@@ -29,13 +29,13 @@ Previous versions of the editor are based on the [Eclipse IDE](https://eclipse.o
 
 ### Demos
 
-Eventually, we share videos, screenshots and thoughts about the editor development progress.
+Eventually, we share videos, screenshots, and thoughts about the editor's development progress.
 
 * Check this [YouTube playlist](https://www.youtube.com/playlist?list=PLB8gI_5U0MvARFuAFCRQkQNR1tgLN7MMM) dedicated to the Phaser Editor v3 development.
 
 * Follow us on [Twitter @PhaserEditor2D](https://twitter.com/PhaserEditor2D) and [Facebook @PhaserEditor2D](https://facebook.com/PhaserEditor2D).
 
-* Check latest posts in the [Phaser Editor website](https://phasereditor2d.com).
+* Check the latest posts in the [Phaser Editor website](https://phasereditor2d.com).
 
 
 ### Build and run
@@ -47,7 +47,7 @@ At this moment you cannot build and run Phaser Editor v3. The server is not part
 
 The code provided in this repository is under the MIT license.
 
-The editor code is divided in two parts: the front-end (the HTML5-based IDE, or client) and the back-end (the HTTP server). This repository contains the full code of the client, that is the bigger part. The server code is closed.
+The editor code is divided into two parts: the front-end (the HTML5-based IDE, or client) and the back-end (the HTTP server). This repository contains the full code of the client, that is the bigger part. The server code is closed.
 
 
 ### Author
