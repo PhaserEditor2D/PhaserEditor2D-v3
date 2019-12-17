@@ -1,0 +1,87 @@
+namespace phasereditor2d.pack.core {
+
+    import controls = colibri.ui.controls;
+    import io = colibri.core.io;
+
+    export abstract class AssetPackItem {
+        private _pack: AssetPack;
+        private _data: any;
+        private _editorData: any;
+
+        constructor(pack: AssetPack, data: any) {
+            this._pack = pack;
+            this._data = data;
+            this._editorData = {};
+        }
+
+        computeUsedFiles(files: Set<io.FilePath>) {
+
+            this.addFilesFromDataKey(files, "url");
+
+            this.addFilesFromDataKey(files, "urls");
+
+            this.addFilesFromDataKey(files, "normalMap");
+        }
+
+        protected addFilesFromDataKey(files: Set<io.FilePath>, ...keys: string[]) {
+            const urls: string[] = [];
+
+            for (const key of keys) {
+
+                if (Array.isArray(this._data[key])) {
+                    urls.push(...this._data[key]);
+                }
+
+                if (typeof (this._data[key]) === "string") {
+                    urls.push(this._data[key]);
+                }
+            }
+
+            this.addFilesFromUrls(files, urls);
+        }
+
+        protected addFilesFromUrls(files: Set<io.FilePath>, urls: string[]) {
+
+            for (const url of urls) {
+                const file = AssetPackUtils.getFileFromPackUrl(url);
+                files.add(file);
+            }
+        }
+
+        getEditorData() {
+            return this._editorData;
+        }
+
+        getPack() {
+            return this._pack;
+        }
+
+        getKey(): string {
+            return this._data["key"];
+        }
+
+        setKey(key : string) {
+            this._data["key"] = key;
+        }
+
+        getType(): string {
+            return this._data["type"];
+        }
+
+        getData() {
+            return this._data;
+        }
+
+        addToPhaserCache(game: Phaser.Game) {
+        }
+
+        async preload(): Promise<controls.PreloadResult> {
+            return controls.Controls.resolveNothingLoaded();
+        }
+
+        resetCache() {
+
+        }
+    }
+
+}

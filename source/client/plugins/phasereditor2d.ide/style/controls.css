@@ -1,0 +1,7 @@
+.AboutDialog {
+    height: auto !important;
+}
+
+.AboutDialog .DialogClientArea {
+    text-align: center;
+}

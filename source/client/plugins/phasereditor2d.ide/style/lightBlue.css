@@ -1,0 +1,189 @@
+.lightBlue body {
+    background: #b2c3dd;
+    color: #0e0e0e;
+}
+
+/* input */
+
+.lightBlue input {
+    background: #dee5f1;
+    border: solid 1px #97aac2;
+}
+
+.lightBlue input[type="file"] {
+    display: none;
+}
+
+
+.lightBlue input:focus {
+    background: #f6f6f6;
+    border-color: #4242ff;
+}
+
+/* button */
+
+.lightBlue button,
+.lightBlue input[type="submit"] {
+    background: #bbc9dd;
+    border-color: #4f555e;
+    text-shadow: 1px 1px #ffffff;
+    color: #0f0f0f;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.lightBlue button[disabled] {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.lightBlue button:hover {
+    background: #d1e1f7;
+}
+
+.lightBlue button:hover[disabled] {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.lightBlue button:active {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* TabPane */
+
+.lightBlue .TabPaneContentArea,
+.lightBlue .TabPaneLabel.selected {
+    background: #99a9c4;
+}
+
+.lightBlue .TabPaneContentArea:empty {
+    background: transparent !important;
+}
+
+.lightBlue .TabPaneLabel.selected {
+    text-shadow: 1px 1px #ffffff6f;
+}
+
+/* Part */
+
+.lightBlue .TabPane.activePart .TabPaneLabel.selected {
+    box-shadow: inset 0px 2px 0px #4242ff;
+    text-shadow: 1px 1px #ffffff;
+}
+
+.lightBlue .TabPane.activePart .TabPaneContentArea,
+.lightBlue .TabPane.activePart .TabPaneLabel.selected {
+    background: #dee5f1;
+}
+
+.lightBlue .ViewerPart .FilteredViewer {
+    background: #dee5f1;
+}
+
+/* Viewer */
+
+.lightBlue .FilteredViewer {
+    border-style: solid;
+    border-width: 0px;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Scroll Bar */
+
+.lightBlue .ScrollHandler {
+    background: transparent;
+}
+
+.lightBlue .ScrollBar {
+    background: #e5e5e5;
+}
+
+.lightBlue .ScrollHandler {
+    background: #535d68;
+}
+
+.lightBlue .ScrollHandler:hover {
+    background: #636f7c;
+}
+
+.lightBlue .ScrollHandler:active {
+    background: #748392;
+}
+
+/* Property Page */
+
+
+.lightBlue .PropertyTitleArea {
+    background: #b2c3dd88;
+    border-radius: 0px;
+}
+
+/* Toolbar */
+
+.lightBlue .ToolbarItem {
+    background: #bbc9dd;
+    border-color: #4f555e;
+    text-shadow: 1px 1px #ffffff6f;
+}
+
+.lightBlue .ToolbarItem:hover {
+    background: #d1e1f7;
+}
+
+.lightBlue .ToolbarItem:active {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+/* ProgressBar */
+
+.lightBlue .ProgressBar {
+    background: #4242ff;
+}
+
+/* Dialog */
+
+.lightBlue .DarkDialogContainer {
+    background: #b2c3dd;
+}
+
+.lightBlue .Dialog {
+    background: #dde5f0;
+}
+
+.lightBlue .Dialog .DialogTitlePane {
+    text-shadow: 1px 1px #ffffffff;
+}
+
+/* Menu */
+
+.lightBlue .Menu {
+    list-style-type: none;
+    background: #ffffff;
+    padding: 0px;
+    margin: 0px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #a0a0a0;
+}
+
+.lightBlue .MenuItemSeparator {
+    background: #b0b0b0;
+}
+
+.lightBlue .MenuItem {
+    padding: 5px 20px;
+}
+
+.lightBlue .MenuItem:hover {
+    background: #4242ff;
+    color: #f0f0f0;
+}
+
+.lightBlue .MenuItemDisabled {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.lightBlue .MenuItemDisabled:hover {
+    color: rgba(255, 255, 255, 0.2);
+}

@@ -1,0 +1,12 @@
+.ImageEditor {
+    padding: 5px;
+}
+
+.ImageEditor .ImageEditorContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.ImageEditor .ImageControl {
+    border-radius: 3px;
+}

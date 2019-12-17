@@ -1,0 +1,209 @@
+/*
+
+Rules to provide the theme colors
+
+Important:   
+
+    - No layout information should be provided.
+    - To layout a control, see controls.css.
+    - To layout a workbench UI, see workbench.css
+
+*/
+
+.light body {
+    background: #a2a2a2;
+    color: #0e0e0e;
+}
+
+/* input */
+
+.light input {
+    background: #f0f0f0;
+    border: solid 1px #a0a0a0;
+}
+
+.light input[type="file"] {
+    display: none;
+}
+
+
+.light input:focus {
+    background: #f6f6f6;
+    border-color: #4242ff;
+}
+
+/* button */
+
+.light button,
+.light input[type="submit"] {
+    background: #dadada;
+    border-color: #808080;
+    text-shadow: 1px 1px #ffffff;
+    color: #0f0f0f;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.light button[disabled] {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.light button:hover {
+    background: #eaeaea;
+}
+
+.light button:hover[disabled] {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.light button:active {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* TabPane */
+
+.light .TabPaneContentArea,
+.light .TabPaneLabel.selected {
+    background: #bdbdbd;
+}
+
+.light .TabPaneContentArea:empty {
+    background: transparent !important;
+}
+
+.light .TabPaneLabel.selected {
+    text-shadow: 1px 1px #f0f0f0;
+}
+
+/* Part */
+
+.light .TabPane.activePart .TabPaneLabel.selected {
+    box-shadow: inset 0px 2px 0px #4242ff;
+}
+
+.light .TabPane.activePart .TabPaneContentArea,
+.light .TabPane.activePart .TabPaneLabel.selected {
+    background: #cacaca;
+}
+
+.light .ViewerPart .FilteredViewer {
+    background: #dadada;
+}
+
+/* Viewer */
+
+.light .FilteredViewer {
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Scroll Bar */
+
+.light .ScrollBar {
+    background: #e5e5e5;
+}
+
+.light .ScrollHandler {
+    background: #b7b7b7;
+}
+
+.light .ScrollHandler:hover {
+    background: #a7a7a7;
+}
+
+.light .ScrollHandler:active {
+    background: #979797;
+}
+
+/* Property Page */
+
+
+.light .PropertyTitleArea {
+    background: #a2a2a2;
+    border-radius: 0px;
+}
+
+.light .PropertyTitleArea label {
+    /* color: rgba(0, 0, 0, 0.75); */
+}
+
+.light .PropertySectionPane {
+    /* background: #d5d5d5; */
+}
+
+/* Toolbar */
+
+.light .ToolbarItem {
+    background: #dadada;
+    border-color: #808080;
+    text-shadow: 1px 1px #f0f0f0;
+}
+
+.light .ToolbarItem:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.light .ToolbarItem:active {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+/* ProgressBar */
+
+.light .ProgressBar {
+    background: #4242ff;
+}
+
+/* Dialog */
+
+.light .DarkDialogContainer {
+    background: #a2a2a2;
+}
+
+.light .Dialog {
+    background: #cacaca;
+}
+
+.light .Dialog .DialogTitlePane {
+    text-shadow: 1px 1px #f0f0f0;
+}
+
+.light .Dialog .FilteredViewer {
+    background: #dadada;
+}
+
+/* Menu */
+
+
+.light .Menu {
+    list-style-type: none;
+    background: #e0e0e0;
+    padding: 0px;
+    margin: 0px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #a0a0a0;
+}
+
+.light .MenuItemSeparator {
+    background: #b0b0b0;
+}
+
+.light .MenuItem {
+    padding: 5px 20px;
+}
+
+.light .MenuItem:hover {
+    background: #4242ff;
+    color: #f0f0f0;
+}
+
+.light .MenuItemDisabled {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.light .MenuItemDisabled:hover {
+    color: rgba(255, 255, 255, 0.2);
+}

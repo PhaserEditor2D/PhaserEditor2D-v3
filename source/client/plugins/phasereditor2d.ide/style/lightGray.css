@@ -1,0 +1,53 @@
+/* Viewer */
+
+.lightGray .FilteredViewer {
+    border-style: none;
+}
+
+
+/* Part */
+
+.lightGray .ViewerPart {
+    display: grid;
+    grid-template-columns: 2px 1fr 2px;
+    grid-template-rows: 0px 1fr 0px;
+}
+
+.lightGray .ViewerPart .FilteredViewer {
+    background: transparent;
+}
+
+.lightGray .TabPane.activePart .TabPaneContentArea,
+.lightGray .TabPane.activePart .TabPaneLabel.selected {
+    background: #dadada;
+}
+
+/* Dialog */
+
+.lightGray .Dialog .FilteredViewer {
+    background: transparent;
+}
+
+.lightGray .DialogButtonPane {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 5px;
+}
+
+.lightGray .ProgressDialog .DialogButtonPane {
+    border: none;
+    padding: 0px;
+}
+
+/* ScrollBar */
+
+.lightGray .ScrollHandler {
+    background: #a3a3a3;
+}
+
+.lightGray .ScrollHandler:hover {
+    background: #979797;
+}
+
+.lightGray .ScrollHandler:active {
+    background: #878787;
+}

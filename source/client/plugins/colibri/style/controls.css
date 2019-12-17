@@ -1,0 +1,334 @@
+/*
+
+Rules to layout controls.
+
+Important:
+    - Don't provide colors here. The colors are provided by the dark.css and light.css files.
+
+*/
+
+* {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+input {
+    -webkit-user-select: text !important;
+    -khtml-user-select: text !important;
+    -moz-user-select: text !important;
+    -o-user-select: text !important;
+    user-select: text !important;
+    box-sizing: border-box;
+}
+
+button:active, button:focus {
+    outline-width: 1px;
+    outline-color: rgba(255, 255, 255, 0.1);
+}
+
+canvas {
+    outline: none;
+    image-rendering: crisp-edges;
+}
+
+.Control {
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.ImageControl {
+    position: fixed;
+}
+
+/* TabPane */
+
+.TabPane {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+}
+
+.TabPaneTitleBar {
+    display: flex;
+}
+
+.TabPaneLabel {
+    float: left;
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+    align-items: center;
+    border-radius: 2px 2px 0 0;
+    padding: 5px 10px 5px 5px;
+}
+
+.TabPaneLabel span {
+    margin-left: 5px;
+}
+
+.TabPaneContentArea {
+    border-radius: 0 3px 3px 3px;
+}
+
+.TabPaneContentArea .ContentArea {
+    display: none;
+}
+
+.TabPaneContentArea .ContentArea.selected {
+    display: block;
+}
+
+.TabPaneContentArea,
+.TabPaneContentArea .ContentArea {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+
+/* ScrollPane */
+
+.ScrollBar,
+.ScrollHandler {
+    position: relative;
+}
+
+.ScrollHandler {
+    border-radius: 3px;
+}
+
+.ScrollPane.hideScrollBar {
+    grid-template-columns: 1fr 0px !important;
+}
+
+.ScrollPane.hideScrollBar .ScrollBar {
+    display: none;
+}
+
+/* Viewer */
+
+.FilteredViewer {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+}
+
+.FilterControl {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+    box-sizing: border-box;
+    padding: 5px 6px 5px 6px;
+}
+
+.FilterControl input {
+    width: 100%;
+}
+
+.FilteredViewer>.ScrollPane {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr 15px;
+    grid-template-rows: 1fr;
+}
+
+.FilteredViewer .FilterControl {
+    position: relative;
+    width: 100%;
+}
+
+.FilteredViewer .ViewerContainer {
+    position: static;
+}
+
+.ViewerContainer .Viewer {
+    position: fixed;
+}
+
+/* PropertyPage */
+
+.PropertyPage {
+    display: grid;
+    grid-template-columns: 100%;
+    align-items: start;
+    position: relative;
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    row-gap: 5px;
+}
+
+.PropertySectionPane {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    position: initial;
+    height: 100%;
+    margin: 0px;
+    border-radius: 3px;
+}
+
+.PropertyTitleArea {
+    display: inline-grid;
+    grid-template-columns: 20px 1fr;
+    height: 1em;
+    padding: 5px;
+    border-radius: 3px 3px 0 0;
+}
+
+.PropertyFormArea {
+    display: grid;
+}
+
+.formSimpleProps {
+    padding: 5px;
+}
+
+/* Toolbar */
+
+.ToolbarItem {
+    display: flex;
+    float: left;
+    margin-right: 5px;
+    padding: 5px;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.ToolbarItemHasTextAndIcon canvas {
+    margin-right: 3px;
+}
+
+/* ProgressBar */
+
+.ProgressBar {
+    height: 10px;
+}
+
+/* Dialog */
+
+.DialogContainer {
+    position: absolute;
+    z-index: 1000;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.Dialog {
+    position: absolute;
+    z-index: 1001;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.5);
+    box-shadow:
+        -12px -5px 22px rgba(0, 0, 0, 0.2),
+        12px 12px 22px rgba(0, 0, 0, 0.2),
+        -12px 12px 22px rgba(0, 0, 0, 0.2),
+        12px -5px 22px rgba(0, 0, 0, 0.2);
+
+}
+
+.Dialog {
+    display: grid;
+    grid-template-columns: 5px 1fr 5px;
+    grid-template-rows: 5px auto 5px 1fr 5px auto 5px;;
+}
+
+.Dialog .DialogTitlePane {
+    width: 100%;
+    grid-column-start: 2;
+    grid-row-start: 2;
+    font-size: small;
+    text-align: center;
+}
+
+.Dialog .DialogClientArea {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    grid-column-start: 2;
+    grid-row-start: 4;   
+    box-sizing: content-box; 
+}
+
+.Dialog .FilteredViewer,
+.Dialog .DialogSection {
+    border-radius: 3px;
+}
+
+.Dialog .DialogSection {
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.Dialog .DialogButtonPane {
+    grid-row-start: 6;
+    grid-column-start: 2;
+    display: block;
+}
+
+.Dialog .DialogButtonPane button {
+    float: right;
+    margin-left: 10px;
+}
+
+/* AlertDialog */
+
+.AlertDialog {
+    height: auto !important;
+}
+
+.AlertDialog .DialogClientArea {
+    padding: 10px;
+}
+
+.AlertDialog .DialogClientArea pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 5px 0px;
+}
+
+/* InputDialog */
+
+.InputDialog {
+    height: auto !important;
+}
+
+.InputDialogLabel {
+    padding: 1em 0px;
+}
+
+/* ProgressDialog */
+
+.ProgressDialog {
+    height: auto !important;
+}
+
+.ProgressDialog .ProgressBar {
+    border-radius: 3px;
+}
+
+/* Menu */
+
+.Menu {
+    position: fixed;
+}
+
+.MenuContainer {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.MenuItemSeparator {
+    height: 1px;
+}

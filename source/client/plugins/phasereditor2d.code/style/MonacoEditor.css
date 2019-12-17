@@ -1,0 +1,8 @@
+.MonacoEditor {
+    padding: 5px;
+}
+
+.MonacoEditor .MonacoEditorContainer {
+    width: 100%;
+    height: 100%;
+}

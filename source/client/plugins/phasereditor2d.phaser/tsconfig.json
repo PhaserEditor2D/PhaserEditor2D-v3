@@ -1,0 +1,8 @@
+{
+    "extends": "../../tsconfig-base.json",
+    "compilerOptions": {
+        "outFile": "_out/plugin.js"        
+    },
+    "references": [],
+    "exclude": ["_out/plugin.d.ts"]
+}

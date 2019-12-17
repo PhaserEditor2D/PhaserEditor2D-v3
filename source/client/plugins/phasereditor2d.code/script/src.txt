@@ -1,0 +1,4 @@
+defineRequire.js
+monaco-editor/min/vs/loader.js
+monaco-editor/min/vs/editor/editor.main.nls.js
+monaco-editor/min/vs/editor/editor.main.js

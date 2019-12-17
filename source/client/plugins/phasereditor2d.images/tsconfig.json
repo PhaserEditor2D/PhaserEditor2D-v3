@@ -1,0 +1,18 @@
+{
+    "extends": "../../tsconfig-base.json",
+    "compilerOptions": {
+        "outFile": "_out/plugin.js"
+    },
+    "references": [
+        {
+            "path": "../colibri"
+        },
+        {
+            "path": "../phasereditor2d.files"
+        },
+        {
+            "path": "../phasereditor2d.webContentTypes"
+        }
+    ],
+    "exclude": ["_out/plugin.d.ts"]
+}

@@ -1,0 +1,12 @@
+.SceneEditor {
+    padding: 5px;
+}
+
+.SceneEditor .SceneEditorContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.SceneEditor canvas {
+    border-radius: 3px;
+}

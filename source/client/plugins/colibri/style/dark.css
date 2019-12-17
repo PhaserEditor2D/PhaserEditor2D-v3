@@ -1,0 +1,216 @@
+/*
+
+Rules to provide the dark colors
+
+Important:   
+    - No layout information should be provided.
+    - To layout a control, see controls.css.
+    - To layout a workbench UI, see workbench.css
+
+*/
+
+.dark body {
+    background: #262626;
+    color: #e0e0e0;
+}
+
+/* a */
+
+.dark a {
+    color: white;
+}
+
+/* input */
+
+.dark input {
+    background: #2e2e2e;
+    color: #f0f0f0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4e4e4e;
+}
+
+.dark input[type="file"] {
+    display: none;
+}
+
+.dark input:focus {
+    background: #2a2a2a;
+    border-color: #f59c5c;
+}
+
+/* button */
+
+.dark button,
+.dark input[type="submit"] {
+    background: #323232;
+    border-color: #646464;
+    color: #f0f0f0;
+    text-shadow: 1px 1px #0e0e0e;    
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+
+.dark button[disabled] {
+    color: rgba(0, 0, 0, 0.4);
+    text-shadow: 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.dark button:hover {
+    background: #3b3b3b;
+}
+
+.dark button[disabled]:hover {
+    background: #353535;
+}
+
+.dark button:active {
+    background: #343434;
+}
+
+/* TabPane */
+
+.dark .TabPaneContentArea,
+.dark .TabPaneLabel.selected {
+    background: #5e5e5e;
+}
+
+.dark .TabPaneContentArea:empty {
+    background: transparent !important;
+}
+
+.dark .TabPaneLabel.selected {
+    text-shadow: 1px 1px #0e0e0e;
+}
+
+/* Part */
+
+.dark .TabPane.activePart .TabPaneLabel.selected {
+    box-shadow: inset 0px 2px 0px #f0a050;
+}
+
+.dark .TabPane.activePart .TabPaneContentArea,
+.dark .TabPane.activePart .TabPaneLabel.selected {
+    background: #6e6e6e;
+}
+
+.dark .ViewerPart .FilteredViewer {
+    background: #3f3f3f;
+}
+
+/* Scroll Bar */
+
+.dark .ScrollHandler {
+    background: transparent;
+}
+
+.dark .ScrollBar {
+    background: #ffffff11;
+}
+
+.dark .ScrollHandler {
+    background: #858585;
+}
+
+.dark .ScrollHandler:hover {
+    background: #585858;
+}
+
+.dark .ScrollHandler:active {
+    background: #282828;
+}
+
+/* Property Page */
+
+
+.dark .PropertyTitleArea {
+    background: linear-gradient(#343434, #323232);
+}
+
+.dark .PropertyTitleArea label {
+    font-weight: bold;
+}
+
+.dark .PropertySectionPane {
+    background: #3f3f3f;
+}
+
+/* Toolbar */
+
+.dark .ToolbarItem {
+    background: #525252;
+    border-color: #646464;
+    text-shadow: 1px 1px #0e0e0e;
+}
+
+.dark .ToolbarItem:hover {
+    background: #656565;
+    border-color: #757575;
+}
+
+.dark .ToolbarItem:active {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ProgressBar */
+
+.dark .ProgressBar {
+    background: #f0a050;
+}
+
+/* Dialog */
+
+.dark .DarkDialogContainer {
+    background: #262626;
+}
+
+.dark .Dialog {
+    background: #3f3f3f;
+}
+
+.dark .Dialog .DialogTitlePane {
+    text-shadow: 1px 1px #0e0e0e;
+}
+
+.dark .Dialog .FilteredViewer {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-style: solid;
+    border-width: 1px;
+    box-sizing: border-box;
+}
+
+/* Menu */
+
+.dark .Menu {
+    list-style-type: none;
+    background: #2f2f2f;
+    padding: 0px;
+    margin: 0px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4f4f4f;
+}
+
+.dark .MenuItemSeparator {
+    background: #3f3f3f;
+}
+
+.dark .MenuItem {
+    padding: 5px 20px;
+}
+
+.dark .MenuItem:hover {
+    background: #f0a050;
+    color: #0e0e0e;
+}
+
+.dark .MenuItemDisabled {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .MenuItemDisabled:hover {
+    color: #3e3e3e;
+}

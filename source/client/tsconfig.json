@@ -1,0 +1,41 @@
+{
+    "references": [        
+        {
+            "path": "./plugins/colibri"
+        },
+        {
+            "path": "./plugins/phasereditor2d.pack"
+        },
+        {
+            "path": "./plugins/phasereditor2d.files"
+        },
+        {
+            "path": "./plugins/phasereditor2d.phaser"
+        },
+        {
+            "path": "./plugins/phasereditor2d.blocks"
+        },       
+        {
+            "path": "./plugins/phasereditor2d.ide"
+        },
+        {
+            "path": "./plugins/phasereditor2d.images"
+        },
+        {
+            "path": "./plugins/phasereditor2d.inspector"
+        },
+        {
+            "path": "./plugins/phasereditor2d.outline"
+        },        
+        {
+            "path": "./plugins/phasereditor2d.scene"
+        },
+        {
+            "path": "./plugins/phasereditor2d.code"
+        },
+        {
+            "path": "./plugins/phasereditor2d.webContentTypes"
+        }
+    ],
+    "files": []
+}
