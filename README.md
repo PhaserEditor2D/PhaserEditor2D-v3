@@ -33,11 +33,11 @@ Previous versions of the editor are based on the [Eclipse IDE](https://eclipse.o
 
 Eventually, we share videos, screenshots and thoughts about the editor development progress.
 
-* Check this [YouTube playlist dedicated to the Phaser Editor v3 development](https://www.youtube.com/playlist?list=PLB8gI_5U0MvARFuAFCRQkQNR1tgLN7MMM).
+* Check this [YouTube playlist](https://www.youtube.com/playlist?list=PLB8gI_5U0MvARFuAFCRQkQNR1tgLN7MMM) dedicated to the Phaser Editor v3 development.
 
 * Follow us on [Twitter @PhaserEditor2D](https://twitter.com/PhaserEditor2D) and [Facebook @PhaserEditor2D](https://facebook.com/PhaserEditor2D).
 
-* Check latest post in the [Phaser Editor website](https://phasereditor2d.com).
+* Check latest posts in the [Phaser Editor website](https://phasereditor2d.com).
 
 
 ### Build and run
@@ -54,4 +54,4 @@ The editor code is divided in two parts: the front-end (the HTML5-based IDE, or 
 
 ### Author
 
-Phaser Editor is developed by [Arian Fornaris][https://twitter.com/boniatillo_com].
+Phaser Editor is developed by [Arian Fornaris](https://twitter.com/boniatillo_com).
