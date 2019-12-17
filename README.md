@@ -1,11 +1,9 @@
-![banner](https://github.com/PhaserEditor2D/PhaserEditor/blob/master/art/logo/banner.png)
-
 # Phaser Editor 2D - v3
 
 Phaser Editor is a web-based IDE to develop HTML5 games. The games are powered by the popular [Phaser](https://phaser.io) framework.
 
 
-![Phaser Editor v3 scheernshot](https://github.com/PhaserEditor2D/PhaserEditor/raw/master/screens/header.png "Phaser Editor v3: scene editor")
+![Phaser Editor v3 scheernshot](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/raw/master/screens/early-preview.png "Phaser Editor v3 early preview")
 
 
 **This version of the editor is in active development and is not released yet**. This is a full re-write of the editor, using web technologies.
