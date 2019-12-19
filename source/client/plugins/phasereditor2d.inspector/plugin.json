@@ -1,0 +1,9 @@
+{
+    "id": "phasereditor2d.inspector",
+    "styles": [
+        "styles/InspectorView.css"
+    ],
+    "scripts": [
+        "_out/plugin.js"
+    ]
+}

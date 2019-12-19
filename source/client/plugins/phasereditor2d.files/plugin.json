@@ -1,0 +1,9 @@
+{
+    "id": "phasereditor2d.files",
+    "styles": [
+        "styles/controls.css"
+    ],
+    "scripts": [
+        "_out/plugin.js"
+    ]
+}

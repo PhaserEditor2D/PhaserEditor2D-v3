@@ -1,0 +1,9 @@
+{
+    "id": "phasereditor2d.scene",
+    "styles": [
+        "styles/SceneEditor.css"
+    ],
+    "scripts": [
+        "_out/plugin.js"
+    ]
+}

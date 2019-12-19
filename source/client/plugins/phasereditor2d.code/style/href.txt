@@ -1,2 +1,0 @@
-../script/monaco-editor/min/vs/editor/editor.main.css
-MonacoEditor.css

@@ -1,0 +1,11 @@
+{
+    "id": "phasereditor2d.images",
+    "styles": [
+        "styles/ImageEditor-dark.css",
+        "styles/ImageEditor-light.css",
+        "styles/ImageEditor.css"
+    ],
+    "scripts": [
+        "_out/plugin.js"
+    ]
+}

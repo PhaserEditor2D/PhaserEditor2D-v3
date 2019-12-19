@@ -1,0 +1,6 @@
+{
+    "id": "phasereditor2d.blocks",
+    "scripts": [
+        "_out/plugin.js"
+    ]
+}

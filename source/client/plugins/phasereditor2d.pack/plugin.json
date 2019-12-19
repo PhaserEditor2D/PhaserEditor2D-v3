@@ -1,0 +1,6 @@
+{
+    "id": "phasereditor2d.pack",
+    "scripts": [
+        "_out/plugin.js"
+    ]
+}

@@ -1,1 +1,0 @@
-var require = { paths: { 'vs': 'static/plugins/phasereditor2d.code/script/monaco-editor/min/vs' } };

@@ -1,0 +1,6 @@
+{
+    "id": "phasereditor2d.webContentTypes",
+    "scripts": [
+        "_out/plugin.js"
+    ]
+}
