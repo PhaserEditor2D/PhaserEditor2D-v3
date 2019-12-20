@@ -102,6 +102,10 @@ namespace colibri.ui.ide {
 
         }
 
+        onPartAdded() {
+            
+        }
+
         onPartClosed(): boolean {
             return true;
         }

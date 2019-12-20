@@ -99,12 +99,6 @@ var phasereditor2d;
                             this._imageControl.resizeTo();
                         }
                     }
-                    setInput(input) {
-                        super.setInput(input);
-                        if (this._imageControl) {
-                            this.updateImage();
-                        }
-                    }
                 }
                 editors.ImageEditor = ImageEditor;
             })(editors = ui.editors || (ui.editors = {}));
