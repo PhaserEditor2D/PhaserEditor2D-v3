@@ -1243,6 +1243,7 @@ declare namespace colibri.ui.ide {
         getSelection(): any[];
         getPropertyProvider(): controls.properties.PropertySectionProvider;
         layout(): void;
+        onPartAdded(): void;
         onPartClosed(): boolean;
         onPartShown(): void;
         protected doCreatePart(): void;

@@ -9,7 +9,6 @@ declare namespace phasereditor2d.images {
 declare namespace phasereditor2d.images.ui.editors {
     import ide = colibri.ui.ide;
     import controls = colibri.ui.controls;
-    import io = colibri.core.io;
     class ImageEditor extends ide.FileEditor {
         private _imageControl;
         constructor();
@@ -19,7 +18,6 @@ declare namespace phasereditor2d.images.ui.editors {
         private updateImage;
         getIcon(): controls.IImage;
         layout(): void;
-        setInput(input: io.FilePath): void;
     }
 }
 declare namespace phasereditor2d.images.ui.viewers {

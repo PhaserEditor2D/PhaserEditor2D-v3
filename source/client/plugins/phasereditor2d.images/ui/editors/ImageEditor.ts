@@ -16,7 +16,7 @@ namespace phasereditor2d.images.ui.editors {
 
                 const file = <io.FilePath>input;
                 const contentType = ide.Workbench.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
-                
+
                 if (contentType === webContentTypes.core.CONTENT_TYPE_IMAGE) {
                     return true;
                 }
@@ -62,7 +62,7 @@ namespace phasereditor2d.images.ui.editors {
         }
 
         private async updateImage() {
-            
+
             const file = this.getInput();
 
             if (!file) {
@@ -93,7 +93,7 @@ namespace phasereditor2d.images.ui.editors {
             }
 
             const img = ide.Workbench.getWorkbench().getFileImage(file);
-            
+
             return img;
         }
 
@@ -103,15 +103,5 @@ namespace phasereditor2d.images.ui.editors {
                 this._imageControl.resizeTo();
             }
         }
-
-        setInput(input: io.FilePath) {
-
-            super.setInput(input);
-
-            if (this._imageControl) {
-                this.updateImage();
-            }
-        }
     }
-
 }

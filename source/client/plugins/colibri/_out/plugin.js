@@ -5110,6 +5110,8 @@ var colibri;
                 }
                 layout() {
                 }
+                onPartAdded() {
+                }
                 onPartClosed() {
                     return true;
                 }
@@ -5236,10 +5238,21 @@ var colibri;
                 }
                 addPart(part, closeable = false, selectIt = true) {
                     part.addEventListener(ide.EVENT_PART_TITLE_UPDATED, (e) => {
-                        this.setTabTitle(part, part.getTitle(), part.getIcon());
+                        const icon = part.getIcon();
+                        if (icon) {
+                            icon.preload().then(() => {
+                                this.setTabTitle(part, part.getTitle(), icon);
+                            });
+                        }
+                        else {
+                            this.setTabTitle(part, part.getTitle(), null);
+                        }
                     });
                     this.addTab(part.getTitle(), part.getIcon(), part, closeable, selectIt);
                     part.setPartFolder(this);
+                    part.onPartAdded();
+                    // we do this here because the icon can be computed with the input.
+                    part.dispatchTitleUpdatedEvent();
                 }
                 getParts() {
                     return this.getContentList();
