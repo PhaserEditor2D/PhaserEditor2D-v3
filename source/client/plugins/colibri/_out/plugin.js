@@ -684,6 +684,13 @@ var colibri;
                     }
                     return null;
                 }
+                getEditorInputExtension(input) {
+                    return this.getEditorInputExtensionWithId(input.getEditorInputExtension());
+                }
+                getEditorInputExtensionWithId(id) {
+                    return colibri.Platform.getExtensions(ide.EditorInputExtension.POINT_ID)
+                        .find(e => e.getId() === id);
+                }
                 openEditor(input) {
                     const editorArea = this.getActiveWindow().getEditorArea();
                     {
@@ -727,6 +734,8 @@ var colibri;
             reg.addExtension(new colibri.ui.ide.themes.ThemeExtension(colibri.ui.controls.Controls.LIGHT_THEME), new colibri.ui.ide.themes.ThemeExtension(colibri.ui.controls.Controls.DARK_THEME));
             // keys
             reg.addExtension(new colibri.ui.ide.commands.CommandExtension(colibri.ui.ide.actions.IDECommands.registerCommands));
+            // editor inputs
+            reg.addExtension(new colibri.ui.ide.FileEditorInputExtension());
         }
     }
     colibri.ColibriPlugin = ColibriPlugin;
@@ -5330,6 +5339,26 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
+            class EditorInputExtension extends colibri.Extension {
+                constructor(id) {
+                    super(EditorInputExtension.POINT_ID);
+                    this._id = id;
+                }
+                getId() {
+                    return this._id;
+                }
+            }
+            EditorInputExtension.POINT_ID = "colibri.ui.ide.EditorInputExtension";
+            ide.EditorInputExtension = EditorInputExtension;
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
             class EditorRegistry {
                 constructor() {
                     this._map = new Map();
@@ -5605,6 +5634,41 @@ var colibri;
                 }
             }
             ide.FileEditor = FileEditor;
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var core;
+    (function (core) {
+        var io;
+        (function (io) {
+            io.FilePath.prototype.getEditorInputExtension = () => colibri.ui.ide.FileEditorInputExtension.ID;
+        })(io = core.io || (core.io = {}));
+    })(core = colibri.core || (colibri.core = {}));
+})(colibri || (colibri = {}));
+/// <reference path="./EditorInputExtension.ts" />
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            class FileEditorInputExtension extends ide.EditorInputExtension {
+                constructor() {
+                    super(FileEditorInputExtension.ID);
+                }
+                getEditorInputState(input) {
+                    return {
+                        filePath: input.getFullName()
+                    };
+                }
+                createEditorInput(state) {
+                    return colibri.ui.ide.FileUtils.getFileFromPath(state.filePath);
+                }
+            }
+            FileEditorInputExtension.ID = "colibri.ui.ide.FileEditorInputExtension";
+            ide.FileEditorInputExtension = FileEditorInputExtension;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
 })(colibri || (colibri = {}));
@@ -5964,7 +6028,6 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            var io = colibri.core.io;
             class WorkbenchWindow extends ui.controls.Control {
                 constructor(id) {
                     super("div", "Window");
@@ -5981,67 +6044,62 @@ var colibri;
                 saveEditorsState(prefs) {
                     const editorArea = this.getEditorArea();
                     const editors = editorArea.getEditors();
-                    let activeEditorFile = null;
+                    let activeEditorIndex = 0;
                     {
                         const activeEditor = editorArea.getSelectedTabContent();
-                        if (activeEditor) {
-                            const input = activeEditor.getInput();
-                            if (input instanceof io.FilePath) {
-                                activeEditorFile = input.getFullName();
-                            }
-                        }
+                        activeEditorIndex = Math.max(0, editors.indexOf(activeEditor));
                     }
                     const restoreEditorData = {
-                        fileDataList: [],
-                        activeEditorFile: activeEditorFile,
+                        inputDataList: [],
+                        activeEditorIndex: activeEditorIndex,
                         tabIconSize: editorArea.getTabIconSize()
                     };
                     for (const editor of editors) {
                         const input = editor.getInput();
-                        if (input instanceof colibri.core.io.FilePath) {
-                            const state = {};
-                            editor.saveState(state);
-                            restoreEditorData.fileDataList.push({
-                                fileName: input.getFullName(),
-                                state: state
-                            });
-                        }
+                        const inputExtension = colibri.Platform.getWorkbench().getEditorInputExtension(input);
+                        const editorState = {};
+                        editor.saveState(editorState);
+                        restoreEditorData.inputDataList.push({
+                            inputExtensionId: inputExtension.getId(),
+                            inputState: inputExtension.getEditorInputState(input),
+                            editorState: editorState
+                        });
                     }
-                    prefs.setValue("restoreEditorData", restoreEditorData);
+                    prefs.setValue("restoreEditorState", restoreEditorData);
                 }
                 restoreEditors(prefs) {
                     const editorArea = this.getEditorArea();
-                    const editors = editorArea.getEditors();
-                    const restoreEditorData = prefs.getValue("restoreEditorData");
+                    const restoreEditorData = prefs.getValue("restoreEditorState");
                     editorArea.closeAll();
                     if (restoreEditorData) {
                         if (restoreEditorData.tabIconSize) {
                             editorArea.setTabIconSize(restoreEditorData.tabIconSize);
                         }
-                        let activeEditor = null;
                         let lastEditor = null;
                         const wb = colibri.Platform.getWorkbench();
-                        for (const fileData of restoreEditorData.fileDataList) {
-                            const fileName = fileData.fileName;
-                            const file = colibri.ui.ide.FileUtils.getFileFromPath(fileName);
-                            if (file) {
-                                const editor = wb.createEditor(file);
+                        for (const inputData of restoreEditorData.inputDataList) {
+                            const inputState = inputData.inputState;
+                            if (!inputState) {
+                                continue;
+                            }
+                            const inputExtension = colibri.Platform.getWorkbench().getEditorInputExtensionWithId(inputData.inputExtensionId);
+                            const input = inputExtension.createEditorInput(inputState);
+                            if (input) {
+                                const editor = wb.createEditor(input);
                                 if (!editor) {
                                     continue;
                                 }
                                 lastEditor = editor;
-                                const state = fileData.state;
+                                const editorState = inputData.editorState;
                                 try {
-                                    editor.setRestoreState(state);
+                                    editor.setRestoreState(editorState);
                                 }
                                 catch (e) {
                                     console.error(e);
                                 }
-                                if (file.getFullName() === restoreEditorData.activeEditorFile) {
-                                    activeEditor = editor;
-                                }
                             }
                         }
+                        let activeEditor = editorArea.getEditors()[restoreEditorData.activeEditorIndex];
                         if (!activeEditor) {
                             activeEditor = lastEditor;
                         }

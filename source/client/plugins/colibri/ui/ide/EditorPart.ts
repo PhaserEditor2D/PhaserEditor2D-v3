@@ -2,7 +2,7 @@ namespace colibri.ui.ide {
 
     export abstract class EditorPart extends Part {
 
-        private _input: any;
+        private _input: IEditorInput;
         private _dirty: boolean;
 
         constructor(id: string) {
@@ -52,7 +52,7 @@ namespace colibri.ui.ide {
             return this._input;
         }
 
-        setInput(input: any): void {
+        setInput(input: IEditorInput): void {
             this._input = input;
         }
 

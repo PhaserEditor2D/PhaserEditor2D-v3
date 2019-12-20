@@ -77,7 +77,7 @@ namespace colibri.ui.ide {
         }
 
         getInput(): core.io.FilePath {
-            return super.getInput();
+            return super.getInput() as any;
         }
 
         getIcon() {

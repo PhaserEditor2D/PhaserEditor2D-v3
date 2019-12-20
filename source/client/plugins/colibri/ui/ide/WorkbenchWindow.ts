@@ -5,11 +5,12 @@ namespace colibri.ui.ide {
     import io = colibri.core.io;
 
     declare type RestoreEditorData = {
-        fileDataList: {
-            fileName: string,
-            state: any
+        inputDataList: {
+            inputExtensionId: string,
+            inputState: any,
+            editorState: any
         }[],
-        activeEditorFile: string,
+        activeEditorIndex: number,
         tabIconSize: number
     }
 
@@ -46,25 +47,16 @@ namespace colibri.ui.ide {
 
             const editors = editorArea.getEditors();
 
-            let activeEditorFile: string = null;
+            let activeEditorIndex = 0;
 
             {
                 const activeEditor = editorArea.getSelectedTabContent() as EditorPart;
-
-                if (activeEditor) {
-
-                    const input = activeEditor.getInput();
-
-                    if (input instanceof io.FilePath) {
-
-                        activeEditorFile = input.getFullName();
-                    }
-                }
+                activeEditorIndex = Math.max(0, editors.indexOf(activeEditor));
             }
 
             const restoreEditorData: RestoreEditorData = {
-                fileDataList: [],
-                activeEditorFile: activeEditorFile,
+                inputDataList: [],
+                activeEditorIndex: activeEditorIndex,
                 tabIconSize: editorArea.getTabIconSize()
             };
 
@@ -72,29 +64,27 @@ namespace colibri.ui.ide {
 
                 const input = editor.getInput();
 
-                if (input instanceof colibri.core.io.FilePath) {
+                const inputExtension = Platform.getWorkbench().getEditorInputExtension(input);
 
-                    const state = {};
+                const editorState = {};
 
-                    editor.saveState(state);
+                editor.saveState(editorState);
 
-                    restoreEditorData.fileDataList.push({
-                        fileName: input.getFullName(),
-                        state: state
-                    });
-                }
+                restoreEditorData.inputDataList.push({
+                    inputExtensionId: inputExtension.getId(),
+                    inputState: inputExtension.getEditorInputState(input),
+                    editorState: editorState
+                });
             }
 
-            prefs.setValue("restoreEditorData", restoreEditorData);
+            prefs.setValue("restoreEditorState", restoreEditorData);
         }
 
         protected restoreEditors(prefs: colibri.core.preferences.Preferences) {
 
             const editorArea = this.getEditorArea();
 
-            const editors = editorArea.getEditors();
-
-            const restoreEditorData = prefs.getValue("restoreEditorData") as RestoreEditorData;
+            const restoreEditorData = prefs.getValue("restoreEditorState") as RestoreEditorData;
 
             editorArea.closeAll();
 
@@ -104,20 +94,25 @@ namespace colibri.ui.ide {
                     editorArea.setTabIconSize(restoreEditorData.tabIconSize);
                 }
 
-                let activeEditor: EditorPart = null;
-                let lastEditor : EditorPart = null;
+                let lastEditor: EditorPart = null;
 
                 const wb = colibri.Platform.getWorkbench();
 
-                for (const fileData of restoreEditorData.fileDataList) {
+                for (const inputData of restoreEditorData.inputDataList) {
 
-                    const fileName = fileData.fileName;
+                    const inputState = inputData.inputState;
 
-                    const file = colibri.ui.ide.FileUtils.getFileFromPath(fileName);
+                    if (!inputState) {
+                        continue;
+                    }
 
-                    if (file) {
+                    const inputExtension = Platform.getWorkbench().getEditorInputExtensionWithId(inputData.inputExtensionId);
 
-                        const editor = wb.createEditor(file);
+                    const input = inputExtension.createEditorInput(inputState);
+
+                    if (input) {
+
+                        const editor = wb.createEditor(input);
 
                         if (!editor) {
                             continue;
@@ -125,28 +120,26 @@ namespace colibri.ui.ide {
 
                         lastEditor = editor;
 
-                        const state = fileData.state;
+                        const editorState = inputData.editorState;
 
                         try {
 
-                            editor.setRestoreState(state);
+                            editor.setRestoreState(editorState);
 
                         } catch (e) {
                             console.error(e);
                         }
-
-                        if (file.getFullName() === restoreEditorData.activeEditorFile) {
-                            activeEditor = editor;
-                        }
                     }
                 }
+
+                let activeEditor = editorArea.getEditors()[restoreEditorData.activeEditorIndex];
 
                 if (!activeEditor) {
                     activeEditor = lastEditor;
                 }
 
                 if (activeEditor) {
-                    
+
                     editorArea.activateEditor(activeEditor);
                     wb.setActivePart(activeEditor);
                 }

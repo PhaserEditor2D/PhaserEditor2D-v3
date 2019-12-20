@@ -36,6 +36,10 @@ namespace colibri {
                     ui.ide.actions.IDECommands.registerCommands
                 )
             );
+
+            // editor inputs
+
+            reg.addExtension(new colibri.ui.ide.FileEditorInputExtension());
         }
     }
 

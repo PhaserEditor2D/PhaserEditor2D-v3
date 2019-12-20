@@ -487,7 +487,7 @@ namespace colibri.ui.ide {
             return this.getActiveWindow().getEditorArea().getEditors();
         }
 
-        createEditor(input: any): EditorPart {
+        createEditor(input: IEditorInput): EditorPart {
 
             const editorArea = this.getActiveWindow().getEditorArea();
 
@@ -513,7 +513,19 @@ namespace colibri.ui.ide {
             return null;
         }
 
-        openEditor(input: any): EditorPart {
+        getEditorInputExtension(input: IEditorInput) {
+
+            return this.getEditorInputExtensionWithId(input.getEditorInputExtension());
+        }
+
+        getEditorInputExtensionWithId(id: string) {
+
+            return Platform.getExtensions<EditorInputExtension>(EditorInputExtension.POINT_ID)
+
+                .find(e => e.getId() === id);
+        }
+
+        openEditor(input: IEditorInput): EditorPart {
 
             const editorArea = this.getActiveWindow().getEditorArea();
 

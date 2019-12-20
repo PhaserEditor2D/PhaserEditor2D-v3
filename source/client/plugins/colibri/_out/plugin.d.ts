@@ -168,8 +168,10 @@ declare namespace colibri.ui.ide {
         getWorkbenchIcon(name: string): controls.IImage;
         getEditorRegistry(): EditorRegistry;
         getEditors(): EditorPart[];
-        createEditor(input: any): EditorPart;
-        openEditor(input: any): EditorPart;
+        createEditor(input: IEditorInput): EditorPart;
+        getEditorInputExtension(input: IEditorInput): EditorInputExtension;
+        getEditorInputExtensionWithId(id: string): EditorInputExtension;
+        openEditor(input: IEditorInput): EditorPart;
     }
 }
 declare namespace colibri {
@@ -1263,8 +1265,8 @@ declare namespace colibri.ui.ide {
         save(): void;
         protected doSave(): void;
         onPartClosed(): boolean;
-        getInput(): any;
-        setInput(input: any): void;
+        getInput(): IEditorInput;
+        setInput(input: IEditorInput): void;
         getEditorViewerProvider(key: string): EditorViewerProvider;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
     }
@@ -1298,6 +1300,16 @@ declare namespace colibri.ui.ide {
         getId(): string;
         abstract acceptInput(input: any): boolean;
         abstract createEditor(): EditorPart;
+    }
+}
+declare namespace colibri.ui.ide {
+    abstract class EditorInputExtension extends Extension {
+        static POINT_ID: string;
+        private _id;
+        constructor(id: string);
+        getId(): string;
+        abstract createEditorInput(state: any): IEditorInput;
+        abstract getEditorInputState(input: IEditorInput): any;
     }
 }
 declare namespace colibri.ui.ide {
@@ -1379,6 +1391,20 @@ declare namespace colibri.ui.ide {
         getIcon(): controls.IImage;
     }
 }
+declare namespace colibri.core.io {
+    interface FilePath extends colibri.ui.ide.IEditorInput {
+    }
+}
+declare namespace colibri.ui.ide {
+    class FileEditorInputExtension extends EditorInputExtension {
+        static ID: string;
+        constructor();
+        getEditorInputState(input: core.io.FilePath): {
+            filePath: any;
+        };
+        createEditorInput(state: any): IEditorInput;
+    }
+}
 declare namespace colibri.ui.ide {
     class FileImage extends controls.DefaultImage {
         private _file;
@@ -1413,6 +1439,15 @@ declare namespace colibri.ui.ide {
         static getFilesWithContentType(contentType: string): Promise<io.FilePath[]>;
         static getAllFiles(): io.FilePath[];
         static getRoot(): io.FilePath;
+    }
+}
+declare namespace colibri.ui.ide {
+    interface IEditorInput {
+        getEditorInputExtension(): string;
+    }
+}
+declare namespace colibri.core.io {
+    interface FilePath extends colibri.ui.ide.IEditorInput {
     }
 }
 declare namespace colibri.ui.ide {
