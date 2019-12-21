@@ -1050,6 +1050,7 @@ declare namespace colibri.ui.controls.viewers {
         constructor(...classList: string[]);
         private initListeners;
         private onKeyDown;
+        private moveCursor;
         private onDragStart;
         getMenu(): Menu;
         setMenu(menu: controls.Menu): void;

@@ -4285,6 +4285,32 @@ var colibri;
                         canvas.addEventListener("dragstart", e => this.onDragStart(e));
                     }
                     onKeyDown(e) {
+                        switch (e.key) {
+                            case "ArrowUp":
+                            case "ArrowLeft":
+                                this.moveCursor(-1);
+                                break;
+                            case "ArrowDown":
+                            case "ArrowRight":
+                                this.moveCursor(1);
+                                break;
+                        }
+                    }
+                    moveCursor(dir) {
+                        const elem = this.getSelectionFirstElement();
+                        if (!elem) {
+                            return;
+                        }
+                        let i = this._paintItems.findIndex(item => item.data === elem);
+                        if (i >= 0) {
+                            i += dir;
+                            if (i >= 0 && i < this._paintItems.length) {
+                                const data = this._paintItems[i].data;
+                                const newSel = [data];
+                                this.setSelection(newSel);
+                                this.reveal(data);
+                            }
+                        }
                     }
                     onDragStart(e) {
                         const paintItemUnderCursor = this.getPaintItemAt(e);

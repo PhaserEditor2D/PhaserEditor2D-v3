@@ -54,8 +54,47 @@ namespace colibri.ui.controls.viewers {
             canvas.addEventListener("dragstart", e => this.onDragStart(e));
         }
 
-        private onKeyDown(e : KeyboardEvent) {
+        private onKeyDown(e: KeyboardEvent) {
 
+            switch (e.key) {
+
+                case "ArrowUp":
+                case "ArrowLeft":
+                    
+                    this.moveCursor(-1);
+                    break;
+
+                case "ArrowDown":
+                case "ArrowRight":
+
+                    this.moveCursor(1);
+                    break;
+            }
+        }
+
+        private moveCursor(dir: number) {
+
+            const elem = this.getSelectionFirstElement();
+
+            if (!elem) {
+                return;
+            }
+
+
+            let i = this._paintItems.findIndex(item => item.data === elem);
+
+            if (i >= 0) {
+
+                i += dir;
+
+                if (i >= 0 && i < this._paintItems.length) {
+
+                    const data = this._paintItems[i].data;
+                    const newSel = [data];
+                    this.setSelection(newSel);
+                    this.reveal(data);
+                }
+            }
         }
 
         private onDragStart(e: DragEvent) {
