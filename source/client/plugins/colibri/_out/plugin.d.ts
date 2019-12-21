@@ -443,6 +443,7 @@ declare namespace colibri.ui.controls {
     const EVENT_ACTION_CHANGED = "actionChanged";
     type ActionConfig = {
         text?: string;
+        tooltip?: string;
         icon?: IImage;
         enabled?: boolean;
         showText?: boolean;
@@ -450,6 +451,7 @@ declare namespace colibri.ui.controls {
     };
     class Action extends EventTarget {
         private _text;
+        private _tooltip;
         private _icon;
         private _enabled;
         private _showText;
@@ -458,6 +460,7 @@ declare namespace colibri.ui.controls {
         isEnabled(): boolean;
         isShowText(): boolean;
         getText(): string;
+        getTooltip(): string;
         getIcon(): IImage;
         run(e?: MouseEvent): void;
     }

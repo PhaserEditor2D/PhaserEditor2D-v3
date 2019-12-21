@@ -345,7 +345,8 @@ var phasereditor2d;
                 class OpenMainMenuAction extends controls.Action {
                     constructor() {
                         super({
-                            //text: "Menu",
+                            text: "Open Menu",
+                            tooltip: "Main menu",
                             icon: ide.IDEPlugin.getInstance().getIcon(ide.ICON_MENU)
                         });
                     }
@@ -389,6 +390,7 @@ var phasereditor2d;
                     constructor() {
                         super({
                             text: "Open Project",
+                            tooltip: "Open other project or create a new one",
                             showText: false,
                             icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER)
                         });
@@ -452,6 +454,7 @@ var phasereditor2d;
                     constructor() {
                         super({
                             text: "Play Project",
+                            tooltip: "Run this project in other tab",
                             showText: false,
                             icon: ide.IDEPlugin.getInstance().getIcon(ide.ICON_PLAY)
                         });

@@ -42,12 +42,15 @@ namespace colibri.ui.controls {
                 }
 
             } else {
+
                 btnElement.classList.add("ToolbarItemHideText");
             }
 
 
-            if (action.getText()) {
-                controls.Tooltip.html(btnElement, action.getText());
+            let tooltip = action.getTooltip() || action.getText();
+
+            if (tooltip) {
+                controls.Tooltip.html(btnElement, tooltip);
             }
 
             this._toolbarElement.appendChild(btnElement);

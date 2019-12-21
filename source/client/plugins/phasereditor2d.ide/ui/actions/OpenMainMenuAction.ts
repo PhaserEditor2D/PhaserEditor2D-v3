@@ -6,7 +6,8 @@ namespace phasereditor2d.ide.ui.actions {
 
         constructor() {
             super({
-                //text: "Menu",
+                text: "Open Menu",
+                tooltip: "Main menu",
                 icon: IDEPlugin.getInstance().getIcon(ICON_MENU)
             });
         }

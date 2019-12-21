@@ -224,6 +224,7 @@ var phasereditor2d;
                     constructor() {
                         super({
                             text: "New File",
+                            tooltip: "Open new content dialog",
                             showText: false,
                             icon: files.FilesPlugin.getInstance().getIcon(files.ICON_NEW_FILE)
                         });

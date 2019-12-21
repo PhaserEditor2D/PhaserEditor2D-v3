@@ -1705,13 +1705,14 @@ var colibri;
             controls.EVENT_ACTION_CHANGED = "actionChanged";
             class Action extends EventTarget {
                 constructor(config) {
-                    var _a, _b, _c;
+                    var _a, _b, _c, _d;
                     super();
                     this._text = (_a = config.text, (_a !== null && _a !== void 0 ? _a : ""));
+                    this._tooltip = (_b = config.tooltip, (_b !== null && _b !== void 0 ? _b : ""));
                     this._showText = config.showText === true;
-                    this._icon = (_b = config.icon, (_b !== null && _b !== void 0 ? _b : null));
+                    this._icon = (_c = config.icon, (_c !== null && _c !== void 0 ? _c : null));
                     this._enabled = config.enabled === undefined || config.enabled;
-                    this._callback = (_c = config.callback, (_c !== null && _c !== void 0 ? _c : null));
+                    this._callback = (_d = config.callback, (_d !== null && _d !== void 0 ? _d : null));
                 }
                 isEnabled() {
                     return this._enabled;
@@ -1721,6 +1722,9 @@ var colibri;
                 }
                 getText() {
                     return this._text;
+                }
+                getTooltip() {
+                    return this._tooltip;
                 }
                 getIcon() {
                     return this._icon;
@@ -2892,8 +2896,9 @@ var colibri;
                     else {
                         btnElement.classList.add("ToolbarItemHideText");
                     }
-                    if (action.getText()) {
-                        controls.Tooltip.html(btnElement, action.getText());
+                    let tooltip = action.getTooltip() || action.getText();
+                    if (tooltip) {
+                        controls.Tooltip.html(btnElement, tooltip);
                     }
                     this._toolbarElement.appendChild(btnElement);
                     const listener = e => this.updateButtonWithAction(btnElement, action);

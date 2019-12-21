@@ -4,6 +4,7 @@ namespace colibri.ui.controls {
 
     export declare type ActionConfig = {
         text?: string,
+        tooltip?: string,
         icon?: IImage,
         enabled?: boolean,
         showText?: boolean,
@@ -13,6 +14,7 @@ namespace colibri.ui.controls {
     export class Action extends EventTarget {
 
         private _text: string;
+        private _tooltip: string;
         private _icon: IImage;
         private _enabled: boolean;
         private _showText: boolean;
@@ -22,6 +24,7 @@ namespace colibri.ui.controls {
             super();
 
             this._text = config.text ?? "";
+            this._tooltip = config.tooltip ?? "";
             this._showText = config.showText === true;
             this._icon = config.icon ?? null;
             this._enabled = config.enabled === undefined || config.enabled;
@@ -38,6 +41,10 @@ namespace colibri.ui.controls {
 
         getText() {
             return this._text;
+        }
+
+        getTooltip() {
+            return this._tooltip;
         }
 
         getIcon() {

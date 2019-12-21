@@ -7,6 +7,7 @@ namespace phasereditor2d.ide.ui.actions {
         constructor() {
             super({
                 text: "Play Project",
+                tooltip: "Run this project in other tab",
                 showText: false,
                 icon: IDEPlugin.getInstance().getIcon(ICON_PLAY)
             });
