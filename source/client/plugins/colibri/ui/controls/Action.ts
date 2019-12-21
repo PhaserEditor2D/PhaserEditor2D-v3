@@ -8,6 +8,7 @@ namespace colibri.ui.controls {
         icon?: IImage,
         enabled?: boolean,
         showText?: boolean,
+        commandId?: string,
         callback?: () => void
     };
 
@@ -15,6 +16,7 @@ namespace colibri.ui.controls {
 
         private _text: string;
         private _tooltip: string;
+        private _commandId: string;
         private _icon: IImage;
         private _enabled: boolean;
         private _showText: boolean;
@@ -29,6 +31,22 @@ namespace colibri.ui.controls {
             this._icon = config.icon ?? null;
             this._enabled = config.enabled === undefined || config.enabled;
             this._callback = config.callback ?? null;
+            this._commandId = config.commandId ?? null;
+        }
+
+        getCommandId() {
+            return this._commandId;
+        }
+
+        getCommandKeyString() {
+
+            if (!this._commandId) {
+                return "";
+            }
+
+            const manager = Platform.getWorkbench().getCommandManager();
+
+            return manager.getCommandKeyString(this._commandId);
         }
 
         isEnabled() {
@@ -51,7 +69,7 @@ namespace colibri.ui.controls {
             return this._icon;
         }
 
-        run(e? : MouseEvent) {
+        run(e?: MouseEvent) {
 
             if (this._callback) {
                 this._callback();

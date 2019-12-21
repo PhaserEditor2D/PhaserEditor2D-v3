@@ -53,6 +53,11 @@ canvas {
     padding: 5px;
 }
 
+.TooltipKeyString {
+    font-size: small;
+    font-family: monospace;
+}
+
 /* TabPane */
 
 .TabPane {

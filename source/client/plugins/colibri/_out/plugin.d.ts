@@ -447,16 +447,20 @@ declare namespace colibri.ui.controls {
         icon?: IImage;
         enabled?: boolean;
         showText?: boolean;
+        commandId?: string;
         callback?: () => void;
     };
     class Action extends EventTarget {
         private _text;
         private _tooltip;
+        private _commandId;
         private _icon;
         private _enabled;
         private _showText;
         private _callback;
         constructor(config: ActionConfig);
+        getCommandId(): string;
+        getCommandKeyString(): string;
         isEnabled(): boolean;
         isShowText(): boolean;
         getText(): string;
@@ -738,7 +742,8 @@ declare namespace colibri.ui.controls {
 }
 declare namespace colibri.ui.controls {
     class Tooltip {
-        static html(element: HTMLElement, html: string): void;
+        static tooltip(element: HTMLElement, tooltip: string): void;
+        static tooltipWithKey(element: HTMLElement, keyString: any, tooltip: string): void;
     }
 }
 declare namespace colibri.ui.controls {
@@ -1584,6 +1589,7 @@ declare namespace colibri.ui.ide.commands {
             key?: string;
             filterInputElements?: boolean;
         });
+        getKeyString(): string;
         matchesKeys(event: KeyboardEvent): boolean;
         matchesTarget(element: EventTarget): boolean;
     }
@@ -1669,6 +1675,7 @@ declare namespace colibri.ui.ide.commands {
         addCommandHelper(id: string): void;
         private makeArgs;
         getCommand(id: string): Command;
+        getCommandKeyString(commandId: string): string;
         addKeyBinding(commandId: string, matcher: KeyMatcher): void;
         addHandler(commandId: string, handler: CommandHandler): void;
         addHandlerHelper(commandId: string, testFunc: (args: CommandArgs) => boolean, executeFunc: (args: CommandArgs) => void): void;

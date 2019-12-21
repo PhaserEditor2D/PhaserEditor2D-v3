@@ -5,13 +5,13 @@ namespace colibri.ui.controls {
         private _element: HTMLElement;
         private _enterTime: number;
         private _token: number;
-        private _html: string;
+        private _tooltip: string;
         private _mousePosition: { x: number, y: number };
 
-        constructor(element: HTMLElement, html: string) {
+        constructor(element: HTMLElement, tooltip: string) {
 
             this._element = element;
-            this._html = html;
+            this._tooltip = tooltip;
 
             this._token = 0;
 
@@ -53,7 +53,7 @@ namespace colibri.ui.controls {
                     return;
                 }
 
-                TooltipManager.showTooltip(this._mousePosition.x, this._mousePosition.y, this._html);
+                TooltipManager.showTooltip(this._mousePosition.x, this._mousePosition.y, this._tooltip);
 
             }, 1000);
         }
@@ -101,9 +101,18 @@ namespace colibri.ui.controls {
 
     export class Tooltip {
 
-        static html(element: HTMLElement, html: string) {
+        static tooltip(element: HTMLElement, tooltip: string) {
 
-            new TooltipManager(element, html);
+            new TooltipManager(element, tooltip);
+        }
+
+        static tooltipWithKey(element: HTMLElement, keyString, tooltip: string) {
+
+            if (keyString) {
+                return this.tooltip(element, "<span class='TooltipKeyString'>" + keyString + "</span> " + tooltip);
+            }
+
+            return this.tooltip(element, tooltip);
         }
 
     }

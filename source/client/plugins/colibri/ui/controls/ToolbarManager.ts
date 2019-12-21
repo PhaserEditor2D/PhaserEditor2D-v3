@@ -47,10 +47,12 @@ namespace colibri.ui.controls {
             }
 
 
-            let tooltip = action.getTooltip() || action.getText();
+            let tooltip = action.getTooltip() || action.getText() || "";
+
+            const keyString = action.getCommandKeyString();
 
             if (tooltip) {
-                controls.Tooltip.html(btnElement, tooltip);
+                controls.Tooltip.tooltipWithKey(btnElement, keyString, tooltip);
             }
 
             this._toolbarElement.appendChild(btnElement);

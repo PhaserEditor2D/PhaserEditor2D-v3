@@ -10,6 +10,7 @@ namespace phasereditor2d.files.ui.actions {
         constructor() {
             super({
                 text: "New File",
+                commandId: CMD_NEW_FILE,
                 tooltip: "Open new content dialog",
                 showText: false,
                 icon: FilesPlugin.getInstance().getIcon(ICON_NEW_FILE)

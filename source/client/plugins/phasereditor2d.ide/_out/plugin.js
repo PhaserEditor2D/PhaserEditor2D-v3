@@ -390,6 +390,7 @@ var phasereditor2d;
                     constructor() {
                         super({
                             text: "Open Project",
+                            commandId: actions.CMD_OPEN_PROJECTS_DIALOG,
                             tooltip: "Open other project or create a new one",
                             showText: false,
                             icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER)

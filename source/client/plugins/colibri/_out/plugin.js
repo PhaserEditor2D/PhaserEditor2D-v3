@@ -1705,7 +1705,7 @@ var colibri;
             controls.EVENT_ACTION_CHANGED = "actionChanged";
             class Action extends EventTarget {
                 constructor(config) {
-                    var _a, _b, _c, _d;
+                    var _a, _b, _c, _d, _e;
                     super();
                     this._text = (_a = config.text, (_a !== null && _a !== void 0 ? _a : ""));
                     this._tooltip = (_b = config.tooltip, (_b !== null && _b !== void 0 ? _b : ""));
@@ -1713,6 +1713,17 @@ var colibri;
                     this._icon = (_c = config.icon, (_c !== null && _c !== void 0 ? _c : null));
                     this._enabled = config.enabled === undefined || config.enabled;
                     this._callback = (_d = config.callback, (_d !== null && _d !== void 0 ? _d : null));
+                    this._commandId = (_e = config.commandId, (_e !== null && _e !== void 0 ? _e : null));
+                }
+                getCommandId() {
+                    return this._commandId;
+                }
+                getCommandKeyString() {
+                    if (!this._commandId) {
+                        return "";
+                    }
+                    const manager = colibri.Platform.getWorkbench().getCommandManager();
+                    return manager.getCommandKeyString(this._commandId);
                 }
                 isEnabled() {
                     return this._enabled;
@@ -2896,9 +2907,10 @@ var colibri;
                     else {
                         btnElement.classList.add("ToolbarItemHideText");
                     }
-                    let tooltip = action.getTooltip() || action.getText();
+                    let tooltip = action.getTooltip() || action.getText() || "";
+                    const keyString = action.getCommandKeyString();
                     if (tooltip) {
-                        controls.Tooltip.html(btnElement, tooltip);
+                        controls.Tooltip.tooltipWithKey(btnElement, keyString, tooltip);
                     }
                     this._toolbarElement.appendChild(btnElement);
                     const listener = e => this.updateButtonWithAction(btnElement, action);
@@ -2931,9 +2943,9 @@ var colibri;
         var controls;
         (function (controls) {
             class TooltipManager {
-                constructor(element, html) {
+                constructor(element, tooltip) {
                     this._element = element;
-                    this._html = html;
+                    this._tooltip = tooltip;
                     this._token = 0;
                     this._element.addEventListener("mouseenter", e => {
                         this.start();
@@ -2958,7 +2970,7 @@ var colibri;
                         if (token !== this._token) {
                             return;
                         }
-                        TooltipManager.showTooltip(this._mousePosition.x, this._mousePosition.y, this._html);
+                        TooltipManager.showTooltip(this._mousePosition.x, this._mousePosition.y, this._tooltip);
                     }, 1000);
                 }
                 static showTooltip(mouseX, mouseY, html) {
@@ -2990,8 +3002,14 @@ var colibri;
                 }
             }
             class Tooltip {
-                static html(element, html) {
-                    new TooltipManager(element, html);
+                static tooltip(element, tooltip) {
+                    new TooltipManager(element, tooltip);
+                }
+                static tooltipWithKey(element, keyString, tooltip) {
+                    if (keyString) {
+                        return this.tooltip(element, "<span class='TooltipKeyString'>" + keyString + "</span> " + tooltip);
+                    }
+                    return this.tooltip(element, tooltip);
                 }
             }
             controls.Tooltip = Tooltip;
@@ -6339,6 +6357,25 @@ var colibri;
                         this._key = config.key === undefined ? "" : config.key;
                         this._filterInputElements = config.filterInputElements === undefined ? true : config.filterInputElements;
                     }
+                    getKeyString() {
+                        const keys = [];
+                        if (this._control) {
+                            keys.push("Ctrl");
+                        }
+                        if (this._meta) {
+                            keys.push("Ctrl");
+                        }
+                        if (this._shift) {
+                            keys.push("Shift");
+                        }
+                        if (this._alt) {
+                            keys.push("Alt");
+                        }
+                        if (this._key) {
+                            keys.push(this._key);
+                        }
+                        return keys.join("+");
+                    }
                     matchesKeys(event) {
                         return event.ctrlKey === this._control
                             && event.shiftKey === this._shift
@@ -6694,6 +6731,17 @@ var colibri;
                             console.error(`Command ${id} not found.`);
                         }
                         return command;
+                    }
+                    getCommandKeyString(commandId) {
+                        const command = this.getCommand(commandId);
+                        if (command) {
+                            const matchers = this._commandMatcherMap.get(command);
+                            if (matchers && matchers.length > 0) {
+                                const matcher = matchers[0];
+                                return matcher.getKeyString();
+                            }
+                        }
+                        return "";
                     }
                     addKeyBinding(commandId, matcher) {
                         const command = this.getCommand(commandId);

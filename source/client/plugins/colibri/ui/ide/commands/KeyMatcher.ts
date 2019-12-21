@@ -1,7 +1,7 @@
 namespace colibri.ui.ide.commands {
 
     export class KeyMatcher {
-
+        
         private _control: boolean;
         private _shift: boolean;
         private _alt: boolean;
@@ -24,6 +24,33 @@ namespace colibri.ui.ide.commands {
             this._meta = config.meta === undefined ? false : config.meta;
             this._key = config.key === undefined ? "" : config.key;
             this._filterInputElements = config.filterInputElements === undefined ? true : config.filterInputElements
+        }
+
+        getKeyString() {
+
+            const keys = [];
+
+            if (this._control) {
+                keys.push("Ctrl");
+            }
+
+            if (this._meta) {
+                keys.push("Ctrl");
+            }
+
+            if (this._shift) {
+                keys.push("Shift");
+            }
+
+            if (this._alt) {
+                keys.push("Alt");
+            }
+
+            if (this._key) {
+                keys.push(this._key)
+            }
+
+            return keys.join("+");
         }
 
         matchesKeys(event: KeyboardEvent) {

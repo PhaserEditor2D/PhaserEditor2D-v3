@@ -102,6 +102,25 @@ namespace colibri.ui.ide.commands {
             return command;
         }
 
+        getCommandKeyString(commandId : string) {
+
+            const command = this.getCommand(commandId);
+
+            if (command) {
+                
+                const matchers = this._commandMatcherMap.get(command);
+
+                if (matchers && matchers.length > 0) {
+
+                    const matcher = matchers[0];
+
+                    return matcher.getKeyString();
+                }
+            }
+
+            return "";
+        }
+
         addKeyBinding(commandId: string, matcher: KeyMatcher): void {
             const command = this.getCommand(commandId);
 
