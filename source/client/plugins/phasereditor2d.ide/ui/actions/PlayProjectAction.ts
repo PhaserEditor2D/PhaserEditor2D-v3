@@ -6,7 +6,8 @@ namespace phasereditor2d.ide.ui.actions {
 
         constructor() {
             super({
-                // text: "Play Project",
+                text: "Play Project",
+                showText: false,
                 icon: IDEPlugin.getInstance().getIcon(ICON_PLAY)
             });
         }

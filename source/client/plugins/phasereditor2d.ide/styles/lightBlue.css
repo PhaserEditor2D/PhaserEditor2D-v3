@@ -50,6 +50,14 @@
     background: rgba(255, 255, 255, 0.9);
 }
 
+/* Tooltip */
+
+.lightBlue .Tooltip {
+    background: #f0f0f0;
+    border-color: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+}
+
 /* TabPane */
 
 .lightBlue .TabPaneContentArea,

@@ -5,7 +5,8 @@ namespace colibri.ui.controls {
     export declare type ActionConfig = {
         text?: string,
         icon?: IImage,
-        enabled?: boolean
+        enabled?: boolean,
+        showText?: boolean,
         callback?: () => void
     };
 
@@ -14,12 +15,14 @@ namespace colibri.ui.controls {
         private _text: string;
         private _icon: IImage;
         private _enabled: boolean;
+        private _showText: boolean;
         private _callback: () => void;
 
         constructor(config: ActionConfig) {
             super();
 
             this._text = config.text ?? "";
+            this._showText = config.showText === true;
             this._icon = config.icon ?? null;
             this._enabled = config.enabled === undefined || config.enabled;
             this._callback = config.callback ?? null;
@@ -27,6 +30,10 @@ namespace colibri.ui.controls {
 
         isEnabled() {
             return this._enabled;
+        }
+
+        isShowText() {
+            return this._showText;
         }
 
         getText() {

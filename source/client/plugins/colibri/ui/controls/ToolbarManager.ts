@@ -31,11 +31,23 @@ namespace colibri.ui.controls {
             }
 
             const textElement = document.createElement("div");
+            textElement.classList.add("ToolbarItemText");
             btnElement.appendChild(textElement);
             btnElement["__text"] = textElement;
 
-            if (action.getText() && action.getIcon()) {
-                btnElement.classList.add("ToolbarItemHasTextAndIcon");
+            if (action.isShowText()) {
+
+                if (action.getIcon()) {
+                    btnElement.classList.add("ToolbarItemHasTextAndIcon");
+                }
+
+            } else {
+                btnElement.classList.add("ToolbarItemHideText");
+            }
+
+
+            if (action.getText()) {
+                controls.Tooltip.html(btnElement, action.getText());
             }
 
             this._toolbarElement.appendChild(btnElement);
@@ -62,7 +74,7 @@ namespace colibri.ui.controls {
         }
 
         private updateButtonWithAction(btn: HTMLElement, action: Action) {
-            const textElement = <HTMLElement> btn["__text"];
+            const textElement = <HTMLElement>btn["__text"];
             textElement.innerText = action.getText();
         }
 

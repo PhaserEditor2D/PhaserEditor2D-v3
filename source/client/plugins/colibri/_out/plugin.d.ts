@@ -445,15 +445,18 @@ declare namespace colibri.ui.controls {
         text?: string;
         icon?: IImage;
         enabled?: boolean;
+        showText?: boolean;
         callback?: () => void;
     };
     class Action extends EventTarget {
         private _text;
         private _icon;
         private _enabled;
+        private _showText;
         private _callback;
         constructor(config: ActionConfig);
         isEnabled(): boolean;
+        isShowText(): boolean;
         getText(): string;
         getIcon(): IImage;
         run(e?: MouseEvent): void;
@@ -728,6 +731,11 @@ declare namespace colibri.ui.controls {
         add(action: Action): void;
         dispose(): void;
         private updateButtonWithAction;
+    }
+}
+declare namespace colibri.ui.controls {
+    class Tooltip {
+        static html(element: HTMLElement, html: string): void;
     }
 }
 declare namespace colibri.ui.controls {

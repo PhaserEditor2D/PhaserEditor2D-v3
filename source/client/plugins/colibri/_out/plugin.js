@@ -1708,12 +1708,16 @@ var colibri;
                     var _a, _b, _c;
                     super();
                     this._text = (_a = config.text, (_a !== null && _a !== void 0 ? _a : ""));
+                    this._showText = config.showText === true;
                     this._icon = (_b = config.icon, (_b !== null && _b !== void 0 ? _b : null));
                     this._enabled = config.enabled === undefined || config.enabled;
                     this._callback = (_c = config.callback, (_c !== null && _c !== void 0 ? _c : null));
                 }
                 isEnabled() {
                     return this._enabled;
+                }
+                isShowText() {
+                    return this._showText;
                 }
                 getText() {
                     return this._text;
@@ -2877,10 +2881,19 @@ var colibri;
                         btnElement["__icon"] = iconElement;
                     }
                     const textElement = document.createElement("div");
+                    textElement.classList.add("ToolbarItemText");
                     btnElement.appendChild(textElement);
                     btnElement["__text"] = textElement;
-                    if (action.getText() && action.getIcon()) {
-                        btnElement.classList.add("ToolbarItemHasTextAndIcon");
+                    if (action.isShowText()) {
+                        if (action.getIcon()) {
+                            btnElement.classList.add("ToolbarItemHasTextAndIcon");
+                        }
+                    }
+                    else {
+                        btnElement.classList.add("ToolbarItemHideText");
+                    }
+                    if (action.getText()) {
+                        controls.Tooltip.html(btnElement, action.getText());
                     }
                     this._toolbarElement.appendChild(btnElement);
                     const listener = e => this.updateButtonWithAction(btnElement, action);
@@ -2903,6 +2916,80 @@ var colibri;
                 }
             }
             controls.ToolbarManager = ToolbarManager;
+        })(controls = ui.controls || (ui.controls = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var controls;
+        (function (controls) {
+            class TooltipManager {
+                constructor(element, html) {
+                    this._element = element;
+                    this._html = html;
+                    this._token = 0;
+                    this._element.addEventListener("mouseenter", e => {
+                        this.start();
+                    });
+                    this._element.addEventListener("mouseleave", e => {
+                        this._enterTime = 0;
+                        this._token++;
+                        TooltipManager.closeTooltip();
+                    });
+                    this._element.addEventListener("mousemove", (e) => {
+                        this._mousePosition = { x: e.clientX, y: e.clientY };
+                        if (Date.now() - this._enterTime > 500) {
+                            this._token++;
+                            this.start();
+                        }
+                    });
+                }
+                start() {
+                    this._enterTime = Date.now();
+                    const token = this._token;
+                    setTimeout(() => {
+                        if (token !== this._token) {
+                            return;
+                        }
+                        TooltipManager.showTooltip(this._mousePosition.x, this._mousePosition.y, this._html);
+                    }, 1000);
+                }
+                static showTooltip(mouseX, mouseY, html) {
+                    this.closeTooltip();
+                    this._tooltipElement = document.createElement("div");
+                    this._tooltipElement.classList.add("Tooltip");
+                    this._tooltipElement.innerHTML = html;
+                    document.body.append(this._tooltipElement);
+                    const bounds = this._tooltipElement.getBoundingClientRect();
+                    let left = mouseX - bounds.width / 2;
+                    let top = mouseY - bounds.height - 10;
+                    if (left < 0) {
+                        left = 5;
+                    }
+                    if (left + bounds.width > window.innerWidth) {
+                        left = window.innerWidth - bounds.width - 5;
+                    }
+                    if (top < 0) {
+                        top = mouseY + 20;
+                    }
+                    this._tooltipElement.style.left = left + "px";
+                    this._tooltipElement.style.top = top + "px";
+                }
+                static closeTooltip() {
+                    if (this._tooltipElement) {
+                        this._tooltipElement.remove();
+                        this._tooltipElement = null;
+                    }
+                }
+            }
+            class Tooltip {
+                static html(element, html) {
+                    new TooltipManager(element, html);
+                }
+            }
+            controls.Tooltip = Tooltip;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
 })(colibri || (colibri = {}));

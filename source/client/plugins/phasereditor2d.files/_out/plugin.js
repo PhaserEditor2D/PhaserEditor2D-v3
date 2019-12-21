@@ -223,7 +223,8 @@ var phasereditor2d;
                 class OpenNewFileDialogAction extends controls.Action {
                     constructor() {
                         super({
-                            //text: "New File",
+                            text: "New File",
+                            showText: false,
                             icon: files.FilesPlugin.getInstance().getIcon(files.ICON_NEW_FILE)
                         });
                     }
