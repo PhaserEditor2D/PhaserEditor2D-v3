@@ -46,7 +46,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             // join in container
 
-            manager.addCommandHelper(CMD_JOIN_IN_CONTAINER);
+            manager.addCommandHelper({
+                id: CMD_JOIN_IN_CONTAINER,
+                name: "Join Objects",
+                tooltip: "Create a container with the selected objects"
+            });
 
             manager.addHandlerHelper(CMD_JOIN_IN_CONTAINER,
 

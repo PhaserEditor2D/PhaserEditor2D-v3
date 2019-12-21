@@ -46,7 +46,6 @@ namespace colibri.ui.controls {
                 btnElement.classList.add("ToolbarItemHideText");
             }
 
-
             let tooltip = action.getTooltip() || action.getText() || "";
 
             const keyString = action.getCommandKeyString();

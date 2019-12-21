@@ -6,7 +6,8 @@ namespace phasereditor2d.ide.ui.actions {
 
         constructor() {
             super({
-                text: "Color Theme"
+                text: "Color Theme",
+                commandId: CMD_CHANGE_THEME
             });
         }
 
@@ -28,7 +29,7 @@ namespace phasereditor2d.ide.ui.actions {
             });
         }
 
-        static commandTest(args : colibri.ui.ide.commands.CommandArgs) {
+        static commandTest(args: colibri.ui.ide.commands.CommandArgs) {
             return !(args.activeDialog instanceof dialogs.ThemesDialog);
         }
     }

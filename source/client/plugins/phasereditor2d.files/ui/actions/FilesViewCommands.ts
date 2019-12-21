@@ -14,7 +14,11 @@ namespace phasereditor2d.files.ui.actions {
 
             // new file
 
-            manager.addCommandHelper(CMD_NEW_FILE);
+            manager.addCommandHelper({
+                id: CMD_NEW_FILE,
+                name: "New File",
+                tooltip: "Create new content."
+            });
 
             manager.addHandlerHelper(CMD_NEW_FILE,
                 OpenNewFileDialogAction.commandTest,

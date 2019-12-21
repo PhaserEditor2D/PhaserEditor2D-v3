@@ -1385,7 +1385,11 @@ var phasereditor2d;
                                 editor.getActionManager().deleteObjects();
                             });
                             // join in container
-                            manager.addCommandHelper(CMD_JOIN_IN_CONTAINER);
+                            manager.addCommandHelper({
+                                id: CMD_JOIN_IN_CONTAINER,
+                                name: "Join Objects",
+                                tooltip: "Create a container with the selected objects"
+                            });
                             manager.addHandlerHelper(CMD_JOIN_IN_CONTAINER, args => isSceneScope(args), args => {
                                 const editor = args.activeEditor;
                                 editor.getActionManager().joinObjectsInContainer();

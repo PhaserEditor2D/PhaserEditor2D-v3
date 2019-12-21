@@ -209,7 +209,7 @@ var phasereditor2d;
                         const manager = new controls.ToolbarManager(area);
                         manager.add(new phasereditor2d.files.ui.actions.OpenNewFileDialogAction());
                         manager.add(new ui.actions.OpenProjectsDialogAction());
-                        manager.add(new phasereditor2d.ide.ui.actions.PlayProjectAction());
+                        manager.add(new ui.actions.PlayProjectAction());
                     }
                     {
                         // right area 
@@ -279,9 +279,11 @@ var phasereditor2d;
             (function (actions) {
                 actions.CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
                 actions.CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
-                actions.CMD_SWITCH_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
+                actions.CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
                 actions.CMD_EDITOR_TABS_SIZE_UP = "phasereditor2d.ide.ui.actions.EditorTabsSizeUp";
                 actions.CMD_EDITOR_TABS_SIZE_DOWN = "phasereditor2d.ide.ui.actions.EditorTabsSizeDown";
+                actions.CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
+                var controls = colibri.ui.controls;
                 var commands = colibri.ui.ide.commands;
                 function isNotWelcomeWindowScope(args) {
                     return !(args.activeWindow instanceof ui.WelcomeWindow);
@@ -289,7 +291,11 @@ var phasereditor2d;
                 class IDEActions {
                     static registerCommands(manager) {
                         // open project
-                        manager.addCommandHelper(actions.CMD_OPEN_PROJECTS_DIALOG);
+                        manager.addCommandHelper({
+                            id: actions.CMD_OPEN_PROJECTS_DIALOG,
+                            name: "Open Project",
+                            tooltip: "Open other project or create a new one."
+                        });
                         manager.addHandlerHelper(actions.CMD_OPEN_PROJECTS_DIALOG, args => isNotWelcomeWindowScope(args) && !args.activeDialog, args => new actions.OpenProjectsDialogAction().run());
                         manager.addKeyBinding(actions.CMD_OPEN_PROJECTS_DIALOG, new commands.KeyMatcher({
                             control: true,
@@ -297,8 +303,27 @@ var phasereditor2d;
                             key: "P",
                             filterInputElements: false
                         }));
+                        // play game
+                        manager.addCommandHelper({
+                            id: actions.CMD_PLAY_PROJECT,
+                            name: "Play Project",
+                            tooltip: "Run this project in other tab"
+                        });
+                        manager.addHandlerHelper(actions.CMD_PLAY_PROJECT, isNotWelcomeWindowScope, args => {
+                            const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                            controls.Controls.openUrlInNewPage(url);
+                        });
+                        manager.addKeyBinding(actions.CMD_PLAY_PROJECT, new commands.KeyMatcher({
+                            control: true,
+                            alt: true,
+                            key: "g"
+                        }));
                         // reload project
-                        manager.addCommandHelper(actions.CMD_RELOAD_PROJECT);
+                        manager.addCommandHelper({
+                            id: actions.CMD_RELOAD_PROJECT,
+                            name: "Reload Project",
+                            tooltip: "Reload the project files."
+                        });
                         manager.addHandlerHelper(actions.CMD_RELOAD_PROJECT, isNotWelcomeWindowScope, args => new actions.ReloadProjectAction().run());
                         manager.addKeyBinding(actions.CMD_RELOAD_PROJECT, new commands.KeyMatcher({
                             control: true,
@@ -306,16 +331,28 @@ var phasereditor2d;
                             key: "R"
                         }));
                         // theme dialog
-                        manager.addCommandHelper(actions.CMD_SWITCH_THEME);
-                        manager.addHandlerHelper(actions.CMD_SWITCH_THEME, actions.OpenThemeDialogAction.commandTest, args => new actions.OpenThemeDialogAction().run());
-                        manager.addKeyBinding(actions.CMD_SWITCH_THEME, new commands.KeyMatcher({
+                        manager.addCommandHelper({
+                            id: actions.CMD_CHANGE_THEME,
+                            name: "Select Color Theme",
+                            tooltip: "Select the color theme of the IDE."
+                        });
+                        manager.addHandlerHelper(actions.CMD_CHANGE_THEME, actions.OpenThemeDialogAction.commandTest, args => new actions.OpenThemeDialogAction().run());
+                        manager.addKeyBinding(actions.CMD_CHANGE_THEME, new commands.KeyMatcher({
                             control: true,
                             key: "2",
                             filterInputElements: false
                         }));
                         // editor tabs size
-                        manager.addCommandHelper(actions.CMD_EDITOR_TABS_SIZE_DOWN);
-                        manager.addCommandHelper(actions.CMD_EDITOR_TABS_SIZE_UP);
+                        manager.addCommandHelper({
+                            id: actions.CMD_EDITOR_TABS_SIZE_DOWN,
+                            name: "Increment Tab Size",
+                            tooltip: "Make bigger the editor tabs."
+                        });
+                        manager.addCommandHelper({
+                            id: actions.CMD_EDITOR_TABS_SIZE_UP,
+                            name: "Decrement Tab Size",
+                            tooltip: "Make smaller the editor tabs."
+                        });
                         manager.addHandlerHelper(actions.CMD_EDITOR_TABS_SIZE_DOWN, isNotWelcomeWindowScope, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(-5));
                         manager.addHandlerHelper(actions.CMD_EDITOR_TABS_SIZE_UP, isNotWelcomeWindowScope, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(5));
                         manager.addKeyBinding(actions.CMD_EDITOR_TABS_SIZE_DOWN, new commands.KeyMatcher({
@@ -389,9 +426,7 @@ var phasereditor2d;
                 class OpenProjectsDialogAction extends controls.Action {
                     constructor() {
                         super({
-                            text: "Open Project",
                             commandId: actions.CMD_OPEN_PROJECTS_DIALOG,
-                            tooltip: "Open other project or create a new one",
                             showText: false,
                             icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER)
                         });
@@ -419,7 +454,8 @@ var phasereditor2d;
                 class OpenThemeDialogAction extends controls.Action {
                     constructor() {
                         super({
-                            text: "Color Theme"
+                            text: "Color Theme",
+                            commandId: actions.CMD_CHANGE_THEME
                         });
                     }
                     run() {

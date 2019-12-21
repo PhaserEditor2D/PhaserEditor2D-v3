@@ -8,7 +8,7 @@ namespace colibri.ui.ide.commands {
         private _commandHandlerMap: Map<Command, CommandHandler[]>;
 
         constructor() {
-            
+
             this._commands = [];
             this._commandIdMap = new Map();
             this._commandMatcherMap = new Map();
@@ -18,7 +18,7 @@ namespace colibri.ui.ide.commands {
         }
 
         private onKeyDown(event: KeyboardEvent): void {
-            
+
             if (event.isComposing) {
                 return;
             }
@@ -67,8 +67,13 @@ namespace colibri.ui.ide.commands {
             this._commandHandlerMap.set(cmd, []);
         }
 
-        addCommandHelper(id: string) {
-            this.addCommand(new Command(id));
+        addCommandHelper(config: {
+            id: string,
+            name: string,
+            tooltip: string,
+            icon?: controls.IImage
+        }) {
+            this.addCommand(new Command(config));
         }
 
         private makeArgs() {
@@ -102,12 +107,12 @@ namespace colibri.ui.ide.commands {
             return command;
         }
 
-        getCommandKeyString(commandId : string) {
+        getCommandKeyString(commandId: string) {
 
             const command = this.getCommand(commandId);
 
             if (command) {
-                
+
                 const matchers = this._commandMatcherMap.get(command);
 
                 if (matchers && matchers.length > 0) {

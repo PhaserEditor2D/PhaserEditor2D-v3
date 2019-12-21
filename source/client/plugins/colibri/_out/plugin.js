@@ -1714,6 +1714,16 @@ var colibri;
                     this._enabled = config.enabled === undefined || config.enabled;
                     this._callback = (_d = config.callback, (_d !== null && _d !== void 0 ? _d : null));
                     this._commandId = (_e = config.commandId, (_e !== null && _e !== void 0 ? _e : null));
+                    if (this._commandId) {
+                        const manager = colibri.Platform.getWorkbench().getCommandManager();
+                        const command = manager.getCommand(this._commandId);
+                        if (command) {
+                            this._text = this._text || command.getName();
+                            this._tooltip = this._tooltip || command.getTooltip();
+                            this._icon = this._icon || command.getIcon();
+                            console.log(command.getIcon());
+                        }
+                    }
                 }
                 getCommandId() {
                     return this._commandId;
@@ -6431,7 +6441,11 @@ var colibri;
                     }
                     static initViewer(manager) {
                         // collapse all
-                        manager.addCommandHelper(actions.CMD_COLLAPSE_ALL);
+                        manager.addCommandHelper({
+                            id: actions.CMD_COLLAPSE_ALL,
+                            name: "Collapse All",
+                            tooltip: "Collapse all elements"
+                        });
                         manager.addHandlerHelper(actions.CMD_COLLAPSE_ALL, isViewerScope, args => {
                             const viewer = ui.controls.Control.getControlOf(args.activeElement);
                             viewer.collapseAll();
@@ -6441,7 +6455,11 @@ var colibri;
                             key: "c"
                         }));
                         // select all
-                        manager.addCommandHelper(actions.CMD_SELECT_ALL);
+                        manager.addCommandHelper({
+                            id: actions.CMD_SELECT_ALL,
+                            name: "Select All",
+                            tooltip: "Select all elements"
+                        });
                         manager.addHandlerHelper(actions.CMD_SELECT_ALL, isViewerScope, args => {
                             const viewer = ui.controls.Control.getControlOf(args.activeElement);
                             viewer.selectAll();
@@ -6452,7 +6470,11 @@ var colibri;
                             key: "a"
                         }));
                         // collapse expand branch
-                        manager.addCommandHelper(actions.CMD_EXPAND_COLLAPSE_BRANCH);
+                        manager.addCommandHelper({
+                            id: actions.CMD_EXPAND_COLLAPSE_BRANCH,
+                            name: "Expand/Collapse the tree branch",
+                            tooltip: "Expand or collapse a branch of the select element"
+                        });
                         manager.addHandlerHelper(actions.CMD_EXPAND_COLLAPSE_BRANCH, args => args.activeElement !== null && ui.controls.Control.getControlOf(args.activeElement) instanceof ui.controls.viewers.Viewer, args => {
                             const viewer = ui.controls.Control.getControlOf(args.activeElement);
                             const parents = [];
@@ -6466,7 +6488,11 @@ var colibri;
                             key: " "
                         }));
                         // escape
-                        manager.addCommandHelper(actions.CMD_ESCAPE);
+                        manager.addCommandHelper({
+                            id: actions.CMD_ESCAPE,
+                            name: "Escape",
+                            tooltip: "Escape"
+                        });
                         manager.addKeyBinding(actions.CMD_ESCAPE, new KeyMatcher({
                             key: "Escape"
                         }));
@@ -6480,14 +6506,22 @@ var colibri;
                     }
                     static initUndo(manager) {
                         // undo
-                        manager.addCommandHelper(actions.CMD_UNDO);
+                        manager.addCommandHelper({
+                            id: actions.CMD_UNDO,
+                            name: "Undo",
+                            tooltip: "Undo operation"
+                        });
                         manager.addHandlerHelper(actions.CMD_UNDO, args => args.activePart !== null, args => args.activePart.getUndoManager().undo());
                         manager.addKeyBinding(actions.CMD_UNDO, new KeyMatcher({
                             control: true,
                             key: "z"
                         }));
                         // redo
-                        manager.addCommandHelper(actions.CMD_REDO);
+                        manager.addCommandHelper({
+                            id: actions.CMD_REDO,
+                            name: "Redo",
+                            tooltip: "Redo operation"
+                        });
                         manager.addHandlerHelper(actions.CMD_REDO, args => args.activePart !== null, args => args.activePart.getUndoManager().redo());
                         manager.addKeyBinding(actions.CMD_REDO, new KeyMatcher({
                             control: true,
@@ -6497,7 +6531,11 @@ var colibri;
                     }
                     static initEdit(manager) {
                         // save
-                        manager.addCommandHelper(actions.CMD_SAVE);
+                        manager.addCommandHelper({
+                            id: actions.CMD_SAVE,
+                            name: "Save",
+                            tooltip: "Save"
+                        });
                         manager.addHandlerHelper(actions.CMD_SAVE, args => args.activeEditor ? true : false, args => {
                             if (args.activeEditor.isDirty()) {
                                 args.activeEditor.save();
@@ -6509,12 +6547,20 @@ var colibri;
                             filterInputElements: false
                         }));
                         // delete
-                        manager.addCommandHelper(actions.CMD_DELETE);
+                        manager.addCommandHelper({
+                            id: actions.CMD_DELETE,
+                            name: "Delete",
+                            tooltip: "Delete"
+                        });
                         manager.addKeyBinding(actions.CMD_DELETE, new KeyMatcher({
                             key: "delete"
                         }));
                         // rename
-                        manager.addCommandHelper(actions.CMD_RENAME);
+                        manager.addCommandHelper({
+                            id: actions.CMD_RENAME,
+                            name: "Rename",
+                            tooltip: "Rename"
+                        });
                         manager.addKeyBinding(actions.CMD_RENAME, new KeyMatcher({
                             key: "f2"
                         }));
@@ -6580,11 +6626,22 @@ var colibri;
             var commands;
             (function (commands) {
                 class Command {
-                    constructor(id) {
-                        this._id = id;
+                    constructor(config) {
+                        this._id = config.id;
+                        this._name = config.name;
+                        this._tooltip = config.tooltip;
                     }
                     getId() {
                         return this._id;
+                    }
+                    getName() {
+                        return this._name;
+                    }
+                    getTooltip() {
+                        return this._tooltip;
+                    }
+                    getIcon() {
+                        return this._icon;
                     }
                 }
                 commands.Command = Command;
@@ -6713,8 +6770,8 @@ var colibri;
                         this._commandMatcherMap.set(cmd, []);
                         this._commandHandlerMap.set(cmd, []);
                     }
-                    addCommandHelper(id) {
-                        this.addCommand(new commands.Command(id));
+                    addCommandHelper(config) {
+                        this.addCommand(new commands.Command(config));
                     }
                     makeArgs() {
                         const wb = ide.Workbench.getWorkbench();

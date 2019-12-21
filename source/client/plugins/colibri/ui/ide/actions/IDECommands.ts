@@ -45,7 +45,11 @@ namespace colibri.ui.ide.actions {
 
             // collapse all
 
-            manager.addCommandHelper(CMD_COLLAPSE_ALL);
+            manager.addCommandHelper({
+                id: CMD_COLLAPSE_ALL,
+                name: "Collapse All",
+                tooltip: "Collapse all elements"
+            });
 
             manager.addHandlerHelper(CMD_COLLAPSE_ALL,
                 isViewerScope,
@@ -62,7 +66,11 @@ namespace colibri.ui.ide.actions {
 
             // select all
 
-            manager.addCommandHelper(CMD_SELECT_ALL);
+            manager.addCommandHelper({
+                id: CMD_SELECT_ALL,
+                name: "Select All",
+                tooltip: "Select all elements"
+            });
 
             manager.addHandlerHelper(CMD_SELECT_ALL,
                 isViewerScope,
@@ -80,7 +88,11 @@ namespace colibri.ui.ide.actions {
 
             // collapse expand branch
 
-            manager.addCommandHelper(CMD_EXPAND_COLLAPSE_BRANCH);
+            manager.addCommandHelper({
+                id: CMD_EXPAND_COLLAPSE_BRANCH,
+                name: "Expand/Collapse the tree branch",
+                tooltip: "Expand or collapse a branch of the select element"
+            });
 
             manager.addHandlerHelper(CMD_EXPAND_COLLAPSE_BRANCH,
                 args => args.activeElement !== null && controls.Control.getControlOf(args.activeElement) instanceof controls.viewers.Viewer,
@@ -105,7 +117,11 @@ namespace colibri.ui.ide.actions {
 
             // escape
 
-            manager.addCommandHelper(CMD_ESCAPE);
+            manager.addCommandHelper({
+                id: CMD_ESCAPE,
+                name: "Escape",
+                tooltip: "Escape"
+            });
 
             manager.addKeyBinding(CMD_ESCAPE, new KeyMatcher({
                 key: "Escape"
@@ -132,7 +148,11 @@ namespace colibri.ui.ide.actions {
         private static initUndo(manager: commands.CommandManager) {
             // undo
 
-            manager.addCommandHelper(CMD_UNDO);
+            manager.addCommandHelper({
+                id: CMD_UNDO,
+                name: "Undo",
+                tooltip: "Undo operation"
+            });
 
             manager.addHandlerHelper(CMD_UNDO,
                 args => args.activePart !== null,
@@ -147,7 +167,11 @@ namespace colibri.ui.ide.actions {
 
             // redo
 
-            manager.addCommandHelper(CMD_REDO);
+            manager.addCommandHelper({
+                id: CMD_REDO,
+                name: "Redo",
+                tooltip: "Redo operation"
+            });
 
             manager.addHandlerHelper(CMD_REDO,
                 args => args.activePart !== null,
@@ -167,7 +191,11 @@ namespace colibri.ui.ide.actions {
 
             // save
 
-            manager.addCommandHelper(CMD_SAVE);
+            manager.addCommandHelper({
+                id: CMD_SAVE,
+                name: "Save",
+                tooltip: "Save"
+            });
 
             manager.addHandlerHelper(CMD_SAVE,
                 args => args.activeEditor ? true : false,
@@ -187,7 +215,11 @@ namespace colibri.ui.ide.actions {
 
             // delete
 
-            manager.addCommandHelper(CMD_DELETE);
+            manager.addCommandHelper({
+                id: CMD_DELETE,
+                name: "Delete",
+                tooltip: "Delete"
+            });
 
             manager.addKeyBinding(CMD_DELETE, new KeyMatcher({
                 key: "delete"
@@ -195,7 +227,11 @@ namespace colibri.ui.ide.actions {
 
             // rename
 
-            manager.addCommandHelper(CMD_RENAME);
+            manager.addCommandHelper({
+                id: CMD_RENAME,
+                name: "Rename",
+                tooltip: "Rename"
+            });
 
             manager.addKeyBinding(CMD_RENAME, new KeyMatcher({
                 key: "f2"

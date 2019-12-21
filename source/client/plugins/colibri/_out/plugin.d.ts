@@ -1628,8 +1628,19 @@ declare namespace colibri.ui.ide.actions {
 declare namespace colibri.ui.ide.commands {
     class Command {
         private _id;
-        constructor(id: string);
+        private _name;
+        private _tooltip;
+        private _icon;
+        constructor(config: {
+            id: string;
+            name: string;
+            tooltip: string;
+            icon?: controls.IImage;
+        });
         getId(): string;
+        getName(): string;
+        getTooltip(): string;
+        getIcon(): controls.IImage;
     }
 }
 declare namespace colibri.ui.ide.commands {
@@ -1672,7 +1683,12 @@ declare namespace colibri.ui.ide.commands {
         constructor();
         private onKeyDown;
         addCommand(cmd: Command): void;
-        addCommandHelper(id: string): void;
+        addCommandHelper(config: {
+            id: string;
+            name: string;
+            tooltip: string;
+            icon?: controls.IImage;
+        }): void;
         private makeArgs;
         getCommand(id: string): Command;
         getCommandKeyString(commandId: string): string;

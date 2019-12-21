@@ -84,7 +84,11 @@ var phasereditor2d;
                 class FilesViewCommands {
                     static registerCommands(manager) {
                         // new file
-                        manager.addCommandHelper(actions.CMD_NEW_FILE);
+                        manager.addCommandHelper({
+                            id: actions.CMD_NEW_FILE,
+                            name: "New File",
+                            tooltip: "Create new content."
+                        });
                         manager.addHandlerHelper(actions.CMD_NEW_FILE, actions.OpenNewFileDialogAction.commandTest, args => {
                             new actions.OpenNewFileDialogAction().run();
                         });
@@ -223,9 +227,7 @@ var phasereditor2d;
                 class OpenNewFileDialogAction extends controls.Action {
                     constructor() {
                         super({
-                            text: "New File",
                             commandId: actions.CMD_NEW_FILE,
-                            tooltip: "Open new content dialog",
                             showText: false,
                             icon: files.FilesPlugin.getInstance().getIcon(files.ICON_NEW_FILE)
                         });

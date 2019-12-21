@@ -32,6 +32,22 @@ namespace colibri.ui.controls {
             this._enabled = config.enabled === undefined || config.enabled;
             this._callback = config.callback ?? null;
             this._commandId = config.commandId ?? null;
+
+            if (this._commandId) {
+                
+                const manager = Platform.getWorkbench().getCommandManager();
+                
+                const command = manager.getCommand(this._commandId);
+
+                if (command) {
+
+                    this._text = this._text || command.getName();
+                    this._tooltip = this._tooltip || command.getTooltip();
+                    this._icon = this._icon || command.getIcon();
+
+                    console.log(command.getIcon());
+                }
+            }
         }
 
         getCommandId() {

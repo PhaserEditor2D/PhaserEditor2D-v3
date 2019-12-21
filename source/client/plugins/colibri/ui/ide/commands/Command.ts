@@ -3,13 +3,36 @@ namespace colibri.ui.ide.commands {
     export class Command {
 
         private _id: string;
+        private _name: string;
+        private _tooltip: string;
+        private _icon : controls.IImage;
 
-        constructor(id: string) {
-            this._id = id;
+        constructor(config: {
+            id: string,
+            name: string,
+            tooltip: string,
+            icon?: controls.IImage
+        }) {
+
+            this._id = config.id;
+            this._name = config.name;
+            this._tooltip = config.tooltip;
         }
 
         getId() {
             return this._id;
+        }
+
+        getName() {
+            return this._name;
+        }
+
+        getTooltip() {
+            return this._tooltip;
+        }
+
+        getIcon() {
+            return this._icon;
         }
     }
 
