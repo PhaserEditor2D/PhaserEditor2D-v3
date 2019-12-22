@@ -6,7 +6,6 @@ namespace phasereditor2d.pack.ui.dialogs {
 
         constructor() {
             super({
-                id: "phasereditor2d.pack.ui.wizards.NewAssetPackFileWizardExtension",
                 wizardName: "Asset Pack File",
                 icon: AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK),
                 initialFileName: "asset-pack",

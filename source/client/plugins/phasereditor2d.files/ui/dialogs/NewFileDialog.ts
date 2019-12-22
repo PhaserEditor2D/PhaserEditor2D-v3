@@ -22,6 +22,10 @@ namespace phasereditor2d.files.ui.dialogs {
 
             const name = super.normalizedFileName();
 
+            if (this._fileExtension === "") {
+                return name;
+            }
+
             if (name.endsWith("." + this._fileExtension)) {
                 return name;
             }

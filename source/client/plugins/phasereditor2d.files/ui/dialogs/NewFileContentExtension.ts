@@ -10,7 +10,6 @@ namespace phasereditor2d.files.ui.dialogs {
         private _fileContent : string;
 
         constructor(config: {
-            id: string,
             wizardName: string,
             icon: controls.IImage,
             initialFileName: string,

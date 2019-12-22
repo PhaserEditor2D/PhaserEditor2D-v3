@@ -1956,7 +1956,6 @@ var phasereditor2d;
                 class NewAssetPackFileWizardExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
                     constructor() {
                         super({
-                            id: "phasereditor2d.pack.ui.wizards.NewAssetPackFileWizardExtension",
                             wizardName: "Asset Pack File",
                             icon: pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_ASSET_PACK),
                             initialFileName: "asset-pack",

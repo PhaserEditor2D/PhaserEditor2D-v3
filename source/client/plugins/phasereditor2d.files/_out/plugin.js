@@ -17,7 +17,7 @@ var phasereditor2d;
                     files.ICON_NEW_FILE
                 ]));
                 // new files
-                reg.addExtension(new files.ui.dialogs.NewFolderExtension());
+                reg.addExtension(new files.ui.dialogs.NewFolderExtension(), new files.ui.dialogs.NewGenericFileExtension());
                 // commands
                 reg.addExtension(new ide.commands.CommandExtension(files.ui.actions.FilesViewCommands.registerCommands));
             }
@@ -573,6 +573,9 @@ var phasereditor2d;
                     }
                     normalizedFileName() {
                         const name = super.normalizedFileName();
+                        if (this._fileExtension === "") {
+                            return name;
+                        }
                         if (name.endsWith("." + this._fileExtension)) {
                             return name;
                         }
@@ -640,6 +643,30 @@ var phasereditor2d;
                     }
                 }
                 dialogs.NewFolderExtension = NewFolderExtension;
+            })(dialogs = ui.dialogs || (ui.dialogs = {}));
+        })(ui = files.ui || (files.ui = {}));
+    })(files = phasereditor2d.files || (phasereditor2d.files = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var files;
+    (function (files) {
+        var ui;
+        (function (ui) {
+            var dialogs;
+            (function (dialogs) {
+                class NewGenericFileExtension extends dialogs.NewFileContentExtension {
+                    constructor() {
+                        super({
+                            fileContent: "",
+                            fileExtension: "",
+                            icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FILE),
+                            initialFileName: "Untitled",
+                            wizardName: "File"
+                        });
+                    }
+                }
+                dialogs.NewGenericFileExtension = NewGenericFileExtension;
             })(dialogs = ui.dialogs || (ui.dialogs = {}));
         })(ui = files.ui || (files.ui = {}));
     })(files = phasereditor2d.files || (phasereditor2d.files = {}));

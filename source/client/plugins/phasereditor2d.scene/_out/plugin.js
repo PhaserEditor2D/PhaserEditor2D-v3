@@ -610,7 +610,6 @@ var phasereditor2d;
                 class NewSceneFileDialogExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
                     constructor() {
                         super({
-                            id: "phasereditor2d.scene.ui.wizards.NewSceneFileWizardExtension",
                             wizardName: "Scene File",
                             icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
                             fileExtension: "scene",

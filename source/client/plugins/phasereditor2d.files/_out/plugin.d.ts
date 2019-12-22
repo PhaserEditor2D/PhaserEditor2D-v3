@@ -104,7 +104,6 @@ declare namespace phasereditor2d.files.ui.dialogs {
         private _fileExtension;
         private _fileContent;
         constructor(config: {
-            id: string;
             wizardName: string;
             icon: controls.IImage;
             initialFileName: string;
@@ -135,6 +134,11 @@ declare namespace phasereditor2d.files.ui.dialogs {
     class NewFolderExtension extends NewFileExtension {
         constructor();
         createDialog(): BaseNewFileDialog;
+    }
+}
+declare namespace phasereditor2d.files.ui.dialogs {
+    class NewGenericFileExtension extends NewFileContentExtension {
+        constructor();
     }
 }
 declare namespace phasereditor2d.files.ui.viewers {

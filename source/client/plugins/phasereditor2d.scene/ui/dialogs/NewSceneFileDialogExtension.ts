@@ -4,7 +4,6 @@ namespace phasereditor2d.scene.ui.dialogs {
 
         constructor() {
             super({
-                id: "phasereditor2d.scene.ui.wizards.NewSceneFileWizardExtension",
                 wizardName: "Scene File",
                 icon: ScenePlugin.getInstance().getIcon(ICON_GROUP),
                 fileExtension: "scene",
