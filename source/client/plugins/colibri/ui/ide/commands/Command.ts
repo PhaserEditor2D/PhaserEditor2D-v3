@@ -5,7 +5,7 @@ namespace colibri.ui.ide.commands {
         private _id: string;
         private _name: string;
         private _tooltip: string;
-        private _icon : controls.IImage;
+        private _icon: controls.IImage;
 
         constructor(config: {
             id: string,
@@ -17,6 +17,7 @@ namespace colibri.ui.ide.commands {
             this._id = config.id;
             this._name = config.name;
             this._tooltip = config.tooltip;
+            this._icon = config.icon ?? null;
         }
 
         getId() {

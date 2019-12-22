@@ -1682,6 +1682,7 @@ declare namespace colibri.ui.ide.commands {
         private _commandHandlerMap;
         constructor();
         private onKeyDown;
+        private executeHandler;
         addCommand(cmd: Command): void;
         addCommandHelper(config: {
             id: string;
@@ -1692,6 +1693,7 @@ declare namespace colibri.ui.ide.commands {
         private makeArgs;
         getCommand(id: string): Command;
         getCommandKeyString(commandId: string): string;
+        executeCommand(commandId: string): void;
         addKeyBinding(commandId: string, matcher: KeyMatcher): void;
         addHandler(commandId: string, handler: CommandHandler): void;
         addHandlerHelper(commandId: string, testFunc: (args: CommandArgs) => boolean, executeFunc: (args: CommandArgs) => void): void;

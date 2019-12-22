@@ -43,19 +43,23 @@ namespace colibri.ui.ide.commands {
 
                 if (eventMatches) {
 
-                    const handlers = this._commandHandlerMap.get(command);
+                    this.executeHandler(command, args);
+                }
+            }
+        }
 
-                    for (const handler of handlers) {
+        private executeHandler(command: Command, args: CommandArgs) {
+            const handlers = this._commandHandlerMap.get(command);
 
-                        if (handler.test(args)) {
+            for (const handler of handlers) {
 
-                            event.preventDefault();
+                if (handler.test(args)) {
 
-                            handler.execute(args);
+                    event.preventDefault();
 
-                            return;
-                        }
-                    }
+                    handler.execute(args);
+
+                    return;
                 }
             }
         }
@@ -124,6 +128,16 @@ namespace colibri.ui.ide.commands {
             }
 
             return "";
+        }
+
+        executeCommand(commandId: string) {
+
+            const command = this.getCommand(commandId);
+
+            if (command) {
+
+                this.executeHandler(command, this.makeArgs());
+            }
         }
 
         addKeyBinding(commandId: string, matcher: KeyMatcher): void {

@@ -43,9 +43,10 @@ namespace phasereditor2d.ide.ui.actions {
             manager.addCommandHelper({
                 id: CMD_PLAY_PROJECT,
                 name: "Play Project",
-                tooltip: "Run this project in other tab"
+                tooltip: "Run this project in other tab",
+                icon: IDEPlugin.getInstance().getIcon(ICON_PLAY)
             });
-
+            
             manager.addHandlerHelper(CMD_PLAY_PROJECT,
                 isNotWelcomeWindowScope,
 

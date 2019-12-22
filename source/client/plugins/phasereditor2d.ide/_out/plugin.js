@@ -209,7 +209,7 @@ var phasereditor2d;
                         const manager = new controls.ToolbarManager(area);
                         manager.add(new phasereditor2d.files.ui.actions.OpenNewFileDialogAction());
                         manager.add(new ui.actions.OpenProjectsDialogAction());
-                        manager.add(new ui.actions.PlayProjectAction());
+                        manager.add(new controls.Action({ commandId: ui.actions.CMD_PLAY_PROJECT }));
                     }
                     {
                         // right area 
@@ -307,7 +307,8 @@ var phasereditor2d;
                         manager.addCommandHelper({
                             id: actions.CMD_PLAY_PROJECT,
                             name: "Play Project",
-                            tooltip: "Run this project in other tab"
+                            tooltip: "Run this project in other tab",
+                            icon: ide.IDEPlugin.getInstance().getIcon(ide.ICON_PLAY)
                         });
                         manager.addHandlerHelper(actions.CMD_PLAY_PROJECT, isNotWelcomeWindowScope, args => {
                             const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
@@ -474,34 +475,6 @@ var phasereditor2d;
                     }
                 }
                 actions.OpenThemeDialogAction = OpenThemeDialogAction;
-            })(actions = ui.actions || (ui.actions = {}));
-        })(ui = ide.ui || (ide.ui = {}));
-    })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var ide;
-    (function (ide) {
-        var ui;
-        (function (ui) {
-            var actions;
-            (function (actions) {
-                var controls = colibri.ui.controls;
-                class PlayProjectAction extends controls.Action {
-                    constructor() {
-                        super({
-                            text: "Play Project",
-                            tooltip: "Run this project in other tab",
-                            showText: false,
-                            icon: ide.IDEPlugin.getInstance().getIcon(ide.ICON_PLAY)
-                        });
-                    }
-                    run() {
-                        const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
-                        controls.Controls.openUrlInNewPage(url);
-                    }
-                }
-                actions.PlayProjectAction = PlayProjectAction;
             })(actions = ui.actions || (ui.actions = {}));
         })(ui = ide.ui || (ide.ui = {}));
     })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));

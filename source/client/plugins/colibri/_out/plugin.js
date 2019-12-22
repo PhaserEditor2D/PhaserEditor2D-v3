@@ -1721,7 +1721,6 @@ var colibri;
                             this._text = this._text || command.getName();
                             this._tooltip = this._tooltip || command.getTooltip();
                             this._icon = this._icon || command.getIcon();
-                            console.log(command.getIcon());
                         }
                     }
                 }
@@ -1753,6 +1752,10 @@ var colibri;
                 run(e) {
                     if (this._callback) {
                         this._callback();
+                        return;
+                    }
+                    if (this._commandId) {
+                        colibri.Platform.getWorkbench().getCommandManager().executeCommand(this._commandId);
                     }
                 }
             }
@@ -6627,9 +6630,11 @@ var colibri;
             (function (commands) {
                 class Command {
                     constructor(config) {
+                        var _a;
                         this._id = config.id;
                         this._name = config.name;
                         this._tooltip = config.tooltip;
+                        this._icon = (_a = config.icon, (_a !== null && _a !== void 0 ? _a : null));
                     }
                     getId() {
                         return this._id;
@@ -6753,14 +6758,17 @@ var colibri;
                                 }
                             }
                             if (eventMatches) {
-                                const handlers = this._commandHandlerMap.get(command);
-                                for (const handler of handlers) {
-                                    if (handler.test(args)) {
-                                        event.preventDefault();
-                                        handler.execute(args);
-                                        return;
-                                    }
-                                }
+                                this.executeHandler(command, args);
+                            }
+                        }
+                    }
+                    executeHandler(command, args) {
+                        const handlers = this._commandHandlerMap.get(command);
+                        for (const handler of handlers) {
+                            if (handler.test(args)) {
+                                event.preventDefault();
+                                handler.execute(args);
+                                return;
                             }
                         }
                     }
@@ -6799,6 +6807,12 @@ var colibri;
                             }
                         }
                         return "";
+                    }
+                    executeCommand(commandId) {
+                        const command = this.getCommand(commandId);
+                        if (command) {
+                            this.executeHandler(command, this.makeArgs());
+                        }
                     }
                     addKeyBinding(commandId, matcher) {
                         const command = this.getCommand(commandId);

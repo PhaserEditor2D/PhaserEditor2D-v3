@@ -34,9 +34,9 @@ namespace colibri.ui.controls {
             this._commandId = config.commandId ?? null;
 
             if (this._commandId) {
-                
+
                 const manager = Platform.getWorkbench().getCommandManager();
-                
+
                 const command = manager.getCommand(this._commandId);
 
                 if (command) {
@@ -44,8 +44,6 @@ namespace colibri.ui.controls {
                     this._text = this._text || command.getName();
                     this._tooltip = this._tooltip || command.getTooltip();
                     this._icon = this._icon || command.getIcon();
-
-                    console.log(command.getIcon());
                 }
             }
         }
@@ -88,8 +86,17 @@ namespace colibri.ui.controls {
         run(e?: MouseEvent) {
 
             if (this._callback) {
+
                 this._callback();
+
+                return;
             }
+
+            if (this._commandId) {
+
+                Platform.getWorkbench().getCommandManager().executeCommand(this._commandId);
+            }
+
         }
 
     }

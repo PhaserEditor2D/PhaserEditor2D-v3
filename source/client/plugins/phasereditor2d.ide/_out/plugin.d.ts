@@ -85,13 +85,6 @@ declare namespace phasereditor2d.ide.ui.actions {
 }
 declare namespace phasereditor2d.ide.ui.actions {
     import controls = colibri.ui.controls;
-    class PlayProjectAction extends controls.Action {
-        constructor();
-        run(): void;
-    }
-}
-declare namespace phasereditor2d.ide.ui.actions {
-    import controls = colibri.ui.controls;
     class ReloadProjectAction extends controls.Action {
         constructor();
         run(): void;
