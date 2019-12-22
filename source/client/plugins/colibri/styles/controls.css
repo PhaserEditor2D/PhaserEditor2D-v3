@@ -54,7 +54,6 @@ canvas {
 }
 
 .TooltipKeyString {
-    font-size: small;
     font-family: monospace;
 }
 
@@ -339,6 +338,12 @@ canvas {
 
 .Menu {
     position: fixed;
+}
+
+.MenuItemKeyString {
+    float: right;
+    font-family: monospace;
+    margin-left: 3em;
 }
 
 .MenuContainer {

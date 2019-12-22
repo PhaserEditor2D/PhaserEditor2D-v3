@@ -47,7 +47,7 @@ namespace colibri.ui.ide.commands {
             }
 
             if (this._key) {
-                keys.push(this._key)
+                keys.push(this._key.length === 1? this._key.toUpperCase() : this._key);
             }
 
             return keys.join("+");

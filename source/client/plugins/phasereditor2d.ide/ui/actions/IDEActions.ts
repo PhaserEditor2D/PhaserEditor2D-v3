@@ -46,7 +46,7 @@ namespace phasereditor2d.ide.ui.actions {
                 tooltip: "Run this project in other tab",
                 icon: IDEPlugin.getInstance().getIcon(ICON_PLAY)
             });
-            
+
             manager.addHandlerHelper(CMD_PLAY_PROJECT,
                 isNotWelcomeWindowScope,
 
@@ -73,7 +73,9 @@ namespace phasereditor2d.ide.ui.actions {
 
             manager.addHandlerHelper(CMD_RELOAD_PROJECT,
                 isNotWelcomeWindowScope,
-                args => new ReloadProjectAction().run()
+                args => IDEPlugin.getInstance().ideOpenProject(
+                    colibri.Platform.getWorkbench().getProjectRoot().getName()
+                )
             );
 
             manager.addKeyBinding(CMD_RELOAD_PROJECT, new commands.KeyMatcher({
@@ -91,8 +93,8 @@ namespace phasereditor2d.ide.ui.actions {
             });
 
             manager.addHandlerHelper(CMD_CHANGE_THEME,
-                actions.OpenThemeDialogAction.commandTest,
-                args => new actions.OpenThemeDialogAction().run()
+                actions.OpenThemeDialogHandler.test,
+                actions.OpenThemeDialogHandler
             );
 
             manager.addKeyBinding(CMD_CHANGE_THEME, new commands.KeyMatcher({

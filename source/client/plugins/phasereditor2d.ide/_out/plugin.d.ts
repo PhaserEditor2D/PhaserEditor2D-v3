@@ -76,18 +76,10 @@ declare namespace phasereditor2d.ide.ui.actions {
     }
 }
 declare namespace phasereditor2d.ide.ui.actions {
-    import controls = colibri.ui.controls;
-    class OpenThemeDialogAction extends controls.Action {
-        constructor();
-        run(): void;
-        static commandTest(args: colibri.ui.ide.commands.CommandArgs): boolean;
-    }
-}
-declare namespace phasereditor2d.ide.ui.actions {
-    import controls = colibri.ui.controls;
-    class ReloadProjectAction extends controls.Action {
-        constructor();
-        run(): void;
+    import commands = colibri.ui.ide.commands;
+    function OpenThemeDialogHandler(args: commands.CommandArgs): void;
+    namespace OpenThemeDialogHandler {
+        var test: (args: commands.CommandArgs) => boolean;
     }
 }
 declare namespace phasereditor2d.ide.ui.dialogs {

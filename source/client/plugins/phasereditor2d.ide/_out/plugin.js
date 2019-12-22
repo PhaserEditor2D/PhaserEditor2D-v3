@@ -325,7 +325,7 @@ var phasereditor2d;
                             name: "Reload Project",
                             tooltip: "Reload the project files."
                         });
-                        manager.addHandlerHelper(actions.CMD_RELOAD_PROJECT, isNotWelcomeWindowScope, args => new actions.ReloadProjectAction().run());
+                        manager.addHandlerHelper(actions.CMD_RELOAD_PROJECT, isNotWelcomeWindowScope, args => ide.IDEPlugin.getInstance().ideOpenProject(colibri.Platform.getWorkbench().getProjectRoot().getName()));
                         manager.addKeyBinding(actions.CMD_RELOAD_PROJECT, new commands.KeyMatcher({
                             control: true,
                             alt: true,
@@ -337,7 +337,7 @@ var phasereditor2d;
                             name: "Select Color Theme",
                             tooltip: "Select the color theme of the IDE."
                         });
-                        manager.addHandlerHelper(actions.CMD_CHANGE_THEME, actions.OpenThemeDialogAction.commandTest, args => new actions.OpenThemeDialogAction().run());
+                        manager.addHandlerHelper(actions.CMD_CHANGE_THEME, actions.OpenThemeDialogHandler.test, actions.OpenThemeDialogHandler);
                         manager.addKeyBinding(actions.CMD_CHANGE_THEME, new commands.KeyMatcher({
                             control: true,
                             key: "2",
@@ -395,8 +395,8 @@ var phasereditor2d;
                             callback: () => controls.Controls.openUrlInNewPage("https://phasereditor2d.com/docs/v3")
                         }));
                         menu.addSeparator();
-                        menu.add(new actions.ReloadProjectAction());
-                        menu.add(new actions.OpenThemeDialogAction());
+                        menu.addCommand(actions.CMD_RELOAD_PROJECT);
+                        menu.addCommand(actions.CMD_CHANGE_THEME);
                         menu.addSeparator();
                         menu.add(new controls.Action({
                             text: "Unlock Phaser Editor 2D"
@@ -452,53 +452,21 @@ var phasereditor2d;
             var actions;
             (function (actions) {
                 var controls = colibri.ui.controls;
-                class OpenThemeDialogAction extends controls.Action {
-                    constructor() {
-                        super({
-                            text: "Color Theme",
-                            commandId: actions.CMD_CHANGE_THEME
-                        });
-                    }
-                    run() {
-                        const dlg = new ui.dialogs.ThemesDialog();
-                        dlg.create();
-                        dlg.getViewer().setSelection([controls.Controls.getTheme()]);
-                        dlg.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
-                            const theme = dlg.getViewer().getSelectionFirstElement();
-                            if (theme) {
-                                ide.IDEPlugin.getInstance().setTheme(theme);
-                            }
-                        });
-                    }
-                    static commandTest(args) {
-                        return !(args.activeDialog instanceof ui.dialogs.ThemesDialog);
-                    }
+                function OpenThemeDialogHandler(args) {
+                    const dlg = new ui.dialogs.ThemesDialog();
+                    dlg.create();
+                    dlg.getViewer().setSelection([controls.Controls.getTheme()]);
+                    dlg.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                        const theme = dlg.getViewer().getSelectionFirstElement();
+                        if (theme) {
+                            ide.IDEPlugin.getInstance().setTheme(theme);
+                        }
+                    });
                 }
-                actions.OpenThemeDialogAction = OpenThemeDialogAction;
-            })(actions = ui.actions || (ui.actions = {}));
-        })(ui = ide.ui || (ide.ui = {}));
-    })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var ide;
-    (function (ide) {
-        var ui;
-        (function (ui) {
-            var actions;
-            (function (actions) {
-                var controls = colibri.ui.controls;
-                class ReloadProjectAction extends controls.Action {
-                    constructor() {
-                        super({
-                            text: "Reload Project"
-                        });
-                    }
-                    run() {
-                        ide.IDEPlugin.getInstance().ideOpenProject(colibri.Platform.getWorkbench().getProjectRoot().getName());
-                    }
-                }
-                actions.ReloadProjectAction = ReloadProjectAction;
+                actions.OpenThemeDialogHandler = OpenThemeDialogHandler;
+                OpenThemeDialogHandler.test = function (args) {
+                    return !(args.activeDialog instanceof ui.dialogs.ThemesDialog);
+                };
             })(actions = ui.actions || (ui.actions = {}));
         })(ui = ide.ui || (ide.ui = {}));
     })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));

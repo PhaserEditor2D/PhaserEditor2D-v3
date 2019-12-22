@@ -606,6 +606,7 @@ declare namespace colibri.ui.controls {
         constructor();
         setMenuClosedCallback(callback: () => void): void;
         add(action: Action): void;
+        addCommand(commandId: string): void;
         addSeparator(): void;
         isEmpty(): boolean;
         getElement(): HTMLUListElement;
@@ -744,6 +745,7 @@ declare namespace colibri.ui.controls {
     class Tooltip {
         static tooltip(element: HTMLElement, tooltip: string): void;
         static tooltipWithKey(element: HTMLElement, keyString: any, tooltip: string): void;
+        private static renderTooltip;
     }
 }
 declare namespace colibri.ui.controls {

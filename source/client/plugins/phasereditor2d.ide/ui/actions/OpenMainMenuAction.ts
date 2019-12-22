@@ -23,9 +23,9 @@ namespace phasereditor2d.ide.ui.actions {
 
             menu.addSeparator();
 
-            menu.add(new actions.ReloadProjectAction());
+            menu.addCommand(actions.CMD_RELOAD_PROJECT);
 
-            menu.add(new actions.OpenThemeDialogAction());
+            menu.addCommand(actions.CMD_CHANGE_THEME);
 
             menu.addSeparator();
 

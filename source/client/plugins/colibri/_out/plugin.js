@@ -2181,6 +2181,9 @@ var colibri;
                 add(action) {
                     this._actions.push(action);
                 }
+                addCommand(commandId) {
+                    this.add(new controls.Action({ commandId: commandId }));
+                }
                 addSeparator() {
                     this._actions.push(null);
                 }
@@ -2211,7 +2214,13 @@ var colibri;
                         lastIsSeparator = false;
                         const item = document.createElement("li");
                         item.classList.add("MenuItem");
-                        item.innerText = action.getText();
+                        const keyString = action.getCommandKeyString();
+                        if (keyString) {
+                            item.innerHTML = `${action.getText()} <span class="MenuItemKeyString">${keyString}</span>`;
+                        }
+                        else {
+                            item.innerHTML = action.getText();
+                        }
                         if (action.isEnabled()) {
                             item.addEventListener("click", e => {
                                 this.close();
@@ -3020,9 +3029,12 @@ var colibri;
                 }
                 static tooltipWithKey(element, keyString, tooltip) {
                     if (keyString) {
-                        return this.tooltip(element, "<span class='TooltipKeyString'>" + keyString + "</span> " + tooltip);
+                        return this.tooltip(element, this.renderTooltip(keyString, tooltip));
                     }
                     return this.tooltip(element, tooltip);
+                }
+                static renderTooltip(keyString, tooltip) {
+                    return "<span class='TooltipKeyString'>" + keyString + "</span> " + tooltip;
                 }
             }
             controls.Tooltip = Tooltip;
@@ -6385,7 +6397,7 @@ var colibri;
                             keys.push("Alt");
                         }
                         if (this._key) {
-                            keys.push(this._key);
+                            keys.push(this._key.length === 1 ? this._key.toUpperCase() : this._key);
                         }
                         return keys.join("+");
                     }

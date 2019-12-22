@@ -6,7 +6,7 @@ namespace colibri.ui.controls {
         private _element: HTMLUListElement;
         private _bgElement: HTMLDivElement;
         private _menuCloseCallback: () => void;
-        private static _activeMenu : Menu = null;
+        private static _activeMenu: Menu = null;
 
         constructor() {
             this._actions = [];
@@ -18,6 +18,10 @@ namespace colibri.ui.controls {
 
         add(action: Action) {
             this._actions.push(action);
+        }
+
+        addCommand(commandId: string) {
+            this.add(new Action({ commandId: commandId }));
         }
 
         addSeparator() {
@@ -67,7 +71,16 @@ namespace colibri.ui.controls {
 
                 item.classList.add("MenuItem");
 
-                item.innerText = action.getText();
+                const keyString = action.getCommandKeyString();
+
+                if (keyString) {
+
+                    item.innerHTML = `${action.getText()} <span class="MenuItemKeyString">${keyString}</span>`;
+
+                } else {
+
+                    item.innerHTML = action.getText();
+                }
 
                 if (action.isEnabled()) {
 

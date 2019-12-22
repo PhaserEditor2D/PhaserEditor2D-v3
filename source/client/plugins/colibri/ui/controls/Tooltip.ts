@@ -109,10 +109,14 @@ namespace colibri.ui.controls {
         static tooltipWithKey(element: HTMLElement, keyString, tooltip: string) {
 
             if (keyString) {
-                return this.tooltip(element, "<span class='TooltipKeyString'>" + keyString + "</span> " + tooltip);
+                return this.tooltip(element, this.renderTooltip(keyString, tooltip));
             }
 
             return this.tooltip(element, tooltip);
+        }
+
+        private static renderTooltip(keyString: string, tooltip: string) {
+            return "<span class='TooltipKeyString'>" + keyString + "</span> " + tooltip;
         }
 
     }
