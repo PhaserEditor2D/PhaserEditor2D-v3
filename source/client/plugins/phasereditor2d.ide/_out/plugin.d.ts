@@ -18,6 +18,16 @@ declare namespace phasereditor2d.ide {
     }
     const VER = "3.0.0";
 }
+declare namespace phasereditor2d.ide.core {
+    class PhaserDocs {
+        private _data;
+        private _plugin;
+        private _filePath;
+        constructor(plugin: colibri.Plugin, filePath: string);
+        preload(): Promise<void>;
+        getDoc(type: string, member: string, param?: string): string;
+    }
+}
 declare namespace phasereditor2d.ide.ui {
     import ide = colibri.ui.ide;
     class DesignWindow extends ide.WorkbenchWindow {

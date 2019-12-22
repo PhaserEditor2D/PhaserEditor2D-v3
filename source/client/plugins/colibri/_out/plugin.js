@@ -18,6 +18,11 @@ var colibri;
         getIcon(name) {
             return colibri.ui.controls.Controls.getIcon(name, `plugins/${this.getId()}/ui/icons`);
         }
+        async getJSON(pathInPlugin) {
+            const result = await fetch(`static/plugins/${this.getId()}/` + pathInPlugin);
+            const data = await result.json();
+            return data;
+        }
     }
     colibri.Plugin = Plugin;
 })(colibri || (colibri = {}));
@@ -3652,10 +3657,13 @@ var colibri;
                         parent.appendChild(div);
                         return div;
                     }
-                    createLabel(parent, text = "") {
+                    createLabel(parent, text = "", tooltip = "") {
                         const label = document.createElement("label");
                         label.classList.add("formLabel");
                         label.innerText = text;
+                        if (tooltip) {
+                            controls.Tooltip.tooltip(label, tooltip);
+                        }
                         parent.appendChild(label);
                         return label;
                     }

@@ -14,10 +14,12 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             const comp = this.createGridElement(parent, 2);
 
+            const docs = AssetPackPlugin.getInstance().getPhaserDocs();
+
             {
                 // Key
 
-                this.createLabel(comp, "Key");
+                this.createLabel(comp, "Key", docs.getDoc("Phaser.Loader.LoaderPlugin", "spritesheet", "key"));
 
                 const text = this.createText(comp);
 

@@ -118,12 +118,16 @@ namespace phasereditor2d.pack {
             reg.addExtension(
                 new ide.PreloadProjectResourcesExtension(
                     (monitor) => {
-                        
-                        const finder = new  pack.core.PackFinder();
+
+                        const finder = new pack.core.PackFinder();
 
                         return finder.preload(monitor);
                     }
-                )
+                ),
+
+                new ide.PreloadProjectResourcesExtension((monitor) => {
+                    return this.getPhaserDocs().preload();
+                })
             );
 
             // editors
@@ -140,6 +144,15 @@ namespace phasereditor2d.pack {
 
             reg.addExtension(
                 new ui.dialogs.NewAssetPackFileWizardExtension());
+        }
+
+
+        private _phaserDocs: phasereditor2d.ide.core.PhaserDocs;
+
+        getPhaserDocs() {
+            return this._phaserDocs ?
+                this._phaserDocs :
+                (this._phaserDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json"));
         }
     }
 

@@ -156,6 +156,33 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var ide;
+    (function (ide) {
+        var core;
+        (function (core) {
+            class PhaserDocs {
+                constructor(plugin, filePath) {
+                    this._data = null;
+                    this._plugin = plugin;
+                    this._filePath = filePath;
+                }
+                async preload() {
+                    if (!this._data) {
+                        this._data = await this._plugin.getJSON(this._filePath);
+                    }
+                }
+                getDoc(type, member, param) {
+                    const key = type + "#" + member + (param ? "@" + param : "");
+                    const signature = type + "." + member + (param ? "(" + param + ")" : "");
+                    return `<small>${signature}</small> <br> ${this._data[key]}`;
+                }
+            }
+            core.PhaserDocs = PhaserDocs;
+        })(core = ide.core || (ide.core = {}));
+    })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var ide;
     (function (ide_2) {
         var ui;
         (function (ui) {

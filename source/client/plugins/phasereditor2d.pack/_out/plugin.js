@@ -87,6 +87,8 @@ var phasereditor2d;
                 reg.addExtension(new ide.PreloadProjectResourcesExtension((monitor) => {
                     const finder = new pack.core.PackFinder();
                     return finder.preload(monitor);
+                }), new ide.PreloadProjectResourcesExtension((monitor) => {
+                    return this.getPhaserDocs().preload();
                 }));
                 // editors
                 reg.addExtension(new ide.EditorExtension([
@@ -95,6 +97,11 @@ var phasereditor2d;
                 reg.addExtension(new ide.commands.CommandExtension(pack.ui.editor.AssetPackEditor.registerCommands));
                 // new file dialog
                 reg.addExtension(new pack.ui.dialogs.NewAssetPackFileWizardExtension());
+            }
+            getPhaserDocs() {
+                return this._phaserDocs ?
+                    this._phaserDocs :
+                    (this._phaserDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json"));
             }
         }
         AssetPackPlugin._instance = new AssetPackPlugin();
@@ -3090,9 +3097,10 @@ var phasereditor2d;
                         }
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 2);
+                            const docs = pack.AssetPackPlugin.getInstance().getPhaserDocs();
                             {
                                 // Key
-                                this.createLabel(comp, "Key");
+                                this.createLabel(comp, "Key", docs.getDoc("Phaser.Loader.LoaderPlugin", "spritesheet", "key"));
                                 const text = this.createText(comp);
                                 text.addEventListener("change", e => {
                                     this.changeItemField("key", text.value);

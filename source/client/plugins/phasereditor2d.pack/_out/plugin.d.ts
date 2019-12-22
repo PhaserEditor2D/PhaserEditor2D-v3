@@ -14,6 +14,8 @@ declare namespace phasereditor2d.pack {
         static getInstance(): AssetPackPlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        private _phaserDocs;
+        getPhaserDocs(): phasereditor2d.ide.core.PhaserDocs;
     }
 }
 declare namespace phasereditor2d.pack.core {

@@ -7,6 +7,7 @@ declare namespace colibri {
         started(): Promise<void>;
         registerExtensions(registry: ExtensionRegistry): void;
         getIcon(name: string): ui.controls.IImage;
+        getJSON(pathInPlugin: string): Promise<any>;
     }
 }
 declare namespace colibri {
@@ -886,7 +887,7 @@ declare namespace colibri.ui.controls.properties {
         flatValues_Number(values: number[]): string;
         flatValues_StringJoin(values: string[]): string;
         protected createGridElement(parent: HTMLElement, cols?: number, simpleProps?: boolean): HTMLDivElement;
-        protected createLabel(parent: HTMLElement, text?: string): HTMLLabelElement;
+        protected createLabel(parent: HTMLElement, text?: string, tooltip?: string): HTMLLabelElement;
         protected createButton(parent: HTMLElement, text: string, callback: () => void): HTMLButtonElement;
         protected createText(parent: HTMLElement, readOnly?: boolean): HTMLInputElement;
         protected createCheckbox(parent: HTMLElement): HTMLInputElement;

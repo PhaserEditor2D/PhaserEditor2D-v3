@@ -89,12 +89,16 @@ namespace colibri.ui.controls.properties {
             return div;
         }
 
-        protected createLabel(parent: HTMLElement, text = "") {
+        protected createLabel(parent: HTMLElement, text = "", tooltip = "") {
 
             const label = document.createElement("label");
 
             label.classList.add("formLabel");
             label.innerText = text;
+
+            if (tooltip) {
+                Tooltip.tooltip(label, tooltip);
+            }
 
             parent.appendChild(label);
 

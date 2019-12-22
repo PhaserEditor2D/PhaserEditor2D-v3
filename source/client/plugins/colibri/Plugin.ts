@@ -28,5 +28,14 @@ namespace colibri {
         getIcon(name : string) : ui.controls.IImage {
             return ui.controls.Controls.getIcon(name, `plugins/${this.getId()}/ui/icons`);
         }
+
+        async getJSON(pathInPlugin : string) {
+
+            const result = await fetch(`static/plugins/${this.getId()}/` + pathInPlugin);
+
+            const data = await result.json();
+
+            return data;
+        }
     }
 }
