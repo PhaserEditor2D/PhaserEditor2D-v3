@@ -16,8 +16,9 @@ namespace colibri.ui.controls {
             this._actionDataMap = new Map();
         }
 
-        addCommand(commandId: string) {
-            this.add(new Action({ commandId: commandId }));
+        addCommand(commandId: string, config: ActionConfig = {}) {
+            config.commandId = commandId;
+            this.add(new Action(config));
         }
 
         add(action: Action) {

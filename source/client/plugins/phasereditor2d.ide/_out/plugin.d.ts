@@ -25,7 +25,7 @@ declare namespace phasereditor2d.ide.core {
         private _filePath;
         constructor(plugin: colibri.Plugin, filePath: string);
         preload(): Promise<void>;
-        getDoc(type: string, member: string, param?: string): string;
+        getDoc(helpKey: any): string;
     }
 }
 declare namespace phasereditor2d.ide.ui {

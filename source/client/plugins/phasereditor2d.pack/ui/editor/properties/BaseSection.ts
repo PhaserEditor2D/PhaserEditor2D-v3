@@ -81,9 +81,19 @@ namespace phasereditor2d.pack.ui.editor.properties {
             });
         }
 
-        protected createFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string) {
+        protected getHelp(helpKey: string) {
+            return AssetPackPlugin.getInstance().getPhaserDocs().getDoc(helpKey);
+        }
 
-            this.createLabel(comp, label);
+        protected createFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string, helpKey?: string) {
+
+            let tooltip: string;
+
+            if (helpKey) {
+                tooltip = this.getHelp(helpKey);
+            }
+
+            this.createLabel(comp, label, tooltip);
 
             const text = this.createText(comp, true);
 
@@ -109,9 +119,9 @@ namespace phasereditor2d.pack.ui.editor.properties {
             });
         }
 
-        protected createMultiFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string) {
+        protected createMultiFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string, helpKey?: string) {
 
-            this.createLabel(comp, label);
+            this.createLabel(comp, label, helpKey ? this.getHelp(helpKey) : undefined);
 
             const text = this.createText(comp, true);
 
@@ -133,9 +143,9 @@ namespace phasereditor2d.pack.ui.editor.properties {
             });
         }
 
-        protected createSimpleTextField(parent: HTMLElement, label: string, field: string) {
+        protected createSimpleTextField(parent: HTMLElement, label: string, field: string, helpKey?: string) {
 
-            this.createLabel(parent, label);
+            this.createLabel(parent, label, helpKey ? this.getHelp(helpKey) : undefined);
 
             const text = this.createText(parent, false);
             text.style.gridColumn = "2 / span 2";
@@ -152,9 +162,9 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return text;
         }
 
-        protected createSimpleIntegerField(parent: HTMLElement, label: string, field: string) {
+        protected createSimpleIntegerField(parent: HTMLElement, label: string, field: string, helpKey?: string) {
 
-            this.createLabel(parent, label);
+            this.createLabel(parent, label, helpKey ? this.getHelp(helpKey) : undefined);
 
             const text = this.createText(parent, false);
             text.style.gridColumn = "2 / span 2";

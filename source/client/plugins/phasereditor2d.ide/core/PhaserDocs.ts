@@ -3,11 +3,11 @@ namespace phasereditor2d.ide.core {
     export class PhaserDocs {
 
         private _data: any = null;
-        private _plugin : colibri.Plugin;
+        private _plugin: colibri.Plugin;
         private _filePath: string;
 
-        constructor(plugin : colibri.Plugin, filePath : string) {
-            
+        constructor(plugin: colibri.Plugin, filePath: string) {
+
             this._plugin = plugin;
             this._filePath = filePath;
         }
@@ -20,13 +20,13 @@ namespace phasereditor2d.ide.core {
             }
         }
 
-        getDoc(type: string, member: string, param?: string): string {
+        getDoc(helpKey): string {
 
-            const key = type + "#" + member + (param ? "@" + param : "");
+            if (helpKey in this._data) {
+                return `<small>${helpKey}</small> <br><br> <div style="max-width:60em">${this._data[helpKey]}</div>`;
+            }
 
-            const signature = type + "." + member + (param ? "(" + param + ")" : "");
-
-            return `<small>${signature}</small> <br> ${this._data[key]}`;
+            return "Help not found for: " + helpKey;
         }
 
     }

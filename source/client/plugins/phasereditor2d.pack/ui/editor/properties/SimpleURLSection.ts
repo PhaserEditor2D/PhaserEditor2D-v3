@@ -28,7 +28,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, this._label, this._dataKey, this._contentType);
+            this.createFileField(comp, this._label, this._dataKey, this._contentType,
+                `Phaser.Loader.LoaderPlugin.${this._assetPackType}(${this._dataKey})`);
         }
     }
 }

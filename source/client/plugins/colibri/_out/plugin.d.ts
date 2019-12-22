@@ -737,7 +737,7 @@ declare namespace colibri.ui.controls {
         private _toolbarElement;
         private _actionDataMap;
         constructor(toolbarElement: HTMLElement);
-        addCommand(commandId: string): void;
+        addCommand(commandId: string, config?: ActionConfig): void;
         add(action: Action): void;
         dispose(): void;
         private updateButtonWithAction;

@@ -636,10 +636,11 @@ declare namespace phasereditor2d.pack.ui.editor.properties {
         canEditNumber(n: number): boolean;
         browseFile_onlyContentType(title: string, contentType: string, selectionCallback: (files: io.FilePath[]) => void): Promise<void>;
         browseFile(title: string, fileFilter: (file: io.FilePath) => boolean, selectionCallback: (files: io.FilePath[]) => void): Promise<void>;
-        protected createFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string): void;
-        protected createMultiFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string): void;
-        protected createSimpleTextField(parent: HTMLElement, label: string, field: string): HTMLInputElement;
-        protected createSimpleIntegerField(parent: HTMLElement, label: string, field: string): HTMLInputElement;
+        protected getHelp(helpKey: string): string;
+        protected createFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string, helpKey?: string): void;
+        protected createMultiFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string, helpKey?: string): void;
+        protected createSimpleTextField(parent: HTMLElement, label: string, field: string, helpKey?: string): HTMLInputElement;
+        protected createSimpleIntegerField(parent: HTMLElement, label: string, field: string, helpKey?: string): HTMLInputElement;
     }
 }
 declare namespace phasereditor2d.pack.ui.editor.properties {

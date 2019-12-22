@@ -13,14 +13,16 @@ namespace phasereditor2d.pack.ui.editor.properties {
         }
 
         protected createForm(parent: HTMLDivElement) {
-            
+
             const comp = this.createGridElement(parent, 3);
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, "JSON URL", "jsonURL", core.contentTypes.CONTENT_TYPE_AUDIO_SPRITE);
+            this.createFileField(comp, "JSON URL", "jsonURL", core.contentTypes.CONTENT_TYPE_AUDIO_SPRITE,
+                "Phaser.Loader.LoaderPlugin.audioSprite(jsonURL)");
 
-            this.createMultiFileField(comp, "Audio URL", "audioURL", webContentTypes.core.CONTENT_TYPE_AUDIO);
+            this.createMultiFileField(comp, "Audio URL", "audioURL", webContentTypes.core.CONTENT_TYPE_AUDIO,
+                "Phaser.Loader.LoaderPlugin.audioSprite(audioURL)");
         }
     }
 }

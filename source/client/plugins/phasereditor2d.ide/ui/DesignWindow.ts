@@ -94,7 +94,7 @@ namespace phasereditor2d.ide.ui {
 
                 manager.add(new ui.actions.OpenProjectsDialogAction());
 
-                manager.addCommand(actions.CMD_PLAY_PROJECT);
+                manager.addCommand(actions.CMD_PLAY_PROJECT, { showText: false });
             }
 
             {

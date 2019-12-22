@@ -10,7 +10,7 @@ namespace phasereditor2d.pack.ui.viewers {
         unityAtlas: "Unity Atlas",
         multiatlas: "Multiatlas",
         spritesheet: "Spritesheet",
-        animations: "Animations",
+        animation: "Animation",
         bitmapFont: "Bitmap Font",
         tilemapCSV: "Tilemap CSV",
         tilemapImpact: "Tilemap Impact",

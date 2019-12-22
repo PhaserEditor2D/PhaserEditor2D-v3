@@ -27,7 +27,7 @@ namespace colibri.ui.controls {
 
             this._text = config.text ?? "";
             this._tooltip = config.tooltip ?? "";
-            this._showText = config.showText === true;
+            this._showText = config.showText !== false;
             this._icon = config.icon ?? null;
             this._enabled = config.enabled === undefined || config.enabled;
             this._callback = config.callback ?? null;

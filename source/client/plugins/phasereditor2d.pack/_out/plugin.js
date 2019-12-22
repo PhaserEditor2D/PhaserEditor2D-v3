@@ -2803,8 +2803,15 @@ var phasereditor2d;
                                 dlg.close();
                             });
                         }
-                        createFileField(comp, label, fieldKey, contentType) {
-                            this.createLabel(comp, label);
+                        getHelp(helpKey) {
+                            return pack.AssetPackPlugin.getInstance().getPhaserDocs().getDoc(helpKey);
+                        }
+                        createFileField(comp, label, fieldKey, contentType, helpKey) {
+                            let tooltip;
+                            if (helpKey) {
+                                tooltip = this.getHelp(helpKey);
+                            }
+                            this.createLabel(comp, label, tooltip);
                             const text = this.createText(comp, true);
                             this.addUpdater(() => {
                                 const val = this.getSelection()[0].getData()[fieldKey];
@@ -2818,8 +2825,8 @@ var phasereditor2d;
                                 });
                             });
                         }
-                        createMultiFileField(comp, label, fieldKey, contentType) {
-                            this.createLabel(comp, label);
+                        createMultiFileField(comp, label, fieldKey, contentType, helpKey) {
+                            this.createLabel(comp, label, helpKey ? this.getHelp(helpKey) : undefined);
                             const text = this.createText(comp, true);
                             this.addUpdater(() => {
                                 const val = this.getSelection()[0].getData()[fieldKey];
@@ -2832,8 +2839,8 @@ var phasereditor2d;
                                 });
                             });
                         }
-                        createSimpleTextField(parent, label, field) {
-                            this.createLabel(parent, label);
+                        createSimpleTextField(parent, label, field, helpKey) {
+                            this.createLabel(parent, label, helpKey ? this.getHelp(helpKey) : undefined);
                             const text = this.createText(parent, false);
                             text.style.gridColumn = "2 / span 2";
                             text.addEventListener("change", e => {
@@ -2845,8 +2852,8 @@ var phasereditor2d;
                             });
                             return text;
                         }
-                        createSimpleIntegerField(parent, label, field) {
-                            this.createLabel(parent, label);
+                        createSimpleIntegerField(parent, label, field, helpKey) {
+                            this.createLabel(parent, label, helpKey ? this.getHelp(helpKey) : undefined);
                             const text = this.createText(parent, false);
                             text.style.gridColumn = "2 / span 2";
                             text.addEventListener("change", e => {
@@ -2886,9 +2893,9 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "Atlas URL", "atlasURL", pack.core.contentTypes.CONTENT_TYPE_ATLAS);
-                            this.createFileField(comp, "Texture URL", "textureURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
-                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
+                            this.createFileField(comp, "Atlas URL", "atlasURL", pack.core.contentTypes.CONTENT_TYPE_ATLAS, "Phaser.Loader.LoaderPlugin.atlas(atlasURL)");
+                            this.createFileField(comp, "Texture URL", "textureURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Loader.LoaderPlugin.atlas(textureURL)");
+                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Types.Loader.FileTypes.AtlasJSONFileConfig.normalMap");
                         }
                     }
                     properties.AtlasSection = AtlasSection;
@@ -2918,9 +2925,9 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "Atlas URL", "atlasURL", pack.core.contentTypes.CONTENT_TYPE_ATLAS_XML);
-                            this.createFileField(comp, "Texture URL", "textureURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
-                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
+                            this.createFileField(comp, "Atlas URL", "atlasURL", pack.core.contentTypes.CONTENT_TYPE_ATLAS_XML, "Phaser.Loader.LoaderPlugin.atlasXML(atlasURL)");
+                            this.createFileField(comp, "Texture URL", "textureURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Loader.LoaderPlugin.atlasXML(textureURL)");
+                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Types.Loader.FileTypes.AtlasXMLFileConfig.normalMap");
                         }
                     }
                     properties.AtlasXMLSection = AtlasXMLSection;
@@ -2949,7 +2956,7 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createMultiFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_AUDIO);
+                            this.createMultiFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_AUDIO, "Phaser.Loader.LoaderPlugin.audio(urls)");
                         }
                     }
                     properties.AudioSection = AudioSection;
@@ -2978,8 +2985,8 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "JSON URL", "jsonURL", pack.core.contentTypes.CONTENT_TYPE_AUDIO_SPRITE);
-                            this.createMultiFileField(comp, "Audio URL", "audioURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_AUDIO);
+                            this.createFileField(comp, "JSON URL", "jsonURL", pack.core.contentTypes.CONTENT_TYPE_AUDIO_SPRITE, "Phaser.Loader.LoaderPlugin.audioSprite(jsonURL)");
+                            this.createMultiFileField(comp, "Audio URL", "audioURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_AUDIO, "Phaser.Loader.LoaderPlugin.audioSprite(audioURL)");
                         }
                     }
                     properties.AudioSpriteSection = AudioSpriteSection;
@@ -3008,9 +3015,9 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "Font Data URL", "fontDataURL", pack.core.contentTypes.CONTENT_TYPE_BITMAP_FONT);
-                            this.createFileField(comp, "Texture URL", "textureURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
-                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
+                            this.createFileField(comp, "Font Data URL", "fontDataURL", pack.core.contentTypes.CONTENT_TYPE_BITMAP_FONT, "Phaser.Loader.LoaderPlugin.bitmapFont(fontDataURL)");
+                            this.createFileField(comp, "Texture URL", "textureURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Loader.LoaderPlugin.bitmapFont(textureURL)");
+                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Types.Loader.FileTypes.BitmapFontFileConfig.normalMap");
                         }
                     }
                     properties.BitmapFontSection = BitmapFontSection;
@@ -3039,9 +3046,9 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_HTML);
-                            this.createSimpleIntegerField(comp, "Width", "width");
-                            this.createSimpleIntegerField(comp, "Height", "height");
+                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_HTML, "Phaser.Loader.LoaderPlugin.htmlTexture(url)");
+                            this.createSimpleIntegerField(comp, "Width", "width", "Phaser.Loader.LoaderPlugin.htmlTexture(width)");
+                            this.createSimpleIntegerField(comp, "Height", "height", "Phaser.Loader.LoaderPlugin.htmlTexture(height)");
                         }
                     }
                     properties.HTMLTextureSection = HTMLTextureSection;
@@ -3070,8 +3077,8 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
-                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
+                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Loader.LoaderPlugin.image(url)");
+                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Types.Loader.FileTypes.ImageFileConfig.normalMap");
                         }
                     }
                     properties.ImageSection = ImageSection;
@@ -3100,7 +3107,7 @@ var phasereditor2d;
                             const docs = pack.AssetPackPlugin.getInstance().getPhaserDocs();
                             {
                                 // Key
-                                this.createLabel(comp, "Key", docs.getDoc("Phaser.Loader.LoaderPlugin", "spritesheet", "key"));
+                                this.createLabel(comp, "Key", "The key of the file");
                                 const text = this.createText(comp);
                                 text.addEventListener("change", e => {
                                     this.changeItemField("key", text.value);
@@ -3144,8 +3151,8 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", pack.core.contentTypes.CONTENT_TYPE_MULTI_ATLAS);
-                            this.createSimpleTextField(comp, "Path", "path");
+                            this.createFileField(comp, "URL", "url", pack.core.contentTypes.CONTENT_TYPE_MULTI_ATLAS, "Phaser.Loader.LoaderPlugin.multiatlas(atlasURL)");
+                            this.createSimpleTextField(comp, "Path", "path", "Phaser.Loader.LoaderPlugin.multiatlas(path)");
                         }
                     }
                     properties.MultiatlasSection = MultiatlasSection;
@@ -3177,11 +3184,11 @@ var phasereditor2d;
                             comp.style.gridTemplateColumns = "auto 1fr auto";
                             {
                                 // URL
-                                this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT);
+                                this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, "Phaser.Loader.LoaderPlugin.plugin(url)");
                             }
                             {
                                 // start
-                                this.createLabel(comp, "Start");
+                                this.createLabel(comp, "Start", this.getHelp("Phaser.Loader.LoaderPlugin.plugin(start)"));
                                 const checkbox = this.createCheckbox(comp);
                                 checkbox.style.gridColumn = "2 / span 2";
                                 checkbox.addEventListener("change", e => {
@@ -3192,7 +3199,7 @@ var phasereditor2d;
                                     checkbox.checked = data.start;
                                 });
                             }
-                            this.createSimpleTextField(comp, "Mapping", "mapping");
+                            this.createSimpleTextField(comp, "Mapping", "mapping", this.getHelp("Phaser.Loader.LoaderPlugin.plugin(mapping)"));
                         }
                     }
                     properties.PluginSection = PluginSection;
@@ -3222,9 +3229,9 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_SVG);
-                            this.createSimpleIntegerField(comp, "Width", "svgConfig.width");
-                            this.createSimpleIntegerField(comp, "Height", "svgConfig.height");
+                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_SVG, "Phaser.Loader.LoaderPlugin.svg(url)");
+                            this.createSimpleIntegerField(comp, "Width", "svgConfig.width", "Phaser.Types.Loader.FileTypes.SVGSizeConfig.width");
+                            this.createSimpleIntegerField(comp, "Height", "svgConfig.height", "Phaser.Types.Loader.FileTypes.SVGSizeConfig.height");
                         }
                     }
                     properties.SVGSection = SVGSection;
@@ -3254,9 +3261,9 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT);
-                            this.createSimpleTextField(comp, "System Key", "systemKey");
-                            this.createSimpleTextField(comp, "Scene Key", "sceneKey");
+                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, "Phaser.Loader.LoaderPlugin.scenePlugin(url)");
+                            this.createSimpleTextField(comp, "System Key", "systemKey", "Phaser.Loader.LoaderPlugin.scenePlugin(systemKey)");
+                            this.createSimpleTextField(comp, "Scene Key", "sceneKey", "Phaser.Loader.LoaderPlugin.scenePlugin(sceneKey)");
                         }
                     }
                     properties.ScenePluginSection = ScenePluginSection;
@@ -3289,7 +3296,7 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, this._label, this._dataKey, this._contentType);
+                            this.createFileField(comp, this._label, this._dataKey, this._contentType, `Phaser.Loader.LoaderPlugin.${this._assetPackType}(${this._dataKey})`);
                         }
                     }
                     properties.SimpleURLSection = SimpleURLSection;
@@ -3322,12 +3329,12 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createSimpleIntegerField(comp, "Frame Width", "frameConfig.frameWidth");
-                            this.createSimpleIntegerField(comp, "Frame Height", "frameConfig.frameHeight");
-                            this.createSimpleIntegerField(comp, "Start Frame", "frameConfig.startFrame");
-                            this.createSimpleIntegerField(comp, "End Frame", "frameConfig.endFrame");
-                            this.createSimpleIntegerField(comp, "Margin", "frameConfig.margin");
-                            this.createSimpleIntegerField(comp, "Spacing", "frameConfig.spacing");
+                            this.createSimpleIntegerField(comp, "Frame Width", "frameConfig.frameWidth", "Phaser.Types.Textures.SpriteSheetConfig.frameWidth");
+                            this.createSimpleIntegerField(comp, "Frame Height", "frameConfig.frameHeight", "Phaser.Types.Textures.SpriteSheetConfig.frameHeight");
+                            this.createSimpleIntegerField(comp, "Start Frame", "frameConfig.startFrame", "Phaser.Types.Textures.SpriteSheetConfig.startFrame");
+                            this.createSimpleIntegerField(comp, "End Frame", "frameConfig.endFrame", "Phaser.Types.Textures.SpriteSheetConfig.endFrame");
+                            this.createSimpleIntegerField(comp, "Margin", "frameConfig.margin", "Phaser.Types.Textures.SpriteSheetConfig.margin");
+                            this.createSimpleIntegerField(comp, "Spacing", "frameConfig.spacing", "Phaser.Types.Textures.SpriteSheetConfig.spacing");
                         }
                     }
                     properties.SpritesheetFrameSection = SpritesheetFrameSection;
@@ -3357,7 +3364,7 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", pack.core.contentTypes.CONTENT_TYPE_MULTI_ATLAS);
+                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Loader.LoaderPlugin.spritesheet(url)");
                         }
                     }
                     properties.SpritesheetURLSection = SpritesheetURLSection;
@@ -3386,7 +3393,7 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_CSV);
+                            this.createFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_CSV, "Phaser.Loader.LoaderPlugin.tilemapCSV(url)");
                         }
                     }
                     properties.TilemapCSVSection = TilemapCSVSection;
@@ -3415,7 +3422,7 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", pack.core.contentTypes.CONTENT_TYPE_TILEMAP_IMPACT);
+                            this.createFileField(comp, "URL", "url", pack.core.contentTypes.CONTENT_TYPE_TILEMAP_IMPACT, "Phaser.Loader.LoaderPlugin.tilemapImpact(url)");
                         }
                     }
                     properties.TilemapImpactSection = TilemapImpactSection;
@@ -3444,7 +3451,7 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "URL", "url", pack.core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON);
+                            this.createFileField(comp, "URL", "url", pack.core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON, "Phaser.Loader.LoaderPlugin.tilemapTiledJSON(url)");
                         }
                     }
                     properties.TilemapTiledJSONSection = TilemapTiledJSONSection;
@@ -3474,9 +3481,9 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createFileField(comp, "Atlas URL", "atlasURL", pack.core.contentTypes.CONTENT_TYPE_UNITY_ATLAS);
-                            this.createFileField(comp, "Texture URL", "textureURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
-                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE);
+                            this.createFileField(comp, "Atlas URL", "atlasURL", pack.core.contentTypes.CONTENT_TYPE_UNITY_ATLAS, "Phaser.Loader.LoaderPlugin.unityAtlas(atlasURL)");
+                            this.createFileField(comp, "Texture URL", "textureURL", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Loader.LoaderPlugin.unityAtlas(textureURL)");
+                            this.createFileField(comp, "Normal Map", "normalMap", phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, "Phaser.Types.Loader.FileTypes.UnityAtlasFileConfig.normalMap");
                         }
                     }
                     properties.UnityAtlasSection = UnityAtlasSection;
@@ -3505,7 +3512,7 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr auto";
-                            this.createMultiFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_VIDEO);
+                            this.createMultiFileField(comp, "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_VIDEO, "Phaser.Loader.LoaderPlugin.video(urls)");
                         }
                     }
                     properties.VideoSection = VideoSection;
@@ -4264,7 +4271,7 @@ var phasereditor2d;
                     unityAtlas: "Unity Atlas",
                     multiatlas: "Multiatlas",
                     spritesheet: "Spritesheet",
-                    animations: "Animations",
+                    animation: "Animation",
                     bitmapFont: "Bitmap Font",
                     tilemapCSV: "Tilemap CSV",
                     tilemapImpact: "Tilemap Impact",

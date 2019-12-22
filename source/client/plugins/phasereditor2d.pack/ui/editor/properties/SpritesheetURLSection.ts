@@ -21,7 +21,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, "URL", "url", core.contentTypes.CONTENT_TYPE_MULTI_ATLAS);
+            this.createFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_IMAGE, 
+                "Phaser.Loader.LoaderPlugin.spritesheet(url)");
 
         }
     }

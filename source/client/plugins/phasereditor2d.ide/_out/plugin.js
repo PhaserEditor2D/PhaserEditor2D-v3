@@ -170,10 +170,11 @@ var phasereditor2d;
                         this._data = await this._plugin.getJSON(this._filePath);
                     }
                 }
-                getDoc(type, member, param) {
-                    const key = type + "#" + member + (param ? "@" + param : "");
-                    const signature = type + "." + member + (param ? "(" + param + ")" : "");
-                    return `<small>${signature}</small> <br> ${this._data[key]}`;
+                getDoc(helpKey) {
+                    if (helpKey in this._data) {
+                        return `<small>${helpKey}</small> <br><br> <div style="max-width:60em">${this._data[helpKey]}</div>`;
+                    }
+                    return "Help not found for: " + helpKey;
                 }
             }
             core.PhaserDocs = PhaserDocs;
@@ -236,7 +237,7 @@ var phasereditor2d;
                         const manager = new controls.ToolbarManager(area);
                         manager.add(new phasereditor2d.files.ui.actions.OpenNewFileDialogAction());
                         manager.add(new ui.actions.OpenProjectsDialogAction());
-                        manager.addCommand(ui.actions.CMD_PLAY_PROJECT);
+                        manager.addCommand(ui.actions.CMD_PLAY_PROJECT, { showText: false });
                     }
                     {
                         // right area 
@@ -412,6 +413,7 @@ var phasereditor2d;
                         super({
                             text: "Open Menu",
                             tooltip: "Main menu",
+                            showText: false,
                             icon: ide.IDEPlugin.getInstance().getIcon(ide.ICON_MENU)
                         });
                     }

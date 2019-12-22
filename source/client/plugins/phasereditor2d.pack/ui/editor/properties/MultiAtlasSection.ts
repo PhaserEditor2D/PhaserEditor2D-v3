@@ -20,9 +20,10 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, "URL", "url", core.contentTypes.CONTENT_TYPE_MULTI_ATLAS);
+            this.createFileField(comp, "URL", "url", core.contentTypes.CONTENT_TYPE_MULTI_ATLAS, 
+            "Phaser.Loader.LoaderPlugin.multiatlas(atlasURL)");
 
-            this.createSimpleTextField(comp, "Path", "path");
+            this.createSimpleTextField(comp, "Path", "path", "Phaser.Loader.LoaderPlugin.multiatlas(path)");
         }
     }
 }

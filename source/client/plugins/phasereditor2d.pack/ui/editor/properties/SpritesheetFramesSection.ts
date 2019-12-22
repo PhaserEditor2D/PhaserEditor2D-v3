@@ -15,7 +15,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return obj instanceof core.SpritesheetAssetPackItem;
         }
 
-        canEditNumber(n : number) {
+        canEditNumber(n: number) {
             return n > 0;
         }
 
@@ -25,17 +25,23 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createSimpleIntegerField(comp, "Frame Width", "frameConfig.frameWidth");
+            this.createSimpleIntegerField(comp, "Frame Width", "frameConfig.frameWidth",
+                "Phaser.Types.Textures.SpriteSheetConfig.frameWidth");
 
-            this.createSimpleIntegerField(comp, "Frame Height", "frameConfig.frameHeight");
+            this.createSimpleIntegerField(comp, "Frame Height", "frameConfig.frameHeight",
+                "Phaser.Types.Textures.SpriteSheetConfig.frameHeight");
 
-            this.createSimpleIntegerField(comp, "Start Frame", "frameConfig.startFrame");
+            this.createSimpleIntegerField(comp, "Start Frame", "frameConfig.startFrame",
+                "Phaser.Types.Textures.SpriteSheetConfig.startFrame");
 
-            this.createSimpleIntegerField(comp, "End Frame", "frameConfig.endFrame");
+            this.createSimpleIntegerField(comp, "End Frame", "frameConfig.endFrame",
+                "Phaser.Types.Textures.SpriteSheetConfig.endFrame");
 
-            this.createSimpleIntegerField(comp, "Margin", "frameConfig.margin");
+            this.createSimpleIntegerField(comp, "Margin", "frameConfig.margin",
+                "Phaser.Types.Textures.SpriteSheetConfig.margin");
 
-            this.createSimpleIntegerField(comp, "Spacing", "frameConfig.spacing");
+            this.createSimpleIntegerField(comp, "Spacing", "frameConfig.spacing",
+                "Phaser.Types.Textures.SpriteSheetConfig.spacing");
         }
     }
 }

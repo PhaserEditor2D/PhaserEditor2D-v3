@@ -17,9 +17,11 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_IMAGE);
+            this.createFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_IMAGE,
+                "Phaser.Loader.LoaderPlugin.image(url)");
 
-            this.createFileField(comp, "Normal Map", "normalMap", webContentTypes.core.CONTENT_TYPE_IMAGE);
+            this.createFileField(comp, "Normal Map", "normalMap", webContentTypes.core.CONTENT_TYPE_IMAGE,
+                "Phaser.Types.Loader.FileTypes.ImageFileConfig.normalMap");
         }
     }
 }

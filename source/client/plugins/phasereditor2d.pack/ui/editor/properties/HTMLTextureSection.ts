@@ -13,16 +13,19 @@ namespace phasereditor2d.pack.ui.editor.properties {
         }
 
         protected createForm(parent: HTMLDivElement) {
-            
+
             const comp = this.createGridElement(parent, 3);
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_HTML);
+            this.createFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_HTML,
+                "Phaser.Loader.LoaderPlugin.htmlTexture(url)");
 
-            this.createSimpleIntegerField(comp, "Width", "width");
+            this.createSimpleIntegerField(comp, "Width", "width",
+                "Phaser.Loader.LoaderPlugin.htmlTexture(width)");
 
-            this.createSimpleIntegerField(comp, "Height", "height");
+            this.createSimpleIntegerField(comp, "Height", "height",
+                "Phaser.Loader.LoaderPlugin.htmlTexture(height)");
         }
     }
 }

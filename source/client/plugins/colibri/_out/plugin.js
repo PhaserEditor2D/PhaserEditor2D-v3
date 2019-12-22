@@ -1714,7 +1714,7 @@ var colibri;
                     super();
                     this._text = (_a = config.text, (_a !== null && _a !== void 0 ? _a : ""));
                     this._tooltip = (_b = config.tooltip, (_b !== null && _b !== void 0 ? _b : ""));
-                    this._showText = config.showText === true;
+                    this._showText = config.showText !== false;
                     this._icon = (_c = config.icon, (_c !== null && _c !== void 0 ? _c : null));
                     this._enabled = config.enabled === undefined || config.enabled;
                     this._callback = (_d = config.callback, (_d !== null && _d !== void 0 ? _d : null));
@@ -2911,8 +2911,9 @@ var colibri;
                     this._toolbarElement = toolbarElement;
                     this._actionDataMap = new Map();
                 }
-                addCommand(commandId) {
-                    this.add(new controls.Action({ commandId: commandId }));
+                addCommand(commandId, config = {}) {
+                    config.commandId = commandId;
+                    this.add(new controls.Action(config));
                 }
                 add(action) {
                     const btnElement = document.createElement("div");

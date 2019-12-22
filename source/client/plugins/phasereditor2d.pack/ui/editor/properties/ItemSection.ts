@@ -19,7 +19,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
             {
                 // Key
 
-                this.createLabel(comp, "Key", docs.getDoc("Phaser.Loader.LoaderPlugin", "spritesheet", "key"));
+                this.createLabel(comp, "Key", "The key of the file");
 
                 const text = this.createText(comp);
 
@@ -31,7 +31,6 @@ namespace phasereditor2d.pack.ui.editor.properties {
                     text.value = this.getSelection()[0].getKey();
                 });
             }
-
         }
 
         canEdit(obj: any, n: number): boolean {

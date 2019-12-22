@@ -18,11 +18,14 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, "Font Data URL", "fontDataURL", core.contentTypes.CONTENT_TYPE_BITMAP_FONT);
+            this.createFileField(comp, "Font Data URL", "fontDataURL", core.contentTypes.CONTENT_TYPE_BITMAP_FONT,
+            "Phaser.Loader.LoaderPlugin.bitmapFont(fontDataURL)");
 
-            this.createFileField(comp, "Texture URL", "textureURL", webContentTypes.core.CONTENT_TYPE_IMAGE);
+            this.createFileField(comp, "Texture URL", "textureURL", webContentTypes.core.CONTENT_TYPE_IMAGE,
+            "Phaser.Loader.LoaderPlugin.bitmapFont(textureURL)");
 
-            this.createFileField(comp, "Normal Map", "normalMap", webContentTypes.core.CONTENT_TYPE_IMAGE);
+            this.createFileField(comp, "Normal Map", "normalMap", webContentTypes.core.CONTENT_TYPE_IMAGE,
+            "Phaser.Types.Loader.FileTypes.BitmapFontFileConfig.normalMap");
         }
     }
 }

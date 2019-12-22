@@ -20,11 +20,14 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_SVG);
+            this.createFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_SVG,
+                "Phaser.Loader.LoaderPlugin.svg(url)");
 
-            this.createSimpleIntegerField(comp, "Width", "svgConfig.width");
+            this.createSimpleIntegerField(comp, "Width", "svgConfig.width",
+                "Phaser.Types.Loader.FileTypes.SVGSizeConfig.width");
 
-            this.createSimpleIntegerField(comp, "Height", "svgConfig.height");
+            this.createSimpleIntegerField(comp, "Height", "svgConfig.height",
+                "Phaser.Types.Loader.FileTypes.SVGSizeConfig.height");
         }
     }
 }
