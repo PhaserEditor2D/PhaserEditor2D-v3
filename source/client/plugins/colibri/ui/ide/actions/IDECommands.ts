@@ -61,7 +61,7 @@ namespace colibri.ui.ide.actions {
             );
 
             manager.addKeyBinding(CMD_COLLAPSE_ALL, new KeyMatcher({
-                key: "c"
+                key: "C"
             }));
 
             // select all
@@ -83,7 +83,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_SELECT_ALL, new KeyMatcher({
                 control: true,
-                key: "a"
+                key: "A"
             }));
 
             // collapse expand branch
@@ -161,7 +161,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_UNDO, new KeyMatcher({
                 control: true,
-                key: "z"
+                key: "Z"
             }));
 
 
@@ -182,7 +182,7 @@ namespace colibri.ui.ide.actions {
             manager.addKeyBinding(CMD_REDO, new KeyMatcher({
                 control: true,
                 shift: true,
-                key: "z"
+                key: "Z"
             }));
 
         }
@@ -209,7 +209,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_SAVE, new KeyMatcher({
                 control: true,
-                key: "s",
+                key: "S",
                 filterInputElements: false
             }));
 
@@ -222,7 +222,7 @@ namespace colibri.ui.ide.actions {
             });
 
             manager.addKeyBinding(CMD_DELETE, new KeyMatcher({
-                key: "delete"
+                key: "Delete"
             }));
 
             // rename
@@ -234,7 +234,7 @@ namespace colibri.ui.ide.actions {
             });
 
             manager.addKeyBinding(CMD_RENAME, new KeyMatcher({
-                key: "f2"
+                key: "F2"
             }));
         }
 

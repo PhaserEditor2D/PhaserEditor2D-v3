@@ -11,7 +11,7 @@ namespace phasereditor2d.files.ui.actions {
 
         constructor(view: views.FilesView) {
             super(view, {
-                text: "Rename",
+                commandId: colibri.ui.ide.actions.CMD_RENAME,
                 enabled: RenameFileAction.isEnabled(view)
             });
         }

@@ -209,7 +209,7 @@ var phasereditor2d;
                         const manager = new controls.ToolbarManager(area);
                         manager.add(new phasereditor2d.files.ui.actions.OpenNewFileDialogAction());
                         manager.add(new ui.actions.OpenProjectsDialogAction());
-                        manager.add(new controls.Action({ commandId: ui.actions.CMD_PLAY_PROJECT }));
+                        manager.addCommand(ui.actions.CMD_PLAY_PROJECT);
                     }
                     {
                         // right area 
@@ -317,7 +317,7 @@ var phasereditor2d;
                         manager.addKeyBinding(actions.CMD_PLAY_PROJECT, new commands.KeyMatcher({
                             control: true,
                             alt: true,
-                            key: "g"
+                            key: "G"
                         }));
                         // reload project
                         manager.addCommandHelper({

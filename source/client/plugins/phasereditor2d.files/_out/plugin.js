@@ -51,7 +51,7 @@ var phasereditor2d;
                     }
                     constructor(view) {
                         super(view, {
-                            text: "Delete",
+                            commandId: colibri.ui.ide.actions.CMD_DELETE,
                             enabled: DeleteFilesAction.isEnabled(view)
                         });
                     }
@@ -195,6 +195,7 @@ var phasereditor2d;
                     constructor(view) {
                         super(view, {
                             text: "New...",
+                            commandId: actions.CMD_NEW_FILE,
                             enabled: true
                         });
                     }
@@ -307,7 +308,7 @@ var phasereditor2d;
                     }
                     constructor(view) {
                         super(view, {
-                            text: "Rename",
+                            commandId: colibri.ui.ide.actions.CMD_RENAME,
                             enabled: RenameFileAction.isEnabled(view)
                         });
                     }

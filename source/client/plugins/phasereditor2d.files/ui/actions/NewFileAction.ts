@@ -8,6 +8,7 @@ namespace phasereditor2d.files.ui.actions {
         constructor(view : views.FilesView) {
             super(view, {
                 text: "New...",
+                commandId: CMD_NEW_FILE,
                 enabled: true
             });
         }

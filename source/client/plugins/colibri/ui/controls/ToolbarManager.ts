@@ -16,6 +16,10 @@ namespace colibri.ui.controls {
             this._actionDataMap = new Map();
         }
 
+        addCommand(commandId: string) {
+            this.add(new Action({ commandId: commandId }));
+        }
+
         add(action: Action) {
 
             const btnElement = document.createElement("div");

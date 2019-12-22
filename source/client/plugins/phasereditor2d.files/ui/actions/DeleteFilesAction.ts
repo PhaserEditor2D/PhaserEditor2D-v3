@@ -28,7 +28,7 @@ namespace phasereditor2d.files.ui.actions {
 
         constructor(view: views.FilesView) {
             super(view, {
-                text: "Delete",
+                commandId: colibri.ui.ide.actions.CMD_DELETE,
                 enabled: DeleteFilesAction.isEnabled(view)
             });
         }

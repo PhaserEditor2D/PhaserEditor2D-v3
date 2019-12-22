@@ -2906,6 +2906,9 @@ var colibri;
                     this._toolbarElement = toolbarElement;
                     this._actionDataMap = new Map();
                 }
+                addCommand(commandId) {
+                    this.add(new controls.Action({ commandId: commandId }));
+                }
                 add(action) {
                     const btnElement = document.createElement("div");
                     btnElement.classList.add("ToolbarItem");
@@ -6397,7 +6400,7 @@ var colibri;
                             keys.push("Alt");
                         }
                         if (this._key) {
-                            keys.push(this._key.length === 1 ? this._key.toUpperCase() : this._key);
+                            keys.push(this._key);
                         }
                         return keys.join("+");
                     }
@@ -6467,7 +6470,7 @@ var colibri;
                             viewer.repaint();
                         });
                         manager.addKeyBinding(actions.CMD_COLLAPSE_ALL, new KeyMatcher({
-                            key: "c"
+                            key: "C"
                         }));
                         // select all
                         manager.addCommandHelper({
@@ -6482,7 +6485,7 @@ var colibri;
                         });
                         manager.addKeyBinding(actions.CMD_SELECT_ALL, new KeyMatcher({
                             control: true,
-                            key: "a"
+                            key: "A"
                         }));
                         // collapse expand branch
                         manager.addCommandHelper({
@@ -6529,7 +6532,7 @@ var colibri;
                         manager.addHandlerHelper(actions.CMD_UNDO, args => args.activePart !== null, args => args.activePart.getUndoManager().undo());
                         manager.addKeyBinding(actions.CMD_UNDO, new KeyMatcher({
                             control: true,
-                            key: "z"
+                            key: "Z"
                         }));
                         // redo
                         manager.addCommandHelper({
@@ -6541,7 +6544,7 @@ var colibri;
                         manager.addKeyBinding(actions.CMD_REDO, new KeyMatcher({
                             control: true,
                             shift: true,
-                            key: "z"
+                            key: "Z"
                         }));
                     }
                     static initEdit(manager) {
@@ -6558,7 +6561,7 @@ var colibri;
                         });
                         manager.addKeyBinding(actions.CMD_SAVE, new KeyMatcher({
                             control: true,
-                            key: "s",
+                            key: "S",
                             filterInputElements: false
                         }));
                         // delete
@@ -6568,7 +6571,7 @@ var colibri;
                             tooltip: "Delete"
                         });
                         manager.addKeyBinding(actions.CMD_DELETE, new KeyMatcher({
-                            key: "delete"
+                            key: "Delete"
                         }));
                         // rename
                         manager.addCommandHelper({
@@ -6577,7 +6580,7 @@ var colibri;
                             tooltip: "Rename"
                         });
                         manager.addKeyBinding(actions.CMD_RENAME, new KeyMatcher({
-                            key: "f2"
+                            key: "F2"
                         }));
                     }
                 }
