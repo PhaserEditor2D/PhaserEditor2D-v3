@@ -3,19 +3,19 @@ namespace colibri.core.io {
     export declare type ChangeListenerFunc = (change: FileStorageChange) => void;
 
     export declare type ProjectTemplatesData = {
-        providers: {
+        providers: Array<{
             name: string,
             templates: {
                 name: string,
                 path: string
             }
-        }[]
-    }
+        }>
+    };
 
     export declare type ImageSize = {
         width: number,
         height: number
-    }
+    };
 
     export interface IFileStorage {
 
@@ -44,6 +44,8 @@ namespace colibri.core.io {
         renameFile(file: FilePath, newName: string): Promise<void>;
 
         moveFiles(movingFiles: FilePath[], moveTo: FilePath): Promise<void>;
+
+        copyFile(fromFile: FilePath, toFile: FilePath): Promise<FilePath>;
 
         uploadFile(uploadFolder: FilePath, file: File): Promise<FilePath>;
 

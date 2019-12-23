@@ -30,6 +30,81 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var files;
+    (function (files) {
+        var ui;
+        (function (ui) {
+            var actions;
+            (function (actions) {
+                var controls = colibri.ui.controls;
+                class CopyFilesAction extends colibri.ui.ide.actions.ViewerViewAction {
+                    constructor(view) {
+                        super(view, {
+                            text: "Copy To"
+                        });
+                    }
+                    run() {
+                        const rootFolder = colibri.ui.ide.FileUtils.getRoot();
+                        const viewer = new controls.viewers.TreeViewer();
+                        viewer.setLabelProvider(new ui.viewers.FileLabelProvider());
+                        viewer.setCellRendererProvider(new ui.viewers.FileCellRendererProvider());
+                        viewer.setContentProvider(new ui.viewers.FileTreeContentProvider(true));
+                        viewer.setInput(rootFolder);
+                        viewer.setExpanded(rootFolder, true);
+                        const dlg = new controls.dialogs.ViewerDialog(viewer);
+                        dlg.create();
+                        dlg.setTitle("Copy Files");
+                        {
+                            const btn = dlg.addButton("Copy", async () => {
+                                const dstFile = viewer.getSelectionFirstElement();
+                                const srcFiles = this.getViewViewer().getSelection();
+                                const progressDlg = new controls.dialogs.ProgressDialog();
+                                progressDlg.create();
+                                progressDlg.setTitle("Copy");
+                                const monitor = new controls.dialogs.ProgressDialogMonitor(progressDlg);
+                                monitor.addTotal(srcFiles.length);
+                                let lastAddedFile;
+                                for (const file of srcFiles) {
+                                    lastAddedFile = await colibri.ui.ide.FileUtils.copyFile_async(file, dstFile);
+                                    monitor.step();
+                                }
+                                progressDlg.close();
+                                if (lastAddedFile) {
+                                    this.getViewViewer().reveal(lastAddedFile);
+                                }
+                                this.getViewViewer().repaint();
+                                dlg.close();
+                            });
+                            btn.disabled = true;
+                            viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                                const sel = viewer.getSelection();
+                                let enabled = true;
+                                if (sel.length !== 1) {
+                                    enabled = false;
+                                }
+                                else {
+                                    const copyTo = sel[0];
+                                    for (const obj of this.getViewViewerSelection()) {
+                                        const file = obj;
+                                        if (copyTo.getFullName().startsWith(file.getFullName())) {
+                                            enabled = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                btn.disabled = !enabled;
+                            });
+                        }
+                        dlg.addButton("Cancel", () => dlg.close());
+                    }
+                }
+                actions.CopyFilesAction = CopyFilesAction;
+            })(actions = ui.actions || (ui.actions = {}));
+        })(ui = files.ui || (files.ui = {}));
+    })(files = phasereditor2d.files || (phasereditor2d.files = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var files;
     (function (files_1) {
         var ui;
         (function (ui) {
@@ -144,7 +219,14 @@ var phasereditor2d;
                         dlg.create();
                         dlg.setTitle("Move Files");
                         {
-                            const btn = dlg.addButton("Move", () => { });
+                            const btn = dlg.addButton("Move", () => async () => {
+                                const moveTo = viewer.getSelectionFirstElement();
+                                const movingFiles = this.getViewViewer().getSelection();
+                                await colibri.ui.ide.FileUtils.moveFiles_async(movingFiles, moveTo);
+                                this.getViewViewer().reveal(movingFiles[0]);
+                                this.getViewViewer().repaint();
+                                dlg.close();
+                            });
                             btn.disabled = true;
                             viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
                                 const sel = viewer.getSelection();
@@ -165,14 +247,6 @@ var phasereditor2d;
                                     }
                                 }
                                 btn.disabled = !enabled;
-                            });
-                            btn.addEventListener("click", async () => {
-                                const moveTo = viewer.getSelectionFirstElement();
-                                const movingFiles = this.getViewViewer().getSelection();
-                                await colibri.ui.ide.FileUtils.moveFiles_async(movingFiles, moveTo);
-                                this.getViewViewer().reveal(movingFiles[0]);
-                                this.getViewViewer().repaint();
-                                dlg.close();
                             });
                         }
                         dlg.addButton("Cancel", () => dlg.close());
@@ -1013,6 +1087,7 @@ var phasereditor2d;
                         menu.addSeparator();
                         menu.add(new ui.actions.RenameFileAction(this));
                         menu.add(new ui.actions.MoveFilesAction(this));
+                        menu.add(new ui.actions.CopyFilesAction(this));
                         menu.add(new ui.actions.DeleteFilesAction(this));
                     }
                     getPropertyProvider() {

@@ -35,6 +35,8 @@ namespace phasereditor2d.files.ui.views {
 
             menu.add(new actions.MoveFilesAction(this));
 
+            menu.add(new actions.CopyFilesAction(this));
+
             menu.add(new actions.DeleteFilesAction(this));
         }
 

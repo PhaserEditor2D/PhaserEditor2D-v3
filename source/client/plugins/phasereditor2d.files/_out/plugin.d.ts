@@ -8,6 +8,12 @@ declare namespace phasereditor2d.files {
     }
 }
 declare namespace phasereditor2d.files.ui.actions {
+    class CopyFilesAction extends colibri.ui.ide.actions.ViewerViewAction<views.FilesView> {
+        constructor(view: views.FilesView);
+        run(): void;
+    }
+}
+declare namespace phasereditor2d.files.ui.actions {
     class DeleteFilesAction extends colibri.ui.ide.actions.ViewerViewAction<views.FilesView> {
         static isEnabled(view: views.FilesView): boolean;
         constructor(view: views.FilesView);

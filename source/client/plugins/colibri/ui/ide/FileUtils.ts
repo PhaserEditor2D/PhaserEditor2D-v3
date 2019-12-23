@@ -4,11 +4,11 @@ namespace colibri.ui.ide {
 
     export class FileUtils {
 
-        static preloadImageSize(file: io.FilePath) : Promise<controls.PreloadResult> {
+        static preloadImageSize(file: io.FilePath): Promise<controls.PreloadResult> {
             return Workbench.getWorkbench().getFileImageSizeCache().preload(file);
         }
 
-        static getImageSize(file : io.FilePath) : core.io.ImageSize {
+        static getImageSize(file: io.FilePath): core.io.ImageSize {
             return Workbench.getWorkbench().getFileImageSizeCache().getContent(file);
         }
 
@@ -32,7 +32,7 @@ namespace colibri.ui.ide {
         }
 
         static async createFile_async(folder: io.FilePath, fileName: string, content: string): Promise<io.FilePath> {
-            
+
             const storage = Workbench.getWorkbench().getFileStorage();
 
             const file = await storage.createFile(folder, fileName, content);
@@ -40,7 +40,7 @@ namespace colibri.ui.ide {
             return file;
         }
 
-        static async createFolder_async(container : io.FilePath, folderName: string) : Promise<io.FilePath> {
+        static async createFolder_async(container: io.FilePath, folderName: string): Promise<io.FilePath> {
 
             const storage = Workbench.getWorkbench().getFileStorage();
 
@@ -49,14 +49,14 @@ namespace colibri.ui.ide {
             return folder;
         }
 
-        static async deleteFiles_async(files : io.FilePath[]) : Promise<void> {
+        static async deleteFiles_async(files: io.FilePath[]): Promise<void> {
 
             const storage = Workbench.getWorkbench().getFileStorage();
 
             await storage.deleteFiles(files);
         }
 
-        static async renameFile_async(file : io.FilePath, newName : string) : Promise<void> {
+        static async renameFile_async(file: io.FilePath, newName: string): Promise<void> {
 
             const storage = Workbench.getWorkbench().getFileStorage();
 
@@ -64,28 +64,35 @@ namespace colibri.ui.ide {
         }
 
         static async moveFiles_async(movingFiles: io.FilePath[], moveTo: io.FilePath) {
-            
+
             const storage = Workbench.getWorkbench().getFileStorage();
 
             await storage.moveFiles(movingFiles, moveTo);
         }
 
+        static async copyFile_async(fromFile: io.FilePath, toFile: io.FilePath) {
+
+            const storage = Workbench.getWorkbench().getFileStorage();
+
+            return await storage.copyFile(fromFile, toFile);
+        }
+
         static async getProjects_async() {
-            
+
             const storage = Workbench.getWorkbench().getFileStorage();
 
             return storage.getProjects();
         }
 
         static async getProjectTemplates_async() {
-            
+
             const storage = Workbench.getWorkbench().getFileStorage();
 
             return storage.getProjectTemplates();
         }
 
-        static async createProject_async(templatePath: string, projectName : string) {
-            
+        static async createProject_async(templatePath: string, projectName: string) {
+
             const storage = Workbench.getWorkbench().getFileStorage();
 
             return storage.createProject(templatePath, projectName);
@@ -99,7 +106,7 @@ namespace colibri.ui.ide {
         }
 
         static getFileFromPath(path: string): io.FilePath {
-            
+
             const root = Workbench.getWorkbench().getProjectRoot();
 
             const names = path.split("/");
@@ -129,7 +136,7 @@ namespace colibri.ui.ide {
             return result;
         }
 
-        static async uploadFile_async(uploadFolder : io.FilePath, file : File) {
+        static async uploadFile_async(uploadFolder: io.FilePath, file: File) {
 
             const storage = Workbench.getWorkbench().getFileStorage();
 

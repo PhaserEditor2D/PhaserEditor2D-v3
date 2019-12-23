@@ -9,6 +9,7 @@
         "variable-name": {
             "options": "allow-leading-underscore"
         },
+        "class-name": false,
         "trailing-comma": false,
         "eofline": false,
         "member-access": false,
@@ -17,7 +18,8 @@
         "no-reference": false,
         "no-console": false,
         "arrow-parens": false,
-        "no-string-literal": false
+        "no-string-literal": false,
+        "interface-over-type-literal": false
     },
     "rulesDirectory": []
 }

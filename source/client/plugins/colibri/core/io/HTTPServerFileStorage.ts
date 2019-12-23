@@ -9,8 +9,8 @@ namespace colibri.core.io {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "method": method,
-                    "body": body
+                    method,
+                    body
                 })
             });
 
@@ -41,7 +41,6 @@ namespace colibri.core.io {
             this._root = null;
 
             this._changeListeners = [];
-
         }
 
         addChangeListener(listener: ChangeListenerFunc) {
@@ -87,8 +86,8 @@ namespace colibri.core.io {
         async createProject(templatePath: string, projectName: string): Promise<boolean> {
 
             const data = await apiRequest("CreateProject", {
-                templatePath: templatePath,
-                projectName: projectName
+                templatePath,
+                projectName
             });
 
             if (data.error) {
@@ -258,7 +257,7 @@ namespace colibri.core.io {
             const path = container.getFullName() + "/" + folderName;
 
             const data = await apiRequest("CreateFolder", {
-                path: path
+                path
             });
 
             if (data.error) {
@@ -310,7 +309,7 @@ namespace colibri.core.io {
 
             const data = await apiRequest("SetFileString", {
                 path: file.getFullName(),
-                content: content
+                content
             });
 
             if (data.error) {
@@ -380,6 +379,48 @@ namespace colibri.core.io {
             change.recordRename(fromPath, file.getFullName());
 
             this.fireChange(change);
+        }
+
+        async copyFile(fromFile: FilePath, toFolder: FilePath) {
+
+            const base = fromFile.getNameWithoutExtension();
+            let ext = fromFile.getExtension();
+
+            if (ext) {
+                ext = "." + ext;
+            }
+
+            let suffix = "";
+
+            while (toFolder.getFile(base + suffix + ext)) {
+                suffix += "_copy";
+            }
+
+            const newName = base + suffix + ext;
+
+            const data = await apiRequest("CopyFile", {
+                fromPath: fromFile.getFullName(),
+                toPath: toFolder.getFullName() + "/" + newName
+            });
+
+            if (data.error) {
+                alert(`Cannot copy the file ${fromFile.getFullName()}`);
+                throw new Error(data.error);
+            }
+
+            const fileData = data.file as FileData;
+
+            const newFile = new FilePath(null, fileData);
+
+            toFolder._add(newFile);
+
+            const change = new FileStorageChange();
+
+            change.recordAdd(newFile.getFullName());
+
+            this.fireChange(change);
+
+            return newFile;
         }
 
         async moveFiles(movingFiles: FilePath[], moveTo: FilePath): Promise<void> {

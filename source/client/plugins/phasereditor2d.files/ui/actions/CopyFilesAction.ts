@@ -3,16 +3,11 @@ namespace phasereditor2d.files.ui.actions {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export class MoveFilesAction extends colibri.ui.ide.actions.ViewerViewAction<views.FilesView> {
-
-        static isEnabled(view: views.FilesView): boolean {
-            return view.getViewer().getSelection().length > 0;
-        }
+    export class CopyFilesAction extends colibri.ui.ide.actions.ViewerViewAction<views.FilesView> {
 
         constructor(view: views.FilesView) {
             super(view, {
-                text: "Move",
-                enabled: MoveFilesAction.isEnabled(view)
+                text: "Copy To"
             });
         }
 
@@ -32,18 +27,40 @@ namespace phasereditor2d.files.ui.actions {
 
             dlg.create();
 
-            dlg.setTitle("Move Files");
+            dlg.setTitle("Copy Files");
 
             {
-                const btn = dlg.addButton("Move", () => async () => {
+                const btn = dlg.addButton("Copy", async () => {
 
-                    const moveTo = viewer.getSelectionFirstElement() as io.FilePath;
+                    const dstFile = viewer.getSelectionFirstElement() as io.FilePath;
 
-                    const movingFiles = this.getViewViewer().getSelection();
+                    const srcFiles = this.getViewViewer().getSelection();
 
-                    await colibri.ui.ide.FileUtils.moveFiles_async(movingFiles, moveTo);
+                    const progressDlg = new controls.dialogs.ProgressDialog();
 
-                    this.getViewViewer().reveal(movingFiles[0]);
+                    progressDlg.create();
+
+                    progressDlg.setTitle("Copy");
+
+                    const monitor = new controls.dialogs.ProgressDialogMonitor(progressDlg);
+
+                    monitor.addTotal(srcFiles.length);
+
+                    let lastAddedFile: io.FilePath;
+
+                    for (const file of srcFiles) {
+
+                        lastAddedFile = await colibri.ui.ide.FileUtils.copyFile_async(file, dstFile);
+
+                        monitor.step();
+                    }
+
+                    progressDlg.close();
+
+                    if (lastAddedFile) {
+                        this.getViewViewer().reveal(lastAddedFile);
+                    }
+
                     this.getViewViewer().repaint();
 
                     dlg.close();
@@ -63,16 +80,14 @@ namespace phasereditor2d.files.ui.actions {
 
                     } else {
 
-                        const moveTo = sel[0] as io.FilePath;
+                        const copyTo = sel[0] as io.FilePath;
 
                         for (const obj of this.getViewViewerSelection()) {
 
                             const file = obj as io.FilePath;
 
                             if (
-                                moveTo.getFullName().startsWith(file.getFullName())
-                                || moveTo === file.getParent()
-                                || moveTo.getFile(file.getName())
+                                copyTo.getFullName().startsWith(file.getFullName())
                             ) {
                                 enabled = false;
                                 break;

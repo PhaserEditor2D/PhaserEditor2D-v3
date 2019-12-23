@@ -1233,8 +1233,8 @@ var colibri;
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
-                            "method": method,
-                            "body": body
+                            method,
+                            body
                         })
                     });
                     const json = await resp.json();
@@ -1282,8 +1282,8 @@ var colibri;
                 }
                 async createProject(templatePath, projectName) {
                     const data = await apiRequest("CreateProject", {
-                        templatePath: templatePath,
-                        projectName: projectName
+                        templatePath,
+                        projectName
                     });
                     if (data.error) {
                         alert("Cannot create the project.");
@@ -1402,7 +1402,7 @@ var colibri;
                     });
                     const path = container.getFullName() + "/" + folderName;
                     const data = await apiRequest("CreateFolder", {
-                        path: path
+                        path
                     });
                     if (data.error) {
                         alert(`Cannot create folder at '${path}'`);
@@ -1436,7 +1436,7 @@ var colibri;
                 async setFileString_priv(file, content) {
                     const data = await apiRequest("SetFileString", {
                         path: file.getFullName(),
-                        content: content
+                        content
                     });
                     if (data.error) {
                         alert(`Cannot set file content to '${file.getFullName()}'`);
@@ -1483,6 +1483,33 @@ var colibri;
                     const change = new io.FileStorageChange();
                     change.recordRename(fromPath, file.getFullName());
                     this.fireChange(change);
+                }
+                async copyFile(fromFile, toFolder) {
+                    const base = fromFile.getNameWithoutExtension();
+                    let ext = fromFile.getExtension();
+                    if (ext) {
+                        ext = "." + ext;
+                    }
+                    let suffix = "";
+                    while (toFolder.getFile(base + suffix + ext)) {
+                        suffix += "_copy";
+                    }
+                    const newName = base + suffix + ext;
+                    const data = await apiRequest("CopyFile", {
+                        fromPath: fromFile.getFullName(),
+                        toPath: toFolder.getFullName() + "/" + newName
+                    });
+                    if (data.error) {
+                        alert(`Cannot copy the file ${fromFile.getFullName()}`);
+                        throw new Error(data.error);
+                    }
+                    const fileData = data.file;
+                    const newFile = new io.FilePath(null, fileData);
+                    toFolder._add(newFile);
+                    const change = new io.FileStorageChange();
+                    change.recordAdd(newFile.getFullName());
+                    this.fireChange(change);
+                    return newFile;
                 }
                 async moveFiles(movingFiles, moveTo) {
                     const data = await apiRequest("MoveFiles", {
@@ -5926,6 +5953,10 @@ var colibri;
                 static async moveFiles_async(movingFiles, moveTo) {
                     const storage = ide.Workbench.getWorkbench().getFileStorage();
                     await storage.moveFiles(movingFiles, moveTo);
+                }
+                static async copyFile_async(fromFile, toFile) {
+                    const storage = ide.Workbench.getWorkbench().getFileStorage();
+                    return await storage.copyFile(fromFile, toFile);
                 }
                 static async getProjects_async() {
                     const storage = ide.Workbench.getWorkbench().getFileStorage();

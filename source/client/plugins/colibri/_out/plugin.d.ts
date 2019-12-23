@@ -370,6 +370,7 @@ declare namespace colibri.core.io {
         private setFileString_priv;
         deleteFiles(files: FilePath[]): Promise<void>;
         renameFile(file: FilePath, newName: string): Promise<void>;
+        copyFile(fromFile: FilePath, toFolder: FilePath): Promise<FilePath>;
         moveFiles(movingFiles: FilePath[], moveTo: FilePath): Promise<void>;
         uploadFile(uploadFolder: FilePath, htmlFile: File): Promise<FilePath>;
         getImageSize(file: FilePath): Promise<ImageSize>;
@@ -378,13 +379,13 @@ declare namespace colibri.core.io {
 declare namespace colibri.core.io {
     type ChangeListenerFunc = (change: FileStorageChange) => void;
     type ProjectTemplatesData = {
-        providers: {
+        providers: Array<{
             name: string;
             templates: {
                 name: string;
                 path: string;
             };
-        }[];
+        }>;
     };
     type ImageSize = {
         width: number;
@@ -404,6 +405,7 @@ declare namespace colibri.core.io {
         deleteFiles(files: FilePath[]): Promise<void>;
         renameFile(file: FilePath, newName: string): Promise<void>;
         moveFiles(movingFiles: FilePath[], moveTo: FilePath): Promise<void>;
+        copyFile(fromFile: FilePath, toFile: FilePath): Promise<FilePath>;
         uploadFile(uploadFolder: FilePath, file: File): Promise<FilePath>;
         getImageSize(file: FilePath): Promise<ImageSize>;
         addChangeListener(listener: ChangeListenerFunc): void;
@@ -1451,6 +1453,7 @@ declare namespace colibri.ui.ide {
         static deleteFiles_async(files: io.FilePath[]): Promise<void>;
         static renameFile_async(file: io.FilePath, newName: string): Promise<void>;
         static moveFiles_async(movingFiles: io.FilePath[], moveTo: io.FilePath): Promise<void>;
+        static copyFile_async(fromFile: io.FilePath, toFile: io.FilePath): Promise<io.FilePath>;
         static getProjects_async(): Promise<string[]>;
         static getProjectTemplates_async(): Promise<io.ProjectTemplatesData>;
         static createProject_async(templatePath: string, projectName: string): Promise<boolean>;
