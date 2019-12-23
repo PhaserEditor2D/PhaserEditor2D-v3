@@ -35,7 +35,7 @@ namespace phasereditor2d.files.ui.actions {
             dlg.setTitle("Move Files");
 
             {
-                const btn = dlg.addButton("Move", () => async () => {
+                const btn = dlg.addButton("Move", async () => {
 
                     const moveTo = viewer.getSelectionFirstElement() as io.FilePath;
 
