@@ -77,7 +77,18 @@ namespace colibri.core.io {
         }
 
         getSize(): number {
-            return this.isFile() ? this._fileSize : 0;
+
+            if (this.isFile()) {
+                return this._fileSize;
+            }
+
+            let size = 0;
+
+            for (const file of this.getFiles()) {
+                size += file.getSize();
+            }
+
+            return size;
         }
 
         _setSize(size: number) {
@@ -110,7 +121,7 @@ namespace colibri.core.io {
         }
 
         getUrl() {
-            
+
             if (this._parent) {
                 return this._parent.getUrl() + "/" + this._name;
             }
