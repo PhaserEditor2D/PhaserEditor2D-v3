@@ -12,9 +12,9 @@ var phasereditor2d;
                 return this._instance;
             }
             registerExtensions(reg) {
-                // icons loader 
+                // icons loader
                 reg.addExtension(colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-                    files.ICON_NEW_FILE
+                    files.ICON_NEW_FILE,
                 ]));
                 // new files
                 reg.addExtension(new files.ui.dialogs.NewFolderExtension(), new files.ui.dialogs.NewGenericFileExtension());

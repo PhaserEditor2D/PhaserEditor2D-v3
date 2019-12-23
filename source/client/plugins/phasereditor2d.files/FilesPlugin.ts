@@ -7,23 +7,23 @@ namespace phasereditor2d.files {
 
     export class FilesPlugin extends colibri.Plugin {
 
-        private static _instance = new FilesPlugin();
-
-        static getInstance() {
+        public static getInstance() {
             return this._instance;
         }
+
+        private static _instance = new FilesPlugin();
 
         private constructor() {
             super("phasereditor2d.files");
         }
 
-        registerExtensions(reg: colibri.ExtensionRegistry) {
+        public registerExtensions(reg: colibri.ExtensionRegistry) {
 
-            // icons loader 
+            // icons loader
 
             reg.addExtension(
                 colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_NEW_FILE
+                    ICON_NEW_FILE,
                 ])
             );
 
