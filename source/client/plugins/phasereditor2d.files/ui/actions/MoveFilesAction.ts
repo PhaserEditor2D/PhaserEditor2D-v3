@@ -41,7 +41,6 @@ namespace phasereditor2d.files.ui.actions {
 
                     const movingFiles = this.getViewViewer().getSelection();
 
-                    console.log("move!");
                     await colibri.ui.ide.FileUtils.moveFiles_async(movingFiles, moveTo);
 
                     this.getViewViewer().reveal(movingFiles[0]);

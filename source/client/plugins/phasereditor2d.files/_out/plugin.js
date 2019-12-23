@@ -222,7 +222,6 @@ var phasereditor2d;
                             const btn = dlg.addButton("Move", async () => {
                                 const moveTo = viewer.getSelectionFirstElement();
                                 const movingFiles = this.getViewViewer().getSelection();
-                                console.log("move!");
                                 await colibri.ui.ide.FileUtils.moveFiles_async(movingFiles, moveTo);
                                 this.getViewViewer().reveal(movingFiles[0]);
                                 this.getViewViewer().repaint();
