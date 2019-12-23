@@ -17,7 +17,6 @@ namespace phasereditor2d.outline {
             super("phasereditor2d.outline");
         }
 
-
         registerExtensions(reg: colibri.ExtensionRegistry) {
 
             reg.addExtension(

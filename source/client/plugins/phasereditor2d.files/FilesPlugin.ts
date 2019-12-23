@@ -7,11 +7,11 @@ namespace phasereditor2d.files {
 
     export class FilesPlugin extends colibri.Plugin {
 
-        public static getInstance() {
+        private static _instance = new FilesPlugin();
+
+        static getInstance() {
             return this._instance;
         }
-
-        private static _instance = new FilesPlugin();
 
         private constructor() {
             super("phasereditor2d.files");

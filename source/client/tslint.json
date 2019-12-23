@@ -10,7 +10,14 @@
             "options": "allow-leading-underscore"
         },
         "trailing-comma": false,
-        "eofline": false
+        "eofline": false,
+        "member-access": false,
+        "member-ordering": false,
+        "object-literal-sort-keys": false,
+        "no-reference": false,
+        "no-console": false,
+        "arrow-parens": false,
+        "no-string-literal": false
     },
     "rulesDirectory": []
 }

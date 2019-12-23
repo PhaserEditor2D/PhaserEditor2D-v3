@@ -56,7 +56,7 @@ namespace phasereditor2d.ide {
                 )
             );
 
-            // themes 
+            // themes
 
             reg.addExtension(new colibri.ui.ide.themes.ThemeExtension({
                 dark: false,
@@ -98,7 +98,7 @@ namespace phasereditor2d.ide {
             wb.addEventListener(colibri.ui.ide.EVENT_PROJECT_OPENED, e => {
 
                 wb.getGlobalPreferences().setValue("defaultProjectData", {
-                    "projectName": wb.getFileStorage().getRoot().getName()
+                    projectName: wb.getFileStorage().getRoot().getName()
                 });
             });
 
@@ -112,7 +112,7 @@ namespace phasereditor2d.ide {
 
                 const projectName = defaultProjectData["projectName"];
 
-                let projects = await wb.getFileStorage().getProjects();
+                const projects = await wb.getFileStorage().getProjects();
 
                 if (projects.indexOf(projectName) >= 0) {
 
@@ -203,7 +203,6 @@ namespace phasereditor2d.ide {
             });
         }
 
-
         restoreTheme() {
 
             const prefs = colibri.Platform.getWorkbench().getGlobalPreferences();
@@ -227,7 +226,6 @@ namespace phasereditor2d.ide {
     }
 
     colibri.Platform.addPlugin(IDEPlugin.getInstance());
-
 
     /* program entry point */
 

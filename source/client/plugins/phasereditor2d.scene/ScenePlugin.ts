@@ -8,7 +8,6 @@ namespace phasereditor2d.scene {
     export const ICON_SCALE = "scale";
     export const ICON_ORIGIN = "origin";
 
-
     export class ScenePlugin extends colibri.Plugin {
 
         private static _instance = new ScenePlugin();

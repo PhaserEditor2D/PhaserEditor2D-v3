@@ -114,7 +114,6 @@ namespace phasereditor2d.pack {
 
             // project resources preloader
 
-
             reg.addExtension(
                 new ide.PreloadProjectResourcesExtension(
                     (monitor) => {
@@ -145,7 +144,6 @@ namespace phasereditor2d.pack {
             reg.addExtension(
                 new ui.dialogs.NewAssetPackFileWizardExtension());
         }
-
 
         private _phaserDocs: phasereditor2d.ide.core.PhaserDocs;
 

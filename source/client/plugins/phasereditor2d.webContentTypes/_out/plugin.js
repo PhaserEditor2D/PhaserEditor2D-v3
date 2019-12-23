@@ -30,7 +30,6 @@ var phasereditor2d;
                     webContentTypes.ICON_FILE_TEXT,
                     webContentTypes.ICON_FILE_FONT
                 ]));
-                // content type resolvers
                 // content type icons
                 reg.addExtension(colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(this, [
                     {

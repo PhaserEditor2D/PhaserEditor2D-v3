@@ -47,10 +47,6 @@ namespace phasereditor2d.webContentTypes {
                 ])
             );
 
-            // content type resolvers
-
-
-
             // content type icons
 
             reg.addExtension(
