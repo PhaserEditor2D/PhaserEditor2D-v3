@@ -40,12 +40,12 @@ namespace phasereditor2d.files.ui.views {
 
                     let total = 0;
 
-                    for(const file of this.getSelection()) {
+                    for (const file of this.getSelection()) {
                         total += file.getSize();
                     }
 
-                    text.value = total.toString();
-                })
+                    text.value = filesize(total);
+                });
             }
 
         }
@@ -57,7 +57,5 @@ namespace phasereditor2d.files.ui.views {
         canEditNumber(n: number): boolean {
             return n > 0;
         }
-
-
     }
 }

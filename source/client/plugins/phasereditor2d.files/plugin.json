@@ -4,6 +4,7 @@
         "styles/controls.css"
     ],
     "scripts": [
-        "_out/plugin.js"
+        "_out/plugin.js",
+        "scripts/filesize/filesize.js"
     ]
 }

@@ -1044,7 +1044,7 @@ var phasereditor2d;
                                 for (const file of this.getSelection()) {
                                     total += file.getSize();
                                 }
-                                text.value = total.toString();
+                                text.value = filesize(total);
                             });
                         }
                     }
