@@ -27,7 +27,7 @@ namespace colibri.core.io {
 
                 this._files = [];
 
-                for (let child of fileData.children) {
+                for (const child of fileData.children) {
                     this._files.push(new FilePath(this, child));
                 }
 
@@ -243,7 +243,7 @@ namespace colibri.core.io {
             let s = " ".repeat(depth * 4);
             s += this.getName() + (this.isFolder() ? "/" : "") + "\n";
             if (this.isFolder()) {
-                for (let file of this._files) {
+                for (const file of this._files) {
                     s += file.toStringTree2(depth + 1);
                 }
             }

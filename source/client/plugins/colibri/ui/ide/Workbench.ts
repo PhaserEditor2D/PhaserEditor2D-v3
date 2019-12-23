@@ -76,7 +76,6 @@ namespace colibri.ui.ide {
             return this._projectPreferences;
         }
 
-
         async launch() {
 
             console.log("Workbench: starting.");
@@ -153,7 +152,8 @@ namespace colibri.ui.ide {
 
         private async preloadProjectResources(monitor: controls.IProgressMonitor) {
 
-            const extensions = Platform.getExtensions<PreloadProjectResourcesExtension>(PreloadProjectResourcesExtension.POINT_ID);
+            const extensions = Platform
+                .getExtensions<PreloadProjectResourcesExtension>(PreloadProjectResourcesExtension.POINT_ID);
 
             for (const extension of extensions) {
                 await extension.getPreloadPromise(monitor);
@@ -187,7 +187,7 @@ namespace colibri.ui.ide {
 
         public activateWindow(id: string): WorkbenchWindow {
 
-            const win = this._windows.find(win => win.getId() === id);
+            const win = this._windows.find(w => w.getId() === id);
 
             if (win) {
 
@@ -253,14 +253,13 @@ namespace colibri.ui.ide {
             }
         }
 
-
         private initEvents() {
 
             window.addEventListener("mousedown", e => {
 
-                this._activeElement = <HTMLElement>e.target;
+                this._activeElement = e.target as HTMLElement;
 
-                const part = this.findPart(<any>e.target);
+                const part = this.findPart(e.target as any);
 
                 if (part) {
                     this.setActivePart(part);
@@ -354,7 +353,7 @@ namespace colibri.ui.ide {
             }
 
             if (part instanceof EditorPart) {
-                this.setActiveEditor(<EditorPart>part);
+                this.setActiveEditor(part as EditorPart);
             }
         }
 
@@ -426,12 +425,16 @@ namespace colibri.ui.ide {
             const control = controls.Control.getControlOf(element);
 
             if (control && control instanceof controls.TabPane) {
-                const tabPane = <controls.TabPane>control;
+
+                const tabPane = control as controls.TabPane;
                 const content = tabPane.getSelectedTabContent();
+
                 if (content) {
-                    const element = content.getElement();
-                    if (element["__part"]) {
-                        return element["__part"];
+
+                    const elem2 = content.getElement();
+
+                    if (elem2["__part"]) {
+                        return elem2["__part"];
                     }
                 }
             }
@@ -532,7 +535,8 @@ namespace colibri.ui.ide {
             {
                 const editors = this.getEditors();
 
-                for (let editor of editors) {
+                // tslint:disable-next-line:no-shadowed-variable
+                for (const editor of editors) {
 
                     if (editor.getInput() === input) {
 

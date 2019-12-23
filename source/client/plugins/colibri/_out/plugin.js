@@ -447,7 +447,8 @@ var colibri;
                     }));
                 }
                 async preloadProjectResources(monitor) {
-                    const extensions = colibri.Platform.getExtensions(ide.PreloadProjectResourcesExtension.POINT_ID);
+                    const extensions = colibri.Platform
+                        .getExtensions(ide.PreloadProjectResourcesExtension.POINT_ID);
                     for (const extension of extensions) {
                         await extension.getPreloadPromise(monitor);
                     }
@@ -469,7 +470,7 @@ var colibri;
                     return this._windows;
                 }
                 activateWindow(id) {
-                    const win = this._windows.find(win => win.getId() === id);
+                    const win = this._windows.find(w => w.getId() === id);
                     if (win) {
                         if (this._activeWindow) {
                             this._activeWindow.style.display = "none";
@@ -633,9 +634,9 @@ var colibri;
                         const tabPane = control;
                         const content = tabPane.getSelectedTabContent();
                         if (content) {
-                            const element = content.getElement();
-                            if (element["__part"]) {
-                                return element["__part"];
+                            const elem2 = content.getElement();
+                            if (elem2["__part"]) {
+                                return elem2["__part"];
                             }
                         }
                     }
@@ -700,7 +701,8 @@ var colibri;
                     const editorArea = this.getActiveWindow().getEditorArea();
                     {
                         const editors = this.getEditors();
-                        for (let editor of editors) {
+                        // tslint:disable-next-line:no-shadowed-variable
+                        for (const editor of editors) {
                             if (editor.getInput() === input) {
                                 editorArea.activateEditor(editor);
                                 this.setActivePart(editor);
@@ -983,7 +985,7 @@ var colibri;
                     this._setName(fileData.name);
                     if (fileData.children) {
                         this._files = [];
-                        for (let child of fileData.children) {
+                        for (const child of fileData.children) {
                             this._files.push(new FilePath(this, child));
                         }
                         this._sort();
@@ -1133,7 +1135,7 @@ var colibri;
                     let s = " ".repeat(depth * 4);
                     s += this.getName() + (this.isFolder() ? "/" : "") + "\n";
                     if (this.isFolder()) {
-                        for (let file of this._files) {
+                        for (const file of this._files) {
                             s += file.toStringTree2(depth + 1);
                         }
                     }

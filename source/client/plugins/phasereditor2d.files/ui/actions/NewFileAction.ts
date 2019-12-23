@@ -5,7 +5,7 @@ namespace phasereditor2d.files.ui.actions {
 
     export class NewFileAction extends colibri.ui.ide.actions.ViewerViewAction<views.FilesView> {
 
-        constructor(view : views.FilesView) {
+        constructor(view: views.FilesView) {
             super(view, {
                 text: "New...",
                 commandId: CMD_NEW_FILE,
@@ -27,7 +27,6 @@ namespace phasereditor2d.files.ui.actions {
 
                 openDialogAction.setInitialLocation(folder);
             }
-
 
             openDialogAction.run();
         }
