@@ -740,7 +740,7 @@ var phasereditor2d;
                     constructor() {
                         super({
                             dialogName: "Project",
-                            dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER)
+                            dialogIcon: phasereditor2d.files.FilesPlugin.getInstance().getIcon(phasereditor2d.files.ICON_PROJECT)
                         });
                     }
                     createDialog(args) {
@@ -822,10 +822,7 @@ var phasereditor2d;
                                 }
                             });
                         }
-                        let projects = await colibri.ui.ide.FileUtils.getProjects_async();
-                        // if (root) {
-                        //     projects = projects.filter(project => root.getName() !== project);
-                        // }
+                        const projects = await colibri.ui.ide.FileUtils.getProjects_async();
                         viewer.setInput(projects);
                         if (root) {
                             viewer.setSelection([root.getName()]);
@@ -900,7 +897,7 @@ var phasereditor2d;
                 var controls = colibri.ui.controls;
                 class ProjectCellRendererProvider {
                     getCellRenderer(element) {
-                        return new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER));
+                        return new controls.viewers.IconImageCellRenderer(phasereditor2d.files.FilesPlugin.getInstance().getIcon(phasereditor2d.files.ICON_PROJECT));
                     }
                     preload(element) {
                         return controls.Controls.resolveNothingLoaded();

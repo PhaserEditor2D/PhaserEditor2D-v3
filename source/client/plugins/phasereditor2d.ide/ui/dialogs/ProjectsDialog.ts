@@ -66,12 +66,7 @@ namespace phasereditor2d.ide.ui.dialogs {
                 });
             }
 
-            let projects = await colibri.ui.ide.FileUtils.getProjects_async();
-
-            // if (root) {
-
-            //     projects = projects.filter(project => root.getName() !== project);
-            // }
+            const projects = await colibri.ui.ide.FileUtils.getProjects_async();
 
             viewer.setInput(projects);
 

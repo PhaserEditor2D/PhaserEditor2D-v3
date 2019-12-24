@@ -13,7 +13,7 @@ namespace phasereditor2d.files.ui.viewers {
 
         getIcon(obj: any): controls.IImage {
 
-            const file = <io.FilePath>obj;
+            const file = obj as io.FilePath;
 
             if (file.isFile()) {
 
@@ -26,7 +26,12 @@ namespace phasereditor2d.files.ui.viewers {
                 }
 
             } else {
-                return controls.Controls.getIcon(ide.ICON_FOLDER);
+
+                if (file.getParent()) {
+                    return controls.Controls.getIcon(ide.ICON_FOLDER);
+                }
+
+                return FilesPlugin.getInstance().getIcon(ICON_PROJECT);
             }
 
             return controls.Controls.getIcon(ide.ICON_FILE);

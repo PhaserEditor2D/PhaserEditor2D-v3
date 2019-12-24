@@ -4,6 +4,7 @@ var phasereditor2d;
     (function (files) {
         var ide = colibri.ui.ide;
         files.ICON_NEW_FILE = "file-new";
+        files.ICON_PROJECT = "project";
         class FilesPlugin extends colibri.Plugin {
             constructor() {
                 super("phasereditor2d.files");
@@ -15,6 +16,7 @@ var phasereditor2d;
                 // icons loader
                 reg.addExtension(colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
                     files.ICON_NEW_FILE,
+                    files.ICON_PROJECT
                 ]));
                 // new files
                 reg.addExtension(new files.ui.dialogs.NewFolderExtension(), new files.ui.dialogs.NewGenericFileExtension());
@@ -818,7 +820,10 @@ var phasereditor2d;
                             }
                         }
                         else {
-                            return controls.Controls.getIcon(ide.ICON_FOLDER);
+                            if (file.getParent()) {
+                                return controls.Controls.getIcon(ide.ICON_FOLDER);
+                            }
+                            return files.FilesPlugin.getInstance().getIcon(files.ICON_PROJECT);
                         }
                         return controls.Controls.getIcon(ide.ICON_FILE);
                     }
@@ -852,7 +857,8 @@ var phasereditor2d;
                     }
                     getCellRenderer(file) {
                         const contentType = ide.Workbench.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
-                        const extensions = colibri.Platform.getExtensions(viewers_2.ContentTypeCellRendererExtension.POINT_ID);
+                        const extensions = colibri.Platform
+                            .getExtensions(viewers_2.ContentTypeCellRendererExtension.POINT_ID);
                         for (const extension of extensions) {
                             const provider = extension.getRendererProvider(contentType);
                             if (provider !== null) {

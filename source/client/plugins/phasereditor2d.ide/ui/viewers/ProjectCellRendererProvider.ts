@@ -5,9 +5,9 @@ namespace phasereditor2d.ide.ui.viewers {
     export class ProjectCellRendererProvider implements controls.viewers.ICellRendererProvider {
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
-            
+
             return new controls.viewers.IconImageCellRenderer(
-                colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER));
+                files.FilesPlugin.getInstance().getIcon(files.ICON_PROJECT));
         }
 
         preload(element: any): Promise<controls.PreloadResult> {

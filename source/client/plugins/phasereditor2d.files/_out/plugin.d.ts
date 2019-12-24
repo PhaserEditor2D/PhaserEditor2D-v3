@@ -1,5 +1,6 @@
 declare namespace phasereditor2d.files {
     const ICON_NEW_FILE = "file-new";
+    const ICON_PROJECT = "project";
     class FilesPlugin extends colibri.Plugin {
         private static _instance;
         static getInstance(): FilesPlugin;

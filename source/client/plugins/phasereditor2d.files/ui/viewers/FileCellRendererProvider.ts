@@ -17,7 +17,8 @@ namespace phasereditor2d.files.ui.viewers {
 
             const contentType = ide.Workbench.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
 
-            const extensions = colibri.Platform.getExtensions<ContentTypeCellRendererExtension>(ContentTypeCellRendererExtension.POINT_ID);
+            const extensions = colibri.Platform
+                .getExtensions<ContentTypeCellRendererExtension>(ContentTypeCellRendererExtension.POINT_ID);
 
             for (const extension of extensions) {
 
