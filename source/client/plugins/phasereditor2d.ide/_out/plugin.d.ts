@@ -123,9 +123,12 @@ declare namespace phasereditor2d.ide.ui.dialogs {
     }
 }
 declare namespace phasereditor2d.ide.ui.dialogs {
+    import io = colibri.core.io;
     class NewProjectDialogExtension extends files.ui.dialogs.NewDialogExtension {
         constructor();
-        createDialog(): colibri.ui.controls.dialogs.Dialog;
+        createDialog(args: {
+            initialFileLocation: io.FilePath;
+        }): colibri.ui.controls.dialogs.Dialog;
     }
 }
 declare namespace phasereditor2d.ide.ui.dialogs {

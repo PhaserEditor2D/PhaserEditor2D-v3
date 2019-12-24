@@ -325,7 +325,7 @@ var phasereditor2d;
                         {
                             const selectCallback = () => {
                                 dlg.close();
-                                this.openFileDialog(viewer.getSelectionFirstElement());
+                                this.openDialog(viewer.getSelectionFirstElement());
                             };
                             const btn = dlg.addButton("Select", () => selectCallback());
                             btn.disabled = true;
@@ -336,17 +336,15 @@ var phasereditor2d;
                         }
                         dlg.addButton("Cancel", () => dlg.close());
                     }
-                    openFileDialog(extension) {
-                        var _a;
-                        const dlg = extension.createDialog();
+                    openDialog(extension) {
+                        const dlg = extension.createDialog({
+                            initialFileLocation: this._initialLocation
+                        });
                         dlg.setTitle(`New ${extension.getDialogName()}`);
-                        // TODO: this is ugly, we should add this to the NewDialogExtension API.
-                        if (dlg instanceof ui.dialogs.NewFileDialog) {
-                            const ext = extension;
-                            dlg.setInitialFileName(ext.getInitialFileName());
-                            dlg.setInitialLocation((_a = this._initialLocation, (_a !== null && _a !== void 0 ? _a : ext.getInitialFileLocation())));
-                            dlg.validate();
-                        }
+                        // const ext = extension as dialogs.NewFileExtension;
+                        // dlg.setInitialFileName(ext.getInitialFileName());
+                        //dlg.setInitialLocation(this._initialLocation ?? ext.getInitialFileLocation());
+                        //dlg.validate();
                     }
                     setInitialLocation(folder) {
                         this._initialLocation = folder;
@@ -361,7 +359,7 @@ var phasereditor2d;
                 class WizardCellRendererProvider {
                     getCellRenderer(element) {
                         const ext = element;
-                        return new controls.viewers.IconImageCellRenderer(ext.getIcon());
+                        return new controls.viewers.IconImageCellRenderer(ext.getDialogIcon());
                     }
                     preload(args) {
                         return controls.Controls.resolveNothingLoaded();
@@ -569,7 +567,7 @@ var phasereditor2d;
                     getDialogName() {
                         return this._dialogName;
                     }
-                    getIcon() {
+                    getDialogIcon() {
                         return this._dialogIcon;
                     }
                 }
@@ -634,7 +632,8 @@ var phasereditor2d;
                         this._fileExtension = config.fileExtension;
                         this._fileContent = config.fileContent;
                     }
-                    createDialog() {
+                    createDialog(args) {
+                        var _a;
                         const dlg = new files.ui.dialogs.NewFileDialog();
                         dlg.create();
                         dlg.setFileExtension(this._fileExtension);
@@ -645,6 +644,9 @@ var phasereditor2d;
                             await reg.preload(file);
                             wb.openEditor(file);
                         });
+                        dlg.setInitialFileName(this.getInitialFileName());
+                        dlg.setInitialLocation((_a = args.initialFileLocation, (_a !== null && _a !== void 0 ? _a : this.getInitialFileLocation())));
+                        dlg.validate();
                         return dlg;
                     }
                 }
@@ -733,9 +735,13 @@ var phasereditor2d;
                             initialFileName: "folder"
                         });
                     }
-                    createDialog() {
+                    createDialog(args) {
+                        var _a;
                         const dlg = new dialogs.NewFolderDialog();
                         dlg.create();
+                        dlg.setInitialFileName(this.getInitialFileName());
+                        dlg.setInitialLocation((_a = args.initialFileLocation, (_a !== null && _a !== void 0 ? _a : this.getInitialFileLocation())));
+                        dlg.validate();
                         return dlg;
                     }
                 }

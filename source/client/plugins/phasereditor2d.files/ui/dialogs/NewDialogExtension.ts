@@ -1,6 +1,7 @@
 namespace phasereditor2d.files.ui.dialogs {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export abstract class NewDialogExtension extends colibri.Extension {
 
@@ -23,11 +24,12 @@ namespace phasereditor2d.files.ui.dialogs {
             return this._dialogName;
         }
 
-        getIcon() {
+        getDialogIcon() {
             return this._dialogIcon;
         }
 
-
-        abstract createDialog(): controls.dialogs.Dialog;
+        abstract createDialog(args: {
+            initialFileLocation: io.FilePath
+        }): controls.dialogs.Dialog;
     }
 }

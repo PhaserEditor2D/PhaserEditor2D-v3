@@ -1,3 +1,4 @@
+
 namespace phasereditor2d.files.ui.dialogs {
 
     import controls = colibri.ui.controls;
@@ -83,6 +84,7 @@ namespace phasereditor2d.files.ui.dialogs {
         }
 
         validate() {
+
             const folder = this._filteredViewer.getViewer().getSelectionFirstElement() as io.FilePath;
 
             let valid = folder !== null;
@@ -111,7 +113,6 @@ namespace phasereditor2d.files.ui.dialogs {
         setFileCreatedCallback(callback: (file: io.FilePath) => void) {
             this._fileCreatedCallback = callback;
         }
-
 
         setInitialFileName(filename: string) {
             this._fileNameText.value = filename;

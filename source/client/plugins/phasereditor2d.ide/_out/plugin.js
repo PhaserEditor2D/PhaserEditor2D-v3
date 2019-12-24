@@ -743,7 +743,7 @@ var phasereditor2d;
                             dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER)
                         });
                     }
-                    createDialog() {
+                    createDialog(args) {
                         const dlg = new dialogs.NewProjectDialog();
                         dlg.create();
                         return dlg;

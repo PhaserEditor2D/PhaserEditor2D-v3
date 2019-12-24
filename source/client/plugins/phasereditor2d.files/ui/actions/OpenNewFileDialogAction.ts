@@ -46,7 +46,7 @@ namespace phasereditor2d.files.ui.actions {
 
                     dlg.close();
 
-                    this.openFileDialog(viewer.getSelectionFirstElement());
+                    this.openDialog(viewer.getSelectionFirstElement());
                 };
 
                 const btn = dlg.addButton("Select", () => selectCallback());
@@ -63,21 +63,18 @@ namespace phasereditor2d.files.ui.actions {
             dlg.addButton("Cancel", () => dlg.close());
         }
 
-        private openFileDialog(extension: ui.dialogs.NewDialogExtension) {
+        private openDialog(extension: ui.dialogs.NewDialogExtension) {
 
-            const dlg = extension.createDialog();
+            const dlg = extension.createDialog({
+                initialFileLocation: this._initialLocation
+            });
 
             dlg.setTitle(`New ${extension.getDialogName()}`);
 
-            // TODO: this is ugly, we should add this to the NewDialogExtension API.
-            if (dlg instanceof dialogs.NewFileDialog) {
-
-                const ext = extension as dialogs.NewFileExtension;
-                dlg.setInitialFileName(ext.getInitialFileName());
-                dlg.setInitialLocation(this._initialLocation ?? ext.getInitialFileLocation());
-
-                dlg.validate();
-            }
+            // const ext = extension as dialogs.NewFileExtension;
+            // dlg.setInitialFileName(ext.getInitialFileName());
+            //dlg.setInitialLocation(this._initialLocation ?? ext.getInitialFileLocation());
+            //dlg.validate();
         }
 
         setInitialLocation(folder: io.FilePath) {
@@ -88,7 +85,7 @@ namespace phasereditor2d.files.ui.actions {
     class WizardLabelProvider implements controls.viewers.ILabelProvider {
 
         getLabel(obj: any): string {
-            return (obj as dialogs.NewFileExtension).getDialogName();
+            return (obj as dialogs.NewDialogExtension).getDialogName();
         }
     }
 
@@ -96,9 +93,9 @@ namespace phasereditor2d.files.ui.actions {
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
-            const ext = element as dialogs.NewFileExtension;
+            const ext = element as dialogs.NewDialogExtension;
 
-            return new controls.viewers.IconImageCellRenderer(ext.getIcon());
+            return new controls.viewers.IconImageCellRenderer(ext.getDialogIcon());
         }
 
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {

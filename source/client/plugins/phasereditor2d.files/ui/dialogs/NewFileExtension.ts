@@ -19,8 +19,6 @@ namespace phasereditor2d.files.ui.dialogs {
             this._initialFileName = config.initialFileName;
         }
 
-        abstract createDialog(): BaseNewFileDialog;
-
         getInitialFileName() {
             return this._initialFileName;
         }

@@ -3,6 +3,7 @@
 namespace phasereditor2d.files.ui.dialogs {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export abstract class NewFileContentExtension extends NewFileExtension {
 
@@ -22,7 +23,9 @@ namespace phasereditor2d.files.ui.dialogs {
             this._fileContent = config.fileContent;
         }
 
-        createDialog() {
+        createDialog(args: {
+            initialFileLocation: io.FilePath
+        }) {
             const dlg = new files.ui.dialogs.NewFileDialog();
 
             dlg.create();
@@ -39,6 +42,10 @@ namespace phasereditor2d.files.ui.dialogs {
 
                 wb.openEditor(file);
             });
+
+            dlg.setInitialFileName(this.getInitialFileName());
+            dlg.setInitialLocation(args.initialFileLocation ?? this.getInitialFileLocation());
+            dlg.validate();
 
             return dlg;
         }

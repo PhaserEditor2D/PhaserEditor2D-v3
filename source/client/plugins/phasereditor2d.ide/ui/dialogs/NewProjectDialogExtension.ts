@@ -1,5 +1,7 @@
 namespace phasereditor2d.ide.ui.dialogs {
 
+    import io = colibri.core.io;
+
     export class NewProjectDialogExtension extends files.ui.dialogs.NewDialogExtension {
 
         constructor() {
@@ -9,7 +11,9 @@ namespace phasereditor2d.ide.ui.dialogs {
             });
         }
 
-        createDialog(): colibri.ui.controls.dialogs.Dialog {
+        createDialog(args: {
+            initialFileLocation: io.FilePath
+        }): colibri.ui.controls.dialogs.Dialog {
 
             const dlg = new NewProjectDialog();
 
