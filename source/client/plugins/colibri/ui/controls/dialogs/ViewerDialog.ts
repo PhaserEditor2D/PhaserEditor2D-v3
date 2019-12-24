@@ -25,6 +25,13 @@ namespace colibri.ui.controls.dialogs {
             return this._viewer;
         }
 
-    }
+        goFront() {
 
+            this.resize();
+
+            if (this._viewer) {
+                this._viewer.repaint();
+            }
+        }
+    }
 }

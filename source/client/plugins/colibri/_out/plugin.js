@@ -3214,6 +3214,7 @@ var colibri;
                         return btn;
                     }
                     createDialogArea() {
+                        // nothing
                     }
                     resize() {
                         this.setBounds({
@@ -3234,7 +3235,11 @@ var colibri;
                         if (this._parentDialog) {
                             this._parentDialog._containerElement.style.display = "block";
                             this._parentDialog.style.display = "grid";
+                            this._parentDialog.goFront();
                         }
+                    }
+                    goFront() {
+                        // nothing
                     }
                     closeAll() {
                         this.close();
@@ -3443,6 +3448,12 @@ var colibri;
                     }
                     getViewer() {
                         return this._viewer;
+                    }
+                    goFront() {
+                        this.resize();
+                        if (this._viewer) {
+                            this._viewer.repaint();
+                        }
                     }
                 }
                 dialogs.ViewerDialog = ViewerDialog;

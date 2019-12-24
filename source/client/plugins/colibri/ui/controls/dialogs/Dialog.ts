@@ -83,7 +83,7 @@ namespace colibri.ui.controls.dialogs {
         create() {
 
             this._containerElement = document.createElement("div");
-            this._containerElement.classList.add("DialogContainer")
+            this._containerElement.classList.add("DialogContainer");
 
             document.body.appendChild(this._containerElement);
             document.body.appendChild(this.getElement());
@@ -127,7 +127,7 @@ namespace colibri.ui.controls.dialogs {
         }
 
         protected createDialogArea() {
-
+            // nothing
         }
 
         protected resize() {
@@ -155,7 +155,12 @@ namespace colibri.ui.controls.dialogs {
             if (this._parentDialog) {
                 this._parentDialog._containerElement.style.display = "block";
                 this._parentDialog.style.display = "grid";
+                this._parentDialog.goFront();
             }
+        }
+
+        protected goFront() {
+            // nothing
         }
 
         closeAll() {

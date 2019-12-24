@@ -789,6 +789,7 @@ declare namespace colibri.ui.controls.dialogs {
         protected resize(): void;
         setSize(width: number, height: number): void;
         close(): void;
+        protected goFront(): void;
         closeAll(): void;
     }
 }
@@ -848,6 +849,7 @@ declare namespace colibri.ui.controls.dialogs {
         constructor(viewer: viewers.TreeViewer);
         createDialogArea(): void;
         getViewer(): viewers.TreeViewer;
+        goFront(): void;
     }
 }
 declare namespace colibri.ui.controls.properties {
