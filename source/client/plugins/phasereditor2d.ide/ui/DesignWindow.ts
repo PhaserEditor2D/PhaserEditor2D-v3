@@ -84,7 +84,7 @@ namespace phasereditor2d.ide.ui {
             const toolbar = this.getToolbar();
 
             {
-                // left area 
+                // left area
 
                 const area = toolbar.getLeftArea();
 
@@ -92,13 +92,13 @@ namespace phasereditor2d.ide.ui {
 
                 manager.add(new files.ui.actions.OpenNewFileDialogAction());
 
-                manager.add(new ui.actions.OpenProjectsDialogAction());
+                // manager.add(new ui.actions.OpenProjectsDialogAction());
 
                 manager.addCommand(actions.CMD_PLAY_PROJECT, { showText: false });
             }
 
             {
-                // right area 
+                // right area
 
                 const area = toolbar.getRightArea();
 

@@ -79,11 +79,7 @@ declare namespace phasereditor2d.ide.ui.actions {
     }
 }
 declare namespace phasereditor2d.ide.ui.actions {
-    import controls = colibri.ui.controls;
-    class OpenProjectsDialogAction extends controls.Action {
-        constructor();
-        run(): void;
-    }
+    function OpenProjectHandler(args: colibri.ui.ide.commands.CommandArgs): void;
 }
 declare namespace phasereditor2d.ide.ui.actions {
     import commands = colibri.ui.ide.commands;

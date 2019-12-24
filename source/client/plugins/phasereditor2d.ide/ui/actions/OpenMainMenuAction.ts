@@ -17,21 +17,19 @@ namespace phasereditor2d.ide.ui.actions {
 
             const menu = new controls.Menu();
 
-            menu.add(new controls.Action({
-                text: "Help",
-                callback: () => controls.Controls.openUrlInNewPage("https://phasereditor2d.com/docs/v3")
-            }));
-
-            menu.addSeparator();
+            menu.addCommand(actions.CMD_OPEN_PROJECTS_DIALOG);
 
             menu.addCommand(actions.CMD_RELOAD_PROJECT);
+
+            menu.addSeparator();
 
             menu.addCommand(actions.CMD_CHANGE_THEME);
 
             menu.addSeparator();
 
             menu.add(new controls.Action({
-                text: "Unlock Phaser Editor 2D"
+                text: "Help",
+                callback: () => controls.Controls.openUrlInNewPage("https://phasereditor2d.com/docs/v3")
             }));
 
             menu.add(new controls.Action({
@@ -39,6 +37,10 @@ namespace phasereditor2d.ide.ui.actions {
                 callback: () => {
                     new dialogs.AboutDialog().create();
                 }
+            }));
+
+            menu.add(new controls.Action({
+                text: "Unlock Phaser Editor 2D"
             }));
 
             menu.create(e);

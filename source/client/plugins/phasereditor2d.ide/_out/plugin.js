@@ -234,15 +234,15 @@ var phasereditor2d;
                 initToolbar() {
                     const toolbar = this.getToolbar();
                     {
-                        // left area 
+                        // left area
                         const area = toolbar.getLeftArea();
                         const manager = new controls.ToolbarManager(area);
                         manager.add(new phasereditor2d.files.ui.actions.OpenNewFileDialogAction());
-                        manager.add(new ui.actions.OpenProjectsDialogAction());
+                        // manager.add(new ui.actions.OpenProjectsDialogAction());
                         manager.addCommand(ui.actions.CMD_PLAY_PROJECT, { showText: false });
                     }
                     {
-                        // right area 
+                        // right area
                         const area = toolbar.getRightArea();
                         const manager = new controls.ToolbarManager(area);
                         manager.add(new ui.actions.OpenMainMenuAction());
@@ -326,7 +326,7 @@ var phasereditor2d;
                             name: "Open Project",
                             tooltip: "Open other project or create a new one."
                         });
-                        manager.addHandlerHelper(actions.CMD_OPEN_PROJECTS_DIALOG, args => isNotWelcomeWindowScope(args) && !args.activeDialog, args => new actions.OpenProjectsDialogAction().run());
+                        manager.addHandlerHelper(actions.CMD_OPEN_PROJECTS_DIALOG, args => isNotWelcomeWindowScope(args) && !args.activeDialog, actions.OpenProjectHandler);
                         manager.addKeyBinding(actions.CMD_OPEN_PROJECTS_DIALOG, new commands.KeyMatcher({
                             control: true,
                             alt: true,
@@ -421,22 +421,23 @@ var phasereditor2d;
                     }
                     run(e) {
                         const menu = new controls.Menu();
-                        menu.add(new controls.Action({
-                            text: "Help",
-                            callback: () => controls.Controls.openUrlInNewPage("https://phasereditor2d.com/docs/v3")
-                        }));
-                        menu.addSeparator();
+                        menu.addCommand(actions.CMD_OPEN_PROJECTS_DIALOG);
                         menu.addCommand(actions.CMD_RELOAD_PROJECT);
+                        menu.addSeparator();
                         menu.addCommand(actions.CMD_CHANGE_THEME);
                         menu.addSeparator();
                         menu.add(new controls.Action({
-                            text: "Unlock Phaser Editor 2D"
+                            text: "Help",
+                            callback: () => controls.Controls.openUrlInNewPage("https://phasereditor2d.com/docs/v3")
                         }));
                         menu.add(new controls.Action({
                             text: "About",
                             callback: () => {
                                 new ui.dialogs.AboutDialog().create();
                             }
+                        }));
+                        menu.add(new controls.Action({
+                            text: "Unlock Phaser Editor 2D"
                         }));
                         menu.create(e);
                     }
@@ -454,22 +455,12 @@ var phasereditor2d;
         (function (ui) {
             var actions;
             (function (actions) {
-                var controls = colibri.ui.controls;
-                class OpenProjectsDialogAction extends controls.Action {
-                    constructor() {
-                        super({
-                            commandId: actions.CMD_OPEN_PROJECTS_DIALOG,
-                            showText: false,
-                            icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER)
-                        });
-                    }
-                    run() {
-                        const dlg = new ui.dialogs.ProjectsDialog();
-                        dlg.create();
-                        dlg.addButton("Cancel", () => dlg.close());
-                    }
+                function OpenProjectHandler(args) {
+                    const dlg = new ui.dialogs.ProjectsDialog();
+                    dlg.create();
+                    dlg.addButton("Cancel", () => dlg.close());
                 }
-                actions.OpenProjectsDialogAction = OpenProjectsDialogAction;
+                actions.OpenProjectHandler = OpenProjectHandler;
             })(actions = ui.actions || (ui.actions = {}));
         })(ui = ide.ui || (ide.ui = {}));
     })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));

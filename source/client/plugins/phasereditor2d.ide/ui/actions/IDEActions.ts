@@ -29,7 +29,7 @@ namespace phasereditor2d.ide.ui.actions {
 
             manager.addHandlerHelper(CMD_OPEN_PROJECTS_DIALOG,
                 args => isNotWelcomeWindowScope(args) && !args.activeDialog,
-                args => new OpenProjectsDialogAction().run());
+                OpenProjectHandler);
 
             manager.addKeyBinding(CMD_OPEN_PROJECTS_DIALOG, new commands.KeyMatcher({
                 control: true,
