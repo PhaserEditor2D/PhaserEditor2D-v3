@@ -6,12 +6,12 @@ namespace phasereditor2d.files.ui.dialogs {
 
     export abstract class NewFileContentExtension extends NewFileExtension {
 
-        private _fileExtension : string;
-        private _fileContent : string;
+        private _fileExtension: string;
+        private _fileContent: string;
 
         constructor(config: {
-            wizardName: string,
-            icon: controls.IImage,
+            dialogName: string,
+            dialogIcon: controls.IImage,
             initialFileName: string,
             fileExtension: string,
             fileContent: string

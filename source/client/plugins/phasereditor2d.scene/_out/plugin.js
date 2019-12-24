@@ -610,8 +610,8 @@ var phasereditor2d;
                 class NewSceneFileDialogExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
                     constructor() {
                         super({
-                            wizardName: "Scene File",
-                            icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
+                            dialogName: "Scene File",
+                            dialogIcon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
                             fileExtension: "scene",
                             initialFileName: "Scene",
                             fileContent: JSON.stringify({
@@ -634,17 +634,6 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/*
-
-`{
-                    "sceneType": "Scene",
-                    "displayList": [],
-                    "meta": {
-
-                    }
-                }`
-
-                */ 
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;

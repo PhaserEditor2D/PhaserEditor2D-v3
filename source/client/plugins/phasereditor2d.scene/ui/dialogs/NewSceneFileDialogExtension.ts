@@ -4,8 +4,8 @@ namespace phasereditor2d.scene.ui.dialogs {
 
         constructor() {
             super({
-                wizardName: "Scene File",
-                icon: ScenePlugin.getInstance().getIcon(ICON_GROUP),
+                dialogName: "Scene File",
+                dialogIcon: ScenePlugin.getInstance().getIcon(ICON_GROUP),
                 fileExtension: "scene",
                 initialFileName: "Scene",
                 fileContent: JSON.stringify({
@@ -25,15 +25,3 @@ namespace phasereditor2d.scene.ui.dialogs {
         }
     }
 }
-
-/*
-
-`{
-                    "sceneType": "Scene",
-                    "displayList": [],
-                    "meta": {
-
-                    }
-                }`
-
-                */

@@ -87,6 +87,10 @@ namespace phasereditor2d.ide {
                 viewerSelectionForeground: controls.Controls.DARK_THEME.viewerSelectionForeground,
                 viewerSelectionBackground: controls.Controls.DARK_THEME.viewerSelectionBackground,
             }));
+
+            // new dialogs
+
+            reg.addExtension(new ui.dialogs.NewProjectDialogExtension());
         }
 
         async openFirstWindow() {

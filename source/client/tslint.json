@@ -9,6 +9,7 @@
         "variable-name": {
             "options": "allow-leading-underscore"
         },
+        "max-classes-per-file": false,
         "class-name": false,
         "trailing-comma": false,
         "eofline": false,

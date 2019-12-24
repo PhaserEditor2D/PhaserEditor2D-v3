@@ -42,7 +42,7 @@ namespace phasereditor2d.files.ui.dialogs {
             this._fileExtension = fileExtension;
         }
 
-        protected createFile(folder : io.FilePath, name : string) {
+        protected createFile(folder: io.FilePath, name: string) {
             return colibri.ui.ide.FileUtils.createFile_async(folder, name, this._fileContent);
         }
 

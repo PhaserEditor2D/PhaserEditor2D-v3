@@ -1,40 +1,28 @@
+/// <reference path="./NewDialogExtension.ts" />
+
 namespace phasereditor2d.files.ui.dialogs {
 
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export abstract class NewFileExtension extends colibri.Extension {
+    export abstract class NewFileExtension extends NewDialogExtension {
 
-        static POINT_ID = "phasereditor2d.files.ui.dialogs.NewFileDialogExtension";
-
-        private _wizardName: string;
-        private _icon: controls.IImage;
         private _initialFileName: string;
-      
+
         constructor(config: {
-            wizardName: string,
-            icon: controls.IImage,
+            dialogName: string,
+            dialogIcon: controls.IImage,
             initialFileName: string
         }) {
-            super(NewFileExtension.POINT_ID);
+            super(config);
 
-            this._wizardName = config.wizardName;
-            this._icon = config.icon;
             this._initialFileName = config.initialFileName;
         }
 
-        abstract createDialog() : BaseNewFileDialog;
+        abstract createDialog(): BaseNewFileDialog;
 
         getInitialFileName() {
             return this._initialFileName;
-        }
-
-        getWizardName() {
-            return this._wizardName;
-        }
-
-        getIcon() {
-            return this._icon;
         }
 
         getInitialFileLocation(): io.FilePath {
@@ -49,7 +37,7 @@ namespace phasereditor2d.files.ui.dialogs {
 
             root.flatTree(files, false);
 
-            const reg = colibri.Platform.getWorkbench().getContentTypeRegistry()
+            const reg = colibri.Platform.getWorkbench().getContentTypeRegistry();
 
             const targetFiles = files.filter(file => contentType === reg.getCachedContentType(file));
 

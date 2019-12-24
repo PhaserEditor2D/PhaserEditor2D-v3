@@ -85,21 +85,31 @@ declare namespace phasereditor2d.files.ui.dialogs {
 }
 declare namespace phasereditor2d.files.ui.dialogs {
     import controls = colibri.ui.controls;
-    import io = colibri.core.io;
-    abstract class NewFileExtension extends colibri.Extension {
+    abstract class NewDialogExtension extends colibri.Extension {
         static POINT_ID: string;
-        private _wizardName;
-        private _icon;
+        private _dialogName;
+        private _dialogIcon;
+        constructor(config: {
+            dialogName: string;
+            dialogIcon: controls.IImage;
+        });
+        getDialogName(): string;
+        getIcon(): controls.IImage;
+        abstract createDialog(): controls.dialogs.Dialog;
+    }
+}
+declare namespace phasereditor2d.files.ui.dialogs {
+    import controls = colibri.ui.controls;
+    import io = colibri.core.io;
+    abstract class NewFileExtension extends NewDialogExtension {
         private _initialFileName;
         constructor(config: {
-            wizardName: string;
-            icon: controls.IImage;
+            dialogName: string;
+            dialogIcon: controls.IImage;
             initialFileName: string;
         });
         abstract createDialog(): BaseNewFileDialog;
         getInitialFileName(): string;
-        getWizardName(): string;
-        getIcon(): controls.IImage;
         getInitialFileLocation(): io.FilePath;
         findInitialFileLocationBasedOnContentType(contentType: string): io.FilePath;
     }
@@ -110,8 +120,8 @@ declare namespace phasereditor2d.files.ui.dialogs {
         private _fileExtension;
         private _fileContent;
         constructor(config: {
-            wizardName: string;
-            icon: controls.IImage;
+            dialogName: string;
+            dialogIcon: controls.IImage;
             initialFileName: string;
             fileExtension: string;
             fileContent: string;

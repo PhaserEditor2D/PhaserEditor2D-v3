@@ -136,26 +136,25 @@ namespace phasereditor2d.ide.ui.dialogs {
 
         create() {
 
-            this.requestProjectsData().then(() => {
+            super.create();
 
-                super.create();
+            this.setTitle("New Project");
 
-                this.setTitle("New Project");
+            this._createBtn = this.addButton("Create Project", () => {
 
-                this._createBtn = this.addButton("Create Project", () => {
+                const template = this._filteredViewer.getViewer().getSelectionFirstElement();
 
-                    const template = this._filteredViewer.getViewer().getSelectionFirstElement();
+                this.closeAll();
 
-                    this.closeAll();
-
-                    this.createProject(template.path);
-                });
-
-                if (this._cancellable) {
-
-                    this.addButton("Cancel", () => this.close());
-                }
+                this.createProject(template.path);
             });
+
+            if (this._cancellable) {
+
+                this.addButton("Cancel", () => this.close());
+            }
+
+            this.requestProjectsData();
         }
 
         private async createProject(templatePath: string) {

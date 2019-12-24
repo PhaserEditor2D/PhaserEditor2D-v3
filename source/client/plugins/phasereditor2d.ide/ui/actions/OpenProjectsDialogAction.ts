@@ -4,7 +4,6 @@ namespace phasereditor2d.ide.ui.actions {
 
     export class OpenProjectsDialogAction extends controls.Action {
 
-
         constructor() {
             super({
                 commandId: CMD_OPEN_PROJECTS_DIALOG,

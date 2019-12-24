@@ -31,7 +31,7 @@ namespace phasereditor2d.files.ui.actions {
             viewer.setCellRendererProvider(new WizardCellRendererProvider());
 
             const extensions = colibri.Platform.getExtensionRegistry()
-                .getExtensions(files.ui.dialogs.NewFileExtension.POINT_ID);
+                .getExtensions(files.ui.dialogs.NewDialogExtension.POINT_ID);
 
             viewer.setInput(extensions);
 
@@ -63,15 +63,21 @@ namespace phasereditor2d.files.ui.actions {
             dlg.addButton("Cancel", () => dlg.close());
         }
 
-        private openFileDialog(extension: ui.dialogs.NewFileExtension) {
+        private openFileDialog(extension: ui.dialogs.NewDialogExtension) {
 
             const dlg = extension.createDialog();
 
-            dlg.setTitle(`New ${extension.getWizardName()}`);
-            dlg.setInitialFileName(extension.getInitialFileName());
-            dlg.setInitialLocation(this._initialLocation ?? extension.getInitialFileLocation());
+            dlg.setTitle(`New ${extension.getDialogName()}`);
 
-            dlg.validate();
+            // TODO: this is ugly, we should add this to the NewDialogExtension API.
+            if (dlg instanceof dialogs.NewFileDialog) {
+
+                const ext = extension as dialogs.NewFileExtension;
+                dlg.setInitialFileName(ext.getInitialFileName());
+                dlg.setInitialLocation(this._initialLocation ?? ext.getInitialFileLocation());
+
+                dlg.validate();
+            }
         }
 
         setInitialLocation(folder: io.FilePath) {
@@ -82,9 +88,8 @@ namespace phasereditor2d.files.ui.actions {
     class WizardLabelProvider implements controls.viewers.ILabelProvider {
 
         getLabel(obj: any): string {
-            return (obj as dialogs.NewFileExtension).getWizardName();
+            return (obj as dialogs.NewFileExtension).getDialogName();
         }
-
     }
 
     class WizardCellRendererProvider implements controls.viewers.ICellRendererProvider {
@@ -99,6 +104,5 @@ namespace phasereditor2d.files.ui.actions {
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
             return controls.Controls.resolveNothingLoaded();
         }
-
     }
 }

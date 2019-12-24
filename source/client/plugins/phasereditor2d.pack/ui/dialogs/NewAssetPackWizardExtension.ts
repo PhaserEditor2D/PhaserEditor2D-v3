@@ -6,13 +6,13 @@ namespace phasereditor2d.pack.ui.dialogs {
 
         constructor() {
             super({
-                wizardName: "Asset Pack File",
-                icon: AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK),
+                dialogName: "Asset Pack File",
+                dialogIcon: AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK),
                 initialFileName: "asset-pack",
                 fileExtension: "json",
                 fileContent: JSON.stringify({
                     section1: {
-                        files : []
+                        files: []
                     },
                     meta: {
                         app: "Phaser Editor 2D - Asset Pack Editor",
@@ -24,7 +24,7 @@ namespace phasereditor2d.pack.ui.dialogs {
             });
         }
 
-      
+
         getInitialFileLocation() {
             return super.findInitialFileLocationBasedOnContentType(pack.core.contentTypes.CONTENT_TYPE_ASSET_PACK);
         }

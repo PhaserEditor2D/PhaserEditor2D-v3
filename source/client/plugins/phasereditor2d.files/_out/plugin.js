@@ -317,7 +317,7 @@ var phasereditor2d;
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
                         viewer.setCellRendererProvider(new WizardCellRendererProvider());
                         const extensions = colibri.Platform.getExtensionRegistry()
-                            .getExtensions(files.ui.dialogs.NewFileExtension.POINT_ID);
+                            .getExtensions(files.ui.dialogs.NewDialogExtension.POINT_ID);
                         viewer.setInput(extensions);
                         const dlg = new controls.dialogs.ViewerDialog(viewer);
                         dlg.create();
@@ -339,10 +339,14 @@ var phasereditor2d;
                     openFileDialog(extension) {
                         var _a;
                         const dlg = extension.createDialog();
-                        dlg.setTitle(`New ${extension.getWizardName()}`);
-                        dlg.setInitialFileName(extension.getInitialFileName());
-                        dlg.setInitialLocation((_a = this._initialLocation, (_a !== null && _a !== void 0 ? _a : extension.getInitialFileLocation())));
-                        dlg.validate();
+                        dlg.setTitle(`New ${extension.getDialogName()}`);
+                        // TODO: this is ugly, we should add this to the NewDialogExtension API.
+                        if (dlg instanceof ui.dialogs.NewFileDialog) {
+                            const ext = extension;
+                            dlg.setInitialFileName(ext.getInitialFileName());
+                            dlg.setInitialLocation((_a = this._initialLocation, (_a !== null && _a !== void 0 ? _a : ext.getInitialFileLocation())));
+                            dlg.validate();
+                        }
                     }
                     setInitialLocation(folder) {
                         this._initialLocation = folder;
@@ -351,7 +355,7 @@ var phasereditor2d;
                 actions.OpenNewFileDialogAction = OpenNewFileDialogAction;
                 class WizardLabelProvider {
                     getLabel(obj) {
-                        return obj.getWizardName();
+                        return obj.getDialogName();
                     }
                 }
                 class WizardCellRendererProvider {
@@ -551,26 +555,46 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var files;
+    (function (files) {
+        var ui;
+        (function (ui) {
+            var dialogs;
+            (function (dialogs) {
+                class NewDialogExtension extends colibri.Extension {
+                    constructor(config) {
+                        super(NewDialogExtension.POINT_ID);
+                        this._dialogName = config.dialogName;
+                        this._dialogIcon = config.dialogIcon;
+                    }
+                    getDialogName() {
+                        return this._dialogName;
+                    }
+                    getIcon() {
+                        return this._dialogIcon;
+                    }
+                }
+                NewDialogExtension.POINT_ID = "phasereditor2d.files.ui.dialogs.NewDialogExtension";
+                dialogs.NewDialogExtension = NewDialogExtension;
+            })(dialogs = ui.dialogs || (ui.dialogs = {}));
+        })(ui = files.ui || (files.ui = {}));
+    })(files = phasereditor2d.files || (phasereditor2d.files = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./NewDialogExtension.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var files;
     (function (files_2) {
         var ui;
         (function (ui) {
             var dialogs;
             (function (dialogs) {
-                class NewFileExtension extends colibri.Extension {
+                class NewFileExtension extends dialogs.NewDialogExtension {
                     constructor(config) {
-                        super(NewFileExtension.POINT_ID);
-                        this._wizardName = config.wizardName;
-                        this._icon = config.icon;
+                        super(config);
                         this._initialFileName = config.initialFileName;
                     }
                     getInitialFileName() {
                         return this._initialFileName;
-                    }
-                    getWizardName() {
-                        return this._wizardName;
-                    }
-                    getIcon() {
-                        return this._icon;
                     }
                     getInitialFileLocation() {
                         return colibri.Platform.getWorkbench().getProjectRoot();
@@ -590,7 +614,6 @@ var phasereditor2d;
                         return root;
                     }
                 }
-                NewFileExtension.POINT_ID = "phasereditor2d.files.ui.dialogs.NewFileDialogExtension";
                 dialogs.NewFileExtension = NewFileExtension;
             })(dialogs = ui.dialogs || (ui.dialogs = {}));
         })(ui = files_2.ui || (files_2.ui = {}));
@@ -705,9 +728,9 @@ var phasereditor2d;
                 class NewFolderExtension extends dialogs.NewFileExtension {
                     constructor() {
                         super({
-                            icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER),
-                            initialFileName: "folder",
-                            wizardName: "Folder"
+                            dialogName: "Folder",
+                            dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER),
+                            initialFileName: "folder"
                         });
                     }
                     createDialog() {
@@ -734,9 +757,9 @@ var phasereditor2d;
                         super({
                             fileContent: "",
                             fileExtension: "",
-                            icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FILE),
+                            dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FILE),
                             initialFileName: "Untitled",
-                            wizardName: "File"
+                            dialogName: "File"
                         });
                     }
                 }

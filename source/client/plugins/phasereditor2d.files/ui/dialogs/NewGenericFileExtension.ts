@@ -6,10 +6,10 @@ namespace phasereditor2d.files.ui.dialogs {
             super({
                 fileContent: "",
                 fileExtension: "",
-                icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FILE),
+                dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FILE),
                 initialFileName: "Untitled",
-                wizardName: "File"
-            })
+                dialogName: "File"
+            });
         }
     }
 }

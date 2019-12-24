@@ -54,6 +54,8 @@ var phasereditor2d;
                     viewerSelectionForeground: controls.Controls.DARK_THEME.viewerSelectionForeground,
                     viewerSelectionBackground: controls.Controls.DARK_THEME.viewerSelectionBackground,
                 }));
+                // new dialogs
+                reg.addExtension(new ide_1.ui.dialogs.NewProjectDialogExtension());
             }
             async openFirstWindow() {
                 this.restoreTheme();
@@ -644,18 +646,17 @@ var phasereditor2d;
                         this._projectNames = new Set(list);
                     }
                     create() {
-                        this.requestProjectsData().then(() => {
-                            super.create();
-                            this.setTitle("New Project");
-                            this._createBtn = this.addButton("Create Project", () => {
-                                const template = this._filteredViewer.getViewer().getSelectionFirstElement();
-                                this.closeAll();
-                                this.createProject(template.path);
-                            });
-                            if (this._cancellable) {
-                                this.addButton("Cancel", () => this.close());
-                            }
+                        super.create();
+                        this.setTitle("New Project");
+                        this._createBtn = this.addButton("Create Project", () => {
+                            const template = this._filteredViewer.getViewer().getSelectionFirstElement();
+                            this.closeAll();
+                            this.createProject(template.path);
                         });
+                        if (this._cancellable) {
+                            this.addButton("Cancel", () => this.close());
+                        }
+                        this.requestProjectsData();
                     }
                     async createProject(templatePath) {
                         const projectName = this._projectNameText.value;
@@ -723,6 +724,32 @@ var phasereditor2d;
                         return controls.Controls.resolveNothingLoaded();
                     }
                 }
+            })(dialogs = ui.dialogs || (ui.dialogs = {}));
+        })(ui = ide.ui || (ide.ui = {}));
+    })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var ide;
+    (function (ide) {
+        var ui;
+        (function (ui) {
+            var dialogs;
+            (function (dialogs) {
+                class NewProjectDialogExtension extends phasereditor2d.files.ui.dialogs.NewDialogExtension {
+                    constructor() {
+                        super({
+                            dialogName: "Project",
+                            dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER)
+                        });
+                    }
+                    createDialog() {
+                        const dlg = new dialogs.NewProjectDialog();
+                        dlg.create();
+                        return dlg;
+                    }
+                }
+                dialogs.NewProjectDialogExtension = NewProjectDialogExtension;
             })(dialogs = ui.dialogs || (ui.dialogs = {}));
         })(ui = ide.ui || (ide.ui = {}));
     })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));

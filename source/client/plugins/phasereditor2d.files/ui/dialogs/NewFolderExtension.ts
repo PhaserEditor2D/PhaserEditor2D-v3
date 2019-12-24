@@ -4,16 +4,16 @@ namespace phasereditor2d.files.ui.dialogs {
 
         constructor() {
             super({
-                icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER),
-                initialFileName: "folder",
-                wizardName: "Folder"
+                dialogName: "Folder",
+                dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER),
+                initialFileName: "folder"
             });
         }
 
         createDialog(): BaseNewFileDialog {
-            
+
             const dlg = new NewFolderDialog();
-            
+
             dlg.create();
 
             return dlg;
