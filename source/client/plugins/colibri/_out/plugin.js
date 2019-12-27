@@ -2743,6 +2743,11 @@ var colibri;
                     const labelElement = this.makeLabel(label, icon, closeable);
                     this._titleBarElement.appendChild(labelElement);
                     labelElement.addEventListener("mousedown", e => {
+                        if (e.button !== 0) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            return;
+                        }
                         if (TabPane.isTabCloseIcon(e.target)) {
                             return;
                         }
@@ -2794,7 +2799,17 @@ var colibri;
                         labelElement.classList.add("closeable");
                         CloseIconManager.setManager(labelElement, manager);
                     }
+                    labelElement.addEventListener("contextmenu", e => this.showTabLabelMenu(e, labelElement));
                     return labelElement;
+                }
+                showTabLabelMenu(e, labelElement) {
+                    e.preventDefault();
+                    const menu = new controls.Menu();
+                    this.fillTabMenu(menu, labelElement);
+                    menu.create(e);
+                }
+                fillTabMenu(menu, labelElement) {
+                    // nothing
                 }
                 setTabCloseIcons(labelElement, icon, overIcon) {
                     const manager = CloseIconManager.getManager(labelElement);
@@ -2916,6 +2931,9 @@ var colibri;
                         return controls.Control.getControlOf(area.firstChild);
                     }
                     return null;
+                }
+                isSelectedLabel(labelElement) {
+                    return labelElement === this.getSelectedLabelElement();
                 }
                 getContentList() {
                     const list = [];
@@ -5509,6 +5527,52 @@ var colibri;
                 }
                 getEditors() {
                     return super.getParts();
+                }
+                getSelectedEditor() {
+                    return this.getSelectedTabContent();
+                }
+                fillTabMenu(menu, labelElement) {
+                    if (this.isSelectedLabel(labelElement)) {
+                        const editor = this.getSelectedEditor();
+                        if (editor.isDirty()) {
+                            menu.addCommand(colibri.ui.ide.actions.CMD_SAVE);
+                            menu.addSeparator();
+                        }
+                    }
+                    menu.add(new ui.controls.Action({
+                        text: "Close",
+                        callback: () => {
+                            this.closeTabLabel(labelElement);
+                        }
+                    }));
+                    menu.add(new ui.controls.Action({
+                        text: "Close to the Left",
+                        callback: () => {
+                            const editor = ui.controls.TabPane.getContentFromLabel(labelElement);
+                            if (!editor) {
+                                return;
+                            }
+                            const editors = this.getEditors();
+                            const index = this.getEditors().indexOf(editor);
+                            for (let i = 0; i < index; i++) {
+                                this.closeTab(editors[i]);
+                            }
+                        }
+                    }));
+                    menu.add(new ui.controls.Action({
+                        text: "Close to the right Right",
+                        callback: () => {
+                            const editor = ui.controls.TabPane.getContentFromLabel(labelElement);
+                            if (!editor) {
+                                return;
+                            }
+                            const editors = this.getEditors();
+                            const index = this.getEditors().indexOf(editor);
+                            for (let i = index + 1; i < editors.length; i++) {
+                                this.closeTab(editors[i]);
+                            }
+                        }
+                    }));
                 }
             }
             ide.EditorArea = EditorArea;

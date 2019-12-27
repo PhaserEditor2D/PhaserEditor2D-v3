@@ -39,7 +39,6 @@ namespace colibri.ui.controls {
             return element["__CloseIconManager"];
         }
 
-
         setIcon(icon: IImage) {
             this._icon = icon;
         }
@@ -175,11 +174,19 @@ namespace colibri.ui.controls {
             this._titleBarElement.appendChild(labelElement);
             labelElement.addEventListener("mousedown", e => {
 
+                if (e.button !== 0) {
+
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+
+                    return;
+                }
+
                 if (TabPane.isTabCloseIcon(e.target as HTMLElement)) {
                     return;
                 }
 
-                this.selectTab(labelElement)
+                this.selectTab(labelElement);
             });
 
             const contentArea = new Control("div", "ContentArea");
@@ -250,7 +257,24 @@ namespace colibri.ui.controls {
                 CloseIconManager.setManager(labelElement, manager);
             }
 
+            labelElement.addEventListener("contextmenu", e => this.showTabLabelMenu(e, labelElement));
+
             return labelElement;
+        }
+
+        private showTabLabelMenu(e: MouseEvent, labelElement: HTMLElement) {
+
+            e.preventDefault();
+
+            const menu = new Menu();
+
+            this.fillTabMenu(menu, labelElement);
+
+            menu.create(e);
+        }
+
+        protected fillTabMenu(menu: Menu, labelElement: HTMLElement) {
+            // nothing
         }
 
         setTabCloseIcons(labelElement: HTMLElement, icon: IImage, overIcon: IImage) {
@@ -264,7 +288,6 @@ namespace colibri.ui.controls {
                 manager.repaint();
             }
         }
-
 
         closeTab(content: controls.Control) {
 
@@ -282,7 +305,7 @@ namespace colibri.ui.controls {
             this._selectionHistoryLabelElement = [];
         }
 
-        private closeTabLabel(labelElement: HTMLElement): void {
+        protected closeTabLabel(labelElement: HTMLElement): void {
             {
                 const content = TabPane.getContentFromLabel(labelElement);
                 const event = new CustomEvent(EVENT_TAB_CLOSED, {
@@ -295,9 +318,8 @@ namespace colibri.ui.controls {
                 }
             }
 
-
             this._titleBarElement.removeChild(labelElement);
-            const contentArea = <HTMLElement>labelElement["__contentArea"];
+            const contentArea = labelElement["__contentArea"] as HTMLElement;
             this._contentAreaElement.removeChild(contentArea);
 
             let toSelectLabel: HTMLElement = null;
@@ -317,7 +339,7 @@ namespace colibri.ui.controls {
 
                     if (this._titleBarElement.childElementCount > 0) {
 
-                        toSelectLabel = <HTMLElement>this._titleBarElement.firstChild;
+                        toSelectLabel = (this._titleBarElement.firstChild as HTMLElement);
                     }
                 }
             }
@@ -331,14 +353,14 @@ namespace colibri.ui.controls {
 
             for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
 
-                const label = <HTMLElement>this._titleBarElement.children.item(i);
+                const label = this._titleBarElement.children.item(i) as HTMLElement;
 
                 const content2 = TabPane.getContentFromLabel(label);
 
                 if (content2 === content) {
 
-                    const iconElement: HTMLCanvasElement = <HTMLCanvasElement>label.firstChild;
-                    const textElement = <HTMLElement>iconElement.nextSibling;
+                    const iconElement: HTMLCanvasElement = label.firstChild as HTMLCanvasElement;
+                    const textElement = iconElement.nextSibling as HTMLElement;
 
                     const manager = TabIconManager.getManager(iconElement);
                     manager.setIcon(icon);
@@ -361,7 +383,7 @@ namespace colibri.ui.controls {
 
             for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
 
-                const label = <HTMLElement>this._titleBarElement.children.item(i);
+                const label = this._titleBarElement.children.item(i) as HTMLElement;
 
                 const content2 = TabPane.getContentFromLabel(label);
 
@@ -378,7 +400,7 @@ namespace colibri.ui.controls {
         }
 
         static getContentFromLabel(labelElement: HTMLElement) {
-            return Control.getControlOf(<HTMLElement>this.getContentAreaFromLabel(labelElement).firstChild);
+            return Control.getControlOf(this.getContentAreaFromLabel(labelElement).firstChild as HTMLElement);
         }
 
         selectTabWithContent(content: Control) {
@@ -428,10 +450,14 @@ namespace colibri.ui.controls {
 
                 const area = TabPane.getContentAreaFromLabel(label);
 
-                return Control.getControlOf(<HTMLElement>area.firstChild);
+                return Control.getControlOf(area.firstChild as HTMLElement);
             }
 
             return null;
+        }
+
+        isSelectedLabel(labelElement: HTMLElement) {
+            return labelElement === this.getSelectedLabelElement();
         }
 
         getContentList(): controls.Control[] {
@@ -440,7 +466,7 @@ namespace colibri.ui.controls {
 
             for (let i = 0; i < this._titleBarElement.children.length; i++) {
 
-                const label = <HTMLElement>this._titleBarElement.children.item(i);
+                const label = this._titleBarElement.children.item(i) as HTMLElement;
 
                 const content = TabPane.getContentFromLabel(label);
 

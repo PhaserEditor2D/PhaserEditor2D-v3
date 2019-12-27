@@ -706,10 +706,12 @@ declare namespace colibri.ui.controls {
         setTabIconSize(size: number): void;
         incrementTabIconSize(amount: number): void;
         private makeLabel;
+        private showTabLabelMenu;
+        protected fillTabMenu(menu: Menu, labelElement: HTMLElement): void;
         setTabCloseIcons(labelElement: HTMLElement, icon: IImage, overIcon: IImage): void;
         closeTab(content: controls.Control): void;
         closeAll(): void;
-        private closeTabLabel;
+        protected closeTabLabel(labelElement: HTMLElement): void;
         setTabTitle(content: Control, title: string, icon?: IImage): void;
         static isTabCloseIcon(element: HTMLElement): boolean;
         static isTabLabel(element: HTMLElement): boolean;
@@ -719,6 +721,7 @@ declare namespace colibri.ui.controls {
         selectTabWithContent(content: Control): void;
         private selectTab;
         getSelectedTabContent(): Control;
+        isSelectedLabel(labelElement: HTMLElement): boolean;
         getContentList(): controls.Control[];
         private getSelectedLabelElement;
     }
@@ -1308,6 +1311,8 @@ declare namespace colibri.ui.ide {
         constructor();
         activateEditor(editor: EditorPart): void;
         getEditors(): EditorPart[];
+        getSelectedEditor(): EditorPart;
+        fillTabMenu(menu: controls.Menu, labelElement: HTMLElement): void;
     }
 }
 declare namespace colibri.ui.ide {

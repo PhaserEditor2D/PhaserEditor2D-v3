@@ -48,7 +48,7 @@ namespace colibri.ui.controls.viewers {
         private initListeners() {
             const canvas = this.getCanvas();
             canvas.addEventListener("mouseup", e => this.onMouseUp(e));
-            canvas.addEventListener("wheel", e => this.onWheel(e))
+            canvas.addEventListener("wheel", e => this.onWheel(e));
             canvas.addEventListener("keydown", e => this.onKeyDown(e));
             canvas.addEventListener("dblclick", e => this.onDoubleClick(e));
             canvas.addEventListener("dragstart", e => this.onDragStart(e));
@@ -120,7 +120,7 @@ namespace colibri.ui.controls.viewers {
                         const renderer = this.getCellRendererProvider().getCellRenderer(obj);
                         renderer.renderCell(new RenderCellArgs(ctx, 0, 0, w, h, obj, this, true));
                     }
-                })
+                });
 
                 const labels = dragObjects.map(obj => this.getLabelProvider().getLabel(obj)).join(",");
 
@@ -143,7 +143,7 @@ namespace colibri.ui.controls.viewers {
 
             if (this._menu) {
                 this._menu.setMenuClosedCallback(() => {
-                    this._menu = null
+                    this._menu = null;
                 });
             }
         }

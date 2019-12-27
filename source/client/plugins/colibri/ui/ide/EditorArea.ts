@@ -10,12 +10,75 @@ namespace colibri.ui.ide {
             super("EditorArea");
         }
 
-        activateEditor(editor : EditorPart) : void {
+        activateEditor(editor: EditorPart): void {
             super.selectTabWithContent(editor);
         }
 
-        getEditors() : EditorPart[] {
+        getEditors(): EditorPart[] {
             return super.getParts() as EditorPart[];
+        }
+
+        getSelectedEditor(): EditorPart {
+            return this.getSelectedTabContent() as EditorPart;
+        }
+
+        fillTabMenu(menu: controls.Menu, labelElement: HTMLElement) {
+
+            if (this.isSelectedLabel(labelElement)) {
+
+                const editor = this.getSelectedEditor();
+
+                if (editor.isDirty()) {
+
+                    menu.addCommand(colibri.ui.ide.actions.CMD_SAVE);
+                    menu.addSeparator();
+                }
+            }
+
+            menu.add(new controls.Action({
+                text: "Close",
+                callback: () => {
+                    this.closeTabLabel(labelElement);
+                }
+            }));
+
+            menu.add(new controls.Action({
+                text: "Close to the Left",
+                callback: () => {
+
+                    const editor = controls.TabPane.getContentFromLabel(labelElement) as EditorPart;
+
+                    if (!editor) {
+                        return;
+                    }
+
+                    const editors = this.getEditors();
+                    const index = this.getEditors().indexOf(editor);
+
+                    for (let i = 0; i < index; i++) {
+                        this.closeTab(editors[i]);
+                    }
+                }
+            }));
+
+            menu.add(new controls.Action({
+                text: "Close to the right Right",
+                callback: () => {
+
+                    const editor = controls.TabPane.getContentFromLabel(labelElement) as EditorPart;
+
+                    if (!editor) {
+                        return;
+                    }
+
+                    const editors = this.getEditors();
+                    const index = this.getEditors().indexOf(editor);
+
+                    for (let i = index + 1; i < editors.length; i++) {
+                        this.closeTab(editors[i]);
+                    }
+                }
+            }));
         }
     }
 }
