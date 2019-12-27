@@ -63,8 +63,6 @@ declare namespace phasereditor2d.ide.ui.actions {
     const CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
     const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
-    const CMD_EDITOR_TABS_SIZE_UP = "phasereditor2d.ide.ui.actions.EditorTabsSizeUp";
-    const CMD_EDITOR_TABS_SIZE_DOWN = "phasereditor2d.ide.ui.actions.EditorTabsSizeDown";
     const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
     import commands = colibri.ui.ide.commands;
     class IDEActions {

@@ -1610,6 +1610,8 @@ declare namespace colibri.ui.ide.commands {
 }
 declare namespace colibri.ui.ide.actions {
     const CMD_SAVE = "colibri.ui.ide.actions.Save";
+    const CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
+    const CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
     const CMD_DELETE = "colibri.ui.ide.actions.Delete";
     const CMD_RENAME = "colibri.ui.ide.actions.Rename";
     const CMD_UNDO = "colibri.ui.ide.actions.Undo";

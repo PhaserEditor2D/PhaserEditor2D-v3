@@ -3,8 +3,6 @@ namespace phasereditor2d.ide.ui.actions {
     export const CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
     export const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
-    export const CMD_EDITOR_TABS_SIZE_UP = "phasereditor2d.ide.ui.actions.EditorTabsSizeUp";
-    export const CMD_EDITOR_TABS_SIZE_DOWN = "phasereditor2d.ide.ui.actions.EditorTabsSizeDown";
     export const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
 
     import controls = colibri.ui.controls;
@@ -101,42 +99,6 @@ namespace phasereditor2d.ide.ui.actions {
                 control: true,
                 key: "2",
                 filterInputElements: false
-            }));
-
-            // editor tabs size
-
-            manager.addCommandHelper({
-                id: CMD_EDITOR_TABS_SIZE_DOWN,
-                name: "Increment Tab Size",
-                tooltip: "Make bigger the editor tabs."
-            });
-
-            manager.addCommandHelper({
-                id: CMD_EDITOR_TABS_SIZE_UP,
-                name: "Decrement Tab Size",
-                tooltip: "Make smaller the editor tabs."
-            });
-
-            manager.addHandlerHelper(CMD_EDITOR_TABS_SIZE_DOWN,
-                isNotWelcomeWindowScope,
-                args =>
-                    colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(-5)
-            );
-
-            manager.addHandlerHelper(CMD_EDITOR_TABS_SIZE_UP,
-                isNotWelcomeWindowScope,
-                args =>
-                    colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(5)
-            );
-
-            manager.addKeyBinding(CMD_EDITOR_TABS_SIZE_DOWN, new commands.KeyMatcher({
-                control: true,
-                key: "3"
-            }));
-
-            manager.addKeyBinding(CMD_EDITOR_TABS_SIZE_UP, new commands.KeyMatcher({
-                control: true,
-                key: "4"
             }));
         }
     }

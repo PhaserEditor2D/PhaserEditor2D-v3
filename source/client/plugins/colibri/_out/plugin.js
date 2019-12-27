@@ -5546,6 +5546,21 @@ var colibri;
                         }
                     }));
                     menu.add(new ui.controls.Action({
+                        text: "Close Others",
+                        callback: () => {
+                            const selectedEditor = ui.controls.TabPane.getContentFromLabel(labelElement);
+                            if (!selectedEditor) {
+                                return;
+                            }
+                            const editors = this.getEditors();
+                            for (const editor of editors) {
+                                if (editor !== selectedEditor) {
+                                    this.closeTab(editor);
+                                }
+                            }
+                        }
+                    }));
+                    menu.add(new ui.controls.Action({
                         text: "Close to the Left",
                         callback: () => {
                             const editor = ui.controls.TabPane.getContentFromLabel(labelElement);
@@ -5573,6 +5588,27 @@ var colibri;
                             }
                         }
                     }));
+                    menu.add(new ui.controls.Action({
+                        text: "Close Saved",
+                        callback: () => {
+                            for (const editor of this.getEditors()) {
+                                if (!editor.isDirty()) {
+                                    this.closeTab(editor);
+                                }
+                            }
+                        }
+                    }));
+                    menu.add(new ui.controls.Action({
+                        text: "Close All",
+                        callback: () => {
+                            for (const editor of this.getEditors()) {
+                                this.closeTab(editor);
+                            }
+                        }
+                    }));
+                    menu.addSeparator();
+                    menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_UP);
+                    menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_DOWN);
                 }
             }
             ide.EditorArea = EditorArea;
@@ -6558,6 +6594,8 @@ var colibri;
             (function (actions) {
                 var KeyMatcher = ide.commands.KeyMatcher;
                 actions.CMD_SAVE = "colibri.ui.ide.actions.Save";
+                actions.CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
+                actions.CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
                 actions.CMD_DELETE = "colibri.ui.ide.actions.Delete";
                 actions.CMD_RENAME = "colibri.ui.ide.actions.Rename";
                 actions.CMD_UNDO = "colibri.ui.ide.actions.Undo";
@@ -6582,6 +6620,27 @@ var colibri;
                         IDECommands.initViewer(manager);
                     }
                     static initViewer(manager) {
+                        // editor tabs size
+                        manager.addCommandHelper({
+                            id: actions.CMD_EDITOR_TABS_SIZE_DOWN,
+                            name: "Decrement Tab Size",
+                            tooltip: "Make bigger the editor tabs."
+                        });
+                        manager.addCommandHelper({
+                            id: actions.CMD_EDITOR_TABS_SIZE_UP,
+                            name: "Increment Tab Size",
+                            tooltip: "Make smaller the editor tabs."
+                        });
+                        manager.addHandlerHelper(actions.CMD_EDITOR_TABS_SIZE_DOWN, e => true, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(-5));
+                        manager.addHandlerHelper(actions.CMD_EDITOR_TABS_SIZE_UP, e => true, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(5));
+                        manager.addKeyBinding(actions.CMD_EDITOR_TABS_SIZE_DOWN, new ide.commands.KeyMatcher({
+                            control: true,
+                            key: "3"
+                        }));
+                        manager.addKeyBinding(actions.CMD_EDITOR_TABS_SIZE_UP, new ide.commands.KeyMatcher({
+                            control: true,
+                            key: "4"
+                        }));
                         // collapse all
                         manager.addCommandHelper({
                             id: actions.CMD_COLLAPSE_ALL,

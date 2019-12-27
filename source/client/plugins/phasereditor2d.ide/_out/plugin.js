@@ -310,8 +310,6 @@ var phasereditor2d;
                 actions.CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
                 actions.CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
                 actions.CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
-                actions.CMD_EDITOR_TABS_SIZE_UP = "phasereditor2d.ide.ui.actions.EditorTabsSizeUp";
-                actions.CMD_EDITOR_TABS_SIZE_DOWN = "phasereditor2d.ide.ui.actions.EditorTabsSizeDown";
                 actions.CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
                 var controls = colibri.ui.controls;
                 var commands = colibri.ui.ide.commands;
@@ -372,27 +370,6 @@ var phasereditor2d;
                             control: true,
                             key: "2",
                             filterInputElements: false
-                        }));
-                        // editor tabs size
-                        manager.addCommandHelper({
-                            id: actions.CMD_EDITOR_TABS_SIZE_DOWN,
-                            name: "Increment Tab Size",
-                            tooltip: "Make bigger the editor tabs."
-                        });
-                        manager.addCommandHelper({
-                            id: actions.CMD_EDITOR_TABS_SIZE_UP,
-                            name: "Decrement Tab Size",
-                            tooltip: "Make smaller the editor tabs."
-                        });
-                        manager.addHandlerHelper(actions.CMD_EDITOR_TABS_SIZE_DOWN, isNotWelcomeWindowScope, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(-5));
-                        manager.addHandlerHelper(actions.CMD_EDITOR_TABS_SIZE_UP, isNotWelcomeWindowScope, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(5));
-                        manager.addKeyBinding(actions.CMD_EDITOR_TABS_SIZE_DOWN, new commands.KeyMatcher({
-                            control: true,
-                            key: "3"
-                        }));
-                        manager.addKeyBinding(actions.CMD_EDITOR_TABS_SIZE_UP, new commands.KeyMatcher({
-                            control: true,
-                            key: "4"
                         }));
                     }
                 }

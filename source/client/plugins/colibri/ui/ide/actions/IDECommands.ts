@@ -5,6 +5,8 @@ namespace colibri.ui.ide.actions {
     import KeyMatcher = commands.KeyMatcher;
 
     export const CMD_SAVE = "colibri.ui.ide.actions.Save";
+    export const CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
+    export const CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
     export const CMD_DELETE = "colibri.ui.ide.actions.Delete";
     export const CMD_RENAME = "colibri.ui.ide.actions.Rename";
     export const CMD_UNDO = "colibri.ui.ide.actions.Undo";
@@ -43,6 +45,42 @@ namespace colibri.ui.ide.actions {
 
         private static initViewer(manager: commands.CommandManager) {
 
+            // editor tabs size
+
+            manager.addCommandHelper({
+                id: CMD_EDITOR_TABS_SIZE_DOWN,
+                name: "Decrement Tab Size",
+                tooltip: "Make bigger the editor tabs."
+            });
+
+            manager.addCommandHelper({
+                id: CMD_EDITOR_TABS_SIZE_UP,
+                name: "Increment Tab Size",
+                tooltip: "Make smaller the editor tabs."
+            });
+
+            manager.addHandlerHelper(CMD_EDITOR_TABS_SIZE_DOWN,
+                e => true,
+                args =>
+                    colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(-5)
+            );
+
+            manager.addHandlerHelper(CMD_EDITOR_TABS_SIZE_UP,
+                e => true,
+                args =>
+                    colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(5)
+            );
+
+            manager.addKeyBinding(CMD_EDITOR_TABS_SIZE_DOWN, new commands.KeyMatcher({
+                control: true,
+                key: "3"
+            }));
+
+            manager.addKeyBinding(CMD_EDITOR_TABS_SIZE_UP, new commands.KeyMatcher({
+                control: true,
+                key: "4"
+            }));
+
             // collapse all
 
             manager.addCommandHelper({
@@ -54,7 +92,7 @@ namespace colibri.ui.ide.actions {
             manager.addHandlerHelper(CMD_COLLAPSE_ALL,
                 isViewerScope,
                 args => {
-                    const viewer = <controls.viewers.Viewer>controls.Control.getControlOf(args.activeElement);
+                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
                     viewer.collapseAll();
                     viewer.repaint();
                 }
@@ -75,7 +113,7 @@ namespace colibri.ui.ide.actions {
             manager.addHandlerHelper(CMD_SELECT_ALL,
                 isViewerScope,
                 args => {
-                    const viewer = <controls.viewers.Viewer>controls.Control.getControlOf(args.activeElement);
+                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
                     viewer.selectAll();
                     viewer.repaint();
                 }

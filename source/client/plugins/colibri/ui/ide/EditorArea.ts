@@ -43,6 +43,27 @@ namespace colibri.ui.ide {
             }));
 
             menu.add(new controls.Action({
+                text: "Close Others",
+                callback: () => {
+
+                    const selectedEditor = controls.TabPane.getContentFromLabel(labelElement) as EditorPart;
+
+                    if (!selectedEditor) {
+                        return;
+                    }
+
+                    const editors = this.getEditors();
+
+                    for (const editor of editors) {
+
+                        if (editor !== selectedEditor) {
+                            this.closeTab(editor);
+                        }
+                    }
+                }
+            }));
+
+            menu.add(new controls.Action({
                 text: "Close to the Left",
                 callback: () => {
 
@@ -79,6 +100,35 @@ namespace colibri.ui.ide {
                     }
                 }
             }));
+
+            menu.add(new controls.Action({
+                text: "Close Saved",
+                callback: () => {
+
+                    for (const editor of this.getEditors()) {
+
+                        if (!editor.isDirty()) {
+                            this.closeTab(editor);
+                        }
+                    }
+                }
+            }));
+
+            menu.add(new controls.Action({
+                text: "Close All",
+                callback: () => {
+
+                    for (const editor of this.getEditors()) {
+                        this.closeTab(editor);
+                    }
+                }
+            }));
+
+            menu.addSeparator();
+
+            menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_UP);
+
+            menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_DOWN);
         }
     }
 }
