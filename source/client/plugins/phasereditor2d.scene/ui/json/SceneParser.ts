@@ -69,11 +69,14 @@ namespace phasereditor2d.scene.ui.json {
             let imageFrameContainerPackItem: pack.core.ImageFrameContainerAssetPackItem = null;
 
             if (data instanceof pack.core.AssetPackItem) {
+
                 if (data instanceof pack.core.ImageFrameContainerAssetPackItem) {
                     imageFrameContainerPackItem = data;
                 }
+
             } else if (data instanceof pack.core.AssetPackImageFrame) {
-                imageFrameContainerPackItem = <pack.core.ImageFrameContainerAssetPackItem>data.getPackItem();
+
+                imageFrameContainerPackItem = (data.getPackItem() as pack.core.ImageFrameContainerAssetPackItem);
             }
 
             if (imageFrameContainerPackItem !== null) {
@@ -90,28 +93,32 @@ namespace phasereditor2d.scene.ui.json {
 
             const type = data.type;
 
-            let sprite: gameobjects.EditorObject = null;
+            const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
 
-            switch (type) {
-                case "Image":
-                    sprite = gameobjects.EditorImage.add(this._scene, 0, 0, "");
-                    break;
-                case "Container":
-                    sprite = gameobjects.EditorContainer.add(this._scene, 0, 0, []);
-                    break;
+            if (ext) {
+
+                const sprite = ext.createSceneObjectWithData({
+                    data: data,
+                    scene: this._scene
+                });
+
+                if (sprite) {
+
+                    sprite.setEditorScene(this._scene);
+
+                    sprite.readJSON(data);
+
+                    SceneParser.initSprite(sprite);
+                }
+
+                return sprite;
+
+            } else {
+
+                console.error(`SceneParser: no extension is registered for type "${type}".`);
             }
 
-            if (sprite) {
-
-                sprite.setEditorScene(this._scene);
-
-                sprite.readJSON(data);
-
-                SceneParser.initSprite(sprite);
-
-            }
-
-            return sprite;
+            return null;
         }
 
         static initSprite(sprite: Phaser.GameObjects.GameObject) {

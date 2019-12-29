@@ -67,6 +67,22 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(
                 new ui.dialogs.NewSceneFileDialogExtension());
+
+            // scene object extensions
+
+            reg.addExtension(
+                new ui.extensions.ImageExtension(),
+                new ui.extensions.ContainerExtension()
+            );
+        }
+
+        getObjectExtensions(): ui.extensions.SceneObjectExtension[] {
+            return colibri.Platform
+                .getExtensions<ui.extensions.SceneObjectExtension>(ui.extensions.SceneObjectExtension.POINT_ID);
+        }
+
+        getObjectExtensionByObjectType(type: string) {
+            return this.getObjectExtensions().find(ext => ext.getTypeName() === type);
         }
 
     }

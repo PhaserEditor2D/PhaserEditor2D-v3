@@ -9,6 +9,8 @@ declare namespace phasereditor2d.scene {
         static getInstance(): ScenePlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        getObjectExtensions(): ui.extensions.SceneObjectExtension[];
+        getObjectExtensionByObjectType(type: string): ui.extensions.SceneObjectExtension;
     }
 }
 declare namespace phasereditor2d.scene.core {
@@ -375,6 +377,68 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
         redo(): void;
     }
 }
+declare namespace phasereditor2d.scene.ui.extensions {
+    interface CreateWithAssetArgs {
+        x: number;
+        y: number;
+        nameMaker: colibri.ui.ide.utils.NameMaker;
+        scene: GameScene;
+        asset: any;
+    }
+    interface CreateWithDataArgs {
+        scene: GameScene;
+        data: any;
+    }
+    abstract class SceneObjectExtension extends colibri.Extension {
+        static POINT_ID: string;
+        private _typeName;
+        private _phaserTypeName;
+        constructor(config: {
+            typeName: string;
+            phaserTypeName: string;
+        });
+        getTypeName(): string;
+        getPhaserTypeName(): string;
+        /**
+         * Check if an object dropped into the scene can be used to create the scene object of this extension.
+         *
+         * @param data Data dropped from outside the scene editor. For example, items from the Blocks view.
+         */
+        abstract acceptsDropData(data: any): boolean;
+        /**
+         * Create the scene object of this extension with the data involved in a drop action.
+         * The data was tested before with the `acceptsDropData()` method.
+         *
+         * @param args The data involved in a drop action.
+         */
+        abstract createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject;
+        /**
+         * Create the scene object of this extension with the data involved in a deserialization.
+         *
+         * @param args The data involved in the creation of the object.
+         */
+        abstract createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject;
+    }
+}
+declare namespace phasereditor2d.scene.ui.extensions {
+    class ContainerExtension extends SceneObjectExtension {
+        constructor();
+        createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject;
+        private createContainerObject;
+        acceptsDropData(data: any): boolean;
+        createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject;
+    }
+}
+declare namespace phasereditor2d.scene.ui.extensions {
+    class ImageExtension extends SceneObjectExtension {
+        constructor();
+        static isImageOrImageFrameAsset(data: any): boolean;
+        acceptsDropData(data: any): boolean;
+        createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject;
+        createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject;
+        private createImageObject;
+    }
+}
 declare namespace phasereditor2d.scene.ui.gameobjects {
     class EditorObjectMixin extends Phaser.GameObjects.GameObject {
         private _label;
@@ -401,7 +465,6 @@ declare namespace phasereditor2d.scene.ui.gameobjects {
 }
 declare namespace phasereditor2d.scene.ui.gameobjects {
     class EditorImage extends Phaser.GameObjects.Image implements EditorObject {
-        static add(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number): EditorImage;
         writeJSON(data: any): void;
         readJSON(data: any): void;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];

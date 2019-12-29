@@ -20,7 +20,9 @@
         "no-console": false,
         "arrow-parens": false,
         "no-string-literal": false,
-        "interface-over-type-literal": false
+        "interface-over-type-literal": false,
+        "object-literal-shorthand": false,
+        "interface-name": false
     },
     "rulesDirectory": []
 }

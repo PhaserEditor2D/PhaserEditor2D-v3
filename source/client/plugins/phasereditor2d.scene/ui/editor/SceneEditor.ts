@@ -13,7 +13,10 @@ namespace phasereditor2d.scene.ui.editor {
         acceptInput(input: any): boolean {
 
             if (input instanceof io.FilePath) {
-                const contentType = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(input);
+
+                const contentType = colibri.Platform.getWorkbench()
+                    .getContentTypeRegistry().getCachedContentType(input);
+
                 return contentType === core.CONTENT_TYPE_SCENE;
             }
 
@@ -100,7 +103,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         protected onEditorInputContentChanged() {
-            //TODO: missing to implement
+            // TODO: missing to implement
         }
 
         setInput(file: io.FilePath) {
@@ -115,7 +118,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.setLayoutChildren(false);
 
-
             const container = document.createElement("div");
             container.classList.add("SceneEditorContainer");
 
@@ -129,7 +131,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._overlayLayer = new OverlayLayer(this);
             container.appendChild(this._overlayLayer.getCanvas());
-
 
             // create game scene
 
@@ -155,7 +156,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._gameBooted = false;
 
-            (<any>this._game.config).postBoot = () => {
+            (this._game.config as any).postBoot = () => {
                 // the scene is created just at this moment!
                 this.onGameBoot();
             };
@@ -180,7 +181,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             if (img) {
 
-                img.preload().then(w => this.dispatchTitleUpdatedEvent())
+                img.preload().then(w => this.dispatchTitleUpdatedEvent());
 
             } else {
 
@@ -210,29 +211,23 @@ namespace phasereditor2d.scene.ui.editor {
 
             manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
-                callback: () => { }
             }));
 
             manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
-                callback: () => { }
             }));
 
             manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
-                callback: () => { }
             }));
 
             manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_ORIGIN),
-                callback: () => { }
             }));
 
             manager.add(new controls.Action({
                 icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
-                callback: () => { }
             }));
-
 
             return manager;
         }
@@ -275,7 +270,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 .filter(obj => obj instanceof Phaser.GameObjects.GameObject)
 
-                .map(obj => <gameobjects.EditorObject>obj);
+                .map(obj => obj as gameobjects.EditorObject);
         }
 
         getActionManager() {

@@ -4,15 +4,6 @@ namespace phasereditor2d.scene.ui.gameobjects {
 
     export class EditorImage extends Phaser.GameObjects.Image implements EditorObject {
 
-        static add(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
-
-            const sprite = new EditorImage(scene, x, y, texture, frame);
-
-            scene.sys.displayList.add(sprite);
-
-            return sprite;
-        }
-
         writeJSON(data: any) {
 
             data.type = "Image";
@@ -35,7 +26,7 @@ namespace phasereditor2d.scene.ui.gameobjects {
             json.TransformComponent.read(this, data);
 
             json.TextureComponent.read(this, data);
-        };
+        }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
             return getScreenBounds(this, camera);
@@ -45,7 +36,7 @@ namespace phasereditor2d.scene.ui.gameobjects {
 
             this.setData("textureKey", key);
             this.setData("textureFrameKey", frame);
-        };
+        }
 
         getEditorTexture() {
 
@@ -53,11 +44,11 @@ namespace phasereditor2d.scene.ui.gameobjects {
                 key: this.getData("textureKey"),
                 frame: this.getData("textureFrameKey")
             };
-        };
+        }
     }
 
     export interface EditorImage extends EditorObjectMixin {
-
+        // empty
     }
 
     colibri.lang.applyMixins(EditorImage, [EditorObjectMixin]);

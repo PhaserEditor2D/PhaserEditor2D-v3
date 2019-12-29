@@ -35,8 +35,10 @@ namespace phasereditor2d.scene.ui {
 
         async createWithDropEvent_async(e: DragEvent, dropDataArray: any[]) {
 
+            const exts = ScenePlugin.getInstance().getObjectExtensions();
+
             const nameMaker = new ide.utils.NameMaker(obj => {
-                return (<gameobjects.EditorObject>obj).getEditorLabel();
+                return (obj as gameobjects.EditorObject).getEditorLabel();
             });
 
             this._scene.visit(obj => nameMaker.update([obj]));
@@ -47,6 +49,7 @@ namespace phasereditor2d.scene.ui {
 
             const parser = new json.SceneParser(this._scene);
 
+            // TODO: we should do this with the extension
             for (const data of dropDataArray) {
                 await parser.addToCache_async(data);
             }
@@ -55,29 +58,19 @@ namespace phasereditor2d.scene.ui {
 
             for (const data of dropDataArray) {
 
-                if (data instanceof pack.core.AssetPackImageFrame) {
+                for (const ext of exts) {
 
-                    const sprite = gameobjects.EditorImage.add(this._scene, x, y, data.getPackItem().getKey(), data.getName());
+                    if (ext.acceptsDropData(data)) {
 
-                    sprite.setEditorLabel(nameMaker.makeName(data.getName()));
-                    sprite.setEditorTexture(data.getPackItem().getKey(), data.getName());
+                        const sprite = ext.createSceneObjectWithAsset({
+                            x: x,
+                            y: y,
+                            asset: data,
+                            nameMaker: nameMaker,
+                            scene: this._scene
+                        });
 
-                    sprites.push(sprite);
-
-                } else if (data instanceof pack.core.AssetPackItem) {
-
-                    switch (data.getType()) {
-                        case pack.core.IMAGE_TYPE: {
-
-                            const sprite = gameobjects.EditorImage.add(this._scene, x, y, data.getKey());
-
-                            sprite.setEditorLabel(nameMaker.makeName(data.getKey()));
-                            sprite.setEditorTexture(data.getKey(), null);
-
-                            sprites.push(sprite);
-
-                            break;
-                        }
+                        sprites.push(sprite);
                     }
                 }
             }
@@ -92,7 +85,5 @@ namespace phasereditor2d.scene.ui {
 
             return sprites;
         }
-
     }
-
 }

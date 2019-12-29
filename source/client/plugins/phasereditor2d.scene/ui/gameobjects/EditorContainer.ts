@@ -14,10 +14,10 @@ namespace phasereditor2d.scene.ui.gameobjects {
         }
 
         get list(): EditorObject[] {
-            return <any>super.list;
+            return super.list as any;
         }
 
-        set list(list : EditorObject[]) {
+        set list(list: EditorObject[]) {
             super.list = list;
         }
 
@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.gameobjects {
 
                 return objData;
             });
-        };
+        }
 
         readJSON(data: any) {
 
@@ -55,21 +55,22 @@ namespace phasereditor2d.scene.ui.gameobjects {
 
             const parser = new json.SceneParser(this.getEditorScene());
 
-            for(const objData of data.list) {
+            for (const objData of data.list) {
 
-                const sprite = parser.createObject(objData);    
+                const sprite = parser.createObject(objData);
 
                 this.add(sprite);
             }
-        };
+        }
 
-        getScreenBounds(camera : Phaser.Cameras.Scene2D.Camera) {
+        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
             return getContainerScreenBounds(this, camera);
         }
     }
 
     export interface EditorContainer extends EditorObjectMixin {
-        
+
+        // nothing
     }
 
     colibri.lang.applyMixins(EditorContainer, [EditorObjectMixin]);
