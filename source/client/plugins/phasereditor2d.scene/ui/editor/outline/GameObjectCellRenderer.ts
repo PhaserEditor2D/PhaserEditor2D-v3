@@ -6,13 +6,14 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
-            const sprite = <Phaser.GameObjects.GameObject>args.obj;
+            const sprite = args.obj as Phaser.GameObjects.GameObject;
 
-            if (sprite instanceof gameobjects.EditorImage) {
+            if (sprite instanceof sceneobjects.Image) {
 
-                const { key, frame } = sprite.getEditorTexture();
+                const { key, frame } = sprite.getEditorSupport().getTexture();
 
-                const image = pack.core.parsers.ImageFrameParser.getSourceImageFrame(sprite.getEditorScene().game, key, frame);
+                const image = pack.core.parsers.ImageFrameParser
+                    .getSourceImageFrame(sprite.getEditorSupport().getScene().game, key, frame);
 
                 if (image) {
 
@@ -23,7 +24,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         cellHeight(args: colibri.ui.controls.viewers.RenderCellArgs): number {
 
-            if (args.obj instanceof gameobjects.EditorImage) {
+            if (args.obj instanceof sceneobjects.Image) {
                 return args.viewer.getCellSize();
             }
 

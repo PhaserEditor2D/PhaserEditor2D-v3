@@ -1,7 +1,7 @@
-namespace phasereditor2d.scene.ui.gameobjects {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
 
-    export function getScreenBounds(sprite: EditorImage, camera: Phaser.Cameras.Scene2D.Camera) {
+    export function getScreenBounds(sprite: Image, camera: Phaser.Cameras.Scene2D.Camera) {
 
         const points: Phaser.Math.Vector2[] = [
             new Phaser.Math.Vector2(0, 0),

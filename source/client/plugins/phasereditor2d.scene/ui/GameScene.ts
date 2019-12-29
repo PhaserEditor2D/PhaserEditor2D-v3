@@ -15,17 +15,17 @@ namespace phasereditor2d.scene.ui {
             this._sceneType = "Scene";
         }
 
-        getDisplayListChildren(): gameobjects.EditorObject[] {
-            return <any>this.sys.displayList.getChildren();
+        getDisplayListChildren(): sceneobjects.SceneObject[] {
+            return this.sys.displayList.getChildren() as any;
         }
 
-        visit(visitor: (obj: gameobjects.EditorObject) => void) {
+        visit(visitor: (obj: sceneobjects.SceneObject) => void) {
 
             for (const obj of this.getDisplayListChildren()) {
 
                 visitor(obj);
 
-                if (obj instanceof gameobjects.EditorContainer) {
+                if (obj instanceof sceneobjects.Container) {
 
                     for (const child of obj.list) {
                         visitor(child);
@@ -36,12 +36,12 @@ namespace phasereditor2d.scene.ui {
 
         makeNewName(baseName: string) {
 
-            const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: gameobjects.EditorObject) => {
-                return obj.getEditorLabel();
+            const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: sceneobjects.SceneObject) => {
+                return obj.getEditorSupport().getLabel();
             });
-    
+
             this.visit(obj => nameMaker.update([obj]));
-    
+
             return nameMaker.makeName(baseName);
         }
 
@@ -56,15 +56,15 @@ namespace phasereditor2d.scene.ui {
             return obj;
         }
 
-        static findByEditorId(list: gameobjects.EditorObject[], id: string) {
+        static findByEditorId(list: sceneobjects.SceneObject[], id: string) {
 
             for (const obj of list) {
 
-                if (obj.getEditorId() === id) {
+                if (obj.getEditorSupport().getId() === id) {
                     return obj;
                 }
 
-                if (obj instanceof gameobjects.EditorContainer) {
+                if (obj instanceof sceneobjects.Container) {
 
                     const result = this.findByEditorId(obj.list, id);
 
@@ -99,7 +99,7 @@ namespace phasereditor2d.scene.ui {
 
                 const camera = this.getCamera();
                 camera.setOrigin(0, 0);
-                //camera.backgroundColor = Phaser.Display.Color.ValueToColor("#6e6e6e");
+                // camera.backgroundColor = Phaser.Display.Color.ValueToColor("#6e6e6e");
                 camera.backgroundColor = Phaser.Display.Color.ValueToColor("#8e8e8e");
 
                 if (this._initialState) {

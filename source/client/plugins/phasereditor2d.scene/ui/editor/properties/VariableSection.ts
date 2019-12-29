@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     import controls = colibri.ui.controls;
 
-    export class VariableSection extends SceneSection<gameobjects.EditorObject> {
+    export class VariableSection extends SceneSection<sceneobjects.SceneObject> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "SceneEditor.VariableSection", "Variable", false);
@@ -19,7 +19,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 this.createLabel(comp, "Name");
                 const text = this.createText(comp);
                 this.addUpdater(() => {
-                    text.value = this.flatValues_StringJoin(this.getSelection().map(obj => obj.getEditorLabel()));
+                    text.value = this.flatValues_StringJoin(
+                        this.getSelection().map(obj => obj.getEditorSupport().getLabel())
+                    );
                 });
             }
         }

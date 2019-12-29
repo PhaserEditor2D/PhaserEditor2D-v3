@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.json {
     import write = colibri.core.json.write;
     import read = colibri.core.json.read;
 
-    export declare type TransformLike = gameobjects.EditorImage|gameobjects.EditorContainer;
+    export declare type TransformLike = sceneobjects.Image|sceneobjects.Container;
 
     export class TransformComponent {
 

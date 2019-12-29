@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         private _dataList: any[];
 
-        constructor(editor: SceneEditor, objects: gameobjects.EditorObject[]) {
+        constructor(editor: SceneEditor, objects: sceneobjects.SceneObject[]) {
             super(editor);
 
             this._dataList = objects.map(obj => {

@@ -1,6 +1,6 @@
-namespace phasereditor2d.scene.ui.gameobjects {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export function getContainerScreenBounds(container: EditorContainer, camera: Phaser.Cameras.Scene2D.Camera) {
+    export function getContainerScreenBounds(container: Container, camera: Phaser.Cameras.Scene2D.Camera) {
 
         if (container.list.length === 0) {
             return [];
@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.gameobjects {
         const maxPoint = new Phaser.Math.Vector2(Number.MIN_VALUE, Number.MIN_VALUE);
 
         for (const obj of container.list) {
-            
+
             const bounds = obj.getScreenBounds(camera);
 
             for (const point of bounds) {

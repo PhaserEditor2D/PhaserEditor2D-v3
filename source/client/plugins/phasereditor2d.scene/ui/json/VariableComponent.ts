@@ -5,12 +5,12 @@ namespace phasereditor2d.scene.ui.json {
 
     export class VariableComponent {
 
-        static write(sprite: gameobjects.EditorObject, data: any): void {
-            write(data, "label", sprite.getEditorLabel());
+        static write(sprite: sceneobjects.SceneObject, data: any): void {
+            write(data, "label", sprite.getEditorSupport().getLabel());
         }
 
-        static read(sprite: gameobjects.EditorObject, data: any): void {
-            sprite.setEditorLabel(read(data, "label"));
+        static read(sprite: sceneobjects.SceneObject, data: any): void {
+            sprite.getEditorSupport().setLabel(read(data, "label"));
         }
 
     }

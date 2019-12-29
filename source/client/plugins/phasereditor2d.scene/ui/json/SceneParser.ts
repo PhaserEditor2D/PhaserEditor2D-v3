@@ -104,7 +104,7 @@ namespace phasereditor2d.scene.ui.json {
 
                 if (sprite) {
 
-                    sprite.setEditorScene(this._scene);
+                    sprite.getEditorSupport().setScene(this._scene);
 
                     sprite.readJSON(data);
 
@@ -125,14 +125,14 @@ namespace phasereditor2d.scene.ui.json {
 
             sprite.setDataEnabled();
 
-            if (sprite instanceof gameobjects.EditorImage) {
+            if (sprite instanceof sceneobjects.Image) {
                 sprite.setInteractive();
             }
 
         }
 
-        static setNewId(sprite: gameobjects.EditorObject) {
-            sprite.setEditorId(Phaser.Utils.String.UUID());
+        static setNewId(sprite: sceneobjects.SceneObject) {
+            sprite.getEditorSupport().setId(Phaser.Utils.String.UUID());
         }
 
     }

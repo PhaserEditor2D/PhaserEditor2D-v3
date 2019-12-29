@@ -2128,8 +2128,8 @@ var colibri;
                         imgW = renderWidth;
                     }
                     const scale = imgW / fd.src.w;
-                    var imgX = x + (center ? renderWidth / 2 - imgW / 2 : 0);
-                    var imgY = y + renderHeight / 2 - imgH / 2;
+                    const imgX = x + (center ? renderWidth / 2 - imgW / 2 : 0);
+                    const imgY = y + renderHeight / 2 - imgH / 2;
                     // here we use the trimmed version of the image, maybe this should be parametrized
                     const imgDstW = fd.src.w * scale;
                     const imgDstH = fd.src.h * scale;

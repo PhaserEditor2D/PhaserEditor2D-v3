@@ -577,7 +577,7 @@ declare namespace colibri.ui.controls {
         private _frameData;
         constructor(name: string, image: controls.IImage, frameData: FrameData);
         preloadSize(): Promise<PreloadResult>;
-        getName(): string;
+        getName(): string | number;
         getImage(): IImage;
         getFrameData(): FrameData;
         paint(context: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, center: boolean): void;

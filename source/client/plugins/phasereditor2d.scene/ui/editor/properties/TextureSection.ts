@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
     import ide = colibri.ui.ide;
     import core = colibri.core;
 
-    export class TextureSection extends SceneSection<gameobjects.EditorImage> {
+    export class TextureSection extends SceneSection<sceneobjects.Image> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "SceneEditor.TextureSection", "Texture", true);
@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
                 imgControl.resizeTo();
-            })
+            });
 
             parent.appendChild(imgControl.getElement());
             setTimeout(() => imgControl.resizeTo(), 1);
@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 const obj = this.getSelection()[0];
 
-                const { key, frame } = obj.getEditorTexture();
+                const { key, frame } = obj.getEditorSupport().getTexture();
 
                 const finder = new pack.core.PackFinder();
 
@@ -42,14 +42,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
         }
 
         canEdit(obj: any): boolean {
-            return obj instanceof gameobjects.EditorImage;
+            return obj instanceof sceneobjects.Image;
         }
 
         canEditNumber(n: number): boolean {
             return n === 1;
         }
-
-
     }
-
 }

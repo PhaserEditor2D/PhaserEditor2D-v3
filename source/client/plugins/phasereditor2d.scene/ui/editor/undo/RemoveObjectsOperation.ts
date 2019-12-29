@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
     export class RemoveObjectsOperation extends AddObjectsOperation {
 
 
-        constructor(editor: SceneEditor, objects: gameobjects.EditorObject[]) {
+        constructor(editor: SceneEditor, objects: sceneobjects.SceneObject[]) {
             super(editor, objects);
         }
 

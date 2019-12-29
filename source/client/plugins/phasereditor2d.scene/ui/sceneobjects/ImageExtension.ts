@@ -1,6 +1,6 @@
-/// <reference path="./SceneObjectExtension.ts" />
+/// <reference path="./SceneObjectExtension.ts" />7
 
-namespace phasereditor2d.scene.ui.extensions {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageExtension extends SceneObjectExtension {
 
@@ -21,17 +21,17 @@ namespace phasereditor2d.scene.ui.extensions {
             return ImageExtension.isImageOrImageFrameAsset(data);
         }
 
-        createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject {
+        createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject {
 
             let key: string;
-            let frame: string;
+            let frame: string | number;
             let baseLabel: string;
 
             if (args.asset instanceof pack.core.AssetPackImageFrame) {
 
                 key = args.asset.getPackItem().getKey();
                 frame = args.asset.getName();
-                baseLabel = frame;
+                baseLabel = frame + "";
 
             } else if (args.asset instanceof pack.core.ImageAssetPackItem) {
 
@@ -42,13 +42,13 @@ namespace phasereditor2d.scene.ui.extensions {
 
             const sprite = this.createImageObject(args.scene, args.x, args.y, key, frame);
 
-            sprite.setEditorLabel(args.nameMaker.makeName(baseLabel));
-            sprite.setEditorTexture(args.asset.getKey(), frame);
+            sprite.getEditorSupport().setLabel(args.nameMaker.makeName(baseLabel));
+            sprite.getEditorSupport().setTexture(args.asset.getKey(), frame);
 
             return sprite;
         }
 
-        createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject {
+        createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject {
 
             const sprite = this.createImageObject(args.scene, 0, 0, undefined);
 
@@ -59,9 +59,9 @@ namespace phasereditor2d.scene.ui.extensions {
 
         private createImageObject(scene: GameScene, x: number, y: number, key: string, frame?: string | number) {
 
-            const sprite = new gameobjects.EditorImage(scene, 0, 0, key, frame);
+            const sprite = new sceneobjects.Image(scene, x, y, key, frame);
 
-            sprite.setEditorScene(scene);
+            sprite.getEditorSupport().setScene(scene);
 
             scene.sys.displayList.add(sprite);
 

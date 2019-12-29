@@ -15,11 +15,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
-            if (element instanceof gameobjects.EditorImage) {
+            if (element instanceof sceneobjects.Image) {
 
                 return new GameObjectCellRenderer();
 
-            } else if (element instanceof gameobjects.EditorContainer) {
+            } else if (element instanceof sceneobjects.Container) {
 
                 return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
 

@@ -1,6 +1,6 @@
 /// <reference path="./SceneObjectExtension.ts" />
 
-namespace phasereditor2d.scene.ui.extensions {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ContainerExtension extends SceneObjectExtension {
 
@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.extensions {
             });
         }
 
-        createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject {
+        createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
@@ -20,9 +20,9 @@ namespace phasereditor2d.scene.ui.extensions {
             return container;
         }
 
-        private createContainerObject(scene: GameScene, x: number, y: number, list: gameobjects.EditorObject[]) {
+        private createContainerObject(scene: GameScene, x: number, y: number, list: sceneobjects.SceneObject[]) {
 
-            const container = new gameobjects.EditorContainer(scene, x, y, list);
+            const container = new sceneobjects.Container(scene, x, y, list);
 
             scene.sys.displayList.add(container);
 
@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.extensions {
             return false;
         }
 
-        createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject {
+        createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject {
             return null;
         }
     }

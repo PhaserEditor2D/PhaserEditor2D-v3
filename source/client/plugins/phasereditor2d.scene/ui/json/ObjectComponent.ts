@@ -5,15 +5,15 @@ namespace phasereditor2d.scene.ui.json {
 
     export class ObjectComponent {
 
-        static write(sprite: gameobjects.EditorObject, data: any): void {
+        static write(sprite: sceneobjects.SceneObject, data: any): void {
 
-            write(data, "id", sprite.getEditorId());
+            write(data, "id", sprite.getEditorSupport().getId());
             write(data, "type", sprite.type);
         }
 
-        static read(sprite: gameobjects.EditorObject, data: any): void {
-            
-            sprite.setEditorId(read(data, "id"));
+        static read(sprite: sceneobjects.SceneObject, data: any): void {
+
+            sprite.getEditorSupport().setId(read(data, "id"));
         }
 
     }

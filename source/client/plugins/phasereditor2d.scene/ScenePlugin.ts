@@ -71,14 +71,14 @@ namespace phasereditor2d.scene {
             // scene object extensions
 
             reg.addExtension(
-                new ui.extensions.ImageExtension(),
-                new ui.extensions.ContainerExtension()
+                new ui.sceneobjects.ImageExtension(),
+                new ui.sceneobjects.ContainerExtension()
             );
         }
 
-        getObjectExtensions(): ui.extensions.SceneObjectExtension[] {
+        getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[] {
             return colibri.Platform
-                .getExtensions<ui.extensions.SceneObjectExtension>(ui.extensions.SceneObjectExtension.POINT_ID);
+                .getExtensions<ui.sceneobjects.SceneObjectExtension>(ui.sceneobjects.SceneObjectExtension.POINT_ID);
         }
 
         getObjectExtensionByObjectType(type: string) {

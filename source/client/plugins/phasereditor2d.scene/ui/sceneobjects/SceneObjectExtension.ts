@@ -1,4 +1,4 @@
-namespace phasereditor2d.scene.ui.extensions {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
     export interface CreateWithAssetArgs {
         x: number;
@@ -51,13 +51,13 @@ namespace phasereditor2d.scene.ui.extensions {
          *
          * @param args The data involved in a drop action.
          */
-        abstract createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject;
+        abstract createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;
 
         /**
          * Create the scene object of this extension with the data involved in a deserialization.
          *
          * @param args The data involved in the creation of the object.
          */
-        abstract createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject;
+        abstract createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
     }
 }

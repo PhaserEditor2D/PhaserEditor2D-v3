@@ -9,8 +9,8 @@ declare namespace phasereditor2d.scene {
         static getInstance(): ScenePlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
-        getObjectExtensions(): ui.extensions.SceneObjectExtension[];
-        getObjectExtensionByObjectType(type: string): ui.extensions.SceneObjectExtension;
+        getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[];
+        getObjectExtensionByObjectType(type: string): ui.sceneobjects.SceneObjectExtension;
     }
 }
 declare namespace phasereditor2d.scene.core {
@@ -34,11 +34,11 @@ declare namespace phasereditor2d.scene.ui {
         private _inEditor;
         private _initialState;
         constructor(inEditor?: boolean);
-        getDisplayListChildren(): gameobjects.EditorObject[];
-        visit(visitor: (obj: gameobjects.EditorObject) => void): void;
+        getDisplayListChildren(): sceneobjects.SceneObject[];
+        visit(visitor: (obj: sceneobjects.SceneObject) => void): void;
         makeNewName(baseName: string): string;
         getByEditorId(id: string): any;
-        static findByEditorId(list: gameobjects.EditorObject[], id: string): any;
+        static findByEditorId(list: sceneobjects.SceneObject[], id: string): any;
         getSceneType(): json.SceneType;
         setSceneType(sceneType: json.SceneType): void;
         getCamera(): Phaser.Cameras.Scene2D.Camera;
@@ -50,9 +50,9 @@ declare namespace phasereditor2d.scene.ui {
     class SceneMaker {
         private _scene;
         constructor(scene: GameScene);
-        createObject(objData: any): gameobjects.EditorObject;
-        createContainerWithObjects(objects: gameobjects.EditorObject[]): gameobjects.EditorContainer;
-        createWithDropEvent_async(e: DragEvent, dropDataArray: any[]): Promise<gameobjects.EditorObject[]>;
+        createObject(objData: any): sceneobjects.SceneObject;
+        createContainerWithObjects(objectList: sceneobjects.SceneObject[]): sceneobjects.Container;
+        createWithDropEvent_async(e: DragEvent, dropDataArray: any[]): Promise<sceneobjects.SceneObject[]>;
     }
 }
 declare namespace phasereditor2d.scene.ui {
@@ -216,7 +216,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         getIcon(): controls.IImage;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
         private readScene;
-        getSelectedGameObjects(): gameobjects.EditorObject[];
+        getSelectedGameObjects(): sceneobjects.SceneObject[];
         getActionManager(): ActionManager;
         getSelectionManager(): SelectionManager;
         getOverlayLayer(): OverlayLayer;
@@ -305,7 +305,7 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
     import controls = colibri.ui.controls;
-    class OriginSection extends SceneSection<gameobjects.EditorImage> {
+    class OriginSection extends SceneSection<sceneobjects.Image> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -320,7 +320,7 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
     import controls = colibri.ui.controls;
-    class TextureSection extends SceneSection<gameobjects.EditorImage> {
+    class TextureSection extends SceneSection<sceneobjects.Image> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any): boolean;
@@ -328,7 +328,7 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
-    class TransformSection extends SceneSection<gameobjects.EditorImage> {
+    class TransformSection extends SceneSection<sceneobjects.Image> {
         constructor(page: colibri.ui.controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -337,7 +337,7 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
     import controls = colibri.ui.controls;
-    class VariableSection extends SceneSection<gameobjects.EditorObject> {
+    class VariableSection extends SceneSection<sceneobjects.SceneObject> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -354,7 +354,7 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class AddObjectsOperation extends SceneEditorOperation {
         private _dataList;
-        constructor(editor: SceneEditor, objects: gameobjects.EditorObject[]);
+        constructor(editor: SceneEditor, objects: sceneobjects.SceneObject[]);
         undo(): void;
         redo(): void;
         private updateEditor;
@@ -364,7 +364,7 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     class JoinObjectsInContainerOperation extends SceneEditorOperation {
         private _containerId;
         private _objectsIdList;
-        constructor(editor: SceneEditor, container: gameobjects.EditorContainer);
+        constructor(editor: SceneEditor, container: sceneobjects.Container);
         undo(): void;
         redo(): void;
         private updateEditor;
@@ -372,12 +372,92 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class RemoveObjectsOperation extends AddObjectsOperation {
-        constructor(editor: SceneEditor, objects: gameobjects.EditorObject[]);
+        constructor(editor: SceneEditor, objects: sceneobjects.SceneObject[]);
         undo(): void;
         redo(): void;
     }
 }
-declare namespace phasereditor2d.scene.ui.extensions {
+declare namespace phasereditor2d.scene.ui.json {
+    class ObjectComponent {
+        static write(sprite: sceneobjects.SceneObject, data: any): void;
+        static read(sprite: sceneobjects.SceneObject, data: any): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    interface ReadWriteJSON {
+        writeJSON(data: any): void;
+        readJSON(data: any): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    type SceneType = "Scene" | "Prefab";
+    type SceneData = {
+        sceneType: SceneType;
+        displayList: any[];
+        meta: {
+            app: string;
+            url: string;
+            contentType: string;
+        };
+    };
+}
+declare namespace phasereditor2d.scene.ui.json {
+    class SceneParser {
+        private _scene;
+        constructor(scene: GameScene);
+        static isValidSceneDataFormat(data: SceneData): boolean;
+        createScene(data: SceneData): void;
+        createSceneCache_async(data: SceneData): Promise<void>;
+        private updateSceneCacheWithObjectData_async;
+        addToCache_async(data: pack.core.AssetPackItem | pack.core.AssetPackImageFrame): Promise<void>;
+        createObject(data: any): sceneobjects.SceneObject;
+        static initSprite(sprite: Phaser.GameObjects.GameObject): void;
+        static setNewId(sprite: sceneobjects.SceneObject): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    class SceneWriter {
+        private _scene;
+        constructor(scene: GameScene);
+        toJSON(): SceneData;
+        toString(): string;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    class TextureComponent {
+        static textureKey: string;
+        static frameKey: string;
+        static write(sprite: sceneobjects.Image, data: any): void;
+        static read(sprite: sceneobjects.Image, data: any): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    type TransformLike = sceneobjects.Image | sceneobjects.Container;
+    class TransformComponent {
+        static write(sprite: TransformLike, data: any): void;
+        static read(sprite: TransformLike, data: any): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    class VariableComponent {
+        static write(sprite: sceneobjects.SceneObject, data: any): void;
+        static read(sprite: sceneobjects.SceneObject, data: any): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class Container extends Phaser.GameObjects.Container implements SceneObject {
+        private _editorSupport;
+        constructor(scene: GameScene, x: number, y: number, children: SceneObject[]);
+        getEditorSupport(): EditorSupport;
+        static add(scene: GameScene, x: number, y: number, list: SceneObject[]): Container;
+        get list(): SceneObject[];
+        set list(list: SceneObject[]);
+        writeJSON(data: any): void;
+        readJSON(data: any): void;
+        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface CreateWithAssetArgs {
         x: number;
         y: number;
@@ -411,150 +491,85 @@ declare namespace phasereditor2d.scene.ui.extensions {
          *
          * @param args The data involved in a drop action.
          */
-        abstract createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject;
+        abstract createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;
         /**
          * Create the scene object of this extension with the data involved in a deserialization.
          *
          * @param args The data involved in the creation of the object.
          */
-        abstract createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject;
+        abstract createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
     }
 }
-declare namespace phasereditor2d.scene.ui.extensions {
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ContainerExtension extends SceneObjectExtension {
         constructor();
-        createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject;
+        createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createContainerObject;
         acceptsDropData(data: any): boolean;
-        createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject;
+        createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;
     }
 }
-declare namespace phasereditor2d.scene.ui.extensions {
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class EditorSupport {
+        private _object;
+        private _label;
+        private _scene;
+        constructor(obj: SceneObject);
+        getObject(): SceneObject;
+        getId(): string;
+        setId(id: string): void;
+        getLabel(): string;
+        setLabel(label: string): void;
+        getScene(): GameScene;
+        setScene(scene: GameScene): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    function getContainerScreenBounds(container: Container, camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    function getScreenBounds(sprite: Image, camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class Image extends Phaser.GameObjects.Image implements SceneObject {
+        private _editorSupport;
+        constructor(scene: GameScene, x: number, y: number, texture: string, frame?: string | number);
+        getEditorSupport(): ImageEditorSupport;
+        writeJSON(data: any): void;
+        readJSON(data: any): void;
+        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class ImageEditorSupport extends EditorSupport {
+        private _textureKey;
+        private _textureFrameKey;
+        constructor(obj: Image);
+        getTextureKey(): string;
+        setTextureKey(key: string): void;
+        setTexture(key: string, frame: string | number): void;
+        getTexture(): {
+            key: string;
+            frame: string | number;
+        };
+        getTextureFrameKey(): string | number;
+        setTextureFrame(frame: string | number): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageExtension extends SceneObjectExtension {
         constructor();
         static isImageOrImageFrameAsset(data: any): boolean;
         acceptsDropData(data: any): boolean;
-        createSceneObjectWithAsset(args: CreateWithAssetArgs): gameobjects.EditorObject;
-        createSceneObjectWithData(args: CreateWithDataArgs): gameobjects.EditorObject;
+        createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;
+        createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createImageObject;
     }
 }
-declare namespace phasereditor2d.scene.ui.gameobjects {
-    class EditorObjectMixin extends Phaser.GameObjects.GameObject {
-        private _label;
-        private _scene;
-        getEditorId(): string;
-        setEditorId(id: string): void;
-        getEditorLabel(): string;
-        setEditorLabel(label: string): void;
-        getEditorScene(): GameScene;
-        setEditorScene(scene: GameScene): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.gameobjects {
-    class EditorContainer extends Phaser.GameObjects.Container implements EditorObject {
-        static add(scene: Phaser.Scene, x: number, y: number, list: EditorObject[]): EditorContainer;
-        get list(): EditorObject[];
-        set list(list: EditorObject[]);
-        writeJSON(data: any): void;
-        readJSON(data: any): void;
-        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
-    }
-    interface EditorContainer extends EditorObjectMixin {
-    }
-}
-declare namespace phasereditor2d.scene.ui.gameobjects {
-    class EditorImage extends Phaser.GameObjects.Image implements EditorObject {
-        writeJSON(data: any): void;
-        readJSON(data: any): void;
-        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
-        setEditorTexture(key: string, frame: any): void;
-        getEditorTexture(): {
-            key: any;
-            frame: any;
-        };
-    }
-    interface EditorImage extends EditorObjectMixin {
-    }
-}
-declare namespace phasereditor2d.scene.ui.gameobjects {
-    interface EditorObject extends Phaser.GameObjects.GameObject, json.ReadWriteJSON {
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface SceneObject extends Phaser.GameObjects.GameObject, json.ReadWriteJSON {
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): any;
-    }
-    interface EditorObject extends EditorObjectMixin {
-    }
-}
-declare namespace phasereditor2d.scene.ui.gameobjects {
-    function getContainerScreenBounds(container: EditorContainer, camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
-}
-declare namespace phasereditor2d.scene.ui.gameobjects {
-    function getScreenBounds(sprite: EditorImage, camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
-}
-declare namespace phasereditor2d.scene.ui.json {
-    class ObjectComponent {
-        static write(sprite: gameobjects.EditorObject, data: any): void;
-        static read(sprite: gameobjects.EditorObject, data: any): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.json {
-    interface ReadWriteJSON {
-        writeJSON(data: any): void;
-        readJSON(data: any): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.json {
-    type SceneType = "Scene" | "Prefab";
-    type SceneData = {
-        sceneType: SceneType;
-        displayList: any[];
-        meta: {
-            app: string;
-            url: string;
-            contentType: string;
-        };
-    };
-}
-declare namespace phasereditor2d.scene.ui.json {
-    class SceneParser {
-        private _scene;
-        constructor(scene: GameScene);
-        static isValidSceneDataFormat(data: SceneData): boolean;
-        createScene(data: SceneData): void;
-        createSceneCache_async(data: SceneData): Promise<void>;
-        private updateSceneCacheWithObjectData_async;
-        addToCache_async(data: pack.core.AssetPackItem | pack.core.AssetPackImageFrame): Promise<void>;
-        createObject(data: any): gameobjects.EditorObject;
-        static initSprite(sprite: Phaser.GameObjects.GameObject): void;
-        static setNewId(sprite: gameobjects.EditorObject): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.json {
-    class SceneWriter {
-        private _scene;
-        constructor(scene: GameScene);
-        toJSON(): SceneData;
-        toString(): string;
-    }
-}
-declare namespace phasereditor2d.scene.ui.json {
-    class TextureComponent {
-        static textureKey: string;
-        static frameKey: string;
-        static write(sprite: gameobjects.EditorImage, data: any): void;
-        static read(sprite: gameobjects.EditorImage, data: any): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.json {
-    type TransformLike = gameobjects.EditorImage | gameobjects.EditorContainer;
-    class TransformComponent {
-        static write(sprite: TransformLike, data: any): void;
-        static read(sprite: TransformLike, data: any): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.json {
-    class VariableComponent {
-        static write(sprite: gameobjects.EditorObject, data: any): void;
-        static read(sprite: gameobjects.EditorObject, data: any): void;
+        getEditorSupport(): EditorSupport;
     }
 }
 declare namespace phasereditor2d.scene.ui.viewers {

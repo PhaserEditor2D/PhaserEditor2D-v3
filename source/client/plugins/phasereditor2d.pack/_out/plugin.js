@@ -4300,7 +4300,7 @@ var phasereditor2d;
                             return obj.getKey();
                         }
                         if (obj instanceof controls.ImageFrame) {
-                            return obj.getName();
+                            return obj.getName() + "";
                         }
                         if (typeof (obj) === "string") {
                             if (obj in ASSET_PACK_TYPE_DISPLAY_NAME) {

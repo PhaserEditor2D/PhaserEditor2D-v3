@@ -20,13 +20,13 @@ namespace phasereditor2d.scene.ui {
             return reader.createObject(objData);
         }
 
-        createContainerWithObjects(objects: gameobjects.EditorObject[]) {
+        createContainerWithObjects(objectList: sceneobjects.SceneObject[]) {
 
-            const container = gameobjects.EditorContainer.add(this._scene, 0, 0, objects);
+            const container = sceneobjects.Container.add(this._scene, 0, 0, objectList);
 
             const name = this._scene.makeNewName("container");
 
-            container.setEditorLabel(name);
+            container.getEditorSupport().setLabel(name);
 
             json.SceneParser.setNewId(container);
 
@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui {
             const exts = ScenePlugin.getInstance().getObjectExtensions();
 
             const nameMaker = new ide.utils.NameMaker(obj => {
-                return (obj as gameobjects.EditorObject).getEditorLabel();
+                return (obj as sceneobjects.SceneObject).getEditorSupport().getLabel();
             });
 
             this._scene.visit(obj => nameMaker.update([obj]));
@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui {
                 await parser.addToCache_async(data);
             }
 
-            const sprites: gameobjects.EditorObject[] = [];
+            const sprites: sceneobjects.SceneObject[] = [];
 
             for (const data of dropDataArray) {
 
@@ -77,7 +77,7 @@ namespace phasereditor2d.scene.ui {
 
             for (const sprite of sprites) {
 
-                sprite.setEditorScene(this._scene);
+                sprite.getEditorSupport().setScene(this._scene);
 
                 json.SceneParser.setNewId(sprite);
                 json.SceneParser.initSprite(sprite);

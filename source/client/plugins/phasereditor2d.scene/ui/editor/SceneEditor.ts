@@ -270,7 +270,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 .filter(obj => obj instanceof Phaser.GameObjects.GameObject)
 
-                .map(obj => obj as gameobjects.EditorObject);
+                .map(obj => obj as sceneobjects.SceneObject);
         }
 
         getActionManager() {

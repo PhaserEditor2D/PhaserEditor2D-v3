@@ -1,23 +1,33 @@
-/// <reference path="./EditorObjectMixin.ts" />
+namespace phasereditor2d.scene.ui.sceneobjects {
 
-namespace phasereditor2d.scene.ui.gameobjects {
+    export class Container extends Phaser.GameObjects.Container implements SceneObject {
 
-    export class EditorContainer extends Phaser.GameObjects.Container implements EditorObject {
+        private _editorSupport: EditorSupport;
 
-        static add(scene: Phaser.Scene, x: number, y: number, list: EditorObject[]) {
+        constructor(scene: GameScene, x: number, y: number, children: SceneObject[]) {
+            super(scene, x, y, children);
 
-            const container = new EditorContainer(scene, x, y, list);
+            this._editorSupport = new EditorSupport(this);
+        }
+
+        getEditorSupport() {
+            return this._editorSupport;
+        }
+
+        static add(scene: GameScene, x: number, y: number, list: SceneObject[]) {
+
+            const container = new Container(scene, x, y, list);
 
             scene.sys.displayList.add(container);
 
             return container;
         }
 
-        get list(): EditorObject[] {
+        get list(): SceneObject[] {
             return super.list as any;
         }
 
-        set list(list: EditorObject[]) {
+        set list(list: SceneObject[]) {
             super.list = list;
         }
 
@@ -53,7 +63,7 @@ namespace phasereditor2d.scene.ui.gameobjects {
 
             // container
 
-            const parser = new json.SceneParser(this.getEditorScene());
+            const parser = new json.SceneParser(this.getEditorSupport().getScene());
 
             for (const objData of data.list) {
 
@@ -67,11 +77,4 @@ namespace phasereditor2d.scene.ui.gameobjects {
             return getContainerScreenBounds(this, camera);
         }
     }
-
-    export interface EditorContainer extends EditorObjectMixin {
-
-        // nothing
-    }
-
-    colibri.lang.applyMixins(EditorContainer, [EditorObjectMixin]);
 }

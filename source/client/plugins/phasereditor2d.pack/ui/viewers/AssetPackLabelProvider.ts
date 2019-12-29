@@ -35,7 +35,7 @@ namespace phasereditor2d.pack.ui.viewers {
     export class AssetPackLabelProvider implements controls.viewers.ILabelProvider {
 
         getLabel(obj: any): string {
-            
+
             if (obj instanceof core.AssetPack) {
                 return obj.getFile().getName();
             }
@@ -45,11 +45,11 @@ namespace phasereditor2d.pack.ui.viewers {
             }
 
             if (obj instanceof controls.ImageFrame) {
-                return obj.getName();
+                return obj.getName() + "";
             }
 
             if (typeof (obj) === "string") {
-                
+
                 if (obj in ASSET_PACK_TYPE_DISPLAY_NAME) {
                     return ASSET_PACK_TYPE_DISPLAY_NAME[obj];
                 }
