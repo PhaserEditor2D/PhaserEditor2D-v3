@@ -20,6 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         readJSON(data: any) {
+
             this._obj.x = read(data, "x", 0);
             this._obj.y = read(data, "y", 0);
 

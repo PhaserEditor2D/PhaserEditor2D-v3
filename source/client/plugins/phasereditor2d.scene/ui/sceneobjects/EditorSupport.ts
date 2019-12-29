@@ -3,21 +3,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import read = colibri.core.json.read;
     import write = colibri.core.json.write;
 
-    export class EditorSupport {
+    export abstract class EditorSupport<T extends SceneObject> {
 
         private _extension: SceneObjectExtension;
-        private _object: SceneObject;
+        private _object: T;
         private _label: string;
         private _scene: GameScene;
-        private _serializers: json.ReadWriteJSON[];
+        private _serializers: json.JSONSerializer[];
 
-        constructor(extension: SceneObjectExtension, obj: SceneObject) {
+        constructor(extension: SceneObjectExtension, obj: T) {
             this._extension = extension;
             this._object = obj;
             this._serializers = [];
         }
 
-        addSerializer(...serializer: json.ReadWriteJSON[]) {
+        abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera);
+
+        addSerializer(...serializer: json.JSONSerializer[]) {
             this._serializers.push(...serializer);
         }
 

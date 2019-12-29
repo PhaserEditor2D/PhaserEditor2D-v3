@@ -12,14 +12,14 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._dataList = objects.map(obj => {
                 const data = {};
 
-                obj.writeJSON(data);
+                obj.getEditorSupport().writeJSON(data);
 
                 return data;
             });
         }
 
         undo(): void {
-            
+
             const scene = this._editor.getGameScene();
 
             for (const data of this._dataList) {

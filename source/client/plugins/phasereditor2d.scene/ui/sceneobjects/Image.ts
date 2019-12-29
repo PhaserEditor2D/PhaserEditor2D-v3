@@ -16,19 +16,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getEditorSupport(): ImageEditorSupport {
             return this._editorSupport;
         }
-
-        writeJSON(data: any) {
-
-            this._editorSupport.writeJSON(data);
-        }
-
-        readJSON(data: any) {
-
-            this._editorSupport.readJSON(data);
-        }
-
-        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
-            return getScreenBounds(this, camera);
-        }
     }
 }

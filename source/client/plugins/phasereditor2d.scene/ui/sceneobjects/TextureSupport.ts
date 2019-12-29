@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import write = colibri.core.json.write;
     import read = colibri.core.json.read;
 
-    export class TextureSupport implements json.ReadWriteJSON {
+    export class TextureSupport implements json.JSONSerializer {
 
         private _textureKey: string;
         private _textureFrameKey: string | number;

@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
-            container.readJSON(args.data);
+            container.getEditorSupport().readJSON(args.data);
 
             return container;
         }

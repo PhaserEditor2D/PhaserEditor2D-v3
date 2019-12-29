@@ -859,7 +859,7 @@ var phasereditor2d;
                         for (const obj of this._editor.getSelection()) {
                             if (obj instanceof Phaser.GameObjects.GameObject) {
                                 const sprite = obj;
-                                const points = sprite.getScreenBounds(camera);
+                                const points = sprite.getEditorSupport().getScreenBounds(camera);
                                 if (points.length === 4) {
                                     ctx.strokeStyle = "black";
                                     ctx.lineWidth = 4;
@@ -1885,7 +1885,7 @@ var phasereditor2d;
                             super(editor);
                             this._dataList = objects.map(obj => {
                                 const data = {};
-                                obj.writeJSON(data);
+                                obj.getEditorSupport().writeJSON(data);
                                 return data;
                             });
                         }
@@ -2071,7 +2071,7 @@ var phasereditor2d;
                             });
                             if (sprite) {
                                 sprite.getEditorSupport().setScene(this._scene);
-                                sprite.readJSON(data);
+                                sprite.getEditorSupport().readJSON(data);
                                 SceneParser.initSprite(sprite);
                             }
                             return sprite;
@@ -2120,7 +2120,7 @@ var phasereditor2d;
                         };
                         for (const obj of this._scene.getDisplayListChildren()) {
                             const objData = {};
-                            obj.writeJSON(objData);
+                            obj.getEditorSupport().writeJSON(objData);
                             sceneData.displayList.push(objData);
                         }
                         return sceneData;
@@ -2146,7 +2146,7 @@ var phasereditor2d;
                 class Container extends Phaser.GameObjects.Container {
                     constructor(extension, scene, x, y, children) {
                         super(scene, x, y, children);
-                        this._editorSupport = new sceneobjects.ContainerSupport(extension, this);
+                        this._editorSupport = new sceneobjects.ContainerEditorSupport(extension, this);
                     }
                     getEditorSupport() {
                         return this._editorSupport;
@@ -2156,27 +2156,6 @@ var phasereditor2d;
                     }
                     set list(list) {
                         super.list = list;
-                    }
-                    writeJSON(data) {
-                        this._editorSupport.writeJSON(data);
-                        // container
-                        data.list = this.list.map(obj => {
-                            const objData = {};
-                            obj.writeJSON(objData);
-                            return objData;
-                        });
-                    }
-                    readJSON(data) {
-                        this._editorSupport.readJSON(data);
-                        // container
-                        const parser = new ui.json.SceneParser(this.getEditorSupport().getScene());
-                        for (const objData of data.list) {
-                            const sprite = parser.createObject(objData);
-                            this.add(sprite);
-                        }
-                    }
-                    getScreenBounds(camera) {
-                        return sceneobjects.getContainerScreenBounds(this, camera);
                     }
                 }
                 sceneobjects.Container = Container;
@@ -2229,7 +2208,7 @@ var phasereditor2d;
                     }
                     createSceneObjectWithData(args) {
                         const container = this.createContainerObject(args.scene, 0, 0, []);
-                        container.readJSON(args.data);
+                        container.getEditorSupport().readJSON(args.data);
                         return container;
                     }
                     createContainerObject(scene, x, y, list) {
@@ -2320,92 +2299,54 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class ContainerSupport extends sceneobjects.EditorSupport {
+                class ContainerEditorSupport extends sceneobjects.EditorSupport {
                     constructor(extension, obj) {
                         super(extension, obj);
                         this.addSerializer(new sceneobjects.TransformSupport(obj));
                     }
-                }
-                sceneobjects.ContainerSupport = ContainerSupport;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                function getContainerScreenBounds(container, camera) {
-                    if (container.list.length === 0) {
-                        return [];
+                    writeJSON(data) {
+                        super.writeJSON(data);
+                        // container
+                        data.list = this.getObject().list.map(obj => {
+                            const objData = {};
+                            obj.getEditorSupport().writeJSON(objData);
+                            return objData;
+                        });
                     }
-                    const minPoint = new Phaser.Math.Vector2(Number.MAX_VALUE, Number.MAX_VALUE);
-                    const maxPoint = new Phaser.Math.Vector2(Number.MIN_VALUE, Number.MIN_VALUE);
-                    for (const obj of container.list) {
-                        const bounds = obj.getScreenBounds(camera);
-                        for (const point of bounds) {
-                            minPoint.x = Math.min(minPoint.x, point.x);
-                            minPoint.y = Math.min(minPoint.y, point.y);
-                            maxPoint.x = Math.max(maxPoint.x, point.x);
-                            maxPoint.y = Math.max(maxPoint.y, point.y);
+                    readJSON(data) {
+                        // container
+                        const obj = this.getObject();
+                        const parser = new ui.json.SceneParser(this.getScene());
+                        for (const objData of data.list) {
+                            const sprite = parser.createObject(objData);
+                            obj.add(sprite);
                         }
                     }
-                    return [
-                        new Phaser.Math.Vector2(minPoint.x, minPoint.y),
-                        new Phaser.Math.Vector2(maxPoint.x, minPoint.y),
-                        new Phaser.Math.Vector2(maxPoint.x, maxPoint.y),
-                        new Phaser.Math.Vector2(minPoint.x, maxPoint.y)
-                    ];
-                }
-                sceneobjects.getContainerScreenBounds = getContainerScreenBounds;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                function getScreenBounds(sprite, camera) {
-                    const points = [
-                        new Phaser.Math.Vector2(0, 0),
-                        new Phaser.Math.Vector2(0, 0),
-                        new Phaser.Math.Vector2(0, 0),
-                        new Phaser.Math.Vector2(0, 0)
-                    ];
-                    let w = sprite.width;
-                    let h = sprite.height;
-                    if (sprite instanceof Phaser.GameObjects.BitmapText) {
-                        // the BitmapText.width is considered a displayWidth, it is already multiplied by the scale
-                        w = w / sprite.scaleX;
-                        h = h / sprite.scaleY;
+                    getScreenBounds(camera) {
+                        const container = this.getObject();
+                        if (container.list.length === 0) {
+                            return [];
+                        }
+                        const minPoint = new Phaser.Math.Vector2(Number.MAX_VALUE, Number.MAX_VALUE);
+                        const maxPoint = new Phaser.Math.Vector2(Number.MIN_VALUE, Number.MIN_VALUE);
+                        for (const obj of container.list) {
+                            const bounds = obj.getEditorSupport().getScreenBounds(camera);
+                            for (const point of bounds) {
+                                minPoint.x = Math.min(minPoint.x, point.x);
+                                minPoint.y = Math.min(minPoint.y, point.y);
+                                maxPoint.x = Math.max(maxPoint.x, point.x);
+                                maxPoint.y = Math.max(maxPoint.y, point.y);
+                            }
+                        }
+                        return [
+                            new Phaser.Math.Vector2(minPoint.x, minPoint.y),
+                            new Phaser.Math.Vector2(maxPoint.x, minPoint.y),
+                            new Phaser.Math.Vector2(maxPoint.x, maxPoint.y),
+                            new Phaser.Math.Vector2(minPoint.x, maxPoint.y)
+                        ];
                     }
-                    let flipX = sprite.flipX ? -1 : 1;
-                    let flipY = sprite.flipY ? -1 : 1;
-                    if (sprite instanceof Phaser.GameObjects.TileSprite) {
-                        flipX = 1;
-                        flipY = 1;
-                    }
-                    const ox = sprite.originX;
-                    const oy = sprite.originY;
-                    const x = -w * ox * flipX;
-                    const y = -h * oy * flipY;
-                    const tx = sprite.getWorldTransformMatrix();
-                    tx.transformPoint(x, y, points[0]);
-                    tx.transformPoint(x + w * flipX, y, points[1]);
-                    tx.transformPoint(x + w * flipX, y + h * flipY, points[2]);
-                    tx.transformPoint(x, y + h * flipY, points[3]);
-                    return points.map(p => camera.getScreenPoint(p.x, p.y));
                 }
-                sceneobjects.getScreenBounds = getScreenBounds;
+                sceneobjects.ContainerEditorSupport = ContainerEditorSupport;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -2425,15 +2366,6 @@ var phasereditor2d;
                     }
                     getEditorSupport() {
                         return this._editorSupport;
-                    }
-                    writeJSON(data) {
-                        this._editorSupport.writeJSON(data);
-                    }
-                    readJSON(data) {
-                        this._editorSupport.readJSON(data);
-                    }
-                    getScreenBounds(camera) {
-                        return sceneobjects.getScreenBounds(this, camera);
                     }
                 }
                 sceneobjects.Image = Image;
@@ -2461,6 +2393,38 @@ var phasereditor2d;
                     }
                     getTransformSupport() {
                         return this._transformSupport;
+                    }
+                    getScreenBounds(camera) {
+                        const sprite = this.getObject();
+                        const points = [
+                            new Phaser.Math.Vector2(0, 0),
+                            new Phaser.Math.Vector2(0, 0),
+                            new Phaser.Math.Vector2(0, 0),
+                            new Phaser.Math.Vector2(0, 0)
+                        ];
+                        let w = sprite.width;
+                        let h = sprite.height;
+                        if (sprite instanceof Phaser.GameObjects.BitmapText) {
+                            // the BitmapText.width is considered a displayWidth, it is already multiplied by the scale
+                            w = w / sprite.scaleX;
+                            h = h / sprite.scaleY;
+                        }
+                        let flipX = sprite.flipX ? -1 : 1;
+                        let flipY = sprite.flipY ? -1 : 1;
+                        if (sprite instanceof Phaser.GameObjects.TileSprite) {
+                            flipX = 1;
+                            flipY = 1;
+                        }
+                        const ox = sprite.originX;
+                        const oy = sprite.originY;
+                        const x = -w * ox * flipX;
+                        const y = -h * oy * flipY;
+                        const tx = sprite.getWorldTransformMatrix();
+                        tx.transformPoint(x, y, points[0]);
+                        tx.transformPoint(x + w * flipX, y, points[1]);
+                        tx.transformPoint(x + w * flipX, y + h * flipY, points[2]);
+                        tx.transformPoint(x, y + h * flipY, points[3]);
+                        return points.map(p => camera.getScreenPoint(p.x, p.y));
                     }
                 }
                 sceneobjects.ImageEditorSupport = ImageEditorSupport;
@@ -2511,7 +2475,7 @@ var phasereditor2d;
                     }
                     createSceneObjectWithData(args) {
                         const sprite = this.createImageObject(args.scene, 0, 0, undefined);
-                        sprite.readJSON(args.data);
+                        sprite.getEditorSupport().readJSON(args.data);
                         return sprite;
                     }
                     createImageObject(scene, x, y, key, frame) {

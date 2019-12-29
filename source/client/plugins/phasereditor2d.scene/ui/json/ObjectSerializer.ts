@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.json {
 
-    export interface ReadWriteJSON {
+    export interface JSONSerializer {
 
         writeJSON(data: any): void;
 

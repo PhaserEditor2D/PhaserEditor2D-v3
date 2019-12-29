@@ -105,7 +105,7 @@ namespace phasereditor2d.scene.ui.json {
 
                     sprite.getEditorSupport().setScene(this._scene);
 
-                    sprite.readJSON(data);
+                    sprite.getEditorSupport().readJSON(data);
 
                     SceneParser.initSprite(sprite);
                 }
