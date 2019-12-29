@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             if (sprite instanceof sceneobjects.Image) {
 
-                const { key, frame } = sprite.getEditorSupport().getTexture();
+                const { key, frame } = sprite.getEditorSupport().getTextureSupport().getTexture();
 
                 const image = pack.core.parsers.ImageFrameParser
                     .getSourceImageFrame(sprite.getEditorSupport().getScene().game, key, frame);

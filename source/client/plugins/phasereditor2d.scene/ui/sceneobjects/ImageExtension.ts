@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const sprite = this.createImageObject(args.scene, args.x, args.y, key, frame);
 
             sprite.getEditorSupport().setLabel(args.nameMaker.makeName(baseLabel));
-            sprite.getEditorSupport().setTexture(args.asset.getKey(), frame);
+            sprite.getEditorSupport().getTextureSupport().setTexture(args.asset.getKey(), frame);
 
             return sprite;
         }
@@ -59,7 +59,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private createImageObject(scene: GameScene, x: number, y: number, key: string, frame?: string | number) {
 
-            const sprite = new sceneobjects.Image(scene, x, y, key, frame);
+            const sprite = new sceneobjects.Image(this, scene, x, y, key, frame);
 
             sprite.getEditorSupport().setScene(scene);
 

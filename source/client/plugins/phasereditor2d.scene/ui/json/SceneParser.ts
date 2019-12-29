@@ -1,4 +1,3 @@
-
 namespace phasereditor2d.scene.ui.json {
 
     export class SceneParser {
@@ -39,7 +38,7 @@ namespace phasereditor2d.scene.ui.json {
 
                 case "Image": {
 
-                    const key = objData[TextureComponent.textureKey];
+                    const key = objData[sceneobjects.TextureSupport.TEXTURE_KEY];
 
                     const finder = new pack.core.PackFinder();
 

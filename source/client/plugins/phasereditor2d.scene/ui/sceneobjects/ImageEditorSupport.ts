@@ -2,40 +2,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageEditorSupport extends EditorSupport {
 
-        private _textureKey: string;
-        private _textureFrameKey: string | number;
+        private _textureSupport: TextureSupport;
+        private _transformSupport: TransformSupport;
 
-        constructor(obj: Image) {
-            super(obj);
+        constructor(extension: SceneObjectExtension, obj: Image) {
+            super(extension, obj);
+
+            this._textureSupport = new TextureSupport(obj);
+            this._transformSupport = new TransformSupport(obj);
+
+            this.addSerializer(
+                this._transformSupport,
+                this._textureSupport
+            );
         }
 
-        getTextureKey() {
-            return this._textureKey;
+        getTextureSupport() {
+            return this._textureSupport;
         }
 
-        setTextureKey(key: string) {
-            this._textureKey = key;
-        }
-
-        setTexture(key: string, frame: string | number) {
-
-            this.setTextureKey(key);
-            this.setTextureFrame(frame);
-        }
-
-        getTexture() {
-            return {
-                key: this.getTextureKey(),
-                frame: this.getTextureFrameKey()
-            };
-        }
-
-        getTextureFrameKey() {
-            return this._textureFrameKey;
-        }
-
-        setTextureFrame(frame: string | number) {
-            this._textureFrameKey = frame;
+        getTransformSupport() {
+            return this._transformSupport;
         }
     }
 }

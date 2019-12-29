@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private createContainerObject(scene: GameScene, x: number, y: number, list: sceneobjects.SceneObject[]) {
 
-            const container = new sceneobjects.Container(scene, x, y, list);
+            const container = new sceneobjects.Container(this, scene, x, y, list);
 
             scene.sys.displayList.add(container);
 

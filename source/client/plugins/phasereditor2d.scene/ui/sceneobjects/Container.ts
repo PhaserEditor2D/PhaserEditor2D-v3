@@ -2,25 +2,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class Container extends Phaser.GameObjects.Container implements SceneObject {
 
-        private _editorSupport: EditorSupport;
+        private _editorSupport: ContainerSupport;
 
-        constructor(scene: GameScene, x: number, y: number, children: SceneObject[]) {
+        constructor(extension: ContainerExtension, scene: GameScene, x: number, y: number, children: SceneObject[]) {
             super(scene, x, y, children);
 
-            this._editorSupport = new EditorSupport(this);
+            this._editorSupport = new ContainerSupport(extension, this);
         }
 
         getEditorSupport() {
             return this._editorSupport;
-        }
-
-        static add(scene: GameScene, x: number, y: number, list: SceneObject[]) {
-
-            const container = new Container(scene, x, y, list);
-
-            scene.sys.displayList.add(container);
-
-            return container;
         }
 
         get list(): SceneObject[] {
@@ -33,13 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(data: any) {
 
-            data.type = "Container";
-
-            json.ObjectComponent.write(this, data);
-
-            json.VariableComponent.write(this, data);
-
-            json.TransformComponent.write(this, data);
+            this._editorSupport.writeJSON(data);
 
             // container
 
@@ -55,11 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(data: any) {
 
-            json.ObjectComponent.read(this, data);
-
-            json.VariableComponent.read(this, data);
-
-            json.TransformComponent.read(this, data);
+            this._editorSupport.readJSON(data);
 
             // container
 

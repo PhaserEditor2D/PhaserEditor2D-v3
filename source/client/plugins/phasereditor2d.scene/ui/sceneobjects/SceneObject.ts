@@ -9,5 +9,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera);
 
         getEditorSupport(): EditorSupport;
+
     }
 }

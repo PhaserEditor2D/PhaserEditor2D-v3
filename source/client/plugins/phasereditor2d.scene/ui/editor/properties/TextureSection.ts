@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 const obj = this.getSelection()[0];
 
-                const { key, frame } = obj.getEditorSupport().getTexture();
+                const { key, frame } = obj.getEditorSupport().getTextureSupport().getTexture();
 
                 const finder = new pack.core.PackFinder();
 

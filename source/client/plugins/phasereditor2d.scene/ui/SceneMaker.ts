@@ -20,17 +20,19 @@ namespace phasereditor2d.scene.ui {
             return reader.createObject(objData);
         }
 
-        createContainerWithObjects(objectList: sceneobjects.SceneObject[]) {
+        createContainerWithObjects(objectList: sceneobjects.SceneObject[]): sceneobjects.Container {
 
-            const container = sceneobjects.Container.add(this._scene, 0, 0, objectList);
+            throw new Error("Not implemented yet. Needs revision!");
 
-            const name = this._scene.makeNewName("container");
+            // const container = sceneobjects.Container.add(this._scene, 0, 0, objectList);
 
-            container.getEditorSupport().setLabel(name);
+            // const name = this._scene.makeNewName("container");
 
-            json.SceneParser.setNewId(container);
+            // container.getEditorSupport().setLabel(name);
 
-            return container;
+            // json.SceneParser.setNewId(container);
+
+            // return container;
         }
 
         async createWithDropEvent_async(e: DragEvent, dropDataArray: any[]) {

@@ -4,10 +4,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _editorSupport: ImageEditorSupport;
 
-        constructor(scene: GameScene, x: number, y: number, texture: string, frame?: string | number) {
+        constructor(
+            extension: ImageExtension,
+            scene: GameScene, x: number, y: number, texture: string, frame?: string | number) {
+
             super(scene, x, y, texture, frame);
 
-            this._editorSupport = new ImageEditorSupport(this);
+            this._editorSupport = new ImageEditorSupport(extension, this);
         }
 
         getEditorSupport(): ImageEditorSupport {
@@ -16,26 +19,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(data: any) {
 
-            data.type = "Image";
-
-            json.ObjectComponent.write(this, data);
-
-            json.VariableComponent.write(this, data);
-
-            json.TransformComponent.write(this, data);
-
-            json.TextureComponent.write(this, data);
+            this._editorSupport.writeJSON(data);
         }
 
         readJSON(data: any) {
 
-            json.ObjectComponent.read(this, data);
-
-            json.VariableComponent.read(this, data);
-
-            json.TransformComponent.read(this, data);
-
-            json.TextureComponent.read(this, data);
+            this._editorSupport.readJSON(data);
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
