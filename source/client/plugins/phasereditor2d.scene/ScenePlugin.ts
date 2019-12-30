@@ -80,6 +80,15 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 new ui.sceneobjects.ImageLoaderUpdater()
             );
+
+            // property sections
+
+            reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
+                page => new ui.sceneobjects.VariableSection(page),
+                page => new ui.sceneobjects.TransformSection(page),
+                page => new ui.sceneobjects.OriginSection(page),
+                page => new ui.sceneobjects.TextureSection(page)
+            ));
         }
 
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[] {

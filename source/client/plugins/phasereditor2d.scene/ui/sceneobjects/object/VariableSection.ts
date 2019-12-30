@@ -1,10 +1,8 @@
-/// <reference path="./SceneSection.ts" />
-
-namespace phasereditor2d.scene.ui.editor.properties {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class VariableSection extends SceneSection<sceneobjects.SceneObject> {
+    export class VariableSection extends editor.properties.SceneSection<sceneobjects.SceneObject> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "SceneEditor.VariableSection", "Variable", false);

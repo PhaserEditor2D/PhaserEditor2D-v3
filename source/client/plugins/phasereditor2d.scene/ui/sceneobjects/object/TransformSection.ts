@@ -1,6 +1,6 @@
-namespace phasereditor2d.scene.ui.editor.properties {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TransformSection extends SceneSection<sceneobjects.Image> {
+    export class TransformSection extends editor.properties.SceneSection<sceneobjects.Image> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
             super(page, "SceneEditor.TransformSection", "Transform", false);

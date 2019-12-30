@@ -1,10 +1,10 @@
-namespace phasereditor2d.scene.ui.editor.properties {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
     import core = colibri.core;
 
-    export class TextureSection extends SceneSection<sceneobjects.Image> {
+    export class TextureSection extends editor.properties.SceneSection<sceneobjects.Image> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "SceneEditor.TextureSection", "Texture", true);

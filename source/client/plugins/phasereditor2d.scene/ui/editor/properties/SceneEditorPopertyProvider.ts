@@ -4,15 +4,18 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     export class SceneEditorSectionProvider extends controls.properties.PropertySectionProvider {
 
-        addSections(page: controls.properties.PropertyPage, sections: controls.properties.PropertySection<any>[]): void {
+        addSections(
+            page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void {
 
-            sections.push(new VariableSection(page));
+            const exts = colibri.Platform
+                .getExtensions<SceneEditorPropertySectionExtension>(SceneEditorPropertySectionExtension.POINT_ID);
 
-            sections.push(new TransformSection(page));
+            for (const ext of exts) {
 
-            sections.push(new OriginSection(page));
-
-            sections.push(new TextureSection(page));
+                for (const provider of ext.getSectionProviders()) {
+                    sections.push(provider(page));
+                }
+            }
         }
     }
 }
