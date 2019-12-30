@@ -2486,7 +2486,7 @@ var phasereditor2d;
                         }
                         const sprite = this.createImageObject(args.scene, args.x, args.y, key, frame);
                         sprite.getEditorSupport().setLabel(args.nameMaker.makeName(baseLabel));
-                        sprite.getEditorSupport().getTextureSupport().setTexture(args.asset.getKey(), frame);
+                        sprite.getEditorSupport().getTextureSupport().setTexture(key, frame);
                         return sprite;
                     }
                     createSceneObjectWithData(args) {
