@@ -414,15 +414,6 @@ declare namespace phasereditor2d.scene.ui.json {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class Container extends Phaser.GameObjects.Container implements SceneObject {
-        private _editorSupport;
-        constructor(scene: GameScene, x: number, y: number, children: SceneObject[]);
-        getEditorSupport(): ContainerEditorSupport;
-        get list(): SceneObject[];
-        set list(list: SceneObject[]);
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class EditorSupport<T extends SceneObject> {
         private _extension;
         private _object;
@@ -446,14 +437,22 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    interface ContainerData extends json.ObjectData {
-        list: json.ObjectData[];
+    abstract class LoaderUpdaterExtension extends colibri.Extension {
+        static POINT_ID: string;
+        constructor();
+        abstract acceptAsset(asset: any): boolean;
+        abstract updateLoader(scene: GameScene, asset: any): any;
     }
-    class ContainerEditorSupport extends EditorSupport<Container> {
-        constructor(obj: Container);
-        writeJSON(data: ContainerData): void;
-        readJSON(data: ContainerData): void;
-        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class ImageLoaderUpdater extends LoaderUpdaterExtension {
+        acceptAsset(asset: any): boolean;
+        updateLoader(scene: GameScene, asset: any): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface SceneObject extends Phaser.GameObjects.GameObject {
+        getEditorSupport(): EditorSupport<SceneObject>;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -517,6 +516,64 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface TextureData extends json.ObjectData {
+        textureKey: string;
+        frameKey: string;
+    }
+    class TextureSupport implements json.ObjectSerializer {
+        private _textureKey;
+        private _textureFrameKey;
+        private _obj;
+        constructor(obj: Image);
+        writeJSON(data: TextureData): void;
+        readJSON(data: TextureData): void;
+        getKey(): string;
+        setKey(key: string): void;
+        setTexture(key: string, frame: string | number): void;
+        getTexture(): {
+            key: string;
+            frame: string | number;
+        };
+        getFrame(): string | number;
+        setFrame(frame: string | number): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface ITransformLike {
+        x: number;
+        y: number;
+        scaleX: number;
+        scaleY: number;
+        angle: number;
+    }
+    class TransformSupport implements json.ObjectSerializer {
+        private _obj;
+        constructor(obj: ITransformLike);
+        readJSON(data: json.ObjectData): void;
+        writeJSON(data: json.ObjectData): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class Container extends Phaser.GameObjects.Container implements SceneObject {
+        private _editorSupport;
+        constructor(scene: GameScene, x: number, y: number, children: SceneObject[]);
+        getEditorSupport(): ContainerEditorSupport;
+        get list(): SceneObject[];
+        set list(list: SceneObject[]);
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface ContainerData extends json.ObjectData {
+        list: json.ObjectData[];
+    }
+    class ContainerEditorSupport extends EditorSupport<Container> {
+        constructor(obj: Container);
+        writeJSON(data: ContainerData): void;
+        readJSON(data: ContainerData): void;
+        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface ContainerData extends json.ObjectData {
         list: json.ObjectData[];
     }
@@ -560,63 +617,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createImageObject;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    abstract class LoaderUpdaterExtension extends colibri.Extension {
-        static POINT_ID: string;
-        constructor();
-        abstract acceptAsset(asset: any): boolean;
-        abstract updateLoader(scene: GameScene, asset: any): any;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class ImageLoaderUpdater extends LoaderUpdaterExtension {
-        acceptAsset(asset: any): boolean;
-        updateLoader(scene: GameScene, asset: any): Promise<void>;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    interface SceneObject extends Phaser.GameObjects.GameObject {
-        getEditorSupport(): EditorSupport<SceneObject>;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    interface TextureData extends json.ObjectData {
-        textureKey: string;
-        frameKey: string;
-    }
-    class TextureSupport implements json.ObjectSerializer {
-        private _textureKey;
-        private _textureFrameKey;
-        private _obj;
-        constructor(obj: Image);
-        writeJSON(data: TextureData): void;
-        readJSON(data: TextureData): void;
-        getKey(): string;
-        setKey(key: string): void;
-        setTexture(key: string, frame: string | number): void;
-        getTexture(): {
-            key: string;
-            frame: string | number;
-        };
-        getFrame(): string | number;
-        setFrame(frame: string | number): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    interface ITransformLike {
-        x: number;
-        y: number;
-        scaleX: number;
-        scaleY: number;
-        angle: number;
-    }
-    class TransformSupport implements json.ObjectSerializer {
-        private _obj;
-        constructor(obj: ITransformLike);
-        readJSON(data: json.ObjectData): void;
-        writeJSON(data: json.ObjectData): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.viewers {

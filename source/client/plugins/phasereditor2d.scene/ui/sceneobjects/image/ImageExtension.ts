@@ -1,5 +1,3 @@
-/// <reference path="./SceneObjectExtension.ts" />7
-
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageExtension extends SceneObjectExtension {

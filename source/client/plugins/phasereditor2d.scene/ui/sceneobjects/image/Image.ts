@@ -13,6 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getEditorSupport(): ImageEditorSupport {
+
             return this._editorSupport;
         }
     }

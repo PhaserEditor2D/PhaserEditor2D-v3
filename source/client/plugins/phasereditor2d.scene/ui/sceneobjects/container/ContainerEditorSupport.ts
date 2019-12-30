@@ -1,5 +1,3 @@
-/// <reference path="./EditorSupport.ts" />
-
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export interface ContainerData extends json.ObjectData {
