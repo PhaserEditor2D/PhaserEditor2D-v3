@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class ImageObjectCellRenderer implements controls.viewers.ICellRenderer {
+    export class TextureCellRenderer implements controls.viewers.ICellRenderer {
 
         renderCell(args: controls.viewers.RenderCellArgs): void {
 

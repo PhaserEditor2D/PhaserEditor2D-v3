@@ -1712,7 +1712,7 @@ var phasereditor2d;
                             setTimeout(() => imgControl.resizeTo(), 1);
                             this.addUpdater(() => {
                                 const obj = this.getSelection()[0];
-                                const { key, frame } = obj.getEditorSupport().getTextureSupport().getTexture();
+                                const { key, frame } = obj.getEditorSupport().getTextureComponent().getTexture();
                                 const finder = new phasereditor2d.pack.core.PackFinder();
                                 finder.preload().then(() => {
                                     const img = finder.getAssetPackItemImage(key, frame);
@@ -2480,18 +2480,13 @@ var phasereditor2d;
                 class ImageEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj) {
                         super(sceneobjects.ImageExtension.getInstance(), obj);
-                        this._textureComponent = new sceneobjects.TextureComponent(obj);
-                        this._transformComponent = new sceneobjects.TransformComponent(obj);
-                        this.addComponent(this._transformComponent, this._textureComponent);
+                        this.addComponent(new sceneobjects.TextureComponent(obj), new sceneobjects.TransformComponent(obj));
                     }
                     getCellRenderer() {
-                        return new sceneobjects.ImageObjectCellRenderer();
+                        return new sceneobjects.TextureCellRenderer();
                     }
-                    getTextureSupport() {
-                        return this._textureComponent;
-                    }
-                    getTransformSupport() {
-                        return this._transformComponent;
+                    getTextureComponent() {
+                        return this.getComponent(sceneobjects.TextureComponent);
                     }
                     getScreenBounds(camera) {
                         const sprite = this.getObject();
@@ -2580,8 +2575,9 @@ var phasereditor2d;
                             baseLabel = key;
                         }
                         const sprite = this.createImageObject(args.scene, args.x, args.y, key, frame);
-                        sprite.getEditorSupport().setLabel(args.nameMaker.makeName(baseLabel));
-                        sprite.getEditorSupport().getTextureSupport().setTexture(key, frame);
+                        const support = sprite.getEditorSupport();
+                        support.setLabel(args.nameMaker.makeName(baseLabel));
+                        support.getTextureComponent().setTexture(key, frame);
                         return sprite;
                     }
                     createSceneObjectWithData(args) {
@@ -2609,7 +2605,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class ImageObjectCellRenderer {
+                class TextureCellRenderer {
                     renderCell(args) {
                         const sprite = args.obj;
                         const editorSupport = sprite.getEditorSupport();
@@ -2631,7 +2627,7 @@ var phasereditor2d;
                         return finder.preload();
                     }
                 }
-                sceneobjects.ImageObjectCellRenderer = ImageObjectCellRenderer;
+                sceneobjects.TextureCellRenderer = TextureCellRenderer;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

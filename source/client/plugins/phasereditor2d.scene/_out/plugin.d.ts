@@ -596,12 +596,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageEditorSupport extends EditorSupport<Image> {
-        private _textureComponent;
-        private _transformComponent;
         constructor(obj: Image);
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
-        getTextureSupport(): TextureComponent;
-        getTransformSupport(): TransformComponent;
+        getTextureComponent(): TextureComponent;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
     }
 }
@@ -620,7 +617,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class ImageObjectCellRenderer implements controls.viewers.ICellRenderer {
+    class TextureCellRenderer implements controls.viewers.ICellRenderer {
         renderCell(args: controls.viewers.RenderCellArgs): void;
         cellHeight(args: colibri.ui.controls.viewers.RenderCellArgs): number;
         preload(args: controls.viewers.PreloadCellArgs): Promise<colibri.ui.controls.PreloadResult>;

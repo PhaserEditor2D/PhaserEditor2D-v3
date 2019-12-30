@@ -2,31 +2,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageEditorSupport extends EditorSupport<Image> {
 
-        private _textureComponent: TextureComponent;
-        private _transformComponent: TransformComponent;
-
         constructor(obj: Image) {
             super(ImageExtension.getInstance(), obj);
 
-            this._textureComponent = new TextureComponent(obj);
-            this._transformComponent = new TransformComponent(obj);
-
             this.addComponent(
-                this._transformComponent,
-                this._textureComponent
+                new TextureComponent(obj),
+                new TransformComponent(obj)
             );
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
-            return new ImageObjectCellRenderer();
+            return new TextureCellRenderer();
         }
 
-        getTextureSupport() {
-            return this._textureComponent;
-        }
-
-        getTransformSupport() {
-            return this._transformComponent;
+        getTextureComponent() {
+            return this.getComponent(TextureComponent) as TextureComponent;
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
