@@ -34,7 +34,9 @@ declare namespace phasereditor2d.scene.ui {
         private _sceneType;
         private _inEditor;
         private _initialState;
+        private _maker;
         constructor(inEditor?: boolean);
+        getMaker(): SceneMaker;
         getDisplayListChildren(): sceneobjects.SceneObject[];
         visit(visitor: (obj: sceneobjects.SceneObject) => void): void;
         makeNewName(baseName: string): string;
@@ -51,9 +53,12 @@ declare namespace phasereditor2d.scene.ui {
     class SceneMaker {
         private _scene;
         constructor(scene: GameScene);
-        createObject(objData: any): sceneobjects.SceneObject;
+        static isValidSceneDataFormat(data: json.SceneData): boolean;
+        createScene(data: json.SceneData): void;
+        updateSceneLoader(sceneData: json.SceneData): Promise<void>;
+        createObject(data: json.ObjectData): sceneobjects.SceneObject;
         createContainerWithObjects(objectList: sceneobjects.SceneObject[]): sceneobjects.Container;
-        createWithDropEvent_async(e: DragEvent, dropAssetArray: any[]): Promise<sceneobjects.SceneObject[]>;
+        createWithDropEvent(e: DragEvent, dropAssetArray: any[]): Promise<sceneobjects.SceneObject[]>;
     }
 }
 declare namespace phasereditor2d.scene.ui {
@@ -198,7 +203,6 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _overlayLayer;
         private _gameCanvas;
         private _gameScene;
-        private _sceneMaker;
         private _dropManager;
         private _cameraManager;
         private _selectionManager;
@@ -401,16 +405,6 @@ declare namespace phasereditor2d.scene.ui.json {
             contentType: string;
         };
     };
-}
-declare namespace phasereditor2d.scene.ui.json {
-    class SceneParser {
-        private _scene;
-        constructor(scene: GameScene);
-        static isValidSceneDataFormat(data: SceneData): boolean;
-        createScene(data: SceneData): void;
-        createSceneCache(sceneData: SceneData): Promise<void>;
-        createObject(data: ObjectData): sceneobjects.SceneObject;
-    }
 }
 declare namespace phasereditor2d.scene.ui.json {
     class SceneWriter {

@@ -7,9 +7,9 @@ namespace phasereditor2d.scene.ui {
     class ThumbnailScene extends GameScene {
 
         private _data: json.SceneData;
-        private _callback: (HTMLImageElement) => void;
+        private _callback: (element: HTMLImageElement) => void;
 
-        constructor(data: json.SceneData, callback: (HTMLImageElement) => void) {
+        constructor(data: json.SceneData, callback: (element: HTMLImageElement) => void) {
             super(false);
 
             this._data = data;
@@ -17,15 +17,17 @@ namespace phasereditor2d.scene.ui {
         }
 
         create() {
-            const parser = new json.SceneParser(this);
-            parser.createSceneCache(this._data)
+
+            const maker = new SceneMaker(this);
+
+            maker.updateSceneLoader(this._data)
                 .then(() => {
 
-                    parser.createScene(this._data);
+                    maker.createScene(this._data);
 
                     this.sys.renderer.snapshot(img => {
 
-                        this._callback(<HTMLImageElement>img);
+                        this._callback(img as HTMLImageElement);
 
                     });
                 });
@@ -65,7 +67,7 @@ namespace phasereditor2d.scene.ui {
             return this._image ? this._image.getHeight() : 16;
         }
 
-        preloadSize() : Promise<controls.PreloadResult> {
+        preloadSize(): Promise<controls.PreloadResult> {
             return this.preload();
         }
 

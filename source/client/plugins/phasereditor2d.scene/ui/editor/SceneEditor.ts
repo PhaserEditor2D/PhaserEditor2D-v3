@@ -37,7 +37,6 @@ namespace phasereditor2d.scene.ui.editor {
         private _overlayLayer: OverlayLayer;
         private _gameCanvas: HTMLCanvasElement;
         private _gameScene: GameScene;
-        private _sceneMaker: SceneMaker;
         private _dropManager: DropManager;
         private _cameraManager: CameraManager;
         private _selectionManager: SelectionManager;
@@ -163,7 +162,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             // init managers and factories
 
-            this._sceneMaker = new SceneMaker(this.getGameScene());
             this._dropManager = new DropManager(this);
             this._cameraManager = new CameraManager(this);
             this._selectionManager = new SelectionManager(this);
@@ -234,6 +232,8 @@ namespace phasereditor2d.scene.ui.editor {
 
         private async readScene() {
 
+            const maker = this._gameScene.getMaker();
+
             this._sceneRead = true;
 
             try {
@@ -246,13 +246,11 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const data = JSON.parse(content);
 
-                if (json.SceneParser.isValidSceneDataFormat(data)) {
+                if (SceneMaker.isValidSceneDataFormat(data)) {
 
-                    const parser = new json.SceneParser(this.getGameScene());
+                    await maker.updateSceneLoader(data);
 
-                    await parser.createSceneCache(data);
-
-                    await parser.createScene(data);
+                    maker.createScene(data);
 
                 } else {
                     alert("Invalid file format.");
@@ -298,7 +296,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getSceneMaker() {
-            return this._sceneMaker;
+            return this._gameScene.getMaker();
         }
 
         layout() {

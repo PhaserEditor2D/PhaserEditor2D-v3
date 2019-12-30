@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui {
         private _sceneType: json.SceneType;
         private _inEditor: boolean;
         private _initialState: any;
+        private _maker: SceneMaker;
 
         constructor(inEditor = true) {
             super("ObjectScene");
@@ -13,6 +14,12 @@ namespace phasereditor2d.scene.ui {
             this._inEditor = inEditor;
 
             this._sceneType = "Scene";
+
+            this._maker = new SceneMaker(this);
+        }
+
+        getMaker() {
+            return this._maker;
         }
 
         getDisplayListChildren(): sceneobjects.SceneObject[] {

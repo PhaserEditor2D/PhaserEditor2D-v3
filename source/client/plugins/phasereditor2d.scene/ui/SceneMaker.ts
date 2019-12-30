@@ -13,11 +13,80 @@ namespace phasereditor2d.scene.ui {
             this._scene = scene;
         }
 
-        createObject(objData: any) {
+        static isValidSceneDataFormat(data: json.SceneData) {
+            return "displayList" in data && Array.isArray(data.displayList);
+        }
 
-            const reader = new json.SceneParser(this._scene);
+        createScene(data: json.SceneData) {
 
-            return reader.createObject(objData);
+            this._scene.setSceneType(data.sceneType);
+
+            for (const objData of data.displayList) {
+
+                this.createObject(objData);
+            }
+        }
+
+        async updateSceneLoader(sceneData: json.SceneData) {
+
+            pack.core.parsers.ImageFrameParser.initSourceImageMap(this._scene.game);
+
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
+
+            for (const objData of sceneData.displayList) {
+
+                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
+
+                if (ext) {
+
+                    const assets = await ext.getAssetsFromObjectData({
+                        data: objData,
+                        finder: finder,
+                        scene: this._scene
+                    });
+
+                    for (const asset of assets) {
+
+                        const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+
+                        if (updater) {
+
+                            await updater.updateLoader(this._scene, asset);
+                        }
+                    }
+                }
+            }
+        }
+
+        createObject(data: json.ObjectData) {
+
+            const type = data.type;
+
+            const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+
+            if (ext) {
+
+                const sprite = ext.createSceneObjectWithData({
+                    data: data,
+                    scene: this._scene
+                });
+
+                if (sprite) {
+
+                    sprite.getEditorSupport().readJSON(data);
+
+                }
+
+                return sprite;
+
+            } else {
+
+                console.error(`SceneParser: no extension is registered for type "${type}".`);
+            }
+
+            return null;
         }
 
         createContainerWithObjects(objectList: sceneobjects.SceneObject[]): sceneobjects.Container {
@@ -35,7 +104,7 @@ namespace phasereditor2d.scene.ui {
             // return container;
         }
 
-        async createWithDropEvent_async(e: DragEvent, dropAssetArray: any[]) {
+        async createWithDropEvent(e: DragEvent, dropAssetArray: any[]) {
 
             const exts = ScenePlugin.getInstance().getObjectExtensions();
 
@@ -48,8 +117,6 @@ namespace phasereditor2d.scene.ui {
             const worldPoint = this._scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
             const x = worldPoint.x;
             const y = worldPoint.y;
-
-            const parser = new json.SceneParser(this._scene);
 
             for (const data of dropAssetArray) {
 
