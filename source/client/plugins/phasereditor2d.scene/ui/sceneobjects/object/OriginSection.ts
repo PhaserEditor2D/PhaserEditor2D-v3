@@ -1,5 +1,3 @@
-/// <reference path="../editor/properties/SceneSection.ts" />
-
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;

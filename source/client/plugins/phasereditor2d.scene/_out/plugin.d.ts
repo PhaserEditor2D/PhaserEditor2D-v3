@@ -423,15 +423,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import controls = colibri.ui.controls;
-    class OriginSection extends editor.properties.SceneSection<sceneobjects.Image> {
-        constructor(page: controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
-        canEdit(obj: any, n: number): boolean;
-        canEditNumber(n: number): boolean;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface SceneObject extends Phaser.GameObjects.GameObject {
         getEditorSupport(): EditorSupport<SceneObject>;
     }
@@ -494,38 +485,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
          * @returns The assets.
          */
         abstract getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    interface TextureData extends json.ObjectData {
-        textureKey: string;
-        frameKey: string;
-    }
-    class TextureComponent implements json.ObjectSerializer {
-        private _textureKey;
-        private _textureFrameKey;
-        private _obj;
-        constructor(obj: Image);
-        writeJSON(data: TextureData): void;
-        readJSON(data: TextureData): void;
-        getKey(): string;
-        setKey(key: string): void;
-        setTexture(key: string, frame: string | number): void;
-        getTexture(): {
-            key: string;
-            frame: string | number;
-        };
-        getFrame(): string | number;
-        setFrame(frame: string | number): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import controls = colibri.ui.controls;
-    class TextureSection extends editor.properties.SceneSection<sceneobjects.Image> {
-        constructor(page: controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
-        canEdit(obj: any): boolean;
-        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -595,10 +554,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class TextureCellRenderer implements controls.viewers.ICellRenderer {
-        renderCell(args: controls.viewers.RenderCellArgs): void;
-        cellHeight(args: colibri.ui.controls.viewers.RenderCellArgs): number;
-        preload(args: controls.viewers.PreloadCellArgs): Promise<colibri.ui.controls.PreloadResult>;
+    class OriginSection extends editor.properties.SceneSection<sceneobjects.Image> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -630,6 +590,46 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class TextureCellRenderer implements controls.viewers.ICellRenderer {
+        renderCell(args: controls.viewers.RenderCellArgs): void;
+        cellHeight(args: colibri.ui.controls.viewers.RenderCellArgs): number;
+        preload(args: controls.viewers.PreloadCellArgs): Promise<colibri.ui.controls.PreloadResult>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface TextureData extends json.ObjectData {
+        textureKey: string;
+        frameKey: string;
+    }
+    class TextureComponent implements json.ObjectSerializer {
+        private _textureKey;
+        private _textureFrameKey;
+        private _obj;
+        constructor(obj: Image);
+        writeJSON(data: TextureData): void;
+        readJSON(data: TextureData): void;
+        getKey(): string;
+        setKey(key: string): void;
+        setTexture(key: string, frame: string | number): void;
+        getTexture(): {
+            key: string;
+            frame: string | number;
+        };
+        getFrame(): string | number;
+        setFrame(frame: string | number): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class TextureSection extends editor.properties.SceneSection<sceneobjects.Image> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any): boolean;
         canEditNumber(n: number): boolean;
     }
 }
