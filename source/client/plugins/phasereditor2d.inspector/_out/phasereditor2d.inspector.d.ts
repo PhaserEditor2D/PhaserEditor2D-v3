@@ -21,4 +21,4 @@ declare namespace phasereditor2d.inspector.ui.views {
         getUndoManager(): ide.undo.UndoManager;
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.inspector.d.ts.map

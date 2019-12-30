@@ -5,7 +5,7 @@
         "styles/MonacoEditor.css"
     ],
     "scripts": [
-        "_out/plugin.js",
+        "_out/phasereditor2d.code.js",
         "scripts/defineRequire.js",
         "scripts/monaco-editor/min/vs/loader.js",
         "scripts/monaco-editor/min/vs/editor/editor.main.nls.js",

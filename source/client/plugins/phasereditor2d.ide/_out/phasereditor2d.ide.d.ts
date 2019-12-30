@@ -154,4 +154,4 @@ declare namespace phasereditor2d.ide.ui.viewers {
         preload(element: any): Promise<controls.PreloadResult>;
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.ide.d.ts.map

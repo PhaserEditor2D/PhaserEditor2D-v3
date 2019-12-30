@@ -7,6 +7,6 @@
         "styles/workbench.css"
     ],
     "scripts": [
-        "_out/plugin.js"
+        "_out/colibri.js"
     ]
 }

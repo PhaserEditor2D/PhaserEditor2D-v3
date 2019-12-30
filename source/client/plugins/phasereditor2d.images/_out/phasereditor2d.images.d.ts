@@ -28,4 +28,4 @@ declare namespace phasereditor2d.images.ui.viewers {
         getImage(file: core.io.FilePath): controls.IImage;
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.images.d.ts.map

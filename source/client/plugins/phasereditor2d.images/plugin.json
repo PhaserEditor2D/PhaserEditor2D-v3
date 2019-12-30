@@ -6,6 +6,6 @@
         "styles/ImageEditor.css"
     ],
     "scripts": [
-        "_out/plugin.js"
+        "_out/phasereditor2d.images.js"
     ]
 }

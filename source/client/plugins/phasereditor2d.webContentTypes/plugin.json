@@ -1,6 +1,6 @@
 {
     "id": "phasereditor2d.webContentTypes",
     "scripts": [
-        "_out/plugin.js"
+        "_out/phasereditor2d.webContentTypes.js"
     ]
 }

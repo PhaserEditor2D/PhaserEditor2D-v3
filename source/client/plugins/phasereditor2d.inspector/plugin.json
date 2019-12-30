@@ -4,6 +4,6 @@
         "styles/InspectorView.css"
     ],
     "scripts": [
-        "_out/plugin.js"
+        "_out/phasereditor2d.inspector.js"
     ]
 }

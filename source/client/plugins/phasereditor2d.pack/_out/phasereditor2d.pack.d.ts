@@ -1007,4 +1007,4 @@ declare namespace phasereditor2d.pack.ui.viewers {
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.pack.d.ts.map

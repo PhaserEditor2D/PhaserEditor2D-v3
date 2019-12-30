@@ -39,4 +39,4 @@ declare namespace phasereditor2d.webContentTypes.core {
         constructor();
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.webContentTypes.d.ts.map

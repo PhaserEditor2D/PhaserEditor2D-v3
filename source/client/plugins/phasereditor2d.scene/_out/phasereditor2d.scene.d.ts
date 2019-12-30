@@ -654,4 +654,4 @@ declare namespace phasereditor2d.scene.ui.viewers {
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.scene.d.ts.map

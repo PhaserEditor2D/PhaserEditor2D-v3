@@ -1761,4 +1761,4 @@ declare namespace colibri.ui.ide.utils {
     }
     export {};
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=colibri.d.ts.map

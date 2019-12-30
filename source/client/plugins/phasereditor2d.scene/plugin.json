@@ -4,6 +4,6 @@
         "styles/SceneEditor.css"
     ],
     "scripts": [
-        "_out/plugin.js"
+        "_out/phasereditor2d.scene.js"
     ]
 }

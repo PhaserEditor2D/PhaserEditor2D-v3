@@ -1,7 +1,7 @@
 {
     "id": "phasereditor2d.phaser",
     "scripts": [
-        "_out/plugin.js",
+        "_out/phasereditor2d.phaser.js",
         "scripts/phaser.js"
     ]
 }

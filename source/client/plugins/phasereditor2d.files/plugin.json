@@ -4,7 +4,7 @@
         "styles/controls.css"
     ],
     "scripts": [
-        "_out/plugin.js",
+        "_out/phasereditor2d.files.js",
         "scripts/filesize/filesize.js"
     ]
 }

@@ -62,4 +62,4 @@ declare namespace phasereditor2d.code.ui.editors {
         updateExtraLibs(): Promise<void>;
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.code.d.ts.map

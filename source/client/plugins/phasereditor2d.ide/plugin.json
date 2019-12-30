@@ -7,6 +7,6 @@
         "styles/lightGray.css"
     ],
     "scripts": [
-        "_out/plugin.js"
+        "_out/phasereditor2d.ide.js"
     ]
 }

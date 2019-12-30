@@ -15,4 +15,4 @@ declare namespace phasereditor2d.outline.ui.views {
         getViewerProvider(editor: ide.EditorPart): ide.EditorViewerProvider;
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.outline.d.ts.map

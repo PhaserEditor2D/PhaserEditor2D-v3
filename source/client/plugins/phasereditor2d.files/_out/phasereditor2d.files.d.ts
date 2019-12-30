@@ -293,4 +293,4 @@ declare namespace phasereditor2d.files.ui.views {
         canEditNumber(n: number): boolean;
     }
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.files.d.ts.map

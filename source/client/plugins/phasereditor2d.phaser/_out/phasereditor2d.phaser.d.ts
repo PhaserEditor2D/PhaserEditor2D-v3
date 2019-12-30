@@ -74953,4 +74953,4 @@ declare type integer = number;
 declare module 'phaser' {
     export = Phaser;
 }
-//# sourceMappingURL=plugin.d.ts.map
+//# sourceMappingURL=phasereditor2d.phaser.d.ts.map
