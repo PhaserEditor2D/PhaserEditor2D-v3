@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui {
 
         create() {
             const parser = new json.SceneParser(this);
-            parser.createSceneCache_async(this._data)
+            parser.createSceneCache(this._data)
                 .then(() => {
 
                     parser.createScene(this._data);

@@ -74,6 +74,12 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.ImageExtension(),
                 new ui.sceneobjects.ContainerExtension()
             );
+
+            // loader updates
+
+            reg.addExtension(
+                new ui.sceneobjects.ImageLoaderUpdater()
+            );
         }
 
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[] {
@@ -85,6 +91,21 @@ namespace phasereditor2d.scene {
             return this.getObjectExtensions().find(ext => ext.getTypeName() === type);
         }
 
+        getLoaderUpdaterForAsset(asset: any) {
+
+            const exts = colibri.Platform
+                .getExtensions<ui.sceneobjects.LoaderUpdaterExtension>(ui.sceneobjects.LoaderUpdaterExtension.POINT_ID);
+
+            for (const ext of exts) {
+
+                if (ext.acceptAsset(asset)) {
+
+                    return ext;
+                }
+            }
+
+            return null;
+        }
     }
 
     colibri.Platform.addPlugin(ScenePlugin.getInstance());

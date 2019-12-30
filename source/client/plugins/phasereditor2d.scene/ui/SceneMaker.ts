@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui {
             // return container;
         }
 
-        async createWithDropEvent_async(e: DragEvent, dropDataArray: any[]) {
+        async createWithDropEvent_async(e: DragEvent, dropAssetArray: any[]) {
 
             const exts = ScenePlugin.getInstance().getObjectExtensions();
 
@@ -51,14 +51,19 @@ namespace phasereditor2d.scene.ui {
 
             const parser = new json.SceneParser(this._scene);
 
-            // TODO: we should do this with the extension
-            for (const data of dropDataArray) {
-                await parser.addToCache_async(data);
+            for (const data of dropAssetArray) {
+
+                const ext = ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
+
+                if (ext) {
+
+                    await ext.updateLoader(this._scene, data);
+                }
             }
 
             const sprites: sceneobjects.SceneObject[] = [];
 
-            for (const data of dropDataArray) {
+            for (const data of dropAssetArray) {
 
                 for (const ext of exts) {
 

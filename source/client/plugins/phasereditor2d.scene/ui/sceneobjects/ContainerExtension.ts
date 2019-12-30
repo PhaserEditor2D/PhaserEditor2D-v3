@@ -16,7 +16,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        updateLoaderWithObjectData(args: UpdateLoaderWithObjectData): void {
+        async getAssetsFromObjectData(args: GetAssetsFromObjectArgs) {
+
+            const list = [];
 
             const containerData = args.data as ContainerData;
 
@@ -25,13 +27,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
 
                 if (ext) {
-                    ext.updateLoaderWithObjectData({
+
+                    const list2 = await ext.getAssetsFromObjectData({
                         data: objData,
                         scene: args.scene,
                         finder: args.finder
                     });
+
+                    list.push(...list2);
                 }
             }
+
+            return list;
         }
 
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject {

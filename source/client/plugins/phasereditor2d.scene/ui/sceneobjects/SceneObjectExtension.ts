@@ -13,10 +13,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         data: json.ObjectData;
     }
 
-    export interface UpdateLoaderWithObjectData {
+    export interface GetAssetsFromObjectArgs {
         data: json.ObjectData;
         scene: GameScene;
         finder: pack.core.PackFinder;
+    }
+
+    export interface UpdateLoaderWithAsset {
+        asset: any;
+        scene: GameScene;
     }
 
     export abstract class SceneObjectExtension extends colibri.Extension {
@@ -67,11 +72,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         abstract createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
 
         /**
-         * Update the scene loader with the JSON data of a scene object.
-         * For example, an Image data contains the texture and frame names, so it uses them to load the texture.
+         * Get the assets contained in a scene object data.
+         * The result of this method may be used to prepare the scene loader before de-serialize an object.
          *
-         * @param args The data involved in the update.
+         * @param args This method args.
+         * @returns The assets.
          */
-        async abstract updateLoaderWithObjectData(args: UpdateLoaderWithObjectData);
+        async abstract getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
     }
 }

@@ -17,11 +17,12 @@ namespace phasereditor2d.scene.ui.json {
             this._scene.setSceneType(data.sceneType);
 
             for (const objData of data.displayList) {
+
                 this.createObject(objData);
             }
         }
 
-        async createSceneCache_async(sceneData: SceneData) {
+        async createSceneCache(sceneData: SceneData) {
 
             pack.core.parsers.ImageFrameParser.initSourceImageMap(this._scene.game);
 
@@ -35,37 +36,22 @@ namespace phasereditor2d.scene.ui.json {
 
                 if (ext) {
 
-                    await ext.updateLoaderWithObjectData({
+                    const assets = await ext.getAssetsFromObjectData({
                         data: objData,
                         finder: finder,
                         scene: this._scene
                     });
+
+                    for (const asset of assets) {
+
+                        const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+
+                        if (updater) {
+
+                            await updater.updateLoader(this._scene, asset);
+                        }
+                    }
                 }
-            }
-        }
-
-        async addToCache_async(data: pack.core.AssetPackItem | pack.core.AssetPackImageFrame) {
-
-            let imageFrameContainerPackItem: pack.core.ImageFrameContainerAssetPackItem = null;
-
-            if (data instanceof pack.core.AssetPackItem) {
-
-                if (data instanceof pack.core.ImageFrameContainerAssetPackItem) {
-                    imageFrameContainerPackItem = data;
-                }
-
-            } else if (data instanceof pack.core.AssetPackImageFrame) {
-
-                imageFrameContainerPackItem = (data.getPackItem() as pack.core.ImageFrameContainerAssetPackItem);
-            }
-
-            if (imageFrameContainerPackItem !== null) {
-
-                await imageFrameContainerPackItem.preload();
-
-                await imageFrameContainerPackItem.preloadImages();
-
-                imageFrameContainerPackItem.addToPhaserCache(this._scene.game);
             }
         }
 

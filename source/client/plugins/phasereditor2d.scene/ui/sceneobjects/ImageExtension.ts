@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        async updateLoaderWithObjectData(args: UpdateLoaderWithObjectData) {
+        async getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]> {
 
             const key = (args.data as sceneobjects.TextureData).textureKey;
 
@@ -21,32 +21,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (item) {
 
-                await ImageExtension.addImageFramesToCache(args.scene, item);
-            }
-        }
-
-        static async addImageFramesToCache(
-            scene: GameScene, data: pack.core.AssetPackItem | pack.core.AssetPackImageFrame) {
-
-            let imageFrameContainerPackItem: pack.core.ImageFrameContainerAssetPackItem = null;
-
-            if (data instanceof pack.core.ImageFrameContainerAssetPackItem) {
-
-                imageFrameContainerPackItem = data;
-
-            } else if (data instanceof pack.core.AssetPackImageFrame) {
-
-                imageFrameContainerPackItem = (data.getPackItem() as pack.core.ImageFrameContainerAssetPackItem);
+                return [item];
             }
 
-            if (imageFrameContainerPackItem !== null) {
-
-                await imageFrameContainerPackItem.preload();
-
-                await imageFrameContainerPackItem.preloadImages();
-
-                imageFrameContainerPackItem.addToPhaserCache(scene.game);
-            }
+            return [];
         }
 
         static isImageOrImageFrameAsset(data: any) {
