@@ -37,7 +37,7 @@ var phasereditor2d;
                 // new file wizards
                 reg.addExtension(new scene.ui.dialogs.NewSceneFileDialogExtension());
                 // scene object extensions
-                reg.addExtension(new scene.ui.sceneobjects.ImageExtension(), new scene.ui.sceneobjects.ContainerExtension());
+                reg.addExtension(scene.ui.sceneobjects.ImageExtension.getInstance(), scene.ui.sceneobjects.ContainerExtension.getInstance());
                 // loader updates
                 reg.addExtension(new scene.ui.sceneobjects.ImageLoaderUpdater());
             }
@@ -2100,9 +2100,9 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class Container extends Phaser.GameObjects.Container {
-                    constructor(extension, scene, x, y, children) {
+                    constructor(scene, x, y, children) {
                         super(scene, x, y, children);
-                        this._editorSupport = new sceneobjects.ContainerEditorSupport(extension, this);
+                        this._editorSupport = new sceneobjects.ContainerEditorSupport(this);
                     }
                     getEditorSupport() {
                         return this._editorSupport;
@@ -2198,8 +2198,8 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class ContainerEditorSupport extends sceneobjects.EditorSupport {
-                    constructor(extension, obj) {
-                        super(extension, obj);
+                    constructor(obj) {
+                        super(sceneobjects.ContainerExtension.getInstance(), obj);
                         this.addSerializer(new sceneobjects.TransformSupport(obj));
                     }
                     writeJSON(data) {
@@ -2291,6 +2291,9 @@ var phasereditor2d;
                             phaserTypeName: "Phaser.GameObjects.Container"
                         });
                     }
+                    static getInstance() {
+                        return this._instance || (this._instance = new ContainerExtension());
+                    }
                     async getAssetsFromObjectData(args) {
                         const list = [];
                         const containerData = args.data;
@@ -2313,7 +2316,7 @@ var phasereditor2d;
                         return container;
                     }
                     createContainerObject(scene, x, y, list) {
-                        const container = new sceneobjects.Container(this, scene, x, y, list);
+                        const container = new sceneobjects.Container(scene, x, y, list);
                         container.getEditorSupport().setScene(scene);
                         scene.sys.displayList.add(container);
                         return container;
@@ -2339,9 +2342,9 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class Image extends Phaser.GameObjects.Image {
-                    constructor(extension, scene, x, y, texture, frame) {
+                    constructor(scene, x, y, texture, frame) {
                         super(scene, x, y, texture, frame);
-                        this._editorSupport = new sceneobjects.ImageEditorSupport(extension, this);
+                        this._editorSupport = new sceneobjects.ImageEditorSupport(this);
                     }
                     getEditorSupport() {
                         return this._editorSupport;
@@ -2361,8 +2364,8 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class ImageEditorSupport extends sceneobjects.EditorSupport {
-                    constructor(extension, obj) {
-                        super(extension, obj);
+                    constructor(obj) {
+                        super(sceneobjects.ImageExtension.getInstance(), obj);
                         this._textureSupport = new sceneobjects.TextureSupport(obj);
                         this._transformSupport = new sceneobjects.TransformSupport(obj);
                         this.addSerializer(this._transformSupport, this._textureSupport);
@@ -2427,6 +2430,10 @@ var phasereditor2d;
                             phaserTypeName: "Phaser.GameObjects.Image"
                         });
                     }
+                    static getInstance() {
+                        var _a;
+                        return _a = this._instance, (_a !== null && _a !== void 0 ? _a : (this._instance = new ImageExtension()));
+                    }
                     async getAssetsFromObjectData(args) {
                         const key = args.data.textureKey;
                         const finder = args.finder;
@@ -2467,7 +2474,7 @@ var phasereditor2d;
                         return sprite;
                     }
                     createImageObject(scene, x, y, key, frame) {
-                        const sprite = new sceneobjects.Image(this, scene, x, y, key, frame);
+                        const sprite = new sceneobjects.Image(scene, x, y, key, frame);
                         sprite.getEditorSupport().setScene(scene);
                         scene.sys.displayList.add(sprite);
                         return sprite;

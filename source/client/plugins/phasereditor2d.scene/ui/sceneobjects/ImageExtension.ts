@@ -4,7 +4,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageExtension extends SceneObjectExtension {
 
-        constructor() {
+        private static _instance;
+
+        static getInstance() {
+            return this._instance ?? (this._instance = new ImageExtension());
+        }
+
+        private constructor() {
             super({
                 typeName: "Image",
                 phaserTypeName: "Phaser.GameObjects.Image"
@@ -75,7 +81,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private createImageObject(scene: GameScene, x: number, y: number, key: string, frame?: string | number) {
 
-            const sprite = new sceneobjects.Image(this, scene, x, y, key, frame);
+            const sprite = new sceneobjects.Image(scene, x, y, key, frame);
 
             sprite.getEditorSupport().setScene(scene);
 

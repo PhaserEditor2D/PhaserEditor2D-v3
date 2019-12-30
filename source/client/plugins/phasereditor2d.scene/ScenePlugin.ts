@@ -71,8 +71,8 @@ namespace phasereditor2d.scene {
             // scene object extensions
 
             reg.addExtension(
-                new ui.sceneobjects.ImageExtension(),
-                new ui.sceneobjects.ContainerExtension()
+                ui.sceneobjects.ImageExtension.getInstance(),
+                ui.sceneobjects.ContainerExtension.getInstance()
             );
 
             // loader updates

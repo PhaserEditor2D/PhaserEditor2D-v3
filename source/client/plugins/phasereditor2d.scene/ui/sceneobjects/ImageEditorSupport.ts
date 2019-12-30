@@ -5,8 +5,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _textureSupport: TextureSupport;
         private _transformSupport: TransformSupport;
 
-        constructor(extension: ImageExtension, obj: Image) {
-            super(extension, obj);
+        constructor(obj: Image) {
+            super(ImageExtension.getInstance(), obj);
 
             this._textureSupport = new TextureSupport(obj);
             this._transformSupport = new TransformSupport(obj);

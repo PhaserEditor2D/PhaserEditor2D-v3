@@ -9,7 +9,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ContainerExtension extends SceneObjectExtension {
 
-        constructor() {
+        private static _instance: ContainerExtension;
+
+        static getInstance() {
+            return this._instance || (this._instance = new ContainerExtension());
+        }
+
+        private constructor() {
             super({
                 typeName: "Container",
                 phaserTypeName: "Phaser.GameObjects.Container"
@@ -52,7 +58,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private createContainerObject(scene: GameScene, x: number, y: number, list: sceneobjects.SceneObject[]) {
 
-            const container = new sceneobjects.Container(this, scene, x, y, list);
+            const container = new sceneobjects.Container(scene, x, y, list);
 
             container.getEditorSupport().setScene(scene);
 

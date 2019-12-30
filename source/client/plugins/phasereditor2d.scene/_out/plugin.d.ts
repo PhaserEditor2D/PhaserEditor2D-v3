@@ -417,7 +417,7 @@ declare namespace phasereditor2d.scene.ui.json {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class Container extends Phaser.GameObjects.Container implements SceneObject {
         private _editorSupport;
-        constructor(extension: ContainerExtension, scene: GameScene, x: number, y: number, children: SceneObject[]);
+        constructor(scene: GameScene, x: number, y: number, children: SceneObject[]);
         getEditorSupport(): ContainerEditorSupport;
         get list(): SceneObject[];
         set list(list: SceneObject[]);
@@ -451,7 +451,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         list: json.ObjectData[];
     }
     class ContainerEditorSupport extends EditorSupport<Container> {
-        constructor(extension: ContainerExtension, obj: Container);
+        constructor(obj: Container);
         writeJSON(data: ContainerData): void;
         readJSON(data: ContainerData): void;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
@@ -522,7 +522,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         list: json.ObjectData[];
     }
     class ContainerExtension extends SceneObjectExtension {
-        constructor();
+        private static _instance;
+        static getInstance(): ContainerExtension;
+        private constructor();
         getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createContainerObject;
@@ -533,7 +535,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class Image extends Phaser.GameObjects.Image implements SceneObject {
         private _editorSupport;
-        constructor(extension: ImageExtension, scene: GameScene, x: number, y: number, texture: string, frame?: string | number);
+        constructor(scene: GameScene, x: number, y: number, texture: string, frame?: string | number);
         getEditorSupport(): ImageEditorSupport;
     }
 }
@@ -541,7 +543,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageEditorSupport extends EditorSupport<Image> {
         private _textureSupport;
         private _transformSupport;
-        constructor(extension: ImageExtension, obj: Image);
+        constructor(obj: Image);
         getTextureSupport(): TextureSupport;
         getTransformSupport(): TransformSupport;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
@@ -549,7 +551,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageExtension extends SceneObjectExtension {
-        constructor();
+        private static _instance;
+        static getInstance(): any;
+        private constructor();
         getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         static isImageOrImageFrameAsset(data: any): boolean;
         acceptsDropData(data: any): boolean;

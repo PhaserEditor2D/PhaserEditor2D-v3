@@ -4,10 +4,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _editorSupport: ContainerEditorSupport;
 
-        constructor(extension: ContainerExtension, scene: GameScene, x: number, y: number, children: SceneObject[]) {
+        constructor(scene: GameScene, x: number, y: number, children: SceneObject[]) {
             super(scene, x, y, children);
 
-            this._editorSupport = new ContainerEditorSupport(extension, this);
+            this._editorSupport = new ContainerEditorSupport(this);
         }
 
         getEditorSupport() {

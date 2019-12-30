@@ -5,12 +5,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _editorSupport: ImageEditorSupport;
 
         constructor(
-            extension: ImageExtension,
             scene: GameScene, x: number, y: number, texture: string, frame?: string | number) {
 
             super(scene, x, y, texture, frame);
 
-            this._editorSupport = new ImageEditorSupport(extension, this);
+            this._editorSupport = new ImageEditorSupport(this);
         }
 
         getEditorSupport(): ImageEditorSupport {

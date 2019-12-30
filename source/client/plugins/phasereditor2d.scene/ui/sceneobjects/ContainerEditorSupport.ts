@@ -8,8 +8,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ContainerEditorSupport extends EditorSupport<Container> {
 
-        constructor(extension: ContainerExtension, obj: Container) {
-            super(extension, obj);
+        constructor(obj: Container) {
+            super(ContainerExtension.getInstance(), obj);
 
             this.addSerializer(new TransformSupport(obj));
         }
