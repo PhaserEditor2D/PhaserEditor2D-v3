@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TransformSection extends editor.properties.SceneSection<sceneobjects.Image> {
+    export class TransformSection extends editor.properties.SceneSection<sceneobjects.ITransformLike> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
             super(page, "SceneEditor.TransformSection", "Transform", false);
@@ -73,18 +73,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.createLabel(comp, "").style.gridColumnStart = "span 2";
             }
-
         }
 
         canEdit(obj: any, n: number): boolean {
-            return obj instanceof sceneobjects.Image;
+            return EditorSupport.getObjectComponent(obj, TransformComponent) !== null;
         }
 
         canEditNumber(n: number): boolean {
             return n > 0;
         }
-
-
     }
-
 }

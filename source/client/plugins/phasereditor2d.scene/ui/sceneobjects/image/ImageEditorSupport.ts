@@ -7,7 +7,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(
                 new TextureComponent(obj),
-                new TransformComponent(obj)
+                new TransformComponent(obj),
+                new OriginComponent(obj)
             );
         }
 

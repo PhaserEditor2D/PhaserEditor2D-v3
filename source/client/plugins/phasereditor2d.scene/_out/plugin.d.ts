@@ -394,6 +394,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
         getComponent(ctr: Function): any;
         hasComponent(ctr: Function): boolean;
+        static getObjectComponent(obj: any, ctr: Function): any;
         protected addComponent(...components: any[]): void;
         protected setNewId(sprite: sceneobjects.SceneObject): void;
         getExtension(): SceneObjectExtension;
@@ -553,8 +554,20 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IOriginLike {
+        originX: number;
+        originY: number;
+    }
+    class OriginComponent implements json.ObjectSerializer {
+        private _obj;
+        constructor(obj: IOriginLike);
+        readJSON(data: json.ObjectData): void;
+        writeJSON(data: json.ObjectData): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class OriginSection extends editor.properties.SceneSection<sceneobjects.Image> {
+    class OriginSection extends editor.properties.SceneSection<IOriginLike> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -577,7 +590,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class TransformSection extends editor.properties.SceneSection<sceneobjects.Image> {
+    class TransformSection extends editor.properties.SceneSection<sceneobjects.ITransformLike> {
         constructor(page: colibri.ui.controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -629,7 +642,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TextureSection extends editor.properties.SceneSection<sceneobjects.Image> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
-        canEdit(obj: any): boolean;
+        canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
     }
 }

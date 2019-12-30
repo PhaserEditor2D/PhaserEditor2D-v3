@@ -39,6 +39,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._components.has(ctr);
         }
 
+        // tslint:disable-next-line:ban-types
+        static getObjectComponent(obj: any, ctr: Function) {
+
+            if (obj && typeof obj["getEditorSupport"] === "function") {
+
+                const support = obj["getEditorSupport"]() as EditorSupport<any>;
+
+                return support.getComponent(ctr) ?? null;
+            }
+
+            return null;
+        }
+
         protected addComponent(...components: any[]) {
 
             for (const c of components) {

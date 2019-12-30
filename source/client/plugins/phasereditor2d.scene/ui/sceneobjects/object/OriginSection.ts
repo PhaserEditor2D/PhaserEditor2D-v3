@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import ide = colibri.ui.ide;
     import core = colibri.core;
 
-    export class OriginSection extends editor.properties.SceneSection<sceneobjects.Image> {
+    export class OriginSection extends editor.properties.SceneSection<IOriginLike> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "SceneEditor.OriginSection", "Origin", false);
@@ -41,14 +41,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEdit(obj: any, n: number): boolean {
-            return obj instanceof sceneobjects.Image;
+            return EditorSupport.getObjectComponent(obj, OriginComponent) !== null;
         }
 
         canEditNumber(n: number): boolean {
             return n > 0;
         }
-
-
     }
 
 }

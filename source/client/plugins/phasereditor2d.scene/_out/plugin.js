@@ -1885,6 +1885,15 @@ var phasereditor2d;
                     hasComponent(ctr) {
                         return this._components.has(ctr);
                     }
+                    // tslint:disable-next-line:ban-types
+                    static getObjectComponent(obj, ctr) {
+                        var _a;
+                        if (obj && typeof obj["getEditorSupport"] === "function") {
+                            const support = obj["getEditorSupport"]();
+                            return _a = support.getComponent(ctr), (_a !== null && _a !== void 0 ? _a : null);
+                        }
+                        return null;
+                    }
                     addComponent(...components) {
                         for (const c of components) {
                             this._components.set(c.constructor, c);
@@ -2206,7 +2215,7 @@ var phasereditor2d;
                 class ImageEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj) {
                         super(sceneobjects.ImageExtension.getInstance(), obj);
-                        this.addComponent(new sceneobjects.TextureComponent(obj), new sceneobjects.TransformComponent(obj));
+                        this.addComponent(new sceneobjects.TextureComponent(obj), new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj));
                     }
                     getCellRenderer() {
                         return new sceneobjects.TextureCellRenderer();
@@ -2331,6 +2340,34 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var write = colibri.core.json.write;
+                var read = colibri.core.json.read;
+                class OriginComponent {
+                    constructor(obj) {
+                        this._obj = obj;
+                    }
+                    readJSON(data) {
+                        this._obj.originX = read(data, "originX", 0.5);
+                        this._obj.originY = read(data, "originY", 0.5);
+                    }
+                    writeJSON(data) {
+                        write(data, "originX", this._obj.originX, 0.5);
+                        write(data, "originY", this._obj.originY, 0.5);
+                    }
+                }
+                sceneobjects.OriginComponent = OriginComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 class OriginSection extends ui.editor.properties.SceneSection {
                     constructor(page) {
                         super(page, "SceneEditor.OriginSection", "Origin", false);
@@ -2359,7 +2396,7 @@ var phasereditor2d;
                         }
                     }
                     canEdit(obj, n) {
-                        return obj instanceof sceneobjects.Image;
+                        return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.OriginComponent) !== null;
                     }
                     canEditNumber(n) {
                         return n > 0;
@@ -2469,7 +2506,7 @@ var phasereditor2d;
                         }
                     }
                     canEdit(obj, n) {
-                        return obj instanceof sceneobjects.Image;
+                        return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TransformComponent) !== null;
                     }
                     canEditNumber(n) {
                         return n > 0;
@@ -2637,8 +2674,8 @@ var phasereditor2d;
                             });
                         });
                     }
-                    canEdit(obj) {
-                        return obj instanceof sceneobjects.Image;
+                    canEdit(obj, n) {
+                        return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TextureComponent) !== null;
                     }
                     canEditNumber(n) {
                         return n === 1;

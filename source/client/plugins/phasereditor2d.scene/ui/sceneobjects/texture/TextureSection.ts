@@ -41,8 +41,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        canEdit(obj: any): boolean {
-            return obj instanceof sceneobjects.Image;
+        canEdit(obj: any, n: number): boolean {
+            return EditorSupport.getObjectComponent(obj, TextureComponent) !== null;
         }
 
         canEditNumber(n: number): boolean {
