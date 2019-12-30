@@ -103,53 +103,5 @@ namespace phasereditor2d.scene.ui {
 
             // return container;
         }
-
-        async createWithDropEvent(e: DragEvent, dropAssetArray: any[]) {
-
-            const exts = ScenePlugin.getInstance().getObjectExtensions();
-
-            const nameMaker = new ide.utils.NameMaker(obj => {
-                return (obj as sceneobjects.SceneObject).getEditorSupport().getLabel();
-            });
-
-            this._scene.visit(obj => nameMaker.update([obj]));
-
-            const worldPoint = this._scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
-            const x = worldPoint.x;
-            const y = worldPoint.y;
-
-            for (const data of dropAssetArray) {
-
-                const ext = ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
-
-                if (ext) {
-
-                    await ext.updateLoader(this._scene, data);
-                }
-            }
-
-            const sprites: sceneobjects.SceneObject[] = [];
-
-            for (const data of dropAssetArray) {
-
-                for (const ext of exts) {
-
-                    if (ext.acceptsDropData(data)) {
-
-                        const sprite = ext.createSceneObjectWithAsset({
-                            x: x,
-                            y: y,
-                            asset: data,
-                            nameMaker: nameMaker,
-                            scene: this._scene
-                        });
-
-                        sprites.push(sprite);
-                    }
-                }
-            }
-
-            return sprites;
-        }
     }
 }

@@ -24,9 +24,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 e.preventDefault();
 
-                const maker = this._editor.getSceneMaker();
-
-                const sprites = await maker.createWithDropEvent(e, dataArray);
+                const sprites = await this.createWithDropEvent(e, dataArray);
 
                 this._editor.getUndoManager().add(new undo.AddObjectsOperation(this._editor, sprites));
 
@@ -40,6 +38,56 @@ namespace phasereditor2d.scene.ui.editor {
 
                 ide.Workbench.getWorkbench().setActivePart(this._editor);
             }
+        }
+
+        private async createWithDropEvent(e: DragEvent, dropAssetArray: any[]) {
+
+            const scene = this._editor.getGameScene();
+
+            const exts = ScenePlugin.getInstance().getObjectExtensions();
+
+            const nameMaker = new ide.utils.NameMaker(obj => {
+                return (obj as sceneobjects.SceneObject).getEditorSupport().getLabel();
+            });
+
+            scene.visit(obj => nameMaker.update([obj]));
+
+            const worldPoint = scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
+            const x = worldPoint.x;
+            const y = worldPoint.y;
+
+            for (const data of dropAssetArray) {
+
+                const ext = ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
+
+                if (ext) {
+
+                    await ext.updateLoader(scene, data);
+                }
+            }
+
+            const sprites: sceneobjects.SceneObject[] = [];
+
+            for (const data of dropAssetArray) {
+
+                for (const ext of exts) {
+
+                    if (ext.acceptsDropData(data)) {
+
+                        const sprite = ext.createSceneObjectWithAsset({
+                            x: x,
+                            y: y,
+                            asset: data,
+                            nameMaker: nameMaker,
+                            scene: scene
+                        });
+
+                        sprites.push(sprite);
+                    }
+                }
+            }
+
+            return sprites;
         }
 
         private onDragOver(e: DragEvent) {

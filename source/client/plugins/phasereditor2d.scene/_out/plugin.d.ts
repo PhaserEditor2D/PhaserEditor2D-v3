@@ -58,7 +58,6 @@ declare namespace phasereditor2d.scene.ui {
         updateSceneLoader(sceneData: json.SceneData): Promise<void>;
         createObject(data: json.ObjectData): sceneobjects.SceneObject;
         createContainerWithObjects(objectList: sceneobjects.SceneObject[]): sceneobjects.Container;
-        createWithDropEvent(e: DragEvent, dropAssetArray: any[]): Promise<sceneobjects.SceneObject[]>;
     }
 }
 declare namespace phasereditor2d.scene.ui {
@@ -173,6 +172,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _editor;
         constructor(editor: SceneEditor);
         onDragDrop_async(e: DragEvent): Promise<void>;
+        private createWithDropEvent;
         private onDragOver;
         private acceptsDropData;
         private acceptsDropDataArray;
