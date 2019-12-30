@@ -2,7 +2,7 @@ namespace colibri.ui.ide.commands {
 
     export class CommandManager {
 
-        private _commandIdMap: Map<String, Command>;
+        private _commandIdMap: Map<string, Command>;
         private _commands: Command[];
         private _commandMatcherMap: Map<Command, KeyMatcher[]>;
         private _commandHandlerMap: Map<Command, CommandHandler[]>;
@@ -14,7 +14,7 @@ namespace colibri.ui.ide.commands {
             this._commandMatcherMap = new Map();
             this._commandHandlerMap = new Map();
 
-            window.addEventListener("keydown", e => { this.onKeyDown(e); })
+            window.addEventListener("keydown", e => { this.onKeyDown(e); });
         }
 
         private onKeyDown(event: KeyboardEvent): void {
@@ -157,7 +157,8 @@ namespace colibri.ui.ide.commands {
             }
         }
 
-        addHandlerHelper(commandId: string, testFunc: (args: CommandArgs) => boolean, executeFunc: (args: CommandArgs) => void) {
+        addHandlerHelper(
+            commandId: string, testFunc: (args: CommandArgs) => boolean, executeFunc: (args: CommandArgs) => void) {
 
             this.addHandler(commandId, new CommandHandler({
                 testFunc: testFunc,

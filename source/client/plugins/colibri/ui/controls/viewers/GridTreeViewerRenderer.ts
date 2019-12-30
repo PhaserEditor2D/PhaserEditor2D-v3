@@ -39,7 +39,9 @@ namespace colibri.ui.controls.viewers {
             return result;
         }
 
-        protected paintItems(objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[], parentPaintItem: PaintItem, x: number, y: number) {
+        protected paintItems(
+            objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
+            parentPaintItem: PaintItem, x: number, y: number) {
 
             const viewer = this.getViewer();
 
@@ -65,7 +67,7 @@ namespace colibri.ui.controls.viewers {
                 const ctx = viewer.getContext();
 
                 let y2 = y + 20;
-                let x2 = x + TREE_RENDERER_GRID_PADDING;
+                const x2 = x + TREE_RENDERER_GRID_PADDING;
 
                 let first = true;
 
@@ -105,7 +107,8 @@ namespace colibri.ui.controls.viewers {
 
                     y2 += 20;
 
-                    const result = this.paintItems2(objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0);
+                    const result = this.paintItems2(
+                        objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0);
 
                     y2 = result.y + 20;
 
@@ -118,19 +121,22 @@ namespace colibri.ui.controls.viewers {
                 return {
                     x: TREE_RENDERER_GRID_PADDING,
                     y: y2
-                }
+                };
 
             } else {
 
-                const offset = this._center ? Math.floor(b.width % (viewer.getCellSize() + TREE_RENDERER_GRID_PADDING) / 2) : TREE_RENDERER_GRID_PADDING;
+                const offset = this._center ?
+                    Math.floor(b.width % (viewer.getCellSize() + TREE_RENDERER_GRID_PADDING) / 2)
+                    : TREE_RENDERER_GRID_PADDING;
 
-                return this.paintItems2(objects, treeIconList, paintItems, null, x + offset, y + TREE_RENDERER_GRID_PADDING, offset, 0);
-
+                return this.paintItems2(
+                    objects, treeIconList, paintItems, null, x + offset, y + TREE_RENDERER_GRID_PADDING, offset, 0);
             }
-
         }
 
-        private paintItems2(objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[], parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number) {
+        private paintItems2(
+            objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
+            parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number) {
 
             const viewer = this.getViewer();
             const cellSize = Math.max(ROW_HEIGHT, viewer.getCellSize());
@@ -140,7 +146,7 @@ namespace colibri.ui.controls.viewers {
             const included = objects.filter(obj => viewer.isFilterIncluded(obj));
             const lastObj = included.length === 0 ? null : included[included.length - 1];
 
-            for (let obj of objects) {
+            for (const obj of objects) {
 
                 const children = viewer.getContentProvider().getChildren(obj);
                 const expanded = viewer.isExpanded(obj);
@@ -161,7 +167,10 @@ namespace colibri.ui.controls.viewers {
 
                             const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
-                            const icon = Controls.getIcon(expanded ? ICON_CONTROL_TREE_COLLAPSE : ICON_CONTROL_TREE_EXPAND);
+                            const icon = Controls.getIcon(expanded ?
+                                ICON_CONTROL_TREE_COLLAPSE
+                                : ICON_CONTROL_TREE_EXPAND);
+
                             icon.paint(context, x + 5, iconY, ICON_SIZE, ICON_SIZE, false);
 
                             treeIconList.push({
@@ -190,7 +199,8 @@ namespace colibri.ui.controls.viewers {
 
                 if (expanded && !this._flat) {
 
-                    const result = this.paintItems2(children, treeIconList, paintItems, newParentPaintItem, x, y, offset, depth + 1);
+                    const result = this.paintItems2(
+                        children, treeIconList, paintItems, newParentPaintItem, x, y, offset, depth + 1);
                     y = result.y;
                     x = result.x;
                 }
@@ -206,7 +216,7 @@ namespace colibri.ui.controls.viewers {
             const cellSize = args.viewer.getCellSize();
             const b = args.viewer.getBounds();
             const lineHeight = 20;
-            let x = args.x;
+            const x = args.x;
 
             const ctx = args.canvasContext;
 
@@ -251,7 +261,8 @@ namespace colibri.ui.controls.viewers {
 
                     this.renderCellFront(args, selected, isLastChild);
 
-                    args.viewer.paintItemBackground(args.obj, args.x, args.y + args.h - lineHeight, args.w, labelHeight, 10);
+                    args.viewer.paintItemBackground(
+                        args.obj, args.x, args.y + args.h - lineHeight, args.w, labelHeight, 10);
                 }
             }
 
@@ -264,14 +275,12 @@ namespace colibri.ui.controls.viewers {
                     ctx.fillStyle = Controls.getTheme().viewerForeground;
                 }
 
-
                 const m = ctx.measureText(line);
                 const x2 = Math.max(x, x + args.w / 2 - m.width / 2);
                 ctx.fillText(line, x2, args.y + args.h - 5);
                 ctx.restore();
             }
         }
-
 
         protected renderCellBack(args: RenderCellArgs, selected: boolean, isLastChild: boolean) {
             if (selected) {
@@ -293,6 +302,4 @@ namespace colibri.ui.controls.viewers {
             }
         }
     }
-
-
 }

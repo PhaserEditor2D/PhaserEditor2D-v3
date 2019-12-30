@@ -6,11 +6,10 @@ namespace colibri.ui.controls.viewers {
     export const TREE_ICON_SIZE = ICON_SIZE;
     export const LABEL_MARGIN = TREE_ICON_SIZE + 0;
 
-
     export declare type TreeIconInfo = {
         rect: Rect,
         obj: any
-    }
+    };
 
     export class TreeViewer extends Viewer {
 
@@ -51,7 +50,6 @@ namespace colibri.ui.controls.viewers {
                 this.revealPath(path);
             }
 
-
             try {
                 if (!(this.getContainer().getContainer() instanceof ScrollPane)) {
                     return;
@@ -60,7 +58,7 @@ namespace colibri.ui.controls.viewers {
                 return;
             }
 
-            const scrollPane = <ScrollPane>this.getContainer().getContainer();
+            const scrollPane = this.getContainer().getContainer() as ScrollPane;
 
             this.repaint().then(() => {
 
@@ -97,7 +95,6 @@ namespace colibri.ui.controls.viewers {
             });
 
         }
-
 
         private revealPath(path: any[]) {
 
@@ -143,7 +140,7 @@ namespace colibri.ui.controls.viewers {
 
         private getTreeIconAtPoint(e: MouseEvent) {
 
-            for (let icon of this._treeIconList) {
+            for (const icon of this._treeIconList) {
                 if (icon.rect.contains(e.offsetX, e.offsetY)) {
                     return icon;
                 }
@@ -162,15 +159,18 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        visitObjects(visitor: Function) {
+        visitObjects(visitor: (obj: any) => void) {
             const provider = this.getContentProvider();
             const list = provider ? provider.getRoots(this.getInput()) : [];
             this.visitObjects2(list, visitor);
         }
 
-        private visitObjects2(objects: any[], visitor: Function) {
-            for (var obj of objects) {
+        private visitObjects2(objects: any[], visitor: (obj: any) => void) {
+
+            for (const obj of objects) {
+
                 visitor(obj);
+
                 if (this.isExpanded(obj) || this.getFilterText() !== "") {
                     const list = this.getContentProvider().getChildren(obj);
                     this.visitObjects2(list, visitor);
@@ -180,8 +180,8 @@ namespace colibri.ui.controls.viewers {
 
         async preload(): Promise<PreloadResult> {
 
-            const list: Promise<PreloadResult>[] = [];
-            
+            const list: Array<Promise<PreloadResult>> = [];
+
             const viewer = this;
 
             this.visitObjects(obj => {
@@ -201,9 +201,8 @@ namespace colibri.ui.controls.viewers {
             return Controls.resolveAll(list);
         }
 
-
         protected paint(): void {
-            
+
             const result = this._treeRenderer.paint();
 
             this._contentHeight = result.contentHeight;
@@ -234,7 +233,7 @@ namespace colibri.ui.controls.viewers {
                     if (children.length > 0) {
 
                         this.setExpanded(obj, true);
-                        
+
                         this.expandFilteredParents(children);
                     }
                 }
@@ -274,7 +273,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         getContentProvider(): ITreeContentProvider {
-            return <ITreeContentProvider>super.getContentProvider();
+            return super.getContentProvider() as ITreeContentProvider;
         }
 
         expandCollapseBranch(obj: any) {

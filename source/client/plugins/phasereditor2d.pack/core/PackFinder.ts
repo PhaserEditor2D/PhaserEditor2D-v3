@@ -12,7 +12,7 @@ namespace phasereditor2d.pack.core {
             this._packs = packs;
         }
 
-        async preload(monitor: controls.IProgressMonitor = controls.EmptyProgressMonitor): Promise<controls.PreloadResult> {
+        async preload(monitor: controls.IProgressMonitor = controls.EMPTY_PROGRESS_MONITOR): Promise<controls.PreloadResult> {
 
             let result = controls.PreloadResult.NOTHING_LOADED;
 

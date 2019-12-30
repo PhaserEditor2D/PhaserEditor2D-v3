@@ -18,13 +18,13 @@ namespace colibri.ui.ide {
 
         protected createViewer(): viewers.TreeViewer {
 
-            const viewer = new viewers.TreeViewer()
+            const viewer = new viewers.TreeViewer();
 
             viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
                 if (this._currentViewerProvider) {
                     this._currentViewerProvider.onViewerSelectionChanged(this._viewer.getSelection());
                 }
-            })
+            });
 
             return viewer;
         }
@@ -76,7 +76,7 @@ namespace colibri.ui.ide {
                 if (state) {
 
                     provider.prepareViewerState(state);
-                    
+
                     this._viewer.setState(state);
                 }
 

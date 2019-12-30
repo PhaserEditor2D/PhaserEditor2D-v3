@@ -7,10 +7,10 @@ namespace phasereditor2d.scene.ui.viewers {
 
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
-            const file = <core.io.FilePath>args.obj;
+            const file = args.obj as core.io.FilePath;
 
             const image = SceneThumbnailCache.getInstance().getContent(file);
-            
+
             if (image) {
                 image.paint(args.canvasContext, args.x, args.y, args.w, args.h, args.center);
             }
@@ -20,10 +20,9 @@ namespace phasereditor2d.scene.ui.viewers {
             return args.viewer.getCellSize();
         }
 
+        async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
 
-        async preload(args : controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
-
-            const file = <core.io.FilePath>args.obj;
+            const file = args.obj as core.io.FilePath;
 
             return SceneThumbnailCache.getInstance().preload(file);
         }

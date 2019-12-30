@@ -8,7 +8,7 @@ namespace colibri.ui.ide {
         protected _viewer: controls.viewers.TreeViewer;
 
         constructor(id: string) {
-            super(id)
+            super(id);
         }
 
         protected abstract createViewer(): controls.viewers.TreeViewer;
@@ -30,7 +30,7 @@ namespace colibri.ui.ide {
         }
 
         protected fillContextMenu(menu: controls.Menu) {
-
+            // nothing
         }
 
         private onMenu(e: MouseEvent) {

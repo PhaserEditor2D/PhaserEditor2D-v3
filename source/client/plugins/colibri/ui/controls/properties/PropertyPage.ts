@@ -16,8 +16,7 @@ namespace colibri.ui.controls.properties {
 
             this._section = section;
 
-            this.addClass("PropertySectionPane")
-
+            this.addClass("PropertySectionPane");
         }
 
         createOrUpdateWithSelection() {
@@ -41,7 +40,6 @@ namespace colibri.ui.controls.properties {
                 label.innerText = this._section.getTitle();
                 label.addEventListener("mouseup", () => this.toggleSection());
                 this._titleArea.appendChild(label);
-
 
                 this._formArea = document.createElement("div");
                 this._formArea.classList.add("PropertyFormArea");
@@ -103,7 +101,7 @@ namespace colibri.ui.controls.properties {
     export class PropertyPage extends Control {
         private _sectionProvider: PropertySectionProvider;
         private _sectionPanes: PropertySectionPane[];
-        private _sectionPaneMap: Map<String, PropertySectionPane>;
+        private _sectionPaneMap: Map<string, PropertySectionPane>;
         private _selection: any[];
 
         constructor() {
@@ -120,7 +118,7 @@ namespace colibri.ui.controls.properties {
 
             if (this._sectionProvider) {
 
-                const list: PropertySection<any>[] = [];
+                const list: Array<PropertySection<any>> = [];
 
                 this._sectionProvider.addSections(this, list);
 
@@ -162,7 +160,7 @@ namespace colibri.ui.controls.properties {
                 return;
             }
 
-            const list: PropertySection<any>[] = [];
+            const list: Array<PropertySection<any>> = [];
 
             this._sectionProvider.addSections(this, list);
 
@@ -211,10 +209,9 @@ namespace colibri.ui.controls.properties {
 
         }
 
-
         updateExpandStatus() {
 
-            const list: PropertySection<any>[] = [];
+            const list: Array<PropertySection<any>> = [];
 
             this._sectionProvider.addSections(this, list);
 

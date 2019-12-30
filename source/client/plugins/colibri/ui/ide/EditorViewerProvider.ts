@@ -41,11 +41,11 @@ namespace colibri.ui.ide {
         }
 
         onViewerSelectionChanged(selection: any[]) {
-
+            // nothing
         }
 
         repaint() {
-            
+
             if (this._viewer) {
 
                 const state = this._viewer.getState();
@@ -59,7 +59,7 @@ namespace colibri.ui.ide {
         }
 
         prepareViewerState(state: viewers.ViewerState) {
-            
+            // nothing
         }
 
         abstract getContentProvider(): viewers.ITreeContentProvider;

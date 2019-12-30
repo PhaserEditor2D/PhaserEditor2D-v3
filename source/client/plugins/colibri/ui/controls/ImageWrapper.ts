@@ -16,11 +16,13 @@ namespace colibri.ui.controls {
             }
         }
 
-        paintFrame(context: CanvasRenderingContext2D, srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void {
+        paintFrame(context: CanvasRenderingContext2D, srcX: number, srcY: number, srcW: number, srcH: number,
+                   dstX: number, dstY: number, dstW: number, dstH: number): void {
 
             if (this._imageElement) {
 
-                DefaultImage.paintImageElementFrame(context, this._imageElement, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
+                DefaultImage.paintImageElementFrame(
+                    context, this._imageElement, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
 
             } else {
 
@@ -34,7 +36,7 @@ namespace colibri.ui.controls {
             return Controls.resolveNothingLoaded();
         }
 
-        preloadSize() : Promise<PreloadResult> {
+        preloadSize(): Promise<PreloadResult> {
             return this.preload();
         }
 

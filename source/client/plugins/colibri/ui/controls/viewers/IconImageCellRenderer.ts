@@ -8,7 +8,7 @@ namespace colibri.ui.controls.viewers {
             this._icon = icon;
         }
 
-        getIcon(obj : any) : IImage {
+        getIcon(obj: any): IImage {
             return this._icon;
         }
 

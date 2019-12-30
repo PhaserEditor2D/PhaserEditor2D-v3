@@ -85,7 +85,7 @@ declare namespace colibri.ui.controls {
         static getApplicationDragData(): any[];
         static getApplicationDragDataAndClean(): any[];
         static setApplicationDragData(data: any[]): void;
-        static resolveAll(list: Promise<PreloadResult>[]): Promise<PreloadResult>;
+        static resolveAll(list: Array<Promise<PreloadResult>>): Promise<PreloadResult>;
         static resolveResourceLoaded(): Promise<PreloadResult>;
         static resolveNothingLoaded(): Promise<PreloadResult>;
         static preload(): Promise<PreloadResult[]>;
@@ -265,13 +265,13 @@ declare namespace colibri.core {
     }
 }
 declare namespace colibri.core.io {
-    type FileData = {
+    interface FileData {
         name: string;
         isFile: boolean;
         size: number;
         modTime: number;
         children?: FileData[];
-    };
+    }
 }
 declare namespace colibri.core.io {
     class FilePath {
@@ -314,10 +314,10 @@ declare namespace colibri.core.io {
     }
 }
 declare namespace colibri.core.io {
-    type RenameData = {
+    interface RenameData {
         oldName: string;
         newFile: FilePath;
-    };
+    }
     class FileStorageChange {
         private _renameRecords_fromPath;
         private _renameRecords_toPath;
@@ -475,12 +475,12 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
-    type Bounds = {
+    interface Bounds {
         x?: number;
         y?: number;
         width?: number;
         height?: number;
-    };
+    }
 }
 declare namespace colibri.ui.controls {
     abstract class CanvasControl extends Control {
@@ -520,7 +520,7 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
-    const EmptyProgressMonitor: IProgressMonitor;
+    const EMPTY_PROGRESS_MONITOR: IProgressMonitor;
 }
 declare namespace colibri.ui.controls {
     class FillLayout implements ILayout {
@@ -729,7 +729,7 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
-    type Theme = {
+    interface Theme {
         id: string;
         classList: string[];
         displayName: string;
@@ -737,7 +737,7 @@ declare namespace colibri.ui.controls {
         viewerSelectionForeground: string;
         viewerForeground: string;
         dark: boolean;
-    };
+    }
 }
 declare namespace colibri.ui.controls {
     class ToolbarManager {
@@ -904,7 +904,7 @@ declare namespace colibri.ui.controls.properties {
 }
 declare namespace colibri.ui.controls.properties {
     abstract class PropertySectionProvider {
-        abstract addSections(page: PropertyPage, sections: PropertySection<any>[]): void;
+        abstract addSections(page: PropertyPage, sections: Array<PropertySection<any>>): void;
     }
 }
 declare namespace colibri.ui.controls.viewers {
@@ -1220,7 +1220,7 @@ declare namespace colibri.ui.controls.viewers {
         private getObjectPath2;
         private getTreeIconAtPoint;
         private onClick;
-        visitObjects(visitor: Function): void;
+        visitObjects(visitor: (obj: any) => void): void;
         private visitObjects2;
         preload(): Promise<PreloadResult>;
         protected paint(): void;
@@ -1233,18 +1233,18 @@ declare namespace colibri.ui.controls.viewers {
     }
 }
 declare namespace colibri.ui.ide {
-    type ContentTypeIconExtensionConfig = {
+    type ContentTypeIconExtensionConfig = Array<{
         icon: controls.IImage;
         contentType: string;
-    }[];
+    }>;
     class ContentTypeIconExtension extends Extension {
         static POINT_ID: string;
         private _config;
-        static withPluginIcons(plugin: colibri.Plugin, config: {
+        static withPluginIcons(plugin: colibri.Plugin, config: Array<{
             iconName: string;
             contentType: string;
             plugin?: colibri.Plugin;
-        }[]): ContentTypeIconExtension;
+        }>): ContentTypeIconExtension;
         constructor(config: ContentTypeIconExtensionConfig);
         getConfig(): ContentTypeIconExtensionConfig;
     }

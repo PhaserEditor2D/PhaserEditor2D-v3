@@ -5,7 +5,7 @@ namespace colibri.ui.ide.actions {
         private _part: T;
 
         constructor(part: T, config: controls.ActionConfig) {
-            super(config)
+            super(config);
 
             this._part = part;
         }

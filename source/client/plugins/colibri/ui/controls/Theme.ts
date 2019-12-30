@@ -1,12 +1,12 @@
 namespace colibri.ui.controls {
 
-    export declare type Theme = {
+    export interface Theme {
 
-        id: string,
-        
+        id: string;
+
         classList: string[];
 
-        displayName : string;
+        displayName: string;
 
         viewerSelectionBackground: string;
 

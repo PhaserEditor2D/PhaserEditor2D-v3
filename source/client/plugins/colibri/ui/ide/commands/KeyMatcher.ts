@@ -1,7 +1,7 @@
 namespace colibri.ui.ide.commands {
 
     export class KeyMatcher {
-        
+
         private _control: boolean;
         private _shift: boolean;
         private _alt: boolean;
@@ -23,7 +23,7 @@ namespace colibri.ui.ide.commands {
             this._alt = config.alt === undefined ? false : config.alt;
             this._meta = config.meta === undefined ? false : config.meta;
             this._key = config.key === undefined ? "" : config.key;
-            this._filterInputElements = config.filterInputElements === undefined ? true : config.filterInputElements
+            this._filterInputElements = config.filterInputElements === undefined ? true : config.filterInputElements;
         }
 
         getKeyString() {

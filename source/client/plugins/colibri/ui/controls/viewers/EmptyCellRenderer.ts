@@ -8,14 +8,14 @@ namespace colibri.ui.controls.viewers {
         }
 
         renderCell(args: RenderCellArgs): void {
-
+            // nothing
         }
 
         cellHeight(args: RenderCellArgs): number {
             return this._variableSize ? args.viewer.getCellSize() : ROW_HEIGHT;
         }
 
-        preload(args : PreloadCellArgs): Promise<PreloadResult> {
+        preload(args: PreloadCellArgs): Promise<PreloadResult> {
             return Controls.resolveNothingLoaded();
         }
     }

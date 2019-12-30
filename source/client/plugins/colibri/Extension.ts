@@ -5,7 +5,7 @@ namespace colibri {
         private _extensionPoint;
         private _priority: number;
 
-        constructor(extensionPoint : string, priority: number = 10) {
+        constructor(extensionPoint: string, priority: number = 10) {
             this._extensionPoint = extensionPoint;
             this._priority = priority;
         }

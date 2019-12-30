@@ -31,12 +31,12 @@ namespace colibri.core.io {
                     return entry.content;
                 }
 
-                const content = this._getContent(file);
+                const content2 = this._getContent(file);
 
                 entry.modTime = file.getModTime();
-                entry.content = content;
+                entry.content = content2;
 
-                return content;
+                return content2;
             }
 
             const content = this._getContent(file);

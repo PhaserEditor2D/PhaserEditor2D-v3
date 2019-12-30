@@ -64,7 +64,8 @@ namespace colibri.ui.controls {
             const pos = this.getControlPosition(e.x, e.y);
             const offset = this._horizontal ? pos.x : pos.y;
 
-            const inside = Math.abs(offset - this._splitPosition) <= SPLIT_OVER_ZONE_WIDTH && this.containsLocalPoint(pos.x, pos.y);
+            const inside = Math.abs(offset - this._splitPosition)
+                <= SPLIT_OVER_ZONE_WIDTH && this.containsLocalPoint(pos.x, pos.y);
 
             if (inside) {
                 e.stopImmediatePropagation();
@@ -88,7 +89,8 @@ namespace colibri.ui.controls {
             const boundsSize = this._horizontal ? this.getBounds().width : this.getBounds().height;
             const cursorResize = this._horizontal ? "ew-resize" : "ns-resize";
 
-            const inside = Math.abs(offset - this._splitPosition) <= SPLIT_OVER_ZONE_WIDTH && this.containsLocalPoint(pos.x, pos.y);
+            const inside = Math.abs(offset - this._splitPosition)
+                <= SPLIT_OVER_ZONE_WIDTH && this.containsLocalPoint(pos.x, pos.y);
 
             if (inside) {
                 if (e.buttons === 0 || this._startDrag !== -1) {
@@ -167,7 +169,7 @@ namespace colibri.ui.controls {
 
             const pos = this._splitPosition;
             const sw = this._splitWidth;
-            let b = this.getBounds();
+            const b = this.getBounds();
 
             if (this._horizontal) {
                 this._leftControl.setBoundsValues(0, 0, pos - sw, b.height);

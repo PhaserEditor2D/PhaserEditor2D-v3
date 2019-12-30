@@ -1,6 +1,7 @@
 namespace colibri.ui.controls.viewers {
 
   export class RenderCellArgs {
+
     constructor(
       public canvasContext: CanvasRenderingContext2D,
       public x: number,
@@ -15,6 +16,5 @@ namespace colibri.ui.controls.viewers {
     clone() {
       return new RenderCellArgs(this.canvasContext, this.x, this.y, this.w, this.h, this.obj, this.viewer, this.center);
     }
-  };
-
+  }
 }

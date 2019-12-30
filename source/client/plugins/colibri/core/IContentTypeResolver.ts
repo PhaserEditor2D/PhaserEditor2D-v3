@@ -4,9 +4,8 @@ namespace colibri.core {
 
     export interface IContentTypeResolver {
 
-        getId() : string;
+        getId(): string;
 
-        computeContentType(file : io.FilePath): Promise<string>;
-        
+        computeContentType(file: io.FilePath): Promise<string>;
     }
 }

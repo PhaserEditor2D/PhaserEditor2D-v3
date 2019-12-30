@@ -5,15 +5,14 @@ namespace colibri.ui.ide {
     import io = colibri.core.io;
 
     declare type RestoreEditorData = {
-        inputDataList: {
+        inputDataList: Array<{
             inputExtensionId: string,
             inputState: any,
             editorState: any
-        }[],
+        }>,
         activeEditorIndex: number,
         tabIconSize: number
-    }
-
+    };
 
     export abstract class WorkbenchWindow extends controls.Control {
 
@@ -215,7 +214,7 @@ namespace colibri.ui.ide {
 
                 for (let i = 0; i < element.childElementCount; i++) {
                     const childElement = element.children.item(i);
-                    this.findViews(<any>childElement, views);
+                    this.findViews(childElement as any, views);
                 }
             }
         }

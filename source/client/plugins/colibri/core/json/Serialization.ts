@@ -21,9 +21,10 @@ namespace colibri.core.json {
 
         const keys = key.split(".");
 
-        for (const key of keys) {
+        for (const key2 of keys) {
+
             if (result !== undefined) {
-                result = result[key];
+                result = result[key2];
             }
         }
 
@@ -38,12 +39,15 @@ namespace colibri.core.json {
 
         for (let i = 0; i < keys.length - 1; i++) {
 
-            const key = keys[i];
+            const key2 = keys[i];
 
-            if (key in data) {
-                data = data[key];
+            if (key2 in data) {
+
+                data = data[key2];
+
             } else {
-                data = (data[key] = {});
+
+                data = (data[key2] = {});
             }
         }
 

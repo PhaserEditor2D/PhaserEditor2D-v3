@@ -16,7 +16,7 @@ namespace colibri.ui.controls {
             this._error = false;
         }
 
-        preloadSize() : Promise<PreloadResult> {
+        preloadSize(): Promise<PreloadResult> {
             return this.preload();
         }
 
@@ -39,7 +39,7 @@ namespace colibri.ui.controls {
             }
 
             this._requestPromise = new Promise((resolve, reject) => {
-                
+
                 this._imageElement.src = this._url;
 
                 this._imageElement.addEventListener("load", e => {
@@ -92,17 +92,19 @@ namespace colibri.ui.controls {
 
             } else {
 
-                DefaultImage.paintEmpty(context, x, y, w, h)
+                DefaultImage.paintEmpty(context, x, y, w, h);
             }
         }
 
-        static paintImageElement(context: CanvasRenderingContext2D, image: HTMLImageElement, x: number, y: number, w: number, h: number, center: boolean) {
+        static paintImageElement(
+            context: CanvasRenderingContext2D, image: HTMLImageElement,
+            x: number, y: number, w: number, h: number, center: boolean) {
 
             const naturalWidth = image.naturalWidth;
             const naturalHeight = image.naturalHeight;
 
-            let renderHeight = h;
-            let renderWidth = w;
+            const renderHeight = h;
+            const renderWidth = w;
 
             let imgW = naturalWidth;
             let imgH = naturalHeight;
@@ -117,13 +119,13 @@ namespace colibri.ui.controls {
                 imgW = renderWidth;
             }
 
-            let scale = imgW / naturalWidth;
+            const scale = imgW / naturalWidth;
 
-            let imgX = x + (center ? renderWidth / 2 - imgW / 2 : 0);
-            let imgY = y + renderHeight / 2 - imgH / 2;
+            const imgX = x + (center ? renderWidth / 2 - imgW / 2 : 0);
+            const imgY = y + renderHeight / 2 - imgH / 2;
 
-            let imgDstW = naturalWidth * scale;
-            let imgDstH = naturalHeight * scale;
+            const imgDstW = naturalWidth * scale;
+            const imgDstH = naturalHeight * scale;
 
             if (imgDstW > 0 && imgDstH > 0) {
                 context.drawImage(image, imgX, imgY, imgDstW, imgDstH);
@@ -143,16 +145,22 @@ namespace colibri.ui.controls {
             }
         }
 
+        static paintImageElementFrame(
+            context: CanvasRenderingContext2D, image: HTMLImageElement,
+            srcX: number, srcY: number, scrW: number, srcH: number,
+            dstX: number, dstY: number, dstW: number, dstH: number): void {
 
-        static paintImageElementFrame(context: CanvasRenderingContext2D, image: HTMLImageElement, srcX: number, srcY: number, scrW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void {
             context.drawImage(image, srcX, srcY, scrW, srcH, dstX, dstY, dstW, dstH);
         }
 
-        paintFrame(context: CanvasRenderingContext2D, srcX: number, srcY: number, scrW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void {
+        paintFrame(
+            context: CanvasRenderingContext2D, srcX: number, srcY: number, scrW: number, srcH: number,
+            dstX: number, dstY: number, dstW: number, dstH: number): void {
 
             if (this._ready) {
 
-                DefaultImage.paintImageElementFrame(context, this._imageElement, srcX, srcY, scrW, srcH, dstX, dstY, dstW, dstH);
+                DefaultImage.paintImageElementFrame(
+                    context, this._imageElement, srcX, srcY, scrW, srcH, dstX, dstY, dstW, dstH);
 
             } else {
 
@@ -160,5 +168,4 @@ namespace colibri.ui.controls {
             }
         }
     }
-
 }

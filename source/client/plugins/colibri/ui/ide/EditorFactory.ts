@@ -12,7 +12,7 @@ namespace colibri.ui.ide {
             return this._id;
         }
 
-        abstract acceptInput(input : any) : boolean;
+        abstract acceptInput(input: any): boolean;
 
         abstract createEditor(): EditorPart;
 

@@ -103,6 +103,7 @@ namespace colibri.ui.controls {
 
         static tooltip(element: HTMLElement, tooltip: string) {
 
+            // tslint:disable-next-line:no-unused-expression
             new TooltipManager(element, tooltip);
         }
 

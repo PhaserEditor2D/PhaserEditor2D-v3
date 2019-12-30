@@ -14,6 +14,7 @@ var colibri;
             return Promise.resolve();
         }
         registerExtensions(registry) {
+            // nothing
         }
         getIcon(name) {
             return colibri.ui.controls.Controls.getIcon(name, `plugins/${this.getId()}/ui/icons`);
@@ -168,7 +169,7 @@ var colibri;
                     }
                     else {
                         if (this._layoutChildren) {
-                            for (let child of this._children) {
+                            for (const child of this._children) {
                                 child.layout();
                             }
                         }
@@ -185,6 +186,7 @@ var colibri;
                     control.onControlAdded();
                 }
                 onControlAdded() {
+                    // nothing
                 }
                 getChildren() {
                     return this._children;
@@ -341,7 +343,7 @@ var colibri;
                 classList: ["light"],
                 dark: false,
                 viewerSelectionBackground: "#4242ff",
-                //treeItemSelectionBackground: "#525252",
+                // treeItemSelectionBackground: "#525252",
                 viewerSelectionForeground: "#f0f0f0",
                 viewerForeground: "#000000",
             };
@@ -786,12 +788,12 @@ var colibri;
                 list.push(ext);
             }
             for (const point of points) {
-                let list = this._map.get(point);
+                const list = this._map.get(point);
                 list.sort((a, b) => a.getPriority() - b.getPriority());
             }
         }
         getExtensions(point) {
-            let list = this._map.get(point);
+            const list = this._map.get(point);
             if (!list) {
                 return [];
             }
@@ -844,15 +846,15 @@ var colibri;
                         if (entry.modTime === file.getModTime()) {
                             return colibri.ui.controls.Controls.resolveNothingLoaded();
                         }
-                        const promise = this._backendGetContent(file)
+                        const promise2 = this._backendGetContent(file)
                             .then((content) => {
                             this._preloadMap.delete(filename);
                             entry.modTime = file.getModTime();
                             entry.content = content;
                             return Promise.resolve(colibri.ui.controls.PreloadResult.RESOURCES_LOADED);
                         });
-                        this._preloadMap.set(filename, promise);
-                        return promise;
+                        this._preloadMap.set(filename, promise2);
+                        return promise2;
                     }
                     const promise = this._backendGetContent(file)
                         .then((content) => {
@@ -1618,10 +1620,10 @@ var colibri;
                         if (entry.modTime === file.getModTime()) {
                             return entry.content;
                         }
-                        const content = this._getContent(file);
+                        const content2 = this._getContent(file);
                         entry.modTime = file.getModTime();
-                        entry.content = content;
-                        return content;
+                        entry.content = content2;
+                        return content2;
                     }
                     const content = this._getContent(file);
                     this._map.set(filename, new io.ContentEntry(content, file.getModTime()));
@@ -1657,9 +1659,9 @@ var colibri;
             function getDataValue(data, key) {
                 let result = data;
                 const keys = key.split(".");
-                for (const key of keys) {
+                for (const key2 of keys) {
                     if (result !== undefined) {
-                        result = result[key];
+                        result = result[key2];
                     }
                 }
                 return result;
@@ -1669,12 +1671,12 @@ var colibri;
                 const keys = key.split(".");
                 const lastKey = keys[keys.length - 1];
                 for (let i = 0; i < keys.length - 1; i++) {
-                    const key = keys[i];
-                    if (key in data) {
-                        data = data[key];
+                    const key2 = keys[i];
+                    if (key2 in data) {
+                        data = data[key2];
                     }
                     else {
-                        data = (data[key] = {});
+                        data = (data[key2] = {});
                     }
                 }
                 data[lastKey] = value;
@@ -1829,8 +1831,8 @@ var colibri;
                 resizeTo(parent) {
                     parent = parent || this.getElement().parentElement;
                     const b = parent.getBoundingClientRect();
-                    this.style.width = ((b.width - this._padding * 2) | 0) + "px";
-                    this.style.height = ((b.height - this._padding * 2) | 0) + "px";
+                    this.style.width = Math.floor(b.width - this._padding * 2) + "px";
+                    this.style.height = Math.floor(b.height - this._padding * 2) + "px";
                     this.repaint();
                 }
                 getPadding() {
@@ -1934,8 +1936,8 @@ var colibri;
                 static paintImageElement(context, image, x, y, w, h, center) {
                     const naturalWidth = image.naturalWidth;
                     const naturalHeight = image.naturalHeight;
-                    let renderHeight = h;
-                    let renderWidth = w;
+                    const renderHeight = h;
+                    const renderWidth = w;
                     let imgW = naturalWidth;
                     let imgH = naturalHeight;
                     // compute the right width
@@ -1946,11 +1948,11 @@ var colibri;
                         imgH = imgH * (renderWidth / imgW);
                         imgW = renderWidth;
                     }
-                    let scale = imgW / naturalWidth;
-                    let imgX = x + (center ? renderWidth / 2 - imgW / 2 : 0);
-                    let imgY = y + renderHeight / 2 - imgH / 2;
-                    let imgDstW = naturalWidth * scale;
-                    let imgDstH = naturalHeight * scale;
+                    const scale = imgW / naturalWidth;
+                    const imgX = x + (center ? renderWidth / 2 - imgW / 2 : 0);
+                    const imgY = y + renderHeight / 2 - imgH / 2;
+                    const imgDstW = naturalWidth * scale;
+                    const imgDstH = naturalHeight * scale;
                     if (imgDstW > 0 && imgDstH > 0) {
                         context.drawImage(image, imgX, imgY, imgDstW, imgDstH);
                     }
@@ -1989,9 +1991,13 @@ var colibri;
     (function (ui) {
         var controls;
         (function (controls) {
-            controls.EmptyProgressMonitor = {
-                addTotal: (n) => { },
-                step: () => { }
+            controls.EMPTY_PROGRESS_MONITOR = {
+                addTotal: (n) => {
+                    // nothing
+                },
+                step: () => {
+                    // nothing
+                }
             };
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -2268,7 +2274,7 @@ var colibri;
                             item.innerHTML = action.getText();
                         }
                         if (action.isEnabled()) {
-                            item.addEventListener("click", e => {
+                            item.addEventListener("click", ev => {
                                 this.close();
                                 action.run();
                             });
@@ -2280,9 +2286,9 @@ var colibri;
                     }
                     this._bgElement = document.createElement("div");
                     this._bgElement.classList.add("MenuContainer");
-                    this._bgElement.addEventListener("mousedown", e => {
-                        e.preventDefault();
-                        e.stopImmediatePropagation();
+                    this._bgElement.addEventListener("mousedown", (ev) => {
+                        ev.preventDefault();
+                        ev.stopImmediatePropagation();
                         this.close();
                     });
                     document.body.appendChild(this._bgElement);
@@ -2539,7 +2545,8 @@ var colibri;
                 onMouseDown(e) {
                     const pos = this.getControlPosition(e.x, e.y);
                     const offset = this._horizontal ? pos.x : pos.y;
-                    const inside = Math.abs(offset - this._splitPosition) <= controls.SPLIT_OVER_ZONE_WIDTH && this.containsLocalPoint(pos.x, pos.y);
+                    const inside = Math.abs(offset - this._splitPosition)
+                        <= controls.SPLIT_OVER_ZONE_WIDTH && this.containsLocalPoint(pos.x, pos.y);
                     if (inside) {
                         e.stopImmediatePropagation();
                         this._startDrag = this._horizontal ? e.x : e.y;
@@ -2558,7 +2565,8 @@ var colibri;
                     const screen = this._horizontal ? e.x : e.y;
                     const boundsSize = this._horizontal ? this.getBounds().width : this.getBounds().height;
                     const cursorResize = this._horizontal ? "ew-resize" : "ns-resize";
-                    const inside = Math.abs(offset - this._splitPosition) <= controls.SPLIT_OVER_ZONE_WIDTH && this.containsLocalPoint(pos.x, pos.y);
+                    const inside = Math.abs(offset - this._splitPosition)
+                        <= controls.SPLIT_OVER_ZONE_WIDTH && this.containsLocalPoint(pos.x, pos.y);
                     if (inside) {
                         if (e.buttons === 0 || this._startDrag !== -1) {
                             e.preventDefault();
@@ -2621,7 +2629,7 @@ var colibri;
                     this.setSplitFactor(this._splitFactor);
                     const pos = this._splitPosition;
                     const sw = this._splitWidth;
-                    let b = this.getBounds();
+                    const b = this.getBounds();
                     if (this._horizontal) {
                         this._leftControl.setBoundsValues(0, 0, pos - sw, b.height);
                         this._rightControl.setBoundsValues(pos + sw, 0, b.width - pos - sw, b.height);
@@ -2997,7 +3005,7 @@ var colibri;
                     else {
                         btnElement.classList.add("ToolbarItemHideText");
                     }
-                    let tooltip = action.getTooltip() || action.getText() || "";
+                    const tooltip = action.getTooltip() || action.getText() || "";
                     const keyString = action.getCommandKeyString();
                     if (tooltip) {
                         controls.Tooltip.tooltipWithKey(btnElement, keyString, tooltip);
@@ -3093,6 +3101,7 @@ var colibri;
             }
             class Tooltip {
                 static tooltip(element, tooltip) {
+                    // tslint:disable-next-line:no-unused-expression
                     new TooltipManager(element, tooltip);
                 }
                 static tooltipWithKey(element, keyString, tooltip) {
@@ -3707,7 +3716,7 @@ var colibri;
                     }
                     flatValues_Number(values) {
                         const set = new Set(values);
-                        if (set.size == 1) {
+                        if (set.size === 1) {
                             const value = set.values().next().value;
                             return value.toString();
                         }
@@ -3817,6 +3826,7 @@ var colibri;
                         this._variableSize = variableSize;
                     }
                     renderCell(args) {
+                        // nothing
                     }
                     cellHeight(args) {
                         return this._variableSize ? args.viewer.getCellSize() : controls.ROW_HEIGHT;
@@ -4027,7 +4037,7 @@ var colibri;
                                 return;
                             }
                             let frameCount = realCount;
-                            if (frameCount == 0) {
+                            if (frameCount === 0) {
                                 return;
                             }
                             let step = 1;
@@ -4038,19 +4048,19 @@ var colibri;
                             if (frameCount === 0) {
                                 frameCount = 1;
                             }
-                            var size = Math.floor(Math.sqrt(width * height / frameCount) * 0.8) + 1;
+                            let size = Math.floor(Math.sqrt(width * height / frameCount) * 0.8) + 1;
                             if (frameCount === 1) {
                                 size = Math.min(width, height);
                             }
-                            var cols = Math.floor(width / size);
-                            var rows = frameCount / cols + (frameCount % cols == 0 ? 0 : 1);
-                            var marginX = Math.max(0, (width - cols * size) / 2) | 0;
-                            var marginY = Math.max(0, (height - rows * size) / 2) | 0;
-                            var itemX = 0;
-                            var itemY = 0;
+                            const cols = Math.floor(width / size);
+                            const rows = frameCount / cols + (frameCount % cols === 0 ? 0 : 1);
+                            const marginX = Math.floor(Math.max(0, (width - cols * size) / 2));
+                            const marginY = Math.floor(Math.max(0, (height - rows * size) / 2));
+                            let itemX = 0;
+                            let itemY = 0;
                             const startX = args.x + marginX;
                             const startY = 2 + args.y + marginY;
-                            for (var i = 0; i < frameCount; i++) {
+                            for (let i = 0; i < frameCount; i++) {
                                 if (itemY + size > height) {
                                     break;
                                 }
@@ -4094,8 +4104,8 @@ var colibri;
                     }
                     paint() {
                         const viewer = this._viewer;
-                        let x = 0;
-                        let y = viewer.getScrollY();
+                        const x = 0;
+                        const y = viewer.getScrollY();
                         const contentProvider = viewer.getContentProvider();
                         const roots = contentProvider.getRoots(viewer.getInput());
                         const treeIconList = [];
@@ -4116,7 +4126,7 @@ var colibri;
                         const viewer = this._viewer;
                         const context = viewer.getContext();
                         const b = viewer.getBounds();
-                        for (let obj of objects) {
+                        for (const obj of objects) {
                             const children = viewer.getContentProvider().getChildren(obj);
                             const expanded = viewer.isExpanded(obj);
                             let newParentPaintItem = null;
@@ -4130,7 +4140,8 @@ var colibri;
                                     // render tree icon
                                     if (children.length > 0) {
                                         const iconY = y + (cellHeight - viewers.TREE_ICON_SIZE) / 2;
-                                        const icon = controls.Controls.getIcon(expanded ? controls.ICON_CONTROL_TREE_COLLAPSE : controls.ICON_CONTROL_TREE_EXPAND);
+                                        const icon = controls.Controls
+                                            .getIcon(expanded ? controls.ICON_CONTROL_TREE_COLLAPSE : controls.ICON_CONTROL_TREE_EXPAND);
                                         icon.paint(context, x, iconY, controls.ICON_SIZE, controls.ICON_SIZE, false);
                                         treeIconList.push({
                                             rect: new controls.Rect(x, iconY, viewers.TREE_ICON_SIZE, viewers.TREE_ICON_SIZE),
@@ -4233,7 +4244,7 @@ var colibri;
                         if (this._sections.length > 0) {
                             const ctx = viewer.getContext();
                             let y2 = y + 20;
-                            let x2 = x + viewers.TREE_RENDERER_GRID_PADDING;
+                            const x2 = x + viewers.TREE_RENDERER_GRID_PADDING;
                             let first = true;
                             for (const section of this._sections) {
                                 const objects2 = viewer
@@ -4271,7 +4282,9 @@ var colibri;
                             };
                         }
                         else {
-                            const offset = this._center ? Math.floor(b.width % (viewer.getCellSize() + viewers.TREE_RENDERER_GRID_PADDING) / 2) : viewers.TREE_RENDERER_GRID_PADDING;
+                            const offset = this._center ?
+                                Math.floor(b.width % (viewer.getCellSize() + viewers.TREE_RENDERER_GRID_PADDING) / 2)
+                                : viewers.TREE_RENDERER_GRID_PADDING;
                             return this.paintItems2(objects, treeIconList, paintItems, null, x + offset, y + viewers.TREE_RENDERER_GRID_PADDING, offset, 0);
                         }
                     }
@@ -4282,7 +4295,7 @@ var colibri;
                         const b = viewer.getBounds();
                         const included = objects.filter(obj => viewer.isFilterIncluded(obj));
                         const lastObj = included.length === 0 ? null : included[included.length - 1];
-                        for (let obj of objects) {
+                        for (const obj of objects) {
                             const children = viewer.getContentProvider().getChildren(obj);
                             const expanded = viewer.isExpanded(obj);
                             let newParentPaintItem = null;
@@ -4294,7 +4307,9 @@ var colibri;
                                     // render tree icon
                                     if (children.length > 0 && !this._flat) {
                                         const iconY = y + (cellSize - viewers.TREE_ICON_SIZE) / 2;
-                                        const icon = controls.Controls.getIcon(expanded ? controls.ICON_CONTROL_TREE_COLLAPSE : controls.ICON_CONTROL_TREE_EXPAND);
+                                        const icon = controls.Controls.getIcon(expanded ?
+                                            controls.ICON_CONTROL_TREE_COLLAPSE
+                                            : controls.ICON_CONTROL_TREE_EXPAND);
                                         icon.paint(context, x + 5, iconY, controls.ICON_SIZE, controls.ICON_SIZE, false);
                                         treeIconList.push({
                                             rect: new controls.Rect(x, iconY, viewers.TREE_ICON_SIZE, viewers.TREE_ICON_SIZE),
@@ -4327,7 +4342,7 @@ var colibri;
                         const cellSize = args.viewer.getCellSize();
                         const b = args.viewer.getBounds();
                         const lineHeight = 20;
-                        let x = args.x;
+                        const x = args.x;
                         const ctx = args.canvasContext;
                         const label = args.viewer.getLabelProvider().getLabel(args.obj);
                         let line = "";
@@ -4408,7 +4423,7 @@ var colibri;
                 class LabelCellRenderer {
                     renderCell(args) {
                         const img = this.getImage(args.obj);
-                        let x = args.x;
+                        const x = args.x;
                         const ctx = args.canvasContext;
                         if (img) {
                             img.paint(ctx, x, args.y, controls.ICON_SIZE, controls.ICON_SIZE, false);
@@ -4602,7 +4617,7 @@ var colibri;
                         return false;
                     }
                     getPaintItemAt(e) {
-                        for (let item of this._paintItems) {
+                        for (const item of this._paintItems) {
                             if (item.contains(e.offsetX, e.offsetY)) {
                                 return item;
                             }
@@ -4694,7 +4709,7 @@ var colibri;
                                     selChanged = true;
                                 }
                                 else if (e.shiftKey) {
-                                    if (this._lastSelectedItemIndex >= 0 && this._lastSelectedItemIndex != item.index) {
+                                    if (this._lastSelectedItemIndex >= 0 && this._lastSelectedItemIndex !== item.index) {
                                         const start = Math.min(this._lastSelectedItemIndex, item.index);
                                         const end = Math.max(this._lastSelectedItemIndex, item.index);
                                         for (let i = start; i <= end; i++) {
@@ -4744,7 +4759,7 @@ var colibri;
                     }
                     expandCollapseBranch(obj) {
                         const parents = [];
-                        const item = this._paintItems.find(item => item.data === obj);
+                        const item = this._paintItems.find(i => i.data === obj);
                         if (item && item.parent) {
                             const parentObj = item.parent.data;
                             this.setExpanded(parentObj, !this.isExpanded(parentObj));
@@ -4825,19 +4840,19 @@ var colibri;
                             ui.controls.setElementBounds(this.getElement(), {
                                 x: b.x,
                                 y: b.y,
-                                width: b.width | 0,
-                                height: b.height | 0
+                                width: Math.floor(b.width),
+                                height: Math.floor(b.height)
                             });
                         }
                         else {
                             ui.controls.setElementBounds(this.getElement(), {
-                                width: b.width | 0,
-                                height: b.height | 0
+                                width: Math.floor(b.width),
+                                height: Math.floor(b.height)
                             });
                         }
                         const canvas = this.getCanvas();
-                        canvas.width = b.width | 0;
-                        canvas.height = b.height | 0;
+                        canvas.width = Math.floor(b.width);
+                        canvas.height = Math.floor(b.height);
                         this.initContext();
                         this.repaint();
                     }
@@ -5035,7 +5050,6 @@ var colibri;
                     }
                 }
                 viewers.PreloadCellArgs = PreloadCellArgs;
-                ;
             })(viewers = controls.viewers || (controls.viewers = {}));
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -5064,7 +5078,6 @@ var colibri;
                     }
                 }
                 viewers.RenderCellArgs = RenderCellArgs;
-                ;
             })(viewers = controls.viewers || (controls.viewers = {}));
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -5161,7 +5174,7 @@ var colibri;
                         return false;
                     }
                     getTreeIconAtPoint(e) {
-                        for (let icon of this._treeIconList) {
+                        for (const icon of this._treeIconList) {
                             if (icon.rect.contains(e.offsetX, e.offsetY)) {
                                 return icon;
                             }
@@ -5181,7 +5194,7 @@ var colibri;
                         this.visitObjects2(list, visitor);
                     }
                     visitObjects2(objects, visitor) {
-                        for (var obj of objects) {
+                        for (const obj of objects) {
                             visitor(obj);
                             if (this.isExpanded(obj) || this.getFilterText() !== "") {
                                 const list = this.getContentProvider().getChildren(obj);
@@ -5760,6 +5773,7 @@ var colibri;
                     return this._viewer.getSelection();
                 }
                 onViewerSelectionChanged(selection) {
+                    // nothing
                 }
                 repaint() {
                     if (this._viewer) {
@@ -5770,6 +5784,7 @@ var colibri;
                     }
                 }
                 prepareViewerState(state) {
+                    // nothing
                 }
             }
             ide.EditorViewerProvider = EditorViewerProvider;
@@ -5814,6 +5829,7 @@ var colibri;
                     this._viewer.getElement().addEventListener("contextmenu", e => this.onMenu(e));
                 }
                 fillContextMenu(menu) {
+                    // nothing
                 }
                 onMenu(e) {
                     e.preventDefault();
@@ -6710,7 +6726,8 @@ var colibri;
                             name: "Expand/Collapse the tree branch",
                             tooltip: "Expand or collapse a branch of the select element"
                         });
-                        manager.addHandlerHelper(actions.CMD_EXPAND_COLLAPSE_BRANCH, args => args.activeElement !== null && ui.controls.Control.getControlOf(args.activeElement) instanceof ui.controls.viewers.Viewer, args => {
+                        manager.addHandlerHelper(actions.CMD_EXPAND_COLLAPSE_BRANCH, args => args.activeElement !== null
+                            && ui.controls.Control.getControlOf(args.activeElement) instanceof ui.controls.viewers.Viewer, args => {
                             const viewer = ui.controls.Control.getControlOf(args.activeElement);
                             const parents = [];
                             for (const obj of viewer.getSelection()) {

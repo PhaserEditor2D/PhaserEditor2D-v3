@@ -2,10 +2,9 @@ namespace colibri.ui.ide.undo {
 
     export abstract class Operation {
 
-        abstract undo() : void;
+        abstract undo(): void;
 
-        abstract redo() : void;
+        abstract redo(): void;
 
     }
-
 }

@@ -10,8 +10,9 @@ namespace colibri.ui.controls {
 
         constructor(padding: number = 0, ...classList: string[]) {
             super("canvas", "CanvasControl", ...classList);
+
             this._padding = padding;
-            this._canvas = <HTMLCanvasElement>this.getElement();
+            this._canvas = this.getElement() as HTMLCanvasElement;
             this.initContext();
         }
 
@@ -24,8 +25,8 @@ namespace colibri.ui.controls {
 
             const b = parent.getBoundingClientRect();
 
-            this.style.width = ((b.width - this._padding * 2) | 0) + "px";
-            this.style.height = ((b.height - this._padding * 2) | 0) + "px";
+            this.style.width = Math.floor(b.width - this._padding * 2) + "px";
+            this.style.height = Math.floor(b.height - this._padding * 2) + "px";
 
             this.repaint();
         }

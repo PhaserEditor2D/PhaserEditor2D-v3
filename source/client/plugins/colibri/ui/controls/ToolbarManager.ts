@@ -1,8 +1,8 @@
 namespace colibri.ui.controls {
 
-    declare type ActionData = {
-        btnElement: HTMLElement,
-        listener: any
+    interface ActionData {
+        btnElement: HTMLElement;
+        listener: any;
     }
 
     export class ToolbarManager {
@@ -51,7 +51,7 @@ namespace colibri.ui.controls {
                 btnElement.classList.add("ToolbarItemHideText");
             }
 
-            let tooltip = action.getTooltip() || action.getText() || "";
+            const tooltip = action.getTooltip() || action.getText() || "";
 
             const keyString = action.getCommandKeyString();
 
@@ -83,7 +83,7 @@ namespace colibri.ui.controls {
         }
 
         private updateButtonWithAction(btn: HTMLElement, action: Action) {
-            const textElement = <HTMLElement>btn["__text"];
+            const textElement = btn["__text"] as HTMLElement;
             textElement.innerText = action.getText();
         }
 

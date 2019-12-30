@@ -797,7 +797,7 @@ var phasereditor2d;
                 constructor(...packs) {
                     this._packs = packs;
                 }
-                async preload(monitor = controls.EmptyProgressMonitor) {
+                async preload(monitor = controls.EMPTY_PROGRESS_MONITOR) {
                     let result = controls.PreloadResult.NOTHING_LOADED;
                     this._packs = await core_2.AssetPackUtils.getAllPacks();
                     const items = this._packs.flatMap(pack => pack.getItems());

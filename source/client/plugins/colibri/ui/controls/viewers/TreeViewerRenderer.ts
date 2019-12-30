@@ -19,8 +19,8 @@ namespace colibri.ui.controls.viewers {
         } {
             const viewer = this._viewer;
 
-            let x = 0;
-            let y = viewer.getScrollY();
+            const x = 0;
+            const y = viewer.getScrollY();
 
             const contentProvider = viewer.getContentProvider();
 
@@ -46,7 +46,9 @@ namespace colibri.ui.controls.viewers {
 
         }
 
-        protected paintItems(objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[], parentPaintItem: PaintItem, x: number, y: number) {
+        protected paintItems(
+            objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
+            parentPaintItem: PaintItem, x: number, y: number) {
 
             const viewer = this._viewer;
 
@@ -54,17 +56,19 @@ namespace colibri.ui.controls.viewers {
 
             const b = viewer.getBounds();
 
-            for (let obj of objects) {
+            for (const obj of objects) {
 
                 const children = viewer.getContentProvider().getChildren(obj);
                 const expanded = viewer.isExpanded(obj);
-                let newParentPaintItem : PaintItem = null;
+                let newParentPaintItem: PaintItem = null;
 
                 if (viewer.isFilterIncluded(obj)) {
 
                     const renderer = viewer.getCellRendererProvider().getCellRenderer(obj);
 
-                    const args = new RenderCellArgs(context, x + LABEL_MARGIN, y, b.width - x - LABEL_MARGIN, 0, obj, viewer);
+                    const args = new RenderCellArgs(
+                        context, x + LABEL_MARGIN, y, b.width - x - LABEL_MARGIN, 0, obj, viewer);
+
                     const cellHeight = renderer.cellHeight(args);
                     args.h = cellHeight;
 
@@ -76,7 +80,9 @@ namespace colibri.ui.controls.viewers {
                         if (children.length > 0) {
                             const iconY = y + (cellHeight - TREE_ICON_SIZE) / 2;
 
-                            const icon = Controls.getIcon(expanded ? ICON_CONTROL_TREE_COLLAPSE : ICON_CONTROL_TREE_EXPAND);
+                            const icon = Controls
+                                .getIcon(expanded ? ICON_CONTROL_TREE_COLLAPSE : ICON_CONTROL_TREE_EXPAND);
+
                             icon.paint(context, x, iconY, ICON_SIZE, ICON_SIZE, false);
 
                             treeIconList.push({
@@ -99,7 +105,10 @@ namespace colibri.ui.controls.viewers {
                 }
 
                 if (expanded) {
-                    const result = this.paintItems(children, treeIconList, paintItems, newParentPaintItem, x + LABEL_MARGIN, y);
+
+                    const result = this.paintItems(
+                        children, treeIconList, paintItems, newParentPaintItem, x + LABEL_MARGIN, y);
+
                     y = result.y;
                 }
             }
@@ -117,11 +126,13 @@ namespace colibri.ui.controls.viewers {
 
             let args2: RenderCellArgs;
             if (args.h <= ROW_HEIGHT) {
-                args2 = new RenderCellArgs(args.canvasContext, args.x, args.y, ICON_SIZE, args.h, args.obj, args.viewer);
+                args2 = new RenderCellArgs(
+                    args.canvasContext, args.x, args.y, ICON_SIZE, args.h, args.obj, args.viewer);
                 x += 20;
                 y += 15;
             } else {
-                args2 = new RenderCellArgs(args.canvasContext, args.x, args.y, args.w, args.h - 20, args.obj, args.viewer);
+                args2 = new RenderCellArgs(
+                    args.canvasContext, args.x, args.y, args.w, args.h - 20, args.obj, args.viewer);
                 y += args2.h + 15;
             }
 

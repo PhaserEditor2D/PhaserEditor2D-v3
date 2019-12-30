@@ -77,10 +77,9 @@ namespace colibri.ui.controls {
             this._element.classList.remove(...tokens);
         }
 
-        containsClass(className : string) {
+        containsClass(className: string) {
             return this._element.classList.contains(className);
         }
-
 
         getElement() {
             return this._element;
@@ -136,16 +135,15 @@ namespace colibri.ui.controls {
                 });
             }
 
-
             if (this._layout) {
-                
+
                 this._layout.layout(this);
 
             } else {
 
                 if (this._layoutChildren) {
 
-                    for (let child of this._children) {
+                    for (const child of this._children) {
                         child.layout();
                     }
                 }
@@ -166,7 +164,7 @@ namespace colibri.ui.controls {
         }
 
         protected onControlAdded() {
-
+            // nothing
         }
 
         getChildren() {

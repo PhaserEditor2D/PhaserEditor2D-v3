@@ -1,6 +1,5 @@
 namespace colibri.ui.controls.viewers {
 
-
     class FilterControl extends Control {
         private _filterElement: HTMLInputElement;
 

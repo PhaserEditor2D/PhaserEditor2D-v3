@@ -47,7 +47,7 @@ namespace colibri.core.preferences {
         }
 
         getValue(key: string, defaultValue: any = null): any {
-            
+
             const data = this.readData();
 
             return data[key] ?? defaultValue;

@@ -1,11 +1,10 @@
 namespace colibri.core.io {
-   
-    export declare type FileData = {
+
+    export interface FileData {
         name: string;
         isFile: boolean;
-        size: number,
-        modTime: number,
+        size: number;
+        modTime: number;
         children?: FileData[];
     }
-
 }

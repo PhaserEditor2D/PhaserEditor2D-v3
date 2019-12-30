@@ -84,7 +84,7 @@ namespace colibri.ui.controls {
 
                 if (action.isEnabled()) {
 
-                    item.addEventListener("click", e => {
+                    item.addEventListener("click", ev => {
 
                         this.close();
 
@@ -103,10 +103,10 @@ namespace colibri.ui.controls {
 
             this._bgElement.classList.add("MenuContainer");
 
-            this._bgElement.addEventListener("mousedown", e => {
+            this._bgElement.addEventListener("mousedown", (ev: MouseEvent) => {
 
-                e.preventDefault();
-                e.stopImmediatePropagation();
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
 
                 this.close();
             });

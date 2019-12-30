@@ -25,11 +25,13 @@ namespace colibri.ui.controls {
 
     export class Controls {
 
-        private static _images: Map<String, IImage> = new Map();
+        private static _images: Map<string, IImage> = new Map();
         private static _applicationDragData: any[] = null;
 
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {
-            let canvas = <HTMLCanvasElement>document.getElementById("__drag__canvas");
+
+            let canvas = document.getElementById("__drag__canvas") as HTMLCanvasElement;
+
             if (!canvas) {
                 canvas = document.createElement("canvas");
                 canvas.setAttribute("id", "__drag__canvas");
@@ -66,8 +68,7 @@ namespace colibri.ui.controls {
             this._applicationDragData = data;
         }
 
-
-        static async resolveAll(list: Promise<PreloadResult>[]): Promise<PreloadResult> {
+        static async resolveAll(list: Array<Promise<PreloadResult>>): Promise<PreloadResult> {
 
             let result = PreloadResult.NOTHING_LOADED;
 
@@ -154,7 +155,7 @@ namespace colibri.ui.controls {
             classList: ["light"],
             dark: false,
             viewerSelectionBackground: "#4242ff",
-            //treeItemSelectionBackground: "#525252",
+            // treeItemSelectionBackground: "#525252",
             viewerSelectionForeground: "#f0f0f0",
             viewerForeground: "#000000",
         };
@@ -164,7 +165,7 @@ namespace colibri.ui.controls {
             displayName: "Dark",
             classList: ["dark"],
             dark: true,
-            viewerSelectionBackground: "#f0a050", //"#101ea2",//"#8f8f8f",
+            viewerSelectionBackground: "#f0a050", // "#101ea2",//"#8f8f8f",
             viewerSelectionForeground: "#0e0e0e",
             viewerForeground: "#f0f0f0",
         };
@@ -196,7 +197,10 @@ namespace colibri.ui.controls {
             return this._theme;
         }
 
-        static drawRoundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, topLeft = 5, topRight = 5, bottomRight = 5, bottomLeft = 5) {
+        static drawRoundedRect(
+            ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number,
+            topLeft = 5, topRight = 5, bottomRight = 5, bottomLeft = 5) {
+
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(x + topLeft, y);

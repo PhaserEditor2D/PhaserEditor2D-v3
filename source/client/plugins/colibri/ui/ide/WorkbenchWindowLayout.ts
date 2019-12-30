@@ -6,7 +6,7 @@ namespace colibri.ui.ide {
 
         layout(parent: controls.Control) {
 
-            const win = <WorkbenchWindow>parent;
+            const win = parent as WorkbenchWindow;
             const toolbar = win.getToolbar();
             const clientArea = win.getClientArea();
 

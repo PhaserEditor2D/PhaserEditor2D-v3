@@ -38,9 +38,8 @@ namespace colibri.ui.controls {
             window.addEventListener("mousemove", l4);
             window.addEventListener("mousemove", l5);
 
-
             this.getViewer().getElement().addEventListener("wheel", e => this.onClientWheel(e));
-            this._scrollBar.addEventListener("mousedown", e => this.onBarMouseDown(e))
+            this._scrollBar.addEventListener("mousedown", e => this.onBarMouseDown(e));
         }
 
         getViewer() {
@@ -98,10 +97,8 @@ namespace colibri.ui.controls {
             this.layout();
         }
 
-
         private _startDragY = -1;
         private _startScrollY = 0;
-
 
         private onMouseDown(e: MouseEvent) {
             if (e.target === this._scrollHandler) {

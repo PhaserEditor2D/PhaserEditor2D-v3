@@ -11,7 +11,7 @@ namespace colibri.ui.ide.undo {
         }
 
         add(op: Operation) {
-            
+
             this._undoList.push(op);
             this._redoList = [];
         }

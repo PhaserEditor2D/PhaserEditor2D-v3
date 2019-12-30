@@ -16,7 +16,6 @@ namespace colibri.ui.ide.actions {
     export const CMD_SELECT_ALL = "colibri.ui.ide.actions.SelectAll";
     export const CMD_ESCAPE = "colibri.ui.ide.actions.Scape";
 
-
     function isViewerScope(args: colibri.ui.ide.commands.CommandArgs) {
 
         if (args.activeElement) {
@@ -30,7 +29,6 @@ namespace colibri.ui.ide.actions {
 
         return false;
     }
-
 
     export class IDECommands {
 
@@ -133,9 +131,12 @@ namespace colibri.ui.ide.actions {
             });
 
             manager.addHandlerHelper(CMD_EXPAND_COLLAPSE_BRANCH,
-                args => args.activeElement !== null && controls.Control.getControlOf(args.activeElement) instanceof controls.viewers.Viewer,
+
+                args => args.activeElement !== null
+                    && controls.Control.getControlOf(args.activeElement) instanceof controls.viewers.Viewer,
+
                 args => {
-                    const viewer = <controls.viewers.Viewer>controls.Control.getControlOf(args.activeElement);
+                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
 
                     const parents = [];
 
@@ -150,8 +151,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_EXPAND_COLLAPSE_BRANCH, new KeyMatcher({
                 key: " "
-            }))
-
+            }));
 
             // escape
 
@@ -170,7 +170,7 @@ namespace colibri.ui.ide.actions {
             manager.addHandlerHelper(CMD_ESCAPE,
                 isViewerScope,
                 args => {
-                    const viewer = <controls.viewers.Viewer>controls.Control.getControlOf(args.activeElement);
+                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
                     viewer.escape();
                 }
             );
@@ -201,7 +201,6 @@ namespace colibri.ui.ide.actions {
                 control: true,
                 key: "Z"
             }));
-
 
             // redo
 

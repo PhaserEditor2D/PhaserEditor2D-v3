@@ -12,10 +12,11 @@ namespace colibri.ui.ide {
                 if (content) {
                     content.layout();
                 }
-            })
+            });
 
             this.addEventListener(controls.EVENT_TAB_CLOSED, (e: CustomEvent) => {
-                const part = <Part>e.detail;
+
+                const part = e.detail as Part;
 
                 if (part.onPartClosed()) {
                     if (this.getContentList().length === 1) {
@@ -31,7 +32,7 @@ namespace colibri.ui.ide {
 
             this.addEventListener(controls.EVENT_TAB_SELECTED, (e: CustomEvent) => {
 
-                const part = <Part>e.detail;
+                const part = e.detail as Part;
 
                 Workbench.getWorkbench().setActivePart(part);
 
@@ -55,7 +56,7 @@ namespace colibri.ui.ide {
 
                 if (icon) {
 
-                    icon.preload().then(()=> {
+                    icon.preload().then(() => {
                         this.setTabTitle(part, part.getTitle(), icon);
                     });
 

@@ -59,10 +59,13 @@ namespace colibri.ui.controls.properties {
         }
 
         flatValues_Number(values: number[]): string {
+
             const set = new Set(values);
 
-            if (set.size == 1) {
+            if (set.size === 1) {
+
                 const value = set.values().next().value;
+
                 return value.toString();
             }
 
@@ -105,10 +108,10 @@ namespace colibri.ui.controls.properties {
             return label;
         }
 
-        protected createButton(parent: HTMLElement, text : string, callback: () => void) {
-            
+        protected createButton(parent: HTMLElement, text: string, callback: () => void) {
+
             const btn = document.createElement("button");
-            
+
             btn.innerText = text;
 
             btn.addEventListener("click", e => callback());
@@ -134,7 +137,7 @@ namespace colibri.ui.controls.properties {
         protected createCheckbox(parent: HTMLElement) {
 
             const check = document.createElement("input");
-            
+
             check.type = "checkbox";
             check.classList.add("formCheckbox");
 

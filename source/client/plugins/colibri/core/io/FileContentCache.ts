@@ -9,7 +9,7 @@ namespace colibri.core.io {
         private _backendGetContent: GetFileContent<T>;
         private _backendSetContent: SetFileContent<T>;
         private _map: Map<string, ContentEntry<T>>;
-        private _preloadMap : Map<string, Promise<ui.controls.PreloadResult>>;
+        private _preloadMap: Map<string, Promise<ui.controls.PreloadResult>>;
 
         constructor(getContent: GetFileContent<T>, setContent?: SetFileContent<T>) {
 
@@ -41,7 +41,7 @@ namespace colibri.core.io {
                     return ui.controls.Controls.resolveNothingLoaded();
                 }
 
-                const promise = this._backendGetContent(file)
+                const promise2 = this._backendGetContent(file)
 
                     .then((content) => {
 
@@ -53,9 +53,9 @@ namespace colibri.core.io {
                         return Promise.resolve(ui.controls.PreloadResult.RESOURCES_LOADED);
                     });
 
-                this._preloadMap.set(filename, promise);
+                this._preloadMap.set(filename, promise2);
 
-                return promise;
+                return promise2;
             }
 
             const promise = this._backendGetContent(file)

@@ -17,7 +17,7 @@ namespace phasereditor2d.code {
         }
 
         constructor() {
-            super("phasereditor2d.core")
+            super("phasereditor2d.core");
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -27,10 +27,11 @@ namespace phasereditor2d.code {
             this._modelsManager = new ui.editors.MonacoModelsManager();
 
             // reg.addExtension(colibri.ui.ide.PreloadProjectResourcesExtension.POINT_ID,
-            //     new colibri.ui.ide.PreloadProjectResourcesExtension("phasereditor2d.code.ui.editors.EditorModelsManager",
-            //         monitor => {
-            //             return this._modelsManager.start(monitor);
-            //         }));
+            //     new colibri.ui.ide
+            //         .PreloadProjectResourcesExtension("phasereditor2d.code.ui.editors.EditorModelsManager",
+            //             monitor => {
+            //                 return this._modelsManager.start(monitor);
+            //             }));
 
             // editors
 
@@ -76,10 +77,10 @@ namespace phasereditor2d.code {
             monaco.editor.defineTheme("vs", {
                 inherit: true,
                 base: "vs",
-                rules: <any>[
+                rules: [
                     {
                         background: "e2e2e2"
-                    }],
+                    }] as any,
                 colors: {
                     "editor.background": "#eaeaea",
                     "editor.lineHighlightBackground": "#bad4ee88"
@@ -89,16 +90,15 @@ namespace phasereditor2d.code {
             monaco.editor.defineTheme("vs-dark", {
                 inherit: true,
                 base: "vs-dark",
-                rules: <any>[
+                rules: [
                     {
                         background: "222222"
-                    }],
+                    }] as any,
                 colors: {
                     "editor.background": "#2e2e2e",
                     "editor.lineHighlightBackground": "#3e3e3e88"
                 }
             });
-
 
             window.addEventListener(controls.EVENT_THEME_CHANGED, e => {
 

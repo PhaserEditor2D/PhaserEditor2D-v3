@@ -22,8 +22,8 @@ namespace colibri.ui.controls.viewers {
 
                 const y2 = (args.h - controls.ICON_SIZE) / 2;
 
-                this._icon.paint(args.canvasContext, args.x + x2, args.y + y2, controls.ICON_SIZE, controls.ICON_SIZE, false);
-
+                this._icon.paint(
+                    args.canvasContext, args.x + x2, args.y + y2, controls.ICON_SIZE, controls.ICON_SIZE, false);
             }
 
             const ctx = args.canvasContext;

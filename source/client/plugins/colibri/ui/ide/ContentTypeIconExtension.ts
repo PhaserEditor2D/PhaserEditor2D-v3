@@ -1,10 +1,10 @@
 
 namespace colibri.ui.ide {
 
-    export declare type ContentTypeIconExtensionConfig = {
+    export declare type ContentTypeIconExtensionConfig = Array<{
         icon: controls.IImage,
         contentType: string
-    }[];
+    }>;
 
     export class ContentTypeIconExtension extends Extension {
 
@@ -12,11 +12,11 @@ namespace colibri.ui.ide {
 
         private _config: ContentTypeIconExtensionConfig;
 
-        static withPluginIcons(plugin: colibri.Plugin, config: {
+        static withPluginIcons(plugin: colibri.Plugin, config: Array<{
             iconName: string,
             contentType: string,
             plugin?: colibri.Plugin
-        }[]) {
+        }>) {
 
             return new ContentTypeIconExtension(
                 config.map(item => {

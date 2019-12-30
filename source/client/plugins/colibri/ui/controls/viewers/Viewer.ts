@@ -24,7 +24,6 @@ namespace colibri.ui.controls.viewers {
         protected _filterIncludeSet: Set<any>;
         private _menu: controls.Menu;
 
-
         constructor(...classList: string[]) {
             super("canvas", "Viewer");
 
@@ -40,7 +39,7 @@ namespace colibri.ui.controls.viewers {
             this._expandedObjects = new Set();
             this._selectedObjects = new Set();
 
-            (<any>window).cc = this;
+            (window as any).cc = this;
 
             this.initListeners();
         }
@@ -60,7 +59,7 @@ namespace colibri.ui.controls.viewers {
 
                 case "ArrowUp":
                 case "ArrowLeft":
-                    
+
                     this.moveCursor(-1);
                     break;
 
@@ -79,7 +78,6 @@ namespace colibri.ui.controls.viewers {
             if (!elem) {
                 return;
             }
-
 
             let i = this._paintItems.findIndex(item => item.data === elem);
 
@@ -199,7 +197,7 @@ namespace colibri.ui.controls.viewers {
 
         protected getPaintItemAt(e: MouseEvent): PaintItem {
 
-            for (let item of this._paintItems) {
+            for (const item of this._paintItems) {
 
                 if (item.contains(e.offsetX, e.offsetY)) {
                     return item;
@@ -332,7 +330,7 @@ namespace colibri.ui.controls.viewers {
 
                     } else if (e.shiftKey) {
 
-                        if (this._lastSelectedItemIndex >= 0 && this._lastSelectedItemIndex != item.index) {
+                        if (this._lastSelectedItemIndex >= 0 && this._lastSelectedItemIndex !== item.index) {
 
                             const start = Math.min(this._lastSelectedItemIndex, item.index);
                             const end = Math.max(this._lastSelectedItemIndex, item.index);
@@ -398,7 +396,7 @@ namespace colibri.ui.controls.viewers {
         expandCollapseBranch(obj: any) {
             const parents = [];
 
-            const item = this._paintItems.find(item => item.data === obj);
+            const item = this._paintItems.find(i => i.data === obj);
 
             if (item && item.parent) {
                 const parentObj = item.parent.data;
@@ -505,20 +503,20 @@ namespace colibri.ui.controls.viewers {
                 ui.controls.setElementBounds(this.getElement(), {
                     x: b.x,
                     y: b.y,
-                    width: b.width | 0,
-                    height: b.height | 0
+                    width: Math.floor(b.width),
+                    height: Math.floor(b.height)
                 });
             } else {
                 ui.controls.setElementBounds(this.getElement(), {
-                    width: b.width | 0,
-                    height: b.height | 0
+                    width: Math.floor(b.width),
+                    height: Math.floor(b.height)
                 });
             }
 
             const canvas = this.getCanvas();
 
-            canvas.width = b.width | 0;
-            canvas.height = b.height | 0;
+            canvas.width = Math.floor(b.width);
+            canvas.height = Math.floor(b.height);
 
             this.initContext();
 
@@ -528,7 +526,7 @@ namespace colibri.ui.controls.viewers {
         protected abstract paint(): void;
 
         getCanvas(): HTMLCanvasElement {
-            return <HTMLCanvasElement>this.getElement();
+            return this.getElement() as HTMLCanvasElement;
         }
 
         getContext() {
@@ -591,11 +589,10 @@ namespace colibri.ui.controls.viewers {
         }
     }
 
-
     export declare type ViewerState = {
         expandedObjects: Set<any>,
         selectedObjects: Set<any>,
         filterText: string,
         cellSize: number
-    }
+    };
 }

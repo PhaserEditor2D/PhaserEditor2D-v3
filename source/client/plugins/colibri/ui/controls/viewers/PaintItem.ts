@@ -4,7 +4,7 @@ namespace colibri.ui.controls.viewers {
         constructor(
             public index: number,
             public data: any,
-            public parent : PaintItem = null
+            public parent: PaintItem = null
         ) {
             super();
         }

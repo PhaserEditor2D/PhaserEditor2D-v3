@@ -1,10 +1,10 @@
 namespace colibri.core.io {
 
-    export declare type RenameData = {
+    export interface RenameData {
 
-        oldName: string,
+        oldName: string;
 
-        newFile: FilePath
+        newFile: FilePath;
     }
 
     export class FileStorageChange {
@@ -27,7 +27,7 @@ namespace colibri.core.io {
         }
 
         recordRename(fromPath: string, toPath: string) {
-            
+
             this._renameRecords_fromPath.add(fromPath);
             this._renameRecords_toPath.add(toPath);
 
@@ -54,11 +54,11 @@ namespace colibri.core.io {
             return this._renameRecords_fromPath;
         }
 
-        recordDelete(path : string) {
+        recordDelete(path: string) {
             this._deletedRecords.add(path);
         }
 
-        isDeleted(path : string) {
+        isDeleted(path: string) {
             return this._deletedRecords.has(path);
         }
 
@@ -66,11 +66,11 @@ namespace colibri.core.io {
             return this._deletedRecords;
         }
 
-        recordAdd(path : string) {
+        recordAdd(path: string) {
             this._addedRecords.add(path);
         }
 
-        isAdded(path : string) {
+        isAdded(path: string) {
             return this._addedRecords.has(path);
         }
 
@@ -78,11 +78,11 @@ namespace colibri.core.io {
             return this._addedRecords;
         }
 
-        recordModify(path : string) {
+        recordModify(path: string) {
             this._modifiedRecords.add(path);
         }
 
-        isModified(path : string) {
+        isModified(path: string) {
             return this._modifiedRecords.has(path);
         }
 

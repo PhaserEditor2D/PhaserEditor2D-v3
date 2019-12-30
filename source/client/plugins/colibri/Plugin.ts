@@ -1,7 +1,6 @@
 namespace colibri {
 
     export abstract class Plugin {
-        
 
         private _id: string;
 
@@ -13,23 +12,23 @@ namespace colibri {
             return this._id;
         }
 
-        starting() : Promise<void> {
+        starting(): Promise<void> {
             return Promise.resolve();
         }
 
-        started() : Promise<void> {
+        started(): Promise<void> {
             return Promise.resolve();
         }
 
-        registerExtensions(registry : ExtensionRegistry) : void {
-
+        registerExtensions(registry: ExtensionRegistry): void {
+            // nothing
         }
 
-        getIcon(name : string) : ui.controls.IImage {
+        getIcon(name: string): ui.controls.IImage {
             return ui.controls.Controls.getIcon(name, `plugins/${this.getId()}/ui/icons`);
         }
 
-        async getJSON(pathInPlugin : string) {
+        async getJSON(pathInPlugin: string) {
 
             const result = await fetch(`static/plugins/${this.getId()}/` + pathInPlugin);
 

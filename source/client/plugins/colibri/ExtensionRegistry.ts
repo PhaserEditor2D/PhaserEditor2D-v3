@@ -27,7 +27,7 @@ namespace colibri {
 
             for (const point of points) {
 
-                let list = this._map.get(point);
+                const list = this._map.get(point);
 
                 list.sort((a, b) => a.getPriority() - b.getPriority());
             }
@@ -35,13 +35,13 @@ namespace colibri {
 
         getExtensions<T extends Extension>(point: string): T[] {
 
-            let list = this._map.get(point);
+            const list = this._map.get(point);
 
             if (!list) {
                 return [];
             }
 
-            return <any>list;
+            return list as any;
         }
 
     }

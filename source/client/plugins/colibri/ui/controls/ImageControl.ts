@@ -6,7 +6,7 @@ namespace colibri.ui.controls {
 
         private _image: IImage;
 
-        constructor(padding : number = 0, ...classList : string[]) {
+        constructor(padding: number = 0, ...classList: string[]) {
             super(padding, "ImageControl", ...classList);
         }
 

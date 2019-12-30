@@ -17,10 +17,11 @@ var phasereditor2d;
                 // project preloaders
                 this._modelsManager = new code.ui.editors.MonacoModelsManager();
                 // reg.addExtension(colibri.ui.ide.PreloadProjectResourcesExtension.POINT_ID,
-                //     new colibri.ui.ide.PreloadProjectResourcesExtension("phasereditor2d.code.ui.editors.EditorModelsManager",
-                //         monitor => {
-                //             return this._modelsManager.start(monitor);
-                //         }));
+                //     new colibri.ui.ide
+                //         .PreloadProjectResourcesExtension("phasereditor2d.code.ui.editors.EditorModelsManager",
+                //             monitor => {
+                //                 return this._modelsManager.start(monitor);
+                //             }));
                 // editors
                 reg.addExtension(new colibri.ui.ide.EditorExtension([
                     new code.ui.editors.JavaScriptEditorFactory(),

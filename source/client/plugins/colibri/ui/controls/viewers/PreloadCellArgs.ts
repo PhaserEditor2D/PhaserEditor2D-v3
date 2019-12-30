@@ -10,5 +10,5 @@ namespace colibri.ui.controls.viewers {
         clone() {
             return new PreloadCellArgs(this.obj, this.viewer);
         }
-    };
+    }
 }

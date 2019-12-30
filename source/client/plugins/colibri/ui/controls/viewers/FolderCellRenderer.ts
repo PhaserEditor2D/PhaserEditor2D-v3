@@ -25,7 +25,7 @@ namespace colibri.ui.controls.viewers {
             // icon.paint(args.canvasContext, args.x, args.y, args.w, args.h, true);
         }
 
-        async preload(args : PreloadCellArgs): Promise<PreloadResult> {
+        async preload(args: PreloadCellArgs): Promise<PreloadResult> {
 
             const viewer = args.viewer;
             const obj = args.obj;
@@ -65,7 +65,7 @@ namespace colibri.ui.controls.viewers {
 
                 let frameCount = realCount;
 
-                if (frameCount == 0) {
+                if (frameCount === 0) {
                     return;
                 }
 
@@ -80,25 +80,24 @@ namespace colibri.ui.controls.viewers {
                     frameCount = 1;
                 }
 
-                var size = Math.floor(Math.sqrt(width * height / frameCount) * 0.8) + 1;
+                let size = Math.floor(Math.sqrt(width * height / frameCount) * 0.8) + 1;
 
                 if (frameCount === 1) {
                     size = Math.min(width, height);
                 }
 
-                var cols = Math.floor(width / size);
-                var rows = frameCount / cols + (frameCount % cols == 0 ? 0 : 1);
-                var marginX = Math.max(0, (width - cols * size) / 2) | 0;
-                var marginY = Math.max(0, (height - rows * size) / 2) | 0;
+                const cols = Math.floor(width / size);
+                const rows = frameCount / cols + (frameCount % cols === 0 ? 0 : 1);
+                const marginX = Math.floor(Math.max(0, (width - cols * size) / 2));
+                const marginY = Math.floor(Math.max(0, (height - rows * size) / 2));
 
-                var itemX = 0;
-                var itemY = 0;
+                let itemX = 0;
+                let itemY = 0;
 
                 const startX = args.x + marginX;
                 const startY = 2 + args.y + marginY;
 
-
-                for (var i = 0; i < frameCount; i++) {
+                for (let i = 0; i < frameCount; i++) {
 
                     if (itemY + size > height) {
                         break;

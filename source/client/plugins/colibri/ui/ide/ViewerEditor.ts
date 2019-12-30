@@ -3,17 +3,17 @@
 namespace colibri.ui.ide {
 
     export abstract class ViewerFileEditor extends FileEditor {
-        
-        protected _filteredViewer: controls.viewers.FilteredViewer<any>;
-        protected _viewer : controls.viewers.TreeViewer;
 
-        constructor(id : string) {
-            super(id)
+        protected _filteredViewer: controls.viewers.FilteredViewer<any>;
+        protected _viewer: controls.viewers.TreeViewer;
+
+        constructor(id: string) {
+            super(id);
         }
 
-        protected abstract  createViewer() : controls.viewers.TreeViewer;
+        protected abstract createViewer(): controls.viewers.TreeViewer;
 
-        protected createPart() : void {
+        protected createPart(): void {
 
             this._viewer = this.createViewer();
 
