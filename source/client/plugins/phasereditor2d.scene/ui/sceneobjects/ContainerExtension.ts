@@ -16,11 +16,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        updateLoaderWithObjectData(args: UpdateLoaderWithObjectData): void {
+
+            const containerData = args.data as ContainerData;
+
+            for (const objData of containerData.list) {
+
+                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
+
+                if (ext) {
+                    ext.updateLoaderWithObjectData({
+                        data: objData,
+                        scene: args.scene,
+                        finder: args.finder
+                    });
+                }
+            }
+        }
+
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
-            container.getEditorSupport().readJSON(args.data);
+            container.getEditorSupport().readJSON(args.data as ContainerData);
 
             return container;
         }

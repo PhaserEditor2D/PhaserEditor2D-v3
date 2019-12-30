@@ -10,7 +10,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export interface CreateWithDataArgs {
         scene: GameScene;
-        data: any;
+        data: json.ObjectData;
+    }
+
+    export interface UpdateLoaderWithObjectData {
+        data: json.ObjectData;
+        scene: GameScene;
+        finder: pack.core.PackFinder;
     }
 
     export abstract class SceneObjectExtension extends colibri.Extension {
@@ -60,5 +66,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          */
         abstract createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
 
+        /**
+         * Update the scene loader with the JSON data of a scene object.
+         * For example, an Image data contains the texture and frame names, so it uses them to load the texture.
+         *
+         * @param args The data involved in the update.
+         */
+        async abstract updateLoaderWithObjectData(args: UpdateLoaderWithObjectData);
     }
 }

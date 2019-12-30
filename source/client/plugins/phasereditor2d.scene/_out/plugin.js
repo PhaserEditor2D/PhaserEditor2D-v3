@@ -2016,29 +2016,17 @@ var phasereditor2d;
                     }
                     async createSceneCache_async(sceneData) {
                         phasereditor2d.pack.core.parsers.ImageFrameParser.initSourceImageMap(this._scene.game);
-                        for (const jsonObjData of sceneData.displayList) {
-                            await this.updateSceneCacheWithObjectData_async(jsonObjData);
-                        }
-                    }
-                    async updateSceneCacheWithObjectData_async(objData) {
-                        const type = objData.type;
-                        switch (type) {
-                            case "Image": {
-                                const key = objData.textureKey;
-                                const finder = new phasereditor2d.pack.core.PackFinder();
-                                await finder.preload();
-                                const item = finder.findAssetPackItem(key);
-                                if (item) {
-                                    await this.addToCache_async(item);
-                                }
-                                break;
+                        const finder = new phasereditor2d.pack.core.PackFinder();
+                        await finder.preload();
+                        for (const objData of sceneData.displayList) {
+                            const ext = scene_7.ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
+                            if (ext) {
+                                await ext.updateLoaderWithObjectData({
+                                    data: objData,
+                                    finder: finder,
+                                    scene: this._scene
+                                });
                             }
-                            case "Container":
-                                const containerData = objData;
-                                for (const childData of containerData.list) {
-                                    await this.updateSceneCacheWithObjectData_async(childData);
-                                }
-                                break;
                         }
                     }
                     async addToCache_async(data) {
@@ -2321,6 +2309,19 @@ var phasereditor2d;
                             phaserTypeName: "Phaser.GameObjects.Container"
                         });
                     }
+                    updateLoaderWithObjectData(args) {
+                        const containerData = args.data;
+                        for (const objData of containerData.list) {
+                            const ext = scene_11.ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
+                            if (ext) {
+                                ext.updateLoaderWithObjectData({
+                                    data: objData,
+                                    scene: args.scene,
+                                    finder: args.finder
+                                });
+                            }
+                        }
+                    }
                     createSceneObjectWithData(args) {
                         const container = this.createContainerObject(args.scene, 0, 0, []);
                         container.getEditorSupport().readJSON(args.data);
@@ -2440,6 +2441,28 @@ var phasereditor2d;
                             typeName: "Image",
                             phaserTypeName: "Phaser.GameObjects.Image"
                         });
+                    }
+                    async updateLoaderWithObjectData(args) {
+                        const key = args.data.textureKey;
+                        const finder = args.finder;
+                        const item = finder.findAssetPackItem(key);
+                        if (item) {
+                            await ImageExtension.addImageFramesToCache(args.scene, item);
+                        }
+                    }
+                    static async addImageFramesToCache(scene, data) {
+                        let imageFrameContainerPackItem = null;
+                        if (data instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem) {
+                            imageFrameContainerPackItem = data;
+                        }
+                        else if (data instanceof phasereditor2d.pack.core.AssetPackImageFrame) {
+                            imageFrameContainerPackItem = data.getPackItem();
+                        }
+                        if (imageFrameContainerPackItem !== null) {
+                            await imageFrameContainerPackItem.preload();
+                            await imageFrameContainerPackItem.preloadImages();
+                            imageFrameContainerPackItem.addToPhaserCache(scene.game);
+                        }
                     }
                     static isImageOrImageFrameAsset(data) {
                         return data instanceof phasereditor2d.pack.core.AssetPackImageFrame || data instanceof phasereditor2d.pack.core.ImageAssetPackItem;

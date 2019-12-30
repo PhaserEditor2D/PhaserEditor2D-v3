@@ -25,44 +25,22 @@ namespace phasereditor2d.scene.ui.json {
 
             pack.core.parsers.ImageFrameParser.initSourceImageMap(this._scene.game);
 
-            for (const jsonObjData of sceneData.displayList) {
+            const finder = new pack.core.PackFinder();
 
-                await this.updateSceneCacheWithObjectData_async(jsonObjData);
-            }
-        }
+            await finder.preload();
 
-        private async updateSceneCacheWithObjectData_async(objData: ObjectData) {
+            for (const objData of sceneData.displayList) {
 
-            const type = objData.type;
+                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
 
-            switch (type) {
+                if (ext) {
 
-                case "Image": {
-
-                    const key = (objData as sceneobjects.TextureData).textureKey;
-
-                    const finder = new pack.core.PackFinder();
-
-                    await finder.preload();
-
-                    const item = finder.findAssetPackItem(key);
-
-                    if (item) {
-                        await this.addToCache_async(item);
-                    }
-
-                    break;
+                    await ext.updateLoaderWithObjectData({
+                        data: objData,
+                        finder: finder,
+                        scene: this._scene
+                    });
                 }
-
-                case "Container":
-
-                    const containerData = objData as sceneobjects.ContainerData;
-
-                    for (const childData of containerData.list) {
-                        await this.updateSceneCacheWithObjectData_async(childData);
-                    }
-
-                    break;
             }
         }
 

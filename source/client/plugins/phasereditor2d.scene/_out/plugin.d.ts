@@ -393,7 +393,7 @@ declare namespace phasereditor2d.scene.ui.json {
     type SceneType = "Scene" | "Prefab";
     type SceneData = {
         sceneType: SceneType;
-        displayList: any[];
+        displayList: ObjectData[];
         meta: {
             app: string;
             url: string;
@@ -408,7 +408,6 @@ declare namespace phasereditor2d.scene.ui.json {
         static isValidSceneDataFormat(data: SceneData): boolean;
         createScene(data: SceneData): void;
         createSceneCache_async(sceneData: SceneData): Promise<void>;
-        private updateSceneCacheWithObjectData_async;
         addToCache_async(data: pack.core.AssetPackItem | pack.core.AssetPackImageFrame): Promise<void>;
         createObject(data: ObjectData): sceneobjects.SceneObject;
     }
@@ -474,7 +473,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
     interface CreateWithDataArgs {
         scene: GameScene;
-        data: any;
+        data: json.ObjectData;
+    }
+    interface UpdateLoaderWithObjectData {
+        data: json.ObjectData;
+        scene: GameScene;
+        finder: pack.core.PackFinder;
     }
     abstract class SceneObjectExtension extends colibri.Extension {
         static POINT_ID: string;
@@ -505,6 +509,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args The data involved in the creation of the object.
          */
         abstract createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
+        /**
+         * Update the scene loader with the JSON data of a scene object.
+         * For example, an Image data contains the texture and frame names, so it uses them to load the texture.
+         *
+         * @param args The data involved in the update.
+         */
+        abstract updateLoaderWithObjectData(args: UpdateLoaderWithObjectData): any;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -513,6 +524,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
     class ContainerExtension extends SceneObjectExtension {
         constructor();
+        updateLoaderWithObjectData(args: UpdateLoaderWithObjectData): void;
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createContainerObject;
         acceptsDropData(data: any): boolean;
@@ -539,6 +551,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageExtension extends SceneObjectExtension {
         constructor();
+        updateLoaderWithObjectData(args: UpdateLoaderWithObjectData): Promise<void>;
+        static addImageFramesToCache(scene: GameScene, data: pack.core.AssetPackItem | pack.core.AssetPackImageFrame): Promise<void>;
         static isImageOrImageFrameAsset(data: any): boolean;
         acceptsDropData(data: any): boolean;
         createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;

@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.json {
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
-                const objData = {};
+                const objData = {} as ObjectData;
                 obj.getEditorSupport().writeJSON(objData);
                 sceneData.displayList.push(objData);
             }

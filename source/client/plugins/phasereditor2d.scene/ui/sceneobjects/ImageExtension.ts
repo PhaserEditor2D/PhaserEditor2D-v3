@@ -11,6 +11,44 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        async updateLoaderWithObjectData(args: UpdateLoaderWithObjectData) {
+
+            const key = (args.data as sceneobjects.TextureData).textureKey;
+
+            const finder = args.finder;
+
+            const item = finder.findAssetPackItem(key);
+
+            if (item) {
+
+                await ImageExtension.addImageFramesToCache(args.scene, item);
+            }
+        }
+
+        static async addImageFramesToCache(
+            scene: GameScene, data: pack.core.AssetPackItem | pack.core.AssetPackImageFrame) {
+
+            let imageFrameContainerPackItem: pack.core.ImageFrameContainerAssetPackItem = null;
+
+            if (data instanceof pack.core.ImageFrameContainerAssetPackItem) {
+
+                imageFrameContainerPackItem = data;
+
+            } else if (data instanceof pack.core.AssetPackImageFrame) {
+
+                imageFrameContainerPackItem = (data.getPackItem() as pack.core.ImageFrameContainerAssetPackItem);
+            }
+
+            if (imageFrameContainerPackItem !== null) {
+
+                await imageFrameContainerPackItem.preload();
+
+                await imageFrameContainerPackItem.preloadImages();
+
+                imageFrameContainerPackItem.addToPhaserCache(scene.game);
+            }
+        }
+
         static isImageOrImageFrameAsset(data: any) {
 
             return data instanceof pack.core.AssetPackImageFrame || data instanceof pack.core.ImageAssetPackItem;
