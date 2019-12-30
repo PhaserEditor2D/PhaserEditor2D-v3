@@ -57,7 +57,6 @@ declare namespace phasereditor2d.scene.ui {
         createScene(data: json.SceneData): void;
         updateSceneLoader(sceneData: json.SceneData): Promise<void>;
         createObject(data: json.ObjectData): sceneobjects.SceneObject;
-        createContainerWithObjects(objectList: sceneobjects.SceneObject[]): sceneobjects.Container;
     }
 }
 declare namespace phasereditor2d.scene.ui {
@@ -528,6 +527,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createContainerObject;
+        createContainerObjectWithChildren(scene: GameScene, objectList: sceneobjects.SceneObject[]): sceneobjects.Container;
         acceptsDropData(data: any): boolean;
         createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;
     }

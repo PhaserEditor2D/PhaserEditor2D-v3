@@ -88,20 +88,5 @@ namespace phasereditor2d.scene.ui {
 
             return null;
         }
-
-        createContainerWithObjects(objectList: sceneobjects.SceneObject[]): sceneobjects.Container {
-
-            throw new Error("Not implemented yet. Needs revision!");
-
-            // const container = sceneobjects.Container.add(this._scene, 0, 0, objectList);
-
-            // const name = this._scene.makeNewName("container");
-
-            // container.getEditorSupport().setLabel(name);
-
-            // json.SceneParser.setNewId(container);
-
-            // return container;
-        }
     }
 }

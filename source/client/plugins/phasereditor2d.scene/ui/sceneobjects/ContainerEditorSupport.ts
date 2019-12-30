@@ -18,8 +18,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.writeJSON(data);
 
-            // container
-
             data.list = this.getObject().list.map(obj => {
 
                 const objData = {};
@@ -31,6 +29,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         readJSON(data: ContainerData) {
+
+            super.readJSON(data);
 
             const maker = this.getScene().getMaker();
 

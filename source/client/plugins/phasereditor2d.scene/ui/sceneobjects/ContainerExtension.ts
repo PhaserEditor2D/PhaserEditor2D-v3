@@ -67,6 +67,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return container;
         }
 
+        createContainerObjectWithChildren(
+            scene: GameScene, objectList: sceneobjects.SceneObject[]): sceneobjects.Container {
+
+            const container = this.createContainerObject(scene, 0, 0, objectList);
+
+            const name = scene.makeNewName("container");
+
+            container.getEditorSupport().setLabel(name);
+
+            return container;
+        }
+
         acceptsDropData(data: any): boolean {
             return false;
         }

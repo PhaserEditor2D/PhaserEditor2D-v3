@@ -41,7 +41,6 @@ namespace phasereditor2d.scene.ui.editor.undo {
             container.destroy();
 
             this.updateEditor();
-
         }
 
         redo(): void {
@@ -50,7 +49,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const objects = this._objectsIdList.map(id => scene.getByEditorId(id));
 
-            const container = this._editor.getSceneMaker().createContainerWithObjects(objects);
+            const container = sceneobjects.ContainerExtension.getInstance()
+                .createContainerObjectWithChildren(scene, objects);
 
             container.getEditorSupport().setId(this._containerId);
 
@@ -64,8 +64,5 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._editor.repaint();
 
         }
-
-
     }
-
 }

@@ -258,14 +258,6 @@ var phasereditor2d;
                     }
                     return null;
                 }
-                createContainerWithObjects(objectList) {
-                    throw new Error("Not implemented yet. Needs revision!");
-                    // const container = sceneobjects.Container.add(this._scene, 0, 0, objectList);
-                    // const name = this._scene.makeNewName("container");
-                    // container.getEditorSupport().setLabel(name);
-                    // json.SceneParser.setNewId(container);
-                    // return container;
-                }
             }
             ui.SceneMaker = SceneMaker;
         })(ui = scene_1.ui || (scene_1.ui = {}));
@@ -696,7 +688,8 @@ var phasereditor2d;
                                 return;
                             }
                         }
-                        const container = this._editor.getSceneMaker().createContainerWithObjects(sel);
+                        const container = ui.sceneobjects.ContainerExtension.getInstance()
+                            .createContainerObjectWithChildren(this._editor.getGameScene(), sel);
                         this._editor.getUndoManager().add(new editor_1.undo.JoinObjectsInContainerOperation(this._editor, container));
                         this._editor.setSelection([container]);
                         this._editor.refreshOutline();
@@ -2009,7 +2002,8 @@ var phasereditor2d;
                         redo() {
                             const scene = this._editor.getGameScene();
                             const objects = this._objectsIdList.map(id => scene.getByEditorId(id));
-                            const container = this._editor.getSceneMaker().createContainerWithObjects(objects);
+                            const container = ui.sceneobjects.ContainerExtension.getInstance()
+                                .createContainerObjectWithChildren(scene, objects);
                             container.getEditorSupport().setId(this._containerId);
                             this.updateEditor();
                         }
@@ -2204,7 +2198,6 @@ var phasereditor2d;
                     }
                     writeJSON(data) {
                         super.writeJSON(data);
-                        // container
                         data.list = this.getObject().list.map(obj => {
                             const objData = {};
                             obj.getEditorSupport().writeJSON(objData);
@@ -2212,6 +2205,7 @@ var phasereditor2d;
                         });
                     }
                     readJSON(data) {
+                        super.readJSON(data);
                         const maker = this.getScene().getMaker();
                         const obj = this.getObject();
                         for (const objData of data.list) {
@@ -2319,6 +2313,12 @@ var phasereditor2d;
                         const container = new sceneobjects.Container(scene, x, y, list);
                         container.getEditorSupport().setScene(scene);
                         scene.sys.displayList.add(container);
+                        return container;
+                    }
+                    createContainerObjectWithChildren(scene, objectList) {
+                        const container = this.createContainerObject(scene, 0, 0, objectList);
+                        const name = scene.makeNewName("container");
+                        container.getEditorSupport().setLabel(name);
                         return container;
                     }
                     acceptsDropData(data) {
