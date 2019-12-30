@@ -2,6 +2,11 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export interface ContainerData extends json.ObjectData {
+
+        list: json.ObjectData[];
+    }
+
     export class ContainerExtension extends SceneObjectExtension {
 
         constructor() {
@@ -23,6 +28,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private createContainerObject(scene: GameScene, x: number, y: number, list: sceneobjects.SceneObject[]) {
 
             const container = new sceneobjects.Container(this, scene, x, y, list);
+
+            container.getEditorSupport().setScene(scene);
 
             scene.sys.displayList.add(container);
 

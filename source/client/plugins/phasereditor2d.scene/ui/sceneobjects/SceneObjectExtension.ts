@@ -59,5 +59,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args The data involved in the creation of the object.
          */
         abstract createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
+
     }
 }

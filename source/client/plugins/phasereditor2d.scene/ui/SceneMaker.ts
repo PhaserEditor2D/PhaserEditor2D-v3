@@ -77,14 +77,6 @@ namespace phasereditor2d.scene.ui {
                 }
             }
 
-            for (const sprite of sprites) {
-
-                sprite.getEditorSupport().setScene(this._scene);
-
-                json.SceneParser.setNewId(sprite);
-                json.SceneParser.initSprite(sprite);
-            }
-
             return sprites;
         }
     }

@@ -21,16 +21,17 @@ namespace phasereditor2d.scene.ui.json {
             }
         }
 
-        async createSceneCache_async(data: SceneData) {
+        async createSceneCache_async(sceneData: SceneData) {
 
             pack.core.parsers.ImageFrameParser.initSourceImageMap(this._scene.game);
 
-            for (const objData of data.displayList) {
-                await this.updateSceneCacheWithObjectData_async(objData);
+            for (const jsonObjData of sceneData.displayList) {
+
+                await this.updateSceneCacheWithObjectData_async(jsonObjData);
             }
         }
 
-        private async updateSceneCacheWithObjectData_async(objData: any) {
+        private async updateSceneCacheWithObjectData_async(objData: ObjectData) {
 
             const type = objData.type;
 
@@ -38,7 +39,7 @@ namespace phasereditor2d.scene.ui.json {
 
                 case "Image": {
 
-                    const key = objData[sceneobjects.TextureSupport.TEXTURE_KEY];
+                    const key = (objData as sceneobjects.TextureData).textureKey;
 
                     const finder = new pack.core.PackFinder();
 
@@ -55,7 +56,9 @@ namespace phasereditor2d.scene.ui.json {
 
                 case "Container":
 
-                    for (const childData of objData.list) {
+                    const containerData = objData as sceneobjects.ContainerData;
+
+                    for (const childData of containerData.list) {
                         await this.updateSceneCacheWithObjectData_async(childData);
                     }
 
@@ -88,7 +91,7 @@ namespace phasereditor2d.scene.ui.json {
             }
         }
 
-        createObject(data: any) {
+        createObject(data: ObjectData) {
 
             const type = data.type;
 
@@ -103,11 +106,8 @@ namespace phasereditor2d.scene.ui.json {
 
                 if (sprite) {
 
-                    sprite.getEditorSupport().setScene(this._scene);
-
                     sprite.getEditorSupport().readJSON(data);
 
-                    SceneParser.initSprite(sprite);
                 }
 
                 return sprite;
@@ -119,21 +119,5 @@ namespace phasereditor2d.scene.ui.json {
 
             return null;
         }
-
-        static initSprite(sprite: Phaser.GameObjects.GameObject) {
-
-            sprite.setDataEnabled();
-
-            if (sprite instanceof sceneobjects.Image) {
-                sprite.setInteractive();
-            }
-
-        }
-
-        static setNewId(sprite: sceneobjects.SceneObject) {
-            sprite.getEditorSupport().setId(Phaser.Utils.String.UUID());
-        }
-
     }
-
 }

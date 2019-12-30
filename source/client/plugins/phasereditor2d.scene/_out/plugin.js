@@ -236,11 +236,6 @@ var phasereditor2d;
                             }
                         }
                     }
-                    for (const sprite of sprites) {
-                        sprite.getEditorSupport().setScene(this._scene);
-                        ui.json.SceneParser.setNewId(sprite);
-                        ui.json.SceneParser.initSprite(sprite);
-                    }
                     return sprites;
                 }
             }
@@ -2019,17 +2014,17 @@ var phasereditor2d;
                             this.createObject(objData);
                         }
                     }
-                    async createSceneCache_async(data) {
+                    async createSceneCache_async(sceneData) {
                         phasereditor2d.pack.core.parsers.ImageFrameParser.initSourceImageMap(this._scene.game);
-                        for (const objData of data.displayList) {
-                            await this.updateSceneCacheWithObjectData_async(objData);
+                        for (const jsonObjData of sceneData.displayList) {
+                            await this.updateSceneCacheWithObjectData_async(jsonObjData);
                         }
                     }
                     async updateSceneCacheWithObjectData_async(objData) {
                         const type = objData.type;
                         switch (type) {
                             case "Image": {
-                                const key = objData[ui.sceneobjects.TextureSupport.TEXTURE_KEY];
+                                const key = objData.textureKey;
                                 const finder = new phasereditor2d.pack.core.PackFinder();
                                 await finder.preload();
                                 const item = finder.findAssetPackItem(key);
@@ -2039,7 +2034,8 @@ var phasereditor2d;
                                 break;
                             }
                             case "Container":
-                                for (const childData of objData.list) {
+                                const containerData = objData;
+                                for (const childData of containerData.list) {
                                     await this.updateSceneCacheWithObjectData_async(childData);
                                 }
                                 break;
@@ -2070,9 +2066,7 @@ var phasereditor2d;
                                 scene: this._scene
                             });
                             if (sprite) {
-                                sprite.getEditorSupport().setScene(this._scene);
                                 sprite.getEditorSupport().readJSON(data);
-                                SceneParser.initSprite(sprite);
                             }
                             return sprite;
                         }
@@ -2080,15 +2074,6 @@ var phasereditor2d;
                             console.error(`SceneParser: no extension is registered for type "${type}".`);
                         }
                         return null;
-                    }
-                    static initSprite(sprite) {
-                        sprite.setDataEnabled();
-                        if (sprite instanceof ui.sceneobjects.Image) {
-                            sprite.setInteractive();
-                        }
-                    }
-                    static setNewId(sprite) {
-                        sprite.getEditorSupport().setId(Phaser.Utils.String.UUID());
                     }
                 }
                 json.SceneParser = SceneParser;
@@ -2166,72 +2151,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class SceneObjectExtension extends colibri.Extension {
-                    constructor(config) {
-                        super(SceneObjectExtension.POINT_ID);
-                        this._typeName = config.typeName;
-                        this._phaserTypeName = config.phaserTypeName;
-                    }
-                    getTypeName() {
-                        return this._typeName;
-                    }
-                    getPhaserTypeName() {
-                        return this._phaserTypeName;
-                    }
-                }
-                SceneObjectExtension.POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
-                sceneobjects.SceneObjectExtension = SceneObjectExtension;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./SceneObjectExtension.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
     (function (scene_10) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class ContainerExtension extends sceneobjects.SceneObjectExtension {
-                    constructor() {
-                        super({
-                            typeName: "Container",
-                            phaserTypeName: "Phaser.GameObjects.Container"
-                        });
-                    }
-                    createSceneObjectWithData(args) {
-                        const container = this.createContainerObject(args.scene, 0, 0, []);
-                        container.getEditorSupport().readJSON(args.data);
-                        return container;
-                    }
-                    createContainerObject(scene, x, y, list) {
-                        const container = new sceneobjects.Container(this, scene, x, y, list);
-                        scene.sys.displayList.add(container);
-                        return container;
-                    }
-                    acceptsDropData(data) {
-                        return false;
-                    }
-                    createSceneObjectWithAsset(args) {
-                        return null;
-                    }
-                }
-                sceneobjects.ContainerExtension = ContainerExtension;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_10.ui || (scene_10.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene_11) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -2243,6 +2163,11 @@ var phasereditor2d;
                         this._extension = extension;
                         this._object = obj;
                         this._serializers = [];
+                        this._object.setDataEnabled();
+                        this.setId(Phaser.Utils.String.UUID());
+                    }
+                    setNewId(sprite) {
+                        this.setId(Phaser.Utils.String.UUID());
                     }
                     addSerializer(...serializer) {
                         this._serializers.push(...serializer);
@@ -2274,12 +2199,14 @@ var phasereditor2d;
                     writeJSON(data) {
                         write(data, "id", this.getId());
                         write(data, "type", this._extension.getTypeName());
+                        write(data, "label", this._label);
                         for (const s of this._serializers) {
                             s.writeJSON(data);
                         }
                     }
                     readJSON(data) {
                         this.setId(read(data, "id"));
+                        this._label = read(data, "label");
                         for (const s of this._serializers) {
                             s.readJSON(data);
                         }
@@ -2287,7 +2214,7 @@ var phasereditor2d;
                 }
                 sceneobjects.EditorSupport = EditorSupport;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_11.ui || (scene_11.ui = {}));
+        })(ui = scene_10.ui || (scene_10.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./EditorSupport.ts" />
@@ -2349,6 +2276,72 @@ var phasereditor2d;
                 sceneobjects.ContainerEditorSupport = ContainerEditorSupport;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class SceneObjectExtension extends colibri.Extension {
+                    constructor(config) {
+                        super(SceneObjectExtension.POINT_ID);
+                        this._typeName = config.typeName;
+                        this._phaserTypeName = config.phaserTypeName;
+                    }
+                    getTypeName() {
+                        return this._typeName;
+                    }
+                    getPhaserTypeName() {
+                        return this._phaserTypeName;
+                    }
+                }
+                SceneObjectExtension.POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
+                sceneobjects.SceneObjectExtension = SceneObjectExtension;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneObjectExtension.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene_11) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class ContainerExtension extends sceneobjects.SceneObjectExtension {
+                    constructor() {
+                        super({
+                            typeName: "Container",
+                            phaserTypeName: "Phaser.GameObjects.Container"
+                        });
+                    }
+                    createSceneObjectWithData(args) {
+                        const container = this.createContainerObject(args.scene, 0, 0, []);
+                        container.getEditorSupport().readJSON(args.data);
+                        return container;
+                    }
+                    createContainerObject(scene, x, y, list) {
+                        const container = new sceneobjects.Container(this, scene, x, y, list);
+                        container.getEditorSupport().setScene(scene);
+                        scene.sys.displayList.add(container);
+                        return container;
+                    }
+                    acceptsDropData(data) {
+                        return false;
+                    }
+                    createSceneObjectWithAsset(args) {
+                        return null;
+                    }
+                }
+                sceneobjects.ContainerExtension = ContainerExtension;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene_11.ui || (scene_11.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2505,40 +2498,40 @@ var phasereditor2d;
                         this._obj = obj;
                     }
                     writeJSON(data) {
-                        write(data, TextureSupport.TEXTURE_KEY, this._textureKey);
-                        write(data, TextureSupport.FRAME_KEY, this._textureFrameKey);
+                        write(data, "textureKey", this._textureKey);
+                        write(data, "frameKey", this._textureFrameKey);
                     }
                     readJSON(data) {
-                        const key = read(data, TextureSupport.TEXTURE_KEY);
-                        const frame = read(data, TextureSupport.FRAME_KEY);
+                        const key = read(data, "textureKey");
+                        const frame = read(data, "frameKey");
                         this.setTexture(key, frame);
                     }
-                    getTextureKey() {
+                    getKey() {
                         return this._textureKey;
                     }
-                    setTextureKey(key) {
+                    setKey(key) {
                         this._textureKey = key;
                     }
                     setTexture(key, frame) {
-                        this.setTextureKey(key);
-                        this.setTextureFrame(frame);
+                        this.setKey(key);
+                        this.setFrame(frame);
                         this._obj.setTexture(key, frame);
+                        // this should be called each time the texture is changed
+                        this._obj.setInteractive();
                     }
                     getTexture() {
                         return {
-                            key: this.getTextureKey(),
-                            frame: this.getTextureFrameKey()
+                            key: this.getKey(),
+                            frame: this.getFrame()
                         };
                     }
-                    getTextureFrameKey() {
+                    getFrame() {
                         return this._textureFrameKey;
                     }
-                    setTextureFrame(frame) {
+                    setFrame(frame) {
                         this._textureFrameKey = frame;
                     }
                 }
-                TextureSupport.TEXTURE_KEY = "textureKey";
-                TextureSupport.FRAME_KEY = "frameKey";
                 sceneobjects.TextureSupport = TextureSupport;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));

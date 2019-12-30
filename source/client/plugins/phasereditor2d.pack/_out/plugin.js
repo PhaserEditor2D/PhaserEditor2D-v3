@@ -1410,11 +1410,11 @@ var phasereditor2d;
                         delete game["_sourceImageFrame_map"];
                     }
                     static setSourceImageFrame(game, image, key, frame) {
-                        let imageMap = game["_sourceImageFrame_map"];
+                        const imageMap = game["_sourceImageFrame_map"];
                         imageMap["__frame__" + key + "$" + (frame ? frame : "")] = image;
                     }
                     static getSourceImageFrame(game, key, frame) {
-                        let imageMap = game["_sourceImageFrame_map"];
+                        const imageMap = game["_sourceImageFrame_map"];
                         return imageMap["__frame__" + key + "$" + (frame ? frame : "")];
                     }
                 }

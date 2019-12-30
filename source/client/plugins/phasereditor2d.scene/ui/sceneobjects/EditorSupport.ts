@@ -9,17 +9,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _object: T;
         private _label: string;
         private _scene: GameScene;
-        private _serializers: json.JSONSerializer[];
+        private _serializers: json.ObjectSerializer[];
 
         constructor(extension: SceneObjectExtension, obj: T) {
+
             this._extension = extension;
             this._object = obj;
             this._serializers = [];
+
+            this._object.setDataEnabled();
+            this.setId(Phaser.Utils.String.UUID());
         }
 
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera);
 
-        addSerializer(...serializer: json.JSONSerializer[]) {
+        protected setNewId(sprite: sceneobjects.SceneObject) {
+            this.setId(Phaser.Utils.String.UUID());
+        }
+
+        addSerializer(...serializer: json.ObjectSerializer[]) {
             this._serializers.push(...serializer);
         }
 
@@ -59,6 +67,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             write(data, "id", this.getId());
             write(data, "type", this._extension.getTypeName());
+            write(data, "label", this._label);
 
             for (const s of this._serializers) {
                 s.writeJSON(data);
@@ -68,6 +77,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         readJSON(data: any) {
 
             this.setId(read(data, "id"));
+            this._label = read(data, "label");
 
             for (const s of this._serializers) {
                 s.readJSON(data);

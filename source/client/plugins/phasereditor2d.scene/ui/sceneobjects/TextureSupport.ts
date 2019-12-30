@@ -3,61 +3,66 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import write = colibri.core.json.write;
     import read = colibri.core.json.read;
 
-    export class TextureSupport implements json.JSONSerializer {
+    export interface TextureData extends json.ObjectData {
+        textureKey: string;
+        frameKey: string;
+    }
+
+    export class TextureSupport implements json.ObjectSerializer {
 
         private _textureKey: string;
         private _textureFrameKey: string | number;
         private _obj: Image;
 
-        static TEXTURE_KEY = "textureKey";
-        static FRAME_KEY = "frameKey";
-
         constructor(obj: Image) {
             this._obj = obj;
         }
 
-        writeJSON(data: any): void {
+        writeJSON(data: TextureData): void {
 
-            write(data, TextureSupport.TEXTURE_KEY, this._textureKey);
-            write(data, TextureSupport.FRAME_KEY, this._textureFrameKey);
+            write(data, "textureKey", this._textureKey);
+            write(data, "frameKey", this._textureFrameKey);
         }
 
-        readJSON(data: any): void {
+        readJSON(data: TextureData): void {
 
-            const key = read(data, TextureSupport.TEXTURE_KEY);
-            const frame = read(data, TextureSupport.FRAME_KEY);
+            const key = read(data, "textureKey");
+            const frame = read(data, "frameKey");
 
             this.setTexture(key, frame);
         }
 
-        getTextureKey() {
+        getKey() {
             return this._textureKey;
         }
 
-        setTextureKey(key: string) {
+        setKey(key: string) {
             this._textureKey = key;
         }
 
         setTexture(key: string, frame: string | number) {
 
-            this.setTextureKey(key);
-            this.setTextureFrame(frame);
+            this.setKey(key);
+            this.setFrame(frame);
 
             this._obj.setTexture(key, frame);
+            // this should be called each time the texture is changed
+            this._obj.setInteractive();
         }
 
         getTexture() {
+
             return {
-                key: this.getTextureKey(),
-                frame: this.getTextureFrameKey()
+                key: this.getKey(),
+                frame: this.getFrame()
             };
         }
 
-        getTextureFrameKey() {
+        getFrame() {
             return this._textureFrameKey;
         }
 
-        setTextureFrame(frame: string | number) {
+        setFrame(frame: string | number) {
             this._textureFrameKey = frame;
         }
     }

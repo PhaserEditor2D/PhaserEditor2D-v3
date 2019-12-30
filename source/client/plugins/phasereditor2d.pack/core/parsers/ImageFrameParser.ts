@@ -24,14 +24,14 @@ namespace phasereditor2d.pack.core.parsers {
 
         static setSourceImageFrame(game: Phaser.Game, image: controls.IImage, key: string, frame?: string | number) {
 
-            let imageMap = game["_sourceImageFrame_map"];
+            const imageMap = game["_sourceImageFrame_map"];
 
             imageMap["__frame__" + key + "$" + (frame ? frame : "")] = image;
         }
 
         static getSourceImageFrame(game: Phaser.Game, key: string, frame?: string | number) {
-            
-            let imageMap = game["_sourceImageFrame_map"];
+
+            const imageMap = game["_sourceImageFrame_map"];
 
             return imageMap["__frame__" + key + "$" + (frame ? frame : "")];
         }

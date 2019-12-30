@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         angle: number;
     }
 
-    export class TransformSupport {
+    export class TransformSupport implements json.ObjectSerializer {
 
         private _obj: ITransformLike;
 
@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._obj = obj;
         }
 
-        readJSON(data: any) {
+        readJSON(data: json.ObjectData) {
 
             this._obj.x = read(data, "x", 0);
             this._obj.y = read(data, "y", 0);
@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._obj.angle = read(data, "angle", 0);
         }
 
-        writeJSON(data: any) {
+        writeJSON(data: json.ObjectData) {
 
             write(data, "x", this._obj.x, 0);
             write(data, "y", this._obj.y, 0);

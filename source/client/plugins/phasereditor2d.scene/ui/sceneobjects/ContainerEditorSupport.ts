@@ -2,6 +2,10 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export interface ContainerData extends json.ObjectData {
+        list: json.ObjectData[];
+    }
+
     export class ContainerEditorSupport extends EditorSupport<Container> {
 
         constructor(extension: ContainerExtension, obj: Container) {
@@ -10,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addSerializer(new TransformSupport(obj));
         }
 
-        writeJSON(data: any) {
+        writeJSON(data: ContainerData) {
 
             super.writeJSON(data);
 
@@ -22,11 +26,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 obj.getEditorSupport().writeJSON(objData);
 
-                return objData;
+                return objData as json.ObjectData;
             });
         }
 
-        readJSON(data: any) {
+        readJSON(data: ContainerData) {
 
             // container
 
