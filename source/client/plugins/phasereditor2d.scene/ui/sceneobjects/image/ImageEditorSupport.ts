@@ -2,18 +2,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageEditorSupport extends EditorSupport<Image> {
 
-        private _textureSupport: TextureSupport;
-        private _transformSupport: TransformSupport;
+        private _textureComponent: TextureComponent;
+        private _transformComponent: TransformComponent;
 
         constructor(obj: Image) {
             super(ImageExtension.getInstance(), obj);
 
-            this._textureSupport = new TextureSupport(obj);
-            this._transformSupport = new TransformSupport(obj);
+            this._textureComponent = new TextureComponent(obj);
+            this._transformComponent = new TransformComponent(obj);
 
-            this.addSupporters(
-                this._transformSupport,
-                this._textureSupport
+            this.addComponent(
+                this._transformComponent,
+                this._textureComponent
             );
         }
 
@@ -22,11 +22,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getTextureSupport() {
-            return this._textureSupport;
+            return this._textureComponent;
         }
 
         getTransformSupport() {
-            return this._transformSupport;
+            return this._transformComponent;
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {

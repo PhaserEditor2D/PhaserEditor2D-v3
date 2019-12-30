@@ -9,11 +9,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const sprite = args.obj as sceneobjects.SceneObject;
             const editorSupport = sprite.getEditorSupport();
 
-            const textureSupport = editorSupport.getSupporter<TextureSupport>(TextureSupport);
+            const textureComp = editorSupport.getComponent(TextureComponent) as TextureComponent;
 
-            if (textureSupport) {
+            if (textureComp) {
 
-                const { key, frame } = textureSupport.getTexture();
+                const { key, frame } = textureComp.getTexture();
 
                 const image = pack.core.parsers.ImageFrameParser
                     .getSourceImageFrame(editorSupport.getScene().game, key, frame);

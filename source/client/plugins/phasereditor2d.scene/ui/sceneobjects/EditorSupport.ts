@@ -12,14 +12,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _scene: GameScene;
         private _serializers: json.ObjectSerializer[];
         // tslint:disable-next-line:ban-types
-        private _supporters: Map<Function, any>;
+        private _components: Map<Function, any>;
 
         constructor(extension: SceneObjectExtension, obj: T) {
 
             this._extension = extension;
             this._object = obj;
             this._serializers = [];
-            this._supporters = new Map();
+            this._components = new Map();
 
             this._object.setDataEnabled();
             this.setId(Phaser.Utils.String.UUID());
@@ -29,27 +29,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
 
-        // tslint:disable-next-line:no-shadowed-variable
-        getSupporter<T>(
-            // tslint:disable-next-line:ban-types
-            supporterType: Function): T {
-
-            return this._supporters.get(supporterType) as T;
+        // tslint:disable-next-line:ban-types
+        getComponent(ctr: Function): any {
+            return this._components.get(ctr) as T;
         }
 
         // tslint:disable-next-line:ban-types
-        hasSupporter(supporterType: Function) {
-            return this._supporters.has(supporterType);
+        hasComponent(ctr: Function) {
+            return this._components.has(ctr);
         }
 
-        protected addSupporters(...supporters: any[]) {
+        protected addComponent(...components: any[]) {
 
-            for (const supporter of supporters) {
+            for (const c of components) {
 
-                this._supporters.set(supporter.constructor, supporter);
+                this._components.set(c.constructor, c);
             }
 
-            this._serializers.push(...supporters);
+            this._serializers.push(...components);
         }
 
         protected setNewId(sprite: sceneobjects.SceneObject) {

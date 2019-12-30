@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: Container) {
             super(ContainerExtension.getInstance(), obj);
 
-            this.addSupporters(new TransformSupport(obj));
+            this.addComponent(new TransformComponent(obj));
         }
 
         writeJSON(data: ContainerData) {

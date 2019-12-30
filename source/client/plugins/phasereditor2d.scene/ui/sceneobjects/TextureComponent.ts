@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         frameKey: string;
     }
 
-    export class TextureSupport implements json.ObjectSerializer {
+    export class TextureComponent implements json.ObjectSerializer {
 
         private _textureKey: string;
         private _textureFrameKey: string | number;

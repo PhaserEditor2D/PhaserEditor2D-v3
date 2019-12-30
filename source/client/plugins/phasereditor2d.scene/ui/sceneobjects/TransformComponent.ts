@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         angle: number;
     }
 
-    export class TransformSupport implements json.ObjectSerializer {
+    export class TransformComponent implements json.ObjectSerializer {
 
         private _obj: ITransformLike;
 

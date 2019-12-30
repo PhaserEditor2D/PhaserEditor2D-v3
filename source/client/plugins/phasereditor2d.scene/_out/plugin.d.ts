@@ -413,13 +413,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _label;
         private _scene;
         private _serializers;
-        private _supporters;
+        private _components;
         constructor(extension: SceneObjectExtension, obj: T);
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): any;
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
-        getSupporter<T>(supporterType: Function): T;
-        hasSupporter(supporterType: Function): boolean;
-        protected addSupporters(...supporters: any[]): void;
+        getComponent(ctr: Function): any;
+        hasComponent(ctr: Function): boolean;
+        protected addComponent(...components: any[]): void;
         protected setNewId(sprite: sceneobjects.SceneObject): void;
         getExtension(): SceneObjectExtension;
         getObject(): T;
@@ -517,7 +517,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         textureKey: string;
         frameKey: string;
     }
-    class TextureSupport implements json.ObjectSerializer {
+    class TextureComponent implements json.ObjectSerializer {
         private _textureKey;
         private _textureFrameKey;
         private _obj;
@@ -543,7 +543,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         scaleY: number;
         angle: number;
     }
-    class TransformSupport implements json.ObjectSerializer {
+    class TransformComponent implements json.ObjectSerializer {
         private _obj;
         constructor(obj: ITransformLike);
         readJSON(data: json.ObjectData): void;
@@ -596,12 +596,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageEditorSupport extends EditorSupport<Image> {
-        private _textureSupport;
-        private _transformSupport;
+        private _textureComponent;
+        private _transformComponent;
         constructor(obj: Image);
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
-        getTextureSupport(): TextureSupport;
-        getTransformSupport(): TransformSupport;
+        getTextureSupport(): TextureComponent;
+        getTransformSupport(): TransformComponent;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
     }
 }

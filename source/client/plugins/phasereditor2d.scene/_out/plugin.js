@@ -2059,25 +2059,23 @@ var phasereditor2d;
                         this._extension = extension;
                         this._object = obj;
                         this._serializers = [];
-                        this._supporters = new Map();
+                        this._components = new Map();
                         this._object.setDataEnabled();
                         this.setId(Phaser.Utils.String.UUID());
                     }
-                    // tslint:disable-next-line:no-shadowed-variable
-                    getSupporter(
                     // tslint:disable-next-line:ban-types
-                    supporterType) {
-                        return this._supporters.get(supporterType);
+                    getComponent(ctr) {
+                        return this._components.get(ctr);
                     }
                     // tslint:disable-next-line:ban-types
-                    hasSupporter(supporterType) {
-                        return this._supporters.has(supporterType);
+                    hasComponent(ctr) {
+                        return this._components.has(ctr);
                     }
-                    addSupporters(...supporters) {
-                        for (const supporter of supporters) {
-                            this._supporters.set(supporter.constructor, supporter);
+                    addComponent(...components) {
+                        for (const c of components) {
+                            this._components.set(c.constructor, c);
                         }
-                        this._serializers.push(...supporters);
+                        this._serializers.push(...components);
                     }
                     setNewId(sprite) {
                         this.setId(Phaser.Utils.String.UUID());
@@ -2217,7 +2215,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 var write = colibri.core.json.write;
                 var read = colibri.core.json.read;
-                class TextureSupport {
+                class TextureComponent {
                     constructor(obj) {
                         this._obj = obj;
                     }
@@ -2256,7 +2254,7 @@ var phasereditor2d;
                         this._textureFrameKey = frame;
                     }
                 }
-                sceneobjects.TextureSupport = TextureSupport;
+                sceneobjects.TextureComponent = TextureComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -2271,7 +2269,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 var write = colibri.core.json.write;
                 var read = colibri.core.json.read;
-                class TransformSupport {
+                class TransformComponent {
                     constructor(obj) {
                         this._obj = obj;
                     }
@@ -2290,7 +2288,7 @@ var phasereditor2d;
                         write(data, "angle", this._obj.angle, 0);
                     }
                 }
-                sceneobjects.TransformSupport = TransformSupport;
+                sceneobjects.TransformComponent = TransformComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -2338,7 +2336,7 @@ var phasereditor2d;
                     }
                     constructor(obj) {
                         super(sceneobjects.ContainerExtension.getInstance(), obj);
-                        this.addSupporters(new sceneobjects.TransformSupport(obj));
+                        this.addComponent(new sceneobjects.TransformComponent(obj));
                     }
                     writeJSON(data) {
                         super.writeJSON(data);
@@ -2482,18 +2480,18 @@ var phasereditor2d;
                 class ImageEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj) {
                         super(sceneobjects.ImageExtension.getInstance(), obj);
-                        this._textureSupport = new sceneobjects.TextureSupport(obj);
-                        this._transformSupport = new sceneobjects.TransformSupport(obj);
-                        this.addSupporters(this._transformSupport, this._textureSupport);
+                        this._textureComponent = new sceneobjects.TextureComponent(obj);
+                        this._transformComponent = new sceneobjects.TransformComponent(obj);
+                        this.addComponent(this._transformComponent, this._textureComponent);
                     }
                     getCellRenderer() {
                         return new sceneobjects.ImageObjectCellRenderer();
                     }
                     getTextureSupport() {
-                        return this._textureSupport;
+                        return this._textureComponent;
                     }
                     getTransformSupport() {
-                        return this._transformSupport;
+                        return this._transformComponent;
                     }
                     getScreenBounds(camera) {
                         const sprite = this.getObject();
@@ -2615,9 +2613,9 @@ var phasereditor2d;
                     renderCell(args) {
                         const sprite = args.obj;
                         const editorSupport = sprite.getEditorSupport();
-                        const textureSupport = editorSupport.getSupporter(sceneobjects.TextureSupport);
-                        if (textureSupport) {
-                            const { key, frame } = textureSupport.getTexture();
+                        const textureComp = editorSupport.getComponent(sceneobjects.TextureComponent);
+                        if (textureComp) {
+                            const { key, frame } = textureComp.getTexture();
                             const image = phasereditor2d.pack.core.parsers.ImageFrameParser
                                 .getSourceImageFrame(editorSupport.getScene().game, key, frame);
                             if (image) {
