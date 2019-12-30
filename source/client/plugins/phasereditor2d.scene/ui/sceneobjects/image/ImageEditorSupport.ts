@@ -17,6 +17,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
+        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
+            return new ImageObjectCellRenderer();
+        }
+
         getTextureSupport() {
             return this._textureSupport;
         }

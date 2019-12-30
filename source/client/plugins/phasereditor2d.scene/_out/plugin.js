@@ -1448,45 +1448,6 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor) {
-                var outline;
-                (function (outline) {
-                    class GameObjectCellRenderer {
-                        renderCell(args) {
-                            const sprite = args.obj;
-                            if (sprite instanceof ui.sceneobjects.Image) {
-                                const { key, frame } = sprite.getEditorSupport().getTextureSupport().getTexture();
-                                const image = phasereditor2d.pack.core.parsers.ImageFrameParser
-                                    .getSourceImageFrame(sprite.getEditorSupport().getScene().game, key, frame);
-                                if (image) {
-                                    image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
-                                }
-                            }
-                        }
-                        cellHeight(args) {
-                            if (args.obj instanceof ui.sceneobjects.Image) {
-                                return args.viewer.getCellSize();
-                            }
-                            return colibri.ui.controls.ROW_HEIGHT;
-                        }
-                        async preload(args) {
-                            const finder = new phasereditor2d.pack.core.PackFinder();
-                            return finder.preload();
-                        }
-                    }
-                    outline.GameObjectCellRenderer = GameObjectCellRenderer;
-                })(outline = editor.outline || (editor.outline = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var editor;
             (function (editor_7) {
                 var outline;
                 (function (outline) {
@@ -1612,11 +1573,9 @@ var phasereditor2d;
                             this._assetRendererProvider = new phasereditor2d.pack.ui.viewers.AssetPackCellRendererProvider("tree");
                         }
                         getCellRenderer(element) {
-                            if (element instanceof ui.sceneobjects.Image) {
-                                return new outline.GameObjectCellRenderer();
-                            }
-                            else if (element instanceof ui.sceneobjects.Container) {
-                                return new controls.viewers.IconImageCellRenderer(scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP));
+                            if (element instanceof Phaser.GameObjects.GameObject) {
+                                const obj = element;
+                                return obj.getEditorSupport().getCellRenderer();
                             }
                             else if (element instanceof Phaser.GameObjects.DisplayList) {
                                 return new controls.viewers.IconImageCellRenderer(controls.Controls.getIcon(ide.ICON_FOLDER));
@@ -2358,7 +2317,11 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var controls = colibri.ui.controls;
                 class ContainerEditorSupport extends sceneobjects.EditorSupport {
+                    getCellRenderer() {
+                        return new controls.viewers.IconImageCellRenderer(scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP));
+                    }
                     constructor(obj) {
                         super(sceneobjects.ContainerExtension.getInstance(), obj);
                         this.addSerializer(new sceneobjects.TransformSupport(obj));
@@ -2509,6 +2472,9 @@ var phasereditor2d;
                         this._transformSupport = new sceneobjects.TransformSupport(obj);
                         this.addSerializer(this._transformSupport, this._textureSupport);
                     }
+                    getCellRenderer() {
+                        return new sceneobjects.ImageObjectCellRenderer();
+                    }
                     getTextureSupport() {
                         return this._textureSupport;
                     }
@@ -2621,6 +2587,39 @@ var phasereditor2d;
                 sceneobjects.ImageExtension = ImageExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene_15.ui || (scene_15.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class ImageObjectCellRenderer {
+                    renderCell(args) {
+                        const sprite = args.obj;
+                        if (sprite instanceof sceneobjects.Image) {
+                            const { key, frame } = sprite.getEditorSupport().getTextureSupport().getTexture();
+                            const image = phasereditor2d.pack.core.parsers.ImageFrameParser
+                                .getSourceImageFrame(sprite.getEditorSupport().getScene().game, key, frame);
+                            if (image) {
+                                image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
+                            }
+                        }
+                    }
+                    cellHeight(args) {
+                        return args.viewer.getCellSize();
+                    }
+                    async preload(args) {
+                        const finder = new phasereditor2d.pack.core.PackFinder();
+                        return finder.preload();
+                    }
+                }
+                sceneobjects.ImageObjectCellRenderer = ImageObjectCellRenderer;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;

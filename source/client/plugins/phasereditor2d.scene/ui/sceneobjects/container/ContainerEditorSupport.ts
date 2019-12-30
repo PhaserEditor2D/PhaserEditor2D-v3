@@ -1,10 +1,16 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import controls = colibri.ui.controls;
+
     export interface ContainerData extends json.ObjectData {
         list: json.ObjectData[];
     }
 
     export class ContainerEditorSupport extends EditorSupport<Container> {
+
+        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
+            return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
+        }
 
         constructor(obj: Container) {
             super(ContainerExtension.getInstance(), obj);

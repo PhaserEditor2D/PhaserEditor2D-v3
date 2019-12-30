@@ -2,6 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import read = colibri.core.json.read;
     import write = colibri.core.json.write;
+    import controls = colibri.ui.controls;
 
     export abstract class EditorSupport<T extends SceneObject> {
 
@@ -22,6 +23,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera);
+
+        abstract getCellRenderer(): controls.viewers.ICellRenderer;
 
         protected setNewId(sprite: sceneobjects.SceneObject) {
             this.setId(Phaser.Utils.String.UUID());

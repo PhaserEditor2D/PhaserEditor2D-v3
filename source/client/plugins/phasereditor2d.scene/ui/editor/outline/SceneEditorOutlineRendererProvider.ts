@@ -15,25 +15,21 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
-            if (element instanceof sceneobjects.Image) {
+            if (element instanceof Phaser.GameObjects.GameObject) {
 
-                return new GameObjectCellRenderer();
+                const obj = element as sceneobjects.SceneObject;
 
-            } else if (element instanceof sceneobjects.Container) {
-
-                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
+                return obj.getEditorSupport().getCellRenderer();
 
             } else if (element instanceof Phaser.GameObjects.DisplayList) {
 
                 return new controls.viewers.IconImageCellRenderer(controls.Controls.getIcon(ide.ICON_FOLDER));
-
             }
-
 
             return new controls.viewers.EmptyCellRenderer(false);
         }
 
-        async preload(args : controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
+        async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
             return controls.Controls.resolveNothingLoaded();
         }
 

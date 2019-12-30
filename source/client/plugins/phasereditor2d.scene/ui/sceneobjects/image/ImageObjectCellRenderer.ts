@@ -1,8 +1,8 @@
-namespace phasereditor2d.scene.ui.editor.outline {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class GameObjectCellRenderer implements controls.viewers.ICellRenderer {
+    export class ImageObjectCellRenderer implements controls.viewers.ICellRenderer {
 
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
@@ -24,11 +24,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         cellHeight(args: colibri.ui.controls.viewers.RenderCellArgs): number {
 
-            if (args.obj instanceof sceneobjects.Image) {
-                return args.viewer.getCellSize();
-            }
-
-            return colibri.ui.controls.ROW_HEIGHT;
+            return args.viewer.getCellSize();
         }
 
         async preload(args: controls.viewers.PreloadCellArgs): Promise<colibri.ui.controls.PreloadResult> {
