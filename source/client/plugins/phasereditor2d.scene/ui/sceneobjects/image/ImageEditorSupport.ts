@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._textureSupport = new TextureSupport(obj);
             this._transformSupport = new TransformSupport(obj);
 
-            this.addSerializer(
+            this.addSupporters(
                 this._transformSupport,
                 this._textureSupport
             );

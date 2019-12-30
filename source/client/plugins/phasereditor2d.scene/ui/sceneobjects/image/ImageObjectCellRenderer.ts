@@ -6,14 +6,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
-            const sprite = args.obj as Phaser.GameObjects.GameObject;
+            const sprite = args.obj as sceneobjects.SceneObject;
+            const editorSupport = sprite.getEditorSupport();
 
-            if (sprite instanceof sceneobjects.Image) {
+            const textureSupport = editorSupport.getSupporter<TextureSupport>(TextureSupport);
 
-                const { key, frame } = sprite.getEditorSupport().getTextureSupport().getTexture();
+            if (textureSupport) {
+
+                const { key, frame } = textureSupport.getTexture();
 
                 const image = pack.core.parsers.ImageFrameParser
-                    .getSourceImageFrame(sprite.getEditorSupport().getScene().game, key, frame);
+                    .getSourceImageFrame(editorSupport.getScene().game, key, frame);
 
                 if (image) {
 

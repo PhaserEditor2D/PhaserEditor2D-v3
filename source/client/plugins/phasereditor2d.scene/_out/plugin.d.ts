@@ -413,11 +413,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _label;
         private _scene;
         private _serializers;
+        private _supporters;
         constructor(extension: SceneObjectExtension, obj: T);
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): any;
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
+        getSupporter<T>(supporterType: Function): T;
+        hasSupporter(supporterType: Function): boolean;
+        protected addSupporters(...supporters: any[]): void;
         protected setNewId(sprite: sceneobjects.SceneObject): void;
-        addSerializer(...serializer: json.ObjectSerializer[]): void;
         getExtension(): SceneObjectExtension;
         getObject(): T;
         getId(): string;

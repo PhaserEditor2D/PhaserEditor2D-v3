@@ -2059,14 +2059,28 @@ var phasereditor2d;
                         this._extension = extension;
                         this._object = obj;
                         this._serializers = [];
+                        this._supporters = new Map();
                         this._object.setDataEnabled();
                         this.setId(Phaser.Utils.String.UUID());
                     }
+                    // tslint:disable-next-line:no-shadowed-variable
+                    getSupporter(
+                    // tslint:disable-next-line:ban-types
+                    supporterType) {
+                        return this._supporters.get(supporterType);
+                    }
+                    // tslint:disable-next-line:ban-types
+                    hasSupporter(supporterType) {
+                        return this._supporters.has(supporterType);
+                    }
+                    addSupporters(...supporters) {
+                        for (const supporter of supporters) {
+                            this._supporters.set(supporter.constructor, supporter);
+                        }
+                        this._serializers.push(...supporters);
+                    }
                     setNewId(sprite) {
                         this.setId(Phaser.Utils.String.UUID());
-                    }
-                    addSerializer(...serializer) {
-                        this._serializers.push(...serializer);
                     }
                     getExtension() {
                         return this._extension;
@@ -2324,7 +2338,7 @@ var phasereditor2d;
                     }
                     constructor(obj) {
                         super(sceneobjects.ContainerExtension.getInstance(), obj);
-                        this.addSerializer(new sceneobjects.TransformSupport(obj));
+                        this.addSupporters(new sceneobjects.TransformSupport(obj));
                     }
                     writeJSON(data) {
                         super.writeJSON(data);
@@ -2470,7 +2484,7 @@ var phasereditor2d;
                         super(sceneobjects.ImageExtension.getInstance(), obj);
                         this._textureSupport = new sceneobjects.TextureSupport(obj);
                         this._transformSupport = new sceneobjects.TransformSupport(obj);
-                        this.addSerializer(this._transformSupport, this._textureSupport);
+                        this.addSupporters(this._transformSupport, this._textureSupport);
                     }
                     getCellRenderer() {
                         return new sceneobjects.ImageObjectCellRenderer();
@@ -2600,10 +2614,12 @@ var phasereditor2d;
                 class ImageObjectCellRenderer {
                     renderCell(args) {
                         const sprite = args.obj;
-                        if (sprite instanceof sceneobjects.Image) {
-                            const { key, frame } = sprite.getEditorSupport().getTextureSupport().getTexture();
+                        const editorSupport = sprite.getEditorSupport();
+                        const textureSupport = editorSupport.getSupporter(sceneobjects.TextureSupport);
+                        if (textureSupport) {
+                            const { key, frame } = textureSupport.getTexture();
                             const image = phasereditor2d.pack.core.parsers.ImageFrameParser
-                                .getSourceImageFrame(sprite.getEditorSupport().getScene().game, key, frame);
+                                .getSourceImageFrame(editorSupport.getScene().game, key, frame);
                             if (image) {
                                 image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
                             }
