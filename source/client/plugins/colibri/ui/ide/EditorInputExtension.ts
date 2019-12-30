@@ -4,9 +4,9 @@ namespace colibri.ui.ide {
 
         static POINT_ID = "colibri.ui.ide.EditorInputExtension";
 
-        private _id : string;
+        private _id: string;
 
-        constructor(id : string) {
+        constructor(id: string) {
             super(EditorInputExtension.POINT_ID);
 
             this._id = id;
@@ -16,8 +16,10 @@ namespace colibri.ui.ide {
             return this._id;
         }
 
-        abstract createEditorInput(state : any) : IEditorInput;
+        abstract createEditorInput(state: any): IEditorInput;
 
-        abstract getEditorInputState(input : IEditorInput) : any;
+        abstract getEditorInputState(input: IEditorInput): any;
+
+        abstract getEditorInputId(input: IEditorInput): string;
     }
 }

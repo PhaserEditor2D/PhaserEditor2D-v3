@@ -388,12 +388,16 @@ var colibri;
                     this._fileStringCache = new colibri.core.io.FileStringCache(this._fileStorage);
                     this._globalPreferences = new colibri.core.preferences.Preferences("__global__");
                     this._projectPreferences = null;
+                    this._editorSessionStateRegistry = new Map();
                 }
                 static getWorkbench() {
                     if (!Workbench._workbench) {
                         Workbench._workbench = new Workbench();
                     }
                     return this._workbench;
+                }
+                getEditorSessionStateRegistry() {
+                    return this._editorSessionStateRegistry;
                 }
                 getGlobalPreferences() {
                     return this._globalPreferences;
@@ -434,6 +438,7 @@ var colibri;
                     this._fileImageCache.reset();
                     this._fileImageSizeCache.reset();
                     this._contentTypeRegistry.resetCache();
+                    this._editorSessionStateRegistry.clear();
                 }
                 async openProject(projectName, monitor) {
                     this._projectPreferences = new colibri.core.preferences.Preferences("__project__" + projectName);
@@ -5356,8 +5361,10 @@ var colibri;
                     return null;
                 }
                 layout() {
+                    // nothing
                 }
                 onPartAdded() {
+                    // nothing
                 }
                 onPartClosed() {
                     return true;
@@ -5381,10 +5388,13 @@ var colibri;
                     this.createPart();
                 }
                 onPartActivated() {
+                    // nothing
                 }
                 saveState(state) {
+                    // nothing
                 }
                 restoreState(state) {
+                    // nothing
                 }
             }
             ide.Part = Part;
@@ -5418,12 +5428,32 @@ var colibri;
                     this.doSave();
                 }
                 doSave() {
+                    // nothing
                 }
                 onPartClosed() {
+                    const ext = colibri.Platform.getWorkbench().getEditorInputExtension(this.getInput());
+                    if (ext) {
+                        const id = ext.getEditorInputId(this.getInput());
+                        const state = {};
+                        this.saveState(state);
+                        colibri.Platform.getWorkbench().getEditorSessionStateRegistry().set(id, state);
+                    }
                     if (this.isDirty()) {
                         return confirm("This editor is not saved, do you want to close it?");
                     }
                     return true;
+                }
+                onPartAdded() {
+                    const ext = colibri.Platform.getWorkbench().getEditorInputExtension(this.getInput());
+                    const stateReg = colibri.Platform.getWorkbench().getEditorSessionStateRegistry();
+                    if (ext) {
+                        const id = ext.getEditorInputId(this.getInput());
+                        const state = stateReg.get(id);
+                        if (state) {
+                            this.setRestoreState(state);
+                        }
+                        stateReg.delete(id);
+                    }
                 }
                 getInput() {
                     return this._input;
@@ -5986,6 +6016,9 @@ var colibri;
                 createEditorInput(state) {
                     return colibri.ui.ide.FileUtils.getFileFromPath(state.filePath);
                 }
+                getEditorInputId(input) {
+                    return input.getFullName();
+                }
             }
             FileEditorInputExtension.ID = "colibri.ui.ide.FileEditorInputExtension";
             ide.FileEditorInputExtension = FileEditorInputExtension;
@@ -6406,7 +6439,8 @@ var colibri;
                             if (!inputState) {
                                 continue;
                             }
-                            const inputExtension = colibri.Platform.getWorkbench().getEditorInputExtensionWithId(inputData.inputExtensionId);
+                            const inputExtension = colibri.Platform.getWorkbench()
+                                .getEditorInputExtensionWithId(inputData.inputExtensionId);
                             const input = inputExtension.createEditorInput(inputState);
                             if (input) {
                                 const editor = wb.createEditor(input);

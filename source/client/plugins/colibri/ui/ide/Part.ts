@@ -99,11 +99,11 @@ namespace colibri.ui.ide {
         }
 
         layout(): void {
-
+            // nothing
         }
 
         onPartAdded() {
-            
+            // nothing
         }
 
         onPartClosed(): boolean {
@@ -137,15 +137,15 @@ namespace colibri.ui.ide {
         }
 
         onPartActivated() {
-
+            // nothing
         }
 
         saveState(state: any) {
-
+            // nothing
         }
 
         protected restoreState(state: any) {
-
+            // nothing
         }
 
         protected abstract createPart(): void;

@@ -21,7 +21,6 @@ namespace phasereditor2d.ide.ui {
         constructor() {
             super(DesignWindow.ID);
 
-
             ide.Workbench.getWorkbench().addEventListener(ide.EVENT_PART_ACTIVATED, e => {
 
                 this.saveWindowState();
@@ -39,16 +38,8 @@ namespace phasereditor2d.ide.ui {
                 return;
             }
 
-            const wb = ide.Workbench.getWorkbench();
-
-            const win = wb.getActiveWindow();
-
-            if (win instanceof DesignWindow) {
-
-                win.saveState(wb.getProjectPreferences());
-            }
+            this.saveState(colibri.Platform.getWorkbench().getProjectPreferences());
         }
-
 
         saveState(prefs: colibri.core.preferences.Preferences) {
 
@@ -67,10 +58,16 @@ namespace phasereditor2d.ide.ui {
             this._blocksView = new blocks.ui.views.BlocksView();
             this._editorArea = new ide.EditorArea();
 
-            this._split_Files_Blocks = new controls.SplitPanel(this.createViewFolder(this._filesView), this.createViewFolder(this._blocksView));
+            this._split_Files_Blocks = new controls.SplitPanel(
+                this.createViewFolder(this._filesView), this.createViewFolder(this._blocksView));
+
             this._split_Editor_FilesBlocks = new controls.SplitPanel(this._editorArea, this._split_Files_Blocks, false);
-            this._split_Outline_EditorFilesBlocks = new controls.SplitPanel(this.createViewFolder(this._outlineView), this._split_Editor_FilesBlocks);
-            this._split_OutlineEditorFilesBlocks_Inspector = new controls.SplitPanel(this._split_Outline_EditorFilesBlocks, this.createViewFolder(this._inspectorView));
+
+            this._split_Outline_EditorFilesBlocks = new controls.SplitPanel(
+                this.createViewFolder(this._outlineView), this._split_Editor_FilesBlocks);
+
+            this._split_OutlineEditorFilesBlocks_Inspector = new controls.SplitPanel(
+                this._split_Outline_EditorFilesBlocks, this.createViewFolder(this._inspectorView));
 
             this.getClientArea().add(this._split_OutlineEditorFilesBlocks_Inspector);
 
@@ -113,14 +110,11 @@ namespace phasereditor2d.ide.ui {
         }
 
         private initialLayout() {
-            //const b = { x: 0, y: 0, width: window.innerWidth, height: window.innerHeight };
 
             this._split_Files_Blocks.setSplitFactor(0.2);
             this._split_Editor_FilesBlocks.setSplitFactor(0.6);
             this._split_Outline_EditorFilesBlocks.setSplitFactor(0.15);
             this._split_OutlineEditorFilesBlocks_Inspector.setSplitFactor(0.8);
-
-            //this.setBounds(b);
 
             this.layout();
         }

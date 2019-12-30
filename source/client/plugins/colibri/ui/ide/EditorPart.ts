@@ -36,16 +36,47 @@ namespace colibri.ui.ide {
         }
 
         protected doSave() {
-
+            // nothing
         }
 
         onPartClosed() {
+
+            const ext = Platform.getWorkbench().getEditorInputExtension(this.getInput());
+
+            if (ext) {
+
+                const id = ext.getEditorInputId(this.getInput());
+
+                const state = {};
+
+                this.saveState(state);
+
+                Platform.getWorkbench().getEditorSessionStateRegistry().set(id, state);
+            }
 
             if (this.isDirty()) {
                 return confirm("This editor is not saved, do you want to close it?");
             }
 
             return true;
+        }
+
+        onPartAdded() {
+
+            const ext = Platform.getWorkbench().getEditorInputExtension(this.getInput());
+            const stateReg = Platform.getWorkbench().getEditorSessionStateRegistry();
+
+            if (ext) {
+
+                const id = ext.getEditorInputId(this.getInput());
+                const state = stateReg.get(id);
+
+                if (state) {
+                    this.setRestoreState(state);
+                }
+
+                stateReg.delete(id);
+            }
         }
 
         getInput() {
@@ -60,7 +91,7 @@ namespace colibri.ui.ide {
             return null;
         }
 
-        createEditorToolbar(parent : HTMLElement) : controls.ToolbarManager {
+        createEditorToolbar(parent: HTMLElement): controls.ToolbarManager {
             return null;
         }
     }

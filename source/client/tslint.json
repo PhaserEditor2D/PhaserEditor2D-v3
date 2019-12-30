@@ -7,7 +7,7 @@
     "rules": {
         "no-namespace": false,
         "variable-name": {
-            "options": "allow-leading-underscore"
+            "options": ["allow-leading-underscore", "allow-snake-case"]
         },
         "max-classes-per-file": false,
         "class-name": false,

@@ -42,6 +42,7 @@ namespace colibri.ui.ide {
         private _windows: WorkbenchWindow[];
         private _globalPreferences: core.preferences.Preferences;
         private _projectPreferences: core.preferences.Preferences;
+        private _editorSessionStateRegistry: Map<string, any>;
 
         private constructor() {
 
@@ -66,6 +67,12 @@ namespace colibri.ui.ide {
             this._globalPreferences = new core.preferences.Preferences("__global__");
 
             this._projectPreferences = null;
+
+            this._editorSessionStateRegistry = new Map();
+        }
+
+        getEditorSessionStateRegistry() {
+            return this._editorSessionStateRegistry;
         }
 
         getGlobalPreferences() {
@@ -129,6 +136,8 @@ namespace colibri.ui.ide {
             this._fileImageCache.reset();
             this._fileImageSizeCache.reset();
             this._contentTypeRegistry.resetCache();
+
+            this._editorSessionStateRegistry.clear();
         }
 
         async openProject(projectName: string, monitor: controls.IProgressMonitor) {

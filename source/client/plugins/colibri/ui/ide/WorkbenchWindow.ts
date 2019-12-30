@@ -106,7 +106,8 @@ namespace colibri.ui.ide {
                         continue;
                     }
 
-                    const inputExtension = Platform.getWorkbench().getEditorInputExtensionWithId(inputData.inputExtensionId);
+                    const inputExtension = Platform.getWorkbench()
+                        .getEditorInputExtensionWithId(inputData.inputExtensionId);
 
                     const input = inputExtension.createEditorInput(inputState);
 

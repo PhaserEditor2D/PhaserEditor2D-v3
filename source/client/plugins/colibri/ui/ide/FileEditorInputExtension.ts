@@ -10,7 +10,7 @@ namespace colibri.ui.ide {
             super(FileEditorInputExtension.ID);
         }
 
-        getEditorInputState(input : core.io.FilePath) {
+        getEditorInputState(input: core.io.FilePath) {
 
             return {
                 filePath: input.getFullName()
@@ -21,5 +21,8 @@ namespace colibri.ui.ide {
             return colibri.ui.ide.FileUtils.getFileFromPath(state.filePath);
         }
 
+        getEditorInputId(input: core.io.FilePath): string {
+            return input.getFullName();
+        }
     }
 }

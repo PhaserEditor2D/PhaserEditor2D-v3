@@ -129,7 +129,9 @@ declare namespace colibri.ui.ide {
         private _windows;
         private _globalPreferences;
         private _projectPreferences;
+        private _editorSessionStateRegistry;
         private constructor();
+        getEditorSessionStateRegistry(): Map<string, any>;
         getGlobalPreferences(): core.preferences.Preferences;
         getProjectPreferences(): core.preferences.Preferences;
         launch(): Promise<void>;
@@ -1293,6 +1295,7 @@ declare namespace colibri.ui.ide {
         save(): void;
         protected doSave(): void;
         onPartClosed(): boolean;
+        onPartAdded(): void;
         getInput(): IEditorInput;
         setInput(input: IEditorInput): void;
         getEditorViewerProvider(key: string): EditorViewerProvider;
@@ -1340,6 +1343,7 @@ declare namespace colibri.ui.ide {
         getId(): string;
         abstract createEditorInput(state: any): IEditorInput;
         abstract getEditorInputState(input: IEditorInput): any;
+        abstract getEditorInputId(input: IEditorInput): string;
     }
 }
 declare namespace colibri.ui.ide {
@@ -1433,6 +1437,7 @@ declare namespace colibri.ui.ide {
             filePath: any;
         };
         createEditorInput(state: any): IEditorInput;
+        getEditorInputId(input: core.io.FilePath): string;
     }
 }
 declare namespace colibri.ui.ide {
