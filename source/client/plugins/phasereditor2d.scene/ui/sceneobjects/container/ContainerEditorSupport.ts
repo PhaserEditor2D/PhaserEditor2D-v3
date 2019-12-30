@@ -8,14 +8,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ContainerEditorSupport extends EditorSupport<Container> {
 
-        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
-            return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
-        }
-
         constructor(obj: Container) {
             super(ContainerExtension.getInstance(), obj);
 
             this.addComponent(new TransformComponent(obj));
+        }
+
+        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
+            return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
         }
 
         writeJSON(data: ContainerData) {
