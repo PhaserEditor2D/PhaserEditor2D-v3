@@ -4,7 +4,6 @@ namespace phasereditor2d.ide.ui.dialogs {
 
     export class OpeningProjectDialog extends controls.dialogs.ProgressDialog {
 
-
         create() {
 
             super.create();

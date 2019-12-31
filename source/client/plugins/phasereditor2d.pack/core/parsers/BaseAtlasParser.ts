@@ -25,13 +25,13 @@ namespace phasereditor2d.pack.core.parsers {
                 const atlasData = AssetPackUtils.getFileJSONFromPackUrl(atlasURL);
                 const textureURL = item.getData().textureURL;
 
-                const image = <controls.DefaultImage>AssetPackUtils.getImageFromPackUrl(textureURL);
+                const image = AssetPackUtils.getImageFromPackUrl(textureURL) as controls.DefaultImage;
 
                 if (image) {
 
                     game.textures.addAtlas(item.getKey(), image.getImageElement(), atlasData);
 
-                    for(const frame of item.getFrames()) {
+                    for (const frame of item.getFrames()) {
                         ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
                     }
                 }
@@ -54,7 +54,7 @@ namespace phasereditor2d.pack.core.parsers {
 
             if (this._preloadImageSize) {
 
-                let result2 = await ide.FileUtils.preloadImageSize(imageFile);
+                const result2 = await ide.FileUtils.preloadImageSize(imageFile);
                 result1 = Math.max(result1, result2);
             }
 

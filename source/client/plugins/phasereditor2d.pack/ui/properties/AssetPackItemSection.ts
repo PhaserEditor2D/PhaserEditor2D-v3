@@ -1,11 +1,11 @@
 namespace phasereditor2d.pack.ui.properties {
 
     import controls = colibri.ui.controls;
-    
+
     export class AssetPackItemSection extends controls.properties.PropertySection<core.AssetPackItem> {
 
-        constructor(page : controls.properties.PropertyPage) {
-            super(page, "AssetPackItemPropertySection", "File Key", false)
+        constructor(page: controls.properties.PropertyPage) {
+            super(page, "AssetPackItemPropertySection", "File Key", false);
         }
 
         protected createForm(parent: HTMLDivElement) {

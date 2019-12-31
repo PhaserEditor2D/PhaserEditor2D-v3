@@ -13,7 +13,7 @@ namespace phasereditor2d.pack.ui.importers {
             const data = super.createItemData(file);
 
             const key = file.getNameWithoutExtension();
-            
+
             data.systemKey = key;
             data.sceneKey = key;
 

@@ -4,7 +4,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
     export class AssetPackEditorPropertyProvider extends controls.properties.PropertySectionProvider {
 
-        addSections(page: controls.properties.PropertyPage, sections: controls.properties.PropertySection<any>[]): void {
+        addSections(page: controls.properties.PropertyPage,
+                    sections: Array<controls.properties.PropertySection<any>>): void {
 
             sections.push(new ItemSection(page));
 

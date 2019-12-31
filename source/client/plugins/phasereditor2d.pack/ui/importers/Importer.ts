@@ -21,7 +21,7 @@ namespace phasereditor2d.pack.ui.importers {
 
         async importFile(pack: core.AssetPack, file: io.FilePath): Promise<core.AssetPackItem> {
 
-            const computer = new ide.utils.NameMaker(item => item.getKey());
+            const computer = new ide.utils.NameMaker(i => i.getKey());
 
             computer.update(pack.getItems());
 

@@ -41,7 +41,7 @@ namespace phasereditor2d.pack.ui.editor {
 
                     btn.addEventListener("click", async (e) => {
 
-                        const editor = <AssetPackEditor>ide.Workbench.getWorkbench().getActiveEditor();
+                        const editor = ide.Workbench.getWorkbench().getActiveEditor() as AssetPackEditor;
 
                         await editor.importData_async(importData);
                     });

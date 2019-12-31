@@ -7,13 +7,12 @@ namespace phasereditor2d.pack.ui.editor {
         private _editor: AssetPackEditor;
         private _groupAtlasItems: boolean;
 
-        constructor(editor: AssetPackEditor, groupAtlasItems : boolean) {
+        constructor(editor: AssetPackEditor, groupAtlasItems: boolean) {
             super();
 
             this._editor = editor;
             this._groupAtlasItems = groupAtlasItems;
         }
-
 
         getPack() {
             return this._editor.getPack();
@@ -37,9 +36,14 @@ namespace phasereditor2d.pack.ui.editor {
 
                     const children =
                         this.getPack().getItems()
+
                             .filter(item => {
+
                                 if (this._groupAtlasItems) {
-                                    if (core.AssetPackUtils.isAtlasType(type) && core.AssetPackUtils.isAtlasType(item.getType())) {
+
+                                    if (core.AssetPackUtils.isAtlasType(type)
+                                        && core.AssetPackUtils.isAtlasType(item.getType())) {
+
                                         return true;
                                     }
                                 }

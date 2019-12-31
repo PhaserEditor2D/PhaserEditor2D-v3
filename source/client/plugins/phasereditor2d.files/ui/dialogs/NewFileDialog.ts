@@ -33,7 +33,6 @@ namespace phasereditor2d.files.ui.dialogs {
             return name + "." + this._fileExtension;
         }
 
-
         setFileContent(fileContent: string) {
             this._fileContent = fileContent;
         }

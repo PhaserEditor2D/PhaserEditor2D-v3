@@ -27,7 +27,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             return super.getRoots(input)
 
-                .filter(obj => this.acceptFile(obj))
+                .filter(obj => this.acceptFile(obj));
         }
 
         getChildren(parent: any): any[] {
@@ -41,7 +41,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             if (parent.isFile() && !this._ignoreFileSet.has(parent)) {
 
-                // TODO: we should create an extension point to know 
+                // TODO: we should create an extension point to know
                 // what files are created by the editor and are not
                 // intended to be imported in the asset pack.
                 if (parent.getExtension() === "scene") {

@@ -15,7 +15,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
         private getFrameImage(obj: any) {
 
-            const packItem = <core.AssetPackItem>obj;
+            const packItem = obj as core.AssetPackItem;
 
             if (packItem instanceof core.ImageFrameContainerAssetPackItem) {
 
@@ -36,7 +36,7 @@ namespace phasereditor2d.pack.ui.viewers {
             return args.viewer.getCellSize();
         }
 
-        async preload(args : controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
+        async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
 
             const img = this.getFrameImage(args.obj);
 

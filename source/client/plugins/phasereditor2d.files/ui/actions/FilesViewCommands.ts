@@ -23,7 +23,7 @@ namespace phasereditor2d.files.ui.actions {
             manager.addHandlerHelper(CMD_NEW_FILE,
                 OpenNewFileDialogAction.commandTest,
                 args => {
-                    new OpenNewFileDialogAction().run()
+                    new OpenNewFileDialogAction().run();
                 });
 
             manager.addKeyBinding(CMD_NEW_FILE, new colibri.ui.ide.commands.KeyMatcher({

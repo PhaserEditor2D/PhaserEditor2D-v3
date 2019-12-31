@@ -518,11 +518,12 @@ declare namespace phasereditor2d.pack.ui.editor {
 declare namespace phasereditor2d.pack.ui.editor {
     import controls = colibri.ui.controls;
     class AssetPackEditorBlocksPropertySectionProvider extends files.ui.views.FilePropertySectionProvider {
-        addSections(page: controls.properties.PropertyPage, sections: controls.properties.PropertySection<any>[]): void;
+        addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void;
     }
 }
 declare namespace phasereditor2d.pack.ui.editor {
     import ide = colibri.ui.ide;
+    import controls = colibri.ui.controls;
     class AssetPackEditorBlocksProvider extends ide.EditorViewerProvider {
         private _editor;
         private _contentProvider;
@@ -530,7 +531,7 @@ declare namespace phasereditor2d.pack.ui.editor {
         getContentProvider(): colibri.ui.controls.viewers.ITreeContentProvider;
         getLabelProvider(): colibri.ui.controls.viewers.ILabelProvider;
         getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider;
-        getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer;
+        getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer;
         getPropertySectionProvider(): colibri.ui.controls.properties.PropertySectionProvider;
         getUndoManager(): ide.undo.UndoManager;
         getInput(): colibri.core.io.FilePath[];
@@ -563,15 +564,16 @@ declare namespace phasereditor2d.pack.ui.editor {
 }
 declare namespace phasereditor2d.pack.ui.editor {
     import ide = colibri.ui.ide;
+    import controls = colibri.ui.controls;
     class AssetPackEditorOutlineProvider extends ide.EditorViewerProvider {
         private _editor;
         constructor(editor: AssetPackEditor);
         getUndoManager(): ide.undo.UndoManager;
-        getContentProvider(): colibri.ui.controls.viewers.ITreeContentProvider;
-        getLabelProvider(): colibri.ui.controls.viewers.ILabelProvider;
-        getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider;
-        getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer;
-        getPropertySectionProvider(): colibri.ui.controls.properties.PropertySectionProvider;
+        getContentProvider(): controls.viewers.ITreeContentProvider;
+        getLabelProvider(): controls.viewers.ILabelProvider;
+        getCellRendererProvider(): controls.viewers.ICellRendererProvider;
+        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer;
+        getPropertySectionProvider(): controls.properties.PropertySectionProvider;
         getInput(): any;
         preload(): Promise<void>;
         onViewerSelectionChanged(selection: any[]): void;
@@ -605,10 +607,10 @@ declare namespace phasereditor2d.pack.ui.editor {
     }
 }
 declare namespace phasereditor2d.pack.ui.editor {
-    type ImportData = {
+    interface ImportData {
         importer: importers.Importer;
         files: colibri.core.io.FilePath[];
-    };
+    }
 }
 declare namespace phasereditor2d.pack.ui.editor {
     import controls = colibri.ui.controls;
@@ -623,7 +625,7 @@ declare namespace phasereditor2d.pack.ui.editor {
 declare namespace phasereditor2d.pack.ui.editor.properties {
     import controls = colibri.ui.controls;
     class AssetPackEditorPropertyProvider extends controls.properties.PropertySectionProvider {
-        addSections(page: controls.properties.PropertyPage, sections: controls.properties.PropertySection<any>[]): void;
+        addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void;
     }
 }
 declare namespace phasereditor2d.pack.ui.editor.properties {
@@ -954,7 +956,7 @@ declare namespace phasereditor2d.pack.ui.properties {
 declare namespace phasereditor2d.pack.ui.properties {
     import controls = colibri.ui.controls;
     class AssetPackPreviewPropertyProvider extends controls.properties.PropertySectionProvider {
-        addSections(page: controls.properties.PropertyPage, sections: controls.properties.PropertySection<any>[]): void;
+        addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void;
     }
 }
 declare namespace phasereditor2d.pack.ui.properties {

@@ -7,9 +7,11 @@ namespace phasereditor2d.pack.ui.editor.properties {
         private _label: string;
         private _dataKey: string;
         private _contentType: string;
-        private _assetPackType : string;
+        private _assetPackType: string;
 
-        constructor(page: controls.properties.PropertyPage, id: string, title: string, fieldLabel: string, dataKey: string, contentType: string, assetPackType : string) {
+        constructor(page: controls.properties.PropertyPage, id: string, title: string,
+                    fieldLabel: string, dataKey: string, contentType: string, assetPackType: string) {
+
             super(page, id, title, false);
 
             this._label = fieldLabel;
@@ -18,7 +20,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
             this._assetPackType = assetPackType;
         }
 
-        canEdit(obj : any, n : number) {
+        canEdit(obj: any, n: number) {
             return super.canEdit(obj, n) && obj.getType() === this._assetPackType;
         }
 

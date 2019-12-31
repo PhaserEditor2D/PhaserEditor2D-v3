@@ -29,7 +29,7 @@ namespace phasereditor2d.pack.core.contentTypes {
                             return CONTENT_TYPE_MULTI_ATLAS;
                         }
                     }
-                    
+
                 } catch (e) {
                     // nothing
                 }

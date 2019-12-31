@@ -12,7 +12,8 @@ namespace phasereditor2d.pack.ui.editor.undo {
         private _oldValueList: any[];
         private _updateSelection: boolean;
 
-        constructor(editor: AssetPackEditor, items: core.AssetPackItem[], fieldKey: string, newValue: any, updateSelection: boolean = false) {
+        constructor(editor: AssetPackEditor, items: core.AssetPackItem[],
+                    fieldKey: string, newValue: any, updateSelection: boolean = false) {
             super();
 
             this._editor = editor;
@@ -24,6 +25,7 @@ namespace phasereditor2d.pack.ui.editor.undo {
 
             this._oldValueList = items.map(item => json.getDataValue(item.getData(), fieldKey));
 
+            // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < items.length; i++) {
                 this._newValueList.push(newValue);
             }

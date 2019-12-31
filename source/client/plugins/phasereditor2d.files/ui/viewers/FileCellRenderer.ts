@@ -37,15 +37,15 @@ namespace phasereditor2d.files.ui.viewers {
             return controls.Controls.getIcon(ide.ICON_FILE);
         }
 
-        preload(args : controls.viewers.PreloadCellArgs) {
+        preload(args: controls.viewers.PreloadCellArgs) {
 
             const obj = args.obj;
 
-            const file = <io.FilePath>obj;
+            const file = obj as io.FilePath;
 
             if (file.isFile()) {
                 const result = ide.Workbench.getWorkbench().getContentTypeRegistry().preload(file);
-                return result
+                return result;
             }
 
             return super.preload(args);

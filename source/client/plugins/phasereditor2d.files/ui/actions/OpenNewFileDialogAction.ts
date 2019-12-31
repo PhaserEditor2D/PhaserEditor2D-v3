@@ -73,8 +73,8 @@ namespace phasereditor2d.files.ui.actions {
 
             // const ext = extension as dialogs.NewFileExtension;
             // dlg.setInitialFileName(ext.getInitialFileName());
-            //dlg.setInitialLocation(this._initialLocation ?? ext.getInitialFileLocation());
-            //dlg.validate();
+            // dlg.setInitialLocation(this._initialLocation ?? ext.getInitialFileLocation());
+            // dlg.validate();
         }
 
         setInitialLocation(folder: io.FilePath) {

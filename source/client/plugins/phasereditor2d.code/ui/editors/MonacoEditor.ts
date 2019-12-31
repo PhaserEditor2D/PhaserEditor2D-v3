@@ -19,7 +19,8 @@ namespace phasereditor2d.code.ui.editors {
 
             if (input instanceof io.FilePath) {
 
-                const contentType = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(input);
+                const contentType = colibri.Platform.getWorkbench()
+                    .getContentTypeRegistry().getCachedContentType(input);
 
                 return this._contentType === contentType;
             }
@@ -88,8 +89,6 @@ namespace phasereditor2d.code.ui.editors {
             const line = model.getLineContent(position.lineNumber);
 
             const tokens = monaco.editor.tokenize(line, this._language);
-
-            let n = 0;
 
             let type = "unknown";
 
@@ -160,7 +159,7 @@ namespace phasereditor2d.code.ui.editors {
         }
 
         protected onEditorInputContentChanged() {
-
+            // empty
         }
     }
 }

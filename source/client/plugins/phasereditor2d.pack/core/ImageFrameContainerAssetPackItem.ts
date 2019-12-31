@@ -27,7 +27,7 @@ namespace phasereditor2d.pack.core {
 
             const frames = this.getFrames();
 
-            for(const frame of frames) {
+            for (const frame of frames) {
 
                 const img = frame.getImage();
 
@@ -43,7 +43,7 @@ namespace phasereditor2d.pack.core {
 
         protected abstract createParser(): parsers.ImageFrameParser;
 
-        findFrame(frameName : any) {
+        findFrame(frameName: any) {
             return this.getFrames().find(f => f.getName() === frameName);
         }
 
@@ -58,7 +58,7 @@ namespace phasereditor2d.pack.core {
             return this._frames;
         }
 
-        addToPhaserCache(game : Phaser.Game) {
+        addToPhaserCache(game: Phaser.Game) {
             const parser = this.createParser();
             parser.addToPhaserCache(game);
         }

@@ -4,7 +4,7 @@ namespace phasereditor2d.pack.core.parsers {
 
     export class UnityAtlasParser extends BaseAtlasParser {
 
-        constructor(packItem : AssetPackItem) {
+        constructor(packItem: AssetPackItem) {
             super(packItem, true);
         }
 
@@ -20,13 +20,13 @@ namespace phasereditor2d.pack.core.parsers {
 
                 const textureURL = item.getData().textureURL;
 
-                const image = <controls.DefaultImage>AssetPackUtils.getImageFromPackUrl(textureURL);
+                const image = AssetPackUtils.getImageFromPackUrl(textureURL) as controls.DefaultImage;
 
                 if (image && atlasData) {
-                    
-                    game.textures.addUnityAtlas(item.getKey(), image.getImageElement(), <any>atlasData);
 
-                    for(const frame of item.getFrames()) {
+                    game.textures.addUnityAtlas(item.getKey(), image.getImageElement(), atlasData as any);
+
+                    for (const frame of item.getFrames()) {
                         ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
                     }
                 }
@@ -37,25 +37,27 @@ namespace phasereditor2d.pack.core.parsers {
 
             // Taken from Phaser code.
 
-            const data = atlas.split('\n');
+            const data = atlas.split("\n");
 
             const lineRegExp = /^[ ]*(- )*(\w+)+[: ]+(.*)/;
 
-            let prevSprite = '';
-            let currentSprite = '';
+            let prevSprite = "";
+            let currentSprite = "";
             let rect = { x: 0, y: 0, width: 0, height: 0 };
 
             // const pivot = { x: 0, y: 0 };
             // const border = { x: 0, y: 0, z: 0, w: 0 };
 
+            // tslint:disable-next-line:prefer-for-of
             for (let i = 0; i < data.length; i++) {
+
                 const results = data[i].match(lineRegExp);
 
                 if (!results) {
                     continue;
                 }
 
-                const isList = (results[1] === '- ');
+                const isList = (results[1] === "- ");
                 const key = results[2];
                 const value = results[3];
 
@@ -68,17 +70,17 @@ namespace phasereditor2d.pack.core.parsers {
                     rect = { x: 0, y: 0, width: 0, height: 0 };
                 }
 
-                if (key === 'name') {
+                if (key === "name") {
                     //  Start new list
                     currentSprite = value;
                     continue;
                 }
 
                 switch (key) {
-                    case 'x':
-                    case 'y':
-                    case 'width':
-                    case 'height':
+                    case "x":
+                    case "y":
+                    case "width":
+                    case "height":
                         rect[key] = parseInt(value, 10);
                         break;
 
@@ -109,7 +111,8 @@ namespace phasereditor2d.pack.core.parsers {
             const dst = new controls.Rect(0, 0, rect.width, rect.height);
             const srcSize = new controls.Point(rect.width, rect.height);
             const fd = new controls.FrameData(imageFrames.length, src, dst, srcSize);
-            imageFrames.push(new AssetPackImageFrame(<ImageFrameContainerAssetPackItem>this.getPackItem(), spriteName, image, fd));
+            imageFrames.push(new AssetPackImageFrame(
+                this.getPackItem() as ImageFrameContainerAssetPackItem, spriteName, image, fd));
         }
 
     }

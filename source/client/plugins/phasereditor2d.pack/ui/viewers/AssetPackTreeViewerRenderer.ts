@@ -9,7 +9,8 @@ namespace phasereditor2d.pack.ui.viewers {
 
             viewer.setCellSize(64);
 
-            const types = core.TYPES.filter(type => type === core.ATLAS_TYPE || type.toLowerCase().indexOf("atlas") < 0);
+            const types = core.TYPES.filter(
+                type => type === core.ATLAS_TYPE || type.toLowerCase().indexOf("atlas") < 0);
 
             this.setSections(types);
         }
@@ -34,11 +35,13 @@ namespace phasereditor2d.pack.ui.viewers {
 
                 if (isLastChild) {
 
-                    controls.Controls.drawRoundedRect(ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 5, 5, 0);
+                    controls.Controls.drawRoundedRect(
+                        ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 5, 5, 0);
 
                 } else {
 
-                    controls.Controls.drawRoundedRect(ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 0, 0, 0);
+                    controls.Controls.drawRoundedRect(
+                        ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 0, 0, 0);
 
                 }
 

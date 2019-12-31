@@ -2,7 +2,6 @@ namespace phasereditor2d.pack.ui.editor {
 
     export class AssetPackEditorOutlineContentProvider extends AssetPackEditorContentProvider {
 
-
         constructor(editor: AssetPackEditor) {
             super(editor, false);
         }

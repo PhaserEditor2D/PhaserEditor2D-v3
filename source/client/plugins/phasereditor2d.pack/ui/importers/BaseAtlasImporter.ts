@@ -35,7 +35,7 @@ namespace phasereditor2d.pack.ui.importers {
             return {
                 atlasURL: core.AssetPackUtils.getFilePackUrl(file),
                 textureURL: textureURL
-            }
+            };
         }
     }
 }

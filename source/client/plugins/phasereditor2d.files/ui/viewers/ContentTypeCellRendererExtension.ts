@@ -6,10 +6,10 @@ namespace phasereditor2d.files.ui.viewers {
 
         static POINT_ID = "phasereditor2d.files.ui.viewers.ContentTypeCellRendererExtension";
 
-        abstract getRendererProvider(contentType : string): controls.viewers.ICellRendererProvider;
+        abstract getRendererProvider(contentType: string): controls.viewers.ICellRendererProvider;
 
         constructor() {
             super(ContentTypeCellRendererExtension.POINT_ID);
         }
-    } 
+    }
 }

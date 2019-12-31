@@ -17,23 +17,23 @@ namespace phasereditor2d.pack.ui.editor {
             return this._editor.getUndoManager();
         }
 
-        getContentProvider(): colibri.ui.controls.viewers.ITreeContentProvider {
+        getContentProvider(): controls.viewers.ITreeContentProvider {
             return new AssetPackEditorOutlineContentProvider(this._editor);
         }
 
-        getLabelProvider(): colibri.ui.controls.viewers.ILabelProvider {
+        getLabelProvider(): controls.viewers.ILabelProvider {
             return this._editor.getViewer().getLabelProvider();
         }
 
-        getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider {
+        getCellRendererProvider(): controls.viewers.ICellRendererProvider {
             return new viewers.AssetPackCellRendererProvider("tree");
         }
 
-        getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer {
+        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer {
             return new controls.viewers.TreeViewerRenderer(viewer);
         }
 
-        getPropertySectionProvider(): colibri.ui.controls.properties.PropertySectionProvider {
+        getPropertySectionProvider(): controls.properties.PropertySectionProvider {
             return this._editor.getPropertyProvider();
         }
 
@@ -45,9 +45,9 @@ namespace phasereditor2d.pack.ui.editor {
             return Promise.resolve();
         }
 
-        onViewerSelectionChanged(selection : any[]) {
-            
-            const viewer= this._editor.getViewer();
+        onViewerSelectionChanged(selection: any[]) {
+
+            const viewer = this._editor.getViewer();
 
             viewer.setSelection(selection, false);
             viewer.reveal(...selection);

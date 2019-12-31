@@ -29,7 +29,7 @@ namespace phasereditor2d.pack.core.parsers {
 
                         const imageName = textureData.image;
                         const imageFile = atlasDataFile.getSibling(imageName);
-                        const image = <controls.DefaultImage>ide.FileUtils.getImage(imageFile);
+                        const image = ide.FileUtils.getImage(imageFile) as controls.DefaultImage;
 
                         images.push(image.getImageElement());
 
@@ -38,7 +38,7 @@ namespace phasereditor2d.pack.core.parsers {
 
                     game.textures.addAtlasJSONArray(this.getPackItem().getKey(), images, jsonArrayData);
 
-                    for(const frame of item.getFrames()) {
+                    for (const frame of item.getFrames()) {
                         ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
                     }
                 }
@@ -69,18 +69,19 @@ namespace phasereditor2d.pack.core.parsers {
 
                 try {
 
-                    const data = JSON.parse(str);
+                    const data2 = JSON.parse(str);
 
-                    if (data.textures) {
+                    if (data2.textures) {
 
-                        for (const textureData of data.textures) {
+                        for (const textureData of data2.textures) {
 
                             const imageName = textureData.image;
                             const imageFile = dataFile.getSibling(imageName);
                             const image = ide.FileUtils.getImage(imageFile);
 
                             for (const frame of textureData.frames) {
-                                const frameData = AtlasParser.buildFrameData(this.getPackItem(), image, frame, list.length);
+                                const frameData = AtlasParser
+                                    .buildFrameData(this.getPackItem(), image, frame, list.length);
                                 list.push(frameData);
                             }
                         }

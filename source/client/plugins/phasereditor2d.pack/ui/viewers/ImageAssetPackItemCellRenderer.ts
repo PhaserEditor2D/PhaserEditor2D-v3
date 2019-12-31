@@ -6,7 +6,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
         getImage(obj: any): controls.IImage {
 
-            const item = <core.AssetPackItem>obj;
+            const item = obj as core.AssetPackItem;
             const data = item.getData();
 
             return core.AssetPackUtils.getImageFromPackUrl(data.url);

@@ -10,7 +10,7 @@ namespace phasereditor2d.pack.ui.importers {
             return {
                 textureURL: core.AssetPackUtils.getFilePackUrlWithNewExtension(file, "png"),
                 fontDataURL: core.AssetPackUtils.getFilePackUrl(file)
-            }
+            };
         }
     }
 }

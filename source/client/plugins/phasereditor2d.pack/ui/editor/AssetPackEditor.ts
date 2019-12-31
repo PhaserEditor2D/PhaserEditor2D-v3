@@ -48,14 +48,14 @@ namespace phasereditor2d.pack.ui.editor {
 
         static registerCommands(manager: ide.commands.CommandManager) {
 
-            // delete 
+            // delete
 
             manager.addHandlerHelper(ide.actions.CMD_DELETE,
 
                 args => AssetPackEditor.isEditorScope(args),
 
                 args => {
-                    const editor = <AssetPackEditor>args.activeEditor;
+                    const editor = args.activeEditor as AssetPackEditor;
                     editor.deleteSelection();
                 });
         }
@@ -66,7 +66,7 @@ namespace phasereditor2d.pack.ui.editor {
 
                 args.activePart instanceof outline.ui.views.OutlineView
 
-                && args.activeEditor instanceof AssetPackEditor
+                && args.activeEditor instanceof AssetPackEditor;
         }
 
         deleteSelection() {
@@ -163,7 +163,7 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         protected onEditorInputContentChanged() {
-            //TODO: missing to implement
+            // TODO: missing to implement
         }
 
         async onPartActivated() {
@@ -243,7 +243,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             const selectCallback = async () => {
 
-                const type = <string>viewer.getSelection()[0];
+                const type = viewer.getSelection()[0] as string;
 
                 await this.openSelectFileDialog_async(type);
             };
@@ -258,17 +258,18 @@ namespace phasereditor2d.pack.ui.editor {
                 btn.disabled = true;
 
                 viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+
                     btn.disabled = viewer.getSelection().length === 0;
-                })
+                });
             }
 
             dlg.addButton("Cancel", () => {
+
                 dlg.close();
             });
 
             viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, e => selectCallback());
         }
-
 
         async createFilesViewer(filter: (file: io.FilePath) => boolean) {
 
@@ -292,7 +293,6 @@ namespace phasereditor2d.pack.ui.editor {
 
             viewer.setInput(list);
 
-
             return viewer;
         }
 
@@ -306,7 +306,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             dlg.create();
 
-            dlg.setTitle("Select Files")
+            dlg.setTitle("Select Files");
 
             const importFilesCallback = async (files: io.FilePath[]) => {
 

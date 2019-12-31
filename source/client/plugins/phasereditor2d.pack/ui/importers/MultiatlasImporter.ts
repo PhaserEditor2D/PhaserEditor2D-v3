@@ -15,7 +15,7 @@ namespace phasereditor2d.pack.ui.importers {
                 type: core.MULTI_ATLAS_TYPE,
                 url: core.AssetPackUtils.getFilePackUrl(file),
                 path: core.AssetPackUtils.getFilePackUrl(file.getParent()),
-            }
+            };
         }
     }
 

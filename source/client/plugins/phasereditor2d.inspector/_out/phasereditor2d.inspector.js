@@ -45,7 +45,8 @@ var phasereditor2d;
                         this._propertyPage = new controls.properties.PropertyPage();
                         this.add(this._propertyPage);
                         this._selectionListener = (e) => this.onPartSelection();
-                        ide.Workbench.getWorkbench().addEventListener(ide.EVENT_PART_ACTIVATED, e => this.onWorkbenchPartActivate());
+                        ide.Workbench.getWorkbench()
+                            .addEventListener(ide.EVENT_PART_ACTIVATED, e => this.onWorkbenchPartActivate());
                     }
                     onWorkbenchPartActivate() {
                         const part = ide.Workbench.getWorkbench().getActivePart();

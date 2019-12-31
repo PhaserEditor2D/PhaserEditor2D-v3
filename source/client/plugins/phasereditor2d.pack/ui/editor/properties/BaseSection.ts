@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export abstract class BaseSection extends controls.properties.PropertySection<core.AssetPackItem> {
 
         getEditor() {
-            return <AssetPackEditor>ide.Workbench.getWorkbench().getActiveEditor();
+            return ide.Workbench.getWorkbench().getActiveEditor() as AssetPackEditor;
         }
 
         changeItemField(key: string, value: any, updateSelection: boolean = false) {
@@ -32,7 +32,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return n === 1;
         }
 
-        async browseFile_onlyContentType(title: string, contentType: string, selectionCallback: (files: io.FilePath[]) => void) {
+        async browseFile_onlyContentType(
+            title: string, contentType: string, selectionCallback: (files: io.FilePath[]) => void) {
 
             this.browseFile(title, f => {
 
@@ -43,7 +44,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
             }, selectionCallback);
         }
 
-        async browseFile(title: string, fileFilter: (file: io.FilePath) => boolean, selectionCallback: (files: io.FilePath[]) => void) {
+        async browseFile(title: string, fileFilter: (file: io.FilePath) => boolean,
+                         selectionCallback: (files: io.FilePath[]) => void) {
 
             const viewer = await this.getEditor().createFilesViewer(fileFilter);
 
@@ -85,7 +87,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return AssetPackPlugin.getInstance().getPhaserDocs().getDoc(helpKey);
         }
 
-        protected createFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string, helpKey?: string) {
+        protected createFileField(
+            comp: HTMLElement, label: string, fieldKey: string, contentType: string, helpKey?: string) {
 
             let tooltip: string;
 
@@ -119,7 +122,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
             });
         }
 
-        protected createMultiFileField(comp: HTMLElement, label: string, fieldKey: string, contentType: string, helpKey?: string) {
+        protected createMultiFileField(
+            comp: HTMLElement, label: string, fieldKey: string, contentType: string, helpKey?: string) {
 
             this.createLabel(comp, label, helpKey ? this.getHelp(helpKey) : undefined);
 
@@ -170,7 +174,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
             text.style.gridColumn = "2 / span 2";
 
             text.addEventListener("change", e => {
-                this.changeItemField(field, Number.parseInt(text.value), true);
+                this.changeItemField(field, Number.parseInt(text.value, 10), true);
             });
 
             this.addUpdater(() => {

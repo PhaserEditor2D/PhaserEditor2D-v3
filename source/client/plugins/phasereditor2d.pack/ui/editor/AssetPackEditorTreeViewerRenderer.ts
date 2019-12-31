@@ -7,24 +7,24 @@ namespace phasereditor2d.pack.ui.editor {
 
     export class AssetPackEditorTreeViewerRenderer extends viewers.AssetPackTreeViewerRenderer {
 
-        private _editor : AssetPackEditor;
+        private _editor: AssetPackEditor;
 
-        constructor(editor : AssetPackEditor, viewer : controls.viewers.TreeViewer) {
+        constructor(editor: AssetPackEditor, viewer: controls.viewers.TreeViewer) {
             super(viewer, false);
 
-            this._editor  = editor;
+            this._editor = editor;
 
             this.setSections([]);
         }
 
-        isChild(file : io.FilePath) {
-            
+        isChild(file: io.FilePath) {
+
             const root = this._editor.getInput().getParent();
 
             return file.isFile() && file.getParent() !== root;
         }
 
-        isParent(file : io.FilePath) {
+        isParent(file: io.FilePath) {
             return file.isFolder();
         }
     }

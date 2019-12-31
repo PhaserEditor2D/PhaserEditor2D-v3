@@ -28,7 +28,8 @@ namespace phasereditor2d.inspector.ui.views {
 
             this._selectionListener = (e: CustomEvent) => this.onPartSelection();
 
-            ide.Workbench.getWorkbench().addEventListener(ide.EVENT_PART_ACTIVATED, e => this.onWorkbenchPartActivate());
+            ide.Workbench.getWorkbench()
+                .addEventListener(ide.EVENT_PART_ACTIVATED, e => this.onWorkbenchPartActivate());
         }
 
         private onWorkbenchPartActivate() {

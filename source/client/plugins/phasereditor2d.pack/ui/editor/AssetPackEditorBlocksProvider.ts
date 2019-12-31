@@ -1,11 +1,12 @@
 namespace phasereditor2d.pack.ui.editor {
 
     import ide = colibri.ui.ide;
+    import controls = colibri.ui.controls;
 
     export class AssetPackEditorBlocksProvider extends ide.EditorViewerProvider {
 
         private _editor: AssetPackEditor;
-        private _contentProvider : AssetPackEditorBlocksContentProvider;
+        private _contentProvider: AssetPackEditorBlocksContentProvider;
 
         constructor(editor: AssetPackEditor) {
             super();
@@ -26,7 +27,7 @@ namespace phasereditor2d.pack.ui.editor {
             return new files.ui.viewers.FileCellRendererProvider("grid");
         }
 
-        getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer {
+        getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer {
             return new AssetPackEditorTreeViewerRenderer(this._editor, viewer);
         }
 
@@ -43,7 +44,7 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         async updateBlocks_async() {
-            
+
             await this._contentProvider.updateIgnoreFileSet_async();
 
             const sel = this.getSelection().filter(obj => !this._contentProvider.getIgnoreFileSet().has(obj));

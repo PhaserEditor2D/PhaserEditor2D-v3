@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.core {
     export class AudioSpriteAssetPackItem extends AssetPackItem {
 
         constructor(pack: AssetPack, data: any) {
-            super(pack, data)
+            super(pack, data);
         }
 
         computeUsedFiles(files: Set<io.FilePath>) {

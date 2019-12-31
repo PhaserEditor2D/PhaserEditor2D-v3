@@ -22,13 +22,13 @@ namespace phasereditor2d.pack.core.parsers {
                 const atlasData = AssetPackUtils.getFileXMLFromPackUrl(atlasURL);
                 const textureURL = item.getData().textureURL;
 
-                const image = <controls.DefaultImage>AssetPackUtils.getImageFromPackUrl(textureURL);
+                const image = AssetPackUtils.getImageFromPackUrl(textureURL) as controls.DefaultImage;
 
                 if (atlasData && image) {
 
                     game.textures.addAtlasXML(item.getKey(), image.getImageElement(), atlasData);
 
-                    for(const frame of item.getFrames()) {
+                    for (const frame of item.getFrames()) {
                         ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
                     }
                 }
@@ -49,10 +49,10 @@ namespace phasereditor2d.pack.core.parsers {
 
                     const name = elem.getAttribute("name");
 
-                    const frameX = Number.parseInt(elem.getAttribute("x"));
-                    const frameY = Number.parseInt(elem.getAttribute("y"));
-                    const frameW = Number.parseInt(elem.getAttribute("width"));
-                    const frameH = Number.parseInt(elem.getAttribute("height"));
+                    const frameX = Number.parseInt(elem.getAttribute("x"), 10);
+                    const frameY = Number.parseInt(elem.getAttribute("y"), 10);
+                    const frameW = Number.parseInt(elem.getAttribute("width"), 10);
+                    const frameH = Number.parseInt(elem.getAttribute("height"), 10);
 
                     let spriteX = frameX;
                     let spriteY = frameY;
@@ -61,10 +61,10 @@ namespace phasereditor2d.pack.core.parsers {
 
                     if (elem.hasAttribute("frameX")) {
 
-                        spriteX = Number.parseInt(elem.getAttribute("frameX"));
-                        spriteY = Number.parseInt(elem.getAttribute("frameY"));
-                        spriteW = Number.parseInt(elem.getAttribute("frameWidth"));
-                        spriteH = Number.parseInt(elem.getAttribute("frameHeight"));
+                        spriteX = Number.parseInt(elem.getAttribute("frameX"), 10);
+                        spriteY = Number.parseInt(elem.getAttribute("frameY"), 10);
+                        spriteW = Number.parseInt(elem.getAttribute("frameWidth"), 10);
+                        spriteH = Number.parseInt(elem.getAttribute("frameHeight"), 10);
                     }
 
                     const fd = new controls.FrameData(i,
@@ -73,7 +73,8 @@ namespace phasereditor2d.pack.core.parsers {
                         new controls.Point(frameW, frameH)
                     );
 
-                    imageFrames.push(new AssetPackImageFrame(<ImageFrameContainerAssetPackItem>this.getPackItem(), name, image, fd));
+                    imageFrames.push(new AssetPackImageFrame(
+                        this.getPackItem() as ImageFrameContainerAssetPackItem, name, image, fd));
                 }
 
             } catch (e) {

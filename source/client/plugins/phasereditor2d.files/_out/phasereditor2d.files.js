@@ -345,8 +345,8 @@ var phasereditor2d;
                         dlg.setTitle(`New ${extension.getDialogName()}`);
                         // const ext = extension as dialogs.NewFileExtension;
                         // dlg.setInitialFileName(ext.getInitialFileName());
-                        //dlg.setInitialLocation(this._initialLocation ?? ext.getInitialFileLocation());
-                        //dlg.validate();
+                        // dlg.setInitialLocation(this._initialLocation ?? ext.getInitialFileLocation());
+                        // dlg.validate();
                     }
                     setInitialLocation(folder) {
                         this._initialLocation = folder;
@@ -908,7 +908,6 @@ var phasereditor2d;
                         this._onlyFolders = onlyFolders;
                     }
                     getRoots(input) {
-                        let result = [];
                         if (input instanceof core.io.FilePath) {
                             if (this._onlyFolders) {
                                 if (!input.isFolder()) {
@@ -1224,7 +1223,7 @@ var phasereditor2d;
                         return false;
                     }
                     canEditNumber(n) {
-                        return n == 1;
+                        return n === 1;
                     }
                 }
                 views.ImageFileSection = ImageFileSection;

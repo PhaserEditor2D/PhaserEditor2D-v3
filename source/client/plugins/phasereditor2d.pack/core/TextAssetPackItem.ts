@@ -4,8 +4,8 @@ namespace phasereditor2d.pack.core {
 
     export class TextAssetPackItem extends AssetPackItem {
 
-        constructor(pack : AssetPack, data : any) {
-            super(pack, data)
+        constructor(pack: AssetPack, data: any) {
+            super(pack, data);
         }
     }
 }

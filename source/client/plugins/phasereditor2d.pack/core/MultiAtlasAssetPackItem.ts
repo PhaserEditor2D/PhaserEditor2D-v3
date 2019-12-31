@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.core {
     export class MultiatlasAssetPackItem extends BaseAtlasAssetPackItem {
 
         constructor(pack: AssetPack, data: any) {
-            super(pack, data)
+            super(pack, data);
         }
 
         protected createParser(): parsers.ImageFrameParser {
@@ -32,7 +32,7 @@ namespace phasereditor2d.pack.core {
 
                     for (const texture of data.textures) {
                         const url = core.AssetPackUtils.getFilePackUrl(atlasFile.getSibling(texture.image));
-                        urlSet.add(url)
+                        urlSet.add(url);
                     }
 
                     for (const url of urlSet) {
@@ -40,7 +40,7 @@ namespace phasereditor2d.pack.core {
                         files.add(file);
                     }
                 }
-                
+
             } catch (e) {
                 console.error(e);
             }

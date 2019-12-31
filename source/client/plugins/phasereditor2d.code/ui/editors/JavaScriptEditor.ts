@@ -13,7 +13,6 @@ namespace phasereditor2d.code.ui.editors {
         }
     }
 
-
     function registerJavaScriptEditorCompletions() {
 
         monaco.languages.registerCompletionItemProvider("javascript", {
@@ -22,7 +21,7 @@ namespace phasereditor2d.code.ui.editors {
 
                 return {
                     suggestions: computeCompletionItems(),
-                }
+                };
             }
         });
     }
@@ -31,36 +30,37 @@ namespace phasereditor2d.code.ui.editors {
 
         const result: monaco.languages.CompletionItem[] = [];
 
-        //TODO: missing preload finder, but we need to compute the completions async, we should look in the monaco docs.
+        // TODO: missing preload finder, but we need to compute the completions async,
+        // we should look in the monaco docs.
         const finder = new pack.core.PackFinder();
         const packs = finder.getPacks();
 
-        for (const pack_ of packs) {
+        for (const pack2 of packs) {
 
-            const packName = pack_.getFile().getName();
+            const packName = pack2.getFile().getName();
 
-            for (const item of pack_.getItems()) {
+            for (const item of pack2.getItems()) {
 
-                result.push(<any>{
+                result.push({
                     label: `${item.getKey()}`,
                     kind: monaco.languages.CompletionItemKind.Text,
                     documentation:
                         `Asset Pack key of type ${item.getType()} (in ${packName}).`,
                     insertText: `"${item.getKey()}"`,
-                });
+                } as any);
 
                 if (item instanceof pack.core.ImageFrameContainerAssetPackItem
                     && !(item instanceof pack.core.ImageAssetPackItem)) {
 
                     for (const frame of item.getFrames()) {
 
-                        result.push(<any>{
+                        result.push({
                             label: `${frame.getName()}`,
                             kind: monaco.languages.CompletionItemKind.Text,
                             documentation:
                                 `Frame of the ${item.getType()} ${item.getKey()} (in ${packName}).`,
                             insertText: `"${frame.getName()}"`,
-                        });
+                        } as any);
                     }
                 }
             }

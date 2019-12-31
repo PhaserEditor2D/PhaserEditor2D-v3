@@ -6,11 +6,11 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
     export class MultiatlasSection extends BaseSection {
 
-        constructor(page : controls.properties.PropertyPage) {
+        constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.pack.ui.editor.properties.MultiatlasSection", "Multiatlas");
         }
 
-        canEdit(obj : any, n : number) {
+        canEdit(obj: any, n: number) {
             return super.canEdit(obj, n) && obj instanceof core.MultiatlasAssetPackItem;
         }
 
@@ -20,8 +20,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createFileField(comp, "URL", "url", core.contentTypes.CONTENT_TYPE_MULTI_ATLAS, 
-            "Phaser.Loader.LoaderPlugin.multiatlas(atlasURL)");
+            this.createFileField(comp, "URL", "url", core.contentTypes.CONTENT_TYPE_MULTI_ATLAS,
+                "Phaser.Loader.LoaderPlugin.multiatlas(atlasURL)");
 
             this.createSimpleTextField(comp, "Path", "path", "Phaser.Loader.LoaderPlugin.multiatlas(path)");
         }

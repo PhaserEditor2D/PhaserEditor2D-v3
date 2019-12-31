@@ -4,9 +4,9 @@ namespace phasereditor2d.pack.ui.editor {
 
     export class IgnoreFileSet extends Set<io.FilePath> {
 
-        private _editor : AssetPackEditor;
+        private _editor: AssetPackEditor;
 
-        constructor(editor : AssetPackEditor) {
+        constructor(editor: AssetPackEditor) {
             super();
 
             this._editor = editor;
@@ -14,7 +14,7 @@ namespace phasereditor2d.pack.ui.editor {
 
         async updateIgnoreFileSet_async() {
 
-            let packs = (await core.AssetPackUtils.getAllPacks())
+            const packs = (await core.AssetPackUtils.getAllPacks())
                 .filter(pack => pack.getFile() !== this._editor.getInput());
 
             this.clear();

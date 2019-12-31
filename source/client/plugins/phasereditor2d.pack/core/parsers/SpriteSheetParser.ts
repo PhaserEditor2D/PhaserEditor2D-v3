@@ -19,13 +19,13 @@ namespace phasereditor2d.pack.core.parsers {
 
                 const data = item.getData();
 
-                const image = <controls.DefaultImage>AssetPackUtils.getImageFromPackUrl(data.url);
+                const image = AssetPackUtils.getImageFromPackUrl(data.url) as controls.DefaultImage;
 
                 if (image) {
-                    
+
                     game.textures.addSpriteSheet(item.getKey(), image.getImageElement(), data.frameConfig);
 
-                    for(const frame of item.getFrames()) {
+                    for (const frame of item.getFrames()) {
                         ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
                     }
                 }
@@ -101,7 +101,8 @@ namespace phasereditor2d.pack.core.parsers {
                             new controls.Point(w, h)
                         );
 
-                        frames.push(new AssetPackImageFrame(<ImageFrameContainerAssetPackItem>this.getPackItem(), i.toString(), image, fd));
+                        frames.push(new AssetPackImageFrame(
+                            this.getPackItem() as ImageFrameContainerAssetPackItem, i.toString(), image, fd));
                     }
                 }
 

@@ -118,16 +118,19 @@ namespace phasereditor2d.pack.core {
 
             for (const sectionId in data) {
 
-                const sectionData = data[sectionId];
+                if (data.hasOwnProperty(sectionId)) {
 
-                const filesData = sectionData["files"];
+                    const sectionData = data[sectionId];
 
-                if (filesData) {
+                    const filesData = sectionData["files"];
 
-                    for (const fileData of filesData) {
+                    if (filesData) {
 
-                        const item = this.createPackItem(fileData);
-                        this._items.push(item);
+                        for (const fileData of filesData) {
+
+                            const item = this.createPackItem(fileData);
+                            this._items.push(item);
+                        }
                     }
                 }
             }

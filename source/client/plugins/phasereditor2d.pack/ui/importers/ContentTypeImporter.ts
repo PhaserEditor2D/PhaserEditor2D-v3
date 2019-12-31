@@ -9,7 +9,7 @@ namespace phasereditor2d.pack.ui.importers {
 
         private _contentType: string;
 
-        constructor(contentType: string, assetPackItemType : string) {
+        constructor(contentType: string, assetPackItemType: string) {
             super(assetPackItemType);
 
             this._contentType = contentType;

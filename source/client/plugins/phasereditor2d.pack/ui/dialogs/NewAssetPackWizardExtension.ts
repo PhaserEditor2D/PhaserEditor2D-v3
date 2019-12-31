@@ -24,10 +24,8 @@ namespace phasereditor2d.pack.ui.dialogs {
             });
         }
 
-
         getInitialFileLocation() {
             return super.findInitialFileLocationBasedOnContentType(pack.core.contentTypes.CONTENT_TYPE_ASSET_PACK);
         }
     }
 }
-

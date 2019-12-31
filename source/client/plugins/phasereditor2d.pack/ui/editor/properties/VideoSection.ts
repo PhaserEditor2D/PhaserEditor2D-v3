@@ -18,7 +18,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
-            this.createMultiFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_VIDEO, 
+            this.createMultiFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_VIDEO,
                 "Phaser.Loader.LoaderPlugin.video(urls)");
         }
     }

@@ -41,14 +41,14 @@ namespace phasereditor2d.pack.core {
         static getFilePackUrl(file: io.FilePath) {
 
             if (file.getParent()) {
-                
+
                 return `${this.getFilePackUrl(file.getParent())}${file.getName()}${file.isFolder() ? "/" : ""}`;
             }
 
             return "";
         }
 
-        static getFilePackUrlWithNewExtension(file: io.FilePath, ext : string) {
+        static getFilePackUrlWithNewExtension(file: io.FilePath, ext: string) {
 
             const url = this.getFilePackUrl(file.getParent());
 
@@ -63,7 +63,7 @@ namespace phasereditor2d.pack.core {
 
                 return null;
             }
-            
+
             const str = ide.FileUtils.getFileString(file);
 
             return str;

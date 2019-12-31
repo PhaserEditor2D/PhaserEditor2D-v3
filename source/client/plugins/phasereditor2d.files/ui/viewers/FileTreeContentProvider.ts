@@ -6,20 +6,18 @@ namespace phasereditor2d.files.ui.viewers {
 
     export class FileTreeContentProvider implements controls.viewers.ITreeContentProvider {
 
-        private _onlyFolders : boolean;
+        private _onlyFolders: boolean;
 
-        constructor(onlyFolders : boolean = false) {
+        constructor(onlyFolders: boolean = false) {
             this._onlyFolders = onlyFolders;
         }
 
         getRoots(input: any): any[] {
 
-            let result : io.FilePath[] = [];
-
             if (input instanceof core.io.FilePath) {
-                
+
                 if (this._onlyFolders) {
-                    
+
                     if (!input.isFolder()) {
                         return [];
                     }
@@ -33,7 +31,7 @@ namespace phasereditor2d.files.ui.viewers {
                 if (this._onlyFolders) {
                     return input.filter(f => (f as io.FilePath).isFolder());
                 }
-                
+
                 return input;
             }
 
@@ -42,7 +40,7 @@ namespace phasereditor2d.files.ui.viewers {
 
         getChildren(parent: any): any[] {
 
-            const files = (<core.io.FilePath>parent).getFiles();
+            const files = (parent as core.io.FilePath).getFiles();
 
             if (this._onlyFolders) {
                 return files.filter(f => f.isFolder());

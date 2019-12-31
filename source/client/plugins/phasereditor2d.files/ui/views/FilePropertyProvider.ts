@@ -4,7 +4,8 @@ namespace phasereditor2d.files.ui.views {
 
     export class FilePropertySectionProvider extends controls.properties.PropertySectionProvider {
 
-        addSections(page: controls.properties.PropertyPage, sections: controls.properties.PropertySection<any>[]): void {
+        addSections(
+            page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void {
 
             sections.push(new FileSection(page));
 

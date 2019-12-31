@@ -5,7 +5,7 @@ namespace phasereditor2d.code.ui.editors {
 
     export class MonacoModelsManager {
 
-        private static _instance : MonacoModelsManager;
+        private static _instance: MonacoModelsManager;
 
         static getInstance() {
 
@@ -17,12 +17,12 @@ namespace phasereditor2d.code.ui.editors {
             return this._instance;
         }
 
-        private _started : boolean;
+        private _started: boolean;
 
-        private _extraLibs: {
+        private _extraLibs: Array<{
             disposable: monaco.IDisposable,
             file: io.FilePath
-        }[];
+        }>;
 
         constructor() {
 
@@ -58,7 +58,7 @@ namespace phasereditor2d.code.ui.editors {
                 }
 
                 return false;
-            }
+            };
 
             const update = test(change.getDeleteRecords())
                 || test(change.getModifiedRecords())
@@ -67,7 +67,7 @@ namespace phasereditor2d.code.ui.editors {
                 || test(change.getAddRecords());
 
             if (update) {
-                
+
                 this.updateExtraLibs();
             }
         }

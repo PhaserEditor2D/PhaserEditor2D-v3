@@ -12,7 +12,8 @@ namespace phasereditor2d.pack.core {
             this._packs = packs;
         }
 
-        async preload(monitor: controls.IProgressMonitor = controls.EMPTY_PROGRESS_MONITOR): Promise<controls.PreloadResult> {
+        async preload(
+            monitor: controls.IProgressMonitor = controls.EMPTY_PROGRESS_MONITOR): Promise<controls.PreloadResult> {
 
             let result = controls.PreloadResult.NOTHING_LOADED;
 
@@ -70,7 +71,7 @@ namespace phasereditor2d.pack.core {
 
         getAssetPackItemOrFrame(key: string, frame: any) {
 
-            let item = this.findAssetPackItem(key);
+            const item = this.findAssetPackItem(key);
 
             if (!item) {
                 return null;

@@ -15,7 +15,8 @@ namespace phasereditor2d.pack.ui.viewers {
 
             if (typeof (element) === "string") {
 
-                return new controls.viewers.IconImageCellRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FOLDER));
+                return new controls.viewers.IconImageCellRenderer(
+                    ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FOLDER));
 
             } else if (element instanceof core.AssetPackItem) {
 
@@ -32,7 +33,7 @@ namespace phasereditor2d.pack.ui.viewers {
                     case core.ATLAS_TYPE:
                     case core.UNITY_ATLAS_TYPE:
                     case core.ATLAS_XML_TYPE: {
-                        
+
                         if (this._layout === "grid") {
                             return new controls.viewers.FolderCellRenderer();
                         }

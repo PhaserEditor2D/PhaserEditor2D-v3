@@ -47,7 +47,8 @@ namespace phasereditor2d.pack.ui.importers {
 
                     new SingleFileImporter(core.contentTypes.CONTENT_TYPE_TILEMAP_IMPACT, core.TILEMAP_IMPACT_TYPE),
 
-                    new SingleFileImporter(core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON, core.TILEMAP_TILED_JSON_TYPE),
+                    new SingleFileImporter(core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON,
+                        core.TILEMAP_TILED_JSON_TYPE),
 
                     new SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.PLUGIN_TYPE, false, {
                         start: false,

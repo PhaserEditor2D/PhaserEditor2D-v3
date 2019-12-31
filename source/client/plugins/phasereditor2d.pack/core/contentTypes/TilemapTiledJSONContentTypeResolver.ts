@@ -26,7 +26,7 @@ namespace phasereditor2d.pack.core.contentTypes {
 
                         return CONTENT_TYPE_TILEMAP_TILED_JSON;
                     }
-                    
+
                 } catch (e) {
                     // nothing
                 }

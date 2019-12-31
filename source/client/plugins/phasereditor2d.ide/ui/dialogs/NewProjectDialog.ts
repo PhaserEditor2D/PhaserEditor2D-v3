@@ -225,7 +225,7 @@ namespace phasereditor2d.ide.ui.dialogs {
 
         getRoots(input: any): any[] {
 
-            const data = input as colibri.core.io.ProjectTemplatesData
+            const data = input as colibri.core.io.ProjectTemplatesData;
 
             return data.providers;
         }

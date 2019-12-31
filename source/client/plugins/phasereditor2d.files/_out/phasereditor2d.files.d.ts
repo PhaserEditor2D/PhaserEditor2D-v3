@@ -235,7 +235,7 @@ declare namespace phasereditor2d.files.ui.viewers {
 declare namespace phasereditor2d.files.ui.views {
     import controls = colibri.ui.controls;
     class FilePropertySectionProvider extends controls.properties.PropertySectionProvider {
-        addSections(page: controls.properties.PropertyPage, sections: controls.properties.PropertySection<any>[]): void;
+        addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void;
     }
 }
 declare namespace phasereditor2d.files.ui.views {

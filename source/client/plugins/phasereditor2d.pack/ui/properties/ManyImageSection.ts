@@ -34,14 +34,14 @@ namespace phasereditor2d.pack.ui.properties {
         }
 
         private async getImageFrames() {
-            
+
             const frames = this.getSelection().flatMap(obj => {
 
                 if (obj instanceof core.ImageFrameContainerAssetPackItem) {
                     return obj.getFrames();
                 }
 
-                return [(<controls.ImageFrame>obj)]
+                return [(obj as controls.ImageFrame)];
             });
 
             return frames;
@@ -50,10 +50,12 @@ namespace phasereditor2d.pack.ui.properties {
         canEdit(obj: any, n: number): boolean {
 
             if (n === 1) {
-                return obj instanceof core.AssetPackItem && obj.getType() !== core.IMAGE_TYPE && obj instanceof core.ImageFrameContainerAssetPackItem;
+                return obj instanceof core.AssetPackItem
+                    && obj.getType() !== core.IMAGE_TYPE && obj instanceof core.ImageFrameContainerAssetPackItem;
             }
 
-            return obj instanceof controls.ImageFrame || obj instanceof core.AssetPackItem && obj instanceof core.ImageFrameContainerAssetPackItem;
+            return obj instanceof controls.ImageFrame
+                || obj instanceof core.AssetPackItem && obj instanceof core.ImageFrameContainerAssetPackItem;
         }
 
         canEditNumber(n: number): boolean {

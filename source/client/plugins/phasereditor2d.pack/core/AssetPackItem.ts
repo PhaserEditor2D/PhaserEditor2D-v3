@@ -60,7 +60,7 @@ namespace phasereditor2d.pack.core {
             return this._data["key"];
         }
 
-        setKey(key : string) {
+        setKey(key: string) {
             this._data["key"] = key;
         }
 
@@ -73,6 +73,7 @@ namespace phasereditor2d.pack.core {
         }
 
         addToPhaserCache(game: Phaser.Game) {
+            // empty
         }
 
         async preload(): Promise<controls.PreloadResult> {
@@ -80,7 +81,7 @@ namespace phasereditor2d.pack.core {
         }
 
         resetCache() {
-
+            // empty
         }
     }
 

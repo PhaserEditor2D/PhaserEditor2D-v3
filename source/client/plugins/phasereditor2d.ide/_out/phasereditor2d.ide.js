@@ -457,7 +457,7 @@ var phasereditor2d;
                     });
                 }
                 actions.OpenThemeDialogHandler = OpenThemeDialogHandler;
-                OpenThemeDialogHandler.test = function (args) {
+                OpenThemeDialogHandler.test = (args) => {
                     return !(args.activeDialog instanceof ui.dialogs.ThemesDialog);
                 };
             })(actions = ui.actions || (ui.actions = {}));
@@ -480,8 +480,7 @@ var phasereditor2d;
                     createDialogArea() {
                         const element = document.createElement("div");
                         element.classList.add("DialogClientArea", "DialogSection");
-                        let html = `
-            
+                        const html = `
             <p class="Title"><b>Phaser Editor 2D</b><br><small>v${ide.VER}</small></p>
 
             <p><i>A friendly IDE for HTML5 game development</i></p>
@@ -494,7 +493,6 @@ var phasereditor2d;
             </p>
 
             <p>
-            
             </p>
 
             <p><small>Copyright &copy; 2016-2020 Arian Fornaris </small></p>

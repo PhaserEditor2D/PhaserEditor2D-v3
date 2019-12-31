@@ -14,7 +14,7 @@ namespace phasereditor2d.images.ui.editors {
 
             if (input instanceof io.FilePath) {
 
-                const file = <io.FilePath>input;
+                const file = input as io.FilePath;
                 const contentType = ide.Workbench.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
 
                 if (contentType === webContentTypes.core.CONTENT_TYPE_IMAGE) {
@@ -44,7 +44,7 @@ namespace phasereditor2d.images.ui.editors {
         }
 
         protected onEditorInputContentChanged() {
-
+            // empty
         }
 
         async createPart() {

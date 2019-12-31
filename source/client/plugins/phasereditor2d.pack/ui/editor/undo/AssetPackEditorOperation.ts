@@ -20,10 +20,10 @@ namespace phasereditor2d.pack.ui.editor.undo {
             this._after = after;
         }
 
-        private load(data : any) {
+        private load(data: any) {
 
             this._editor.getPack().fromJSON(data);
-            
+
             this._editor.updateAll();
 
             this._editor.setDirty(true);

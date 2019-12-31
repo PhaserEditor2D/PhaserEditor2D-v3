@@ -105,7 +105,8 @@ var phasereditor2d;
                     }
                     acceptInput(input) {
                         if (input instanceof io.FilePath) {
-                            const contentType = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(input);
+                            const contentType = colibri.Platform.getWorkbench()
+                                .getContentTypeRegistry().getCachedContentType(input);
                             return this._contentType === contentType;
                         }
                         return false;
@@ -145,7 +146,6 @@ var phasereditor2d;
                         const model = this._monacoEditor.getModel();
                         const line = model.getLineContent(position.lineNumber);
                         const tokens = monaco.editor.tokenize(line, this._language);
-                        let n = 0;
                         let type = "unknown";
                         for (const token of tokens[0]) {
                             if (position.column >= token.offset) {
@@ -190,6 +190,7 @@ var phasereditor2d;
                         }
                     }
                     onEditorInputContentChanged() {
+                        // empty
                     }
                 }
                 editors.MonacoEditor = MonacoEditor;
@@ -226,12 +227,13 @@ var phasereditor2d;
                 }
                 function computeCompletionItems() {
                     const result = [];
-                    //TODO: missing preload finder, but we need to compute the completions async, we should look in the monaco docs.
+                    // TODO: missing preload finder, but we need to compute the completions async,
+                    // we should look in the monaco docs.
                     const finder = new phasereditor2d.pack.core.PackFinder();
                     const packs = finder.getPacks();
-                    for (const pack_ of packs) {
-                        const packName = pack_.getFile().getName();
-                        for (const item of pack_.getItems()) {
+                    for (const pack2 of packs) {
+                        const packName = pack2.getFile().getName();
+                        for (const item of pack2.getItems()) {
                             result.push({
                                 label: `${item.getKey()}`,
                                 kind: monaco.languages.CompletionItemKind.Text,

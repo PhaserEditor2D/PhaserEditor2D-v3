@@ -18,7 +18,7 @@ namespace phasereditor2d.files.ui.views {
 
             this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
                 imgControl.resizeTo();
-            })
+            });
 
             parent.appendChild(imgControl.getElement());
             setTimeout(() => imgControl.resizeTo(), 1);
@@ -44,8 +44,7 @@ namespace phasereditor2d.files.ui.views {
         }
 
         canEditNumber(n: number): boolean {
-            return n == 1;
+            return n === 1;
         }
-
     }
 }

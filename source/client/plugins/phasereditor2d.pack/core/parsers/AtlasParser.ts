@@ -21,17 +21,26 @@ namespace phasereditor2d.pack.core.parsers {
 
                         for (const frame of data.frames) {
 
-                            const frameData = AtlasParser.buildFrameData(this.getPackItem(), image, frame, imageFrames.length);
+                            const frameData = AtlasParser.buildFrameData(
+                                this.getPackItem(), image, frame, imageFrames.length);
+
                             imageFrames.push(frameData);
                         }
                     } else {
 
                         for (const name in data.frames) {
 
-                            const frame = data.frames[name];
-                            frame.filename = name;
-                            const frameData = AtlasParser.buildFrameData(this.getPackItem(), image, frame, imageFrames.length);
-                            imageFrames.push(frameData);
+                            if (data.frames.hasOwnProperty(name)) {
+
+                                const frame = data.frames[name];
+
+                                frame.filename = name;
+
+                                const frameData = AtlasParser.buildFrameData(
+                                    this.getPackItem(), image, frame, imageFrames.length);
+
+                                imageFrames.push(frameData);
+                            }
                         }
                     }
                 }
@@ -41,17 +50,20 @@ namespace phasereditor2d.pack.core.parsers {
             }
         }
 
-        static buildFrameData(packItem: AssetPackItem, image: controls.IImage, frame: FrameDataType, index: number): AssetPackImageFrame {
+        static buildFrameData(
+            packItem: AssetPackItem, image: controls.IImage, frame: FrameDataType, index: number): AssetPackImageFrame {
 
             const src = new controls.Rect(frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h);
 
-            const dst = new controls.Rect(frame.spriteSourceSize.x, frame.spriteSourceSize.y, frame.spriteSourceSize.w, frame.spriteSourceSize.h);
+            const dst = new controls.Rect(
+                frame.spriteSourceSize.x, frame.spriteSourceSize.y, frame.spriteSourceSize.w, frame.spriteSourceSize.h);
 
             const srcSize = new controls.Point(frame.sourceSize.w, frame.sourceSize.h);
 
             const frameData = new controls.FrameData(index, src, dst, srcSize);
 
-            return new AssetPackImageFrame(<ImageFrameContainerAssetPackItem>packItem, frame.filename, image, frameData);
+            return new AssetPackImageFrame(
+                packItem as ImageFrameContainerAssetPackItem, frame.filename, image, frameData);
         }
 
     }

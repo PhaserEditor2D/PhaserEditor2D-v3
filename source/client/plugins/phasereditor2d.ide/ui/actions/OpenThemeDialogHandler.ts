@@ -21,7 +21,7 @@ namespace phasereditor2d.ide.ui.actions {
         });
     }
 
-    OpenThemeDialogHandler.test = function (args: commands.CommandArgs) {
-        return !(args.activeDialog instanceof dialogs.ThemesDialog)
-    }
+    OpenThemeDialogHandler.test = (args: commands.CommandArgs) => {
+        return !(args.activeDialog instanceof dialogs.ThemesDialog);
+    };
 }

@@ -1,5 +1,5 @@
 namespace phasereditor2d.pack.core {
-    
+
     export type FrameDataType = {
         "filename": string,
         "trimmed": boolean,
@@ -20,5 +20,5 @@ namespace phasereditor2d.pack.core {
             "w": number,
             "h": number
         }
-    }
+    };
 }

@@ -27,7 +27,7 @@ namespace phasereditor2d.pack.core.contentTypes {
                             return CONTENT_TYPE_ANIMATIONS;
                         }
                     }
-                    
+
                 } catch (e) {
                     // nothing
                 }

@@ -20,7 +20,6 @@ namespace phasereditor2d.ide.ui.dialogs {
         }
     }
 
-
     class ThemeViewer extends controls.viewers.TreeViewer {
 
         constructor() {

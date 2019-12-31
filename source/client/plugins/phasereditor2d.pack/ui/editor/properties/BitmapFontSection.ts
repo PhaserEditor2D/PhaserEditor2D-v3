@@ -13,19 +13,19 @@ namespace phasereditor2d.pack.ui.editor.properties {
         }
 
         protected createForm(parent: HTMLDivElement) {
-            
+
             const comp = this.createGridElement(parent, 3);
 
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
             this.createFileField(comp, "Font Data URL", "fontDataURL", core.contentTypes.CONTENT_TYPE_BITMAP_FONT,
-            "Phaser.Loader.LoaderPlugin.bitmapFont(fontDataURL)");
+                "Phaser.Loader.LoaderPlugin.bitmapFont(fontDataURL)");
 
             this.createFileField(comp, "Texture URL", "textureURL", webContentTypes.core.CONTENT_TYPE_IMAGE,
-            "Phaser.Loader.LoaderPlugin.bitmapFont(textureURL)");
+                "Phaser.Loader.LoaderPlugin.bitmapFont(textureURL)");
 
             this.createFileField(comp, "Normal Map", "normalMap", webContentTypes.core.CONTENT_TYPE_IMAGE,
-            "Phaser.Types.Loader.FileTypes.BitmapFontFileConfig.normalMap");
+                "Phaser.Types.Loader.FileTypes.BitmapFontFileConfig.normalMap");
         }
     }
 }

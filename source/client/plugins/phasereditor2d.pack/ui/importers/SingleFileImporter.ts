@@ -9,7 +9,7 @@ namespace phasereditor2d.pack.ui.importers {
         private _urlIsArray: boolean;
         private _defaultValues: any;
 
-        constructor(contentType: string, assetPackType: string, urlIsArray: boolean = false, defaultValues : any = {}) {
+        constructor(contentType: string, assetPackType: string, urlIsArray: boolean = false, defaultValues: any = {}) {
             super(contentType, assetPackType);
 
             this._urlIsArray = urlIsArray;
@@ -31,8 +31,11 @@ namespace phasereditor2d.pack.ui.importers {
                 url: this._urlIsArray ? [url] : url
             };
 
-            for(const k in this._defaultValues) {
-                data[k] = this._defaultValues[k];
+            for (const k in this._defaultValues) {
+
+                if (this._defaultValues.hasOwnProperty(k)) {
+                    data[k] = this._defaultValues[k];
+                }
             }
 
             return data;

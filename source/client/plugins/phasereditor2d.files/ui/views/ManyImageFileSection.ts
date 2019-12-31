@@ -60,7 +60,5 @@ namespace phasereditor2d.files.ui.views {
         canEditNumber(n: number): boolean {
             return n > 1;
         }
-
-
     }
 }

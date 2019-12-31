@@ -24,7 +24,7 @@ namespace phasereditor2d.pack.ui.importers {
             return {
                 jsonURL: core.AssetPackUtils.getFilePackUrl(file),
                 audioURL: urls
-            }
+            };
         }
     }
 }
