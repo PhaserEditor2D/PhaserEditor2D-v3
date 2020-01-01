@@ -12,7 +12,5 @@ namespace phasereditor2d.scene.ui.blocks {
 
             return super.getLabel(obj);
         }
-
     }
-
 }

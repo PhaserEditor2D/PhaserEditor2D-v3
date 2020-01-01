@@ -31,11 +31,14 @@ declare namespace phasereditor2d.scene.ui {
 }
 declare namespace phasereditor2d.scene.ui {
     class GameScene extends Phaser.Scene {
+        private _id;
         private _sceneType;
         private _inEditor;
         private _initialState;
         private _maker;
         constructor(inEditor?: boolean);
+        getId(): string;
+        setId(id: string): void;
         getMaker(): SceneMaker;
         getDisplayListChildren(): sceneobjects.SceneObject[];
         visit(visitor: (obj: sceneobjects.SceneObject) => void): void;
@@ -109,7 +112,7 @@ declare namespace phasereditor2d.scene.ui.blocks {
 declare namespace phasereditor2d.scene.ui.blocks {
     import controls = colibri.ui.controls;
     class SceneEditorBlocksPropertyProvider extends pack.ui.properties.AssetPackPreviewPropertyProvider {
-        addSections(page: controls.properties.PropertyPage, sections: controls.properties.PropertySection<any>[]): void;
+        addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.blocks {
@@ -363,6 +366,7 @@ declare namespace phasereditor2d.scene.ui.json {
 declare namespace phasereditor2d.scene.ui.json {
     type SceneType = "Scene" | "Prefab";
     type SceneData = {
+        id: string;
         sceneType: SceneType;
         displayList: ObjectData[];
         meta: {

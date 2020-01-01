@@ -21,6 +21,11 @@ namespace phasereditor2d.scene.ui {
 
             this._scene.setSceneType(data.sceneType);
 
+            // removes this condition, it is used temporal for compatibility
+            if (data.id) {
+                this._scene.setId(data.id);
+            }
+
             for (const objData of data.displayList) {
 
                 this.createObject(objData);
@@ -83,7 +88,7 @@ namespace phasereditor2d.scene.ui {
 
             } else {
 
-                console.error(`SceneParser: no extension is registered for type "${type}".`);
+                console.error(`SceneMaker: no extension is registered for type "${type}".`);
             }
 
             return null;

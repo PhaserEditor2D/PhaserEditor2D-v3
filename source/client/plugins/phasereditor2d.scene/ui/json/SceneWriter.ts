@@ -11,6 +11,7 @@ namespace phasereditor2d.scene.ui.json {
         toJSON(): SceneData {
 
             const sceneData: SceneData = {
+                id: this._scene.getId(),
                 sceneType: this._scene.getSceneType(),
                 displayList: [],
                 meta: {

@@ -89,6 +89,7 @@ var phasereditor2d;
                                 }
                             }
                             catch (e) {
+                                // nothing
                             }
                         }
                     }
@@ -106,8 +107,8 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             Phaser.Cameras.Scene2D.Camera.prototype.getScreenPoint = function (worldX, worldY) {
-                let x = worldX * this.zoom - this.scrollX * this.zoom;
-                let y = worldY * this.zoom - this.scrollY * this.zoom;
+                const x = worldX * this.zoom - this.scrollX * this.zoom;
+                const y = worldY * this.zoom - this.scrollY * this.zoom;
                 return new Phaser.Math.Vector2(x, y);
             };
         })(ui = scene.ui || (scene.ui = {}));
@@ -122,9 +123,16 @@ var phasereditor2d;
             class GameScene extends Phaser.Scene {
                 constructor(inEditor = true) {
                     super("ObjectScene");
+                    this._id = Phaser.Utils.String.UUID();
                     this._inEditor = inEditor;
                     this._sceneType = "Scene";
                     this._maker = new ui.SceneMaker(this);
+                }
+                getId() {
+                    return this._id;
+                }
+                setId(id) {
+                    this._id = id;
                 }
                 getMaker() {
                     return this._maker;
@@ -217,6 +225,10 @@ var phasereditor2d;
                 }
                 createScene(data) {
                     this._scene.setSceneType(data.sceneType);
+                    // removes this condition, it is used temporal for compatibility
+                    if (data.id) {
+                        this._scene.setId(data.id);
+                    }
                     for (const objData of data.displayList) {
                         this.createObject(objData);
                     }
@@ -256,7 +268,7 @@ var phasereditor2d;
                         return sprite;
                     }
                     else {
-                        console.error(`SceneParser: no extension is registered for type "${type}".`);
+                        console.error(`SceneMaker: no extension is registered for type "${type}".`);
                     }
                     return null;
                 }
@@ -459,7 +471,7 @@ var phasereditor2d;
                                     return this.getPackItems()
                                         .filter(item => item instanceof phasereditor2d.pack.core.BaseAtlasAssetPackItem);
                                 case blocks.PREFAB_SECTION:
-                                    //TODO: we need to implement the PrefabFinder
+                                    // TODO: we need to implement the PrefabFinder
                                     const files = this.getSceneFiles();
                                     return files;
                             }
@@ -754,7 +766,7 @@ var phasereditor2d;
                         const camera = scene.getCamera();
                         const delta = e.deltaY;
                         const zoomDelta = (delta > 0 ? 0.9 : 1.1);
-                        //const pointer = scene.input.activePointer;
+                        // const pointer = scene.input.activePointer;
                         const point1 = camera.getWorldPoint(e.offsetX, e.offsetY);
                         camera.zoom *= zoomDelta;
                         // update the camera matrix
@@ -889,8 +901,8 @@ var phasereditor2d;
                     }
                     resizeTo() {
                         const parent = this._canvas.parentElement;
-                        this._canvas.width = parent.clientWidth | 0;
-                        this._canvas.height = parent.clientHeight | 0;
+                        this._canvas.width = Math.floor(parent.clientWidth);
+                        this._canvas.height = Math.floor(parent.clientHeight);
                         this._canvas.style.width = this._canvas.width + "px";
                         this._canvas.style.height = this._canvas.height + "px";
                         this.resetContext();
@@ -974,14 +986,14 @@ var phasereditor2d;
                         const grid = (render) => {
                             let worldY = worldStartPoint.y;
                             while (worldY < worldEndPoint.y) {
-                                let point = camera.getScreenPoint(0, worldY);
-                                render.horizontal(worldY, point.y | 0);
+                                const point = camera.getScreenPoint(0, worldY);
+                                render.horizontal(worldY, Math.floor(point.y));
                                 worldY += gapY;
                             }
                             let worldX = worldStartPoint.x;
                             while (worldX < worldEndPoint.x) {
-                                let point = camera.getScreenPoint(worldX, 0);
-                                render.vertical(worldX, point.x | 0);
+                                const point = camera.getScreenPoint(worldX, 0);
+                                render.vertical(worldX, Math.floor(point.x));
                                 worldX += gapX;
                             }
                         };
@@ -1011,7 +1023,7 @@ var phasereditor2d;
                                 ctx.fillText(worldX.toString(), screenX - w / 2, 15);
                             }
                         });
-                        // lines 
+                        // lines
                         grid({
                             horizontal: (worldY, screenY) => {
                                 if (screenY < 20) {
@@ -1403,7 +1415,8 @@ var phasereditor2d;
                     const CMD_JOIN_IN_CONTAINER = "joinObjectsInContainer";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_6.SceneEditor ||
-                            args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView && args.activeEditor instanceof editor_6.SceneEditor;
+                            args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
+                                && args.activeEditor instanceof editor_6.SceneEditor;
                     }
                     class SceneEditorCommands {
                         static registerCommands(manager) {
@@ -1417,7 +1430,7 @@ var phasereditor2d;
                                 const editor = args.activeEditor;
                                 editor.getSelectionManager().clearSelection();
                             });
-                            // delete 
+                            // delete
                             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE, isSceneScope, args => {
                                 const editor = args.activeEditor;
                                 editor.getActionManager().deleteObjects();
@@ -1833,6 +1846,7 @@ var phasereditor2d;
                     }
                     toJSON() {
                         const sceneData = {
+                            id: this._scene.getId(),
                             sceneType: this._scene.getSceneType(),
                             displayList: [],
                             meta: {

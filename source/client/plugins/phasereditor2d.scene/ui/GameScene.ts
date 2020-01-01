@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui {
 
     export class GameScene extends Phaser.Scene {
 
+        private _id: string;
         private _sceneType: json.SceneType;
         private _inEditor: boolean;
         private _initialState: any;
@@ -11,11 +12,21 @@ namespace phasereditor2d.scene.ui {
         constructor(inEditor = true) {
             super("ObjectScene");
 
+            this._id = Phaser.Utils.String.UUID();
+
             this._inEditor = inEditor;
 
             this._sceneType = "Scene";
 
             this._maker = new SceneMaker(this);
+        }
+
+        getId() {
+            return this._id;
+        }
+
+        setId(id: string) {
+            this._id = id;
         }
 
         getMaker() {
