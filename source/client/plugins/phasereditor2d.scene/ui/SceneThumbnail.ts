@@ -52,7 +52,9 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        paintFrame(context: CanvasRenderingContext2D, srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void {
+        paintFrame(
+            context: CanvasRenderingContext2D, srcX: number, srcY: number, srcW: number, srcH: number,
+            dstX: number, dstY: number, dstW: number, dstH: number): void {
 
             if (this._image) {
                 this._image.paintFrame(context, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);

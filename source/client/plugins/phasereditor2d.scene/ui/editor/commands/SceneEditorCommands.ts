@@ -4,7 +4,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
     function isSceneScope(args: colibri.ui.ide.commands.CommandArgs) {
         return args.activePart instanceof SceneEditor ||
-            args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView && args.activeEditor instanceof SceneEditor
+            args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
+            && args.activeEditor instanceof SceneEditor;
     }
 
     export class SceneEditorCommands {
@@ -33,14 +34,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     editor.getSelectionManager().clearSelection();
                 });
 
-            // delete 
+            // delete
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
 
                 isSceneScope,
 
                 args => {
-                    const editor = <SceneEditor>args.activeEditor;
+                    const editor = args.activeEditor as SceneEditor;
                     editor.getActionManager().deleteObjects();
                 });
 
@@ -57,7 +58,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 args => isSceneScope(args),
 
                 args => {
-                    const editor = <SceneEditor>args.activeEditor;
+                    const editor = args.activeEditor as SceneEditor;
                     editor.getActionManager().joinObjectsInContainer();
                 });
 

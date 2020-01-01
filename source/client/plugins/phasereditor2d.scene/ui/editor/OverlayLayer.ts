@@ -24,8 +24,8 @@ namespace phasereditor2d.scene.ui.editor {
 
         resizeTo() {
             const parent = this._canvas.parentElement;
-            this._canvas.width = parent.clientWidth | 0;
-            this._canvas.height = parent.clientHeight | 0;
+            this._canvas.width = Math.floor(parent.clientWidth);
+            this._canvas.height = Math.floor(parent.clientHeight);
             this._canvas.style.width = this._canvas.width + "px";
             this._canvas.style.height = this._canvas.height + "px";
             this.resetContext();
@@ -96,7 +96,7 @@ namespace phasereditor2d.scene.ui.editor {
             const snapY = 10;
 
             const borderX = 0;
-            const borderY = 0
+            const borderY = 0;
             const borderWidth = 800;
             const borderHeight = 600;
 
@@ -135,7 +135,6 @@ namespace phasereditor2d.scene.ui.editor {
             worldStartPoint.x = Phaser.Math.Snap.Floor(worldStartPoint.x, gapX);
             worldStartPoint.y = Phaser.Math.Snap.Floor(worldStartPoint.y, gapY);
 
-
             const worldEndPoint = camera.getWorldPoint(canvasWidth, canvasHeight);
 
             const grid = (
@@ -146,19 +145,21 @@ namespace phasereditor2d.scene.ui.editor {
             ) => {
 
                 let worldY = worldStartPoint.y;
+
                 while (worldY < worldEndPoint.y) {
-                    let point = camera.getScreenPoint(0, worldY);
-                    render.horizontal(worldY, point.y | 0);
+
+                    const point = camera.getScreenPoint(0, worldY);
+                    render.horizontal(worldY, Math.floor(point.y));
                     worldY += gapY;
                 }
 
                 let worldX = worldStartPoint.x;
                 while (worldX < worldEndPoint.x) {
-                    let point = camera.getScreenPoint(worldX, 0);
-                    render.vertical(worldX, point.x | 0);
+                    const point = camera.getScreenPoint(worldX, 0);
+                    render.vertical(worldX, Math.floor(point.x));
                     worldX += gapX;
                 }
-            }
+            };
 
             let labelWidth = 0;
 
@@ -190,8 +191,7 @@ namespace phasereditor2d.scene.ui.editor {
                 }
             });
 
-
-            // lines 
+            // lines
 
             grid({
                 horizontal: (worldY, screenY) => {

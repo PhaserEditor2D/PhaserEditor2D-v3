@@ -6,11 +6,11 @@ namespace phasereditor2d.scene.ui.blocks {
 
     export class SceneEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
 
-        private _getPacks : () => pack.core.AssetPack[];
+        private _getPacks: () => pack.core.AssetPack[];
 
-        constructor(getPacks : () => pack.core.AssetPack[]) {
+        constructor(getPacks: () => pack.core.AssetPack[]) {
             super();
-            
+
             this._getPacks = getPacks;
         }
 
@@ -47,7 +47,7 @@ namespace phasereditor2d.scene.ui.blocks {
                             .filter(item => item instanceof pack.core.BaseAtlasAssetPackItem);
 
                     case PREFAB_SECTION:
-                        //TODO: we need to implement the PrefabFinder
+                        // TODO: we need to implement the PrefabFinder
                         const files = this.getSceneFiles();
                         return files;
                 }

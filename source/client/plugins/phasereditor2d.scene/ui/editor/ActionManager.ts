@@ -9,13 +9,14 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         deleteObjects() {
+
             const objects = this._editor.getSelectedGameObjects();
 
             // create the undo-operation before destroy the objects
             this._editor.getUndoManager().add(new undo.RemoveObjectsOperation(this._editor, objects));
 
             for (const obj of objects) {
-                (<Phaser.GameObjects.GameObject>obj).destroy();
+                (obj as Phaser.GameObjects.GameObject).destroy();
             }
 
             this._editor.refreshOutline();

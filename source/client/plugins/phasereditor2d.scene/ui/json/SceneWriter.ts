@@ -30,14 +30,11 @@ namespace phasereditor2d.scene.ui.json {
             return sceneData;
         }
 
-
-        toString() : string {
+        toString(): string {
 
             const json = this.toJSON();
 
             return JSON.stringify(json);
         }
-
     }
-
 }

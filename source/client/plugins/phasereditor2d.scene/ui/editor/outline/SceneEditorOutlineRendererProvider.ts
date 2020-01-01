@@ -32,7 +32,5 @@ namespace phasereditor2d.scene.ui.editor.outline {
         async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
             return controls.Controls.resolveNothingLoaded();
         }
-
-
     }
 }

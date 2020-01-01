@@ -28,7 +28,7 @@ namespace phasereditor2d.scene.core {
                         }
 
                     } catch (e) {
-
+                        // nothing
                     }
                 }
             }

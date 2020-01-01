@@ -63,14 +63,14 @@ namespace phasereditor2d.scene.ui.editor {
 
             const zoomDelta = (delta > 0 ? 0.9 : 1.1);
 
-            //const pointer = scene.input.activePointer;
+            // const pointer = scene.input.activePointer;
 
             const point1 = camera.getWorldPoint(e.offsetX, e.offsetY);
 
             camera.zoom *= zoomDelta;
 
             // update the camera matrix
-            (<any>camera).preRender(scene.scale.resolution);
+            (camera as any).preRender(scene.scale.resolution);
 
             const point2 = camera.getWorldPoint(e.offsetX, e.offsetY);
 

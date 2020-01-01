@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
-            
+
             this._editor = editor;
 
             const canvas = this._editor.getOverlayLayer().getCanvas();
@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.editor {
                 }
 
                 return true;
-            }))
+            }));
         }
 
         selectAll() {

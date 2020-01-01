@@ -1,5 +1,5 @@
 namespace phasereditor2d.scene.ui.blocks {
-    
+
     import core = colibri.core;
 
     export class SceneEditorBlocksLabelProvider extends pack.ui.viewers.AssetPackLabelProvider {
