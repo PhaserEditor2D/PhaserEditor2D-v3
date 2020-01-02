@@ -1493,6 +1493,9 @@ var phasereditor2d;
                                 return parent.getChildren();
                             }
                             else if (parent instanceof Phaser.GameObjects.Container) {
+                                if (parent.getEditorSupport().isPrefabInstance()) {
+                                    return [];
+                                }
                                 return parent.list;
                             }
                             return [];

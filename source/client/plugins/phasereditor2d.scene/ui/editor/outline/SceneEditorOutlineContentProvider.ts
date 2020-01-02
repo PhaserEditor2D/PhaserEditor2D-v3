@@ -17,13 +17,18 @@ namespace phasereditor2d.scene.ui.editor.outline {
             return [];
         }
 
-        getChildren(parent: any): any[] {
+        getChildren(parent: sceneobjects.SceneObject): any[] {
 
             if (parent instanceof Phaser.GameObjects.DisplayList) {
 
                 return parent.getChildren();
 
             } else if (parent instanceof Phaser.GameObjects.Container) {
+
+                if (parent.getEditorSupport().isPrefabInstance()) {
+
+                    return [];
+                }
 
                 return parent.list;
 

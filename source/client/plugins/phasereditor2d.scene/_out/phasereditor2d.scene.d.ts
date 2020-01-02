@@ -266,7 +266,7 @@ declare namespace phasereditor2d.scene.ui.editor.outline {
     import controls = colibri.ui.controls;
     class SceneEditorOutlineContentProvider implements controls.viewers.ITreeContentProvider {
         getRoots(input: any): any[];
-        getChildren(parent: any): any[];
+        getChildren(parent: sceneobjects.SceneObject): any[];
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.outline {
