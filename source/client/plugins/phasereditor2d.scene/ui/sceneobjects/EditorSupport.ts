@@ -151,8 +151,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: json.Serializer) {
 
+            if (this._prefabId) {
+
+                ser.getData().prefabId = this._prefabId;
+
+            } else {
+
+                ser.write("type", this._extension.getTypeName());
+            }
+
             ser.write("id", this.getId());
-            ser.write("type", this._extension.getTypeName());
             ser.write("label", this._label);
 
             for (const s of this._serializables) {
