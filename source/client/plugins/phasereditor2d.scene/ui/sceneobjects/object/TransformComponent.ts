@@ -31,11 +31,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: json.Serializer) {
 
-            ser.write( "x", this._obj.x, 0);
-            ser.write( "y", this._obj.y, 0);
-            ser.write( "scaleX", this._obj.scaleX, 1);
-            ser.write( "scaleY", this._obj.scaleY, 1);
-            ser.write( "angle", this._obj.angle, 0);
+            ser.write("x", this._obj.x, 0);
+            ser.write("y", this._obj.y, 0);
+            ser.write("scaleX", this._obj.scaleX, 1);
+            ser.write("scaleY", this._obj.scaleY, 1);
+            ser.write("angle", this._obj.angle, 0);
         }
     }
 }

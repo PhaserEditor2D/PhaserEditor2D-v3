@@ -408,11 +408,12 @@ declare namespace phasereditor2d.scene.ui.json {
 declare namespace phasereditor2d.scene.ui.json {
     class Serializer {
         private _data;
-        private _prefabSerializer;
+        private _prefabSer;
         private _table;
         constructor(data: ObjectData, table: SceneDataTable);
         getSerializer(data: ObjectData): Serializer;
         getData(): ObjectData;
+        getType(): any;
         private getDefaultValue;
         write(name: string, value: any, defValue?: any): void;
         read(name: string, defValue?: any): any;

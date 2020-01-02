@@ -248,10 +248,14 @@ var phasereditor2d;
                     const finder = new phasereditor2d.pack.core.PackFinder();
                     await finder.preload();
                     for (const objData of sceneData.displayList) {
-                        const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
+                        const objData2 = objData;
+                        if (objData2.prefabId) {
+                            const ser = this.getSerializer(objData2);
+                        }
+                        const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(objData2.type);
                         if (ext) {
                             const assets = await ext.getAssetsFromObjectData({
-                                data: objData,
+                                data: objData2,
                                 finder: finder,
                                 scene: this._scene
                             });
@@ -265,7 +269,8 @@ var phasereditor2d;
                     }
                 }
                 createObject(data) {
-                    const type = data.type;
+                    const ser = this.getSerializer(data);
+                    const type = ser.getType();
                     const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                     if (ext) {
                         const sprite = ext.createSceneObjectWithData({
@@ -301,14 +306,13 @@ var phasereditor2d;
                     this._data = data;
                     this._callback = callback;
                 }
-                create() {
+                async create() {
                     const maker = new ui.SceneMaker(this);
-                    maker.updateSceneLoader(this._data)
-                        .then(() => {
-                        maker.createScene(this._data);
-                        this.sys.renderer.snapshot(img => {
-                            this._callback(img);
-                        });
+                    await maker.preload();
+                    await maker.updateSceneLoader(this._data);
+                    maker.createScene(this._data);
+                    this.sys.renderer.snapshot(img => {
+                        this._callback(img);
                     });
                 }
             }
@@ -1236,6 +1240,7 @@ var phasereditor2d;
                             const content = colibri.ui.ide.FileUtils.getFileString(file);
                             const data = JSON.parse(content);
                             if (ui.SceneMaker.isValidSceneDataFormat(data)) {
+                                await maker.preload();
                                 await maker.updateSceneLoader(data);
                                 maker.createScene(data);
                             }
@@ -1864,7 +1869,8 @@ var phasereditor2d;
                                 const data = JSON.parse(content);
                                 if (data.id) {
                                     if (data.displayList.length > 0) {
-                                        map.set(data.id, data.displayList[0]);
+                                        const objData = data.displayList[0];
+                                        map.set(data.id, objData);
                                     }
                                 }
                             }
@@ -1872,6 +1878,7 @@ var phasereditor2d;
                                 console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${e.message}`);
                             }
                         }
+                        console.log(map);
                         this._map = map;
                     }
                     getPrefabData(prefabId) {
@@ -1937,7 +1944,12 @@ var phasereditor2d;
                         this._table = table;
                         if (this._data.prefabId) {
                             const prefabData = table.getPrefabData(this._data.prefabId);
-                            this._prefabSerializer = new Serializer(prefabData, table);
+                            if (prefabData) {
+                                this._prefabSer = new Serializer(prefabData, table);
+                            }
+                            else {
+                                console.error(`Cannot find scene prefab with id "${this._data.prefabId}".`);
+                            }
                         }
                     }
                     getSerializer(data) {
@@ -1946,14 +1958,20 @@ var phasereditor2d;
                     getData() {
                         return this._data;
                     }
+                    getType() {
+                        if (this._prefabSer) {
+                            return this._prefabSer.getType();
+                        }
+                        return this._data.type;
+                    }
                     getDefaultValue(name, defValue) {
                         const value = this._data[name];
                         if (value !== undefined) {
                             return value;
                         }
                         let defValueInPrefab;
-                        if (this._prefabSerializer) {
-                            defValueInPrefab = this._prefabSerializer.getDefaultValue(name, defValue);
+                        if (this._prefabSer) {
+                            defValueInPrefab = this._prefabSer.getDefaultValue(name, defValue);
                         }
                         if (defValueInPrefab !== undefined) {
                             return defValueInPrefab;

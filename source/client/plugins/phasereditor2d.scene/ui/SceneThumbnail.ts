@@ -16,21 +16,21 @@ namespace phasereditor2d.scene.ui {
             this._callback = callback;
         }
 
-        create() {
+        async create() {
 
             const maker = new SceneMaker(this);
 
-            maker.updateSceneLoader(this._data)
-                .then(() => {
+            await maker.preload();
 
-                    maker.createScene(this._data);
+            await maker.updateSceneLoader(this._data);
 
-                    this.sys.renderer.snapshot(img => {
+            maker.createScene(this._data);
 
-                        this._callback(img as HTMLImageElement);
+            this.sys.renderer.snapshot(img => {
 
-                    });
-                });
+                this._callback(img as HTMLImageElement);
+
+            });
         }
     }
 

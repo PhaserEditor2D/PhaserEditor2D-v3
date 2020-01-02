@@ -56,12 +56,19 @@ namespace phasereditor2d.scene.ui {
 
             for (const objData of sceneData.displayList) {
 
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
+                const objData2 = objData;
+
+                if (objData2.prefabId) {
+                    
+                    const ser = this.getSerializer(objData2);
+                }
+
+                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(objData2.type);
 
                 if (ext) {
 
                     const assets = await ext.getAssetsFromObjectData({
-                        data: objData,
+                        data: objData2,
                         finder: finder,
                         scene: this._scene
                     });
@@ -81,7 +88,9 @@ namespace phasereditor2d.scene.ui {
 
         createObject(data: json.ObjectData) {
 
-            const type = data.type;
+            const ser = this.getSerializer(data);
+
+            const type = ser.getType();
 
             const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
 

@@ -28,7 +28,9 @@ namespace phasereditor2d.scene.ui.json {
 
                         if (data.displayList.length > 0) {
 
-                            map.set(data.id, data.displayList[0]);
+                            const objData = data.displayList[0];
+
+                            map.set(data.id, objData);
                         }
                     }
 
@@ -36,6 +38,8 @@ namespace phasereditor2d.scene.ui.json {
                     console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
                 }
             }
+
+            console.log(map);
 
             this._map = map;
         }

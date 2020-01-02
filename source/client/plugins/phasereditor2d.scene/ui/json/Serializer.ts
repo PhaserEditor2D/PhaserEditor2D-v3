@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.json {
     export class Serializer {
 
         private _data: ObjectData;
-        private _prefabSerializer: Serializer;
+        private _prefabSer: Serializer;
         private _table: SceneDataTable;
 
         constructor(data: ObjectData, table: SceneDataTable) {
@@ -15,8 +15,17 @@ namespace phasereditor2d.scene.ui.json {
             this._table = table;
 
             if (this._data.prefabId) {
+
                 const prefabData = table.getPrefabData(this._data.prefabId);
-                this._prefabSerializer = new Serializer(prefabData, table);
+
+                if (prefabData) {
+
+                    this._prefabSer = new Serializer(prefabData, table);
+
+                } else {
+
+                    console.error(`Cannot find scene prefab with id "${this._data.prefabId}".`);
+                }
             }
         }
 
@@ -26,6 +35,15 @@ namespace phasereditor2d.scene.ui.json {
 
         getData() {
             return this._data;
+        }
+
+        getType() {
+
+            if (this._prefabSer) {
+                return this._prefabSer.getType();
+            }
+
+            return this._data.type;
         }
 
         private getDefaultValue(name: string, defValue?: any) {
@@ -38,8 +56,8 @@ namespace phasereditor2d.scene.ui.json {
 
             let defValueInPrefab: any;
 
-            if (this._prefabSerializer) {
-                defValueInPrefab = this._prefabSerializer.getDefaultValue(name, defValue);
+            if (this._prefabSer) {
+                defValueInPrefab = this._prefabSer.getDefaultValue(name, defValue);
             }
 
             if (defValueInPrefab !== undefined) {

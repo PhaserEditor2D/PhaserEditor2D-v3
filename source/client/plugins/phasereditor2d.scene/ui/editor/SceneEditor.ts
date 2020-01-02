@@ -248,6 +248,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (SceneMaker.isValidSceneDataFormat(data)) {
 
+                    await maker.preload();
+
                     await maker.updateSceneLoader(data);
 
                     maker.createScene(data);

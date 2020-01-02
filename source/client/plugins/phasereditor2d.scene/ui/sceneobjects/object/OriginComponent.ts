@@ -24,8 +24,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: json.Serializer) {
 
-            ser.write( "originX", this._obj.originX, 0.5);
-            ser.write( "originY", this._obj.originY, 0.5);
+            ser.write("originX", this._obj.originX, 0.5);
+            ser.write("originY", this._obj.originY, 0.5);
         }
     }
 }

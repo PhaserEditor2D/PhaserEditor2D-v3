@@ -20,8 +20,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: json.Serializer): void {
 
-            ser.write( "textureKey", this._textureKey);
-            ser.write( "frameKey", this._textureFrameKey);
+            ser.write("textureKey", this._textureKey);
+            ser.write("frameKey", this._textureFrameKey);
         }
 
         readJSON(ser: json.Serializer): void {
