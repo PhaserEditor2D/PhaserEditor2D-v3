@@ -2259,12 +2259,14 @@ var phasereditor2d;
                     }
                     writeJSON(ser) {
                         super.writeJSON(ser);
-                        const data = ser.getData();
-                        data.list = this.getObject().list.map(obj => {
-                            const objData = {};
-                            obj.getEditorSupport().writeJSON(ser.getSerializer(objData));
-                            return objData;
-                        });
+                        if (!this.isPrefabInstance()) {
+                            const data = ser.getData();
+                            data.list = this.getObject().list.map(obj => {
+                                const objData = {};
+                                obj.getEditorSupport().writeJSON(ser.getSerializer(objData));
+                                return objData;
+                            });
+                        }
                     }
                     readJSON(ser) {
                         super.readJSON(ser);

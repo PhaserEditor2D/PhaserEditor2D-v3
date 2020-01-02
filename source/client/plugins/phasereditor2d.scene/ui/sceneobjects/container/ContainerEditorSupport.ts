@@ -22,16 +22,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.writeJSON(ser);
 
-            const data = ser.getData() as ContainerData;
+            if (!this.isPrefabInstance()) {
 
-            data.list = this.getObject().list.map(obj => {
+                const data = ser.getData() as ContainerData;
 
-                const objData = {} as json.ObjectData;
+                data.list = this.getObject().list.map(obj => {
 
-                obj.getEditorSupport().writeJSON(ser.getSerializer(objData));
+                    const objData = {} as json.ObjectData;
 
-                return objData as json.ObjectData;
-            });
+                    obj.getEditorSupport().writeJSON(ser.getSerializer(objData));
+
+                    return objData as json.ObjectData;
+                });
+            }
         }
 
         readJSON(ser: json.Serializer) {
