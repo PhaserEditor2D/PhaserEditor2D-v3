@@ -74,7 +74,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const sprite = this.createImageObject(args.scene, 0, 0, undefined);
 
-            sprite.getEditorSupport().readJSON(args.data);
+            sprite.getEditorSupport().readJSON(args.scene.getMaker().getSerializer(args.data));
 
             return sprite;
         }

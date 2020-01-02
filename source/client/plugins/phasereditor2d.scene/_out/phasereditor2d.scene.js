@@ -219,9 +219,19 @@ var phasereditor2d;
             class SceneMaker {
                 constructor(scene) {
                     this._scene = scene;
+                    this._sceneDataTable = new ui.json.SceneDataTable();
                 }
                 static isValidSceneDataFormat(data) {
                     return "displayList" in data && Array.isArray(data.displayList);
+                }
+                async preload() {
+                    await this._sceneDataTable.preload();
+                }
+                getSceneDataTable() {
+                    return this._sceneDataTable;
+                }
+                getSerializer(data) {
+                    return new ui.json.Serializer(data, this._sceneDataTable);
                 }
                 createScene(data) {
                     this._scene.setSceneType(data.sceneType);
@@ -263,7 +273,7 @@ var phasereditor2d;
                             scene: this._scene
                         });
                         if (sprite) {
-                            sprite.getEditorSupport().readJSON(data);
+                            sprite.getEditorSupport().readJSON(this.getSerializer(data));
                         }
                         return sprite;
                     }
@@ -1718,7 +1728,7 @@ var phasereditor2d;
                             super(editor);
                             this._dataList = objects.map(obj => {
                                 const data = {};
-                                obj.getEditorSupport().writeJSON(data);
+                                obj.getEditorSupport().writeJSON(editor.getSceneMaker().getSerializer(data));
                                 return data;
                             });
                         }
@@ -1835,6 +1845,47 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var json;
+            (function (json) {
+                var FileUtils = colibri.ui.ide.FileUtils;
+                class SceneDataTable {
+                    constructor() {
+                        this._map = new Map();
+                    }
+                    async preload() {
+                        const map = new Map();
+                        const files = await FileUtils.getFilesWithContentType(scene.core.CONTENT_TYPE_SCENE);
+                        for (const file of files) {
+                            const content = await FileUtils.preloadAndGetFileString(file);
+                            try {
+                                const data = JSON.parse(content);
+                                if (data.id) {
+                                    if (data.displayList.length > 0) {
+                                        map.set(data.id, data.displayList[0]);
+                                    }
+                                }
+                            }
+                            catch (e) {
+                                console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${e.message}`);
+                            }
+                        }
+                        this._map = map;
+                    }
+                    getPrefabData(prefabId) {
+                        return this._map.get(prefabId);
+                    }
+                }
+                json.SceneDataTable = SceneDataTable;
+            })(json = ui.json || (ui.json = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
     (function (scene_8) {
         var ui;
         (function (ui) {
@@ -1857,7 +1908,7 @@ var phasereditor2d;
                         };
                         for (const obj of this._scene.getDisplayListChildren()) {
                             const objData = {};
-                            obj.getEditorSupport().writeJSON(objData);
+                            obj.getEditorSupport().writeJSON(this._scene.getMaker().getSerializer(objData));
                             sceneData.displayList.push(objData);
                         }
                         return sceneData;
@@ -1875,18 +1926,68 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var json;
+            (function (json) {
+                class Serializer {
+                    constructor(data, table) {
+                        this._data = data;
+                        this._table = table;
+                        if (this._data.prefabId) {
+                            const prefabData = table.getPrefabData(this._data.prefabId);
+                            this._prefabSerializer = new Serializer(prefabData, table);
+                        }
+                    }
+                    getSerializer(data) {
+                        return new Serializer(data, this._table);
+                    }
+                    getData() {
+                        return this._data;
+                    }
+                    getDefaultValue(name, defValue) {
+                        const value = this._data[name];
+                        if (value !== undefined) {
+                            return value;
+                        }
+                        let defValueInPrefab;
+                        if (this._prefabSerializer) {
+                            defValueInPrefab = this._prefabSerializer.getDefaultValue(name, defValue);
+                        }
+                        if (defValueInPrefab !== undefined) {
+                            return defValueInPrefab;
+                        }
+                        return defValue;
+                    }
+                    write(name, value, defValue) {
+                        const defValue2 = this.getDefaultValue(name, defValue);
+                        colibri.core.json.write(this._data, name, value, defValue2);
+                    }
+                    read(name, defValue) {
+                        const defValue2 = this.getDefaultValue(name, defValue);
+                        const value = colibri.core.json.read(this._data, name, defValue2);
+                        return value;
+                    }
+                }
+                json.Serializer = Serializer;
+            })(json = ui.json || (ui.json = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
     (function (scene_9) {
         var ui;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                var read = colibri.core.json.read;
-                var write = colibri.core.json.write;
                 class EditorSupport {
                     constructor(extension, obj) {
                         this._extension = extension;
                         this._object = obj;
-                        this._serializers = [];
+                        this._serializables = [];
                         this._components = new Map();
                         this._object.setDataEnabled();
                         this.setId(Phaser.Utils.String.UUID());
@@ -1912,7 +2013,7 @@ var phasereditor2d;
                         for (const c of components) {
                             this._components.set(c.constructor, c);
                         }
-                        this._serializers.push(...components);
+                        this._serializables.push(...components);
                     }
                     setNewId(sprite) {
                         this.setId(Phaser.Utils.String.UUID());
@@ -1941,19 +2042,19 @@ var phasereditor2d;
                     setScene(scene) {
                         this._scene = scene;
                     }
-                    writeJSON(data) {
-                        write(data, "id", this.getId());
-                        write(data, "type", this._extension.getTypeName());
-                        write(data, "label", this._label);
-                        for (const s of this._serializers) {
-                            s.writeJSON(data);
+                    writeJSON(ser) {
+                        ser.write("id", this.getId());
+                        ser.write("type", this._extension.getTypeName());
+                        ser.write("label", this._label);
+                        for (const s of this._serializables) {
+                            s.writeJSON(ser);
                         }
                     }
-                    readJSON(data) {
-                        this.setId(read(data, "id"));
-                        this._label = read(data, "label");
-                        for (const s of this._serializers) {
-                            s.readJSON(data);
+                    readJSON(ser) {
+                        this.setId(ser.read("id"));
+                        this._label = ser.read("label");
+                        for (const s of this._serializables) {
+                            s.readJSON(ser);
                         }
                     }
                 }
@@ -2087,16 +2188,18 @@ var phasereditor2d;
                     getCellRenderer() {
                         return new controls.viewers.IconImageCellRenderer(scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP));
                     }
-                    writeJSON(data) {
-                        super.writeJSON(data);
+                    writeJSON(ser) {
+                        super.writeJSON(ser);
+                        const data = ser.getData();
                         data.list = this.getObject().list.map(obj => {
                             const objData = {};
-                            obj.getEditorSupport().writeJSON(objData);
+                            obj.getEditorSupport().writeJSON(ser.getSerializer(objData));
                             return objData;
                         });
                     }
-                    readJSON(data) {
-                        super.readJSON(data);
+                    readJSON(ser) {
+                        super.readJSON(ser);
+                        const data = ser.getData();
                         const maker = this.getScene().getMaker();
                         const obj = this.getObject();
                         for (const objData of data.list) {
@@ -2169,7 +2272,7 @@ var phasereditor2d;
                     }
                     createSceneObjectWithData(args) {
                         const container = this.createContainerObject(args.scene, 0, 0, []);
-                        container.getEditorSupport().readJSON(args.data);
+                        container.getEditorSupport().readJSON(args.scene.getMaker().getSerializer(args.data));
                         return container;
                     }
                     createContainerObject(scene, x, y, list) {
@@ -2331,7 +2434,7 @@ var phasereditor2d;
                     }
                     createSceneObjectWithData(args) {
                         const sprite = this.createImageObject(args.scene, 0, 0, undefined);
-                        sprite.getEditorSupport().readJSON(args.data);
+                        sprite.getEditorSupport().readJSON(args.scene.getMaker().getSerializer(args.data));
                         return sprite;
                     }
                     createImageObject(scene, x, y, key, frame) {
@@ -2354,19 +2457,17 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                var write = colibri.core.json.write;
-                var read = colibri.core.json.read;
                 class OriginComponent {
                     constructor(obj) {
                         this._obj = obj;
                     }
-                    readJSON(data) {
-                        this._obj.originX = read(data, "originX", 0.5);
-                        this._obj.originY = read(data, "originY", 0.5);
+                    readJSON(ser) {
+                        this._obj.originX = ser.read("originX", 0.5);
+                        this._obj.originY = ser.read("originY", 0.5);
                     }
-                    writeJSON(data) {
-                        write(data, "originX", this._obj.originX, 0.5);
-                        write(data, "originY", this._obj.originY, 0.5);
+                    writeJSON(ser) {
+                        ser.write("originX", this._obj.originX, 0.5);
+                        ser.write("originY", this._obj.originY, 0.5);
                     }
                 }
                 sceneobjects.OriginComponent = OriginComponent;
@@ -2429,25 +2530,23 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                var write = colibri.core.json.write;
-                var read = colibri.core.json.read;
                 class TransformComponent {
                     constructor(obj) {
                         this._obj = obj;
                     }
-                    readJSON(data) {
-                        this._obj.x = read(data, "x", 0);
-                        this._obj.y = read(data, "y", 0);
-                        this._obj.scaleX = read(data, "scaleX", 1);
-                        this._obj.scaleY = read(data, "scaleY", 1);
-                        this._obj.angle = read(data, "angle", 0);
+                    readJSON(ser) {
+                        this._obj.x = ser.read("x", 0);
+                        this._obj.y = ser.read("y", 0);
+                        this._obj.scaleX = ser.read("scaleX", 1);
+                        this._obj.scaleY = ser.read("scaleY", 1);
+                        this._obj.angle = ser.read("angle", 0);
                     }
-                    writeJSON(data) {
-                        write(data, "x", this._obj.x, 0);
-                        write(data, "y", this._obj.y, 0);
-                        write(data, "scaleX", this._obj.scaleX, 1);
-                        write(data, "scaleY", this._obj.scaleY, 1);
-                        write(data, "angle", this._obj.angle, 0);
+                    writeJSON(ser) {
+                        ser.write("x", this._obj.x, 0);
+                        ser.write("y", this._obj.y, 0);
+                        ser.write("scaleX", this._obj.scaleX, 1);
+                        ser.write("scaleY", this._obj.scaleY, 1);
+                        ser.write("angle", this._obj.angle, 0);
                     }
                 }
                 sceneobjects.TransformComponent = TransformComponent;
@@ -2609,19 +2708,17 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                var write = colibri.core.json.write;
-                var read = colibri.core.json.read;
                 class TextureComponent {
                     constructor(obj) {
                         this._obj = obj;
                     }
-                    writeJSON(data) {
-                        write(data, "textureKey", this._textureKey);
-                        write(data, "frameKey", this._textureFrameKey);
+                    writeJSON(ser) {
+                        ser.write("textureKey", this._textureKey);
+                        ser.write("frameKey", this._textureFrameKey);
                     }
-                    readJSON(data) {
-                        const key = read(data, "textureKey");
-                        const frame = read(data, "frameKey");
+                    readJSON(ser) {
+                        const key = ser.read("textureKey");
+                        const frame = ser.read("frameKey");
                         this.setTexture(key, frame);
                     }
                     getKey() {

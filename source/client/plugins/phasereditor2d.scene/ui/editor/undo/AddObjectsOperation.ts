@@ -10,9 +10,10 @@ namespace phasereditor2d.scene.ui.editor.undo {
             super(editor);
 
             this._dataList = objects.map(obj => {
-                const data = {};
 
-                obj.getEditorSupport().writeJSON(data);
+                const data = {} as json.ObjectData;
+
+                obj.getEditorSupport().writeJSON(editor.getSceneMaker().getSerializer(data));
 
                 return data;
             });

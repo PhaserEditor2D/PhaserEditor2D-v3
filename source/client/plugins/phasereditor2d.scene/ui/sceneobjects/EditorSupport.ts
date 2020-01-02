@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _object: T;
         private _label: string;
         private _scene: GameScene;
-        private _serializers: json.ObjectSerializer[];
+        private _serializables: json.Serializable[];
         // tslint:disable-next-line:ban-types
         private _components: Map<Function, any>;
 
@@ -18,9 +18,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._extension = extension;
             this._object = obj;
-            this._serializers = [];
+            this._serializables = [];
             this._components = new Map();
-
             this._object.setDataEnabled();
             this.setId(Phaser.Utils.String.UUID());
         }
@@ -59,7 +58,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._components.set(c.constructor, c);
             }
 
-            this._serializers.push(...components);
+            this._serializables.push(...components);
         }
 
         protected setNewId(sprite: sceneobjects.SceneObject) {
@@ -98,24 +97,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._scene = scene;
         }
 
-        writeJSON(data: any) {
+        writeJSON(ser: json.Serializer) {
 
-            write(data, "id", this.getId());
-            write(data, "type", this._extension.getTypeName());
-            write(data, "label", this._label);
+            ser.write("id", this.getId());
+            ser.write("type", this._extension.getTypeName());
+            ser.write("label", this._label);
 
-            for (const s of this._serializers) {
-                s.writeJSON(data);
+            for (const s of this._serializables) {
+
+                s.writeJSON(ser);
             }
         }
 
-        readJSON(data: any) {
+        readJSON(ser: json.Serializer) {
 
-            this.setId(read(data, "id"));
-            this._label = read(data, "label");
+            this.setId(ser.read("id"));
+            this._label = ser.read("label");
 
-            for (const s of this._serializers) {
-                s.readJSON(data);
+            for (const s of this._serializables) {
+
+                s.readJSON(ser);
             }
         }
     }

@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         angle: number;
     }
 
-    export class TransformComponent implements json.ObjectSerializer {
+    export class TransformComponent implements json.Serializable {
 
         private _obj: ITransformLike;
 
@@ -19,23 +19,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._obj = obj;
         }
 
-        readJSON(data: json.ObjectData) {
+        readJSON(ser: json.Serializer) {
 
-            this._obj.x = read(data, "x", 0);
-            this._obj.y = read(data, "y", 0);
+            this._obj.x = ser.read("x", 0);
+            this._obj.y = ser.read("y", 0);
 
-            this._obj.scaleX = read(data, "scaleX", 1);
-            this._obj.scaleY = read(data, "scaleY", 1);
-            this._obj.angle = read(data, "angle", 0);
+            this._obj.scaleX = ser.read("scaleX", 1);
+            this._obj.scaleY = ser.read("scaleY", 1);
+            this._obj.angle = ser.read("angle", 0);
         }
 
-        writeJSON(data: json.ObjectData) {
+        writeJSON(ser: json.Serializer) {
 
-            write(data, "x", this._obj.x, 0);
-            write(data, "y", this._obj.y, 0);
-            write(data, "scaleX", this._obj.scaleX, 1);
-            write(data, "scaleY", this._obj.scaleY, 1);
-            write(data, "angle", this._obj.angle, 0);
+            ser.write( "x", this._obj.x, 0);
+            ser.write( "y", this._obj.y, 0);
+            ser.write( "scaleX", this._obj.scaleX, 1);
+            ser.write( "scaleY", this._obj.scaleY, 1);
+            ser.write( "angle", this._obj.angle, 0);
         }
     }
 }

@@ -8,13 +8,27 @@ namespace phasereditor2d.scene.ui {
     export class SceneMaker {
 
         private _scene: GameScene;
+        private _sceneDataTable: json.SceneDataTable;
 
         constructor(scene: GameScene) {
             this._scene = scene;
+            this._sceneDataTable = new json.SceneDataTable();
         }
 
         static isValidSceneDataFormat(data: json.SceneData) {
             return "displayList" in data && Array.isArray(data.displayList);
+        }
+
+        async preload() {
+            await this._sceneDataTable.preload();
+        }
+
+        getSceneDataTable() {
+            return this._sceneDataTable;
+        }
+
+        getSerializer(data: json.ObjectData) {
+            return new json.Serializer(data, this._sceneDataTable);
         }
 
         createScene(data: json.SceneData) {
@@ -80,7 +94,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (sprite) {
 
-                    sprite.getEditorSupport().readJSON(data);
+                    sprite.getEditorSupport().readJSON(this.getSerializer(data));
 
                 }
 

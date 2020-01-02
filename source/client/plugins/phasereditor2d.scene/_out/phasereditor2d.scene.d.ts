@@ -55,8 +55,12 @@ declare namespace phasereditor2d.scene.ui {
 declare namespace phasereditor2d.scene.ui {
     class SceneMaker {
         private _scene;
+        private _sceneDataTable;
         constructor(scene: GameScene);
         static isValidSceneDataFormat(data: json.SceneData): boolean;
+        preload(): Promise<void>;
+        getSceneDataTable(): json.SceneDataTable;
+        getSerializer(data: json.ObjectData): json.Serializer;
         createScene(data: json.SceneData): void;
         updateSceneLoader(sceneData: json.SceneData): Promise<void>;
         createObject(data: json.ObjectData): sceneobjects.SceneObject;
@@ -355,12 +359,7 @@ declare namespace phasereditor2d.scene.ui.json {
     interface ObjectData {
         id: string;
         type: string;
-    }
-}
-declare namespace phasereditor2d.scene.ui.json {
-    interface ObjectSerializer {
-        writeJSON(data: ObjectData): void;
-        readJSON(data: ObjectData): void;
+        prefabId?: string;
     }
 }
 declare namespace phasereditor2d.scene.ui.json {
@@ -377,11 +376,46 @@ declare namespace phasereditor2d.scene.ui.json {
     };
 }
 declare namespace phasereditor2d.scene.ui.json {
+    class SceneDataTable {
+        private _map;
+        constructor();
+        preload(): Promise<void>;
+        getPrefabData(prefabId: string): ObjectData;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
     class SceneWriter {
         private _scene;
         constructor(scene: GameScene);
         toJSON(): SceneData;
         toString(): string;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    interface WriteArgs {
+        data: ObjectData;
+        table: SceneDataTable;
+    }
+    interface ReadArgs {
+        data: ObjectData;
+        table: SceneDataTable;
+    }
+    interface Serializable {
+        writeJSON(ser: Serializer): void;
+        readJSON(ser: Serializer): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    class Serializer {
+        private _data;
+        private _prefabSerializer;
+        private _table;
+        constructor(data: ObjectData, table: SceneDataTable);
+        getSerializer(data: ObjectData): Serializer;
+        getData(): ObjectData;
+        private getDefaultValue;
+        write(name: string, value: any, defValue?: any): void;
+        read(name: string, defValue?: any): any;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -391,7 +425,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _object;
         private _label;
         private _scene;
-        private _serializers;
+        private _serializables;
         private _components;
         constructor(extension: SceneObjectExtension, obj: T);
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): any;
@@ -409,8 +443,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         setLabel(label: string): void;
         getScene(): GameScene;
         setScene(scene: GameScene): void;
-        writeJSON(data: any): void;
-        readJSON(data: any): void;
+        writeJSON(ser: json.Serializer): void;
+        readJSON(ser: json.Serializer): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -508,8 +542,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ContainerEditorSupport extends EditorSupport<Container> {
         constructor(obj: Container);
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
-        writeJSON(data: ContainerData): void;
-        readJSON(data: ContainerData): void;
+        writeJSON(ser: json.Serializer): void;
+        readJSON(ser: json.Serializer): void;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
     }
 }
@@ -562,11 +596,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         originX: number;
         originY: number;
     }
-    class OriginComponent implements json.ObjectSerializer {
+    class OriginComponent implements json.Serializable {
         private _obj;
         constructor(obj: IOriginLike);
-        readJSON(data: json.ObjectData): void;
-        writeJSON(data: json.ObjectData): void;
+        readJSON(ser: json.Serializer): void;
+        writeJSON(ser: json.Serializer): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -586,11 +620,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         scaleY: number;
         angle: number;
     }
-    class TransformComponent implements json.ObjectSerializer {
+    class TransformComponent implements json.Serializable {
         private _obj;
         constructor(obj: ITransformLike);
-        readJSON(data: json.ObjectData): void;
-        writeJSON(data: json.ObjectData): void;
+        readJSON(ser: json.Serializer): void;
+        writeJSON(ser: json.Serializer): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -623,13 +657,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         textureKey: string;
         frameKey: string;
     }
-    class TextureComponent implements json.ObjectSerializer {
+    class TextureComponent implements json.Serializable {
         private _textureKey;
         private _textureFrameKey;
         private _obj;
         constructor(obj: Image);
-        writeJSON(data: TextureData): void;
-        readJSON(data: TextureData): void;
+        writeJSON(ser: json.Serializer): void;
+        readJSON(ser: json.Serializer): void;
         getKey(): string;
         setKey(key: string): void;
         setTexture(key: string, frame: string | number): void;

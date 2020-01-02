@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         frameKey: string;
     }
 
-    export class TextureComponent implements json.ObjectSerializer {
+    export class TextureComponent implements json.Serializable {
 
         private _textureKey: string;
         private _textureFrameKey: string | number;
@@ -18,16 +18,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._obj = obj;
         }
 
-        writeJSON(data: TextureData): void {
+        writeJSON(ser: json.Serializer): void {
 
-            write(data, "textureKey", this._textureKey);
-            write(data, "frameKey", this._textureFrameKey);
+            ser.write( "textureKey", this._textureKey);
+            ser.write( "frameKey", this._textureFrameKey);
         }
 
-        readJSON(data: TextureData): void {
+        readJSON(ser: json.Serializer): void {
 
-            const key = read(data, "textureKey");
-            const frame = read(data, "frameKey");
+            const key = ser.read("textureKey");
+            const frame = ser.read("frameKey");
 
             this.setTexture(key, frame);
         }

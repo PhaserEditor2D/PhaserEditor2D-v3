@@ -18,23 +18,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
         }
 
-        writeJSON(data: ContainerData) {
+        writeJSON(ser: json.Serializer) {
 
-            super.writeJSON(data);
+            super.writeJSON(ser);
+
+            const data = ser.getData() as ContainerData;
 
             data.list = this.getObject().list.map(obj => {
 
-                const objData = {};
+                const objData = {} as json.ObjectData;
 
-                obj.getEditorSupport().writeJSON(objData);
+                obj.getEditorSupport().writeJSON(ser.getSerializer(objData));
 
                 return objData as json.ObjectData;
             });
         }
 
-        readJSON(data: ContainerData) {
+        readJSON(ser: json.Serializer) {
 
-            super.readJSON(data);
+            super.readJSON(ser);
+
+            const data = ser.getData() as ContainerData;
 
             const maker = this.getScene().getMaker();
 

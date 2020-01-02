@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
-            container.getEditorSupport().readJSON(args.data as ContainerData);
+            container.getEditorSupport().readJSON(args.scene.getMaker().getSerializer(args.data));
 
             return container;
         }

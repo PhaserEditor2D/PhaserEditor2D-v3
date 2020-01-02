@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         originY: number;
     }
 
-    export class OriginComponent implements json.ObjectSerializer {
+    export class OriginComponent implements json.Serializable {
 
         private _obj: IOriginLike;
 
@@ -16,16 +16,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._obj = obj;
         }
 
-        readJSON(data: json.ObjectData) {
+        readJSON(ser: json.Serializer) {
 
-            this._obj.originX = read(data, "originX", 0.5);
-            this._obj.originY = read(data, "originY", 0.5);
+            this._obj.originX = ser.read("originX", 0.5);
+            this._obj.originY = ser.read("originY", 0.5);
         }
 
-        writeJSON(data: json.ObjectData) {
+        writeJSON(ser: json.Serializer) {
 
-            write(data, "originX", this._obj.originX, 0.5);
-            write(data, "originY", this._obj.originY, 0.5);
+            ser.write( "originX", this._obj.originX, 0.5);
+            ser.write( "originY", this._obj.originY, 0.5);
         }
     }
 }
