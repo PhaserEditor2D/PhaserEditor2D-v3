@@ -38,17 +38,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.readJSON(ser);
 
-            const data = ser.getData() as ContainerData;
+            const list = ser.read("list", []) as json.ObjectData[];
 
             const maker = this.getScene().getMaker();
 
-            const obj = this.getObject();
+            const container = this.getObject();
 
-            for (const objData of data.list) {
+            // TODO: why? this should be executed once
+            container.removeAll(true);
+
+            for (const objData of list) {
 
                 const sprite = maker.createObject(objData);
 
-                obj.add(sprite);
+                container.add(sprite);
             }
         }
 

@@ -24,9 +24,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const list = [];
 
-            const containerData = args.serializer.getData() as ContainerData;
+            const children = args.serializer.read("list", []) as json.ObjectData[];
 
-            for (const objData of containerData.list) {
+            for (const objData of children) {
 
                 const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
 

@@ -2247,12 +2247,14 @@ var phasereditor2d;
                     }
                     readJSON(ser) {
                         super.readJSON(ser);
-                        const data = ser.getData();
+                        const list = ser.read("list", []);
                         const maker = this.getScene().getMaker();
-                        const obj = this.getObject();
-                        for (const objData of data.list) {
+                        const container = this.getObject();
+                        // TODO: why? this should be executed once
+                        container.removeAll(true);
+                        for (const objData of list) {
                             const sprite = maker.createObject(objData);
-                            obj.add(sprite);
+                            container.add(sprite);
                         }
                     }
                     getScreenBounds(camera) {
@@ -2304,8 +2306,8 @@ var phasereditor2d;
                     }
                     async getAssetsFromObjectData(args) {
                         const list = [];
-                        const containerData = args.serializer.getData();
-                        for (const objData of containerData.list) {
+                        const children = args.serializer.read("list", []);
+                        for (const objData of children) {
                             const ext = scene_13.ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
                             if (ext) {
                                 const list2 = await ext.getAssetsFromObjectData({
