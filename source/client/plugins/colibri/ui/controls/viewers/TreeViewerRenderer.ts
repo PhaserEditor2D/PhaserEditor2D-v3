@@ -1,9 +1,11 @@
 namespace colibri.ui.controls.viewers {
 
     export class TreeViewerRenderer {
+
         private _viewer: TreeViewer;
 
         constructor(viewer: TreeViewer, cellSize: number = ROW_HEIGHT) {
+
             this._viewer = viewer;
             this._viewer.setCellSize(cellSize);
         }
@@ -117,7 +119,9 @@ namespace colibri.ui.controls.viewers {
         }
 
         private renderTreeCell(args: RenderCellArgs, renderer: ICellRenderer): void {
+
             const label = args.viewer.getLabelProvider().getLabel(args.obj);
+
             let x = args.x;
             let y = args.y;
 
@@ -125,12 +129,17 @@ namespace colibri.ui.controls.viewers {
             ctx.fillStyle = Controls.getTheme().viewerForeground;
 
             let args2: RenderCellArgs;
+
             if (args.h <= ROW_HEIGHT) {
+
                 args2 = new RenderCellArgs(
                     args.canvasContext, args.x, args.y, ICON_SIZE, args.h, args.obj, args.viewer);
+
                 x += 20;
                 y += 15;
+
             } else {
+
                 args2 = new RenderCellArgs(
                     args.canvasContext, args.x, args.y, args.w, args.h - 20, args.obj, args.viewer);
                 y += args2.h + 15;
@@ -139,11 +148,20 @@ namespace colibri.ui.controls.viewers {
             renderer.renderCell(args2);
 
             ctx.save();
-            if (args.viewer.isSelected(args.obj)) {
-                ctx.fillStyle = Controls.getTheme().viewerSelectionForeground;
-            }
+
+            this.setTextColor(args);
+
             ctx.fillText(label, x, y);
+
             ctx.restore();
+        }
+
+        protected setTextColor(args: RenderCellArgs) {
+
+            if (args.viewer.isSelected(args.obj)) {
+
+                args.canvasContext.fillStyle = Controls.getTheme().viewerSelectionForeground;
+            }
         }
     }
 }

@@ -302,6 +302,13 @@ declare namespace phasereditor2d.scene.ui.editor.outline {
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
     }
 }
+declare namespace phasereditor2d.scene.ui.editor.outline {
+    import controls = colibri.ui.controls;
+    class SceneEditorOutlineViewerRenderer extends controls.viewers.TreeViewerRenderer {
+        constructor(viewer: controls.viewers.TreeViewer);
+        setTextColor(args: controls.viewers.RenderCellArgs): void;
+    }
+}
 declare namespace phasereditor2d.scene.ui.editor.properties {
     import controls = colibri.ui.controls;
     class SceneEditorSectionProvider extends controls.properties.PropertySectionProvider {

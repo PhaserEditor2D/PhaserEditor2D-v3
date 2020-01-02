@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
         }
 
         getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer {
-            return new controls.viewers.TreeViewerRenderer(viewer, 48);
+            return new SceneEditorOutlineViewerRenderer(viewer);
         }
 
         getPropertySectionProvider(): controls.properties.PropertySectionProvider {

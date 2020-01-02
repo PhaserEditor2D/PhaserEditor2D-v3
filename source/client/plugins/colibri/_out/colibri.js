@@ -4181,11 +4181,14 @@ var colibri;
                         }
                         renderer.renderCell(args2);
                         ctx.save();
-                        if (args.viewer.isSelected(args.obj)) {
-                            ctx.fillStyle = controls.Controls.getTheme().viewerSelectionForeground;
-                        }
+                        this.setTextColor(args);
                         ctx.fillText(label, x, y);
                         ctx.restore();
+                    }
+                    setTextColor(args) {
+                        if (args.viewer.isSelected(args.obj)) {
+                            args.canvasContext.fillStyle = controls.Controls.getTheme().viewerSelectionForeground;
+                        }
                     }
                 }
                 viewers.TreeViewerRenderer = TreeViewerRenderer;

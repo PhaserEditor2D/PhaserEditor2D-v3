@@ -1576,7 +1576,6 @@ var phasereditor2d;
             (function (editor_8) {
                 var outline;
                 (function (outline) {
-                    var controls = colibri.ui.controls;
                     var ide = colibri.ui.ide;
                     class SceneEditorOutlineProvider extends ide.EditorViewerProvider {
                         constructor(editor) {
@@ -1596,7 +1595,7 @@ var phasereditor2d;
                             return new outline.SceneEditorOutlineRendererProvider(this._editor);
                         }
                         getTreeViewerRenderer(viewer) {
-                            return new controls.viewers.TreeViewerRenderer(viewer, 48);
+                            return new outline.SceneEditorOutlineViewerRenderer(viewer);
                         }
                         getPropertySectionProvider() {
                             return this._editor.getPropertyProvider();
@@ -1651,6 +1650,50 @@ var phasereditor2d;
                     }
                     outline.SceneEditorOutlineRendererProvider = SceneEditorOutlineRendererProvider;
                 })(outline = editor_9.outline || (editor_9.outline = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var outline;
+                (function (outline) {
+                    var controls = colibri.ui.controls;
+                    const COLORS = {
+                        light: {
+                            selected: "#ffaaaa",
+                            normal: "#ff2222"
+                        },
+                        dark: {
+                            selected: "#550055",
+                            normal: "#ffaaff"
+                        }
+                    };
+                    class SceneEditorOutlineViewerRenderer extends controls.viewers.TreeViewerRenderer {
+                        constructor(viewer) {
+                            super(viewer, 48);
+                        }
+                        setTextColor(args) {
+                            if (args.obj instanceof Phaser.GameObjects.GameObject) {
+                                const obj = args.obj;
+                                if (obj.getEditorSupport().isPrefabInstance()) {
+                                    const colors = controls.Controls.getTheme().dark ? COLORS.dark : COLORS.light;
+                                    const color = args.viewer.isSelected(args.obj) ? colors.selected : colors.normal;
+                                    args.canvasContext.fillStyle = color;
+                                    return;
+                                }
+                            }
+                            super.setTextColor(args);
+                        }
+                    }
+                    outline.SceneEditorOutlineViewerRenderer = SceneEditorOutlineViewerRenderer;
+                })(outline = editor.outline || (editor.outline = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

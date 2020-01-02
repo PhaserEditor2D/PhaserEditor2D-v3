@@ -994,6 +994,7 @@ declare namespace colibri.ui.controls.viewers {
             y: number;
         };
         private renderTreeCell;
+        protected setTextColor(args: RenderCellArgs): void;
     }
 }
 declare namespace colibri.ui.controls.viewers {
