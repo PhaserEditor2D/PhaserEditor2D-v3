@@ -4450,7 +4450,13 @@ var colibri;
             var viewers;
             (function (viewers) {
                 class ImageCellRenderer {
+                    constructor(singleImage) {
+                        this._singleImage = singleImage;
+                    }
                     getImage(obj) {
+                        if (this._singleImage) {
+                            return this._singleImage;
+                        }
                         return obj;
                     }
                     renderCell(args) {

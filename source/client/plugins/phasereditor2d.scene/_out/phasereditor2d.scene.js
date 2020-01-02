@@ -2282,6 +2282,16 @@ var phasereditor2d;
                         this.addComponent(new sceneobjects.TransformComponent(obj));
                     }
                     getCellRenderer() {
+                        if (this.isPrefabInstance()) {
+                            const table = this.getScene().getMaker().getSceneDataTable();
+                            const file = table.getPrefabFile(this.getPrefabId());
+                            if (file) {
+                                const image = ui.SceneThumbnailCache.getInstance().getContent(file);
+                                if (image) {
+                                    return new controls.viewers.ImageCellRenderer(image);
+                                }
+                            }
+                        }
                         return new controls.viewers.IconImageCellRenderer(scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP));
                     }
                     writeJSON(ser) {

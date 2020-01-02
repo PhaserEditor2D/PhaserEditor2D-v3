@@ -1053,6 +1053,8 @@ declare namespace colibri.ui.controls.viewers {
 }
 declare namespace colibri.ui.controls.viewers {
     class ImageCellRenderer implements ICellRenderer {
+        private _singleImage;
+        constructor(singleImage?: IImage);
         getImage(obj: any): IImage;
         renderCell(args: RenderCellArgs): void;
         cellHeight(args: RenderCellArgs): number;

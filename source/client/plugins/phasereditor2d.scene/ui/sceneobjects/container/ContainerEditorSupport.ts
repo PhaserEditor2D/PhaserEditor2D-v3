@@ -15,6 +15,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
+
+            if (this.isPrefabInstance()) {
+
+                const table = this.getScene().getMaker().getSceneDataTable();
+                const file = table.getPrefabFile(this.getPrefabId());
+
+                if (file) {
+
+                    const image = SceneThumbnailCache.getInstance().getContent(file);
+
+                    if (image) {
+
+                        return new controls.viewers.ImageCellRenderer(image);
+                    }
+                }
+            }
+
             return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
         }
 

@@ -2,7 +2,19 @@ namespace colibri.ui.controls.viewers {
 
     export class ImageCellRenderer implements ICellRenderer {
 
+        private _singleImage: IImage;
+
+        constructor(singleImage?: IImage) {
+
+            this._singleImage = singleImage;
+        }
+
         getImage(obj: any): IImage {
+
+            if (this._singleImage) {
+
+                return this._singleImage;
+            }
 
             return obj;
         }
