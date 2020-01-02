@@ -81,7 +81,6 @@ namespace colibri.ui.ide {
 
         setSelection(selection: any[], notify = true): void {
             this._selection = selection;
-            window["SELECTION"] = selection;
 
             if (notify) {
                 this.dispatchEvent(new CustomEvent(controls.EVENT_SELECTION_CHANGED, {

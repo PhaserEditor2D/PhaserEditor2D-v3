@@ -1382,7 +1382,12 @@ var phasereditor2d;
                         let next = [];
                         if (result) {
                             const current = this._editor.getSelection();
-                            const selected = result.pop();
+                            let selected = result.pop();
+                            if (selected) {
+                                const obj = selected;
+                                const owner = obj.getEditorSupport().getPrefabInstanceOwner();
+                                selected = (owner !== null && owner !== void 0 ? owner : selected);
+                            }
                             if (e.ctrlKey || e.metaKey) {
                                 if (new Set(current).has(selected)) {
                                     next = current.filter(obj => obj !== selected);
@@ -2071,6 +2076,16 @@ var phasereditor2d;
                     }
                     isPrefabInstance() {
                         return typeof this._prefabId === "string";
+                    }
+                    getPrefabInstanceOwner() {
+                        if (this.isPrefabInstance()) {
+                            return this._object;
+                        }
+                        if (this._object.parentContainer) {
+                            const parent = this._object.parentContainer;
+                            return parent.getEditorSupport().getPrefabInstanceOwner();
+                        }
+                        return null;
                     }
                     getPrefabId() {
                         return this._prefabId;

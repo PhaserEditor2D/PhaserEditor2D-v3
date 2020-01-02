@@ -5360,7 +5360,6 @@ var colibri;
                 }
                 setSelection(selection, notify = true) {
                     this._selection = selection;
-                    window["SELECTION"] = selection;
                     if (notify) {
                         this.dispatchEvent(new CustomEvent(ui.controls.EVENT_SELECTION_CHANGED, {
                             detail: selection

@@ -47,6 +47,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private onMouseClick(e: MouseEvent): void {
+
             const result = this.hitTestOfActivePointer();
 
             let next = [];
@@ -54,7 +55,16 @@ namespace phasereditor2d.scene.ui.editor {
             if (result) {
 
                 const current = this._editor.getSelection();
-                const selected = result.pop();
+                let selected = result.pop();
+
+                if (selected) {
+
+                    const obj = selected as sceneobjects.SceneObject;
+
+                    const owner = obj.getEditorSupport().getPrefabInstanceOwner();
+
+                    selected = owner ?? selected;
+                }
 
                 if (e.ctrlKey || e.metaKey) {
 

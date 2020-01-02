@@ -102,6 +102,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return typeof this._prefabId === "string";
         }
 
+        getPrefabInstanceOwner(): SceneObject {
+
+            if (this.isPrefabInstance()) {
+                return this._object;
+            }
+
+            if (this._object.parentContainer) {
+
+                const parent = this._object.parentContainer as unknown as SceneObject;
+
+                return parent.getEditorSupport().getPrefabInstanceOwner();
+            }
+
+            return null;
+        }
+
         getPrefabId() {
             return this._prefabId;
         }
