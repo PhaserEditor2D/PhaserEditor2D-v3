@@ -2326,10 +2326,12 @@ var phasereditor2d;
                         const list = [];
                         const children = args.serializer.read("list", []);
                         for (const objData of children) {
-                            const ext = scene_13.ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
+                            const ser = args.serializer.getSerializer(objData);
+                            const type = ser.getType();
+                            const ext = scene_13.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                             if (ext) {
                                 const list2 = await ext.getAssetsFromObjectData({
-                                    serializer: args.serializer.getSerializer(objData),
+                                    serializer: ser,
                                     scene: args.scene,
                                     finder: args.finder
                                 });
