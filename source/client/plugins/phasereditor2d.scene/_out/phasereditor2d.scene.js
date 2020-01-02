@@ -1385,7 +1385,7 @@ var phasereditor2d;
                             let selected = result.pop();
                             if (selected) {
                                 const obj = selected;
-                                const owner = obj.getEditorSupport().getPrefabInstanceOwner();
+                                const owner = obj.getEditorSupport().getOwnerPrefabInstance();
                                 selected = (owner !== null && owner !== void 0 ? owner : selected);
                             }
                             if (e.ctrlKey || e.metaKey) {
@@ -2075,13 +2075,13 @@ var phasereditor2d;
                     isPrefabInstance() {
                         return typeof this._prefabId === "string";
                     }
-                    getPrefabInstanceOwner() {
-                        if (this.isPrefabInstance()) {
-                            return this._object;
-                        }
+                    getOwnerPrefabInstance() {
                         if (this._object.parentContainer) {
                             const parent = this._object.parentContainer;
-                            return parent.getEditorSupport().getPrefabInstanceOwner();
+                            return parent.getEditorSupport().getOwnerPrefabInstance();
+                        }
+                        if (this._object.getEditorSupport().isPrefabInstance()) {
+                            return this._object;
                         }
                         return null;
                     }

@@ -61,7 +61,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     const obj = selected as sceneobjects.SceneObject;
 
-                    const owner = obj.getEditorSupport().getPrefabInstanceOwner();
+                    const owner = obj.getEditorSupport().getOwnerPrefabInstance();
 
                     selected = owner ?? selected;
                 }
@@ -69,8 +69,11 @@ namespace phasereditor2d.scene.ui.editor {
                 if (e.ctrlKey || e.metaKey) {
 
                     if (new Set(current).has(selected)) {
+
                         next = current.filter(obj => obj !== selected);
+
                     } else {
+
                         next = current;
                         next.push(selected);
                     }

@@ -449,7 +449,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getScene(): GameScene;
         setScene(scene: GameScene): void;
         isPrefabInstance(): boolean;
-        getPrefabInstanceOwner(): SceneObject;
+        getOwnerPrefabInstance(): SceneObject;
         getPrefabId(): string;
         getPrefabName(): string;
         getObjectType(): any;
