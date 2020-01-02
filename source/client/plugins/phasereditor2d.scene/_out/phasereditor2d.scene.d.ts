@@ -376,11 +376,14 @@ declare namespace phasereditor2d.scene.ui.json {
     };
 }
 declare namespace phasereditor2d.scene.ui.json {
+    import io = colibri.core.io;
     class SceneDataTable {
-        private _map;
+        private _dataMap;
+        private _fileMap;
         constructor();
         preload(): Promise<void>;
         getPrefabData(prefabId: string): ObjectData;
+        getPrefabFile(prefabId: string): io.FilePath;
     }
 }
 declare namespace phasereditor2d.scene.ui.json {
@@ -424,6 +427,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class EditorSupport<T extends SceneObject> {
         private _extension;
         private _object;
+        private _prefabId;
         private _label;
         private _scene;
         private _serializables;
@@ -444,6 +448,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         setLabel(label: string): void;
         getScene(): GameScene;
         setScene(scene: GameScene): void;
+        isPrefabInstance(): boolean;
+        getPrefabId(): string;
+        getPrefabName(): string;
+        getObjectType(): any;
         writeJSON(ser: json.Serializer): void;
         readJSON(ser: json.Serializer): void;
     }

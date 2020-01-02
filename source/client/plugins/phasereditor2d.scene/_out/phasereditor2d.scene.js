@@ -1856,10 +1856,12 @@ var phasereditor2d;
                 var FileUtils = colibri.ui.ide.FileUtils;
                 class SceneDataTable {
                     constructor() {
-                        this._map = new Map();
+                        this._dataMap = new Map();
+                        this._fileMap = new Map();
                     }
                     async preload() {
-                        const map = new Map();
+                        const dataMap = new Map();
+                        const fileMap = new Map();
                         const files = await FileUtils.getFilesWithContentType(scene.core.CONTENT_TYPE_SCENE);
                         for (const file of files) {
                             const content = await FileUtils.preloadAndGetFileString(file);
@@ -1868,7 +1870,8 @@ var phasereditor2d;
                                 if (data.id) {
                                     if (data.displayList.length > 0) {
                                         const objData = data.displayList[0];
-                                        map.set(data.id, objData);
+                                        dataMap.set(data.id, objData);
+                                        fileMap.set(data.id, file);
                                     }
                                 }
                             }
@@ -1876,11 +1879,16 @@ var phasereditor2d;
                                 console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${e.message}`);
                             }
                         }
-                        console.log(map);
-                        this._map = map;
+                        console.log("SceneDataTable");
+                        console.log(dataMap);
+                        this._dataMap = dataMap;
+                        this._fileMap = fileMap;
                     }
                     getPrefabData(prefabId) {
-                        return this._map.get(prefabId);
+                        return this._dataMap.get(prefabId);
+                    }
+                    getPrefabFile(prefabId) {
+                        return this._fileMap.get(prefabId);
                     }
                 }
                 json.SceneDataTable = SceneDataTable;
@@ -2058,6 +2066,29 @@ var phasereditor2d;
                     setScene(scene) {
                         this._scene = scene;
                     }
+                    isPrefabInstance() {
+                        return typeof this._prefabId === "string";
+                    }
+                    getPrefabId() {
+                        return this._prefabId;
+                    }
+                    getPrefabName() {
+                        if (this._prefabId) {
+                            const file = this._scene.getMaker().getSceneDataTable().getPrefabFile(this._prefabId);
+                            if (file) {
+                                return file.getNameWithoutExtension();
+                            }
+                        }
+                        return null;
+                    }
+                    getObjectType() {
+                        const ser = this._scene.getMaker().getSerializer({
+                            id: this.getId(),
+                            type: this._extension.getTypeName(),
+                            prefabId: this._prefabId
+                        });
+                        return ser.getType();
+                    }
                     writeJSON(ser) {
                         ser.write("id", this.getId());
                         ser.write("type", this._extension.getTypeName());
@@ -2068,6 +2099,7 @@ var phasereditor2d;
                     }
                     readJSON(ser) {
                         this.setId(ser.read("id"));
+                        this._prefabId = ser.getData().prefabId;
                         this._label = ser.read("label");
                         for (const s of this._serializables) {
                             s.readJSON(ser);
@@ -2667,6 +2699,21 @@ var phasereditor2d;
                             const text = this.createText(comp);
                             this.addUpdater(() => {
                                 text.value = this.flatValues_StringJoin(this.getSelection().map(obj => obj.getEditorSupport().getLabel()));
+                            });
+                        }
+                        {
+                            // Type
+                            this.createLabel(comp, "Type");
+                            const text = this.createText(comp, true);
+                            this.addUpdater(() => {
+                                text.value = this.flatValues_StringJoin(this.getSelection().map(obj => {
+                                    const support = obj.getEditorSupport();
+                                    let typename = support.getObjectType();
+                                    if (support.isPrefabInstance()) {
+                                        typename = `prefab ${support.getPrefabName()} (${typename})`;
+                                    }
+                                    return typename;
+                                }));
                             });
                         }
                     }

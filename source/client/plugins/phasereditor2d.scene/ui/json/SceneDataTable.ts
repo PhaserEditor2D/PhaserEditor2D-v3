@@ -1,18 +1,23 @@
 namespace phasereditor2d.scene.ui.json {
 
     import FileUtils = colibri.ui.ide.FileUtils;
+    import io = colibri.core.io;
 
     export class SceneDataTable {
 
-        private _map: Map<string, ObjectData>;
+        private _dataMap: Map<string, ObjectData>;
+        private _fileMap: Map<string, io.FilePath>;
 
         constructor() {
-            this._map = new Map();
+
+            this._dataMap = new Map();
+            this._fileMap = new Map();
         }
 
         async preload(): Promise<void> {
 
-            const map = new Map<string, ObjectData>();
+            const dataMap = new Map<string, ObjectData>();
+            const fileMap = new Map<string, io.FilePath>();
 
             const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
 
@@ -30,7 +35,8 @@ namespace phasereditor2d.scene.ui.json {
 
                             const objData = data.displayList[0];
 
-                            map.set(data.id, objData);
+                            dataMap.set(data.id, objData);
+                            fileMap.set(data.id, file);
                         }
                     }
 
@@ -39,14 +45,21 @@ namespace phasereditor2d.scene.ui.json {
                 }
             }
 
-            console.log(map);
+            console.log("SceneDataTable");
+            console.log(dataMap);
 
-            this._map = map;
+            this._dataMap = dataMap;
+            this._fileMap = fileMap;
         }
 
         getPrefabData(prefabId: string): ObjectData {
 
-            return this._map.get(prefabId);
+            return this._dataMap.get(prefabId);
+        }
+
+        getPrefabFile(prefabId: string): io.FilePath {
+
+            return this._fileMap.get(prefabId);
         }
     }
 }

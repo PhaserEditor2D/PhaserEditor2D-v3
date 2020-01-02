@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _extension: SceneObjectExtension;
         private _object: T;
+        private _prefabId: string;
         private _label: string;
         private _scene: GameScene;
         private _serializables: json.Serializable[];
@@ -97,6 +98,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._scene = scene;
         }
 
+        isPrefabInstance() {
+            return typeof this._prefabId === "string";
+        }
+
+        getPrefabId() {
+            return this._prefabId;
+        }
+
+        getPrefabName() {
+
+            if (this._prefabId) {
+
+                const file = this._scene.getMaker().getSceneDataTable().getPrefabFile(this._prefabId);
+
+                if (file) {
+
+                    return file.getNameWithoutExtension();
+                }
+            }
+
+            return null;
+        }
+
+        getObjectType() {
+
+            const ser = this._scene.getMaker().getSerializer({
+                id: this.getId(),
+                type: this._extension.getTypeName(),
+                prefabId: this._prefabId
+            });
+
+            return ser.getType();
+        }
+
         writeJSON(ser: json.Serializer) {
 
             ser.write("id", this.getId());
@@ -112,6 +147,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         readJSON(ser: json.Serializer) {
 
             this.setId(ser.read("id"));
+            this._prefabId = ser.getData().prefabId;
             this._label = ser.read("label");
 
             for (const s of this._serializables) {

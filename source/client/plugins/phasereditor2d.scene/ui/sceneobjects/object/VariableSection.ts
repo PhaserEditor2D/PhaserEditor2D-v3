@@ -22,6 +22,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     );
                 });
             }
+
+            {
+                // Type
+
+                this.createLabel(comp, "Type");
+                const text = this.createText(comp, true);
+                this.addUpdater(() => {
+
+                    text.value = this.flatValues_StringJoin(
+
+                        this.getSelection().map(obj => {
+
+                            const support = obj.getEditorSupport();
+
+                            let typename = support.getObjectType();
+
+                            if (support.isPrefabInstance()) {
+
+                                typename = `prefab ${support.getPrefabName()} (${typename})`;
+                            }
+
+                            return typename;
+                        })
+                    );
+                });
+            }
         }
 
         canEdit(obj: any, n: number): boolean {
@@ -31,7 +57,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         canEditNumber(n: number): boolean {
             return n === 1;
         }
-
     }
-
 }
