@@ -305,7 +305,7 @@ var phasereditor2d;
                     this._callback = callback;
                 }
                 async create() {
-                    const maker = new ui.SceneMaker(this);
+                    const maker = this.getMaker();
                     await maker.preload();
                     await maker.updateSceneLoader(this._data);
                     maker.createScene(this._data);
@@ -1887,8 +1887,6 @@ var phasereditor2d;
                                 console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${e.message}`);
                             }
                         }
-                        console.log("SceneDataTable");
-                        console.log(dataMap);
                         this._dataMap = dataMap;
                         this._fileMap = fileMap;
                     }

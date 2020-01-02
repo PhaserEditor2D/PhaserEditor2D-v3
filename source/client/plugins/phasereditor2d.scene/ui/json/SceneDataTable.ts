@@ -45,9 +45,6 @@ namespace phasereditor2d.scene.ui.json {
                 }
             }
 
-            console.log("SceneDataTable");
-            console.log(dataMap);
-
             this._dataMap = dataMap;
             this._fileMap = fileMap;
         }

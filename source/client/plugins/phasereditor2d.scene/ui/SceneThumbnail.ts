@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui {
 
         async create() {
 
-            const maker = new SceneMaker(this);
+            const maker = this.getMaker();
 
             await maker.preload();
 
@@ -29,7 +29,6 @@ namespace phasereditor2d.scene.ui {
             this.sys.renderer.snapshot(img => {
 
                 this._callback(img as HTMLImageElement);
-
             });
         }
     }
