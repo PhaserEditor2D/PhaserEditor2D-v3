@@ -480,7 +480,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         data: json.ObjectData;
     }
     interface GetAssetsFromObjectArgs {
-        data: json.ObjectData;
+        serializer: json.Serializer;
         scene: GameScene;
         finder: pack.core.PackFinder;
     }

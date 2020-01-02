@@ -248,14 +248,12 @@ var phasereditor2d;
                     const finder = new phasereditor2d.pack.core.PackFinder();
                     await finder.preload();
                     for (const objData of sceneData.displayList) {
-                        const objData2 = objData;
-                        if (objData2.prefabId) {
-                            const ser = this.getSerializer(objData2);
-                        }
-                        const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(objData2.type);
+                        const ser = this.getSerializer(objData);
+                        const type = ser.getType();
+                        const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                         if (ext) {
                             const assets = await ext.getAssetsFromObjectData({
-                                data: objData2,
+                                serializer: ser,
                                 finder: finder,
                                 scene: this._scene
                             });
@@ -2274,12 +2272,12 @@ var phasereditor2d;
                     }
                     async getAssetsFromObjectData(args) {
                         const list = [];
-                        const containerData = args.data;
+                        const containerData = args.serializer.getData();
                         for (const objData of containerData.list) {
                             const ext = scene_13.ScenePlugin.getInstance().getObjectExtensionByObjectType(objData.type);
                             if (ext) {
                                 const list2 = await ext.getAssetsFromObjectData({
-                                    data: objData,
+                                    serializer: args.serializer.getSerializer(objData),
                                     scene: args.scene,
                                     finder: args.finder
                                 });
@@ -2416,7 +2414,8 @@ var phasereditor2d;
                         return _a = this._instance, (_a !== null && _a !== void 0 ? _a : (this._instance = new ImageExtension()));
                     }
                     async getAssetsFromObjectData(args) {
-                        const key = args.data.textureKey;
+                        const key = args.serializer.read("textureKey");
+                        // const key = (args.data as sceneobjects.TextureData).textureKey;
                         const finder = args.finder;
                         const item = finder.findAssetPackItem(key);
                         if (item) {

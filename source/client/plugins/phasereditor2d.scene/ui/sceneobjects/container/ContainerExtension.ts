@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const list = [];
 
-            const containerData = args.data as ContainerData;
+            const containerData = args.serializer.getData() as ContainerData;
 
             for (const objData of containerData.list) {
 
@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 if (ext) {
 
                     const list2 = await ext.getAssetsFromObjectData({
-                        data: objData,
+                        serializer: args.serializer.getSerializer(objData),
                         scene: args.scene,
                         finder: args.finder
                     });

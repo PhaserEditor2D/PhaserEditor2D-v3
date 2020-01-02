@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     }
 
     export interface GetAssetsFromObjectArgs {
-        data: json.ObjectData;
+        serializer: json.Serializer;
         scene: GameScene;
         finder: pack.core.PackFinder;
     }
