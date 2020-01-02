@@ -26,10 +26,49 @@ namespace phasereditor2d.scene.ui {
 
             maker.createScene(this._data);
 
-            this.sys.renderer.snapshot(img => {
+            const bounds = this.computeSceneBounds();
 
-                this._callback(img as HTMLImageElement);
+            this.sys.renderer.snapshotArea(bounds.x, bounds.y, bounds.width, bounds.height, (img: HTMLImageElement) => {
+
+                this._callback(img);
             });
+        }
+
+        private computeSceneBounds() {
+
+            const children = this.getDisplayListChildren();
+
+            if (children.length === 0) {
+                return { x: 0, y: 0, width: 10, height: 10 };
+            }
+
+            const camera = this.getCamera();
+
+            let minX = Number.MAX_VALUE;
+            let minY = Number.MAX_VALUE;
+            let maxX = Number.MIN_VALUE;
+            let maxY = Number.MIN_VALUE;
+
+            for (const obj of this.getDisplayListChildren()) {
+
+                const points = obj.getEditorSupport().getScreenBounds(camera);
+
+                for (const point of points) {
+
+                    minX = Math.min(minX, point.x);
+                    minY = Math.min(minY, point.y);
+                    maxX = Math.max(maxX, point.x);
+                    maxY = Math.max(maxY, point.y);
+                }
+            }
+
+            return {
+                x: Math.floor(minX),
+                y: Math.floor(minY),
+                width: Math.floor(maxX - minX),
+                height: Math.floor(maxY - minY)
+            };
+
         }
     }
 
@@ -107,8 +146,8 @@ namespace phasereditor2d.scene.ui {
 
                 const data: json.SceneData = JSON.parse(content);
 
-                const width = 800;
-                const height = 600;
+                const width = 1200;
+                const height = 800;
 
                 const canvas = document.createElement("canvas");
                 canvas.style.width = (canvas.width = width) + "px";

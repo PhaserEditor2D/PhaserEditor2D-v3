@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(Phaser.Utils.String.UUID());
         }
 
-        abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera);
+        abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
 
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
 

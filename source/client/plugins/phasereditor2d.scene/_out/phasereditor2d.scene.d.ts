@@ -433,7 +433,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _serializables;
         private _components;
         constructor(extension: SceneObjectExtension, obj: T);
-        abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): any;
+        abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
         getComponent(ctr: Function): any;
         hasComponent(ctr: Function): boolean;
