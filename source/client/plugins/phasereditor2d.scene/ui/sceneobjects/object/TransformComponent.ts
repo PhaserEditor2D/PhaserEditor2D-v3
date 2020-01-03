@@ -19,6 +19,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._obj = obj;
         }
 
+        getObject() {
+            return this._obj;
+        }
+
         readJSON(ser: json.Serializer) {
 
             this._obj.x = ser.read("x", 0);

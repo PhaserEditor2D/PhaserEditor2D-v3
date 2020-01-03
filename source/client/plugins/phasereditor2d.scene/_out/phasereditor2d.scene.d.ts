@@ -53,12 +53,15 @@ declare namespace phasereditor2d.scene.ui {
     }
 }
 declare namespace phasereditor2d.scene.ui {
+    import io = colibri.core.io;
     class SceneMaker {
         private _scene;
         private _sceneDataTable;
         constructor(scene: GameScene);
         static isValidSceneDataFormat(data: json.SceneData): boolean;
         preload(): Promise<void>;
+        isPrefabFile(file: io.FilePath): boolean;
+        createPrefabInstanceWithFile(file: io.FilePath): Promise<sceneobjects.SceneObject>;
         getSceneDataTable(): json.SceneDataTable;
         getSerializer(data: json.ObjectData): json.Serializer;
         createScene(data: json.SceneData): void;
@@ -366,7 +369,7 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 declare namespace phasereditor2d.scene.ui.json {
     interface ObjectData {
         id: string;
-        type: string;
+        type?: string;
         prefabId?: string;
     }
 }
@@ -641,6 +644,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TransformComponent implements json.Serializable {
         private _obj;
         constructor(obj: ITransformLike);
+        getObject(): ITransformLike;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;
     }

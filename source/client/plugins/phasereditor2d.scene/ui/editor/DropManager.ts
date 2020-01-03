@@ -2,16 +2,17 @@ namespace phasereditor2d.scene.ui.editor {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
+    import io = colibri.core.io;
 
     export class DropManager {
 
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
+
             this._editor = editor;
 
             const canvas = this._editor.getOverlayLayer().getCanvas();
-
             canvas.addEventListener("dragover", e => this.onDragOver(e));
             canvas.addEventListener("drop", e => this.onDragDrop_async(e));
         }
@@ -44,6 +45,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             const scene = this._editor.getGameScene();
 
+            const sceneMaker = scene.getMaker();
+
             const exts = ScenePlugin.getInstance().getObjectExtensions();
 
             const nameMaker = new ide.utils.NameMaker(obj => {
@@ -53,8 +56,8 @@ namespace phasereditor2d.scene.ui.editor {
             scene.visit(obj => nameMaker.update([obj]));
 
             const worldPoint = scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
-            const x = worldPoint.x;
-            const y = worldPoint.y;
+            const x = Math.floor(worldPoint.x);
+            const y = Math.floor(worldPoint.y);
 
             for (const data of dropAssetArray) {
 
@@ -69,6 +72,32 @@ namespace phasereditor2d.scene.ui.editor {
             const sprites: sceneobjects.SceneObject[] = [];
 
             for (const data of dropAssetArray) {
+
+                if (data instanceof io.FilePath) {
+
+                    if (sceneMaker.isPrefabFile(data)) {
+
+                        const sprite = await sceneMaker.createPrefabInstanceWithFile(data);
+
+                        const transformComp = sprite.getEditorSupport()
+                            .getComponent(sceneobjects.TransformComponent) as sceneobjects.TransformComponent;
+
+                        if (transformComp) {
+
+                            const obj = transformComp.getObject();
+                            obj.x = x;
+                            obj.y = y;
+                        }
+
+                        if (sprite) {
+
+                            sprites.push(sprite);
+                        }
+
+                        continue;
+                    }
+                }
+
 
                 for (const ext of exts) {
 
@@ -98,6 +127,13 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private acceptsDropData(data: any): boolean {
+
+            if (data instanceof io.FilePath) {
+
+                if (this._editor.getSceneMaker().isPrefabFile(data)) {
+                    return true;
+                }
+            }
 
             for (const ext of ScenePlugin.getInstance().getObjectExtensions()) {
 

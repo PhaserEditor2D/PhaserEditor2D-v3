@@ -216,6 +216,7 @@ var phasereditor2d;
     (function (scene_1) {
         var ui;
         (function (ui) {
+            var FileUtils = colibri.ui.ide.FileUtils;
             class SceneMaker {
                 constructor(scene) {
                     this._scene = scene;
@@ -226,6 +227,29 @@ var phasereditor2d;
                 }
                 async preload() {
                     await this._sceneDataTable.preload();
+                }
+                isPrefabFile(file) {
+                    const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
+                    // TODO: missing to check if it is a scene of type prefab.
+                    return ct === scene_1.core.CONTENT_TYPE_SCENE;
+                }
+                async createPrefabInstanceWithFile(file) {
+                    const content = await FileUtils.preloadAndGetFileString(file);
+                    if (!content) {
+                        return null;
+                    }
+                    try {
+                        const prefabData = JSON.parse(content);
+                        const obj = this.createObject({
+                            id: Phaser.Utils.String.UUID(),
+                            prefabId: prefabData.id
+                        });
+                        return obj;
+                    }
+                    catch (e) {
+                        console.error(e);
+                        return null;
+                    }
                 }
                 getSceneDataTable() {
                     return this._sceneDataTable;
@@ -838,6 +862,7 @@ var phasereditor2d;
             (function (editor_3) {
                 var controls = colibri.ui.controls;
                 var ide = colibri.ui.ide;
+                var io = colibri.core.io;
                 class DropManager {
                     constructor(editor) {
                         this._editor = editor;
@@ -860,14 +885,15 @@ var phasereditor2d;
                     }
                     async createWithDropEvent(e, dropAssetArray) {
                         const scene = this._editor.getGameScene();
+                        const sceneMaker = scene.getMaker();
                         const exts = scene_4.ScenePlugin.getInstance().getObjectExtensions();
                         const nameMaker = new ide.utils.NameMaker(obj => {
                             return obj.getEditorSupport().getLabel();
                         });
                         scene.visit(obj => nameMaker.update([obj]));
                         const worldPoint = scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
-                        const x = worldPoint.x;
-                        const y = worldPoint.y;
+                        const x = Math.floor(worldPoint.x);
+                        const y = Math.floor(worldPoint.y);
                         for (const data of dropAssetArray) {
                             const ext = scene_4.ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
                             if (ext) {
@@ -876,6 +902,22 @@ var phasereditor2d;
                         }
                         const sprites = [];
                         for (const data of dropAssetArray) {
+                            if (data instanceof io.FilePath) {
+                                if (sceneMaker.isPrefabFile(data)) {
+                                    const sprite = await sceneMaker.createPrefabInstanceWithFile(data);
+                                    const transformComp = sprite.getEditorSupport()
+                                        .getComponent(ui.sceneobjects.TransformComponent);
+                                    if (transformComp) {
+                                        const obj = transformComp.getObject();
+                                        obj.x = x;
+                                        obj.y = y;
+                                    }
+                                    if (sprite) {
+                                        sprites.push(sprite);
+                                    }
+                                    continue;
+                                }
+                            }
                             for (const ext of exts) {
                                 if (ext.acceptsDropData(data)) {
                                     const sprite = ext.createSceneObjectWithAsset({
@@ -897,6 +939,11 @@ var phasereditor2d;
                         }
                     }
                     acceptsDropData(data) {
+                        if (data instanceof io.FilePath) {
+                            if (this._editor.getSceneMaker().isPrefabFile(data)) {
+                                return true;
+                            }
+                        }
                         for (const ext of scene_4.ScenePlugin.getInstance().getObjectExtensions()) {
                             if (ext.acceptsDropData(data)) {
                                 return true;
@@ -2694,6 +2741,9 @@ var phasereditor2d;
                 class TransformComponent {
                     constructor(obj) {
                         this._obj = obj;
+                    }
+                    getObject() {
+                        return this._obj;
                     }
                     readJSON(ser) {
                         this._obj.x = ser.read("x", 0);

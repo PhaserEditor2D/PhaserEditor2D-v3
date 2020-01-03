@@ -3,7 +3,8 @@ namespace phasereditor2d.scene.ui {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
-    import core = colibri.core;
+    import io = colibri.core.io;
+    import FileUtils = colibri.ui.ide.FileUtils;
 
     export class SceneMaker {
 
@@ -21,6 +22,42 @@ namespace phasereditor2d.scene.ui {
 
         async preload() {
             await this._sceneDataTable.preload();
+        }
+
+        isPrefabFile(file: io.FilePath) {
+
+            const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
+
+            // TODO: missing to check if it is a scene of type prefab.
+
+            return ct === core.CONTENT_TYPE_SCENE;
+        }
+
+        async createPrefabInstanceWithFile(file: io.FilePath) {
+
+            const content = await FileUtils.preloadAndGetFileString(file);
+
+            if (!content) {
+                return null;
+            }
+
+            try {
+
+                const prefabData = JSON.parse(content) as json.SceneData;
+
+                const obj = this.createObject({
+                    id: Phaser.Utils.String.UUID(),
+                    prefabId: prefabData.id
+                });
+
+                return obj;
+
+            } catch (e) {
+
+                console.error(e);
+
+                return null;
+            }
         }
 
         getSceneDataTable() {
