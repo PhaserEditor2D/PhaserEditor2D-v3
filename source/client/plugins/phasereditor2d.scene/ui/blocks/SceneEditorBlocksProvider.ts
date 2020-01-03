@@ -82,7 +82,7 @@ namespace phasereditor2d.scene.ui.blocks {
         }
 
         getContentProvider(): controls.viewers.ITreeContentProvider {
-            return new SceneEditorBlocksContentProvider(() => this._packs);
+            return new SceneEditorBlocksContentProvider(this._editor, () => this._packs);
         }
 
         getLabelProvider(): controls.viewers.ILabelProvider {

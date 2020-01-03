@@ -101,7 +101,8 @@ declare namespace phasereditor2d.scene.ui.blocks {
 declare namespace phasereditor2d.scene.ui.blocks {
     class SceneEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
         private _getPacks;
-        constructor(getPacks: () => pack.core.AssetPack[]);
+        private _editor;
+        constructor(sceneEditor: editor.SceneEditor, getPacks: () => pack.core.AssetPack[]);
         getPackItems(): pack.core.AssetPackItem[];
         getRoots(input: any): any[];
         getSceneFiles(): colibri.core.io.FilePath[];

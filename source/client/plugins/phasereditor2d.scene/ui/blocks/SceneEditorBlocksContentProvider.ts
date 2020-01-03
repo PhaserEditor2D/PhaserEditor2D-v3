@@ -7,11 +7,13 @@ namespace phasereditor2d.scene.ui.blocks {
     export class SceneEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
 
         private _getPacks: () => pack.core.AssetPack[];
+        private _editor: editor.SceneEditor;
 
-        constructor(getPacks: () => pack.core.AssetPack[]) {
+        constructor(sceneEditor: editor.SceneEditor, getPacks: () => pack.core.AssetPack[]) {
             super();
 
             this._getPacks = getPacks;
+            this._editor = sceneEditor;
         }
 
         getPackItems() {
@@ -35,7 +37,14 @@ namespace phasereditor2d.scene.ui.blocks {
         }
 
         getSceneFiles() {
-            return ide.FileUtils.getAllFiles().filter(file => file.getExtension() === "scene");
+
+            return ide.FileUtils.getAllFiles()
+
+                .filter(file => colibri.Platform.getWorkbench()
+                    .getContentTypeRegistry()
+                    .getCachedContentType(file) === core.CONTENT_TYPE_SCENE)
+
+                .filter(file => file !== this._editor.getInput());
         }
 
         getChildren(parent: any): any[] {
