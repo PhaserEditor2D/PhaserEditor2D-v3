@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui {
         private _inEditor: boolean;
         private _initialState: any;
         private _maker: SceneMaker;
+        private _settings: json.SceneSettings;
 
         constructor(inEditor = true) {
             super("ObjectScene");
@@ -19,6 +20,12 @@ namespace phasereditor2d.scene.ui {
             this._sceneType = "Scene";
 
             this._maker = new SceneMaker(this);
+
+            this._settings = new json.SceneSettings();
+        }
+
+        getSettings() {
+            return this._settings;
         }
 
         getId() {

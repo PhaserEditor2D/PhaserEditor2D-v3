@@ -1,4 +1,4 @@
-namespace phasereditor2d.scene.core {
+namespace phasereditor2d.scene.core.code {
 
     export class UnitCodeDOM {
 

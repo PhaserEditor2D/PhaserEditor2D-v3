@@ -71,293 +71,6 @@ var phasereditor2d;
     var scene;
     (function (scene) {
         var core;
-        (function (core) {
-            class AssignPropertyDOM {
-                constructor(propertyName, contentExpr) {
-                    this._propertyName = propertyName;
-                    this._contextExpr = contentExpr;
-                }
-                value(expr) {
-                    this._propertyValueExpr = expr;
-                }
-                valueLiteral(expr) {
-                    this._propertyValueExpr = core.CodeDOM.quote(expr);
-                }
-                valueFloat(n) {
-                    // tslint:disable-next-line:no-construct
-                    this._propertyValueExpr = new Number(n).toString();
-                }
-                valueInt(n) {
-                    // tslint:disable-next-line:no-construct
-                    this._propertyValueExpr = new Number(Math.floor(n)).toString();
-                }
-                valueBool(b) {
-                    // tslint:disable-next-line:no-construct
-                    this._propertyValueExpr = new Boolean(b).toString();
-                }
-                getPropertyName() {
-                    return this._propertyName;
-                }
-                getContentExpr() {
-                    return this._contextExpr;
-                }
-                getPropertyValueExpr() {
-                    return this._propertyValueExpr;
-                }
-                getPropertyType() {
-                    return this._propertyType;
-                }
-                setPropertyType(propertyType) {
-                    this._propertyType = propertyType;
-                }
-            }
-            core.AssignPropertyDOM = AssignPropertyDOM;
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
-        (function (core) {
-            class CodeDOM {
-                getOffset() {
-                    return this._offset;
-                }
-                setOffset(offset) {
-                    this._offset = offset;
-                }
-                static toHex(n) {
-                    const hex = n.toString(16);
-                    if (hex.length < 2) {
-                        return "0" + hex;
-                    }
-                    return hex;
-                }
-                static quote(s) {
-                    if (s === null || s === undefined || s.length === 0) {
-                        return '""';
-                    }
-                    let b;
-                    let c;
-                    let i;
-                    const len = s.length;
-                    let result = '"';
-                    for (i = 0; i < len; i += 1) {
-                        b = c;
-                        c = s.charAt(i);
-                        switch (c) {
-                            case "\\":
-                            case '"':
-                                result += "\\";
-                                result += c;
-                                break;
-                            case "/":
-                                if (b === "<") {
-                                    result += "\\";
-                                }
-                                result += c;
-                                break;
-                            case "\b":
-                                result += "\\b";
-                                break;
-                            case "\t":
-                                result += "\\t";
-                                break;
-                            case "\n":
-                                result += "\\n";
-                                break;
-                            case "\f":
-                                result += "\\f";
-                                break;
-                            case "\r":
-                                result += "\\r";
-                                break;
-                            default:
-                                result += c;
-                        }
-                    }
-                    result += '"';
-                    return s;
-                }
-            }
-            core.CodeDOM = CodeDOM;
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./CodeDOM.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
-        (function (core) {
-            class MemberDeclDOM extends core.CodeDOM {
-                constructor(name) {
-                    super();
-                    this._name = name;
-                }
-                getName() {
-                    return this._name;
-                }
-            }
-            core.MemberDeclDOM = MemberDeclDOM;
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./MemberDeclDOM.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
-        (function (core) {
-            class ClassDeclCodeDOM extends core.MemberDeclDOM {
-                constructor(name) {
-                    super(name);
-                    this._members = [];
-                }
-                getConstructor() {
-                    return this._constructor;
-                }
-                setConstructor(constructor) {
-                    this._constructor = constructor;
-                }
-                getSuperClass() {
-                    return this._superClass;
-                }
-                setSuperClass(superClass) {
-                    this._superClass = superClass;
-                }
-                getMembers() {
-                    return this._members;
-                }
-            }
-            core.ClassDeclCodeDOM = ClassDeclCodeDOM;
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
-        (function (core) {
-            class FieldDeclDOM extends core.MemberDeclDOM {
-                constructor(name) {
-                    super(name);
-                }
-                getType() {
-                    return this._type;
-                }
-                setType(type) {
-                    this._type = type;
-                }
-            }
-            core.FieldDeclDOM = FieldDeclDOM;
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
-        (function (core) {
-            class MethodCallDOM extends core.CodeDOM {
-                constructor(methodName, contextExpr) {
-                    super();
-                    this._methodName = methodName;
-                    this._contextExpr = contextExpr;
-                    this._args = [];
-                    this._declareReturnToVar = true;
-                }
-                getReturnToVar() {
-                    return this._returnToVar;
-                }
-                setReturnToVar(returnToVar) {
-                    this._returnToVar = returnToVar;
-                }
-                setDeclareReturnToVar(declareReturnToVar) {
-                    this._declareReturnToVar = declareReturnToVar;
-                }
-                isDeclareReturnToVar() {
-                    return this._declareReturnToVar;
-                }
-                arg(expr) {
-                    this._args.push(expr);
-                }
-                argLiteral(expr) {
-                    this._args.push(core.CodeDOM.quote(expr));
-                }
-                argFloat(n) {
-                    // tslint:disable-next-line:no-construct
-                    this._args.push(new Number(n).toString());
-                }
-                argInt(n) {
-                    // tslint:disable-next-line:no-construct
-                    this._args.push(new Number(Math.floor(n)).toString());
-                }
-                getMethodName() {
-                    return this._methodName;
-                }
-                getContextExpr() {
-                    return this._contextExpr;
-                }
-                getArgs() {
-                    return this._args;
-                }
-            }
-            core.MethodCallDOM = MethodCallDOM;
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
-        (function (core) {
-            class MethodDeclDOM extends core.MemberDeclDOM {
-                constructor(name) {
-                    super(name);
-                }
-                getInstructions() {
-                    return this._instructions;
-                }
-                setInstructions(instructions) {
-                    this._instructions = instructions;
-                }
-            }
-            core.MethodDeclDOM = MethodDeclDOM;
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
-        (function (core) {
-            class RawCode extends core.CodeDOM {
-                constructor(code) {
-                    super();
-                    this._code = code;
-                }
-                getCode() {
-                    return this._code;
-                }
-            }
-            core.RawCode = RawCode;
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
         (function (core_1) {
             var core = colibri.core;
             core_1.CONTENT_TYPE_SCENE = "phasereditor2d.core.scene.SceneContentType";
@@ -393,18 +106,369 @@ var phasereditor2d;
     (function (scene) {
         var core;
         (function (core) {
-            class UnitCodeDOM {
-                constructor(elements) {
-                    this._elements = elements;
+            var code;
+            (function (code) {
+                class AssignPropertyDOM {
+                    constructor(propertyName, contentExpr) {
+                        this._propertyName = propertyName;
+                        this._contextExpr = contentExpr;
+                    }
+                    value(expr) {
+                        this._propertyValueExpr = expr;
+                    }
+                    valueLiteral(expr) {
+                        this._propertyValueExpr = code.CodeDOM.quote(expr);
+                    }
+                    valueFloat(n) {
+                        // tslint:disable-next-line:no-construct
+                        this._propertyValueExpr = new Number(n).toString();
+                    }
+                    valueInt(n) {
+                        // tslint:disable-next-line:no-construct
+                        this._propertyValueExpr = new Number(Math.floor(n)).toString();
+                    }
+                    valueBool(b) {
+                        // tslint:disable-next-line:no-construct
+                        this._propertyValueExpr = new Boolean(b).toString();
+                    }
+                    getPropertyName() {
+                        return this._propertyName;
+                    }
+                    getContentExpr() {
+                        return this._contextExpr;
+                    }
+                    getPropertyValueExpr() {
+                        return this._propertyValueExpr;
+                    }
+                    getPropertyType() {
+                        return this._propertyType;
+                    }
+                    setPropertyType(propertyType) {
+                        this._propertyType = propertyType;
+                    }
                 }
-                getElements() {
-                    return this._elements;
+                code.AssignPropertyDOM = AssignPropertyDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class CodeDOM {
+                    getOffset() {
+                        return this._offset;
+                    }
+                    setOffset(offset) {
+                        this._offset = offset;
+                    }
+                    static toHex(n) {
+                        const hex = n.toString(16);
+                        if (hex.length < 2) {
+                            return "0" + hex;
+                        }
+                        return hex;
+                    }
+                    static quote(s) {
+                        if (s === null || s === undefined || s.length === 0) {
+                            return '""';
+                        }
+                        let b;
+                        let c;
+                        let i;
+                        const len = s.length;
+                        let result = '"';
+                        for (i = 0; i < len; i += 1) {
+                            b = c;
+                            c = s.charAt(i);
+                            switch (c) {
+                                case "\\":
+                                case '"':
+                                    result += "\\";
+                                    result += c;
+                                    break;
+                                case "/":
+                                    if (b === "<") {
+                                        result += "\\";
+                                    }
+                                    result += c;
+                                    break;
+                                case "\b":
+                                    result += "\\b";
+                                    break;
+                                case "\t":
+                                    result += "\\t";
+                                    break;
+                                case "\n":
+                                    result += "\\n";
+                                    break;
+                                case "\f":
+                                    result += "\\f";
+                                    break;
+                                case "\r":
+                                    result += "\\r";
+                                    break;
+                                default:
+                                    result += c;
+                            }
+                        }
+                        result += '"';
+                        return s;
+                    }
                 }
-                setElements(elements) {
-                    this._elements = elements;
+                code.CodeDOM = CodeDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./CodeDOM.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class MemberDeclDOM extends code.CodeDOM {
+                    constructor(name) {
+                        super();
+                        this._name = name;
+                    }
+                    getName() {
+                        return this._name;
+                    }
                 }
-            }
-            core.UnitCodeDOM = UnitCodeDOM;
+                code.MemberDeclDOM = MemberDeclDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./MemberDeclDOM.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class ClassDeclCodeDOM extends code.MemberDeclDOM {
+                    constructor(name) {
+                        super(name);
+                        this._members = [];
+                    }
+                    getConstructor() {
+                        return this._constructor;
+                    }
+                    setConstructor(constructor) {
+                        this._constructor = constructor;
+                    }
+                    getSuperClass() {
+                        return this._superClass;
+                    }
+                    setSuperClass(superClass) {
+                        this._superClass = superClass;
+                    }
+                    getMembers() {
+                        return this._members;
+                    }
+                }
+                code.ClassDeclCodeDOM = ClassDeclCodeDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class FieldDeclDOM extends code.MemberDeclDOM {
+                    constructor(name) {
+                        super(name);
+                    }
+                    getType() {
+                        return this._type;
+                    }
+                    setType(type) {
+                        this._type = type;
+                    }
+                }
+                code.FieldDeclDOM = FieldDeclDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class MethodCallDOM extends code.CodeDOM {
+                    constructor(methodName, contextExpr) {
+                        super();
+                        this._methodName = methodName;
+                        this._contextExpr = contextExpr;
+                        this._args = [];
+                        this._declareReturnToVar = true;
+                    }
+                    getReturnToVar() {
+                        return this._returnToVar;
+                    }
+                    setReturnToVar(returnToVar) {
+                        this._returnToVar = returnToVar;
+                    }
+                    setDeclareReturnToVar(declareReturnToVar) {
+                        this._declareReturnToVar = declareReturnToVar;
+                    }
+                    isDeclareReturnToVar() {
+                        return this._declareReturnToVar;
+                    }
+                    arg(expr) {
+                        this._args.push(expr);
+                    }
+                    argLiteral(expr) {
+                        this._args.push(code.CodeDOM.quote(expr));
+                    }
+                    argFloat(n) {
+                        // tslint:disable-next-line:no-construct
+                        this._args.push(new Number(n).toString());
+                    }
+                    argInt(n) {
+                        // tslint:disable-next-line:no-construct
+                        this._args.push(new Number(Math.floor(n)).toString());
+                    }
+                    getMethodName() {
+                        return this._methodName;
+                    }
+                    getContextExpr() {
+                        return this._contextExpr;
+                    }
+                    getArgs() {
+                        return this._args;
+                    }
+                }
+                code.MethodCallDOM = MethodCallDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class MethodDeclDOM extends code.MemberDeclDOM {
+                    constructor(name) {
+                        super(name);
+                    }
+                    getInstructions() {
+                        return this._instructions;
+                    }
+                    setInstructions(instructions) {
+                        this._instructions = instructions;
+                    }
+                }
+                code.MethodDeclDOM = MethodDeclDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code_1) {
+                class RawCode extends code_1.CodeDOM {
+                    constructor(code) {
+                        super();
+                        this._code = code;
+                    }
+                    getCode() {
+                        return this._code;
+                    }
+                }
+                code_1.RawCode = RawCode;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene_1) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class SceneCodeDOMBuilder {
+                    constructor(scene, file) {
+                        this._scene = scene;
+                        this._file = file;
+                    }
+                    build() {
+                        const methods = [];
+                        const fields = [];
+                        const unit = new code.UnitCodeDOM([]);
+                        const settings = this._scene.getSettings();
+                        if (settings.onlyGenerateMethods) {
+                            // TODO
+                        }
+                        else {
+                            const clsName = this._file.getNameWithoutExtension();
+                            const clsDecl = new code.ClassDeclCodeDOM(clsName);
+                            clsDecl.setSuperClass(settings.superClassName);
+                            clsDecl.getMembers().push(...methods);
+                            clsDecl.getMembers().push(...fields);
+                            unit.getElements().push(clsDecl);
+                        }
+                        return unit;
+                    }
+                }
+                code.SceneCodeDOMBuilder = SceneCodeDOMBuilder;
+            })(code = core.code || (core.code = {}));
+        })(core = scene_1.core || (scene_1.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class UnitCodeDOM {
+                    constructor(elements) {
+                        this._elements = elements;
+                    }
+                    getElements() {
+                        return this._elements;
+                    }
+                    setElements(elements) {
+                        this._elements = elements;
+                    }
+                }
+                code.UnitCodeDOM = UnitCodeDOM;
+            })(code = core.code || (core.code = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
@@ -435,6 +499,10 @@ var phasereditor2d;
                     this._inEditor = inEditor;
                     this._sceneType = "Scene";
                     this._maker = new ui.SceneMaker(this);
+                    this._settings = new ui.json.SceneSettings();
+                }
+                getSettings() {
+                    return this._settings;
                 }
                 getId() {
                     return this._id;
@@ -521,7 +589,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_1) {
+    (function (scene_2) {
         var ui;
         (function (ui) {
             var FileUtils = colibri.ui.ide.FileUtils;
@@ -539,7 +607,7 @@ var phasereditor2d;
                 isPrefabFile(file) {
                     const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
                     // TODO: missing to check if it is a scene of type prefab.
-                    return ct === scene_1.core.CONTENT_TYPE_SCENE;
+                    return ct === scene_2.core.CONTENT_TYPE_SCENE;
                 }
                 async createPrefabInstanceWithFile(file) {
                     const content = await FileUtils.preloadAndGetFileString(file);
@@ -582,7 +650,7 @@ var phasereditor2d;
                     for (const objData of sceneData.displayList) {
                         const ser = this.getSerializer(objData);
                         const type = ser.getType();
-                        const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                        const ext = scene_2.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                         if (ext) {
                             const assets = await ext.getAssetsFromObjectData({
                                 serializer: ser,
@@ -590,7 +658,7 @@ var phasereditor2d;
                                 scene: this._scene
                             });
                             for (const asset of assets) {
-                                const updater = scene_1.ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+                                const updater = scene_2.ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
                                 if (updater) {
                                     await updater.updateLoader(this._scene, asset);
                                 }
@@ -601,7 +669,7 @@ var phasereditor2d;
                 createObject(data) {
                     const ser = this.getSerializer(data);
                     const type = ser.getType();
-                    const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                    const ext = scene_2.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                     if (ext) {
                         const sprite = ext.createSceneObjectWithData({
                             data: data,
@@ -619,13 +687,13 @@ var phasereditor2d;
                 }
             }
             ui.SceneMaker = SceneMaker;
-        })(ui = scene_1.ui || (scene_1.ui = {}));
+        })(ui = scene_2.ui || (scene_2.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_2) {
+    (function (scene_3) {
         var ui;
         (function (ui) {
             var controls = colibri.ui.controls;
@@ -753,7 +821,7 @@ var phasereditor2d;
                 }
             }
             ui.SceneThumbnail = SceneThumbnail;
-        })(ui = scene_2.ui || (scene_2.ui = {}));
+        })(ui = scene_3.ui || (scene_3.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -1095,7 +1163,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_3) {
+    (function (scene_4) {
         var ui;
         (function (ui) {
             var editor;
@@ -1157,13 +1225,13 @@ var phasereditor2d;
                 }
                 editor_2.CameraManager = CameraManager;
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_3.ui || (scene_3.ui = {}));
+        })(ui = scene_4.ui || (scene_4.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_4) {
+    (function (scene_5) {
         var ui;
         (function (ui) {
             var editor;
@@ -1194,7 +1262,7 @@ var phasereditor2d;
                     async createWithDropEvent(e, dropAssetArray) {
                         const scene = this._editor.getGameScene();
                         const sceneMaker = scene.getMaker();
-                        const exts = scene_4.ScenePlugin.getInstance().getObjectExtensions();
+                        const exts = scene_5.ScenePlugin.getInstance().getObjectExtensions();
                         const nameMaker = new ide.utils.NameMaker(obj => {
                             return obj.getEditorSupport().getLabel();
                         });
@@ -1203,7 +1271,7 @@ var phasereditor2d;
                         const x = Math.floor(worldPoint.x);
                         const y = Math.floor(worldPoint.y);
                         for (const data of dropAssetArray) {
-                            const ext = scene_4.ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
+                            const ext = scene_5.ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
                             if (ext) {
                                 await ext.updateLoader(scene, data);
                             }
@@ -1252,7 +1320,7 @@ var phasereditor2d;
                                 return true;
                             }
                         }
-                        for (const ext of scene_4.ScenePlugin.getInstance().getObjectExtensions()) {
+                        for (const ext of scene_5.ScenePlugin.getInstance().getObjectExtensions()) {
                             if (ext.acceptsDropData(data)) {
                                 return true;
                             }
@@ -1273,7 +1341,7 @@ var phasereditor2d;
                 }
                 editor_3.DropManager = DropManager;
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_4.ui || (scene_4.ui = {}));
+        })(ui = scene_5.ui || (scene_5.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -1513,6 +1581,12 @@ var phasereditor2d;
                         catch (e) {
                             console.error(e);
                         }
+                        // compile
+                        {
+                            const builder = new scene.core.code.SceneCodeDOMBuilder(this._gameScene, this.getInput());
+                            const unit = builder.build();
+                            console.log(unit);
+                        }
                         const win = colibri.Platform.getWorkbench().getActiveWindow();
                         win.saveWindowState();
                     }
@@ -1729,7 +1803,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_5) {
+    (function (scene_6) {
         var ui;
         (function (ui) {
             var editor;
@@ -1804,7 +1878,7 @@ var phasereditor2d;
                 }
                 editor_5.SelectionManager = SelectionManager;
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_5.ui || (scene_5.ui = {}));
+        })(ui = scene_6.ui || (scene_6.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2157,7 +2231,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_6) {
+    (function (scene_7) {
         var ui;
         (function (ui) {
             var editor;
@@ -2200,13 +2274,13 @@ var phasereditor2d;
                     undo.AddObjectsOperation = AddObjectsOperation;
                 })(undo = editor_11.undo || (editor_11.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_6.ui || (scene_6.ui = {}));
+        })(ui = scene_7.ui || (scene_7.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_7) {
+    (function (scene_8) {
         var ui;
         (function (ui) {
             var editor;
@@ -2253,7 +2327,7 @@ var phasereditor2d;
                     undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
                 })(undo = editor_12.undo || (editor_12.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_7.ui || (scene_7.ui = {}));
+        })(ui = scene_8.ui || (scene_8.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2335,7 +2409,39 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_8) {
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var json;
+            (function (json) {
+                class SceneSettings {
+                    constructor(snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "", createMethodName = "create", sceneKey = "", compilerLang = "JavaScript", scopeBlocksToFolder = false, methodContextType = "Scene", borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                        this.snapEnabled = snapEnabled;
+                        this.snapWidth = snapWidth;
+                        this.snapHeight = snapHeight;
+                        this.onlyGenerateMethods = onlyGenerateMethods;
+                        this.superClassName = superClassName;
+                        this.preloadMethodName = preloadMethodName;
+                        this.createMethodName = createMethodName;
+                        this.sceneKey = sceneKey;
+                        this.compilerLang = compilerLang;
+                        this.scopeBlocksToFolder = scopeBlocksToFolder;
+                        this.methodContextType = methodContextType;
+                        this.borderX = borderX;
+                        this.borderY = borderY;
+                        this.borderWidth = borderWidth;
+                        this.borderHeight = borderHeight;
+                    }
+                }
+                json.SceneSettings = SceneSettings;
+            })(json = ui.json || (ui.json = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene_9) {
         var ui;
         (function (ui) {
             var json;
@@ -2352,7 +2458,7 @@ var phasereditor2d;
                             meta: {
                                 app: "Phaser Editor 2D - Scene Editor",
                                 url: "https://phasereditor2d.com",
-                                contentType: scene_8.core.CONTENT_TYPE_SCENE
+                                contentType: scene_9.core.CONTENT_TYPE_SCENE
                             }
                         };
                         for (const obj of this._scene.getDisplayListChildren()) {
@@ -2369,7 +2475,7 @@ var phasereditor2d;
                 }
                 json_1.SceneWriter = SceneWriter;
             })(json = ui.json || (ui.json = {}));
-        })(ui = scene_8.ui || (scene_8.ui = {}));
+        })(ui = scene_9.ui || (scene_9.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2438,7 +2544,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_9) {
+    (function (scene_10) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -2559,13 +2665,13 @@ var phasereditor2d;
                 }
                 sceneobjects.EditorSupport = EditorSupport;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_9.ui || (scene_9.ui = {}));
+        })(ui = scene_10.ui || (scene_10.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_10) {
+    (function (scene_11) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -2578,14 +2684,14 @@ var phasereditor2d;
                 LoaderUpdaterExtension.POINT_ID = "phasereditor2d.scene.ui.sceneobjects.AssetLoaderExtension";
                 sceneobjects.LoaderUpdaterExtension = LoaderUpdaterExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_10.ui || (scene_10.ui = {}));
+        })(ui = scene_11.ui || (scene_11.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./LoaderUpdaterExtension.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_11) {
+    (function (scene_12) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -2612,7 +2718,7 @@ var phasereditor2d;
                 }
                 sceneobjects.ImageLoaderUpdater = ImageLoaderUpdater;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_11.ui || (scene_11.ui = {}));
+        })(ui = scene_12.ui || (scene_12.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2645,7 +2751,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_12) {
+    (function (scene_13) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -2667,7 +2773,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Container = Container;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_12.ui || (scene_12.ui = {}));
+        })(ui = scene_13.ui || (scene_13.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2752,7 +2858,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_13) {
+    (function (scene_14) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -2773,7 +2879,7 @@ var phasereditor2d;
                         for (const objData of children) {
                             const ser = args.serializer.getSerializer(objData);
                             const type = ser.getType();
-                            const ext = scene_13.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                            const ext = scene_14.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                             if (ext) {
                                 const list2 = await ext.getAssetsFromObjectData({
                                     serializer: ser,
@@ -2811,13 +2917,13 @@ var phasereditor2d;
                 }
                 sceneobjects.ContainerExtension = ContainerExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_13.ui || (scene_13.ui = {}));
+        })(ui = scene_14.ui || (scene_14.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_14) {
+    (function (scene_15) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -2833,7 +2939,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Image = Image;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_14.ui || (scene_14.ui = {}));
+        })(ui = scene_15.ui || (scene_15.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2896,7 +3002,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_15) {
+    (function (scene_16) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -2962,7 +3068,7 @@ var phasereditor2d;
                 }
                 sceneobjects.ImageExtension = ImageExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_15.ui || (scene_15.ui = {}));
+        })(ui = scene_16.ui || (scene_16.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;

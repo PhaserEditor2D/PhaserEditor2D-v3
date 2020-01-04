@@ -15,6 +15,14 @@ declare namespace phasereditor2d.scene {
     }
 }
 declare namespace phasereditor2d.scene.core {
+    import core = colibri.core;
+    const CONTENT_TYPE_SCENE = "phasereditor2d.core.scene.SceneContentType";
+    class SceneContentTypeResolver extends core.ContentTypeResolver {
+        constructor();
+        computeContentType(file: core.io.FilePath): Promise<string>;
+    }
+}
+declare namespace phasereditor2d.scene.core.code {
     class AssignPropertyDOM {
         private _propertyName;
         private _propertyValueExpr;
@@ -33,7 +41,7 @@ declare namespace phasereditor2d.scene.core {
         setPropertyType(propertyType: string): void;
     }
 }
-declare namespace phasereditor2d.scene.core {
+declare namespace phasereditor2d.scene.core.code {
     class CodeDOM {
         private _offset;
         getOffset(): number;
@@ -42,14 +50,14 @@ declare namespace phasereditor2d.scene.core {
         static quote(s: string): string;
     }
 }
-declare namespace phasereditor2d.scene.core {
+declare namespace phasereditor2d.scene.core.code {
     class MemberDeclDOM extends CodeDOM {
         private _name;
         constructor(name: string);
         getName(): string;
     }
 }
-declare namespace phasereditor2d.scene.core {
+declare namespace phasereditor2d.scene.core.code {
     class ClassDeclCodeDOM extends MemberDeclDOM {
         private _members;
         private _constructor;
@@ -62,7 +70,7 @@ declare namespace phasereditor2d.scene.core {
         getMembers(): MemberDeclDOM[];
     }
 }
-declare namespace phasereditor2d.scene.core {
+declare namespace phasereditor2d.scene.core.code {
     class FieldDeclDOM extends MemberDeclDOM {
         private _type;
         constructor(name: string);
@@ -70,7 +78,7 @@ declare namespace phasereditor2d.scene.core {
         setType(type: string): void;
     }
 }
-declare namespace phasereditor2d.scene.core {
+declare namespace phasereditor2d.scene.core.code {
     class MethodCallDOM extends CodeDOM {
         private _methodName;
         private _contextExpr;
@@ -91,7 +99,7 @@ declare namespace phasereditor2d.scene.core {
         getArgs(): string[];
     }
 }
-declare namespace phasereditor2d.scene.core {
+declare namespace phasereditor2d.scene.core.code {
     class MethodDeclDOM extends MemberDeclDOM {
         private _instructions;
         constructor(name: string);
@@ -99,22 +107,23 @@ declare namespace phasereditor2d.scene.core {
         setInstructions(instructions: CodeDOM[]): void;
     }
 }
-declare namespace phasereditor2d.scene.core {
+declare namespace phasereditor2d.scene.core.code {
     class RawCode extends CodeDOM {
         private _code;
         constructor(code: string);
         getCode(): string;
     }
 }
-declare namespace phasereditor2d.scene.core {
-    import core = colibri.core;
-    const CONTENT_TYPE_SCENE = "phasereditor2d.core.scene.SceneContentType";
-    class SceneContentTypeResolver extends core.ContentTypeResolver {
-        constructor();
-        computeContentType(file: core.io.FilePath): Promise<string>;
+declare namespace phasereditor2d.scene.core.code {
+    import io = colibri.core.io;
+    class SceneCodeDOMBuilder {
+        private _scene;
+        private _file;
+        constructor(scene: ui.GameScene, file: io.FilePath);
+        build(): UnitCodeDOM;
     }
 }
-declare namespace phasereditor2d.scene.core {
+declare namespace phasereditor2d.scene.core.code {
     class UnitCodeDOM {
         private _elements;
         constructor(elements: object[]);
@@ -136,7 +145,9 @@ declare namespace phasereditor2d.scene.ui {
         private _inEditor;
         private _initialState;
         private _maker;
+        private _settings;
         constructor(inEditor?: boolean);
+        getSettings(): json.SceneSettings;
         getId(): string;
         setId(id: string): void;
         getMaker(): SceneMaker;
@@ -495,6 +506,28 @@ declare namespace phasereditor2d.scene.ui.json {
         preload(): Promise<void>;
         getPrefabData(prefabId: string): ObjectData;
         getPrefabFile(prefabId: string): io.FilePath;
+    }
+}
+declare namespace phasereditor2d.scene.ui.json {
+    type SourceLang = "JavaScript" | "TypeScript";
+    type MethodContextType = "Scene" | "Object";
+    class SceneSettings {
+        snapEnabled: boolean;
+        snapWidth: number;
+        snapHeight: number;
+        onlyGenerateMethods: boolean;
+        superClassName: string;
+        preloadMethodName: string;
+        createMethodName: string;
+        sceneKey: string;
+        compilerLang: SourceLang;
+        scopeBlocksToFolder: boolean;
+        methodContextType: MethodContextType;
+        borderX: number;
+        borderY: number;
+        borderWidth: number;
+        borderHeight: number;
+        constructor(snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, createMethodName?: string, sceneKey?: string, compilerLang?: SourceLang, scopeBlocksToFolder?: boolean, methodContextType?: MethodContextType, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
     }
 }
 declare namespace phasereditor2d.scene.ui.json {

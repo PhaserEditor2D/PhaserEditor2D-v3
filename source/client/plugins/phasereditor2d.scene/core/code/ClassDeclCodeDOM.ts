@@ -1,6 +1,6 @@
 /// <reference path="./MemberDeclDOM.ts" />
 
-namespace phasereditor2d.scene.core {
+namespace phasereditor2d.scene.core.code {
 
     export class ClassDeclCodeDOM extends MemberDeclDOM {
 

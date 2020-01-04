@@ -78,6 +78,14 @@ namespace phasereditor2d.scene.ui.editor {
                 console.error(e);
             }
 
+            // compile
+
+            {
+                const builder = new core.code.SceneCodeDOMBuilder(this._gameScene, this.getInput());
+                const unit = builder.build();
+                console.log(unit);
+            }
+
             const win = colibri.Platform.getWorkbench().getActiveWindow() as ide.ui.DesignWindow;
 
             win.saveWindowState();
