@@ -23,7 +23,7 @@ declare namespace phasereditor2d.scene.core {
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class AssignPropertyDOM {
+    class AssignPropertyCodeDOM {
         private _propertyName;
         private _propertyValueExpr;
         private _contextExpr;
@@ -35,10 +35,39 @@ declare namespace phasereditor2d.scene.core.code {
         valueInt(n: number): void;
         valueBool(b: boolean): void;
         getPropertyName(): string;
-        getContentExpr(): string;
+        getContextExpr(): string;
         getPropertyValueExpr(): string;
         getPropertyType(): string;
         setPropertyType(propertyType: string): void;
+    }
+}
+declare namespace phasereditor2d.scene.core.code {
+    abstract class BaseCodeGenerator {
+        private _text;
+        private _replace;
+        private _indent;
+        constructor();
+        getOffset(): number;
+        generate(replace: string): string;
+        protected abstract internalGenerate(): void;
+        length(): number;
+        getStartSectionContent(endTag: string, defaultContent: string): string;
+        getSectionContent(openTag: string, closeTag: string, defaultContent: string): string;
+        getReplaceContent(): string;
+        userCode(text: string): void;
+        sectionStart(endTag: string, defaultContent: string): void;
+        sectionEnd(openTag: string, defaultContent: string): void;
+        section(openTag: string, closeTag: string, defaultContent: string): void;
+        cut(start: number, end: number): string;
+        trim(run: () => void): void;
+        append(str: string): void;
+        join(list: string[]): void;
+        line(line?: string): void;
+        static escapeStringLiterals(str: string): string;
+        openIndent(line?: string): void;
+        closeIndent(str?: string): void;
+        getIndentTabs(): string;
+        static emptyStringToNull(str: string): string;
     }
 }
 declare namespace phasereditor2d.scene.core.code {
@@ -51,27 +80,27 @@ declare namespace phasereditor2d.scene.core.code {
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class MemberDeclDOM extends CodeDOM {
+    class MemberDeclCodeDOM extends CodeDOM {
         private _name;
         constructor(name: string);
         getName(): string;
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class ClassDeclCodeDOM extends MemberDeclDOM {
+    class ClassDeclCodeDOM extends MemberDeclCodeDOM {
         private _members;
         private _constructor;
         private _superClass;
         constructor(name: string);
-        getConstructor(): MethodDeclDOM;
-        setConstructor(constructor: MethodDeclDOM): void;
+        getConstructor(): MethodDeclCodeDOM;
+        setConstructor(constructor: MethodDeclCodeDOM): void;
         getSuperClass(): string;
         setSuperClass(superClass: string): void;
-        getMembers(): MemberDeclDOM[];
+        getMembers(): MemberDeclCodeDOM[];
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class FieldDeclDOM extends MemberDeclDOM {
+    class FieldDeclCodeDOM extends MemberDeclCodeDOM {
         private _type;
         constructor(name: string);
         getType(): string;
@@ -79,7 +108,23 @@ declare namespace phasereditor2d.scene.core.code {
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class MethodCallDOM extends CodeDOM {
+    class JavaScriptUnitCodeGenerator extends BaseCodeGenerator {
+        private _unit;
+        constructor(unit: UnitCodeDOM);
+        protected internalGenerate(): void;
+        private generateUnitElement;
+        private generateClass;
+        protected generateMemberDecl(memberDecl: MemberDeclCodeDOM): void;
+        private generateMethodDecl;
+        private generateInstr;
+        private generateAssignProperty;
+        protected generateTypeAnnotation(assign: AssignPropertyCodeDOM): void;
+        private generateMethodCall;
+        private generateRawCode;
+    }
+}
+declare namespace phasereditor2d.scene.core.code {
+    class MethodCallCodeDOM extends CodeDOM {
         private _methodName;
         private _contextExpr;
         private _args;
@@ -100,7 +145,7 @@ declare namespace phasereditor2d.scene.core.code {
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class MethodDeclDOM extends MemberDeclDOM {
+    class MethodDeclCodeDOM extends MemberDeclCodeDOM {
         private _instructions;
         constructor(name: string);
         getInstructions(): CodeDOM[];
@@ -108,7 +153,7 @@ declare namespace phasereditor2d.scene.core.code {
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class RawCode extends CodeDOM {
+    class RawCodeDOM extends CodeDOM {
         private _code;
         constructor(code: string);
         getCode(): string;
@@ -121,6 +166,13 @@ declare namespace phasereditor2d.scene.core.code {
         private _file;
         constructor(scene: ui.GameScene, file: io.FilePath);
         build(): UnitCodeDOM;
+    }
+}
+declare namespace phasereditor2d.scene.core.code {
+    class TypeScriptUnitCodeGenerator extends JavaScriptUnitCodeGenerator {
+        constructor(unit: UnitCodeDOM);
+        protected generateMemberDecl(memberDecl: MemberDeclCodeDOM): void;
+        protected generateTypeAnnotation(assign: AssignPropertyCodeDOM): void;
     }
 }
 declare namespace phasereditor2d.scene.core.code {

@@ -1,11 +1,11 @@
-/// <reference path="./MemberDeclDOM.ts" />
+/// <reference path="./MemberDeclCodeDOM.ts" />
 
 namespace phasereditor2d.scene.core.code {
 
-    export class ClassDeclCodeDOM extends MemberDeclDOM {
+    export class ClassDeclCodeDOM extends MemberDeclCodeDOM {
 
-        private _members: MemberDeclDOM[];
-        private _constructor: MethodDeclDOM;
+        private _members: MemberDeclCodeDOM[];
+        private _constructor: MethodDeclCodeDOM;
         private _superClass: string;
 
         constructor(name: string) {
@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.core.code {
             return this._constructor;
         }
 
-        setConstructor(constructor: MethodDeclDOM) {
+        setConstructor(constructor: MethodDeclCodeDOM) {
             this._constructor = constructor;
         }
 

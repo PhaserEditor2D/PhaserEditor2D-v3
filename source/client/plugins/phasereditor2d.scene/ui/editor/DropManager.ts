@@ -98,7 +98,6 @@ namespace phasereditor2d.scene.ui.editor {
                     }
                 }
 
-
                 for (const ext of exts) {
 
                     if (ext.acceptsDropData(data)) {

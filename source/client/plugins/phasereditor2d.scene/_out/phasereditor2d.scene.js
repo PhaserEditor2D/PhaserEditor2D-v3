@@ -108,7 +108,7 @@ var phasereditor2d;
         (function (core) {
             var code;
             (function (code) {
-                class AssignPropertyDOM {
+                class AssignPropertyCodeDOM {
                     constructor(propertyName, contentExpr) {
                         this._propertyName = propertyName;
                         this._contextExpr = contentExpr;
@@ -134,7 +134,7 @@ var phasereditor2d;
                     getPropertyName() {
                         return this._propertyName;
                     }
-                    getContentExpr() {
+                    getContextExpr() {
                         return this._contextExpr;
                     }
                     getPropertyValueExpr() {
@@ -147,7 +147,131 @@ var phasereditor2d;
                         this._propertyType = propertyType;
                     }
                 }
-                code.AssignPropertyDOM = AssignPropertyDOM;
+                code.AssignPropertyCodeDOM = AssignPropertyCodeDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class BaseCodeGenerator {
+                    constructor() {
+                        this._text = "";
+                    }
+                    getOffset() {
+                        return this._text.length;
+                    }
+                    generate(replace) {
+                        this._replace = (replace !== null && replace !== void 0 ? replace : "");
+                        this.internalGenerate();
+                        return this._text;
+                    }
+                    length() {
+                        return this._text.length;
+                    }
+                    getStartSectionContent(endTag, defaultContent) {
+                        const j = this._replace.indexOf(endTag);
+                        const size = this._replace.length;
+                        if (size > 0 && j !== -1) {
+                            const section = this._replace.substring(0, j);
+                            return section;
+                        }
+                        return defaultContent;
+                    }
+                    getSectionContent(openTag, closeTag, defaultContent) {
+                        const i = this._replace.indexOf(openTag);
+                        let j = this._replace.indexOf(closeTag);
+                        if (j === -1) {
+                            j = this._replace.length;
+                        }
+                        if (i !== -1 && j !== -1) {
+                            const section = this._replace.substring(i + openTag.length, j);
+                            return section;
+                        }
+                        return defaultContent;
+                    }
+                    getReplaceContent() {
+                        return this._replace;
+                    }
+                    userCode(text) {
+                        const lines = text.split("\n");
+                        for (const line of lines) {
+                            this.line(line);
+                        }
+                    }
+                    sectionStart(endTag, defaultContent) {
+                        this.append(this.getStartSectionContent(endTag, defaultContent));
+                        this.append(endTag);
+                    }
+                    sectionEnd(openTag, defaultContent) {
+                        this.append(openTag);
+                        this.append(this.getSectionContent(openTag, "papa(--o^^o--)pig", defaultContent));
+                    }
+                    section(openTag, closeTag, defaultContent) {
+                        const content = this.getSectionContent(openTag, closeTag, defaultContent);
+                        this.append(openTag);
+                        this.append(content);
+                        this.append(closeTag);
+                    }
+                    cut(start, end) {
+                        const str = this._text.substring(start, end);
+                        const s1 = this._text.slice(0, start);
+                        const s2 = this._text.slice(end, this._text.length);
+                        this._text = s1 + s2;
+                        // _sb.delete(start, end);
+                        return str;
+                    }
+                    trim(run) {
+                        const a = this.length();
+                        run();
+                        const b = this.length();
+                        const str = this._text.substring(a, b);
+                        if (str.trim().length === 0) {
+                            this.cut(a, b);
+                        }
+                    }
+                    append(str) {
+                        this._text += str;
+                    }
+                    join(list) {
+                        for (let i = 0; i < list.length; i++) {
+                            if (i > 0) {
+                                this.append(", ");
+                            }
+                            this.append(list[i]);
+                        }
+                    }
+                    line(line = "") {
+                        this.append(line);
+                        this.append("\n");
+                        this.append(this.getIndentTabs());
+                    }
+                    static escapeStringLiterals(str) {
+                        return str.replace("\\", "\\\\").replace("\\R", "\n").replace("'", "\\'").replace("\"", "\\\"");
+                    }
+                    openIndent(line = "") {
+                        this._indent++;
+                        this.line(line);
+                    }
+                    closeIndent(str = "") {
+                        this._indent--;
+                        this.line();
+                        this.line(str);
+                    }
+                    getIndentTabs() {
+                        return "\t".repeat(this._indent);
+                    }
+                    static emptyStringToNull(str) {
+                        return str == null ? null : (str.trim().length === 0 ? null : str);
+                    }
+                }
+                code.BaseCodeGenerator = BaseCodeGenerator;
             })(code = core.code || (core.code = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -235,7 +359,7 @@ var phasereditor2d;
         (function (core) {
             var code;
             (function (code) {
-                class MemberDeclDOM extends code.CodeDOM {
+                class MemberDeclCodeDOM extends code.CodeDOM {
                     constructor(name) {
                         super();
                         this._name = name;
@@ -244,12 +368,12 @@ var phasereditor2d;
                         return this._name;
                     }
                 }
-                code.MemberDeclDOM = MemberDeclDOM;
+                code.MemberDeclCodeDOM = MemberDeclCodeDOM;
             })(code = core.code || (core.code = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./MemberDeclDOM.ts" />
+/// <reference path="./MemberDeclCodeDOM.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -258,7 +382,7 @@ var phasereditor2d;
         (function (core) {
             var code;
             (function (code) {
-                class ClassDeclCodeDOM extends code.MemberDeclDOM {
+                class ClassDeclCodeDOM extends code.MemberDeclCodeDOM {
                     constructor(name) {
                         super(name);
                         this._members = [];
@@ -292,7 +416,7 @@ var phasereditor2d;
         (function (core) {
             var code;
             (function (code) {
-                class FieldDeclDOM extends code.MemberDeclDOM {
+                class FieldDeclCodeDOM extends code.MemberDeclCodeDOM {
                     constructor(name) {
                         super(name);
                     }
@@ -303,7 +427,129 @@ var phasereditor2d;
                         this._type = type;
                     }
                 }
-                code.FieldDeclDOM = FieldDeclDOM;
+                code.FieldDeclCodeDOM = FieldDeclCodeDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code_1) {
+                class JavaScriptUnitCodeGenerator extends code_1.BaseCodeGenerator {
+                    constructor(unit) {
+                        super();
+                        this._unit = unit;
+                    }
+                    internalGenerate() {
+                        this.sectionStart("/* START OF COMPILED CODE */", "\n// You can write more code here\n\n");
+                        this.line();
+                        this.line();
+                        for (const elem of this._unit.getElements()) {
+                            this.generateUnitElement(elem);
+                        }
+                        this.sectionEnd("/* END OF COMPILED CODE */", "\n\n// You can write more code here\n");
+                    }
+                    generateUnitElement(elem) {
+                        if (elem instanceof code_1.ClassDeclCodeDOM) {
+                            this.generateClass(elem);
+                        }
+                        else if (elem instanceof code_1.MethodDeclCodeDOM) {
+                            this.line();
+                            this.generateMethodDecl(elem, true);
+                            this.line();
+                        }
+                    }
+                    generateClass(clsDecl) {
+                        this.append("class " + clsDecl.getName() + " ");
+                        if (clsDecl.getSuperClass() && clsDecl.getSuperClass().trim().length > 0) {
+                            this.append("extends " + clsDecl.getSuperClass() + " ");
+                        }
+                        this.openIndent("{");
+                        this.line();
+                        for (const memberDecl of clsDecl.getMembers()) {
+                            this.generateMemberDecl(memberDecl);
+                            this.line();
+                        }
+                        this.section("/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n// Write your code here.\n\n");
+                        this.closeIndent("}");
+                        this.line();
+                    }
+                    generateMemberDecl(memberDecl) {
+                        if (memberDecl instanceof code_1.MethodDeclCodeDOM) {
+                            this.generateMethodDecl(memberDecl, false);
+                        }
+                    }
+                    generateMethodDecl(methodDecl, isFunction) {
+                        if (isFunction) {
+                            this.append("function ");
+                        }
+                        this.append(methodDecl.getName() + "() ");
+                        this.line("{");
+                        this.openIndent();
+                        for (const instr of methodDecl.getInstructions()) {
+                            this.generateInstr(instr);
+                        }
+                        this.closeIndent("}");
+                    }
+                    generateInstr(instr) {
+                        instr.setOffset(this.getOffset());
+                        if (instr instanceof code_1.RawCodeDOM) {
+                            this.generateRawCode(instr);
+                        }
+                        else if (instr instanceof code_1.MethodCallCodeDOM) {
+                            this.generateMethodCall(instr);
+                        }
+                        else if (instr instanceof code_1.AssignPropertyCodeDOM) {
+                            this.generateAssignProperty(instr);
+                        }
+                    }
+                    generateAssignProperty(assign) {
+                        this.generateTypeAnnotation(assign);
+                        this.append(assign.getContextExpr());
+                        this.append(".");
+                        this.append(assign.getPropertyName());
+                        this.append(" = ");
+                        this.append(assign.getPropertyValueExpr());
+                        this.append(";");
+                        this.line();
+                    }
+                    generateTypeAnnotation(assign) {
+                        const type = assign.getPropertyType();
+                        if (type != null) {
+                            this.line("/** @type {" + type + "} */");
+                        }
+                    }
+                    generateMethodCall(call) {
+                        if (call.getReturnToVar()) {
+                            if (call.isDeclareReturnToVar()) {
+                                this.append("const ");
+                            }
+                            this.append(call.getReturnToVar());
+                            this.append(" = ");
+                        }
+                        if (call.getContextExpr() != null) {
+                            this.append(call.getContextExpr());
+                            this.append(".");
+                        }
+                        this.append(call.getMethodName());
+                        this.append("(");
+                        this.join(call.getArgs());
+                        this.line(");");
+                    }
+                    generateRawCode(raw) {
+                        const code = raw.getCode();
+                        const lines = code.split("\\R");
+                        for (const line of lines) {
+                            this.line(line);
+                        }
+                    }
+                }
+                code_1.JavaScriptUnitCodeGenerator = JavaScriptUnitCodeGenerator;
             })(code = core.code || (core.code = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -316,7 +562,7 @@ var phasereditor2d;
         (function (core) {
             var code;
             (function (code) {
-                class MethodCallDOM extends code.CodeDOM {
+                class MethodCallCodeDOM extends code.CodeDOM {
                     constructor(methodName, contextExpr) {
                         super();
                         this._methodName = methodName;
@@ -360,7 +606,7 @@ var phasereditor2d;
                         return this._args;
                     }
                 }
-                code.MethodCallDOM = MethodCallDOM;
+                code.MethodCallCodeDOM = MethodCallCodeDOM;
             })(code = core.code || (core.code = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -373,7 +619,7 @@ var phasereditor2d;
         (function (core) {
             var code;
             (function (code) {
-                class MethodDeclDOM extends code.MemberDeclDOM {
+                class MethodDeclCodeDOM extends code.MemberDeclCodeDOM {
                     constructor(name) {
                         super(name);
                     }
@@ -384,7 +630,7 @@ var phasereditor2d;
                         this._instructions = instructions;
                     }
                 }
-                code.MethodDeclDOM = MethodDeclDOM;
+                code.MethodDeclCodeDOM = MethodDeclCodeDOM;
             })(code = core.code || (core.code = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -396,8 +642,8 @@ var phasereditor2d;
         var core;
         (function (core) {
             var code;
-            (function (code_1) {
-                class RawCode extends code_1.CodeDOM {
+            (function (code_2) {
+                class RawCodeDOM extends code_2.CodeDOM {
                     constructor(code) {
                         super();
                         this._code = code;
@@ -406,7 +652,7 @@ var phasereditor2d;
                         return this._code;
                     }
                 }
-                code_1.RawCode = RawCode;
+                code_2.RawCodeDOM = RawCodeDOM;
             })(code = core.code || (core.code = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -446,6 +692,35 @@ var phasereditor2d;
                 code.SceneCodeDOMBuilder = SceneCodeDOMBuilder;
             })(code = core.code || (core.code = {}));
         })(core = scene_1.core || (scene_1.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class TypeScriptUnitCodeGenerator extends code.JavaScriptUnitCodeGenerator {
+                    constructor(unit) {
+                        super(unit);
+                    }
+                    generateMemberDecl(memberDecl) {
+                        if (memberDecl instanceof code.FieldDeclCodeDOM) {
+                            this.line("private " + memberDecl.getName() + ": " + memberDecl.getType() + ";");
+                        }
+                        else {
+                            super.generateMemberDecl(memberDecl);
+                        }
+                    }
+                    generateTypeAnnotation(assign) {
+                        // do nothing, in TypeScript uses the var declaration syntax
+                    }
+                }
+                code.TypeScriptUnitCodeGenerator = TypeScriptUnitCodeGenerator;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -1771,7 +2046,11 @@ var phasereditor2d;
                         {
                             const builder = new scene.core.code.SceneCodeDOMBuilder(this._gameScene, this.getInput());
                             const unit = builder.build();
-                            console.log(unit);
+                            const generator = this._gameScene.getSettings().compilerLang === "JavaScript" ?
+                                new scene.core.code.JavaScriptUnitCodeGenerator(unit)
+                                : new scene.core.code.TypeScriptUnitCodeGenerator(unit);
+                            const str = generator.generate("");
+                            console.log(str);
                         }
                         const win = colibri.Platform.getWorkbench().getActiveWindow();
                         win.saveWindowState();

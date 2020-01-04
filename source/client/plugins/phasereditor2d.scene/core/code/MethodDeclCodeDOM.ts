@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.core.code {
 
-    export class MethodDeclDOM extends MemberDeclDOM {
+    export class MethodDeclCodeDOM extends MemberDeclCodeDOM {
 
         private _instructions: CodeDOM[];
 

@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.core.code {
 
-    export class MethodCallDOM extends CodeDOM {
+    export class MethodCallCodeDOM extends CodeDOM {
 
         private _methodName: string;
         private _contextExpr: string;

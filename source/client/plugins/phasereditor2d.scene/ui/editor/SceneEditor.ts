@@ -84,7 +84,14 @@ namespace phasereditor2d.scene.ui.editor {
             {
                 const builder = new core.code.SceneCodeDOMBuilder(this._gameScene, this.getInput());
                 const unit = builder.build();
-                console.log(unit);
+
+                const generator = this._gameScene.getSettings().compilerLang === "JavaScript" ?
+                    new core.code.JavaScriptUnitCodeGenerator(unit)
+                    : new core.code.TypeScriptUnitCodeGenerator(unit);
+
+                const str = generator.generate("");
+
+                console.log(str);
             }
 
             const win = colibri.Platform.getWorkbench().getActiveWindow() as ide.ui.DesignWindow;

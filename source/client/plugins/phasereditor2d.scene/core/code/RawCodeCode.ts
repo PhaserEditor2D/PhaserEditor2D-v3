@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.core.code {
 
-    export class RawCode extends CodeDOM {
+    export class RawCodeDOM extends CodeDOM {
 
         private _code: string;
 

@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.core.code {
 
-    export class FieldDeclDOM extends MemberDeclDOM {
+    export class FieldDeclCodeDOM extends MemberDeclCodeDOM {
 
         private _type: string;
 

@@ -15,8 +15,8 @@ namespace phasereditor2d.scene.core.code {
 
         build(): UnitCodeDOM {
 
-            const methods: MemberDeclDOM[] = [];
-            const fields: MemberDeclDOM[] = [];
+            const methods: MemberDeclCodeDOM[] = [];
+            const fields: MemberDeclCodeDOM[] = [];
 
             const unit = new UnitCodeDOM([]);
 

@@ -2,7 +2,7 @@
 
 namespace phasereditor2d.scene.core.code {
 
-    export class MemberDeclDOM extends CodeDOM {
+    export class MemberDeclCodeDOM extends CodeDOM {
 
         private _name: string;
 

@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.core.code {
 
-    export class AssignPropertyDOM {
+    export class AssignPropertyCodeDOM {
 
         private _propertyName: string;
         private _propertyValueExpr: string;
@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.core.code {
             return this._propertyName;
         }
 
-        getContentExpr() {
+        getContextExpr() {
             return this._contextExpr;
         }
 
