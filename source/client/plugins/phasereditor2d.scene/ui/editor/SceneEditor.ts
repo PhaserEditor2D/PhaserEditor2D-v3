@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui.editor {
 
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
+    import json = core.json;
 
     class SceneEditorFactory extends colibri.ui.ide.EditorFactory {
 

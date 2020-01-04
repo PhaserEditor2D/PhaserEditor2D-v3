@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import json = core.json;
+
     export interface ContainerData extends json.ObjectData {
 
         list: json.ObjectData[];

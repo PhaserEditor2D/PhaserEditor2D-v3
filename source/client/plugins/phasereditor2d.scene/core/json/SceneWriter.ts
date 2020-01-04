@@ -1,10 +1,10 @@
-namespace phasereditor2d.scene.ui.json {
+namespace phasereditor2d.scene.core.json {
 
     export class SceneWriter {
 
-        private _scene: GameScene;
+        private _scene: ui.GameScene;
 
-        constructor(scene: GameScene) {
+        constructor(scene: ui.GameScene) {
             this._scene = scene;
         }
 

@@ -4,6 +4,7 @@ namespace phasereditor2d.scene.ui {
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
     import io = colibri.core.io;
+    import json = core.json;
     import FileUtils = colibri.ui.ide.FileUtils;
 
     export class SceneMaker {

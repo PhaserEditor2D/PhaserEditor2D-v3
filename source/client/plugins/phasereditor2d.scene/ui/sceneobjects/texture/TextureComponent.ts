@@ -2,6 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import write = colibri.core.json.write;
     import read = colibri.core.json.read;
+    import json = core.json;
 
     export interface TextureData extends json.ObjectData {
         textureKey: string;

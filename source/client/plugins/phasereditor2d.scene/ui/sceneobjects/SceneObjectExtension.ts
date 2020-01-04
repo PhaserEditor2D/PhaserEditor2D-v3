@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import json = core.json;
+
     export interface CreateWithAssetArgs {
         x: number;
         y: number;

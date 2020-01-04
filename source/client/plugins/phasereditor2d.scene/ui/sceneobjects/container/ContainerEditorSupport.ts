@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
+    import json = core.json;
 
     export interface ContainerData extends json.ObjectData {
         list: json.ObjectData[];

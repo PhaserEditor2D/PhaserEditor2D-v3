@@ -2,6 +2,8 @@
 
 namespace phasereditor2d.scene.ui.editor.undo {
 
+    import json = core.json;
+
     export class AddObjectsOperation extends SceneEditorOperation {
 
         private _dataList: any[];

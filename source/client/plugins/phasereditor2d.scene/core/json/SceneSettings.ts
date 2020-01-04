@@ -1,4 +1,4 @@
-namespace phasereditor2d.scene.ui.json {
+namespace phasereditor2d.scene.core.json {
 
     export declare type SourceLang = "JavaScript" | "TypeScript";
 

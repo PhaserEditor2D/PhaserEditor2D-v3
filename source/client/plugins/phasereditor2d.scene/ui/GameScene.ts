@@ -4,11 +4,11 @@ namespace phasereditor2d.scene.ui {
     export class GameScene extends Phaser.Scene {
 
         private _id: string;
-        private _sceneType: json.SceneType;
+        private _sceneType: core.json.SceneType;
         private _inEditor: boolean;
         private _initialState: any;
         private _maker: SceneMaker;
-        private _settings: json.SceneSettings;
+        private _settings: core.json.SceneSettings;
 
         constructor(inEditor = true) {
             super("ObjectScene");
@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui {
 
             this._maker = new SceneMaker(this);
 
-            this._settings = new json.SceneSettings();
+            this._settings = new core.json.SceneSettings();
         }
 
         getSettings() {
@@ -106,7 +106,7 @@ namespace phasereditor2d.scene.ui {
             return this._sceneType;
         }
 
-        setSceneType(sceneType: json.SceneType): void {
+        setSceneType(sceneType: core.json.SceneType): void {
             this._sceneType = sceneType;
         }
 

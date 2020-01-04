@@ -476,6 +476,190 @@ var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
     (function (scene) {
+        var core;
+        (function (core) {
+            var json;
+            (function (json) {
+                var FileUtils = colibri.ui.ide.FileUtils;
+                class SceneDataTable {
+                    constructor() {
+                        this._dataMap = new Map();
+                        this._fileMap = new Map();
+                    }
+                    async preload() {
+                        const dataMap = new Map();
+                        const fileMap = new Map();
+                        const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+                        for (const file of files) {
+                            const content = await FileUtils.preloadAndGetFileString(file);
+                            try {
+                                const data = JSON.parse(content);
+                                if (data.id) {
+                                    if (data.displayList.length > 0) {
+                                        const objData = data.displayList[0];
+                                        dataMap.set(data.id, objData);
+                                        fileMap.set(data.id, file);
+                                    }
+                                }
+                            }
+                            catch (e) {
+                                console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${e.message}`);
+                            }
+                        }
+                        this._dataMap = dataMap;
+                        this._fileMap = fileMap;
+                    }
+                    getPrefabData(prefabId) {
+                        return this._dataMap.get(prefabId);
+                    }
+                    getPrefabFile(prefabId) {
+                        return this._fileMap.get(prefabId);
+                    }
+                }
+                json.SceneDataTable = SceneDataTable;
+            })(json = core.json || (core.json = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var json;
+            (function (json) {
+                class SceneSettings {
+                    constructor(snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "", createMethodName = "create", sceneKey = "", compilerLang = "JavaScript", scopeBlocksToFolder = false, methodContextType = "Scene", borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                        this.snapEnabled = snapEnabled;
+                        this.snapWidth = snapWidth;
+                        this.snapHeight = snapHeight;
+                        this.onlyGenerateMethods = onlyGenerateMethods;
+                        this.superClassName = superClassName;
+                        this.preloadMethodName = preloadMethodName;
+                        this.createMethodName = createMethodName;
+                        this.sceneKey = sceneKey;
+                        this.compilerLang = compilerLang;
+                        this.scopeBlocksToFolder = scopeBlocksToFolder;
+                        this.methodContextType = methodContextType;
+                        this.borderX = borderX;
+                        this.borderY = borderY;
+                        this.borderWidth = borderWidth;
+                        this.borderHeight = borderHeight;
+                    }
+                }
+                json.SceneSettings = SceneSettings;
+            })(json = core.json || (core.json = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene_2) {
+        var core;
+        (function (core) {
+            var json;
+            (function (json_1) {
+                class SceneWriter {
+                    constructor(scene) {
+                        this._scene = scene;
+                    }
+                    toJSON() {
+                        const sceneData = {
+                            id: this._scene.getId(),
+                            sceneType: this._scene.getSceneType(),
+                            displayList: [],
+                            meta: {
+                                app: "Phaser Editor 2D - Scene Editor",
+                                url: "https://phasereditor2d.com",
+                                contentType: core.CONTENT_TYPE_SCENE
+                            }
+                        };
+                        for (const obj of this._scene.getDisplayListChildren()) {
+                            const objData = {};
+                            obj.getEditorSupport().writeJSON(this._scene.getMaker().getSerializer(objData));
+                            sceneData.displayList.push(objData);
+                        }
+                        return sceneData;
+                    }
+                    toString() {
+                        const json = this.toJSON();
+                        return JSON.stringify(json);
+                    }
+                }
+                json_1.SceneWriter = SceneWriter;
+            })(json = core.json || (core.json = {}));
+        })(core = scene_2.core || (scene_2.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var json;
+            (function (json) {
+                class Serializer {
+                    constructor(data, table) {
+                        this._data = data;
+                        this._table = table;
+                        if (this._data.prefabId) {
+                            const prefabData = table.getPrefabData(this._data.prefabId);
+                            if (prefabData) {
+                                this._prefabSer = new Serializer(prefabData, table);
+                            }
+                            else {
+                                console.error(`Cannot find scene prefab with id "${this._data.prefabId}".`);
+                            }
+                        }
+                    }
+                    getSerializer(data) {
+                        return new Serializer(data, this._table);
+                    }
+                    getData() {
+                        return this._data;
+                    }
+                    getType() {
+                        if (this._prefabSer) {
+                            return this._prefabSer.getType();
+                        }
+                        return this._data.type;
+                    }
+                    getDefaultValue(name, defValue) {
+                        const value = this._data[name];
+                        if (value !== undefined) {
+                            return value;
+                        }
+                        let defValueInPrefab;
+                        if (this._prefabSer) {
+                            defValueInPrefab = this._prefabSer.getDefaultValue(name, defValue);
+                        }
+                        if (defValueInPrefab !== undefined) {
+                            return defValueInPrefab;
+                        }
+                        return defValue;
+                    }
+                    write(name, value, defValue) {
+                        const defValue2 = this.getDefaultValue(name, defValue);
+                        colibri.core.json.write(this._data, name, value, defValue2);
+                    }
+                    read(name, defValue) {
+                        const defValue2 = this.getDefaultValue(name, defValue);
+                        const value = colibri.core.json.read(this._data, name, defValue2);
+                        return value;
+                    }
+                }
+                json.Serializer = Serializer;
+            })(json = core.json || (core.json = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
         var ui;
         (function (ui) {
             Phaser.Cameras.Scene2D.Camera.prototype.getScreenPoint = function (worldX, worldY) {
@@ -499,7 +683,7 @@ var phasereditor2d;
                     this._inEditor = inEditor;
                     this._sceneType = "Scene";
                     this._maker = new ui.SceneMaker(this);
-                    this._settings = new ui.json.SceneSettings();
+                    this._settings = new scene.core.json.SceneSettings();
                 }
                 getSettings() {
                     return this._settings;
@@ -589,14 +773,15 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_2) {
+    (function (scene_3) {
         var ui;
         (function (ui) {
+            var json = scene_3.core.json;
             var FileUtils = colibri.ui.ide.FileUtils;
             class SceneMaker {
                 constructor(scene) {
                     this._scene = scene;
-                    this._sceneDataTable = new ui.json.SceneDataTable();
+                    this._sceneDataTable = new json.SceneDataTable();
                 }
                 static isValidSceneDataFormat(data) {
                     return "displayList" in data && Array.isArray(data.displayList);
@@ -607,7 +792,7 @@ var phasereditor2d;
                 isPrefabFile(file) {
                     const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
                     // TODO: missing to check if it is a scene of type prefab.
-                    return ct === scene_2.core.CONTENT_TYPE_SCENE;
+                    return ct === scene_3.core.CONTENT_TYPE_SCENE;
                 }
                 async createPrefabInstanceWithFile(file) {
                     const content = await FileUtils.preloadAndGetFileString(file);
@@ -631,7 +816,7 @@ var phasereditor2d;
                     return this._sceneDataTable;
                 }
                 getSerializer(data) {
-                    return new ui.json.Serializer(data, this._sceneDataTable);
+                    return new json.Serializer(data, this._sceneDataTable);
                 }
                 createScene(data) {
                     this._scene.setSceneType(data.sceneType);
@@ -650,7 +835,7 @@ var phasereditor2d;
                     for (const objData of sceneData.displayList) {
                         const ser = this.getSerializer(objData);
                         const type = ser.getType();
-                        const ext = scene_2.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                        const ext = scene_3.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                         if (ext) {
                             const assets = await ext.getAssetsFromObjectData({
                                 serializer: ser,
@@ -658,7 +843,7 @@ var phasereditor2d;
                                 scene: this._scene
                             });
                             for (const asset of assets) {
-                                const updater = scene_2.ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+                                const updater = scene_3.ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
                                 if (updater) {
                                     await updater.updateLoader(this._scene, asset);
                                 }
@@ -669,7 +854,7 @@ var phasereditor2d;
                 createObject(data) {
                     const ser = this.getSerializer(data);
                     const type = ser.getType();
-                    const ext = scene_2.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                    const ext = scene_3.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                     if (ext) {
                         const sprite = ext.createSceneObjectWithData({
                             data: data,
@@ -687,13 +872,13 @@ var phasereditor2d;
                 }
             }
             ui.SceneMaker = SceneMaker;
-        })(ui = scene_2.ui || (scene_2.ui = {}));
+        })(ui = scene_3.ui || (scene_3.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_3) {
+    (function (scene_4) {
         var ui;
         (function (ui) {
             var controls = colibri.ui.controls;
@@ -821,7 +1006,7 @@ var phasereditor2d;
                 }
             }
             ui.SceneThumbnail = SceneThumbnail;
-        })(ui = scene_3.ui || (scene_3.ui = {}));
+        })(ui = scene_4.ui || (scene_4.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -1163,7 +1348,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_4) {
+    (function (scene_5) {
         var ui;
         (function (ui) {
             var editor;
@@ -1225,13 +1410,13 @@ var phasereditor2d;
                 }
                 editor_2.CameraManager = CameraManager;
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_4.ui || (scene_4.ui = {}));
+        })(ui = scene_5.ui || (scene_5.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_5) {
+    (function (scene_6) {
         var ui;
         (function (ui) {
             var editor;
@@ -1262,7 +1447,7 @@ var phasereditor2d;
                     async createWithDropEvent(e, dropAssetArray) {
                         const scene = this._editor.getGameScene();
                         const sceneMaker = scene.getMaker();
-                        const exts = scene_5.ScenePlugin.getInstance().getObjectExtensions();
+                        const exts = scene_6.ScenePlugin.getInstance().getObjectExtensions();
                         const nameMaker = new ide.utils.NameMaker(obj => {
                             return obj.getEditorSupport().getLabel();
                         });
@@ -1271,7 +1456,7 @@ var phasereditor2d;
                         const x = Math.floor(worldPoint.x);
                         const y = Math.floor(worldPoint.y);
                         for (const data of dropAssetArray) {
-                            const ext = scene_5.ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
+                            const ext = scene_6.ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
                             if (ext) {
                                 await ext.updateLoader(scene, data);
                             }
@@ -1320,7 +1505,7 @@ var phasereditor2d;
                                 return true;
                             }
                         }
-                        for (const ext of scene_5.ScenePlugin.getInstance().getObjectExtensions()) {
+                        for (const ext of scene_6.ScenePlugin.getInstance().getObjectExtensions()) {
                             if (ext.acceptsDropData(data)) {
                                 return true;
                             }
@@ -1341,7 +1526,7 @@ var phasereditor2d;
                 }
                 editor_3.DropManager = DropManager;
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_5.ui || (scene_5.ui = {}));
+        })(ui = scene_6.ui || (scene_6.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -1542,6 +1727,7 @@ var phasereditor2d;
             (function (editor) {
                 var controls = colibri.ui.controls;
                 var io = colibri.core.io;
+                var json = scene.core.json;
                 class SceneEditorFactory extends colibri.ui.ide.EditorFactory {
                     constructor() {
                         super("phasereditor2d.SceneEditorFactory");
@@ -1570,7 +1756,7 @@ var phasereditor2d;
                         return new SceneEditorFactory();
                     }
                     async doSave() {
-                        const writer = new ui.json.SceneWriter(this.getGameScene());
+                        const writer = new json.SceneWriter(this.getGameScene());
                         const data = writer.toJSON();
                         const content = JSON.stringify(data, null, 4);
                         try {
@@ -1803,7 +1989,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_6) {
+    (function (scene_7) {
         var ui;
         (function (ui) {
             var editor;
@@ -1878,7 +2064,7 @@ var phasereditor2d;
                 }
                 editor_5.SelectionManager = SelectionManager;
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_6.ui || (scene_6.ui = {}));
+        })(ui = scene_7.ui || (scene_7.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2231,7 +2417,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_7) {
+    (function (scene_8) {
         var ui;
         (function (ui) {
             var editor;
@@ -2274,13 +2460,13 @@ var phasereditor2d;
                     undo.AddObjectsOperation = AddObjectsOperation;
                 })(undo = editor_11.undo || (editor_11.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_7.ui || (scene_7.ui = {}));
+        })(ui = scene_8.ui || (scene_8.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_8) {
+    (function (scene_9) {
         var ui;
         (function (ui) {
             var editor;
@@ -2327,7 +2513,7 @@ var phasereditor2d;
                     undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
                 })(undo = editor_12.undo || (editor_12.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_8.ui || (scene_8.ui = {}));
+        })(ui = scene_9.ui || (scene_9.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -2354,190 +2540,6 @@ var phasereditor2d;
                     undo.RemoveObjectsOperation = RemoveObjectsOperation;
                 })(undo = editor_13.undo || (editor_13.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var json;
-            (function (json) {
-                var FileUtils = colibri.ui.ide.FileUtils;
-                class SceneDataTable {
-                    constructor() {
-                        this._dataMap = new Map();
-                        this._fileMap = new Map();
-                    }
-                    async preload() {
-                        const dataMap = new Map();
-                        const fileMap = new Map();
-                        const files = await FileUtils.getFilesWithContentType(scene.core.CONTENT_TYPE_SCENE);
-                        for (const file of files) {
-                            const content = await FileUtils.preloadAndGetFileString(file);
-                            try {
-                                const data = JSON.parse(content);
-                                if (data.id) {
-                                    if (data.displayList.length > 0) {
-                                        const objData = data.displayList[0];
-                                        dataMap.set(data.id, objData);
-                                        fileMap.set(data.id, file);
-                                    }
-                                }
-                            }
-                            catch (e) {
-                                console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${e.message}`);
-                            }
-                        }
-                        this._dataMap = dataMap;
-                        this._fileMap = fileMap;
-                    }
-                    getPrefabData(prefabId) {
-                        return this._dataMap.get(prefabId);
-                    }
-                    getPrefabFile(prefabId) {
-                        return this._fileMap.get(prefabId);
-                    }
-                }
-                json.SceneDataTable = SceneDataTable;
-            })(json = ui.json || (ui.json = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var json;
-            (function (json) {
-                class SceneSettings {
-                    constructor(snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "", createMethodName = "create", sceneKey = "", compilerLang = "JavaScript", scopeBlocksToFolder = false, methodContextType = "Scene", borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
-                        this.snapEnabled = snapEnabled;
-                        this.snapWidth = snapWidth;
-                        this.snapHeight = snapHeight;
-                        this.onlyGenerateMethods = onlyGenerateMethods;
-                        this.superClassName = superClassName;
-                        this.preloadMethodName = preloadMethodName;
-                        this.createMethodName = createMethodName;
-                        this.sceneKey = sceneKey;
-                        this.compilerLang = compilerLang;
-                        this.scopeBlocksToFolder = scopeBlocksToFolder;
-                        this.methodContextType = methodContextType;
-                        this.borderX = borderX;
-                        this.borderY = borderY;
-                        this.borderWidth = borderWidth;
-                        this.borderHeight = borderHeight;
-                    }
-                }
-                json.SceneSettings = SceneSettings;
-            })(json = ui.json || (ui.json = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene_9) {
-        var ui;
-        (function (ui) {
-            var json;
-            (function (json_1) {
-                class SceneWriter {
-                    constructor(scene) {
-                        this._scene = scene;
-                    }
-                    toJSON() {
-                        const sceneData = {
-                            id: this._scene.getId(),
-                            sceneType: this._scene.getSceneType(),
-                            displayList: [],
-                            meta: {
-                                app: "Phaser Editor 2D - Scene Editor",
-                                url: "https://phasereditor2d.com",
-                                contentType: scene_9.core.CONTENT_TYPE_SCENE
-                            }
-                        };
-                        for (const obj of this._scene.getDisplayListChildren()) {
-                            const objData = {};
-                            obj.getEditorSupport().writeJSON(this._scene.getMaker().getSerializer(objData));
-                            sceneData.displayList.push(objData);
-                        }
-                        return sceneData;
-                    }
-                    toString() {
-                        const json = this.toJSON();
-                        return JSON.stringify(json);
-                    }
-                }
-                json_1.SceneWriter = SceneWriter;
-            })(json = ui.json || (ui.json = {}));
-        })(ui = scene_9.ui || (scene_9.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var json;
-            (function (json) {
-                class Serializer {
-                    constructor(data, table) {
-                        this._data = data;
-                        this._table = table;
-                        if (this._data.prefabId) {
-                            const prefabData = table.getPrefabData(this._data.prefabId);
-                            if (prefabData) {
-                                this._prefabSer = new Serializer(prefabData, table);
-                            }
-                            else {
-                                console.error(`Cannot find scene prefab with id "${this._data.prefabId}".`);
-                            }
-                        }
-                    }
-                    getSerializer(data) {
-                        return new Serializer(data, this._table);
-                    }
-                    getData() {
-                        return this._data;
-                    }
-                    getType() {
-                        if (this._prefabSer) {
-                            return this._prefabSer.getType();
-                        }
-                        return this._data.type;
-                    }
-                    getDefaultValue(name, defValue) {
-                        const value = this._data[name];
-                        if (value !== undefined) {
-                            return value;
-                        }
-                        let defValueInPrefab;
-                        if (this._prefabSer) {
-                            defValueInPrefab = this._prefabSer.getDefaultValue(name, defValue);
-                        }
-                        if (defValueInPrefab !== undefined) {
-                            return defValueInPrefab;
-                        }
-                        return defValue;
-                    }
-                    write(name, value, defValue) {
-                        const defValue2 = this.getDefaultValue(name, defValue);
-                        colibri.core.json.write(this._data, name, value, defValue2);
-                    }
-                    read(name, defValue) {
-                        const defValue2 = this.getDefaultValue(name, defValue);
-                        const value = colibri.core.json.read(this._data, name, defValue2);
-                        return value;
-                    }
-                }
-                json.Serializer = Serializer;
-            })(json = ui.json || (ui.json = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
