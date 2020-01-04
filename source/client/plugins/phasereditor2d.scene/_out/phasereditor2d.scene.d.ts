@@ -15,11 +15,111 @@ declare namespace phasereditor2d.scene {
     }
 }
 declare namespace phasereditor2d.scene.core {
+    class AssignPropertyDOM {
+        private _propertyName;
+        private _propertyValueExpr;
+        private _contextExpr;
+        private _propertyType;
+        constructor(propertyName: string, contentExpr: string);
+        value(expr: string): void;
+        valueLiteral(expr: string): void;
+        valueFloat(n: number): void;
+        valueInt(n: number): void;
+        valueBool(b: boolean): void;
+        getPropertyName(): string;
+        getContentExpr(): string;
+        getPropertyValueExpr(): string;
+        getPropertyType(): string;
+        setPropertyType(propertyType: string): void;
+    }
+}
+declare namespace phasereditor2d.scene.core {
+    class CodeDOM {
+        private _offset;
+        getOffset(): number;
+        setOffset(offset: number): void;
+        static toHex(n: number): string;
+        static quote(s: string): string;
+    }
+}
+declare namespace phasereditor2d.scene.core {
+    class MemberDeclDOM extends CodeDOM {
+        private _name;
+        constructor(name: string);
+        getName(): string;
+    }
+}
+declare namespace phasereditor2d.scene.core {
+    class ClassDeclCodeDOM extends MemberDeclDOM {
+        private _members;
+        private _constructor;
+        private _superClass;
+        constructor(name: string);
+        getConstructor(): MethodDeclDOM;
+        setConstructor(constructor: MethodDeclDOM): void;
+        getSuperClass(): string;
+        setSuperClass(superClass: string): void;
+        getMembers(): MemberDeclDOM[];
+    }
+}
+declare namespace phasereditor2d.scene.core {
+    class FieldDeclDOM extends MemberDeclDOM {
+        private _type;
+        constructor(name: string);
+        getType(): string;
+        setType(type: string): void;
+    }
+}
+declare namespace phasereditor2d.scene.core {
+    class MethodCallDOM extends CodeDOM {
+        private _methodName;
+        private _contextExpr;
+        private _args;
+        private _returnToVar;
+        private _declareReturnToVar;
+        constructor(methodName: string, contextExpr: string);
+        getReturnToVar(): string;
+        setReturnToVar(returnToVar: string): void;
+        setDeclareReturnToVar(declareReturnToVar: boolean): void;
+        isDeclareReturnToVar(): boolean;
+        arg(expr: string): void;
+        argLiteral(expr: string): void;
+        argFloat(n: number): void;
+        argInt(n: number): void;
+        getMethodName(): string;
+        getContextExpr(): string;
+        getArgs(): string[];
+    }
+}
+declare namespace phasereditor2d.scene.core {
+    class MethodDeclDOM extends MemberDeclDOM {
+        private _instructions;
+        constructor(name: string);
+        getInstructions(): CodeDOM[];
+        setInstructions(instructions: CodeDOM[]): void;
+    }
+}
+declare namespace phasereditor2d.scene.core {
+    class RawCode extends CodeDOM {
+        private _code;
+        constructor(code: string);
+        getCode(): string;
+    }
+}
+declare namespace phasereditor2d.scene.core {
     import core = colibri.core;
     const CONTENT_TYPE_SCENE = "phasereditor2d.core.scene.SceneContentType";
     class SceneContentTypeResolver extends core.ContentTypeResolver {
         constructor();
         computeContentType(file: core.io.FilePath): Promise<string>;
+    }
+}
+declare namespace phasereditor2d.scene.core {
+    class UnitCodeDOM {
+        private _elements;
+        constructor(elements: object[]);
+        getElements(): object[];
+        setElements(elements: object[]): void;
     }
 }
 declare namespace Phaser.Cameras.Scene2D {
