@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (isAlphaNumeric(c)) {
 
-                s += c;
+                s += (s.length === 0 ? c.toLowerCase() : c);
 
             } else {
 

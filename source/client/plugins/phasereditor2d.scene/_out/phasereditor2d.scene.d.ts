@@ -711,7 +711,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface CreateWithAssetArgs {
         x: number;
         y: number;
-        nameMaker: colibri.ui.ide.utils.NameMaker;
         scene: GameScene;
         asset: any;
     }

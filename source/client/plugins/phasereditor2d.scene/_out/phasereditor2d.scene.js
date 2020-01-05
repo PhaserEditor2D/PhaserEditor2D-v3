@@ -430,7 +430,7 @@ var phasereditor2d;
                     let s = "";
                     for (const c of name) {
                         if (isAlphaNumeric(c)) {
-                            s += c;
+                            s += (s.length === 0 ? c.toLowerCase() : c);
                         }
                         else {
                             s += "_";
@@ -1937,12 +1937,18 @@ var phasereditor2d;
                                         x: x,
                                         y: y,
                                         asset: data,
-                                        nameMaker: nameMaker,
                                         scene: scene
                                     });
                                     sprites.push(sprite);
                                 }
                             }
+                        }
+                        for (const sprite of sprites) {
+                            const support = sprite.getEditorSupport();
+                            let label = support.isPrefabInstance() ? support.getPrefabName() : support.getLabel();
+                            label = scene_6.core.code.formatToValidVarName(label);
+                            label = nameMaker.makeName(label);
+                            support.setLabel(label);
                         }
                         return sprites;
                     }
@@ -3618,7 +3624,7 @@ var phasereditor2d;
                         }
                         const sprite = this.createImageObject(args.scene, args.x, args.y, key, frame);
                         const support = sprite.getEditorSupport();
-                        support.setLabel(args.nameMaker.makeName(baseLabel));
+                        support.setLabel(baseLabel);
                         support.getTextureComponent().setTexture(key, frame);
                         return sprite;
                     }

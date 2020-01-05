@@ -106,13 +106,25 @@ namespace phasereditor2d.scene.ui.editor {
                             x: x,
                             y: y,
                             asset: data,
-                            nameMaker: nameMaker,
                             scene: scene
                         });
 
                         sprites.push(sprite);
                     }
                 }
+            }
+
+            for (const sprite of sprites) {
+
+                const support = sprite.getEditorSupport();
+
+                let label = support.isPrefabInstance() ? support.getPrefabName() : support.getLabel();
+
+                label = core.code.formatToValidVarName(label);
+
+                label = nameMaker.makeName(label);
+
+                support.setLabel(label);
             }
 
             return sprites;

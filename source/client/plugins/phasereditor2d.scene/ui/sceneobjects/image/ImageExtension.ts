@@ -127,7 +127,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const support = sprite.getEditorSupport();
 
-            support.setLabel(args.nameMaker.makeName(baseLabel));
+            support.setLabel(baseLabel);
             support.getTextureComponent().setTexture(key, frame);
 
             return sprite;
