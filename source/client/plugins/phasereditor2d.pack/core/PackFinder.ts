@@ -111,7 +111,5 @@ namespace phasereditor2d.pack.core {
 
             return new controls.ImageWrapper(null);
         }
-
     }
-
 }

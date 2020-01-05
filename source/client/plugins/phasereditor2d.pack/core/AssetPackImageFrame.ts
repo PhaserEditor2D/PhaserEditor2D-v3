@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.core {
         private _packItem: ImageFrameContainerAssetPackItem;
 
         constructor(
-            packItem: ImageFrameContainerAssetPackItem, name: string,
+            packItem: ImageFrameContainerAssetPackItem, name: string | number,
             frameImage: controls.IImage, frameData: controls.FrameData) {
 
             super(name, frameImage, frameData);

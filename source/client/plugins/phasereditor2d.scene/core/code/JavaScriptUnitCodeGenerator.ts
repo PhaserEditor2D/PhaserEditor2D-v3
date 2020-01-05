@@ -62,7 +62,7 @@ namespace phasereditor2d.scene.core.code {
                 this.line();
             }
 
-            this.section("/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n// Write your code here.\n\n");
+            this.section("/* START-USER-CODE */", "\t/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n");
 
             this.closeIndent("}");
 
@@ -148,7 +148,11 @@ namespace phasereditor2d.scene.core.code {
                 this.append(" = ");
             }
 
-            if (call.getContextExpr() != null) {
+            if (call.isConstructor()) {
+                this.append("new ");
+            }
+
+            if (call.getContextExpr() && call.getContextExpr().length > 0) {
 
                 this.append(call.getContextExpr());
                 this.append(".");

@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.core.code {
 
         constructor() {
             this._text = "";
+            this._indent = 0;
         }
 
         getOffset() {

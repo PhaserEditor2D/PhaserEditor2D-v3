@@ -7,14 +7,24 @@ namespace phasereditor2d.scene.core.code {
         private _args: string[];
         private _returnToVar: string;
         private _declareReturnToVar: boolean;
+        private _isConstructor: boolean;
 
-        constructor(methodName: string, contextExpr: string) {
+        constructor(methodName: string, contextExpr = "") {
             super();
 
             this._methodName = methodName;
             this._contextExpr = contextExpr;
             this._args = [];
             this._declareReturnToVar = true;
+            this._isConstructor = false;
+        }
+
+        isConstructor() {
+            return this._isConstructor;
+        }
+
+        setConstructor(isConstructor: boolean) {
+            this._isConstructor = isConstructor;
         }
 
         getReturnToVar() {
@@ -53,6 +63,10 @@ namespace phasereditor2d.scene.core.code {
 
         getMethodName() {
             return this._methodName;
+        }
+
+        setMethodName(methodName: string) {
+            this._methodName = methodName;
         }
 
         getContextExpr() {

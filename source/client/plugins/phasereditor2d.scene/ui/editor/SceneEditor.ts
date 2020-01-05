@@ -83,7 +83,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             {
                 const builder = new core.code.SceneCodeDOMBuilder(this._gameScene, this.getInput());
-                const unit = builder.build();
+
+                const unit = await builder.build();
 
                 const generator = this._gameScene.getSettings().compilerLang === "JavaScript" ?
                     new core.code.JavaScriptUnitCodeGenerator(unit)

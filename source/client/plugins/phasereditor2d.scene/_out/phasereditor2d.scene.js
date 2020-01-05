@@ -163,6 +163,7 @@ var phasereditor2d;
                 class BaseCodeGenerator {
                     constructor() {
                         this._text = "";
+                        this._indent = 0;
                     }
                     getOffset() {
                         return this._text.length;
@@ -342,7 +343,7 @@ var phasereditor2d;
                             }
                         }
                         result += '"';
-                        return s;
+                        return result;
                     }
                 }
                 code.CodeDOM = CodeDOM;
@@ -475,7 +476,7 @@ var phasereditor2d;
                             this.generateMemberDecl(memberDecl);
                             this.line();
                         }
-                        this.section("/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n// Write your code here.\n\n");
+                        this.section("/* START-USER-CODE */", "\t/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n");
                         this.closeIndent("}");
                         this.line();
                     }
@@ -532,7 +533,10 @@ var phasereditor2d;
                             this.append(call.getReturnToVar());
                             this.append(" = ");
                         }
-                        if (call.getContextExpr() != null) {
+                        if (call.isConstructor()) {
+                            this.append("new ");
+                        }
+                        if (call.getContextExpr() && call.getContextExpr().length > 0) {
                             this.append(call.getContextExpr());
                             this.append(".");
                         }
@@ -563,12 +567,19 @@ var phasereditor2d;
             var code;
             (function (code) {
                 class MethodCallCodeDOM extends code.CodeDOM {
-                    constructor(methodName, contextExpr) {
+                    constructor(methodName, contextExpr = "") {
                         super();
                         this._methodName = methodName;
                         this._contextExpr = contextExpr;
                         this._args = [];
                         this._declareReturnToVar = true;
+                        this._isConstructor = false;
+                    }
+                    isConstructor() {
+                        return this._isConstructor;
+                    }
+                    setConstructor(isConstructor) {
+                        this._isConstructor = isConstructor;
                     }
                     getReturnToVar() {
                         return this._returnToVar;
@@ -599,6 +610,9 @@ var phasereditor2d;
                     getMethodName() {
                         return this._methodName;
                     }
+                    setMethodName(methodName) {
+                        this._methodName = methodName;
+                    }
                     getContextExpr() {
                         return this._contextExpr;
                     }
@@ -622,6 +636,7 @@ var phasereditor2d;
                 class MethodDeclCodeDOM extends code.MemberDeclCodeDOM {
                     constructor(name) {
                         super(name);
+                        this._instructions = [];
                     }
                     getInstructions() {
                         return this._instructions;
@@ -670,11 +685,15 @@ var phasereditor2d;
                         this._scene = scene;
                         this._file = file;
                     }
-                    build() {
+                    async build() {
+                        const settings = this._scene.getSettings();
                         const methods = [];
+                        if (settings.preloadMethodName.trim().length > 0) {
+                            const preloadDom = await this.buildPreloadMethod();
+                            methods.push(preloadDom);
+                        }
                         const fields = [];
                         const unit = new code.UnitCodeDOM([]);
-                        const settings = this._scene.getSettings();
                         if (settings.onlyGenerateMethods) {
                             // TODO
                         }
@@ -682,11 +701,77 @@ var phasereditor2d;
                             const clsName = this._file.getNameWithoutExtension();
                             const clsDecl = new code.ClassDeclCodeDOM(clsName);
                             clsDecl.setSuperClass(settings.superClassName);
+                            // constructor
+                            {
+                                const key = settings.sceneKey;
+                                if (key.trim().length > 0) {
+                                    const ctrMethod = this.buildConstructorMethod(key);
+                                    methods.push(ctrMethod);
+                                }
+                            }
+                            // create
+                            {
+                                const createMethodDecl = this.buildCreateMethod(fields);
+                                methods.push(createMethodDecl);
+                            }
                             clsDecl.getMembers().push(...methods);
                             clsDecl.getMembers().push(...fields);
                             unit.getElements().push(clsDecl);
                         }
                         return unit;
+                    }
+                    buildCreateMethod(fields) {
+                        const settings = this._scene.getSettings();
+                        const createMethodDecl = new code.MethodDeclCodeDOM(settings.createMethodName);
+                        const publicObjects = [];
+                        for (const obj of this._scene.getDisplayListChildren()) {
+                            // TODO: if it is a prefab, the construction is other!
+                            const support = obj.getEditorSupport();
+                            let createObjectMethodCall;
+                            if (support.isPrefabInstance()) {
+                                const clsName = support.getPrefabName();
+                                const type = support.getObjectType();
+                                const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                                createObjectMethodCall = new code.MethodCallCodeDOM(clsName);
+                                createObjectMethodCall.setConstructor(true);
+                                ext.buildNewPrefabInstanceCodeDOM({
+                                    obj,
+                                    methodCallDOM: createObjectMethodCall,
+                                    sceneExpr: "this"
+                                });
+                            }
+                            else {
+                                const ext = support.getExtension();
+                                createObjectMethodCall = ext.buildAddObjectCodeDOM({
+                                    gameObjectFactoryExpr: "this.add",
+                                    obj: obj
+                                });
+                            }
+                            createMethodDecl.getInstructions().push(createObjectMethodCall);
+                        }
+                        return createMethodDecl;
+                    }
+                    buildConstructorMethod(sceneKey) {
+                        const methodDecl = new code.MethodDeclCodeDOM("constructor");
+                        const superCall = new code.MethodCallCodeDOM("super", null);
+                        superCall.argLiteral(sceneKey);
+                        methodDecl.getInstructions().push(superCall);
+                        return methodDecl;
+                    }
+                    async buildPreloadMethod() {
+                        const settings = this._scene.getSettings();
+                        const preloadDom = new code.MethodDeclCodeDOM(settings.preloadMethodName);
+                        // TODO: the packs to be loaded should be set manually.
+                        // We can provide a Scene Loader dialog where the user can select the packs to be loaded.
+                        /*
+            
+                        for (const pair of packSectionList) {
+                            var call = new MethodCallDom("pack", "this.load");
+                            call.argLiteral(pair[0]);
+                            call.argLiteral(pair[1]);
+                            preloadDom.getInstructions().add(call);
+                        }*/
+                        return preloadDom;
                     }
                 }
                 code.SceneCodeDOMBuilder = SceneCodeDOMBuilder;
@@ -805,7 +890,7 @@ var phasereditor2d;
             var json;
             (function (json) {
                 class SceneSettings {
-                    constructor(snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "", createMethodName = "create", sceneKey = "", compilerLang = "JavaScript", scopeBlocksToFolder = false, methodContextType = "Scene", borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                    constructor(snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "", createMethodName = "create", sceneKey = "MyScene", compilerLang = "JavaScript", scopeBlocksToFolder = false, methodContextType = "Scene", borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
                         this.snapEnabled = snapEnabled;
                         this.snapWidth = snapWidth;
                         this.snapHeight = snapHeight;
@@ -2045,7 +2130,7 @@ var phasereditor2d;
                         // compile
                         {
                             const builder = new scene.core.code.SceneCodeDOMBuilder(this._gameScene, this.getInput());
-                            const unit = builder.build();
+                            const unit = await builder.build();
                             const generator = this._gameScene.getSettings().compilerLang === "JavaScript" ?
                                 new scene.core.code.JavaScriptUnitCodeGenerator(unit)
                                 : new scene.core.code.TypeScriptUnitCodeGenerator(unit);
@@ -3144,6 +3229,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var code = scene_14.core.code;
                 class ContainerExtension extends sceneobjects.SceneObjectExtension {
                     constructor() {
                         super({
@@ -3153,6 +3239,13 @@ var phasereditor2d;
                     }
                     static getInstance() {
                         return this._instance || (this._instance = new ContainerExtension());
+                    }
+                    buildNewPrefabInstanceCodeDOM(args) {
+                        args.methodCallDOM.arg(args.sceneExpr);
+                    }
+                    buildAddObjectCodeDOM(args) {
+                        const call = new code.MethodCallCodeDOM("container", args.gameObjectFactoryExpr);
+                        return call;
                     }
                     async getAssetsFromObjectData(args) {
                         const list = [];
@@ -3288,6 +3381,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var code = scene_16.core.code;
                 class ImageExtension extends sceneobjects.SceneObjectExtension {
                     constructor() {
                         super({
@@ -3298,6 +3392,34 @@ var phasereditor2d;
                     static getInstance() {
                         var _a;
                         return _a = this._instance, (_a !== null && _a !== void 0 ? _a : (this._instance = new ImageExtension()));
+                    }
+                    buildNewPrefabInstanceCodeDOM(args) {
+                        const call = args.methodCallDOM;
+                        call.arg(args.sceneExpr);
+                        this.addArgsToCreateMethodDOM(call, args.obj);
+                    }
+                    buildAddObjectCodeDOM(args) {
+                        const obj = args.obj;
+                        const call = new code.MethodCallCodeDOM("image", args.gameObjectFactoryExpr);
+                        this.addArgsToCreateMethodDOM(call, obj);
+                        return call;
+                    }
+                    addArgsToCreateMethodDOM(call, obj) {
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
+                        {
+                            const comp = obj.getEditorSupport().getTextureComponent();
+                            call.argLiteral(comp.getKey());
+                            const frame = comp.getFrame();
+                            switch (typeof frame) {
+                                case "number":
+                                    call.argInt(frame);
+                                    break;
+                                case "string":
+                                    call.argLiteral(frame);
+                                    break;
+                            }
+                        }
                     }
                     async getAssetsFromObjectData(args) {
                         const key = args.serializer.read("textureKey");
@@ -3322,7 +3444,7 @@ var phasereditor2d;
                         if (args.asset instanceof phasereditor2d.pack.core.AssetPackImageFrame) {
                             key = args.asset.getPackItem().getKey();
                             frame = args.asset.getName();
-                            baseLabel = frame + "";
+                            baseLabel = frame.toString();
                         }
                         else if (args.asset instanceof phasereditor2d.pack.core.ImageAssetPackItem) {
                             key = args.asset.getKey();

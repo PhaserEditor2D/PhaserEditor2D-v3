@@ -130,7 +130,10 @@ declare namespace phasereditor2d.scene.core.code {
         private _args;
         private _returnToVar;
         private _declareReturnToVar;
-        constructor(methodName: string, contextExpr: string);
+        private _isConstructor;
+        constructor(methodName: string, contextExpr?: string);
+        isConstructor(): boolean;
+        setConstructor(isConstructor: boolean): void;
         getReturnToVar(): string;
         setReturnToVar(returnToVar: string): void;
         setDeclareReturnToVar(declareReturnToVar: boolean): void;
@@ -140,6 +143,7 @@ declare namespace phasereditor2d.scene.core.code {
         argFloat(n: number): void;
         argInt(n: number): void;
         getMethodName(): string;
+        setMethodName(methodName: string): void;
         getContextExpr(): string;
         getArgs(): string[];
     }
@@ -165,7 +169,10 @@ declare namespace phasereditor2d.scene.core.code {
         private _scene;
         private _file;
         constructor(scene: ui.GameScene, file: io.FilePath);
-        build(): UnitCodeDOM;
+        build(): Promise<UnitCodeDOM>;
+        private buildCreateMethod;
+        private buildConstructorMethod;
+        private buildPreloadMethod;
     }
 }
 declare namespace phasereditor2d.scene.core.code {
@@ -696,6 +703,15 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         asset: any;
         scene: GameScene;
     }
+    interface BuildObjectFactoryCodeDOMArgs {
+        obj: SceneObject;
+        gameObjectFactoryExpr: string;
+    }
+    interface BuildPrefabConstructorCodeDOMArgs {
+        obj: SceneObject;
+        sceneExpr: string;
+        methodCallDOM: core.code.MethodCallCodeDOM;
+    }
     abstract class SceneObjectExtension extends colibri.Extension {
         static POINT_ID: string;
         private _typeName;
@@ -733,6 +749,21 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
          * @returns The assets.
          */
         abstract getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
+        /**
+         * Build a method call CodeDOM to create the scene object of this extension.
+         * This method is used by the Scene compiler.
+         *
+         * @param obj The scene object to be created.
+         */
+        abstract buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM;
+        /**
+         * Build a CodeDOM expression to create a prefab instance that
+         * has as root type the same type of this scene object type.
+         * This method is used by the Scene compiler.
+         *
+         * @param obj The scene object to be created.
+         */
+        abstract buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -759,6 +790,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
+    import code = core.code;
     interface ContainerData extends json.ObjectData {
         list: json.ObjectData[];
     }
@@ -766,6 +798,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private static _instance;
         static getInstance(): ContainerExtension;
         private constructor();
+        buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
+        buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
         getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createContainerObject;
@@ -790,10 +824,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import code = core.code;
     class ImageExtension extends SceneObjectExtension {
         private static _instance;
         static getInstance(): any;
         private constructor();
+        buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
+        buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
+        private addArgsToCreateMethodDOM;
         getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         static isImageOrImageFrameAsset(data: any): boolean;
         acceptsDropData(data: any): boolean;

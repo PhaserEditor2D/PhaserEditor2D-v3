@@ -6,7 +6,7 @@ namespace colibri.ui.controls {
         private _image: controls.IImage;
         private _frameData: FrameData;
 
-        constructor(name: string, image: controls.IImage, frameData: FrameData) {
+        constructor(name: string | number, image: controls.IImage, frameData: FrameData) {
             this._name = name;
             this._image = image;
             this._frameData = frameData;

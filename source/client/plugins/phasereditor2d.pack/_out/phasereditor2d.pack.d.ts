@@ -94,7 +94,7 @@ declare namespace phasereditor2d.pack.core {
     import controls = colibri.ui.controls;
     class AssetPackImageFrame extends controls.ImageFrame {
         private _packItem;
-        constructor(packItem: ImageFrameContainerAssetPackItem, name: string, frameImage: controls.IImage, frameData: controls.FrameData);
+        constructor(packItem: ImageFrameContainerAssetPackItem, name: string | number, frameImage: controls.IImage, frameData: controls.FrameData);
         getPackItem(): ImageFrameContainerAssetPackItem;
     }
 }

@@ -26,6 +26,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         scene: GameScene;
     }
 
+    export interface BuildObjectFactoryCodeDOMArgs {
+        obj: SceneObject;
+        gameObjectFactoryExpr: string;
+    }
+
+    export interface BuildPrefabConstructorCodeDOMArgs {
+        obj: SceneObject;
+        sceneExpr: string;
+        methodCallDOM: core.code.MethodCallCodeDOM;
+    }
+
     export abstract class SceneObjectExtension extends colibri.Extension {
 
         static POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
@@ -81,5 +92,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @returns The assets.
          */
         async abstract getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
+
+        /**
+         * Build a method call CodeDOM to create the scene object of this extension.
+         * This method is used by the Scene compiler.
+         *
+         * @param obj The scene object to be created.
+         */
+        abstract buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM;
+
+        /**
+         * Build a CodeDOM expression to create a prefab instance that
+         * has as root type the same type of this scene object type.
+         * This method is used by the Scene compiler.
+         *
+         * @param obj The scene object to be created.
+         */
+        abstract buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
     }
 }

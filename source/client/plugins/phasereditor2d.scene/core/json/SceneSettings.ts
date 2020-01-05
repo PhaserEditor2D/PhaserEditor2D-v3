@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.core.json {
             public superClassName = "Phaser.Scene",
             public preloadMethodName = "",
             public createMethodName = "create",
-            public sceneKey = "",
+            public sceneKey = "MyScene",
             public compilerLang: SourceLang = "JavaScript",
             public scopeBlocksToFolder: boolean = false,
             public methodContextType: MethodContextType = "Scene",

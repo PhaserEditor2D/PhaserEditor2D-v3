@@ -6,6 +6,8 @@ namespace phasereditor2d.scene.core.code {
 
         constructor(name: string) {
             super(name);
+
+            this._instructions = [];
         }
 
         getInstructions() {

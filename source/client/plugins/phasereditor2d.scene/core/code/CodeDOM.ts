@@ -85,7 +85,7 @@ namespace phasereditor2d.scene.core.code {
 
             result += '"';
 
-            return s;
+            return result;
         }
     }
 }

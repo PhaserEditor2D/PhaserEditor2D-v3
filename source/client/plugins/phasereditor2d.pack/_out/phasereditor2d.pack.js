@@ -1807,7 +1807,7 @@ var phasereditor2d;
                             if (i >= start) {
                                 if (x + w <= image.getWidth() && y + h <= image.getHeight()) {
                                     const fd = new controls.FrameData(i, new controls.Rect(x, y, w, h), new controls.Rect(0, 0, w, h), new controls.Point(w, h));
-                                    frames.push(new core.AssetPackImageFrame(this.getPackItem(), i.toString(), image, fd));
+                                    frames.push(new core.AssetPackImageFrame(this.getPackItem(), i, image, fd));
                                 }
                             }
                             column++;

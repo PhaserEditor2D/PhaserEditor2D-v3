@@ -102,7 +102,7 @@ namespace phasereditor2d.pack.core.parsers {
                         );
 
                         frames.push(new AssetPackImageFrame(
-                            this.getPackItem() as ImageFrameContainerAssetPackItem, i.toString(), image, fd));
+                            this.getPackItem() as ImageFrameContainerAssetPackItem, i, image, fd));
                     }
                 }
 

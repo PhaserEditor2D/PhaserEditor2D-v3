@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
+    import code = core.code;
 
     export interface ContainerData extends json.ObjectData {
 
@@ -20,6 +21,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 typeName: "Container",
                 phaserTypeName: "Phaser.GameObjects.Container"
             });
+        }
+
+        buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs) {
+
+            args.methodCallDOM.arg(args.sceneExpr);
+        }
+
+        buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
+
+            const call = new code.MethodCallCodeDOM("container", args.gameObjectFactoryExpr);
+
+            return call;
         }
 
         async getAssetsFromObjectData(args: GetAssetsFromObjectArgs) {
