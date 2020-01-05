@@ -23,7 +23,16 @@ declare namespace phasereditor2d.scene.core {
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class AssignPropertyCodeDOM {
+    class CodeDOM {
+        private _offset;
+        getOffset(): number;
+        setOffset(offset: number): void;
+        static toHex(n: number): string;
+        static quote(s: string): string;
+    }
+}
+declare namespace phasereditor2d.scene.core.code {
+    class AssignPropertyCodeDOM extends CodeDOM {
         private _propertyName;
         private _propertyValueExpr;
         private _contextExpr;
@@ -71,15 +80,6 @@ declare namespace phasereditor2d.scene.core.code {
     }
 }
 declare namespace phasereditor2d.scene.core.code {
-    class CodeDOM {
-        private _offset;
-        getOffset(): number;
-        setOffset(offset: number): void;
-        static toHex(n: number): string;
-        static quote(s: string): string;
-    }
-}
-declare namespace phasereditor2d.scene.core.code {
     class MemberDeclCodeDOM extends CodeDOM {
         private _name;
         constructor(name: string);
@@ -98,6 +98,10 @@ declare namespace phasereditor2d.scene.core.code {
         setSuperClass(superClass: string): void;
         getMembers(): MemberDeclCodeDOM[];
     }
+}
+declare namespace phasereditor2d.scene.core.code {
+    function isAlphaNumeric(c: string): boolean;
+    function formatToValidVarName(name: string): string;
 }
 declare namespace phasereditor2d.scene.core.code {
     class FieldDeclCodeDOM extends MemberDeclCodeDOM {
@@ -150,10 +154,10 @@ declare namespace phasereditor2d.scene.core.code {
 }
 declare namespace phasereditor2d.scene.core.code {
     class MethodDeclCodeDOM extends MemberDeclCodeDOM {
-        private _instructions;
+        private _body;
         constructor(name: string);
-        getInstructions(): CodeDOM[];
-        setInstructions(instructions: CodeDOM[]): void;
+        getBody(): CodeDOM[];
+        setBody(body: CodeDOM[]): void;
     }
 }
 declare namespace phasereditor2d.scene.core.code {
@@ -171,6 +175,7 @@ declare namespace phasereditor2d.scene.core.code {
         constructor(scene: ui.GameScene, file: io.FilePath);
         build(): Promise<UnitCodeDOM>;
         private buildCreateMethod;
+        private addCreateObjectCode;
         private buildConstructorMethod;
         private buildPreloadMethod;
     }
@@ -627,6 +632,22 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface SetObjectPropertiesCodeDOMArgs {
+        result: core.code.CodeDOM[];
+        objectVarName: string;
+        prefabSerializer: core.json.Serializer;
+    }
+    abstract class Component<T> implements core.json.Serializable {
+        private _obj;
+        constructor(obj: T);
+        getObject(): T;
+        protected buildSetObjectPropertyCodeDOM_Float(fieldName: string, value: number, defValue: number, args: SetObjectPropertiesCodeDOMArgs): void;
+        abstract buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
+        abstract writeJSON(ser: core.json.Serializer): void;
+        abstract readJSON(ser: core.json.Serializer): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = core.json;
     abstract class EditorSupport<T extends SceneObject> {
@@ -640,10 +661,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(extension: SceneObjectExtension, obj: T);
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
-        getComponent(ctr: Function): any;
+        getComponent(ctr: Function): Component<any>;
         hasComponent(ctr: Function): boolean;
-        static getObjectComponent(obj: any, ctr: Function): any;
-        protected addComponent(...components: any[]): void;
+        getComponents(): IterableIterator<Component<any>>;
+        static getObjectComponent(obj: any, ctr: Function): Component<any>;
+        protected addComponent(...components: Array<Component<any>>): void;
         protected setNewId(sprite: sceneobjects.SceneObject): void;
         getExtension(): SceneObjectExtension;
         getObject(): T;
@@ -657,9 +679,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getOwnerPrefabInstance(): SceneObject;
         getPrefabId(): string;
         getPrefabName(): string;
+        getPrefabData(): json.ObjectData;
+        getPrefabSerializer(): json.Serializer;
         getObjectType(): any;
-        writeJSON(ser: json.Serializer): void;
-        readJSON(ser: json.Serializer): void;
+        getSerializer(data: json.ObjectData): json.Serializer;
+        writeJSON(data: json.ObjectData): void;
+        readJSON(data: json.ObjectData): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -711,6 +736,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         obj: SceneObject;
         sceneExpr: string;
         methodCallDOM: core.code.MethodCallCodeDOM;
+        prefabSerializer: json.Serializer;
     }
     abstract class SceneObjectExtension extends colibri.Extension {
         static POINT_ID: string;
@@ -783,8 +809,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ContainerEditorSupport extends EditorSupport<Container> {
         constructor(obj: Container);
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
-        writeJSON(ser: json.Serializer): void;
-        readJSON(ser: json.Serializer): void;
+        writeJSON(containerData: ContainerData): void;
+        readJSON(containerData: ContainerData): void;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
     }
 }
@@ -846,9 +872,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         originX: number;
         originY: number;
     }
-    class OriginComponent implements json.Serializable {
-        private _obj;
-        constructor(obj: IOriginLike);
+    class OriginComponent extends Component<IOriginLike> {
+        buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;
     }
@@ -871,10 +896,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         scaleY: number;
         angle: number;
     }
-    class TransformComponent implements json.Serializable {
-        private _obj;
-        constructor(obj: ITransformLike);
-        getObject(): ITransformLike;
+    class TransformComponent extends Component<ITransformLike> {
+        buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;
     }
@@ -910,11 +933,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         textureKey: string;
         frameKey: string;
     }
-    class TextureComponent implements json.Serializable {
+    class TextureComponent extends Component<Image> {
+        static TEXTURE_KEY_NAME: string;
+        static FRAME_KEY_NAME: string;
         private _textureKey;
         private _textureFrameKey;
-        private _obj;
-        constructor(obj: Image);
+        buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         writeJSON(ser: json.Serializer): void;
         readJSON(ser: json.Serializer): void;
         getKey(): string;

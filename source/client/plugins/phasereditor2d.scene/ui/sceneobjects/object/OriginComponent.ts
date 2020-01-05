@@ -1,32 +1,39 @@
+/// <reference path="../Component.ts" />
+
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import write = colibri.core.json.write;
-    import read = colibri.core.json.read;
     import json = core.json;
+    import code = core.code;
 
     export declare interface IOriginLike {
         originX: number;
         originY: number;
     }
 
-    export class OriginComponent implements json.Serializable {
+    export class OriginComponent extends Component<IOriginLike> {
 
-        private _obj: IOriginLike;
+        buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
 
-        constructor(obj: IOriginLike) {
-            this._obj = obj;
+            const obj = this.getObject();
+
+            this.buildSetObjectPropertyCodeDOM_Float("originX", obj.originX, 0.5, args);
+            this.buildSetObjectPropertyCodeDOM_Float("originY", obj.originY, 0.5, args);
         }
 
         readJSON(ser: json.Serializer) {
 
-            this._obj.originX = ser.read("originX", 0.5);
-            this._obj.originY = ser.read("originY", 0.5);
+            const obj = this.getObject();
+
+            obj.originX = ser.read("originX", 0.5);
+            obj.originY = ser.read("originY", 0.5);
         }
 
         writeJSON(ser: json.Serializer) {
 
-            ser.write("originX", this._obj.originX, 0.5);
-            ser.write("originY", this._obj.originY, 0.5);
+            const obj = this.getObject();
+
+            ser.write("originX", obj.originX, 0.5);
+            ser.write("originY", obj.originY, 0.5);
         }
     }
 }

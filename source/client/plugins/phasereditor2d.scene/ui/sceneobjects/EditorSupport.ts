@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _scene: GameScene;
         private _serializables: json.Serializable[];
         // tslint:disable-next-line:ban-types
-        private _components: Map<Function, any>;
+        private _components: Map<Function, Component<any>>;
 
         constructor(extension: SceneObjectExtension, obj: T) {
 
@@ -31,13 +31,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
 
         // tslint:disable-next-line:ban-types
-        getComponent(ctr: Function): any {
-            return this._components.get(ctr) as T;
+        getComponent(ctr: Function): Component<any> {
+            return this._components.get(ctr);
         }
 
         // tslint:disable-next-line:ban-types
         hasComponent(ctr: Function) {
             return this._components.has(ctr);
+        }
+
+        getComponents() {
+            return this._components.values();
         }
 
         // tslint:disable-next-line:ban-types
@@ -53,7 +57,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
-        protected addComponent(...components: any[]) {
+        protected addComponent(...components: Array<Component<any>>) {
 
             for (const c of components) {
 
@@ -139,6 +143,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
+        getPrefabData() {
+
+            if (this._prefabId) {
+
+                const data = this._scene.getMaker().getSceneDataTable().getPrefabData(this._prefabId);
+
+                return data;
+            }
+
+            return null;
+        }
+
+        getPrefabSerializer() {
+
+            const data = this.getPrefabData();
+
+            if (data) {
+
+                return this._scene.getMaker().getSerializer(data);
+            }
+
+            return null;
+        }
+
         getObjectType() {
 
             const ser = this._scene.getMaker().getSerializer({
@@ -150,13 +178,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ser.getType();
         }
 
-        writeJSON(ser: json.Serializer) {
+        getSerializer(data: json.ObjectData) {
+
+            return this._scene.getMaker().getSerializer(data);
+        }
+
+        writeJSON(data: json.ObjectData) {
 
             if (this._prefabId) {
+                data.prefabId = this._prefabId;
+            }
 
-                ser.getData().prefabId = this._prefabId;
+            const ser = this.getSerializer(data);
 
-            } else {
+            if (!this._prefabId) {
 
                 ser.write("type", this._extension.getTypeName());
             }
@@ -170,7 +205,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        readJSON(ser: json.Serializer) {
+        readJSON(data: json.ObjectData) {
+
+            const ser = this.getSerializer(data);
 
             this.setId(ser.read("id"));
             this._prefabId = ser.getData().prefabId;

@@ -108,8 +108,84 @@ var phasereditor2d;
         (function (core) {
             var code;
             (function (code) {
-                class AssignPropertyCodeDOM {
+                class CodeDOM {
+                    getOffset() {
+                        return this._offset;
+                    }
+                    setOffset(offset) {
+                        this._offset = offset;
+                    }
+                    static toHex(n) {
+                        const hex = n.toString(16);
+                        if (hex.length < 2) {
+                            return "0" + hex;
+                        }
+                        return hex;
+                    }
+                    static quote(s) {
+                        if (s === null || s === undefined || s.length === 0) {
+                            return '""';
+                        }
+                        let b;
+                        let c;
+                        let i;
+                        const len = s.length;
+                        let result = '"';
+                        for (i = 0; i < len; i += 1) {
+                            b = c;
+                            c = s.charAt(i);
+                            switch (c) {
+                                case "\\":
+                                case '"':
+                                    result += "\\";
+                                    result += c;
+                                    break;
+                                case "/":
+                                    if (b === "<") {
+                                        result += "\\";
+                                    }
+                                    result += c;
+                                    break;
+                                case "\b":
+                                    result += "\\b";
+                                    break;
+                                case "\t":
+                                    result += "\\t";
+                                    break;
+                                case "\n":
+                                    result += "\\n";
+                                    break;
+                                case "\f":
+                                    result += "\\f";
+                                    break;
+                                case "\r":
+                                    result += "\\r";
+                                    break;
+                                default:
+                                    result += c;
+                            }
+                        }
+                        result += '"';
+                        return result;
+                    }
+                }
+                code.CodeDOM = CodeDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./CodeDOM.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                class AssignPropertyCodeDOM extends code.CodeDOM {
                     constructor(propertyName, contentExpr) {
+                        super();
                         this._propertyName = propertyName;
                         this._contextExpr = contentExpr;
                     }
@@ -277,80 +353,6 @@ var phasereditor2d;
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var core;
-        (function (core) {
-            var code;
-            (function (code) {
-                class CodeDOM {
-                    getOffset() {
-                        return this._offset;
-                    }
-                    setOffset(offset) {
-                        this._offset = offset;
-                    }
-                    static toHex(n) {
-                        const hex = n.toString(16);
-                        if (hex.length < 2) {
-                            return "0" + hex;
-                        }
-                        return hex;
-                    }
-                    static quote(s) {
-                        if (s === null || s === undefined || s.length === 0) {
-                            return '""';
-                        }
-                        let b;
-                        let c;
-                        let i;
-                        const len = s.length;
-                        let result = '"';
-                        for (i = 0; i < len; i += 1) {
-                            b = c;
-                            c = s.charAt(i);
-                            switch (c) {
-                                case "\\":
-                                case '"':
-                                    result += "\\";
-                                    result += c;
-                                    break;
-                                case "/":
-                                    if (b === "<") {
-                                        result += "\\";
-                                    }
-                                    result += c;
-                                    break;
-                                case "\b":
-                                    result += "\\b";
-                                    break;
-                                case "\t":
-                                    result += "\\t";
-                                    break;
-                                case "\n":
-                                    result += "\\n";
-                                    break;
-                                case "\f":
-                                    result += "\\f";
-                                    break;
-                                case "\r":
-                                    result += "\\r";
-                                    break;
-                                default:
-                                    result += c;
-                            }
-                        }
-                        result += '"';
-                        return result;
-                    }
-                }
-                code.CodeDOM = CodeDOM;
-            })(code = core.code || (core.code = {}));
-        })(core = scene.core || (scene.core = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./CodeDOM.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -405,6 +407,38 @@ var phasereditor2d;
                     }
                 }
                 code.ClassDeclCodeDOM = ClassDeclCodeDOM;
+            })(code = core.code || (core.code = {}));
+        })(core = scene.core || (scene.core = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var core;
+        (function (core) {
+            var code;
+            (function (code) {
+                function isAlphaNumeric(c) {
+                    const n = c.charCodeAt(0);
+                    return (n > 47 && n < 58) // 0-9
+                        || (n > 64 && n < 91) // a-z
+                        || (n > 96 && n < 123); // A-Z
+                }
+                code.isAlphaNumeric = isAlphaNumeric;
+                function formatToValidVarName(name) {
+                    let s = "";
+                    for (const c of name) {
+                        if (isAlphaNumeric(c)) {
+                            s += c;
+                        }
+                        else {
+                            s += "_";
+                        }
+                    }
+                    return s;
+                }
+                code.formatToValidVarName = formatToValidVarName;
             })(code = core.code || (core.code = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -492,7 +526,7 @@ var phasereditor2d;
                         this.append(methodDecl.getName() + "() ");
                         this.line("{");
                         this.openIndent();
-                        for (const instr of methodDecl.getInstructions()) {
+                        for (const instr of methodDecl.getBody()) {
                             this.generateInstr(instr);
                         }
                         this.closeIndent("}");
@@ -636,13 +670,13 @@ var phasereditor2d;
                 class MethodDeclCodeDOM extends code.MemberDeclCodeDOM {
                     constructor(name) {
                         super(name);
-                        this._instructions = [];
+                        this._body = [];
                     }
-                    getInstructions() {
-                        return this._instructions;
+                    getBody() {
+                        return this._body;
                     }
-                    setInstructions(instructions) {
-                        this._instructions = instructions;
+                    setBody(body) {
+                        this._body = body;
                     }
                 }
                 code.MethodDeclCodeDOM = MethodDeclCodeDOM;
@@ -721,41 +755,99 @@ var phasereditor2d;
                         return unit;
                     }
                     buildCreateMethod(fields) {
+                        // TODO: we should iterate container children too!
                         const settings = this._scene.getSettings();
                         const createMethodDecl = new code.MethodDeclCodeDOM(settings.createMethodName);
-                        const publicObjects = [];
+                        const body = createMethodDecl.getBody();
                         for (const obj of this._scene.getDisplayListChildren()) {
-                            // TODO: if it is a prefab, the construction is other!
-                            const support = obj.getEditorSupport();
-                            let createObjectMethodCall;
-                            if (support.isPrefabInstance()) {
-                                const clsName = support.getPrefabName();
-                                const type = support.getObjectType();
-                                const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
-                                createObjectMethodCall = new code.MethodCallCodeDOM(clsName);
-                                createObjectMethodCall.setConstructor(true);
+                            body.push(new code.RawCodeDOM(""));
+                            body.push(new code.RawCodeDOM("// " + obj.getEditorSupport().getLabel()));
+                            this.addCreateObjectCode(obj, createMethodDecl);
+                        }
+                        return createMethodDecl;
+                    }
+                    addCreateObjectCode(obj, createMethodDecl) {
+                        // TODO: if it is a prefab, the construction is other!
+                        const support = obj.getEditorSupport();
+                        let createObjectMethodCall;
+                        if (support.isPrefabInstance()) {
+                            const clsName = support.getPrefabName();
+                            const type = support.getObjectType();
+                            const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                            createObjectMethodCall = new code.MethodCallCodeDOM(clsName);
+                            createObjectMethodCall.setConstructor(true);
+                            const prefabSerializer = support.getPrefabSerializer();
+                            if (prefabSerializer) {
                                 ext.buildNewPrefabInstanceCodeDOM({
                                     obj,
                                     methodCallDOM: createObjectMethodCall,
-                                    sceneExpr: "this"
+                                    sceneExpr: "this",
+                                    prefabSerializer
                                 });
                             }
                             else {
-                                const ext = support.getExtension();
-                                createObjectMethodCall = ext.buildAddObjectCodeDOM({
-                                    gameObjectFactoryExpr: "this.add",
-                                    obj: obj
-                                });
+                                throw new Error(`Cannot find prefab with id ${support.getPrefabId()}.`);
                             }
-                            createMethodDecl.getInstructions().push(createObjectMethodCall);
                         }
-                        return createMethodDecl;
+                        else {
+                            const ext = support.getExtension();
+                            createObjectMethodCall = ext.buildAddObjectCodeDOM({
+                                gameObjectFactoryExpr: "this.add",
+                                obj: obj
+                            });
+                        }
+                        const varname = code.formatToValidVarName(support.getLabel());
+                        let temporalVar = false;
+                        createMethodDecl.getBody().push(createObjectMethodCall);
+                        {
+                            const setPropsInstructions = [];
+                            const objData = {};
+                            let prefabSerializer = null;
+                            if (support.isPrefabInstance()) {
+                                temporalVar = true;
+                                prefabSerializer = support.getPrefabSerializer();
+                                // add to scene
+                                {
+                                    if (obj.parentContainer) {
+                                        const container = obj.parentContainer;
+                                        const containerVarname = code.formatToValidVarName(container.getEditorSupport().getLabel());
+                                        const addToContainer = new code.MethodCallCodeDOM("add", containerVarname);
+                                        addToContainer.arg(varname);
+                                        createMethodDecl.getBody().push(addToContainer);
+                                    }
+                                    else {
+                                        const addToScene = new code.MethodCallCodeDOM("existing", "this.add");
+                                        addToScene.arg(varname);
+                                        createMethodDecl.getBody().push(addToScene);
+                                    }
+                                }
+                            }
+                            for (const comp of support.getComponents()) {
+                                comp.buildSetObjectPropertiesCodeDOM({
+                                    result: setPropsInstructions,
+                                    objectVarName: varname,
+                                    prefabSerializer: prefabSerializer
+                                });
+                                temporalVar = temporalVar || setPropsInstructions.length > 0;
+                                createMethodDecl.getBody().push(...setPropsInstructions);
+                            }
+                            if (obj instanceof scene_1.ui.sceneobjects.Container && !support.isPrefabInstance()) {
+                                temporalVar = temporalVar || obj.list.length > 0;
+                                for (const child of obj.list) {
+                                    this.addCreateObjectCode(child, createMethodDecl);
+                                }
+                            }
+                        }
+                        if (temporalVar) {
+                            createObjectMethodCall.setReturnToVar(varname);
+                            createObjectMethodCall.setDeclareReturnToVar(true);
+                        }
                     }
                     buildConstructorMethod(sceneKey) {
                         const methodDecl = new code.MethodDeclCodeDOM("constructor");
                         const superCall = new code.MethodCallCodeDOM("super", null);
                         superCall.argLiteral(sceneKey);
-                        methodDecl.getInstructions().push(superCall);
+                        methodDecl.getBody().push(superCall);
                         return methodDecl;
                     }
                     async buildPreloadMethod() {
@@ -938,7 +1030,7 @@ var phasereditor2d;
                         };
                         for (const obj of this._scene.getDisplayListChildren()) {
                             const objData = {};
-                            obj.getEditorSupport().writeJSON(this._scene.getMaker().getSerializer(objData));
+                            obj.getEditorSupport().writeJSON(objData);
                             sceneData.displayList.push(objData);
                         }
                         return sceneData;
@@ -1221,7 +1313,7 @@ var phasereditor2d;
                             scene: this._scene
                         });
                         if (sprite) {
-                            sprite.getEditorSupport().readJSON(this.getSerializer(data));
+                            sprite.getEditorSupport().readJSON(data);
                         }
                         return sprite;
                     }
@@ -2793,7 +2885,7 @@ var phasereditor2d;
                             super(editor);
                             this._dataList = objects.map(obj => {
                                 const data = {};
-                                obj.getEditorSupport().writeJSON(editor.getSceneMaker().getSerializer(data));
+                                obj.getEditorSupport().writeJSON(data);
                                 return data;
                             });
                         }
@@ -2910,6 +3002,43 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                var code = scene.core.code;
+                class Component {
+                    constructor(obj) {
+                        this._obj = obj;
+                    }
+                    getObject() {
+                        return this._obj;
+                    }
+                    buildSetObjectPropertyCodeDOM_Float(fieldName, value, defValue, args) {
+                        const obj = this.getObject();
+                        const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
+                        let add = false;
+                        if (args.prefabSerializer) {
+                            add = value !== args.prefabSerializer.read(fieldName, defValue);
+                        }
+                        else {
+                            add = value !== defValue;
+                        }
+                        if (add) {
+                            dom.valueFloat(value);
+                            args.result.push(dom);
+                        }
+                    }
+                }
+                sceneobjects.Component = Component;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
     (function (scene_10) {
         var ui;
         (function (ui) {
@@ -2931,6 +3060,9 @@ var phasereditor2d;
                     // tslint:disable-next-line:ban-types
                     hasComponent(ctr) {
                         return this._components.has(ctr);
+                    }
+                    getComponents() {
+                        return this._components.values();
                     }
                     // tslint:disable-next-line:ban-types
                     static getObjectComponent(obj, ctr) {
@@ -2999,6 +3131,20 @@ var phasereditor2d;
                         }
                         return null;
                     }
+                    getPrefabData() {
+                        if (this._prefabId) {
+                            const data = this._scene.getMaker().getSceneDataTable().getPrefabData(this._prefabId);
+                            return data;
+                        }
+                        return null;
+                    }
+                    getPrefabSerializer() {
+                        const data = this.getPrefabData();
+                        if (data) {
+                            return this._scene.getMaker().getSerializer(data);
+                        }
+                        return null;
+                    }
                     getObjectType() {
                         const ser = this._scene.getMaker().getSerializer({
                             id: this.getId(),
@@ -3007,11 +3153,15 @@ var phasereditor2d;
                         });
                         return ser.getType();
                     }
-                    writeJSON(ser) {
+                    getSerializer(data) {
+                        return this._scene.getMaker().getSerializer(data);
+                    }
+                    writeJSON(data) {
                         if (this._prefabId) {
-                            ser.getData().prefabId = this._prefabId;
+                            data.prefabId = this._prefabId;
                         }
-                        else {
+                        const ser = this.getSerializer(data);
+                        if (!this._prefabId) {
                             ser.write("type", this._extension.getTypeName());
                         }
                         ser.write("id", this.getId());
@@ -3020,7 +3170,8 @@ var phasereditor2d;
                             s.writeJSON(ser);
                         }
                     }
-                    readJSON(ser) {
+                    readJSON(data) {
+                        const ser = this.getSerializer(data);
                         this.setId(ser.read("id"));
                         this._prefabId = ser.getData().prefabId;
                         this._label = ser.read("label");
@@ -3169,19 +3320,19 @@ var phasereditor2d;
                         }
                         return new controls.viewers.IconImageCellRenderer(scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP));
                     }
-                    writeJSON(ser) {
-                        super.writeJSON(ser);
+                    writeJSON(containerData) {
+                        super.writeJSON(containerData);
                         if (!this.isPrefabInstance()) {
-                            const data = ser.getData();
-                            data.list = this.getObject().list.map(obj => {
+                            containerData.list = this.getObject().list.map(obj => {
                                 const objData = {};
-                                obj.getEditorSupport().writeJSON(ser.getSerializer(objData));
+                                obj.getEditorSupport().writeJSON(objData);
                                 return objData;
                             });
                         }
                     }
-                    readJSON(ser) {
-                        super.readJSON(ser);
+                    readJSON(containerData) {
+                        super.readJSON(containerData);
+                        const ser = this.getSerializer(containerData);
                         const list = ser.read("list", []);
                         const maker = this.getScene().getMaker();
                         const container = this.getObject();
@@ -3241,10 +3392,17 @@ var phasereditor2d;
                         return this._instance || (this._instance = new ContainerExtension());
                     }
                     buildNewPrefabInstanceCodeDOM(args) {
-                        args.methodCallDOM.arg(args.sceneExpr);
+                        const obj = args.obj;
+                        const call = args.methodCallDOM;
+                        call.arg(args.sceneExpr);
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
                     }
                     buildAddObjectCodeDOM(args) {
+                        const obj = args.obj;
                         const call = new code.MethodCallCodeDOM("container", args.gameObjectFactoryExpr);
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
                         return call;
                     }
                     async getAssetsFromObjectData(args) {
@@ -3267,7 +3425,7 @@ var phasereditor2d;
                     }
                     createSceneObjectWithData(args) {
                         const container = this.createContainerObject(args.scene, 0, 0, []);
-                        container.getEditorSupport().readJSON(args.scene.getMaker().getSerializer(args.data));
+                        container.getEditorSupport().readJSON(args.data);
                         return container;
                     }
                     createContainerObject(scene, x, y, list) {
@@ -3399,31 +3557,38 @@ var phasereditor2d;
                         this.addArgsToCreateMethodDOM(call, args.obj);
                     }
                     buildAddObjectCodeDOM(args) {
-                        const obj = args.obj;
                         const call = new code.MethodCallCodeDOM("image", args.gameObjectFactoryExpr);
-                        this.addArgsToCreateMethodDOM(call, obj);
+                        this.addArgsToCreateMethodDOM(call, args.obj);
                         return call;
                     }
                     addArgsToCreateMethodDOM(call, obj) {
                         call.argFloat(obj.x);
                         call.argFloat(obj.y);
-                        {
-                            const comp = obj.getEditorSupport().getTextureComponent();
-                            call.argLiteral(comp.getKey());
-                            const frame = comp.getFrame();
-                            switch (typeof frame) {
-                                case "number":
-                                    call.argInt(frame);
-                                    break;
-                                case "string":
-                                    call.argLiteral(frame);
-                                    break;
+                        const support = obj.getEditorSupport();
+                        const textureComponent = obj.getEditorSupport().getTextureComponent();
+                        if (support.isPrefabInstance()) {
+                            const prefabSerializer = support.getPrefabSerializer();
+                            if (prefabSerializer) {
+                                const key = prefabSerializer.read(sceneobjects.TextureComponent.TEXTURE_KEY_NAME);
+                                if (key === textureComponent.getKey()) {
+                                    return call;
+                                }
                             }
+                            else {
+                                throw new Error(`Cannot find prefab with id ${support.getPrefabId()}.`);
+                            }
+                        }
+                        call.argLiteral(textureComponent.getKey());
+                        const frame = textureComponent.getFrame();
+                        if (typeof frame === "number") {
+                            call.argInt(frame);
+                        }
+                        else {
+                            call.argLiteral(frame);
                         }
                     }
                     async getAssetsFromObjectData(args) {
                         const key = args.serializer.read("textureKey");
-                        // const key = (args.data as sceneobjects.TextureData).textureKey;
                         const finder = args.finder;
                         const item = finder.findAssetPackItem(key);
                         if (item) {
@@ -3459,7 +3624,7 @@ var phasereditor2d;
                     }
                     createSceneObjectWithData(args) {
                         const sprite = this.createImageObject(args.scene, 0, 0, undefined);
-                        sprite.getEditorSupport().readJSON(args.scene.getMaker().getSerializer(args.data));
+                        sprite.getEditorSupport().readJSON(args.data);
                         return sprite;
                     }
                     createImageObject(scene, x, y, key, frame) {
@@ -3474,6 +3639,7 @@ var phasereditor2d;
         })(ui = scene_16.ui || (scene_16.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../Component.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -3482,17 +3648,21 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class OriginComponent {
-                    constructor(obj) {
-                        this._obj = obj;
+                class OriginComponent extends sceneobjects.Component {
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        const obj = this.getObject();
+                        this.buildSetObjectPropertyCodeDOM_Float("originX", obj.originX, 0.5, args);
+                        this.buildSetObjectPropertyCodeDOM_Float("originY", obj.originY, 0.5, args);
                     }
                     readJSON(ser) {
-                        this._obj.originX = ser.read("originX", 0.5);
-                        this._obj.originY = ser.read("originY", 0.5);
+                        const obj = this.getObject();
+                        obj.originX = ser.read("originX", 0.5);
+                        obj.originY = ser.read("originY", 0.5);
                     }
                     writeJSON(ser) {
-                        ser.write("originX", this._obj.originX, 0.5);
-                        ser.write("originY", this._obj.originY, 0.5);
+                        const obj = this.getObject();
+                        ser.write("originX", obj.originX, 0.5);
+                        ser.write("originY", obj.originY, 0.5);
                     }
                 }
                 sceneobjects.OriginComponent = OriginComponent;
@@ -3547,6 +3717,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../Component.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -3555,26 +3726,25 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TransformComponent {
-                    constructor(obj) {
-                        this._obj = obj;
-                    }
-                    getObject() {
-                        return this._obj;
+                class TransformComponent extends sceneobjects.Component {
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        // TODO
                     }
                     readJSON(ser) {
-                        this._obj.x = ser.read("x", 0);
-                        this._obj.y = ser.read("y", 0);
-                        this._obj.scaleX = ser.read("scaleX", 1);
-                        this._obj.scaleY = ser.read("scaleY", 1);
-                        this._obj.angle = ser.read("angle", 0);
+                        const obj = this.getObject();
+                        obj.x = ser.read("x", 0);
+                        obj.y = ser.read("y", 0);
+                        obj.scaleX = ser.read("scaleX", 1);
+                        obj.scaleY = ser.read("scaleY", 1);
+                        obj.angle = ser.read("angle", 0);
                     }
                     writeJSON(ser) {
-                        ser.write("x", this._obj.x, 0);
-                        ser.write("y", this._obj.y, 0);
-                        ser.write("scaleX", this._obj.scaleX, 1);
-                        ser.write("scaleY", this._obj.scaleY, 1);
-                        ser.write("angle", this._obj.angle, 0);
+                        const obj = this.getObject();
+                        ser.write("x", obj.x, 0);
+                        ser.write("y", obj.y, 0);
+                        ser.write("scaleX", obj.scaleX, 1);
+                        ser.write("scaleY", obj.scaleY, 1);
+                        ser.write("angle", obj.angle, 0);
                     }
                 }
                 sceneobjects.TransformComponent = TransformComponent;
@@ -3743,6 +3913,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../Component.ts"/>
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -3751,9 +3922,9 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TextureComponent {
-                    constructor(obj) {
-                        this._obj = obj;
+                class TextureComponent extends sceneobjects.Component {
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        // nothing, the properties are set when the object is created.
                     }
                     writeJSON(ser) {
                         ser.write("textureKey", this._textureKey);
@@ -3773,9 +3944,10 @@ var phasereditor2d;
                     setTexture(key, frame) {
                         this.setKey(key);
                         this.setFrame(frame);
-                        this._obj.setTexture(key, frame);
+                        const obj = this.getObject();
+                        obj.setTexture(key, frame);
                         // this should be called each time the texture is changed
-                        this._obj.setInteractive();
+                        obj.setInteractive();
                     }
                     getTexture() {
                         return {
@@ -3790,6 +3962,8 @@ var phasereditor2d;
                         this._textureFrameKey = frame;
                     }
                 }
+                TextureComponent.TEXTURE_KEY_NAME = "textureKey";
+                TextureComponent.FRAME_KEY_NAME = "frameKey";
                 sceneobjects.TextureComponent = TextureComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));

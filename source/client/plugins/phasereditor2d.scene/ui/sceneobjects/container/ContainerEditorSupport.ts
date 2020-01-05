@@ -36,28 +36,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
         }
 
-        writeJSON(ser: json.Serializer) {
+        writeJSON(containerData: ContainerData) {
 
-            super.writeJSON(ser);
+            super.writeJSON(containerData);
 
             if (!this.isPrefabInstance()) {
 
-                const data = ser.getData() as ContainerData;
-
-                data.list = this.getObject().list.map(obj => {
+                containerData.list = this.getObject().list.map(obj => {
 
                     const objData = {} as json.ObjectData;
 
-                    obj.getEditorSupport().writeJSON(ser.getSerializer(objData));
+                    obj.getEditorSupport().writeJSON(objData);
 
                     return objData as json.ObjectData;
                 });
             }
         }
 
-        readJSON(ser: json.Serializer) {
+        readJSON(containerData: ContainerData) {
 
-            super.readJSON(ser);
+            super.readJSON(containerData);
+
+            const ser = this.getSerializer(containerData);
 
             const list = ser.read("list", []) as json.ObjectData[];
 

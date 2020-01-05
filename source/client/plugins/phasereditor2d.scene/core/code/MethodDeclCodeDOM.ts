@@ -2,20 +2,20 @@ namespace phasereditor2d.scene.core.code {
 
     export class MethodDeclCodeDOM extends MemberDeclCodeDOM {
 
-        private _instructions: CodeDOM[];
+        private _body: CodeDOM[];
 
         constructor(name: string) {
             super(name);
 
-            this._instructions = [];
+            this._body = [];
         }
 
-        getInstructions() {
-            return this._instructions;
+        getBody() {
+            return this._body;
         }
 
-        setInstructions(instructions: CodeDOM[]) {
-            this._instructions = instructions;
+        setBody(body: CodeDOM[]) {
+            this._body = body;
         }
     }
 }

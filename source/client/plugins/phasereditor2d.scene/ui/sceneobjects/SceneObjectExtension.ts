@@ -35,6 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         obj: SceneObject;
         sceneExpr: string;
         methodCallDOM: core.code.MethodCallCodeDOM;
+        prefabSerializer: json.Serializer;
     }
 
     export abstract class SceneObjectExtension extends colibri.Extension {

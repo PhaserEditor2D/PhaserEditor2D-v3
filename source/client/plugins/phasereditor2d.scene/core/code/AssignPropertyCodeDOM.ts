@@ -1,6 +1,8 @@
+/// <reference path="./CodeDOM.ts" />
+
 namespace phasereditor2d.scene.core.code {
 
-    export class AssignPropertyCodeDOM {
+    export class AssignPropertyCodeDOM extends CodeDOM {
 
         private _propertyName: string;
         private _propertyValueExpr: string;
@@ -8,6 +10,8 @@ namespace phasereditor2d.scene.core.code {
         private _propertyType: string;
 
         constructor(propertyName: string, contentExpr: string) {
+            super();
+
             this._propertyName = propertyName;
             this._contextExpr = contentExpr;
         }

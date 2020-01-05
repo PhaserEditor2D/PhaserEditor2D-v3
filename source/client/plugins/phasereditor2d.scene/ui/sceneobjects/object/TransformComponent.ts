@@ -1,3 +1,5 @@
+/// <reference path="../Component.ts" />
+
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import write = colibri.core.json.write;
@@ -12,35 +14,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         angle: number;
     }
 
-    export class TransformComponent implements json.Serializable {
+    export class TransformComponent extends Component<ITransformLike> {
 
-        private _obj: ITransformLike;
-
-        constructor(obj: ITransformLike) {
-            this._obj = obj;
-        }
-
-        getObject() {
-            return this._obj;
+        buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
+            // TODO
         }
 
         readJSON(ser: json.Serializer) {
 
-            this._obj.x = ser.read("x", 0);
-            this._obj.y = ser.read("y", 0);
+            const obj = this.getObject();
 
-            this._obj.scaleX = ser.read("scaleX", 1);
-            this._obj.scaleY = ser.read("scaleY", 1);
-            this._obj.angle = ser.read("angle", 0);
+            obj.x = ser.read("x", 0);
+            obj.y = ser.read("y", 0);
+
+            obj.scaleX = ser.read("scaleX", 1);
+            obj.scaleY = ser.read("scaleY", 1);
+            obj.angle = ser.read("angle", 0);
         }
 
         writeJSON(ser: json.Serializer) {
 
-            ser.write("x", this._obj.x, 0);
-            ser.write("y", this._obj.y, 0);
-            ser.write("scaleX", this._obj.scaleX, 1);
-            ser.write("scaleY", this._obj.scaleY, 1);
-            ser.write("angle", this._obj.angle, 0);
+            const obj = this.getObject();
+
+            ser.write("x", obj.x, 0);
+            ser.write("y", obj.y, 0);
+            ser.write("scaleX", obj.scaleX, 1);
+            ser.write("scaleY", obj.scaleY, 1);
+            ser.write("angle", obj.angle, 0);
         }
     }
 }

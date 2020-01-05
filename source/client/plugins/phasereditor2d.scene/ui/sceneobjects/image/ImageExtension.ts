@@ -28,11 +28,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
-            const obj = args.obj as Image;
-
             const call = new code.MethodCallCodeDOM("image", args.gameObjectFactoryExpr);
 
-            this.addArgsToCreateMethodDOM(call, obj);
+            this.addArgsToCreateMethodDOM(call, args.obj as Image);
 
             return call;
         }
@@ -42,30 +40,47 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.argFloat(obj.x);
             call.argFloat(obj.y);
 
-            {
-                const comp = obj.getEditorSupport().getTextureComponent();
+            const support = obj.getEditorSupport();
 
-                call.argLiteral(comp.getKey());
+            const textureComponent = obj.getEditorSupport().getTextureComponent();
 
-                const frame = comp.getFrame();
+            if (support.isPrefabInstance()) {
 
-                switch (typeof frame) {
+                const prefabSerializer = support.getPrefabSerializer();
 
-                    case "number":
-                        call.argInt(frame);
-                        break;
-                    case "string":
-                        call.argLiteral(frame);
-                        break;
+                if (prefabSerializer) {
+
+                    const key = prefabSerializer.read(TextureComponent.TEXTURE_KEY_NAME);
+
+                    if (key === textureComponent.getKey()) {
+
+                        return call;
+                    }
+
+                } else {
+
+                    throw new Error(`Cannot find prefab with id ${support.getPrefabId()}.`);
                 }
             }
+
+            call.argLiteral(textureComponent.getKey());
+
+            const frame = textureComponent.getFrame();
+
+            if (typeof frame === "number") {
+
+                call.argInt(frame);
+
+            } else {
+
+                call.argLiteral(frame);
+            }
+
         }
 
         async getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]> {
 
             const key = args.serializer.read("textureKey");
-
-            // const key = (args.data as sceneobjects.TextureData).textureKey;
 
             const finder = args.finder;
 
@@ -122,7 +137,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const sprite = this.createImageObject(args.scene, 0, 0, undefined);
 
-            sprite.getEditorSupport().readJSON(args.scene.getMaker().getSerializer(args.data));
+            sprite.getEditorSupport().readJSON(args.data);
 
             return sprite;
         }

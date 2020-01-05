@@ -138,7 +138,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (sprite) {
 
-                    sprite.getEditorSupport().readJSON(this.getSerializer(data));
+                    sprite.getEditorSupport().readJSON(data);
 
                 }
 

@@ -25,12 +25,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs) {
 
-            args.methodCallDOM.arg(args.sceneExpr);
+            const obj = args.obj as Container;
+            const call = args.methodCallDOM;
+
+            call.arg(args.sceneExpr);
+            call.argFloat(obj.x);
+            call.argFloat(obj.y);
         }
 
         buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
+            const obj = args.obj as Container;
             const call = new code.MethodCallCodeDOM("container", args.gameObjectFactoryExpr);
+
+            call.argFloat(obj.x);
+            call.argFloat(obj.y);
 
             return call;
         }
@@ -68,7 +77,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
-            container.getEditorSupport().readJSON(args.scene.getMaker().getSerializer(args.data));
+            container.getEditorSupport().readJSON(args.data as ContainerData);
 
             return container;
         }

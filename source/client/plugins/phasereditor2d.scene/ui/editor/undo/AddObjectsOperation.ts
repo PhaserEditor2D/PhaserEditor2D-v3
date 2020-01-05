@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 const data = {} as json.ObjectData;
 
-                obj.getEditorSupport().writeJSON(editor.getSceneMaker().getSerializer(data));
+                obj.getEditorSupport().writeJSON(data);
 
                 return data;
             });

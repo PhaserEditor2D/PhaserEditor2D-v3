@@ -70,51 +70,138 @@ namespace phasereditor2d.scene.core.code {
 
         private buildCreateMethod(fields: MemberDeclCodeDOM[]) {
 
+            // TODO: we should iterate container children too!
+
             const settings = this._scene.getSettings();
 
             const createMethodDecl = new MethodDeclCodeDOM(settings.createMethodName);
 
-            const publicObjects: SceneObject[] = [];
+            const body = createMethodDecl.getBody();
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
-                // TODO: if it is a prefab, the construction is other!
+                body.push(new RawCodeDOM(""));
+                body.push(new RawCodeDOM("// " + obj.getEditorSupport().getLabel()));
 
-                const support = obj.getEditorSupport();
+                this.addCreateObjectCode(obj, createMethodDecl);
+            }
 
-                let createObjectMethodCall: code.MethodCallCodeDOM;
+            return createMethodDecl;
+        }
 
-                if (support.isPrefabInstance()) {
+        private addCreateObjectCode(obj: SceneObject, createMethodDecl: MethodDeclCodeDOM) {
+            // TODO: if it is a prefab, the construction is other!
 
-                    const clsName = support.getPrefabName();
+            const support = obj.getEditorSupport();
 
-                    const type = support.getObjectType();
+            let createObjectMethodCall: MethodCallCodeDOM;
 
-                    const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+            if (support.isPrefabInstance()) {
 
-                    createObjectMethodCall = new code.MethodCallCodeDOM(clsName);
-                    createObjectMethodCall.setConstructor(true);
+                const clsName = support.getPrefabName();
+
+                const type = support.getObjectType();
+
+                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+
+                createObjectMethodCall = new code.MethodCallCodeDOM(clsName);
+                createObjectMethodCall.setConstructor(true);
+
+                const prefabSerializer = support.getPrefabSerializer();
+
+                if (prefabSerializer) {
 
                     ext.buildNewPrefabInstanceCodeDOM({
                         obj,
                         methodCallDOM: createObjectMethodCall,
-                        sceneExpr: "this"
+                        sceneExpr: "this",
+                        prefabSerializer
                     });
 
                 } else {
 
-                    const ext = support.getExtension();
-
-                    createObjectMethodCall = ext.buildAddObjectCodeDOM({
-                        gameObjectFactoryExpr: "this.add",
-                        obj: obj
-                    });
+                    throw new Error(`Cannot find prefab with id ${support.getPrefabId()}.`);
                 }
 
-                createMethodDecl.getInstructions().push(createObjectMethodCall);
+            } else {
+
+                const ext = support.getExtension();
+
+                createObjectMethodCall = ext.buildAddObjectCodeDOM({
+                    gameObjectFactoryExpr: "this.add",
+                    obj: obj
+                });
             }
 
-            return createMethodDecl;
+            const varname = formatToValidVarName(support.getLabel());
+
+            let temporalVar = false;
+
+            createMethodDecl.getBody().push(createObjectMethodCall);
+
+            {
+                const setPropsInstructions: CodeDOM[] = [];
+
+                const objData = {} as json.ObjectData;
+
+                let prefabSerializer: json.Serializer = null;
+
+                if (support.isPrefabInstance()) {
+
+                    temporalVar = true;
+
+                    prefabSerializer = support.getPrefabSerializer();
+
+                    // add to scene
+                    {
+                        if (obj.parentContainer) {
+
+                            const container = obj.parentContainer as ui.sceneobjects.Container;
+                            const containerVarname = formatToValidVarName(container.getEditorSupport().getLabel());
+
+                            const addToContainer = new MethodCallCodeDOM("add", containerVarname);
+                            addToContainer.arg(varname);
+                            createMethodDecl.getBody().push(addToContainer);
+
+                        } else {
+
+                            const addToScene = new MethodCallCodeDOM("existing", "this.add");
+                            addToScene.arg(varname);
+                            createMethodDecl.getBody().push(addToScene);
+                        }
+
+                    }
+                }
+
+                for (const comp of support.getComponents()) {
+
+                    comp.buildSetObjectPropertiesCodeDOM({
+                        result: setPropsInstructions,
+                        objectVarName: varname,
+                        prefabSerializer: prefabSerializer
+                    });
+
+                    temporalVar = temporalVar || setPropsInstructions.length > 0;
+
+                    createMethodDecl.getBody().push(...setPropsInstructions);
+                }
+
+                if (obj instanceof ui.sceneobjects.Container && !support.isPrefabInstance()) {
+
+                    temporalVar = temporalVar || obj.list.length > 0;
+
+                    for (const child of obj.list) {
+
+                        this.addCreateObjectCode(child, createMethodDecl);
+                    }
+                }
+            }
+
+            if (temporalVar) {
+
+                createObjectMethodCall.setReturnToVar(varname);
+                createObjectMethodCall.setDeclareReturnToVar(true);
+            }
         }
 
         private buildConstructorMethod(sceneKey: string) {
@@ -125,7 +212,7 @@ namespace phasereditor2d.scene.core.code {
 
             superCall.argLiteral(sceneKey);
 
-            methodDecl.getInstructions().push(superCall);
+            methodDecl.getBody().push(superCall);
 
             return methodDecl;
         }

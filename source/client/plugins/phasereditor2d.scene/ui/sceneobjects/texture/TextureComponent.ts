@@ -1,3 +1,5 @@
+/// <reference path="../Component.ts"/>
+
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import write = colibri.core.json.write;
@@ -9,14 +11,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         frameKey: string;
     }
 
-    export class TextureComponent implements json.Serializable {
+    export class TextureComponent extends Component<Image> {
+
+        static TEXTURE_KEY_NAME = "textureKey";
+        static FRAME_KEY_NAME = "frameKey";
 
         private _textureKey: string;
         private _textureFrameKey: string | number;
-        private _obj: Image;
 
-        constructor(obj: Image) {
-            this._obj = obj;
+        buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
+            // nothing, the properties are set when the object is created.
         }
 
         writeJSON(ser: json.Serializer): void {
@@ -46,9 +50,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setKey(key);
             this.setFrame(frame);
 
-            this._obj.setTexture(key, frame);
+            const obj = this.getObject();
+
+            obj.setTexture(key, frame);
             // this should be called each time the texture is changed
-            this._obj.setInteractive();
+            obj.setInteractive();
         }
 
         getTexture() {

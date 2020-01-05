@@ -88,7 +88,7 @@ namespace phasereditor2d.scene.core.code {
             this.line("{");
             this.openIndent();
 
-            for (const instr of methodDecl.getInstructions()) {
+            for (const instr of methodDecl.getBody()) {
 
                 this.generateInstr(instr);
             }
