@@ -19,8 +19,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this.isPrefabInstance()) {
 
-                const table = this.getScene().getMaker().getSceneDataTable();
-                const file = table.getPrefabFile(this.getPrefabId());
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                const file = finder.getPrefabFile(this.getPrefabId());
 
                 if (file) {
 

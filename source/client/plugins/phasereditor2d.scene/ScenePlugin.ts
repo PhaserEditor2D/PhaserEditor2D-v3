@@ -12,6 +12,8 @@ namespace phasereditor2d.scene {
 
         private static _instance = new ScenePlugin();
 
+        private _sceneFinder: core.json.SceneFinder;
+
         static getInstance() {
             return this._instance;
         }
@@ -21,6 +23,15 @@ namespace phasereditor2d.scene {
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
+
+            this._sceneFinder = new core.json.SceneFinder();
+
+            // preload project
+
+            reg.addExtension(new colibri.ui.ide.PreloadProjectResourcesExtension(monitor => {
+
+                return this._sceneFinder.preload(monitor);
+            }));
 
             // content type resolvers
 
@@ -89,6 +100,10 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.OriginSection(page),
                 page => new ui.sceneobjects.TextureSection(page)
             ));
+        }
+
+        getSceneFinder() {
+            return this._sceneFinder;
         }
 
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[] {

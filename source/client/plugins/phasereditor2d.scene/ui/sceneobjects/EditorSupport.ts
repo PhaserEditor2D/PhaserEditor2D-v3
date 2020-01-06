@@ -149,7 +149,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._prefabId) {
 
-                const file = this._scene.getMaker().getSceneDataTable().getPrefabFile(this._prefabId);
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                const file = finder.getPrefabFile(this._prefabId);
 
                 if (file) {
 
@@ -164,7 +166,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._prefabId) {
 
-                const data = this._scene.getMaker().getSceneDataTable().getPrefabData(this._prefabId);
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                const data = finder.getPrefabData(this._prefabId);
 
                 return data;
             }

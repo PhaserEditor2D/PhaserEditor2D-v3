@@ -10,7 +10,6 @@ namespace phasereditor2d.scene.ui {
     export class SceneMaker {
 
         private _scene: GameScene;
-        private static _sceneDataTable: json.SceneDataTable;
 
         constructor(scene: GameScene) {
             this._scene = scene;
@@ -21,7 +20,7 @@ namespace phasereditor2d.scene.ui {
         }
 
         async preload() {
-            await this.getSceneDataTable().preload();
+            // nothing for now
         }
 
         isPrefabFile(file: io.FilePath) {
@@ -30,7 +29,9 @@ namespace phasereditor2d.scene.ui {
 
             if (ct === core.CONTENT_TYPE_SCENE) {
 
-                const data = this.getSceneDataTable().getSceneData(file);
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                const data = finder.getSceneData(file);
 
                 return data && data.sceneType === json.SceneType.PREFAB;
             }
@@ -65,17 +66,8 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        getSceneDataTable() {
-
-            if (!SceneMaker._sceneDataTable) {
-                SceneMaker._sceneDataTable = new json.SceneDataTable();
-            }
-
-            return SceneMaker._sceneDataTable;
-        }
-
         getSerializer(data: json.ObjectData) {
-            return new json.Serializer(data, this.getSceneDataTable());
+            return new json.Serializer(data);
         }
 
         createScene(data: json.SceneData) {

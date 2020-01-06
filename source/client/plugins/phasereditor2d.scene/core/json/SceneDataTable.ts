@@ -2,8 +2,9 @@ namespace phasereditor2d.scene.core.json {
 
     import FileUtils = colibri.ui.ide.FileUtils;
     import io = colibri.core.io;
+    import controls = colibri.ui.controls;
 
-    export class SceneDataTable {
+    export class SceneFinder {
 
         private _dataMap: Map<string, ObjectData>;
         private _sceneDataMap: Map<string, SceneData>;
@@ -16,13 +17,15 @@ namespace phasereditor2d.scene.core.json {
             this._fileMap = new Map();
         }
 
-        async preload(): Promise<void> {
+        async preload(monitor: controls.IProgressMonitor): Promise<void> {
 
             const dataMap = new Map<string, ObjectData>();
             const sceneDataMap = new Map<string, SceneData>();
             const fileMap = new Map<string, io.FilePath>();
 
             const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+
+            monitor.addTotal(files.length);
 
             for (const file of files) {
 
@@ -48,6 +51,8 @@ namespace phasereditor2d.scene.core.json {
                 } catch (e) {
                     console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
                 }
+
+                monitor.step();
             }
 
             this._dataMap = dataMap;

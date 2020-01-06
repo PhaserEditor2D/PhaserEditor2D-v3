@@ -7,20 +7,20 @@ namespace phasereditor2d.scene.core.json {
 
         private _data: ObjectData;
         private _prefabSer: Serializer;
-        private _table: SceneDataTable;
 
-        constructor(data: ObjectData, table: SceneDataTable) {
+        constructor(data: ObjectData) {
 
             this._data = data;
-            this._table = table;
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
 
             if (this._data.prefabId) {
 
-                const prefabData = table.getPrefabData(this._data.prefabId);
+                const prefabData = finder.getPrefabData(this._data.prefabId);
 
                 if (prefabData) {
 
-                    this._prefabSer = new Serializer(prefabData, table);
+                    this._prefabSer = new Serializer(prefabData);
 
                 } else {
 
@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.core.json {
         }
 
         getSerializer(data: ObjectData) {
-            return new Serializer(data, this._table);
+            return new Serializer(data);
         }
 
         getData() {

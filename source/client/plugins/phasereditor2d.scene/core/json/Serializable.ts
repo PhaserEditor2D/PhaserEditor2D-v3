@@ -2,12 +2,12 @@ namespace phasereditor2d.scene.core.json {
 
     export interface WriteArgs {
         data: ObjectData;
-        table: SceneDataTable;
+        table: SceneFinder;
     }
 
     export interface ReadArgs {
         data: ObjectData;
-        table: SceneDataTable;
+        table: SceneFinder;
     }
 
     export interface Serializable {

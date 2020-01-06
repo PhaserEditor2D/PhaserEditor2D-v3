@@ -16,6 +16,11 @@ var phasereditor2d;
                 return this._instance;
             }
             registerExtensions(reg) {
+                this._sceneFinder = new scene.core.json.SceneFinder();
+                // preload project
+                reg.addExtension(new colibri.ui.ide.PreloadProjectResourcesExtension(monitor => {
+                    return this._sceneFinder.preload(monitor);
+                }));
                 // content type resolvers
                 reg.addExtension(new colibri.core.ContentTypeExtension([new scene.core.SceneContentTypeResolver()], 5));
                 // content type renderer
@@ -42,6 +47,9 @@ var phasereditor2d;
                 reg.addExtension(new scene.ui.sceneobjects.ImageLoaderUpdater());
                 // property sections
                 reg.addExtension(new scene.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene.ui.sceneobjects.VariableSection(page), page => new scene.ui.sceneobjects.TransformSection(page), page => new scene.ui.sceneobjects.OriginSection(page), page => new scene.ui.sceneobjects.TextureSection(page)));
+            }
+            getSceneFinder() {
+                return this._sceneFinder;
             }
             getObjectExtensions() {
                 return colibri.Platform
@@ -1070,17 +1078,18 @@ var phasereditor2d;
             var json;
             (function (json) {
                 var FileUtils = colibri.ui.ide.FileUtils;
-                class SceneDataTable {
+                class SceneFinder {
                     constructor() {
                         this._dataMap = new Map();
                         this._sceneDataMap = new Map();
                         this._fileMap = new Map();
                     }
-                    async preload() {
+                    async preload(monitor) {
                         const dataMap = new Map();
                         const sceneDataMap = new Map();
                         const fileMap = new Map();
                         const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+                        monitor.addTotal(files.length);
                         for (const file of files) {
                             const content = await FileUtils.preloadAndGetFileString(file);
                             try {
@@ -1097,6 +1106,7 @@ var phasereditor2d;
                             catch (e) {
                                 console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${e.message}`);
                             }
+                            monitor.step();
                         }
                         this._dataMap = dataMap;
                         this._sceneDataMap = sceneDataMap;
@@ -1112,7 +1122,7 @@ var phasereditor2d;
                         return this._sceneDataMap.get(file.getFullName());
                     }
                 }
-                json.SceneDataTable = SceneDataTable;
+                json.SceneFinder = SceneFinder;
             })(json = core.json || (core.json = {}));
         })(core = scene.core || (scene.core = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -1239,13 +1249,13 @@ var phasereditor2d;
             var json;
             (function (json) {
                 class Serializer {
-                    constructor(data, table) {
+                    constructor(data) {
                         this._data = data;
-                        this._table = table;
+                        const finder = scene.ScenePlugin.getInstance().getSceneFinder();
                         if (this._data.prefabId) {
-                            const prefabData = table.getPrefabData(this._data.prefabId);
+                            const prefabData = finder.getPrefabData(this._data.prefabId);
                             if (prefabData) {
-                                this._prefabSer = new Serializer(prefabData, table);
+                                this._prefabSer = new Serializer(prefabData);
                             }
                             else {
                                 console.error(`Cannot find scene prefab with id "${this._data.prefabId}".`);
@@ -1253,7 +1263,7 @@ var phasereditor2d;
                         }
                     }
                     getSerializer(data) {
-                        return new Serializer(data, this._table);
+                        return new Serializer(data);
                     }
                     getData() {
                         return this._data;
@@ -1435,12 +1445,13 @@ var phasereditor2d;
                     return "displayList" in data && Array.isArray(data.displayList);
                 }
                 async preload() {
-                    await this.getSceneDataTable().preload();
+                    // nothing for now
                 }
                 isPrefabFile(file) {
                     const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
                     if (ct === scene_3.core.CONTENT_TYPE_SCENE) {
-                        const data = this.getSceneDataTable().getSceneData(file);
+                        const finder = scene_3.ScenePlugin.getInstance().getSceneFinder();
+                        const data = finder.getSceneData(file);
                         return data && data.sceneType === json.SceneType.PREFAB;
                     }
                     return false;
@@ -1463,14 +1474,8 @@ var phasereditor2d;
                         return null;
                     }
                 }
-                getSceneDataTable() {
-                    if (!SceneMaker._sceneDataTable) {
-                        SceneMaker._sceneDataTable = new json.SceneDataTable();
-                    }
-                    return SceneMaker._sceneDataTable;
-                }
                 getSerializer(data) {
-                    return new json.Serializer(data, this.getSceneDataTable());
+                    return new json.Serializer(data);
                 }
                 createScene(data) {
                     if (data.settings) {
@@ -3364,7 +3369,8 @@ var phasereditor2d;
                     }
                     getPrefabName() {
                         if (this._prefabId) {
-                            const file = this._scene.getMaker().getSceneDataTable().getPrefabFile(this._prefabId);
+                            const finder = scene_10.ScenePlugin.getInstance().getSceneFinder();
+                            const file = finder.getPrefabFile(this._prefabId);
                             if (file) {
                                 return file.getNameWithoutExtension();
                             }
@@ -3373,7 +3379,8 @@ var phasereditor2d;
                     }
                     getPrefabData() {
                         if (this._prefabId) {
-                            const data = this._scene.getMaker().getSceneDataTable().getPrefabData(this._prefabId);
+                            const finder = scene_10.ScenePlugin.getInstance().getSceneFinder();
+                            const data = finder.getPrefabData(this._prefabId);
                             return data;
                         }
                         return null;
@@ -3559,8 +3566,8 @@ var phasereditor2d;
                     }
                     getCellRenderer() {
                         if (this.isPrefabInstance()) {
-                            const table = this.getScene().getMaker().getSceneDataTable();
-                            const file = table.getPrefabFile(this.getPrefabId());
+                            const finder = scene.ScenePlugin.getInstance().getSceneFinder();
+                            const file = finder.getPrefabFile(this.getPrefabId());
                             if (file) {
                                 const image = ui.SceneThumbnailCache.getInstance().getContent(file);
                                 if (image) {

@@ -6,9 +6,11 @@ declare namespace phasereditor2d.scene {
     const ICON_ORIGIN = "origin";
     class ScenePlugin extends colibri.Plugin {
         private static _instance;
+        private _sceneFinder;
         static getInstance(): ScenePlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        getSceneFinder(): core.json.SceneFinder;
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[];
         getObjectExtensionByObjectType(type: string): ui.sceneobjects.SceneObjectExtension;
         getLoaderUpdaterForAsset(asset: any): ui.sceneobjects.LoaderUpdaterExtension;
@@ -241,12 +243,13 @@ declare namespace phasereditor2d.scene.core.json {
 }
 declare namespace phasereditor2d.scene.core.json {
     import io = colibri.core.io;
-    class SceneDataTable {
+    import controls = colibri.ui.controls;
+    class SceneFinder {
         private _dataMap;
         private _sceneDataMap;
         private _fileMap;
         constructor();
-        preload(): Promise<void>;
+        preload(monitor: controls.IProgressMonitor): Promise<void>;
         getPrefabData(prefabId: string): ObjectData;
         getPrefabFile(prefabId: string): io.FilePath;
         getSceneData(file: io.FilePath): SceneData;
@@ -288,11 +291,11 @@ declare namespace phasereditor2d.scene.core.json {
 declare namespace phasereditor2d.scene.core.json {
     interface WriteArgs {
         data: ObjectData;
-        table: SceneDataTable;
+        table: SceneFinder;
     }
     interface ReadArgs {
         data: ObjectData;
-        table: SceneDataTable;
+        table: SceneFinder;
     }
     interface Serializable {
         writeJSON(ser: Serializer): void;
@@ -303,8 +306,7 @@ declare namespace phasereditor2d.scene.core.json {
     class Serializer {
         private _data;
         private _prefabSer;
-        private _table;
-        constructor(data: ObjectData, table: SceneDataTable);
+        constructor(data: ObjectData);
         getSerializer(data: ObjectData): Serializer;
         getData(): ObjectData;
         getType(): any;
@@ -353,13 +355,11 @@ declare namespace phasereditor2d.scene.ui {
     import json = core.json;
     class SceneMaker {
         private _scene;
-        private static _sceneDataTable;
         constructor(scene: GameScene);
         static isValidSceneDataFormat(data: json.SceneData): boolean;
         preload(): Promise<void>;
         isPrefabFile(file: io.FilePath): boolean;
         createPrefabInstanceWithFile(file: io.FilePath): Promise<sceneobjects.SceneObject>;
-        getSceneDataTable(): json.SceneDataTable;
         getSerializer(data: json.ObjectData): json.Serializer;
         createScene(data: json.SceneData): void;
         updateSceneLoader(sceneData: json.SceneData): Promise<void>;
