@@ -71,7 +71,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 call.argInt(frame);
 
-            } else {
+            } else if (typeof frame === "string") {
 
                 call.argLiteral(frame);
             }

@@ -171,12 +171,16 @@ declare namespace phasereditor2d.scene.core.code {
     import io = colibri.core.io;
     class SceneCodeDOMBuilder {
         private _scene;
+        private _isPrefabScene;
         private _file;
         constructor(scene: ui.GameScene, file: io.FilePath);
         build(): Promise<UnitCodeDOM>;
+        private buildPrefabConstructorMethod;
         private buildCreateMethod;
         private addCreateObjectCode;
-        private buildConstructorMethod;
+        private addSetObjectProperties;
+        private addChildrenObjects;
+        private buildSceneConstructorMethod;
         private buildPreloadMethod;
     }
 }
@@ -207,6 +211,7 @@ declare namespace phasereditor2d.scene.core.json {
     type SceneData = {
         id: string;
         sceneType: SceneType;
+        settings: object;
         displayList: ObjectData[];
         meta: {
             app: string;
@@ -219,16 +224,17 @@ declare namespace phasereditor2d.scene.core.json {
     import io = colibri.core.io;
     class SceneDataTable {
         private _dataMap;
+        private _sceneDataMap;
         private _fileMap;
         constructor();
         preload(): Promise<void>;
         getPrefabData(prefabId: string): ObjectData;
         getPrefabFile(prefabId: string): io.FilePath;
+        getSceneData(file: io.FilePath): SceneData;
     }
 }
 declare namespace phasereditor2d.scene.core.json {
     type SourceLang = "JavaScript" | "TypeScript";
-    type MethodContextType = "Scene" | "Object";
     class SceneSettings {
         snapEnabled: boolean;
         snapWidth: number;
@@ -240,12 +246,13 @@ declare namespace phasereditor2d.scene.core.json {
         sceneKey: string;
         compilerLang: SourceLang;
         scopeBlocksToFolder: boolean;
-        methodContextType: MethodContextType;
         borderX: number;
         borderY: number;
         borderWidth: number;
         borderHeight: number;
-        constructor(snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, createMethodName?: string, sceneKey?: string, compilerLang?: SourceLang, scopeBlocksToFolder?: boolean, methodContextType?: MethodContextType, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
+        constructor(snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, createMethodName?: string, sceneKey?: string, compilerLang?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
+        toJSON(): {};
+        readJSON(data: object): void;
     }
 }
 declare namespace phasereditor2d.scene.core.json {
@@ -279,6 +286,7 @@ declare namespace phasereditor2d.scene.core.json {
         getSerializer(data: ObjectData): Serializer;
         getData(): ObjectData;
         getType(): any;
+        getPhaserType(): any;
         private getDefaultValue;
         write(name: string, value: any, defValue?: any): void;
         read(name: string, defValue?: any): any;
@@ -294,23 +302,25 @@ declare namespace phasereditor2d.scene.ui {
 declare namespace phasereditor2d.scene.ui {
     class GameScene extends Phaser.Scene {
         private _id;
-        private _sceneType;
         private _inEditor;
         private _initialState;
         private _maker;
         private _settings;
+        private _sceneType;
         constructor(inEditor?: boolean);
+        getPrefabObject(): sceneobjects.SceneObject;
         getSettings(): core.json.SceneSettings;
         getId(): string;
         setId(id: string): void;
+        getSceneType(): core.json.SceneType;
+        isPrefabSceneType(): boolean;
+        setSceneType(sceneType: core.json.SceneType): void;
         getMaker(): SceneMaker;
         getDisplayListChildren(): sceneobjects.SceneObject[];
         visit(visitor: (obj: sceneobjects.SceneObject) => void): void;
         makeNewName(baseName: string): string;
         getByEditorId(id: string): any;
         static findByEditorId(list: sceneobjects.SceneObject[], id: string): any;
-        getSceneType(): core.json.SceneType;
-        setSceneType(sceneType: core.json.SceneType): void;
         getCamera(): Phaser.Cameras.Scene2D.Camera;
         setInitialState(state: any): void;
         create(): void;
@@ -321,7 +331,7 @@ declare namespace phasereditor2d.scene.ui {
     import json = core.json;
     class SceneMaker {
         private _scene;
-        private _sceneDataTable;
+        private static _sceneDataTable;
         constructor(scene: GameScene);
         static isValidSceneDataFormat(data: json.SceneData): boolean;
         preload(): Promise<void>;
@@ -682,6 +692,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getPrefabData(): json.ObjectData;
         getPrefabSerializer(): json.Serializer;
         getObjectType(): any;
+        getPhaserType(): any;
         getSerializer(data: json.ObjectData): json.Serializer;
         writeJSON(data: json.ObjectData): void;
         readJSON(data: json.ObjectData): void;

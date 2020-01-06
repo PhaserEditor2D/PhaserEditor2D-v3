@@ -10,11 +10,10 @@ namespace phasereditor2d.scene.ui {
     export class SceneMaker {
 
         private _scene: GameScene;
-        private _sceneDataTable: json.SceneDataTable;
+        private static _sceneDataTable: json.SceneDataTable;
 
         constructor(scene: GameScene) {
             this._scene = scene;
-            this._sceneDataTable = new json.SceneDataTable();
         }
 
         static isValidSceneDataFormat(data: json.SceneData) {
@@ -22,16 +21,21 @@ namespace phasereditor2d.scene.ui {
         }
 
         async preload() {
-            await this._sceneDataTable.preload();
+            await this.getSceneDataTable().preload();
         }
 
         isPrefabFile(file: io.FilePath) {
 
             const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
 
-            // TODO: missing to check if it is a scene of type prefab.
+            if (ct === core.CONTENT_TYPE_SCENE) {
 
-            return ct === core.CONTENT_TYPE_SCENE;
+                const data = this.getSceneDataTable().getSceneData(file);
+
+                return data && data.sceneType === "Prefab";
+            }
+
+            return false;
         }
 
         async createPrefabInstanceWithFile(file: io.FilePath) {
@@ -62,14 +66,24 @@ namespace phasereditor2d.scene.ui {
         }
 
         getSceneDataTable() {
-            return this._sceneDataTable;
+
+            if (!SceneMaker._sceneDataTable) {
+                SceneMaker._sceneDataTable = new json.SceneDataTable();
+            }
+
+            return SceneMaker._sceneDataTable;
         }
 
         getSerializer(data: json.ObjectData) {
-            return new json.Serializer(data, this._sceneDataTable);
+            return new json.Serializer(data, this.getSceneDataTable());
         }
 
         createScene(data: json.SceneData) {
+
+            if (data.settings) {
+
+                this._scene.getSettings().readJSON(data.settings);
+            }
 
             this._scene.setSceneType(data.sceneType);
 

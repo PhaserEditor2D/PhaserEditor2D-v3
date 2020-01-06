@@ -178,6 +178,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ser.getType();
         }
 
+        getPhaserType() {
+
+            const ser = this._scene.getMaker().getSerializer({
+                id: this.getId(),
+                type: this._extension.getTypeName(),
+                prefabId: this._prefabId
+            });
+
+            return ser.getPhaserType();
+        }
+
         getSerializer(data: json.ObjectData) {
 
             return this._scene.getMaker().getSerializer(data);

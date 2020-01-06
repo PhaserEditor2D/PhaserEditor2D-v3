@@ -1,6 +1,7 @@
 namespace colibri.core.json {
 
     export function write(data: any, name: string, value: any, defaultValue?: any): void {
+
         if (value !== defaultValue) {
             data[name] = value;
         }

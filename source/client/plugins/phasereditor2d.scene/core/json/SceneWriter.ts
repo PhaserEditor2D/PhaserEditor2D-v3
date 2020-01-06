@@ -13,6 +13,7 @@ namespace phasereditor2d.scene.core.json {
             const sceneData: SceneData = {
                 id: this._scene.getId(),
                 sceneType: this._scene.getSceneType(),
+                settings: this._scene.getSettings().toJSON(),
                 displayList: [],
                 meta: {
                     app: "Phaser Editor 2D - Scene Editor",

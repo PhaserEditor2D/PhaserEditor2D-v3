@@ -6,17 +6,20 @@ namespace phasereditor2d.scene.core.json {
     export class SceneDataTable {
 
         private _dataMap: Map<string, ObjectData>;
+        private _sceneDataMap: Map<string, SceneData>;
         private _fileMap: Map<string, io.FilePath>;
 
         constructor() {
 
             this._dataMap = new Map();
+            this._sceneDataMap = new Map();
             this._fileMap = new Map();
         }
 
         async preload(): Promise<void> {
 
             const dataMap = new Map<string, ObjectData>();
+            const sceneDataMap = new Map<string, SceneData>();
             const fileMap = new Map<string, io.FilePath>();
 
             const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
@@ -28,6 +31,8 @@ namespace phasereditor2d.scene.core.json {
                 try {
 
                     const data = JSON.parse(content) as SceneData;
+
+                    sceneDataMap.set(file.getFullName(), data);
 
                     if (data.id) {
 
@@ -46,6 +51,7 @@ namespace phasereditor2d.scene.core.json {
             }
 
             this._dataMap = dataMap;
+            this._sceneDataMap = sceneDataMap;
             this._fileMap = fileMap;
         }
 
@@ -57,6 +63,11 @@ namespace phasereditor2d.scene.core.json {
         getPrefabFile(prefabId: string): io.FilePath {
 
             return this._fileMap.get(prefabId);
+        }
+
+        getSceneData(file: io.FilePath) {
+
+            return this._sceneDataMap.get(file.getFullName());
         }
     }
 }

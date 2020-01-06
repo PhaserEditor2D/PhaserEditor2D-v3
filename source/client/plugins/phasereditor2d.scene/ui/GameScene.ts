@@ -4,11 +4,11 @@ namespace phasereditor2d.scene.ui {
     export class GameScene extends Phaser.Scene {
 
         private _id: string;
-        private _sceneType: core.json.SceneType;
         private _inEditor: boolean;
         private _initialState: any;
         private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
+        private _sceneType: core.json.SceneType;
 
         constructor(inEditor = true) {
             super("ObjectScene");
@@ -17,11 +17,13 @@ namespace phasereditor2d.scene.ui {
 
             this._inEditor = inEditor;
 
-            this._sceneType = "Scene";
-
             this._maker = new SceneMaker(this);
 
             this._settings = new core.json.SceneSettings();
+        }
+
+        getPrefabObject(): sceneobjects.SceneObject {
+            return this.getDisplayListChildren()[0];
         }
 
         getSettings() {
@@ -34,6 +36,18 @@ namespace phasereditor2d.scene.ui {
 
         setId(id: string) {
             this._id = id;
+        }
+
+        getSceneType() {
+            return this._sceneType;
+        }
+
+        isPrefabSceneType() {
+            return this._sceneType === "Prefab";
+        }
+
+        setSceneType(sceneType: core.json.SceneType) {
+            this._sceneType = sceneType;
         }
 
         getMaker() {
@@ -100,14 +114,6 @@ namespace phasereditor2d.scene.ui {
             }
 
             return null;
-        }
-
-        getSceneType() {
-            return this._sceneType;
-        }
-
-        setSceneType(sceneType: core.json.SceneType): void {
-            this._sceneType = sceneType;
         }
 
         getCamera() {

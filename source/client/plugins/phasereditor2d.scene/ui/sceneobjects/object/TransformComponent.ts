@@ -17,7 +17,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class TransformComponent extends Component<ITransformLike> {
 
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
-            // TODO
+
+            const obj = this.getObject();
+
+            this.buildSetObjectPropertyCodeDOM_Float("scaleX", obj.scaleX, 1, args);
+            this.buildSetObjectPropertyCodeDOM_Float("scaleY", obj.scaleY, 1, args);
+            this.buildSetObjectPropertyCodeDOM_Float("angle", obj.angle, 0, args);
         }
 
         readJSON(ser: json.Serializer) {
