@@ -4,6 +4,7 @@ namespace phasereditor2d.scene.ui.editor {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
     import json = core.json;
+    import FileUtils = colibri.ui.ide.FileUtils;
 
     class SceneEditorFactory extends colibri.ui.ide.EditorFactory {
 
@@ -61,6 +62,8 @@ namespace phasereditor2d.scene.ui.editor {
 
         async doSave() {
 
+            const sceneFile = this.getInput();
+
             const writer = new json.SceneWriter(this.getGameScene());
 
             const data = writer.toJSON();
@@ -69,7 +72,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             try {
 
-                await colibri.ui.ide.FileUtils.setFileString_async(this.getInput(), content);
+                await FileUtils.setFileString_async(sceneFile, content);
 
                 this.setDirty(false);
 
@@ -82,22 +85,39 @@ namespace phasereditor2d.scene.ui.editor {
             // compile
 
             {
-                const builder = new core.code.SceneCodeDOMBuilder(this._gameScene, this.getInput());
+
+                const compileToJS = this._gameScene.getSettings().compilerLang === "JavaScript";
+
+                const builder = new core.code.SceneCodeDOMBuilder(this._gameScene, sceneFile);
 
                 const unit = await builder.build();
 
-                const generator = this._gameScene.getSettings().compilerLang === "JavaScript" ?
+                const generator = compileToJS ?
                     new core.code.JavaScriptUnitCodeGenerator(unit)
                     : new core.code.TypeScriptUnitCodeGenerator(unit);
 
-                const str = generator.generate("");
+                const fileExt = compileToJS ? "js" : "ts";
+                const fileName = sceneFile.getNameWithoutExtension() + "." + fileExt;
 
-                console.log(str);
+                let replaceContent = "";
+
+                {
+                    const outputFile = sceneFile.getSibling(fileName);
+
+                    if (outputFile) {
+
+                        replaceContent = await FileUtils.getFileStorage().getFileString(outputFile);
+                    }
+                }
+
+                const output = generator.generate(replaceContent);
+
+                await FileUtils.createFile_async(sceneFile.getParent(), fileName, output);
             }
 
-            const win = colibri.Platform.getWorkbench().getActiveWindow() as ide.ui.DesignWindow;
-
-            win.saveWindowState();
+            // TODO: we don't need to do this, right?
+            // const win = colibri.Platform.getWorkbench().getActiveWindow() as ide.ui.DesignWindow;
+            // win.saveWindowState();
         }
 
         saveState(state: any) {
@@ -257,9 +277,9 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const file = this.getInput();
 
-                await colibri.ui.ide.FileUtils.preloadFileString(file);
+                await FileUtils.preloadFileString(file);
 
-                const content = colibri.ui.ide.FileUtils.getFileString(file);
+                const content = FileUtils.getFileString(file);
 
                 const data = JSON.parse(content);
 

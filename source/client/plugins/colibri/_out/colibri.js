@@ -6109,9 +6109,20 @@ var colibri;
                 static setFileString_async(file, content) {
                     return ide.Workbench.getWorkbench().getFileStringCache().setContent(file, content);
                 }
+                static getFileStringCache() {
+                    return ide.Workbench.getWorkbench().getFileStringCache();
+                }
+                static getFileStorage() {
+                    return ide.Workbench.getWorkbench().getFileStorage();
+                }
                 static async createFile_async(folder, fileName, content) {
-                    const storage = ide.Workbench.getWorkbench().getFileStorage();
-                    const file = await storage.createFile(folder, fileName, content);
+                    let file = folder.getFile(fileName);
+                    if (file) {
+                        await this.setFileString_async(file, content);
+                        return file;
+                    }
+                    const storage = this.getFileStorage();
+                    file = await storage.createFile(folder, fileName, content);
                     return file;
                 }
                 static async createFolder_async(container, folderName) {

@@ -2315,6 +2315,7 @@ var phasereditor2d;
                 var controls = colibri.ui.controls;
                 var io = colibri.core.io;
                 var json = scene.core.json;
+                var FileUtils = colibri.ui.ide.FileUtils;
                 class SceneEditorFactory extends colibri.ui.ide.EditorFactory {
                     constructor() {
                         super("phasereditor2d.SceneEditorFactory");
@@ -2343,11 +2344,12 @@ var phasereditor2d;
                         return new SceneEditorFactory();
                     }
                     async doSave() {
+                        const sceneFile = this.getInput();
                         const writer = new json.SceneWriter(this.getGameScene());
                         const data = writer.toJSON();
                         const content = JSON.stringify(data, null, 4);
                         try {
-                            await colibri.ui.ide.FileUtils.setFileString_async(this.getInput(), content);
+                            await FileUtils.setFileString_async(sceneFile, content);
                             this.setDirty(false);
                             this.updateTitleIcon();
                         }
@@ -2356,16 +2358,27 @@ var phasereditor2d;
                         }
                         // compile
                         {
-                            const builder = new scene.core.code.SceneCodeDOMBuilder(this._gameScene, this.getInput());
+                            const compileToJS = this._gameScene.getSettings().compilerLang === "JavaScript";
+                            const builder = new scene.core.code.SceneCodeDOMBuilder(this._gameScene, sceneFile);
                             const unit = await builder.build();
-                            const generator = this._gameScene.getSettings().compilerLang === "JavaScript" ?
+                            const generator = compileToJS ?
                                 new scene.core.code.JavaScriptUnitCodeGenerator(unit)
                                 : new scene.core.code.TypeScriptUnitCodeGenerator(unit);
-                            const str = generator.generate("");
-                            console.log(str);
+                            const fileExt = compileToJS ? "js" : "ts";
+                            const fileName = sceneFile.getNameWithoutExtension() + "." + fileExt;
+                            let replaceContent = "";
+                            {
+                                const outputFile = sceneFile.getSibling(fileName);
+                                if (outputFile) {
+                                    replaceContent = await FileUtils.getFileStorage().getFileString(outputFile);
+                                }
+                            }
+                            const output = generator.generate(replaceContent);
+                            await FileUtils.createFile_async(sceneFile.getParent(), fileName, output);
                         }
-                        const win = colibri.Platform.getWorkbench().getActiveWindow();
-                        win.saveWindowState();
+                        // TODO: we don't need to do this, right?
+                        // const win = colibri.Platform.getWorkbench().getActiveWindow() as ide.ui.DesignWindow;
+                        // win.saveWindowState();
                     }
                     saveState(state) {
                         if (!this._gameScene) {
@@ -2472,8 +2485,8 @@ var phasereditor2d;
                         this._sceneRead = true;
                         try {
                             const file = this.getInput();
-                            await colibri.ui.ide.FileUtils.preloadFileString(file);
-                            const content = colibri.ui.ide.FileUtils.getFileString(file);
+                            await FileUtils.preloadFileString(file);
+                            const content = FileUtils.getFileString(file);
                             const data = JSON.parse(content);
                             if (ui.SceneMaker.isValidSceneDataFormat(data)) {
                                 await maker.preload();

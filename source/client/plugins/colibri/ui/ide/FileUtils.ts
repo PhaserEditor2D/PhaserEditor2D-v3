@@ -31,11 +31,29 @@ namespace colibri.ui.ide {
             return Workbench.getWorkbench().getFileStringCache().setContent(file, content);
         }
 
+        static getFileStringCache() {
+            return Workbench.getWorkbench().getFileStringCache();
+        }
+
+        static getFileStorage() {
+            return Workbench.getWorkbench().getFileStorage();
+        }
+
+
         static async createFile_async(folder: io.FilePath, fileName: string, content: string): Promise<io.FilePath> {
 
-            const storage = Workbench.getWorkbench().getFileStorage();
+            let file = folder.getFile(fileName);
 
-            const file = await storage.createFile(folder, fileName, content);
+            if (file) {
+
+                await this.setFileString_async(file, content);
+
+                return file;
+            }
+
+            const storage = this.getFileStorage();
+
+            file = await storage.createFile(folder, fileName, content);
 
             return file;
         }
