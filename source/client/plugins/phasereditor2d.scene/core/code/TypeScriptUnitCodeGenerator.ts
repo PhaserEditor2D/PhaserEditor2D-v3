@@ -21,5 +21,14 @@ namespace phasereditor2d.scene.core.code {
         protected generateTypeAnnotation(assign: AssignPropertyCodeDOM) {
             // do nothing, in TypeScript uses the var declaration syntax
         }
+
+        protected generateMethodDeclArgs(methodDecl: MethodDeclCodeDOM) {
+
+            this.append(
+                methodDecl.getArgs()
+                    .map(arg => `${arg.name}${arg.optional ? "?" : ""}: ${arg.type}`)
+                    .join(", ")
+            );
+        }
     }
 }

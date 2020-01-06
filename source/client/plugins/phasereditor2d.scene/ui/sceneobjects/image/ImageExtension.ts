@@ -17,7 +17,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs) {
+        buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void {
+
+            const ctr = args.ctrDeclCodeDOM;
+
+            ctr.addArg("x", "number");
+            ctr.addArg("y", "number");
+            ctr.addArg("texture", "string");
+            ctr.addArg("frame", "number | string", true);
+        }
+
+        buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs) {
 
             const call = args.methodCallDOM;
 
@@ -26,7 +36,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addArgsToCreateMethodDOM(call, args.obj as Image);
         }
 
-        buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
+        buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
             const call = new code.MethodCallCodeDOM("image", args.gameObjectFactoryExpr);
 

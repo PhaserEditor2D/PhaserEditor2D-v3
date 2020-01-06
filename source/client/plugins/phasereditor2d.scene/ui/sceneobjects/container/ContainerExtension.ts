@@ -23,7 +23,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs) {
+        buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void {
+
+            const ctr = args.ctrDeclCodeDOM;
+
+            ctr.addArg("x", "number");
+            ctr.addArg("y", "number");
+        }
+
+        buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs) {
 
             const obj = args.obj as Container;
             const call = args.methodCallDOM;
@@ -33,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.argFloat(obj.y);
         }
 
-        buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
+        buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
             const obj = args.obj as Container;
             const call = new code.MethodCallCodeDOM("container", args.gameObjectFactoryExpr);

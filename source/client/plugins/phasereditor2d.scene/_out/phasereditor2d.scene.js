@@ -523,13 +523,18 @@ var phasereditor2d;
                         if (isFunction) {
                             this.append("function ");
                         }
-                        this.append(methodDecl.getName() + "() ");
-                        this.line("{");
-                        this.openIndent();
+                        this.append(methodDecl.getName() + "(");
+                        this.generateMethodDeclArgs(methodDecl);
+                        this.openIndent(") {");
                         for (const instr of methodDecl.getBody()) {
                             this.generateInstr(instr);
                         }
                         this.closeIndent("}");
+                    }
+                    generateMethodDeclArgs(methodDecl) {
+                        this.append(methodDecl.getArgs()
+                            .map(arg => arg.name)
+                            .join(", "));
                     }
                     generateInstr(instr) {
                         instr.setOffset(this.getOffset());
@@ -670,7 +675,16 @@ var phasereditor2d;
                 class MethodDeclCodeDOM extends code.MemberDeclCodeDOM {
                     constructor(name) {
                         super(name);
+                        this._args = [];
                         this._body = [];
+                    }
+                    addArg(name, type, optional = false) {
+                        this._args.push({
+                            name, type, optional
+                        });
+                    }
+                    getArgs() {
+                        return this._args;
                     }
                     getBody() {
                         return this._body;
@@ -773,25 +787,39 @@ var phasereditor2d;
                         return unit;
                     }
                     buildPrefabConstructorMethod() {
-                        const ctrMethodDecl = new code.MethodDeclCodeDOM("constructor");
+                        const ctrDecl = new code.MethodDeclCodeDOM("constructor");
                         const prefabObj = this._scene.getPrefabObject();
                         if (!prefabObj) {
                             throw new Error("Invalid prefab scene state: missing object.");
                         }
+                        const type = prefabObj.getEditorSupport().getObjectType();
+                        const ext = scene_1.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                        ctrDecl.addArg("scene", "Phaser.Scene");
+                        ext.buildPrefabConstructorDeclarationCodeDOM({
+                            ctrDeclCodeDOM: ctrDecl
+                        });
+                        {
+                            const superCall = new code.MethodCallCodeDOM("super");
+                            for (const arg of ctrDecl.getArgs()) {
+                                superCall.arg(arg.name);
+                            }
+                            ctrDecl.getBody().push(superCall);
+                            ctrDecl.getBody().push(new code.RawCodeDOM(""));
+                        }
                         this.addSetObjectProperties({
                             obj: prefabObj,
                             temporalVar: false,
-                            createMethodDecl: ctrMethodDecl,
+                            createMethodDecl: ctrDecl,
                             varname: "this"
                         });
                         if (prefabObj instanceof scene_1.ui.sceneobjects.Container) {
                             this.addChildrenObjects({
-                                createMethodDecl: ctrMethodDecl,
+                                createMethodDecl: ctrDecl,
                                 obj: prefabObj,
                                 temporalVar: false
                             });
                         }
-                        return ctrMethodDecl;
+                        return ctrDecl;
                     }
                     buildCreateMethod(fields) {
                         const settings = this._scene.getSettings();
@@ -815,7 +843,7 @@ var phasereditor2d;
                             createObjectMethodCall.setConstructor(true);
                             const prefabSerializer = objSupport.getPrefabSerializer();
                             if (prefabSerializer) {
-                                ext.buildNewPrefabInstanceCodeDOM({
+                                ext.buildCreatePrefabInstanceCodeDOM({
                                     obj,
                                     methodCallDOM: createObjectMethodCall,
                                     sceneExpr: this._isPrefabScene ? "scene" : "this",
@@ -828,7 +856,7 @@ var phasereditor2d;
                         }
                         else {
                             const ext = objSupport.getExtension();
-                            createObjectMethodCall = ext.buildAddObjectCodeDOM({
+                            createObjectMethodCall = ext.buildCreateObjectWithFactoryCodeDOM({
                                 gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene.add" : "this.add",
                                 obj: obj
                             });
@@ -959,6 +987,11 @@ var phasereditor2d;
                     }
                     generateTypeAnnotation(assign) {
                         // do nothing, in TypeScript uses the var declaration syntax
+                    }
+                    generateMethodDeclArgs(methodDecl) {
+                        this.append(methodDecl.getArgs()
+                            .map(arg => `${arg.name}${arg.optional ? "?" : ""}: ${arg.type}`)
+                            .join(", "));
                     }
                 }
                 code.TypeScriptUnitCodeGenerator = TypeScriptUnitCodeGenerator;
@@ -3547,14 +3580,19 @@ var phasereditor2d;
                     static getInstance() {
                         return this._instance || (this._instance = new ContainerExtension());
                     }
-                    buildNewPrefabInstanceCodeDOM(args) {
+                    buildPrefabConstructorDeclarationCodeDOM(args) {
+                        const ctr = args.ctrDeclCodeDOM;
+                        ctr.addArg("x", "number");
+                        ctr.addArg("y", "number");
+                    }
+                    buildCreatePrefabInstanceCodeDOM(args) {
                         const obj = args.obj;
                         const call = args.methodCallDOM;
                         call.arg(args.sceneExpr);
                         call.argFloat(obj.x);
                         call.argFloat(obj.y);
                     }
-                    buildAddObjectCodeDOM(args) {
+                    buildCreateObjectWithFactoryCodeDOM(args) {
                         const obj = args.obj;
                         const call = new code.MethodCallCodeDOM("container", args.gameObjectFactoryExpr);
                         call.argFloat(obj.x);
@@ -3707,12 +3745,19 @@ var phasereditor2d;
                         var _a;
                         return _a = this._instance, (_a !== null && _a !== void 0 ? _a : (this._instance = new ImageExtension()));
                     }
-                    buildNewPrefabInstanceCodeDOM(args) {
+                    buildPrefabConstructorDeclarationCodeDOM(args) {
+                        const ctr = args.ctrDeclCodeDOM;
+                        ctr.addArg("x", "number");
+                        ctr.addArg("y", "number");
+                        ctr.addArg("texture", "string");
+                        ctr.addArg("frame", "number | string", true);
+                    }
+                    buildCreatePrefabInstanceCodeDOM(args) {
                         const call = args.methodCallDOM;
                         call.arg(args.sceneExpr);
                         this.addArgsToCreateMethodDOM(call, args.obj);
                     }
-                    buildAddObjectCodeDOM(args) {
+                    buildCreateObjectWithFactoryCodeDOM(args) {
                         const call = new code.MethodCallCodeDOM("image", args.gameObjectFactoryExpr);
                         this.addArgsToCreateMethodDOM(call, args.obj);
                         return call;

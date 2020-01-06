@@ -83,10 +83,11 @@ namespace phasereditor2d.scene.core.code {
                 this.append("function ");
             }
 
-            this.append(methodDecl.getName() + "() ");
+            this.append(methodDecl.getName() + "(");
 
-            this.line("{");
-            this.openIndent();
+            this.generateMethodDeclArgs(methodDecl);
+
+            this.openIndent(") {");
 
             for (const instr of methodDecl.getBody()) {
 
@@ -94,6 +95,15 @@ namespace phasereditor2d.scene.core.code {
             }
 
             this.closeIndent("}");
+        }
+
+        protected generateMethodDeclArgs(methodDecl: MethodDeclCodeDOM) {
+
+            this.append(
+                methodDecl.getArgs()
+                    .map(arg => arg.name)
+                    .join(", ")
+            );
         }
 
         private generateInstr(instr: CodeDOM) {

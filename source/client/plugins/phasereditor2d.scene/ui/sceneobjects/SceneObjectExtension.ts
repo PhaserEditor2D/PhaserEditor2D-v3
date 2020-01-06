@@ -1,8 +1,10 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
+    import code = core.code;
 
     export interface CreateWithAssetArgs {
+
         x: number;
         y: number;
         scene: GameScene;
@@ -10,31 +12,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     }
 
     export interface CreateWithDataArgs {
+
         scene: GameScene;
         data: json.ObjectData;
     }
 
     export interface GetAssetsFromObjectArgs {
+
         serializer: json.Serializer;
         scene: GameScene;
         finder: pack.core.PackFinder;
     }
 
     export interface UpdateLoaderWithAsset {
+
         asset: any;
         scene: GameScene;
     }
 
     export interface BuildObjectFactoryCodeDOMArgs {
+
         obj: SceneObject;
         gameObjectFactoryExpr: string;
     }
 
     export interface BuildPrefabConstructorCodeDOMArgs {
+
         obj: SceneObject;
         sceneExpr: string;
-        methodCallDOM: core.code.MethodCallCodeDOM;
+        methodCallDOM: code.MethodCallCodeDOM;
         prefabSerializer: json.Serializer;
+    }
+
+    // tslint:disable-next-line:no-empty-interface
+    export interface BuildPrefabConstructorDeclarationCodeDOM {
+
+        ctrDeclCodeDOM: code.MethodDeclCodeDOM;
     }
 
     export abstract class SceneObjectExtension extends colibri.Extension {
@@ -94,20 +107,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         async abstract getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
 
         /**
-         * Build a method call CodeDOM to create the scene object of this extension.
+         * Build a method call CodeDOM to create the scene object of this extension,
+         * using the factories provided by Phaser.
+         *
          * This method is used by the Scene compiler.
          *
          * @param obj The scene object to be created.
          */
-        abstract buildAddObjectCodeDOM(args: BuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM;
+        abstract buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
 
         /**
          * Build a CodeDOM expression to create a prefab instance that
          * has as root type the same type of this scene object type.
+         *
          * This method is used by the Scene compiler.
          *
          * @param obj The scene object to be created.
          */
-        abstract buildNewPrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
+        abstract buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
+
+        /**
+         * 
+         * @param args 
+         */
+        abstract buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
     }
 }
