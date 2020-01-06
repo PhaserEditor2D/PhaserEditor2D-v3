@@ -44,10 +44,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         prefabSerializer: json.Serializer;
     }
 
-    // tslint:disable-next-line:no-empty-interface
     export interface BuildPrefabConstructorDeclarationCodeDOM {
 
         ctrDeclCodeDOM: code.MethodDeclCodeDOM;
+    }
+
+    export interface BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {
+
+        superMethodCallCodeDOM: code.MethodCallCodeDOM;
+        prefabObj: SceneObject;
     }
 
     export abstract class SceneObjectExtension extends colibri.Extension {
@@ -112,7 +117,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * This method is used by the Scene compiler.
          *
-         * @param obj The scene object to be created.
+         * @param args This method args.
          */
         abstract buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
 
@@ -122,14 +127,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * This method is used by the Scene compiler.
          *
-         * @param obj The scene object to be created.
+         * @param args This method args.
          */
         abstract buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
 
         /**
-         * 
-         * @param args 
+         * Build the CodeDOM of the prefab class constructor.
+         *
+         * This method is used by the Scene compiler.
+         *
+         * @param args This method args.
          */
         abstract buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
+
+       /**
+        * Build the CodeDOM of the super-method call in a prefab constructor.
+        *
+        * This method is used by the Scene compiler.
+        *
+        * @param args This method args.
+        */
+        abstract buildPrefabConstructorDeclarationSupperCallCodeDOM(
+            args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
     }
 }

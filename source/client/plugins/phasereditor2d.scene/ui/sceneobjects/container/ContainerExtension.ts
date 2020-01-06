@@ -23,6 +23,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(
+            args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
+
+            const call = args.superMethodCallCodeDOM;
+
+            call.arg("x");
+            call.arg("y");
+        }
+
         buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void {
 
             const ctr = args.ctrDeclCodeDOM;

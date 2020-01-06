@@ -843,9 +843,11 @@ var phasereditor2d;
                         });
                         {
                             const superCall = new code.MethodCallCodeDOM("super");
-                            for (const arg of ctrDecl.getArgs()) {
-                                superCall.arg(arg.name);
-                            }
+                            superCall.arg("scene");
+                            ext.buildPrefabConstructorDeclarationSupperCallCodeDOM({
+                                superMethodCallCodeDOM: superCall,
+                                prefabObj: prefabObj
+                            });
                             ctrDecl.getBody().push(superCall);
                             ctrDecl.getBody().push(new code.RawCodeDOM(""));
                         }
@@ -2117,6 +2119,19 @@ var phasereditor2d;
                         const worldPoint = scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
                         const x = Math.floor(worldPoint.x);
                         const y = Math.floor(worldPoint.y);
+                        const prefabAssets = [];
+                        const sceneFinder = scene_6.ScenePlugin.getInstance().getSceneFinder();
+                        for (const data of dropAssetArray) {
+                            if (data instanceof io.FilePath) {
+                                const file = data;
+                                if (sceneMaker.isPrefabFile(file)) {
+                                    const sceneData = sceneFinder.getSceneData(file);
+                                    if (sceneData) {
+                                        await sceneMaker.updateSceneLoader(sceneData);
+                                    }
+                                }
+                            }
+                        }
                         for (const data of dropAssetArray) {
                             const ext = scene_6.ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);
                             if (ext) {
@@ -3648,6 +3663,11 @@ var phasereditor2d;
                     static getInstance() {
                         return this._instance || (this._instance = new ContainerExtension());
                     }
+                    buildPrefabConstructorDeclarationSupperCallCodeDOM(args) {
+                        const call = args.superMethodCallCodeDOM;
+                        call.arg("x");
+                        call.arg("y");
+                    }
                     buildPrefabConstructorDeclarationCodeDOM(args) {
                         const ctr = args.ctrDeclCodeDOM;
                         ctr.addArg("x", "number");
@@ -3812,6 +3832,32 @@ var phasereditor2d;
                     static getInstance() {
                         var _a;
                         return _a = this._instance, (_a !== null && _a !== void 0 ? _a : (this._instance = new ImageExtension()));
+                    }
+                    buildPrefabConstructorDeclarationSupperCallCodeDOM(args) {
+                        const call = args.superMethodCallCodeDOM;
+                        call.arg("x");
+                        call.arg("y");
+                        const obj = args.prefabObj;
+                        const textureComponent = obj.getEditorSupport().getTextureComponent();
+                        const key = textureComponent.getKey();
+                        const frame = textureComponent.getFrame();
+                        if (typeof key === "string") {
+                            call.arg("texture || " + code.CodeDOM.quote(key));
+                            let frameLiteral;
+                            if (typeof frame === "string") {
+                                frameLiteral = code.CodeDOM.quote(frame);
+                            }
+                            else if (typeof frame === "number") {
+                                frameLiteral = frame.toString();
+                            }
+                            if (frameLiteral) {
+                                call.arg("frame !== undefined && frame !== null ? frame : " + frameLiteral);
+                            }
+                        }
+                        else {
+                            call.arg("texture");
+                            call.arg("key");
+                        }
                     }
                     buildPrefabConstructorDeclarationCodeDOM(args) {
                         const ctr = args.ctrDeclCodeDOM;

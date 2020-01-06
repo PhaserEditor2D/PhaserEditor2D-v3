@@ -59,6 +59,29 @@ namespace phasereditor2d.scene.ui.editor {
             const x = Math.floor(worldPoint.x);
             const y = Math.floor(worldPoint.y);
 
+            const prefabAssets = [];
+
+            const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
+
+            for (const data of dropAssetArray) {
+
+                if (data instanceof io.FilePath) {
+
+                    const file = data;
+
+                    if (sceneMaker.isPrefabFile(file)) {
+
+                        const sceneData = sceneFinder.getSceneData(file);
+
+                        if (sceneData) {
+
+                            await sceneMaker.updateSceneLoader(sceneData);
+                        }
+                    }
+                }
+            }
+
+
             for (const data of dropAssetArray) {
 
                 const ext = ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);

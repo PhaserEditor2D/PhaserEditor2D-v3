@@ -153,10 +153,12 @@ namespace phasereditor2d.scene.core.code {
             {
                 const superCall = new MethodCallCodeDOM("super");
 
-                for (const arg of ctrDecl.getArgs()) {
+                superCall.arg("scene");
 
-                    superCall.arg(arg.name);
-                }
+                ext.buildPrefabConstructorDeclarationSupperCallCodeDOM({
+                    superMethodCallCodeDOM: superCall,
+                    prefabObj: prefabObj
+                });
 
                 ctrDecl.getBody().push(superCall);
                 ctrDecl.getBody().push(new RawCodeDOM(""));

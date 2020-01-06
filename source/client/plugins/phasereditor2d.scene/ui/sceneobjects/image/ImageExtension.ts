@@ -17,6 +17,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(
+            args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
+
+            const call = args.superMethodCallCodeDOM;
+
+            call.arg("x");
+            call.arg("y");
+
+            const obj = args.prefabObj as Image;
+
+            const textureComponent = obj.getEditorSupport().getTextureComponent();
+
+            const key = textureComponent.getKey();
+
+            const frame = textureComponent.getFrame();
+
+            if (typeof key === "string") {
+
+                call.arg("texture || " + code.CodeDOM.quote(key));
+
+                let frameLiteral: string;
+
+                if (typeof frame === "string") {
+
+                    frameLiteral = code.CodeDOM.quote(frame);
+
+                } else if (typeof frame === "number") {
+
+                    frameLiteral = frame.toString();
+                }
+
+                if (frameLiteral) {
+
+                    call.arg("frame !== undefined && frame !== null ? frame : " + frameLiteral);
+                }
+
+            } else {
+
+                call.arg("texture");
+                call.arg("key");
+            }
+        }
+
         buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void {
 
             const ctr = args.ctrDeclCodeDOM;
