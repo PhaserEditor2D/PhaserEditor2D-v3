@@ -3,7 +3,11 @@ namespace phasereditor2d.scene.core.json {
     import read = colibri.core.json.read;
     import write = colibri.core.json.write;
 
-    export declare type SourceLang = "JavaScript" | "TypeScript";
+    export enum SourceLang {
+
+        JAVA_SCRIPT = "JAVA_SCRIPT",
+        TYPE_SCRIPT = "TYPE_SCRIPT"
+    }
 
     export class SceneSettings {
 
@@ -16,7 +20,7 @@ namespace phasereditor2d.scene.core.json {
             public preloadMethodName = "",
             public createMethodName = "create",
             public sceneKey = "",
-            public compilerLang: SourceLang = "JavaScript",
+            public compilerOutputLanguage = SourceLang.JAVA_SCRIPT,
             public scopeBlocksToFolder: boolean = false,
             public borderX = 0,
             public borderY = 0,
@@ -38,7 +42,7 @@ namespace phasereditor2d.scene.core.json {
             write(data, "preloadMethodName", this.preloadMethodName, "");
             write(data, "createMethodName", this.createMethodName, "create");
             write(data, "sceneKey", this.sceneKey, "");
-            write(data, "compilerLang", this.compilerLang, "JavaScript");
+            write(data, "compilerOutputLanguage", this.compilerOutputLanguage, SourceLang.JAVA_SCRIPT);
             write(data, "scopeBlocksToFolder", this.scopeBlocksToFolder, false);
             write(data, "borderX", this.borderX, 0);
             write(data, "borderY", this.borderY, 0);
@@ -58,7 +62,7 @@ namespace phasereditor2d.scene.core.json {
             this.preloadMethodName = read(data, "preloadMethodName", "");
             this.createMethodName = read(data, "createMethodName", "create");
             this.sceneKey = read(data, "sceneKey", "");
-            this.compilerLang = read(data, "compilerLang", "JavaScript");
+            this.compilerOutputLanguage = read(data, "compilerOutputLanguage", SourceLang.JAVA_SCRIPT);
             this.scopeBlocksToFolder = read(data, "scopeBlocksToFolder", false);
             this.borderX = read(data, "borderX", 0);
             this.borderY = read(data, "borderY", 0);

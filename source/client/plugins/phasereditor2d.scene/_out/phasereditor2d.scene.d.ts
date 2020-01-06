@@ -88,7 +88,7 @@ declare namespace phasereditor2d.scene.core.code {
 }
 declare namespace phasereditor2d.scene.core.code {
     class ClassDeclCodeDOM extends MemberDeclCodeDOM {
-        private _members;
+        private _body;
         private _constructor;
         private _superClass;
         constructor(name: string);
@@ -96,7 +96,7 @@ declare namespace phasereditor2d.scene.core.code {
         setConstructor(constructor: MethodDeclCodeDOM): void;
         getSuperClass(): string;
         setSuperClass(superClass: string): void;
-        getMembers(): MemberDeclCodeDOM[];
+        getBody(): MemberDeclCodeDOM[];
     }
 }
 declare namespace phasereditor2d.scene.core.code {
@@ -106,9 +106,10 @@ declare namespace phasereditor2d.scene.core.code {
 declare namespace phasereditor2d.scene.core.code {
     class FieldDeclCodeDOM extends MemberDeclCodeDOM {
         private _type;
-        constructor(name: string);
+        private _publicScope;
+        constructor(name: string, type: string, publicScope?: boolean);
+        isPublic(): boolean;
         getType(): string;
-        setType(type: string): void;
     }
 }
 declare namespace phasereditor2d.scene.core.code {
@@ -119,6 +120,7 @@ declare namespace phasereditor2d.scene.core.code {
         private generateUnitElement;
         private generateClass;
         protected generateMemberDecl(memberDecl: MemberDeclCodeDOM): void;
+        protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM): void;
         private generateMethodDecl;
         protected generateMethodDeclArgs(methodDecl: MethodDeclCodeDOM): void;
         private generateInstr;
@@ -135,6 +137,7 @@ declare namespace phasereditor2d.scene.core.code {
         private _args;
         private _returnToVar;
         private _declareReturnToVar;
+        private _declareReturnToField;
         private _isConstructor;
         constructor(methodName: string, contextExpr?: string);
         isConstructor(): boolean;
@@ -143,6 +146,8 @@ declare namespace phasereditor2d.scene.core.code {
         setReturnToVar(returnToVar: string): void;
         setDeclareReturnToVar(declareReturnToVar: boolean): void;
         isDeclareReturnToVar(): boolean;
+        setDeclareReturnToField(declareReturnToField: boolean): void;
+        isDeclareReturnToField(): boolean;
         arg(expr: string): void;
         argLiteral(expr: string): void;
         argFloat(n: number): void;
@@ -184,10 +189,11 @@ declare namespace phasereditor2d.scene.core.code {
         private _file;
         constructor(scene: ui.GameScene, file: io.FilePath);
         build(): Promise<UnitCodeDOM>;
+        private buildClassFields;
         private buildPrefabConstructorMethod;
         private buildCreateMethod;
         private addCreateObjectCode;
-        private addSetObjectProperties;
+        private buildSetObjectProperties;
         private addChildrenObjects;
         private buildSceneConstructorMethod;
         private buildPreloadMethod;
@@ -196,7 +202,7 @@ declare namespace phasereditor2d.scene.core.code {
 declare namespace phasereditor2d.scene.core.code {
     class TypeScriptUnitCodeGenerator extends JavaScriptUnitCodeGenerator {
         constructor(unit: UnitCodeDOM);
-        protected generateMemberDecl(memberDecl: MemberDeclCodeDOM): void;
+        protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM): void;
         protected generateTypeAnnotation(assign: AssignPropertyCodeDOM): void;
         protected generateMethodDeclArgs(methodDecl: MethodDeclCodeDOM): void;
     }
@@ -217,7 +223,10 @@ declare namespace phasereditor2d.scene.core.json {
     }
 }
 declare namespace phasereditor2d.scene.core.json {
-    type SceneType = "Scene" | "Prefab";
+    enum SceneType {
+        SCENE = "SCENE",
+        PREFAB = "PREFAB"
+    }
     type SceneData = {
         id: string;
         sceneType: SceneType;
@@ -244,7 +253,10 @@ declare namespace phasereditor2d.scene.core.json {
     }
 }
 declare namespace phasereditor2d.scene.core.json {
-    type SourceLang = "JavaScript" | "TypeScript";
+    enum SourceLang {
+        JAVA_SCRIPT = "JAVA_SCRIPT",
+        TYPE_SCRIPT = "TYPE_SCRIPT"
+    }
     class SceneSettings {
         snapEnabled: boolean;
         snapWidth: number;
@@ -254,13 +266,13 @@ declare namespace phasereditor2d.scene.core.json {
         preloadMethodName: string;
         createMethodName: string;
         sceneKey: string;
-        compilerLang: SourceLang;
+        compilerOutputLanguage: SourceLang;
         scopeBlocksToFolder: boolean;
         borderX: number;
         borderY: number;
         borderWidth: number;
         borderHeight: number;
-        constructor(snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, createMethodName?: string, sceneKey?: string, compilerLang?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
+        constructor(snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, createMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
         toJSON(): {};
         readJSON(data: object): void;
     }
@@ -670,11 +682,17 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = core.json;
+    enum ObjectScope {
+        METHOD = "METHOD",
+        CLASS = "CLASS",
+        PUBLIC = "PUBLIC"
+    }
     abstract class EditorSupport<T extends SceneObject> {
         private _extension;
         private _object;
         private _prefabId;
         private _label;
+        private _scope;
         private _scene;
         private _serializables;
         private _components;
@@ -693,6 +711,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         setId(id: string): void;
         getLabel(): string;
         setLabel(label: string): void;
+        getScope(): ObjectScope;
+        setScope(scope: ObjectScope): void;
         getScene(): GameScene;
         setScene(scene: GameScene): void;
         isPrefabInstance(): boolean;

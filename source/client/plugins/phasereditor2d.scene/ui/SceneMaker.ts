@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui {
 
                 const data = this.getSceneDataTable().getSceneData(file);
 
-                return data && data.sceneType === "Prefab";
+                return data && data.sceneType === json.SceneType.PREFAB;
             }
 
             return false;

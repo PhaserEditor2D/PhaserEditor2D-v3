@@ -4,14 +4,14 @@ namespace phasereditor2d.scene.core.code {
 
     export class ClassDeclCodeDOM extends MemberDeclCodeDOM {
 
-        private _members: MemberDeclCodeDOM[];
+        private _body: MemberDeclCodeDOM[];
         private _constructor: MethodDeclCodeDOM;
         private _superClass: string;
 
         constructor(name: string) {
             super(name);
 
-            this._members = [];
+            this._body = [];
         }
 
         getConstructor() {
@@ -30,8 +30,8 @@ namespace phasereditor2d.scene.core.code {
             this._superClass = superClass;
         }
 
-        getMembers() {
-            return this._members;
+        getBody() {
+            return this._body;
         }
     }
 }

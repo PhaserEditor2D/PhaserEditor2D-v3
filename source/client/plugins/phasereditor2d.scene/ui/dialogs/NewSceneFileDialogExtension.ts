@@ -9,14 +9,14 @@ namespace phasereditor2d.scene.ui.dialogs {
                 fileExtension: "scene",
                 initialFileName: "Scene",
                 fileContent: JSON.stringify({
-                    sceneType: "Scene",
+                    sceneType: core.json.SceneType.SCENE,
                     displayList: [],
                     meta: {
                         app: "Phaser Editor 2D - Scene Editor",
                         url: "https://phasereditor2d.com",
                         contentType: scene.core.CONTENT_TYPE_SCENE
                     }
-                })
+                } as core.json.SceneData)
             });
         }
 

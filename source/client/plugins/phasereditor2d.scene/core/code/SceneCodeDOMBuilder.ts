@@ -29,8 +29,6 @@ namespace phasereditor2d.scene.core.code {
                 methods.push(preloadDom);
             }
 
-            const fields: MemberDeclCodeDOM[] = [];
-
             const unit = new UnitCodeDOM([]);
 
             if (settings.onlyGenerateMethods) {
@@ -86,17 +84,49 @@ namespace phasereditor2d.scene.core.code {
 
                     // scene create method
 
-                    const createMethodDecl = this.buildCreateMethod(fields);
+                    const createMethodDecl = this.buildCreateMethod();
                     methods.push(createMethodDecl);
                 }
 
-                clsDecl.getMembers().push(...methods);
-                clsDecl.getMembers().push(...fields);
+                const fields: MemberDeclCodeDOM[] = [];
+                this.buildClassFields(fields, this._scene.getDisplayListChildren());
+
+                clsDecl.getBody().push(...methods);
+                clsDecl.getBody().push(...fields);
 
                 unit.getElements().push(clsDecl);
             }
 
             return unit;
+        }
+
+        private buildClassFields(fields: MemberDeclCodeDOM[], children: SceneObject[]) {
+
+            for (const obj of children) {
+
+                const support = obj.getEditorSupport();
+                const scope = support.getScope();
+
+                if (scope !== ui.sceneobjects.ObjectScope.METHOD) {
+
+                    const varName = code.formatToValidVarName(support.getLabel());
+
+                    const type = support.isPrefabInstance()
+                        ? support.getPrefabName()
+                        : support.getPhaserType();
+
+                    const isPublic = support.getScope() === ui.sceneobjects.ObjectScope.PUBLIC;
+
+                    const field = new FieldDeclCodeDOM(varName, type, isPublic);
+
+                    fields.push(field);
+                }
+
+                if (obj instanceof ui.sceneobjects.Container) {
+
+                    this.buildClassFields(fields, obj.list);
+                }
+            }
         }
 
         private buildPrefabConstructorMethod() {
@@ -132,26 +162,25 @@ namespace phasereditor2d.scene.core.code {
                 ctrDecl.getBody().push(new RawCodeDOM(""));
             }
 
-            this.addSetObjectProperties({
+            const setPropsCodeList = this.buildSetObjectProperties({
                 obj: prefabObj,
-                temporalVar: false,
-                createMethodDecl: ctrDecl,
                 varname: "this"
             });
 
-            if (prefabObj instanceof ui.sceneobjects.Container) {
+            ctrDecl.getBody().push(...setPropsCodeList);
+
+            if (prefabObj instanceof ui.sceneobjects.Container && !prefabObj.getEditorSupport().isPrefabInstance()) {
 
                 this.addChildrenObjects({
                     createMethodDecl: ctrDecl,
-                    obj: prefabObj,
-                    temporalVar: false
+                    obj: prefabObj
                 });
             }
 
             return ctrDecl;
         }
 
-        private buildCreateMethod(fields: MemberDeclCodeDOM[]) {
+        private buildCreateMethod() {
 
             const settings = this._scene.getSettings();
 
@@ -217,11 +246,9 @@ namespace phasereditor2d.scene.core.code {
 
             createMethodDecl.getBody().push(createObjectMethodCall);
 
-            let temporalVar = false;
-
             if (objSupport.isPrefabInstance()) {
 
-                temporalVar = true;
+                createObjectMethodCall.setDeclareReturnToVar(true);
 
                 if (!obj.parentContainer) {
                     const addToScene = new MethodCallCodeDOM("existing", "this.add");
@@ -232,7 +259,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (obj.parentContainer) {
 
-                temporalVar = true;
+                createObjectMethodCall.setDeclareReturnToVar(true);
 
                 const container = obj.parentContainer as ui.sceneobjects.Container;
 
@@ -248,45 +275,44 @@ namespace phasereditor2d.scene.core.code {
                 createMethodDecl.getBody().push(addToContainerCall);
             }
 
-            const result = this.addSetObjectProperties({
-                temporalVar,
-                createMethodDecl,
+            const setPropsCode = this.buildSetObjectProperties({
                 obj,
                 varname
             });
 
-            temporalVar = result.temporalVar || temporalVar;
-
-            if (obj instanceof ui.sceneobjects.Container) {
-
-                temporalVar = this.addChildrenObjects({
-                    temporalVar,
-                    createMethodDecl,
-                    obj: obj as ui.sceneobjects.Container
-                }) || temporalVar;
+            if (setPropsCode.length > 0) {
+                createObjectMethodCall.setDeclareReturnToVar(true);
+                createMethodDecl.getBody().push(...setPropsCode);
             }
 
-            if (temporalVar) {
+            if (obj instanceof ui.sceneobjects.Container && !objSupport.isPrefabInstance()) {
+
+                createObjectMethodCall.setDeclareReturnToVar(true);
+
+                this.addChildrenObjects({
+                    createMethodDecl,
+                    obj: obj as ui.sceneobjects.Container
+                });
+            }
+
+            if (createObjectMethodCall.isDeclareReturnToVar()) {
 
                 createObjectMethodCall.setReturnToVar(varname);
-                createObjectMethodCall.setDeclareReturnToVar(true);
+
+                if (obj.getEditorSupport().getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
+                    createObjectMethodCall.setDeclareReturnToField(true);
+                }
             }
         }
 
-        private addSetObjectProperties(args: {
-            temporalVar: boolean,
+        private buildSetObjectProperties(args: {
             obj: SceneObject,
-            varname: string,
-            createMethodDecl: code.MethodDeclCodeDOM
-        }): {
-            temporalVar: boolean
-        } {
+            varname: string
+        }) {
 
             const obj = args.obj;
             const support = obj.getEditorSupport();
             const varname = args.varname;
-            const createMethodDecl = args.createMethodDecl;
-            let temporalVar = args.temporalVar;
 
             let prefabSerializer: json.Serializer = null;
 
@@ -304,37 +330,22 @@ namespace phasereditor2d.scene.core.code {
                     objectVarName: varname,
                     prefabSerializer: prefabSerializer
                 });
-
-                temporalVar = temporalVar || setPropsInstructions.length > 0;
-
             }
 
-            createMethodDecl.getBody().push(...setPropsInstructions);
-
-            return {
-                temporalVar
-            };
+            return setPropsInstructions;
         }
 
         private addChildrenObjects(args: {
-            temporalVar: boolean,
             obj: ui.sceneobjects.Container,
             createMethodDecl: MethodDeclCodeDOM
         }) {
 
-            if (args.obj instanceof ui.sceneobjects.Container && !args.obj.getEditorSupport().isPrefabInstance()) {
+            for (const child of args.obj.list) {
 
-                args.temporalVar = args.temporalVar || args.obj.list.length > 0;
-
-                for (const child of args.obj.list) {
-
-                    args.createMethodDecl.getBody().push(new RawCodeDOM(""));
-                    args.createMethodDecl.getBody().push(new RawCodeDOM("// " + child.getEditorSupport().getLabel()));
-                    this.addCreateObjectCode(child, args.createMethodDecl);
-                }
+                args.createMethodDecl.getBody().push(new RawCodeDOM(""));
+                args.createMethodDecl.getBody().push(new RawCodeDOM("// " + child.getEditorSupport().getLabel()));
+                this.addCreateObjectCode(child, args.createMethodDecl);
             }
-
-            return args.temporalVar;
         }
 
         private buildSceneConstructorMethod(sceneKey: string) {

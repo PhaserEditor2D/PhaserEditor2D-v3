@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui {
         }
 
         isPrefabSceneType() {
-            return this._sceneType === "Prefab";
+            return this._sceneType === core.json.SceneType.PREFAB;
         }
 
         setSceneType(sceneType: core.json.SceneType) {

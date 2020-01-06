@@ -86,7 +86,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             {
 
-                const compileToJS = this._gameScene.getSettings().compilerLang === "JavaScript";
+                const compileToJS = this._gameScene.getSettings()
+                    .compilerOutputLanguage === json.SourceLang.JAVA_SCRIPT;
 
                 const builder = new core.code.SceneCodeDOMBuilder(this._gameScene, sceneFile);
 

@@ -1,8 +1,13 @@
 namespace phasereditor2d.scene.core.json {
 
-    export declare type SceneType = "Scene" | "Prefab";
+    export enum SceneType {
+
+        SCENE = "SCENE",
+        PREFAB = "PREFAB"
+    }
 
     export declare type SceneData = {
+
         id: string,
         sceneType: SceneType;
         settings: object,

@@ -5,12 +5,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = core.json;
 
+    export enum ObjectScope {
+
+        METHOD = "METHOD",
+        CLASS = "CLASS",
+        PUBLIC = "PUBLIC"
+    }
+
     export abstract class EditorSupport<T extends SceneObject> {
 
         private _extension: SceneObjectExtension;
         private _object: T;
         private _prefabId: string;
         private _label: string;
+        private _scope: ObjectScope;
         private _scene: GameScene;
         private _serializables: json.Serializable[];
         // tslint:disable-next-line:ban-types
@@ -24,6 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._components = new Map();
             this._object.setDataEnabled();
             this.setId(Phaser.Utils.String.UUID());
+            this._scope = ObjectScope.METHOD;
         }
 
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
@@ -93,6 +102,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setLabel(label: string) {
             this._label = label;
+        }
+
+        getScope() {
+            return this._scope;
+        }
+
+        setScope(scope: ObjectScope) {
+            this._scope = scope;
         }
 
         getScene() {
@@ -209,6 +226,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ser.write("id", this.getId());
             ser.write("label", this._label);
+            write(data, "scope", this._scope, ObjectScope.METHOD);
 
             for (const s of this._serializables) {
 
@@ -223,6 +241,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(ser.read("id"));
             this._prefabId = ser.getData().prefabId;
             this._label = ser.read("label");
+            this._scope = read(data, "scope", ObjectScope.METHOD);
 
             for (const s of this._serializables) {
 

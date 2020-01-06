@@ -6,16 +6,11 @@ namespace phasereditor2d.scene.core.code {
             super(unit);
         }
 
-        protected generateMemberDecl(memberDecl: MemberDeclCodeDOM) {
+        protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM) {
 
-            if (memberDecl instanceof FieldDeclCodeDOM) {
+            const mod = fieldDecl.isPublic() ? "public" : "private";
 
-                this.line("private " + memberDecl.getName() + ": " + memberDecl.getType() + ";");
-
-            } else {
-
-                super.generateMemberDecl(memberDecl);
-            }
+            this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()};`);
         }
 
         protected generateTypeAnnotation(assign: AssignPropertyCodeDOM) {
