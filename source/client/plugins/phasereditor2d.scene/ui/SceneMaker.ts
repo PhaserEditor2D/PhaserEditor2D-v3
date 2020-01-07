@@ -9,9 +9,9 @@ namespace phasereditor2d.scene.ui {
 
     export class SceneMaker {
 
-        private _scene: GameScene;
+        private _scene: Scene;
 
-        constructor(scene: GameScene) {
+        constructor(scene: Scene) {
             this._scene = scene;
         }
 

@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _prefabId: string;
         private _label: string;
         private _scope: ObjectScope;
-        private _scene: GameScene;
+        private _scene: Scene;
         private _serializables: json.Serializable[];
         // tslint:disable-next-line:ban-types
         private _components: Map<Function, Component<any>>;
@@ -116,7 +116,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._scene;
         }
 
-        setScene(scene: GameScene) {
+        setScene(scene: Scene) {
             this._scene = scene;
         }
 

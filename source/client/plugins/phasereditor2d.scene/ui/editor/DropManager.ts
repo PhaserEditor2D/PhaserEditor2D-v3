@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private async createWithDropEvent(e: DragEvent, dropAssetArray: any[]) {
 
-            const scene = this._editor.getGameScene();
+            const scene = this._editor.getScene();
 
             const sceneMaker = scene.getMaker();
 

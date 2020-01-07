@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         undo(): void {
 
-            const scene = this._editor.getGameScene();
+            const scene = this._editor.getScene();
 
             for (const data of this._dataList) {
 

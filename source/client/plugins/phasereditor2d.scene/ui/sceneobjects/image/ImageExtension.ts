@@ -195,7 +195,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return sprite;
         }
 
-        private createImageObject(scene: GameScene, x: number, y: number, key: string, frame?: string | number) {
+        private createImageObject(scene: Scene, x: number, y: number, key: string, frame?: string | number) {
 
             const sprite = new sceneobjects.Image(scene, x, y, key, frame);
 

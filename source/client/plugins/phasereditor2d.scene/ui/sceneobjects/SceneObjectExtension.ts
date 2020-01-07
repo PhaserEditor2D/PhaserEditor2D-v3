@@ -7,27 +7,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         x: number;
         y: number;
-        scene: GameScene;
+        scene: Scene;
         asset: any;
     }
 
     export interface CreateWithDataArgs {
 
-        scene: GameScene;
+        scene: Scene;
         data: json.ObjectData;
     }
 
     export interface GetAssetsFromObjectArgs {
 
         serializer: json.Serializer;
-        scene: GameScene;
+        scene: Scene;
         finder: pack.core.PackFinder;
     }
 
     export interface UpdateLoaderWithAsset {
 
         asset: any;
-        scene: GameScene;
+        scene: Scene;
     }
 
     export interface BuildObjectFactoryCodeDOMArgs {

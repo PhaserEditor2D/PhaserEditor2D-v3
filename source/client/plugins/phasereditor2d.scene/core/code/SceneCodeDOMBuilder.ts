@@ -5,11 +5,11 @@ namespace phasereditor2d.scene.core.code {
 
     export class SceneCodeDOMBuilder {
 
-        private _scene: ui.GameScene;
+        private _scene: ui.Scene;
         private _isPrefabScene: boolean;
         private _file: io.FilePath;
 
-        constructor(scene: ui.GameScene, file: io.FilePath) {
+        constructor(scene: ui.Scene, file: io.FilePath) {
 
             this._scene = scene;
             this._file = file;

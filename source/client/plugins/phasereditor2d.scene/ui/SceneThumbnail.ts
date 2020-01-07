@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui {
     import ide = colibri.ui.ide;
     import io = colibri.core.io;
 
-    class ThumbnailScene extends GameScene {
+    class ThumbnailScene extends Scene {
 
         private _data: core.json.SceneData;
         private _callback: (element: HTMLImageElement) => void;

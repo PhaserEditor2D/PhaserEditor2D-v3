@@ -16,15 +16,15 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         undo(): void {
 
-            const scene = this._editor.getGameScene();
+            const scene = this._editor.getScene();
 
-            const displayList = this._editor.getGameScene().sys.displayList;
+            const displayList = this._editor.getScene().sys.displayList;
 
             const container = scene.getByEditorId(this._containerId) as sceneobjects.Container;
 
             for (const id of this._objectsIdList) {
 
-                const obj = GameScene.findByEditorId(container.list, id);
+                const obj = Scene.findByEditorId(container.list, id);
 
                 if (obj) {
 
@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         redo(): void {
 
-            const scene = this._editor.getGameScene();
+            const scene = this._editor.getScene();
 
             const objects = this._objectsIdList.map(id => scene.getByEditorId(id));
 

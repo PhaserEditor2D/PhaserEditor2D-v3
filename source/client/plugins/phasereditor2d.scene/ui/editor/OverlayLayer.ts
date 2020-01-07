@@ -46,7 +46,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             ctx.save();
 
-            const camera = this._editor.getGameScene().getCamera();
+            const camera = this._editor.getScene().getCamera();
 
             for (const obj of this._editor.getSelection()) {
 
@@ -87,7 +87,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private renderGrid() {
-            const camera = this._editor.getGameScene().getCamera();
+            const camera = this._editor.getScene().getCamera();
 
             // parameters from settings
 

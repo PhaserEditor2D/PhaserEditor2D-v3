@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _editorSupport: ImageEditorSupport;
 
         constructor(
-            scene: GameScene, x: number, y: number, texture: string, frame?: string | number) {
+            scene: Scene, x: number, y: number, texture: string, frame?: string | number) {
 
             super(scene, x, y, texture, frame);
 

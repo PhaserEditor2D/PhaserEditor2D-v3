@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private getCamera() {
-            return this._editor.getGameScene().getCamera();
+            return this._editor.getScene().getCamera();
         }
 
         private onMouseDown(e: MouseEvent): void {
@@ -55,7 +55,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private onWheel(e: WheelEvent): void {
-            const scene = this._editor.getGameScene();
+            const scene = this._editor.getScene();
 
             const camera = scene.getCamera();
 

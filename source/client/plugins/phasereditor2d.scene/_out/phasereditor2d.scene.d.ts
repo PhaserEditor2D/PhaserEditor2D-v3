@@ -4,6 +4,7 @@ declare namespace phasereditor2d.scene {
     const ICON_ANGLE = "angle";
     const ICON_SCALE = "scale";
     const ICON_ORIGIN = "origin";
+    const ICON_BUILD = "build";
     class ScenePlugin extends colibri.Plugin {
         private static _instance;
         private _sceneFinder;
@@ -189,7 +190,7 @@ declare namespace phasereditor2d.scene.core.code {
         private _scene;
         private _isPrefabScene;
         private _file;
-        constructor(scene: ui.GameScene, file: io.FilePath);
+        constructor(scene: ui.Scene, file: io.FilePath);
         build(): Promise<UnitCodeDOM>;
         private buildClassFields;
         private buildPrefabConstructorMethod;
@@ -199,6 +200,15 @@ declare namespace phasereditor2d.scene.core.code {
         private addChildrenObjects;
         private buildSceneConstructorMethod;
         private buildPreloadMethod;
+    }
+}
+declare namespace phasereditor2d.scene.core.code {
+    import io = colibri.core.io;
+    class SceneCompiler {
+        private _scene;
+        private _sceneFile;
+        constructor(scene: ui.Scene, sceneFile: io.FilePath);
+        compile(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.core.code {
@@ -283,7 +293,7 @@ declare namespace phasereditor2d.scene.core.json {
 declare namespace phasereditor2d.scene.core.json {
     class SceneWriter {
         private _scene;
-        constructor(scene: ui.GameScene);
+        constructor(scene: ui.Scene);
         toJSON(): SceneData;
         toString(): string;
     }
@@ -324,7 +334,7 @@ declare namespace Phaser.Cameras.Scene2D {
 declare namespace phasereditor2d.scene.ui {
 }
 declare namespace phasereditor2d.scene.ui {
-    class GameScene extends Phaser.Scene {
+    class Scene extends Phaser.Scene {
         private _id;
         private _inEditor;
         private _initialState;
@@ -355,7 +365,7 @@ declare namespace phasereditor2d.scene.ui {
     import json = core.json;
     class SceneMaker {
         private _scene;
-        constructor(scene: GameScene);
+        constructor(scene: Scene);
         static isValidSceneDataFormat(data: json.SceneData): boolean;
         preload(): Promise<void>;
         isPrefabFile(file: io.FilePath): boolean;
@@ -509,7 +519,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _game;
         private _overlayLayer;
         private _gameCanvas;
-        private _gameScene;
+        private _scene;
         private _dropManager;
         private _cameraManager;
         private _selectionManager;
@@ -520,6 +530,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         constructor();
         openSourceFileInEditor(): void;
         doSave(): Promise<void>;
+        compile(): Promise<void>;
         saveState(state: any): void;
         restoreState(state: any): void;
         protected onEditorInputContentChanged(): void;
@@ -534,7 +545,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         getSelectionManager(): SelectionManager;
         getOverlayLayer(): OverlayLayer;
         getGameCanvas(): HTMLCanvasElement;
-        getGameScene(): GameScene;
+        getScene(): Scene;
         getGame(): Phaser.Game;
         getSceneMaker(): SceneMaker;
         layout(): void;
@@ -562,6 +573,7 @@ declare namespace phasereditor2d.scene.ui.editor {
 declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
+    const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
@@ -716,8 +728,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         setLabel(label: string): void;
         getScope(): ObjectScope;
         setScope(scope: ObjectScope): void;
-        getScene(): GameScene;
-        setScene(scene: GameScene): void;
+        getScene(): Scene;
+        setScene(scene: Scene): void;
         isPrefabInstance(): boolean;
         getOwnerPrefabInstance(): SceneObject;
         getPrefabId(): string;
@@ -736,13 +748,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static POINT_ID: string;
         constructor();
         abstract acceptAsset(asset: any): boolean;
-        abstract updateLoader(scene: GameScene, asset: any): any;
+        abstract updateLoader(scene: Scene, asset: any): any;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageLoaderUpdater extends LoaderUpdaterExtension {
         acceptAsset(asset: any): boolean;
-        updateLoader(scene: GameScene, asset: any): Promise<void>;
+        updateLoader(scene: Scene, asset: any): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -756,21 +768,21 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface CreateWithAssetArgs {
         x: number;
         y: number;
-        scene: GameScene;
+        scene: Scene;
         asset: any;
     }
     interface CreateWithDataArgs {
-        scene: GameScene;
+        scene: Scene;
         data: json.ObjectData;
     }
     interface GetAssetsFromObjectArgs {
         serializer: json.Serializer;
-        scene: GameScene;
+        scene: Scene;
         finder: pack.core.PackFinder;
     }
     interface UpdateLoaderWithAsset {
         asset: any;
-        scene: GameScene;
+        scene: Scene;
     }
     interface BuildObjectFactoryCodeDOMArgs {
         obj: SceneObject;
@@ -865,7 +877,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class Container extends Phaser.GameObjects.Container implements SceneObject {
         private _editorSupport;
-        constructor(scene: GameScene, x: number, y: number, children: SceneObject[]);
+        constructor(scene: Scene, x: number, y: number, children: SceneObject[]);
         getEditorSupport(): ContainerEditorSupport;
         get list(): SceneObject[];
         set list(list: SceneObject[]);
@@ -901,7 +913,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createContainerObject;
-        createContainerObjectWithChildren(scene: GameScene, objectList: sceneobjects.SceneObject[]): sceneobjects.Container;
+        createContainerObjectWithChildren(scene: Scene, objectList: sceneobjects.SceneObject[]): sceneobjects.Container;
         acceptsDropData(data: any): boolean;
         createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;
     }
@@ -909,7 +921,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class Image extends Phaser.GameObjects.Image implements SceneObject {
         private _editorSupport;
-        constructor(scene: GameScene, x: number, y: number, texture: string, frame?: string | number);
+        constructor(scene: Scene, x: number, y: number, texture: string, frame?: string | number);
         getEditorSupport(): ImageEditorSupport;
     }
 }

@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 || asset instanceof pack.core.AssetPackImageFrame;
         }
 
-        async updateLoader(scene: GameScene, asset: any) {
+        async updateLoader(scene: Scene, asset: any) {
 
             let imageFrameContainerPackItem: pack.core.ImageFrameContainerAssetPackItem = null;
 

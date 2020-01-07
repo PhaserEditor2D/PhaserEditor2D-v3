@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _game: Phaser.Game;
         private _overlayLayer: OverlayLayer;
         private _gameCanvas: HTMLCanvasElement;
-        private _gameScene: GameScene;
+        private _scene: Scene;
         private _dropManager: DropManager;
         private _cameraManager: CameraManager;
         private _selectionManager: SelectionManager;
@@ -62,7 +62,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         openSourceFileInEditor(): void {
 
-            const lang = this._gameScene.getSettings().compilerOutputLanguage;
+            const lang = this._scene.getSettings().compilerOutputLanguage;
 
             const ext = lang === json.SourceLang.JAVA_SCRIPT ? ".js" : ".ts";
 
@@ -78,7 +78,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const sceneFile = this.getInput();
 
-            const writer = new json.SceneWriter(this.getGameScene());
+            const writer = new json.SceneWriter(this.getScene());
 
             const data = writer.toJSON();
 
@@ -96,54 +96,23 @@ namespace phasereditor2d.scene.ui.editor {
                 console.error(e);
             }
 
-            // compile
+            await this.compile();
+        }
 
-            {
+        async compile() {
 
-                const compileToJS = this._gameScene.getSettings()
-                    .compilerOutputLanguage === json.SourceLang.JAVA_SCRIPT;
+            const compiler = new core.code.SceneCompiler(this._scene, this.getInput());
 
-                const builder = new core.code.SceneCodeDOMBuilder(this._gameScene, sceneFile);
-
-                const unit = await builder.build();
-
-                const generator = compileToJS ?
-                    new core.code.JavaScriptUnitCodeGenerator(unit)
-                    : new core.code.TypeScriptUnitCodeGenerator(unit);
-
-                const fileExt = compileToJS ? "js" : "ts";
-                const fileName = sceneFile.getNameWithoutExtension() + "." + fileExt;
-
-                let replaceContent = "";
-
-                {
-                    const outputFile = sceneFile.getSibling(fileName);
-
-                    if (outputFile) {
-
-                        replaceContent = await FileUtils.getFileStorage().getFileString(outputFile);
-                    }
-                }
-
-                const output = generator.generate(replaceContent);
-
-                await FileUtils.createFile_async(sceneFile.getParent(), fileName, output);
-
-                console.log("compiled " + sceneFile.getFullName());
-            }
-
-            // TODO: we don't need to do this, right?
-            // const win = colibri.Platform.getWorkbench().getActiveWindow() as ide.ui.DesignWindow;
-            // win.saveWindowState();
+            await compiler.compile();
         }
 
         saveState(state: any) {
 
-            if (!this._gameScene) {
+            if (!this._scene) {
                 return;
             }
 
-            const camera = this._gameScene.cameras.main;
+            const camera = this._scene.cameras.main;
 
             state.cameraZoom = camera.zoom;
             state.cameraScrollX = camera.scrollX;
@@ -152,7 +121,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         restoreState(state: any) {
 
-            this._gameScene.setInitialState(state);
+            this._scene.setInitialState(state);
         }
 
         protected onEditorInputContentChanged() {
@@ -187,7 +156,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             // create game scene
 
-            this._gameScene = new GameScene();
+            this._scene = new Scene();
 
             this._game = new Phaser.Game({
                 type: Phaser.WEBGL,
@@ -202,7 +171,7 @@ namespace phasereditor2d.scene.ui.editor {
                 audio: {
                     noAudio: true
                 },
-                scene: this._gameScene,
+                scene: this._scene,
             });
 
             this._sceneRead = false;
@@ -262,6 +231,11 @@ namespace phasereditor2d.scene.ui.editor {
             const manager = new controls.ToolbarManager(parent);
 
             manager.add(new controls.Action({
+                icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
+                showText: false
+            }));
+
+            manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
                 showText: false
             }));
@@ -281,12 +255,11 @@ namespace phasereditor2d.scene.ui.editor {
                 showText: false
             }));
 
-            manager.add(new controls.Action({
-                icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
-                showText: false
-            }));
-
             manager.addCommand(commands.CMD_OPEN_COMPILED_FILE, {
+                showText: false
+            });
+
+            manager.addCommand(commands.CMD_COMPILE_SCENE_EDITOR, {
                 showText: false
             });
 
@@ -295,7 +268,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private async readScene() {
 
-            const maker = this._gameScene.getMaker();
+            const maker = this._scene.getMaker();
 
             this._sceneRead = true;
 
@@ -352,8 +325,8 @@ namespace phasereditor2d.scene.ui.editor {
             return this._gameCanvas;
         }
 
-        getGameScene() {
-            return this._gameScene;
+        getScene() {
+            return this._scene;
         }
 
         getGame() {
@@ -361,7 +334,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getSceneMaker() {
-            return this._gameScene.getMaker();
+            return this._scene.getMaker();
         }
 
         layout() {
@@ -379,7 +352,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             if (this._gameBooted) {
 
-                this._gameScene.getCamera().setSize(w, h);
+                this._scene.getCamera().setSize(w, h);
 
                 this.repaint();
             }

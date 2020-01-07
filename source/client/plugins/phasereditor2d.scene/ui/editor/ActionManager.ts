@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.editor {
             }
 
             const container = sceneobjects.ContainerExtension.getInstance()
-                .createContainerObjectWithChildren(this._editor.getGameScene(), sel);
+                .createContainerObjectWithChildren(this._editor.getScene(), sel);
 
             this._editor.getUndoManager().add(new undo.JoinObjectsInContainerOperation(this._editor, container));
 

@@ -1,7 +1,7 @@
 
 namespace phasereditor2d.scene.ui {
 
-    export class GameScene extends Phaser.Scene {
+    export class Scene extends Phaser.Scene {
 
         private _id: string;
         private _inEditor: boolean;
@@ -86,7 +86,7 @@ namespace phasereditor2d.scene.ui {
 
         getByEditorId(id: string) {
 
-            const obj = GameScene.findByEditorId(this.getDisplayListChildren(), id);
+            const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
 
             if (!obj) {
                 console.error(`Object with id=${id} not found.`);

@@ -99,7 +99,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return container;
         }
 
-        private createContainerObject(scene: GameScene, x: number, y: number, list: sceneobjects.SceneObject[]) {
+        private createContainerObject(scene: Scene, x: number, y: number, list: sceneobjects.SceneObject[]) {
 
             const container = new sceneobjects.Container(scene, x, y, list);
 
@@ -111,7 +111,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createContainerObjectWithChildren(
-            scene: GameScene, objectList: sceneobjects.SceneObject[]): sceneobjects.Container {
+            scene: Scene, objectList: sceneobjects.SceneObject[]): sceneobjects.Container {
 
             const container = this.createContainerObject(scene, 0, 0, objectList);
 

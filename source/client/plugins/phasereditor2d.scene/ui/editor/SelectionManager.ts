@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor.setSelection(this._editor.getSelection().filter(obj => {
 
                 if (obj instanceof Phaser.GameObjects.GameObject) {
-                    return this._editor.getGameScene().sys.displayList.exists(obj);
+                    return this._editor.getScene().sys.displayList.exists(obj);
                 }
 
                 return true;
@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         selectAll() {
 
-            const sel = this._editor.getGameScene().getDisplayListChildren();
+            const sel = this._editor.getScene().getDisplayListChildren();
             this._editor.setSelection(sel);
             this._editor.repaint();
         }
@@ -89,7 +89,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         hitTestOfActivePointer(): Phaser.GameObjects.GameObject[] {
-            const scene = this._editor.getGameScene();
+            const scene = this._editor.getScene();
             const input = scene.input;
 
             // const real = input["real_hitTest"];
