@@ -265,7 +265,8 @@ namespace phasereditor2d.scene.core.code {
 
                 const container = obj.parentContainer as ui.sceneobjects.Container;
 
-                const parentIsPrefabObject = obj.parentContainer as any === this._scene.getPrefabObject();
+                const parentIsPrefabObject = this._scene.isPrefabSceneType()
+                    && obj.parentContainer as any === this._scene.getPrefabObject();
 
                 const containerVarname = parentIsPrefabObject ? "this"
                     : formatToValidVarName(container.getEditorSupport().getLabel());
@@ -283,6 +284,7 @@ namespace phasereditor2d.scene.core.code {
             });
 
             if (setPropsCode.length > 0) {
+
                 createObjectMethodCall.setDeclareReturnToVar(true);
                 createMethodDecl.getBody().push(...setPropsCode);
             }

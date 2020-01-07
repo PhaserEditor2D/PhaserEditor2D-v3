@@ -630,7 +630,7 @@ var phasereditor2d;
                         this._methodName = methodName;
                         this._contextExpr = contextExpr;
                         this._args = [];
-                        this._declareReturnToVar = true;
+                        this._declareReturnToVar = false;
                         this._isConstructor = false;
                         this._declareReturnToField = false;
                     }
@@ -919,7 +919,8 @@ var phasereditor2d;
                         if (obj.parentContainer) {
                             createObjectMethodCall.setDeclareReturnToVar(true);
                             const container = obj.parentContainer;
-                            const parentIsPrefabObject = obj.parentContainer === this._scene.getPrefabObject();
+                            const parentIsPrefabObject = this._scene.isPrefabSceneType()
+                                && obj.parentContainer === this._scene.getPrefabObject();
                             const containerVarname = parentIsPrefabObject ? "this"
                                 : code.formatToValidVarName(container.getEditorSupport().getLabel());
                             const addToContainerCall = new code.MethodCallCodeDOM("add", containerVarname);

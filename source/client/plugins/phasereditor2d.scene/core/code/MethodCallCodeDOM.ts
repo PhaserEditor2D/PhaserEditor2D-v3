@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.core.code {
             this._methodName = methodName;
             this._contextExpr = contextExpr;
             this._args = [];
-            this._declareReturnToVar = true;
+            this._declareReturnToVar = false;
             this._isConstructor = false;
             this._declareReturnToField = false;
         }
