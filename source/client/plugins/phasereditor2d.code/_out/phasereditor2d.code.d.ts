@@ -4,11 +4,28 @@ declare namespace phasereditor2d.code {
         private _modelsManager;
         static getInstance(): CodePlugin;
         constructor();
+        getModelsManager(): ui.editors.MonacoModelsManager;
         registerExtensions(reg: colibri.ExtensionRegistry): void;
         starting(): Promise<void>;
         private initMonacoContentAssist;
         private initMonacoLanguages;
         private initMonacoThemes;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors {
+    import io = colibri.core.io;
+    import controls = colibri.ui.controls;
+    class MonacoModelsManager {
+        private _fileModelMap;
+        private _changeListener;
+        private _filesModifiedByMonacoEditor;
+        constructor();
+        fileModifiedByMonacoEditor(file: io.FilePath): void;
+        private reset;
+        preload(monitor: controls.IProgressMonitor): Promise<void>;
+        private addSrcFile;
+        private addDefFile;
+        getModel(file: io.FilePath): monaco.editor.ITextModel;
     }
 }
 declare namespace phasereditor2d.code.ui.editors {
@@ -48,18 +65,6 @@ declare namespace phasereditor2d.code.ui.editors {
         createPart(): void;
         private _propertyProvider;
         getPropertyProvider(): pack.ui.properties.AssetPackPreviewPropertyProvider;
-    }
-}
-declare namespace phasereditor2d.code.ui.editors {
-    class MonacoModelsManager {
-        private static _instance;
-        static getInstance(): MonacoModelsManager;
-        private _started;
-        private _extraLibs;
-        constructor();
-        start(): Promise<void>;
-        private onStorageChanged;
-        updateExtraLibs(): Promise<void>;
     }
 }
 //# sourceMappingURL=phasereditor2d.code.d.ts.map

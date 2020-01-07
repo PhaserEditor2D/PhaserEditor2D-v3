@@ -2472,6 +2472,7 @@ var phasereditor2d;
                             }
                             const output = generator.generate(replaceContent);
                             await FileUtils.createFile_async(sceneFile.getParent(), fileName, output);
+                            console.log("compiled " + sceneFile.getFullName());
                         }
                         // TODO: we don't need to do this, right?
                         // const win = colibri.Platform.getWorkbench().getActiveWindow() as ide.ui.DesignWindow;

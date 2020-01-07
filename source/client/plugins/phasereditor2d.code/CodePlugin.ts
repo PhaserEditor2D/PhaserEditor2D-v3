@@ -20,18 +20,22 @@ namespace phasereditor2d.code {
             super("phasereditor2d.core");
         }
 
+        getModelsManager() {
+            return this._modelsManager;
+        }
+
         registerExtensions(reg: colibri.ExtensionRegistry) {
 
             // project preloaders
 
             this._modelsManager = new ui.editors.MonacoModelsManager();
 
-            // reg.addExtension(colibri.ui.ide.PreloadProjectResourcesExtension.POINT_ID,
-            //     new colibri.ui.ide
-            //         .PreloadProjectResourcesExtension("phasereditor2d.code.ui.editors.EditorModelsManager",
-            //             monitor => {
-            //                 return this._modelsManager.start(monitor);
-            //             }));
+            reg.addExtension(
+                new colibri.ui.ide
+                    .PreloadProjectResourcesExtension(
+                        monitor => {
+                            return this._modelsManager.preload(monitor);
+                        }));
 
             // editors
 

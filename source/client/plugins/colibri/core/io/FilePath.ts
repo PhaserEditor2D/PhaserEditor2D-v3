@@ -111,7 +111,7 @@ namespace colibri.core.io {
             this._modTime = modTime;
         }
 
-        getFullName() {
+        getFullName(): string {
 
             if (this._parent) {
                 return this._parent.getFullName() + "/" + this._name;

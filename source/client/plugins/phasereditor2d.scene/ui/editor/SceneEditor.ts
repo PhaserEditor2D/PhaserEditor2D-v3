@@ -114,6 +114,8 @@ namespace phasereditor2d.scene.ui.editor {
                 const output = generator.generate(replaceContent);
 
                 await FileUtils.createFile_async(sceneFile.getParent(), fileName, output);
+
+                console.log("compiled " + sceneFile.getFullName());
             }
 
             // TODO: we don't need to do this, right?

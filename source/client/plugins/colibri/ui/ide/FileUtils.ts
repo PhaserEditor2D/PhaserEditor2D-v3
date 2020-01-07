@@ -39,7 +39,6 @@ namespace colibri.ui.ide {
             return Workbench.getWorkbench().getFileStorage();
         }
 
-
         static async createFile_async(folder: io.FilePath, fileName: string, content: string): Promise<io.FilePath> {
 
             let file = folder.getFile(fileName);

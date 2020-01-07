@@ -13,15 +13,16 @@ var phasereditor2d;
                 }
                 return this._instance;
             }
+            getModelsManager() {
+                return this._modelsManager;
+            }
             registerExtensions(reg) {
                 // project preloaders
                 this._modelsManager = new code.ui.editors.MonacoModelsManager();
-                // reg.addExtension(colibri.ui.ide.PreloadProjectResourcesExtension.POINT_ID,
-                //     new colibri.ui.ide
-                //         .PreloadProjectResourcesExtension("phasereditor2d.code.ui.editors.EditorModelsManager",
-                //             monitor => {
-                //                 return this._modelsManager.start(monitor);
-                //             }));
+                reg.addExtension(new colibri.ui.ide
+                    .PreloadProjectResourcesExtension(monitor => {
+                    return this._modelsManager.preload(monitor);
+                }));
                 // editors
                 reg.addExtension(new colibri.ui.ide.EditorExtension([
                     new code.ui.editors.JavaScriptEditorFactory(),
@@ -96,6 +97,124 @@ var phasereditor2d;
         (function (ui) {
             var editors;
             (function (editors) {
+                var ide = colibri.ui.ide;
+                function isSrcFile(file) {
+                    if (!file) {
+                        return false;
+                    }
+                    const name = file.getName();
+                    if (name.endsWith(".min.js")) {
+                        return false;
+                    }
+                    if (name === "phaser.js") {
+                        return false;
+                    }
+                    return name.endsWith(".js");
+                }
+                class MonacoModelsManager {
+                    constructor() {
+                        this._fileModelMap = new Map();
+                        this._filesModifiedByMonacoEditor = new Set();
+                        this._changeListener = change => {
+                            // added files
+                            for (const name of change.getAddRecords()) {
+                                const file = ide.FileUtils.getFileFromPath(name);
+                                if (isSrcFile(file)) {
+                                    this.addSrcFile(file);
+                                }
+                                else if (name.endsWith(".d.ts")) {
+                                    this.addDefFile(file);
+                                }
+                            }
+                            // modified files
+                            for (const name of change.getModifiedRecords()) {
+                                const file = ide.FileUtils.getFileFromPath(name);
+                                if (this._filesModifiedByMonacoEditor.has(file)) {
+                                    continue;
+                                }
+                                const model = this._fileModelMap.get(file.getFullName());
+                                if (model) {
+                                    const content = ide.FileUtils.getFileString(file);
+                                    model.setValue(content);
+                                }
+                            }
+                            this._filesModifiedByMonacoEditor = new Set();
+                            // deleted files
+                            for (const name of change.getDeleteRecords()) {
+                                const model = this._fileModelMap.get(name);
+                                if (model) {
+                                    model.dispose();
+                                }
+                            }
+                            // moved files
+                            for (const from of change.getRenameFromRecords()) {
+                                const to = change.getRenameTo(from);
+                                const model = this._fileModelMap.get(from);
+                                if (model) {
+                                    // TODO: we should rename the model URI
+                                    this._fileModelMap.set(to, model);
+                                    this._fileModelMap.delete(from);
+                                    model.dispose();
+                                }
+                            }
+                        };
+                    }
+                    fileModifiedByMonacoEditor(file) {
+                        this._filesModifiedByMonacoEditor.add(file);
+                    }
+                    reset() {
+                        this._fileModelMap.clear();
+                        for (const model of monaco.editor.getModels()) {
+                            model.dispose();
+                        }
+                        ide.FileUtils.getFileStorage().addChangeListener(this._changeListener);
+                    }
+                    async preload(monitor) {
+                        this.reset();
+                        const srcFiles = ide.FileUtils.getAllFiles()
+                            .filter(isSrcFile);
+                        const defFiles = ide.FileUtils.getAllFiles()
+                            .filter(file => file.getName().endsWith(".d.ts"));
+                        monitor.addTotal(srcFiles.length + defFiles.length);
+                        for (const file of defFiles) {
+                            await this.addDefFile(file);
+                            monitor.step();
+                        }
+                        for (const file of srcFiles) {
+                            await this.addSrcFile(file);
+                            monitor.step();
+                        }
+                        monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+                        monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
+                    }
+                    async addSrcFile(file) {
+                        const value = await ide.FileUtils.preloadAndGetFileString(file);
+                        const uri = monaco.Uri.file(file.getFullName());
+                        const model = monaco.editor.createModel(value, null, uri);
+                        this._fileModelMap.set(file.getFullName(), model);
+                    }
+                    async addDefFile(file) {
+                        const content = await ide.FileUtils.preloadAndGetFileString(file);
+                        monaco.languages.typescript.javascriptDefaults.addExtraLib(content);
+                        monaco.languages.typescript.typescriptDefaults.addExtraLib(content);
+                    }
+                    getModel(file) {
+                        return this._fileModelMap.get(file.getFullName());
+                    }
+                }
+                editors.MonacoModelsManager = MonacoModelsManager;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
                 var io = colibri.core.io;
                 class MonacoEditorFactory extends colibri.ui.ide.EditorFactory {
                     constructor(language, contentType) {
@@ -126,10 +245,13 @@ var phasereditor2d;
                         return this._monacoEditor;
                     }
                     onPartClosed() {
-                        if (this._monacoEditor) {
-                            this._monacoEditor.dispose();
+                        if (super.onPartClosed()) {
+                            if (this._monacoEditor) {
+                                this._monacoEditor.dispose();
+                            }
+                            return true;
                         }
-                        return super.onPartClosed();
+                        return false;
                     }
                     createPart() {
                         const container = document.createElement("div");
@@ -139,7 +261,6 @@ var phasereditor2d;
                         this._monacoEditor.onDidChangeModelContent(e => {
                             this.setDirty(true);
                         });
-                        editors.MonacoModelsManager.getInstance().start();
                         this.updateContent();
                     }
                     getTokensAtLine(position) {
@@ -165,6 +286,8 @@ var phasereditor2d;
                         };
                     }
                     async doSave() {
+                        const manager = code.CodePlugin.getInstance().getModelsManager();
+                        manager.fileModifiedByMonacoEditor(this.getInput());
                         const content = this._monacoEditor.getValue();
                         try {
                             await colibri.ui.ide.FileUtils.setFileString_async(this.getInput(), content);
@@ -179,8 +302,15 @@ var phasereditor2d;
                         if (!file) {
                             return;
                         }
-                        const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
-                        this._monacoEditor.setValue(content);
+                        const manager = code.CodePlugin.getInstance().getModelsManager();
+                        const model = manager.getModel(file);
+                        if (model) {
+                            this._monacoEditor.setModel(model);
+                        }
+                        else {
+                            const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+                            this._monacoEditor.setValue(content);
+                        }
                         this.setDirty(false);
                     }
                     layout() {
@@ -315,76 +445,6 @@ var phasereditor2d;
                         i++;
                     }
                 }
-            })(editors = ui.editors || (ui.editors = {}));
-        })(ui = code.ui || (code.ui = {}));
-    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var code;
-    (function (code) {
-        var ui;
-        (function (ui) {
-            var editors;
-            (function (editors) {
-                class MonacoModelsManager {
-                    constructor() {
-                        this._started = false;
-                        this._extraLibs = [];
-                    }
-                    static getInstance() {
-                        if (!this._instance) {
-                            this._instance = new MonacoModelsManager();
-                        }
-                        return this._instance;
-                    }
-                    async start() {
-                        if (this._started) {
-                            return;
-                        }
-                        this._started = true;
-                        this.updateExtraLibs();
-                        colibri.Platform.getWorkbench().getFileStorage().addChangeListener(change => this.onStorageChanged(change));
-                    }
-                    onStorageChanged(change) {
-                        console.info(`MonacoModelsManager: storage changed.`);
-                        const test = (paths) => {
-                            for (const r of paths) {
-                                if (r.endsWith(".d.ts")) {
-                                    return true;
-                                }
-                            }
-                            return false;
-                        };
-                        const update = test(change.getDeleteRecords())
-                            || test(change.getModifiedRecords())
-                            || test(change.getRenameToRecords())
-                            || test(change.getRenameFromRecords())
-                            || test(change.getAddRecords());
-                        if (update) {
-                            this.updateExtraLibs();
-                        }
-                    }
-                    async updateExtraLibs() {
-                        console.log("MonacoModelsManager: updating extra libs.");
-                        for (const lib of this._extraLibs) {
-                            console.log(`MonacoModelsManager: disposing ${lib.file.getFullName()}`);
-                            lib.disposable.dispose();
-                        }
-                        const files = colibri.ui.ide.FileUtils.getRoot().flatTree([], false);
-                        const tsFiles = files.filter(file => file.getName().endsWith(".d.ts"));
-                        for (const file of tsFiles) {
-                            const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
-                            const d = monaco.languages.typescript.javascriptDefaults.addExtraLib(content);
-                            console.log(`MonacoModelsManager: add extra lib ${file.getFullName()}`);
-                            this._extraLibs.push({
-                                disposable: d,
-                                file: file
-                            });
-                        }
-                    }
-                }
-                editors.MonacoModelsManager = MonacoModelsManager;
             })(editors = ui.editors || (ui.editors = {}));
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));

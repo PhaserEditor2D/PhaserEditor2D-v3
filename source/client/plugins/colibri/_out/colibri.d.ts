@@ -294,7 +294,7 @@ declare namespace colibri.core.io {
         getNameWithoutExtension(): string;
         getModTime(): number;
         _setModTime(modTime: number): void;
-        getFullName(): any;
+        getFullName(): string;
         getUrl(): any;
         getProject(): FilePath;
         getSibling(name: string): FilePath;
@@ -1437,7 +1437,7 @@ declare namespace colibri.ui.ide {
         static ID: string;
         constructor();
         getEditorInputState(input: core.io.FilePath): {
-            filePath: any;
+            filePath: string;
         };
         createEditorInput(state: any): IEditorInput;
         getEditorInputId(input: core.io.FilePath): string;
