@@ -3047,11 +3047,13 @@ var colibri;
                     this._element.addEventListener("mouseenter", e => {
                         this.start();
                     });
-                    this._element.addEventListener("mouseleave", e => {
+                    const listenToClose = (e) => {
                         this._enterTime = 0;
                         this._token++;
                         TooltipManager.closeTooltip();
-                    });
+                    };
+                    this._element.addEventListener("mouseleave", listenToClose);
+                    this._element.addEventListener("mousedown", listenToClose);
                     this._element.addEventListener("mousemove", (e) => {
                         this._mousePosition = { x: e.clientX, y: e.clientY };
                         if (Date.now() - this._enterTime > 500) {

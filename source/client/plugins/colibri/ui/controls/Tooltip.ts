@@ -20,13 +20,16 @@ namespace colibri.ui.controls {
                 this.start();
             });
 
-            this._element.addEventListener("mouseleave", e => {
+            const listenToClose = (e: MouseEvent) => {
 
                 this._enterTime = 0;
                 this._token++;
 
                 TooltipManager.closeTooltip();
-            });
+            };
+
+            this._element.addEventListener("mouseleave", listenToClose);
+            this._element.addEventListener("mousedown", listenToClose);
 
             this._element.addEventListener("mousemove", (e: MouseEvent) => {
 
