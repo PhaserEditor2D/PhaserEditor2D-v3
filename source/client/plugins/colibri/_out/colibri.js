@@ -2235,6 +2235,12 @@ var colibri;
                 addCommand(commandId) {
                     this.add(new controls.Action({ commandId: commandId }));
                 }
+                addExtension(menuId) {
+                    const exts = colibri.Platform.getExtensions(controls.MenuExtension.POINT_ID);
+                    for (const ext of exts) {
+                        ext.fillMenu(this);
+                    }
+                }
                 addSeparator() {
                     this._actions.push(null);
                 }
@@ -2315,6 +2321,37 @@ var colibri;
             }
             Menu._activeMenu = null;
             controls.Menu = Menu;
+        })(controls = ui.controls || (ui.controls = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var controls;
+        (function (controls) {
+            class MenuExtension extends colibri.Extension {
+                constructor(menuId, ...configs) {
+                    super(MenuExtension.POINT_ID);
+                    this._menuId = menuId;
+                    this._configList = configs;
+                }
+                getMenuId() {
+                    return this._menuId;
+                }
+                fillMenu(menu) {
+                    for (const config of this._configList) {
+                        if (config.separator) {
+                            menu.addSeparator();
+                        }
+                        else if (config.command) {
+                            menu.addCommand(config.command);
+                        }
+                    }
+                }
+            }
+            MenuExtension.POINT_ID = "colibri.ui.controls.menus";
+            controls.MenuExtension = MenuExtension;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
 })(colibri || (colibri = {}));

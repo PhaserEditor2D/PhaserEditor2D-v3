@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
+    export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
 
     function isSceneScope(args: colibri.ui.ide.commands.CommandArgs) {
         return args.activePart instanceof SceneEditor ||
@@ -88,13 +89,27 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 id: CMD_COMPILE_SCENE_EDITOR,
                 icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
                 name: "Compile Scene",
-                tooltip: "Compile the scene file to code."
+                tooltip: "Compile the editor's Scene."
             });
 
             manager.addHandlerHelper(
                 CMD_COMPILE_SCENE_EDITOR,
                 args => args.activeEditor instanceof SceneEditor,
                 args => (args.activeEditor as SceneEditor).compile());
+
+            // compile all scene files
+
+            manager.addCommandHelper({
+                id: CMD_COMPILE_ALL_SCENE_FILES,
+                icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
+                name: "Compile All Scene Files",
+                tooltip: "Compile all the Scene files of the project."
+            });
+
+            manager.addHandlerHelper(
+                CMD_COMPILE_ALL_SCENE_FILES,
+                args => args.activeWindow instanceof ide.ui.DesignWindow,
+                args => ScenePlugin.getInstance().compileAll());
         }
 
     }

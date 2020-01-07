@@ -24,6 +24,16 @@ namespace colibri.ui.controls {
             this.add(new Action({ commandId: commandId }));
         }
 
+        addExtension(menuId: string) {
+
+            const exts = Platform.getExtensions<MenuExtension>(MenuExtension.POINT_ID);
+
+            for (const ext of exts) {
+
+                ext.fillMenu(this);
+            }
+        }
+
         addSeparator() {
             this._actions.push(null);
         }

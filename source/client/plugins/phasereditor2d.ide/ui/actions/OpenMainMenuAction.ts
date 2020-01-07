@@ -25,6 +25,8 @@ namespace phasereditor2d.ide.ui.actions {
 
             menu.addCommand(actions.CMD_CHANGE_THEME);
 
+            menu.addExtension(DesignWindow.MENU_MAIN);
+
             menu.addSeparator();
 
             menu.add(new controls.Action({

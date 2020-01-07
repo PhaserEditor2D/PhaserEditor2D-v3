@@ -256,6 +256,7 @@ var phasereditor2d;
                 }
             }
             DesignWindow.ID = "phasereditor2d.ide.ui.DesignWindow";
+            DesignWindow.MENU_MAIN = "phasereditor2d.ide.ui.MainMenu";
             ui.DesignWindow = DesignWindow;
         })(ui = ide_2.ui || (ide_2.ui = {}));
     })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));
@@ -396,6 +397,7 @@ var phasereditor2d;
                         menu.addCommand(actions.CMD_RELOAD_PROJECT);
                         menu.addSeparator();
                         menu.addCommand(actions.CMD_CHANGE_THEME);
+                        menu.addExtension(ui.DesignWindow.MENU_MAIN);
                         menu.addSeparator();
                         menu.add(new controls.Action({
                             text: "Help",

@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene {
 
     import ide = colibri.ui.ide;
+    import controls = colibri.ui.controls;
 
     export const ICON_GROUP = "group";
     export const ICON_TRANSLATE = "translate";
@@ -102,6 +103,14 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.OriginSection(page),
                 page => new ui.sceneobjects.TextureSection(page)
             ));
+
+            // main menu
+
+            reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN,
+                {
+                    command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
+                }
+            ));
         }
 
         getSceneFinder() {
@@ -131,6 +140,37 @@ namespace phasereditor2d.scene {
             }
 
             return null;
+        }
+
+        async compileAll() {
+
+            const files = this._sceneFinder.getFiles();
+
+            const dlg = new controls.dialogs.ProgressDialog();
+
+            dlg.create();
+            dlg.setTitle("Compiling Scene Files");
+
+            const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
+
+            monitor.addTotal(files.length);
+
+            for (const file of files) {
+
+                const data = this.getSceneFinder().getSceneData(file);
+
+                const scene = await ui.OfflineScene.createScene(data);
+
+                const compiler = new core.code.SceneCompiler(scene, file);
+
+                scene.game.destroy(false);
+
+                await compiler.compile();
+
+                monitor.step();
+            }
+
+            dlg.close();
         }
     }
 

@@ -612,12 +612,27 @@ declare namespace colibri.ui.controls {
         setMenuClosedCallback(callback: () => void): void;
         add(action: Action): void;
         addCommand(commandId: string): void;
+        addExtension(menuId: string): void;
         addSeparator(): void;
         isEmpty(): boolean;
         getElement(): HTMLUListElement;
         static getActiveMenu(): Menu;
         create(e: MouseEvent): void;
         close(): void;
+    }
+}
+declare namespace colibri.ui.controls {
+    interface MenuExtensionConfig {
+        command?: string;
+        separator?: boolean;
+    }
+    class MenuExtension extends Extension {
+        static POINT_ID: string;
+        private _menuId;
+        private _configList;
+        constructor(menuId: string, ...configs: MenuExtensionConfig[]);
+        getMenuId(): string;
+        fillMenu(menu: controls.Menu): void;
     }
 }
 declare namespace colibri.ui.controls {

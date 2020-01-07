@@ -15,6 +15,7 @@ declare namespace phasereditor2d.scene {
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[];
         getObjectExtensionByObjectType(type: string): ui.sceneobjects.SceneObjectExtension;
         getLoaderUpdaterForAsset(asset: any): ui.sceneobjects.LoaderUpdaterExtension;
+        compileAll(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.core {
@@ -258,8 +259,10 @@ declare namespace phasereditor2d.scene.core.json {
         private _dataMap;
         private _sceneDataMap;
         private _fileMap;
+        private _files;
         constructor();
         preload(monitor: controls.IProgressMonitor): Promise<void>;
+        getFiles(): io.FilePath[];
         getPrefabData(prefabId: string): ObjectData;
         getPrefabFile(prefabId: string): io.FilePath;
         getSceneData(file: io.FilePath): SceneData;
@@ -358,6 +361,16 @@ declare namespace phasereditor2d.scene.ui {
         getCamera(): Phaser.Cameras.Scene2D.Camera;
         setInitialState(state: any): void;
         create(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui {
+    class OfflineScene extends Scene {
+        static createScene(data: core.json.SceneData): Promise<OfflineScene>;
+        private _data;
+        private _callback;
+        private constructor();
+        setCallback(callback: () => void): void;
+        create(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.ui {
@@ -574,6 +587,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
+    const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }

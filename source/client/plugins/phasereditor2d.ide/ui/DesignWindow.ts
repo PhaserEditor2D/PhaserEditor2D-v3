@@ -8,6 +8,8 @@ namespace phasereditor2d.ide.ui {
 
         static ID = "phasereditor2d.ide.ui.DesignWindow";
 
+        static MENU_MAIN = "phasereditor2d.ide.ui.MainMenu";
+
         private _outlineView: outline.ui.views.OutlineView;
         private _filesView: files.ui.views.FilesView;
         private _inspectorView: inspector.ui.views.InspectorView;
