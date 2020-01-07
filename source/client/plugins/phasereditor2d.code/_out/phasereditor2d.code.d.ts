@@ -15,18 +15,27 @@ declare namespace phasereditor2d.code {
 declare namespace phasereditor2d.code.ui.editors {
     import io = colibri.core.io;
     import controls = colibri.ui.controls;
-    class MonacoModelsManager {
+    class MonacoModelsProjectPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
+        private _manager;
+        constructor(manager: MonacoModelsManager);
+        computeTotal(): Promise<number>;
+        preload(monitor: controls.IProgressMonitor): Promise<void>;
+    }
+    export class MonacoModelsManager {
         private _fileModelMap;
         private _changeListener;
         private _filesModifiedByMonacoEditor;
         constructor();
         fileModifiedByMonacoEditor(file: io.FilePath): void;
         private reset;
+        getProjectPreloader(): MonacoModelsProjectPreloader;
+        computePreloadTotal(): Promise<number>;
         preload(monitor: controls.IProgressMonitor): Promise<void>;
         private addSrcFile;
         private addDefFile;
         getModel(file: io.FilePath): monaco.editor.ITextModel;
     }
+    export {};
 }
 declare namespace phasereditor2d.code.ui.editors {
     class MonacoEditorFactory extends colibri.ui.ide.EditorFactory {

@@ -164,8 +164,20 @@ namespace colibri.ui.ide {
             const extensions = Platform
                 .getExtensions<PreloadProjectResourcesExtension>(PreloadProjectResourcesExtension.POINT_ID);
 
+            let total = 0;
+
             for (const extension of extensions) {
-                await extension.getPreloadPromise(monitor);
+
+                const n = await extension.computeTotal();
+
+                total += n;
+            }
+
+            monitor.addTotal(total);
+
+            for (const extension of extensions) {
+
+                await extension.preload(monitor);
             }
         }
 

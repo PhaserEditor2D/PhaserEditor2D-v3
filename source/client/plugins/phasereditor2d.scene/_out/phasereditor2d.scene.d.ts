@@ -255,18 +255,26 @@ declare namespace phasereditor2d.scene.core.json {
 declare namespace phasereditor2d.scene.core.json {
     import io = colibri.core.io;
     import controls = colibri.ui.controls;
-    class SceneFinder {
+    class SceneFinderPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
+        private _finder;
+        constructor(finder: SceneFinder);
+        computeTotal(): Promise<number>;
+        preload(monitor: controls.IProgressMonitor): Promise<void>;
+    }
+    export class SceneFinder {
         private _dataMap;
         private _sceneDataMap;
         private _fileMap;
         private _files;
         constructor();
+        getProjectPreloader(): SceneFinderPreloader;
         preload(monitor: controls.IProgressMonitor): Promise<void>;
         getFiles(): io.FilePath[];
         getPrefabData(prefabId: string): ObjectData;
         getPrefabFile(prefabId: string): io.FilePath;
         getSceneData(file: io.FilePath): SceneData;
     }
+    export {};
 }
 declare namespace phasereditor2d.scene.core.json {
     enum SourceLang {

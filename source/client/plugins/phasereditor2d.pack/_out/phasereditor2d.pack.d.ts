@@ -99,6 +99,15 @@ declare namespace phasereditor2d.pack.core {
     }
 }
 declare namespace phasereditor2d.pack.core {
+    import ide = colibri.ui.ide;
+    import controls = colibri.ui.controls;
+    class AssetPackPreloadProjectExtension extends ide.PreloadProjectResourcesExtension {
+        constructor();
+        computeTotal(): Promise<number>;
+        preload(monitor: controls.IProgressMonitor): Promise<controls.PreloadResult>;
+    }
+}
+declare namespace phasereditor2d.pack.core {
     import io = colibri.core.io;
     class AssetPackUtils {
         static isAtlasType(type: string): boolean;

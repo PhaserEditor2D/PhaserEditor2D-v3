@@ -1,20 +1,16 @@
 namespace colibri.ui.ide {
 
-    export class PreloadProjectResourcesExtension extends Extension {
+    export abstract class PreloadProjectResourcesExtension extends Extension {
 
         static POINT_ID = "colibri.ui.ide.PreloadProjectResourcesExtension";
 
-        private _getPreloadPromise: (monitor: controls.IProgressMonitor) => Promise<any>;
-
-        constructor(getPreloadPromise: (monitor: controls.IProgressMonitor) => Promise<any>) {
+        constructor() {
             super(PreloadProjectResourcesExtension.POINT_ID);
-
-            this._getPreloadPromise = getPreloadPromise;
         }
 
-        getPreloadPromise(monitor: controls.IProgressMonitor) {
-            return this._getPreloadPromise(monitor);
-        }
+        abstract async computeTotal(): Promise<number>;
+
+        abstract async preload(monitor: controls.IProgressMonitor);
     }
 
 }

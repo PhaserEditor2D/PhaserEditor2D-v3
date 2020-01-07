@@ -12,8 +12,7 @@ namespace phasereditor2d.pack.core {
             this._packs = packs;
         }
 
-        async preload(
-            monitor: controls.IProgressMonitor = controls.EMPTY_PROGRESS_MONITOR): Promise<controls.PreloadResult> {
+        async preload(monitor?: controls.IProgressMonitor): Promise<controls.PreloadResult> {
 
             let result = controls.PreloadResult.NOTHING_LOADED;
 
@@ -21,14 +20,15 @@ namespace phasereditor2d.pack.core {
 
             const items = this._packs.flatMap(pack => pack.getItems());
 
-            monitor.addTotal(items.length);
-
             for (const item of items) {
 
                 const result2 = await item.preload();
                 result = Math.max(result, result2);
 
-                monitor.step();
+                if (monitor) {
+
+                    monitor.step();
+                }
             }
 
             return Promise.resolve(result);

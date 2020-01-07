@@ -30,12 +30,7 @@ namespace phasereditor2d.code {
 
             this._modelsManager = new ui.editors.MonacoModelsManager();
 
-            reg.addExtension(
-                new colibri.ui.ide
-                    .PreloadProjectResourcesExtension(
-                        monitor => {
-                            return this._modelsManager.preload(monitor);
-                        }));
+            reg.addExtension(this._modelsManager.getProjectPreloader());
 
             // editors
 

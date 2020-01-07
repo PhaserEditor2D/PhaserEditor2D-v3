@@ -456,8 +456,14 @@ var colibri;
                 async preloadProjectResources(monitor) {
                     const extensions = colibri.Platform
                         .getExtensions(ide.PreloadProjectResourcesExtension.POINT_ID);
+                    let total = 0;
                     for (const extension of extensions) {
-                        await extension.getPreloadPromise(monitor);
+                        const n = await extension.computeTotal();
+                        total += n;
+                    }
+                    monitor.addTotal(total);
+                    for (const extension of extensions) {
+                        await extension.preload(monitor);
                     }
                 }
                 registerWindows() {
@@ -6370,12 +6376,8 @@ var colibri;
         var ide;
         (function (ide) {
             class PreloadProjectResourcesExtension extends colibri.Extension {
-                constructor(getPreloadPromise) {
+                constructor() {
                     super(PreloadProjectResourcesExtension.POINT_ID);
-                    this._getPreloadPromise = getPreloadPromise;
-                }
-                getPreloadPromise(monitor) {
-                    return this._getPreloadPromise(monitor);
                 }
             }
             PreloadProjectResourcesExtension.POINT_ID = "colibri.ui.ide.PreloadProjectResourcesExtension";

@@ -1549,11 +1549,11 @@ declare namespace colibri.ui.ide {
     }
 }
 declare namespace colibri.ui.ide {
-    class PreloadProjectResourcesExtension extends Extension {
+    abstract class PreloadProjectResourcesExtension extends Extension {
         static POINT_ID: string;
-        private _getPreloadPromise;
-        constructor(getPreloadPromise: (monitor: controls.IProgressMonitor) => Promise<any>);
-        getPreloadPromise(monitor: controls.IProgressMonitor): Promise<any>;
+        constructor();
+        abstract computeTotal(): Promise<number>;
+        abstract preload(monitor: controls.IProgressMonitor): any;
     }
 }
 declare namespace colibri.ui.ide {

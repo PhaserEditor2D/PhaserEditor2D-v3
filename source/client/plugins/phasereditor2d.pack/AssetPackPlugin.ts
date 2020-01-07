@@ -115,17 +115,18 @@ namespace phasereditor2d.pack {
             // project resources preloader
 
             reg.addExtension(
-                new ide.PreloadProjectResourcesExtension(
-                    (monitor) => {
+                new core.AssetPackPreloadProjectExtension(),
 
-                        const finder = new pack.core.PackFinder();
+                // tslint:disable-next-line:new-parens
+                new (class extends ide.PreloadProjectResourcesExtension {
 
-                        return finder.preload(monitor);
+                    async computeTotal() {
+                        return 0;
                     }
-                ),
 
-                new ide.PreloadProjectResourcesExtension((monitor) => {
-                    return this.getPhaserDocs().preload();
+                    async preload() {
+                        return AssetPackPlugin.getInstance().getPhaserDocs().preload();
+                    }
                 })
             );
 

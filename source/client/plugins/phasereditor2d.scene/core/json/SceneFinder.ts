@@ -4,6 +4,30 @@ namespace phasereditor2d.scene.core.json {
     import io = colibri.core.io;
     import controls = colibri.ui.controls;
 
+
+    class SceneFinderPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
+
+        private _finder: SceneFinder;
+
+        constructor(finder: SceneFinder) {
+            super();
+
+            this._finder = finder;
+        }
+
+        async computeTotal(): Promise<number> {
+
+            const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+
+            return files.length;
+        }
+
+        preload(monitor: controls.IProgressMonitor) {
+
+            return this._finder.preload(monitor);
+        }
+    }
+
     export class SceneFinder {
 
         private _dataMap: Map<string, ObjectData>;
@@ -19,6 +43,10 @@ namespace phasereditor2d.scene.core.json {
             this._files = [];
         }
 
+        getProjectPreloader() {
+            return new SceneFinderPreloader(this);
+        }
+
         async preload(monitor: controls.IProgressMonitor): Promise<void> {
 
             const dataMap = new Map<string, ObjectData>();
@@ -27,8 +55,6 @@ namespace phasereditor2d.scene.core.json {
             const newFiles = [];
 
             const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
-
-            monitor.addTotal(files.length);
 
             for (const file of files) {
 

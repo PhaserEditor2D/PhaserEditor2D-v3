@@ -20,9 +20,7 @@ var phasereditor2d;
             registerExtensions(reg) {
                 this._sceneFinder = new scene_1.core.json.SceneFinder();
                 // preload project
-                reg.addExtension(new colibri.ui.ide.PreloadProjectResourcesExtension(monitor => {
-                    return this._sceneFinder.preload(monitor);
-                }));
+                reg.addExtension(this._sceneFinder.getProjectPreloader());
                 // content type resolvers
                 reg.addExtension(new colibri.core.ContentTypeExtension([new scene_1.core.SceneContentTypeResolver()], 5));
                 // content type renderer
@@ -1145,6 +1143,19 @@ var phasereditor2d;
             var json;
             (function (json) {
                 var FileUtils = colibri.ui.ide.FileUtils;
+                class SceneFinderPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
+                    constructor(finder) {
+                        super();
+                        this._finder = finder;
+                    }
+                    async computeTotal() {
+                        const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+                        return files.length;
+                    }
+                    preload(monitor) {
+                        return this._finder.preload(monitor);
+                    }
+                }
                 class SceneFinder {
                     constructor() {
                         this._dataMap = new Map();
@@ -1152,13 +1163,15 @@ var phasereditor2d;
                         this._fileMap = new Map();
                         this._files = [];
                     }
+                    getProjectPreloader() {
+                        return new SceneFinderPreloader(this);
+                    }
                     async preload(monitor) {
                         const dataMap = new Map();
                         const sceneDataMap = new Map();
                         const fileMap = new Map();
                         const newFiles = [];
                         const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
-                        monitor.addTotal(files.length);
                         for (const file of files) {
                             const content = await FileUtils.preloadAndGetFileString(file);
                             try {

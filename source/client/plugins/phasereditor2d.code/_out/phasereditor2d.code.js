@@ -19,10 +19,7 @@ var phasereditor2d;
             registerExtensions(reg) {
                 // project preloaders
                 this._modelsManager = new code.ui.editors.MonacoModelsManager();
-                reg.addExtension(new colibri.ui.ide
-                    .PreloadProjectResourcesExtension(monitor => {
-                    return this._modelsManager.preload(monitor);
-                }));
+                reg.addExtension(this._modelsManager.getProjectPreloader());
                 // editors
                 reg.addExtension(new colibri.ui.ide.EditorExtension([
                     new code.ui.editors.JavaScriptEditorFactory(),
@@ -111,6 +108,21 @@ var phasereditor2d;
                     }
                     return name.endsWith(".js");
                 }
+                function isDefFile(file) {
+                    return file.getName().endsWith(".d.ts");
+                }
+                class MonacoModelsProjectPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
+                    constructor(manager) {
+                        super();
+                        this._manager = manager;
+                    }
+                    async computeTotal() {
+                        return this._manager.computePreloadTotal();
+                    }
+                    preload(monitor) {
+                        return this._manager.preload(monitor);
+                    }
+                }
                 class MonacoModelsManager {
                     constructor() {
                         this._fileModelMap = new Map();
@@ -169,13 +181,22 @@ var phasereditor2d;
                         }
                         ide.FileUtils.getFileStorage().addChangeListener(this._changeListener);
                     }
+                    getProjectPreloader() {
+                        return new MonacoModelsProjectPreloader(this);
+                    }
+                    async computePreloadTotal() {
+                        const srcFiles = ide.FileUtils.getAllFiles()
+                            .filter(isSrcFile);
+                        const defFiles = ide.FileUtils.getAllFiles()
+                            .filter(isDefFile);
+                        return srcFiles.length + defFiles.length;
+                    }
                     async preload(monitor) {
                         this.reset();
                         const srcFiles = ide.FileUtils.getAllFiles()
                             .filter(isSrcFile);
                         const defFiles = ide.FileUtils.getAllFiles()
-                            .filter(file => file.getName().endsWith(".d.ts"));
-                        monitor.addTotal(srcFiles.length + defFiles.length);
+                            .filter(isDefFile);
                         for (const file of defFiles) {
                             await this.addDefFile(file);
                             monitor.step();

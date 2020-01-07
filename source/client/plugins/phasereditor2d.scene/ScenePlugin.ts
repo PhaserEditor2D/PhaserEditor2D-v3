@@ -30,10 +30,7 @@ namespace phasereditor2d.scene {
 
             // preload project
 
-            reg.addExtension(new colibri.ui.ide.PreloadProjectResourcesExtension(monitor => {
-
-                return this._sceneFinder.preload(monitor);
-            }));
+            reg.addExtension(this._sceneFinder.getProjectPreloader());
 
             // content type resolvers
 

@@ -23,6 +23,34 @@ namespace phasereditor2d.code.ui.editors {
         return name.endsWith(".js");
     }
 
+    function isDefFile(file: io.FilePath) {
+
+        return file.getName().endsWith(".d.ts");
+    }
+
+    class MonacoModelsProjectPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
+
+        private _manager: MonacoModelsManager;
+
+        constructor(manager: MonacoModelsManager) {
+            super();
+
+            this._manager = manager;
+        }
+
+        async computeTotal(): Promise<number> {
+
+            return this._manager.computePreloadTotal();
+        }
+
+        preload(monitor: controls.IProgressMonitor) {
+
+            return this._manager.preload(monitor);
+        }
+
+
+    }
+
     export class MonacoModelsManager {
 
         private _fileModelMap: Map<string, monaco.editor.ITextModel>;
@@ -124,6 +152,22 @@ namespace phasereditor2d.code.ui.editors {
             ide.FileUtils.getFileStorage().addChangeListener(this._changeListener);
         }
 
+        getProjectPreloader() {
+
+            return new MonacoModelsProjectPreloader(this);
+        }
+
+        async computePreloadTotal() {
+
+            const srcFiles = ide.FileUtils.getAllFiles()
+                .filter(isSrcFile);
+
+            const defFiles = ide.FileUtils.getAllFiles()
+                .filter(isDefFile);
+
+            return srcFiles.length + defFiles.length;
+        }
+
         async preload(monitor: controls.IProgressMonitor) {
 
             this.reset();
@@ -132,9 +176,7 @@ namespace phasereditor2d.code.ui.editors {
                 .filter(isSrcFile);
 
             const defFiles = ide.FileUtils.getAllFiles()
-                .filter(file => file.getName().endsWith(".d.ts"));
-
-            monitor.addTotal(srcFiles.length + defFiles.length);
+                .filter(isDefFile);
 
             for (const file of defFiles) {
 
