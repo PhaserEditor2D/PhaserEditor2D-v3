@@ -30,6 +30,9 @@
         },
         {
             "path": "../phasereditor2d.ide"
+        },
+        {
+            "path": "../phasereditor2d.webContentTypes"
         }
     ],
     "exclude": ["_out/"]

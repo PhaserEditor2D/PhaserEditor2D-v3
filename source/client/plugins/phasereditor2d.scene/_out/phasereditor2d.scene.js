@@ -2439,6 +2439,14 @@ var phasereditor2d;
                     static getFactory() {
                         return new SceneEditorFactory();
                     }
+                    openSourceFileInEditor() {
+                        const lang = this._gameScene.getSettings().compilerOutputLanguage;
+                        const ext = lang === json.SourceLang.JAVA_SCRIPT ? ".js" : ".ts";
+                        const file = this.getInput().getSibling(this.getInput().getNameWithoutExtension() + ext);
+                        if (file) {
+                            colibri.Platform.getWorkbench().openEditor(file);
+                        }
+                    }
                     async doSave() {
                         const sceneFile = this.getInput();
                         const writer = new json.SceneWriter(this.getGameScene());
@@ -2563,19 +2571,27 @@ var phasereditor2d;
                         const manager = new controls.ToolbarManager(parent);
                         manager.add(new controls.Action({
                             icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_TRANSLATE),
+                            showText: false
                         }));
                         manager.add(new controls.Action({
                             icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_SCALE),
+                            showText: false
                         }));
                         manager.add(new controls.Action({
                             icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ANGLE),
+                            showText: false
                         }));
                         manager.add(new controls.Action({
                             icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ORIGIN),
+                            showText: false
                         }));
                         manager.add(new controls.Action({
                             icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
+                            showText: false
                         }));
+                        manager.addCommand(editor.commands.CMD_OPEN_COMPILED_FILE, {
+                            showText: false
+                        });
                         return manager;
                     }
                     async readScene() {
@@ -2779,7 +2795,8 @@ var phasereditor2d;
             (function (editor_6) {
                 var commands;
                 (function (commands) {
-                    const CMD_JOIN_IN_CONTAINER = "joinObjectsInContainer";
+                    commands.CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+                    commands.CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_6.SceneEditor ||
                             args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
@@ -2804,17 +2821,25 @@ var phasereditor2d;
                             });
                             // join in container
                             manager.addCommandHelper({
-                                id: CMD_JOIN_IN_CONTAINER,
+                                id: commands.CMD_JOIN_IN_CONTAINER,
                                 name: "Join Objects",
                                 tooltip: "Create a container with the selected objects"
                             });
-                            manager.addHandlerHelper(CMD_JOIN_IN_CONTAINER, args => isSceneScope(args), args => {
+                            manager.addHandlerHelper(commands.CMD_JOIN_IN_CONTAINER, args => isSceneScope(args), args => {
                                 const editor = args.activeEditor;
                                 editor.getActionManager().joinObjectsInContainer();
                             });
-                            manager.addKeyBinding(CMD_JOIN_IN_CONTAINER, new colibri.ui.ide.commands.KeyMatcher({
+                            manager.addKeyBinding(commands.CMD_JOIN_IN_CONTAINER, new colibri.ui.ide.commands.KeyMatcher({
                                 key: "j"
                             }));
+                            // open compiled file
+                            manager.addCommandHelper({
+                                id: commands.CMD_OPEN_COMPILED_FILE,
+                                icon: phasereditor2d.webContentTypes.WebContentTypesPlugin.getInstance().getIcon(phasereditor2d.webContentTypes.ICON_FILE_SCRIPT),
+                                name: "Open Scene Output File",
+                                tooltip: "Open the output source file of the scene."
+                            });
+                            manager.addHandlerHelper(commands.CMD_OPEN_COMPILED_FILE, args => args.activeEditor instanceof editor_6.SceneEditor, args => args.activeEditor.openSourceFileInEditor());
                         }
                     }
                     commands.SceneEditorCommands = SceneEditorCommands;

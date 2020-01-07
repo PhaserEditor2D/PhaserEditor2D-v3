@@ -518,6 +518,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _sceneRead;
         static getFactory(): colibri.ui.ide.EditorFactory;
         constructor();
+        openSourceFileInEditor(): void;
         doSave(): Promise<void>;
         saveState(state: any): void;
         restoreState(state: any): void;
@@ -559,6 +560,8 @@ declare namespace phasereditor2d.scene.ui.editor {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.commands {
+    const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+    const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }

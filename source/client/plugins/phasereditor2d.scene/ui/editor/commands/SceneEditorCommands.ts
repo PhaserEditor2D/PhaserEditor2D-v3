@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.editor.commands {
 
-    const CMD_JOIN_IN_CONTAINER = "joinObjectsInContainer";
+    export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+    export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
 
     function isSceneScope(args: colibri.ui.ide.commands.CommandArgs) {
         return args.activePart instanceof SceneEditor ||
@@ -65,6 +66,20 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.addKeyBinding(CMD_JOIN_IN_CONTAINER, new colibri.ui.ide.commands.KeyMatcher({
                 key: "j"
             }));
+
+            // open compiled file
+
+            manager.addCommandHelper({
+                id: CMD_OPEN_COMPILED_FILE,
+                icon: webContentTypes.WebContentTypesPlugin.getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
+                name: "Open Scene Output File",
+                tooltip: "Open the output source file of the scene."
+            });
+
+            manager.addHandlerHelper(
+                CMD_OPEN_COMPILED_FILE,
+                args => args.activeEditor instanceof SceneEditor,
+                args => (args.activeEditor as SceneEditor).openSourceFileInEditor());
         }
 
     }

@@ -60,6 +60,20 @@ namespace phasereditor2d.scene.ui.editor {
             this._propertyProvider = new properties.SceneEditorSectionProvider();
         }
 
+        openSourceFileInEditor(): void {
+
+            const lang = this._gameScene.getSettings().compilerOutputLanguage;
+
+            const ext = lang === json.SourceLang.JAVA_SCRIPT ? ".js" : ".ts";
+
+            const file = this.getInput().getSibling(this.getInput().getNameWithoutExtension() + ext);
+
+            if (file) {
+
+                colibri.Platform.getWorkbench().openEditor(file);
+            }
+        }
+
         async doSave() {
 
             const sceneFile = this.getInput();
@@ -249,23 +263,32 @@ namespace phasereditor2d.scene.ui.editor {
 
             manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
+                showText: false
             }));
 
             manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
+                showText: false
             }));
 
             manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
+                showText: false
             }));
 
             manager.add(new controls.Action({
                 icon: ScenePlugin.getInstance().getIcon(ICON_ORIGIN),
+                showText: false
             }));
 
             manager.add(new controls.Action({
                 icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
+                showText: false
             }));
+
+            manager.addCommand(commands.CMD_OPEN_COMPILED_FILE, {
+                showText: false
+            });
 
             return manager;
         }
