@@ -26,6 +26,7 @@ declare namespace phasereditor2d.code.ui.editors {
         private _changeListener;
         private _filesModifiedByMonacoEditor;
         constructor();
+        private handleStorageChange;
         fileModifiedByMonacoEditor(file: io.FilePath): void;
         private reset;
         getProjectPreloader(): MonacoModelsProjectPreloader;

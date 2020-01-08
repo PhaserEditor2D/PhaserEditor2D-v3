@@ -10,6 +10,13 @@ namespace phasereditor2d.code.ui.editors {
             return false;
         }
 
+        const ext = file.getExtension();
+
+        if (ext !== "js" && ext !== "ts") {
+
+            return false;
+        }
+
         const name = file.getName();
 
         if (name.endsWith(".min.js")) {
@@ -20,7 +27,7 @@ namespace phasereditor2d.code.ui.editors {
             return false;
         }
 
-        return name.endsWith(".js");
+        return true;
     }
 
     function isDefFile(file: io.FilePath) {
@@ -47,8 +54,6 @@ namespace phasereditor2d.code.ui.editors {
 
             return this._manager.preload(monitor);
         }
-
-
     }
 
     export class MonacoModelsManager {
@@ -62,77 +67,79 @@ namespace phasereditor2d.code.ui.editors {
             this._fileModelMap = new Map();
             this._filesModifiedByMonacoEditor = new Set();
 
-            this._changeListener = change => {
+            this._changeListener = change => this.handleStorageChange(change);
+        }
 
-                // added files
+        private handleStorageChange(change: io.FileStorageChange) {
 
-                for (const name of change.getAddRecords()) {
+            // added files
 
-                    const file = ide.FileUtils.getFileFromPath(name);
+            for (const name of change.getAddRecords()) {
 
-                    if (isSrcFile(file)) {
+                const file = ide.FileUtils.getFileFromPath(name);
 
-                        this.addSrcFile(file);
+                if (isSrcFile(file)) {
 
-                    } else if (name.endsWith(".d.ts")) {
+                    this.addSrcFile(file);
 
-                        this.addDefFile(file);
-                    }
+                } else if (name.endsWith(".d.ts")) {
+
+                    this.addDefFile(file);
+                }
+            }
+
+            // modified files
+
+            for (const name of change.getModifiedRecords()) {
+
+                const file = ide.FileUtils.getFileFromPath(name);
+
+                if (this._filesModifiedByMonacoEditor.has(file)) {
+                    continue;
                 }
 
-                // modified files
+                const model = this._fileModelMap.get(file.getFullName());
 
-                for (const name of change.getModifiedRecords()) {
+                if (model) {
 
-                    const file = ide.FileUtils.getFileFromPath(name);
+                    const content = ide.FileUtils.getFileString(file);
 
-                    if (this._filesModifiedByMonacoEditor.has(file)) {
-
-                        continue;
-                    }
-
-                    const model = this._fileModelMap.get(file.getFullName());
-
-                    if (model) {
-
-                        const content = ide.FileUtils.getFileString(file);
-                        model.setValue(content);
-                    }
+                    model.setValue(content);
                 }
+            }
 
-                this._filesModifiedByMonacoEditor = new Set();
+            this._filesModifiedByMonacoEditor = new Set();
 
-                // deleted files
+            // deleted files
 
-                for (const name of change.getDeleteRecords()) {
+            for (const name of change.getDeleteRecords()) {
 
-                    const model = this._fileModelMap.get(name);
+                const model = this._fileModelMap.get(name);
 
-                    if (model) {
+                if (model) {
 
-                        model.dispose();
-                    }
+                    model.dispose();
                 }
+            }
 
-                // moved files
+            // moved files
 
-                for (const from of change.getRenameFromRecords()) {
+            for (const from of change.getRenameFromRecords()) {
 
-                    const to = change.getRenameTo(from);
+                const to = change.getRenameTo(from);
 
-                    const model = this._fileModelMap.get(from);
+                const model = this._fileModelMap.get(from);
 
-                    if (model) {
+                if (model) {
 
-                        // TODO: we should rename the model URI
+                    // TODO: we should rename the model URI
 
-                        this._fileModelMap.set(to, model);
-                        this._fileModelMap.delete(from);
+                    this._fileModelMap.set(to, model);
+                    this._fileModelMap.delete(from);
 
-                        model.dispose();
-                    }
+                    model.dispose();
                 }
-            };
+            }
         }
 
         fileModifiedByMonacoEditor(file: io.FilePath) {
