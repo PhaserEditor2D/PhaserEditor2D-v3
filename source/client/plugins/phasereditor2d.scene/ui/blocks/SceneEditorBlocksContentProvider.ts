@@ -44,7 +44,9 @@ namespace phasereditor2d.scene.ui.blocks {
                     .getContentTypeRegistry()
                     .getCachedContentType(file) === core.CONTENT_TYPE_SCENE)
 
-                .filter(file => file !== this._editor.getInput());
+                .filter(file => file !== this._editor.getInput())
+
+                .filter(file => this._editor.getSceneMaker().isPrefabFile(file));
         }
 
         getChildren(parent: any): any[] {

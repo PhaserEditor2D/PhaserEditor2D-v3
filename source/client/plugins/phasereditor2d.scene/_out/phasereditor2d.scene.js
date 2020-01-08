@@ -1885,7 +1885,8 @@ var phasereditor2d;
                             .filter(file => colibri.Platform.getWorkbench()
                             .getContentTypeRegistry()
                             .getCachedContentType(file) === scene.core.CONTENT_TYPE_SCENE)
-                            .filter(file => file !== this._editor.getInput());
+                            .filter(file => file !== this._editor.getInput())
+                            .filter(file => this._editor.getSceneMaker().isPrefabFile(file));
                     }
                     getChildren(parent) {
                         if (typeof (parent) === "string") {
