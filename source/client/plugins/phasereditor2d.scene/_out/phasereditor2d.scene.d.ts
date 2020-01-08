@@ -780,6 +780,51 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import code = core.code;
+    /**
+     * This class provides the methods to build the CodeDOM of the different aspects
+     * of the code generation associated to game objects.
+     *
+     * Each object extension provides an instance of this class, that is used by the Scene compiler.
+     */
+    abstract class ObjectCodeDOMBuilder {
+        /**
+         * Build a method call CodeDOM to create the scene object of this extension,
+         * using the factories provided by Phaser.
+         *
+         * This method is used by the Scene compiler.
+         *
+         * @param args This method args.
+         */
+        abstract buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
+        /**
+         * Build a CodeDOM expression to create a prefab instance that
+         * has as root type the same type of this scene object type.
+         *
+         * This method is used by the Scene compiler.
+         *
+         * @param args This method args.
+         */
+        abstract buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
+        /**
+         * Build the CodeDOM of the prefab class constructor.
+         *
+         * This method is used by the Scene compiler.
+         *
+         * @param args This method args.
+         */
+        abstract buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
+        /**
+         * Build the CodeDOM of the super-method call in a prefab constructor.
+         *
+         * This method is used by the Scene compiler.
+         *
+         * @param args This method args.
+         */
+        abstract buildPrefabConstructorDeclarationSupperCallCodeDOM(args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface SceneObject extends Phaser.GameObjects.GameObject {
         getEditorSupport(): EditorSupport<SceneObject>;
     }
@@ -861,39 +906,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
          */
         abstract getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         /**
-         * Build a method call CodeDOM to create the scene object of this extension,
-         * using the factories provided by Phaser.
-         *
-         * This method is used by the Scene compiler.
-         *
-         * @param args This method args.
+         * Gets a CodeDOM provider used by the Scene compiler to generate the object creation and prefab class codes.
          */
-        abstract buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
-        /**
-         * Build a CodeDOM expression to create a prefab instance that
-         * has as root type the same type of this scene object type.
-         *
-         * This method is used by the Scene compiler.
-         *
-         * @param args This method args.
-         */
-        abstract buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
-        /**
-         * Build the CodeDOM of the prefab class constructor.
-         *
-         * This method is used by the Scene compiler.
-         *
-         * @param args This method args.
-         */
-        abstract buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
-        /**
-         * Build the CodeDOM of the super-method call in a prefab constructor.
-         *
-         * This method is used by the Scene compiler.
-         *
-         * @param args This method args.
-         */
-        abstract buildPrefabConstructorDeclarationSupperCallCodeDOM(args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+        abstract getCodeDOMBuilder(): ObjectCodeDOMBuilder;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -903,6 +918,17 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getEditorSupport(): ContainerEditorSupport;
         get list(): SceneObject[];
         set list(list: SceneObject[]);
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import code = core.code;
+    class ContainerCodeDOMBuilder extends ObjectCodeDOMBuilder {
+        private static _instance;
+        static getInstance(): ContainerCodeDOMBuilder;
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+        buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
+        buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
+        buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -920,7 +946,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
-    import code = core.code;
     interface ContainerData extends json.ObjectData {
         list: json.ObjectData[];
     }
@@ -928,10 +953,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private static _instance;
         static getInstance(): ContainerExtension;
         private constructor();
-        buildPrefabConstructorDeclarationSupperCallCodeDOM(args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
-        buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
-        buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
-        buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
+        getCodeDOMBuilder(): ObjectCodeDOMBuilder;
         getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
         private createContainerObject;
@@ -948,6 +970,18 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import code = core.code;
+    class ImageCodeDOMBuilder extends ObjectCodeDOMBuilder {
+        private static _instance;
+        static getInstance(): ObjectCodeDOMBuilder;
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+        buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
+        buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
+        buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
+        private addArgsToCreateMethodDOM;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageEditorSupport extends EditorSupport<Image> {
         constructor(obj: Image);
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
@@ -956,16 +990,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import code = core.code;
     class ImageExtension extends SceneObjectExtension {
         private static _instance;
         static getInstance(): any;
         private constructor();
-        buildPrefabConstructorDeclarationSupperCallCodeDOM(args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
-        buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
-        buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
-        buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
-        private addArgsToCreateMethodDOM;
+        getCodeDOMBuilder(): ObjectCodeDOMBuilder;
         getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
         static isImageOrImageFrameAsset(data: any): boolean;
         acceptsDropData(data: any): boolean;

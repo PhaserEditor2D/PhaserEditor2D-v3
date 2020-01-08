@@ -144,9 +144,11 @@ namespace phasereditor2d.scene.core.code {
 
             const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
 
+            const objBuilder = ext.getCodeDOMBuilder();
+
             ctrDecl.addArg("scene", "Phaser.Scene");
 
-            ext.buildPrefabConstructorDeclarationCodeDOM({
+            objBuilder.buildPrefabConstructorDeclarationCodeDOM({
                 ctrDeclCodeDOM: ctrDecl
             });
 
@@ -155,7 +157,7 @@ namespace phasereditor2d.scene.core.code {
 
                 superCall.arg("scene");
 
-                ext.buildPrefabConstructorDeclarationSupperCallCodeDOM({
+                objBuilder.buildPrefabConstructorDeclarationSupperCallCodeDOM({
                     superMethodCallCodeDOM: superCall,
                     prefabObj: prefabObj
                 });
@@ -222,7 +224,9 @@ namespace phasereditor2d.scene.core.code {
 
                 if (prefabSerializer) {
 
-                    ext.buildCreatePrefabInstanceCodeDOM({
+                    const builder = ext.getCodeDOMBuilder();
+
+                    builder.buildCreatePrefabInstanceCodeDOM({
                         obj,
                         methodCallDOM: createObjectMethodCall,
                         sceneExpr: this._isPrefabScene ? "scene" : "this",
@@ -236,9 +240,9 @@ namespace phasereditor2d.scene.core.code {
 
             } else {
 
-                const ext = objSupport.getExtension();
+                const builder = objSupport.getExtension().getCodeDOMBuilder();
 
-                createObjectMethodCall = ext.buildCreateObjectWithFactoryCodeDOM({
+                createObjectMethodCall = builder.buildCreateObjectWithFactoryCodeDOM({
                     gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene.add" : "this.add",
                     obj: obj
                 });

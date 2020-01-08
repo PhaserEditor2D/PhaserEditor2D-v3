@@ -112,42 +112,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         async abstract getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
 
         /**
-         * Build a method call CodeDOM to create the scene object of this extension,
-         * using the factories provided by Phaser.
-         *
-         * This method is used by the Scene compiler.
-         *
-         * @param args This method args.
+         * Gets a CodeDOM provider used by the Scene compiler to generate the object creation and prefab class codes.
          */
-        abstract buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
-
-        /**
-         * Build a CodeDOM expression to create a prefab instance that
-         * has as root type the same type of this scene object type.
-         *
-         * This method is used by the Scene compiler.
-         *
-         * @param args This method args.
-         */
-        abstract buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
-
-        /**
-         * Build the CodeDOM of the prefab class constructor.
-         *
-         * This method is used by the Scene compiler.
-         *
-         * @param args This method args.
-         */
-        abstract buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
-
-       /**
-        * Build the CodeDOM of the super-method call in a prefab constructor.
-        *
-        * This method is used by the Scene compiler.
-        *
-        * @param args This method args.
-        */
-        abstract buildPrefabConstructorDeclarationSupperCallCodeDOM(
-            args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+        abstract getCodeDOMBuilder(): ObjectCodeDOMBuilder;
     }
 }
