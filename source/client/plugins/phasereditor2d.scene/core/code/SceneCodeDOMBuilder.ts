@@ -45,6 +45,12 @@ namespace phasereditor2d.scene.core.code {
                 if (this._isPrefabScene) {
 
                     const obj = this._scene.getPrefabObject();
+
+                    if (!obj) {
+
+                        return null;
+                    }
+
                     const support = obj.getEditorSupport();
 
                     if (obj.getEditorSupport().isPrefabInstance()) {

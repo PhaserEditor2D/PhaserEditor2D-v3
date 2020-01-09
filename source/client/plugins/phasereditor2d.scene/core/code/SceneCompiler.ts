@@ -23,6 +23,11 @@ namespace phasereditor2d.scene.core.code {
 
             const unit = await builder.build();
 
+            if (!unit) {
+
+                return;
+            }
+
             const generator = compileToJS ?
                 new core.code.JavaScriptUnitCodeGenerator(unit)
                 : new core.code.TypeScriptUnitCodeGenerator(unit);
