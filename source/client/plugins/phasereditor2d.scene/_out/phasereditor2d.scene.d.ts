@@ -267,6 +267,7 @@ declare namespace phasereditor2d.scene.core.json {
         private _fileMap;
         private _files;
         constructor();
+        private handleStorageChange;
         getProjectPreloader(): SceneFinderPreloader;
         preload(monitor: controls.IProgressMonitor): Promise<void>;
         getFiles(): io.FilePath[];

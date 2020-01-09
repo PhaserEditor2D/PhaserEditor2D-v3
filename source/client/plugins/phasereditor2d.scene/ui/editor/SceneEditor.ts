@@ -76,6 +76,12 @@ namespace phasereditor2d.scene.ui.editor {
 
         async doSave() {
 
+            // compile first because the SceneFinder will be updated after the file is changed.
+
+            await this.compile();
+
+            // saves the file
+
             const sceneFile = this.getInput();
 
             const writer = new json.SceneWriter(this.getScene());
@@ -93,10 +99,9 @@ namespace phasereditor2d.scene.ui.editor {
                 this.updateTitleIcon();
 
             } catch (e) {
+
                 console.error(e);
             }
-
-            await this.compile();
         }
 
         async compile() {

@@ -1145,6 +1145,7 @@ var phasereditor2d;
             var json;
             (function (json) {
                 var FileUtils = colibri.ui.ide.FileUtils;
+                var controls = colibri.ui.controls;
                 class SceneFinderPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
                     constructor(finder) {
                         super();
@@ -1165,8 +1166,25 @@ var phasereditor2d;
                         this._fileMap = new Map();
                         this._files = [];
                         colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(async (e) => {
-                            await this.preload(colibri.ui.controls.EMPTY_PROGRESS_MONITOR);
+                            await this.handleStorageChange(e);
                         });
+                    }
+                    async handleStorageChange(change) {
+                        const test = (names) => {
+                            for (const name of names) {
+                                if (name.endsWith(".scene")) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        };
+                        if (test(change.getAddRecords())
+                            || test(change.getModifiedRecords())
+                            || test(change.getDeleteRecords())
+                            || test(change.getRenameFromRecords())
+                            || test(change.getRenameToRecords())) {
+                            await this.preload(controls.EMPTY_PROGRESS_MONITOR);
+                        }
                     }
                     getProjectPreloader() {
                         return new SceneFinderPreloader(this);
@@ -2619,6 +2637,9 @@ var phasereditor2d;
                         }
                     }
                     async doSave() {
+                        // compile first because the SceneFinder will be updated after the file is changed.
+                        await this.compile();
+                        // saves the file
                         const sceneFile = this.getInput();
                         const writer = new json.SceneWriter(this.getScene());
                         const data = writer.toJSON();
@@ -2631,7 +2652,6 @@ var phasereditor2d;
                         catch (e) {
                             console.error(e);
                         }
-                        await this.compile();
                     }
                     async compile() {
                         const compiler = new scene.core.code.SceneCompiler(this._scene, this.getInput());

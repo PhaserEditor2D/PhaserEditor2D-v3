@@ -43,8 +43,40 @@ namespace phasereditor2d.scene.core.json {
 
             colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(async (e) => {
 
-                await this.preload(colibri.ui.controls.EMPTY_PROGRESS_MONITOR);
+                await this.handleStorageChange(e);
+
             });
+        }
+
+        private async handleStorageChange(change: io.FileStorageChange) {
+
+            const test = (names: Set<string>) => {
+
+                for (const name of names) {
+
+                    if (name.endsWith(".scene")) {
+
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            if (
+                test(change.getAddRecords())
+
+                || test(change.getModifiedRecords())
+
+                || test(change.getDeleteRecords())
+
+                || test(change.getRenameFromRecords())
+
+                || test(change.getRenameToRecords())
+            ) {
+
+                await this.preload(controls.EMPTY_PROGRESS_MONITOR);
+            }
         }
 
         getProjectPreloader() {
