@@ -67,7 +67,8 @@ namespace phasereditor2d.scene.ui {
 
                 const obj = this.createObject({
                     id: Phaser.Utils.String.UUID(),
-                    prefabId: prefabData.id
+                    prefabId: prefabData.id,
+                    label: "temporal"
                 });
 
                 return obj;
@@ -153,12 +154,6 @@ namespace phasereditor2d.scene.ui {
                     data: data,
                     scene: this._scene
                 });
-
-                if (sprite) {
-
-                    sprite.getEditorSupport().readJSON(data);
-
-                }
 
                 return sprite;
 

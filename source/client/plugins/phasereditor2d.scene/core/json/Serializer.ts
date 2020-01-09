@@ -78,20 +78,65 @@ namespace phasereditor2d.scene.core.json {
             return defValue;
         }
 
+        isUnlocked(name: string) {
+
+            if (this.isPrefabInstance()) {
+
+                if (this._data.unlock) {
+
+                    const i = this._data.unlock.indexOf(name);
+
+                    return i >= 0;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        isPrefabInstance() {
+
+            return typeof this._data.prefabId === "string";
+        }
+
         write(name: string, value: any, defValue?: any) {
 
-            const defValue2 = this.getDefaultValue(name, defValue);
+            if (this.isPrefabInstance()) {
 
-            colibri.core.json.write(this._data, name, value, defValue2);
+                if (this.isUnlocked(name)) {
+
+                    const defValue2 = this.getDefaultValue(name, defValue);
+
+                    colibri.core.json.write(this._data, name, value, defValue2);
+                }
+
+            } else {
+
+                colibri.core.json.write(this._data, name, value, defValue);
+            }
         }
 
         read(name: string, defValue?: any) {
 
-            const defValue2 = this.getDefaultValue(name, defValue);
+            // const defValue2 = this.getDefaultValue(name, defValue);
+            // const value = colibri.core.json.read(this._data, name, defValue2);
+            // return value;
 
-            const value = colibri.core.json.read(this._data, name, defValue2);
 
-            return value;
+            if (this.isPrefabInstance()) {
+
+                const prefabValue = this.getDefaultValue(name, defValue);
+
+                if (this.isUnlocked(name)) {
+
+                    return colibri.core.json.read(this._data, name, prefabValue);
+                }
+
+                return prefabValue;
+            }
+
+            return colibri.core.json.read(this._data, name, defValue);
         }
     }
 }

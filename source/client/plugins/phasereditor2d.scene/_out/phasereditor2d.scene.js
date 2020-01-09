@@ -1218,8 +1218,6 @@ var phasereditor2d;
                         this._sceneDataMap = sceneDataMap;
                         this._fileMap = fileMap;
                         this._files = newFiles;
-                        console.log("preloaded");
-                        console.log(this._sceneDataMap);
                     }
                     getFiles() {
                         return this._files;
@@ -1407,14 +1405,42 @@ var phasereditor2d;
                         }
                         return defValue;
                     }
+                    isUnlocked(name) {
+                        if (this.isPrefabInstance()) {
+                            if (this._data.unlock) {
+                                const i = this._data.unlock.indexOf(name);
+                                return i >= 0;
+                            }
+                            return false;
+                        }
+                        return true;
+                    }
+                    isPrefabInstance() {
+                        return typeof this._data.prefabId === "string";
+                    }
                     write(name, value, defValue) {
-                        const defValue2 = this.getDefaultValue(name, defValue);
-                        colibri.core.json.write(this._data, name, value, defValue2);
+                        if (this.isPrefabInstance()) {
+                            if (this.isUnlocked(name)) {
+                                const defValue2 = this.getDefaultValue(name, defValue);
+                                colibri.core.json.write(this._data, name, value, defValue2);
+                            }
+                        }
+                        else {
+                            colibri.core.json.write(this._data, name, value, defValue);
+                        }
                     }
                     read(name, defValue) {
-                        const defValue2 = this.getDefaultValue(name, defValue);
-                        const value = colibri.core.json.read(this._data, name, defValue2);
-                        return value;
+                        // const defValue2 = this.getDefaultValue(name, defValue);
+                        // const value = colibri.core.json.read(this._data, name, defValue2);
+                        // return value;
+                        if (this.isPrefabInstance()) {
+                            const prefabValue = this.getDefaultValue(name, defValue);
+                            if (this.isUnlocked(name)) {
+                                return colibri.core.json.read(this._data, name, prefabValue);
+                            }
+                            return prefabValue;
+                        }
+                        return colibri.core.json.read(this._data, name, defValue);
                     }
                 }
                 json.Serializer = Serializer;
@@ -1630,7 +1656,8 @@ var phasereditor2d;
                         const prefabData = JSON.parse(content);
                         const obj = this.createObject({
                             id: Phaser.Utils.String.UUID(),
-                            prefabId: prefabData.id
+                            prefabId: prefabData.id,
+                            label: "temporal"
                         });
                         return obj;
                     }
@@ -1685,9 +1712,6 @@ var phasereditor2d;
                             data: data,
                             scene: this._scene
                         });
-                        if (sprite) {
-                            sprite.getEditorSupport().readJSON(data);
-                        }
                         return sprite;
                     }
                     else {
@@ -3576,6 +3600,21 @@ var phasereditor2d;
                         this._object.setDataEnabled();
                         this.setId(Phaser.Utils.String.UUID());
                         this._scope = ObjectScope.METHOD;
+                        this._unlockedProperties = new Set();
+                    }
+                    isUnlockedProperty(propName) {
+                        if (this.isPrefabInstance()) {
+                            return this._unlockedProperties.has(propName);
+                        }
+                        return true;
+                    }
+                    setUnlockedProperty(propName, unlock) {
+                        if (unlock) {
+                            this._unlockedProperties.add(propName);
+                        }
+                        else {
+                            this._unlockedProperties.delete(propName);
+                        }
                     }
                     async buildDependenciesHash(builder) {
                         {
@@ -3699,7 +3738,8 @@ var phasereditor2d;
                         const ser = this._scene.getMaker().getSerializer({
                             id: this.getId(),
                             type: this._extension.getTypeName(),
-                            prefabId: this._prefabId
+                            prefabId: this._prefabId,
+                            label: "temporal"
                         });
                         return ser.getType();
                     }
@@ -3707,7 +3747,8 @@ var phasereditor2d;
                         const ser = this._scene.getMaker().getSerializer({
                             id: this.getId(),
                             type: this._extension.getTypeName(),
-                            prefabId: this._prefabId
+                            prefabId: this._prefabId,
+                            label: "temporal",
                         });
                         return ser.getPhaserType();
                     }
@@ -3715,26 +3756,31 @@ var phasereditor2d;
                         return this._scene.getMaker().getSerializer(data);
                     }
                     writeJSON(data) {
-                        if (this._prefabId) {
+                        if (this.isPrefabInstance()) {
                             data.prefabId = this._prefabId;
                         }
-                        const ser = this.getSerializer(data);
-                        if (!this._prefabId) {
-                            ser.write("type", this._extension.getTypeName());
+                        else {
+                            data.type = this._extension.getTypeName();
                         }
-                        ser.write("id", this.getId());
-                        ser.write("label", this._label);
+                        data.id = this.getId();
+                        data.label = this._label;
                         write(data, "scope", this._scope, ObjectScope.METHOD);
+                        if (this._prefabId && this._unlockedProperties.size > 0) {
+                            data["unlock"] = [...this._unlockedProperties];
+                        }
+                        const ser = this.getSerializer(data);
                         for (const s of this._serializables) {
                             s.writeJSON(ser);
                         }
                     }
                     readJSON(data) {
+                        var _a;
                         const ser = this.getSerializer(data);
-                        this.setId(ser.read("id"));
-                        this._prefabId = ser.getData().prefabId;
-                        this._label = ser.read("label");
+                        this.setId(data.id);
+                        this._prefabId = data.prefabId;
+                        this._label = data.label;
                         this._scope = read(data, "scope", ObjectScope.METHOD);
+                        this._unlockedProperties = new Set((_a = data["unlock"], (_a !== null && _a !== void 0 ? _a : [])));
                         for (const s of this._serializables) {
                             s.readJSON(ser);
                         }
@@ -4644,6 +4690,7 @@ var phasereditor2d;
                 }
                 TextureComponent.TEXTURE_KEY_NAME = "textureKey";
                 TextureComponent.FRAME_KEY_NAME = "frameKey";
+                TextureComponent.UNLOCK_TEXTURE_KEY = "TextureComponent.texture";
                 sceneobjects.TextureComponent = TextureComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));

@@ -233,6 +233,8 @@ declare namespace phasereditor2d.scene.core.json {
         id: string;
         type?: string;
         prefabId?: string;
+        label: string;
+        unlock?: string[];
     }
 }
 declare namespace phasereditor2d.scene.core.json {
@@ -334,6 +336,8 @@ declare namespace phasereditor2d.scene.core.json {
         getType(): any;
         getPhaserType(): any;
         private getDefaultValue;
+        isUnlocked(name: string): boolean;
+        isPrefabInstance(): boolean;
         write(name: string, value: any, defValue?: any): void;
         read(name: string, defValue?: any): any;
     }
@@ -748,7 +752,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _scene;
         private _serializables;
         private _components;
+        private _unlockedProperties;
         constructor(extension: SceneObjectExtension, obj: T);
+        isUnlockedProperty(propName: string): boolean;
+        setUnlockedProperty(propName: string, unlock: boolean): void;
         buildDependenciesHash(builder: ide.core.MultiHashBuilder): Promise<void>;
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
@@ -1090,6 +1097,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TextureComponent extends Component<Image> {
         static TEXTURE_KEY_NAME: string;
         static FRAME_KEY_NAME: string;
+        static UNLOCK_TEXTURE_KEY: string;
         private _textureKey;
         private _textureFrameKey;
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;

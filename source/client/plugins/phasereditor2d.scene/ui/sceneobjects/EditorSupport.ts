@@ -23,6 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _serializables: json.Serializable[];
         // tslint:disable-next-line:ban-types
         private _components: Map<Function, Component<any>>;
+        private _unlockedProperties: Set<string>;
 
         constructor(extension: SceneObjectExtension, obj: T) {
 
@@ -33,6 +34,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._object.setDataEnabled();
             this.setId(Phaser.Utils.String.UUID());
             this._scope = ObjectScope.METHOD;
+            this._unlockedProperties = new Set();
+        }
+
+        isUnlockedProperty(propName: string) {
+
+            if (this.isPrefabInstance()) {
+
+                return this._unlockedProperties.has(propName);
+            }
+
+            return true;
+        }
+
+        setUnlockedProperty(propName: string, unlock: boolean) {
+
+            if (unlock) {
+
+                this._unlockedProperties.add(propName);
+
+            } else {
+
+                this._unlockedProperties.delete(propName);
+            }
         }
 
         async buildDependenciesHash(builder: ide.core.MultiHashBuilder) {
@@ -223,7 +247,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const ser = this._scene.getMaker().getSerializer({
                 id: this.getId(),
                 type: this._extension.getTypeName(),
-                prefabId: this._prefabId
+                prefabId: this._prefabId,
+                label: "temporal"
             });
 
             return ser.getType();
@@ -234,7 +259,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const ser = this._scene.getMaker().getSerializer({
                 id: this.getId(),
                 type: this._extension.getTypeName(),
-                prefabId: this._prefabId
+                prefabId: this._prefabId,
+                label: "temporal",
             });
 
             return ser.getPhaserType();
@@ -247,20 +273,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(data: json.ObjectData) {
 
-            if (this._prefabId) {
+            if (this.isPrefabInstance()) {
+
                 data.prefabId = this._prefabId;
+
+            } else {
+
+                data.type = this._extension.getTypeName();
+            }
+
+            data.id = this.getId();
+            data.label = this._label;
+
+            write(data, "scope", this._scope, ObjectScope.METHOD);
+
+            if (this._prefabId && this._unlockedProperties.size > 0) {
+
+                data["unlock"] = [...this._unlockedProperties];
             }
 
             const ser = this.getSerializer(data);
-
-            if (!this._prefabId) {
-
-                ser.write("type", this._extension.getTypeName());
-            }
-
-            ser.write("id", this.getId());
-            ser.write("label", this._label);
-            write(data, "scope", this._scope, ObjectScope.METHOD);
 
             for (const s of this._serializables) {
 
@@ -272,10 +304,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const ser = this.getSerializer(data);
 
-            this.setId(ser.read("id"));
-            this._prefabId = ser.getData().prefabId;
-            this._label = ser.read("label");
+            this.setId(data.id);
+
+            this._prefabId = data.prefabId;
+            this._label = data.label;
             this._scope = read(data, "scope", ObjectScope.METHOD);
+            this._unlockedProperties = new Set(data["unlock"] ?? []);
 
             for (const s of this._serializables) {
 

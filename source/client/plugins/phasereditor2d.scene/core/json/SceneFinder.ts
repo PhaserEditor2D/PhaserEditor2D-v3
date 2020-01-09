@@ -126,9 +126,6 @@ namespace phasereditor2d.scene.core.json {
             this._sceneDataMap = sceneDataMap;
             this._fileMap = fileMap;
             this._files = newFiles;
-
-            console.log("preloaded");
-            console.log(this._sceneDataMap);
         }
 
         getFiles() {

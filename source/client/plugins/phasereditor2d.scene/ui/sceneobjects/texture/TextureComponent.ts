@@ -15,6 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static TEXTURE_KEY_NAME = "textureKey";
         static FRAME_KEY_NAME = "frameKey";
+        static UNLOCK_TEXTURE_KEY = "TextureComponent.texture";
 
         private _textureKey: string;
         private _textureFrameKey: string | number;
