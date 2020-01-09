@@ -1218,6 +1218,8 @@ var phasereditor2d;
                         this._sceneDataMap = sceneDataMap;
                         this._fileMap = fileMap;
                         this._files = newFiles;
+                        console.log("preloaded");
+                        console.log(this._sceneDataMap);
                     }
                     getFiles() {
                         return this._files;
@@ -1602,6 +1604,14 @@ var phasereditor2d;
                 async preload() {
                     // nothing for now
                 }
+                async buildDependenciesHash() {
+                    const builder = new phasereditor2d.ide.core.MultiHashBuilder();
+                    for (const obj of this._scene.getDisplayListChildren()) {
+                        await obj.getEditorSupport().buildDependenciesHash(builder);
+                    }
+                    const hash = builder.build();
+                    return hash;
+                }
                 isPrefabFile(file) {
                     const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
                     if (ct === scene_6.core.CONTENT_TYPE_SCENE) {
@@ -1632,16 +1642,14 @@ var phasereditor2d;
                 getSerializer(data) {
                     return new json.Serializer(data);
                 }
-                createScene(data) {
-                    if (data.settings) {
-                        this._scene.getSettings().readJSON(data.settings);
+                createScene(sceneData) {
+                    if (sceneData.settings) {
+                        this._scene.getSettings().readJSON(sceneData.settings);
                     }
-                    this._scene.setSceneType(data.sceneType);
+                    this._scene.setSceneType(sceneData.sceneType);
                     // removes this condition, it is used temporal for compatibility
-                    if (data.id) {
-                        this._scene.setId(data.id);
-                    }
-                    for (const objData of data.displayList) {
+                    this._scene.setId(sceneData.id);
+                    for (const objData of sceneData.displayList) {
                         this.createObject(objData);
                     }
                 }
@@ -2091,21 +2099,26 @@ var phasereditor2d;
             var dialogs;
             (function (dialogs) {
                 class NewPrefabFileDialogExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
+                    static createSceneData() {
+                        return {
+                            id: Phaser.Utils.String.UUID(),
+                            settings: {},
+                            sceneType: scene.core.json.SceneType.PREFAB,
+                            displayList: [],
+                            meta: {
+                                app: "Phaser Editor 2D - Scene Editor",
+                                url: "https://phasereditor2d.com",
+                                contentType: scene.core.CONTENT_TYPE_SCENE
+                            }
+                        };
+                    }
                     constructor() {
                         super({
                             dialogName: "Prefab File",
                             dialogIcon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
                             fileExtension: "scene",
                             initialFileName: "Prefab",
-                            fileContent: JSON.stringify({
-                                sceneType: scene.core.json.SceneType.PREFAB,
-                                displayList: [],
-                                meta: {
-                                    app: "Phaser Editor 2D - Scene Editor",
-                                    url: "https://phasereditor2d.com",
-                                    contentType: scene.core.CONTENT_TYPE_SCENE
-                                }
-                            })
+                            fileContent: JSON.stringify(NewPrefabFileDialogExtension.createSceneData())
                         });
                     }
                     getInitialFileLocation() {
@@ -2126,21 +2139,26 @@ var phasereditor2d;
             var dialogs;
             (function (dialogs) {
                 class NewSceneFileDialogExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
+                    static createSceneData() {
+                        return {
+                            id: Phaser.Utils.String.UUID(),
+                            settings: {},
+                            sceneType: scene.core.json.SceneType.SCENE,
+                            displayList: [],
+                            meta: {
+                                app: "Phaser Editor 2D - Scene Editor",
+                                url: "https://phasereditor2d.com",
+                                contentType: scene.core.CONTENT_TYPE_SCENE
+                            }
+                        };
+                    }
                     constructor() {
                         super({
                             dialogName: "Scene File",
                             dialogIcon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
                             fileExtension: "scene",
                             initialFileName: "Scene",
-                            fileContent: JSON.stringify({
-                                sceneType: scene.core.json.SceneType.SCENE,
-                                displayList: [],
-                                meta: {
-                                    app: "Phaser Editor 2D - Scene Editor",
-                                    url: "https://phasereditor2d.com",
-                                    contentType: scene.core.CONTENT_TYPE_SCENE
-                                }
-                            })
+                            fileContent: JSON.stringify(NewSceneFileDialogExtension.createSceneData())
                         });
                     }
                     getInitialFileLocation() {
@@ -2688,7 +2706,14 @@ var phasereditor2d;
                         container.appendChild(this._gameCanvas);
                         this._overlayLayer = new editor.OverlayLayer(this);
                         container.appendChild(this._overlayLayer.getCanvas());
-                        // create game scene
+                        this.createGame();
+                        // init managers and factories
+                        this._dropManager = new editor.DropManager(this);
+                        this._cameraManager = new editor.CameraManager(this);
+                        this._selectionManager = new editor.SelectionManager(this);
+                        this._actionManager = new editor.ActionManager(this);
+                    }
+                    createGame() {
                         this._scene = new ui.Scene();
                         this._game = new Phaser.Game({
                             type: Phaser.WEBGL,
@@ -2711,11 +2736,6 @@ var phasereditor2d;
                             // the scene is created just at this moment!
                             this.onGameBoot();
                         };
-                        // init managers and factories
-                        this._dropManager = new editor.DropManager(this);
-                        this._cameraManager = new editor.CameraManager(this);
-                        this._selectionManager = new editor.SelectionManager(this);
-                        this._actionManager = new editor.ActionManager(this);
                     }
                     async updateTitleIcon() {
                         const file = this.getInput();
@@ -2831,8 +2851,36 @@ var phasereditor2d;
                     getPropertyProvider() {
                         return this._propertyProvider;
                     }
+                    async refreshScene() {
+                        const writer = new json.SceneWriter(this._scene);
+                        const sceneData = writer.toJSON();
+                        for (const obj of this._scene.getDisplayListChildren()) {
+                            obj.destroy();
+                        }
+                        this._scene.sys.updateList.removeAll();
+                        this._scene.sys.displayList.removeAll();
+                        const maker = this.getSceneMaker();
+                        await maker.preload();
+                        await maker.updateSceneLoader(sceneData);
+                        maker.createScene(sceneData);
+                        this.repaint();
+                        this._currentRefreshHash = await this.buildDependenciesHash();
+                    }
+                    async buildDependenciesHash() {
+                        const maker = this._scene.getMaker();
+                        const hash = await maker.buildDependenciesHash();
+                        return hash;
+                    }
                     async onPartActivated() {
                         super.onPartActivated();
+                        {
+                            if (this._scene) {
+                                const hash = await this.buildDependenciesHash();
+                                if (this._currentRefreshHash && hash !== this._currentRefreshHash) {
+                                    await this.refreshScene();
+                                }
+                            }
+                        }
                         if (this._blocksProvider) {
                             await this._blocksProvider.preload();
                             this._blocksProvider.repaint();
@@ -2859,6 +2907,7 @@ var phasereditor2d;
                         this._gameBooted = true;
                         if (!this._sceneRead) {
                             await this.readScene();
+                            this._currentRefreshHash = await this.buildDependenciesHash();
                         }
                         this.layout();
                         this.refreshOutline();
@@ -3493,6 +3542,9 @@ var phasereditor2d;
                             args.result.push(dom);
                         }
                     }
+                    async buildDependenciesHash(builder) {
+                        // nothing by default
+                    }
                 }
                 sceneobjects.Component = Component;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
@@ -3524,6 +3576,24 @@ var phasereditor2d;
                         this._object.setDataEnabled();
                         this.setId(Phaser.Utils.String.UUID());
                         this._scope = ObjectScope.METHOD;
+                    }
+                    async buildDependenciesHash(builder) {
+                        {
+                            // prefab token
+                            let token;
+                            if (this._prefabId) {
+                                const finder = scene_13.ScenePlugin.getInstance().getSceneFinder();
+                                const file = finder.getPrefabFile(this._prefabId);
+                                if (file) {
+                                    token = "(prefab=" + this._prefabId + ";file=" + file.getModTime() + ")";
+                                }
+                            }
+                            builder.addPartialToken(token);
+                        }
+                        // components token
+                        for (const comp of this.getComponents()) {
+                            comp.buildDependenciesHash(builder);
+                        }
                     }
                     // tslint:disable-next-line:ban-types
                     getComponent(ctr) {
@@ -3861,6 +3931,14 @@ var phasereditor2d;
                     constructor(obj) {
                         super(sceneobjects.ContainerExtension.getInstance(), obj);
                         this.addComponent(new sceneobjects.TransformComponent(obj));
+                    }
+                    async buildDependenciesHash(builder) {
+                        super.buildDependenciesHash(builder);
+                        if (!this.isPrefabInstance()) {
+                            for (const obj of this.getObject().list) {
+                                obj.getEditorSupport().buildDependenciesHash(builder);
+                            }
+                        }
                     }
                     getCellRenderer() {
                         if (this.isPrefabInstance()) {

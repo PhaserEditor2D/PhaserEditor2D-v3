@@ -35,6 +35,36 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._scope = ObjectScope.METHOD;
         }
 
+        async buildDependenciesHash(builder: ide.core.MultiHashBuilder) {
+
+            {
+                // prefab token
+
+                let token: string;
+
+                if (this._prefabId) {
+
+                    const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                    const file = finder.getPrefabFile(this._prefabId);
+
+                    if (file) {
+
+                        token = "(prefab=" + this._prefabId + ";file=" + file.getModTime() + ")";
+                    }
+                }
+
+                builder.addPartialToken(token);
+            }
+
+            // components token
+
+            for (const comp of this.getComponents()) {
+
+                comp.buildDependenciesHash(builder);
+            }
+        }
+
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
 
         abstract getCellRenderer(): controls.viewers.ICellRenderer;

@@ -23,6 +23,20 @@ namespace phasereditor2d.scene.ui {
             // nothing for now
         }
 
+        async buildDependenciesHash() {
+
+            const builder = new phasereditor2d.ide.core.MultiHashBuilder();
+
+            for (const obj of this._scene.getDisplayListChildren()) {
+
+                await obj.getEditorSupport().buildDependenciesHash(builder);
+            }
+
+            const hash = builder.build();
+
+            return hash;
+        }
+
         isPrefabFile(file: io.FilePath) {
 
             const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
@@ -70,21 +84,19 @@ namespace phasereditor2d.scene.ui {
             return new json.Serializer(data);
         }
 
-        createScene(data: json.SceneData) {
+        createScene(sceneData: json.SceneData) {
 
-            if (data.settings) {
+            if (sceneData.settings) {
 
-                this._scene.getSettings().readJSON(data.settings);
+                this._scene.getSettings().readJSON(sceneData.settings);
             }
 
-            this._scene.setSceneType(data.sceneType);
+            this._scene.setSceneType(sceneData.sceneType);
 
             // removes this condition, it is used temporal for compatibility
-            if (data.id) {
-                this._scene.setId(data.id);
-            }
+            this._scene.setId(sceneData.id);
 
-            for (const objData of data.displayList) {
+            for (const objData of sceneData.displayList) {
 
                 this.createObject(objData);
             }

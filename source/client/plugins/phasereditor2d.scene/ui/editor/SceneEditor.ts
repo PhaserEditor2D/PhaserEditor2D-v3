@@ -45,6 +45,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _actionManager: ActionManager;
         private _gameBooted: boolean;
         private _sceneRead: boolean;
+        private _currentRefreshHash: string;
 
         static getFactory(): colibri.ui.ide.EditorFactory {
             return new SceneEditorFactory();
@@ -159,7 +160,18 @@ namespace phasereditor2d.scene.ui.editor {
             this._overlayLayer = new OverlayLayer(this);
             container.appendChild(this._overlayLayer.getCanvas());
 
-            // create game scene
+            this.createGame();
+
+            // init managers and factories
+
+            this._dropManager = new DropManager(this);
+            this._cameraManager = new CameraManager(this);
+            this._selectionManager = new SelectionManager(this);
+            this._actionManager = new ActionManager(this);
+
+        }
+
+        private createGame() {
 
             this._scene = new Scene();
 
@@ -187,14 +199,6 @@ namespace phasereditor2d.scene.ui.editor {
                 // the scene is created just at this moment!
                 this.onGameBoot();
             };
-
-            // init managers and factories
-
-            this._dropManager = new DropManager(this);
-            this._cameraManager = new CameraManager(this);
-            this._selectionManager = new SelectionManager(this);
-            this._actionManager = new ActionManager(this);
-
         }
 
         private async updateTitleIcon() {
@@ -367,9 +371,58 @@ namespace phasereditor2d.scene.ui.editor {
             return this._propertyProvider;
         }
 
+        private async refreshScene() {
+
+            const writer = new json.SceneWriter(this._scene);
+
+            const sceneData = writer.toJSON();
+
+            for (const obj of this._scene.getDisplayListChildren()) {
+
+                obj.destroy();
+            }
+
+            this._scene.sys.updateList.removeAll();
+            this._scene.sys.displayList.removeAll();
+
+            const maker = this.getSceneMaker();
+
+            await maker.preload();
+
+            await maker.updateSceneLoader(sceneData);
+
+            maker.createScene(sceneData);
+
+            this.repaint();
+
+            this._currentRefreshHash = await this.buildDependenciesHash();
+
+        }
+
+        private async buildDependenciesHash() {
+
+            const maker = this._scene.getMaker();
+
+            const hash = await maker.buildDependenciesHash();
+
+            return hash;
+        }
+
         async onPartActivated() {
 
             super.onPartActivated();
+
+            {
+                if (this._scene) {
+
+                    const hash = await this.buildDependenciesHash();
+
+                    if (this._currentRefreshHash && hash !== this._currentRefreshHash) {
+
+                        await this.refreshScene();
+                    }
+                }
+            }
 
             if (this._blocksProvider) {
 
@@ -410,6 +463,9 @@ namespace phasereditor2d.scene.ui.editor {
             if (!this._sceneRead) {
 
                 await this.readScene();
+
+                this._currentRefreshHash = await this.buildDependenciesHash();
+
             }
 
             this.layout();

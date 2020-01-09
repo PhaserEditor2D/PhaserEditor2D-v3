@@ -15,6 +15,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new TransformComponent(obj));
         }
 
+        async buildDependenciesHash(builder: ide.core.MultiHashBuilder) {
+
+            super.buildDependenciesHash(builder);
+
+            if (!this.isPrefabInstance()) {
+
+                for (const obj of this.getObject().list) {
+
+                    obj.getEditorSupport().buildDependenciesHash(builder);
+                }
+            }
+        }
+
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
             if (this.isPrefabInstance()) {

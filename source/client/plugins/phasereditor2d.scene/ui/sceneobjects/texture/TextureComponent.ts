@@ -19,6 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _textureKey: string;
         private _textureFrameKey: string | number;
 
+
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
             // nothing, the properties are set when the object is created.
         }

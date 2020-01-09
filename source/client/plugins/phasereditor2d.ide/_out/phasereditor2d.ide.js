@@ -161,6 +161,33 @@ var phasereditor2d;
     (function (ide) {
         var core;
         (function (core) {
+            class MultiHashBuilder {
+                constructor() {
+                    this._tokens = new Set();
+                }
+                addPartialToken(token) {
+                    if (token && token !== "") {
+                        this._tokens.add(token);
+                    }
+                }
+                build() {
+                    const list = [];
+                    for (const token of this._tokens) {
+                        list.push(token);
+                    }
+                    return list.sort().join("+");
+                }
+            }
+            core.MultiHashBuilder = MultiHashBuilder;
+        })(core = ide.core || (ide.core = {}));
+    })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var ide;
+    (function (ide) {
+        var core;
+        (function (core) {
             class PhaserDocs {
                 constructor(plugin, filePath) {
                     this._data = null;

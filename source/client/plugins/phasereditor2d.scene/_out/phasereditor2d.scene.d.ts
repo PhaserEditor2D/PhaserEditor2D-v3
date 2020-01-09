@@ -390,10 +390,11 @@ declare namespace phasereditor2d.scene.ui {
         constructor(scene: Scene);
         static isValidSceneDataFormat(data: json.SceneData): boolean;
         preload(): Promise<void>;
+        buildDependenciesHash(): Promise<string>;
         isPrefabFile(file: io.FilePath): boolean;
         createPrefabInstanceWithFile(file: io.FilePath): Promise<sceneobjects.SceneObject>;
         getSerializer(data: json.ObjectData): json.Serializer;
-        createScene(data: json.SceneData): void;
+        createScene(sceneData: json.SceneData): void;
         updateSceneLoader(sceneData: json.SceneData): Promise<void>;
         createObject(data: json.ObjectData): sceneobjects.SceneObject;
     }
@@ -481,12 +482,14 @@ declare namespace phasereditor2d.scene.ui.blocks {
 }
 declare namespace phasereditor2d.scene.ui.dialogs {
     class NewPrefabFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
+        private static createSceneData;
         constructor();
         getInitialFileLocation(): colibri.core.io.FilePath;
     }
 }
 declare namespace phasereditor2d.scene.ui.dialogs {
     class NewSceneFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
+        private static createSceneData;
         constructor();
         getInitialFileLocation(): colibri.core.io.FilePath;
     }
@@ -554,6 +557,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _actionManager;
         private _gameBooted;
         private _sceneRead;
+        private _currentRefreshHash;
         static getFactory(): colibri.ui.ide.EditorFactory;
         constructor();
         openSourceFileInEditor(): void;
@@ -564,6 +568,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         protected onEditorInputContentChanged(): void;
         setInput(file: io.FilePath): void;
         protected createPart(): void;
+        private createGame;
         private updateTitleIcon;
         getIcon(): controls.IImage;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
@@ -578,6 +583,8 @@ declare namespace phasereditor2d.scene.ui.editor {
         getSceneMaker(): SceneMaker;
         layout(): void;
         getPropertyProvider(): properties.SceneEditorSectionProvider;
+        private refreshScene;
+        private buildDependenciesHash;
         onPartActivated(): Promise<void>;
         getEditorViewerProvider(key: string): blocks.SceneEditorBlocksProvider | outline.SceneEditorOutlineProvider;
         getOutlineProvider(): outline.SceneEditorOutlineProvider;
@@ -718,6 +725,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: T);
         getObject(): T;
         protected buildSetObjectPropertyCodeDOM_Float(fieldName: string, value: number, defValue: number, args: SetObjectPropertiesCodeDOMArgs): void;
+        buildDependenciesHash(builder: ide.core.MultiHashBuilder): Promise<void>;
         abstract buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         abstract writeJSON(ser: core.json.Serializer): void;
         abstract readJSON(ser: core.json.Serializer): void;
@@ -741,6 +749,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _serializables;
         private _components;
         constructor(extension: SceneObjectExtension, obj: T);
+        buildDependenciesHash(builder: ide.core.MultiHashBuilder): Promise<void>;
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
         getComponent(ctr: Function): Component<any>;
@@ -945,6 +954,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
     class ContainerEditorSupport extends EditorSupport<Container> {
         constructor(obj: Container);
+        buildDependenciesHash(builder: ide.core.MultiHashBuilder): Promise<void>;
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
         writeJSON(containerData: ContainerData): void;
         readJSON(containerData: ContainerData): void;

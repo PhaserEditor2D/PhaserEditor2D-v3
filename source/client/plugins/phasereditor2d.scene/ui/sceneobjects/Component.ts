@@ -40,6 +40,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        async buildDependenciesHash(builder: ide.core.MultiHashBuilder) {
+
+            // nothing by default
+        }
+
         abstract buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
 
         abstract writeJSON(ser: core.json.Serializer): void;

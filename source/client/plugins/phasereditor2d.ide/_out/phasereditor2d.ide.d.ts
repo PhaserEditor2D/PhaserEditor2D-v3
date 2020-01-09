@@ -19,6 +19,14 @@ declare namespace phasereditor2d.ide {
     const VER = "3.0.0";
 }
 declare namespace phasereditor2d.ide.core {
+    class MultiHashBuilder {
+        private _tokens;
+        constructor();
+        addPartialToken(token: string): void;
+        build(): string;
+    }
+}
+declare namespace phasereditor2d.ide.core {
     class PhaserDocs {
         private _data;
         private _plugin;
