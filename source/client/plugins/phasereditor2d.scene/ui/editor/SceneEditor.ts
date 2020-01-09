@@ -419,6 +419,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (this._currentRefreshHash && hash !== this._currentRefreshHash) {
 
+                        console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed. Refreshing it.");
+
                         await this.refreshScene();
                     }
                 }

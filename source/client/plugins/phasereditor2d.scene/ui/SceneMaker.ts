@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui {
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
-                await obj.getEditorSupport().buildDependenciesHash(builder);
+                await obj.getEditorSupport().buildDependencyHash(builder);
             }
 
             const hash = builder.build();

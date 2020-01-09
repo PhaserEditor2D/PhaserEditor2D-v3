@@ -1633,7 +1633,7 @@ var phasereditor2d;
                 async buildDependenciesHash() {
                     const builder = new phasereditor2d.ide.core.MultiHashBuilder();
                     for (const obj of this._scene.getDisplayListChildren()) {
-                        await obj.getEditorSupport().buildDependenciesHash(builder);
+                        await obj.getEditorSupport().buildDependencyHash(builder);
                     }
                     const hash = builder.build();
                     return hash;
@@ -2901,6 +2901,7 @@ var phasereditor2d;
                             if (this._scene) {
                                 const hash = await this.buildDependenciesHash();
                                 if (this._currentRefreshHash && hash !== this._currentRefreshHash) {
+                                    console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed. Refreshing it.");
                                     await this.refreshScene();
                                 }
                             }
@@ -3616,20 +3617,27 @@ var phasereditor2d;
                             this._unlockedProperties.delete(propName);
                         }
                     }
-                    async buildDependenciesHash(builder) {
-                        {
-                            // prefab token
-                            let token;
-                            if (this._prefabId) {
-                                const finder = scene_13.ScenePlugin.getInstance().getSceneFinder();
-                                const file = finder.getPrefabFile(this._prefabId);
-                                if (file) {
-                                    token = "(prefab=" + this._prefabId + ";file=" + file.getModTime() + ")";
-                                }
-                            }
-                            builder.addPartialToken(token);
+                    static async buildPrefabDependencyHash(builder, prefabId) {
+                        if (!prefabId) {
+                            return;
                         }
-                        // components token
+                        const finder = scene_13.ScenePlugin.getInstance().getSceneFinder();
+                        const file = finder.getPrefabFile(prefabId);
+                        if (!file) {
+                            return;
+                        }
+                        const token = "(prefab=" + prefabId + ";file=" + file.getModTime() + ")";
+                        builder.addPartialToken(token);
+                        const sceneData = finder.getSceneData(file);
+                        if (!sceneData) {
+                            return;
+                        }
+                        for (const objData of sceneData.displayList) {
+                            this.buildPrefabDependencyHash(builder, objData.prefabId);
+                        }
+                    }
+                    async buildDependencyHash(builder) {
+                        EditorSupport.buildPrefabDependencyHash(builder, this._prefabId);
                         for (const comp of this.getComponents()) {
                             comp.buildDependenciesHash(builder);
                         }
@@ -3978,11 +3986,11 @@ var phasereditor2d;
                         super(sceneobjects.ContainerExtension.getInstance(), obj);
                         this.addComponent(new sceneobjects.TransformComponent(obj));
                     }
-                    async buildDependenciesHash(builder) {
-                        super.buildDependenciesHash(builder);
+                    async buildDependencyHash(builder) {
+                        super.buildDependencyHash(builder);
                         if (!this.isPrefabInstance()) {
                             for (const obj of this.getObject().list) {
-                                obj.getEditorSupport().buildDependenciesHash(builder);
+                                obj.getEditorSupport().buildDependencyHash(builder);
                             }
                         }
                     }

@@ -756,7 +756,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(extension: SceneObjectExtension, obj: T);
         isUnlockedProperty(propName: string): boolean;
         setUnlockedProperty(propName: string, unlock: boolean): void;
-        buildDependenciesHash(builder: ide.core.MultiHashBuilder): Promise<void>;
+        private static buildPrefabDependencyHash;
+        buildDependencyHash(builder: ide.core.MultiHashBuilder): Promise<void>;
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
         getComponent(ctr: Function): Component<any>;
@@ -961,7 +962,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
     class ContainerEditorSupport extends EditorSupport<Container> {
         constructor(obj: Container);
-        buildDependenciesHash(builder: ide.core.MultiHashBuilder): Promise<void>;
+        buildDependencyHash(builder: ide.core.MultiHashBuilder): Promise<void>;
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
         writeJSON(containerData: ContainerData): void;
         readJSON(containerData: ContainerData): void;
