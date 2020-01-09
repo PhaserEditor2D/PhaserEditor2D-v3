@@ -2,7 +2,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageEditorSupport extends EditorSupport<Image> {
 
-
         private _cellRenderer: TextureCellRenderer;
 
         constructor(obj: Image) {

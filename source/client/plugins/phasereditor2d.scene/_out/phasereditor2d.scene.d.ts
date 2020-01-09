@@ -394,6 +394,7 @@ declare namespace phasereditor2d.scene.ui {
     class SceneMaker {
         private _scene;
         constructor(scene: Scene);
+        static acceptDropFile(dropFile: io.FilePath, editorFile: io.FilePath): any;
         static isValidSceneDataFormat(data: json.SceneData): boolean;
         preload(): Promise<void>;
         buildDependenciesHash(): Promise<string>;
@@ -528,8 +529,8 @@ declare namespace phasereditor2d.scene.ui.editor {
         onDragDrop_async(e: DragEvent): Promise<void>;
         private createWithDropEvent;
         private onDragOver;
-        private acceptsDropData;
-        private acceptsDropDataArray;
+        private acceptDropData;
+        private acceptDropDataArray;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor {

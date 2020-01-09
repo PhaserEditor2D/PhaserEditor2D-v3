@@ -797,6 +797,9 @@ var phasereditor2d;
                             let superCls;
                             if (this._isPrefabScene) {
                                 const obj = this._scene.getPrefabObject();
+                                if (!obj) {
+                                    return null;
+                                }
                                 const support = obj.getEditorSupport();
                                 if (obj.getEditorSupport().isPrefabInstance()) {
                                     superCls = support.getPrefabName();
@@ -1044,6 +1047,9 @@ var phasereditor2d;
                             .compilerOutputLanguage === core.json.SourceLang.JAVA_SCRIPT;
                         const builder = new core.code.SceneCodeDOMBuilder(this._scene, this._sceneFile);
                         const unit = await builder.build();
+                        if (!unit) {
+                            return;
+                        }
                         const generator = compileToJS ?
                             new core.code.JavaScriptUnitCodeGenerator(unit)
                             : new core.code.TypeScriptUnitCodeGenerator(unit);
@@ -1636,6 +1642,30 @@ var phasereditor2d;
                 constructor(scene) {
                     this._scene = scene;
                 }
+                static acceptDropFile(dropFile, editorFile) {
+                    if (dropFile.getFullName() === editorFile.getFullName()) {
+                        return false;
+                    }
+                    const sceneFinder = scene_6.ScenePlugin.getInstance().getSceneFinder();
+                    const sceneData = sceneFinder.getSceneData(dropFile);
+                    if (sceneData) {
+                        if (sceneData.sceneType !== scene_6.core.json.SceneType.PREFAB) {
+                            return false;
+                        }
+                        if (sceneData.displayList.length === 0) {
+                            return false;
+                        }
+                        const objData = sceneData.displayList[0];
+                        if (objData.prefabId) {
+                            const prefabFile = sceneFinder.getPrefabFile(objData.prefabId);
+                            if (prefabFile) {
+                                return this.acceptDropFile(prefabFile, editorFile);
+                            }
+                        }
+                        return true;
+                    }
+                    return false;
+                }
                 static isValidSceneDataFormat(data) {
                     return "displayList" in data && Array.isArray(data.displayList);
                 }
@@ -1957,7 +1987,7 @@ var phasereditor2d;
                             .getContentTypeRegistry()
                             .getCachedContentType(file) === scene.core.CONTENT_TYPE_SCENE)
                             .filter(file => file !== this._editor.getInput())
-                            .filter(file => this._editor.getSceneMaker().isPrefabFile(file));
+                            .filter(file => ui.SceneMaker.acceptDropFile(file, this._editor.getInput()));
                     }
                     getChildren(parent) {
                         if (typeof (parent) === "string") {
@@ -1993,7 +2023,7 @@ var phasereditor2d;
                 class SceneEditorBlocksLabelProvider extends phasereditor2d.pack.ui.viewers.AssetPackLabelProvider {
                     getLabel(obj) {
                         if (obj instanceof core.io.FilePath) {
-                            return obj.getName();
+                            return obj.getNameWithoutExtension();
                         }
                         return super.getLabel(obj);
                     }
@@ -2344,7 +2374,7 @@ var phasereditor2d;
                     }
                     async onDragDrop_async(e) {
                         const dataArray = controls.Controls.getApplicationDragDataAndClean();
-                        if (this.acceptsDropDataArray(dataArray)) {
+                        if (this.acceptDropDataArray(dataArray)) {
                             e.preventDefault();
                             const sprites = await this.createWithDropEvent(e, dataArray);
                             this._editor.getUndoManager().add(new editor_3.undo.AddObjectsOperation(this._editor, sprites));
@@ -2425,15 +2455,13 @@ var phasereditor2d;
                         return sprites;
                     }
                     onDragOver(e) {
-                        if (this.acceptsDropDataArray(controls.Controls.getApplicationDragData())) {
+                        if (this.acceptDropDataArray(controls.Controls.getApplicationDragData())) {
                             e.preventDefault();
                         }
                     }
-                    acceptsDropData(data) {
+                    acceptDropData(data) {
                         if (data instanceof io.FilePath) {
-                            if (this._editor.getSceneMaker().isPrefabFile(data)) {
-                                return true;
-                            }
+                            return ui.SceneMaker.acceptDropFile(data, this._editor.getInput());
                         }
                         for (const ext of scene_9.ScenePlugin.getInstance().getObjectExtensions()) {
                             if (ext.acceptsDropData(data)) {
@@ -2442,12 +2470,12 @@ var phasereditor2d;
                         }
                         return false;
                     }
-                    acceptsDropDataArray(dataArray) {
+                    acceptDropDataArray(dataArray) {
                         if (!dataArray) {
                             return false;
                         }
                         for (const item of dataArray) {
-                            if (!this.acceptsDropData(item)) {
+                            if (!this.acceptDropData(item)) {
                                 return false;
                             }
                         }

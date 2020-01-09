@@ -7,7 +7,8 @@ namespace phasereditor2d.scene.ui.blocks {
         getLabel(obj: any) {
 
             if (obj instanceof core.io.FilePath) {
-                return obj.getName();
+
+                return obj.getNameWithoutExtension();
             }
 
             return super.getLabel(obj);
