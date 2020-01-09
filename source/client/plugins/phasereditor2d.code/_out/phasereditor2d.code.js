@@ -137,6 +137,9 @@ var phasereditor2d;
                         // added files
                         for (const name of change.getAddRecords()) {
                             const file = ide.FileUtils.getFileFromPath(name);
+                            if (!file) {
+                                continue;
+                            }
                             if (isSrcFile(file)) {
                                 this.addSrcFile(file);
                             }
@@ -147,6 +150,9 @@ var phasereditor2d;
                         // modified files
                         for (const name of change.getModifiedRecords()) {
                             const file = ide.FileUtils.getFileFromPath(name);
+                            if (!file) {
+                                continue;
+                            }
                             if (this._filesModifiedByMonacoEditor.has(file)) {
                                 continue;
                             }

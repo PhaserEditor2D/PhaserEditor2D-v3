@@ -78,6 +78,10 @@ namespace phasereditor2d.code.ui.editors {
 
                 const file = ide.FileUtils.getFileFromPath(name);
 
+                if (!file) {
+                    continue;
+                }
+
                 if (isSrcFile(file)) {
 
                     this.addSrcFile(file);
@@ -93,6 +97,10 @@ namespace phasereditor2d.code.ui.editors {
             for (const name of change.getModifiedRecords()) {
 
                 const file = ide.FileUtils.getFileFromPath(name);
+
+                if (!file) {
+                    continue;
+                }
 
                 if (this._filesModifiedByMonacoEditor.has(file)) {
                     continue;
