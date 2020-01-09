@@ -77,7 +77,9 @@ namespace phasereditor2d.scene {
             // new file wizards
 
             reg.addExtension(
-                new ui.dialogs.NewSceneFileDialogExtension());
+                new ui.dialogs.NewSceneFileDialogExtension(),
+                new ui.dialogs.NewPrefabFileDialogExtension()
+            );
 
             // scene object extensions
 
