@@ -127,7 +127,7 @@ declare namespace phasereditor2d.pack.core {
         private _frames;
         constructor(pack: AssetPack, data: any);
         preload(): Promise<controls.PreloadResult>;
-        preloadImages(): Promise<void>;
+        preloadImages(): Promise<controls.PreloadResult>;
         resetCache(): void;
         protected abstract createParser(): parsers.ImageFrameParser;
         findFrame(frameName: any): AssetPackImageFrame;

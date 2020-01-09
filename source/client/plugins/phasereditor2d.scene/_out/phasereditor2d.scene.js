@@ -1830,6 +1830,7 @@ var phasereditor2d;
                     return controls.Controls.resolveNothingLoaded();
                 }
                 createImageElement() {
+                    console.log("SceneThumbnail.createImageElement() " + Date.now());
                     return new Promise((resolve, reject) => {
                         const content = ide.FileUtils.getFileString(this._file);
                         const data = JSON.parse(content);
@@ -2928,6 +2929,7 @@ var phasereditor2d;
                                 if (this._currentRefreshHash && hash !== this._currentRefreshHash) {
                                     console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed. Refreshing it.");
                                     await this.refreshScene();
+                                    this.refreshOutline();
                                     await this.updateTitleIcon(true);
                                 }
                             }
@@ -4278,9 +4280,10 @@ var phasereditor2d;
                     constructor(obj) {
                         super(sceneobjects.ImageExtension.getInstance(), obj);
                         this.addComponent(new sceneobjects.TextureComponent(obj), new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj));
+                        this._cellRenderer = new sceneobjects.TextureCellRenderer();
                     }
                     getCellRenderer() {
-                        return new sceneobjects.TextureCellRenderer();
+                        return this._cellRenderer;
                     }
                     getTextureComponent() {
                         return this.getComponent(sceneobjects.TextureComponent);
@@ -4648,25 +4651,41 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class TextureCellRenderer {
+                    constructor() {
+                        this._finder = new phasereditor2d.pack.core.PackFinder();
+                    }
                     renderCell(args) {
-                        const sprite = args.obj;
-                        const support = sprite.getEditorSupport();
-                        const textureComp = support.getComponent(sceneobjects.TextureComponent);
-                        if (textureComp) {
-                            const { key, frame } = textureComp.getTexture();
-                            const image = phasereditor2d.pack.core.parsers.ImageFrameParser
-                                .getSourceImageFrame(support.getScene().game, key, frame);
-                            if (image) {
-                                image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
-                            }
+                        if (this._image) {
+                            this._image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
                         }
                     }
                     cellHeight(args) {
                         return args.viewer.getCellSize();
                     }
                     async preload(args) {
-                        const finder = new phasereditor2d.pack.core.PackFinder();
-                        return finder.preload();
+                        let result = await this._finder.preload();
+                        const support = args.obj.getEditorSupport();
+                        const textureComp = support.getComponent(sceneobjects.TextureComponent);
+                        if (textureComp) {
+                            const { key, frame } = textureComp.getTexture();
+                            const item = this._finder.findAssetPackItem(key);
+                            let image = null;
+                            if (item instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem) {
+                                result = Math.max(await item.preload(), result);
+                                result = Math.max(await item.preloadImages(), result);
+                                if (item instanceof phasereditor2d.pack.core.ImageAssetPackItem) {
+                                    image = item.getFrames()[0].getImage();
+                                }
+                                else {
+                                    image = item.findFrame(frame);
+                                }
+                            }
+                            if (image) {
+                                result = Math.max(await image.preload(), result);
+                            }
+                            this._image = image;
+                        }
+                        return result;
                     }
                 }
                 sceneobjects.TextureCellRenderer = TextureCellRenderer;

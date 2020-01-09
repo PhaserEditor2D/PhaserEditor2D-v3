@@ -440,6 +440,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                         await this.refreshScene();
 
+                        this.refreshOutline();
+
                         await this.updateTitleIcon(true);
                     }
                 }

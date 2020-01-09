@@ -23,7 +23,9 @@ namespace phasereditor2d.pack.core {
             return parser.preloadFrames();
         }
 
-        async preloadImages() {
+        async preloadImages(): Promise<controls.PreloadResult> {
+
+            let result = controls.PreloadResult.NOTHING_LOADED;
 
             const frames = this.getFrames();
 
@@ -32,9 +34,12 @@ namespace phasereditor2d.pack.core {
                 const img = frame.getImage();
 
                 if (img) {
-                    await img.preload();
+
+                    result = Math.max(await img.preload(), result);
                 }
             }
+
+            return result;
         }
 
         resetCache() {

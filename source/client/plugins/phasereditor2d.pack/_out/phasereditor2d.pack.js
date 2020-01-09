@@ -525,13 +525,15 @@ var phasereditor2d;
                     return parser.preloadFrames();
                 }
                 async preloadImages() {
+                    let result = controls.PreloadResult.NOTHING_LOADED;
                     const frames = this.getFrames();
                     for (const frame of frames) {
                         const img = frame.getImage();
                         if (img) {
-                            await img.preload();
+                            result = Math.max(await img.preload(), result);
                         }
                     }
+                    return result;
                 }
                 resetCache() {
                     this._frames = null;

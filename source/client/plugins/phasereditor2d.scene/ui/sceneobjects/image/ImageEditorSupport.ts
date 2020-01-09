@@ -2,6 +2,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageEditorSupport extends EditorSupport<Image> {
 
+
+        private _cellRenderer: TextureCellRenderer;
+
         constructor(obj: Image) {
             super(ImageExtension.getInstance(), obj);
 
@@ -10,10 +13,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new TransformComponent(obj),
                 new OriginComponent(obj)
             );
+
+            this._cellRenderer = new TextureCellRenderer();
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
-            return new TextureCellRenderer();
+            return this._cellRenderer;
         }
 
         getTextureComponent() {
