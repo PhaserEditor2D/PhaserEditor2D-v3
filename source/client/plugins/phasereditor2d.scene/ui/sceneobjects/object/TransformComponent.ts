@@ -7,6 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
 
     export declare interface ITransformLike {
+
         x: number;
         y: number;
         scaleX: number;

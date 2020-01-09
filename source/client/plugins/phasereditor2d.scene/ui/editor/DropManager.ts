@@ -81,7 +81,6 @@ namespace phasereditor2d.scene.ui.editor {
                 }
             }
 
-
             for (const data of dropAssetArray) {
 
                 const ext = ScenePlugin.getInstance().getLoaderUpdaterForAsset(data);

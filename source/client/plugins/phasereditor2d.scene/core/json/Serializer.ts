@@ -123,7 +123,6 @@ namespace phasereditor2d.scene.core.json {
             // const value = colibri.core.json.read(this._data, name, defValue2);
             // return value;
 
-
             if (this.isPrefabInstance()) {
 
                 const prefabValue = this.getDefaultValue(name, defValue);
