@@ -223,7 +223,7 @@ declare namespace colibri.core.io {
         private _preloadMap;
         constructor(getContent: GetFileContent<T>, setContent?: SetFileContent<T>);
         reset(): void;
-        preload(file: FilePath): Promise<ui.controls.PreloadResult>;
+        preload(file: FilePath, force?: boolean): Promise<ui.controls.PreloadResult>;
         getContent(file: FilePath): T;
         setContent(file: FilePath, content: T): Promise<void>;
         hasFile(file: FilePath): boolean;

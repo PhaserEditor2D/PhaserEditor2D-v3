@@ -25,7 +25,7 @@ namespace colibri.core.io {
             this._preloadMap = new Map();
         }
 
-        preload(file: FilePath): Promise<ui.controls.PreloadResult> {
+        preload(file: FilePath, force = false): Promise<ui.controls.PreloadResult> {
 
             const filename = file.getFullName();
 
@@ -37,7 +37,7 @@ namespace colibri.core.io {
 
             if (entry) {
 
-                if (entry.modTime === file.getModTime()) {
+                if (!force && entry.modTime === file.getModTime()) {
                     return ui.controls.Controls.resolveNothingLoaded();
                 }
 

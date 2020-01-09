@@ -846,14 +846,14 @@ var colibri;
                     this._map = new Map();
                     this._preloadMap = new Map();
                 }
-                preload(file) {
+                preload(file, force = false) {
                     const filename = file.getFullName();
                     if (this._preloadMap.has(filename)) {
                         return this._preloadMap.get(filename);
                     }
                     const entry = this._map.get(filename);
                     if (entry) {
-                        if (entry.modTime === file.getModTime()) {
+                        if (!force && entry.modTime === file.getModTime()) {
                             return colibri.ui.controls.Controls.resolveNothingLoaded();
                         }
                         const promise2 = this._backendGetContent(file)

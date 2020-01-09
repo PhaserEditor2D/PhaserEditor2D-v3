@@ -201,17 +201,19 @@ namespace phasereditor2d.scene.ui.editor {
             };
         }
 
-        private async updateTitleIcon() {
+        private async updateTitleIcon(force = false) {
 
             const file = this.getInput();
 
-            await SceneThumbnailCache.getInstance().preload(file);
+            await SceneThumbnailCache.getInstance().preload(file, force);
 
             const img = this.getIcon();
 
             if (img) {
 
-                img.preload().then(w => this.dispatchTitleUpdatedEvent());
+                await img.preload();
+
+                this.dispatchTitleUpdatedEvent();
 
             } else {
 
@@ -437,6 +439,8 @@ namespace phasereditor2d.scene.ui.editor {
                         console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed. Refreshing it.");
 
                         await this.refreshScene();
+
+                        await this.updateTitleIcon(true);
                     }
                 }
             }
@@ -491,6 +495,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             // for some reason, we should do this after a time, or the game is not stopped well.
             setTimeout(() => this._game.loop.stop(), 500);
+
+            this.updateTitleIcon(true);
         }
 
         repaint(): void {

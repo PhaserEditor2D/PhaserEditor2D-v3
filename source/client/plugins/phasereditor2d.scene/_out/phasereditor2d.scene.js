@@ -2776,12 +2776,13 @@ var phasereditor2d;
                             this.onGameBoot();
                         };
                     }
-                    async updateTitleIcon() {
+                    async updateTitleIcon(force = false) {
                         const file = this.getInput();
-                        await ui.SceneThumbnailCache.getInstance().preload(file);
+                        await ui.SceneThumbnailCache.getInstance().preload(file, force);
                         const img = this.getIcon();
                         if (img) {
-                            img.preload().then(w => this.dispatchTitleUpdatedEvent());
+                            await img.preload();
+                            this.dispatchTitleUpdatedEvent();
                         }
                         else {
                             this.dispatchTitleUpdatedEvent();
@@ -2927,6 +2928,7 @@ var phasereditor2d;
                                 if (this._currentRefreshHash && hash !== this._currentRefreshHash) {
                                     console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed. Refreshing it.");
                                     await this.refreshScene();
+                                    await this.updateTitleIcon(true);
                                 }
                             }
                         }
@@ -2962,6 +2964,7 @@ var phasereditor2d;
                         this.refreshOutline();
                         // for some reason, we should do this after a time, or the game is not stopped well.
                         setTimeout(() => this._game.loop.stop(), 500);
+                        this.updateTitleIcon(true);
                     }
                     repaint() {
                         if (!this._gameBooted) {
