@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const dataArray = controls.Controls.getApplicationDragDataAndClean();
 
-            if (this.acceptsDropDataArray(dataArray)) {
+            if (this.acceptDropDataArray(dataArray)) {
 
                 e.preventDefault();
 
@@ -155,18 +155,16 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onDragOver(e: DragEvent) {
 
-            if (this.acceptsDropDataArray(controls.Controls.getApplicationDragData())) {
+            if (this.acceptDropDataArray(controls.Controls.getApplicationDragData())) {
                 e.preventDefault();
             }
         }
 
-        private acceptsDropData(data: any): boolean {
+        private acceptDropData(data: any): boolean {
 
             if (data instanceof io.FilePath) {
 
-                if (this._editor.getSceneMaker().isPrefabFile(data)) {
-                    return true;
-                }
+                return SceneMaker.acceptDropFile(data, this._editor.getInput());
             }
 
             for (const ext of ScenePlugin.getInstance().getObjectExtensions()) {
@@ -179,7 +177,7 @@ namespace phasereditor2d.scene.ui.editor {
             return false;
         }
 
-        private acceptsDropDataArray(dataArray: any[]) {
+        private acceptDropDataArray(dataArray: any[]) {
 
             if (!dataArray) {
                 return false;
@@ -187,7 +185,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             for (const item of dataArray) {
 
-                if (!this.acceptsDropData(item)) {
+                if (!this.acceptDropData(item)) {
                     return false;
                 }
             }

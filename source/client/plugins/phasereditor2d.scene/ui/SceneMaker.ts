@@ -15,6 +15,47 @@ namespace phasereditor2d.scene.ui {
             this._scene = scene;
         }
 
+        static acceptDropFile(dropFile: io.FilePath, editorFile: io.FilePath) {
+
+            if (dropFile.getFullName() === editorFile.getFullName()) {
+
+                return false;
+            }
+
+            const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
+
+            const sceneData = sceneFinder.getSceneData(dropFile);
+
+            if (sceneData) {
+
+                if (sceneData.sceneType !== core.json.SceneType.PREFAB) {
+
+                    return false;
+                }
+
+                if (sceneData.displayList.length === 0) {
+
+                    return false;
+                }
+
+                const objData = sceneData.displayList[0];
+
+                if (objData.prefabId) {
+
+                    const prefabFile = sceneFinder.getPrefabFile(objData.prefabId);
+
+                    if (prefabFile) {
+
+                        return this.acceptDropFile(prefabFile, editorFile);
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         static isValidSceneDataFormat(data: json.SceneData) {
             return "displayList" in data && Array.isArray(data.displayList);
         }

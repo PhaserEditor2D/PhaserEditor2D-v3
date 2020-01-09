@@ -46,7 +46,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
                 .filter(file => file !== this._editor.getInput())
 
-                .filter(file => this._editor.getSceneMaker().isPrefabFile(file));
+                .filter(file => SceneMaker.acceptDropFile(file, this._editor.getInput()));
         }
 
         getChildren(parent: any): any[] {
