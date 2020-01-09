@@ -84,7 +84,7 @@ var phasereditor2d;
                     const data = this.getSceneFinder().getSceneData(file);
                     const scene = await scene_1.ui.OfflineScene.createScene(data);
                     const compiler = new scene_1.core.code.SceneCompiler(scene, file);
-                    scene.game.destroy(false);
+                    scene.destroyGame();
                     await compiler.compile();
                     monitor.step();
                 }
@@ -1476,6 +1476,16 @@ var phasereditor2d;
                     this._maker = new ui.SceneMaker(this);
                     this._settings = new scene.core.json.SceneSettings();
                 }
+                registerDestroyListener(name) {
+                    console.log(name + ": register destroy listener.");
+                    this.game.events.on(Phaser.Core.Events.DESTROY, e => {
+                        console.log(name + ": destroyed.");
+                    });
+                }
+                destroyGame() {
+                    this.game.destroy(true);
+                    this.game.loop.tick();
+                }
                 getPrefabObject() {
                     return this.getDisplayListChildren()[0];
                 }
@@ -1549,6 +1559,7 @@ var phasereditor2d;
                 }
                 create() {
                     var _a, _b, _c;
+                    this.registerDestroyListener("Scene");
                     if (this._inEditor) {
                         const camera = this.getCamera();
                         camera.setOrigin(0, 0);
@@ -1601,6 +1612,7 @@ var phasereditor2d;
                     this._callback = callback;
                 }
                 async create() {
+                    this.registerDestroyListener("OfflineScene");
                     const maker = this.getMaker();
                     await maker.preload();
                     await maker.updateSceneLoader(this._data);
@@ -1739,6 +1751,7 @@ var phasereditor2d;
                     this._callback = callback;
                 }
                 async create() {
+                    this.registerDestroyListener("ThumbnailScene");
                     const maker = this.getMaker();
                     await maker.preload();
                     await maker.updateSceneLoader(this._data);
@@ -1746,6 +1759,7 @@ var phasereditor2d;
                     const bounds = this.computeSceneBounds();
                     this.sys.renderer.snapshotArea(bounds.x, bounds.y, bounds.width, bounds.height, (img) => {
                         this._callback(img);
+                        this.destroyGame();
                     });
                 }
                 computeSceneBounds() {
@@ -1829,10 +1843,6 @@ var phasereditor2d;
                         parent.style.left = -width - 10 + "px";
                         parent.appendChild(canvas);
                         document.body.appendChild(parent);
-                        const scene = new ThumbnailScene(data, image => {
-                            resolve(image);
-                            parent.remove();
-                        });
                         const game = new Phaser.Game({
                             type: Phaser.WEBGL,
                             canvas: canvas,
@@ -1848,9 +1858,14 @@ var phasereditor2d;
                             },
                             audio: {
                                 noAudio: true
-                            },
-                            scene: scene,
+                            }
                         });
+                        const scene = new ThumbnailScene(data, image => {
+                            resolve(image);
+                            scene.destroyGame();
+                            parent.remove();
+                        });
+                        game.scene.add("scene", scene, true);
                     });
                 }
             }
@@ -2874,6 +2889,15 @@ var phasereditor2d;
                     }
                     getPropertyProvider() {
                         return this._propertyProvider;
+                    }
+                    onPartClosed() {
+                        if (super.onPartClosed()) {
+                            if (this._scene) {
+                                this._scene.destroyGame();
+                            }
+                            return true;
+                        }
+                        return false;
                     }
                     async refreshScene() {
                         const writer = new json.SceneWriter(this._scene);

@@ -18,6 +18,8 @@ namespace phasereditor2d.scene.ui {
 
         async create() {
 
+            this.registerDestroyListener("ThumbnailScene");
+
             const maker = this.getMaker();
 
             await maker.preload();
@@ -31,6 +33,8 @@ namespace phasereditor2d.scene.ui {
             this.sys.renderer.snapshotArea(bounds.x, bounds.y, bounds.width, bounds.height, (img: HTMLImageElement) => {
 
                 this._callback(img);
+
+                this.destroyGame();
             });
         }
 
@@ -160,11 +164,6 @@ namespace phasereditor2d.scene.ui {
 
                 document.body.appendChild(parent);
 
-                const scene = new ThumbnailScene(data, image => {
-                    resolve(image);
-                    parent.remove();
-                });
-
                 const game = new Phaser.Game({
                     type: Phaser.WEBGL,
                     canvas: canvas,
@@ -180,9 +179,19 @@ namespace phasereditor2d.scene.ui {
                     },
                     audio: {
                         noAudio: true
-                    },
-                    scene: scene,
+                    }
                 });
+
+                const scene = new ThumbnailScene(data, image => {
+
+                    resolve(image);
+
+                    scene.destroyGame();
+
+                    parent.remove();
+                });
+
+                game.scene.add("scene", scene, true);
             });
         }
 

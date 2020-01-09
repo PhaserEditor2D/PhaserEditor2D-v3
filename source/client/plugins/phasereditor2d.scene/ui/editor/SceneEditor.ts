@@ -371,6 +371,21 @@ namespace phasereditor2d.scene.ui.editor {
             return this._propertyProvider;
         }
 
+        onPartClosed() {
+
+            if (super.onPartClosed()) {
+
+                if (this._scene) {
+
+                    this._scene.destroyGame();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         private async refreshScene() {
 
             const writer = new json.SceneWriter(this._scene);

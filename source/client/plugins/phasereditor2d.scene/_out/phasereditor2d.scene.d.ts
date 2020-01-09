@@ -358,6 +358,8 @@ declare namespace phasereditor2d.scene.ui {
         private _settings;
         private _sceneType;
         constructor(inEditor?: boolean);
+        protected registerDestroyListener(name: string): void;
+        destroyGame(): void;
         getPrefabObject(): sceneobjects.SceneObject;
         getSettings(): core.json.SceneSettings;
         getId(): string;
@@ -587,6 +589,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         getSceneMaker(): SceneMaker;
         layout(): void;
         getPropertyProvider(): properties.SceneEditorSectionProvider;
+        onPartClosed(): boolean;
         private refreshScene;
         private buildDependenciesHash;
         onPartActivated(): Promise<void>;

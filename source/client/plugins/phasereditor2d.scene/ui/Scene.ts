@@ -20,6 +20,23 @@ namespace phasereditor2d.scene.ui {
             this._maker = new SceneMaker(this);
 
             this._settings = new core.json.SceneSettings();
+
+        }
+
+        protected registerDestroyListener(name: string) {
+
+            console.log(name + ": register destroy listener.");
+
+            this.game.events.on(Phaser.Core.Events.DESTROY, e => {
+
+                console.log(name + ": destroyed.");
+            });
+        }
+
+        destroyGame() {
+
+            this.game.destroy(true);
+            this.game.loop.tick();
         }
 
         getPrefabObject(): sceneobjects.SceneObject {
@@ -125,6 +142,8 @@ namespace phasereditor2d.scene.ui {
         }
 
         create() {
+
+            this.registerDestroyListener("Scene");
 
             if (this._inEditor) {
 
