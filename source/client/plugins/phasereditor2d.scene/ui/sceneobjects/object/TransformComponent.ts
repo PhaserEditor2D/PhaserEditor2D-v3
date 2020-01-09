@@ -29,8 +29,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
 
-            obj.x = ser.read("x", 0);
-            obj.y = ser.read("y", 0);
+            // position are always unlocked!
+
+            obj.x = read(ser.getData(), "x", 0);
+            obj.y = read(ser.getData(), "y", 0);
 
             obj.scaleX = ser.read("scaleX", 1);
             obj.scaleY = ser.read("scaleY", 1);
@@ -41,8 +43,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
 
-            ser.write("x", obj.x, 0);
-            ser.write("y", obj.y, 0);
+            // position is always unlocked
+
+            write(ser.getData(), "x", obj.x, 0);
+            write(ser.getData(), "y", obj.y, 0);
+
             ser.write("scaleX", obj.scaleX, 1);
             ser.write("scaleY", obj.scaleY, 1);
             ser.write("angle", obj.angle, 0);
