@@ -41,6 +41,8 @@ namespace colibri {
                 return [];
             }
 
+            list.sort((a, b) => a.getPriority() - b.getPriority());
+
             return list as any;
         }
 

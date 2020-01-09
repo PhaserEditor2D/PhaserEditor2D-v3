@@ -774,6 +774,9 @@ var colibri;
         getPriority() {
             return this._priority;
         }
+        setPriority(priority) {
+            this._priority = priority;
+        }
     }
     colibri.Extension = Extension;
 })(colibri || (colibri = {}));
@@ -803,6 +806,7 @@ var colibri;
             if (!list) {
                 return [];
             }
+            list.sort((a, b) => a.getPriority() - b.getPriority());
             return list;
         }
     }

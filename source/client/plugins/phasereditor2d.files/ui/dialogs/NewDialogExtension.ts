@@ -10,10 +10,12 @@ namespace phasereditor2d.files.ui.dialogs {
         private _dialogName: string;
         private _dialogIcon: controls.IImage;
 
-        constructor(config: {
-            dialogName: string,
-            dialogIcon: controls.IImage
-        }) {
+        constructor(
+            config: {
+                dialogName: string,
+                dialogIcon: controls.IImage
+            }) {
+
             super(NewDialogExtension.POINT_ID);
 
             this._dialogName = config.dialogName;

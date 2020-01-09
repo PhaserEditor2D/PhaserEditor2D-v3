@@ -9,6 +9,8 @@ namespace phasereditor2d.ide.ui.dialogs {
                 dialogName: "Project",
                 dialogIcon: files.FilesPlugin.getInstance().getIcon(files.ICON_PROJECT)
             });
+
+            this.setPriority(Number.MAX_VALUE);
         }
 
         createDialog(args: {

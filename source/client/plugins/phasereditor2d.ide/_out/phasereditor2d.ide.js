@@ -706,6 +706,7 @@ var phasereditor2d;
                             dialogName: "Project",
                             dialogIcon: phasereditor2d.files.FilesPlugin.getInstance().getIcon(phasereditor2d.files.ICON_PROJECT)
                         });
+                        this.setPriority(Number.MAX_VALUE);
                     }
                     createDialog(args) {
                         const dlg = new dialogs.NewProjectDialog();

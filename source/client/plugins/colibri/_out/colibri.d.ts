@@ -188,11 +188,13 @@ declare namespace colibri {
 }
 declare namespace colibri {
     class Extension {
+        static DEFAULT_PRIORITY: number;
         private _extensionPoint;
         private _priority;
         constructor(extensionPoint: string, priority?: number);
         getExtensionPoint(): any;
         getPriority(): number;
+        setPriority(priority: number): void;
     }
 }
 declare namespace colibri {
