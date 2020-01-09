@@ -956,6 +956,10 @@ var colibri;
             getCachedContentType(file) {
                 return this._cache.getContent(file);
             }
+            async preloadAndGetContentType(file) {
+                await this.preload(file);
+                return this.getCachedContentType(file);
+            }
             async preload(file) {
                 return this._cache.preload(file);
             }

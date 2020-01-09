@@ -28,6 +28,13 @@ namespace colibri.core {
             return this._cache.getContent(file);
         }
 
+        async preloadAndGetContentType(file: io.FilePath) {
+
+            await this.preload(file);
+
+            return this.getCachedContentType(file);
+        }
+
         async preload(file: io.FilePath): Promise<ui.controls.PreloadResult> {
             return this._cache.preload(file);
         }

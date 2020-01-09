@@ -248,6 +248,7 @@ declare namespace colibri.core {
         registerResolver(resolver: IContentTypeResolver): void;
         getResolvers(): IContentTypeResolver[];
         getCachedContentType(file: io.FilePath): string;
+        preloadAndGetContentType(file: io.FilePath): Promise<string>;
         preload(file: io.FilePath): Promise<ui.controls.PreloadResult>;
     }
 }

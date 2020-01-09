@@ -41,7 +41,7 @@ var phasereditor2d;
                     scene_1.ui.editor.SceneEditor.getFactory()
                 ]));
                 // new file wizards
-                reg.addExtension(new scene_1.ui.dialogs.NewSceneFileDialogExtension());
+                reg.addExtension(new scene_1.ui.dialogs.NewSceneFileDialogExtension(), new scene_1.ui.dialogs.NewPrefabFileDialogExtension());
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // loader updates
@@ -1164,6 +1164,9 @@ var phasereditor2d;
                         this._sceneDataMap = new Map();
                         this._fileMap = new Map();
                         this._files = [];
+                        colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(async (e) => {
+                            await this.preload(colibri.ui.controls.EMPTY_PROGRESS_MONITOR);
+                        });
                     }
                     getProjectPreloader() {
                         return new SceneFinderPreloader(this);
@@ -2058,6 +2061,41 @@ var phasereditor2d;
                 }
                 blocks.SceneEditorBlocksTreeRendererProvider = SceneEditorBlocksTreeRendererProvider;
             })(blocks = ui.blocks || (ui.blocks = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var dialogs;
+            (function (dialogs) {
+                class NewPrefabFileDialogExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
+                    constructor() {
+                        super({
+                            dialogName: "Prefab File",
+                            dialogIcon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
+                            fileExtension: "scene",
+                            initialFileName: "Prefab",
+                            fileContent: JSON.stringify({
+                                sceneType: scene.core.json.SceneType.PREFAB,
+                                displayList: [],
+                                meta: {
+                                    app: "Phaser Editor 2D - Scene Editor",
+                                    url: "https://phasereditor2d.com",
+                                    contentType: scene.core.CONTENT_TYPE_SCENE
+                                }
+                            })
+                        });
+                    }
+                    getInitialFileLocation() {
+                        return super.findInitialFileLocationBasedOnContentType(scene.core.CONTENT_TYPE_SCENE);
+                    }
+                }
+                dialogs.NewPrefabFileDialogExtension = NewPrefabFileDialogExtension;
+            })(dialogs = ui.dialogs || (ui.dialogs = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));

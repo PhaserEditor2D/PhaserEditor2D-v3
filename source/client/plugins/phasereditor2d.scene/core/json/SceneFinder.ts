@@ -4,7 +4,6 @@ namespace phasereditor2d.scene.core.json {
     import io = colibri.core.io;
     import controls = colibri.ui.controls;
 
-
     class SceneFinderPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
 
         private _finder: SceneFinder;
@@ -41,6 +40,11 @@ namespace phasereditor2d.scene.core.json {
             this._sceneDataMap = new Map();
             this._fileMap = new Map();
             this._files = [];
+
+            colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(async (e) => {
+
+                await this.preload(colibri.ui.controls.EMPTY_PROGRESS_MONITOR);
+            });
         }
 
         getProjectPreloader() {
