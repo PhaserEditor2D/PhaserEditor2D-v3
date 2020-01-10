@@ -72,7 +72,7 @@ namespace phasereditor2d.pack.core {
             return this._data;
         }
 
-        addToPhaserCache(game: Phaser.Game) {
+        addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
             // empty
         }
 

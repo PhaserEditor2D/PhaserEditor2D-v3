@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 await imageFrameContainerPackItem.preloadImages();
 
-                imageFrameContainerPackItem.addToPhaserCache(scene.game);
+                imageFrameContainerPackItem.addToPhaserCache(scene.game, scene.getPackCache());
             }
         }
     }

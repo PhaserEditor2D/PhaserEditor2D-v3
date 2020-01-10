@@ -63,9 +63,11 @@ namespace phasereditor2d.pack.core {
             return this._frames;
         }
 
-        addToPhaserCache(game: Phaser.Game) {
+        addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
+
             const parser = this.createParser();
-            parser.addToPhaserCache(game);
+
+            parser.addToPhaserCache(game, cache);
         }
 
     }

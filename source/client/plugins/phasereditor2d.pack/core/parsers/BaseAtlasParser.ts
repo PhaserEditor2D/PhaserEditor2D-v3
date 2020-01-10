@@ -15,7 +15,7 @@ namespace phasereditor2d.pack.core.parsers {
             this._preloadImageSize = preloadImageSize;
         }
 
-        addToPhaserCache(game: Phaser.Game) {
+        addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
 
             const item = this.getPackItem() as ImageFrameContainerAssetPackItem;
 
@@ -32,7 +32,8 @@ namespace phasereditor2d.pack.core.parsers {
                     game.textures.addAtlas(item.getKey(), image.getImageElement(), atlasData);
 
                     for (const frame of item.getFrames()) {
-                        ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
+
+                        cache.addImage(frame, item.getKey(), frame.getName());
                     }
                 }
             }

@@ -358,8 +358,10 @@ declare namespace phasereditor2d.scene.ui {
         private _maker;
         private _settings;
         private _sceneType;
+        private _packCache;
         constructor(inEditor?: boolean);
         protected registerDestroyListener(name: string): void;
+        getPackCache(): pack.core.parsers.AssetPackCache;
         destroyGame(): void;
         getPrefabObject(): sceneobjects.SceneObject;
         getSettings(): core.json.SceneSettings;
@@ -1026,7 +1028,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageEditorSupport extends EditorSupport<Image> {
-        private _cellRenderer;
         constructor(obj: Image);
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
         getTextureComponent(): TextureComponent;
@@ -1104,8 +1105,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class TextureCellRenderer implements controls.viewers.ICellRenderer {
         renderCell(args: controls.viewers.RenderCellArgs): void;
+        private getImage;
         cellHeight(args: colibri.ui.controls.viewers.RenderCellArgs): number;
-        preload(args: controls.viewers.PreloadCellArgs): Promise<colibri.ui.controls.PreloadResult>;
+        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

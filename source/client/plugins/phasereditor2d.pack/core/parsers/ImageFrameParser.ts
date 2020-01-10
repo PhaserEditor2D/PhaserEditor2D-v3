@@ -14,29 +14,7 @@ namespace phasereditor2d.pack.core.parsers {
             return this._packItem;
         }
 
-        static initSourceImageMap(game: Phaser.Game) {
-            game["_sourceImageFrame_map"] = {};
-        }
-
-        static clearSourceImageMap(game: Phaser.Game) {
-            delete game["_sourceImageFrame_map"];
-        }
-
-        static setSourceImageFrame(game: Phaser.Game, image: controls.IImage, key: string, frame?: string | number) {
-
-            const imageMap = game["_sourceImageFrame_map"];
-
-            imageMap["__frame__" + key + "$" + (frame ? frame : "")] = image;
-        }
-
-        static getSourceImageFrame(game: Phaser.Game, key: string, frame?: string | number) {
-
-            const imageMap = game["_sourceImageFrame_map"];
-
-            return imageMap["__frame__" + key + "$" + (frame ? frame : "")];
-        }
-
-        abstract addToPhaserCache(game: Phaser.Game): void;
+        abstract addToPhaserCache(game: Phaser.Game, cache: AssetPackCache): void;
 
         abstract async preloadFrames(): Promise<controls.PreloadResult>;
 

@@ -8,7 +8,7 @@ namespace phasereditor2d.pack.core.parsers {
             super(packItem, true);
         }
 
-        addToPhaserCache(game: Phaser.Game) {
+        addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
 
             const item = this.getPackItem() as UnityAtlasAssetPackItem;
 
@@ -27,7 +27,7 @@ namespace phasereditor2d.pack.core.parsers {
                     game.textures.addUnityAtlas(item.getKey(), image.getImageElement(), atlasData as any);
 
                     for (const frame of item.getFrames()) {
-                        ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
+                        cache.addImage(frame, item.getKey(), frame.getName());
                     }
                 }
             }

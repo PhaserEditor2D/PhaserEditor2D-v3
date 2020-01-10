@@ -146,8 +146,6 @@ namespace phasereditor2d.scene.ui {
 
         async updateSceneLoader(sceneData: json.SceneData) {
 
-            pack.core.parsers.ImageFrameParser.initSourceImageMap(this._scene.game);
-
             const finder = new pack.core.PackFinder();
 
             await finder.preload();

@@ -6,8 +6,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
-            const sprite = args.obj as sceneobjects.SceneObject;
-            const support = sprite.getEditorSupport();
+            const image = this.getImage(args);
+
+            if (image) {
+
+                image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
+
+            } else {
+
+                controls.DefaultImage.paintEmpty(args.canvasContext, args.x, args.y, args.w, args.h);
+            }
+        }
+
+        private getImage(args: { obj: any }) {
+
+            const obj = args.obj as SceneObject;
+
+            const support = obj.getEditorSupport();
 
             const textureComp = support.getComponent(TextureComponent) as TextureComponent;
 
@@ -15,14 +30,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const { key, frame } = textureComp.getTexture();
 
-                const image = pack.core.parsers.ImageFrameParser
-                    .getSourceImageFrame(support.getScene().game, key, frame);
+                const image = support.getScene().getPackCache().getImage(key, frame);
 
-                if (image) {
-
-                    image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
-                }
+                return image;
             }
+
+            return null;
         }
 
         cellHeight(args: colibri.ui.controls.viewers.RenderCellArgs): number {
@@ -30,11 +43,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return args.viewer.getCellSize();
         }
 
-        async preload(args: controls.viewers.PreloadCellArgs): Promise<colibri.ui.controls.PreloadResult> {
+        async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
 
-            const finder = new pack.core.PackFinder();
+            const image = this.getImage(args);
 
-            return finder.preload();
+            if (image) {
+
+                return image.preload();
+            }
+
+            return controls.PreloadResult.NOTHING_LOADED;
         }
     }
 }

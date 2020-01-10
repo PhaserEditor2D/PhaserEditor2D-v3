@@ -10,7 +10,7 @@ namespace phasereditor2d.pack.core.parsers {
             super(packItem);
         }
 
-        addToPhaserCache(game: Phaser.Game) {
+        addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
 
             const item = this.getPackItem() as MultiatlasAssetPackItem;
 
@@ -39,7 +39,8 @@ namespace phasereditor2d.pack.core.parsers {
                     game.textures.addAtlasJSONArray(this.getPackItem().getKey(), images, jsonArrayData);
 
                     for (const frame of item.getFrames()) {
-                        ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
+
+                        cache.addImage(frame, item.getKey(), frame.getName());
                     }
                 }
             }

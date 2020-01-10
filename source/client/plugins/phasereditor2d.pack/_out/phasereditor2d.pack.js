@@ -167,7 +167,7 @@ var phasereditor2d;
                 getData() {
                     return this._data;
                 }
-                addToPhaserCache(game) {
+                addToPhaserCache(game, cache) {
                     // empty
                 }
                 async preload() {
@@ -550,9 +550,9 @@ var phasereditor2d;
                     }
                     return this._frames;
                 }
-                addToPhaserCache(game) {
+                addToPhaserCache(game, cache) {
                     const parser = this.createParser();
-                    parser.addToPhaserCache(game);
+                    parser.addToPhaserCache(game, cache);
                 }
             }
             core.ImageFrameContainerAssetPackItem = ImageFrameContainerAssetPackItem;
@@ -1434,26 +1434,44 @@ var phasereditor2d;
         (function (core) {
             var parsers;
             (function (parsers) {
+                class AssetPackCache {
+                    constructor() {
+                        this._imageMap = new Map();
+                    }
+                    clear() {
+                        this._imageMap.clear();
+                    }
+                    addImage(image, key, frame) {
+                        const mapKey = this.getImageMapKey(key, frame);
+                        this._imageMap.set(mapKey, image);
+                    }
+                    getImage(key, frame) {
+                        const mapKey = this.getImageMapKey(key, frame);
+                        return this._imageMap.get(mapKey);
+                    }
+                    getImageMapKey(key, frame) {
+                        return key + "$" + (frame === null || frame === undefined ? "." : frame);
+                    }
+                }
+                parsers.AssetPackCache = AssetPackCache;
+            })(parsers = core.parsers || (core.parsers = {}));
+        })(core = pack.core || (pack.core = {}));
+    })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var pack;
+    (function (pack) {
+        var core;
+        (function (core) {
+            var parsers;
+            (function (parsers) {
                 class ImageFrameParser {
                     constructor(packItem) {
                         this._packItem = packItem;
                     }
                     getPackItem() {
                         return this._packItem;
-                    }
-                    static initSourceImageMap(game) {
-                        game["_sourceImageFrame_map"] = {};
-                    }
-                    static clearSourceImageMap(game) {
-                        delete game["_sourceImageFrame_map"];
-                    }
-                    static setSourceImageFrame(game, image, key, frame) {
-                        const imageMap = game["_sourceImageFrame_map"];
-                        imageMap["__frame__" + key + "$" + (frame ? frame : "")] = image;
-                    }
-                    static getSourceImageFrame(game, key, frame) {
-                        const imageMap = game["_sourceImageFrame_map"];
-                        return imageMap["__frame__" + key + "$" + (frame ? frame : "")];
                     }
                 }
                 parsers.ImageFrameParser = ImageFrameParser;
@@ -1477,7 +1495,7 @@ var phasereditor2d;
                         super(packItem);
                         this._preloadImageSize = preloadImageSize;
                     }
-                    addToPhaserCache(game) {
+                    addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
                         if (!game.textures.exists(item.getKey())) {
                             const atlasURL = item.getData().atlasURL;
@@ -1487,7 +1505,7 @@ var phasereditor2d;
                             if (image) {
                                 game.textures.addAtlas(item.getKey(), image.getImageElement(), atlasData);
                                 for (const frame of item.getFrames()) {
-                                    parsers.ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
+                                    cache.addImage(frame, item.getKey(), frame.getName());
                                 }
                             }
                         }
@@ -1596,7 +1614,7 @@ var phasereditor2d;
                     constructor(packItem) {
                         super(packItem, false);
                     }
-                    addToPhaserCache(game) {
+                    addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
                         if (!game.textures.exists(item.getKey())) {
                             const atlasURL = item.getData().atlasURL;
@@ -1606,7 +1624,7 @@ var phasereditor2d;
                             if (atlasData && image) {
                                 game.textures.addAtlasXML(item.getKey(), image.getImageElement(), atlasData);
                                 for (const frame of item.getFrames()) {
-                                    parsers.ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
+                                    cache.addImage(frame, item.getKey(), frame.getName());
                                 }
                             }
                         }
@@ -1660,14 +1678,14 @@ var phasereditor2d;
                     constructor(packItem) {
                         super(packItem);
                     }
-                    addToPhaserCache(game) {
+                    addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
                         if (!game.textures.exists(item.getKey())) {
                             const url = item.getData().url;
                             const image = core.AssetPackUtils.getImageFromPackUrl(url);
                             if (image) {
                                 game.textures.addImage(item.getKey(), image.getImageElement());
-                                ImageParser.setSourceImageFrame(game, image, item.getKey());
+                                cache.addImage(image, item.getKey());
                             }
                         }
                     }
@@ -1705,7 +1723,7 @@ var phasereditor2d;
                     constructor(packItem) {
                         super(packItem);
                     }
-                    addToPhaserCache(game) {
+                    addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
                         if (!game.textures.exists(item.getKey())) {
                             const packItemData = item.getData();
@@ -1723,7 +1741,7 @@ var phasereditor2d;
                                 }
                                 game.textures.addAtlasJSONArray(this.getPackItem().getKey(), images, jsonArrayData);
                                 for (const frame of item.getFrames()) {
-                                    parsers.ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
+                                    cache.addImage(frame, item.getKey(), frame.getName());
                                 }
                             }
                         }
@@ -1784,7 +1802,7 @@ var phasereditor2d;
                     constructor(packItem) {
                         super(packItem);
                     }
-                    addToPhaserCache(game) {
+                    addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
                         if (!game.textures.exists(item.getKey())) {
                             const data = item.getData();
@@ -1792,7 +1810,7 @@ var phasereditor2d;
                             if (image) {
                                 game.textures.addSpriteSheet(item.getKey(), image.getImageElement(), data.frameConfig);
                                 for (const frame of item.getFrames()) {
-                                    parsers.ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
+                                    cache.addImage(frame, item.getKey(), frame.getName());
                                 }
                             }
                         }
@@ -1875,7 +1893,7 @@ var phasereditor2d;
                     constructor(packItem) {
                         super(packItem, true);
                     }
-                    addToPhaserCache(game) {
+                    addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
                         if (!game.textures.exists(item.getKey())) {
                             const atlasURL = item.getData().atlasURL;
@@ -1885,7 +1903,7 @@ var phasereditor2d;
                             if (image && atlasData) {
                                 game.textures.addUnityAtlas(item.getKey(), image.getImageElement(), atlasData);
                                 for (const frame of item.getFrames()) {
-                                    parsers.ImageFrameParser.setSourceImageFrame(game, frame, item.getKey(), frame.getName());
+                                    cache.addImage(frame, item.getKey(), frame.getName());
                                 }
                             }
                         }

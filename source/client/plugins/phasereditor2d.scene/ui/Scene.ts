@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui {
         private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
         private _sceneType: core.json.SceneType;
+        private _packCache: pack.core.parsers.AssetPackCache;
 
         constructor(inEditor = true) {
             super("ObjectScene");
@@ -20,6 +21,7 @@ namespace phasereditor2d.scene.ui {
 
             this._settings = new core.json.SceneSettings();
 
+            this._packCache = new pack.core.parsers.AssetPackCache();
         }
 
         protected registerDestroyListener(name: string) {
@@ -27,6 +29,10 @@ namespace phasereditor2d.scene.ui {
             // this.game.events.on(Phaser.Core.Events.DESTROY, e => {
             //     console.log(name + ": destroyed.");
             // });
+        }
+
+        getPackCache() {
+            return this._packCache;
         }
 
         destroyGame() {

@@ -8,7 +8,7 @@ namespace phasereditor2d.pack.core.parsers {
             super(packItem);
         }
 
-        addToPhaserCache(game: Phaser.Game) {
+        addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
 
             const item = this.getPackItem();
 
@@ -22,7 +22,7 @@ namespace phasereditor2d.pack.core.parsers {
 
                     game.textures.addImage(item.getKey(), image.getImageElement());
 
-                    ImageParser.setSourceImageFrame(game, image, item.getKey());
+                    cache.addImage(image, item.getKey());
                 }
             }
         }
