@@ -1103,9 +1103,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class TextureCellRenderer implements controls.viewers.ICellRenderer {
-        private _finder;
-        private _image;
-        constructor();
         renderCell(args: controls.viewers.RenderCellArgs): void;
         cellHeight(args: colibri.ui.controls.viewers.RenderCellArgs): number;
         preload(args: controls.viewers.PreloadCellArgs): Promise<colibri.ui.controls.PreloadResult>;

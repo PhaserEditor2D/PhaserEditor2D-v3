@@ -4711,41 +4711,25 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class TextureCellRenderer {
-                    constructor() {
-                        this._finder = new phasereditor2d.pack.core.PackFinder();
-                    }
                     renderCell(args) {
-                        if (this._image) {
-                            this._image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
+                        const sprite = args.obj;
+                        const support = sprite.getEditorSupport();
+                        const textureComp = support.getComponent(sceneobjects.TextureComponent);
+                        if (textureComp) {
+                            const { key, frame } = textureComp.getTexture();
+                            const image = phasereditor2d.pack.core.parsers.ImageFrameParser
+                                .getSourceImageFrame(support.getScene().game, key, frame);
+                            if (image) {
+                                image.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
+                            }
                         }
                     }
                     cellHeight(args) {
                         return args.viewer.getCellSize();
                     }
                     async preload(args) {
-                        let result = await this._finder.preload();
-                        const support = args.obj.getEditorSupport();
-                        const textureComp = support.getComponent(sceneobjects.TextureComponent);
-                        if (textureComp) {
-                            const { key, frame } = textureComp.getTexture();
-                            const item = this._finder.findAssetPackItem(key);
-                            let image = null;
-                            if (item instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem) {
-                                result = Math.max(await item.preload(), result);
-                                result = Math.max(await item.preloadImages(), result);
-                                if (item instanceof phasereditor2d.pack.core.ImageAssetPackItem) {
-                                    image = item.getFrames()[0].getImage();
-                                }
-                                else {
-                                    image = item.findFrame(frame);
-                                }
-                            }
-                            if (image) {
-                                result = Math.max(await image.preload(), result);
-                            }
-                            this._image = image;
-                        }
-                        return result;
+                        const finder = new phasereditor2d.pack.core.PackFinder();
+                        return finder.preload();
                     }
                 }
                 sceneobjects.TextureCellRenderer = TextureCellRenderer;
