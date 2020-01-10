@@ -9,18 +9,21 @@ namespace phasereditor2d.pack.ui.dialogs {
                 dialogName: "Asset Pack File",
                 dialogIcon: AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK),
                 initialFileName: "asset-pack",
-                fileExtension: "json",
-                fileContent: JSON.stringify({
-                    section1: {
-                        files: []
-                    },
-                    meta: {
-                        app: "Phaser Editor 2D - Asset Pack Editor",
-                        url: "https://phasereditor2d.com",
-                        contentType: core.contentTypes.CONTENT_TYPE_ASSET_PACK,
-                        version: 2
-                    }
-                })
+                fileExtension: "json"
+            });
+        }
+
+        createFileContent(): string {
+            return JSON.stringify({
+                section1: {
+                    files: []
+                },
+                meta: {
+                    app: "Phaser Editor 2D - Asset Pack Editor",
+                    url: "https://phasereditor2d.com",
+                    contentType: core.contentTypes.CONTENT_TYPE_ASSET_PACK,
+                    version: 2
+                }
             });
         }
 

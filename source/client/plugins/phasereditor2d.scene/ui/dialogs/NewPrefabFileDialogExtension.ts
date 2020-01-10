@@ -2,8 +2,9 @@ namespace phasereditor2d.scene.ui.dialogs {
 
     export class NewPrefabFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
 
-        private static createSceneData(): core.json.SceneData {
-            return {
+        createFileContent(): string {
+
+            const sceneData: core.json.SceneData = {
                 id: Phaser.Utils.String.UUID(),
                 settings: {},
                 sceneType: core.json.SceneType.PREFAB,
@@ -14,6 +15,8 @@ namespace phasereditor2d.scene.ui.dialogs {
                     contentType: scene.core.CONTENT_TYPE_SCENE
                 }
             };
+
+            return JSON.stringify(sceneData, null, 4);
         }
 
         constructor() {
@@ -21,8 +24,7 @@ namespace phasereditor2d.scene.ui.dialogs {
                 dialogName: "Prefab File",
                 dialogIcon: ScenePlugin.getInstance().getIcon(ICON_GROUP),
                 fileExtension: "scene",
-                initialFileName: "Prefab",
-                fileContent: JSON.stringify(NewPrefabFileDialogExtension.createSceneData())
+                initialFileName: "Prefab"
             });
         }
 

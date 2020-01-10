@@ -471,6 +471,7 @@ declare namespace phasereditor2d.pack.ui.dialogs {
     import io = colibri.core.io;
     class NewAssetPackFileWizardExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
         constructor();
+        createFileContent(): string;
         getInitialFileLocation(): io.FilePath;
     }
 }

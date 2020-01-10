@@ -2161,8 +2161,8 @@ var phasereditor2d;
             var dialogs;
             (function (dialogs) {
                 class NewPrefabFileDialogExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
-                    static createSceneData() {
-                        return {
+                    createFileContent() {
+                        const sceneData = {
                             id: Phaser.Utils.String.UUID(),
                             settings: {},
                             sceneType: scene.core.json.SceneType.PREFAB,
@@ -2173,14 +2173,14 @@ var phasereditor2d;
                                 contentType: scene.core.CONTENT_TYPE_SCENE
                             }
                         };
+                        return JSON.stringify(sceneData, null, 4);
                     }
                     constructor() {
                         super({
                             dialogName: "Prefab File",
                             dialogIcon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
                             fileExtension: "scene",
-                            initialFileName: "Prefab",
-                            fileContent: JSON.stringify(NewPrefabFileDialogExtension.createSceneData())
+                            initialFileName: "Prefab"
                         });
                     }
                     getInitialFileLocation() {
@@ -2201,8 +2201,16 @@ var phasereditor2d;
             var dialogs;
             (function (dialogs) {
                 class NewSceneFileDialogExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
-                    static createSceneData() {
-                        return {
+                    constructor() {
+                        super({
+                            dialogName: "Scene File",
+                            dialogIcon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
+                            fileExtension: "scene",
+                            initialFileName: "Scene"
+                        });
+                    }
+                    createFileContent() {
+                        const sceneData = {
                             id: Phaser.Utils.String.UUID(),
                             settings: {},
                             sceneType: scene.core.json.SceneType.SCENE,
@@ -2213,15 +2221,7 @@ var phasereditor2d;
                                 contentType: scene.core.CONTENT_TYPE_SCENE
                             }
                         };
-                    }
-                    constructor() {
-                        super({
-                            dialogName: "Scene File",
-                            dialogIcon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP),
-                            fileExtension: "scene",
-                            initialFileName: "Scene",
-                            fileContent: JSON.stringify(NewSceneFileDialogExtension.createSceneData())
-                        });
+                        return JSON.stringify(sceneData, null, 2);
                     }
                     getInitialFileLocation() {
                         return super.findInitialFileLocationBasedOnContentType(scene.core.CONTENT_TYPE_SCENE);

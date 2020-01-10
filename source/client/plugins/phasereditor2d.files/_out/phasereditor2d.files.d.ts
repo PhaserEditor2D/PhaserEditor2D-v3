@@ -122,14 +122,13 @@ declare namespace phasereditor2d.files.ui.dialogs {
     import io = colibri.core.io;
     abstract class NewFileContentExtension extends NewFileExtension {
         private _fileExtension;
-        private _fileContent;
         constructor(config: {
             dialogName: string;
             dialogIcon: controls.IImage;
             initialFileName: string;
             fileExtension: string;
-            fileContent: string;
         });
+        abstract createFileContent(): string;
         createDialog(args: {
             initialFileLocation: io.FilePath;
         }): NewFileDialog;
@@ -164,6 +163,7 @@ declare namespace phasereditor2d.files.ui.dialogs {
 declare namespace phasereditor2d.files.ui.dialogs {
     class NewGenericFileExtension extends NewFileContentExtension {
         constructor();
+        createFileContent(): string;
     }
 }
 declare namespace phasereditor2d.files.ui.viewers {

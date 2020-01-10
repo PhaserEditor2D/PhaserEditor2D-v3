@@ -632,14 +632,13 @@ var phasereditor2d;
                     constructor(config) {
                         super(config);
                         this._fileExtension = config.fileExtension;
-                        this._fileContent = config.fileContent;
                     }
                     createDialog(args) {
                         var _a;
                         const dlg = new files.ui.dialogs.NewFileDialog();
                         dlg.create();
                         dlg.setFileExtension(this._fileExtension);
-                        dlg.setFileContent(this._fileContent);
+                        dlg.setFileContent(this.createFileContent());
                         dlg.setFileCreatedCallback(async (file) => {
                             const wb = colibri.Platform.getWorkbench();
                             const reg = wb.getContentTypeRegistry();
@@ -763,12 +762,14 @@ var phasereditor2d;
                 class NewGenericFileExtension extends dialogs.NewFileContentExtension {
                     constructor() {
                         super({
-                            fileContent: "",
                             fileExtension: "",
                             dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FILE),
                             initialFileName: "Untitled",
                             dialogName: "File"
                         });
+                    }
+                    createFileContent() {
+                        return "";
                     }
                 }
                 dialogs.NewGenericFileExtension = NewGenericFileExtension;
