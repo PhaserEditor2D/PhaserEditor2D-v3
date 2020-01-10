@@ -1484,14 +1484,16 @@ var phasereditor2d;
                     this._settings = new scene.core.json.SceneSettings();
                 }
                 registerDestroyListener(name) {
-                    console.log(name + ": register destroy listener.");
-                    this.game.events.on(Phaser.Core.Events.DESTROY, e => {
-                        console.log(name + ": destroyed.");
-                    });
+                    // console.log(name + ": register destroy listener.");
+                    // this.game.events.on(Phaser.Core.Events.DESTROY, e => {
+                    //     console.log(name + ": destroyed.");
+                    // });
                 }
                 destroyGame() {
-                    this.game.destroy(true);
-                    this.game.loop.tick();
+                    if (this.game) {
+                        this.game.destroy(true);
+                        this.game.loop.tick();
+                    }
                 }
                 getPrefabObject() {
                     return this.getDisplayListChildren()[0];
@@ -1561,23 +1563,11 @@ var phasereditor2d;
                 getCamera() {
                     return this.cameras.main;
                 }
-                setInitialState(state) {
-                    this._initialState = state;
-                }
                 create() {
-                    var _a, _b, _c;
                     this.registerDestroyListener("Scene");
                     if (this._inEditor) {
                         const camera = this.getCamera();
                         camera.setOrigin(0, 0);
-                        // does not work with Phaser.CANVAS, so we set it in the game config.
-                        // camera.backgroundColor = Phaser.Display.Color.ValueToColor("#8e8e8e");
-                        if (this._initialState) {
-                            camera.zoom = (_a = this._initialState.cameraZoom, (_a !== null && _a !== void 0 ? _a : camera.zoom));
-                            camera.scrollX = (_b = this._initialState.cameraScrollX, (_b !== null && _b !== void 0 ? _b : camera.scrollX));
-                            camera.scrollY = (_c = this._initialState.cameraScrollY, (_c !== null && _c !== void 0 ? _c : camera.scrollY));
-                            this._initialState = null;
-                        }
                     }
                 }
             }
@@ -1863,7 +1853,6 @@ var phasereditor2d;
                     return controls.Controls.resolveNothingLoaded();
                 }
                 createImageElement() {
-                    console.log("SceneThumbnail.createImageElement() " + Date.now());
                     return new Promise((resolve, reject) => {
                         const content = ide.FileUtils.getFileString(this._file);
                         const data = JSON.parse(content);
@@ -2306,6 +2295,11 @@ var phasereditor2d;
                         canvas.addEventListener("mousedown", e => this.onMouseDown(e));
                         canvas.addEventListener("mousemove", e => this.onMouseMove(e));
                         canvas.addEventListener("mouseup", e => this.onMouseUp(e));
+                        this._state = {
+                            scrollX: 0,
+                            scrollY: 0,
+                            zoom: 1
+                        };
                     }
                     getCamera() {
                         return this._editor.getScene().getCamera();
@@ -2327,8 +2321,15 @@ var phasereditor2d;
                         const camera = this.getCamera();
                         camera.scrollX = this._dragStartCameraScroll.x + dx / camera.zoom;
                         camera.scrollY = this._dragStartCameraScroll.y + dy / camera.zoom;
+                        this.updateState();
                         this._editor.repaint();
                         e.preventDefault();
+                    }
+                    updateState() {
+                        const camera = this.getCamera();
+                        this._state.scrollX = camera.scrollX;
+                        this._state.scrollY = camera.scrollY;
+                        this._state.zoom = camera.zoom;
                     }
                     onMouseUp(e) {
                         this._dragStartPoint = null;
@@ -2349,7 +2350,20 @@ var phasereditor2d;
                         const dy = point2.y - point1.y;
                         camera.scrollX += -dx;
                         camera.scrollY += -dy;
+                        this.updateState();
                         this._editor.repaint();
+                    }
+                    getState() {
+                        return this._state;
+                    }
+                    setState(state) {
+                        if (state) {
+                            const camera = this.getCamera();
+                            camera.scrollX = state.scrollX;
+                            camera.scrollY = state.scrollY;
+                            camera.zoom = state.zoom;
+                            this._state = state;
+                        }
                     }
                 }
                 editor_2.CameraManager = CameraManager;
@@ -2750,13 +2764,10 @@ var phasereditor2d;
                         if (!this._scene) {
                             return;
                         }
-                        const camera = this._scene.cameras.main;
-                        state.cameraZoom = camera.zoom;
-                        state.cameraScrollX = camera.scrollX;
-                        state.cameraScrollY = camera.scrollY;
+                        state.cameraState = this._cameraManager.getState();
                     }
                     restoreState(state) {
-                        this._scene.setInitialState(state);
+                        this._editorState = state;
                     }
                     onEditorInputContentChanged() {
                         // TODO: missing to implement
@@ -2771,7 +2782,6 @@ var phasereditor2d;
                         const container = document.createElement("div");
                         container.classList.add("SceneEditorContainer");
                         this.getElement().appendChild(container);
-                        //this._gameCanvas = document.createElement("canvas");
                         this._gameCanvas = Phaser.Display.Canvas.CanvasPool.create2D(this.getElement(), 100, 100);
                         this._gameCanvas.style.position = "absolute";
                         this.getElement().appendChild(container);
@@ -2993,6 +3003,12 @@ var phasereditor2d;
                         this._gameBooted = true;
                         if (!this._sceneRead) {
                             await this.readScene();
+                            if (this._editorState) {
+                                if (this._editorState) {
+                                    this._cameraManager.setState(this._editorState.cameraState);
+                                }
+                                this._editorState = null;
+                            }
                             this._currentRefreshHash = await this.buildDependenciesHash();
                         }
                         this.layout();

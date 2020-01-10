@@ -354,7 +354,6 @@ declare namespace phasereditor2d.scene.ui {
     class Scene extends Phaser.Scene {
         private _id;
         private _inEditor;
-        private _initialState;
         private _maker;
         private _settings;
         private _sceneType;
@@ -375,7 +374,6 @@ declare namespace phasereditor2d.scene.ui {
         getByEditorId(id: string): any;
         static findByEditorId(list: sceneobjects.SceneObject[], id: string): any;
         getCamera(): Phaser.Cameras.Scene2D.Camera;
-        setInitialState(state: any): void;
         create(): void;
     }
 }
@@ -511,16 +509,25 @@ declare namespace phasereditor2d.scene.ui.editor {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor {
+    interface CameraState {
+        scrollX: number;
+        scrollY: number;
+        zoom: number;
+    }
     class CameraManager {
         private _editor;
         private _dragStartPoint;
         private _dragStartCameraScroll;
+        private _state;
         constructor(editor: SceneEditor);
         private getCamera;
         private onMouseDown;
         private onMouseMove;
+        private updateState;
         private onMouseUp;
         private onWheel;
+        getState(): CameraState;
+        setState(state: editor.CameraState): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor {
@@ -551,7 +558,10 @@ declare namespace phasereditor2d.scene.ui.editor {
 declare namespace phasereditor2d.scene.ui.editor {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
-    class SceneEditor extends colibri.ui.ide.FileEditor {
+    interface EditorState {
+        cameraState: CameraState;
+    }
+    export class SceneEditor extends colibri.ui.ide.FileEditor {
         private _blocksProvider;
         private _outlineProvider;
         private _propertyProvider;
@@ -566,13 +576,14 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _gameBooted;
         private _sceneRead;
         private _currentRefreshHash;
+        private _editorState;
         static getFactory(): colibri.ui.ide.EditorFactory;
         constructor();
         openSourceFileInEditor(): void;
         doSave(): Promise<void>;
         compile(): Promise<void>;
-        saveState(state: any): void;
-        restoreState(state: any): void;
+        saveState(state: EditorState): void;
+        restoreState(state: EditorState): void;
         protected onEditorInputContentChanged(): void;
         setInput(file: io.FilePath): void;
         protected createPart(): void;
@@ -601,6 +612,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private onGameBoot;
         repaint(): void;
     }
+    export {};
 }
 declare namespace phasereditor2d.scene.ui.editor {
     class SelectionManager {

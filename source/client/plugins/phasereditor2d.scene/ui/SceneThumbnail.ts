@@ -144,8 +144,6 @@ namespace phasereditor2d.scene.ui {
 
         private createImageElement() {
 
-            console.log("SceneThumbnail.createImageElement() " + Date.now());
-
             return new Promise<HTMLImageElement>((resolve, reject) => {
 
                 const content = ide.FileUtils.getFileString(this._file);

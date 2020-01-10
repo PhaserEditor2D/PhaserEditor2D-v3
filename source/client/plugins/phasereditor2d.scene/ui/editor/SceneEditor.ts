@@ -30,6 +30,11 @@ namespace phasereditor2d.scene.ui.editor {
         }
     }
 
+    interface EditorState {
+
+        cameraState: CameraState;
+    }
+
     export class SceneEditor extends colibri.ui.ide.FileEditor {
 
         private _blocksProvider: blocks.SceneEditorBlocksProvider;
@@ -46,6 +51,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _gameBooted: boolean;
         private _sceneRead: boolean;
         private _currentRefreshHash: string;
+        private _editorState: EditorState;
 
         static getFactory(): colibri.ui.ide.EditorFactory {
             return new SceneEditorFactory();
@@ -112,22 +118,19 @@ namespace phasereditor2d.scene.ui.editor {
             await compiler.compile();
         }
 
-        saveState(state: any) {
+        saveState(state: EditorState) {
 
             if (!this._scene) {
+
                 return;
             }
 
-            const camera = this._scene.cameras.main;
-
-            state.cameraZoom = camera.zoom;
-            state.cameraScrollX = camera.scrollX;
-            state.cameraScrollY = camera.scrollY;
+            state.cameraState = this._cameraManager.getState();
         }
 
-        restoreState(state: any) {
+        restoreState(state: EditorState) {
 
-            this._scene.setInitialState(state);
+            this._editorState = state;
         }
 
         protected onEditorInputContentChanged() {
@@ -151,7 +154,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.getElement().appendChild(container);
 
-            //this._gameCanvas = document.createElement("canvas");
             this._gameCanvas = Phaser.Display.Canvas.CanvasPool.create2D(this.getElement(), 100, 100);
             this._gameCanvas.style.position = "absolute";
             this.getElement().appendChild(container);
@@ -488,6 +490,16 @@ namespace phasereditor2d.scene.ui.editor {
             if (!this._sceneRead) {
 
                 await this.readScene();
+
+                if (this._editorState) {
+
+                    if (this._editorState) {
+
+                        this._cameraManager.setState(this._editorState.cameraState);
+                    }
+
+                    this._editorState = null;
+                }
 
                 this._currentRefreshHash = await this.buildDependenciesHash();
 

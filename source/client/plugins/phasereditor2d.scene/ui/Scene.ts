@@ -5,7 +5,6 @@ namespace phasereditor2d.scene.ui {
 
         private _id: string;
         private _inEditor: boolean;
-        private _initialState: any;
         private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
         private _sceneType: core.json.SceneType;
@@ -24,19 +23,19 @@ namespace phasereditor2d.scene.ui {
         }
 
         protected registerDestroyListener(name: string) {
-
-            console.log(name + ": register destroy listener.");
-
-            this.game.events.on(Phaser.Core.Events.DESTROY, e => {
-
-                console.log(name + ": destroyed.");
-            });
+            // console.log(name + ": register destroy listener.");
+            // this.game.events.on(Phaser.Core.Events.DESTROY, e => {
+            //     console.log(name + ": destroyed.");
+            // });
         }
 
         destroyGame() {
 
-            this.game.destroy(true);
-            this.game.loop.tick();
+            if (this.game) {
+
+                this.game.destroy(true);
+                this.game.loop.tick();
+            }
         }
 
         getPrefabObject(): sceneobjects.SceneObject {
@@ -137,10 +136,6 @@ namespace phasereditor2d.scene.ui {
             return this.cameras.main;
         }
 
-        setInitialState(state: any) {
-            this._initialState = state;
-        }
-
         create() {
 
             this.registerDestroyListener("Scene");
@@ -149,21 +144,7 @@ namespace phasereditor2d.scene.ui {
 
                 const camera = this.getCamera();
                 camera.setOrigin(0, 0);
-
-                // does not work with Phaser.CANVAS, so we set it in the game config.
-                // camera.backgroundColor = Phaser.Display.Color.ValueToColor("#8e8e8e");
-
-                if (this._initialState) {
-
-                    camera.zoom = this._initialState.cameraZoom ?? camera.zoom;
-                    camera.scrollX = this._initialState.cameraScrollX ?? camera.scrollX;
-                    camera.scrollY = this._initialState.cameraScrollY ?? camera.scrollY;
-
-                    this._initialState = null;
-                }
             }
-
         }
     }
-
 }
