@@ -403,7 +403,9 @@ namespace phasereditor2d.scene.ui.editor {
             return false;
         }
 
-        private async refreshScene() {
+        async refreshScene() {
+
+            console.log("Scene Editor: refreshing.");
 
             const writer = new json.SceneWriter(this._scene);
 
@@ -429,6 +431,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._currentRefreshHash = await this.buildDependenciesHash();
 
+            this.refreshOutline();
+
+            await this.updateTitleIcon(true);
         }
 
         private async buildDependenciesHash() {
@@ -455,13 +460,9 @@ namespace phasereditor2d.scene.ui.editor {
 
                         && hash !== this._currentRefreshHash) {
 
-                        console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed. Refreshing it.");
+                        console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed.");
 
                         await this.refreshScene();
-
-                        this.refreshOutline();
-
-                        await this.updateTitleIcon(true);
                     }
                 }
             }

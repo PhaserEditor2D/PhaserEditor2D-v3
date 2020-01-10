@@ -14,7 +14,8 @@ namespace colibri.ui.ide.actions {
     export const CMD_COLLAPSE_ALL = "colibri.ui.ide.actions.CollapseAll";
     export const CMD_EXPAND_COLLAPSE_BRANCH = "colibri.ui.ide.actions.ExpandCollapseBranch";
     export const CMD_SELECT_ALL = "colibri.ui.ide.actions.SelectAll";
-    export const CMD_ESCAPE = "colibri.ui.ide.actions.Scape";
+    export const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
+    export const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
 
     function isViewerScope(args: colibri.ui.ide.commands.CommandArgs) {
 
@@ -222,6 +223,19 @@ namespace colibri.ui.ide.actions {
                 key: "Z"
             }));
 
+            // update current editor
+
+            manager.addCommandHelper({
+                id: CMD_UPDATE_CURRENT_EDITOR,
+                name: "Update Current Editor",
+                tooltip: "Refresh the current editor's content."
+            });
+
+            manager.addKeyBinding(CMD_UPDATE_CURRENT_EDITOR, new KeyMatcher({
+                control: true,
+                alt: true,
+                key: "U"
+            }));
         }
 
         private static initEdit(manager: commands.CommandManager) {

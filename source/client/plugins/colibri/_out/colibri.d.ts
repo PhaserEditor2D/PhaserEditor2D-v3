@@ -1647,7 +1647,8 @@ declare namespace colibri.ui.ide.actions {
     const CMD_COLLAPSE_ALL = "colibri.ui.ide.actions.CollapseAll";
     const CMD_EXPAND_COLLAPSE_BRANCH = "colibri.ui.ide.actions.ExpandCollapseBranch";
     const CMD_SELECT_ALL = "colibri.ui.ide.actions.SelectAll";
-    const CMD_ESCAPE = "colibri.ui.ide.actions.Scape";
+    const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
+    const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
     class IDECommands {
         static registerCommands(manager: commands.CommandManager): void;
         private static initViewer;

@@ -15,6 +15,12 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
+            // update current editor
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR,
+                args => args.activeEditor instanceof SceneEditor,
+                args => (args.activeEditor as SceneEditor).refreshScene());
+
             // select all
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL,

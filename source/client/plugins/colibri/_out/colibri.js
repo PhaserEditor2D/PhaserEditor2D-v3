@@ -6720,7 +6720,8 @@ var colibri;
                 actions.CMD_COLLAPSE_ALL = "colibri.ui.ide.actions.CollapseAll";
                 actions.CMD_EXPAND_COLLAPSE_BRANCH = "colibri.ui.ide.actions.ExpandCollapseBranch";
                 actions.CMD_SELECT_ALL = "colibri.ui.ide.actions.SelectAll";
-                actions.CMD_ESCAPE = "colibri.ui.ide.actions.Scape";
+                actions.CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
+                actions.CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
                 function isViewerScope(args) {
                     if (args.activeElement) {
                         const control = ui.controls.Control.getControlOf(args.activeElement);
@@ -6846,6 +6847,17 @@ var colibri;
                             control: true,
                             shift: true,
                             key: "Z"
+                        }));
+                        // update current editor
+                        manager.addCommandHelper({
+                            id: actions.CMD_UPDATE_CURRENT_EDITOR,
+                            name: "Update Current Editor",
+                            tooltip: "Refresh the current editor's content."
+                        });
+                        manager.addKeyBinding(actions.CMD_UPDATE_CURRENT_EDITOR, new KeyMatcher({
+                            control: true,
+                            alt: true,
+                            key: "U"
                         }));
                     }
                     static initEdit(manager) {

@@ -2955,6 +2955,7 @@ var phasereditor2d;
                         return false;
                     }
                     async refreshScene() {
+                        console.log("Scene Editor: refreshing.");
                         const writer = new json.SceneWriter(this._scene);
                         const sceneData = writer.toJSON();
                         for (const obj of this._scene.getDisplayListChildren()) {
@@ -2968,6 +2969,8 @@ var phasereditor2d;
                         maker.createScene(sceneData);
                         this.repaint();
                         this._currentRefreshHash = await this.buildDependenciesHash();
+                        this.refreshOutline();
+                        await this.updateTitleIcon(true);
                     }
                     async buildDependenciesHash() {
                         const maker = this._scene.getMaker();
@@ -2982,10 +2985,8 @@ var phasereditor2d;
                                 if (this._currentRefreshHash !== null
                                     && this._currentRefreshHash !== undefined
                                     && hash !== this._currentRefreshHash) {
-                                    console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed. Refreshing it.");
+                                    console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed.");
                                     await this.refreshScene();
-                                    this.refreshOutline();
-                                    await this.updateTitleIcon(true);
                                 }
                             }
                         }
@@ -3144,6 +3145,8 @@ var phasereditor2d;
                     }
                     class SceneEditorCommands {
                         static registerCommands(manager) {
+                            // update current editor
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, args => args.activeEditor instanceof editor_6.SceneEditor, args => args.activeEditor.refreshScene());
                             // select all
                             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL, args => args.activePart instanceof editor_6.SceneEditor, args => {
                                 const editor = args.activeEditor;
