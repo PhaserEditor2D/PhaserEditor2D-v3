@@ -151,7 +151,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.getElement().appendChild(container);
 
-            this._gameCanvas = document.createElement("canvas");
+            //this._gameCanvas = document.createElement("canvas");
+            this._gameCanvas = Phaser.Display.Canvas.CanvasPool.create2D(this.getElement(), 100, 100);
             this._gameCanvas.style.position = "absolute";
             this.getElement().appendChild(container);
 

@@ -84,8 +84,8 @@ var phasereditor2d;
                     const data = this.getSceneFinder().getSceneData(file);
                     const scene = await scene_1.ui.OfflineScene.createScene(data);
                     const compiler = new scene_1.core.code.SceneCompiler(scene, file);
-                    scene.destroyGame();
                     await compiler.compile();
+                    scene.destroyGame();
                     monitor.step();
                 }
                 dlg.close();
@@ -1604,9 +1604,9 @@ var phasereditor2d;
                             resolve(scene);
                         });
                         const game = new Phaser.Game({
-                            type: Phaser.HEADLESS,
-                            width: 10,
-                            height: 10,
+                            type: Phaser.CANVAS,
+                            width: 1,
+                            height: 1,
                             audio: {
                                 noAudio: true,
                             },
@@ -1624,7 +1624,9 @@ var phasereditor2d;
                     await maker.preload();
                     await maker.updateSceneLoader(this._data);
                     maker.createScene(this._data);
+                    console.log("before callback");
                     this._callback();
+                    console.log("after callback");
                 }
             }
             ui.OfflineScene = OfflineScene;
@@ -2769,7 +2771,8 @@ var phasereditor2d;
                         const container = document.createElement("div");
                         container.classList.add("SceneEditorContainer");
                         this.getElement().appendChild(container);
-                        this._gameCanvas = document.createElement("canvas");
+                        //this._gameCanvas = document.createElement("canvas");
+                        this._gameCanvas = Phaser.Display.Canvas.CanvasPool.create2D(this.getElement(), 100, 100);
                         this._gameCanvas.style.position = "absolute";
                         this.getElement().appendChild(container);
                         container.appendChild(this._gameCanvas);

@@ -15,9 +15,9 @@ namespace phasereditor2d.scene.ui {
                 });
 
                 const game = new Phaser.Game({
-                    type: Phaser.HEADLESS,
-                    width: 10,
-                    height: 10,
+                    type: Phaser.CANVAS,
+                    width: 1,
+                    height: 1,
                     audio: {
                         noAudio: true,
                     },
@@ -53,7 +53,11 @@ namespace phasereditor2d.scene.ui {
 
             maker.createScene(this._data);
 
+            console.log("before callback");
+
             this._callback();
+
+            console.log("after callback");
         }
     }
 }

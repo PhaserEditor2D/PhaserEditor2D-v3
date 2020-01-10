@@ -164,9 +164,9 @@ namespace phasereditor2d.scene {
 
                 const compiler = new core.code.SceneCompiler(scene, file);
 
-                scene.destroyGame();
-
                 await compiler.compile();
+
+                scene.destroyGame();
 
                 monitor.step();
             }
