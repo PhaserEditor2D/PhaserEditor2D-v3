@@ -614,7 +614,7 @@ declare namespace colibri.ui.controls {
         constructor();
         setMenuClosedCallback(callback: () => void): void;
         add(action: Action): void;
-        addCommand(commandId: string): void;
+        addCommand(commandId: string, config?: ActionConfig): void;
         addExtension(menuId: string): void;
         addSeparator(): void;
         isEmpty(): boolean;
@@ -1337,6 +1337,7 @@ declare namespace colibri.ui.ide {
         getEditors(): EditorPart[];
         getSelectedEditor(): EditorPart;
         fillTabMenu(menu: controls.Menu, labelElement: HTMLElement): void;
+        closeAllEditors(): void;
     }
 }
 declare namespace colibri.ui.ide {
@@ -1640,6 +1641,8 @@ declare namespace colibri.ui.ide.actions {
     const CMD_SAVE = "colibri.ui.ide.actions.Save";
     const CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
     const CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
+    const CMD_EDITOR_CLOSE = "colibri.ui.ide.actions.EditorClose";
+    const CMD_EDITOR_CLOSE_ALL = "colibri.ui.ide.actions.EditorCloseAll";
     const CMD_DELETE = "colibri.ui.ide.actions.Delete";
     const CMD_RENAME = "colibri.ui.ide.actions.Rename";
     const CMD_UNDO = "colibri.ui.ide.actions.Undo";
@@ -1651,6 +1654,7 @@ declare namespace colibri.ui.ide.actions {
     const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
     class IDECommands {
         static registerCommands(manager: commands.CommandManager): void;
+        private static initEditors;
         private static initViewer;
         private static initUndo;
         private static initEdit;

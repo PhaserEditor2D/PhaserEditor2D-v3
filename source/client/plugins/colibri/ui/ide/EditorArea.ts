@@ -36,6 +36,7 @@ namespace colibri.ui.ide {
             }
 
             menu.add(new controls.Action({
+                commandId: actions.CMD_EDITOR_CLOSE,
                 text: "Close",
                 callback: () => {
                     this.closeTabLabel(labelElement);
@@ -114,21 +115,22 @@ namespace colibri.ui.ide {
                 }
             }));
 
-            menu.add(new controls.Action({
-                text: "Close All",
-                callback: () => {
-
-                    for (const editor of this.getEditors()) {
-                        this.closeTab(editor);
-                    }
-                }
-            }));
+            menu.addCommand(actions.CMD_EDITOR_CLOSE_ALL, {
+                text: "Close All"
+            });
 
             menu.addSeparator();
 
             menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_UP);
 
             menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_DOWN);
+        }
+
+        closeAllEditors() {
+
+            for (const editor of this.getEditors()) {
+                this.closeTab(editor);
+            }
         }
     }
 }

@@ -20,8 +20,16 @@ namespace colibri.ui.controls {
             this._actions.push(action);
         }
 
-        addCommand(commandId: string) {
-            this.add(new Action({ commandId: commandId }));
+        addCommand(commandId: string, config?: ActionConfig) {
+
+            if (!config) {
+
+                config = {};
+            }
+
+            config.commandId = commandId;
+
+            this.add(new Action(config));
         }
 
         addExtension(menuId: string) {

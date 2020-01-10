@@ -7,6 +7,8 @@ namespace colibri.ui.ide.actions {
     export const CMD_SAVE = "colibri.ui.ide.actions.Save";
     export const CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
     export const CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
+    export const CMD_EDITOR_CLOSE = "colibri.ui.ide.actions.EditorClose";
+    export const CMD_EDITOR_CLOSE_ALL = "colibri.ui.ide.actions.EditorCloseAll";
     export const CMD_DELETE = "colibri.ui.ide.actions.Delete";
     export const CMD_RENAME = "colibri.ui.ide.actions.Rename";
     export const CMD_UNDO = "colibri.ui.ide.actions.Undo";
@@ -35,6 +37,8 @@ namespace colibri.ui.ide.actions {
 
         static registerCommands(manager: commands.CommandManager) {
 
+            IDECommands.initEditors(manager);
+
             IDECommands.initEdit(manager);
 
             IDECommands.initUndo(manager);
@@ -42,7 +46,7 @@ namespace colibri.ui.ide.actions {
             IDECommands.initViewer(manager);
         }
 
-        private static initViewer(manager: commands.CommandManager) {
+        private static initEditors(manager: commands.CommandManager) {
 
             // editor tabs size
 
@@ -79,6 +83,44 @@ namespace colibri.ui.ide.actions {
                 control: true,
                 key: "4"
             }));
+
+            // close editor
+
+            manager.addCommandHelper({
+                id: CMD_EDITOR_CLOSE,
+                name: "Close Editor",
+                tooltip: "Close active editor.",
+            });
+
+            manager.addHandlerHelper(CMD_EDITOR_CLOSE,
+                args => typeof args.activeEditor === "object",
+                args => Platform.getWorkbench().getActiveWindow().getEditorArea().closeTab(args.activeEditor));
+
+            manager.addKeyBinding(CMD_EDITOR_CLOSE, new KeyMatcher({
+                control: true,
+                key: "W"
+            }));
+
+            // close all editors
+
+            manager.addCommandHelper({
+                id: CMD_EDITOR_CLOSE_ALL,
+                name: "Close All Editors",
+                tooltip: "Close all editors.",
+            });
+
+            manager.addHandlerHelper(CMD_EDITOR_CLOSE_ALL,
+                args => true,
+                args => Platform.getWorkbench().getActiveWindow().getEditorArea().closeAllEditors());
+
+            manager.addKeyBinding(CMD_EDITOR_CLOSE_ALL, new KeyMatcher({
+                control: true,
+                shift: true,
+                key: "W"
+            }));
+        }
+
+        private static initViewer(manager: commands.CommandManager) {
 
             // collapse all
 

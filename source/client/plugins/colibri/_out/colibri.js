@@ -2246,8 +2246,12 @@ var colibri;
                 add(action) {
                     this._actions.push(action);
                 }
-                addCommand(commandId) {
-                    this.add(new controls.Action({ commandId: commandId }));
+                addCommand(commandId, config) {
+                    if (!config) {
+                        config = {};
+                    }
+                    config.commandId = commandId;
+                    this.add(new controls.Action(config));
                 }
                 addExtension(menuId) {
                     const exts = colibri.Platform.getExtensions(controls.MenuExtension.POINT_ID);
@@ -5643,6 +5647,7 @@ var colibri;
                         }
                     }
                     menu.add(new ui.controls.Action({
+                        commandId: ide.actions.CMD_EDITOR_CLOSE,
                         text: "Close",
                         callback: () => {
                             this.closeTabLabel(labelElement);
@@ -5701,17 +5706,17 @@ var colibri;
                             }
                         }
                     }));
-                    menu.add(new ui.controls.Action({
-                        text: "Close All",
-                        callback: () => {
-                            for (const editor of this.getEditors()) {
-                                this.closeTab(editor);
-                            }
-                        }
-                    }));
+                    menu.addCommand(ide.actions.CMD_EDITOR_CLOSE_ALL, {
+                        text: "Close All"
+                    });
                     menu.addSeparator();
                     menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_UP);
                     menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_DOWN);
+                }
+                closeAllEditors() {
+                    for (const editor of this.getEditors()) {
+                        this.closeTab(editor);
+                    }
                 }
             }
             ide.EditorArea = EditorArea;
@@ -6713,6 +6718,8 @@ var colibri;
                 actions.CMD_SAVE = "colibri.ui.ide.actions.Save";
                 actions.CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
                 actions.CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
+                actions.CMD_EDITOR_CLOSE = "colibri.ui.ide.actions.EditorClose";
+                actions.CMD_EDITOR_CLOSE_ALL = "colibri.ui.ide.actions.EditorCloseAll";
                 actions.CMD_DELETE = "colibri.ui.ide.actions.Delete";
                 actions.CMD_RENAME = "colibri.ui.ide.actions.Rename";
                 actions.CMD_UNDO = "colibri.ui.ide.actions.Undo";
@@ -6733,11 +6740,12 @@ var colibri;
                 }
                 class IDECommands {
                     static registerCommands(manager) {
+                        IDECommands.initEditors(manager);
                         IDECommands.initEdit(manager);
                         IDECommands.initUndo(manager);
                         IDECommands.initViewer(manager);
                     }
-                    static initViewer(manager) {
+                    static initEditors(manager) {
                         // editor tabs size
                         manager.addCommandHelper({
                             id: actions.CMD_EDITOR_TABS_SIZE_DOWN,
@@ -6759,6 +6767,31 @@ var colibri;
                             control: true,
                             key: "4"
                         }));
+                        // close editor
+                        manager.addCommandHelper({
+                            id: actions.CMD_EDITOR_CLOSE,
+                            name: "Close Editor",
+                            tooltip: "Close active editor.",
+                        });
+                        manager.addHandlerHelper(actions.CMD_EDITOR_CLOSE, args => typeof args.activeEditor === "object", args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().closeTab(args.activeEditor));
+                        manager.addKeyBinding(actions.CMD_EDITOR_CLOSE, new KeyMatcher({
+                            control: true,
+                            key: "W"
+                        }));
+                        // close all editors
+                        manager.addCommandHelper({
+                            id: actions.CMD_EDITOR_CLOSE_ALL,
+                            name: "Close All Editors",
+                            tooltip: "Close all editors.",
+                        });
+                        manager.addHandlerHelper(actions.CMD_EDITOR_CLOSE_ALL, args => true, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().closeAllEditors());
+                        manager.addKeyBinding(actions.CMD_EDITOR_CLOSE_ALL, new KeyMatcher({
+                            control: true,
+                            shift: true,
+                            key: "W"
+                        }));
+                    }
+                    static initViewer(manager) {
                         // collapse all
                         manager.addCommandHelper({
                             id: actions.CMD_COLLAPSE_ALL,
