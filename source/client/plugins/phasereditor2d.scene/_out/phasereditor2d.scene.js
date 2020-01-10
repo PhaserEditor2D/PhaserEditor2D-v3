@@ -2976,7 +2976,9 @@ var phasereditor2d;
                         {
                             if (this._scene) {
                                 const hash = await this.buildDependenciesHash();
-                                if (this._currentRefreshHash && hash !== this._currentRefreshHash) {
+                                if (this._currentRefreshHash !== null
+                                    && this._currentRefreshHash !== undefined
+                                    && hash !== this._currentRefreshHash) {
                                     console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed. Refreshing it.");
                                     await this.refreshScene();
                                     this.refreshOutline();
