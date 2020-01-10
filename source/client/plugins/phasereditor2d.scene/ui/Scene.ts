@@ -149,8 +149,9 @@ namespace phasereditor2d.scene.ui {
 
                 const camera = this.getCamera();
                 camera.setOrigin(0, 0);
-                // camera.backgroundColor = Phaser.Display.Color.ValueToColor("#6e6e6e");
-                camera.backgroundColor = Phaser.Display.Color.ValueToColor("#8e8e8e");
+
+                // does not work with Phaser.CANVAS, so we set it in the game config.
+                // camera.backgroundColor = Phaser.Display.Color.ValueToColor("#8e8e8e");
 
                 if (this._initialState) {
 

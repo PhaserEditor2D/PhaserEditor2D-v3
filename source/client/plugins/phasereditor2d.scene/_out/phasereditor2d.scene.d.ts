@@ -8,6 +8,7 @@ declare namespace phasereditor2d.scene {
     class ScenePlugin extends colibri.Plugin {
         private static _instance;
         private _sceneFinder;
+        static DEFAULT_CANVAS_CONTEXT: number;
         static getInstance(): ScenePlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;

@@ -92,6 +92,7 @@ var phasereditor2d;
             }
         }
         ScenePlugin._instance = new ScenePlugin();
+        ScenePlugin.DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
         scene_1.ScenePlugin = ScenePlugin;
         colibri.Platform.addPlugin(ScenePlugin.getInstance());
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -1569,8 +1570,8 @@ var phasereditor2d;
                     if (this._inEditor) {
                         const camera = this.getCamera();
                         camera.setOrigin(0, 0);
-                        // camera.backgroundColor = Phaser.Display.Color.ValueToColor("#6e6e6e");
-                        camera.backgroundColor = Phaser.Display.Color.ValueToColor("#8e8e8e");
+                        // does not work with Phaser.CANVAS, so we set it in the game config.
+                        // camera.backgroundColor = Phaser.Display.Color.ValueToColor("#8e8e8e");
                         if (this._initialState) {
                             camera.zoom = (_a = this._initialState.cameraZoom, (_a !== null && _a !== void 0 ? _a : camera.zoom));
                             camera.scrollX = (_b = this._initialState.cameraScrollX, (_b !== null && _b !== void 0 ? _b : camera.scrollX));
@@ -1875,7 +1876,7 @@ var phasereditor2d;
                         parent.appendChild(canvas);
                         document.body.appendChild(parent);
                         const game = new Phaser.Game({
-                            type: Phaser.WEBGL,
+                            type: scene_7.ScenePlugin.DEFAULT_CANVAS_CONTEXT,
                             canvas: canvas,
                             parent: null,
                             width: width,
@@ -2784,8 +2785,9 @@ var phasereditor2d;
                     createGame() {
                         this._scene = new ui.Scene();
                         this._game = new Phaser.Game({
-                            type: Phaser.WEBGL,
+                            type: scene.ScenePlugin.DEFAULT_CANVAS_CONTEXT,
                             canvas: this._gameCanvas,
+                            backgroundColor: "#8e8e8e",
                             scale: {
                                 mode: Phaser.Scale.NONE
                             },

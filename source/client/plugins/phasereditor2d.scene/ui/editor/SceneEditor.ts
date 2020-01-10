@@ -176,8 +176,9 @@ namespace phasereditor2d.scene.ui.editor {
             this._scene = new Scene();
 
             this._game = new Phaser.Game({
-                type: Phaser.WEBGL,
+                type: ScenePlugin.DEFAULT_CANVAS_CONTEXT,
                 canvas: this._gameCanvas,
+                backgroundColor: "#8e8e8e",
                 scale: {
                     mode: Phaser.Scale.NONE
                 },

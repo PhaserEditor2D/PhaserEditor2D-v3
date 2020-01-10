@@ -167,7 +167,7 @@ namespace phasereditor2d.scene.ui {
                 document.body.appendChild(parent);
 
                 const game = new Phaser.Game({
-                    type: Phaser.WEBGL,
+                    type: ScenePlugin.DEFAULT_CANVAS_CONTEXT,
                     canvas: canvas,
                     parent: null,
                     width: width,

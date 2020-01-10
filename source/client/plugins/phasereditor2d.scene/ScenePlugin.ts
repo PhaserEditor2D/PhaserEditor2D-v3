@@ -16,6 +16,8 @@ namespace phasereditor2d.scene {
 
         private _sceneFinder: core.json.SceneFinder;
 
+        static DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
+
         static getInstance() {
             return this._instance;
         }
