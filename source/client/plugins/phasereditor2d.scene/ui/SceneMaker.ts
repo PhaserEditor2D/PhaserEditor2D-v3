@@ -61,7 +61,25 @@ namespace phasereditor2d.scene.ui {
         }
 
         async preload() {
-            // nothing for now
+
+            const list = this._scene.textures.list;
+
+            for (const key in this._scene.textures.list) {
+
+                if (key === "__DEFAULT" || key === "__MISSING") {
+
+                    continue;
+                }
+
+                if (list.hasOwnProperty(key)) {
+
+                    const texture = list[key];
+
+                    texture.destroy();
+
+                    delete list[key];
+                }
+            }
         }
 
         async buildDependenciesHash() {
