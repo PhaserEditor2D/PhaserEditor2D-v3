@@ -9,7 +9,8 @@ namespace phasereditor2d.pack.core {
         private _packs: AssetPack[];
 
         constructor(...packs: AssetPack[]) {
-            this._packs = packs;
+
+            this._packs = packs.filter(pack => pack !== null && pack !== undefined);
         }
 
         async preload(monitor?: controls.IProgressMonitor): Promise<controls.PreloadResult> {

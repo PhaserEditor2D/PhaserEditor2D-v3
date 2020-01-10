@@ -18,6 +18,8 @@ namespace phasereditor2d.scene {
 
         static DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
 
+        static DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
+
         static getInstance() {
             return this._instance;
         }

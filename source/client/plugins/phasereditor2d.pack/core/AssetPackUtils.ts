@@ -24,8 +24,13 @@ namespace phasereditor2d.pack.core {
             const packs: AssetPack[] = [];
 
             for (const file of files) {
+
                 const pack = await AssetPack.createFromFile(file);
-                packs.push(pack);
+
+                if (pack) {
+
+                    packs.push(pack);
+                }
             }
 
             return packs;

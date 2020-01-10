@@ -458,7 +458,9 @@ var phasereditor2d;
                     const packs = [];
                     for (const file of files) {
                         const pack = await core.AssetPack.createFromFile(file);
-                        packs.push(pack);
+                        if (pack) {
+                            packs.push(pack);
+                        }
                     }
                     return packs;
                 }
@@ -830,7 +832,7 @@ var phasereditor2d;
             var controls = colibri.ui.controls;
             class PackFinder {
                 constructor(...packs) {
-                    this._packs = packs;
+                    this._packs = packs.filter(pack => pack !== null && pack !== undefined);
                 }
                 async preload(monitor) {
                     let result = controls.PreloadResult.NOTHING_LOADED;

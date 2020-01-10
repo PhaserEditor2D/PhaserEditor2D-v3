@@ -93,6 +93,7 @@ var phasereditor2d;
         }
         ScenePlugin._instance = new ScenePlugin();
         ScenePlugin.DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
+        ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
         scene_1.ScenePlugin = ScenePlugin;
         colibri.Platform.addPlugin(ScenePlugin.getInstance());
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -2782,7 +2783,10 @@ var phasereditor2d;
                         const container = document.createElement("div");
                         container.classList.add("SceneEditorContainer");
                         this.getElement().appendChild(container);
-                        this._gameCanvas = Phaser.Display.Canvas.CanvasPool.create2D(this.getElement(), 100, 100);
+                        const pool = Phaser.Display.Canvas.CanvasPool;
+                        this._gameCanvas = scene.ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT === Phaser.CANVAS
+                            ? pool.create2D(this.getElement(), 100, 100)
+                            : pool.createWebGL(this.getElement(), 100, 100);
                         this._gameCanvas.style.position = "absolute";
                         this.getElement().appendChild(container);
                         container.appendChild(this._gameCanvas);
@@ -2798,7 +2802,7 @@ var phasereditor2d;
                     createGame() {
                         this._scene = new ui.Scene();
                         this._game = new Phaser.Game({
-                            type: scene.ScenePlugin.DEFAULT_CANVAS_CONTEXT,
+                            type: scene.ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                             canvas: this._gameCanvas,
                             backgroundColor: "#8e8e8e",
                             scale: {
@@ -2922,6 +2926,9 @@ var phasereditor2d;
                     }
                     layout() {
                         super.layout();
+                        if (!this._game) {
+                            return;
+                        }
                         this._overlayLayer.resizeTo();
                         const parent = this._gameCanvas.parentElement;
                         const w = parent.clientWidth;

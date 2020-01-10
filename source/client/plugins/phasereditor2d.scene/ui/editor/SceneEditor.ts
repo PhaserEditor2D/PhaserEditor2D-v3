@@ -154,7 +154,14 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.getElement().appendChild(container);
 
-            this._gameCanvas = Phaser.Display.Canvas.CanvasPool.create2D(this.getElement(), 100, 100);
+            const pool = Phaser.Display.Canvas.CanvasPool;
+
+            this._gameCanvas = ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT === Phaser.CANVAS
+
+                ? pool.create2D(this.getElement(), 100, 100)
+
+                : pool.createWebGL(this.getElement(), 100, 100);
+
             this._gameCanvas.style.position = "absolute";
             this.getElement().appendChild(container);
 
@@ -179,7 +186,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._scene = new Scene();
 
             this._game = new Phaser.Game({
-                type: ScenePlugin.DEFAULT_CANVAS_CONTEXT,
+                type: ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                 canvas: this._gameCanvas,
                 backgroundColor: "#8e8e8e",
                 scale: {
@@ -355,6 +362,10 @@ namespace phasereditor2d.scene.ui.editor {
         layout() {
 
             super.layout();
+
+            if (!this._game) {
+                return;
+            }
 
             this._overlayLayer.resizeTo();
 

@@ -201,7 +201,9 @@ namespace phasereditor2d.pack.core {
         }
 
         static async createFromFile(file: core.io.FilePath) {
+
             const content = await ide.FileUtils.preloadAndGetFileString(file);
+
             return new AssetPack(file, content);
         }
 
