@@ -1619,9 +1619,7 @@ var phasereditor2d;
                     await maker.preload();
                     await maker.updateSceneLoader(this._data);
                     maker.createScene(this._data);
-                    console.log("before callback");
                     this._callback();
-                    console.log("after callback");
                 }
             }
             ui.OfflineScene = OfflineScene;

@@ -53,11 +53,7 @@ namespace phasereditor2d.scene.ui {
 
             maker.createScene(this._data);
 
-            console.log("before callback");
-
             this._callback();
-
-            console.log("after callback");
         }
     }
 }

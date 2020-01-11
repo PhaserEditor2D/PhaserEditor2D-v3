@@ -98,7 +98,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_EDITOR_CLOSE, new KeyMatcher({
                 control: true,
-                key: "W"
+                key: "Q"
             }));
 
             // close all editors
@@ -116,7 +116,7 @@ namespace colibri.ui.ide.actions {
             manager.addKeyBinding(CMD_EDITOR_CLOSE_ALL, new KeyMatcher({
                 control: true,
                 shift: true,
-                key: "W"
+                key: "Q"
             }));
         }
 
