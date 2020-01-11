@@ -12,6 +12,8 @@ namespace phasereditor2d.pack.core.parsers {
 
             const item = this.getPackItem();
 
+            cache.addAsset(item);
+
             if (!game.textures.exists(item.getKey())) {
 
                 const url = item.getData().url;

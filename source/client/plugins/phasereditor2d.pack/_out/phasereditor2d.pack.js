@@ -1437,9 +1437,16 @@ var phasereditor2d;
                 class AssetPackCache {
                     constructor() {
                         this._imageMap = new Map();
+                        this._assets = new Set();
                     }
                     clear() {
                         this._imageMap.clear();
+                    }
+                    addAsset(asset) {
+                        this._assets.add(asset);
+                    }
+                    getAssets() {
+                        return this._assets;
                     }
                     addImage(image, key, frame) {
                         const mapKey = this.getImageMapKey(key, frame);
@@ -1497,6 +1504,7 @@ var phasereditor2d;
                     }
                     addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
+                        cache.addAsset(item);
                         if (!game.textures.exists(item.getKey())) {
                             const atlasURL = item.getData().atlasURL;
                             const atlasData = core.AssetPackUtils.getFileJSONFromPackUrl(atlasURL);
@@ -1616,6 +1624,7 @@ var phasereditor2d;
                     }
                     addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
+                        cache.addAsset(item);
                         if (!game.textures.exists(item.getKey())) {
                             const atlasURL = item.getData().atlasURL;
                             const atlasData = core_4.AssetPackUtils.getFileXMLFromPackUrl(atlasURL);
@@ -1680,6 +1689,7 @@ var phasereditor2d;
                     }
                     addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
+                        cache.addAsset(item);
                         if (!game.textures.exists(item.getKey())) {
                             const url = item.getData().url;
                             const image = core.AssetPackUtils.getImageFromPackUrl(url);
@@ -1725,6 +1735,7 @@ var phasereditor2d;
                     }
                     addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
+                        cache.addAsset(item);
                         if (!game.textures.exists(item.getKey())) {
                             const packItemData = item.getData();
                             const atlasDataFile = core_5.AssetPackUtils.getFileFromPackUrl(packItemData.url);
@@ -1804,6 +1815,7 @@ var phasereditor2d;
                     }
                     addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
+                        cache.addAsset(item);
                         if (!game.textures.exists(item.getKey())) {
                             const data = item.getData();
                             const image = core.AssetPackUtils.getImageFromPackUrl(data.url);
@@ -1895,6 +1907,7 @@ var phasereditor2d;
                     }
                     addToPhaserCache(game, cache) {
                         const item = this.getPackItem();
+                        cache.addAsset(item);
                         if (!game.textures.exists(item.getKey())) {
                             const atlasURL = item.getData().atlasURL;
                             const atlasData = core.AssetPackUtils.getFileStringFromPackUrl(atlasURL);

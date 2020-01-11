@@ -170,6 +170,11 @@ var phasereditor2d;
                         this._tokens.add(token);
                     }
                 }
+                addPartialFileToken(file) {
+                    if (file) {
+                        this.addPartialToken("file(" + file.getFullName() + "," + file.getModTime() + ")");
+                    }
+                }
                 build() {
                     const list = [];
                     for (const token of this._tokens) {

@@ -15,15 +15,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new TransformComponent(obj));
         }
 
-        async buildDependencyHash(builder: ide.core.MultiHashBuilder) {
+        async buildDependencyHash(args: BuildDependencyHashArgs) {
 
-            super.buildDependencyHash(builder);
+            super.buildDependencyHash(args);
 
             if (!this.isPrefabInstance()) {
 
                 for (const obj of this.getObject().list) {
 
-                    obj.getEditorSupport().buildDependencyHash(builder);
+                    obj.getEditorSupport().buildDependencyHash(args);
                 }
             }
         }

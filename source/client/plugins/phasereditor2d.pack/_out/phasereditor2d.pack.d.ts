@@ -393,8 +393,11 @@ declare namespace phasereditor2d.pack.core.parsers {
     import controls = colibri.ui.controls;
     class AssetPackCache {
         private _imageMap;
+        private _assets;
         constructor();
         clear(): void;
+        addAsset(asset: AssetPackItem): void;
+        getAssets(): Set<AssetPackItem>;
         addImage(image: controls.IImage, key: string, frame?: string | number): void;
         getImage(key: string, frame?: string | number): controls.IImage;
         private getImageMapKey;

@@ -73,7 +73,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
-            const token = "(prefab=" + prefabId + ";file=" + file.getModTime() + ")";
+            const token = "prefab(" + prefabId + "," + file.getModTime() + ")";
 
             builder.addPartialToken(token);
 
@@ -89,13 +89,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        async buildDependencyHash(builder: ide.core.MultiHashBuilder) {
+        async buildDependencyHash(args: BuildDependencyHashArgs) {
 
-            EditorSupport.buildPrefabDependencyHash(builder, this._prefabId);
+            EditorSupport.buildPrefabDependencyHash(args.builder, this._prefabId);
 
             for (const comp of this.getComponents()) {
 
-                comp.buildDependenciesHash(builder);
+                comp.buildDependenciesHash(args);
             }
         }
 

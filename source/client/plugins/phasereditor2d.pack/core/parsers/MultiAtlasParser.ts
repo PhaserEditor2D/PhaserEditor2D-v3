@@ -14,6 +14,8 @@ namespace phasereditor2d.pack.core.parsers {
 
             const item = this.getPackItem() as MultiatlasAssetPackItem;
 
+            cache.addAsset(item);
+
             if (!game.textures.exists(item.getKey())) {
 
                 const packItemData = item.getData();

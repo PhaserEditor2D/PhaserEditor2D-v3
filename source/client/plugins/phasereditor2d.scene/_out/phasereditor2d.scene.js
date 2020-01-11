@@ -1681,7 +1681,16 @@ var phasereditor2d;
                 async buildDependenciesHash() {
                     const builder = new phasereditor2d.ide.core.MultiHashBuilder();
                     for (const obj of this._scene.getDisplayListChildren()) {
-                        await obj.getEditorSupport().buildDependencyHash(builder);
+                        await obj.getEditorSupport().buildDependencyHash({ builder });
+                    }
+                    const cache = this._scene.getPackCache();
+                    const files = new Set();
+                    for (const asset of cache.getAssets()) {
+                        files.add(asset.getPack().getFile());
+                        asset.computeUsedFiles(files);
+                    }
+                    for (const file of files) {
+                        builder.addPartialFileToken(file);
                     }
                     const hash = builder.build();
                     return hash;
@@ -3668,7 +3677,7 @@ var phasereditor2d;
                             args.result.push(dom);
                         }
                     }
-                    async buildDependenciesHash(builder) {
+                    async buildDependenciesHash(args) {
                         // nothing by default
                     }
                 }
@@ -3727,7 +3736,7 @@ var phasereditor2d;
                         if (!file) {
                             return;
                         }
-                        const token = "(prefab=" + prefabId + ";file=" + file.getModTime() + ")";
+                        const token = "prefab(" + prefabId + "," + file.getModTime() + ")";
                         builder.addPartialToken(token);
                         const sceneData = finder.getSceneData(file);
                         if (!sceneData) {
@@ -3737,10 +3746,10 @@ var phasereditor2d;
                             this.buildPrefabDependencyHash(builder, objData.prefabId);
                         }
                     }
-                    async buildDependencyHash(builder) {
-                        EditorSupport.buildPrefabDependencyHash(builder, this._prefabId);
+                    async buildDependencyHash(args) {
+                        EditorSupport.buildPrefabDependencyHash(args.builder, this._prefabId);
                         for (const comp of this.getComponents()) {
-                            comp.buildDependenciesHash(builder);
+                            comp.buildDependenciesHash(args);
                         }
                     }
                     // tslint:disable-next-line:ban-types
@@ -4087,11 +4096,11 @@ var phasereditor2d;
                         super(sceneobjects.ContainerExtension.getInstance(), obj);
                         this.addComponent(new sceneobjects.TransformComponent(obj));
                     }
-                    async buildDependencyHash(builder) {
-                        super.buildDependencyHash(builder);
+                    async buildDependencyHash(args) {
+                        super.buildDependencyHash(args);
                         if (!this.isPrefabInstance()) {
                             for (const obj of this.getObject().list) {
-                                obj.getEditorSupport().buildDependencyHash(builder);
+                                obj.getEditorSupport().buildDependencyHash(args);
                             }
                         }
                     }

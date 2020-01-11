@@ -19,10 +19,12 @@ declare namespace phasereditor2d.ide {
     const VER = "3.0.0";
 }
 declare namespace phasereditor2d.ide.core {
+    import io = colibri.core.io;
     class MultiHashBuilder {
         private _tokens;
         constructor();
         addPartialToken(token: string): void;
+        addPartialFileToken(file: io.FilePath): void;
         build(): string;
     }
 }

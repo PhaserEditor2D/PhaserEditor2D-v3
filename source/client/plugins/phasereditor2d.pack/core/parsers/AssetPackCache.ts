@@ -5,15 +5,26 @@ namespace phasereditor2d.pack.core.parsers {
     export class AssetPackCache {
 
         private _imageMap: Map<string, controls.IImage>;
+        private _assets: Set<AssetPackItem>;
 
         constructor() {
 
             this._imageMap = new Map();
+            this._assets = new Set();
         }
 
         clear() {
 
             this._imageMap.clear();
+        }
+
+        addAsset(asset: AssetPackItem) {
+
+            this._assets.add(asset);
+        }
+
+        getAssets() {
+            return this._assets;
         }
 
         addImage(image: controls.IImage, key: string, frame?: string | number) {

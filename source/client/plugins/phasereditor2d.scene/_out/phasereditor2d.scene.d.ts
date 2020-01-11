@@ -739,6 +739,11 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface BuildDependencyHashArgs {
+        builder: ide.core.MultiHashBuilder;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface SetObjectPropertiesCodeDOMArgs {
         result: core.code.CodeDOM[];
         objectVarName: string;
@@ -749,7 +754,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: T);
         getObject(): T;
         protected buildSetObjectPropertyCodeDOM_Float(fieldName: string, value: number, defValue: number, args: SetObjectPropertiesCodeDOMArgs): void;
-        buildDependenciesHash(builder: ide.core.MultiHashBuilder): Promise<void>;
+        buildDependenciesHash(args: BuildDependencyHashArgs): Promise<void>;
         abstract buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         abstract writeJSON(ser: core.json.Serializer): void;
         abstract readJSON(ser: core.json.Serializer): void;
@@ -777,7 +782,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         isUnlockedProperty(propName: string): boolean;
         setUnlockedProperty(propName: string, unlock: boolean): void;
         private static buildPrefabDependencyHash;
-        buildDependencyHash(builder: ide.core.MultiHashBuilder): Promise<void>;
+        buildDependencyHash(args: BuildDependencyHashArgs): Promise<void>;
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
         getComponent(ctr: Function): Component<any>;
@@ -982,7 +987,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
     class ContainerEditorSupport extends EditorSupport<Container> {
         constructor(obj: Container);
-        buildDependencyHash(builder: ide.core.MultiHashBuilder): Promise<void>;
+        buildDependencyHash(args: BuildDependencyHashArgs): Promise<void>;
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
         writeJSON(containerData: ContainerData): void;
         readJSON(containerData: ContainerData): void;

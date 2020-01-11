@@ -40,7 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        async buildDependenciesHash(builder: ide.core.MultiHashBuilder) {
+        async buildDependenciesHash(args: BuildDependencyHashArgs) {
 
             // nothing by default
         }

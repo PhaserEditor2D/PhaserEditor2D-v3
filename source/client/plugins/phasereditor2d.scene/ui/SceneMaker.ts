@@ -88,7 +88,23 @@ namespace phasereditor2d.scene.ui {
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
-                await obj.getEditorSupport().buildDependencyHash(builder);
+                await obj.getEditorSupport().buildDependencyHash({ builder });
+            }
+
+            const cache = this._scene.getPackCache();
+
+            const files = new Set<io.FilePath>();
+
+            for (const asset of cache.getAssets()) {
+
+                files.add(asset.getPack().getFile());
+
+                asset.computeUsedFiles(files);
+            }
+
+            for (const file of files) {
+
+                builder.addPartialFileToken(file);
             }
 
             const hash = builder.build();

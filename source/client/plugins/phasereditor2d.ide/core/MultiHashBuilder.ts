@@ -1,5 +1,7 @@
 namespace phasereditor2d.ide.core {
 
+    import io = colibri.core.io;
+
     export class MultiHashBuilder {
 
         private _tokens: Set<string>;
@@ -14,6 +16,14 @@ namespace phasereditor2d.ide.core {
             if (token && token !== "") {
 
                 this._tokens.add(token);
+            }
+        }
+
+        addPartialFileToken(file: io.FilePath) {
+
+            if (file) {
+
+                this.addPartialToken("file(" + file.getFullName() + "," + file.getModTime() + ")");
             }
         }
 
