@@ -6776,7 +6776,7 @@ var colibri;
                         manager.addHandlerHelper(actions.CMD_EDITOR_CLOSE, args => typeof args.activeEditor === "object", args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().closeTab(args.activeEditor));
                         manager.addKeyBinding(actions.CMD_EDITOR_CLOSE, new KeyMatcher({
                             control: true,
-                            key: "W"
+                            key: "Q"
                         }));
                         // close all editors
                         manager.addCommandHelper({
@@ -6788,7 +6788,7 @@ var colibri;
                         manager.addKeyBinding(actions.CMD_EDITOR_CLOSE_ALL, new KeyMatcher({
                             control: true,
                             shift: true,
-                            key: "W"
+                            key: "Q"
                         }));
                     }
                     static initViewer(manager) {
