@@ -811,7 +811,8 @@ var phasereditor2d;
                                 }
                             }
                             else {
-                                superCls = settings.superClassName;
+                                superCls = settings.superClassName.trim().length === 0 ?
+                                    "Phaser.Scene" : settings.superClassName;
                             }
                             clsDecl.setSuperClass(superCls);
                             if (this._isPrefabScene) {
@@ -3474,6 +3475,29 @@ var phasereditor2d;
                         getSettings() {
                             return this.getScene().getSettings();
                         }
+                        getHelp(key) {
+                            return "TODO";
+                        }
+                        createStringField(comp, name, label, tooltip) {
+                            const labelElement = this.createLabel(comp, label, tooltip);
+                            const textElement = this.createText(comp);
+                            this.addUpdater(() => {
+                                textElement.value = this.getSettings()[name].toString();
+                            });
+                            textElement.addEventListener("change", e => {
+                                const editor = this.getEditor();
+                                editor.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
+                                    editor: editor,
+                                    name: name,
+                                    value: textElement.value,
+                                    repaint: true
+                                }));
+                            });
+                            return {
+                                label: labelElement,
+                                text: textElement
+                            };
+                        }
                         createIntegerField(comp, name, label, tooltip) {
                             const labelElement = this.createLabel(comp, label, tooltip);
                             const textElement = this.createText(comp);
@@ -3493,6 +3517,22 @@ var phasereditor2d;
                                 label: labelElement,
                                 text: textElement
                             };
+                        }
+                        createMenuField(comp, items, name, label, tooltip) {
+                            this.createLabel(comp, label, tooltip);
+                            const btn = this.createMenuButton(comp, "-", items, value => {
+                                const editor = this.getEditor();
+                                editor.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
+                                    editor: editor,
+                                    name: name,
+                                    value: value,
+                                    repaint: true
+                                }));
+                            });
+                            this.addUpdater(() => {
+                                const item = items.find(i => i.value === this.getSettings().compilerOutputLanguage);
+                                btn.textContent = item ? item.name : "-";
+                            });
                         }
                         createBooleanField(comp, name, label, tooltip) {
                             const comp2 = document.createElement("div");
@@ -3629,6 +3669,45 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
+            (function (editor) {
+                var properties;
+                (function (properties) {
+                    class CompilerSection extends properties.SceneSection {
+                        constructor(page) {
+                            super(page, "id", "Compiler");
+                        }
+                        createForm(parent) {
+                            const comp = this.createGridElement(parent, 3);
+                            comp.style.gridTemplateColumns = "auto 1fr";
+                            {
+                                this.createMenuField(comp, [
+                                    {
+                                        name: "JavaScript",
+                                        value: scene.core.json.SourceLang.JAVA_SCRIPT,
+                                    },
+                                    {
+                                        name: "TypeScript",
+                                        value: scene.core.json.SourceLang.TYPE_SCRIPT
+                                    }
+                                ], "compilerOutputLanguage", "Output Language", "The scene compiler output language.");
+                            }
+                            this.createStringField(comp, "sceneKey", "Scene Key", "The key of the scene. Used when the scene is loaded with the Phaser loader.");
+                            this.createStringField(comp, "superClassName", "Super Class", "The super class used for the scene. If it is blank (no-value) then use default value.");
+                        }
+                    }
+                    properties.CompilerSection = CompilerSection;
+                })(properties = editor.properties || (editor.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
             (function (editor_12) {
                 var properties;
                 (function (properties) {
@@ -3642,7 +3721,7 @@ var phasereditor2d;
                             return this._editor.getScene();
                         }
                         addSections(page, sections) {
-                            sections.push(new properties.SnappingSection(page), new properties.BorderSection(page));
+                            sections.push(new properties.SnappingSection(page), new properties.BorderSection(page), new properties.CompilerSection(page));
                             const exts = colibri.Platform
                                 .getExtensions(properties.SceneEditorPropertySectionExtension.POINT_ID);
                             for (const ext of exts) {

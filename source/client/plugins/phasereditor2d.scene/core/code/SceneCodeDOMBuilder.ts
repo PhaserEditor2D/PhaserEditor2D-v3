@@ -64,7 +64,8 @@ namespace phasereditor2d.scene.core.code {
 
                 } else {
 
-                    superCls = settings.superClassName;
+                    superCls = settings.superClassName.trim().length === 0 ?
+                        "Phaser.Scene" : settings.superClassName;
                 }
 
                 clsDecl.setSuperClass(superCls);

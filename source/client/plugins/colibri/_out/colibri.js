@@ -3815,8 +3815,23 @@ var colibri;
                     createButton(parent, text, callback) {
                         const btn = document.createElement("button");
                         btn.innerText = text;
-                        btn.addEventListener("click", e => callback());
+                        btn.addEventListener("click", e => callback(e));
                         parent.appendChild(btn);
+                        return btn;
+                    }
+                    createMenuButton(parent, text, items, callback) {
+                        const btn = this.createButton(parent, text, e => {
+                            const menu = new controls.Menu();
+                            for (const item of items) {
+                                menu.add(new controls.Action({
+                                    text: item.name,
+                                    callback: () => {
+                                        callback(item.value);
+                                    }
+                                }));
+                            }
+                            menu.create(e);
+                        });
                         return btn;
                     }
                     createText(parent, readOnly = false) {

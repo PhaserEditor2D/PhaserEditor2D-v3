@@ -698,10 +698,19 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
         protected getSettings(): core.json.SceneSettings;
+        getHelp(key: string): string;
+        createStringField(comp: HTMLElement, name: string, label: string, tooltip: string): {
+            label: HTMLLabelElement;
+            text: HTMLInputElement;
+        };
         createIntegerField(comp: HTMLElement, name: string, label: string, tooltip: string): {
             label: HTMLLabelElement;
             text: HTMLInputElement;
         };
+        createMenuField(comp: HTMLElement, items: Array<{
+            name: string;
+            value: any;
+        }>, name: string, label: string, tooltip: string): void;
         createBooleanField(comp: HTMLElement, name: string, label: string, tooltip: string): {
             comp: HTMLDivElement;
             label: HTMLLabelElement;
@@ -738,6 +747,13 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
         private setValue;
         undo(): void;
         redo(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.properties {
+    import controls = colibri.ui.controls;
+    class CompilerSection extends SceneSection {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {

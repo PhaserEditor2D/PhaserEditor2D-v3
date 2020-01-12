@@ -110,15 +110,40 @@ namespace colibri.ui.controls.properties {
             return label;
         }
 
-        protected createButton(parent: HTMLElement, text: string, callback: () => void) {
+        protected createButton(parent: HTMLElement, text: string, callback: (e?: MouseEvent) => void) {
 
             const btn = document.createElement("button");
 
             btn.innerText = text;
 
-            btn.addEventListener("click", e => callback());
+            btn.addEventListener("click", e => callback(e));
 
             parent.appendChild(btn);
+
+            return btn;
+        }
+
+        protected createMenuButton(
+            parent: HTMLElement, text: string,
+            items: Array<{ name: string, value: any }>,
+            callback: (value: any) => void) {
+
+            const btn = this.createButton(parent, text, e => {
+
+                const menu = new controls.Menu();
+
+                for (const item of items) {
+
+                    menu.add(new Action({
+                        text: item.name,
+                        callback: () => {
+                            callback(item.value);
+                        }
+                    }));
+                }
+
+                menu.create(e);
+            });
 
             return btn;
         }
