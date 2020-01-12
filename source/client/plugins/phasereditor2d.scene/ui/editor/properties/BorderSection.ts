@@ -4,10 +4,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     import controls = colibri.ui.controls;
 
-    export class DisplaySection extends SceneSection {
+    export class BorderSection extends SceneSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Display");
+            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Border");
         }
 
         protected createForm(parent: HTMLDivElement) {

@@ -3459,70 +3459,6 @@ var phasereditor2d;
         (function (ui) {
             var editor;
             (function (editor_10) {
-                var undo;
-                (function (undo) {
-                    var ide = colibri.ui.ide;
-                    class SceneEditorOperation extends ide.undo.Operation {
-                        constructor(editor) {
-                            super();
-                            this._editor = editor;
-                        }
-                    }
-                    undo.SceneEditorOperation = SceneEditorOperation;
-                })(undo = editor_10.undo || (editor_10.undo = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="../undo/SceneEditorOperation.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var editor;
-            (function (editor) {
-                var properties;
-                (function (properties) {
-                    class ChangeSettingsPropertyOperation extends editor.undo.SceneEditorOperation {
-                        constructor(args) {
-                            super(args.editor);
-                            this._name = args.name;
-                            this._value = args.value;
-                            this._repaint = args.repaint;
-                            this._oldValue = this._editor.getScene().getSettings()[this._name];
-                            this.setValue(this._value);
-                        }
-                        setValue(value) {
-                            this._editor.getScene().getSettings()[this._name] = value;
-                            this._editor.setSelection(this._editor.getSelection());
-                            this._editor.setDirty(true);
-                            if (this._repaint) {
-                                this._editor.repaint();
-                            }
-                        }
-                        undo() {
-                            this.setValue(this._oldValue);
-                        }
-                        redo() {
-                            this.setValue(this._value);
-                        }
-                    }
-                    properties.ChangeSettingsPropertyOperation = ChangeSettingsPropertyOperation;
-                })(properties = editor.properties || (editor.properties = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var editor;
-            (function (editor_11) {
                 var properties;
                 (function (properties) {
                     class SceneSection extends properties.BaseSceneSection {
@@ -3585,7 +3521,7 @@ var phasereditor2d;
                         }
                     }
                     properties.SceneSection = SceneSection;
-                })(properties = editor_11.properties || (editor_11.properties = {}));
+                })(properties = editor_10.properties || (editor_10.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3601,9 +3537,9 @@ var phasereditor2d;
             (function (editor) {
                 var properties;
                 (function (properties) {
-                    class DisplaySection extends properties.SceneSection {
+                    class BorderSection extends properties.SceneSection {
                         constructor(page) {
-                            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Display");
+                            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Border");
                         }
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
@@ -3616,7 +3552,71 @@ var phasereditor2d;
                             this.createIntegerField(comp, "borderHeight", "Height", "Scene border height");
                         }
                     }
-                    properties.DisplaySection = DisplaySection;
+                    properties.BorderSection = BorderSection;
+                })(properties = editor.properties || (editor.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_11) {
+                var undo;
+                (function (undo) {
+                    var ide = colibri.ui.ide;
+                    class SceneEditorOperation extends ide.undo.Operation {
+                        constructor(editor) {
+                            super();
+                            this._editor = editor;
+                        }
+                    }
+                    undo.SceneEditorOperation = SceneEditorOperation;
+                })(undo = editor_11.undo || (editor_11.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../undo/SceneEditorOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var properties;
+                (function (properties) {
+                    class ChangeSettingsPropertyOperation extends editor.undo.SceneEditorOperation {
+                        constructor(args) {
+                            super(args.editor);
+                            this._name = args.name;
+                            this._value = args.value;
+                            this._repaint = args.repaint;
+                            this._oldValue = this._editor.getScene().getSettings()[this._name];
+                            this.setValue(this._value);
+                        }
+                        setValue(value) {
+                            this._editor.getScene().getSettings()[this._name] = value;
+                            this._editor.setSelection(this._editor.getSelection());
+                            this._editor.setDirty(true);
+                            if (this._repaint) {
+                                this._editor.repaint();
+                            }
+                        }
+                        undo() {
+                            this.setValue(this._oldValue);
+                        }
+                        redo() {
+                            this.setValue(this._value);
+                        }
+                    }
+                    properties.ChangeSettingsPropertyOperation = ChangeSettingsPropertyOperation;
                 })(properties = editor.properties || (editor.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -3642,7 +3642,7 @@ var phasereditor2d;
                             return this._editor.getScene();
                         }
                         addSections(page, sections) {
-                            sections.push(new properties.SnappingSection(page), new properties.DisplaySection(page));
+                            sections.push(new properties.SnappingSection(page), new properties.BorderSection(page));
                             const exts = colibri.Platform
                                 .getExtensions(properties.SceneEditorPropertySectionExtension.POINT_ID);
                             for (const ext of exts) {

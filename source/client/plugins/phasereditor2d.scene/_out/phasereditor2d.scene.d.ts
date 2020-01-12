@@ -692,6 +692,30 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
         getEditor(): SceneEditor;
     }
 }
+declare namespace phasereditor2d.scene.ui.editor.properties {
+    abstract class SceneSection extends BaseSceneSection<Scene> {
+        protected getScene(): Scene;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+        protected getSettings(): core.json.SceneSettings;
+        createIntegerField(comp: HTMLElement, name: string, label: string, tooltip: string): {
+            label: HTMLLabelElement;
+            text: HTMLInputElement;
+        };
+        createBooleanField(comp: HTMLElement, name: string, label: string, tooltip: string): {
+            comp: HTMLDivElement;
+            label: HTMLLabelElement;
+            check: HTMLInputElement;
+        };
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.properties {
+    import controls = colibri.ui.controls;
+    class BorderSection extends SceneSection {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+    }
+}
 declare namespace phasereditor2d.scene.ui.editor.undo {
     import ide = colibri.ui.ide;
     abstract class SceneEditorOperation extends ide.undo.Operation {
@@ -714,30 +738,6 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
         private setValue;
         undo(): void;
         redo(): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.editor.properties {
-    abstract class SceneSection extends BaseSceneSection<Scene> {
-        protected getScene(): Scene;
-        canEdit(obj: any, n: number): boolean;
-        canEditNumber(n: number): boolean;
-        protected getSettings(): core.json.SceneSettings;
-        createIntegerField(comp: HTMLElement, name: string, label: string, tooltip: string): {
-            label: HTMLLabelElement;
-            text: HTMLInputElement;
-        };
-        createBooleanField(comp: HTMLElement, name: string, label: string, tooltip: string): {
-            comp: HTMLDivElement;
-            label: HTMLLabelElement;
-            check: HTMLInputElement;
-        };
-    }
-}
-declare namespace phasereditor2d.scene.ui.editor.properties {
-    import controls = colibri.ui.controls;
-    class DisplaySection extends SceneSection {
-        constructor(page: controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {

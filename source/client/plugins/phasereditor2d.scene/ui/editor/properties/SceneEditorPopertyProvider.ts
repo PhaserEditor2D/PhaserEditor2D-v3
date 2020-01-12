@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             sections.push(
 
                 new SnappingSection(page),
-                new DisplaySection(page)
+                new BorderSection(page)
             );
 
             const exts = colibri.Platform
