@@ -2898,10 +2898,6 @@ var phasereditor2d;
                             icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ANGLE),
                             showText: false
                         }));
-                        manager.add(new controls.Action({
-                            icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ORIGIN),
-                            showText: false
-                        }));
                         manager.addCommand(editor.commands.CMD_OPEN_COMPILED_FILE, {
                             showText: false
                         });

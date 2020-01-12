@@ -272,11 +272,6 @@ namespace phasereditor2d.scene.ui.editor {
                 showText: false
             }));
 
-            manager.add(new controls.Action({
-                icon: ScenePlugin.getInstance().getIcon(ICON_ORIGIN),
-                showText: false
-            }));
-
             manager.addCommand(commands.CMD_OPEN_COMPILED_FILE, {
                 showText: false
             });
