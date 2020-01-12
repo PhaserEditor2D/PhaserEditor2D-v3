@@ -14,7 +14,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr";
 
-
             this.createMenuField(
                 comp, [
                 {
@@ -53,6 +52,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 this.createLabel(comp, "Only Generate Methods",
                     "No class code is generated, only the \"create\" or \"preload\" methods."));
+
+            // this.createStringField(
+            //     comp, "preloadMethodName", "Preload Method", "The name of the preload method. It may be empty.");
+
+            this.createStringField(
+                comp, "createMethodName", "Create Method", "The name of the create method.");
         }
     }
 }

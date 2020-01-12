@@ -3696,6 +3696,9 @@ var phasereditor2d;
                             this.createStringField(comp, "sceneKey", "Scene Key", "The key of the scene. Used when the scene is loaded with the Phaser loader.");
                             this.createStringField(comp, "superClassName", "Super Class", "The super class used for the scene. If it is blank (no-value) then use default value.");
                             this.createBooleanField(comp, "onlyGenerateMethods", this.createLabel(comp, "Only Generate Methods", "No class code is generated, only the \"create\" or \"preload\" methods."));
+                            // this.createStringField(
+                            //     comp, "preloadMethodName", "Preload Method", "The name of the preload method. It may be empty.");
+                            this.createStringField(comp, "createMethodName", "Create Method", "The name of the create method.");
                         }
                     }
                     properties.CompilerSection = CompilerSection;
