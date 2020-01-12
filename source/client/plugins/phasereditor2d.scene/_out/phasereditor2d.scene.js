@@ -785,7 +785,7 @@ var phasereditor2d;
                     async build() {
                         const settings = this._scene.getSettings();
                         const methods = [];
-                        if (settings.preloadMethodName.trim().length > 0) {
+                        if (settings.preloadPackFiles.length > 0) {
                             const preloadDom = await this.buildPreloadMethod();
                             methods.push(preloadDom);
                         }
@@ -1017,16 +1017,18 @@ var phasereditor2d;
                     async buildPreloadMethod() {
                         const settings = this._scene.getSettings();
                         const preloadDom = new code.MethodDeclCodeDOM(settings.preloadMethodName);
-                        // TODO: the packs to be loaded should be set manually.
-                        // We can provide a Scene Loader dialog where the user can select the packs to be loaded.
-                        /*
-            
-                        for (const pair of packSectionList) {
-                            var call = new MethodCallDom("pack", "this.load");
-                            call.argLiteral(pair[0]);
-                            call.argLiteral(pair[1]);
-                            preloadDom.getInstructions().add(call);
-                        }*/
+                        preloadDom.getBody().push(new code.RawCodeDOM(""));
+                        const ctx = (this._isPrefabScene ? "scene" : "this");
+                        for (const fileName of settings.preloadPackFiles) {
+                            const call = new code.MethodCallCodeDOM("pack", ctx + ".load");
+                            const parts = fileName.split("/");
+                            const namePart = parts[parts.length - 1];
+                            const key = namePart.substring(0, namePart.length - 5);
+                            const relativeName = parts.slice(1).join("/");
+                            call.argLiteral(key);
+                            call.argLiteral(relativeName);
+                            preloadDom.getBody().push(call);
+                        }
                         return preloadDom;
                     }
                 }
