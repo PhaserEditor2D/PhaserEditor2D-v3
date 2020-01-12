@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.core.code {
             this.line();
             this.line();
 
-            for (const elem of this._unit.getElements()) {
+            for (const elem of this._unit.getBody()) {
 
                 this.generateUnitElement(elem);
 

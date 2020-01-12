@@ -2,18 +2,18 @@ namespace phasereditor2d.scene.core.code {
 
     export class UnitCodeDOM {
 
-        private _elements: object[];
+        private _body: object[];
 
         constructor(elements: object[]) {
-            this._elements = elements;
+            this._body = elements;
         }
 
-        getElements() {
-            return this._elements;
+        getBody() {
+            return this._body;
         }
 
-        setElements(elements: object[]) {
-            this._elements = elements;
+        setBody(body: object[]) {
+            this._body = body;
         }
     }
 }

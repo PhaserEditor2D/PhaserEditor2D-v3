@@ -33,7 +33,9 @@ namespace phasereditor2d.scene.core.code {
 
             if (settings.onlyGenerateMethods) {
 
-                // TODO
+                const createMethodDecl = this.buildCreateMethod();
+
+                unit.getBody().push(createMethodDecl);
 
             } else {
 
@@ -101,7 +103,7 @@ namespace phasereditor2d.scene.core.code {
                 clsDecl.getBody().push(...methods);
                 clsDecl.getBody().push(...fields);
 
-                unit.getElements().push(clsDecl);
+                unit.getBody().push(clsDecl);
             }
 
             return unit;
@@ -196,6 +198,11 @@ namespace phasereditor2d.scene.core.code {
             const settings = this._scene.getSettings();
 
             const createMethodDecl = new MethodDeclCodeDOM(settings.createMethodName);
+
+            if (settings.onlyGenerateMethods && settings.sceneType === json.SceneType.PREFAB) {
+
+                createMethodDecl.addArg("scene", "Phaser.Scene");
+            }
 
             const body = createMethodDecl.getBody();
 

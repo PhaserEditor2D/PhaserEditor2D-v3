@@ -224,10 +224,10 @@ declare namespace phasereditor2d.scene.core.code {
 }
 declare namespace phasereditor2d.scene.core.code {
     class UnitCodeDOM {
-        private _elements;
+        private _body;
         constructor(elements: object[]);
-        getElements(): object[];
-        setElements(elements: object[]): void;
+        getBody(): object[];
+        setBody(body: object[]): void;
     }
 }
 declare namespace phasereditor2d.scene.core.json {

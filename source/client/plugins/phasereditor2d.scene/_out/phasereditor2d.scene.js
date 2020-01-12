@@ -518,7 +518,7 @@ var phasereditor2d;
                         this.sectionStart("/* START OF COMPILED CODE */", "\n// You can write more code here\n\n");
                         this.line();
                         this.line();
-                        for (const elem of this._unit.getElements()) {
+                        for (const elem of this._unit.getBody()) {
                             this.generateUnitElement(elem);
                         }
                         this.sectionEnd("/* END OF COMPILED CODE */", "\n\n// You can write more code here\n");
@@ -791,7 +791,8 @@ var phasereditor2d;
                         }
                         const unit = new code.UnitCodeDOM([]);
                         if (settings.onlyGenerateMethods) {
-                            // TODO
+                            const createMethodDecl = this.buildCreateMethod();
+                            unit.getBody().push(createMethodDecl);
                         }
                         else {
                             const clsName = this._file.getNameWithoutExtension();
@@ -835,7 +836,7 @@ var phasereditor2d;
                             this.buildClassFields(fields, this._scene.getDisplayListChildren());
                             clsDecl.getBody().push(...methods);
                             clsDecl.getBody().push(...fields);
-                            unit.getElements().push(clsDecl);
+                            unit.getBody().push(clsDecl);
                         }
                         return unit;
                     }
@@ -896,6 +897,9 @@ var phasereditor2d;
                     buildCreateMethod() {
                         const settings = this._scene.getSettings();
                         const createMethodDecl = new code.MethodDeclCodeDOM(settings.createMethodName);
+                        if (settings.onlyGenerateMethods && settings.sceneType === core.json.SceneType.PREFAB) {
+                            createMethodDecl.addArg("scene", "Phaser.Scene");
+                        }
                         const body = createMethodDecl.getBody();
                         for (const obj of this._scene.getDisplayListChildren()) {
                             body.push(new code.RawCodeDOM(""));
@@ -1114,13 +1118,13 @@ var phasereditor2d;
             (function (code) {
                 class UnitCodeDOM {
                     constructor(elements) {
-                        this._elements = elements;
+                        this._body = elements;
                     }
-                    getElements() {
-                        return this._elements;
+                    getBody() {
+                        return this._body;
                     }
-                    setElements(elements) {
-                        this._elements = elements;
+                    setBody(body) {
+                        this._body = body;
                     }
                 }
                 code.UnitCodeDOM = UnitCodeDOM;
