@@ -3842,6 +3842,13 @@ var colibri;
                         parent.appendChild(text);
                         return text;
                     }
+                    createTextArea(parent, readOnly = false) {
+                        const text = document.createElement("textarea");
+                        text.classList.add("formText");
+                        text.readOnly = readOnly;
+                        parent.appendChild(text);
+                        return text;
+                    }
                     createCheckbox(parent, label) {
                         const check = document.createElement("input");
                         if (label) {

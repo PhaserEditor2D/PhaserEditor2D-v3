@@ -294,6 +294,7 @@ declare namespace phasereditor2d.scene.core.json {
         onlyGenerateMethods: boolean;
         superClassName: string;
         preloadMethodName: string;
+        preloadPackFiles: string[];
         createMethodName: string;
         sceneKey: string;
         compilerOutputLanguage: SourceLang;
@@ -302,7 +303,7 @@ declare namespace phasereditor2d.scene.core.json {
         borderY: number;
         borderWidth: number;
         borderHeight: number;
-        constructor(sceneType?: SceneType, snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, createMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
+        constructor(sceneType?: SceneType, snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, preloadPackFiles?: string[], createMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
         toJSON(): {};
         readJSON(data: object): void;
     }
@@ -750,6 +751,7 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
     class CompilerSection extends SceneSection {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
+        private createPreloadPackFilesField;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {

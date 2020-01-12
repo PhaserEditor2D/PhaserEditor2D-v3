@@ -1266,7 +1266,7 @@ var phasereditor2d;
                     SourceLang["TYPE_SCRIPT"] = "TYPE_SCRIPT";
                 })(SourceLang = json.SourceLang || (json.SourceLang = {}));
                 class SceneSettings {
-                    constructor(sceneType = json.SceneType.SCENE, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "", createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                    constructor(sceneType = json.SceneType.SCENE, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "preload", preloadPackFiles = [], createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
                         this.sceneType = sceneType;
                         this.snapEnabled = snapEnabled;
                         this.snapWidth = snapWidth;
@@ -1274,6 +1274,7 @@ var phasereditor2d;
                         this.onlyGenerateMethods = onlyGenerateMethods;
                         this.superClassName = superClassName;
                         this.preloadMethodName = preloadMethodName;
+                        this.preloadPackFiles = preloadPackFiles;
                         this.createMethodName = createMethodName;
                         this.sceneKey = sceneKey;
                         this.compilerOutputLanguage = compilerOutputLanguage;
@@ -1291,7 +1292,8 @@ var phasereditor2d;
                         write(data, "snapHeight", this.snapHeight, 16);
                         write(data, "onlyGenerateMethods", this.onlyGenerateMethods, false);
                         write(data, "superClassName", this.superClassName, "Phaser.Scene");
-                        write(data, "preloadMethodName", this.preloadMethodName, "");
+                        write(data, "preloadMethodName", this.preloadMethodName, "preload");
+                        write(data, "preloadPackFiles", this.preloadPackFiles, []);
                         write(data, "createMethodName", this.createMethodName, "create");
                         write(data, "sceneKey", this.sceneKey, "");
                         write(data, "compilerOutputLanguage", this.compilerOutputLanguage, SourceLang.JAVA_SCRIPT);
@@ -1309,7 +1311,8 @@ var phasereditor2d;
                         this.snapHeight = read(data, "snapHeight", 16);
                         this.onlyGenerateMethods = read(data, "onlyGenerateMethods", false);
                         this.superClassName = read(data, "superClassName", "Phaser.Scene");
-                        this.preloadMethodName = read(data, "preloadMethodName", "");
+                        this.preloadMethodName = read(data, "preloadMethodName", "preload");
+                        this.preloadPackFiles = read(data, "preloadPackFiles", []);
                         this.createMethodName = read(data, "createMethodName", "create");
                         this.sceneKey = read(data, "sceneKey", "");
                         this.compilerOutputLanguage = read(data, "compilerOutputLanguage", SourceLang.JAVA_SCRIPT);
@@ -3670,6 +3673,7 @@ var phasereditor2d;
             (function (editor) {
                 var properties;
                 (function (properties) {
+                    var controls = colibri.ui.controls;
                     class CompilerSection extends properties.SceneSection {
                         constructor(page) {
                             super(page, "id", "Compiler");
@@ -3700,9 +3704,58 @@ var phasereditor2d;
                             this.createStringField(comp, "sceneKey", "Scene Key", "The key of the scene. Used when the scene is loaded with the Phaser loader.");
                             this.createStringField(comp, "superClassName", "Super Class", "The super class used for the scene. If it is blank (no-value) then use default value.");
                             this.createBooleanField(comp, "onlyGenerateMethods", this.createLabel(comp, "Only Generate Methods", "No class code is generated, only the \"create\" or \"preload\" methods."));
-                            // this.createStringField(
-                            //     comp, "preloadMethodName", "Preload Method", "The name of the preload method. It may be empty.");
+                            this.createPreloadPackFilesField(comp);
+                            this.createStringField(comp, "preloadMethodName", "Preload Method", "The name of the preload method. It may be empty.");
                             this.createStringField(comp, "createMethodName", "Create Method", "The name of the create method.");
+                        }
+                        createPreloadPackFilesField(parent) {
+                            this.createLabel(parent, "Preload Pack Files", "The Pack files to be loaded in this scene.");
+                            const btn = this.createButton(parent, "0 selected", async (e) => {
+                                const viewer = new controls.viewers.TreeViewer();
+                                viewer.setLabelProvider(new phasereditor2d.files.ui.viewers.FileLabelProvider());
+                                viewer.setCellRendererProvider(new phasereditor2d.files.ui.viewers.FileCellRendererProvider("tree"));
+                                viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                                const finder = new phasereditor2d.pack.core.PackFinder();
+                                await finder.preload();
+                                const packs = viewer.setInput(finder.getPacks().map(pack => pack.getFile()));
+                                viewer.setSelection(this.getSettings().preloadPackFiles
+                                    .map(name => finder.getPacks().find(pack => pack.getFile().getFullName() === name))
+                                    .filter(pack => pack !== null && pack !== undefined)
+                                    .map(pack => pack.getFile()));
+                                const dlg = new controls.dialogs.ViewerDialog(viewer);
+                                const selectionCallback = (files) => {
+                                    const names = files.map(file => file.getFullName());
+                                    this.getEditor().getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
+                                        editor: this.getEditor(),
+                                        name: "preloadPackFiles",
+                                        value: names,
+                                        repaint: false
+                                    }));
+                                    this.updateWithSelection();
+                                    dlg.close();
+                                };
+                                dlg.create();
+                                dlg.setTitle("Select Pack Files");
+                                const selectBtn = dlg.addButton("Select", () => {
+                                    selectionCallback(viewer.getSelection());
+                                });
+                                selectBtn.textContent = "Select " + viewer.getSelection().length + " Files";
+                                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, () => {
+                                    selectBtn.textContent = "Select " + viewer.getSelection().length + " Files";
+                                });
+                                dlg.addButton("Clear", () => {
+                                    viewer.setSelection([]);
+                                });
+                                dlg.addButton("Cancel", () => {
+                                    dlg.close();
+                                });
+                                viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, async (e) => {
+                                    selectionCallback([viewer.getSelection()[0]]);
+                                });
+                            });
+                            this.addUpdater(() => {
+                                btn.textContent = this.getSettings().preloadPackFiles.length + " selected";
+                            });
                         }
                     }
                     properties.CompilerSection = CompilerSection;

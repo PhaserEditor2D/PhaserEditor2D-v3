@@ -161,6 +161,18 @@ namespace colibri.ui.controls.properties {
             return text;
         }
 
+        protected createTextArea(parent: HTMLElement, readOnly = false) {
+
+            const text = document.createElement("textarea");
+
+            text.classList.add("formText");
+            text.readOnly = readOnly;
+
+            parent.appendChild(text);
+
+            return text;
+        }
+
         private static NEXT_ID = 0;
 
         protected createCheckbox(parent: HTMLElement, label?: HTMLLabelElement) {
