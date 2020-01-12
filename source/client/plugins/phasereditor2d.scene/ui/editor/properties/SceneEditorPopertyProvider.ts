@@ -20,7 +20,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
         addSections(
             page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void {
 
-            sections.push(new DisplaySection(page));
+            sections.push(
+
+                new SnappingSection(page),
+                new DisplaySection(page)
+            );
 
             const exts = colibri.Platform
                 .getExtensions<SceneEditorPropertySectionExtension>(SceneEditorPropertySectionExtension.POINT_ID);

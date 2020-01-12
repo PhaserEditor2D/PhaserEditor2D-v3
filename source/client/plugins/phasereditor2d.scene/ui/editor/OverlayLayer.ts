@@ -97,9 +97,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             // parameters from settings
 
-            const snapEnabled = false;
-            const snapX = 10;
-            const snapY = 10;
+            const snapEnabled = settings.snapEnabled;
+            const snapX = settings.snapWidth;
+            const snapY = settings.snapHeight;
 
             const borderX = settings.borderX;
             const borderY = settings.borderY;

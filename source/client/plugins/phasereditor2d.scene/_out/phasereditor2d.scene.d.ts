@@ -719,10 +719,17 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
 declare namespace phasereditor2d.scene.ui.editor.properties {
     abstract class SceneSection extends BaseSceneSection<Scene> {
         protected getScene(): Scene;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
         protected getSettings(): core.json.SceneSettings;
         createIntegerField(comp: HTMLElement, name: string, label: string, tooltip: string): {
             label: HTMLLabelElement;
             text: HTMLInputElement;
+        };
+        createBooleanField(comp: HTMLElement, name: string, label: string, tooltip: string): {
+            comp: HTMLDivElement;
+            label: HTMLLabelElement;
+            check: HTMLInputElement;
         };
     }
 }
@@ -731,8 +738,6 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
     class DisplaySection extends SceneSection {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
-        canEdit(obj: any, n: number): boolean;
-        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
@@ -752,6 +757,13 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
         private _sectionProviders;
         constructor(...sectionProviders: GetPropertySection[]);
         getSectionProviders(): GetPropertySection[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.properties {
+    import controls = colibri.ui.controls;
+    class SnappingSection extends SceneSection {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {

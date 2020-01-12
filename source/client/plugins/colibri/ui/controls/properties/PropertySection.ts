@@ -88,7 +88,9 @@ namespace colibri.ui.controls.properties {
             if (simpleProps) {
                 div.classList.add("formSimpleProps");
             }
+
             parent.appendChild(div);
+
             return div;
         }
 

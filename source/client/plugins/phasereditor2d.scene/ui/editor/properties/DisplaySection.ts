@@ -24,15 +24,5 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this.createIntegerField(comp, "borderWidth", "Width", "Scene border width");
             this.createIntegerField(comp, "borderHeight", "Height", "Scene border height");
         }
-
-        canEdit(obj: any, n: number): boolean {
-
-            return obj instanceof Scene;
-        }
-
-        canEditNumber(n: number): boolean {
-
-            return n === 1;
-        }
     }
 }

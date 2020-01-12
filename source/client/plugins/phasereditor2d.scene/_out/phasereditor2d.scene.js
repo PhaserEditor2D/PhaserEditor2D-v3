@@ -2598,9 +2598,9 @@ var phasereditor2d;
                         const settings = this._editor.getScene().getSettings();
                         const camera = this._editor.getScene().getCamera();
                         // parameters from settings
-                        const snapEnabled = false;
-                        const snapX = 10;
-                        const snapY = 10;
+                        const snapEnabled = settings.snapEnabled;
+                        const snapX = settings.snapWidth;
+                        const snapY = settings.snapHeight;
                         const borderX = settings.borderX;
                         const borderY = settings.borderY;
                         const borderWidth = settings.borderWidth;
@@ -3529,6 +3529,12 @@ var phasereditor2d;
                         getScene() {
                             return this.getSelection()[0];
                         }
+                        canEdit(obj, n) {
+                            return obj instanceof ui.Scene;
+                        }
+                        canEditNumber(n) {
+                            return n === 1;
+                        }
                         getSettings() {
                             return this.getScene().getSettings();
                         }
@@ -3550,6 +3556,31 @@ var phasereditor2d;
                             return {
                                 label: labelElement,
                                 text: textElement
+                            };
+                        }
+                        createBooleanField(comp, name, label, tooltip) {
+                            const comp2 = document.createElement("div");
+                            comp2.classList.add("formGrid");
+                            comp2.style.gridTemplateColumns = "auto 1fr";
+                            comp.appendChild(comp2);
+                            const checkElement = this.createCheckbox(comp2);
+                            const labelElement = this.createLabel(comp2, label, tooltip);
+                            this.addUpdater(() => {
+                                checkElement.checked = this.getSettings()[name];
+                            });
+                            checkElement.addEventListener("change", e => {
+                                const editor = this.getEditor();
+                                editor.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
+                                    editor: editor,
+                                    name: name,
+                                    value: checkElement.checked,
+                                    repaint: true
+                                }));
+                            });
+                            return {
+                                comp: comp2,
+                                label: labelElement,
+                                check: checkElement
                             };
                         }
                     }
@@ -3584,12 +3615,6 @@ var phasereditor2d;
                             this.createIntegerField(comp, "borderWidth", "Width", "Scene border width");
                             this.createIntegerField(comp, "borderHeight", "Height", "Scene border height");
                         }
-                        canEdit(obj, n) {
-                            return obj instanceof ui.Scene;
-                        }
-                        canEditNumber(n) {
-                            return n === 1;
-                        }
                     }
                     properties.DisplaySection = DisplaySection;
                 })(properties = editor.properties || (editor.properties = {}));
@@ -3617,7 +3642,7 @@ var phasereditor2d;
                             return this._editor.getScene();
                         }
                         addSections(page, sections) {
-                            sections.push(new properties.DisplaySection(page));
+                            sections.push(new properties.SnappingSection(page), new properties.DisplaySection(page));
                             const exts = colibri.Platform
                                 .getExtensions(properties.SceneEditorPropertySectionExtension.POINT_ID);
                             for (const ext of exts) {
@@ -3654,6 +3679,38 @@ var phasereditor2d;
                     }
                     SceneEditorPropertySectionExtension.POINT_ID = "phasereditor2d.scene.ui.editor.properties.SceneEditorPropertySectionExtension";
                     properties.SceneEditorPropertySectionExtension = SceneEditorPropertySectionExtension;
+                })(properties = editor.properties || (editor.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var properties;
+                (function (properties) {
+                    class SnappingSection extends properties.SceneSection {
+                        constructor(page) {
+                            super(page, "phasereditor2d.scene.ui.editor.properties.SnappingSection", "Snapping");
+                        }
+                        createForm(parent) {
+                            const comp = this.createGridElement(parent, 3);
+                            comp.style.gridTemplateColumns = "auto auto 1fr auto 1fr";
+                            {
+                                this.createBooleanField(comp, "snapEnabled", "Enabled", "Enable snapping")
+                                    .comp.style.gridColumn = "1 / span 5";
+                            }
+                            this.createLabel(comp, "Size");
+                            this.createIntegerField(comp, "snapWidth", "Width", "Scene snapping width.");
+                            this.createIntegerField(comp, "snapHeight", "Height", "Scene snapping height.");
+                        }
+                    }
+                    properties.SnappingSection = SnappingSection;
                 })(properties = editor.properties || (editor.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
