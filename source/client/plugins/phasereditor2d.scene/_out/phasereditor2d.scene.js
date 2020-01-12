@@ -1262,7 +1262,8 @@ var phasereditor2d;
                     SourceLang["TYPE_SCRIPT"] = "TYPE_SCRIPT";
                 })(SourceLang = json.SourceLang || (json.SourceLang = {}));
                 class SceneSettings {
-                    constructor(snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "", createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                    constructor(sceneType = json.SceneType.SCENE, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "", createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                        this.sceneType = sceneType;
                         this.snapEnabled = snapEnabled;
                         this.snapWidth = snapWidth;
                         this.snapHeight = snapHeight;
@@ -1280,6 +1281,7 @@ var phasereditor2d;
                     }
                     toJSON() {
                         const data = {};
+                        write(data, "sceneType", this.sceneType, json.SceneType.SCENE);
                         write(data, "snapEnabled", this.snapEnabled, false);
                         write(data, "snapWidth", this.snapWidth, 16);
                         write(data, "snapHeight", this.snapHeight, 16);
@@ -1297,6 +1299,7 @@ var phasereditor2d;
                         return data;
                     }
                     readJSON(data) {
+                        this.sceneType = read(data, "sceneType", json.SceneType.SCENE);
                         this.snapEnabled = read(data, "snapEnabled", false);
                         this.snapWidth = read(data, "snapWidth", 16);
                         this.snapHeight = read(data, "snapHeight", 16);
@@ -1514,13 +1517,13 @@ var phasereditor2d;
                     this._id = id;
                 }
                 getSceneType() {
-                    return this._sceneType;
+                    return this._settings.sceneType;
                 }
                 isPrefabSceneType() {
-                    return this._sceneType === scene.core.json.SceneType.PREFAB;
+                    return this.getSceneType() === scene.core.json.SceneType.PREFAB;
                 }
                 setSceneType(sceneType) {
-                    this._sceneType = sceneType;
+                    this._settings.sceneType = sceneType;
                 }
                 getMaker() {
                     return this._maker;
@@ -3530,17 +3533,12 @@ var phasereditor2d;
                                 }));
                             });
                             this.addUpdater(() => {
-                                const item = items.find(i => i.value === this.getSettings().compilerOutputLanguage);
+                                const item = items.find(i => i.value === this.getSettings()[name]);
                                 btn.textContent = item ? item.name : "-";
                             });
                         }
-                        createBooleanField(comp, name, label, tooltip) {
-                            const comp2 = document.createElement("div");
-                            comp2.classList.add("formGrid");
-                            comp2.style.gridTemplateColumns = "auto 1fr";
-                            comp.appendChild(comp2);
-                            const checkElement = this.createCheckbox(comp2);
-                            const labelElement = this.createLabel(comp2, label, tooltip);
+                        createBooleanField(comp, name, label) {
+                            const checkElement = this.createCheckbox(comp, label);
                             this.addUpdater(() => {
                                 checkElement.checked = this.getSettings()[name];
                             });
@@ -3553,11 +3551,7 @@ var phasereditor2d;
                                     repaint: true
                                 }));
                             });
-                            return {
-                                comp: comp2,
-                                label: labelElement,
-                                check: checkElement
-                            };
+                            return checkElement;
                         }
                     }
                     properties.SceneSection = SceneSection;
@@ -3679,20 +3673,29 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr";
-                            {
-                                this.createMenuField(comp, [
-                                    {
-                                        name: "JavaScript",
-                                        value: scene.core.json.SourceLang.JAVA_SCRIPT,
-                                    },
-                                    {
-                                        name: "TypeScript",
-                                        value: scene.core.json.SourceLang.TYPE_SCRIPT
-                                    }
-                                ], "compilerOutputLanguage", "Output Language", "The scene compiler output language.");
-                            }
+                            this.createMenuField(comp, [
+                                {
+                                    name: "Scene",
+                                    value: scene.core.json.SceneType.SCENE,
+                                },
+                                {
+                                    name: "Prefab",
+                                    value: scene.core.json.SceneType.PREFAB,
+                                }
+                            ], "sceneType", "Scene Type", "If this is a regular scene or a prefab.");
+                            this.createMenuField(comp, [
+                                {
+                                    name: "JavaScript",
+                                    value: scene.core.json.SourceLang.JAVA_SCRIPT,
+                                },
+                                {
+                                    name: "TypeScript",
+                                    value: scene.core.json.SourceLang.TYPE_SCRIPT
+                                }
+                            ], "compilerOutputLanguage", "Output Language", "The scene compiler output language.");
                             this.createStringField(comp, "sceneKey", "Scene Key", "The key of the scene. Used when the scene is loaded with the Phaser loader.");
                             this.createStringField(comp, "superClassName", "Super Class", "The super class used for the scene. If it is blank (no-value) then use default value.");
+                            this.createBooleanField(comp, "onlyGenerateMethods", this.createLabel(comp, "Only Generate Methods", "No class code is generated, only the \"create\" or \"preload\" methods."));
                         }
                     }
                     properties.CompilerSection = CompilerSection;
@@ -3781,8 +3784,10 @@ var phasereditor2d;
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto auto 1fr auto 1fr";
                             {
-                                this.createBooleanField(comp, "snapEnabled", "Enabled", "Enable snapping")
-                                    .comp.style.gridColumn = "1 / span 5";
+                                const label = this.createLabel(comp, "Enabled", "Enable snapping");
+                                label.style.gridColumn = "1 / span 2";
+                                this.createBooleanField(comp, "snapEnabled", label)
+                                    .style.gridColumn = "3 / span 3";
                             }
                             this.createLabel(comp, "Size");
                             this.createIntegerField(comp, "snapWidth", "Width", "Scene snapping width.");

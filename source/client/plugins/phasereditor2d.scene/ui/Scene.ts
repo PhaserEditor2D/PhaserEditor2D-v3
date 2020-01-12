@@ -7,7 +7,6 @@ namespace phasereditor2d.scene.ui {
         private _inEditor: boolean;
         private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
-        private _sceneType: core.json.SceneType;
         private _packCache: pack.core.parsers.AssetPackCache;
 
         constructor(inEditor = true) {
@@ -61,15 +60,15 @@ namespace phasereditor2d.scene.ui {
         }
 
         getSceneType() {
-            return this._sceneType;
+            return this._settings.sceneType;
         }
 
         isPrefabSceneType() {
-            return this._sceneType === core.json.SceneType.PREFAB;
+            return this.getSceneType() === core.json.SceneType.PREFAB;
         }
 
         setSceneType(sceneType: core.json.SceneType) {
-            this._sceneType = sceneType;
+            this._settings.sceneType = sceneType;
         }
 
         getMaker() {

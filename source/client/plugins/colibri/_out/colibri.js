@@ -3842,14 +3842,20 @@ var colibri;
                         parent.appendChild(text);
                         return text;
                     }
-                    createCheckbox(parent) {
+                    createCheckbox(parent, label) {
                         const check = document.createElement("input");
+                        if (label) {
+                            const id = (PropertySection.NEXT_ID++).toString();
+                            label.htmlFor = id;
+                            check.setAttribute("id", id);
+                        }
                         check.type = "checkbox";
                         check.classList.add("formCheckbox");
                         parent.appendChild(check);
                         return check;
                     }
                 }
+                PropertySection.NEXT_ID = 0;
                 properties.PropertySection = PropertySection;
             })(properties = controls.properties || (controls.properties = {}));
         })(controls = ui.controls || (ui.controls = {}));

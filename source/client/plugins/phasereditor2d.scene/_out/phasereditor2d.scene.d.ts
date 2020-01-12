@@ -287,6 +287,7 @@ declare namespace phasereditor2d.scene.core.json {
         TYPE_SCRIPT = "TYPE_SCRIPT"
     }
     class SceneSettings {
+        sceneType: SceneType;
         snapEnabled: boolean;
         snapWidth: number;
         snapHeight: number;
@@ -301,7 +302,7 @@ declare namespace phasereditor2d.scene.core.json {
         borderY: number;
         borderWidth: number;
         borderHeight: number;
-        constructor(snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, createMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
+        constructor(sceneType?: SceneType, snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, createMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
         toJSON(): {};
         readJSON(data: object): void;
     }
@@ -357,7 +358,6 @@ declare namespace phasereditor2d.scene.ui {
         private _inEditor;
         private _maker;
         private _settings;
-        private _sceneType;
         private _packCache;
         constructor(inEditor?: boolean);
         protected registerDestroyListener(name: string): void;
@@ -711,11 +711,7 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
             name: string;
             value: any;
         }>, name: string, label: string, tooltip: string): void;
-        createBooleanField(comp: HTMLElement, name: string, label: string, tooltip: string): {
-            comp: HTMLDivElement;
-            label: HTMLLabelElement;
-            check: HTMLInputElement;
-        };
+        createBooleanField(comp: HTMLElement, name: string, label?: HTMLLabelElement): HTMLInputElement;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {

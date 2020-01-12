@@ -15,9 +15,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
             comp.style.gridTemplateColumns = "auto auto 1fr auto 1fr";
 
             {
-                this.createBooleanField(comp, "snapEnabled", "Enabled", "Enable snapping")
 
-                    .comp.style.gridColumn = "1 / span 5";
+                const label = this.createLabel(comp, "Enabled", "Enable snapping");
+                label.style.gridColumn = "1 / span 2";
+
+                this.createBooleanField(comp, "snapEnabled", label)
+                    .style.gridColumn = "3 / span 3";
             }
 
             this.createLabel(comp, "Size");

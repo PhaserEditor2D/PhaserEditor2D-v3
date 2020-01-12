@@ -106,23 +106,15 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this.addUpdater(() => {
 
-                const item = items.find(i => i.value === this.getSettings().compilerOutputLanguage);
+                const item = items.find(i => i.value === this.getSettings()[name]);
 
                 btn.textContent = item ? item.name : "-";
             });
         }
 
-        createBooleanField(comp: HTMLElement, name: string, label: string, tooltip: string) {
+        createBooleanField(comp: HTMLElement, name: string, label?: HTMLLabelElement) {
 
-            const comp2 = document.createElement("div");
-            comp2.classList.add("formGrid");
-            comp2.style.gridTemplateColumns = "auto 1fr";
-
-            comp.appendChild(comp2);
-
-            const checkElement = this.createCheckbox(comp2);
-
-            const labelElement = this.createLabel(comp2, label, tooltip);
+            const checkElement = this.createCheckbox(comp, label);
 
             this.addUpdater(() => {
 
@@ -141,11 +133,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 }));
             });
 
-            return {
-                comp: comp2,
-                label: labelElement,
-                check: checkElement
-            };
+            return checkElement;
         }
     }
 }

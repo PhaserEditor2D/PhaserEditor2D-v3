@@ -161,9 +161,20 @@ namespace colibri.ui.controls.properties {
             return text;
         }
 
-        protected createCheckbox(parent: HTMLElement) {
+        private static NEXT_ID = 0;
+
+        protected createCheckbox(parent: HTMLElement, label?: HTMLLabelElement) {
 
             const check = document.createElement("input");
+
+            if (label) {
+
+                const id = (PropertySection.NEXT_ID++).toString();
+
+                label.htmlFor = id;
+
+                check.setAttribute("id", id);
+            }
 
             check.type = "checkbox";
             check.classList.add("formCheckbox");
