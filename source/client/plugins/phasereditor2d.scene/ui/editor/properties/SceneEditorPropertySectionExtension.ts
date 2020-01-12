@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     import controls = colibri.ui.controls;
 
-    export declare type GetPropertySection = (page: controls.properties.PropertyPage) => SceneSection<any>;
+    export declare type GetPropertySection = (page: controls.properties.PropertyPage) => BaseSceneSection<any>;
 
     export class SceneEditorPropertySectionExtension extends colibri.Extension {
 

@@ -170,7 +170,22 @@ namespace colibri.ui.controls.properties {
                 sectionIdSet.add(section.getId());
             }
 
-            const n = this._selection.length;
+            let n = this._selection.length;
+
+            let selection = this._selection;
+
+            if (n === 0) {
+
+                const obj = this._sectionProvider.getEmptySelectionObject();
+
+                if (obj) {
+
+                    selection = [obj];
+                    n = 1;
+                }
+            }
+
+            this._selection = selection;
 
             for (const pane of this._sectionPanes) {
 
@@ -182,7 +197,7 @@ namespace colibri.ui.controls.properties {
 
                     show = true;
 
-                    for (const obj of this._selection) {
+                    for (const obj of selection) {
 
                         if (!section.canEdit(obj, n)) {
 

@@ -923,6 +923,7 @@ declare namespace colibri.ui.controls.properties {
 declare namespace colibri.ui.controls.properties {
     abstract class PropertySectionProvider {
         abstract addSections(page: PropertyPage, sections: Array<PropertySection<any>>): void;
+        getEmptySelectionObject(): any;
     }
 }
 declare namespace colibri.ui.controls.viewers {

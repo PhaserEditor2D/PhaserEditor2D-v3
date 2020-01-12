@@ -2595,15 +2595,16 @@ var phasereditor2d;
                         ctx.restore();
                     }
                     renderGrid() {
+                        const settings = this._editor.getScene().getSettings();
                         const camera = this._editor.getScene().getCamera();
                         // parameters from settings
                         const snapEnabled = false;
                         const snapX = 10;
                         const snapY = 10;
-                        const borderX = 0;
-                        const borderY = 0;
-                        const borderWidth = 800;
-                        const borderHeight = 600;
+                        const borderX = settings.borderX;
+                        const borderY = settings.borderY;
+                        const borderWidth = settings.borderWidth;
+                        const borderHeight = settings.borderHeight;
                         const ctx = this._ctx;
                         const canvasWidth = this._canvas.width;
                         const canvasHeight = this._canvas.height;
@@ -2747,7 +2748,7 @@ var phasereditor2d;
                         this.addClass("SceneEditor");
                         this._blocksProvider = new ui.blocks.SceneEditorBlocksProvider(this);
                         this._outlineProvider = new editor.outline.SceneEditorOutlineProvider(this);
-                        this._propertyProvider = new editor.properties.SceneEditorSectionProvider();
+                        this._propertyProvider = new editor.properties.SceneEditorSectionProvider(this);
                     }
                     static getFactory() {
                         return new SceneEditorFactory();
@@ -3118,7 +3119,7 @@ var phasereditor2d;
                                     next.push(selected);
                                 }
                             }
-                            else {
+                            else if (selected) {
                                 next = [selected];
                             }
                         }
@@ -3431,9 +3432,192 @@ var phasereditor2d;
             (function (editor) {
                 var properties;
                 (function (properties) {
+                    class BaseSceneSection extends colibri.ui.controls.properties.PropertySection {
+                        getHelp(key) {
+                            return "";
+                        }
+                        getScene() {
+                            return this.getSelection()[0];
+                        }
+                        getEditor() {
+                            return colibri.Platform.getWorkbench()
+                                .getActiveWindow().getEditorArea()
+                                .getSelectedEditor();
+                        }
+                    }
+                    properties.BaseSceneSection = BaseSceneSection;
+                })(properties = editor.properties || (editor.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_10) {
+                var undo;
+                (function (undo) {
+                    var ide = colibri.ui.ide;
+                    class SceneEditorOperation extends ide.undo.Operation {
+                        constructor(editor) {
+                            super();
+                            this._editor = editor;
+                        }
+                    }
+                    undo.SceneEditorOperation = SceneEditorOperation;
+                })(undo = editor_10.undo || (editor_10.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../undo/SceneEditorOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var properties;
+                (function (properties) {
+                    class ChangeSettingsPropertyOperation extends editor.undo.SceneEditorOperation {
+                        constructor(args) {
+                            super(args.editor);
+                            this._name = args.name;
+                            this._value = args.value;
+                            this._repaint = args.repaint;
+                            this._oldValue = this._editor.getScene().getSettings()[this._name];
+                            this.setValue(this._value);
+                        }
+                        setValue(value) {
+                            this._editor.getScene().getSettings()[this._name] = value;
+                            this._editor.setSelection(this._editor.getSelection());
+                            this._editor.setDirty(true);
+                            if (this._repaint) {
+                                this._editor.repaint();
+                            }
+                        }
+                        undo() {
+                            this.setValue(this._oldValue);
+                        }
+                        redo() {
+                            this.setValue(this._value);
+                        }
+                    }
+                    properties.ChangeSettingsPropertyOperation = ChangeSettingsPropertyOperation;
+                })(properties = editor.properties || (editor.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_11) {
+                var properties;
+                (function (properties) {
+                    class SceneSection extends properties.BaseSceneSection {
+                        getScene() {
+                            return this.getSelection()[0];
+                        }
+                        getSettings() {
+                            return this.getScene().getSettings();
+                        }
+                        createIntegerField(comp, name, label, tooltip) {
+                            const labelElement = this.createLabel(comp, label, tooltip);
+                            const textElement = this.createText(comp);
+                            this.addUpdater(() => {
+                                textElement.value = this.getSettings()[name].toString();
+                            });
+                            textElement.addEventListener("change", e => {
+                                const editor = this.getEditor();
+                                editor.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
+                                    editor: editor,
+                                    name: name,
+                                    value: Number.parseInt(textElement.value, 10),
+                                    repaint: true
+                                }));
+                            });
+                            return {
+                                label: labelElement,
+                                text: textElement
+                            };
+                        }
+                    }
+                    properties.SceneSection = SceneSection;
+                })(properties = editor_11.properties || (editor_11.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneSection.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var properties;
+                (function (properties) {
+                    class DisplaySection extends properties.SceneSection {
+                        constructor(page) {
+                            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Display");
+                        }
+                        createForm(parent) {
+                            const comp = this.createGridElement(parent, 3);
+                            comp.style.gridTemplateColumns = "auto auto 1fr auto 1fr";
+                            this.createLabel(comp, "Border");
+                            this.createIntegerField(comp, "borderX", "X", "Scene border position (X)");
+                            this.createIntegerField(comp, "borderY", "Y", "Scene border position (Y)");
+                            this.createLabel(comp, "");
+                            this.createIntegerField(comp, "borderWidth", "Width", "Scene border width");
+                            this.createIntegerField(comp, "borderHeight", "Height", "Scene border height");
+                        }
+                        canEdit(obj, n) {
+                            return obj instanceof ui.Scene;
+                        }
+                        canEditNumber(n) {
+                            return n === 1;
+                        }
+                    }
+                    properties.DisplaySection = DisplaySection;
+                })(properties = editor.properties || (editor.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_12) {
+                var properties;
+                (function (properties) {
                     var controls = colibri.ui.controls;
                     class SceneEditorSectionProvider extends controls.properties.PropertySectionProvider {
+                        constructor(editor) {
+                            super();
+                            this._editor = editor;
+                        }
+                        getEmptySelectionObject() {
+                            return this._editor.getScene();
+                        }
                         addSections(page, sections) {
+                            sections.push(new properties.DisplaySection(page));
                             const exts = colibri.Platform
                                 .getExtensions(properties.SceneEditorPropertySectionExtension.POINT_ID);
                             for (const ext of exts) {
@@ -3444,7 +3628,7 @@ var phasereditor2d;
                         }
                     }
                     properties.SceneEditorSectionProvider = SceneEditorSectionProvider;
-                })(properties = editor.properties || (editor.properties = {}));
+                })(properties = editor_12.properties || (editor_12.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3475,47 +3659,6 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var editor;
-            (function (editor) {
-                var properties;
-                (function (properties) {
-                    class SceneSection extends colibri.ui.controls.properties.PropertySection {
-                    }
-                    properties.SceneSection = SceneSection;
-                })(properties = editor.properties || (editor.properties = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var editor;
-            (function (editor_10) {
-                var undo;
-                (function (undo) {
-                    var ide = colibri.ui.ide;
-                    class SceneEditorOperation extends ide.undo.Operation {
-                        constructor(editor) {
-                            super();
-                            this._editor = editor;
-                        }
-                    }
-                    undo.SceneEditorOperation = SceneEditorOperation;
-                })(undo = editor_10.undo || (editor_10.undo = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./SceneEditorOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -3524,7 +3667,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_11) {
+            (function (editor_13) {
                 var undo;
                 (function (undo) {
                     class AddObjectsOperation extends undo.SceneEditorOperation {
@@ -3561,7 +3704,7 @@ var phasereditor2d;
                         }
                     }
                     undo.AddObjectsOperation = AddObjectsOperation;
-                })(undo = editor_11.undo || (editor_11.undo = {}));
+                })(undo = editor_13.undo || (editor_13.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_11.ui || (scene_11.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3573,7 +3716,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_12) {
+            (function (editor_14) {
                 var undo;
                 (function (undo) {
                     class JoinObjectsInContainerOperation extends undo.SceneEditorOperation {
@@ -3614,7 +3757,7 @@ var phasereditor2d;
                         }
                     }
                     undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
-                })(undo = editor_12.undo || (editor_12.undo = {}));
+                })(undo = editor_14.undo || (editor_14.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_12.ui || (scene_12.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3626,7 +3769,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_13) {
+            (function (editor_15) {
                 var undo;
                 (function (undo) {
                     class RemoveObjectsOperation extends undo.AddObjectsOperation {
@@ -3641,7 +3784,7 @@ var phasereditor2d;
                         }
                     }
                     undo.RemoveObjectsOperation = RemoveObjectsOperation;
-                })(undo = editor_13.undo || (editor_13.undo = {}));
+                })(undo = editor_15.undo || (editor_15.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4133,7 +4276,6 @@ var phasereditor2d;
                         const list = ser.read("list", []);
                         const maker = this.getScene().getMaker();
                         const container = this.getObject();
-                        // TODO: why? this should be executed once
                         container.removeAll(true);
                         for (const objData of list) {
                             const sprite = maker.createObject(objData);
@@ -4519,7 +4661,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class OriginSection extends ui.editor.properties.SceneSection {
+                class OriginSection extends ui.editor.properties.BaseSceneSection {
                     constructor(page) {
                         super(page, "SceneEditor.OriginSection", "Origin", false);
                     }
@@ -4600,6 +4742,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../../editor/properties/BaseSceneSection.ts"/>
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -4608,7 +4751,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TransformSection extends ui.editor.properties.SceneSection {
+                class TransformSection extends ui.editor.properties.BaseSceneSection {
                     constructor(page) {
                         super(page, "SceneEditor.TransformSection", "Transform", false);
                     }
@@ -4684,7 +4827,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class VariableSection extends ui.editor.properties.SceneSection {
+                class VariableSection extends ui.editor.properties.BaseSceneSection {
                     constructor(page) {
                         super(page, "SceneEditor.VariableSection", "Variable", false);
                     }
@@ -4839,7 +4982,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 var controls = colibri.ui.controls;
                 var ide = colibri.ui.ide;
-                class TextureSection extends ui.editor.properties.SceneSection {
+                class TextureSection extends ui.editor.properties.BaseSceneSection {
                     constructor(page) {
                         super(page, "SceneEditor.TextureSection", "Texture", true);
                     }

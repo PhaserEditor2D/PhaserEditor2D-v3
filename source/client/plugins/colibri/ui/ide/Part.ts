@@ -80,6 +80,7 @@ namespace colibri.ui.ide {
         }
 
         setSelection(selection: any[], notify = true): void {
+
             this._selection = selection;
 
             if (notify) {

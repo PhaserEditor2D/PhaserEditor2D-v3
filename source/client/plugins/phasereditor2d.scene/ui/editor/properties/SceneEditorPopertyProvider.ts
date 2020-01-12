@@ -4,8 +4,23 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     export class SceneEditorSectionProvider extends controls.properties.PropertySectionProvider {
 
+        private _editor: SceneEditor;
+
+        constructor(editor: SceneEditor) {
+            super();
+
+            this._editor = editor;
+        }
+
+        getEmptySelectionObject() {
+
+            return this._editor.getScene();
+        }
+
         addSections(
             page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void {
+
+            sections.push(new DisplaySection(page));
 
             const exts = colibri.Platform
                 .getExtensions<SceneEditorPropertySectionExtension>(SceneEditorPropertySectionExtension.POINT_ID);

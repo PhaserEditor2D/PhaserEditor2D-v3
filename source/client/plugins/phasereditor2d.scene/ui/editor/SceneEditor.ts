@@ -64,7 +64,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._blocksProvider = new blocks.SceneEditorBlocksProvider(this);
             this._outlineProvider = new outline.SceneEditorOutlineProvider(this);
-            this._propertyProvider = new properties.SceneEditorSectionProvider();
+            this._propertyProvider = new properties.SceneEditorSectionProvider(this);
         }
 
         openSourceFileInEditor(): void {

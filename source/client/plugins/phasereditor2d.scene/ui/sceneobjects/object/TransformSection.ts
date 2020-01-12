@@ -1,6 +1,8 @@
+/// <reference path="../../editor/properties/BaseSceneSection.ts"/>
+
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TransformSection extends editor.properties.SceneSection<sceneobjects.ITransformLike> {
+    export class TransformSection extends editor.properties.BaseSceneSection<sceneobjects.ITransformLike> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
             super(page, "SceneEditor.TransformSection", "Transform", false);

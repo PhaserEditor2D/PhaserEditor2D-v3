@@ -78,7 +78,8 @@ namespace phasereditor2d.scene.ui.editor {
                         next.push(selected);
                     }
 
-                } else {
+                } else if (selected) {
+
                     next = [selected];
                 }
             }

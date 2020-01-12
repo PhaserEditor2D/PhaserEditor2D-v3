@@ -79,7 +79,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.getObject();
 
-            // TODO: why? this should be executed once
             container.removeAll(true);
 
             for (const objData of list) {

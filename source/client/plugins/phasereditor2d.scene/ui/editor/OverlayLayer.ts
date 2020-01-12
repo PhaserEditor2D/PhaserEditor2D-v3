@@ -23,15 +23,18 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         resizeTo() {
+
             const parent = this._canvas.parentElement;
             this._canvas.width = Math.floor(parent.clientWidth);
             this._canvas.height = Math.floor(parent.clientHeight);
             this._canvas.style.width = this._canvas.width + "px";
             this._canvas.style.height = this._canvas.height + "px";
+
             this.resetContext();
         }
 
         render() {
+
             if (!this._ctx) {
                 this.resetContext();
             }
@@ -87,6 +90,9 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private renderGrid() {
+
+            const settings = this._editor.getScene().getSettings();
+
             const camera = this._editor.getScene().getCamera();
 
             // parameters from settings
@@ -95,10 +101,10 @@ namespace phasereditor2d.scene.ui.editor {
             const snapX = 10;
             const snapY = 10;
 
-            const borderX = 0;
-            const borderY = 0;
-            const borderWidth = 800;
-            const borderHeight = 600;
+            const borderX = settings.borderX;
+            const borderY = settings.borderY;
+            const borderWidth = settings.borderWidth;
+            const borderHeight = settings.borderHeight;
 
             const ctx = this._ctx;
             const canvasWidth = this._canvas.width;
