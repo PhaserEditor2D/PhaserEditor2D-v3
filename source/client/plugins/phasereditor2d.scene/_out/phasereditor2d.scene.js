@@ -4856,9 +4856,18 @@ var phasereditor2d;
                             this.getEditor().getUndoManager().add(new sceneobjects.PropertyUnlockOperation(this.getEditor(), this.getSelection(), properties, unlocked));
                         });
                         this.addUpdater(() => {
-                            const unlocked = this.isUnlocked(...properties);
-                            mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
-                            mutableIcon.repaint();
+                            const thereIsPrefabInstances = this.getSelection()
+                                .map(obj => obj.getEditorSupport().isPrefabInstance())
+                                .find(b => b);
+                            if (thereIsPrefabInstances) {
+                                element.style.width = controls.ICON_SIZE + "px";
+                                const unlocked = this.isUnlocked(...properties);
+                                mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
+                                mutableIcon.repaint();
+                            }
+                            else {
+                                element.style.width = "0px";
+                            }
                         });
                     }
                     isUnlocked(...properties) {
@@ -5045,12 +5054,14 @@ var phasereditor2d;
                     setValue(obj, unlocked) {
                         for (const prop of this._properties) {
                             const support = obj.getEditorSupport();
-                            if (!unlocked) {
-                                const prefabSer = support.getPrefabSerializer();
-                                const propValue = prefabSer.read(prop.name, prop.defValue);
-                                prop.setValue(obj, propValue);
+                            if (support.isPrefabInstance()) {
+                                if (!unlocked) {
+                                    const prefabSer = support.getPrefabSerializer();
+                                    const propValue = prefabSer.read(prop.name, prop.defValue);
+                                    prop.setValue(obj, propValue);
+                                }
+                                obj.getEditorSupport().setUnlockedProperty(prop.name, unlocked);
                             }
-                            obj.getEditorSupport().setUnlockedProperty(prop.name, unlocked);
                         }
                     }
                 }

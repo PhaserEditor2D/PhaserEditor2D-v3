@@ -37,16 +37,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const support = obj.getEditorSupport();
 
-                if (!unlocked) {
+                if (support.isPrefabInstance()) {
 
-                    const prefabSer = support.getPrefabSerializer();
+                    if (!unlocked) {
 
-                    const propValue = prefabSer.read(prop.name, prop.defValue);
+                        const prefabSer = support.getPrefabSerializer();
 
-                    prop.setValue(obj, propValue);
+                        const propValue = prefabSer.read(prop.name, prop.defValue);
+
+                        prop.setValue(obj, propValue);
+                    }
+
+                    obj.getEditorSupport().setUnlockedProperty(prop.name, unlocked);
                 }
-
-                obj.getEditorSupport().setUnlockedProperty(prop.name, unlocked);
             }
         }
     }

@@ -24,11 +24,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(() => {
 
-                const unlocked = this.isUnlocked(...properties);
+                const thereIsPrefabInstances = this.getSelection()
 
-                mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
+                    .map(obj => obj.getEditorSupport().isPrefabInstance())
 
-                mutableIcon.repaint();
+                    .find(b => b);
+
+                if (thereIsPrefabInstances) {
+
+                    element.style.width = controls.ICON_SIZE + "px";
+
+                    const unlocked = this.isUnlocked(...properties);
+
+                    mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
+
+                    mutableIcon.repaint();
+
+                } else {
+
+                    element.style.width = "0px";
+                }
             });
         }
 
