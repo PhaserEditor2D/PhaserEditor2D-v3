@@ -3219,13 +3219,23 @@ var phasereditor2d;
                             });
                             manager.addHandlerHelper(commands.CMD_COMPILE_SCENE_EDITOR, args => args.activeEditor instanceof editor_6.SceneEditor, args => args.activeEditor.compile());
                             // compile all scene files
-                            manager.addCommandHelper({
-                                id: commands.CMD_COMPILE_ALL_SCENE_FILES,
-                                icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_BUILD),
-                                name: "Compile All Scene Files",
-                                tooltip: "Compile all the Scene files of the project."
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_COMPILE_ALL_SCENE_FILES,
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_BUILD),
+                                    name: "Compile All Scene Files",
+                                    tooltip: "Compile all the Scene files of the project."
+                                },
+                                handler: {
+                                    testFunc: args => args.activeWindow instanceof phasereditor2d.ide.ui.DesignWindow,
+                                    executeFunc: args => scene.ScenePlugin.getInstance().compileAll(),
+                                },
+                                keys: {
+                                    control: true,
+                                    alt: true,
+                                    key: "B"
+                                }
                             });
-                            manager.addHandlerHelper(commands.CMD_COMPILE_ALL_SCENE_FILES, args => args.activeWindow instanceof phasereditor2d.ide.ui.DesignWindow, args => scene.ScenePlugin.getInstance().compileAll());
                         }
                     }
                     commands.SceneEditorCommands = SceneEditorCommands;

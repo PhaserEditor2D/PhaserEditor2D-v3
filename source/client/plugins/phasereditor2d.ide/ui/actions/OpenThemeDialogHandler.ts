@@ -3,7 +3,7 @@ namespace phasereditor2d.ide.ui.actions {
     import controls = colibri.ui.controls;
     import commands = colibri.ui.ide.commands;
 
-    export function OpenThemeDialogHandler(args: commands.CommandArgs) {
+    export function OpenThemeDialogHandler(args: commands.HandlerArgs) {
 
         const dlg = new dialogs.ThemesDialog();
 
@@ -21,7 +21,7 @@ namespace phasereditor2d.ide.ui.actions {
         });
     }
 
-    OpenThemeDialogHandler.test = (args: commands.CommandArgs) => {
+    OpenThemeDialogHandler.test = (args: commands.HandlerArgs) => {
         return !(args.activeDialog instanceof dialogs.ThemesDialog);
     };
 }

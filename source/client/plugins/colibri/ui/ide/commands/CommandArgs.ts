@@ -1,6 +1,6 @@
 namespace colibri.ui.ide.commands {
 
-    export class CommandArgs {
+    export class HandlerArgs {
         constructor(
             public readonly activePart: Part,
             public readonly activeEditor: EditorPart,

@@ -7063,7 +7063,7 @@ var colibri;
         (function (ide) {
             var commands;
             (function (commands) {
-                class CommandArgs {
+                class HandlerArgs {
                     constructor(activePart, activeEditor, activeElement, activeMenu, activeWindow, activeDialog) {
                         this.activePart = activePart;
                         this.activeEditor = activeEditor;
@@ -7073,7 +7073,7 @@ var colibri;
                         this.activeDialog = activeDialog;
                     }
                 }
-                commands.CommandArgs = CommandArgs;
+                commands.HandlerArgs = HandlerArgs;
             })(commands = ide.commands || (ide.commands = {}));
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -7189,7 +7189,7 @@ var colibri;
                         if (activeMenu) {
                             activeElement = activeMenu.getElement();
                         }
-                        return new commands.CommandArgs(wb.getActivePart(), wb.getActiveEditor(), activeElement, activeMenu, wb.getActiveWindow(), wb.getActiveDialog());
+                        return new commands.HandlerArgs(wb.getActivePart(), wb.getActiveEditor(), activeElement, activeMenu, wb.getActiveWindow(), wb.getActiveDialog());
                     }
                     getCommand(id) {
                         const command = this._commandIdMap.get(id);
@@ -7221,6 +7221,9 @@ var colibri;
                             this._commandMatcherMap.get(command).push(matcher);
                         }
                     }
+                    addKeyBindingHelper(commandId, config) {
+                        this.addKeyBinding(commandId, new commands.KeyMatcher(config));
+                    }
                     addHandler(commandId, handler) {
                         const command = this.getCommand(commandId);
                         if (command) {
@@ -7232,6 +7235,18 @@ var colibri;
                             testFunc: testFunc,
                             executeFunc: executeFunc
                         }));
+                    }
+                    add(args, commandId) {
+                        if (args.command) {
+                            this.addCommandHelper(args.command);
+                        }
+                        const id = args.command ? args.command.id : commandId;
+                        if (args.handler) {
+                            this.addHandler(id, new commands.CommandHandler(args.handler));
+                        }
+                        if (args.keys) {
+                            this.addKeyBinding(id, new commands.KeyMatcher(args.keys));
+                        }
                     }
                 }
                 commands.CommandManager = CommandManager;

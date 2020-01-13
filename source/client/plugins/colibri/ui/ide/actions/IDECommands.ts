@@ -19,7 +19,7 @@ namespace colibri.ui.ide.actions {
     export const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
     export const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
 
-    function isViewerScope(args: colibri.ui.ide.commands.CommandArgs) {
+    function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
         if (args.activeElement) {
 

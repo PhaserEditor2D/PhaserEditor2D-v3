@@ -2,7 +2,7 @@ namespace phasereditor2d.ide.ui.actions {
 
     import controls = colibri.ui.controls;
 
-    export function OpenProjectHandler(args: colibri.ui.ide.commands.CommandArgs) {
+    export function OpenProjectHandler(args: colibri.ui.ide.commands.HandlerArgs) {
 
         const dlg = new dialogs.ProjectsDialog();
 

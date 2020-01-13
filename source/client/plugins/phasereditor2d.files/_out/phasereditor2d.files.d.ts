@@ -46,7 +46,7 @@ declare namespace phasereditor2d.files.ui.actions {
     class OpenNewFileDialogAction extends controls.Action {
         private _initialLocation;
         constructor();
-        static commandTest(args: colibri.ui.ide.commands.CommandArgs): boolean;
+        static commandTest(args: colibri.ui.ide.commands.HandlerArgs): boolean;
         run(): void;
         private openDialog;
         setInitialLocation(folder: io.FilePath): void;

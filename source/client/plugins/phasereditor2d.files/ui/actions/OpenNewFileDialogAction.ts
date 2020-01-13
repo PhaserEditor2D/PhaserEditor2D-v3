@@ -15,7 +15,7 @@ namespace phasereditor2d.files.ui.actions {
             });
         }
 
-        static commandTest(args: colibri.ui.ide.commands.CommandArgs): boolean {
+        static commandTest(args: colibri.ui.ide.commands.HandlerArgs): boolean {
 
             const root = colibri.ui.ide.FileUtils.getRoot();
 

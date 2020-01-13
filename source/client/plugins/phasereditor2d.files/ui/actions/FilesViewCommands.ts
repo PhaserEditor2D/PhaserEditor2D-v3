@@ -4,7 +4,7 @@ namespace phasereditor2d.files.ui.actions {
 
     export const CMD_NEW_FILE = "phasereditor2d.files.ui.actions.newfile";
 
-    function isFilesViewScope(args: colibri.ui.ide.commands.CommandArgs) {
+    function isFilesViewScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof views.FilesView;
     }
 

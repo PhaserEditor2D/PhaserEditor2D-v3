@@ -60,7 +60,7 @@ namespace phasereditor2d.pack.ui.editor {
                 });
         }
 
-        private static isEditorScope(args: ide.commands.CommandArgs) {
+        private static isEditorScope(args: ide.commands.HandlerArgs) {
 
             return args.activePart instanceof AssetPackEditor ||
 

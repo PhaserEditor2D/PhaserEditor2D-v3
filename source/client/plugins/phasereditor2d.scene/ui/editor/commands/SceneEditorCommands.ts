@@ -1,11 +1,13 @@
 namespace phasereditor2d.scene.ui.editor.commands {
 
+    import controls = colibri.ui.controls;
+
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
 
-    function isSceneScope(args: colibri.ui.ide.commands.CommandArgs) {
+    function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor ||
             args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
             && args.activeEditor instanceof SceneEditor;
@@ -105,19 +107,23 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             // compile all scene files
 
-            manager.addCommandHelper({
-                id: CMD_COMPILE_ALL_SCENE_FILES,
-                icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
-                name: "Compile All Scene Files",
-                tooltip: "Compile all the Scene files of the project."
+            manager.add({
+                command: {
+                    id: CMD_COMPILE_ALL_SCENE_FILES,
+                    icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
+                    name: "Compile All Scene Files",
+                    tooltip: "Compile all the Scene files of the project."
+                },
+                handler: {
+                    testFunc: args => args.activeWindow instanceof ide.ui.DesignWindow,
+                    executeFunc: args => ScenePlugin.getInstance().compileAll(),
+                },
+                keys: {
+                    control: true,
+                    alt: true,
+                    key: "B"
+                }
             });
-
-            manager.addHandlerHelper(
-                CMD_COMPILE_ALL_SCENE_FILES,
-                args => args.activeWindow instanceof ide.ui.DesignWindow,
-                args => ScenePlugin.getInstance().compileAll());
         }
-
     }
-
 }

@@ -1,25 +1,27 @@
 namespace colibri.ui.ide.commands {
 
+    export interface HandlerConfig {
+
+        testFunc?: (args: HandlerArgs) => boolean;
+        executeFunc?: (args: HandlerArgs) => void;
+    }
+
     export class CommandHandler {
 
-        private _testFunc: (args: CommandArgs) => boolean;
-        private _executeFunc: (args: CommandArgs) => void;
+        private _testFunc: (args: HandlerArgs) => boolean;
+        private _executeFunc: (args: HandlerArgs) => void;
 
-        constructor(config: {
-            testFunc?: (args: CommandArgs) => boolean,
-            executeFunc?: (args: CommandArgs) => void
-        }) {
+        constructor(config: HandlerConfig) {
 
             this._testFunc = config.testFunc;
             this._executeFunc = config.executeFunc;
-
         }
 
-        test(args: CommandArgs) {
+        test(args: HandlerArgs) {
             return this._testFunc ? this._testFunc(args) : true;
         }
 
-        execute(args: CommandArgs): void {
+        execute(args: HandlerArgs): void {
 
             if (this._executeFunc) {
                 this._executeFunc(args);

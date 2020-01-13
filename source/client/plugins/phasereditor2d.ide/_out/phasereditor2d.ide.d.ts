@@ -88,13 +88,13 @@ declare namespace phasereditor2d.ide.ui.actions {
     }
 }
 declare namespace phasereditor2d.ide.ui.actions {
-    function OpenProjectHandler(args: colibri.ui.ide.commands.CommandArgs): void;
+    function OpenProjectHandler(args: colibri.ui.ide.commands.HandlerArgs): void;
 }
 declare namespace phasereditor2d.ide.ui.actions {
     import commands = colibri.ui.ide.commands;
-    function OpenThemeDialogHandler(args: commands.CommandArgs): void;
+    function OpenThemeDialogHandler(args: commands.HandlerArgs): void;
     namespace OpenThemeDialogHandler {
-        var test: (args: commands.CommandArgs) => boolean;
+        var test: (args: commands.HandlerArgs) => boolean;
     }
 }
 declare namespace phasereditor2d.ide.ui.dialogs {

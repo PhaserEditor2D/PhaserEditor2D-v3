@@ -1624,6 +1624,14 @@ declare namespace colibri.ui.ide {
     const IMG_SECTION_PADDING = 10;
 }
 declare namespace colibri.ui.ide.commands {
+    interface KeyMatcherConfig {
+        control?: boolean;
+        shift?: boolean;
+        alt?: boolean;
+        meta?: boolean;
+        key?: string;
+        filterInputElements?: boolean;
+    }
     class KeyMatcher {
         private _control;
         private _shift;
@@ -1631,14 +1639,7 @@ declare namespace colibri.ui.ide.commands {
         private _meta;
         private _key;
         private _filterInputElements;
-        constructor(config: {
-            control?: boolean;
-            shift?: boolean;
-            alt?: boolean;
-            meta?: boolean;
-            key?: string;
-            filterInputElements?: boolean;
-        });
+        constructor(config: KeyMatcherConfig);
         getKeyString(): string;
         matchesKeys(event: KeyboardEvent): boolean;
         matchesTarget(element: EventTarget): boolean;
@@ -1682,17 +1683,18 @@ declare namespace colibri.ui.ide.actions {
     }
 }
 declare namespace colibri.ui.ide.commands {
+    interface CommandConfig {
+        id: string;
+        name: string;
+        tooltip: string;
+        icon?: controls.IImage;
+    }
     class Command {
         private _id;
         private _name;
         private _tooltip;
         private _icon;
-        constructor(config: {
-            id: string;
-            name: string;
-            tooltip: string;
-            icon?: controls.IImage;
-        });
+        constructor(config: CommandConfig);
         getId(): string;
         getName(): string;
         getTooltip(): string;
@@ -1700,7 +1702,7 @@ declare namespace colibri.ui.ide.commands {
     }
 }
 declare namespace colibri.ui.ide.commands {
-    class CommandArgs {
+    class HandlerArgs {
         readonly activePart: Part;
         readonly activeEditor: EditorPart;
         readonly activeElement: HTMLElement;
@@ -1719,15 +1721,16 @@ declare namespace colibri.ui.ide.commands {
     }
 }
 declare namespace colibri.ui.ide.commands {
+    interface HandlerConfig {
+        testFunc?: (args: HandlerArgs) => boolean;
+        executeFunc?: (args: HandlerArgs) => void;
+    }
     class CommandHandler {
         private _testFunc;
         private _executeFunc;
-        constructor(config: {
-            testFunc?: (args: CommandArgs) => boolean;
-            executeFunc?: (args: CommandArgs) => void;
-        });
-        test(args: CommandArgs): boolean;
-        execute(args: CommandArgs): void;
+        constructor(config: HandlerConfig);
+        test(args: HandlerArgs): boolean;
+        execute(args: HandlerArgs): void;
     }
 }
 declare namespace colibri.ui.ide.commands {
@@ -1751,8 +1754,14 @@ declare namespace colibri.ui.ide.commands {
         getCommandKeyString(commandId: string): string;
         executeCommand(commandId: string): void;
         addKeyBinding(commandId: string, matcher: KeyMatcher): void;
+        addKeyBindingHelper(commandId: string, config: KeyMatcherConfig): void;
         addHandler(commandId: string, handler: CommandHandler): void;
-        addHandlerHelper(commandId: string, testFunc: (args: CommandArgs) => boolean, executeFunc: (args: CommandArgs) => void): void;
+        addHandlerHelper(commandId: string, testFunc: (args: HandlerArgs) => boolean, executeFunc: (args: HandlerArgs) => void): void;
+        add(args: {
+            command?: CommandConfig;
+            handler?: HandlerConfig;
+            keys?: KeyMatcherConfig;
+        }, commandId?: string): void;
     }
 }
 declare namespace colibri.ui.ide.properties {

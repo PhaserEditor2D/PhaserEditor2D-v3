@@ -48,7 +48,7 @@ namespace colibri.ui.ide.commands {
             }
         }
 
-        private executeHandler(command: Command, args: CommandArgs) {
+        private executeHandler(command: Command, args: HandlerArgs) {
             const handlers = this._commandHandlerMap.get(command);
 
             for (const handler of handlers) {
@@ -91,7 +91,7 @@ namespace colibri.ui.ide.commands {
                 activeElement = activeMenu.getElement();
             }
 
-            return new CommandArgs(
+            return new HandlerArgs(
                 wb.getActivePart(),
                 wb.getActiveEditor(),
                 activeElement,
@@ -148,6 +148,11 @@ namespace colibri.ui.ide.commands {
             }
         }
 
+        addKeyBindingHelper(commandId: string, config: KeyMatcherConfig) {
+
+            this.addKeyBinding(commandId, new KeyMatcher(config));
+        }
+
         addHandler(commandId: string, handler: CommandHandler) {
 
             const command = this.getCommand(commandId);
@@ -158,12 +163,39 @@ namespace colibri.ui.ide.commands {
         }
 
         addHandlerHelper(
-            commandId: string, testFunc: (args: CommandArgs) => boolean, executeFunc: (args: CommandArgs) => void) {
+            commandId: string, testFunc: (args: HandlerArgs) => boolean, executeFunc: (args: HandlerArgs) => void) {
 
             this.addHandler(commandId, new CommandHandler({
                 testFunc: testFunc,
                 executeFunc: executeFunc
             }));
+        }
+
+        add(
+            args: {
+                command?: CommandConfig,
+                handler?: HandlerConfig,
+                keys?: KeyMatcherConfig
+            },
+            commandId?: string) {
+
+            if (args.command) {
+
+                this.addCommandHelper(args.command);
+
+            }
+
+            const id = args.command ? args.command.id : commandId;
+
+            if (args.handler) {
+
+                this.addHandler(id, new CommandHandler(args.handler));
+            }
+
+            if (args.keys) {
+
+                this.addKeyBinding(id, new KeyMatcher(args.keys));
+            }
         }
     }
 

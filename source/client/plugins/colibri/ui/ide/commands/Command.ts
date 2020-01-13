@@ -1,5 +1,12 @@
 namespace colibri.ui.ide.commands {
 
+    export interface CommandConfig {
+        id: string;
+        name: string;
+        tooltip: string;
+        icon?: controls.IImage;
+    }
+
     export class Command {
 
         private _id: string;
@@ -7,12 +14,7 @@ namespace colibri.ui.ide.commands {
         private _tooltip: string;
         private _icon: controls.IImage;
 
-        constructor(config: {
-            id: string,
-            name: string,
-            tooltip: string,
-            icon?: controls.IImage
-        }) {
+        constructor(config: CommandConfig) {
 
             this._id = config.id;
             this._name = config.name;
