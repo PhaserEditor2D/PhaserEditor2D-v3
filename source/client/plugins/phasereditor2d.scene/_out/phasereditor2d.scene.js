@@ -4070,6 +4070,9 @@ var phasereditor2d;
                         this._unlockedProperties = new Set();
                     }
                     isUnlockedProperty(propName) {
+                        if (propName === sceneobjects.TransformComponent.x.name || propName === sceneobjects.TransformComponent.y.name) {
+                            return true;
+                        }
                         if (this.isPrefabInstance()) {
                             return this._unlockedProperties.has(propName);
                         }

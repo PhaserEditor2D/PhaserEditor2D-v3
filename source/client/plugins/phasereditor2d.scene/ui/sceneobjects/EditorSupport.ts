@@ -39,6 +39,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isUnlockedProperty(propName: string) {
 
+            if (propName === TransformComponent.x.name || propName === TransformComponent.y.name) {
+                return true;
+            }
+
             if (this.isPrefabInstance()) {
 
                 return this._unlockedProperties.has(propName);
