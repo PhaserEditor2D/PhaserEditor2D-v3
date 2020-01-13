@@ -7323,6 +7323,9 @@ var colibri;
             var undo;
             (function (undo) {
                 class Operation {
+                    execute() {
+                        // nothing by default
+                    }
                 }
                 undo.Operation = Operation;
             })(undo = ide.undo || (ide.undo = {}));
@@ -7345,6 +7348,7 @@ var colibri;
                     add(op) {
                         this._undoList.push(op);
                         this._redoList = [];
+                        op.execute();
                     }
                     undo() {
                         if (this._undoList.length > 0) {

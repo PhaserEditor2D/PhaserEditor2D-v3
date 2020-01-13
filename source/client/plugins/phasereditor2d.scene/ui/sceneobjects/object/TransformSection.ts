@@ -1,8 +1,9 @@
 /// <reference path="../../editor/properties/BaseSceneSection.ts"/>
+/// <reference path="./ObjectSceneSection.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TransformSection extends editor.properties.BaseSceneSection<sceneobjects.ITransformLike> {
+    export class TransformSection extends ObjectSceneSection<sceneobjects.ITransformLike> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
             super(page, "SceneEditor.TransformSection", "Transform", false);
@@ -16,24 +17,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 this.createLabel(comp, "Position");
 
-                // X
+                // x
 
                 {
                     this.createLabel(comp, "X");
-                    const text = this.createText(comp);
-                    this.addUpdater(() => {
-                        text.value = this.flatValues_Number(this.getSelection().map(obj => obj.x));
-                    });
+                    this.createFloatField(comp, TransformComponent.x);
                 }
 
-                // y
+                // x
 
                 {
                     this.createLabel(comp, "Y");
-                    const text = this.createText(comp);
-                    this.addUpdater(() => {
-                        text.value = this.flatValues_Number(this.getSelection().map(obj => obj.y));
-                    });
+                    this.createFloatField(comp, TransformComponent.y);
                 }
             }
 
@@ -42,38 +37,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 this.createLabel(comp, "Scale");
 
-                // X
+                // scaleX
 
                 {
                     this.createLabel(comp, "X");
-                    const text = this.createText(comp);
-                    this.addUpdater(() => {
-                        text.value = this.flatValues_Number(this.getSelection().map(obj => obj.scaleX));
-                    });
+                    this.createFloatField(comp, TransformComponent.scaleX);
                 }
 
-                // y
+                // scaleY
 
                 {
                     this.createLabel(comp, "Y");
-                    const text = this.createText(comp);
-                    this.addUpdater(() => {
-                        text.value = this.flatValues_Number(this.getSelection().map(obj => obj.scaleY));
-                    });
+                    this.createFloatField(comp, TransformComponent.scaleY);
                 }
             }
 
-            // Angle
+            // angle
 
             {
-                this.createLabel(comp, "Angle").style.gridColumnStart = "span 2";
-
-                const text = this.createText(comp);
-                this.addUpdater(() => {
-                    text.value = this.flatValues_Number(this.getSelection().map(obj => obj.angle));
-                });
-
-                this.createLabel(comp, "").style.gridColumnStart = "span 2";
+                this.createLabel(comp, "Angle").style.gridColumn = "1 / span 2";
+                this.createFloatField(comp, TransformComponent.angle);
+                this.createLabel(comp, "").style.gridColumn = "3 / span 2";
             }
         }
 

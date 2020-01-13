@@ -6,5 +6,9 @@ namespace colibri.ui.ide.undo {
 
         abstract redo(): void;
 
+        execute(): void {
+            // nothing by default
+        }
+
     }
 }

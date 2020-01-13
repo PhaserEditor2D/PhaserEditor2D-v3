@@ -1782,6 +1782,7 @@ declare namespace colibri.ui.ide.undo {
     abstract class Operation {
         abstract undo(): void;
         abstract redo(): void;
+        execute(): void;
     }
 }
 declare namespace colibri.ui.ide.undo {

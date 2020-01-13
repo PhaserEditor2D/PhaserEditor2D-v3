@@ -883,6 +883,19 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IProperty<T> {
+        getValue(obj: T): any;
+        setValue(obj: T, value: any): void;
+        label?: string;
+        tooltip?: string;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface ISceneObjectLike {
+        getEditorSupport(): EditorSupport<SceneObject>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class LoaderUpdaterExtension extends colibri.Extension {
         static POINT_ID: string;
         constructor();
@@ -942,7 +955,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    interface SceneObject extends Phaser.GameObjects.GameObject {
+    interface SceneObject extends ISceneObjectLike, Phaser.GameObjects.GameObject {
         getEditorSupport(): EditorSupport<SceneObject>;
     }
 }
@@ -1122,6 +1135,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+        createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     interface IOriginLike {
         originX: number;
@@ -1143,8 +1161,32 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    abstract class SceneObjectOperation<T extends ISceneObjectLike> extends editor.undo.SceneEditorOperation {
+        private _objIdList;
+        private _value;
+        private _values1;
+        private _values2;
+        private _objects;
+        constructor(editor: editor.SceneEditor, objects: T[], value: any);
+        abstract getValue(obj: T): any;
+        abstract setValue(obj: T, value: any): void;
+        execute(): void;
+        undo(): void;
+        redo(): void;
+        private update;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class SimpleOperation<T extends ISceneObjectLike> extends SceneObjectOperation<T> {
+        private _property;
+        constructor(editor: editor.SceneEditor, objects: T[], property: IProperty<T>, value: any);
+        getValue(obj: T): any;
+        setValue(obj: T, value: any): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
-    interface ITransformLike {
+    interface ITransformLike extends ISceneObjectLike {
         x: number;
         y: number;
         scaleX: number;
@@ -1152,13 +1194,18 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         angle: number;
     }
     class TransformComponent extends Component<ITransformLike> {
+        static x: IProperty<ITransformLike>;
+        static y: IProperty<ITransformLike>;
+        static scaleX: IProperty<ITransformLike>;
+        static scaleY: IProperty<ITransformLike>;
+        static angle: IProperty<ITransformLike>;
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class TransformSection extends editor.properties.BaseSceneSection<sceneobjects.ITransformLike> {
+    class TransformSection extends ObjectSceneSection<sceneobjects.ITransformLike> {
         constructor(page: colibri.ui.controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;

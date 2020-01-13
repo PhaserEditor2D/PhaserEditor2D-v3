@@ -4831,6 +4831,38 @@ var phasereditor2d;
         })(ui = scene_19.ui || (scene_19.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class ObjectSceneSection extends ui.editor.properties.BaseSceneSection {
+                    // tslint:disable-next-line:ban-types
+                    createFloatField(parent, property) {
+                        const text = this.createText(parent, false);
+                        text.addEventListener("change", e => {
+                            const val = Number.parseFloat(text.value);
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, val));
+                        });
+                        this.addUpdater(() => {
+                            const values = [];
+                            for (const obj of this.getSelection()) {
+                                const value = property.getValue(obj);
+                                values.push(value);
+                            }
+                            text.value = values.length === 1 ? values[0].toString() : "";
+                        });
+                        return text;
+                    }
+                }
+                sceneobjects.ObjectSceneSection = ObjectSceneSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../Component.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -4909,6 +4941,77 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class SceneObjectOperation extends ui.editor.undo.SceneEditorOperation {
+                    constructor(editor, objects, value) {
+                        super(editor);
+                        this._objects = objects;
+                        this._value = value;
+                    }
+                    execute() {
+                        this._objIdList = this._objects.map(obj => obj.getEditorSupport().getId());
+                        this._values1 = this._objects.map(_ => this._value);
+                        this._values2 = this._objects.map(obj => this.getValue(obj));
+                        // don't keep the objects reference, we have the ids.
+                        this._objects = null;
+                        this.update(this._values1);
+                    }
+                    undo() {
+                        this.update(this._values2);
+                    }
+                    redo() {
+                        this.update(this._values1);
+                    }
+                    update(values) {
+                        for (let i = 0; i < this._objIdList.length; i++) {
+                            const id = this._objIdList[i];
+                            const obj = this._editor.getScene().getByEditorId(id);
+                            const value = values[i];
+                            if (obj) {
+                                this.setValue(obj, value);
+                            }
+                        }
+                        this._editor.setSelection(this._editor.getSelection());
+                        this._editor.setDirty(true);
+                    }
+                }
+                sceneobjects.SceneObjectOperation = SceneObjectOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class SimpleOperation extends sceneobjects.SceneObjectOperation {
+                    constructor(editor, objects, property, value) {
+                        super(editor, objects, value);
+                        this._property = property;
+                    }
+                    getValue(obj) {
+                        return this._property.getValue(obj);
+                    }
+                    setValue(obj, value) {
+                        this._property.setValue(obj, value);
+                    }
+                }
+                sceneobjects.SimpleOperation = SimpleOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../Component.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -4946,12 +5049,33 @@ var phasereditor2d;
                         ser.write("angle", obj.angle, 0);
                     }
                 }
+                TransformComponent.x = {
+                    getValue: obj => obj.x,
+                    setValue: (obj, val) => obj.x = val
+                };
+                TransformComponent.y = {
+                    getValue: obj => obj.y,
+                    setValue: (obj, val) => obj.y = val
+                };
+                TransformComponent.scaleX = {
+                    getValue: obj => obj.scaleX,
+                    setValue: (obj, val) => obj.scaleX = val
+                };
+                TransformComponent.scaleY = {
+                    getValue: obj => obj.scaleY,
+                    setValue: (obj, val) => obj.scaleY = val
+                };
+                TransformComponent.angle = {
+                    getValue: obj => obj.angle,
+                    setValue: (obj, val) => obj.angle = val
+                };
                 sceneobjects.TransformComponent = TransformComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../../editor/properties/BaseSceneSection.ts"/>
+/// <reference path="./ObjectSceneSection.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -4960,7 +5084,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TransformSection extends ui.editor.properties.BaseSceneSection {
+                class TransformSection extends sceneobjects.ObjectSceneSection {
                     constructor(page) {
                         super(page, "SceneEditor.TransformSection", "Transform", false);
                     }
@@ -4969,51 +5093,36 @@ var phasereditor2d;
                         // Position
                         {
                             this.createLabel(comp, "Position");
-                            // X
+                            // x
                             {
                                 this.createLabel(comp, "X");
-                                const text = this.createText(comp);
-                                this.addUpdater(() => {
-                                    text.value = this.flatValues_Number(this.getSelection().map(obj => obj.x));
-                                });
+                                this.createFloatField(comp, sceneobjects.TransformComponent.x);
                             }
-                            // y
+                            // x
                             {
                                 this.createLabel(comp, "Y");
-                                const text = this.createText(comp);
-                                this.addUpdater(() => {
-                                    text.value = this.flatValues_Number(this.getSelection().map(obj => obj.y));
-                                });
+                                this.createFloatField(comp, sceneobjects.TransformComponent.y);
                             }
                         }
                         // Scale
                         {
                             this.createLabel(comp, "Scale");
-                            // X
+                            // scaleX
                             {
                                 this.createLabel(comp, "X");
-                                const text = this.createText(comp);
-                                this.addUpdater(() => {
-                                    text.value = this.flatValues_Number(this.getSelection().map(obj => obj.scaleX));
-                                });
+                                this.createFloatField(comp, sceneobjects.TransformComponent.scaleX);
                             }
-                            // y
+                            // scaleY
                             {
                                 this.createLabel(comp, "Y");
-                                const text = this.createText(comp);
-                                this.addUpdater(() => {
-                                    text.value = this.flatValues_Number(this.getSelection().map(obj => obj.scaleY));
-                                });
+                                this.createFloatField(comp, sceneobjects.TransformComponent.scaleY);
                             }
                         }
-                        // Angle
+                        // angle
                         {
-                            this.createLabel(comp, "Angle").style.gridColumnStart = "span 2";
-                            const text = this.createText(comp);
-                            this.addUpdater(() => {
-                                text.value = this.flatValues_Number(this.getSelection().map(obj => obj.angle));
-                            });
-                            this.createLabel(comp, "").style.gridColumnStart = "span 2";
+                            this.createLabel(comp, "Angle").style.gridColumn = "1 / span 2";
+                            this.createFloatField(comp, sceneobjects.TransformComponent.angle);
+                            this.createLabel(comp, "").style.gridColumn = "3 / span 2";
                         }
                     }
                     canEdit(obj, n) {
