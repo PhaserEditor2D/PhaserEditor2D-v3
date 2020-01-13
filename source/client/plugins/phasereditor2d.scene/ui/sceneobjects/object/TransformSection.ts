@@ -10,12 +10,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected createForm(parent: HTMLDivElement) {
-            const comp = this.createGridElement(parent, 5);
+            const comp = this.createGridElement(parent);
+            comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
 
             // Position
 
             {
-                this.createLabel(comp, "Position");
+                // this.createLock(comp);
+                this.createLabel(comp, "Position").style.gridColumn = "2";
 
                 // x
 
@@ -24,7 +26,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     this.createFloatField(comp, TransformComponent.x);
                 }
 
-                // x
+                // y
 
                 {
                     this.createLabel(comp, "Y");
@@ -35,6 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // Scale
 
             {
+                this.createLock(comp, TransformComponent.scaleX, TransformComponent.scaleY);
                 this.createLabel(comp, "Scale");
 
                 // scaleX
@@ -55,9 +58,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // angle
 
             {
-                this.createLabel(comp, "Angle").style.gridColumn = "1 / span 2";
+                this.createLock(comp, TransformComponent.angle);
+                this.createLabel(comp, "Angle").style.gridColumn = "2 / span 2";
                 this.createFloatField(comp, TransformComponent.angle);
-                this.createLabel(comp, "").style.gridColumn = "3 / span 2";
+                this.createLabel(comp, "").style.gridColumn = "4 / span 2";
             }
         }
 

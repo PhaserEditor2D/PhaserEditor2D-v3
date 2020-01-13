@@ -5,6 +5,8 @@ declare namespace phasereditor2d.scene {
     const ICON_SCALE = "scale";
     const ICON_ORIGIN = "origin";
     const ICON_BUILD = "build";
+    const ICON_LOCKED = "locked";
+    const ICON_UNLOCKED = "unlocked";
     class ScenePlugin extends colibri.Plugin {
         private static _instance;
         private _sceneFinder;
@@ -886,6 +888,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IProperty<T> {
         getValue(obj: T): any;
         setValue(obj: T, value: any): void;
+        name?: string;
+        defValue?: any;
         label?: string;
         tooltip?: string;
     }
@@ -1136,6 +1140,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+        createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
+        private isUnlocked;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
     }
 }

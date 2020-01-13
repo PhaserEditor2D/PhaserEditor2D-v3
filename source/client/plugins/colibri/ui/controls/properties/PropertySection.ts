@@ -25,6 +25,7 @@ namespace colibri.ui.controls.properties {
         abstract canEditNumber(n: number): boolean;
 
         updateWithSelection(): void {
+
             for (const updater of this._updaters) {
                 updater();
             }

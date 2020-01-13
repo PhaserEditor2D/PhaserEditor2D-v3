@@ -639,6 +639,18 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
+    class MutableIcon {
+        private _element;
+        private _context;
+        private _icon;
+        constructor();
+        getElement(): HTMLCanvasElement;
+        setIcon(icon: IImage): void;
+        getIcon(): IImage;
+        repaint(): void;
+    }
+}
+declare namespace colibri.ui.controls {
     class Point {
         x: number;
         y: number;

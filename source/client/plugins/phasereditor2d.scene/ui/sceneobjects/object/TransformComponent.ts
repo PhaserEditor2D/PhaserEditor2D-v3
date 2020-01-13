@@ -18,28 +18,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class TransformComponent extends Component<ITransformLike> {
 
         static x: IProperty<ITransformLike> = {
+            name: "x",
+            defValue: 0,
             getValue: obj => obj.x,
-            setValue: (obj, val) => obj.x = val
+            setValue: (obj, val) => obj.x = val,
         };
 
         static y: IProperty<ITransformLike> = {
+            name: "y",
+            defValue: 0,
             getValue: obj => obj.y,
-            setValue: (obj, val) => obj.y = val
+            setValue: (obj, val) => obj.y = val,
         };
 
         static scaleX: IProperty<ITransformLike> = {
+            name: "scaleX",
+            defValue: 1,
             getValue: obj => obj.scaleX,
-            setValue: (obj, val) => obj.scaleX = val
+            setValue: (obj, val) => obj.scaleX = val,
         };
 
         static scaleY: IProperty<ITransformLike> = {
+            name: "scaleY",
+            defValue: 1,
             getValue: obj => obj.scaleY,
             setValue: (obj, val) => obj.scaleY = val
         };
 
         static angle: IProperty<ITransformLike> = {
             getValue: obj => obj.angle,
-            setValue: (obj, val) => obj.angle = val
+            setValue: (obj, val) => obj.angle = val,
+            name: "angle"
         };
 
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {

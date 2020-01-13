@@ -9,6 +9,8 @@ namespace phasereditor2d.scene {
     export const ICON_SCALE = "scale";
     export const ICON_ORIGIN = "origin";
     export const ICON_BUILD = "build";
+    export const ICON_LOCKED = "locked";
+    export const ICON_UNLOCKED = "unlocked";
 
     export class ScenePlugin extends colibri.Plugin {
 
@@ -62,7 +64,9 @@ namespace phasereditor2d.scene {
                     ICON_ORIGIN,
                     ICON_SCALE,
                     ICON_TRANSLATE,
-                    ICON_BUILD
+                    ICON_BUILD,
+                    ICON_LOCKED,
+                    ICON_UNLOCKED
                 ])
             );
 

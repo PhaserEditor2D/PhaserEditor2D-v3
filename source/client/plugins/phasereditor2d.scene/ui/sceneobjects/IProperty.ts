@@ -6,6 +6,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setValue(obj: T, value: any): void;
 
+        name?: string;
+
+        defValue?: any;
+
         label?: string;
 
         tooltip?: string;

@@ -10,6 +10,8 @@ var phasereditor2d;
         scene_1.ICON_SCALE = "scale";
         scene_1.ICON_ORIGIN = "origin";
         scene_1.ICON_BUILD = "build";
+        scene_1.ICON_LOCKED = "locked";
+        scene_1.ICON_UNLOCKED = "unlocked";
         class ScenePlugin extends colibri.Plugin {
             constructor() {
                 super("phasereditor2d.scene");
@@ -32,7 +34,9 @@ var phasereditor2d;
                     scene_1.ICON_ORIGIN,
                     scene_1.ICON_SCALE,
                     scene_1.ICON_TRANSLATE,
-                    scene_1.ICON_BUILD
+                    scene_1.ICON_BUILD,
+                    scene_1.ICON_LOCKED,
+                    scene_1.ICON_UNLOCKED
                 ]));
                 // commands
                 reg.addExtension(new ide.commands.CommandExtension(scene_1.ui.editor.commands.SceneEditorCommands.registerCommands));
@@ -4839,7 +4843,47 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var controls = colibri.ui.controls;
                 class ObjectSceneSection extends ui.editor.properties.BaseSceneSection {
+                    createLock(parent, ...properties) {
+                        const mutableIcon = new controls.MutableIcon();
+                        const element = mutableIcon.getElement();
+                        parent.appendChild(element);
+                        const lockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_LOCKED);
+                        const unlockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_UNLOCKED);
+                        element.addEventListener("click", e => {
+                            const unlocked = !this.isUnlocked(...properties);
+                            for (const obj of this.getSelection()) {
+                                for (const property of properties) {
+                                    const support = obj.getEditorSupport();
+                                    if (!unlocked) {
+                                        const prefabSer = support.getPrefabSerializer();
+                                        const propValue = prefabSer.read(property.name, property.defValue);
+                                        property.setValue(obj, propValue);
+                                    }
+                                    support.setUnlockedProperty(property.name, unlocked);
+                                }
+                            }
+                            this.updateWithSelection();
+                            this.getEditor().repaint();
+                        });
+                        this.addUpdater(() => {
+                            const unlocked = this.isUnlocked(...properties);
+                            mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
+                            mutableIcon.repaint();
+                        });
+                    }
+                    isUnlocked(...properties) {
+                        for (const obj of this.getSelection()) {
+                            for (const property of properties) {
+                                const locked = !obj.getEditorSupport().isUnlockedProperty(property.name);
+                                if (locked) {
+                                    return false;
+                                }
+                            }
+                        }
+                        return true;
+                    }
                     // tslint:disable-next-line:ban-types
                     createFloatField(parent, property) {
                         const text = this.createText(parent, false);
@@ -5050,24 +5094,33 @@ var phasereditor2d;
                     }
                 }
                 TransformComponent.x = {
+                    name: "x",
+                    defValue: 0,
                     getValue: obj => obj.x,
-                    setValue: (obj, val) => obj.x = val
+                    setValue: (obj, val) => obj.x = val,
                 };
                 TransformComponent.y = {
+                    name: "y",
+                    defValue: 0,
                     getValue: obj => obj.y,
-                    setValue: (obj, val) => obj.y = val
+                    setValue: (obj, val) => obj.y = val,
                 };
                 TransformComponent.scaleX = {
+                    name: "scaleX",
+                    defValue: 1,
                     getValue: obj => obj.scaleX,
-                    setValue: (obj, val) => obj.scaleX = val
+                    setValue: (obj, val) => obj.scaleX = val,
                 };
                 TransformComponent.scaleY = {
+                    name: "scaleY",
+                    defValue: 1,
                     getValue: obj => obj.scaleY,
                     setValue: (obj, val) => obj.scaleY = val
                 };
                 TransformComponent.angle = {
                     getValue: obj => obj.angle,
-                    setValue: (obj, val) => obj.angle = val
+                    setValue: (obj, val) => obj.angle = val,
+                    name: "angle"
                 };
                 sceneobjects.TransformComponent = TransformComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
@@ -5089,16 +5142,18 @@ var phasereditor2d;
                         super(page, "SceneEditor.TransformSection", "Transform", false);
                     }
                     createForm(parent) {
-                        const comp = this.createGridElement(parent, 5);
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
                         // Position
                         {
-                            this.createLabel(comp, "Position");
+                            // this.createLock(comp);
+                            this.createLabel(comp, "Position").style.gridColumn = "2";
                             // x
                             {
                                 this.createLabel(comp, "X");
                                 this.createFloatField(comp, sceneobjects.TransformComponent.x);
                             }
-                            // x
+                            // y
                             {
                                 this.createLabel(comp, "Y");
                                 this.createFloatField(comp, sceneobjects.TransformComponent.y);
@@ -5106,6 +5161,7 @@ var phasereditor2d;
                         }
                         // Scale
                         {
+                            this.createLock(comp, sceneobjects.TransformComponent.scaleX, sceneobjects.TransformComponent.scaleY);
                             this.createLabel(comp, "Scale");
                             // scaleX
                             {
@@ -5120,9 +5176,10 @@ var phasereditor2d;
                         }
                         // angle
                         {
-                            this.createLabel(comp, "Angle").style.gridColumn = "1 / span 2";
+                            this.createLock(comp, sceneobjects.TransformComponent.angle);
+                            this.createLabel(comp, "Angle").style.gridColumn = "2 / span 2";
                             this.createFloatField(comp, sceneobjects.TransformComponent.angle);
-                            this.createLabel(comp, "").style.gridColumn = "3 / span 2";
+                            this.createLabel(comp, "").style.gridColumn = "4 / span 2";
                         }
                     }
                     canEdit(obj, n) {
