@@ -422,7 +422,16 @@ namespace phasereditor2d.scene.ui.editor {
 
             maker.createScene(sceneData);
 
-            this.repaint();
+            const sel = this.getSelection()
+
+                .map(obj =>
+                    obj instanceof Phaser.GameObjects.GameObject ?
+                        this._scene.getByEditorId((obj as sceneobjects.SceneObject).getEditorSupport().getId())
+                        : obj)
+
+                .filter(v => v !== null && v !== undefined);
+
+            this.setSelection(sel);
 
             this._currentRefreshHash = await this.buildDependenciesHash();
 

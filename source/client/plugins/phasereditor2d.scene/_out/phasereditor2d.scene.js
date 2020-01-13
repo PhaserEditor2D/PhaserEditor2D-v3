@@ -2998,7 +2998,12 @@ var phasereditor2d;
                         await maker.preload();
                         await maker.updateSceneLoader(sceneData);
                         maker.createScene(sceneData);
-                        this.repaint();
+                        const sel = this.getSelection()
+                            .map(obj => obj instanceof Phaser.GameObjects.GameObject ?
+                            this._scene.getByEditorId(obj.getEditorSupport().getId())
+                            : obj)
+                            .filter(v => v !== null && v !== undefined);
+                        this.setSelection(sel);
                         this._currentRefreshHash = await this.buildDependenciesHash();
                         this.refreshOutline();
                         await this.updateTitleIcon(true);
