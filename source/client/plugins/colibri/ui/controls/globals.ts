@@ -4,6 +4,7 @@ namespace colibri.ui.controls {
     export const ROW_HEIGHT = 20;
     export const FONT_HEIGHT = 14;
     export const FONT_OFFSET = 2;
+    export const FONT_FAMILY = "Arial, Helvetica, sans-serif";
     export const ACTION_WIDTH = 20;
     export const PANEL_BORDER_SIZE = 5;
     export const PANEL_TITLE_HEIGHT = 22;

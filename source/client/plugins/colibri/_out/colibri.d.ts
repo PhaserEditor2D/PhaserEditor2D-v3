@@ -792,6 +792,7 @@ declare namespace colibri.ui.controls {
     const ROW_HEIGHT = 20;
     const FONT_HEIGHT = 14;
     const FONT_OFFSET = 2;
+    const FONT_FAMILY = "Arial, Helvetica, sans-serif";
     const ACTION_WIDTH = 20;
     const PANEL_BORDER_SIZE = 5;
     const PANEL_TITLE_HEIGHT = 22;
@@ -1031,7 +1032,7 @@ declare namespace colibri.ui.controls.viewers {
             y: number;
         };
         private renderTreeCell;
-        protected setTextColor(args: RenderCellArgs): void;
+        protected prepareContextForText(args: RenderCellArgs): void;
     }
 }
 declare namespace colibri.ui.controls.viewers {

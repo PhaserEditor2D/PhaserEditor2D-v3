@@ -149,14 +149,14 @@ namespace colibri.ui.controls.viewers {
 
             ctx.save();
 
-            this.setTextColor(args);
+            this.prepareContextForText(args);
 
             ctx.fillText(label, x, y);
 
             ctx.restore();
         }
 
-        protected setTextColor(args: RenderCellArgs) {
+        protected prepareContextForText(args: RenderCellArgs) {
 
             if (args.viewer.isSelected(args.obj)) {
 

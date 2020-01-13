@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
         }
 
         getCellRendererProvider(): controls.viewers.ICellRendererProvider {
-            return new SceneEditorOutlineRendererProvider(this._editor);
+            return new SceneEditorOutlineRendererProvider();
         }
 
         getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer {

@@ -3221,6 +3221,7 @@ var colibri;
             controls.ROW_HEIGHT = 20;
             controls.FONT_HEIGHT = 14;
             controls.FONT_OFFSET = 2;
+            controls.FONT_FAMILY = "Arial, Helvetica, sans-serif";
             controls.ACTION_WIDTH = 20;
             controls.PANEL_BORDER_SIZE = 5;
             controls.PANEL_TITLE_HEIGHT = 22;
@@ -4314,11 +4315,11 @@ var colibri;
                         }
                         renderer.renderCell(args2);
                         ctx.save();
-                        this.setTextColor(args);
+                        this.prepareContextForText(args);
                         ctx.fillText(label, x, y);
                         ctx.restore();
                     }
-                    setTextColor(args) {
+                    prepareContextForText(args) {
                         if (args.viewer.isSelected(args.obj)) {
                             args.canvasContext.fillStyle = controls.Controls.getTheme().viewerSelectionForeground;
                         }

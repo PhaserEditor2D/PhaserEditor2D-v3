@@ -3344,7 +3344,7 @@ var phasereditor2d;
                             return new outline.SceneEditorOutlineLabelProvider();
                         }
                         getCellRendererProvider() {
-                            return new outline.SceneEditorOutlineRendererProvider(this._editor);
+                            return new outline.SceneEditorOutlineRendererProvider();
                         }
                         getTreeViewerRenderer(viewer) {
                             return new outline.SceneEditorOutlineViewerRenderer(viewer);
@@ -3376,16 +3376,12 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_9) {
+            (function (editor) {
                 var outline;
                 (function (outline) {
                     var controls = colibri.ui.controls;
                     var ide = colibri.ui.ide;
                     class SceneEditorOutlineRendererProvider {
-                        constructor(editor) {
-                            this._editor = editor;
-                            this._assetRendererProvider = new phasereditor2d.pack.ui.viewers.AssetPackCellRendererProvider("tree");
-                        }
                         getCellRenderer(element) {
                             if (element instanceof Phaser.GameObjects.GameObject) {
                                 const obj = element;
@@ -3401,7 +3397,7 @@ var phasereditor2d;
                         }
                     }
                     outline.SceneEditorOutlineRendererProvider = SceneEditorOutlineRendererProvider;
-                })(outline = editor_9.outline || (editor_9.outline = {}));
+                })(outline = editor.outline || (editor.outline = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3417,31 +3413,18 @@ var phasereditor2d;
                 var outline;
                 (function (outline) {
                     var controls = colibri.ui.controls;
-                    const COLORS = {
-                        light: {
-                            selected: "#ffaaaa",
-                            normal: "#ff2222"
-                        },
-                        dark: {
-                            selected: "#550055",
-                            normal: "#ffaaff"
-                        }
-                    };
                     class SceneEditorOutlineViewerRenderer extends controls.viewers.TreeViewerRenderer {
                         constructor(viewer) {
                             super(viewer, 48);
                         }
-                        setTextColor(args) {
+                        prepareContextForText(args) {
                             if (args.obj instanceof Phaser.GameObjects.GameObject) {
                                 const obj = args.obj;
                                 if (obj.getEditorSupport().isPrefabInstance()) {
-                                    const colors = controls.Controls.getTheme().dark ? COLORS.dark : COLORS.light;
-                                    const color = args.viewer.isSelected(args.obj) ? colors.selected : colors.normal;
-                                    args.canvasContext.fillStyle = color;
-                                    return;
+                                    args.canvasContext.font = `italic ${controls.FONT_HEIGHT}px ${controls.FONT_FAMILY}`;
                                 }
                             }
-                            super.setTextColor(args);
+                            super.prepareContextForText(args);
                         }
                     }
                     outline.SceneEditorOutlineViewerRenderer = SceneEditorOutlineViewerRenderer;
@@ -3486,7 +3469,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_10) {
+            (function (editor_9) {
                 var properties;
                 (function (properties) {
                     class SceneSection extends properties.BaseSceneSection {
@@ -3579,7 +3562,7 @@ var phasereditor2d;
                         }
                     }
                     properties.SceneSection = SceneSection;
-                })(properties = editor_10.properties || (editor_10.properties = {}));
+                })(properties = editor_9.properties || (editor_9.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3623,7 +3606,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_11) {
+            (function (editor_10) {
                 var undo;
                 (function (undo) {
                     var ide = colibri.ui.ide;
@@ -3634,7 +3617,7 @@ var phasereditor2d;
                         }
                     }
                     undo.SceneEditorOperation = SceneEditorOperation;
-                })(undo = editor_11.undo || (editor_11.undo = {}));
+                })(undo = editor_10.undo || (editor_10.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3788,7 +3771,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_12) {
+            (function (editor_11) {
                 var properties;
                 (function (properties) {
                     var controls = colibri.ui.controls;
@@ -3812,7 +3795,7 @@ var phasereditor2d;
                         }
                     }
                     properties.SceneEditorSectionProvider = SceneEditorSectionProvider;
-                })(properties = editor_12.properties || (editor_12.properties = {}));
+                })(properties = editor_11.properties || (editor_11.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3885,7 +3868,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_13) {
+            (function (editor_12) {
                 var undo;
                 (function (undo) {
                     class AddObjectsOperation extends undo.SceneEditorOperation {
@@ -3922,7 +3905,7 @@ var phasereditor2d;
                         }
                     }
                     undo.AddObjectsOperation = AddObjectsOperation;
-                })(undo = editor_13.undo || (editor_13.undo = {}));
+                })(undo = editor_12.undo || (editor_12.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_11.ui || (scene_11.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3934,7 +3917,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_14) {
+            (function (editor_13) {
                 var undo;
                 (function (undo) {
                     class JoinObjectsInContainerOperation extends undo.SceneEditorOperation {
@@ -3975,7 +3958,7 @@ var phasereditor2d;
                         }
                     }
                     undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
-                })(undo = editor_14.undo || (editor_14.undo = {}));
+                })(undo = editor_13.undo || (editor_13.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_12.ui || (scene_12.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3987,7 +3970,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_15) {
+            (function (editor_14) {
                 var undo;
                 (function (undo) {
                     class RemoveObjectsOperation extends undo.AddObjectsOperation {
@@ -4002,7 +3985,7 @@ var phasereditor2d;
                         }
                     }
                     undo.RemoveObjectsOperation = RemoveObjectsOperation;
-                })(undo = editor_15.undo || (editor_15.undo = {}));
+                })(undo = editor_14.undo || (editor_14.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
