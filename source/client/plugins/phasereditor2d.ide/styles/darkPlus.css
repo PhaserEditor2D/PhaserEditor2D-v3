@@ -39,6 +39,10 @@ Important:
     border-color: #f59c5c;
 }
 
+.darkPlus input:read-only {
+    background: #4a4a4a;
+}
+
 /* button */
 
 .darkPlus button,
@@ -52,7 +56,6 @@ Important:
     border-radius: 3px;
     padding: 5px;
 }
-
 
 .darkPlus button[disabled] {
     color: rgba(0, 0, 0, 0.4);

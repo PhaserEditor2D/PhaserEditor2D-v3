@@ -4889,6 +4889,7 @@ var phasereditor2d;
                             this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, val));
                         });
                         this.addUpdater(() => {
+                            text.readOnly = !this.isUnlocked(property);
                             text.value = this.flatValues_Number(this.getSelection()
                                 .map(obj => property.getValue(obj)));
                         });

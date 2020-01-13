@@ -20,6 +20,10 @@
     border-color: #4242ff;
 }
 
+.lightBlue input:read-only {
+    background: #bec5e1;
+}
+
 /* button */
 
 .lightBlue button,

@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
 
-        createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>) {
+        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>) {
 
             const mutableIcon = new controls.MutableIcon();
 
@@ -47,7 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        private isUnlocked(...properties: Array<IProperty<T>>) {
+        protected isUnlocked(...properties: Array<IProperty<T>>) {
 
             for (const obj of this.getSelection()) {
 
@@ -79,6 +79,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
 
             this.addUpdater(() => {
+
+                text.readOnly = !this.isUnlocked(property);
 
                 text.value = this.flatValues_Number(
 

@@ -39,6 +39,10 @@ Important:
     border-color: #f59c5c;
 }
 
+.dark input:read-only {
+    background: #4a4a4a;
+}
+
 /* button */
 
 .dark button,

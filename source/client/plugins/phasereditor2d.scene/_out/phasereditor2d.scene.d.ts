@@ -1140,8 +1140,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
-        createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
-        private isUnlocked;
+        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
+        protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
     }
 }
