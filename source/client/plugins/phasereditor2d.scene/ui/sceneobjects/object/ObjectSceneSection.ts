@@ -80,15 +80,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(() => {
 
-                const values = [];
+                text.value = this.flatValues_Number(
 
-                for (const obj of this.getSelection()) {
+                    this.getSelection()
 
-                    const value = property.getValue(obj);
-                    values.push(value);
-                }
-
-                text.value = values.length === 1 ? values[0].toString() : "";
+                        .map(obj => property.getValue(obj))
+                );
             });
 
             return text;
