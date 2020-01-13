@@ -18,28 +18,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const unlocked = !this.isUnlocked(...properties);
 
-                for (const obj of this.getSelection()) {
-
-                    for (const property of properties) {
-
-                        const support = obj.getEditorSupport();
-
-                        if (!unlocked) {
-
-                            const prefabSer = support.getPrefabSerializer();
-
-                            const propValue = prefabSer.read(property.name, property.defValue);
-
-                            property.setValue(obj, propValue);
-                        }
-
-                        support.setUnlockedProperty(property.name, unlocked);
-                    }
-                }
-
-                this.updateWithSelection();
-
-                this.getEditor().repaint();
+                this.getEditor().getUndoManager().add(
+                    new PropertyUnlockOperation(this.getEditor(), this.getSelection(), properties, unlocked));
             });
 
             this.addUpdater(() => {

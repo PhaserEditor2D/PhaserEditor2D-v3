@@ -888,8 +888,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IProperty<T> {
         getValue(obj: T): any;
         setValue(obj: T, value: any): void;
-        name?: string;
-        defValue?: any;
+        name: string;
+        defValue: any;
         label?: string;
         tooltip?: string;
     }
@@ -1180,6 +1180,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         undo(): void;
         redo(): void;
         private update;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class PropertyUnlockOperation extends SceneObjectOperation<ISceneObjectLike> {
+        private _properties;
+        constructor(editor: editor.SceneEditor, objects: ISceneObjectLike[], properties: Array<IProperty<ISceneObjectLike>>, unlocked: boolean);
+        getValue(obj: ISceneObjectLike): boolean;
+        setValue(obj: ISceneObjectLike, unlocked: any): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

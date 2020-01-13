@@ -6,9 +6,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setValue(obj: T, value: any): void;
 
-        name?: string;
+        name: string;
 
-        defValue?: any;
+        defValue: any;
 
         label?: string;
 

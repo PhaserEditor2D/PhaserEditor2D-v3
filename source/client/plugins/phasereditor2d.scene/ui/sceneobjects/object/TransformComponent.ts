@@ -46,9 +46,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static angle: IProperty<ITransformLike> = {
+            name: "angle",
+            defValue: 0,
             getValue: obj => obj.angle,
             setValue: (obj, val) => obj.angle = val,
-            name: "angle"
         };
 
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {

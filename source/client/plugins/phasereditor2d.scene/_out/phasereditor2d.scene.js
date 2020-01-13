@@ -4853,19 +4853,7 @@ var phasereditor2d;
                         const unlockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_UNLOCKED);
                         element.addEventListener("click", e => {
                             const unlocked = !this.isUnlocked(...properties);
-                            for (const obj of this.getSelection()) {
-                                for (const property of properties) {
-                                    const support = obj.getEditorSupport();
-                                    if (!unlocked) {
-                                        const prefabSer = support.getPrefabSerializer();
-                                        const propValue = prefabSer.read(property.name, property.defValue);
-                                        property.setValue(obj, propValue);
-                                    }
-                                    support.setUnlockedProperty(property.name, unlocked);
-                                }
-                            }
-                            this.updateWithSelection();
-                            this.getEditor().repaint();
+                            this.getEditor().getUndoManager().add(new sceneobjects.PropertyUnlockOperation(this.getEditor(), this.getSelection(), properties, unlocked));
                         });
                         this.addUpdater(() => {
                             const unlocked = this.isUnlocked(...properties);
@@ -5031,6 +5019,46 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneObjectOperation.ts"/>
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class PropertyUnlockOperation extends sceneobjects.SceneObjectOperation {
+                    constructor(editor, objects, properties, unlocked) {
+                        super(editor, objects, unlocked);
+                        this._properties = properties;
+                    }
+                    getValue(obj) {
+                        for (const prop of this._properties) {
+                            const locked = !obj.getEditorSupport().isUnlockedProperty(prop.name);
+                            if (locked) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    setValue(obj, unlocked) {
+                        for (const prop of this._properties) {
+                            const support = obj.getEditorSupport();
+                            if (!unlocked) {
+                                const prefabSer = support.getPrefabSerializer();
+                                const propValue = prefabSer.read(prop.name, prop.defValue);
+                                prop.setValue(obj, propValue);
+                            }
+                            obj.getEditorSupport().setUnlockedProperty(prop.name, unlocked);
+                        }
+                    }
+                }
+                sceneobjects.PropertyUnlockOperation = PropertyUnlockOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5118,9 +5146,10 @@ var phasereditor2d;
                     setValue: (obj, val) => obj.scaleY = val
                 };
                 TransformComponent.angle = {
+                    name: "angle",
+                    defValue: 0,
                     getValue: obj => obj.angle,
                     setValue: (obj, val) => obj.angle = val,
-                    name: "angle"
                 };
                 sceneobjects.TransformComponent = TransformComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
