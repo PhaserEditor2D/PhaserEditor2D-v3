@@ -1656,6 +1656,7 @@ var phasereditor2d;
             class SceneMaker {
                 constructor(scene) {
                     this._scene = scene;
+                    this._packFinder = new phasereditor2d.pack.core.PackFinder();
                 }
                 static acceptDropFile(dropFile, editorFile) {
                     if (dropFile.getFullName() === editorFile.getFullName()) {
@@ -1684,7 +1685,11 @@ var phasereditor2d;
                 static isValidSceneDataFormat(data) {
                     return "displayList" in data && Array.isArray(data.displayList);
                 }
+                getPackFinder() {
+                    return this._packFinder;
+                }
                 async preload() {
+                    await this._packFinder.preload();
                     const list = this._scene.textures.list;
                     for (const key in this._scene.textures.list) {
                         if (key === "__DEFAULT" || key === "__MISSING") {
@@ -2099,8 +2104,14 @@ var phasereditor2d;
                         this._packs = [];
                     }
                     async preload() {
-                        const finder = new phasereditor2d.pack.core.PackFinder();
-                        await finder.preload();
+                        let finder;
+                        if (this._editor.getScene()) {
+                            finder = this._editor.getSceneMaker().getPackFinder();
+                        }
+                        else {
+                            finder = new phasereditor2d.pack.core.PackFinder();
+                            await finder.preload();
+                        }
                         this._packs = finder.getPacks();
                     }
                     prepareViewerState(state) {
@@ -2960,6 +2971,9 @@ var phasereditor2d;
                     getSceneMaker() {
                         return this._scene.getMaker();
                     }
+                    getPackFinder() {
+                        return this.getSceneMaker().getPackFinder();
+                    }
                     layout() {
                         super.layout();
                         if (!this._game) {
@@ -3012,6 +3026,7 @@ var phasereditor2d;
                     }
                     async buildDependenciesHash() {
                         const maker = this._scene.getMaker();
+                        await maker.getPackFinder().preload();
                         const hash = await maker.buildDependenciesHash();
                         return hash;
                     }
@@ -3718,13 +3733,12 @@ var phasereditor2d;
                         }
                         createPreloadPackFilesField(parent) {
                             this.createLabel(parent, "Preload Pack Files", "The Pack files to be loaded in this scene.");
-                            const btn = this.createButton(parent, "0 selected", async (e) => {
+                            const btn = this.createButton(parent, "0 selected", (e) => {
                                 const viewer = new controls.viewers.TreeViewer();
                                 viewer.setLabelProvider(new phasereditor2d.files.ui.viewers.FileLabelProvider());
                                 viewer.setCellRendererProvider(new phasereditor2d.files.ui.viewers.FileCellRendererProvider("tree"));
                                 viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                                const finder = new phasereditor2d.pack.core.PackFinder();
-                                await finder.preload();
+                                const finder = this.getEditor().getPackFinder();
                                 const packs = viewer.setInput(finder.getPacks().map(pack => pack.getFile()));
                                 viewer.setSelection(this.getSettings().preloadPackFiles
                                     .map(name => finder.getPacks().find(pack => pack.getFile().getFullName() === name))
@@ -3757,7 +3771,7 @@ var phasereditor2d;
                                 dlg.addButton("Cancel", () => {
                                     dlg.close();
                                 });
-                                viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, async (e) => {
+                                viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, _ => {
                                     selectionCallback([viewer.getSelection()[0]]);
                                 });
                             });
@@ -5284,18 +5298,15 @@ var phasereditor2d;
                         return comp.getTexture();
                     }
                     setValue(obj, value) {
-                        const finder = new phasereditor2d.pack.core.PackFinder();
-                        // TODO: this is a bit ugly, we need a pack finder always ready in the scene editor!
-                        finder.preload().then(() => {
-                            const item = finder.findAssetPackItem(value.textureKey);
-                            if (item) {
-                                item.addToPhaserCache(this.getEditor().getGame(), this.getScene().getPackCache());
-                            }
-                            const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
-                            comp.setTexture(value.textureKey, value.frameKey);
-                            this.getEditor().repaint();
-                            this.getEditor().setSelection(this.getEditor().getSelection());
-                        });
+                        const finder = this.getEditor().getPackFinder();
+                        const item = finder.findAssetPackItem(value.textureKey);
+                        if (item) {
+                            item.addToPhaserCache(this.getEditor().getGame(), this.getScene().getPackCache());
+                        }
+                        const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
+                        comp.setTexture(value.textureKey, value.frameKey);
+                        this.getEditor().repaint();
+                        this.getEditor().setSelection(this.getEditor().getSelection());
                     }
                 }
                 sceneobjects.ChangeTextureOperation = ChangeTextureOperation;
@@ -5439,8 +5450,7 @@ var phasereditor2d;
                         });
                         imgComp.appendChild(imgControl.getElement());
                         this.addUpdater(async () => {
-                            const finder = new phasereditor2d.pack.core.PackFinder();
-                            await finder.preload();
+                            const finder = this.getEditor().getPackFinder();
                             for (const obj of this.getSelection()) {
                                 const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
                                 const img = finder.getAssetPackItemImage(textureKey, frameKey);
@@ -5451,7 +5461,8 @@ var phasereditor2d;
                         // Buttons
                         {
                             const changeBtn = this.createButton(comp, "Select", e => {
-                                sceneobjects.TextureSelectionDialog.createDialog(async (sel) => {
+                                const finder = this.getEditor().getPackFinder();
+                                sceneobjects.TextureSelectionDialog.createDialog(finder, async (sel) => {
                                     const frame = sel[0];
                                     let textureData;
                                     const item = frame.getPackItem();
@@ -5521,9 +5532,7 @@ var phasereditor2d;
                         this._finder = finder;
                         this._callback = callback;
                     }
-                    static async createDialog(callback) {
-                        const finder = new phasereditor2d.pack.core.PackFinder();
-                        await finder.preload();
+                    static async createDialog(finder, callback) {
                         const dlg = new TextureSelectionDialog(finder, callback);
                         dlg.create();
                         return dlg;

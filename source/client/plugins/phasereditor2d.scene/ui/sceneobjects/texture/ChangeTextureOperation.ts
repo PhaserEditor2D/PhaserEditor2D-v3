@@ -15,26 +15,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setValue(obj: ITextureLike, value: TextureKeyFrame): void {
 
-            const finder = new pack.core.PackFinder();
+            const finder = this.getEditor().getPackFinder();
 
-            // TODO: this is a bit ugly, we need a pack finder always ready in the scene editor!
+            const item = finder.findAssetPackItem(value.textureKey);
 
-            finder.preload().then(() => {
+            if (item) {
 
-                const item = finder.findAssetPackItem(value.textureKey);
+                item.addToPhaserCache(this.getEditor().getGame(), this.getScene().getPackCache());
+            }
 
-                if (item) {
+            const comp = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
 
-                    item.addToPhaserCache(this.getEditor().getGame(), this.getScene().getPackCache());
-                }
+            comp.setTexture(value.textureKey, value.frameKey);
 
-                const comp = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
-
-                comp.setTexture(value.textureKey, value.frameKey);
-
-                this.getEditor().repaint();
-                this.getEditor().setSelection(this.getEditor().getSelection());
-            });
+            this.getEditor().repaint();
+            this.getEditor().setSelection(this.getEditor().getSelection());
         }
     }
 }

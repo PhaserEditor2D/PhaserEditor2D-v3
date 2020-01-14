@@ -33,9 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(async () => {
 
-                const finder = new pack.core.PackFinder();
-
-                await finder.preload();
+                const finder = this.getEditor().getPackFinder();
 
                 for (const obj of this.getSelection()) {
 
@@ -54,7 +52,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 const changeBtn = this.createButton(comp, "Select", e => {
 
-                    TextureSelectionDialog.createDialog(async (sel) => {
+                    const finder = this.getEditor().getPackFinder();
+
+                    TextureSelectionDialog.createDialog(finder, async (sel) => {
 
                         const frame = sel[0];
 
@@ -74,14 +74,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             textureData = { textureKey: item.getKey(), frameKey: frame.getName() };
                         }
 
-
                         this.getEditor()
 
                             .getUndoManager().add(new ChangeTextureOperation(
-
                                 this.getEditor(),
                                 this.getSelection(),
-                                textureData));
+                                textureData)
+                            );
                     });
                 });
 

@@ -10,9 +10,11 @@ namespace phasereditor2d.scene.ui {
     export class SceneMaker {
 
         private _scene: Scene;
+        private _packFinder: pack.core.PackFinder;
 
         constructor(scene: Scene) {
             this._scene = scene;
+            this._packFinder = new pack.core.PackFinder();
         }
 
         static acceptDropFile(dropFile: io.FilePath, editorFile: io.FilePath) {
@@ -60,7 +62,13 @@ namespace phasereditor2d.scene.ui {
             return "displayList" in data && Array.isArray(data.displayList);
         }
 
+        getPackFinder() {
+            return this._packFinder;
+        }
+
         async preload() {
+
+            await this._packFinder.preload();
 
             const list = this._scene.textures.list;
 

@@ -67,15 +67,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this.createLabel(parent, "Preload Pack Files", "The Pack files to be loaded in this scene.");
 
-            const btn = this.createButton(parent, "0 selected", async (e) => {
+            const btn = this.createButton(parent, "0 selected", (e) => {
 
                 const viewer = new controls.viewers.TreeViewer();
                 viewer.setLabelProvider(new files.ui.viewers.FileLabelProvider());
                 viewer.setCellRendererProvider(new files.ui.viewers.FileCellRendererProvider("tree"));
                 viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
 
-                const finder = new pack.core.PackFinder();
-                await finder.preload();
+                const finder = this.getEditor().getPackFinder();
 
                 const packs =
 
@@ -135,7 +134,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     dlg.close();
                 });
 
-                viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, async (e) => {
+                viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, _ => {
 
                     selectionCallback([viewer.getSelection()[0]]);
                 });

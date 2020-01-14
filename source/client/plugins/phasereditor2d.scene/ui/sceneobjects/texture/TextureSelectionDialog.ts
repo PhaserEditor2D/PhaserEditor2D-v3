@@ -6,10 +6,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _finder: pack.core.PackFinder;
 
-        static async createDialog(callback: (selection: pack.core.AssetPackImageFrame[]) => void) {
-
-            const finder = new pack.core.PackFinder();
-            await finder.preload();
+        static async createDialog(
+            finder: pack.core.PackFinder,
+            callback: (selection: pack.core.AssetPackImageFrame[]) => void
+        ) {
 
             const dlg = new TextureSelectionDialog(finder, callback);
 

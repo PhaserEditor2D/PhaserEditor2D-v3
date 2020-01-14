@@ -354,6 +354,10 @@ namespace phasereditor2d.scene.ui.editor {
             return this._scene.getMaker();
         }
 
+        getPackFinder() {
+            return this.getSceneMaker().getPackFinder();
+        }
+
         layout() {
 
             super.layout();
@@ -443,6 +447,8 @@ namespace phasereditor2d.scene.ui.editor {
         private async buildDependenciesHash() {
 
             const maker = this._scene.getMaker();
+
+            await maker.getPackFinder().preload();
 
             const hash = await maker.buildDependenciesHash();
 

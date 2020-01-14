@@ -398,9 +398,11 @@ declare namespace phasereditor2d.scene.ui {
     import json = core.json;
     class SceneMaker {
         private _scene;
+        private _packFinder;
         constructor(scene: Scene);
         static acceptDropFile(dropFile: io.FilePath, editorFile: io.FilePath): any;
         static isValidSceneDataFormat(data: json.SceneData): boolean;
+        getPackFinder(): pack.core.PackFinder;
         preload(): Promise<void>;
         buildDependenciesHash(): Promise<string>;
         isPrefabFile(file: io.FilePath): boolean;
@@ -606,6 +608,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         getScene(): Scene;
         getGame(): Phaser.Game;
         getSceneMaker(): SceneMaker;
+        getPackFinder(): pack.core.PackFinder;
         layout(): void;
         getPropertyProvider(): properties.SceneEditorSectionProvider;
         onPartClosed(): boolean;
@@ -1310,7 +1313,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class TextureSelectionDialog extends controls.dialogs.ViewerDialog {
         private _finder;
-        static createDialog(callback: (selection: pack.core.AssetPackImageFrame[]) => void): Promise<TextureSelectionDialog>;
+        static createDialog(finder: pack.core.PackFinder, callback: (selection: pack.core.AssetPackImageFrame[]) => void): Promise<TextureSelectionDialog>;
         private _callback;
         private constructor();
         create(): void;
