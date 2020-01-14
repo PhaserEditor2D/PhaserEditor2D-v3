@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const mutableIcon = new controls.MutableIcon();
 
             const element = mutableIcon.getElement();
+            element.classList.add("PropertyLockIcon");
             parent.appendChild(element);
 
             const lockedIcon = ScenePlugin.getInstance().getIcon(ICON_LOCKED);

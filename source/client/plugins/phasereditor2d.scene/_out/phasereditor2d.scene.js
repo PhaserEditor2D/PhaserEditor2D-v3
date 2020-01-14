@@ -4839,6 +4839,7 @@ var phasereditor2d;
                     createLock(parent, ...properties) {
                         const mutableIcon = new controls.MutableIcon();
                         const element = mutableIcon.getElement();
+                        element.classList.add("PropertyLockIcon");
                         parent.appendChild(element);
                         const lockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_LOCKED);
                         const unlockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_UNLOCKED);

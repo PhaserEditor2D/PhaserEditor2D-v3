@@ -10,3 +10,7 @@
 .SceneEditor canvas {
     border-radius: 3px;
 }
+
+.PropertyLockIcon:hover {
+    cursor: pointer;
+}
