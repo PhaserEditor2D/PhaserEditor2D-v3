@@ -5438,30 +5438,21 @@ var phasereditor2d;
                             setTimeout(() => imgControl.resizeTo(), 1);
                         });
                         imgComp.appendChild(imgControl.getElement());
-                        this.addUpdater(() => {
-                            const obj = this.getSelection()[0];
-                            const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
+                        this.addUpdater(async () => {
                             const finder = new phasereditor2d.pack.core.PackFinder();
-                            finder.preload().then(() => {
+                            await finder.preload();
+                            for (const obj of this.getSelection()) {
+                                const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
                                 const img = finder.getAssetPackItemImage(textureKey, frameKey);
                                 imgControl.setImage(img);
-                                setTimeout(() => imgControl.resizeTo(), 1);
-                            });
+                            }
+                            setTimeout(() => imgControl.resizeTo(), 1);
                         });
                         // Buttons
                         {
                             const changeBtn = this.createButton(comp, "Select", e => {
                                 sceneobjects.TextureSelectionDialog.createDialog(async (sel) => {
                                     const frame = sel[0];
-                                    // const obj = this.getSelection()[0];
-                                    // const textureComp = obj.getEditorSupport().getTextureComponent();
-                                    // const scene = this.getEditor().getScene();
-                                    // frame.getPackItem().addToPhaserCache(scene.game, scene.getPackCache());
-                                    // if (frame.getPackItem() instanceof pack.core.ImageAssetPackItem) {
-                                    //     textureComp.setTexture(frame.getPackItem().getKey(), null);
-                                    // } else {
-                                    //     textureComp.setTexture(frame.getPackItem().getKey(), frame.getName());
-                                    // }
                                     let textureData;
                                     const item = frame.getPackItem();
                                     item.addToPhaserCache(this.getEditor().getGame(), this.getEditor().getScene().getPackCache());
@@ -5476,17 +5467,22 @@ var phasereditor2d;
                                 });
                             });
                             this.addUpdater(() => {
-                                const obj = this.getSelection()[0];
-                                const texture = obj.getEditorSupport().getTextureComponent();
-                                const { textureKey, frameKey } = texture.getTexture();
-                                let str = "(Select)";
-                                if (typeof frameKey === "number" || typeof frameKey === "string") {
-                                    str = frameKey + " @ " + textureKey;
+                                if (this.getSelection().length === 1) {
+                                    const obj = this.getSelection()[0];
+                                    const texture = obj.getEditorSupport().getTextureComponent();
+                                    const { textureKey, frameKey } = texture.getTexture();
+                                    let str = "(Select)";
+                                    if (typeof frameKey === "number" || typeof frameKey === "string") {
+                                        str = frameKey + " @ " + textureKey;
+                                    }
+                                    else if (textureKey) {
+                                        str = textureKey;
+                                    }
+                                    changeBtn.textContent = str;
                                 }
-                                else if (textureKey) {
-                                    str = textureKey;
+                                else {
+                                    changeBtn.textContent = "Multiple Textures";
                                 }
-                                changeBtn.textContent = str;
                             });
                             const deleteBtn = this.createButton(comp, "Delete", e => {
                                 const obj = this.getSelection()[0];
@@ -5502,7 +5498,7 @@ var phasereditor2d;
                         return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TextureComponent) !== null;
                     }
                     canEditNumber(n) {
-                        return n === 1;
+                        return n > 0;
                     }
                 }
                 sceneobjects.TextureSection = TextureSection;

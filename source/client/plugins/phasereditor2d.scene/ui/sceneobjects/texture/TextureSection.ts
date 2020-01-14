@@ -31,22 +31,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             imgComp.appendChild(imgControl.getElement());
 
-            this.addUpdater(() => {
-
-                const obj = this.getSelection()[0];
-
-                const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
+            this.addUpdater(async () => {
 
                 const finder = new pack.core.PackFinder();
 
-                finder.preload().then(() => {
+                await finder.preload();
+
+                for (const obj of this.getSelection()) {
+
+                    const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
 
                     const img = finder.getAssetPackItemImage(textureKey, frameKey);
 
                     imgControl.setImage(img);
+                }
 
-                    setTimeout(() => imgControl.resizeTo(), 1);
-                });
+                setTimeout(() => imgControl.resizeTo(), 1);
             });
 
             // Buttons
@@ -57,23 +57,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     TextureSelectionDialog.createDialog(async (sel) => {
 
                         const frame = sel[0];
-
-                        // const obj = this.getSelection()[0];
-
-                        // const textureComp = obj.getEditorSupport().getTextureComponent();
-
-                        // const scene = this.getEditor().getScene();
-
-                        // frame.getPackItem().addToPhaserCache(scene.game, scene.getPackCache());
-
-                        // if (frame.getPackItem() instanceof pack.core.ImageAssetPackItem) {
-
-                        //     textureComp.setTexture(frame.getPackItem().getKey(), null);
-
-                        // } else {
-
-                        //     textureComp.setTexture(frame.getPackItem().getKey(), frame.getName());
-                        // }
 
                         let textureData: TextureKeyFrame;
 
@@ -104,24 +87,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.addUpdater(() => {
 
-                    const obj = this.getSelection()[0];
+                    if (this.getSelection().length === 1) {
 
-                    const texture = obj.getEditorSupport().getTextureComponent();
+                        const obj = this.getSelection()[0];
 
-                    const { textureKey, frameKey } = texture.getTexture();
+                        const texture = obj.getEditorSupport().getTextureComponent();
 
-                    let str = "(Select)";
+                        const { textureKey, frameKey } = texture.getTexture();
 
-                    if (typeof frameKey === "number" || typeof frameKey === "string") {
+                        let str = "(Select)";
 
-                        str = frameKey + " @ " + textureKey;
+                        if (typeof frameKey === "number" || typeof frameKey === "string") {
 
-                    } else if (textureKey) {
+                            str = frameKey + " @ " + textureKey;
 
-                        str = textureKey;
+                        } else if (textureKey) {
+
+                            str = textureKey;
+                        }
+
+                        changeBtn.textContent = str;
+
+                    } else {
+
+                        changeBtn.textContent = "Multiple Textures";
                     }
-
-                    changeBtn.textContent = str;
                 });
 
                 const deleteBtn = this.createButton(comp, "Delete", e => {
@@ -147,7 +137,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEditNumber(n: number): boolean {
-            return n === 1;
+            return n > 0;
         }
     }
 }
