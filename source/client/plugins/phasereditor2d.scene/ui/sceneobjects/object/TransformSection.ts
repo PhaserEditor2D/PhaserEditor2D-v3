@@ -16,7 +16,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // Position
 
             {
-                // this.createLock(comp);
                 this.createLabel(comp, "Position").style.gridColumn = "2";
 
                 // x

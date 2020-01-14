@@ -4007,7 +4007,6 @@ var phasereditor2d;
                         return this._obj;
                     }
                     buildSetObjectPropertyCodeDOM_Float(fieldName, value, defValue, args) {
-                        const obj = this.getObject();
                         const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
                         let add = false;
                         if (args.prefabSerializer) {
@@ -4353,6 +4352,29 @@ var phasereditor2d;
                 }
                 SceneObjectExtension.POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
                 sceneobjects.SceneObjectExtension = SceneObjectExtension;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                function SimpleProperty(name, defValue, label, tooltip) {
+                    return {
+                        name,
+                        defValue,
+                        label,
+                        tooltip,
+                        getValue: obj => obj[name],
+                        setValue: (obj, value) => obj[name] = value
+                    };
+                }
+                sceneobjects.SimpleProperty = SimpleProperty;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4836,6 +4858,11 @@ var phasereditor2d;
             (function (sceneobjects) {
                 var controls = colibri.ui.controls;
                 class ObjectSceneSection extends ui.editor.properties.BaseSceneSection {
+                    createGridElementWithPropertiesXY(parent) {
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
+                        return comp;
+                    }
                     createLock(parent, ...properties) {
                         const mutableIcon = new controls.MutableIcon();
                         const element = mutableIcon.getElement();
@@ -4872,6 +4899,14 @@ var phasereditor2d;
                             }
                         }
                         return true;
+                    }
+                    createPropertyXYRow(parent, propXY) {
+                        this.createLock(parent, propXY.x, propXY.y);
+                        this.createLabel(parent, propXY.label);
+                        for (const prop of [propXY.x, propXY.y]) {
+                            this.createLabel(parent, "X");
+                            this.createFloatField(parent, prop);
+                        }
                     }
                     // tslint:disable-next-line:ban-types
                     createFloatField(parent, property) {
@@ -4919,6 +4954,13 @@ var phasereditor2d;
                         ser.write("originY", obj.originY, 0.5);
                     }
                 }
+                OriginComponent.originX = sceneobjects.SimpleProperty("originX", 0.5, "X");
+                OriginComponent.originY = sceneobjects.SimpleProperty("originY", 0.5, "Y");
+                OriginComponent.origin = {
+                    label: "Origin",
+                    x: OriginComponent.originX,
+                    y: OriginComponent.originY
+                };
                 sceneobjects.OriginComponent = OriginComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -4932,32 +4974,13 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class OriginSection extends ui.editor.properties.BaseSceneSection {
+                class OriginSection extends sceneobjects.ObjectSceneSection {
                     constructor(page) {
                         super(page, "SceneEditor.OriginSection", "Origin", false);
                     }
                     createForm(parent) {
-                        const comp = this.createGridElement(parent, 5);
-                        // Position
-                        {
-                            this.createLabel(comp, "Origin");
-                            // X
-                            {
-                                this.createLabel(comp, "X");
-                                const text = this.createText(comp);
-                                this.addUpdater(() => {
-                                    text.value = this.flatValues_Number(this.getSelection().map(obj => obj.originX));
-                                });
-                            }
-                            // y
-                            {
-                                this.createLabel(comp, "Y");
-                                const text = this.createText(comp);
-                                this.addUpdater(() => {
-                                    text.value = this.flatValues_Number(this.getSelection().map(obj => obj.originY));
-                                });
-                            }
-                        }
+                        const comp = this.createGridElementWithPropertiesXY(parent);
+                        this.createPropertyXYRow(comp, sceneobjects.OriginComponent.origin);
                     }
                     canEdit(obj, n) {
                         return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.OriginComponent) !== null;
@@ -5175,7 +5198,6 @@ var phasereditor2d;
                         comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
                         // Position
                         {
-                            // this.createLock(comp);
                             this.createLabel(comp, "Position").style.gridColumn = "2";
                             // x
                             {

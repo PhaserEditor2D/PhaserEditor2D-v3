@@ -3,14 +3,24 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
-    import code = core.code;
 
-    export declare interface IOriginLike {
+    export declare interface IOriginLike extends SceneObject {
+
         originX: number;
         originY: number;
     }
 
     export class OriginComponent extends Component<IOriginLike> {
+
+        static originX = SimpleProperty("originX", 0.5, "X");
+
+        static originY = SimpleProperty("originY", 0.5, "Y");
+
+        static origin: IPropertyXY = {
+            label: "Origin",
+            x: OriginComponent.originX,
+            y: OriginComponent.originY
+        };
 
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
 

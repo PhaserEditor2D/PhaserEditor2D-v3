@@ -78,6 +78,7 @@ namespace colibri.ui.controls.properties {
         }
 
         protected createGridElement(parent: HTMLElement, cols = 0, simpleProps = true) {
+
             const div = document.createElement("div");
 
             div.classList.add("formGrid");

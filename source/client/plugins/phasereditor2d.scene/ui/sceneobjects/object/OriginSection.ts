@@ -4,40 +4,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import ide = colibri.ui.ide;
     import core = colibri.core;
 
-    export class OriginSection extends editor.properties.BaseSceneSection<IOriginLike> {
+    export class OriginSection extends ObjectSceneSection<IOriginLike> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "SceneEditor.OriginSection", "Origin", false);
         }
 
         protected createForm(parent: HTMLDivElement) {
-            const comp = this.createGridElement(parent, 5);
 
-            // Position
+            const comp = this.createGridElementWithPropertiesXY(parent);
 
-            {
-                this.createLabel(comp, "Origin");
-
-                // X
-
-                {
-                    this.createLabel(comp, "X");
-                    const text = this.createText(comp);
-                    this.addUpdater(() => {
-                        text.value = this.flatValues_Number(this.getSelection().map(obj => obj.originX));
-                    });
-                }
-
-                // y
-
-                {
-                    this.createLabel(comp, "Y");
-                    const text = this.createText(comp);
-                    this.addUpdater(() => {
-                        text.value = this.flatValues_Number(this.getSelection().map(obj => obj.originY));
-                    });
-                }
-            }
+            this.createPropertyXYRow(comp, OriginComponent.origin);
         }
 
         canEdit(obj: any, n: number): boolean {

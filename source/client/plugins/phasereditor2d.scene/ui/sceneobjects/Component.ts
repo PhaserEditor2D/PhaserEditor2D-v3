@@ -23,18 +23,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         protected buildSetObjectPropertyCodeDOM_Float(
             fieldName: string, value: number, defValue: number, args: SetObjectPropertiesCodeDOMArgs): void {
 
-            const obj = this.getObject();
-
             const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
             let add = false;
 
             if (args.prefabSerializer) {
+
                 add = value !== args.prefabSerializer.read(fieldName, defValue);
+
             } else {
+
                 add = value !== defValue;
             }
 
             if (add) {
+
                 dom.valueFloat(value);
                 args.result.push(dom);
             }

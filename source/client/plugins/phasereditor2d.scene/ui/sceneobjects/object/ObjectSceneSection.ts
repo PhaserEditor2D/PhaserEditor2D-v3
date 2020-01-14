@@ -4,6 +4,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
 
+        protected createGridElementWithPropertiesXY(parent: HTMLElement) {
+
+            const comp = this.createGridElement(parent);
+
+            comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
+
+            return comp;
+        }
+
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>) {
 
             const mutableIcon = new controls.MutableIcon();
@@ -64,6 +73,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return true;
+        }
+
+        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY) {
+
+            this.createLock(parent, propXY.x, propXY.y);
+
+            this.createLabel(parent, propXY.label);
+
+            for (const prop of [propXY.x, propXY.y]) {
+
+                this.createLabel(parent, "X");
+                this.createFloatField(parent, prop);
+            }
         }
 
         // tslint:disable-next-line:ban-types

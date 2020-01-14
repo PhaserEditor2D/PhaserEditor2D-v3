@@ -892,6 +892,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IPropertyXY {
+        label: string;
+        x: IProperty<any>;
+        y: IProperty<any>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface ISceneObjectLike {
         getEditorSupport(): EditorSupport<SceneObject>;
     }
@@ -1043,6 +1050,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    function SimpleProperty(name: string, defValue: any, label?: string, tooltip?: string): IProperty<any>;
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class Container extends Phaser.GameObjects.Container implements SceneObject {
         private _editorSupport;
         constructor(scene: Scene, x: number, y: number, children: SceneObject[]);
@@ -1137,18 +1147,23 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+        protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
         protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
+        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY): void;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
-    interface IOriginLike {
+    interface IOriginLike extends SceneObject {
         originX: number;
         originY: number;
     }
     class OriginComponent extends Component<IOriginLike> {
+        static originX: IProperty<any>;
+        static originY: IProperty<any>;
+        static origin: IPropertyXY;
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;
@@ -1156,7 +1171,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class OriginSection extends editor.properties.BaseSceneSection<IOriginLike> {
+    class OriginSection extends ObjectSceneSection<IOriginLike> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
