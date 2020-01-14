@@ -51,7 +51,9 @@ var phasereditor2d;
                 // loader updates
                 reg.addExtension(new scene_1.ui.sceneobjects.ImageLoaderUpdater());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.VariableSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.VariableSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), 
+                //page => new ui.sceneobjects.TextureSection(page)
+                page => new scene_1.ui.sceneobjects.TextureSection(page)));
                 // main menu
                 reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN, {
                     command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
@@ -3615,6 +3617,12 @@ var phasereditor2d;
                             super();
                             this._editor = editor;
                         }
+                        getEditor() {
+                            return this._editor;
+                        }
+                        getScene() {
+                            return this._editor.getScene();
+                        }
                     }
                     undo.SceneEditorOperation = SceneEditorOperation;
                 })(undo = editor_10.undo || (editor_10.undo = {}));
@@ -5267,6 +5275,42 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                class ChangeTextureOperation extends sceneobjects.SceneObjectOperation {
+                    constructor(editor, objects, value) {
+                        super(editor, objects, value);
+                    }
+                    getValue(obj) {
+                        const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
+                        return comp.getTexture();
+                    }
+                    setValue(obj, value) {
+                        const finder = new phasereditor2d.pack.core.PackFinder();
+                        // TODO: this is a bit ugly, we need a pack finder always ready in the scene editor!
+                        finder.preload().then(() => {
+                            const item = finder.findAssetPackItem(value.textureKey);
+                            if (item) {
+                                item.addToPhaserCache(this.getEditor().getGame(), this.getScene().getPackCache());
+                            }
+                            const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
+                            comp.setTexture(value.textureKey, value.frameKey);
+                            this.getEditor().repaint();
+                            this.getEditor().setSelection(this.getEditor().getSelection());
+                        });
+                    }
+                }
+                sceneobjects.ChangeTextureOperation = ChangeTextureOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 var controls = colibri.ui.controls;
                 class TextureCellRenderer {
                     renderCell(args) {
@@ -5283,8 +5327,8 @@ var phasereditor2d;
                         const support = obj.getEditorSupport();
                         const textureComp = support.getComponent(sceneobjects.TextureComponent);
                         if (textureComp) {
-                            const { key, frame } = textureComp.getTexture();
-                            const image = support.getScene().getPackCache().getImage(key, frame);
+                            const { textureKey, frameKey } = textureComp.getTexture();
+                            const image = support.getScene().getPackCache().getImage(textureKey, frameKey);
                             return image;
                         }
                         return null;
@@ -5341,10 +5385,15 @@ var phasereditor2d;
                         // this should be called each time the texture is changed
                         obj.setInteractive();
                     }
+                    removeTexture() {
+                        this.setKey(null);
+                        this.setFrame(null);
+                        this.getObject().setTexture(null);
+                    }
                     getTexture() {
                         return {
-                            key: this.getKey(),
-                            frame: this.getFrame()
+                            textureKey: this.getKey(),
+                            frameKey: this.getFrame()
                         };
                     }
                     getFrame() {
@@ -5374,26 +5423,80 @@ var phasereditor2d;
                 var ide = colibri.ui.ide;
                 class TextureSection extends ui.editor.properties.BaseSceneSection {
                     constructor(page) {
-                        super(page, "SceneEditor.TextureSection", "Texture", true);
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture");
                     }
                     createForm(parent) {
-                        parent.classList.add("ImagePreviewFormArea", "PreviewBackground");
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "1fr auto";
+                        // Preview
+                        const imgComp = document.createElement("div");
+                        imgComp.style.gridColumn = "1/ span 2";
+                        imgComp.style.height = "200px";
+                        comp.appendChild(imgComp);
                         const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
                         this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e) => {
-                            imgControl.resizeTo();
+                            setTimeout(() => imgControl.resizeTo(), 1);
                         });
-                        parent.appendChild(imgControl.getElement());
-                        setTimeout(() => imgControl.resizeTo(), 1);
+                        imgComp.appendChild(imgControl.getElement());
                         this.addUpdater(() => {
                             const obj = this.getSelection()[0];
-                            const { key, frame } = obj.getEditorSupport().getTextureComponent().getTexture();
+                            const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
                             const finder = new phasereditor2d.pack.core.PackFinder();
                             finder.preload().then(() => {
-                                const img = finder.getAssetPackItemImage(key, frame);
+                                const img = finder.getAssetPackItemImage(textureKey, frameKey);
                                 imgControl.setImage(img);
                                 setTimeout(() => imgControl.resizeTo(), 1);
                             });
                         });
+                        // Buttons
+                        {
+                            const changeBtn = this.createButton(comp, "Select", e => {
+                                sceneobjects.TextureSelectionDialog.createDialog(async (sel) => {
+                                    const frame = sel[0];
+                                    // const obj = this.getSelection()[0];
+                                    // const textureComp = obj.getEditorSupport().getTextureComponent();
+                                    // const scene = this.getEditor().getScene();
+                                    // frame.getPackItem().addToPhaserCache(scene.game, scene.getPackCache());
+                                    // if (frame.getPackItem() instanceof pack.core.ImageAssetPackItem) {
+                                    //     textureComp.setTexture(frame.getPackItem().getKey(), null);
+                                    // } else {
+                                    //     textureComp.setTexture(frame.getPackItem().getKey(), frame.getName());
+                                    // }
+                                    let textureData;
+                                    const item = frame.getPackItem();
+                                    item.addToPhaserCache(this.getEditor().getGame(), this.getEditor().getScene().getPackCache());
+                                    if (item instanceof phasereditor2d.pack.core.ImageAssetPackItem) {
+                                        textureData = { textureKey: item.getKey() };
+                                    }
+                                    else {
+                                        textureData = { textureKey: item.getKey(), frameKey: frame.getName() };
+                                    }
+                                    this.getEditor()
+                                        .getUndoManager().add(new sceneobjects.ChangeTextureOperation(this.getEditor(), this.getSelection(), textureData));
+                                });
+                            });
+                            this.addUpdater(() => {
+                                const obj = this.getSelection()[0];
+                                const texture = obj.getEditorSupport().getTextureComponent();
+                                const { textureKey, frameKey } = texture.getTexture();
+                                let str = "(Select)";
+                                if (typeof frameKey === "number" || typeof frameKey === "string") {
+                                    str = frameKey + " @ " + textureKey;
+                                }
+                                else if (textureKey) {
+                                    str = textureKey;
+                                }
+                                changeBtn.textContent = str;
+                            });
+                            const deleteBtn = this.createButton(comp, "Delete", e => {
+                                const obj = this.getSelection()[0];
+                                const textureComp = obj.getEditorSupport().getTextureComponent();
+                                textureComp.setTexture(null, null);
+                                this.getEditor().setDirty(true);
+                                this.getEditor().repaint();
+                                this.updateWithSelection();
+                            });
+                        }
                     }
                     canEdit(obj, n) {
                         return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TextureComponent) !== null;
@@ -5403,6 +5506,63 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.TextureSection = TextureSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                var controls = colibri.ui.controls;
+                class TextureSelectionDialog extends controls.dialogs.ViewerDialog {
+                    constructor(finder, callback) {
+                        super(new controls.viewers.TreeViewer());
+                        this._finder = finder;
+                        this._callback = callback;
+                    }
+                    static async createDialog(callback) {
+                        const finder = new phasereditor2d.pack.core.PackFinder();
+                        await finder.preload();
+                        const dlg = new TextureSelectionDialog(finder, callback);
+                        dlg.create();
+                        return dlg;
+                    }
+                    create() {
+                        const viewer = this.getViewer();
+                        viewer.setLabelProvider(new phasereditor2d.pack.ui.viewers.AssetPackLabelProvider());
+                        viewer.setCellRendererProvider(new phasereditor2d.pack.ui.viewers.AssetPackCellRendererProvider("tree"));
+                        viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        viewer.setInput(this._finder.getPacks()
+                            .flatMap(pack => pack.getItems())
+                            .filter(item => item instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem)
+                            .flatMap(item => {
+                            const frames = item.getFrames();
+                            if (item instanceof phasereditor2d.pack.core.SpritesheetAssetPackItem) {
+                                if (frames.length > 50) {
+                                    return frames.slice(0, 50);
+                                }
+                            }
+                            return frames;
+                        }));
+                        super.create();
+                        this.setTitle("Select Texture");
+                        const btn = this.addButton("Select", () => {
+                            this._callback(this.getViewer().getSelection());
+                            this.close();
+                        });
+                        btn.disabled = true;
+                        this.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                            btn.disabled = this.getViewer().getSelection().length === 0;
+                        });
+                        this.addButton("Cancel", () => this.close());
+                    }
+                }
+                sceneobjects.TextureSelectionDialog = TextureSelectionDialog;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

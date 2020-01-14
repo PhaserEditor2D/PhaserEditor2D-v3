@@ -726,6 +726,8 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     abstract class SceneEditorOperation extends ide.undo.Operation {
         protected _editor: SceneEditor;
         constructor(editor: SceneEditor);
+        getEditor(): SceneEditor;
+        getScene(): Scene;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
@@ -1251,6 +1253,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class ChangeTextureOperation extends SceneObjectOperation<ITextureLike> {
+        constructor(editor: editor.SceneEditor, objects: ITextureLike[], value: TextureKeyFrame);
+        getValue(obj: ITextureLike): TextureKeyFrame;
+        setValue(obj: ITextureLike, value: TextureKeyFrame): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class TextureCellRenderer implements controls.viewers.ICellRenderer {
         renderCell(args: controls.viewers.RenderCellArgs): void;
@@ -1261,11 +1270,16 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
-    interface TextureData extends json.ObjectData {
-        textureKey: string;
-        frameKey: string;
+    interface ITextureLike extends SceneObject {
+        setTexture(key: string, frame?: string | number): void;
     }
-    class TextureComponent extends Component<Image> {
+    interface TextureKeyFrame {
+        textureKey: string;
+        frameKey?: string | number;
+    }
+    interface TextureData extends json.ObjectData, TextureKeyFrame {
+    }
+    class TextureComponent extends Component<ITextureLike> {
         static TEXTURE_KEY_NAME: string;
         static FRAME_KEY_NAME: string;
         static UNLOCK_TEXTURE_KEY: string;
@@ -1277,10 +1291,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getKey(): string;
         setKey(key: string): void;
         setTexture(key: string, frame: string | number): void;
-        getTexture(): {
-            key: string;
-            frame: string | number;
-        };
+        removeTexture(): void;
+        getTexture(): TextureKeyFrame;
         getFrame(): string | number;
         setFrame(frame: string | number): void;
     }
@@ -1292,6 +1304,16 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class TextureSelectionDialog extends controls.dialogs.ViewerDialog {
+        private _finder;
+        static createDialog(callback: (selection: pack.core.AssetPackImageFrame[]) => void): Promise<TextureSelectionDialog>;
+        private _callback;
+        private constructor();
+        create(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.viewers {

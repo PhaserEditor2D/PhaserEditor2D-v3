@@ -12,6 +12,13 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._editor = editor;
         }
 
+        getEditor() {
+            return this._editor;
+        }
+
+        getScene() {
+            return this._editor.getScene();
+        }
     }
 
 }

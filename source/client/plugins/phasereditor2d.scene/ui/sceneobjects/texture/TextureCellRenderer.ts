@@ -28,9 +28,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (textureComp) {
 
-                const { key, frame } = textureComp.getTexture();
+                const { textureKey, frameKey } = textureComp.getTexture();
 
-                const image = support.getScene().getPackCache().getImage(key, frame);
+                const image = support.getScene().getPackCache().getImage(textureKey, frameKey);
 
                 return image;
             }

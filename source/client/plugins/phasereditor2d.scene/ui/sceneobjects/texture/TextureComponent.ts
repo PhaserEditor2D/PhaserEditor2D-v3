@@ -6,12 +6,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import read = colibri.core.json.read;
     import json = core.json;
 
-    export interface TextureData extends json.ObjectData {
-        textureKey: string;
-        frameKey: string;
+    export interface ITextureLike extends SceneObject {
+
+        setTexture(key: string, frame?: string | number): void;
     }
 
-    export class TextureComponent extends Component<Image> {
+    export interface TextureKeyFrame {
+
+        textureKey: string;
+        frameKey?: string | number;
+    }
+
+    export interface TextureData
+        extends json.ObjectData, TextureKeyFrame {
+
+    }
+
+    export class TextureComponent extends Component<ITextureLike> {
 
         static TEXTURE_KEY_NAME = "textureKey";
         static FRAME_KEY_NAME = "frameKey";
@@ -54,15 +65,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const obj = this.getObject();
 
             obj.setTexture(key, frame);
+
             // this should be called each time the texture is changed
             obj.setInteractive();
         }
 
-        getTexture() {
+        removeTexture() {
+
+            this.setKey(null);
+            this.setFrame(null);
+
+            this.getObject().setTexture(null);
+        }
+
+        getTexture(): TextureKeyFrame {
 
             return {
-                key: this.getKey(),
-                frame: this.getFrame()
+                textureKey: this.getKey(),
+                frameKey: this.getFrame()
             };
         }
 

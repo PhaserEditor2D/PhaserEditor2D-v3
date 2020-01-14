@@ -7,38 +7,139 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class TextureSection extends editor.properties.BaseSceneSection<sceneobjects.Image> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "SceneEditor.TextureSection", "Texture", true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture");
         }
 
         protected createForm(parent: HTMLDivElement) {
-            parent.classList.add("ImagePreviewFormArea", "PreviewBackground");
+
+            const comp = this.createGridElement(parent);
+            comp.style.gridTemplateColumns = "1fr auto";
+
+            // Preview
+
+            const imgComp = document.createElement("div");
+            imgComp.style.gridColumn = "1/ span 2";
+            imgComp.style.height = "200px";
+            comp.appendChild(imgComp);
 
             const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
 
             this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
-                imgControl.resizeTo();
+
+                setTimeout(() => imgControl.resizeTo(), 1);
             });
 
-            parent.appendChild(imgControl.getElement());
-            setTimeout(() => imgControl.resizeTo(), 1);
+            imgComp.appendChild(imgControl.getElement());
 
             this.addUpdater(() => {
 
                 const obj = this.getSelection()[0];
 
-                const { key, frame } = obj.getEditorSupport().getTextureComponent().getTexture();
+                const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
 
                 const finder = new pack.core.PackFinder();
 
                 finder.preload().then(() => {
 
-                    const img = finder.getAssetPackItemImage(key, frame);
+                    const img = finder.getAssetPackItemImage(textureKey, frameKey);
 
                     imgControl.setImage(img);
 
                     setTimeout(() => imgControl.resizeTo(), 1);
                 });
             });
+
+            // Buttons
+
+            {
+                const changeBtn = this.createButton(comp, "Select", e => {
+
+                    TextureSelectionDialog.createDialog(async (sel) => {
+
+                        const frame = sel[0];
+
+                        // const obj = this.getSelection()[0];
+
+                        // const textureComp = obj.getEditorSupport().getTextureComponent();
+
+                        // const scene = this.getEditor().getScene();
+
+                        // frame.getPackItem().addToPhaserCache(scene.game, scene.getPackCache());
+
+                        // if (frame.getPackItem() instanceof pack.core.ImageAssetPackItem) {
+
+                        //     textureComp.setTexture(frame.getPackItem().getKey(), null);
+
+                        // } else {
+
+                        //     textureComp.setTexture(frame.getPackItem().getKey(), frame.getName());
+                        // }
+
+                        let textureData: TextureKeyFrame;
+
+                        const item = frame.getPackItem();
+
+                        item.addToPhaserCache(
+                            this.getEditor().getGame(), this.getEditor().getScene().getPackCache());
+
+                        if (item instanceof pack.core.ImageAssetPackItem) {
+
+                            textureData = { textureKey: item.getKey() };
+
+                        } else {
+
+                            textureData = { textureKey: item.getKey(), frameKey: frame.getName() };
+                        }
+
+
+                        this.getEditor()
+
+                            .getUndoManager().add(new ChangeTextureOperation(
+
+                                this.getEditor(),
+                                this.getSelection(),
+                                textureData));
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    const obj = this.getSelection()[0];
+
+                    const texture = obj.getEditorSupport().getTextureComponent();
+
+                    const { textureKey, frameKey } = texture.getTexture();
+
+                    let str = "(Select)";
+
+                    if (typeof frameKey === "number" || typeof frameKey === "string") {
+
+                        str = frameKey + " @ " + textureKey;
+
+                    } else if (textureKey) {
+
+                        str = textureKey;
+                    }
+
+                    changeBtn.textContent = str;
+                });
+
+                const deleteBtn = this.createButton(comp, "Delete", e => {
+
+                    const obj = this.getSelection()[0];
+
+                    const textureComp = obj.getEditorSupport().getTextureComponent();
+
+                    textureComp.setTexture(null, null);
+
+                    this.getEditor().setDirty(true);
+
+                    this.getEditor().repaint();
+
+                    this.updateWithSelection();
+                });
+            }
+
         }
 
         canEdit(obj: any, n: number): boolean {
