@@ -4900,11 +4900,24 @@ var phasereditor2d;
                         }
                         return true;
                     }
-                    createPropertyXYRow(parent, propXY) {
-                        this.createLock(parent, propXY.x, propXY.y);
-                        this.createLabel(parent, propXY.label);
+                    createNumberPropertyRow(parent, prop, fullWidth = true) {
+                        this.createLock(parent, prop);
+                        this.createLabel(parent, prop.label)
+                            .style.gridColumn = "2/ span 2";
+                        this.createFloatField(parent, prop)
+                            .style.gridColumn = fullWidth ? "4 / span 3" : "4";
+                    }
+                    createPropertyXYRow(parent, propXY, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, propXY.x, propXY.y);
+                            this.createLabel(parent, propXY.label);
+                        }
+                        else {
+                            const label = this.createLabel(parent, propXY.label);
+                            label.style.gridColumn = "2";
+                        }
                         for (const prop of [propXY.x, propXY.y]) {
-                            this.createLabel(parent, "X");
+                            this.createLabel(parent, prop.label);
                             this.createFloatField(parent, prop);
                         }
                     }
@@ -5144,36 +5157,21 @@ var phasereditor2d;
                         ser.write("angle", obj.angle, 0);
                     }
                 }
-                TransformComponent.x = {
-                    name: "x",
-                    defValue: 0,
-                    getValue: obj => obj.x,
-                    setValue: (obj, val) => obj.x = val,
+                TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X");
+                TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y");
+                TransformComponent.position = {
+                    label: "Position",
+                    x: TransformComponent.x,
+                    y: TransformComponent.y
                 };
-                TransformComponent.y = {
-                    name: "y",
-                    defValue: 0,
-                    getValue: obj => obj.y,
-                    setValue: (obj, val) => obj.y = val,
+                TransformComponent.scaleX = sceneobjects.SimpleProperty("scaleX", 1, "X");
+                TransformComponent.scaleY = sceneobjects.SimpleProperty("scaleY", 1, "Y");
+                TransformComponent.scale = {
+                    label: "Scale",
+                    x: TransformComponent.scaleX,
+                    y: TransformComponent.scaleY
                 };
-                TransformComponent.scaleX = {
-                    name: "scaleX",
-                    defValue: 1,
-                    getValue: obj => obj.scaleX,
-                    setValue: (obj, val) => obj.scaleX = val,
-                };
-                TransformComponent.scaleY = {
-                    name: "scaleY",
-                    defValue: 1,
-                    getValue: obj => obj.scaleY,
-                    setValue: (obj, val) => obj.scaleY = val
-                };
-                TransformComponent.angle = {
-                    name: "angle",
-                    defValue: 0,
-                    getValue: obj => obj.angle,
-                    setValue: (obj, val) => obj.angle = val,
-                };
+                TransformComponent.angle = sceneobjects.SimpleProperty("angle", 0, "Angle");
                 sceneobjects.TransformComponent = TransformComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -5194,44 +5192,10 @@ var phasereditor2d;
                         super(page, "SceneEditor.TransformSection", "Transform", false);
                     }
                     createForm(parent) {
-                        const comp = this.createGridElement(parent);
-                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
-                        // Position
-                        {
-                            this.createLabel(comp, "Position").style.gridColumn = "2";
-                            // x
-                            {
-                                this.createLabel(comp, "X");
-                                this.createFloatField(comp, sceneobjects.TransformComponent.x);
-                            }
-                            // y
-                            {
-                                this.createLabel(comp, "Y");
-                                this.createFloatField(comp, sceneobjects.TransformComponent.y);
-                            }
-                        }
-                        // Scale
-                        {
-                            this.createLock(comp, sceneobjects.TransformComponent.scaleX, sceneobjects.TransformComponent.scaleY);
-                            this.createLabel(comp, "Scale");
-                            // scaleX
-                            {
-                                this.createLabel(comp, "X");
-                                this.createFloatField(comp, sceneobjects.TransformComponent.scaleX);
-                            }
-                            // scaleY
-                            {
-                                this.createLabel(comp, "Y");
-                                this.createFloatField(comp, sceneobjects.TransformComponent.scaleY);
-                            }
-                        }
-                        // angle
-                        {
-                            this.createLock(comp, sceneobjects.TransformComponent.angle);
-                            this.createLabel(comp, "Angle").style.gridColumn = "2 / span 2";
-                            this.createFloatField(comp, sceneobjects.TransformComponent.angle);
-                            this.createLabel(comp, "").style.gridColumn = "4 / span 2";
-                        }
+                        const comp = this.createGridElementWithPropertiesXY(parent);
+                        this.createPropertyXYRow(comp, sceneobjects.TransformComponent.position, false);
+                        this.createPropertyXYRow(comp, sceneobjects.TransformComponent.scale);
+                        this.createNumberPropertyRow(comp, sceneobjects.TransformComponent.angle, false);
                     }
                     canEdit(obj, n) {
                         return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TransformComponent) !== null;

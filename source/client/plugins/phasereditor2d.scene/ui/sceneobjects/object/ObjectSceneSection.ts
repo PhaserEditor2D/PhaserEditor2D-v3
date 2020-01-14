@@ -75,15 +75,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return true;
         }
 
-        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY) {
+        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth = true) {
 
-            this.createLock(parent, propXY.x, propXY.y);
+            this.createLock(parent, prop);
 
-            this.createLabel(parent, propXY.label);
+            this.createLabel(parent, prop.label)
+                .style.gridColumn = "2/ span 2";
+
+            this.createFloatField(parent, prop)
+                .style.gridColumn = fullWidth ? "4 / span 3" : "4";
+        }
+
+        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
+
+            if (lockIcon) {
+
+                this.createLock(parent, propXY.x, propXY.y);
+                this.createLabel(parent, propXY.label);
+
+            } else {
+
+                const label = this.createLabel(parent, propXY.label);
+                label.style.gridColumn = "2";
+            }
 
             for (const prop of [propXY.x, propXY.y]) {
 
-                this.createLabel(parent, "X");
+                this.createLabel(parent, prop.label);
                 this.createFloatField(parent, prop);
             }
         }

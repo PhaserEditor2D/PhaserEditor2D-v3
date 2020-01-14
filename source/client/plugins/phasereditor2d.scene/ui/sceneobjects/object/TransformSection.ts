@@ -10,58 +10,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected createForm(parent: HTMLDivElement) {
-            const comp = this.createGridElement(parent);
-            comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
 
-            // Position
+            const comp = this.createGridElementWithPropertiesXY(parent);
 
-            {
-                this.createLabel(comp, "Position").style.gridColumn = "2";
+            this.createPropertyXYRow(comp, TransformComponent.position, false);
 
-                // x
+            this.createPropertyXYRow(comp, TransformComponent.scale);
 
-                {
-                    this.createLabel(comp, "X");
-                    this.createFloatField(comp, TransformComponent.x);
-                }
-
-                // y
-
-                {
-                    this.createLabel(comp, "Y");
-                    this.createFloatField(comp, TransformComponent.y);
-                }
-            }
-
-            // Scale
-
-            {
-                this.createLock(comp, TransformComponent.scaleX, TransformComponent.scaleY);
-                this.createLabel(comp, "Scale");
-
-                // scaleX
-
-                {
-                    this.createLabel(comp, "X");
-                    this.createFloatField(comp, TransformComponent.scaleX);
-                }
-
-                // scaleY
-
-                {
-                    this.createLabel(comp, "Y");
-                    this.createFloatField(comp, TransformComponent.scaleY);
-                }
-            }
-
-            // angle
-
-            {
-                this.createLock(comp, TransformComponent.angle);
-                this.createLabel(comp, "Angle").style.gridColumn = "2 / span 2";
-                this.createFloatField(comp, TransformComponent.angle);
-                this.createLabel(comp, "").style.gridColumn = "4 / span 2";
-            }
+            this.createNumberPropertyRow(comp, TransformComponent.angle, false);
         }
 
         canEdit(obj: any, n: number): boolean {

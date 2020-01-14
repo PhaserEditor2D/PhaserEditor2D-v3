@@ -1150,7 +1150,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
         protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
-        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY): void;
+        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
+        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
     }
 }
@@ -1220,11 +1221,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         angle: number;
     }
     class TransformComponent extends Component<ITransformLike> {
-        static x: IProperty<ITransformLike>;
-        static y: IProperty<ITransformLike>;
-        static scaleX: IProperty<ITransformLike>;
-        static scaleY: IProperty<ITransformLike>;
-        static angle: IProperty<ITransformLike>;
+        static x: IProperty<any>;
+        static y: IProperty<any>;
+        static position: IPropertyXY;
+        static scaleX: IProperty<any>;
+        static scaleY: IProperty<any>;
+        static scale: IPropertyXY;
+        static angle: IProperty<any>;
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;

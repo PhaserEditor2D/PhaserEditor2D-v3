@@ -17,40 +17,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TransformComponent extends Component<ITransformLike> {
 
-        static x: IProperty<ITransformLike> = {
-            name: "x",
-            defValue: 0,
-            getValue: obj => obj.x,
-            setValue: (obj, val) => obj.x = val,
+        static x = SimpleProperty("x", 0, "X");
+        static y = SimpleProperty("y", 0, "Y");
+
+        static position: IPropertyXY = {
+            label: "Position",
+            x: TransformComponent.x,
+            y: TransformComponent.y
         };
 
-        static y: IProperty<ITransformLike> = {
-            name: "y",
-            defValue: 0,
-            getValue: obj => obj.y,
-            setValue: (obj, val) => obj.y = val,
+        static scaleX = SimpleProperty("scaleX", 1, "X");
+        static scaleY = SimpleProperty("scaleY", 1, "Y");
+
+        static scale: IPropertyXY = {
+            label: "Scale",
+            x: TransformComponent.scaleX,
+            y: TransformComponent.scaleY
         };
 
-        static scaleX: IProperty<ITransformLike> = {
-            name: "scaleX",
-            defValue: 1,
-            getValue: obj => obj.scaleX,
-            setValue: (obj, val) => obj.scaleX = val,
-        };
-
-        static scaleY: IProperty<ITransformLike> = {
-            name: "scaleY",
-            defValue: 1,
-            getValue: obj => obj.scaleY,
-            setValue: (obj, val) => obj.scaleY = val
-        };
-
-        static angle: IProperty<ITransformLike> = {
-            name: "angle",
-            defValue: 0,
-            getValue: obj => obj.angle,
-            setValue: (obj, val) => obj.angle = val,
-        };
+        static angle = SimpleProperty("angle", 0, "Angle");
 
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
 
