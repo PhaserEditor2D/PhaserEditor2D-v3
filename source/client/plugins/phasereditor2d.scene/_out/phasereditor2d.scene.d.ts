@@ -1284,7 +1284,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         texture: TextureKeys;
     }
     class TextureComponent extends Component<ITextureLikeObject> {
-        static TEXTURE_KEYS_NAME: string;
+        static texture: IProperty<ITextureLikeObject>;
         private _textureKeys;
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         writeJSON(ser: json.Serializer): void;

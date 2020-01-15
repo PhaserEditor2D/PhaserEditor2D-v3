@@ -13,12 +13,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
-            comp.style.gridTemplateColumns = "1fr auto";
+            comp.style.gridTemplateColumns = "auto 1fr auto";
 
             // Preview
 
             const imgComp = document.createElement("div");
-            imgComp.style.gridColumn = "1/ span 2";
+            imgComp.style.gridColumn = "1/ span 3";
             imgComp.style.height = "200px";
             comp.appendChild(imgComp);
 
@@ -48,6 +48,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 setTimeout(() => imgControl.resizeTo(), 1);
             });
+
+            // Lock
+
+            this.createLock(comp, TextureComponent.texture);
 
             // Buttons
 
@@ -86,6 +90,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     });
                 });
 
+                const deleteBtn = this.createButton(comp, "Delete", e => {
+
+                    const obj = this.getSelection()[0];
+
+                    const textureComp = this.getTextureComponent(obj);
+
+                    textureComp.setTextureKeys({});
+
+                    this.getEditor().setDirty(true);
+
+                    this.getEditor().repaint();
+
+                    this.updateWithSelection();
+                });
+
                 this.addUpdater(() => {
 
                     if (this.getSelection().length === 1) {
@@ -113,21 +132,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         changeBtn.textContent = "Multiple Textures";
                     }
-                });
 
-                const deleteBtn = this.createButton(comp, "Delete", e => {
+                    const unlocked = this.isUnlocked(TextureComponent.texture);
 
-                    const obj = this.getSelection()[0];
-
-                    const textureComp = this.getTextureComponent(obj);
-
-                    textureComp.setTextureKeys({});
-
-                    this.getEditor().setDirty(true);
-
-                    this.getEditor().repaint();
-
-                    this.updateWithSelection();
+                    changeBtn.disabled = !unlocked;
+                    deleteBtn.disabled = !unlocked;
                 });
             }
 

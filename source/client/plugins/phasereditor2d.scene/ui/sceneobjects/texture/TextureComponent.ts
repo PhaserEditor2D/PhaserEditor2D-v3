@@ -25,7 +25,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TextureComponent extends Component<ITextureLikeObject> {
 
-        static TEXTURE_KEYS_NAME = "texture";
+        static texture: IProperty<ITextureLikeObject> = {
+            name: "texture",
+            defValue: {},
+            getValue: obj => {
+
+                const textureComponent = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
+                return textureComponent.getTextureKeys();
+            },
+            setValue: (obj, value) => {
+
+                const textureComponent = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
+                textureComponent.setTextureKeys(value);
+            }
+        };
 
         private _textureKeys: TextureKeys = {};
 

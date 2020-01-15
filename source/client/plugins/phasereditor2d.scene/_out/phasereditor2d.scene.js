@@ -4714,7 +4714,7 @@ var phasereditor2d;
                         if (support.isPrefabInstance()) {
                             const prefabSerializer = support.getPrefabSerializer();
                             if (prefabSerializer) {
-                                const prefabKeys = prefabSerializer.read(sceneobjects.TextureComponent.TEXTURE_KEYS_NAME);
+                                const prefabKeys = prefabSerializer.read(sceneobjects.TextureComponent.texture.name);
                                 if (prefabKeys.key === key) {
                                     return call;
                                 }
@@ -4818,7 +4818,7 @@ var phasereditor2d;
                         return sceneobjects.ImageCodeDOMBuilder.getInstance();
                     }
                     async getAssetsFromObjectData(args) {
-                        const { key, frame } = args.serializer.read(sceneobjects.TextureComponent.TEXTURE_KEYS_NAME);
+                        const { key, frame } = args.serializer.read(sceneobjects.TextureComponent.texture.name);
                         const finder = args.finder;
                         const item = finder.findAssetPackItem(key);
                         if (item) {
@@ -5407,7 +5407,18 @@ var phasereditor2d;
                         this.setTextureKeys({});
                     }
                 }
-                TextureComponent.TEXTURE_KEYS_NAME = "texture";
+                TextureComponent.texture = {
+                    name: "texture",
+                    defValue: {},
+                    getValue: obj => {
+                        const textureComponent = obj.getEditorSupport().getComponent(TextureComponent);
+                        return textureComponent.getTextureKeys();
+                    },
+                    setValue: (obj, value) => {
+                        const textureComponent = obj.getEditorSupport().getComponent(TextureComponent);
+                        textureComponent.setTextureKeys(value);
+                    }
+                };
                 sceneobjects.TextureComponent = TextureComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -5429,10 +5440,10 @@ var phasereditor2d;
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent);
-                        comp.style.gridTemplateColumns = "1fr auto";
+                        comp.style.gridTemplateColumns = "auto 1fr auto";
                         // Preview
                         const imgComp = document.createElement("div");
-                        imgComp.style.gridColumn = "1/ span 2";
+                        imgComp.style.gridColumn = "1/ span 3";
                         imgComp.style.height = "200px";
                         comp.appendChild(imgComp);
                         const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
@@ -5450,6 +5461,8 @@ var phasereditor2d;
                             }
                             setTimeout(() => imgControl.resizeTo(), 1);
                         });
+                        // Lock
+                        this.createLock(comp, sceneobjects.TextureComponent.texture);
                         // Buttons
                         {
                             const changeBtn = this.createButton(comp, "Select", e => {
@@ -5469,6 +5482,14 @@ var phasereditor2d;
                                         .getUndoManager().add(new sceneobjects.ChangeTextureOperation(this.getEditor(), this.getSelection(), textureData));
                                 });
                             });
+                            const deleteBtn = this.createButton(comp, "Delete", e => {
+                                const obj = this.getSelection()[0];
+                                const textureComp = this.getTextureComponent(obj);
+                                textureComp.setTextureKeys({});
+                                this.getEditor().setDirty(true);
+                                this.getEditor().repaint();
+                                this.updateWithSelection();
+                            });
                             this.addUpdater(() => {
                                 if (this.getSelection().length === 1) {
                                     const obj = this.getSelection()[0];
@@ -5486,14 +5507,9 @@ var phasereditor2d;
                                 else {
                                     changeBtn.textContent = "Multiple Textures";
                                 }
-                            });
-                            const deleteBtn = this.createButton(comp, "Delete", e => {
-                                const obj = this.getSelection()[0];
-                                const textureComp = this.getTextureComponent(obj);
-                                textureComp.setTextureKeys({});
-                                this.getEditor().setDirty(true);
-                                this.getEditor().repaint();
-                                this.updateWithSelection();
+                                const unlocked = this.isUnlocked(sceneobjects.TextureComponent.texture);
+                                changeBtn.disabled = !unlocked;
+                                deleteBtn.disabled = !unlocked;
                             });
                         }
                     }
