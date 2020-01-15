@@ -1709,11 +1709,11 @@ var phasereditor2d;
                             }
                         }
                     }
-                    preloadFrames() {
+                    async preloadFrames() {
                         const url = this.getPackItem().getData().url;
                         const img = core.AssetPackUtils.getImageFromPackUrl(url);
                         if (img) {
-                            return img.preloadSize();
+                            return await img.preloadSize();
                         }
                         return controls.Controls.resolveNothingLoaded();
                     }

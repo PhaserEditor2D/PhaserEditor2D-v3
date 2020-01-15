@@ -29,14 +29,15 @@ namespace phasereditor2d.pack.core.parsers {
             }
         }
 
-        preloadFrames(): Promise<controls.PreloadResult> {
+        async preloadFrames(): Promise<controls.PreloadResult> {
 
             const url = this.getPackItem().getData().url;
 
             const img = AssetPackUtils.getImageFromPackUrl(url);
 
             if (img) {
-                return img.preloadSize();
+
+                return await img.preloadSize();
             }
 
             return controls.Controls.resolveNothingLoaded();

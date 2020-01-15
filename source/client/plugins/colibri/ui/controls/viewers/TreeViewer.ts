@@ -215,6 +215,7 @@ namespace colibri.ui.controls.viewers {
             super.setFilterText(filter);
 
             if (filter !== "") {
+
                 this.expandFilteredParents(this.getContentProvider().getRoots(this.getInput()));
                 this.repaint();
             }

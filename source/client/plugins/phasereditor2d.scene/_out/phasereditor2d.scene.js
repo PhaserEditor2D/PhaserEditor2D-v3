@@ -3030,6 +3030,9 @@ var phasereditor2d;
                         const hash = await maker.buildDependenciesHash();
                         return hash;
                     }
+                    async refreshDependenciesHash() {
+                        this._currentRefreshHash = await this.buildDependenciesHash();
+                    }
                     async onPartActivated() {
                         super.onPartActivated();
                         {
@@ -4858,7 +4861,7 @@ var phasereditor2d;
                         return sprite;
                     }
                     createImageObject(scene, x, y, key, frame) {
-                        const sprite = new sceneobjects.Image(scene, x, y, key, frame);
+                        const sprite = new sceneobjects.Image(scene, x, y, key || null, frame);
                         sprite.getEditorSupport().setScene(scene);
                         scene.sys.displayList.add(sprite);
                         return sprite;
@@ -5397,7 +5400,7 @@ var phasereditor2d;
                             this._textureKeys.frame = undefined;
                         }
                         const obj = this.getObject();
-                        obj.setTexture(keys.key, keys.frame);
+                        obj.setTexture(keys.key || null, keys.frame);
                         // this should be called each time the texture is changed
                         obj.setInteractive();
                     }
@@ -5450,7 +5453,8 @@ var phasereditor2d;
                         });
                         imgComp.appendChild(imgControl.getElement());
                         this.addUpdater(async () => {
-                            imgControl.setImage(new controls.MultiImage(this.getSelectedFrames(), 10, 10));
+                            const frames = this.getSelectedFrames();
+                            imgControl.setImage(new controls.MultiImage(frames, 10, 10));
                             setTimeout(() => imgControl.resizeTo(), 1);
                         });
                         // Lock
@@ -5472,6 +5476,7 @@ var phasereditor2d;
                                     }
                                     this.getEditor()
                                         .getUndoManager().add(new sceneobjects.ChangeTextureOperation(this.getEditor(), this.getSelection(), textureData));
+                                    this.getEditor().refreshDependenciesHash();
                                 });
                             });
                             const deleteBtn = this.createButton(comp, "Delete", e => {
@@ -5502,6 +5507,10 @@ var phasereditor2d;
                         }
                     }
                     getSelectedFrames() {
+                        // this happens when the editor is opened but the scene is not yet created
+                        if (!this.getEditor().getScene()) {
+                            return [];
+                        }
                         const finder = this.getEditor().getPackFinder();
                         const images = new Set();
                         for (const obj of this.getSelection()) {

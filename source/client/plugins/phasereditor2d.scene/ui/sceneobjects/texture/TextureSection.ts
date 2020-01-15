@@ -33,7 +33,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(async () => {
 
-                imgControl.setImage(new controls.MultiImage(this.getSelectedFrames(), 10, 10));
+                const frames = this.getSelectedFrames();
+
+                imgControl.setImage(new controls.MultiImage(frames, 10, 10));
 
                 setTimeout(() => imgControl.resizeTo(), 1);
             });
@@ -76,6 +78,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 this.getSelection(),
                                 textureData)
                             );
+
+                        this.getEditor().refreshDependenciesHash();
                     });
                 });
 
@@ -123,6 +127,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private getSelectedFrames() {
+
+            // this happens when the editor is opened but the scene is not yet created
+            if (!this.getEditor().getScene()) {
+
+                return [];
+            }
 
             const finder = this.getEditor().getPackFinder();
 

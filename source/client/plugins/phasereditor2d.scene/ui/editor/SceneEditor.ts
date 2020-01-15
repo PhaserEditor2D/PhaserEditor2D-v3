@@ -455,6 +455,11 @@ namespace phasereditor2d.scene.ui.editor {
             return hash;
         }
 
+        async refreshDependenciesHash() {
+
+            this._currentRefreshHash = await this.buildDependenciesHash();
+        }
+
         async onPartActivated() {
 
             super.onPartActivated();
