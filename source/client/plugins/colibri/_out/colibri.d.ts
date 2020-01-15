@@ -994,6 +994,7 @@ declare namespace colibri.ui.controls.viewers {
         private _scrollPane;
         constructor(viewer: T, ...classList: string[]);
         private onFilterInput;
+        filterText(value: string): void;
         getViewer(): T;
         layout(): void;
         getFilterControl(): FilterControl;

@@ -63,10 +63,17 @@ namespace colibri.ui.controls.viewers {
             this.setLayoutChildren(false);
         }
 
-        private onFilterInput(e: Event) {
+        private onFilterInput(e?: Event) {
             const value = this._filterControl.getFilterElement().value;
             this._viewer.setFilterText(value);
             this._viewer.repaint();
+        }
+
+        filterText(value: string) {
+
+            this._filterControl.getFilterElement().value = value;
+
+            this.onFilterInput();
         }
 
         getViewer() {

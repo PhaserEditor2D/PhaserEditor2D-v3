@@ -78,6 +78,11 @@ namespace colibri.ui.ide {
                     provider.prepareViewerState(state);
 
                     this._viewer.setState(state);
+                    this._filteredViewer.filterText(state.filterText);
+
+                } else {
+
+                    this._filteredViewer.filterText("");
                 }
 
             } else {

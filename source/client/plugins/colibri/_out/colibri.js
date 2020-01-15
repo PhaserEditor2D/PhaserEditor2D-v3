@@ -4071,6 +4071,10 @@ var colibri;
                         this._viewer.setFilterText(value);
                         this._viewer.repaint();
                     }
+                    filterText(value) {
+                        this._filterControl.getFilterElement().value = value;
+                        this.onFilterInput();
+                    }
                     getViewer() {
                         return this._viewer;
                     }
@@ -6048,6 +6052,10 @@ var colibri;
                         if (state) {
                             provider.prepareViewerState(state);
                             this._viewer.setState(state);
+                            this._filteredViewer.filterText(state.filterText);
+                        }
+                        else {
+                            this._filteredViewer.filterText("");
                         }
                     }
                     else {
