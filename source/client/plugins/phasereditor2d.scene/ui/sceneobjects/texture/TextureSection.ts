@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import ide = colibri.ui.ide;
     import core = colibri.core;
 
-    export class TextureSection extends editor.properties.BaseSceneSection<sceneobjects.Image> {
+    export class TextureSection extends ObjectSceneSection<ITextureLikeObject> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture");
@@ -37,7 +37,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 for (const obj of this.getSelection()) {
 
-                    const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
+                    const textureComp = this.getTextureComponent(obj);
+
+                    const { textureKey, frameKey } = textureComp.getTexture();
 
                     const img = finder.getAssetPackItemImage(textureKey, frameKey);
 
@@ -46,6 +48,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 setTimeout(() => imgControl.resizeTo(), 1);
             });
+
+            this.createLock(comp);
 
             // Buttons
 
@@ -90,9 +94,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const obj = this.getSelection()[0];
 
-                        const texture = obj.getEditorSupport().getTextureComponent();
+                        const textureComp = this.getTextureComponent(obj);
 
-                        const { textureKey, frameKey } = texture.getTexture();
+                        const { textureKey, frameKey } = textureComp.getTexture();
 
                         let str = "(Select)";
 
@@ -117,7 +121,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const obj = this.getSelection()[0];
 
-                    const textureComp = obj.getEditorSupport().getTextureComponent();
+                    const textureComp = this.getTextureComponent(obj);
 
                     textureComp.setTexture(null, null);
 
@@ -129,6 +133,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 });
             }
 
+        }
+
+        getTextureComponent(obj: ITextureLikeObject) {
+            return obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
         }
 
         canEdit(obj: any, n: number): boolean {

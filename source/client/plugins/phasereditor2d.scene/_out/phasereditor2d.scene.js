@@ -5432,7 +5432,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 var controls = colibri.ui.controls;
                 var ide = colibri.ui.ide;
-                class TextureSection extends ui.editor.properties.BaseSceneSection {
+                class TextureSection extends sceneobjects.ObjectSceneSection {
                     constructor(page) {
                         super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture");
                     }
@@ -5452,7 +5452,8 @@ var phasereditor2d;
                         this.addUpdater(async () => {
                             const finder = this.getEditor().getPackFinder();
                             for (const obj of this.getSelection()) {
-                                const { textureKey, frameKey } = obj.getEditorSupport().getTextureComponent().getTexture();
+                                const textureComp = this.getTextureComponent(obj);
+                                const { textureKey, frameKey } = textureComp.getTexture();
                                 const img = finder.getAssetPackItemImage(textureKey, frameKey);
                                 imgControl.setImage(img);
                             }
@@ -5480,8 +5481,8 @@ var phasereditor2d;
                             this.addUpdater(() => {
                                 if (this.getSelection().length === 1) {
                                     const obj = this.getSelection()[0];
-                                    const texture = obj.getEditorSupport().getTextureComponent();
-                                    const { textureKey, frameKey } = texture.getTexture();
+                                    const textureComp = this.getTextureComponent(obj);
+                                    const { textureKey, frameKey } = textureComp.getTexture();
                                     let str = "(Select)";
                                     if (typeof frameKey === "number" || typeof frameKey === "string") {
                                         str = frameKey + " @ " + textureKey;
@@ -5497,13 +5498,16 @@ var phasereditor2d;
                             });
                             const deleteBtn = this.createButton(comp, "Delete", e => {
                                 const obj = this.getSelection()[0];
-                                const textureComp = obj.getEditorSupport().getTextureComponent();
+                                const textureComp = this.getTextureComponent(obj);
                                 textureComp.setTexture(null, null);
                                 this.getEditor().setDirty(true);
                                 this.getEditor().repaint();
                                 this.updateWithSelection();
                             });
                         }
+                    }
+                    getTextureComponent(obj) {
+                        return obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
                     }
                     canEdit(obj, n) {
                         return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TextureComponent) !== null;

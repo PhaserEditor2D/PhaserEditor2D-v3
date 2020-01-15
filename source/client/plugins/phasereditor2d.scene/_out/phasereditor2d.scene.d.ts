@@ -1256,10 +1256,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class ChangeTextureOperation extends SceneObjectOperation<ITextureLike> {
-        constructor(editor: editor.SceneEditor, objects: ITextureLike[], value: TextureKeyFrame);
-        getValue(obj: ITextureLike): TextureKeyFrame;
-        setValue(obj: ITextureLike, value: TextureKeyFrame): void;
+    class ChangeTextureOperation extends SceneObjectOperation<ITextureLikeObject> {
+        constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: TextureKeyFrame);
+        getValue(obj: ITextureLikeObject): TextureKeyFrame;
+        setValue(obj: ITextureLikeObject, value: TextureKeyFrame): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1273,7 +1273,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
-    interface ITextureLike extends SceneObject {
+    interface ITextureLikeObject extends SceneObject {
         setTexture(key: string, frame?: string | number): void;
     }
     interface TextureKeyFrame {
@@ -1282,7 +1282,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
     interface TextureData extends json.ObjectData, TextureKeyFrame {
     }
-    class TextureComponent extends Component<ITextureLike> {
+    class TextureComponent extends Component<ITextureLikeObject> {
         static TEXTURE_KEY_NAME: string;
         static FRAME_KEY_NAME: string;
         static UNLOCK_TEXTURE_KEY: string;
@@ -1302,9 +1302,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class TextureSection extends editor.properties.BaseSceneSection<sceneobjects.Image> {
+    class TextureSection extends ObjectSceneSection<ITextureLikeObject> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
+        getTextureComponent(obj: ITextureLikeObject): TextureComponent;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
     }

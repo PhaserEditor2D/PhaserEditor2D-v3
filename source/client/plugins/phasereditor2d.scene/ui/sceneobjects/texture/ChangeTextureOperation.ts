@@ -1,19 +1,19 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ChangeTextureOperation extends SceneObjectOperation<ITextureLike> {
+    export class ChangeTextureOperation extends SceneObjectOperation<ITextureLikeObject> {
 
-        constructor(editor: editor.SceneEditor, objects: ITextureLike[], value: TextureKeyFrame) {
+        constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: TextureKeyFrame) {
             super(editor, objects, value);
         }
 
-        getValue(obj: ITextureLike): TextureKeyFrame {
+        getValue(obj: ITextureLikeObject): TextureKeyFrame {
 
             const comp = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
 
             return comp.getTexture();
         }
 
-        setValue(obj: ITextureLike, value: TextureKeyFrame): void {
+        setValue(obj: ITextureLikeObject, value: TextureKeyFrame): void {
 
             const finder = this.getEditor().getPackFinder();
 
