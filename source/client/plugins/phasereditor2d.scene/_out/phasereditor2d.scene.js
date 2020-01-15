@@ -5397,8 +5397,6 @@ var phasereditor2d;
                             this._textureKeys.frame = undefined;
                         }
                         const obj = this.getObject();
-                        console.log(keys);
-                        console.log(obj.getEditorSupport().getScene().game.textures.getTextureKeys());
                         obj.setTexture(keys.key, keys.frame);
                         // this should be called each time the texture is changed
                         obj.setInteractive();
@@ -5553,6 +5551,7 @@ var phasereditor2d;
                         viewer.setLabelProvider(new phasereditor2d.pack.ui.viewers.AssetPackLabelProvider());
                         viewer.setCellRendererProvider(new phasereditor2d.pack.ui.viewers.AssetPackCellRendererProvider("tree"));
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        viewer.setCellSize(64);
                         viewer.setInput(this._finder.getPacks()
                             .flatMap(pack => pack.getItems())
                             .filter(item => item instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem)

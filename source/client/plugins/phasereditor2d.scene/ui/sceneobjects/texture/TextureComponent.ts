@@ -80,9 +80,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
 
-            console.log(keys);
-
-            console.log(obj.getEditorSupport().getScene().game.textures.getTextureKeys());
             obj.setTexture(keys.key, keys.frame);
 
             // this should be called each time the texture is changed

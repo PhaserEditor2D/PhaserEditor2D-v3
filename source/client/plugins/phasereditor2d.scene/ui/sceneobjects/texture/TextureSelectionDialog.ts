@@ -37,6 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("tree"));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+            viewer.setCellSize(64);
             viewer.setInput(
                 this._finder.getPacks()
                     .flatMap(pack => pack.getItems())
