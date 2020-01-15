@@ -40,6 +40,11 @@ namespace phasereditor2d.pack.core {
         }
 
         findAssetPackItem(key: string) {
+
+            if (!key) {
+                return null;
+            }
+
             return this._packs
                 .flatMap(pack => pack.getItems())
                 .find(item => item.getKey() === key);

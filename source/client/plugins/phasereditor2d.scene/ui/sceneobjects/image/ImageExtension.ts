@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]> {
 
-            const key = args.serializer.read("textureKey");
+            const { key, frame } = args.serializer.read(TextureComponent.TEXTURE_KEYS_NAME) as TextureKeys;
 
             const finder = args.finder;
 
@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             } else if (args.asset instanceof pack.core.ImageAssetPackItem) {
 
                 key = args.asset.getKey();
-                frame = null;
+                frame = undefined;
                 baseLabel = key;
             }
 
@@ -72,7 +72,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const support = sprite.getEditorSupport();
 
             support.setLabel(baseLabel);
-            support.getTextureComponent().setTexture(key, frame);
+            support.getTextureComponent().setTextureKeys({ key, frame });
 
             return sprite;
         }

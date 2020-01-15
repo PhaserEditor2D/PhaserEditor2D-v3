@@ -11,25 +11,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         setTexture(key: string, frame?: string | number): void;
     }
 
-    export interface TextureKeyFrame {
+    export interface TextureKeys {
 
-        textureKey: string;
-        frameKey?: string | number;
+        key?: string;
+        frame?: string | number;
     }
 
     export interface TextureData
-        extends json.ObjectData, TextureKeyFrame {
+        extends json.ObjectData {
 
+        texture: TextureKeys;
     }
 
     export class TextureComponent extends Component<ITextureLikeObject> {
 
-        static TEXTURE_KEY_NAME = "textureKey";
-        static FRAME_KEY_NAME = "frameKey";
-        static UNLOCK_TEXTURE_KEY = "TextureComponent.texture";
+        static TEXTURE_KEYS_NAME = "texture";
 
-        private _textureKey: string;
-        private _textureFrameKey: string | number;
+        private _textureKeys: TextureKeys = {};
 
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
             // nothing, the properties are set when the object is created.
@@ -37,34 +35,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: json.Serializer): void {
 
-            ser.write("textureKey", this._textureKey);
-            ser.write("frameKey", this._textureFrameKey);
+            if (this._textureKeys.key) {
+
+                if (this._textureKeys.frame === null) {
+                    this._textureKeys.frame = undefined;
+                }
+
+                ser.write("texture", this._textureKeys);
+            }
         }
 
         readJSON(ser: json.Serializer): void {
 
-            const key = ser.read("textureKey");
-            const frame = ser.read("frameKey");
+            const keys = ser.read("texture", {});
 
-            this.setTexture(key, frame);
+            this.setTextureKeys(keys);
         }
 
-        getKey() {
-            return this._textureKey;
+        getTextureKeys(): TextureKeys {
+            return this._textureKeys;
         }
 
-        setKey(key: string) {
-            this._textureKey = key;
-        }
+        setTextureKeys(keys: TextureKeys) {
 
-        setTexture(key: string, frame: string | number) {
+            this._textureKeys = keys;
 
-            this.setKey(key);
-            this.setFrame(frame);
+            if (this._textureKeys.frame === null) {
+
+                this._textureKeys.frame = undefined;
+            }
 
             const obj = this.getObject();
 
-            obj.setTexture(key, frame);
+            console.log(keys);
+
+            console.log(obj.getEditorSupport().getScene().game.textures.getTextureKeys());
+            obj.setTexture(keys.key, keys.frame);
 
             // this should be called each time the texture is changed
             obj.setInteractive();
@@ -72,26 +78,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         removeTexture() {
 
-            this.setKey(null);
-            this.setFrame(null);
-
-            this.getObject().setTexture(null);
-        }
-
-        getTexture(): TextureKeyFrame {
-
-            return {
-                textureKey: this.getKey(),
-                frameKey: this.getFrame()
-            };
-        }
-
-        getFrame() {
-            return this._textureFrameKey;
-        }
-
-        setFrame(frame: string | number) {
-            this._textureFrameKey = frame;
+            this.setTextureKeys({});
         }
     }
 }

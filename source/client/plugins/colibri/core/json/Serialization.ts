@@ -3,6 +3,7 @@ namespace colibri.core.json {
     export function write(data: any, name: string, value: any, defaultValue?: any): void {
 
         if (value !== defaultValue) {
+
             data[name] = value;
         }
     }
@@ -10,6 +11,7 @@ namespace colibri.core.json {
     export function read(data: any, name: string, defaultValue?: any): any {
 
         if (name in data) {
+
             return data[name];
         }
 
@@ -25,6 +27,7 @@ namespace colibri.core.json {
         for (const key2 of keys) {
 
             if (result !== undefined) {
+
                 result = result[key2];
             }
         }

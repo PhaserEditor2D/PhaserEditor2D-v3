@@ -39,17 +39,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const textureComp = this.getTextureComponent(obj);
 
-                    const { textureKey, frameKey } = textureComp.getTexture();
+                    const { key, frame } = textureComp.getTextureKeys();
 
-                    const img = finder.getAssetPackItemImage(textureKey, frameKey);
+                    const img = finder.getAssetPackItemImage(key, frame);
 
                     imgControl.setImage(img);
                 }
 
                 setTimeout(() => imgControl.resizeTo(), 1);
             });
-
-            this.createLock(comp);
 
             // Buttons
 
@@ -62,7 +60,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const frame = sel[0];
 
-                        let textureData: TextureKeyFrame;
+                        let textureData: TextureKeys;
 
                         const item = frame.getPackItem();
 
@@ -71,11 +69,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         if (item instanceof pack.core.ImageAssetPackItem) {
 
-                            textureData = { textureKey: item.getKey() };
+                            textureData = { key: item.getKey() };
 
                         } else {
 
-                            textureData = { textureKey: item.getKey(), frameKey: frame.getName() };
+                            textureData = { key: item.getKey(), frame: frame.getName() };
                         }
 
                         this.getEditor()
@@ -96,17 +94,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const textureComp = this.getTextureComponent(obj);
 
-                        const { textureKey, frameKey } = textureComp.getTexture();
+                        const { key, frame } = textureComp.getTextureKeys();
 
                         let str = "(Select)";
 
-                        if (typeof frameKey === "number" || typeof frameKey === "string") {
+                        if (frame !== undefined) {
 
-                            str = frameKey + " @ " + textureKey;
+                            str = frame + " @ " + key;
 
-                        } else if (textureKey) {
+                        } else if (key) {
 
-                            str = textureKey;
+                            str = key;
                         }
 
                         changeBtn.textContent = str;
@@ -123,7 +121,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const textureComp = this.getTextureComponent(obj);
 
-                    textureComp.setTexture(null, null);
+                    textureComp.setTextureKeys({});
 
                     this.getEditor().setDirty(true);
 

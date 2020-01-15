@@ -24,9 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const textureComponent = obj.getEditorSupport().getTextureComponent();
 
-            const key = textureComponent.getKey();
-
-            const frame = textureComponent.getFrame();
+            const { key, frame } = textureComponent.getTextureKeys();
 
             if (typeof key === "string") {
 
@@ -92,15 +90,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const textureComponent = obj.getEditorSupport().getTextureComponent();
 
+            const { key, frame } = textureComponent.getTextureKeys();
+
             if (support.isPrefabInstance()) {
 
                 const prefabSerializer = support.getPrefabSerializer();
 
                 if (prefabSerializer) {
 
-                    const key = prefabSerializer.read(TextureComponent.TEXTURE_KEY_NAME);
+                    const prefabKeys = prefabSerializer.read(TextureComponent.TEXTURE_KEYS_NAME) as TextureKeys;
 
-                    if (key === textureComponent.getKey()) {
+                    if (prefabKeys.key === key) {
 
                         return call;
                     }
@@ -111,9 +111,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            call.argLiteral(textureComponent.getKey());
-
-            const frame = textureComponent.getFrame();
+            call.argLiteral(key);
 
             if (typeof frame === "number") {
 

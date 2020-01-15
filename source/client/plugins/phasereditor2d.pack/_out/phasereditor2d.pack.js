@@ -851,6 +851,9 @@ var phasereditor2d;
                     return this._packs;
                 }
                 findAssetPackItem(key) {
+                    if (!key) {
+                        return null;
+                    }
                     return this._packs
                         .flatMap(pack => pack.getItems())
                         .find(item => item.getKey() === key);

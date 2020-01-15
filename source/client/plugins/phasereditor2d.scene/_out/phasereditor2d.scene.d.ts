@@ -1257,9 +1257,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ChangeTextureOperation extends SceneObjectOperation<ITextureLikeObject> {
-        constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: TextureKeyFrame);
-        getValue(obj: ITextureLikeObject): TextureKeyFrame;
-        setValue(obj: ITextureLikeObject, value: TextureKeyFrame): void;
+        constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: TextureKeys);
+        getValue(obj: ITextureLikeObject): TextureKeys;
+        setValue(obj: ITextureLikeObject, value: TextureKeys): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1276,28 +1276,22 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface ITextureLikeObject extends SceneObject {
         setTexture(key: string, frame?: string | number): void;
     }
-    interface TextureKeyFrame {
-        textureKey: string;
-        frameKey?: string | number;
+    interface TextureKeys {
+        key?: string;
+        frame?: string | number;
     }
-    interface TextureData extends json.ObjectData, TextureKeyFrame {
+    interface TextureData extends json.ObjectData {
+        texture: TextureKeys;
     }
     class TextureComponent extends Component<ITextureLikeObject> {
-        static TEXTURE_KEY_NAME: string;
-        static FRAME_KEY_NAME: string;
-        static UNLOCK_TEXTURE_KEY: string;
-        private _textureKey;
-        private _textureFrameKey;
+        static TEXTURE_KEYS_NAME: string;
+        private _textureKeys;
         buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
         writeJSON(ser: json.Serializer): void;
         readJSON(ser: json.Serializer): void;
-        getKey(): string;
-        setKey(key: string): void;
-        setTexture(key: string, frame: string | number): void;
+        getTextureKeys(): TextureKeys;
+        setTextureKeys(keys: TextureKeys): void;
         removeTexture(): void;
-        getTexture(): TextureKeyFrame;
-        getFrame(): string | number;
-        setFrame(frame: string | number): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
