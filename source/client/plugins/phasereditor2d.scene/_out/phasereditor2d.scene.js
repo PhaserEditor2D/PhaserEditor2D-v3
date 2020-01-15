@@ -5450,15 +5450,7 @@ var phasereditor2d;
                         });
                         imgComp.appendChild(imgControl.getElement());
                         this.addUpdater(async () => {
-                            const finder = this.getEditor().getPackFinder();
-                            const images = new Set();
-                            for (const obj of this.getSelection()) {
-                                const textureComp = this.getTextureComponent(obj);
-                                const { key, frame } = textureComp.getTextureKeys();
-                                const img = finder.getAssetPackItemImage(key, frame);
-                                images.add(img);
-                            }
-                            imgControl.setImage(new controls.MultiImage([...images], 10, 10));
+                            imgControl.setImage(new controls.MultiImage(this.getSelectedFrames(), 10, 10));
                             setTimeout(() => imgControl.resizeTo(), 1);
                         });
                         // Lock
@@ -5467,7 +5459,7 @@ var phasereditor2d;
                         {
                             const changeBtn = this.createButton(comp, "Select", e => {
                                 const finder = this.getEditor().getPackFinder();
-                                sceneobjects.TextureSelectionDialog.createDialog(finder, async (sel) => {
+                                sceneobjects.TextureSelectionDialog.createDialog(finder, this.getSelectedFrames(), async (sel) => {
                                     const frame = sel[0];
                                     let textureData;
                                     const item = frame.getPackItem();
@@ -5509,6 +5501,19 @@ var phasereditor2d;
                             });
                         }
                     }
+                    getSelectedFrames() {
+                        const finder = this.getEditor().getPackFinder();
+                        const images = new Set();
+                        for (const obj of this.getSelection()) {
+                            const textureComp = this.getTextureComponent(obj);
+                            const { key, frame } = textureComp.getTextureKeys();
+                            const img = finder.getAssetPackItemImage(key, frame);
+                            if (img) {
+                                images.add(img);
+                            }
+                        }
+                        return [...images];
+                    }
                     getTextureComponent(obj) {
                         return obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
                     }
@@ -5539,9 +5544,11 @@ var phasereditor2d;
                         this._finder = finder;
                         this._callback = callback;
                     }
-                    static async createDialog(finder, callback) {
+                    static async createDialog(finder, selected, callback) {
                         const dlg = new TextureSelectionDialog(finder, callback);
                         dlg.create();
+                        dlg.getViewer().setSelection(selected);
+                        dlg.getViewer().reveal(...selected);
                         return dlg;
                     }
                     create() {

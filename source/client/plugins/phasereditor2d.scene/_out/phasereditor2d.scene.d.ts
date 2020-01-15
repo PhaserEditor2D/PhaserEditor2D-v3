@@ -1299,6 +1299,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TextureSection extends ObjectSceneSection<ITextureLikeObject> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
+        private getSelectedFrames;
         getTextureComponent(obj: ITextureLikeObject): TextureComponent;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
@@ -1308,7 +1309,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class TextureSelectionDialog extends controls.dialogs.ViewerDialog {
         private _finder;
-        static createDialog(finder: pack.core.PackFinder, callback: (selection: pack.core.AssetPackImageFrame[]) => void): Promise<TextureSelectionDialog>;
+        static createDialog(finder: pack.core.PackFinder, selected: pack.core.AssetPackImageFrame[], callback: (selection: pack.core.AssetPackImageFrame[]) => void): Promise<TextureSelectionDialog>;
         private _callback;
         private constructor();
         create(): void;

@@ -15,6 +15,17 @@ namespace phasereditor2d.pack.core {
             this._packItem = packItem;
         }
 
+        equalsKeys(other: AssetPackImageFrame) {
+
+            if (other) {
+
+                return other.getPackItem().getKey() === this.getPackItem().getKey()
+                    && other.getName() === this.getName();
+            }
+
+            return false;
+        }
+
         getPackItem() {
             return this._packItem;
         }

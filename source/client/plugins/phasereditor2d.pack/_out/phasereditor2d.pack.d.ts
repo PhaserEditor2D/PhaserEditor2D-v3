@@ -95,6 +95,7 @@ declare namespace phasereditor2d.pack.core {
     class AssetPackImageFrame extends controls.ImageFrame {
         private _packItem;
         constructor(packItem: ImageFrameContainerAssetPackItem, name: string | number, frameImage: controls.IImage, frameData: controls.FrameData);
+        equalsKeys(other: AssetPackImageFrame): boolean;
         getPackItem(): ImageFrameContainerAssetPackItem;
     }
 }
@@ -249,7 +250,7 @@ declare namespace phasereditor2d.pack.core {
         findAssetPackItem(key: string): AssetPackItem;
         findPackItemOrFrameWithKey(key: string): AssetPackItem | AssetPackImageFrame;
         getAssetPackItemOrFrame(key: string, frame: any): AssetPackItem | AssetPackImageFrame;
-        getAssetPackItemImage(key: string, frame: any): controls.IImage;
+        getAssetPackItemImage(key: string, frame: any): AssetPackImageFrame;
     }
 }
 declare namespace phasereditor2d.pack.core {

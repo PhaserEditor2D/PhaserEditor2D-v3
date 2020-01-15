@@ -403,6 +403,13 @@ var phasereditor2d;
                     super(name, frameImage, frameData);
                     this._packItem = packItem;
                 }
+                equalsKeys(other) {
+                    if (other) {
+                        return other.getPackItem().getKey() === this.getPackItem().getKey()
+                            && other.getName() === this.getName();
+                    }
+                    return false;
+                }
                 getPackItem() {
                     return this._packItem;
                 }
@@ -894,13 +901,13 @@ var phasereditor2d;
                 }
                 getAssetPackItemImage(key, frame) {
                     const asset = this.getAssetPackItemOrFrame(key, frame);
-                    if (asset instanceof core_2.AssetPackItem && asset.getType() === core_2.IMAGE_TYPE) {
-                        return core_2.AssetPackUtils.getImageFromPackUrl(asset.getData().url);
+                    if (asset instanceof core_2.ImageAssetPackItem) {
+                        return asset.getFrames()[0];
                     }
                     else if (asset instanceof core_2.AssetPackImageFrame) {
                         return asset;
                     }
-                    return new controls.ImageWrapper(null);
+                    return null;
                 }
             }
             core_2.PackFinder = PackFinder;

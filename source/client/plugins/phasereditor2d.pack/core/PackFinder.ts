@@ -101,13 +101,13 @@ namespace phasereditor2d.pack.core {
             return item;
         }
 
-        getAssetPackItemImage(key: string, frame: any): controls.IImage {
+        getAssetPackItemImage(key: string, frame: any): AssetPackImageFrame {
 
             const asset = this.getAssetPackItemOrFrame(key, frame);
 
-            if (asset instanceof AssetPackItem && asset.getType() === IMAGE_TYPE) {
+            if (asset instanceof ImageAssetPackItem) {
 
-                return AssetPackUtils.getImageFromPackUrl(asset.getData().url);
+                return asset.getFrames()[0];
 
             } else if (asset instanceof AssetPackImageFrame) {
 
@@ -115,7 +115,7 @@ namespace phasereditor2d.pack.core {
 
             }
 
-            return new controls.ImageWrapper(null);
+            return null;
         }
     }
 }
