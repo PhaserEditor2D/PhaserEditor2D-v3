@@ -98,7 +98,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (prefabSerializer) {
 
-                    const prefabKeys = prefabSerializer.read(TextureComponent.texture.name) as TextureKeys;
+                    const prefabKeys = prefabSerializer.read(TextureComponent.texture.name, {}) as TextureKeys;
 
                     if (prefabKeys.key === key) {
 

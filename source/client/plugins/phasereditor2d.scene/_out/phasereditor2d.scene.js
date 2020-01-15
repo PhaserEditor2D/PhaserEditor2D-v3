@@ -4714,7 +4714,7 @@ var phasereditor2d;
                         if (support.isPrefabInstance()) {
                             const prefabSerializer = support.getPrefabSerializer();
                             if (prefabSerializer) {
-                                const prefabKeys = prefabSerializer.read(sceneobjects.TextureComponent.texture.name);
+                                const prefabKeys = prefabSerializer.read(sceneobjects.TextureComponent.texture.name, {});
                                 if (prefabKeys.key === key) {
                                     return call;
                                 }
