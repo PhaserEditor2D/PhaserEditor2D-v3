@@ -2379,6 +2379,67 @@ var colibri;
     (function (ui) {
         var controls;
         (function (controls) {
+            class MultiImage {
+                constructor(images, width, height) {
+                    this._images = images;
+                    this._width = width;
+                    this._height = height;
+                }
+                paint(context, x, y, w, h, center) {
+                    const frameCount = this._images.length;
+                    let size = Math.floor(Math.sqrt(w * h / frameCount) * 0.8) + 1;
+                    if (frameCount === 1) {
+                        size = Math.min(w, h);
+                    }
+                    const cols = Math.floor(w / size);
+                    const rows = frameCount / cols + (frameCount % cols === 0 ? 0 : 1);
+                    const marginX = Math.floor(Math.max(0, (w - cols * size) / 2));
+                    const marginY = Math.floor(Math.max(0, (h - rows * size) / 2));
+                    let x2 = x + marginX;
+                    let y2 = y + marginY;
+                    for (const img of this._images) {
+                        img.paint(context, x2, y2, size, size, true);
+                        x2 += size;
+                        if (x2 + size >= w) {
+                            x2 = x + marginX;
+                            y2 += size + 5;
+                        }
+                    }
+                }
+                paintFrame(context, srcX, srcY, scrW, srcH, dstX, dstY, dstW, dstH) {
+                    // nothing
+                }
+                async preload() {
+                    let result = controls.PreloadResult.NOTHING_LOADED;
+                    for (const image of this._images) {
+                        result = Math.max(result, await image.preload());
+                    }
+                    return result;
+                }
+                resize(width, height) {
+                    this._width = width;
+                    this._height = height;
+                }
+                getWidth() {
+                    return this._width;
+                }
+                getHeight() {
+                    return this._height;
+                }
+                async preloadSize() {
+                    return controls.PreloadResult.NOTHING_LOADED;
+                }
+            }
+            controls.MultiImage = MultiImage;
+        })(controls = ui.controls || (ui.controls = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var controls;
+        (function (controls) {
             class MutableIcon {
                 constructor() {
                     this._element = document.createElement("canvas");

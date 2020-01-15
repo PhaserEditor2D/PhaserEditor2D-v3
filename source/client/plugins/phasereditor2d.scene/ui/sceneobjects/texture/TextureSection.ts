@@ -34,6 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addUpdater(async () => {
 
                 const finder = this.getEditor().getPackFinder();
+                const images = new Set<controls.IImage>();
 
                 for (const obj of this.getSelection()) {
 
@@ -43,8 +44,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const img = finder.getAssetPackItemImage(key, frame);
 
-                    imgControl.setImage(img);
+                    images.add(img);
                 }
+
+                imgControl.setImage(new controls.MultiImage([...images], 10, 10));
 
                 setTimeout(() => imgControl.resizeTo(), 1);
             });
@@ -92,17 +95,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const deleteBtn = this.createButton(comp, "Delete", e => {
 
-                    const obj = this.getSelection()[0];
-
-                    const textureComp = this.getTextureComponent(obj);
-
-                    textureComp.setTextureKeys({});
-
-                    this.getEditor().setDirty(true);
-
-                    this.getEditor().repaint();
-
-                    this.updateWithSelection();
+                    this.getEditor().getUndoManager()
+                        .add(new ChangeTextureOperation(this.getEditor(), this.getSelection(), {}));
                 });
 
                 this.addUpdater(() => {

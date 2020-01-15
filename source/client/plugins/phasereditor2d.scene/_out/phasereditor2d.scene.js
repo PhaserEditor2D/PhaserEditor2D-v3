@@ -4818,7 +4818,7 @@ var phasereditor2d;
                         return sceneobjects.ImageCodeDOMBuilder.getInstance();
                     }
                     async getAssetsFromObjectData(args) {
-                        const { key, frame } = args.serializer.read(sceneobjects.TextureComponent.texture.name);
+                        const { key, frame } = args.serializer.read(sceneobjects.TextureComponent.texture.name, {});
                         const finder = args.finder;
                         const item = finder.findAssetPackItem(key);
                         if (item) {
@@ -5451,12 +5451,14 @@ var phasereditor2d;
                         imgComp.appendChild(imgControl.getElement());
                         this.addUpdater(async () => {
                             const finder = this.getEditor().getPackFinder();
+                            const images = new Set();
                             for (const obj of this.getSelection()) {
                                 const textureComp = this.getTextureComponent(obj);
                                 const { key, frame } = textureComp.getTextureKeys();
                                 const img = finder.getAssetPackItemImage(key, frame);
-                                imgControl.setImage(img);
+                                images.add(img);
                             }
+                            imgControl.setImage(new controls.MultiImage([...images], 10, 10));
                             setTimeout(() => imgControl.resizeTo(), 1);
                         });
                         // Lock
@@ -5481,12 +5483,8 @@ var phasereditor2d;
                                 });
                             });
                             const deleteBtn = this.createButton(comp, "Delete", e => {
-                                const obj = this.getSelection()[0];
-                                const textureComp = this.getTextureComponent(obj);
-                                textureComp.setTextureKeys({});
-                                this.getEditor().setDirty(true);
-                                this.getEditor().repaint();
-                                this.updateWithSelection();
+                                this.getEditor().getUndoManager()
+                                    .add(new sceneobjects.ChangeTextureOperation(this.getEditor(), this.getSelection(), {}));
                             });
                             this.addUpdater(() => {
                                 if (this.getSelection().length === 1) {

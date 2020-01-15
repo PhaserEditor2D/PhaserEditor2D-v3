@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]> {
 
-            const { key, frame } = args.serializer.read(TextureComponent.texture.name) as TextureKeys;
+            const { key, frame } = args.serializer.read(TextureComponent.texture.name, {}) as TextureKeys;
 
             const finder = args.finder;
 

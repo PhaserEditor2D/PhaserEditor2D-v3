@@ -639,6 +639,21 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
+    class MultiImage implements IImage {
+        private _width;
+        private _height;
+        private _images;
+        constructor(images: IImage[], width: number, height: number);
+        paint(context: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, center: boolean): void;
+        paintFrame(context: CanvasRenderingContext2D, srcX: number, srcY: number, scrW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void;
+        preload(): Promise<PreloadResult>;
+        resize(width: number, height: number): void;
+        getWidth(): number;
+        getHeight(): number;
+        preloadSize(): Promise<PreloadResult>;
+    }
+}
+declare namespace colibri.ui.controls {
     class MutableIcon {
         private _element;
         private _context;
