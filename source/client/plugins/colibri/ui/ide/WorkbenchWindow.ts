@@ -146,6 +146,38 @@ namespace colibri.ui.ide {
             }
         }
 
+        private onStorageChanged(e: io.FileStorageChange) {
+
+            const editorArea = this.getEditorArea();
+            const editorsToRemove: FileEditor[] = [];
+
+            for (const editor of editorArea.getEditors()) {
+
+                if (editor instanceof FileEditor) {
+
+                    const file = editor.getInput();
+
+                    if (file) {
+
+                        if (e.isDeleted(file.getFullName())) {
+
+                            try {
+
+                                editorsToRemove.push(editor);
+
+                            } catch (e) {
+                                console.error(e);
+                            }
+                        }
+                    }
+                }
+            }
+            if (editorsToRemove.length > 0) {
+
+                editorArea.closeEditors(editorsToRemove);
+            }
+        }
+
         create() {
 
             if (this._created) {
@@ -159,6 +191,11 @@ namespace colibri.ui.ide {
             });
 
             window.addEventListener(controls.EVENT_THEME_CHANGED, e => this.layout());
+
+            FileUtils.getFileStorage().addChangeListener(e => {
+
+                this.onStorageChanged(e);
+            });
 
             this._toolbar = new MainToolbar();
             this._clientArea = new controls.Control("div", "WindowClientArea");

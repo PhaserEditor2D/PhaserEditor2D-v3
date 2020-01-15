@@ -306,6 +306,7 @@ namespace colibri.ui.controls {
         }
 
         protected closeTabLabel(labelElement: HTMLElement): void {
+
             {
                 const content = TabPane.getContentFromLabel(labelElement);
                 const event = new CustomEvent(EVENT_TAB_CLOSED, {
@@ -316,6 +317,13 @@ namespace colibri.ui.controls {
                 if (!this.dispatchEvent(event)) {
                     return;
                 }
+            }
+
+            const i = this._selectionHistoryLabelElement.indexOf(labelElement);
+
+            if (i >= 0) {
+
+                this._selectionHistoryLabelElement.splice(i, 1);
             }
 
             this._titleBarElement.removeChild(labelElement);
@@ -335,12 +343,14 @@ namespace colibri.ui.controls {
 
                     toSelectLabel = nextInHistory;
 
-                } else {
+                }
+            }
 
-                    if (this._titleBarElement.childElementCount > 0) {
+            if (!toSelectLabel) {
 
-                        toSelectLabel = (this._titleBarElement.firstChild as HTMLElement);
-                    }
+                if (this._titleBarElement.childElementCount > 0) {
+
+                    toSelectLabel = (this._titleBarElement.firstChild as HTMLElement);
                 }
             }
 
@@ -412,7 +422,7 @@ namespace colibri.ui.controls {
             }
         }
 
-        private selectTab(toSelectLabel: HTMLElement): void {
+        protected selectTab(toSelectLabel: HTMLElement): void {
 
             const selectedLabel = this._selectionHistoryLabelElement.pop();
 

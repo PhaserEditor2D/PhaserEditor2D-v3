@@ -2945,6 +2945,10 @@ var colibri;
                             return;
                         }
                     }
+                    const i = this._selectionHistoryLabelElement.indexOf(labelElement);
+                    if (i >= 0) {
+                        this._selectionHistoryLabelElement.splice(i, 1);
+                    }
                     this._titleBarElement.removeChild(labelElement);
                     const contentArea = labelElement["__contentArea"];
                     this._contentAreaElement.removeChild(contentArea);
@@ -2956,10 +2960,10 @@ var colibri;
                         if (nextInHistory) {
                             toSelectLabel = nextInHistory;
                         }
-                        else {
-                            if (this._titleBarElement.childElementCount > 0) {
-                                toSelectLabel = this._titleBarElement.firstChild;
-                            }
+                    }
+                    if (!toSelectLabel) {
+                        if (this._titleBarElement.childElementCount > 0) {
+                            toSelectLabel = this._titleBarElement.firstChild;
                         }
                     }
                     if (toSelectLabel) {
@@ -5800,6 +5804,21 @@ var colibri;
                         this.closeTab(editor);
                     }
                 }
+                closeEditors(editors) {
+                    this._tabsToBeClosed = new Set(editors.map(editor => this.getLabelFromContent(editor)));
+                    for (const editor of editors) {
+                        this.closeTab(editor);
+                    }
+                    this._tabsToBeClosed = null;
+                }
+                selectTab(label) {
+                    if (this._tabsToBeClosed) {
+                        if (this._tabsToBeClosed.has(label)) {
+                            return;
+                        }
+                    }
+                    super.selectTab(label);
+                }
             }
             ide.EditorArea = EditorArea;
         })(ide = ui.ide || (ui.ide = {}));
@@ -6114,7 +6133,7 @@ var colibri;
                     const editorFile = this.getInput();
                     const editorFileFullName = editorFile.getFullName();
                     if (change.isDeleted(editorFileFullName)) {
-                        this.getPartFolder().closeTab(this);
+                        // this.getPartFolder().closeTab(this);
                     }
                     else if (change.isModified(editorFileFullName)) {
                         if (!this._isSaving) {
@@ -6641,6 +6660,28 @@ var colibri;
                         }
                     }
                 }
+                onStorageChanged(e) {
+                    const editorArea = this.getEditorArea();
+                    const editorsToRemove = [];
+                    for (const editor of editorArea.getEditors()) {
+                        if (editor instanceof ide.FileEditor) {
+                            const file = editor.getInput();
+                            if (file) {
+                                if (e.isDeleted(file.getFullName())) {
+                                    try {
+                                        editorsToRemove.push(editor);
+                                    }
+                                    catch (e) {
+                                        console.error(e);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (editorsToRemove.length > 0) {
+                        editorArea.closeEditors(editorsToRemove);
+                    }
+                }
                 create() {
                     if (this._created) {
                         return;
@@ -6650,6 +6691,9 @@ var colibri;
                         this.layout();
                     });
                     window.addEventListener(ui.controls.EVENT_THEME_CHANGED, e => this.layout());
+                    ide.FileUtils.getFileStorage().addChangeListener(e => {
+                        this.onStorageChanged(e);
+                    });
                     this._toolbar = new ide.MainToolbar();
                     this._clientArea = new ui.controls.Control("div", "WindowClientArea");
                     this._clientArea.setLayout(new ui.controls.FillLayout());

@@ -6,6 +6,8 @@ namespace colibri.ui.ide {
 
     export class EditorArea extends PartFolder {
 
+        private _tabsToBeClosed: Set<HTMLElement>;
+
         constructor() {
             super("EditorArea");
         }
@@ -131,6 +133,32 @@ namespace colibri.ui.ide {
             for (const editor of this.getEditors()) {
                 this.closeTab(editor);
             }
+        }
+
+        closeEditors(editors: EditorPart[]) {
+
+            this._tabsToBeClosed = new Set(
+                editors.map(editor => this.getLabelFromContent(editor)));
+
+            for (const editor of editors) {
+
+                this.closeTab(editor);
+            }
+
+            this._tabsToBeClosed = null;
+        }
+
+        selectTab(label: HTMLElement) {
+
+            if (this._tabsToBeClosed) {
+
+                if (this._tabsToBeClosed.has(label)) {
+
+                    return;
+                }
+            }
+
+            super.selectTab(label);
         }
     }
 }

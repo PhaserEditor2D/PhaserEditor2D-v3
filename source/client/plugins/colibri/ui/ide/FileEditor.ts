@@ -42,7 +42,7 @@ namespace colibri.ui.ide {
 
             if (change.isDeleted(editorFileFullName)) {
 
-                this.getPartFolder().closeTab(this);
+                // this.getPartFolder().closeTab(this);
 
             } else if (change.isModified(editorFileFullName)) {
 

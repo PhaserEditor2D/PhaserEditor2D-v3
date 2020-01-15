@@ -751,7 +751,7 @@ declare namespace colibri.ui.controls {
         private static getContentAreaFromLabel;
         static getContentFromLabel(labelElement: HTMLElement): Control;
         selectTabWithContent(content: Control): void;
-        private selectTab;
+        protected selectTab(toSelectLabel: HTMLElement): void;
         getSelectedTabContent(): Control;
         isSelectedLabel(labelElement: HTMLElement): boolean;
         getContentList(): controls.Control[];
@@ -1353,12 +1353,15 @@ declare namespace colibri.ui.ide {
 }
 declare namespace colibri.ui.ide {
     class EditorArea extends PartFolder {
+        private _tabsToBeClosed;
         constructor();
         activateEditor(editor: EditorPart): void;
         getEditors(): EditorPart[];
         getSelectedEditor(): EditorPart;
         fillTabMenu(menu: controls.Menu, labelElement: HTMLElement): void;
         closeAllEditors(): void;
+        closeEditors(editors: EditorPart[]): void;
+        selectTab(label: HTMLElement): void;
     }
 }
 declare namespace colibri.ui.ide {
@@ -1617,6 +1620,7 @@ declare namespace colibri.ui.ide {
         restoreState(prefs: colibri.core.preferences.Preferences): void;
         protected saveEditorsState(prefs: colibri.core.preferences.Preferences): void;
         protected restoreEditors(prefs: colibri.core.preferences.Preferences): void;
+        private onStorageChanged;
         create(): void;
         protected abstract createParts(): any;
         getId(): string;
