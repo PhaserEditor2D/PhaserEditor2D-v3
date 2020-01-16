@@ -13,12 +13,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
         };
 
-        static scope: IProperty<ISceneObjectLike> = {
+        static scope: IEnumProperty<ISceneObjectLike, ObjectScope> = {
             name: "scope",
             tooltip: "The variable lexical scope.",
             defValue: ObjectScope.METHOD,
             getValue: obj => obj.getEditorSupport().getScope(),
-            setValue: (obj, value) => obj.getEditorSupport().setScope(value)
+            setValue: (obj, value) => obj.getEditorSupport().setScope(value),
+            values: [ObjectScope.METHOD, ObjectScope.CLASS, ObjectScope.PUBLIC],
+            getValueLabel: value => value[0] + value.toLowerCase().substring(1)
         };
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {

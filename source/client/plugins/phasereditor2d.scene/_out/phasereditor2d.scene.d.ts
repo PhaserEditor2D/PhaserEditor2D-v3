@@ -884,6 +884,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IEnumProperty<T, TValue> extends IProperty<T> {
+        values: TValue[];
+        getValueLabel(value: TValue): string;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IProperty<T> {
         getValue(obj: T): any;
         setValue(obj: T, value: any): void;
@@ -1154,7 +1160,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
         protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
         protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
+        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
+        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1246,7 +1254,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class VariableComponent extends Component<ISceneObjectLike> {
         static label: IProperty<ISceneObjectLike>;
-        static scope: IProperty<ISceneObjectLike>;
+        static scope: IEnumProperty<ISceneObjectLike, ObjectScope>;
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
         writeJSON(ser: core.json.Serializer): void;
         readJSON(ser: core.json.Serializer): void;

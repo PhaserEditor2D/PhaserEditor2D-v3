@@ -3893,6 +3893,9 @@ var colibri;
                     flatValues_StringJoin(values) {
                         return values.join(",");
                     }
+                    flatValues_StringOneOrNothing(values) {
+                        return values.length === 1 ? values[0] : "(Multiple)";
+                    }
                     createGridElement(parent, cols = 0, simpleProps = true) {
                         const div = document.createElement("div");
                         div.classList.add("formGrid");

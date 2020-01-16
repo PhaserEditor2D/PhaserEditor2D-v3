@@ -16,13 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.createLabel(comp, "Name");
 
-                const text = this.createText(comp);
-
-                this.addUpdater(() => {
-                    text.value = this.flatValues_StringJoin(
-                        this.getSelection().map(obj => obj.getEditorSupport().getLabel())
-                    );
-                });
+                this.createStringField(comp, VariableComponent.label, false);
             }
 
             {
@@ -57,22 +51,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 // Scope
 
                 this.createLabel(comp, "Scope", "The lexical scope of the object.");
-                this.createMenuButton(comp, "Text", [
-                    {
-                        name: "Method",
-                        value: ObjectScope.METHOD
-                    },
-                    {
-                        name: "Class",
-                        value: ObjectScope.CLASS
-                    },
-                    {
-                        name: "Public",
-                        value: ObjectScope.PUBLIC
-                    }
-                ], value => {
-
-                });
+                this.createEnumField(comp, VariableComponent.scope, false);
             }
         }
 

@@ -4962,16 +4962,46 @@ var phasereditor2d;
                             this.createFloatField(parent, prop);
                         }
                     }
+                    createEnumField(parent, property, checkUnlocked = true) {
+                        const items = property.values
+                            .map(value => {
+                            return {
+                                name: property.getValueLabel(value),
+                                value
+                            };
+                        });
+                        const btn = this.createMenuButton(parent, "-", items, value => {
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            btn.disabled = checkUnlocked && !this.isUnlocked(property);
+                            btn.textContent = this.flatValues_StringOneOrNothing(this.getSelection()
+                                .map(obj => property.getValueLabel(property.getValue(obj))));
+                        });
+                    }
                     // tslint:disable-next-line:ban-types
                     createFloatField(parent, property) {
                         const text = this.createText(parent, false);
                         text.addEventListener("change", e => {
-                            const val = Number.parseFloat(text.value);
-                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, val));
+                            const value = Number.parseFloat(text.value);
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
                         });
                         this.addUpdater(() => {
                             text.readOnly = !this.isUnlocked(property);
                             text.value = this.flatValues_Number(this.getSelection()
+                                .map(obj => property.getValue(obj)));
+                        });
+                        return text;
+                    }
+                    createStringField(parent, property, checkUnlock = true) {
+                        const text = this.createText(parent, false);
+                        text.addEventListener("change", e => {
+                            const value = text.value;
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            text.readOnly = checkUnlock && !this.isUnlocked(property);
+                            text.value = this.flatValues_StringOneOrNothing(this.getSelection()
                                 .map(obj => property.getValue(obj)));
                         });
                         return text;
@@ -5267,7 +5297,9 @@ var phasereditor2d;
                     tooltip: "The variable lexical scope.",
                     defValue: sceneobjects.ObjectScope.METHOD,
                     getValue: obj => obj.getEditorSupport().getScope(),
-                    setValue: (obj, value) => obj.getEditorSupport().setScope(value)
+                    setValue: (obj, value) => obj.getEditorSupport().setScope(value),
+                    values: [sceneobjects.ObjectScope.METHOD, sceneobjects.ObjectScope.CLASS, sceneobjects.ObjectScope.PUBLIC],
+                    getValueLabel: value => value[0] + value.toLowerCase().substring(1)
                 };
                 sceneobjects.VariableComponent = VariableComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
@@ -5291,10 +5323,7 @@ var phasereditor2d;
                         {
                             // Name
                             this.createLabel(comp, "Name");
-                            const text = this.createText(comp);
-                            this.addUpdater(() => {
-                                text.value = this.flatValues_StringJoin(this.getSelection().map(obj => obj.getEditorSupport().getLabel()));
-                            });
+                            this.createStringField(comp, sceneobjects.VariableComponent.label, false);
                         }
                         {
                             // Type
@@ -5314,21 +5343,7 @@ var phasereditor2d;
                         {
                             // Scope
                             this.createLabel(comp, "Scope", "The lexical scope of the object.");
-                            this.createMenuButton(comp, "Text", [
-                                {
-                                    name: "Method",
-                                    value: sceneobjects.ObjectScope.METHOD
-                                },
-                                {
-                                    name: "Class",
-                                    value: sceneobjects.ObjectScope.CLASS
-                                },
-                                {
-                                    name: "Public",
-                                    value: sceneobjects.ObjectScope.PUBLIC
-                                }
-                            ], value => {
-                            });
+                            this.createEnumField(comp, sceneobjects.VariableComponent.scope, false);
                         }
                     }
                     canEdit(obj, n) {

@@ -106,6 +106,36 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        createEnumField<TValue>(
+            parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked = true) {
+
+            const items = property.values
+                .map(value => {
+                    return {
+                        name: property.getValueLabel(value),
+                        value
+                    };
+                });
+
+            const btn = this.createMenuButton(parent, "-", items, value => {
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                btn.disabled = checkUnlocked && !this.isUnlocked(property);
+
+                btn.textContent = this.flatValues_StringOneOrNothing(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValueLabel(property.getValue(obj)))
+                );
+            });
+        }
+
         // tslint:disable-next-line:ban-types
         createFloatField(parent: HTMLElement, property: IProperty<T>) {
 
@@ -113,10 +143,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             text.addEventListener("change", e => {
 
-                const val = Number.parseFloat(text.value);
+                const value = Number.parseFloat(text.value);
 
                 this.getEditor().getUndoManager().add(
-                    new SimpleOperation(this.getEditor(), this.getSelection(), property, val));
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
             });
 
             this.addUpdater(() => {
@@ -124,6 +154,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 text.readOnly = !this.isUnlocked(property);
 
                 text.value = this.flatValues_Number(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValue(obj))
+                );
+            });
+
+            return text;
+        }
+
+        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {
+
+            const text = this.createText(parent, false);
+
+            text.addEventListener("change", e => {
+
+                const value = text.value;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                text.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                text.value = this.flatValues_StringOneOrNothing(
 
                     this.getSelection()
 

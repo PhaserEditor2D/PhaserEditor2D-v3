@@ -77,6 +77,10 @@ namespace colibri.ui.controls.properties {
             return values.join(",");
         }
 
+        flatValues_StringOneOrNothing(values: string[]): string {
+            return values.length === 1 ? values[0] : "(Multiple)";
+        }
+
         protected createGridElement(parent: HTMLElement, cols = 0, simpleProps = true) {
 
             const div = document.createElement("div");
