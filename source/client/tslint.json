@@ -28,7 +28,8 @@
         "no-string-literal": false,
         "interface-over-type-literal": false,
         "object-literal-shorthand": false,
-        "interface-name": false
+        "interface-name": true,
+        "no-empty-interface": false
     },
     "rulesDirectory": []
 }

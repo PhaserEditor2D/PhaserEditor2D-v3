@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args This method args.
          */
-        abstract buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
+        abstract buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
 
         /**
          * Build a CodeDOM expression to create a prefab instance that
@@ -28,7 +28,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args This method args.
          */
-        abstract buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs): void;
+        abstract buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
 
         /**
          * Build the CodeDOM of the prefab class constructor.
@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args This method args.
          */
-        abstract buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void;
+        abstract buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
 
         /**
          * Build the CodeDOM of the super-method call in a prefab constructor.
@@ -47,6 +47,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args This method args.
          */
         abstract buildPrefabConstructorDeclarationSupperCallCodeDOM(
-            args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+            args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
     }
 }

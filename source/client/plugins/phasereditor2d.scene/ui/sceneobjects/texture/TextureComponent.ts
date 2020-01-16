@@ -6,21 +6,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import read = colibri.core.json.read;
     import json = core.json;
 
-    export interface ITextureLikeObject extends SceneObject {
+    export interface ITextureLikeObject extends ISceneObject {
 
         setTexture(key: string, frame?: string | number): void;
     }
 
-    export interface TextureKeys {
+    export interface ITextureKeys {
 
         key?: string;
         frame?: string | number;
     }
 
-    export interface TextureData
-        extends json.ObjectData {
+    export interface ITextureData
+        extends json.IObjectData {
 
-        texture: TextureKeys;
+        texture: ITextureKeys;
     }
 
     export class TextureComponent extends Component<ITextureLikeObject> {
@@ -40,9 +40,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         };
 
-        private _textureKeys: TextureKeys = {};
+        private _textureKeys: ITextureKeys = {};
 
-        buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
             // nothing, the properties are set when the object is created.
         }
 
@@ -65,11 +65,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setTextureKeys(keys);
         }
 
-        getTextureKeys(): TextureKeys {
+        getTextureKeys(): ITextureKeys {
             return this._textureKeys;
         }
 
-        setTextureKeys(keys: TextureKeys) {
+        setTextureKeys(keys: ITextureKeys) {
 
             this._textureKeys = keys;
 

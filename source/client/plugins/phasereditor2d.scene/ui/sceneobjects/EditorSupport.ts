@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         PUBLIC = "PUBLIC"
     }
 
-    export abstract class EditorSupport<T extends SceneObject> {
+    export abstract class EditorSupport<T extends ISceneObject> {
 
         private _extension: SceneObjectExtension;
         private _object: T;
@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _label: string;
         private _scope: ObjectScope;
         private _scene: Scene;
-        private _serializables: json.Serializable[];
+        private _serializables: json.ISerializable[];
         // tslint:disable-next-line:ban-types
         private _components: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
@@ -93,7 +93,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        async buildDependencyHash(args: BuildDependencyHashArgs) {
+        async buildDependencyHash(args: IBuildDependencyHashArgs) {
 
             EditorSupport.buildPrefabDependencyHash(args.builder, this._prefabId);
 
@@ -144,7 +144,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._serializables.push(...components);
         }
 
-        protected setNewId(sprite: sceneobjects.SceneObject) {
+        protected setNewId(sprite: sceneobjects.ISceneObject) {
             this.setId(Phaser.Utils.String.UUID());
         }
 
@@ -192,11 +192,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return typeof this._prefabId === "string";
         }
 
-        getOwnerPrefabInstance(): SceneObject {
+        getOwnerPrefabInstance(): ISceneObject {
 
             if (this._object.parentContainer) {
 
-                const parent = this._object.parentContainer as unknown as SceneObject;
+                const parent = this._object.parentContainer as unknown as ISceneObject;
 
                 return parent.getEditorSupport().getOwnerPrefabInstance();
             }
@@ -280,12 +280,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ser.getPhaserType();
         }
 
-        getSerializer(data: json.ObjectData) {
+        getSerializer(data: json.IObjectData) {
 
             return this._scene.getMaker().getSerializer(data);
         }
 
-        writeJSON(data: json.ObjectData) {
+        writeJSON(data: json.IObjectData) {
 
             if (this.isPrefabInstance()) {
 
@@ -314,7 +314,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        readJSON(data: json.ObjectData) {
+        readJSON(data: json.IObjectData) {
 
             const ser = this.getSerializer(data);
 

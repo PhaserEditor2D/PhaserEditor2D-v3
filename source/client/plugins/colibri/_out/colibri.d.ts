@@ -55,9 +55,9 @@ declare namespace colibri.ui.controls {
             y: number;
         };
         containsLocalPoint(x: number, y: number): boolean;
-        setBounds(bounds: Bounds): void;
+        setBounds(bounds: IBounds): void;
         setBoundsValues(x: number, y: number, w: number, h: number): void;
-        getBounds(): Bounds;
+        getBounds(): IBounds;
         setLocation(x: number, y: number): void;
         layout(): void;
         dispatchLayoutEvent(): void;
@@ -93,12 +93,12 @@ declare namespace colibri.ui.controls {
         static openUrlInNewPage(url: string): void;
         static getIcon(name: string, baseUrl?: string): IImage;
         static createIconElement(icon?: IImage, size?: number): HTMLCanvasElement;
-        static LIGHT_THEME: Theme;
-        static DARK_THEME: Theme;
-        static _theme: Theme;
-        static switchTheme(): Theme;
-        static setTheme(theme: Theme): void;
-        static getTheme(): Theme;
+        static LIGHT_THEME: ITheme;
+        static DARK_THEME: ITheme;
+        static _theme: ITheme;
+        static switchTheme(): ITheme;
+        static setTheme(theme: ITheme): void;
+        static getTheme(): ITheme;
         static drawRoundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, topLeft?: number, topRight?: number, bottomRight?: number, bottomLeft?: number): void;
     }
 }
@@ -268,12 +268,12 @@ declare namespace colibri.core {
     }
 }
 declare namespace colibri.core.io {
-    interface FileData {
+    interface IFileData {
         name: string;
         isFile: boolean;
         size: number;
         modTime: number;
-        children?: FileData[];
+        children?: IFileData[];
     }
 }
 declare namespace colibri.core.io {
@@ -287,7 +287,7 @@ declare namespace colibri.core.io {
         private _modTime;
         private _fileSize;
         private _alive;
-        constructor(parent: FilePath, fileData: FileData);
+        constructor(parent: FilePath, fileData: IFileData);
         _sort(): void;
         _setName(name: string): void;
         getExtension(): string;
@@ -317,7 +317,7 @@ declare namespace colibri.core.io {
     }
 }
 declare namespace colibri.core.io {
-    interface RenameData {
+    interface IRenameData {
         oldName: string;
         newFile: FilePath;
     }
@@ -478,7 +478,7 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
-    interface Bounds {
+    interface IBounds {
         x?: number;
         y?: number;
         width?: number;
@@ -625,7 +625,7 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
-    interface MenuExtensionConfig {
+    interface IMenuExtensionConfig {
         command?: string;
         separator?: boolean;
     }
@@ -633,7 +633,7 @@ declare namespace colibri.ui.controls {
         static POINT_ID: string;
         private _menuId;
         private _configList;
-        constructor(menuId: string, ...configs: MenuExtensionConfig[]);
+        constructor(menuId: string, ...configs: IMenuExtensionConfig[]);
         getMenuId(): string;
         fillMenu(menu: controls.Menu): void;
     }
@@ -774,7 +774,7 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
-    interface Theme {
+    interface ITheme {
         id: string;
         classList: string[];
         displayName: string;
@@ -813,8 +813,8 @@ declare namespace colibri.ui.controls {
     const PANEL_TITLE_HEIGHT = 22;
     const FILTERED_VIEWER_FILTER_HEIGHT = 30;
     const SPLIT_OVER_ZONE_WIDTH = 6;
-    function setElementBounds(elem: HTMLElement, bounds: Bounds): void;
-    function getElementBounds(elem: HTMLElement): Bounds;
+    function setElementBounds(elem: HTMLElement, bounds: IBounds): void;
+    function getElementBounds(elem: HTMLElement): IBounds;
 }
 declare namespace colibri.ui.controls.dialogs {
     class Dialog extends Control {
@@ -1330,6 +1330,7 @@ declare namespace colibri.ui.ide {
         getId(): string;
         setSelection(selection: any[], notify?: boolean): void;
         getSelection(): any[];
+        dispatchSelectionChanged(): void;
         getPropertyProvider(): controls.properties.PropertySectionProvider;
         layout(): void;
         onPartAdded(): void;
@@ -1545,10 +1546,6 @@ declare namespace colibri.ui.ide {
         getEditorInputExtension(): string;
     }
 }
-declare namespace colibri.core.io {
-    interface FilePath extends colibri.ui.ide.IEditorInput {
-    }
-}
 declare namespace colibri.ui.ide {
     class IconLoaderExtension extends Extension {
         static POINT_ID: string;
@@ -1657,7 +1654,7 @@ declare namespace colibri.ui.ide {
     const IMG_SECTION_PADDING = 10;
 }
 declare namespace colibri.ui.ide.commands {
-    interface KeyMatcherConfig {
+    interface IKeyMatcherConfig {
         control?: boolean;
         shift?: boolean;
         alt?: boolean;
@@ -1672,7 +1669,7 @@ declare namespace colibri.ui.ide.commands {
         private _meta;
         private _key;
         private _filterInputElements;
-        constructor(config: KeyMatcherConfig);
+        constructor(config: IKeyMatcherConfig);
         getKeyString(): string;
         matchesKeys(event: KeyboardEvent): boolean;
         matchesTarget(element: EventTarget): boolean;
@@ -1716,7 +1713,7 @@ declare namespace colibri.ui.ide.actions {
     }
 }
 declare namespace colibri.ui.ide.commands {
-    interface CommandConfig {
+    interface ICommandConfig {
         id: string;
         name: string;
         tooltip: string;
@@ -1727,7 +1724,7 @@ declare namespace colibri.ui.ide.commands {
         private _name;
         private _tooltip;
         private _icon;
-        constructor(config: CommandConfig);
+        constructor(config: ICommandConfig);
         getId(): string;
         getName(): string;
         getTooltip(): string;
@@ -1754,14 +1751,14 @@ declare namespace colibri.ui.ide.commands {
     }
 }
 declare namespace colibri.ui.ide.commands {
-    interface HandlerConfig {
+    interface IHandlerConfig {
         testFunc?: (args: HandlerArgs) => boolean;
         executeFunc?: (args: HandlerArgs) => void;
     }
     class CommandHandler {
         private _testFunc;
         private _executeFunc;
-        constructor(config: HandlerConfig);
+        constructor(config: IHandlerConfig);
         test(args: HandlerArgs): boolean;
         execute(args: HandlerArgs): void;
     }
@@ -1787,13 +1784,13 @@ declare namespace colibri.ui.ide.commands {
         getCommandKeyString(commandId: string): string;
         executeCommand(commandId: string): void;
         addKeyBinding(commandId: string, matcher: KeyMatcher): void;
-        addKeyBindingHelper(commandId: string, config: KeyMatcherConfig): void;
+        addKeyBindingHelper(commandId: string, config: IKeyMatcherConfig): void;
         addHandler(commandId: string, handler: CommandHandler): void;
         addHandlerHelper(commandId: string, testFunc: (args: HandlerArgs) => boolean, executeFunc: (args: HandlerArgs) => void): void;
         add(args: {
-            command?: CommandConfig;
-            handler?: HandlerConfig;
-            keys?: KeyMatcherConfig;
+            command?: ICommandConfig;
+            handler?: IHandlerConfig;
+            keys?: IKeyMatcherConfig;
         }, commandId?: string): void;
     }
 }
@@ -1807,8 +1804,8 @@ declare namespace colibri.ui.ide.themes {
     class ThemeExtension extends Extension {
         static POINT_ID: string;
         private _theme;
-        constructor(theme: controls.Theme);
-        getTheme(): controls.Theme;
+        constructor(theme: controls.ITheme);
+        getTheme(): controls.ITheme;
     }
 }
 declare namespace colibri.ui.ide.undo {

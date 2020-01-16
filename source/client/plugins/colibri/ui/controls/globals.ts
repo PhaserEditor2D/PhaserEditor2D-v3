@@ -11,7 +11,7 @@ namespace colibri.ui.controls {
     export const FILTERED_VIEWER_FILTER_HEIGHT = 30;
     export const SPLIT_OVER_ZONE_WIDTH = 6;
 
-    export function setElementBounds(elem: HTMLElement, bounds: Bounds) {
+    export function setElementBounds(elem: HTMLElement, bounds: IBounds) {
         if (bounds.x !== undefined) {
             elem.style.left = bounds.x + "px";
         }
@@ -29,7 +29,7 @@ namespace colibri.ui.controls {
         }
     }
 
-    export function getElementBounds(elem: HTMLElement): Bounds {
+    export function getElementBounds(elem: HTMLElement): IBounds {
         return {
             x: elem.clientLeft,
             y: elem.clientTop,

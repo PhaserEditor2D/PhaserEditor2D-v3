@@ -2,18 +2,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ChangeTextureOperation extends SceneObjectOperation<ITextureLikeObject> {
 
-        constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: TextureKeys) {
+        constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: ITextureKeys) {
             super(editor, objects, value);
         }
 
-        getValue(obj: ITextureLikeObject): TextureKeys {
+        getValue(obj: ITextureLikeObject): ITextureKeys {
 
             const comp = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
 
             return comp.getTextureKeys();
         }
 
-        setValue(obj: ITextureLikeObject, value: TextureKeys): void {
+        setValue(obj: ITextureLikeObject, value: ITextureKeys): void {
 
             const finder = this.getEditor().getPackFinder();
 
@@ -28,8 +28,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             comp.setTextureKeys(value);
 
-            this.getEditor().repaint();
-            this.getEditor().setSelection(this.getEditor().getSelection());
+            const editor = this.getEditor();
+
+            editor.refreshDependenciesHash();
+
+            editor.dispatchSelectionChanged();
+
+            editor.repaint();
         }
     }
 }

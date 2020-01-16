@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        getPrefabObject(): sceneobjects.SceneObject {
+        getPrefabObject(): sceneobjects.ISceneObject {
             return this.getDisplayListChildren()[0];
         }
 
@@ -75,11 +75,11 @@ namespace phasereditor2d.scene.ui {
             return this._maker;
         }
 
-        getDisplayListChildren(): sceneobjects.SceneObject[] {
+        getDisplayListChildren(): sceneobjects.ISceneObject[] {
             return this.sys.displayList.getChildren() as any;
         }
 
-        visit(visitor: (obj: sceneobjects.SceneObject) => void) {
+        visit(visitor: (obj: sceneobjects.ISceneObject) => void) {
 
             for (const obj of this.getDisplayListChildren()) {
 
@@ -96,7 +96,7 @@ namespace phasereditor2d.scene.ui {
 
         makeNewName(baseName: string) {
 
-            const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: sceneobjects.SceneObject) => {
+            const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: sceneobjects.ISceneObject) => {
                 return obj.getEditorSupport().getLabel();
             });
 
@@ -116,7 +116,7 @@ namespace phasereditor2d.scene.ui {
             return obj;
         }
 
-        static findByEditorId(list: sceneobjects.SceneObject[], id: string) {
+        static findByEditorId(list: sceneobjects.ISceneObject[], id: string) {
 
             for (const obj of list) {
 

@@ -19,7 +19,7 @@ namespace phasereditor2d.pack.ui.editor {
                     comp.children.item(0).remove();
                 }
 
-                const importList: ImportData[] = [];
+                const importList: IImportData[] = [];
 
                 for (const importer of importers.Importers.getAll()) {
 

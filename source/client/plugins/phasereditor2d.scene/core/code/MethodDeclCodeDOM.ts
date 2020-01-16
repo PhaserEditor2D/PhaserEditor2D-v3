@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.core.code {
 
-    export interface ArgCodeDOM {
+    export interface IArgCodeDOM {
 
         name: string;
         type: string;
@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.core.code {
     export class MethodDeclCodeDOM extends MemberDeclCodeDOM {
 
         private _body: CodeDOM[];
-        private _args: ArgCodeDOM[];
+        private _args: IArgCodeDOM[];
 
         constructor(name: string) {
             super(name);

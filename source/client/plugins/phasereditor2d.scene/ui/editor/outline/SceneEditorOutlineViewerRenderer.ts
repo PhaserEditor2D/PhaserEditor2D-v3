@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             if (args.obj instanceof Phaser.GameObjects.GameObject) {
 
-                const obj = args.obj as sceneobjects.SceneObject;
+                const obj = args.obj as sceneobjects.ISceneObject;
 
                 if (obj.getEditorSupport().isPrefabInstance()) {
 

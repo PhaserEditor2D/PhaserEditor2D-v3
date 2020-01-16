@@ -2,13 +2,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export interface SetObjectPropertiesCodeDOMArgs {
+    export interface ISetObjectPropertiesCodeDOMArgs {
         result: core.code.CodeDOM[];
         objectVarName: string;
         prefabSerializer: core.json.Serializer;
     }
 
-    export abstract class Component<T> implements core.json.Serializable {
+    export abstract class Component<T> implements core.json.ISerializable {
 
         private _obj: T;
 
@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected buildSetObjectPropertyCodeDOM_Float(
-            fieldName: string, value: number, defValue: number, args: SetObjectPropertiesCodeDOMArgs): void {
+            fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
             let add = false;
@@ -42,12 +42,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        async buildDependenciesHash(args: BuildDependencyHashArgs) {
+        async buildDependenciesHash(args: IBuildDependencyHashArgs) {
 
             // nothing by default
         }
 
-        abstract buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void;
+        abstract buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
 
         abstract writeJSON(ser: core.json.Serializer): void;
 

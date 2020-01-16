@@ -59,7 +59,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (selected) {
 
-                    const obj = selected as sceneobjects.SceneObject;
+                    const obj = selected as sceneobjects.ISceneObject;
 
                     const owner = obj.getEditorSupport().getOwnerPrefabInstance();
 

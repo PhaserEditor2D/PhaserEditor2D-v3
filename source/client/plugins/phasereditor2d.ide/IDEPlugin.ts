@@ -196,7 +196,7 @@ namespace phasereditor2d.ide {
             return this._openingProject;
         }
 
-        setTheme(theme: controls.Theme) {
+        setTheme(theme: controls.ITheme) {
 
             controls.Controls.setTheme(theme);
 

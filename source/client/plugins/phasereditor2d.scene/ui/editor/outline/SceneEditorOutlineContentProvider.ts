@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
             return [];
         }
 
-        getChildren(parent: sceneobjects.SceneObject): any[] {
+        getChildren(parent: sceneobjects.ISceneObject): any[] {
 
             if (parent instanceof Phaser.GameObjects.DisplayList) {
 

@@ -520,7 +520,7 @@ declare namespace phasereditor2d.pack.ui.editor {
         private openAddFileDialog;
         createFilesViewer(filter: (file: io.FilePath) => boolean): Promise<controls.viewers.TreeViewer>;
         private openSelectFileDialog_async;
-        importData_async(importData: ImportData): Promise<void>;
+        importData_async(importData: IImportData): Promise<void>;
         private updateBlocks;
     }
 }
@@ -628,7 +628,7 @@ declare namespace phasereditor2d.pack.ui.editor {
     }
 }
 declare namespace phasereditor2d.pack.ui.editor {
-    interface ImportData {
+    interface IImportData {
         importer: importers.Importer;
         files: colibri.core.io.FilePath[];
     }

@@ -164,7 +164,7 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        getSerializer(data: json.ObjectData) {
+        getSerializer(data: json.IObjectData) {
             return new json.Serializer(data);
         }
 
@@ -221,7 +221,7 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        createObject(data: json.ObjectData) {
+        createObject(data: json.IObjectData) {
 
             const ser = this.getSerializer(data);
 

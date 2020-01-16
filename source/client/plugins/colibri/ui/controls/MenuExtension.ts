@@ -1,6 +1,6 @@
 namespace colibri.ui.controls {
 
-    export interface MenuExtensionConfig {
+    export interface IMenuExtensionConfig {
         command?: string;
         separator?: boolean;
     }
@@ -10,9 +10,9 @@ namespace colibri.ui.controls {
         static POINT_ID = "colibri.ui.controls.menus";
 
         private _menuId: string;
-        private _configList: MenuExtensionConfig[];
+        private _configList: IMenuExtensionConfig[];
 
-        constructor(menuId: string, ...configs: MenuExtensionConfig[]) {
+        constructor(menuId: string, ...configs: IMenuExtensionConfig[]) {
             super(MenuExtension.POINT_ID);
 
             this._menuId = menuId;

@@ -5,10 +5,10 @@ namespace phasereditor2d.scene.core.json {
 
     export class Serializer {
 
-        private _data: ObjectData;
+        private _data: IObjectData;
         private _prefabSer: Serializer;
 
-        constructor(data: ObjectData) {
+        constructor(data: IObjectData) {
 
             this._data = data;
 
@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.core.json {
             }
         }
 
-        getSerializer(data: ObjectData) {
+        getSerializer(data: IObjectData) {
             return new Serializer(data);
         }
 

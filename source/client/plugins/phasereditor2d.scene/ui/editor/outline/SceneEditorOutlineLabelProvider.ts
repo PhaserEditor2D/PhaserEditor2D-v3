@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
         getLabel(obj: any): string {
 
             if (obj instanceof Phaser.GameObjects.GameObject) {
-                return (obj as sceneobjects.SceneObject).getEditorSupport().getLabel();
+                return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
             }
 
             if (obj instanceof Phaser.GameObjects.DisplayList) {

@@ -1,6 +1,6 @@
 namespace colibri.ui.controls {
 
-    export interface Bounds {
+    export interface IBounds {
         x?: number;
         y?: number;
         width?: number;

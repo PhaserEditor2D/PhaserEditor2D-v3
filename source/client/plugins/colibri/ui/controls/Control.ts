@@ -3,7 +3,7 @@ namespace colibri.ui.controls {
     export const EVENT_CONTROL_LAYOUT = "controlLayout";
 
     export class Control extends EventTarget {
-        private _bounds: Bounds = { x: 0, y: 0, width: 0, height: 0 };
+        private _bounds: IBounds = { x: 0, y: 0, width: 0, height: 0 };
         private _element: HTMLElement;
         private _children: Control[];
         private _layout: ILayout;
@@ -97,7 +97,7 @@ namespace colibri.ui.controls {
             return x >= 0 && x <= this._bounds.width && y >= 0 && y <= this._bounds.height;
         }
 
-        setBounds(bounds: Bounds): void {
+        setBounds(bounds: IBounds): void {
             this._bounds.x = bounds.x === undefined ? this._bounds.x : bounds.x;
             this._bounds.y = bounds.y === undefined ? this._bounds.y : bounds.y;
             this._bounds.width = bounds.width === undefined ? this._bounds.width : bounds.width;

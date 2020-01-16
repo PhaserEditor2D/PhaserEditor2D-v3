@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.editor {
 
-    export interface CameraState {
+    export interface ICameraState {
         scrollX: number;
         scrollY: number;
         zoom: number;
@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _editor: SceneEditor;
         private _dragStartPoint: Phaser.Math.Vector2;
         private _dragStartCameraScroll: Phaser.Math.Vector2;
-        private _state: CameraState;
+        private _state: ICameraState;
 
         constructor(editor: SceneEditor) {
             this._editor = editor;
@@ -115,7 +115,7 @@ namespace phasereditor2d.scene.ui.editor {
             return this._state;
         }
 
-        setState(state: editor.CameraState) {
+        setState(state: editor.ICameraState) {
 
             if (state) {
 

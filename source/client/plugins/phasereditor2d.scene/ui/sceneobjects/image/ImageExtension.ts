@@ -22,9 +22,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ImageCodeDOMBuilder.getInstance();
         }
 
-        async getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]> {
+        async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
 
-            const { key, frame } = args.serializer.read(TextureComponent.texture.name, {}) as TextureKeys;
+            const { key, frame } = args.serializer.read(TextureComponent.texture.name, {}) as ITextureKeys;
 
             const finder = args.finder;
 
@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ImageExtension.isImageOrImageFrameAsset(data);
         }
 
-        createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject {
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject {
 
             let key: string;
             let frame: string | number;
@@ -77,7 +77,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return sprite;
         }
 
-        createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject {
+        createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject {
 
             const sprite = this.createImageObject(args.scene, 0, 0, undefined);
 

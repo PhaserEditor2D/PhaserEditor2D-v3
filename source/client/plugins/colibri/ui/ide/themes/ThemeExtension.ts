@@ -4,9 +4,9 @@ namespace colibri.ui.ide.themes {
 
         static POINT_ID = "colibri.ui.ide.ThemeExtension";
 
-        private _theme: controls.Theme;
+        private _theme: controls.ITheme;
 
-        constructor(theme: controls.Theme) {
+        constructor(theme: controls.ITheme) {
             super(ThemeExtension.POINT_ID);
 
             this._theme = theme;

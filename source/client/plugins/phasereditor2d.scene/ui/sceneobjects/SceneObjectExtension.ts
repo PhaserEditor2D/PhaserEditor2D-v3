@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     import code = core.code;
 
-    export interface CreateWithAssetArgs {
+    export interface ICreateWithAssetArgs {
 
         x: number;
         y: number;
@@ -11,48 +11,48 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         asset: any;
     }
 
-    export interface CreateWithDataArgs {
+    export interface ICreateWithDataArgs {
 
         scene: Scene;
-        data: json.ObjectData;
+        data: json.IObjectData;
     }
 
-    export interface GetAssetsFromObjectArgs {
+    export interface IGetAssetsFromObjectArgs {
 
         serializer: json.Serializer;
         scene: Scene;
         finder: pack.core.PackFinder;
     }
 
-    export interface UpdateLoaderWithAsset {
+    export interface IUpdateLoaderWithAsset {
 
         asset: any;
         scene: Scene;
     }
 
-    export interface BuildObjectFactoryCodeDOMArgs {
+    export interface IBuildObjectFactoryCodeDOMArgs {
 
-        obj: SceneObject;
+        obj: ISceneObject;
         gameObjectFactoryExpr: string;
     }
 
-    export interface BuildPrefabConstructorCodeDOMArgs {
+    export interface IBuildPrefabConstructorCodeDOMArgs {
 
-        obj: SceneObject;
+        obj: ISceneObject;
         sceneExpr: string;
         methodCallDOM: code.MethodCallCodeDOM;
         prefabSerializer: json.Serializer;
     }
 
-    export interface BuildPrefabConstructorDeclarationCodeDOM {
+    export interface IBuildPrefabConstructorDeclarationCodeDOM {
 
         ctrDeclCodeDOM: code.MethodDeclCodeDOM;
     }
 
-    export interface BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {
+    export interface IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {
 
         superMethodCallCodeDOM: code.MethodCallCodeDOM;
-        prefabObj: SceneObject;
+        prefabObj: ISceneObject;
     }
 
     export abstract class SceneObjectExtension extends colibri.Extension {
@@ -93,14 +93,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args The data involved in a drop action.
          */
-        abstract createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject;
+        abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
 
         /**
          * Create the scene object of this extension with the data involved in a deserialization.
          *
          * @param args The data involved in the creation of the object.
          */
-        abstract createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject;
+        abstract createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
 
         /**
          * Get the assets contained in a scene object data.
@@ -109,7 +109,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args This method args.
          * @returns The assets.
          */
-        async abstract getAssetsFromObjectData(args: GetAssetsFromObjectArgs): Promise<any[]>;
+        async abstract getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
 
         /**
          * Gets a CodeDOM provider used by the Scene compiler to generate the object creation and prefab class codes.

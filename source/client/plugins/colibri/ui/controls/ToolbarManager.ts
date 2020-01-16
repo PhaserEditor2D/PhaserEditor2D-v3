@@ -1,6 +1,6 @@
 namespace colibri.ui.controls {
 
-    interface ActionData {
+    interface IActionData {
         btnElement: HTMLElement;
         listener: any;
     }
@@ -8,7 +8,7 @@ namespace colibri.ui.controls {
     export class ToolbarManager {
 
         private _toolbarElement: HTMLElement;
-        private _actionDataMap: Map<Action, ActionData>;
+        private _actionDataMap: Map<Action, IActionData>;
 
         constructor(toolbarElement: HTMLElement) {
 

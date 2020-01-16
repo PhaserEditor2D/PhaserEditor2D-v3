@@ -2,6 +2,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export interface ISceneObjectLike {
 
-        getEditorSupport(): EditorSupport<SceneObject>;
+        getEditorSupport(): EditorSupport<ISceneObject>;
     }
 }

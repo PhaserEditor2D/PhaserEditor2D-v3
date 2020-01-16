@@ -13,7 +13,7 @@ declare namespace phasereditor2d.ide {
         ideOpenProject(projectName: string): Promise<void>;
         private validateIndexFile;
         isOpeningProject(): boolean;
-        setTheme(theme: controls.Theme): void;
+        setTheme(theme: controls.ITheme): void;
         restoreTheme(): void;
     }
     const VER = "3.0.0";

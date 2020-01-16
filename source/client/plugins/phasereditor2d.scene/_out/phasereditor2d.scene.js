@@ -51,9 +51,7 @@ var phasereditor2d;
                 // loader updates
                 reg.addExtension(new scene_1.ui.sceneobjects.ImageLoaderUpdater());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.VariableSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), 
-                //page => new ui.sceneobjects.TextureSection(page)
-                page => new scene_1.ui.sceneobjects.TextureSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.VariableSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page)));
                 // main menu
                 reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN, {
                     command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
@@ -5307,8 +5305,10 @@ var phasereditor2d;
                         }
                         const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
                         comp.setTextureKeys(value);
-                        this.getEditor().repaint();
-                        this.getEditor().setSelection(this.getEditor().getSelection());
+                        const editor = this.getEditor();
+                        editor.refreshDependenciesHash();
+                        editor.dispatchSelectionChanged();
+                        editor.repaint();
                     }
                 }
                 sceneobjects.ChangeTextureOperation = ChangeTextureOperation;

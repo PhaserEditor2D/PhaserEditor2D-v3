@@ -1,6 +1,6 @@
 namespace colibri.ui.ide.commands {
 
-    export interface KeyMatcherConfig {
+    export interface IKeyMatcherConfig {
 
         control?: boolean;
         shift?: boolean;
@@ -19,7 +19,7 @@ namespace colibri.ui.ide.commands {
         private _key: string;
         private _filterInputElements: boolean;
 
-        constructor(config: KeyMatcherConfig) {
+        constructor(config: IKeyMatcherConfig) {
 
             this._control = config.control === undefined ? false : config.control;
             this._shift = config.shift === undefined ? false : config.shift;

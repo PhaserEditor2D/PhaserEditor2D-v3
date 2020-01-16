@@ -30,9 +30,9 @@ namespace phasereditor2d.scene.ui.editor {
         }
     }
 
-    interface EditorState {
+    interface IEditorState {
 
-        cameraState: CameraState;
+        cameraState: ICameraState;
     }
 
     export class SceneEditor extends colibri.ui.ide.FileEditor {
@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _gameBooted: boolean;
         private _sceneRead: boolean;
         private _currentRefreshHash: string;
-        private _editorState: EditorState;
+        private _editorState: IEditorState;
 
         static getFactory(): colibri.ui.ide.EditorFactory {
             return new SceneEditorFactory();
@@ -118,7 +118,7 @@ namespace phasereditor2d.scene.ui.editor {
             await compiler.compile();
         }
 
-        saveState(state: EditorState) {
+        saveState(state: IEditorState) {
 
             if (!this._scene) {
 
@@ -128,7 +128,7 @@ namespace phasereditor2d.scene.ui.editor {
             state.cameraState = this._cameraManager.getState();
         }
 
-        restoreState(state: EditorState) {
+        restoreState(state: IEditorState) {
 
             this._editorState = state;
         }
@@ -323,7 +323,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 .filter(obj => obj instanceof Phaser.GameObjects.GameObject)
 
-                .map(obj => obj as sceneobjects.SceneObject);
+                .map(obj => obj as sceneobjects.ISceneObject);
         }
 
         getActionManager() {
@@ -430,7 +430,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 .map(obj =>
                     obj instanceof Phaser.GameObjects.GameObject ?
-                        this._scene.getByEditorId((obj as sceneobjects.SceneObject).getEditorSupport().getId())
+                        this._scene.getByEditorId((obj as sceneobjects.ISceneObject).getEditorSupport().getId())
                         : obj)
 
                 .filter(v => v !== null && v !== undefined);

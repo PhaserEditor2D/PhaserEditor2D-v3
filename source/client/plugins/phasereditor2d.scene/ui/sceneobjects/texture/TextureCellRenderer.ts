@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private getImage(args: { obj: any }) {
 
-            const obj = args.obj as SceneObject;
+            const obj = args.obj as ISceneObject;
 
             const support = obj.getEditorSupport();
 

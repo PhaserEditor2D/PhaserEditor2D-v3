@@ -12,7 +12,7 @@ namespace colibri.core.io {
         private _fileSize: number;
         private _alive: boolean;
 
-        constructor(parent: FilePath, fileData: FileData) {
+        constructor(parent: FilePath, fileData: IFileData) {
 
             this._parent = parent;
             this._isFile = fileData.isFile;

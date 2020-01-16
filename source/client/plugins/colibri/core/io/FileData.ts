@@ -1,10 +1,10 @@
 namespace colibri.core.io {
 
-    export interface FileData {
+    export interface IFileData {
         name: string;
         isFile: boolean;
         size: number;
         modTime: number;
-        children?: FileData[];
+        children?: IFileData[];
     }
 }

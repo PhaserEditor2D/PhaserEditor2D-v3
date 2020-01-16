@@ -344,7 +344,7 @@ namespace phasereditor2d.pack.ui.editor {
             });
         }
 
-        async importData_async(importData: ImportData) {
+        async importData_async(importData: IImportData) {
 
             const before = undo.AssetPackEditorOperation.takeSnapshot(this);
 

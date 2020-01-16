@@ -149,7 +149,7 @@ namespace colibri.ui.controls {
             return canvas;
         }
 
-        static LIGHT_THEME: Theme = {
+        static LIGHT_THEME: ITheme = {
             id: "light",
             displayName: "Light",
             classList: ["light"],
@@ -160,7 +160,7 @@ namespace colibri.ui.controls {
             viewerForeground: "#000000",
         };
 
-        static DARK_THEME: Theme = {
+        static DARK_THEME: ITheme = {
             id: "dark",
             displayName: "Dark",
             classList: ["dark"],
@@ -170,9 +170,9 @@ namespace colibri.ui.controls {
             viewerForeground: "#f0f0f0",
         };
 
-        static _theme: Theme = Controls.DARK_THEME;
+        static _theme: ITheme = Controls.DARK_THEME;
 
-        static switchTheme(): Theme {
+        static switchTheme(): ITheme {
 
             const newTheme = this._theme === this.LIGHT_THEME ? this.DARK_THEME : this.LIGHT_THEME;
 
@@ -181,7 +181,7 @@ namespace colibri.ui.controls {
             return newTheme;
         }
 
-        static setTheme(theme: Theme) {
+        static setTheme(theme: ITheme) {
 
             const classList = document.getElementsByTagName("html")[0].classList;
 

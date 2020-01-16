@@ -1,7 +1,7 @@
 namespace phasereditor2d.scene.core.code {
 
     import io = colibri.core.io;
-    import SceneObject = ui.sceneobjects.SceneObject;
+    import SceneObject = ui.sceneobjects.ISceneObject;
 
     export class SceneCodeDOMBuilder {
 

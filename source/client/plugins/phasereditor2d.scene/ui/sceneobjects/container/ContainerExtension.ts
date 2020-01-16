@@ -3,9 +3,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     import code = core.code;
 
-    export interface ContainerData extends json.ObjectData {
+    export interface IContainerData extends json.IObjectData {
 
-        list: json.ObjectData[];
+        list: json.IObjectData[];
     }
 
     export class ContainerExtension extends SceneObjectExtension {
@@ -28,11 +28,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ContainerCodeDOMBuilder.getInstance();
         }
 
-        async getAssetsFromObjectData(args: GetAssetsFromObjectArgs) {
+        async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs) {
 
             const list = [];
 
-            const children = args.serializer.read("list", []) as json.ObjectData[];
+            const children = args.serializer.read("list", []) as json.IObjectData[];
 
             for (const objData of children) {
 
@@ -57,16 +57,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return list;
         }
 
-        createSceneObjectWithData(args: CreateWithDataArgs): sceneobjects.SceneObject {
+        createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
-            container.getEditorSupport().readJSON(args.data as ContainerData);
+            container.getEditorSupport().readJSON(args.data as IContainerData);
 
             return container;
         }
 
-        private createContainerObject(scene: Scene, x: number, y: number, list: sceneobjects.SceneObject[]) {
+        private createContainerObject(scene: Scene, x: number, y: number, list: sceneobjects.ISceneObject[]) {
 
             const container = new sceneobjects.Container(scene, x, y, list);
 
@@ -78,7 +78,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createContainerObjectWithChildren(
-            scene: Scene, objectList: sceneobjects.SceneObject[]): sceneobjects.Container {
+            scene: Scene, objectList: sceneobjects.ISceneObject[]): sceneobjects.Container {
 
             const container = this.createContainerObject(scene, 0, 0, objectList);
 
@@ -93,7 +93,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        createSceneObjectWithAsset(args: CreateWithAssetArgs): sceneobjects.SceneObject {
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject {
             return null;
         }
     }

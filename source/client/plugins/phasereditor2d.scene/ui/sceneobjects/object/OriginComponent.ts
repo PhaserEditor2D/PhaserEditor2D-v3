@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export declare interface IOriginLike extends SceneObject {
+    export interface IOriginLike extends ISceneObject {
 
         originX: number;
         originY: number;
@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             y: OriginComponent.originY
         };
 
-        buildSetObjectPropertiesCodeDOM(args: SetObjectPropertiesCodeDOMArgs): void {
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const obj = this.getObject();
 

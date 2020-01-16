@@ -5573,13 +5573,16 @@ var colibri;
                 setSelection(selection, notify = true) {
                     this._selection = selection;
                     if (notify) {
-                        this.dispatchEvent(new CustomEvent(ui.controls.EVENT_SELECTION_CHANGED, {
-                            detail: selection
-                        }));
+                        this.dispatchSelectionChanged();
                     }
                 }
                 getSelection() {
                     return this._selection;
+                }
+                dispatchSelectionChanged() {
+                    this.dispatchEvent(new CustomEvent(ui.controls.EVENT_SELECTION_CHANGED, {
+                        detail: this._selection
+                    }));
                 }
                 getPropertyProvider() {
                     return null;

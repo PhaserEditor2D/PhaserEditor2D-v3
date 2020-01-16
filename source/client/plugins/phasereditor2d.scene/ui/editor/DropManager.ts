@@ -50,7 +50,7 @@ namespace phasereditor2d.scene.ui.editor {
             const exts = ScenePlugin.getInstance().getObjectExtensions();
 
             const nameMaker = new ide.utils.NameMaker(obj => {
-                return (obj as sceneobjects.SceneObject).getEditorSupport().getLabel();
+                return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
             });
 
             scene.visit(obj => nameMaker.update([obj]));
@@ -91,7 +91,7 @@ namespace phasereditor2d.scene.ui.editor {
                 }
             }
 
-            const sprites: sceneobjects.SceneObject[] = [];
+            const sprites: sceneobjects.ISceneObject[] = [];
 
             for (const data of dropAssetArray) {
 

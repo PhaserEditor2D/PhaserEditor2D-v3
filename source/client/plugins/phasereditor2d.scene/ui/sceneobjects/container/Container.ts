@@ -1,10 +1,10 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class Container extends Phaser.GameObjects.Container implements SceneObject {
+    export class Container extends Phaser.GameObjects.Container implements ISceneObject {
 
         private _editorSupport: ContainerEditorSupport;
 
-        constructor(scene: Scene, x: number, y: number, children: SceneObject[]) {
+        constructor(scene: Scene, x: number, y: number, children: ISceneObject[]) {
             super(scene, x, y, children);
 
             this._editorSupport = new ContainerEditorSupport(this);
@@ -14,11 +14,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._editorSupport;
         }
 
-        get list(): SceneObject[] {
+        get list(): ISceneObject[] {
             return super.list as any;
         }
 
-        set list(list: SceneObject[]) {
+        set list(list: ISceneObject[]) {
             super.list = list;
         }
     }

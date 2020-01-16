@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildPrefabConstructorDeclarationSupperCallCodeDOM(
-            args: BuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
+            args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
 
             const call = args.superMethodCallCodeDOM;
 
@@ -53,7 +53,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        buildPrefabConstructorDeclarationCodeDOM(args: BuildPrefabConstructorDeclarationCodeDOM): void {
+        buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
 
             const ctr = args.ctrDeclCodeDOM;
 
@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctr.addArg("frame", "number | string", true);
         }
 
-        buildCreatePrefabInstanceCodeDOM(args: BuildPrefabConstructorCodeDOMArgs) {
+        buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs) {
 
             const call = args.methodCallDOM;
 
@@ -72,7 +72,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addArgsToCreateMethodDOM(call, args.obj as Image);
         }
 
-        buildCreateObjectWithFactoryCodeDOM(args: BuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
+        buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
             const call = new code.MethodCallCodeDOM("image", args.gameObjectFactoryExpr);
 
@@ -98,7 +98,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (prefabSerializer) {
 
-                    const prefabKeys = prefabSerializer.read(TextureComponent.texture.name, {}) as TextureKeys;
+                    const prefabKeys = prefabSerializer.read(TextureComponent.texture.name, {}) as ITextureKeys;
 
                     if (prefabKeys.key === key) {
 

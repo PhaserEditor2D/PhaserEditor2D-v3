@@ -148,7 +148,7 @@ namespace colibri.ui.ide.commands {
             }
         }
 
-        addKeyBindingHelper(commandId: string, config: KeyMatcherConfig) {
+        addKeyBindingHelper(commandId: string, config: IKeyMatcherConfig) {
 
             this.addKeyBinding(commandId, new KeyMatcher(config));
         }
@@ -173,9 +173,9 @@ namespace colibri.ui.ide.commands {
 
         add(
             args: {
-                command?: CommandConfig,
-                handler?: HandlerConfig,
-                keys?: KeyMatcherConfig
+                command?: ICommandConfig,
+                handler?: IHandlerConfig,
+                keys?: IKeyMatcherConfig
             },
             commandId?: string) {
 

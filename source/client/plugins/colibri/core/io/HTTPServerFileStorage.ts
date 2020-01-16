@@ -317,7 +317,7 @@ namespace colibri.core.io {
                 throw new Error(data.error);
             }
 
-            const fileData = data as FileData;
+            const fileData = data as IFileData;
 
             file._setModTime(fileData.modTime);
             file._setSize(fileData.size);
@@ -408,7 +408,7 @@ namespace colibri.core.io {
                 throw new Error(data.error);
             }
 
-            const fileData = data.file as FileData;
+            const fileData = data.file as IFileData;
 
             const newFile = new FilePath(null, fileData);
 
@@ -480,7 +480,7 @@ namespace colibri.core.io {
                 throw new Error(data.error);
             }
 
-            const fileData = data.file as FileData;
+            const fileData = data.file as IFileData;
 
             let file = uploadFolder.getFile(htmlFile.name);
 

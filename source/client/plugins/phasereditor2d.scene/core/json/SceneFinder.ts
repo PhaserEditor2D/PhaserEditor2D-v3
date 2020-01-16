@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.core.json {
 
     export class SceneFinder {
 
-        private _dataMap: Map<string, ObjectData>;
+        private _dataMap: Map<string, IObjectData>;
         private _sceneDataMap: Map<string, SceneData>;
         private _fileMap: Map<string, io.FilePath>;
         private _files: io.FilePath[];
@@ -85,7 +85,7 @@ namespace phasereditor2d.scene.core.json {
 
         async preload(monitor: controls.IProgressMonitor): Promise<void> {
 
-            const dataMap = new Map<string, ObjectData>();
+            const dataMap = new Map<string, IObjectData>();
             const sceneDataMap = new Map<string, SceneData>();
             const fileMap = new Map<string, io.FilePath>();
             const newFiles = [];
@@ -132,7 +132,7 @@ namespace phasereditor2d.scene.core.json {
             return this._files;
         }
 
-        getPrefabData(prefabId: string): ObjectData {
+        getPrefabData(prefabId: string): IObjectData {
 
             return this._dataMap.get(prefabId);
         }

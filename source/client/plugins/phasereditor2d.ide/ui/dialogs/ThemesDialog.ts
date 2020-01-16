@@ -47,7 +47,7 @@ namespace phasereditor2d.ide.ui.dialogs {
 
     class ThemeLabelProvider extends controls.viewers.LabelProvider {
 
-        getLabel(theme: controls.Theme) {
+        getLabel(theme: controls.ITheme) {
             return theme.displayName;
         }
     }

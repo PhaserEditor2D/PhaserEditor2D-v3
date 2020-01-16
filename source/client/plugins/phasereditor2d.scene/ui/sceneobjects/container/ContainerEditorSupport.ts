@@ -3,8 +3,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = core.json;
 
-    export interface ContainerData extends json.ObjectData {
-        list: json.ObjectData[];
+    export interface IContainerData extends json.IObjectData {
+        list: json.IObjectData[];
     }
 
     export class ContainerEditorSupport extends EditorSupport<Container> {
@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new TransformComponent(obj));
         }
 
-        async buildDependencyHash(args: BuildDependencyHashArgs) {
+        async buildDependencyHash(args: IBuildDependencyHashArgs) {
 
             super.buildDependencyHash(args);
 
@@ -50,7 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
         }
 
-        writeJSON(containerData: ContainerData) {
+        writeJSON(containerData: IContainerData) {
 
             super.writeJSON(containerData);
 
@@ -58,22 +58,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 containerData.list = this.getObject().list.map(obj => {
 
-                    const objData = {} as json.ObjectData;
+                    const objData = {} as json.IObjectData;
 
                     obj.getEditorSupport().writeJSON(objData);
 
-                    return objData as json.ObjectData;
+                    return objData as json.IObjectData;
                 });
             }
         }
 
-        readJSON(containerData: ContainerData) {
+        readJSON(containerData: IContainerData) {
 
             super.readJSON(containerData);
 
             const ser = this.getSerializer(containerData);
 
-            const list = ser.read("list", []) as json.ObjectData[];
+            const list = ser.read("list", []) as json.IObjectData[];
 
             const maker = this.getScene().getMaker();
 

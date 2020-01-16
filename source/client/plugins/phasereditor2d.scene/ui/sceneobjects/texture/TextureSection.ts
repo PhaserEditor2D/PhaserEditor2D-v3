@@ -55,7 +55,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const frame = sel[0];
 
-                        let textureData: TextureKeys;
+                        let textureData: ITextureKeys;
 
                         const item = frame.getPackItem();
 

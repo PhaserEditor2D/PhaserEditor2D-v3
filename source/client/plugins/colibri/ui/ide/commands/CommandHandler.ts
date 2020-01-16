@@ -1,6 +1,6 @@
 namespace colibri.ui.ide.commands {
 
-    export interface HandlerConfig {
+    export interface IHandlerConfig {
 
         testFunc?: (args: HandlerArgs) => boolean;
         executeFunc?: (args: HandlerArgs) => void;
@@ -11,7 +11,7 @@ namespace colibri.ui.ide.commands {
         private _testFunc: (args: HandlerArgs) => boolean;
         private _executeFunc: (args: HandlerArgs) => void;
 
-        constructor(config: HandlerConfig) {
+        constructor(config: IHandlerConfig) {
 
             this._testFunc = config.testFunc;
             this._executeFunc = config.executeFunc;

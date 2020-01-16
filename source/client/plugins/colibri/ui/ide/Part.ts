@@ -84,14 +84,20 @@ namespace colibri.ui.ide {
             this._selection = selection;
 
             if (notify) {
-                this.dispatchEvent(new CustomEvent(controls.EVENT_SELECTION_CHANGED, {
-                    detail: selection
-                }));
+
+                this.dispatchSelectionChanged();
             }
         }
 
         getSelection() {
             return this._selection;
+        }
+
+        dispatchSelectionChanged() {
+
+            this.dispatchEvent(new CustomEvent(controls.EVENT_SELECTION_CHANGED, {
+                detail: this._selection
+            }));
         }
 
         getPropertyProvider(): controls.properties.PropertySectionProvider {

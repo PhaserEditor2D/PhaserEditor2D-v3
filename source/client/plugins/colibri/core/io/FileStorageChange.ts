@@ -1,6 +1,6 @@
 namespace colibri.core.io {
 
-    export interface RenameData {
+    export interface IRenameData {
 
         oldName: string;
 

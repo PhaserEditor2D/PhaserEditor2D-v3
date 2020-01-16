@@ -108,7 +108,6 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.VariableSection(page),
                 page => new ui.sceneobjects.TransformSection(page),
                 page => new ui.sceneobjects.OriginSection(page),
-                //page => new ui.sceneobjects.TextureSection(page)
                 page => new ui.sceneobjects.TextureSection(page)
             ));
 
