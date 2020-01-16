@@ -22,28 +22,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._obj;
         }
 
-        write(ser: core.json.Serializer, prop: IProperty<T>) {
+        write(ser: core.json.Serializer, ...properties: Array<IProperty<T>>) {
 
-            ser.write(prop.name, prop.getValue(this._obj), prop.defValue);
+            for (const prop of properties) {
+
+                ser.write(prop.name, prop.getValue(this._obj), prop.defValue);
+            }
         }
 
-        read(ser: core.json.Serializer, prop: IProperty<T>) {
+        read(ser: core.json.Serializer, ...properties: Array<IProperty<T>>) {
 
-            const value = ser.read(prop.name, prop.defValue);
+            for (const prop of properties) {
 
-            prop.setValue(this._obj, value);
+                const value = ser.read(prop.name, prop.defValue);
+
+                prop.setValue(this._obj, value);
+            }
         }
 
-        writeLocal(ser: core.json.Serializer, prop: IProperty<T>) {
+        writeLocal(ser: core.json.Serializer, ...properties: Array<IProperty<T>>) {
 
-            write(ser.getData(), prop.name, prop.getValue(this._obj), prop.defValue);
+            for (const prop of properties) {
+
+                write(ser.getData(), prop.name, prop.getValue(this._obj), prop.defValue);
+            }
         }
 
-        readLocal(ser: core.json.Serializer, prop: IProperty<T>) {
+        readLocal(ser: core.json.Serializer, ...properties: Array<IProperty<T>>) {
 
-            const value = read(ser.getData(), prop.name, prop.defValue);
+            for (const prop of properties) {
 
-            prop.setValue(this._obj, value);
+                const value = read(ser.getData(), prop.name, prop.defValue);
+
+                prop.setValue(this._obj, value);
+            }
         }
 
         protected buildSetObjectPropertyCodeDOM_Float(

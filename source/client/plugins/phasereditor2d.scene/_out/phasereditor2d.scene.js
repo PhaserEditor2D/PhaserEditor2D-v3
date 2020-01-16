@@ -4031,19 +4031,27 @@ var phasereditor2d;
                     getObject() {
                         return this._obj;
                     }
-                    write(ser, prop) {
-                        ser.write(prop.name, prop.getValue(this._obj), prop.defValue);
+                    write(ser, ...properties) {
+                        for (const prop of properties) {
+                            ser.write(prop.name, prop.getValue(this._obj), prop.defValue);
+                        }
                     }
-                    read(ser, prop) {
-                        const value = ser.read(prop.name, prop.defValue);
-                        prop.setValue(this._obj, value);
+                    read(ser, ...properties) {
+                        for (const prop of properties) {
+                            const value = ser.read(prop.name, prop.defValue);
+                            prop.setValue(this._obj, value);
+                        }
                     }
-                    writeLocal(ser, prop) {
-                        write(ser.getData(), prop.name, prop.getValue(this._obj), prop.defValue);
+                    writeLocal(ser, ...properties) {
+                        for (const prop of properties) {
+                            write(ser.getData(), prop.name, prop.getValue(this._obj), prop.defValue);
+                        }
                     }
-                    readLocal(ser, prop) {
-                        const value = read(ser.getData(), prop.name, prop.defValue);
-                        prop.setValue(this._obj, value);
+                    readLocal(ser, ...properties) {
+                        for (const prop of properties) {
+                            const value = read(ser.getData(), prop.name, prop.defValue);
+                            prop.setValue(this._obj, value);
+                        }
                     }
                     buildSetObjectPropertyCodeDOM_Float(fieldName, value, defValue, args) {
                         const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
@@ -4990,14 +4998,10 @@ var phasereditor2d;
                         this.buildSetObjectPropertyCodeDOM_Float("originY", obj.originY, 0.5, args);
                     }
                     readJSON(ser) {
-                        const obj = this.getObject();
-                        obj.originX = ser.read("originX", 0.5);
-                        obj.originY = ser.read("originY", 0.5);
+                        this.read(ser, OriginComponent.originX, OriginComponent.originY);
                     }
                     writeJSON(ser) {
-                        const obj = this.getObject();
-                        ser.write("originX", obj.originX, 0.5);
-                        ser.write("originY", obj.originY, 0.5);
+                        this.write(ser, OriginComponent.originX, OriginComponent.originY);
                     }
                 }
                 OriginComponent.originX = sceneobjects.SimpleProperty("originX", 0.5, "X");
@@ -5162,8 +5166,6 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                var write = colibri.core.json.write;
-                var read = colibri.core.json.read;
                 class TransformComponent extends sceneobjects.Component {
                     buildSetObjectPropertiesCodeDOM(args) {
                         const obj = this.getObject();
@@ -5172,22 +5174,12 @@ var phasereditor2d;
                         this.buildSetObjectPropertyCodeDOM_Float("angle", obj.angle, 0, args);
                     }
                     readJSON(ser) {
-                        const obj = this.getObject();
-                        // position are always unlocked!
-                        obj.x = read(ser.getData(), "x", 0);
-                        obj.y = read(ser.getData(), "y", 0);
-                        obj.scaleX = ser.read("scaleX", 1);
-                        obj.scaleY = ser.read("scaleY", 1);
-                        obj.angle = ser.read("angle", 0);
+                        this.readLocal(ser, TransformComponent.x, TransformComponent.y);
+                        this.read(ser, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
                     }
                     writeJSON(ser) {
-                        const obj = this.getObject();
-                        // position is always unlocked
-                        write(ser.getData(), "x", obj.x, 0);
-                        write(ser.getData(), "y", obj.y, 0);
-                        ser.write("scaleX", obj.scaleX, 1);
-                        ser.write("scaleY", obj.scaleY, 1);
-                        ser.write("angle", obj.angle, 0);
+                        this.writeLocal(ser, TransformComponent.x, TransformComponent.y);
+                        this.write(ser, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
                     }
                 }
                 TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X");
@@ -5450,16 +5442,14 @@ var phasereditor2d;
                         // nothing, the properties are set when the object is created.
                     }
                     writeJSON(ser) {
+                        var _a;
                         if (this._textureKeys.key) {
-                            if (this._textureKeys.frame === null) {
-                                this._textureKeys.frame = undefined;
-                            }
-                            ser.write("texture", this._textureKeys);
+                            this._textureKeys.frame = (_a = this._textureKeys.frame, (_a !== null && _a !== void 0 ? _a : undefined));
+                            this.write(ser, TextureComponent.texture);
                         }
                     }
                     readJSON(ser) {
-                        const keys = ser.read("texture", {});
-                        this.setTextureKeys(keys);
+                        this.read(ser, TextureComponent.texture);
                     }
                     getTextureKeys() {
                         return this._textureKeys;

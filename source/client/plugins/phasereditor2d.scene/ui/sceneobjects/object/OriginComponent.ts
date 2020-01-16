@@ -32,18 +32,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(ser: json.Serializer) {
 
-            const obj = this.getObject();
-
-            obj.originX = ser.read("originX", 0.5);
-            obj.originY = ser.read("originY", 0.5);
+            this.read(ser,
+                OriginComponent.originX,
+                OriginComponent.originY
+            );
         }
 
         writeJSON(ser: json.Serializer) {
 
-            const obj = this.getObject();
-
-            ser.write("originX", obj.originX, 0.5);
-            ser.write("originY", obj.originY, 0.5);
+            this.write(ser,
+                OriginComponent.originX,
+                OriginComponent.originY
+            );
         }
     }
 }

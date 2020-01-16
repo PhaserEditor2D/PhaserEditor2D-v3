@@ -48,30 +48,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(ser: json.Serializer) {
 
-            const obj = this.getObject();
+            this.readLocal(ser,
+                TransformComponent.x,
+                TransformComponent.y
+            );
 
-            // position are always unlocked!
-
-            obj.x = read(ser.getData(), "x", 0);
-            obj.y = read(ser.getData(), "y", 0);
-
-            obj.scaleX = ser.read("scaleX", 1);
-            obj.scaleY = ser.read("scaleY", 1);
-            obj.angle = ser.read("angle", 0);
+            this.read(ser,
+                TransformComponent.scaleX,
+                TransformComponent.scaleY,
+                TransformComponent.angle
+            );
         }
 
         writeJSON(ser: json.Serializer) {
 
-            const obj = this.getObject();
+            this.writeLocal(ser,
+                TransformComponent.x,
+                TransformComponent.y
+            );
 
-            // position is always unlocked
-
-            write(ser.getData(), "x", obj.x, 0);
-            write(ser.getData(), "y", obj.y, 0);
-
-            ser.write("scaleX", obj.scaleX, 1);
-            ser.write("scaleY", obj.scaleY, 1);
-            ser.write("angle", obj.angle, 0);
+            this.write(ser,
+                TransformComponent.scaleX,
+                TransformComponent.scaleY,
+                TransformComponent.angle
+            );
         }
     }
 }

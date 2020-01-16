@@ -31,11 +31,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             getValue: obj => {
 
                 const textureComponent = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
+
                 return textureComponent.getTextureKeys();
             },
             setValue: (obj, value) => {
 
                 const textureComponent = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
+
                 textureComponent.setTextureKeys(value);
             }
         };
@@ -50,19 +52,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._textureKeys.key) {
 
-                if (this._textureKeys.frame === null) {
-                    this._textureKeys.frame = undefined;
-                }
+                this._textureKeys.frame = this._textureKeys.frame ?? undefined;
 
-                ser.write("texture", this._textureKeys);
+                this.write(ser, TextureComponent.texture);
             }
         }
 
         readJSON(ser: json.Serializer): void {
 
-            const keys = ser.read("texture", {});
-
-            this.setTextureKeys(keys);
+            this.read(ser, TextureComponent.texture);
         }
 
         getTextureKeys(): ITextureKeys {
