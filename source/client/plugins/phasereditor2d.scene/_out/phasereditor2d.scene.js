@@ -5457,11 +5457,7 @@ var phasereditor2d;
                         // nothing, the properties are set when the object is created.
                     }
                     writeJSON(ser) {
-                        var _a;
-                        if (this._textureKeys.key) {
-                            this._textureKeys.frame = (_a = this._textureKeys.frame, (_a !== null && _a !== void 0 ? _a : undefined));
-                            this.write(ser, TextureComponent.texture);
-                        }
+                        this.write(ser, TextureComponent.texture);
                     }
                     readJSON(ser) {
                         this.read(ser, TextureComponent.texture);
