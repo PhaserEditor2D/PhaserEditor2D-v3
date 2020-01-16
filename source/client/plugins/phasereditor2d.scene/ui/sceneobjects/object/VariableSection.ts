@@ -2,10 +2,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class VariableSection extends editor.properties.BaseSceneSection<sceneobjects.ISceneObject> {
+    export class VariableSection extends ObjectSceneSection<ISceneObjectLike> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "SceneEditor.VariableSection", "Variable", false);
+            super(page, "phasereditor2d.scene.ui.sceneobjects", "Variable", false);
         }
 
         protected createForm(parent: HTMLDivElement) {
@@ -15,7 +15,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 // Name
 
                 this.createLabel(comp, "Name");
+
                 const text = this.createText(comp);
+
                 this.addUpdater(() => {
                     text.value = this.flatValues_StringJoin(
                         this.getSelection().map(obj => obj.getEditorSupport().getLabel())
@@ -27,7 +29,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 // Type
 
                 this.createLabel(comp, "Type");
+
                 const text = this.createText(comp, true);
+
                 this.addUpdater(() => {
 
                     text.value = this.flatValues_StringJoin(
@@ -46,6 +50,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             return typename;
                         })
                     );
+                });
+            }
+
+            {
+                // Scope
+
+                this.createLabel(comp, "Scope", "The lexical scope of the object.");
+                this.createMenuButton(comp, "Text", [
+                    {
+                        name: "Method",
+                        value: ObjectScope.METHOD
+                    },
+                    {
+                        name: "Class",
+                        value: ObjectScope.CLASS
+                    },
+                    {
+                        name: "Public",
+                        value: ObjectScope.PUBLIC
+                    }
+                ], value => {
+
                 });
             }
         }

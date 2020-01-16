@@ -35,6 +35,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(Phaser.Utils.String.UUID());
             this._scope = ObjectScope.METHOD;
             this._unlockedProperties = new Set();
+
+            this.addComponent(new VariableComponent(this._object));
         }
 
         isUnlockedProperty(propName: string) {
@@ -297,9 +299,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             data.id = this.getId();
-            data.label = this._label;
-
-            write(data, "scope", this._scope, ObjectScope.METHOD);
 
             if (this._prefabId && this._unlockedProperties.size > 0) {
 
@@ -321,8 +320,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(data.id);
 
             this._prefabId = data.prefabId;
-            this._label = data.label;
-            this._scope = read(data, "scope", ObjectScope.METHOD);
             this._unlockedProperties = new Set(data["unlock"] ?? []);
 
             for (const s of this._serializables) {

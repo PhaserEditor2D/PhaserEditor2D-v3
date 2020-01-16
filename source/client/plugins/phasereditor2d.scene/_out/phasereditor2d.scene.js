@@ -4022,12 +4022,28 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 var code = scene.core.code;
+                var read = colibri.core.json.read;
+                var write = colibri.core.json.write;
                 class Component {
                     constructor(obj) {
                         this._obj = obj;
                     }
                     getObject() {
                         return this._obj;
+                    }
+                    write(ser, prop) {
+                        ser.write(prop.name, prop.getValue(this._obj), prop.defValue);
+                    }
+                    read(ser, prop) {
+                        const value = ser.read(prop.name, prop.defValue);
+                        prop.setValue(this._obj, value);
+                    }
+                    writeLocal(ser, prop) {
+                        write(ser.getData(), prop.name, prop.getValue(this._obj), prop.defValue);
+                    }
+                    readLocal(ser, prop) {
+                        const value = read(ser.getData(), prop.name, prop.defValue);
+                        prop.setValue(this._obj, value);
                     }
                     buildSetObjectPropertyCodeDOM_Float(fieldName, value, defValue, args) {
                         const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
@@ -4060,8 +4076,6 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                var read = colibri.core.json.read;
-                var write = colibri.core.json.write;
                 let ObjectScope;
                 (function (ObjectScope) {
                     ObjectScope["METHOD"] = "METHOD";
@@ -4078,6 +4092,7 @@ var phasereditor2d;
                         this.setId(Phaser.Utils.String.UUID());
                         this._scope = ObjectScope.METHOD;
                         this._unlockedProperties = new Set();
+                        this.addComponent(new sceneobjects.VariableComponent(this._object));
                     }
                     isUnlockedProperty(propName) {
                         if (propName === sceneobjects.TransformComponent.x.name || propName === sceneobjects.TransformComponent.y.name) {
@@ -4250,8 +4265,6 @@ var phasereditor2d;
                             data.type = this._extension.getTypeName();
                         }
                         data.id = this.getId();
-                        data.label = this._label;
-                        write(data, "scope", this._scope, ObjectScope.METHOD);
                         if (this._prefabId && this._unlockedProperties.size > 0) {
                             data["unlock"] = [...this._unlockedProperties];
                         }
@@ -4265,8 +4278,6 @@ var phasereditor2d;
                         const ser = this.getSerializer(data);
                         this.setId(data.id);
                         this._prefabId = data.prefabId;
-                        this._label = data.label;
-                        this._scope = read(data, "scope", ObjectScope.METHOD);
                         this._unlockedProperties = new Set((_a = data["unlock"], (_a !== null && _a !== void 0 ? _a : [])));
                         for (const s of this._serializables) {
                             s.readJSON(ser);
@@ -5239,9 +5250,49 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class VariableSection extends ui.editor.properties.BaseSceneSection {
+                class VariableComponent extends sceneobjects.Component {
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        // nothing
+                    }
+                    writeJSON(ser) {
+                        this.writeLocal(ser, VariableComponent.label);
+                        this.writeLocal(ser, VariableComponent.scope);
+                    }
+                    readJSON(ser) {
+                        this.readLocal(ser, VariableComponent.label);
+                        this.readLocal(ser, VariableComponent.scope);
+                    }
+                }
+                VariableComponent.label = {
+                    name: "label",
+                    tooltip: "The variable name of the object.",
+                    defValue: undefined,
+                    getValue: obj => obj.getEditorSupport().getLabel(),
+                    setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
+                };
+                VariableComponent.scope = {
+                    name: "scope",
+                    tooltip: "The variable lexical scope.",
+                    defValue: sceneobjects.ObjectScope.METHOD,
+                    getValue: obj => obj.getEditorSupport().getScope(),
+                    setValue: (obj, value) => obj.getEditorSupport().setScope(value)
+                };
+                sceneobjects.VariableComponent = VariableComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class VariableSection extends sceneobjects.ObjectSceneSection {
                     constructor(page) {
-                        super(page, "SceneEditor.VariableSection", "Variable", false);
+                        super(page, "phasereditor2d.scene.ui.sceneobjects", "Variable", false);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent, 2);
@@ -5266,6 +5317,25 @@ var phasereditor2d;
                                     }
                                     return typename;
                                 }));
+                            });
+                        }
+                        {
+                            // Scope
+                            this.createLabel(comp, "Scope", "The lexical scope of the object.");
+                            this.createMenuButton(comp, "Text", [
+                                {
+                                    name: "Method",
+                                    value: sceneobjects.ObjectScope.METHOD
+                                },
+                                {
+                                    name: "Class",
+                                    value: sceneobjects.ObjectScope.CLASS
+                                },
+                                {
+                                    name: "Public",
+                                    value: sceneobjects.ObjectScope.PUBLIC
+                                }
+                            ], value => {
                             });
                         }
                     }

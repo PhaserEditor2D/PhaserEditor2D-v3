@@ -818,6 +818,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _obj;
         constructor(obj: T);
         getObject(): T;
+        write(ser: core.json.Serializer, prop: IProperty<T>): void;
+        read(ser: core.json.Serializer, prop: IProperty<T>): void;
+        writeLocal(ser: core.json.Serializer, prop: IProperty<T>): void;
+        readLocal(ser: core.json.Serializer, prop: IProperty<T>): void;
         protected buildSetObjectPropertyCodeDOM_Float(fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void;
         buildDependenciesHash(args: IBuildDependencyHashArgs): Promise<void>;
         abstract buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
@@ -1240,8 +1244,17 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class VariableComponent extends Component<ISceneObjectLike> {
+        static label: IProperty<ISceneObjectLike>;
+        static scope: IProperty<ISceneObjectLike>;
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+        writeJSON(ser: core.json.Serializer): void;
+        readJSON(ser: core.json.Serializer): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class VariableSection extends editor.properties.BaseSceneSection<sceneobjects.ISceneObject> {
+    class VariableSection extends ObjectSceneSection<ISceneObjectLike> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
