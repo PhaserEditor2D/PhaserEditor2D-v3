@@ -5021,11 +5021,24 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var code = scene.core.code;
                 class OriginComponent extends sceneobjects.Component {
                     buildSetObjectPropertiesCodeDOM(args) {
                         const obj = this.getObject();
-                        this.buildSetObjectPropertyCodeDOM_Float("originX", obj.originX, 0.5, args);
-                        this.buildSetObjectPropertyCodeDOM_Float("originY", obj.originY, 0.5, args);
+                        let add = false;
+                        if (args.prefabSerializer) {
+                            add = obj.originX !== args.prefabSerializer.read("originX", 0.5)
+                                || obj.originY !== args.prefabSerializer.read("originY", 0.5);
+                        }
+                        else {
+                            add = obj.originX !== 0.5 || obj.originY !== 0.5;
+                        }
+                        if (add) {
+                            const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
+                            dom.argFloat(obj.originX);
+                            dom.argFloat(obj.originY);
+                            args.result.push(dom);
+                        }
                     }
                     readJSON(ser) {
                         this.read(ser, OriginComponent.originX, OriginComponent.originY);
@@ -5034,8 +5047,20 @@ var phasereditor2d;
                         this.write(ser, OriginComponent.originX, OriginComponent.originY);
                     }
                 }
-                OriginComponent.originX = sceneobjects.SimpleProperty("originX", 0.5, "X");
-                OriginComponent.originY = sceneobjects.SimpleProperty("originY", 0.5, "Y");
+                OriginComponent.originX = {
+                    name: "originX",
+                    label: "X",
+                    defValue: 0.5,
+                    getValue: obj => obj.originX,
+                    setValue: (obj, value) => obj.setOrigin(value, obj.originY)
+                };
+                OriginComponent.originY = {
+                    name: "originY",
+                    label: "Y",
+                    defValue: 0.5,
+                    getValue: obj => obj.originY,
+                    setValue: (obj, value) => obj.setOrigin(obj.originX, value)
+                };
                 OriginComponent.origin = {
                     label: "Origin",
                     x: OriginComponent.originX,

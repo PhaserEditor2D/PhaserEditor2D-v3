@@ -3,18 +3,32 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
+    import code = core.code;
 
     export interface IOriginLike extends ISceneObject {
 
         originX: number;
         originY: number;
+        setOrigin(x: number, y: number);
     }
 
     export class OriginComponent extends Component<IOriginLike> {
 
-        static originX = SimpleProperty("originX", 0.5, "X");
+        static originX: IProperty<IOriginLike> = {
+            name: "originX",
+            label: "X",
+            defValue: 0.5,
+            getValue: obj => obj.originX,
+            setValue: (obj, value) => obj.setOrigin(value, obj.originY)
+        };
 
-        static originY = SimpleProperty("originY", 0.5, "Y");
+        static originY: IProperty<IOriginLike> = {
+            name: "originY",
+            label: "Y",
+            defValue: 0.5,
+            getValue: obj => obj.originY,
+            setValue: (obj, value) => obj.setOrigin(obj.originX, value)
+        };
 
         static origin: IPropertyXY = {
             label: "Origin",
@@ -26,8 +40,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
 
-            this.buildSetObjectPropertyCodeDOM_Float("originX", obj.originX, 0.5, args);
-            this.buildSetObjectPropertyCodeDOM_Float("originY", obj.originY, 0.5, args);
+            let add = false;
+
+            if (args.prefabSerializer) {
+
+                add = obj.originX !== args.prefabSerializer.read("originX", 0.5)
+                    || obj.originY !== args.prefabSerializer.read("originY", 0.5);
+
+            } else {
+
+                add = obj.originX !== 0.5 || obj.originY !== 0.5;
+            }
+
+            if (add) {
+
+                const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
+
+                dom.argFloat(obj.originX);
+                dom.argFloat(obj.originY);
+
+                args.result.push(dom);
+            }
         }
 
         readJSON(ser: json.Serializer) {

@@ -1170,10 +1170,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IOriginLike extends ISceneObject {
         originX: number;
         originY: number;
+        setOrigin(x: number, y: number): any;
     }
     class OriginComponent extends Component<IOriginLike> {
-        static originX: IProperty<any>;
-        static originY: IProperty<any>;
+        static originX: IProperty<IOriginLike>;
+        static originY: IProperty<IOriginLike>;
         static origin: IPropertyXY;
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
