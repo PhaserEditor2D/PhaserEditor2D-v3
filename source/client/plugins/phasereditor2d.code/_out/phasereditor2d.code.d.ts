@@ -1,42 +1,11 @@
 declare namespace phasereditor2d.code {
     class CodePlugin extends colibri.Plugin {
         private static _instance;
-        private _modelsManager;
         static getInstance(): CodePlugin;
         constructor();
-        getModelsManager(): ui.editors.MonacoModelsManager;
         registerExtensions(reg: colibri.ExtensionRegistry): void;
         starting(): Promise<void>;
-        private initMonacoContentAssist;
-        private initMonacoLanguages;
-        private initMonacoThemes;
     }
-}
-declare namespace phasereditor2d.code.ui.editors {
-    import io = colibri.core.io;
-    import controls = colibri.ui.controls;
-    class MonacoModelsProjectPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
-        private _manager;
-        constructor(manager: MonacoModelsManager);
-        computeTotal(): Promise<number>;
-        preload(monitor: controls.IProgressMonitor): Promise<void>;
-    }
-    export class MonacoModelsManager {
-        private _fileModelMap;
-        private _changeListener;
-        private _filesModifiedByMonacoEditor;
-        constructor();
-        private handleStorageChange;
-        fileModifiedByMonacoEditor(file: io.FilePath): void;
-        private reset;
-        getProjectPreloader(): MonacoModelsProjectPreloader;
-        computePreloadTotal(): Promise<number>;
-        preload(monitor: controls.IProgressMonitor): Promise<void>;
-        private addSrcFile;
-        private addDefFile;
-        getModel(file: io.FilePath): monaco.editor.ITextModel;
-    }
-    export {};
 }
 declare namespace phasereditor2d.code.ui.editors {
     class MonacoEditorFactory extends colibri.ui.ide.EditorFactory {
@@ -61,20 +30,6 @@ declare namespace phasereditor2d.code.ui.editors {
         private updateContent;
         layout(): void;
         protected onEditorInputContentChanged(): void;
-    }
-}
-declare namespace phasereditor2d.code.ui.editors {
-    class JavaScriptEditorFactory extends MonacoEditorFactory {
-        constructor();
-        createEditor(): colibri.ui.ide.EditorPart;
-    }
-    class JavaScriptEditor extends MonacoEditor {
-        private static _init;
-        constructor();
-        private static init;
-        createPart(): void;
-        private _propertyProvider;
-        getPropertyProvider(): pack.ui.properties.AssetPackPreviewPropertyProvider;
     }
 }
 //# sourceMappingURL=phasereditor2d.code.d.ts.map

@@ -1351,8 +1351,8 @@ declare namespace colibri.ui.ide {
         constructor(id: string);
         setDirty(dirty: boolean): void;
         isDirty(): boolean;
-        save(): void;
-        protected doSave(): void;
+        save(): Promise<void>;
+        protected doSave(): Promise<void>;
         onPartClosed(): boolean;
         onPartAdded(): void;
         getInput(): IEditorInput;
@@ -1478,7 +1478,7 @@ declare namespace colibri.ui.ide {
         private _onFileStorageListener;
         private _isSaving;
         constructor(id: string);
-        save(): void;
+        save(): Promise<void>;
         protected isSaving(): boolean;
         protected onFileStorageChanged(change: io.FileStorageChange): void;
         protected abstract onEditorInputContentChanged(): any;

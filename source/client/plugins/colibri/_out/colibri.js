@@ -5654,10 +5654,10 @@ var colibri;
                 isDirty() {
                     return this._dirty;
                 }
-                save() {
-                    this.doSave();
+                async save() {
+                    await this.doSave();
                 }
-                doSave() {
+                async doSave() {
                     // nothing
                 }
                 onPartClosed() {
@@ -6184,10 +6184,10 @@ var colibri;
                     };
                     ide.Workbench.getWorkbench().getFileStorage().addChangeListener(this._onFileStorageListener);
                 }
-                save() {
+                async save() {
                     this._isSaving = true;
                     try {
-                        super.save();
+                        await super.save();
                     }
                     finally {
                         this._isSaving = false;
@@ -6197,6 +6197,7 @@ var colibri;
                     return this._isSaving;
                 }
                 onFileStorageChanged(change) {
+                    console.log(change);
                     const editorFile = this.getInput();
                     const editorFileFullName = editorFile.getFullName();
                     if (change.isDeleted(editorFileFullName)) {

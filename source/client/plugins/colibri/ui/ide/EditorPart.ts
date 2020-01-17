@@ -31,11 +31,12 @@ namespace colibri.ui.ide {
             return this._dirty;
         }
 
-        save() {
-            this.doSave();
+        async save() {
+
+            await this.doSave();
         }
 
-        protected doSave() {
+        protected async doSave() {
             // nothing
         }
 

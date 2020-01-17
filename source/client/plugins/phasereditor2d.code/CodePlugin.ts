@@ -5,7 +5,6 @@ namespace phasereditor2d.code {
     export class CodePlugin extends colibri.Plugin {
 
         private static _instance: CodePlugin;
-        private _modelsManager: ui.editors.MonacoModelsManager;
 
         static getInstance() {
 
@@ -20,24 +19,14 @@ namespace phasereditor2d.code {
             super("phasereditor2d.core");
         }
 
-        getModelsManager() {
-            return this._modelsManager;
-        }
-
         registerExtensions(reg: colibri.ExtensionRegistry) {
-
-            // project preloaders
-
-            this._modelsManager = new ui.editors.MonacoModelsManager();
-
-            reg.addExtension(this._modelsManager.getProjectPreloader());
 
             // editors
 
             reg.addExtension(
                 new colibri.ui.ide.EditorExtension(
                     [
-                        new ui.editors.JavaScriptEditorFactory(),
+                        new ui.editors.MonacoEditorFactory("javascript", webContentTypes.core.CONTENT_TYPE_JAVASCRIPT),
                         new ui.editors.MonacoEditorFactory("typescript", webContentTypes.core.CONTENT_TYPE_SCRIPT),
                         new ui.editors.MonacoEditorFactory("html", webContentTypes.core.CONTENT_TYPE_HTML),
                         new ui.editors.MonacoEditorFactory("css", webContentTypes.core.CONTENT_TYPE_CSS),
@@ -49,29 +38,6 @@ namespace phasereditor2d.code {
         }
 
         async starting() {
-
-            this.initMonacoLanguages();
-
-            this.initMonacoContentAssist();
-
-            this.initMonacoThemes();
-        }
-
-        private initMonacoContentAssist() {
-
-            monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-                noSemanticValidation: true
-            });
-        }
-
-        private initMonacoLanguages() {
-
-            monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-                noSemanticValidation: true
-            });
-        }
-
-        private initMonacoThemes() {
 
             monaco.editor.defineTheme("vs", {
                 inherit: true,

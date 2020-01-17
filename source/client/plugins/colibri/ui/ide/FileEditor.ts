@@ -19,13 +19,16 @@ namespace colibri.ui.ide {
             Workbench.getWorkbench().getFileStorage().addChangeListener(this._onFileStorageListener);
         }
 
-        save() {
+        async save() {
 
             this._isSaving = true;
 
             try {
-                super.save();
+
+                await super.save();
+
             } finally {
+
                 this._isSaving = false;
             }
         }
@@ -35,6 +38,8 @@ namespace colibri.ui.ide {
         }
 
         protected onFileStorageChanged(change: io.FileStorageChange) {
+
+            console.log(change);
 
             const editorFile = this.getInput();
 
@@ -47,6 +52,7 @@ namespace colibri.ui.ide {
             } else if (change.isModified(editorFileFullName)) {
 
                 if (!this._isSaving) {
+
                     this.onEditorInputContentChanged();
                 }
 
