@@ -56,6 +56,8 @@ var phasereditor2d;
                 reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN, {
                     command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
                 }));
+                // scene tools
+                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool()));
             }
             getSceneFinder() {
                 return this._sceneFinder;
@@ -2589,6 +2591,26 @@ var phasereditor2d;
                         }
                         this.renderGrid();
                         this.renderSelection();
+                        this.renderTools();
+                    }
+                    renderTools() {
+                        const manager = this._editor.getToolsManager();
+                        const tool = manager.getActiveTool();
+                        if (!tool) {
+                            return;
+                        }
+                        const sel = this._editor.getSelection().filter(obj => tool.canEdit(obj));
+                        if (sel.length === 0) {
+                            return;
+                        }
+                        const ctx = this._ctx;
+                        ctx.save();
+                        tool.render({
+                            context: ctx,
+                            objects: sel,
+                            camera: this._editor.getScene().getCamera()
+                        });
+                        ctx.restore();
                     }
                     renderSelection() {
                         const ctx = this._ctx;
@@ -2847,6 +2869,7 @@ var phasereditor2d;
                         this._cameraManager = new editor.CameraManager(this);
                         this._selectionManager = new editor.SelectionManager(this);
                         this._actionManager = new editor.ActionManager(this);
+                        this._toolsManager = new editor.tools.SceneToolsManager(this);
                     }
                     createGame() {
                         this._scene = new ui.Scene();
@@ -2947,6 +2970,9 @@ var phasereditor2d;
                         return this.getSelection()
                             .filter(obj => obj instanceof Phaser.GameObjects.GameObject)
                             .map(obj => obj);
+                    }
+                    getToolsManager() {
+                        return this._toolsManager;
                     }
                     getActionManager() {
                         return this._actionManager;
@@ -3192,6 +3218,7 @@ var phasereditor2d;
                     commands.CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
                     commands.CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
                     commands.CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
+                    commands.CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_6.SceneEditor ||
                             args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
@@ -3261,6 +3288,22 @@ var phasereditor2d;
                                     control: true,
                                     alt: true,
                                     key: "B"
+                                }
+                            });
+                            // scene tools
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_MOVE_SCENE_OBJECT,
+                                    name: "Move Objects",
+                                    tooltip: "Translate the selected scene objects",
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.TranslateTool.ID)
+                                },
+                                keys: {
+                                    key: "M"
                                 }
                             });
                         }
@@ -3883,6 +3926,203 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var tools;
+                (function (tools) {
+                    class SceneToolItem {
+                        getScreenPointOfObject(args, obj, fx, fy) {
+                            const worldPoint = new Phaser.Geom.Point(0, 0);
+                            const sprite = obj;
+                            const x = sprite.width * fx;
+                            const y = sprite.height * fy;
+                            sprite.getWorldTransformMatrix().transformPoint(x, y, worldPoint);
+                            return args.camera.getScreenPoint(worldPoint.x, worldPoint.y);
+                        }
+                        drawArrowPath(ctx) {
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.moveTo(0, -6);
+                            ctx.lineTo(12, 0);
+                            ctx.lineTo(0, 6);
+                            ctx.closePath();
+                            ctx.fill();
+                            ctx.stroke();
+                            ctx.restore();
+                        }
+                        getAvgScreenPointOfObjects(args, fx, fy) {
+                            const worldPoint = new Phaser.Math.Vector2(0, 0);
+                            let avgY = 0;
+                            let avgX = 0;
+                            for (const obj of args.objects) {
+                                const point = this.getScreenPointOfObject(args, obj, fx(obj), fy(obj));
+                                avgX += point.x;
+                                avgY += point.y;
+                            }
+                            avgX /= args.objects.length;
+                            avgY /= args.objects.length;
+                            return new Phaser.Math.Vector2(avgX, avgY);
+                        }
+                    }
+                    tools.SceneToolItem = SceneToolItem;
+                })(tools = editor.tools || (editor.tools = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneToolItem.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var tools;
+                (function (tools_1) {
+                    class LineToolItem extends tools_1.SceneToolItem {
+                        constructor(color, ...tools) {
+                            super();
+                            this._color = color;
+                            this._tools = tools;
+                        }
+                        render(args) {
+                            const ctx = args.context;
+                            ctx.save();
+                            ctx.beginPath();
+                            let start = true;
+                            for (const tool of this._tools) {
+                                const { x, y } = tool.getPoint(args);
+                                if (start) {
+                                    ctx.moveTo(x, y);
+                                }
+                                else {
+                                    ctx.lineTo(x, y);
+                                }
+                                start = false;
+                            }
+                            ctx.strokeStyle = "#000";
+                            ctx.lineWidth = 4;
+                            ctx.stroke();
+                            ctx.strokeStyle = this._color;
+                            ctx.lineWidth = 2;
+                            ctx.stroke();
+                            ctx.restore();
+                        }
+                    }
+                    tools_1.LineToolItem = LineToolItem;
+                })(tools = editor.tools || (editor.tools = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var tools;
+                (function (tools) {
+                    class SceneTool {
+                        constructor(id) {
+                            this._id = id;
+                            this._items = [];
+                        }
+                        getId() {
+                            return this._id;
+                        }
+                        getItems() {
+                            return this._items;
+                        }
+                        addItems(...items) {
+                            this._items.push(...items);
+                        }
+                        render(args) {
+                            for (const item of this._items) {
+                                item.render(args);
+                            }
+                        }
+                    }
+                    tools.SceneTool = SceneTool;
+                })(tools = editor.tools || (editor.tools = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var tools;
+                (function (tools_2) {
+                    class SceneToolExtension extends colibri.Extension {
+                        constructor(...tools) {
+                            super(SceneToolExtension.POINT_ID);
+                            this._tools = tools;
+                        }
+                        getTools() {
+                            return this._tools;
+                        }
+                    }
+                    SceneToolExtension.POINT_ID = "phasereditor2d.scene.ui.editor.tools.SceneToolExtension";
+                    tools_2.SceneToolExtension = SceneToolExtension;
+                })(tools = editor.tools || (editor.tools = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_12) {
+                var tools;
+                (function (tools) {
+                    class SceneToolsManager {
+                        constructor(editor) {
+                            this._editor = editor;
+                            const exts = colibri.Platform.getExtensions(tools.SceneToolExtension.POINT_ID);
+                            this._tools = exts.flatMap(ext => ext.getTools());
+                        }
+                        findTool(toolId) {
+                            return this._tools.find(tool => tool.getId() === tool.getId());
+                        }
+                        getActiveTool() {
+                            return this._activeTool;
+                        }
+                        setActiveTool(tool) {
+                            console.log("Set tool: " + (tool ? tool.getId() : "null"));
+                            this._activeTool = tool;
+                            this._editor.repaint();
+                        }
+                        swapTool(toolId) {
+                            const tool = this.findTool(toolId);
+                            this.setActiveTool(tool === this._activeTool ? null : tool);
+                        }
+                    }
+                    tools.SceneToolsManager = SceneToolsManager;
+                })(tools = editor_12.tools || (editor_12.tools = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./SceneEditorOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -3891,7 +4131,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_12) {
+            (function (editor_13) {
                 var undo;
                 (function (undo) {
                     class AddObjectsOperation extends undo.SceneEditorOperation {
@@ -3928,7 +4168,7 @@ var phasereditor2d;
                         }
                     }
                     undo.AddObjectsOperation = AddObjectsOperation;
-                })(undo = editor_12.undo || (editor_12.undo = {}));
+                })(undo = editor_13.undo || (editor_13.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_11.ui || (scene_11.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3940,7 +4180,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_13) {
+            (function (editor_14) {
                 var undo;
                 (function (undo) {
                     class JoinObjectsInContainerOperation extends undo.SceneEditorOperation {
@@ -3981,7 +4221,7 @@ var phasereditor2d;
                         }
                     }
                     undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
-                })(undo = editor_13.undo || (editor_13.undo = {}));
+                })(undo = editor_14.undo || (editor_14.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_12.ui || (scene_12.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3993,7 +4233,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_14) {
+            (function (editor_15) {
                 var undo;
                 (function (undo) {
                     class RemoveObjectsOperation extends undo.AddObjectsOperation {
@@ -4008,7 +4248,7 @@ var phasereditor2d;
                         }
                     }
                     undo.RemoveObjectsOperation = RemoveObjectsOperation;
-                })(undo = editor_14.undo || (editor_14.undo = {}));
+                })(undo = editor_15.undo || (editor_15.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5285,6 +5525,77 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.TransformSection = TransformSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TranslateTool extends ui.editor.tools.SceneTool {
+                    constructor() {
+                        super(TranslateTool.ID);
+                        const x = new sceneobjects.TranslateToolItem("x");
+                        const y = new sceneobjects.TranslateToolItem("y");
+                        const xy = new sceneobjects.TranslateToolItem("xy");
+                        this.addItems(new ui.editor.tools.LineToolItem("#f00", xy, x), new ui.editor.tools.LineToolItem("#0f0", xy, y), xy, x, y);
+                    }
+                    canEdit(obj) {
+                        return obj instanceof Phaser.GameObjects.GameObject
+                            && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
+                    }
+                }
+                TranslateTool.ID = "phasereditor2d.scene.ui.sceneobjects.SceneTool";
+                sceneobjects.TranslateTool = TranslateTool;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TranslateToolItem extends ui.editor.tools.SceneToolItem {
+                    constructor(axis) {
+                        super();
+                        this._axis = axis;
+                    }
+                    getPoint(args) {
+                        const { x, y } = this.getAvgScreenPointOfObjects(args, obj => 0, obj => 0);
+                        return {
+                            x: this._axis === "x" ? x + 100 : x,
+                            y: this._axis === "y" ? y + 100 : y
+                        };
+                    }
+                    render(args) {
+                        const { x, y } = this.getPoint(args);
+                        const ctx = args.context;
+                        ctx.strokeStyle = "#000";
+                        if (this._axis === "xy") {
+                            ctx.fillStyle = "#ffff00";
+                            ctx.fillRect(x - 5, y - 5, 10, 10);
+                            ctx.strokeRect(x - 5, y - 5, 10, 10);
+                        }
+                        else {
+                            ctx.fillStyle = this._axis === "x" ? "#f00" : "#0f0";
+                            ctx.save();
+                            ctx.translate(x, y);
+                            ctx.rotate(this._axis === "x" ? 0 : Math.PI / 2);
+                            this.drawArrowPath(ctx);
+                            ctx.restore();
+                        }
+                    }
+                }
+                sceneobjects.TranslateToolItem = TranslateToolItem;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

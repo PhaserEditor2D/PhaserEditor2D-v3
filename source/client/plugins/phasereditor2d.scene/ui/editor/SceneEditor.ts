@@ -48,6 +48,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _cameraManager: CameraManager;
         private _selectionManager: SelectionManager;
         private _actionManager: ActionManager;
+        private _toolsManager: tools.SceneToolsManager;
         private _gameBooted: boolean;
         private _sceneRead: boolean;
         private _currentRefreshHash: string;
@@ -178,7 +179,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._cameraManager = new CameraManager(this);
             this._selectionManager = new SelectionManager(this);
             this._actionManager = new ActionManager(this);
-
+            this._toolsManager = new tools.SceneToolsManager(this);
         }
 
         private createGame() {
@@ -324,6 +325,10 @@ namespace phasereditor2d.scene.ui.editor {
                 .filter(obj => obj instanceof Phaser.GameObjects.GameObject)
 
                 .map(obj => obj as sceneobjects.ISceneObject);
+        }
+
+        getToolsManager() {
+            return this._toolsManager;
         }
 
         getActionManager() {

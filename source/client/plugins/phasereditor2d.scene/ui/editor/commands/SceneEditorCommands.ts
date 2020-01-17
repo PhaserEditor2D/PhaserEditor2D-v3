@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
+    export const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor ||
@@ -122,6 +123,24 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     control: true,
                     alt: true,
                     key: "B"
+                }
+            });
+
+            // scene tools
+
+            manager.add({
+                command: {
+                    id: CMD_MOVE_SCENE_OBJECT,
+                    name: "Move Objects",
+                    tooltip: "Translate the selected scene objects",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.TranslateTool.ID)
+                },
+                keys: {
+                    key: "M"
                 }
             });
         }

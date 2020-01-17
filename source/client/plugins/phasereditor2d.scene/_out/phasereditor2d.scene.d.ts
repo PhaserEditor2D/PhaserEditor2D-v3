@@ -551,6 +551,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private resetContext;
         resizeTo(): void;
         render(): void;
+        private renderTools;
         private renderSelection;
         private renderGrid;
     }
@@ -573,6 +574,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _cameraManager;
         private _selectionManager;
         private _actionManager;
+        private _toolsManager;
         private _gameBooted;
         private _sceneRead;
         private _currentRefreshHash;
@@ -593,6 +595,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
         private readScene;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
+        getToolsManager(): tools.SceneToolsManager;
         getActionManager(): ActionManager;
         getSelectionManager(): SelectionManager;
         getOverlayLayer(): OverlayLayer;
@@ -633,6 +636,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
+    const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
@@ -775,6 +779,68 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
     class SnappingSection extends SceneSection {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.tools {
+    interface ISceneToolItemXY {
+        getPoint(args: ISceneToolRenderArgs): {
+            x: number;
+            y: number;
+        };
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.tools {
+    abstract class SceneToolItem {
+        abstract render(args: ISceneToolRenderArgs): any;
+        protected getScreenPointOfObject(args: ISceneToolRenderArgs, obj: any, fx: number, fy: number): Phaser.Math.Vector2;
+        protected drawArrowPath(ctx: CanvasRenderingContext2D): void;
+        protected getAvgScreenPointOfObjects(args: ISceneToolRenderArgs, fx: (ob: Phaser.GameObjects.Sprite) => number, fy: (ob: Phaser.GameObjects.Sprite) => number): Phaser.Math.Vector2;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.tools {
+    class LineToolItem extends SceneToolItem {
+        private _tools;
+        private _color;
+        constructor(color: string, ...tools: ISceneToolItemXY[]);
+        render(args: ISceneToolRenderArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.tools {
+    import ISceneObject = ui.sceneobjects.ISceneObject;
+    interface ISceneToolRenderArgs {
+        camera: Phaser.Cameras.Scene2D.Camera;
+        context: CanvasRenderingContext2D;
+        objects: ISceneObject[];
+    }
+    abstract class SceneTool {
+        private _id;
+        private _items;
+        constructor(id: string);
+        getId(): string;
+        getItems(): SceneToolItem[];
+        addItems(...items: SceneToolItem[]): void;
+        abstract canEdit(obj: unknown): boolean;
+        render(args: ISceneToolRenderArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.tools {
+    class SceneToolExtension extends colibri.Extension {
+        static POINT_ID: string;
+        private _tools;
+        constructor(...tools: SceneTool[]);
+        getTools(): SceneTool[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.tools {
+    class SceneToolsManager {
+        private _editor;
+        private _activeTool;
+        private _tools;
+        constructor(editor: SceneEditor);
+        findTool(toolId: string): SceneTool;
+        getActiveTool(): SceneTool;
+        setActiveTool(tool: SceneTool): void;
+        swapTool(toolId: string): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
@@ -1250,6 +1316,24 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TranslateTool extends editor.tools.SceneTool {
+        static ID: string;
+        constructor();
+        canEdit(obj: unknown): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TranslateToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        private _axis;
+        constructor(axis: "x" | "y" | "xy");
+        getPoint(args: editor.tools.ISceneToolRenderArgs): {
+            x: number;
+            y: number;
+        };
+        render(args: editor.tools.ISceneToolRenderArgs): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

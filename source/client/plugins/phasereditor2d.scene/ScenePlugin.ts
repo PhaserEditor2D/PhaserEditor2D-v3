@@ -118,6 +118,12 @@ namespace phasereditor2d.scene {
                     command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
                 }
             ));
+
+            // scene tools
+
+            reg.addExtension(new ui.editor.tools.SceneToolExtension(
+                new ui.sceneobjects.TranslateTool()
+            ));
         }
 
         getSceneFinder() {

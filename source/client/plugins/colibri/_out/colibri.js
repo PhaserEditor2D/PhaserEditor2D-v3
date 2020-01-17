@@ -6197,7 +6197,6 @@ var colibri;
                     return this._isSaving;
                 }
                 onFileStorageChanged(change) {
-                    console.log(change);
                     const editorFile = this.getInput();
                     const editorFileFullName = editorFile.getFullName();
                     if (change.isDeleted(editorFileFullName)) {

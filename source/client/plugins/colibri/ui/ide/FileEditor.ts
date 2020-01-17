@@ -39,8 +39,6 @@ namespace colibri.ui.ide {
 
         protected onFileStorageChanged(change: io.FileStorageChange) {
 
-            console.log(change);
-
             const editorFile = this.getInput();
 
             const editorFileFullName = editorFile.getFullName();

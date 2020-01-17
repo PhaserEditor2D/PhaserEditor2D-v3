@@ -41,6 +41,36 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.renderGrid();
             this.renderSelection();
+            this.renderTools();
+        }
+
+        private renderTools() {
+
+            const manager = this._editor.getToolsManager();
+
+            const tool = manager.getActiveTool();
+
+            if (!tool) {
+                return;
+            }
+
+            const sel = this._editor.getSelection().filter(obj => tool.canEdit(obj));
+
+            if (sel.length === 0) {
+                return;
+            }
+
+            const ctx = this._ctx;
+
+            ctx.save();
+
+            tool.render({
+                context: ctx,
+                objects: sel,
+                camera: this._editor.getScene().getCamera()
+            });
+
+            ctx.restore();
         }
 
         private renderSelection() {
