@@ -1482,8 +1482,15 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             Phaser.Cameras.Scene2D.Camera.prototype.getScreenPoint = function (worldX, worldY) {
-                const x = worldX * this.zoom - this.scrollX * this.zoom;
-                const y = worldY * this.zoom - this.scrollY * this.zoom;
+                // const x = worldX * this.zoom - this.scrollX * this.zoom;
+                // const y = worldY * this.zoom - this.scrollY * this.zoom;
+                const x = (worldX - this.scrollX) * this.zoom;
+                const y = (worldY - this.scrollY) * this.zoom;
+                return new Phaser.Math.Vector2(x, y);
+            };
+            Phaser.Cameras.Scene2D.Camera.prototype.getWorldPoint2 = function (screenX, screenY) {
+                const x = screenX / this.zoom + this.scrollX;
+                const y = screenY / this.zoom + this.scrollY;
                 return new Phaser.Math.Vector2(x, y);
             };
         })(ui = scene.ui || (scene.ui = {}));
@@ -2563,6 +2570,82 @@ var phasereditor2d;
         (function (ui) {
             var editor;
             (function (editor_4) {
+                class MouseManager {
+                    constructor(editor) {
+                        this._editor = editor;
+                        this._toolInAction = false;
+                        const canvas = editor.getOverlayLayer().getCanvas();
+                        canvas.addEventListener("click", e => this.onClick(e));
+                        canvas.addEventListener("mousedown", e => this.onMouseDown(e));
+                        canvas.addEventListener("mouseup", e => this.onMouseUp(e));
+                        canvas.addEventListener("mousemove", e => this.onMouseMove(e));
+                    }
+                    createArgs(e) {
+                        return {
+                            camera: this._editor.getScene().getCamera(),
+                            editor: this._editor,
+                            objects: this._editor.getSelection(),
+                            x: e.offsetX,
+                            y: e.offsetY
+                        };
+                    }
+                    onMouseDown(e) {
+                        const toolsManager = this._editor.getToolsManager();
+                        const tool = toolsManager.getActiveTool();
+                        if (tool) {
+                            const args = this.createArgs(e);
+                            if (tool.containsPoint(args)) {
+                                this._toolInAction = true;
+                                tool.onStartDrag(args);
+                            }
+                        }
+                    }
+                    onMouseMove(e) {
+                        const toolsManager = this._editor.getToolsManager();
+                        const tool = toolsManager.getActiveTool();
+                        if (tool) {
+                            const args = this.createArgs(e);
+                            tool.onDrag(args);
+                        }
+                    }
+                    onMouseUp(e) {
+                        const toolsManager = this._editor.getToolsManager();
+                        const tool = toolsManager.getActiveTool();
+                        if (tool) {
+                            const args = this.createArgs(e);
+                            tool.onStopDrag(args);
+                        }
+                    }
+                    onClick(e) {
+                        if (this._toolInAction) {
+                            this._toolInAction = false;
+                            return;
+                        }
+                        const selManager = this._editor.getSelectionManager();
+                        const toolsManager = this._editor.getToolsManager();
+                        const tool = toolsManager.getActiveTool();
+                        if (tool) {
+                            const args = this.createArgs(e);
+                            if (tool.containsPoint(args)) {
+                                return;
+                            }
+                        }
+                        selManager.onMouseClick(e);
+                    }
+                }
+                editor_4.MouseManager = MouseManager;
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_5) {
                 class OverlayLayer {
                     constructor(editor) {
                         this._editor = editor;
@@ -2606,6 +2689,7 @@ var phasereditor2d;
                         const ctx = this._ctx;
                         ctx.save();
                         tool.render({
+                            editor: this._editor,
                             context: ctx,
                             objects: sel,
                             camera: this._editor.getScene().getCamera()
@@ -2759,7 +2843,7 @@ var phasereditor2d;
                         }
                     }
                 }
-                editor_4.OverlayLayer = OverlayLayer;
+                editor_5.OverlayLayer = OverlayLayer;
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -2870,6 +2954,7 @@ var phasereditor2d;
                         this._selectionManager = new editor.SelectionManager(this);
                         this._actionManager = new editor.ActionManager(this);
                         this._toolsManager = new editor.tools.SceneToolsManager(this);
+                        this._mouseManager = new editor.MouseManager(this);
                     }
                     createGame() {
                         this._scene = new ui.Scene();
@@ -3130,13 +3215,11 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_5) {
+            (function (editor_6) {
                 var controls = colibri.ui.controls;
                 class SelectionManager {
                     constructor(editor) {
                         this._editor = editor;
-                        const canvas = this._editor.getOverlayLayer().getCanvas();
-                        canvas.addEventListener("click", e => this.onMouseClick(e));
                         this._editor.addEventListener(controls.EVENT_SELECTION_CHANGED, e => this.updateOutlineSelection());
                     }
                     clearSelection() {
@@ -3199,7 +3282,7 @@ var phasereditor2d;
                         return result;
                     }
                 }
-                editor_5.SelectionManager = SelectionManager;
+                editor_6.SelectionManager = SelectionManager;
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_10.ui || (scene_10.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3211,7 +3294,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_6) {
+            (function (editor_7) {
                 var commands;
                 (function (commands) {
                     commands.CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
@@ -3220,16 +3303,16 @@ var phasereditor2d;
                     commands.CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
                     commands.CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
                     function isSceneScope(args) {
-                        return args.activePart instanceof editor_6.SceneEditor ||
+                        return args.activePart instanceof editor_7.SceneEditor ||
                             args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
-                                && args.activeEditor instanceof editor_6.SceneEditor;
+                                && args.activeEditor instanceof editor_7.SceneEditor;
                     }
                     class SceneEditorCommands {
                         static registerCommands(manager) {
                             // update current editor
-                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, args => args.activeEditor instanceof editor_6.SceneEditor, args => args.activeEditor.refreshScene());
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, args => args.activeEditor instanceof editor_7.SceneEditor, args => args.activeEditor.refreshScene());
                             // select all
-                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL, args => args.activePart instanceof editor_6.SceneEditor, args => {
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL, args => args.activePart instanceof editor_7.SceneEditor, args => {
                                 const editor = args.activeEditor;
                                 editor.getSelectionManager().selectAll();
                             });
@@ -3263,7 +3346,7 @@ var phasereditor2d;
                                 name: "Open Scene Output File",
                                 tooltip: "Open the output source file of the scene."
                             });
-                            manager.addHandlerHelper(commands.CMD_OPEN_COMPILED_FILE, args => args.activeEditor instanceof editor_6.SceneEditor, args => args.activeEditor.openSourceFileInEditor());
+                            manager.addHandlerHelper(commands.CMD_OPEN_COMPILED_FILE, args => args.activeEditor instanceof editor_7.SceneEditor, args => args.activeEditor.openSourceFileInEditor());
                             // compile scene editor
                             manager.addCommandHelper({
                                 id: commands.CMD_COMPILE_SCENE_EDITOR,
@@ -3271,7 +3354,7 @@ var phasereditor2d;
                                 name: "Compile Scene",
                                 tooltip: "Compile the editor's Scene."
                             });
-                            manager.addHandlerHelper(commands.CMD_COMPILE_SCENE_EDITOR, args => args.activeEditor instanceof editor_6.SceneEditor, args => args.activeEditor.compile());
+                            manager.addHandlerHelper(commands.CMD_COMPILE_SCENE_EDITOR, args => args.activeEditor instanceof editor_7.SceneEditor, args => args.activeEditor.compile());
                             // compile all scene files
                             manager.add({
                                 command: {
@@ -3309,7 +3392,7 @@ var phasereditor2d;
                         }
                     }
                     commands.SceneEditorCommands = SceneEditorCommands;
-                })(commands = editor_6.commands || (editor_6.commands = {}));
+                })(commands = editor_7.commands || (editor_7.commands = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3321,7 +3404,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_7) {
+            (function (editor_8) {
                 var outline;
                 (function (outline) {
                     class SceneEditorOutlineContentProvider {
@@ -3347,7 +3430,7 @@ var phasereditor2d;
                         }
                     }
                     outline.SceneEditorOutlineContentProvider = SceneEditorOutlineContentProvider;
-                })(outline = editor_7.outline || (editor_7.outline = {}));
+                })(outline = editor_8.outline || (editor_8.outline = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3386,7 +3469,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_8) {
+            (function (editor_9) {
                 var outline;
                 (function (outline) {
                     var ide = colibri.ui.ide;
@@ -3425,7 +3508,7 @@ var phasereditor2d;
                         }
                     }
                     outline.SceneEditorOutlineProvider = SceneEditorOutlineProvider;
-                })(outline = editor_8.outline || (editor_8.outline = {}));
+                })(outline = editor_9.outline || (editor_9.outline = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3530,7 +3613,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_9) {
+            (function (editor_10) {
                 var properties;
                 (function (properties) {
                     class SceneSection extends properties.BaseSceneSection {
@@ -3623,7 +3706,7 @@ var phasereditor2d;
                         }
                     }
                     properties.SceneSection = SceneSection;
-                })(properties = editor_9.properties || (editor_9.properties = {}));
+                })(properties = editor_10.properties || (editor_10.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3667,7 +3750,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_10) {
+            (function (editor_11) {
                 var undo;
                 (function (undo) {
                     var ide = colibri.ui.ide;
@@ -3684,7 +3767,7 @@ var phasereditor2d;
                         }
                     }
                     undo.SceneEditorOperation = SceneEditorOperation;
-                })(undo = editor_10.undo || (editor_10.undo = {}));
+                })(undo = editor_11.undo || (editor_11.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3837,7 +3920,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_11) {
+            (function (editor_12) {
                 var properties;
                 (function (properties) {
                     var controls = colibri.ui.controls;
@@ -3861,7 +3944,7 @@ var phasereditor2d;
                         }
                     }
                     properties.SceneEditorSectionProvider = SceneEditorSectionProvider;
-                })(properties = editor_11.properties || (editor_11.properties = {}));
+                })(properties = editor_12.properties || (editor_12.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3945,6 +4028,18 @@ var phasereditor2d;
                             sprite.getWorldTransformMatrix().transformPoint(x, y, worldPoint);
                             return args.camera.getScreenPoint(worldPoint.x, worldPoint.y);
                         }
+                        getScreenToObjectScale(args, obj) {
+                            let x = args.camera.zoom;
+                            let y = args.camera.zoom;
+                            const sprite = obj;
+                            let next = sprite.parentContainer;
+                            while (next) {
+                                x *= next.scaleX;
+                                y *= next.scaleY;
+                                next = next.parentContainer;
+                            }
+                            return { x, y };
+                        }
                         drawArrowPath(ctx) {
                             ctx.save();
                             ctx.beginPath();
@@ -4016,6 +4111,18 @@ var phasereditor2d;
                             ctx.stroke();
                             ctx.restore();
                         }
+                        containsPoint(args) {
+                            return false;
+                        }
+                        onStartDrag(args) {
+                            // nothing
+                        }
+                        onDrag(args) {
+                            // nothing
+                        }
+                        onStopDrag(args) {
+                            // nothing
+                        }
                     }
                     tools_1.LineToolItem = LineToolItem;
                 })(tools = editor.tools || (editor.tools = {}));
@@ -4050,6 +4157,29 @@ var phasereditor2d;
                         render(args) {
                             for (const item of this._items) {
                                 item.render(args);
+                            }
+                        }
+                        containsPoint(args) {
+                            for (const item of this._items) {
+                                if (item.containsPoint(args)) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
+                        onStartDrag(args) {
+                            for (const item of this._items) {
+                                item.onStartDrag(args);
+                            }
+                        }
+                        onDrag(args) {
+                            for (const item of this._items) {
+                                item.onDrag(args);
+                            }
+                        }
+                        onStopDrag(args) {
+                            for (const item of this._items) {
+                                item.onStopDrag(args);
                             }
                         }
                     }
@@ -4092,7 +4222,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_12) {
+            (function (editor_13) {
                 var tools;
                 (function (tools) {
                     class SceneToolsManager {
@@ -4118,7 +4248,7 @@ var phasereditor2d;
                         }
                     }
                     tools.SceneToolsManager = SceneToolsManager;
-                })(tools = editor_12.tools || (editor_12.tools = {}));
+                })(tools = editor_13.tools || (editor_13.tools = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4131,7 +4261,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_13) {
+            (function (editor_14) {
                 var undo;
                 (function (undo) {
                     class AddObjectsOperation extends undo.SceneEditorOperation {
@@ -4168,7 +4298,7 @@ var phasereditor2d;
                         }
                     }
                     undo.AddObjectsOperation = AddObjectsOperation;
-                })(undo = editor_13.undo || (editor_13.undo = {}));
+                })(undo = editor_14.undo || (editor_14.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_11.ui || (scene_11.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4180,7 +4310,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_14) {
+            (function (editor_15) {
                 var undo;
                 (function (undo) {
                     class JoinObjectsInContainerOperation extends undo.SceneEditorOperation {
@@ -4221,7 +4351,7 @@ var phasereditor2d;
                         }
                     }
                     undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
-                })(undo = editor_14.undo || (editor_14.undo = {}));
+                })(undo = editor_15.undo || (editor_15.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_12.ui || (scene_12.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4233,7 +4363,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_15) {
+            (function (editor_16) {
                 var undo;
                 (function (undo) {
                     class RemoveObjectsOperation extends undo.AddObjectsOperation {
@@ -4248,7 +4378,7 @@ var phasereditor2d;
                         }
                     }
                     undo.RemoveObjectsOperation = RemoveObjectsOperation;
-                })(undo = editor_15.undo || (editor_15.undo = {}));
+                })(undo = editor_16.undo || (editor_16.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5537,6 +5667,54 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                class TranslateOperation extends ui.editor.undo.SceneEditorOperation {
+                    constructor(editor, toolArgs) {
+                        super(editor);
+                        this._objects = toolArgs.objects;
+                        this._values0 = new Map();
+                        this._values1 = new Map();
+                    }
+                    execute() {
+                        for (const obj of this._objects) {
+                            const sprite = obj;
+                            const value0 = sceneobjects.TranslateToolItem.getInitObjectPosition(sprite);
+                            const value1 = { x: sprite.x, y: sprite.y };
+                            const id = sprite.getEditorSupport().getId();
+                            this._values0.set(id, value0);
+                            this._values1.set(id, value1);
+                        }
+                    }
+                    setValues(values) {
+                        for (const obj of this._objects) {
+                            const sprite = obj;
+                            const id = sprite.getEditorSupport().getId();
+                            const { x, y } = values.get(id);
+                            sprite.x = x;
+                            sprite.y = y;
+                        }
+                        this._editor.setDirty(true);
+                        this._editor.dispatchSelectionChanged();
+                    }
+                    undo() {
+                        this.setValues(this._values0);
+                    }
+                    redo() {
+                        this.setValues(this._values1);
+                    }
+                }
+                sceneobjects.TranslateOperation = TranslateOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 class TranslateTool extends ui.editor.tools.SceneTool {
                     constructor() {
                         super(TranslateTool.ID);
@@ -5568,6 +5746,47 @@ var phasereditor2d;
                     constructor(axis) {
                         super();
                         this._axis = axis;
+                    }
+                    containsPoint(args) {
+                        const point = this.getPoint(args);
+                        const d = Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y);
+                        return d < 20;
+                    }
+                    onStartDrag(args) {
+                        if (this.containsPoint(args)) {
+                            this._initCursorPos = { x: args.x, y: args.y };
+                            for (const obj of args.objects) {
+                                const sprite = obj;
+                                sprite.setData("TranslateTool.initObjectPos", { x: sprite.x, y: sprite.y });
+                            }
+                        }
+                    }
+                    onDrag(args) {
+                        if (this._initCursorPos) {
+                            const dx = args.x - this._initCursorPos.x;
+                            const dy = args.y - this._initCursorPos.y;
+                            for (const obj of args.objects) {
+                                const sprite = obj;
+                                const scale = this.getScreenToObjectScale(args, obj);
+                                const dx2 = dx / scale.x;
+                                const dy2 = dy / scale.y;
+                                const { x, y } = sprite.getData("TranslateTool.initObjectPos");
+                                const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
+                                const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
+                                sprite.setPosition(x + dx2 * xAxis, y + dy2 * yAxis);
+                            }
+                            args.editor.dispatchSelectionChanged();
+                        }
+                    }
+                    static getInitObjectPosition(obj) {
+                        return obj.getData("TranslateTool.initObjectPos");
+                    }
+                    onStopDrag(args) {
+                        if (this._initCursorPos) {
+                            const editor = args.editor;
+                            editor.getUndoManager().add(new sceneobjects.TranslateOperation(editor, args));
+                        }
+                        this._initCursorPos = null;
                     }
                     getPoint(args) {
                         const { x, y } = this.getAvgScreenPointOfObjects(args, obj => 0, obj => 0);

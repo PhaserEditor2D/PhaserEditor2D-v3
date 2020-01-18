@@ -50,5 +50,21 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             ctx.restore();
         }
+
+        containsPoint(args: ISceneToolDragEventArgs): boolean {
+            return false;
+        }
+
+        onStartDrag(args: ISceneToolDragEventArgs): void {
+            // nothing
+        }
+
+        onDrag(args: ISceneToolDragEventArgs): void {
+            // nothing
+        }
+
+        onStopDrag(args: ISceneToolDragEventArgs): void {
+            // nothing
+        }
     }
 }

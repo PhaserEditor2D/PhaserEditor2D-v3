@@ -3,7 +3,7 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TransformSection extends ObjectSceneSection<sceneobjects.ITransformLike> {
+    export class TransformSection extends ObjectSceneSection<sceneobjects.ITransformLikeObject> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
             super(page, "SceneEditor.TransformSection", "Transform", false);

@@ -4,7 +4,15 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         abstract render(args: ISceneToolRenderArgs);
 
-        protected getScreenPointOfObject(args: ISceneToolRenderArgs, obj: any, fx: number, fy: number) {
+        abstract containsPoint(args: ISceneToolDragEventArgs): boolean;
+
+        abstract onStartDrag(args: ISceneToolDragEventArgs): void;
+
+        abstract onDrag(args: ISceneToolDragEventArgs): void;
+
+        abstract onStopDrag(args: ISceneToolDragEventArgs): void;
+
+        protected getScreenPointOfObject(args: ISceneToolContextArgs, obj: any, fx: number, fy: number) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
 
@@ -17,6 +25,24 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             return args.camera.getScreenPoint(worldPoint.x, worldPoint.y);
 
+        }
+
+        protected getScreenToObjectScale(args: ISceneToolContextArgs, obj: any) {
+
+            let x = args.camera.zoom;
+            let y = args.camera.zoom;
+
+            const sprite = obj as Phaser.GameObjects.Sprite;
+
+            let next = sprite.parentContainer;
+
+            while (next) {
+                x *= next.scaleX;
+                y *= next.scaleY;
+                next = next.parentContainer;
+            }
+
+            return { x, y };
         }
 
         protected drawArrowPath(ctx: CanvasRenderingContext2D) {
@@ -36,7 +62,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
         }
 
         protected getAvgScreenPointOfObjects(
-            args: ISceneToolRenderArgs,
+            args: ISceneToolContextArgs,
             fx: (ob: Phaser.GameObjects.Sprite) => number,
             fy: (ob: Phaser.GameObjects.Sprite) => number) {
 

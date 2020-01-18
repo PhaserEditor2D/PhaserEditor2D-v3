@@ -3,14 +3,12 @@ namespace phasereditor2d.scene.ui.editor {
     import controls = colibri.ui.controls;
 
     export class SelectionManager {
+
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
 
             this._editor = editor;
-
-            const canvas = this._editor.getOverlayLayer().getCanvas();
-            canvas.addEventListener("click", e => this.onMouseClick(e));
 
             this._editor.addEventListener(controls.EVENT_SELECTION_CHANGED, e => this.updateOutlineSelection());
         }
@@ -46,7 +44,7 @@ namespace phasereditor2d.scene.ui.editor {
             provider.repaint();
         }
 
-        private onMouseClick(e: MouseEvent): void {
+        onMouseClick(e: MouseEvent): void {
 
             const result = this.hitTestOfActivePointer();
 

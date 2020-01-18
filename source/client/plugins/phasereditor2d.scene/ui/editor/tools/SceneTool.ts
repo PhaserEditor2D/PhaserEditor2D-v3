@@ -2,11 +2,22 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
     import ISceneObject = ui.sceneobjects.ISceneObject;
 
-    export interface ISceneToolRenderArgs {
+    export interface ISceneToolContextArgs {
 
+        editor: SceneEditor;
         camera: Phaser.Cameras.Scene2D.Camera;
-        context: CanvasRenderingContext2D;
         objects: ISceneObject[];
+    }
+
+    export interface ISceneToolRenderArgs extends ISceneToolContextArgs {
+
+        context: CanvasRenderingContext2D;
+    }
+
+    export interface ISceneToolDragEventArgs extends ISceneToolContextArgs {
+
+        x: number;
+        y: number;
     }
 
     export abstract class SceneTool {
@@ -40,6 +51,42 @@ namespace phasereditor2d.scene.ui.editor.tools {
             for (const item of this._items) {
 
                 item.render(args);
+            }
+        }
+
+        containsPoint(args: ISceneToolDragEventArgs) {
+
+            for (const item of this._items) {
+
+                if (item.containsPoint(args)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        onStartDrag(args: ISceneToolDragEventArgs) {
+
+            for (const item of this._items) {
+
+                item.onStartDrag(args);
+            }
+        }
+
+        onDrag(args: ISceneToolDragEventArgs) {
+
+            for (const item of this._items) {
+
+                item.onDrag(args);
+            }
+        }
+
+        onStopDrag(args: ISceneToolDragEventArgs) {
+
+            for (const item of this._items) {
+
+                item.onStopDrag(args);
             }
         }
     }

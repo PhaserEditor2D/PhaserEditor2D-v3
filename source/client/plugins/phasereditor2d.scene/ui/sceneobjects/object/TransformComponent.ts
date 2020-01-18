@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import read = colibri.core.json.read;
     import json = core.json;
 
-    export interface ITransformLike extends ISceneObjectLike {
+    export interface ITransformLikeObject extends ISceneObjectLike {
 
         x: number;
         y: number;
@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         angle: number;
     }
 
-    export class TransformComponent extends Component<ITransformLike> {
+    export class TransformComponent extends Component<ITransformLikeObject> {
 
         static x = SimpleProperty("x", 0, "X");
         static y = SimpleProperty("y", 0, "Y");

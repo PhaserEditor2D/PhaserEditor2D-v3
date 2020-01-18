@@ -49,6 +49,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _selectionManager: SelectionManager;
         private _actionManager: ActionManager;
         private _toolsManager: tools.SceneToolsManager;
+        private _mouseManager: MouseManager;
         private _gameBooted: boolean;
         private _sceneRead: boolean;
         private _currentRefreshHash: string;
@@ -180,6 +181,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._selectionManager = new SelectionManager(this);
             this._actionManager = new ActionManager(this);
             this._toolsManager = new tools.SceneToolsManager(this);
+            this._mouseManager = new MouseManager(this);
         }
 
         private createGame() {
