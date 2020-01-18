@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TranslateTool extends editor.tools.SceneTool {
 
-        static ID = "phasereditor2d.scene.ui.sceneobjects.SceneTool";
+        static ID = "phasereditor2d.scene.ui.sceneobjects.TranslateTool";
 
         constructor() {
             super(TranslateTool.ID);

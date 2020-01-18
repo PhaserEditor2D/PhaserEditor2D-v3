@@ -7,6 +7,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     export const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+    export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor ||
@@ -141,6 +142,22 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "M"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_ROTATE_SCENE_OBJECT,
+                    name: "Rotate objects",
+                    tooltip: "Rotate the selected scene objects",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.AngleTool.ID)
+                },
+                keys: {
+                    key: "N"
                 }
             });
         }

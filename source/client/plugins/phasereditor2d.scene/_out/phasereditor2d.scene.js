@@ -57,7 +57,7 @@ var phasereditor2d;
                     command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
                 }));
                 // scene tools
-                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool()));
+                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.AngleTool()));
             }
             getSceneFinder() {
                 return this._sceneFinder;
@@ -3312,6 +3312,7 @@ var phasereditor2d;
                     commands.CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
                     commands.CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
                     commands.CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+                    commands.CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_7.SceneEditor ||
                             args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
@@ -3397,6 +3398,21 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "M"
+                                }
+                            });
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_ROTATE_SCENE_OBJECT,
+                                    name: "Rotate objects",
+                                    tooltip: "Rotate the selected scene objects",
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.AngleTool.ID)
+                                },
+                                keys: {
+                                    key: "N"
                                 }
                             });
                         }
@@ -4240,9 +4256,10 @@ var phasereditor2d;
                             this._editor = editor;
                             const exts = colibri.Platform.getExtensions(tools.SceneToolExtension.POINT_ID);
                             this._tools = exts.flatMap(ext => ext.getTools());
+                            console.log(this._tools);
                         }
                         findTool(toolId) {
-                            return this._tools.find(tool => tool.getId() === tool.getId());
+                            return this._tools.find(tool => tool.getId() === toolId);
                         }
                         getActiveTool() {
                             return this._activeTool;
@@ -5277,6 +5294,29 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                class AngleTool extends ui.editor.tools.SceneTool {
+                    constructor() {
+                        super(AngleTool.ID);
+                    }
+                    canEdit(obj) {
+                        return obj instanceof Phaser.GameObjects.GameObject
+                            && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
+                    }
+                }
+                AngleTool.ID = "phasereditor2d.scene.ui.sceneobjects.AngleTool";
+                sceneobjects.AngleTool = AngleTool;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 var controls = colibri.ui.controls;
                 class ObjectSceneSection extends ui.editor.properties.BaseSceneSection {
                     createGridElementWithPropertiesXY(parent) {
@@ -5738,7 +5778,7 @@ var phasereditor2d;
                             && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
                     }
                 }
-                TranslateTool.ID = "phasereditor2d.scene.ui.sceneobjects.SceneTool";
+                TranslateTool.ID = "phasereditor2d.scene.ui.sceneobjects.TranslateTool";
                 sceneobjects.TranslateTool = TranslateTool;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));

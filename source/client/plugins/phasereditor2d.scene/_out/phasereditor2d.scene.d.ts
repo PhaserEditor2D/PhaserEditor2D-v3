@@ -655,6 +655,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+    const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
@@ -1258,6 +1259,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
         createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
         private createImageObject;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class AngleTool extends editor.tools.SceneTool {
+        static ID: string;
+        constructor();
+        canEdit(obj: unknown): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

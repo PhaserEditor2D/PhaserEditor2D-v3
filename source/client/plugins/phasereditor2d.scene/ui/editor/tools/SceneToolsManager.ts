@@ -12,11 +12,13 @@ namespace phasereditor2d.scene.ui.editor.tools {
             const exts = colibri.Platform.getExtensions<SceneToolExtension>(SceneToolExtension.POINT_ID);
 
             this._tools = exts.flatMap(ext => ext.getTools());
+
+            console.log(this._tools);
         }
 
         findTool(toolId: string) {
 
-            return this._tools.find(tool => tool.getId() === tool.getId());
+            return this._tools.find(tool => tool.getId() === toolId);
         }
 
         getActiveTool() {
