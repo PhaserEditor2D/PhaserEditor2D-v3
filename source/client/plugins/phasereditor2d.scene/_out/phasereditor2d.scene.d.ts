@@ -474,7 +474,7 @@ declare namespace phasereditor2d.scene.ui.blocks {
         getContentProvider(): controls.viewers.ITreeContentProvider;
         getLabelProvider(): controls.viewers.ILabelProvider;
         getCellRendererProvider(): controls.viewers.ICellRendererProvider;
-        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): SceneEditorBlocksTreeRendererProvider;
+        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): SceneEditorBlocksTreeRendererProvider_Compact;
         getUndoManager(): editor.SceneEditor;
         getPropertySectionProvider(): controls.properties.PropertySectionProvider;
         getInput(): this;
@@ -484,6 +484,13 @@ declare namespace phasereditor2d.scene.ui.blocks {
     import controls = colibri.ui.controls;
     const PREFAB_SECTION = "Prefab";
     class SceneEditorBlocksTreeRendererProvider extends pack.ui.viewers.AssetPackTreeViewerRenderer {
+        constructor(viewer: controls.viewers.TreeViewer);
+        prepareContextForText(args: controls.viewers.RenderCellArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.blocks {
+    import controls = colibri.ui.controls;
+    class SceneEditorBlocksTreeRendererProvider_Compact extends pack.ui.viewers.AssetPackTreeViewerRenderer {
         constructor(viewer: controls.viewers.TreeViewer);
         prepareContextForText(args: controls.viewers.RenderCellArgs): void;
     }

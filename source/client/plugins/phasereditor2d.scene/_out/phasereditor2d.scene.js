@@ -2168,7 +2168,8 @@ var phasereditor2d;
                         return new blocks.SceneEditorBlocksCellRendererProvider();
                     }
                     getTreeViewerRenderer(viewer) {
-                        return new blocks.SceneEditorBlocksTreeRendererProvider(viewer);
+                        // return new SceneEditorBlocksTreeRendererProvider(viewer);
+                        return new blocks.SceneEditorBlocksTreeRendererProvider_Compact(viewer);
                     }
                     getUndoManager() {
                         return this._editor;
@@ -2217,6 +2218,36 @@ var phasereditor2d;
                     }
                 }
                 blocks.SceneEditorBlocksTreeRendererProvider = SceneEditorBlocksTreeRendererProvider;
+            })(blocks = ui.blocks || (ui.blocks = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var blocks;
+            (function (blocks) {
+                var controls = colibri.ui.controls;
+                var io = colibri.core.io;
+                class SceneEditorBlocksTreeRendererProvider_Compact extends phasereditor2d.pack.ui.viewers.AssetPackTreeViewerRenderer {
+                    constructor(viewer) {
+                        super(viewer, false);
+                        this.setSections([]);
+                    }
+                    prepareContextForText(args) {
+                        super.prepareContextForText(args);
+                        if (args.obj instanceof io.FilePath) {
+                            const type = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(args.obj);
+                            if (type === scene.core.CONTENT_TYPE_SCENE) {
+                                args.canvasContext.font = `italic ${controls.FONT_HEIGHT}px ${controls.FONT_FAMILY}`;
+                            }
+                        }
+                    }
+                }
+                blocks.SceneEditorBlocksTreeRendererProvider_Compact = SceneEditorBlocksTreeRendererProvider_Compact;
             })(blocks = ui.blocks || (ui.blocks = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
