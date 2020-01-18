@@ -57,7 +57,7 @@ var phasereditor2d;
                     command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
                 }));
                 // scene tools
-                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.AngleTool()));
+                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool()));
             }
             getSceneFinder() {
                 return this._sceneFinder;
@@ -3423,7 +3423,7 @@ var phasereditor2d;
                                 handler: {
                                     testFunc: isSceneScope,
                                     executeFunc: args => args.activeEditor
-                                        .getToolsManager().swapTool(ui.sceneobjects.AngleTool.ID)
+                                        .getToolsManager().swapTool(ui.sceneobjects.RotateTool.ID)
                                 },
                                 keys: {
                                     key: "N"
@@ -4079,6 +4079,14 @@ var phasereditor2d;
                                 next = next.parentContainer;
                             }
                             return { x, y };
+                        }
+                        globalAngle(sprite) {
+                            let a = sprite.angle;
+                            const parent = sprite.parentContainer;
+                            if (parent) {
+                                a += this.globalAngle(parent);
+                            }
+                            return a;
                         }
                         drawArrowPath(ctx) {
                             ctx.save();
@@ -5428,112 +5436,6 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class AngleTool extends ui.editor.tools.SceneTool {
-                    constructor() {
-                        super(AngleTool.ID);
-                        this.addItems(new ui.editor.tools.CenterPointToolItem(sceneobjects.AngleToolItem.COLOR), new sceneobjects.AngleToolItem());
-                    }
-                    canEdit(obj) {
-                        return obj instanceof Phaser.GameObjects.GameObject
-                            && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
-                    }
-                }
-                AngleTool.ID = "phasereditor2d.scene.ui.sceneobjects.AngleTool";
-                sceneobjects.AngleTool = AngleTool;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class AngleToolItem extends ui.editor.tools.SceneToolItem {
-                    constructor() {
-                        super();
-                    }
-                    getPoint(args) {
-                        return this.getAvgScreenPointOfObjects(args);
-                    }
-                    render(args) {
-                        const point = this.getPoint(args);
-                        const ctx = args.canvasContext;
-                        ctx.beginPath();
-                        ctx.arc(point.x, point.y, 100, 0, Math.PI * 2);
-                        ctx.lineWidth = 4;
-                        ctx.strokeStyle = "#000";
-                        ctx.stroke();
-                        ctx.lineWidth = 2;
-                        ctx.strokeStyle = AngleToolItem.COLOR;
-                        ctx.stroke();
-                    }
-                    containsPoint(args) {
-                        const point = this.getPoint(args);
-                        const d = Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y);
-                        return Math.abs(d - 100) < 10;
-                    }
-                    onStartDrag(args) {
-                        if (!this.containsPoint(args)) {
-                            return;
-                        }
-                        this._initCursorPos = { x: args.x, y: args.y };
-                        for (const obj of args.objects) {
-                            obj.setData("AngleToolItem.initAngle", obj.angle);
-                        }
-                    }
-                    onDrag(args) {
-                        if (!this._initCursorPos) {
-                            return;
-                        }
-                        const dx = this._initCursorPos.x - args.x;
-                        const dy = this._initCursorPos.y - args.y;
-                        if (Math.abs(dx) < 1 || Math.abs(dy) < 1) {
-                            return;
-                        }
-                        const point = this.getPoint(args);
-                        for (const obj of args.objects) {
-                            const sprite = obj;
-                            const deltaRadians = angleBetweenTwoPointsWithFixedPoint(args.x, args.y, this._initCursorPos.x, this._initCursorPos.y, point.x, point.y);
-                            const initAngle = sprite.getData("AngleToolItem.initAngle");
-                            const deltaAngle = Phaser.Math.RadToDeg(deltaRadians);
-                            sprite.angle = initAngle + deltaAngle;
-                        }
-                        args.editor.dispatchSelectionChanged();
-                    }
-                    static getInitialAngle(obj) {
-                        return obj.getData("AngleToolItem.initAngle");
-                    }
-                    onStopDrag(args) {
-                        if (!this._initCursorPos) {
-                            return;
-                        }
-                        args.editor.getUndoManager().add(new sceneobjects.RotateOperation(args));
-                        this._initCursorPos = null;
-                    }
-                }
-                AngleToolItem.COLOR = "#aaf";
-                sceneobjects.AngleToolItem = AngleToolItem;
-                function angleBetweenTwoPointsWithFixedPoint(point1X, point1Y, point2X, point2Y, fixedX, fixedY) {
-                    const angle1 = Math.atan2(point1Y - fixedY, point1X - fixedX);
-                    const angle2 = Math.atan2(point2Y - fixedY, point2X - fixedX);
-                    return angle1 - angle2;
-                }
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
                 var controls = colibri.ui.controls;
                 class ObjectSceneSection extends ui.editor.properties.BaseSceneSection {
                     createGridElementWithPropertiesXY(parent) {
@@ -5824,6 +5726,66 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class RotateLineToolItem extends ui.editor.tools.SceneToolItem {
+                    constructor(start) {
+                        super();
+                        this._start = start;
+                    }
+                    render(args) {
+                        let globalStartAngle = 0;
+                        let globalEndAngle = 0;
+                        for (const sprite of args.objects) {
+                            const endAngle = this.globalAngle(sprite);
+                            const startAngle = 0;
+                            globalStartAngle += startAngle;
+                            globalEndAngle += endAngle;
+                        }
+                        const len = args.objects.length;
+                        globalStartAngle /= len;
+                        globalEndAngle /= len;
+                        const angle = this._start ? globalStartAngle : globalEndAngle;
+                        const point = this.getAvgScreenPointOfObjects(args);
+                        const ctx = args.canvasContext;
+                        ctx.save();
+                        ctx.translate(point.x, point.y);
+                        ctx.rotate(Phaser.Math.DegToRad(angle));
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(100, 0);
+                        ctx.strokeStyle = "#000";
+                        ctx.lineWidth = 4;
+                        ctx.stroke();
+                        ctx.strokeStyle = sceneobjects.RotateToolItem.COLOR;
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                    containsPoint(args) {
+                        return false;
+                    }
+                    onStartDrag(args) {
+                        // nothing
+                    }
+                    onDrag(args) {
+                        // nothing
+                    }
+                    onStopDrag(args) {
+                        // nothing
+                    }
+                }
+                sceneobjects.RotateLineToolItem = RotateLineToolItem;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../../editor/tools/SceneToolOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -5835,7 +5797,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class RotateOperation extends ui.editor.tools.SceneToolOperation {
                     getInitialValue(obj) {
-                        return sceneobjects.AngleToolItem.getInitialAngle(obj);
+                        return sceneobjects.RotateToolItem.getInitialAngle(obj);
                     }
                     getFinalValue(obj) {
                         return obj.angle;
@@ -5845,6 +5807,112 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.RotateOperation = RotateOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class RotateTool extends ui.editor.tools.SceneTool {
+                    constructor() {
+                        super(RotateTool.ID);
+                        this.addItems(new sceneobjects.RotateLineToolItem(true), new sceneobjects.RotateLineToolItem(false), new ui.editor.tools.CenterPointToolItem(sceneobjects.RotateToolItem.COLOR), new sceneobjects.RotateToolItem());
+                    }
+                    canEdit(obj) {
+                        return obj instanceof Phaser.GameObjects.GameObject
+                            && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
+                    }
+                }
+                RotateTool.ID = "phasereditor2d.scene.ui.sceneobjects.RotateTool";
+                sceneobjects.RotateTool = RotateTool;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class RotateToolItem extends ui.editor.tools.SceneToolItem {
+                    constructor() {
+                        super();
+                    }
+                    getPoint(args) {
+                        return this.getAvgScreenPointOfObjects(args);
+                    }
+                    render(args) {
+                        const point = this.getPoint(args);
+                        const ctx = args.canvasContext;
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, 100, 0, Math.PI * 2);
+                        ctx.lineWidth = 4;
+                        ctx.strokeStyle = "#000";
+                        ctx.stroke();
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = RotateToolItem.COLOR;
+                        ctx.stroke();
+                    }
+                    containsPoint(args) {
+                        const point = this.getPoint(args);
+                        const d = Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y);
+                        return Math.abs(d - 100) < 10;
+                    }
+                    onStartDrag(args) {
+                        if (!this.containsPoint(args)) {
+                            return;
+                        }
+                        this._initCursorPos = { x: args.x, y: args.y };
+                        for (const obj of args.objects) {
+                            obj.setData("AngleToolItem.initAngle", obj.angle);
+                        }
+                    }
+                    onDrag(args) {
+                        if (!this._initCursorPos) {
+                            return;
+                        }
+                        const dx = this._initCursorPos.x - args.x;
+                        const dy = this._initCursorPos.y - args.y;
+                        if (Math.abs(dx) < 1 || Math.abs(dy) < 1) {
+                            return;
+                        }
+                        const point = this.getPoint(args);
+                        for (const obj of args.objects) {
+                            const sprite = obj;
+                            const deltaRadians = angleBetweenTwoPointsWithFixedPoint(args.x, args.y, this._initCursorPos.x, this._initCursorPos.y, point.x, point.y);
+                            const initAngle = sprite.getData("AngleToolItem.initAngle");
+                            const deltaAngle = Phaser.Math.RadToDeg(deltaRadians);
+                            sprite.angle = initAngle + deltaAngle;
+                        }
+                        args.editor.dispatchSelectionChanged();
+                    }
+                    static getInitialAngle(obj) {
+                        return obj.getData("AngleToolItem.initAngle");
+                    }
+                    onStopDrag(args) {
+                        if (!this._initCursorPos) {
+                            return;
+                        }
+                        args.editor.getUndoManager().add(new sceneobjects.RotateOperation(args));
+                        this._initCursorPos = null;
+                    }
+                }
+                RotateToolItem.COLOR = "#aaf";
+                sceneobjects.RotateToolItem = RotateToolItem;
+                function angleBetweenTwoPointsWithFixedPoint(point1X, point1Y, point2X, point2Y, fixedX, fixedY) {
+                    const angle1 = Math.atan2(point1Y - fixedY, point1X - fixedX);
+                    const angle2 = Math.atan2(point2Y - fixedY, point2X - fixedX);
+                    return angle1 - angle2;
+                }
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

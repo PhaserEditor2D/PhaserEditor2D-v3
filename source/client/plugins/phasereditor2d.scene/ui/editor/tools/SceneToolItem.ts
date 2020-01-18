@@ -46,6 +46,20 @@ namespace phasereditor2d.scene.ui.editor.tools {
             return { x, y };
         }
 
+        protected globalAngle(sprite: Phaser.GameObjects.Sprite) {
+
+            let a = sprite.angle;
+
+            const parent = sprite.parentContainer;
+
+            if (parent) {
+
+                a += this.globalAngle(parent as unknown as Phaser.GameObjects.Sprite);
+            }
+
+            return a;
+        }
+
         protected drawArrowPath(ctx: CanvasRenderingContext2D) {
 
             ctx.save();

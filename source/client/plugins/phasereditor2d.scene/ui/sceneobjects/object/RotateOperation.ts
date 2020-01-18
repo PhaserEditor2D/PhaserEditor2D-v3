@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getInitialValue(obj: any): number {
 
-            return AngleToolItem.getInitialAngle(obj);
+            return RotateToolItem.getInitialAngle(obj);
         }
 
         getFinalValue(obj: any): number {

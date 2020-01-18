@@ -154,7 +154,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 handler: {
                     testFunc: isSceneScope,
                     executeFunc: args => (args.activeEditor as SceneEditor)
-                        .getToolsManager().swapTool(ui.sceneobjects.AngleTool.ID)
+                        .getToolsManager().swapTool(ui.sceneobjects.RotateTool.ID)
                 },
                 keys: {
                     key: "N"

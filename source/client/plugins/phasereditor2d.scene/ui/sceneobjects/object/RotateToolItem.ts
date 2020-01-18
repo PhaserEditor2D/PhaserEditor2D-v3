@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class AngleToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+    export class RotateToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
         static COLOR = "#aaf";
 
@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.stroke();
 
             ctx.lineWidth = 2;
-            ctx.strokeStyle = AngleToolItem.COLOR;
+            ctx.strokeStyle = RotateToolItem.COLOR;
             ctx.stroke();
         }
 

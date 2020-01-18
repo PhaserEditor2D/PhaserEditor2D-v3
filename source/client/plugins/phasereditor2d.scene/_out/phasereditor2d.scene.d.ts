@@ -813,6 +813,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
             x: number;
             y: number;
         };
+        protected globalAngle(sprite: Phaser.GameObjects.Sprite): number;
         protected drawArrowPath(ctx: CanvasRenderingContext2D): void;
         protected getAvgScreenPointOfObjects(args: ISceneToolContextArgs, fx?: (ob: Phaser.GameObjects.Sprite) => number, fy?: (ob: Phaser.GameObjects.Sprite) => number): Phaser.Math.Vector2;
     }
@@ -1302,30 +1303,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class AngleTool extends editor.tools.SceneTool {
-        static ID: string;
-        constructor();
-        canEdit(obj: unknown): boolean;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class AngleToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
-        static COLOR: string;
-        private _initCursorPos;
-        constructor();
-        getPoint(args: editor.tools.ISceneToolContextArgs): {
-            x: number;
-            y: number;
-        };
-        render(args: editor.tools.ISceneToolRenderArgs): void;
-        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
-        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
-        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
-        static getInitialAngle(obj: any): number;
-        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
         protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
@@ -1387,10 +1364,45 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class RotateLineToolItem extends editor.tools.SceneToolItem {
+        private _start;
+        constructor(start: boolean);
+        render(args: editor.tools.ISceneToolRenderArgs): void;
+        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
+        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class RotateOperation extends editor.tools.SceneToolOperation<number> {
         getInitialValue(obj: any): number;
         getFinalValue(obj: any): number;
         setValue(obj: any, value: number): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class RotateTool extends editor.tools.SceneTool {
+        static ID: string;
+        constructor();
+        canEdit(obj: unknown): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class RotateToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        static COLOR: string;
+        private _initCursorPos;
+        constructor();
+        getPoint(args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        render(args: editor.tools.ISceneToolRenderArgs): void;
+        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
+        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        static getInitialAngle(obj: any): number;
+        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

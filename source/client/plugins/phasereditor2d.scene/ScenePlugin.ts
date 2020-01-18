@@ -123,7 +123,7 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(new ui.editor.tools.SceneToolExtension(
                 new ui.sceneobjects.TranslateTool(),
-                new ui.sceneobjects.AngleTool()
+                new ui.sceneobjects.RotateTool()
             ));
         }
 
