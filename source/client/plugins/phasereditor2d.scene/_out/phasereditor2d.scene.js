@@ -5951,6 +5951,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../../editor/tools/SceneToolOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5959,39 +5960,18 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TranslateOperation extends ui.editor.undo.SceneEditorOperation {
-                    constructor(editor, toolArgs) {
-                        super(editor);
-                        this._objects = toolArgs.objects;
-                        this._values0 = new Map();
-                        this._values1 = new Map();
+                class TranslateOperation extends ui.editor.tools.SceneToolOperation {
+                    getInitialValue(obj) {
+                        return sceneobjects.TranslateToolItem.getInitObjectPosition(obj);
                     }
-                    execute() {
-                        for (const obj of this._objects) {
-                            const sprite = obj;
-                            const value0 = sceneobjects.TranslateToolItem.getInitObjectPosition(sprite);
-                            const value1 = { x: sprite.x, y: sprite.y };
-                            const id = sprite.getEditorSupport().getId();
-                            this._values0.set(id, value0);
-                            this._values1.set(id, value1);
-                        }
+                    getFinalValue(obj) {
+                        const sprite = obj;
+                        return { x: sprite.x, y: sprite.y };
                     }
-                    setValues(values) {
-                        for (const obj of this._objects) {
-                            const sprite = obj;
-                            const id = sprite.getEditorSupport().getId();
-                            const { x, y } = values.get(id);
-                            sprite.x = x;
-                            sprite.y = y;
-                        }
-                        this._editor.setDirty(true);
-                        this._editor.dispatchSelectionChanged();
-                    }
-                    undo() {
-                        this.setValues(this._values0);
-                    }
-                    redo() {
-                        this.setValues(this._values1);
+                    setValue(obj, value) {
+                        const sprite = obj;
+                        sprite.x = value.x;
+                        sprite.y = value.y;
                     }
                 }
                 sceneobjects.TranslateOperation = TranslateOperation;
@@ -6049,7 +6029,7 @@ var phasereditor2d;
                             this._initCursorPos = { x: args.x, y: args.y };
                             for (const obj of args.objects) {
                                 const sprite = obj;
-                                sprite.setData("TranslateTool.initObjectPos", { x: sprite.x, y: sprite.y });
+                                sprite.setData("TranslateTool.initPosition", { x: sprite.x, y: sprite.y });
                             }
                         }
                     }
@@ -6064,7 +6044,7 @@ var phasereditor2d;
                             const scale = this.getScreenToObjectScale(args, obj);
                             const dx2 = dx / scale.x;
                             const dy2 = dy / scale.y;
-                            const { x, y } = sprite.getData("TranslateTool.initObjectPos");
+                            const { x, y } = sprite.getData("TranslateTool.initPosition");
                             const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
                             const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
                             const { x: x2, y: y2 } = args.editor.snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
@@ -6073,12 +6053,12 @@ var phasereditor2d;
                         args.editor.dispatchSelectionChanged();
                     }
                     static getInitObjectPosition(obj) {
-                        return obj.getData("TranslateTool.initObjectPos");
+                        return obj.getData("TranslateTool.initPosition");
                     }
                     onStopDrag(args) {
                         if (this._initCursorPos) {
                             const editor = args.editor;
-                            editor.getUndoManager().add(new sceneobjects.TranslateOperation(editor, args));
+                            editor.getUndoManager().add(new sceneobjects.TranslateOperation(args));
                         }
                         this._initCursorPos = null;
                     }

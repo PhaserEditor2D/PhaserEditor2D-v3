@@ -1432,15 +1432,22 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class TranslateOperation extends editor.undo.SceneEditorOperation {
-        private _objects;
-        private _values0;
-        private _values1;
-        constructor(editor: editor.SceneEditor, toolArgs: editor.tools.ISceneToolContextArgs);
-        execute(): void;
-        private setValues;
-        undo(): void;
-        redo(): void;
+    class TranslateOperation extends editor.tools.SceneToolOperation<{
+        x: number;
+        y: number;
+    }> {
+        getInitialValue(obj: any): {
+            x: number;
+            y: number;
+        };
+        getFinalValue(obj: any): {
+            x: number;
+            y: number;
+        };
+        setValue(obj: any, value: {
+            x: number;
+            y: number;
+        }): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

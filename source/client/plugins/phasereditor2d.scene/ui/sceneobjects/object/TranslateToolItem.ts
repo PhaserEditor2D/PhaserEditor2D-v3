@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-                    sprite.setData("TranslateTool.initObjectPos", { x: sprite.x, y: sprite.y });
+                    sprite.setData("TranslateTool.initPosition", { x: sprite.x, y: sprite.y });
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const dx2 = dx / scale.x;
                 const dy2 = dy / scale.y;
 
-                const { x, y } = sprite.getData("TranslateTool.initObjectPos");
+                const { x, y } = sprite.getData("TranslateTool.initPosition");
 
                 const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
                 const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
@@ -67,7 +67,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         static getInitObjectPosition(obj: any): { x: number, y: number } {
-            return (obj as Phaser.GameObjects.Sprite).getData("TranslateTool.initObjectPos");
+            return (obj as Phaser.GameObjects.Sprite).getData("TranslateTool.initPosition");
         }
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
@@ -76,7 +76,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const editor = args.editor;
 
-                editor.getUndoManager().add(new TranslateOperation(editor, args));
+                editor.getUndoManager().add(new TranslateOperation(args));
             }
 
             this._initCursorPos = null;
