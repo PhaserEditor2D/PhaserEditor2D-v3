@@ -16,7 +16,7 @@ namespace colibri.ui.controls {
 
             const frameCount = this._images.length;
 
-            let size = Math.floor(Math.sqrt(w * h / frameCount) * 0.8) + 1;
+            let size = Math.floor(Math.sqrt(w * h / frameCount) * 0.7) + 1;
 
             if (frameCount === 1) {
 
@@ -39,7 +39,7 @@ namespace colibri.ui.controls {
 
                 if (x2 + size >= w) {
                     x2 = x + marginX;
-                    y2 += size + 5;
+                    y2 += size + 1;
                 }
             }
         }

@@ -2387,7 +2387,7 @@ var colibri;
                 }
                 paint(context, x, y, w, h, center) {
                     const frameCount = this._images.length;
-                    let size = Math.floor(Math.sqrt(w * h / frameCount) * 0.8) + 1;
+                    let size = Math.floor(Math.sqrt(w * h / frameCount) * 0.7) + 1;
                     if (frameCount === 1) {
                         size = Math.min(w, h);
                     }
@@ -2402,7 +2402,7 @@ var colibri;
                         x2 += size;
                         if (x2 + size >= w) {
                             x2 = x + marginX;
-                            y2 += size + 5;
+                            y2 += size + 1;
                         }
                     }
                 }
