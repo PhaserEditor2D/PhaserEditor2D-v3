@@ -37,6 +37,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             let next = sprite.parentContainer;
 
             while (next) {
+
                 x *= next.scaleX;
                 y *= next.scaleY;
                 next = next.parentContainer;

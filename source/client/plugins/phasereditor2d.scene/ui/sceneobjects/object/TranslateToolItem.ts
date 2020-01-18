@@ -56,10 +56,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
                     const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
 
-                    sprite.setPosition(
-                        x + dx2 * xAxis,
-                        y + dy2 * yAxis
-                    );
+                    const { x: x2, y: y2 } = args.editor.snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
+
+                    sprite.setPosition(x2, y2);
                 }
 
                 args.editor.dispatchSelectionChanged();

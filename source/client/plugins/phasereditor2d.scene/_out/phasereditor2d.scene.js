@@ -3202,6 +3202,16 @@ var phasereditor2d;
                         this._game.loop.tick();
                         this._overlayLayer.render();
                     }
+                    snapPoint(x, y) {
+                        const settings = this._scene.getSettings();
+                        if (settings.snapEnabled) {
+                            return {
+                                x: Math.round(x / settings.snapWidth) * settings.snapWidth,
+                                y: Math.round(y / settings.snapHeight) * settings.snapHeight
+                            };
+                        }
+                        return { x, y };
+                    }
                 }
                 editor.SceneEditor = SceneEditor;
             })(editor = ui.editor || (ui.editor = {}));
@@ -5773,7 +5783,8 @@ var phasereditor2d;
                                 const { x, y } = sprite.getData("TranslateTool.initObjectPos");
                                 const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
                                 const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
-                                sprite.setPosition(x + dx2 * xAxis, y + dy2 * yAxis);
+                                const { x: x2, y: y2 } = args.editor.snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
+                                sprite.setPosition(x2, y2);
                             }
                             args.editor.dispatchSelectionChanged();
                         }
