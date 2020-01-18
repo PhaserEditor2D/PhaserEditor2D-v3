@@ -4450,9 +4450,10 @@ var colibri;
                             }
                         }
                         const b = viewer.getBounds();
+                        const sectionMargin = 20;
                         if (this._sections.length > 0) {
                             const ctx = viewer.getContext();
-                            let y2 = y + 20;
+                            let y2 = y + sectionMargin;
                             const x2 = x + viewers.TREE_RENDERER_GRID_PADDING;
                             let first = true;
                             for (const section of this._sections) {
@@ -4467,7 +4468,7 @@ var colibri;
                                     first = false;
                                 }
                                 else {
-                                    y2 += 20;
+                                    y2 += sectionMargin;
                                 }
                                 const label = labelProvider.getLabel(section);
                                 ctx.save();
@@ -4478,9 +4479,9 @@ var colibri;
                                 const m = ctx.measureText(label);
                                 ctx.fillText(label, b.width / 2 - m.width / 2, y2);
                                 ctx.restore();
-                                y2 += 20;
+                                y2 += sectionMargin;
                                 const result = this.paintItems2(objects2, treeIconList, paintItems, null, x2, y2, viewers.TREE_RENDERER_GRID_PADDING, 0);
-                                y2 = result.y + 20;
+                                y2 = result.y + sectionMargin;
                                 if (result.x > viewers.TREE_RENDERER_GRID_PADDING) {
                                     y2 += cellSize;
                                 }
@@ -4590,6 +4591,7 @@ var colibri;
                             else {
                                 ctx.fillStyle = controls.Controls.getTheme().viewerForeground;
                             }
+                            this.prepareContextForText(args);
                             const m = ctx.measureText(line);
                             const x2 = Math.max(x, x + args.w / 2 - m.width / 2);
                             ctx.fillText(line, x2, args.y + args.h - 5);

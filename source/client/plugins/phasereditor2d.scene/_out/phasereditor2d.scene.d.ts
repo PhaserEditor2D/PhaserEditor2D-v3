@@ -485,6 +485,7 @@ declare namespace phasereditor2d.scene.ui.blocks {
     const PREFAB_SECTION = "Prefab";
     class SceneEditorBlocksTreeRendererProvider extends pack.ui.viewers.AssetPackTreeViewerRenderer {
         constructor(viewer: controls.viewers.TreeViewer);
+        prepareContextForText(args: controls.viewers.RenderCellArgs): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.dialogs {

@@ -62,11 +62,13 @@ namespace colibri.ui.controls.viewers {
 
             const b = viewer.getBounds();
 
+            const sectionMargin = 20;
+
             if (this._sections.length > 0) {
 
                 const ctx = viewer.getContext();
 
-                let y2 = y + 20;
+                let y2 = y + sectionMargin;
                 const x2 = x + TREE_RENDERER_GRID_PADDING;
 
                 let first = true;
@@ -85,7 +87,7 @@ namespace colibri.ui.controls.viewers {
                     if (first) {
                         first = false;
                     } else {
-                        y2 += 20;
+                        y2 += sectionMargin;
                     }
 
                     const label = labelProvider.getLabel(section);
@@ -105,12 +107,12 @@ namespace colibri.ui.controls.viewers {
 
                     ctx.restore();
 
-                    y2 += 20;
+                    y2 += sectionMargin;
 
                     const result = this.paintItems2(
                         objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0);
 
-                    y2 = result.y + 20;
+                    y2 = result.y + sectionMargin;
 
                     if (result.x > TREE_RENDERER_GRID_PADDING) {
                         y2 += cellSize;
@@ -274,6 +276,8 @@ namespace colibri.ui.controls.viewers {
                 } else {
                     ctx.fillStyle = Controls.getTheme().viewerForeground;
                 }
+
+                this.prepareContextForText(args);
 
                 const m = ctx.measureText(line);
                 const x2 = Math.max(x, x + args.w / 2 - m.width / 2);

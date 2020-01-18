@@ -2193,6 +2193,8 @@ var phasereditor2d;
         (function (ui) {
             var blocks;
             (function (blocks) {
+                var controls = colibri.ui.controls;
+                var io = colibri.core.io;
                 blocks.PREFAB_SECTION = "Prefab";
                 class SceneEditorBlocksTreeRendererProvider extends phasereditor2d.pack.ui.viewers.AssetPackTreeViewerRenderer {
                     constructor(viewer) {
@@ -2203,6 +2205,15 @@ var phasereditor2d;
                             phasereditor2d.pack.core.ATLAS_TYPE,
                             phasereditor2d.pack.core.SPRITESHEET_TYPE
                         ]);
+                    }
+                    prepareContextForText(args) {
+                        super.prepareContextForText(args);
+                        if (args.obj instanceof io.FilePath) {
+                            const type = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(args.obj);
+                            if (type === scene.core.CONTENT_TYPE_SCENE) {
+                                args.canvasContext.font = `italic ${controls.FONT_HEIGHT}px ${controls.FONT_FAMILY}`;
+                            }
+                        }
                     }
                 }
                 blocks.SceneEditorBlocksTreeRendererProvider = SceneEditorBlocksTreeRendererProvider;
