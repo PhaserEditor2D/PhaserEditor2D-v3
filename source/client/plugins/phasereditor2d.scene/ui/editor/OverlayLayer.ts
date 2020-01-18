@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             tool.render({
                 editor: this._editor,
-                context: ctx,
+                canvasContext: ctx,
                 objects: sel,
                 camera: this._editor.getScene().getCamera()
             });

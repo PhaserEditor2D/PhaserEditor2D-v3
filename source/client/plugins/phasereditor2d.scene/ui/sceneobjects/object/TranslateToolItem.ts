@@ -38,31 +38,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
-            if (this._initCursorPos) {
-
-                const dx = args.x - this._initCursorPos.x;
-                const dy = args.y - this._initCursorPos.y;
-
-                for (const obj of args.objects) {
-
-                    const sprite = obj as unknown as Phaser.GameObjects.Sprite;
-
-                    const scale = this.getScreenToObjectScale(args, obj);
-                    const dx2 = dx / scale.x;
-                    const dy2 = dy / scale.y;
-
-                    const { x, y } = sprite.getData("TranslateTool.initObjectPos");
-
-                    const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
-                    const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
-
-                    const { x: x2, y: y2 } = args.editor.snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
-
-                    sprite.setPosition(x2, y2);
-                }
-
-                args.editor.dispatchSelectionChanged();
+            if (!this._initCursorPos) {
+                return;
             }
+
+            const dx = args.x - this._initCursorPos.x;
+            const dy = args.y - this._initCursorPos.y;
+
+            for (const obj of args.objects) {
+
+                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+
+                const scale = this.getScreenToObjectScale(args, obj);
+                const dx2 = dx / scale.x;
+                const dy2 = dy / scale.y;
+
+                const { x, y } = sprite.getData("TranslateTool.initObjectPos");
+
+                const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
+                const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
+
+                const { x: x2, y: y2 } = args.editor.snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
+
+                sprite.setPosition(x2, y2);
+            }
+
+            args.editor.dispatchSelectionChanged();
         }
 
         static getInitObjectPosition(obj: any): { x: number, y: number } {
@@ -83,7 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getPoint(args: editor.tools.ISceneToolContextArgs) {
 
-            const { x, y } = this.getAvgScreenPointOfObjects(args, obj => 0, obj => 0);
+            const { x, y } = this.getAvgScreenPointOfObjects(args);
 
             return {
                 x: this._axis === "x" ? x + 100 : x,
@@ -95,7 +96,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { x, y } = this.getPoint(args);
 
-            const ctx = args.context;
+            const ctx = args.canvasContext;
 
             ctx.strokeStyle = "#000";
 

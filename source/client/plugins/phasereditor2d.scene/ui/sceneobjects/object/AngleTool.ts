@@ -6,6 +6,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor() {
             super(AngleTool.ID);
+
+            this.addItems(
+                new editor.tools.CenterPointToolItem(AngleToolItem.COLOR),
+                new AngleToolItem()
+            );
         }
 
         canEdit(obj: unknown): boolean {

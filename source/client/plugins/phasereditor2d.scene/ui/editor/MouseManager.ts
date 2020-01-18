@@ -31,6 +31,10 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onMouseDown(e: MouseEvent) {
 
+            if (e.button !== 0) {
+                return;
+            }
+
             const toolsManager = this._editor.getToolsManager();
 
             const tool = toolsManager.getActiveTool();
@@ -54,7 +58,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const tool = toolsManager.getActiveTool();
 
-            if (tool) {
+            if (tool && this._toolInAction) {
 
                 const args = this.createArgs(e);
 

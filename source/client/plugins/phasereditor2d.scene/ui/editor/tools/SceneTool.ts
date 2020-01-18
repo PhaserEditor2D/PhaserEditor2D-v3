@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
     export interface ISceneToolRenderArgs extends ISceneToolContextArgs {
 
-        context: CanvasRenderingContext2D;
+        canvasContext: CanvasRenderingContext2D;
     }
 
     export interface ISceneToolDragEventArgs extends ISceneToolContextArgs {

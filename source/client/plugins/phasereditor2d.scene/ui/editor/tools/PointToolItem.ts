@@ -2,53 +2,32 @@
 
 namespace phasereditor2d.scene.ui.editor.tools {
 
-    export class LineToolItem extends SceneToolItem {
+    export abstract class PointToolItem extends SceneToolItem implements ISceneToolItemXY {
 
-        private _tools: ISceneToolItemXY[];
         private _color: string;
 
-        constructor(color: string, ...tools: ISceneToolItemXY[]) {
+        constructor(color: string) {
             super();
 
             this._color = color;
-            this._tools = tools;
         }
+
+        abstract getPoint(args: ISceneToolContextArgs): { x: number; y: number; };
 
         render(args: ISceneToolRenderArgs) {
 
+            const point = this.getPoint(args);
+
             const ctx = args.canvasContext;
 
-            ctx.save();
+            ctx.fillStyle = this._color;
 
             ctx.beginPath();
-
-            let start = true;
-
-            for (const tool of this._tools) {
-
-                const { x, y } = tool.getPoint(args);
-
-                if (start) {
-
-                    ctx.moveTo(x, y);
-
-                } else {
-
-                    ctx.lineTo(x, y);
-                }
-
-                start = false;
-            }
+            ctx.arc(point.x, point.y, 6, 0, Math.PI * 2);
+            ctx.fill();
 
             ctx.strokeStyle = "#000";
-            ctx.lineWidth = 4;
             ctx.stroke();
-
-            ctx.strokeStyle = this._color;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            ctx.restore();
         }
 
         containsPoint(args: ISceneToolDragEventArgs): boolean {

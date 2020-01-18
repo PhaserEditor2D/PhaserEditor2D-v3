@@ -64,8 +64,8 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         protected getAvgScreenPointOfObjects(
             args: ISceneToolContextArgs,
-            fx: (ob: Phaser.GameObjects.Sprite) => number,
-            fy: (ob: Phaser.GameObjects.Sprite) => number) {
+            fx: (ob: Phaser.GameObjects.Sprite) => number = obj => 0,
+            fy: (ob: Phaser.GameObjects.Sprite) => number = obj => 0) {
 
             const worldPoint = new Phaser.Math.Vector2(0, 0);
 
