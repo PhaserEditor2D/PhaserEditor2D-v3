@@ -4603,7 +4603,8 @@ var colibri;
                             const ctx = args.canvasContext;
                             ctx.save();
                             ctx.fillStyle = controls.Controls.getTheme().viewerSelectionBackground + "88";
-                            ctx.fillRect(args.x, args.y, args.w, args.h);
+                            // ctx.fillRect(args.x, args.y, args.w, args.h);
+                            controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
                             ctx.restore();
                         }
                     }
@@ -4612,7 +4613,8 @@ var colibri;
                             const ctx = args.canvasContext;
                             ctx.save();
                             ctx.fillStyle = controls.Controls.getTheme().viewerSelectionBackground + "44";
-                            ctx.fillRect(args.x, args.y, args.w, args.h);
+                            // ctx.fillRect(args.x, args.y, args.w, args.h);
+                            controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
                             ctx.restore();
                         }
                     }

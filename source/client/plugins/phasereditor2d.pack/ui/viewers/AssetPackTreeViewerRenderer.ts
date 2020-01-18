@@ -55,8 +55,11 @@ namespace phasereditor2d.pack.ui.viewers {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
 
                 if (expanded) {
+
                     controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h, 5, 0, 0, 5);
+
                 } else {
+
                     controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h, 5, 5, 5, 5);
                 }
 

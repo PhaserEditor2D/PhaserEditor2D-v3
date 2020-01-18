@@ -215,6 +215,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         private renderGridCell(args: RenderCellArgs, renderer: ICellRenderer, depth: number, isLastChild: boolean) {
+
             const cellSize = args.viewer.getCellSize();
             const b = args.viewer.getBounds();
             const lineHeight = 20;
@@ -225,6 +226,7 @@ namespace colibri.ui.controls.viewers {
             const label = args.viewer.getLabelProvider().getLabel(args.obj);
 
             let line = "";
+
             for (const c of label) {
                 const test = line + c;
                 const m = ctx.measureText(test);
@@ -287,21 +289,33 @@ namespace colibri.ui.controls.viewers {
         }
 
         protected renderCellBack(args: RenderCellArgs, selected: boolean, isLastChild: boolean) {
+
             if (selected) {
+
                 const ctx = args.canvasContext;
+
                 ctx.save();
+
                 ctx.fillStyle = Controls.getTheme().viewerSelectionBackground + "88";
-                ctx.fillRect(args.x, args.y, args.w, args.h);
+                // ctx.fillRect(args.x, args.y, args.w, args.h);
+                controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
+
                 ctx.restore();
             }
         }
 
         protected renderCellFront(args: RenderCellArgs, selected: boolean, isLastChild: boolean) {
+
             if (selected) {
+
                 const ctx = args.canvasContext;
+
                 ctx.save();
+
                 ctx.fillStyle = Controls.getTheme().viewerSelectionBackground + "44";
-                ctx.fillRect(args.x, args.y, args.w, args.h);
+                // ctx.fillRect(args.x, args.y, args.w, args.h);
+                controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
+
                 ctx.restore();
             }
         }
