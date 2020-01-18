@@ -1439,7 +1439,7 @@ var colibri;
                     }
                     newFolder["_modTime"] = data["modTime"];
                     container["_files"].push(newFolder);
-                    container["_files"].sort((a, b) => a.getName().localeCompare(b.getName()));
+                    container._sort();
                     const change = new io.FileStorageChange();
                     change.recordAdd(newFolder.getFullName());
                     this.fireChange(change);
