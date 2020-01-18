@@ -2610,7 +2610,6 @@ var phasereditor2d;
                     }
                     renderCellBack(args, selected, isLastChild) {
                         super.renderCellBack(args, selected, isLastChild);
-                        const isParent = this.isParent(args.obj);
                         const isChild = this.isChild(args.obj);
                         const expanded = args.viewer.isExpanded(args.obj);
                         if (isChild) {
@@ -2626,7 +2625,7 @@ var phasereditor2d;
                             }
                             ctx.restore();
                         }
-                        else if (isParent && !this.isFlat()) {
+                        else /*if (!this.isFlat()) */ {
                             const ctx = args.canvasContext;
                             ctx.save();
                             ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
@@ -2638,21 +2637,6 @@ var phasereditor2d;
                             }
                             ctx.restore();
                         }
-                    }
-                    isParent(obj) {
-                        if (obj instanceof pack.core.AssetPackItem) {
-                            switch (obj.getType()) {
-                                case pack.core.ATLAS_TYPE:
-                                case pack.core.MULTI_ATLAS_TYPE:
-                                case pack.core.ATLAS_XML_TYPE:
-                                case pack.core.UNITY_ATLAS_TYPE:
-                                case pack.core.SPRITESHEET_TYPE:
-                                    return true;
-                                default:
-                                    return false;
-                            }
-                        }
-                        return false;
                     }
                     isChild(obj) {
                         return obj instanceof controls.ImageFrame;

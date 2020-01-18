@@ -474,7 +474,7 @@ declare namespace phasereditor2d.scene.ui.blocks {
         getContentProvider(): controls.viewers.ITreeContentProvider;
         getLabelProvider(): controls.viewers.ILabelProvider;
         getCellRendererProvider(): controls.viewers.ICellRendererProvider;
-        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): SceneEditorBlocksTreeRendererProvider_Compact;
+        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): SceneEditorBlocksTreeRendererProvider;
         getUndoManager(): editor.SceneEditor;
         getPropertySectionProvider(): controls.properties.PropertySectionProvider;
         getInput(): this;

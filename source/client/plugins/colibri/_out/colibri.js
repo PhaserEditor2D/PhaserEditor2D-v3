@@ -5187,13 +5187,18 @@ var colibri;
                             const y2 = (args.h - controls.ICON_SIZE) / 2;
                             this._icon.paint(args.canvasContext, args.x + x2, args.y + y2, controls.ICON_SIZE, controls.ICON_SIZE, false);
                         }
-                        const ctx = args.canvasContext;
+                        /*const ctx = args.canvasContext;
+            
                         ctx.save();
+            
                         ctx.lineWidth = 1;
                         ctx.globalAlpha = 0.5;
-                        ctx.strokeStyle = controls.Controls.getTheme().viewerForeground;
+                        ctx.strokeStyle = Controls.getTheme().viewerForeground;
+            
                         ctx.strokeRect(args.x, args.y, args.w, args.h);
+            
                         ctx.restore();
+                        */
                     }
                     cellHeight(args) {
                         return args.viewer.getCellSize();

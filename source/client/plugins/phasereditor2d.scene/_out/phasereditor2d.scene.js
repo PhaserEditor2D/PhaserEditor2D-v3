@@ -2168,8 +2168,9 @@ var phasereditor2d;
                         return new blocks.SceneEditorBlocksCellRendererProvider();
                     }
                     getTreeViewerRenderer(viewer) {
-                        // return new SceneEditorBlocksTreeRendererProvider(viewer);
-                        return new blocks.SceneEditorBlocksTreeRendererProvider_Compact(viewer);
+                        // TODO: we should implements the Favorites section
+                        return new blocks.SceneEditorBlocksTreeRendererProvider(viewer);
+                        // return new SceneEditorBlocksTreeRendererProvider_Compact(viewer);
                     }
                     getUndoManager() {
                         return this._editor;

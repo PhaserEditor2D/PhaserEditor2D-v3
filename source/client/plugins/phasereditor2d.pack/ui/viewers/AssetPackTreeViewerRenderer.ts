@@ -19,7 +19,6 @@ namespace phasereditor2d.pack.ui.viewers {
 
             super.renderCellBack(args, selected, isLastChild);
 
-            const isParent = this.isParent(args.obj);
             const isChild = this.isChild(args.obj);
             const expanded = args.viewer.isExpanded(args.obj);
 
@@ -47,7 +46,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
                 ctx.restore();
 
-            } else if (isParent && !this.isFlat()) {
+            } else /*if (!this.isFlat()) */ {
 
                 const ctx = args.canvasContext;
 
@@ -63,26 +62,6 @@ namespace phasereditor2d.pack.ui.viewers {
 
                 ctx.restore();
             }
-        }
-
-        protected isParent(obj: any) {
-
-            if (obj instanceof core.AssetPackItem) {
-
-                switch (obj.getType()) {
-                    case core.ATLAS_TYPE:
-                    case core.MULTI_ATLAS_TYPE:
-                    case core.ATLAS_XML_TYPE:
-                    case core.UNITY_ATLAS_TYPE:
-                    case core.SPRITESHEET_TYPE:
-                        return true;
-                    default:
-                        return false;
-                }
-
-            }
-
-            return false;
         }
 
         protected isChild(obj: any) {

@@ -605,7 +605,6 @@ declare namespace phasereditor2d.pack.ui.viewers {
     class AssetPackTreeViewerRenderer extends controls.viewers.GridTreeViewerRenderer {
         constructor(viewer: controls.viewers.TreeViewer, flat: boolean);
         renderCellBack(args: controls.viewers.RenderCellArgs, selected: boolean, isLastChild: boolean): void;
-        protected isParent(obj: any): boolean;
         protected isChild(obj: any): boolean;
     }
 }

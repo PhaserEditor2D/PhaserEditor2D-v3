@@ -26,7 +26,7 @@ namespace colibri.ui.controls.viewers {
                     args.canvasContext, args.x + x2, args.y + y2, controls.ICON_SIZE, controls.ICON_SIZE, false);
             }
 
-            const ctx = args.canvasContext;
+            /*const ctx = args.canvasContext;
 
             ctx.save();
 
@@ -37,6 +37,7 @@ namespace colibri.ui.controls.viewers {
             ctx.strokeRect(args.x, args.y, args.w, args.h);
 
             ctx.restore();
+            */
         }
 
         cellHeight(args: RenderCellArgs): number {
