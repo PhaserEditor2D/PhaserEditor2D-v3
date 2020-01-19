@@ -37,6 +37,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static angle = SimpleProperty("angle", 0, "Angle");
 
+        constructor(obj: ITransformLikeObject) {
+            super(obj, [
+                TransformComponent.x,
+                TransformComponent.y,
+                TransformComponent.scaleX,
+                TransformComponent.scaleY,
+                TransformComponent.angle
+            ]);
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const obj = this.getObject();

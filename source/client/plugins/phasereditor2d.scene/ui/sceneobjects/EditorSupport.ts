@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _scene: Scene;
         private _serializables: json.ISerializable[];
         // tslint:disable-next-line:ban-types
-        private _components: Map<Function, Component<any>>;
+        private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
 
         constructor(extension: SceneObjectExtension, obj: T) {
@@ -30,13 +30,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._extension = extension;
             this._object = obj;
             this._serializables = [];
-            this._components = new Map();
+            this._componentMap = new Map();
             this._object.setDataEnabled();
             this.setId(Phaser.Utils.String.UUID());
             this._scope = ObjectScope.METHOD;
             this._unlockedProperties = new Set();
 
             this.addComponent(new VariableComponent(this._object));
+        }
+
+        hasProperty(property: IProperty<any>) {
+
+            for (const comp of this._componentMap.values()) {
+
+                if (comp.getProperties().has(property)) {
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         isUnlockedProperty(propName: string) {
@@ -111,16 +124,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         // tslint:disable-next-line:ban-types
         getComponent(ctr: Function): Component<any> {
-            return this._components.get(ctr);
+            return this._componentMap.get(ctr);
         }
 
         // tslint:disable-next-line:ban-types
         hasComponent(ctr: Function) {
-            return this._components.has(ctr);
+            return this._componentMap.has(ctr);
         }
 
         getComponents() {
-            return this._components.values();
+            return this._componentMap.values();
         }
 
         // tslint:disable-next-line:ban-types
@@ -140,7 +153,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const c of components) {
 
-                this._components.set(c.constructor, c);
+                this._componentMap.set(c.constructor, c);
             }
 
             this._serializables.push(...components);

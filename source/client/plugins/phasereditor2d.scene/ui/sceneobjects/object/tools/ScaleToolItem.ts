@@ -40,7 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ctx.rotate(Phaser.Math.DegToRad(angle));
 
-            this.drawRect(ctx, "#0ff");
+            this.drawRect(ctx, args.canEdit ? "#0ff" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
             ctx.restore();
         }

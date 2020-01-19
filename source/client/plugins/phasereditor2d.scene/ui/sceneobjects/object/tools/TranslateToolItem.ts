@@ -106,7 +106,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 ctx.translate(x, y);
 
-                this.drawCircle(ctx, "#ff0");
+                this.drawCircle(ctx,
+                    args.canEdit ? "#ff0" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
                 ctx.restore();
 
@@ -121,7 +122,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     ctx.rotate(Math.PI / 2);
                 }
 
-                this.drawArrowPath(ctx, this._axis === "x" ? "#f00" : "#0f0");
+                this.drawArrowPath(ctx,
+                    args.canEdit ? (this._axis === "x" ? "#f00" : "#0f0") : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
                 ctx.restore();
             }

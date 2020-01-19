@@ -44,6 +44,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _textureKeys: ITextureKeys = {};
 
+        constructor(obj: ITextureLikeObject) {
+            super(obj, [
+                TextureComponent.texture
+            ]);
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
             // nothing, the properties are set when the object is created.
         }

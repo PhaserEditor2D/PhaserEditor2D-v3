@@ -56,11 +56,13 @@ namespace phasereditor2d.scene.ui.editor {
                 return;
             }
 
-            const sel = this._editor.getSelection().filter(obj => tool.canEdit(obj));
+            const renderSel = this._editor.getSelection().filter(obj => tool.canRender(obj));
 
-            if (sel.length === 0) {
+            if (renderSel.length === 0) {
                 return;
             }
+
+            const editSel = this._editor.getSelection().filter(obj => tool.canEdit(obj));
 
             const ctx = this._ctx;
 
@@ -69,7 +71,8 @@ namespace phasereditor2d.scene.ui.editor {
             tool.render({
                 editor: this._editor,
                 canvasContext: ctx,
-                objects: sel,
+                objects: renderSel,
+                canEdit: editSel.length === renderSel.length,
                 camera: this._editor.getScene().getCamera()
             });
 

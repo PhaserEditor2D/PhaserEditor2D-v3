@@ -5,16 +5,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     import code = core.code;
 
-    export interface IOriginLike extends ISceneObject {
+    export interface IOriginLikeObject extends ISceneObject {
 
         originX: number;
         originY: number;
         setOrigin(x: number, y: number);
     }
 
-    export class OriginComponent extends Component<IOriginLike> {
+    export class OriginComponent extends Component<IOriginLikeObject> {
 
-        static originX: IProperty<IOriginLike> = {
+        static originX: IProperty<IOriginLikeObject> = {
             name: "originX",
             label: "X",
             defValue: 0.5,
@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setValue: (obj, value) => obj.setOrigin(value, obj.originY)
         };
 
-        static originY: IProperty<IOriginLike> = {
+        static originY: IProperty<IOriginLikeObject> = {
             name: "originY",
             label: "Y",
             defValue: 0.5,
@@ -35,6 +35,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             x: OriginComponent.originX,
             y: OriginComponent.originY
         };
+
+        constructor(obj: IOriginLikeObject) {
+            super(obj, [
+                OriginComponent.originX,
+                OriginComponent.originY
+            ]);
+        }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 

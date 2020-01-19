@@ -12,6 +12,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
     export interface ISceneToolRenderArgs extends ISceneToolContextArgs {
 
         canvasContext: CanvasRenderingContext2D;
+        canEdit: boolean;
     }
 
     export interface ISceneToolDragEventArgs extends ISceneToolContextArgs {
@@ -21,6 +22,8 @@ namespace phasereditor2d.scene.ui.editor.tools {
     }
 
     export abstract class SceneTool {
+
+        static COLOR_CANNOT_EDIT = "#808080";
 
         private _id: string;
         private _items: SceneToolItem[];
@@ -45,6 +48,8 @@ namespace phasereditor2d.scene.ui.editor.tools {
         }
 
         abstract canEdit(obj: unknown): boolean;
+
+        abstract canRender(obj: unknown): boolean;
 
         render(args: ISceneToolRenderArgs): void {
 

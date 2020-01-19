@@ -2640,6 +2640,11 @@ var phasereditor2d;
                         const tool = toolsManager.getActiveTool();
                         if (tool) {
                             const args = this.createArgs(e);
+                            for (const obj of args.objects) {
+                                if (!tool.canEdit(obj)) {
+                                    return;
+                                }
+                            }
                             if (tool.containsPoint(args)) {
                                 this._toolInAction = true;
                                 tool.onStartDrag(args);
@@ -2729,16 +2734,18 @@ var phasereditor2d;
                         if (!tool) {
                             return;
                         }
-                        const sel = this._editor.getSelection().filter(obj => tool.canEdit(obj));
-                        if (sel.length === 0) {
+                        const renderSel = this._editor.getSelection().filter(obj => tool.canRender(obj));
+                        if (renderSel.length === 0) {
                             return;
                         }
+                        const editSel = this._editor.getSelection().filter(obj => tool.canEdit(obj));
                         const ctx = this._ctx;
                         ctx.save();
                         tool.render({
                             editor: this._editor,
                             canvasContext: ctx,
-                            objects: sel,
+                            objects: renderSel,
+                            canEdit: editSel.length === renderSel.length,
                             camera: this._editor.getScene().getCamera()
                         });
                         ctx.restore();
@@ -4229,7 +4236,7 @@ var phasereditor2d;
                         render(args) {
                             const point = this.getPoint(args);
                             const ctx = args.canvasContext;
-                            ctx.fillStyle = this._color;
+                            ctx.fillStyle = args.canEdit ? this._color : editor.tools.SceneTool.COLOR_CANNOT_EDIT;
                             ctx.beginPath();
                             ctx.arc(point.x, point.y, 6, 0, Math.PI * 2);
                             ctx.fill();
@@ -4315,7 +4322,7 @@ var phasereditor2d;
                             ctx.strokeStyle = "#000";
                             ctx.lineWidth = 4;
                             ctx.stroke();
-                            ctx.strokeStyle = this._color;
+                            ctx.strokeStyle = args.canEdit ? this._color : tools_1.SceneTool.COLOR_CANNOT_EDIT;
                             ctx.lineWidth = 2;
                             ctx.stroke();
                             ctx.restore();
@@ -4392,6 +4399,7 @@ var phasereditor2d;
                             }
                         }
                     }
+                    SceneTool.COLOR_CANNOT_EDIT = "#808080";
                     tools.SceneTool = SceneTool;
                 })(tools = editor.tools || (editor.tools = {}));
             })(editor = ui.editor || (ui.editor = {}));
@@ -4513,7 +4521,6 @@ var phasereditor2d;
                             return this._activeTool;
                         }
                         setActiveTool(tool) {
-                            console.log("Set tool: " + (tool ? tool.getId() : "null"));
                             this.updateAction(this._activeTool, false);
                             this.updateAction(tool, true);
                             this._activeTool = tool;
@@ -4680,8 +4687,12 @@ var phasereditor2d;
                 var read = colibri.core.json.read;
                 var write = colibri.core.json.write;
                 class Component {
-                    constructor(obj) {
+                    constructor(obj, properties) {
                         this._obj = obj;
+                        this._properties = new Set(properties);
+                    }
+                    getProperties() {
+                        return this._properties;
                     }
                     getObject() {
                         return this._obj;
@@ -4750,12 +4761,20 @@ var phasereditor2d;
                         this._extension = extension;
                         this._object = obj;
                         this._serializables = [];
-                        this._components = new Map();
+                        this._componentMap = new Map();
                         this._object.setDataEnabled();
                         this.setId(Phaser.Utils.String.UUID());
                         this._scope = ObjectScope.METHOD;
                         this._unlockedProperties = new Set();
                         this.addComponent(new sceneobjects.VariableComponent(this._object));
+                    }
+                    hasProperty(property) {
+                        for (const comp of this._componentMap.values()) {
+                            if (comp.getProperties().has(property)) {
+                                return true;
+                            }
+                        }
+                        return false;
                     }
                     isUnlockedProperty(propName) {
                         if (propName === sceneobjects.TransformComponent.x.name || propName === sceneobjects.TransformComponent.y.name) {
@@ -4801,14 +4820,14 @@ var phasereditor2d;
                     }
                     // tslint:disable-next-line:ban-types
                     getComponent(ctr) {
-                        return this._components.get(ctr);
+                        return this._componentMap.get(ctr);
                     }
                     // tslint:disable-next-line:ban-types
                     hasComponent(ctr) {
-                        return this._components.has(ctr);
+                        return this._componentMap.has(ctr);
                     }
                     getComponents() {
-                        return this._components.values();
+                        return this._componentMap.values();
                     }
                     // tslint:disable-next-line:ban-types
                     static getObjectComponent(obj, ctr) {
@@ -4821,7 +4840,7 @@ var phasereditor2d;
                     }
                     addComponent(...components) {
                         for (const c of components) {
-                            this._components.set(c.constructor, c);
+                            this._componentMap.set(c.constructor, c);
                         }
                         this._serializables.push(...components);
                     }
@@ -5555,6 +5574,12 @@ var phasereditor2d;
             (function (sceneobjects) {
                 var code = scene.core.code;
                 class OriginComponent extends sceneobjects.Component {
+                    constructor(obj) {
+                        super(obj, [
+                            OriginComponent.originX,
+                            OriginComponent.originY
+                        ]);
+                    }
                     buildSetObjectPropertiesCodeDOM(args) {
                         const obj = this.getObject();
                         let add = false;
@@ -5684,6 +5709,15 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class TransformComponent extends sceneobjects.Component {
+                    constructor(obj) {
+                        super(obj, [
+                            TransformComponent.x,
+                            TransformComponent.y,
+                            TransformComponent.scaleX,
+                            TransformComponent.scaleY,
+                            TransformComponent.angle
+                        ]);
+                    }
                     buildSetObjectPropertiesCodeDOM(args) {
                         const obj = this.getObject();
                         this.buildSetObjectPropertyCodeDOM_Float("scaleX", obj.scaleX, 1, args);
@@ -5728,6 +5762,12 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class VariableComponent extends sceneobjects.Component {
+                    constructor(obj) {
+                        super(obj, [
+                            VariableComponent.label,
+                            VariableComponent.scope
+                        ]);
+                    }
                     buildSetObjectPropertiesCodeDOM(args) {
                         // nothing
                     }
@@ -6046,6 +6086,51 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                class BaseObjectTool extends ui.editor.tools.SceneTool {
+                    constructor(id, ...properties) {
+                        super(id);
+                        this._properties = properties;
+                    }
+                    canEdit(obj) {
+                        if (obj instanceof Phaser.GameObjects.GameObject) {
+                            const support = obj.getEditorSupport();
+                            for (const prop of this._properties) {
+                                if (!support.hasProperty(prop)) {
+                                    return false;
+                                }
+                                if (!support.isUnlockedProperty(prop.name)) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                        return false;
+                    }
+                    canRender(obj) {
+                        if (obj instanceof Phaser.GameObjects.GameObject) {
+                            const support = obj.getEditorSupport();
+                            for (const prop of this._properties) {
+                                if (support.hasProperty(prop)) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    }
+                }
+                sceneobjects.BaseObjectTool = BaseObjectTool;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 class RotateLineToolItem extends ui.editor.tools.SceneToolItem {
                     constructor(start) {
                         super();
@@ -6075,7 +6160,7 @@ var phasereditor2d;
                         ctx.strokeStyle = "#000";
                         ctx.lineWidth = 4;
                         ctx.stroke();
-                        ctx.strokeStyle = sceneobjects.RotateToolItem.COLOR;
+                        ctx.strokeStyle = args.canEdit ? sceneobjects.RotateToolItem.COLOR : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT;
                         ctx.lineWidth = 2;
                         ctx.stroke();
                         ctx.restore();
@@ -6123,6 +6208,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./BaseObjectTool.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -6131,14 +6217,10 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class RotateTool extends ui.editor.tools.SceneTool {
+                class RotateTool extends sceneobjects.BaseObjectTool {
                     constructor() {
-                        super(RotateTool.ID);
+                        super(RotateTool.ID, sceneobjects.TransformComponent.angle);
                         this.addItems(new sceneobjects.RotateLineToolItem(true), new sceneobjects.RotateLineToolItem(false), new ui.editor.tools.CenterPointToolItem(sceneobjects.RotateToolItem.COLOR), new sceneobjects.RotateToolItem());
-                    }
-                    canEdit(obj) {
-                        return obj instanceof Phaser.GameObjects.GameObject
-                            && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
                     }
                 }
                 RotateTool.ID = "phasereditor2d.scene.ui.sceneobjects.RotateTool";
@@ -6171,7 +6253,7 @@ var phasereditor2d;
                         ctx.strokeStyle = "#000";
                         ctx.stroke();
                         ctx.lineWidth = 2;
-                        ctx.strokeStyle = RotateToolItem.COLOR;
+                        ctx.strokeStyle = args.canEdit ? RotateToolItem.COLOR : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT;
                         ctx.stroke();
                     }
                     containsPoint(args) {
@@ -6255,6 +6337,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./BaseObjectTool.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -6263,14 +6346,10 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class ScaleTool extends ui.editor.tools.SceneTool {
+                class ScaleTool extends sceneobjects.BaseObjectTool {
                     constructor() {
-                        super(ScaleTool.ID);
+                        super(ScaleTool.ID, sceneobjects.TransformComponent.scaleX, sceneobjects.TransformComponent.scaleY);
                         this.addItems(new sceneobjects.ScaleToolItem(1, 0.5), new sceneobjects.ScaleToolItem(1, 1), new sceneobjects.ScaleToolItem(0.5, 1));
-                    }
-                    canEdit(obj) {
-                        return obj instanceof Phaser.GameObjects.GameObject
-                            && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
                     }
                 }
                 ScaleTool.ID = "phasereditor2d.scene.ui.sceneobjects.ScaleTool";
@@ -6303,7 +6382,7 @@ var phasereditor2d;
                         ctx.translate(point.x, point.y);
                         const angle = this.globalAngle(args.objects[0]);
                         ctx.rotate(Phaser.Math.DegToRad(angle));
-                        this.drawRect(ctx, "#0ff");
+                        this.drawRect(ctx, args.canEdit ? "#0ff" : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
                         ctx.restore();
                     }
                     containsPoint(args) {
@@ -6427,17 +6506,13 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TranslateTool extends ui.editor.tools.SceneTool {
+                class TranslateTool extends sceneobjects.BaseObjectTool {
                     constructor() {
-                        super(TranslateTool.ID);
+                        super(TranslateTool.ID, sceneobjects.TransformComponent.x, sceneobjects.TransformComponent.y);
                         const x = new sceneobjects.TranslateToolItem("x");
                         const y = new sceneobjects.TranslateToolItem("y");
                         const xy = new sceneobjects.TranslateToolItem("xy");
                         this.addItems(new ui.editor.tools.LineToolItem("#f00", xy, x), new ui.editor.tools.LineToolItem("#0f0", xy, y), xy, x, y);
-                    }
-                    canEdit(obj) {
-                        return obj instanceof Phaser.GameObjects.GameObject
-                            && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
                     }
                 }
                 TranslateTool.ID = "phasereditor2d.scene.ui.sceneobjects.TranslateTool";
@@ -6516,7 +6591,7 @@ var phasereditor2d;
                         if (this._axis === "xy") {
                             ctx.save();
                             ctx.translate(x, y);
-                            this.drawCircle(ctx, "#ff0");
+                            this.drawCircle(ctx, args.canEdit ? "#ff0" : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
                             ctx.restore();
                         }
                         else {
@@ -6525,7 +6600,7 @@ var phasereditor2d;
                             if (this._axis === "y") {
                                 ctx.rotate(Math.PI / 2);
                             }
-                            this.drawArrowPath(ctx, this._axis === "x" ? "#f00" : "#0f0");
+                            this.drawArrowPath(ctx, args.canEdit ? (this._axis === "x" ? "#f00" : "#0f0") : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
                             ctx.restore();
                         }
                     }
@@ -6626,8 +6701,10 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class TextureComponent extends sceneobjects.Component {
-                    constructor() {
-                        super(...arguments);
+                    constructor(obj) {
+                        super(obj, [
+                            TextureComponent.texture
+                        ]);
                         this._textureKeys = {};
                     }
                     buildSetObjectPropertiesCodeDOM(args) {

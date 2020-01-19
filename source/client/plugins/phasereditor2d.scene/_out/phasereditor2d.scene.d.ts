@@ -885,12 +885,14 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
     }
     interface ISceneToolRenderArgs extends ISceneToolContextArgs {
         canvasContext: CanvasRenderingContext2D;
+        canEdit: boolean;
     }
     interface ISceneToolDragEventArgs extends ISceneToolContextArgs {
         x: number;
         y: number;
     }
     abstract class SceneTool {
+        static COLOR_CANNOT_EDIT: string;
         private _id;
         private _items;
         constructor(id: string);
@@ -898,6 +900,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         getItems(): SceneToolItem[];
         addItems(...items: SceneToolItem[]): void;
         abstract canEdit(obj: unknown): boolean;
+        abstract canRender(obj: unknown): boolean;
         render(args: ISceneToolRenderArgs): void;
         containsPoint(args: ISceneToolDragEventArgs): boolean;
         onStartDrag(args: ISceneToolDragEventArgs): void;
@@ -985,7 +988,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
     abstract class Component<T> implements core.json.ISerializable {
         private _obj;
-        constructor(obj: T);
+        private _properties;
+        constructor(obj: T, properties: Array<IProperty<any>>);
+        getProperties(): Set<IProperty<any>>;
         getObject(): T;
         write(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
         read(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
@@ -1014,9 +1019,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _scope;
         private _scene;
         private _serializables;
-        private _components;
+        private _componentMap;
         private _unlockedProperties;
         constructor(extension: SceneObjectExtension, obj: T);
+        hasProperty(property: IProperty<any>): boolean;
         isUnlockedProperty(propName: string): boolean;
         setUnlockedProperty(propName: string, unlock: boolean): void;
         private static buildPrefabDependencyHash;
@@ -1324,15 +1330,16 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
-    interface IOriginLike extends ISceneObject {
+    interface IOriginLikeObject extends ISceneObject {
         originX: number;
         originY: number;
         setOrigin(x: number, y: number): any;
     }
-    class OriginComponent extends Component<IOriginLike> {
-        static originX: IProperty<IOriginLike>;
-        static originY: IProperty<IOriginLike>;
+    class OriginComponent extends Component<IOriginLikeObject> {
+        static originX: IProperty<IOriginLikeObject>;
+        static originY: IProperty<IOriginLikeObject>;
         static origin: IPropertyXY;
+        constructor(obj: IOriginLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;
@@ -1379,6 +1386,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static scaleY: IProperty<any>;
         static scale: IPropertyXY;
         static angle: IProperty<any>;
+        constructor(obj: ITransformLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;
@@ -1388,6 +1396,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class VariableComponent extends Component<ISceneObjectLike> {
         static label: IProperty<ISceneObjectLike>;
         static scope: IEnumProperty<ISceneObjectLike, ObjectScope>;
+        constructor(obj: ISceneObjectLike);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
         writeJSON(ser: core.json.Serializer): void;
         readJSON(ser: core.json.Serializer): void;
@@ -1407,7 +1416,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class OriginSection extends ObjectSceneSection<IOriginLike> {
+    class OriginSection extends ObjectSceneSection<IOriginLikeObject> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -1440,6 +1449,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class BaseObjectTool extends editor.tools.SceneTool {
+        private _properties;
+        constructor(id: string, ...properties: Array<IProperty<any>>);
+        canEdit(obj: unknown): boolean;
+        canRender(obj: unknown): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class RotateLineToolItem extends editor.tools.SceneToolItem {
         private _start;
         constructor(start: boolean);
@@ -1458,10 +1475,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class RotateTool extends editor.tools.SceneTool {
+    class RotateTool extends BaseObjectTool {
         static ID: string;
         constructor();
-        canEdit(obj: unknown): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1501,10 +1517,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class ScaleTool extends editor.tools.SceneTool {
+    class ScaleTool extends BaseObjectTool {
         static ID: string;
         constructor();
-        canEdit(obj: unknown): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1549,10 +1564,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class TranslateTool extends editor.tools.SceneTool {
+    class TranslateTool extends BaseObjectTool {
         static ID: string;
         constructor();
-        canEdit(obj: unknown): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1606,6 +1620,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TextureComponent extends Component<ITextureLikeObject> {
         static texture: IProperty<ITextureLikeObject>;
         private _textureKeys;
+        constructor(obj: ITextureLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
         writeJSON(ser: json.Serializer): void;
         readJSON(ser: json.Serializer): void;

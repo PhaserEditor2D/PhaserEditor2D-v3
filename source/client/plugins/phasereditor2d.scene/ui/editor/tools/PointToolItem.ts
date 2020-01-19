@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             const ctx = args.canvasContext;
 
-            ctx.fillStyle = this._color;
+            ctx.fillStyle = args.canEdit ? this._color : editor.tools.SceneTool.COLOR_CANNOT_EDIT;
 
             ctx.beginPath();
             ctx.arc(point.x, point.y, 6, 0, Math.PI * 2);

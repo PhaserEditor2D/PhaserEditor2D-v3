@@ -54,15 +54,12 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         setActiveTool(tool: SceneTool) {
 
-            console.log("Set tool: " + (tool ? tool.getId() : "null"));
-
             this.updateAction(this._activeTool, false);
             this.updateAction(tool, true);
 
             this._activeTool = tool;
 
             this._editor.repaint();
-
         }
 
         private updateAction(tool: tools.SceneTool, selected: boolean) {

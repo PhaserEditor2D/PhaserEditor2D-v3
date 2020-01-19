@@ -1,11 +1,11 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TranslateTool extends editor.tools.SceneTool {
+    export class TranslateTool extends BaseObjectTool {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.TranslateTool";
 
         constructor() {
-            super(TranslateTool.ID);
+            super(TranslateTool.ID, TransformComponent.x, TransformComponent.y);
 
             const x = new TranslateToolItem("x");
             const y = new TranslateToolItem("y");
@@ -18,11 +18,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 x,
                 y
             );
-        }
-
-        canEdit(obj: unknown): boolean {
-            return obj instanceof Phaser.GameObjects.GameObject
-                && (obj as ISceneObject).getEditorSupport().hasComponent(TransformComponent);
         }
     }
 }

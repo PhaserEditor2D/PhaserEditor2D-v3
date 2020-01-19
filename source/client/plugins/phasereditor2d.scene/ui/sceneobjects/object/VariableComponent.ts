@@ -23,6 +23,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             getValueLabel: value => value[0] + value.toLowerCase().substring(1)
         };
 
+        constructor(obj: ISceneObjectLike) {
+            super(obj, [
+                VariableComponent.label,
+                VariableComponent.scope
+            ]);
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
             // nothing
         }

@@ -43,6 +43,13 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const args = this.createArgs(e);
 
+                for (const obj of args.objects) {
+
+                    if (!tool.canEdit(obj)) {
+                        return;
+                    }
+                }
+
                 if (tool.containsPoint(args)) {
 
                     this._toolInAction = true;

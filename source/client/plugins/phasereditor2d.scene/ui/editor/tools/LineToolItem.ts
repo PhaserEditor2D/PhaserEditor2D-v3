@@ -44,7 +44,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             ctx.lineWidth = 4;
             ctx.stroke();
 
-            ctx.strokeStyle = this._color;
+            ctx.strokeStyle = args.canEdit ? this._color : SceneTool.COLOR_CANNOT_EDIT;
             ctx.lineWidth = 2;
             ctx.stroke();
 

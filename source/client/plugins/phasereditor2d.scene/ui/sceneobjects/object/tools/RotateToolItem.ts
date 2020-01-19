@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.stroke();
 
             ctx.lineWidth = 2;
-            ctx.strokeStyle = RotateToolItem.COLOR;
+            ctx.strokeStyle = args.canEdit ? RotateToolItem.COLOR : editor.tools.SceneTool.COLOR_CANNOT_EDIT;
             ctx.stroke();
         }
 

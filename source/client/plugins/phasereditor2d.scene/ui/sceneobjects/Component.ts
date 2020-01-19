@@ -13,9 +13,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export abstract class Component<T> implements core.json.ISerializable {
 
         private _obj: T;
+        private _properties: Set<IProperty<any>>;
 
-        constructor(obj: T) {
+        constructor(obj: T, properties: Array<IProperty<any>>) {
+
             this._obj = obj;
+            this._properties = new Set(properties);
+        }
+
+        getProperties() {
+            return this._properties;
         }
 
         getObject() {

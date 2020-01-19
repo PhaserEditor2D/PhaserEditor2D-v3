@@ -1,11 +1,13 @@
+/// <reference path="./BaseObjectTool.ts" />
+
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class RotateTool extends editor.tools.SceneTool {
+    export class RotateTool extends BaseObjectTool {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.RotateTool";
 
         constructor() {
-            super(RotateTool.ID);
+            super(RotateTool.ID, TransformComponent.angle);
 
             this.addItems(
                 new RotateLineToolItem(true),
@@ -13,12 +15,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new editor.tools.CenterPointToolItem(RotateToolItem.COLOR),
                 new RotateToolItem()
             );
-        }
-
-        canEdit(obj: unknown): boolean {
-
-            return obj instanceof Phaser.GameObjects.GameObject
-                && (obj as unknown as ISceneObject).getEditorSupport().hasComponent(TransformComponent);
         }
     }
 }
