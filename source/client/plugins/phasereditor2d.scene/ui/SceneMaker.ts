@@ -221,6 +221,35 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
+        createEmptyObject(ext: sceneobjects.SceneObjectExtension) {
+
+            const canvas = this._scene.game.canvas;
+
+            let x = canvas.width / 2;
+            let y = canvas.height / 2;
+
+            const worldPoint = this._scene.getCamera().getWorldPoint(x, y);
+
+            x = Math.floor(worldPoint.x);
+            y = Math.floor(worldPoint.y);
+
+            const newObject = ext.createEmptySceneObject({
+                scene: this._scene,
+                x: x,
+                y: y,
+            });
+
+            const nameMaker = new ide.utils.NameMaker(obj => {
+                return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
+            });
+
+            this._scene.visit(obj => nameMaker.update([obj]));
+
+            newObject.getEditorSupport().setLabel(nameMaker.makeName(ext.getTypeName().toLowerCase()));
+
+            return newObject;
+        }
+
         createObject(data: json.IObjectData) {
 
             const ser = this.getSerializer(data);

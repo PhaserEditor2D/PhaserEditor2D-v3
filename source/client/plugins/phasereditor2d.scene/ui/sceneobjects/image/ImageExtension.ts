@@ -48,6 +48,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ImageExtension.isImageOrImageFrameAsset(data);
         }
 
+        createEmptySceneObject(args: ICreateEmptyArgs) {
+
+            return this.createImageObject(args.scene, args.x, args.y);
+        }
+
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject {
 
             let key: string;
@@ -86,7 +91,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return sprite;
         }
 
-        private createImageObject(scene: Scene, x: number, y: number, key: string, frame?: string | number) {
+        private createImageObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number) {
 
             const sprite = new sceneobjects.Image(scene, x, y, key || null, frame);
 

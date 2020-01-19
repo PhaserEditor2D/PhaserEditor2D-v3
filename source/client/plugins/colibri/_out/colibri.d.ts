@@ -1229,6 +1229,8 @@ declare namespace colibri.ui.controls.viewers {
 }
 declare namespace colibri.ui.controls.viewers {
     class LabelProvider implements ILabelProvider {
+        private _getLabel;
+        constructor(getLabel?: (obj: any) => string);
         getLabel(obj: any): string;
     }
 }

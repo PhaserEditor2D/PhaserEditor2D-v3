@@ -5236,7 +5236,13 @@ var colibri;
             var viewers;
             (function (viewers) {
                 class LabelProvider {
+                    constructor(getLabel) {
+                        this._getLabel = getLabel;
+                    }
                     getLabel(obj) {
+                        if (this._getLabel) {
+                            return this._getLabel(obj);
+                        }
                         if (typeof (obj) === "string") {
                             return obj;
                         }

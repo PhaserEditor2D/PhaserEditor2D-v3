@@ -403,6 +403,7 @@ declare namespace phasereditor2d.scene.ui {
         getSerializer(data: json.IObjectData): json.Serializer;
         createScene(sceneData: json.SceneData): void;
         updateSceneLoader(sceneData: json.SceneData): Promise<void>;
+        createEmptyObject(ext: sceneobjects.SceneObjectExtension): sceneobjects.ISceneObject;
         createObject(data: json.IObjectData): sceneobjects.ISceneObject;
     }
 }
@@ -518,6 +519,14 @@ declare namespace phasereditor2d.scene.ui.editor {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor {
+    import controls = colibri.ui.controls;
+    class AddObjectDialog extends controls.dialogs.ViewerDialog {
+        private _editor;
+        constructor(editor: SceneEditor);
+        create(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor {
     interface ICameraState {
         scrollX: number;
         scrollY: number;
@@ -619,6 +628,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private createActions;
         getToolActionMap(): Map<string, controls.Action>;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
+        openAddObjectDialog(): void;
         private readScene;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
         getToolsManager(): tools.SceneToolsManager;
@@ -669,6 +679,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
+    const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
@@ -1161,6 +1172,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         scene: Scene;
         asset: any;
     }
+    interface ICreateEmptyArgs {
+        x: number;
+        y: number;
+        scene: Scene;
+    }
     interface ICreateWithDataArgs {
         scene: Scene;
         data: json.IObjectData;
@@ -1214,6 +1230,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args The data involved in a drop action.
          */
         abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
+        /**
+         * Create an empty object of this extension.
+         *
+         * @param args The data needed to create the object.
+         */
+        abstract createEmptySceneObject(args: ICreateEmptyArgs): sceneobjects.ISceneObject;
         /**
          * Create the scene object of this extension with the data involved in a deserialization.
          *
@@ -1282,6 +1304,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private constructor();
         getCodeDOMBuilder(): ObjectCodeDOMBuilder;
         getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
+        createEmptySceneObject(args: ICreateEmptyArgs): Container;
         createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
         private createContainerObject;
         createContainerObjectWithChildren(scene: Scene, objectList: sceneobjects.ISceneObject[]): sceneobjects.Container;
@@ -1325,6 +1348,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
         static isImageOrImageFrameAsset(data: any): boolean;
         acceptsDropData(data: any): boolean;
+        createEmptySceneObject(args: ICreateEmptyArgs): Image;
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
         createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
         private createImageObject;

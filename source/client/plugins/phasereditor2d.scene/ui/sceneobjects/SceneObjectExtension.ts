@@ -11,6 +11,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         asset: any;
     }
 
+    export interface ICreateEmptyArgs {
+
+        x: number;
+        y: number;
+        scene: Scene;
+    }
+
     export interface ICreateWithDataArgs {
 
         scene: Scene;
@@ -94,6 +101,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args The data involved in a drop action.
          */
         abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
+
+
+        /**
+         * Create an empty object of this extension.
+         *
+         * @param args The data needed to create the object.
+         */
+        abstract createEmptySceneObject(args: ICreateEmptyArgs): sceneobjects.ISceneObject;
 
         /**
          * Create the scene object of this extension with the data involved in a deserialization.

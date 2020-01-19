@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
+    export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor ||
@@ -178,6 +179,25 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "S"
+                }
+            });
+
+
+            // add object dialog
+
+            manager.add({
+                command: {
+                    id: CMD_ADD_SCENE_OBJECT,
+                    icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
+                    name: "Add Object",
+                    tooltip: "Add a new object to the scene"
+                },
+                handler: {
+                    testFunc: args => args.activePart instanceof editor.SceneEditor,
+                    executeFunc: args => (args.activeEditor as editor.SceneEditor).openAddObjectDialog()
+                },
+                keys: {
+                    key: "A"
                 }
             });
         }

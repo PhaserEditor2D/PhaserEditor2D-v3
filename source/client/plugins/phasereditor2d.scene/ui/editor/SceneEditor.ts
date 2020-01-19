@@ -295,10 +295,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const manager = new controls.ToolbarManager(parent);
 
-            manager.add(new controls.Action({
-                icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
-                showText: false
-            }));
+            manager.addCommand(commands.CMD_ADD_SCENE_OBJECT, { showText: false });
 
             manager.add(this._toolActionMap.get(sceneobjects.TranslateTool.ID));
 
@@ -315,6 +312,13 @@ namespace phasereditor2d.scene.ui.editor {
             });
 
             return manager;
+        }
+
+        openAddObjectDialog() {
+
+            const dlg = new AddObjectDialog(this);
+
+            dlg.create();
         }
 
         private async readScene() {
