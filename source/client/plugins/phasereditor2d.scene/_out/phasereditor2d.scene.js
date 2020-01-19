@@ -4719,6 +4719,11 @@ var phasereditor2d;
                             prop.setValue(this._obj, value);
                         }
                     }
+                    buildSetObjectPropertyCodeDOM_FloatProperty(args, ...properties) {
+                        for (const prop of properties) {
+                            this.buildSetObjectPropertyCodeDOM_Float(prop.name, prop.getValue(this.getObject()), prop.defValue, args);
+                        }
+                    }
                     buildSetObjectPropertyCodeDOM_Float(fieldName, value, defValue, args) {
                         const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
                         let add = false;
@@ -5734,10 +5739,7 @@ var phasereditor2d;
                         ]);
                     }
                     buildSetObjectPropertiesCodeDOM(args) {
-                        const obj = this.getObject();
-                        this.buildSetObjectPropertyCodeDOM_Float("scaleX", obj.scaleX, 1, args);
-                        this.buildSetObjectPropertyCodeDOM_Float("scaleY", obj.scaleY, 1, args);
-                        this.buildSetObjectPropertyCodeDOM_Float("angle", obj.angle, 0, args);
+                        this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
                     }
                 }
                 TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X", undefined, true);

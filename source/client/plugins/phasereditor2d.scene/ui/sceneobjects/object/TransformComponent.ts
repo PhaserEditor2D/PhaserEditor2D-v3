@@ -49,11 +49,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
-            const obj = this.getObject();
-
-            this.buildSetObjectPropertyCodeDOM_Float("scaleX", obj.scaleX, 1, args);
-            this.buildSetObjectPropertyCodeDOM_Float("scaleY", obj.scaleY, 1, args);
-            this.buildSetObjectPropertyCodeDOM_Float("angle", obj.angle, 0, args);
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(
+                args,
+                TransformComponent.scaleX,
+                TransformComponent.scaleY,
+                TransformComponent.angle
+            );
         }
     }
 }

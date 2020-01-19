@@ -65,6 +65,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        protected buildSetObjectPropertyCodeDOM_FloatProperty(
+
+            args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
+
+            for (const prop of properties) {
+
+                this.buildSetObjectPropertyCodeDOM_Float(
+                    prop.name,
+                    prop.getValue(this.getObject()),
+                    prop.defValue,
+                    args
+                );
+            }
+        }
+
         protected buildSetObjectPropertyCodeDOM_Float(
             fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void {
 

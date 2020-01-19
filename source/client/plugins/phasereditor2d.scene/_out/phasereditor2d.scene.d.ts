@@ -996,6 +996,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         read(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
         writeLocal(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
         readLocal(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
+        protected buildSetObjectPropertyCodeDOM_FloatProperty(args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>): void;
         protected buildSetObjectPropertyCodeDOM_Float(fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void;
         buildDependenciesHash(args: IBuildDependencyHashArgs): Promise<void>;
         abstract buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
