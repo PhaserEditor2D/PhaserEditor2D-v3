@@ -2,7 +2,6 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import json = core.json;
     import code = core.code;
 
     export interface IOriginLikeObject extends ISceneObject {
@@ -68,22 +67,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 args.result.push(dom);
             }
-        }
-
-        readJSON(ser: json.Serializer) {
-
-            this.read(ser,
-                OriginComponent.originX,
-                OriginComponent.originY
-            );
-        }
-
-        writeJSON(ser: json.Serializer) {
-
-            this.write(ser,
-                OriginComponent.originX,
-                OriginComponent.originY
-            );
         }
     }
 }

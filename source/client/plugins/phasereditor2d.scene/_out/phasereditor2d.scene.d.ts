@@ -999,8 +999,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected buildSetObjectPropertyCodeDOM_Float(fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void;
         buildDependenciesHash(args: IBuildDependencyHashArgs): Promise<void>;
         abstract buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-        abstract writeJSON(ser: core.json.Serializer): void;
-        abstract readJSON(ser: core.json.Serializer): void;
+        writeJSON(ser: core.json.Serializer): void;
+        readJSON(ser: core.json.Serializer): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1070,6 +1070,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         setValue(obj: T, value: any): void;
         name: string;
         defValue: any;
+        local?: boolean;
         label?: string;
         tooltip?: string;
     }
@@ -1233,7 +1234,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    function SimpleProperty(name: string, defValue: any, label?: string, tooltip?: string): IProperty<any>;
+    function SimpleProperty(name: string, defValue: any, label?: string, tooltip?: string, local?: boolean): IProperty<any>;
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class Container extends Phaser.GameObjects.Container implements ISceneObject {
@@ -1329,7 +1330,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import json = core.json;
     interface IOriginLikeObject extends ISceneObject {
         originX: number;
         originY: number;
@@ -1341,8 +1341,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static origin: IPropertyXY;
         constructor(obj: IOriginLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-        readJSON(ser: json.Serializer): void;
-        writeJSON(ser: json.Serializer): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1370,7 +1368,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import json = core.json;
     interface ITransformLikeObject extends ISceneObjectLike {
         x: number;
         y: number;
@@ -1388,8 +1385,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static angle: IProperty<any>;
         constructor(obj: ITransformLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-        readJSON(ser: json.Serializer): void;
-        writeJSON(ser: json.Serializer): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1398,8 +1393,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static scope: IEnumProperty<ISceneObjectLike, ObjectScope>;
         constructor(obj: ISceneObjectLike);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-        writeJSON(ser: core.json.Serializer): void;
-        readJSON(ser: core.json.Serializer): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1622,8 +1615,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _textureKeys;
         constructor(obj: ITextureLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-        writeJSON(ser: json.Serializer): void;
-        readJSON(ser: json.Serializer): void;
         getTextureKeys(): ITextureKeys;
         setTextureKeys(keys: ITextureKeys): void;
         removeTexture(): void;

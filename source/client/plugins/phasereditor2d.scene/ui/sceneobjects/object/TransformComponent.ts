@@ -17,8 +17,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TransformComponent extends Component<ITransformLikeObject> {
 
-        static x = SimpleProperty("x", 0, "X");
-        static y = SimpleProperty("y", 0, "Y");
+        static x = SimpleProperty("x", 0, "X", undefined, true);
+        static y = SimpleProperty("y", 0, "Y", undefined, true);
 
         static position: IPropertyXY = {
             label: "Position",
@@ -54,34 +54,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.buildSetObjectPropertyCodeDOM_Float("scaleX", obj.scaleX, 1, args);
             this.buildSetObjectPropertyCodeDOM_Float("scaleY", obj.scaleY, 1, args);
             this.buildSetObjectPropertyCodeDOM_Float("angle", obj.angle, 0, args);
-        }
-
-        readJSON(ser: json.Serializer) {
-
-            this.readLocal(ser,
-                TransformComponent.x,
-                TransformComponent.y
-            );
-
-            this.read(ser,
-                TransformComponent.scaleX,
-                TransformComponent.scaleY,
-                TransformComponent.angle
-            );
-        }
-
-        writeJSON(ser: json.Serializer) {
-
-            this.writeLocal(ser,
-                TransformComponent.x,
-                TransformComponent.y
-            );
-
-            this.write(ser,
-                TransformComponent.scaleX,
-                TransformComponent.scaleY,
-                TransformComponent.angle
-            );
         }
     }
 }

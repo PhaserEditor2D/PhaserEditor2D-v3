@@ -4736,6 +4736,26 @@ var phasereditor2d;
                     async buildDependenciesHash(args) {
                         // nothing by default
                     }
+                    writeJSON(ser) {
+                        for (const prop of this._properties) {
+                            if (prop.local) {
+                                this.writeLocal(ser, prop);
+                            }
+                            else {
+                                this.write(ser, prop);
+                            }
+                        }
+                    }
+                    readJSON(ser) {
+                        for (const prop of this._properties) {
+                            if (prop.local) {
+                                this.readLocal(ser, prop);
+                            }
+                            else {
+                                this.read(ser, prop);
+                            }
+                        }
+                    }
                 }
                 sceneobjects.Component = Component;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
@@ -5080,12 +5100,13 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                function SimpleProperty(name, defValue, label, tooltip) {
+                function SimpleProperty(name, defValue, label, tooltip, local = false) {
                     return {
                         name,
                         defValue,
                         label,
                         tooltip,
+                        local,
                         getValue: obj => obj[name],
                         setValue: (obj, value) => obj[name] = value
                     };
@@ -5597,12 +5618,6 @@ var phasereditor2d;
                             args.result.push(dom);
                         }
                     }
-                    readJSON(ser) {
-                        this.read(ser, OriginComponent.originX, OriginComponent.originY);
-                    }
-                    writeJSON(ser) {
-                        this.write(ser, OriginComponent.originX, OriginComponent.originY);
-                    }
                 }
                 OriginComponent.originX = {
                     name: "originX",
@@ -5724,17 +5739,9 @@ var phasereditor2d;
                         this.buildSetObjectPropertyCodeDOM_Float("scaleY", obj.scaleY, 1, args);
                         this.buildSetObjectPropertyCodeDOM_Float("angle", obj.angle, 0, args);
                     }
-                    readJSON(ser) {
-                        this.readLocal(ser, TransformComponent.x, TransformComponent.y);
-                        this.read(ser, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
-                    }
-                    writeJSON(ser) {
-                        this.writeLocal(ser, TransformComponent.x, TransformComponent.y);
-                        this.write(ser, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
-                    }
                 }
-                TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X");
-                TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y");
+                TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X", undefined, true);
+                TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y", undefined, true);
                 TransformComponent.position = {
                     label: "Position",
                     x: TransformComponent.x,
@@ -5771,19 +5778,12 @@ var phasereditor2d;
                     buildSetObjectPropertiesCodeDOM(args) {
                         // nothing
                     }
-                    writeJSON(ser) {
-                        this.writeLocal(ser, VariableComponent.label);
-                        this.writeLocal(ser, VariableComponent.scope);
-                    }
-                    readJSON(ser) {
-                        this.readLocal(ser, VariableComponent.label);
-                        this.readLocal(ser, VariableComponent.scope);
-                    }
                 }
                 VariableComponent.label = {
                     name: "label",
                     tooltip: "The variable name of the object.",
                     defValue: undefined,
+                    local: true,
                     getValue: obj => obj.getEditorSupport().getLabel(),
                     setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
                 };
@@ -5791,6 +5791,7 @@ var phasereditor2d;
                     name: "scope",
                     tooltip: "The variable lexical scope.",
                     defValue: sceneobjects.ObjectScope.METHOD,
+                    local: true,
                     getValue: obj => obj.getEditorSupport().getScope(),
                     setValue: (obj, value) => obj.getEditorSupport().setScope(value),
                     values: [sceneobjects.ObjectScope.METHOD, sceneobjects.ObjectScope.CLASS, sceneobjects.ObjectScope.PUBLIC],
@@ -6709,12 +6710,6 @@ var phasereditor2d;
                     }
                     buildSetObjectPropertiesCodeDOM(args) {
                         // nothing, the properties are set when the object is created.
-                    }
-                    writeJSON(ser) {
-                        this.write(ser, TextureComponent.texture);
-                    }
-                    readJSON(ser) {
-                        this.read(ser, TextureComponent.texture);
                     }
                     getTextureKeys() {
                         return this._textureKeys;

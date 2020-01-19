@@ -2,8 +2,6 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import write = colibri.core.json.write;
-    import read = colibri.core.json.read;
     import json = core.json;
 
     export interface ITextureLikeObject extends ISceneObject {
@@ -52,16 +50,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
             // nothing, the properties are set when the object is created.
-        }
-
-        writeJSON(ser: json.Serializer): void {
-
-            this.write(ser, TextureComponent.texture);
-        }
-
-        readJSON(ser: json.Serializer): void {
-
-            this.read(ser, TextureComponent.texture);
         }
 
         getTextureKeys(): ITextureKeys {

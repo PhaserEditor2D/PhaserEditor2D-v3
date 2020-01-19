@@ -10,6 +10,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         defValue: any;
 
+        local?: boolean;
+
         label?: string;
 
         tooltip?: string;

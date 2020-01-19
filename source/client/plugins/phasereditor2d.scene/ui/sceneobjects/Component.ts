@@ -94,8 +94,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
 
-        abstract writeJSON(ser: core.json.Serializer): void;
+        writeJSON(ser: core.json.Serializer) {
 
-        abstract readJSON(ser: core.json.Serializer): void;
+            for (const prop of this._properties) {
+
+                if (prop.local) {
+
+                    this.writeLocal(ser, prop);
+
+                } else {
+
+                    this.write(ser, prop);
+                }
+            }
+        }
+
+        readJSON(ser: core.json.Serializer) {
+
+            for (const prop of this._properties) {
+
+                if (prop.local) {
+
+                    this.readLocal(ser, prop);
+
+                } else {
+
+                    this.read(ser, prop);
+                }
+            }
+        }
     }
 }
