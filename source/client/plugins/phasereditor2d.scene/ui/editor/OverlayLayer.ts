@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.editor {
 
+    import controls = colibri.ui.controls;
+
     export class OverlayLayer {
 
         private _editor: SceneEditor;
@@ -76,6 +78,8 @@ namespace phasereditor2d.scene.ui.editor {
 
         private renderSelection() {
 
+            const theme = controls.Controls.getTheme();
+
             const ctx = this._ctx;
 
             ctx.save();
@@ -103,7 +107,9 @@ namespace phasereditor2d.scene.ui.editor {
                         ctx.closePath();
                         ctx.stroke();
 
-                        ctx.strokeStyle = "#00ff00";
+                        // ctx.strokeStyle = "#00ff00";
+                        ctx.strokeStyle = controls.Controls.getTheme().viewerSelectionBackground;
+
                         ctx.lineWidth = 2;
 
                         ctx.beginPath();
@@ -145,7 +151,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             // render grid
 
-            ctx.strokeStyle = "#aeaeae";
+            const theme = controls.Controls.getTheme();
+
+            ctx.strokeStyle = theme.dark ? "#6e6e6eaa" : "#bebebe";
             ctx.lineWidth = 1;
 
             let gapX = 4;
@@ -259,7 +267,7 @@ namespace phasereditor2d.scene.ui.editor {
                 const a = camera.getScreenPoint(borderX, borderY);
                 const b = camera.getScreenPoint(borderX + borderWidth, borderY + borderHeight);
                 ctx.save();
-                ctx.strokeStyle = "#404040";
+                ctx.strokeStyle = theme.dark ? "#0a0a0a" : "#404040";
                 ctx.strokeRect(a.x + 2, a.y + 2, b.x - a.x, b.y - a.y);
                 ctx.restore();
 

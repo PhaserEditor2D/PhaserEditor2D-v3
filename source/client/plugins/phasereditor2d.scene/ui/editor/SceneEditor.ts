@@ -164,6 +164,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                 : pool.createWebGL(this.getElement(), 100, 100);
 
+            this._gameCanvas.classList.add("GameCanvas");
+
             this._gameCanvas.style.position = "absolute";
             this.getElement().appendChild(container);
 
@@ -191,7 +193,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._game = new Phaser.Game({
                 type: ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                 canvas: this._gameCanvas,
-                backgroundColor: "#8e8e8e",
+                // backgroundColor: "#8e8e8e",
                 scale: {
                     mode: Phaser.Scale.NONE
                 },

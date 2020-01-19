@@ -2692,6 +2692,7 @@ var phasereditor2d;
         (function (ui) {
             var editor;
             (function (editor_5) {
+                var controls = colibri.ui.controls;
                 class OverlayLayer {
                     constructor(editor) {
                         this._editor = editor;
@@ -2743,6 +2744,7 @@ var phasereditor2d;
                         ctx.restore();
                     }
                     renderSelection() {
+                        const theme = controls.Controls.getTheme();
                         const ctx = this._ctx;
                         ctx.save();
                         const camera = this._editor.getScene().getCamera();
@@ -2760,7 +2762,8 @@ var phasereditor2d;
                                     ctx.lineTo(points[3].x, points[3].y);
                                     ctx.closePath();
                                     ctx.stroke();
-                                    ctx.strokeStyle = "#00ff00";
+                                    // ctx.strokeStyle = "#00ff00";
+                                    ctx.strokeStyle = controls.Controls.getTheme().viewerSelectionBackground;
                                     ctx.lineWidth = 2;
                                     ctx.beginPath();
                                     ctx.moveTo(points[0].x, points[0].y);
@@ -2790,7 +2793,8 @@ var phasereditor2d;
                         const canvasHeight = this._canvas.height;
                         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
                         // render grid
-                        ctx.strokeStyle = "#aeaeae";
+                        const theme = controls.Controls.getTheme();
+                        ctx.strokeStyle = theme.dark ? "#6e6e6eaa" : "#bebebe";
                         ctx.lineWidth = 1;
                         let gapX = 4;
                         let gapY = 4;
@@ -2880,7 +2884,7 @@ var phasereditor2d;
                             const a = camera.getScreenPoint(borderX, borderY);
                             const b = camera.getScreenPoint(borderX + borderWidth, borderY + borderHeight);
                             ctx.save();
-                            ctx.strokeStyle = "#404040";
+                            ctx.strokeStyle = theme.dark ? "#0a0a0a" : "#404040";
                             ctx.strokeRect(a.x + 2, a.y + 2, b.x - a.x, b.y - a.y);
                             ctx.restore();
                             ctx.lineWidth = 1;
@@ -2988,6 +2992,7 @@ var phasereditor2d;
                         this._gameCanvas = scene.ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT === Phaser.CANVAS
                             ? pool.create2D(this.getElement(), 100, 100)
                             : pool.createWebGL(this.getElement(), 100, 100);
+                        this._gameCanvas.classList.add("GameCanvas");
                         this._gameCanvas.style.position = "absolute";
                         this.getElement().appendChild(container);
                         container.appendChild(this._gameCanvas);
@@ -3007,7 +3012,7 @@ var phasereditor2d;
                         this._game = new Phaser.Game({
                             type: scene.ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                             canvas: this._gameCanvas,
-                            backgroundColor: "#8e8e8e",
+                            // backgroundColor: "#8e8e8e",
                             scale: {
                                 mode: Phaser.Scale.NONE
                             },

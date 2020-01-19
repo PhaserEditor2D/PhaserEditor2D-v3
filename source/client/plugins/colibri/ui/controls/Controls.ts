@@ -155,7 +155,6 @@ namespace colibri.ui.controls {
             classList: ["light"],
             dark: false,
             viewerSelectionBackground: "#4242ff",
-            // treeItemSelectionBackground: "#525252",
             viewerSelectionForeground: "#f0f0f0",
             viewerForeground: "#000000",
         };

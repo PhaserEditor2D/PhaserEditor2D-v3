@@ -14,3 +14,17 @@
 .PropertyLockIcon:hover {
     cursor: pointer;
 }
+
+.light .SceneEditor .SceneEditorContainer {
+    background: #8e8e8e;
+}
+
+
+.lightBlue .SceneEditor .SceneEditorContainer {
+    background: slategray;
+}
+
+
+.dark .SceneEditor .SceneEditorContainer {
+    background: #3f3f3f;
+}

@@ -18,6 +18,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return obj instanceof Phaser.GameObjects.GameObject
                 && (obj as unknown as ISceneObject).getEditorSupport().hasComponent(TransformComponent);
         }
-
     }
 }
