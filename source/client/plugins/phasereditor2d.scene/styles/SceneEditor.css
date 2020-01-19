@@ -24,7 +24,11 @@
     background: slategray;
 }
 
-
 .dark .SceneEditor .SceneEditorContainer {
     background: #3f3f3f;
+    border-radius: 3px;
+}
+
+.darkPlus .SceneEditor {
+    padding: 0px !important;
 }

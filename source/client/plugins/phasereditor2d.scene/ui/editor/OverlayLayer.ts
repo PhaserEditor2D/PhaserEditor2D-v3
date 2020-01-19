@@ -107,8 +107,8 @@ namespace phasereditor2d.scene.ui.editor {
                         ctx.closePath();
                         ctx.stroke();
 
-                        // ctx.strokeStyle = "#00ff00";
-                        ctx.strokeStyle = controls.Controls.getTheme().viewerSelectionBackground;
+                        ctx.strokeStyle = "#00ff00";
+                        // ctx.strokeStyle = controls.Controls.getTheme().viewerSelectionBackground;
 
                         ctx.lineWidth = 2;
 
