@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     export const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
+    export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor ||
@@ -158,6 +159,22 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "N"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SCALE_SCENE_OBJECT,
+                    name: "Scale objects",
+                    tooltip: "Scale the selected scene objects",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.ScaleTool.ID)
+                },
+                keys: {
+                    key: "S"
                 }
             });
         }

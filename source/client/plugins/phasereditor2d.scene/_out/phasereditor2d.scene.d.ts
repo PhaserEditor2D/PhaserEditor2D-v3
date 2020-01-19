@@ -664,6 +664,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
+    const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
@@ -822,6 +823,8 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         };
         protected globalAngle(sprite: Phaser.GameObjects.Sprite): number;
         protected drawArrowPath(ctx: CanvasRenderingContext2D): void;
+        protected drawCircle(ctx: CanvasRenderingContext2D, color: string): void;
+        protected drawRect(ctx: CanvasRenderingContext2D, color: string): void;
         protected getAvgScreenPointOfObjects(args: ISceneToolContextArgs, fx?: (ob: Phaser.GameObjects.Sprite) => number, fy?: (ob: Phaser.GameObjects.Sprite) => number): Phaser.Math.Vector2;
     }
 }
@@ -1310,18 +1313,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
-        protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
-        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
-        protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
-        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
-        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
-        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
-        createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
-        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     interface IOriginLike extends ISceneObject {
         originX: number;
@@ -1335,15 +1326,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
         readJSON(ser: json.Serializer): void;
         writeJSON(ser: json.Serializer): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import controls = colibri.ui.controls;
-    class OriginSection extends ObjectSceneSection<IOriginLike> {
-        constructor(page: controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
-        canEdit(obj: any, n: number): boolean;
-        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1363,11 +1345,88 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class SimpleOperation<T extends ISceneObjectLike> extends SceneObjectOperation<T> {
+        private _property;
+        constructor(editor: editor.SceneEditor, objects: T[], property: IProperty<T>, value: any);
+        getValue(obj: T): any;
+        setValue(obj: T, value: any): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import json = core.json;
+    interface ITransformLikeObject extends ISceneObjectLike {
+        x: number;
+        y: number;
+        scaleX: number;
+        scaleY: number;
+        angle: number;
+    }
+    class TransformComponent extends Component<ITransformLikeObject> {
+        static x: IProperty<any>;
+        static y: IProperty<any>;
+        static position: IPropertyXY;
+        static scaleX: IProperty<any>;
+        static scaleY: IProperty<any>;
+        static scale: IPropertyXY;
+        static angle: IProperty<any>;
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+        readJSON(ser: json.Serializer): void;
+        writeJSON(ser: json.Serializer): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class VariableComponent extends Component<ISceneObjectLike> {
+        static label: IProperty<ISceneObjectLike>;
+        static scope: IEnumProperty<ISceneObjectLike, ObjectScope>;
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+        writeJSON(ser: core.json.Serializer): void;
+        readJSON(ser: core.json.Serializer): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+        protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
+        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
+        protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
+        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
+        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
+        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
+        createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
+        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class OriginSection extends ObjectSceneSection<IOriginLike> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class PropertyUnlockOperation extends SceneObjectOperation<ISceneObjectLike> {
         private _properties;
         constructor(editor: editor.SceneEditor, objects: ISceneObjectLike[], properties: Array<IProperty<ISceneObjectLike>>, unlocked: boolean);
         getValue(obj: ISceneObjectLike): boolean;
         setValue(obj: ISceneObjectLike, unlocked: any): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TransformSection extends ObjectSceneSection<sceneobjects.ITransformLikeObject> {
+        constructor(page: colibri.ui.controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class VariableSection extends ObjectSceneSection<ISceneObjectLike> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1413,41 +1472,28 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class SimpleOperation<T extends ISceneObjectLike> extends SceneObjectOperation<T> {
-        private _property;
-        constructor(editor: editor.SceneEditor, objects: T[], property: IProperty<T>, value: any);
-        getValue(obj: T): any;
-        setValue(obj: T, value: any): void;
+    class ScaleTool extends editor.tools.SceneTool {
+        static ID: string;
+        constructor();
+        canEdit(obj: unknown): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import json = core.json;
-    interface ITransformLikeObject extends ISceneObjectLike {
-        x: number;
-        y: number;
-        scaleX: number;
-        scaleY: number;
-        angle: number;
-    }
-    class TransformComponent extends Component<ITransformLikeObject> {
-        static x: IProperty<any>;
-        static y: IProperty<any>;
-        static position: IPropertyXY;
-        static scaleX: IProperty<any>;
-        static scaleY: IProperty<any>;
-        static scale: IPropertyXY;
-        static angle: IProperty<any>;
-        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-        readJSON(ser: json.Serializer): void;
-        writeJSON(ser: json.Serializer): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class TransformSection extends ObjectSceneSection<sceneobjects.ITransformLikeObject> {
-        constructor(page: colibri.ui.controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
-        canEdit(obj: any, n: number): boolean;
-        canEditNumber(n: number): boolean;
+    type IScaleAxis = 0 | 0.5 | 1;
+    class ScaleToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        private _x;
+        private _y;
+        private _dragging;
+        constructor(x: IScaleAxis, y: IScaleAxis);
+        getPoint(args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        render(args: editor.tools.ISceneToolRenderArgs): void;
+        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
+        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1494,24 +1540,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
             y: number;
         };
         render(args: editor.tools.ISceneToolRenderArgs): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class VariableComponent extends Component<ISceneObjectLike> {
-        static label: IProperty<ISceneObjectLike>;
-        static scope: IEnumProperty<ISceneObjectLike, ObjectScope>;
-        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-        writeJSON(ser: core.json.Serializer): void;
-        readJSON(ser: core.json.Serializer): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import controls = colibri.ui.controls;
-    class VariableSection extends ObjectSceneSection<ISceneObjectLike> {
-        constructor(page: controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
-        canEdit(obj: any, n: number): boolean;
-        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

@@ -57,7 +57,7 @@ var phasereditor2d;
                     command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
                 }));
                 // scene tools
-                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool()));
+                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool()));
             }
             getSceneFinder() {
                 return this._sceneFinder;
@@ -3359,6 +3359,7 @@ var phasereditor2d;
                     commands.CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
                     commands.CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
                     commands.CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
+                    commands.CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_7.SceneEditor ||
                             args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
@@ -3459,6 +3460,21 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "N"
+                                }
+                            });
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_SCALE_SCENE_OBJECT,
+                                    name: "Scale objects",
+                                    tooltip: "Scale the selected scene objects",
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.ScaleTool.ID)
+                                },
+                                keys: {
+                                    key: "S"
                                 }
                             });
                         }
@@ -4131,8 +4147,26 @@ var phasereditor2d;
                             ctx.stroke();
                             ctx.restore();
                         }
+                        drawCircle(ctx, color) {
+                            ctx.fillStyle = color;
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 6, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.strokeStyle = "#000";
+                            ctx.stroke();
+                        }
+                        drawRect(ctx, color) {
+                            ctx.save();
+                            ctx.translate(-5, -5);
+                            ctx.beginPath();
+                            ctx.rect(0, 0, 10, 10);
+                            ctx.fillStyle = color;
+                            ctx.strokeStyle = "#000";
+                            ctx.fill();
+                            ctx.stroke();
+                            ctx.restore();
+                        }
                         getAvgScreenPointOfObjects(args, fx = obj => 0, fy = obj => 0) {
-                            const worldPoint = new Phaser.Math.Vector2(0, 0);
                             let avgY = 0;
                             let avgX = 0;
                             for (const obj of args.objects) {
@@ -5460,6 +5494,223 @@ var phasereditor2d;
         })(ui = scene_19.ui || (scene_19.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../Component.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                var code = scene.core.code;
+                class OriginComponent extends sceneobjects.Component {
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        const obj = this.getObject();
+                        let add = false;
+                        if (args.prefabSerializer) {
+                            add = obj.originX !== args.prefabSerializer.read("originX", 0.5)
+                                || obj.originY !== args.prefabSerializer.read("originY", 0.5);
+                        }
+                        else {
+                            add = obj.originX !== 0.5 || obj.originY !== 0.5;
+                        }
+                        if (add) {
+                            const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
+                            dom.argFloat(obj.originX);
+                            dom.argFloat(obj.originY);
+                            args.result.push(dom);
+                        }
+                    }
+                    readJSON(ser) {
+                        this.read(ser, OriginComponent.originX, OriginComponent.originY);
+                    }
+                    writeJSON(ser) {
+                        this.write(ser, OriginComponent.originX, OriginComponent.originY);
+                    }
+                }
+                OriginComponent.originX = {
+                    name: "originX",
+                    label: "X",
+                    defValue: 0.5,
+                    getValue: obj => obj.originX,
+                    setValue: (obj, value) => obj.setOrigin(value, obj.originY)
+                };
+                OriginComponent.originY = {
+                    name: "originY",
+                    label: "Y",
+                    defValue: 0.5,
+                    getValue: obj => obj.originY,
+                    setValue: (obj, value) => obj.setOrigin(obj.originX, value)
+                };
+                OriginComponent.origin = {
+                    label: "Origin",
+                    x: OriginComponent.originX,
+                    y: OriginComponent.originY
+                };
+                sceneobjects.OriginComponent = OriginComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class SceneObjectOperation extends ui.editor.undo.SceneEditorOperation {
+                    constructor(editor, objects, value) {
+                        super(editor);
+                        this._objects = objects;
+                        this._value = value;
+                    }
+                    execute() {
+                        this._objIdList = this._objects.map(obj => obj.getEditorSupport().getId());
+                        this._values1 = this._objects.map(_ => this._value);
+                        this._values2 = this._objects.map(obj => this.getValue(obj));
+                        // don't keep the objects reference, we have the ids.
+                        this._objects = null;
+                        this.update(this._values1);
+                    }
+                    undo() {
+                        this.update(this._values2);
+                    }
+                    redo() {
+                        this.update(this._values1);
+                    }
+                    update(values) {
+                        for (let i = 0; i < this._objIdList.length; i++) {
+                            const id = this._objIdList[i];
+                            const obj = this._editor.getScene().getByEditorId(id);
+                            const value = values[i];
+                            if (obj) {
+                                this.setValue(obj, value);
+                            }
+                        }
+                        this._editor.setSelection(this._editor.getSelection());
+                        this._editor.setDirty(true);
+                    }
+                }
+                sceneobjects.SceneObjectOperation = SceneObjectOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class SimpleOperation extends sceneobjects.SceneObjectOperation {
+                    constructor(editor, objects, property, value) {
+                        super(editor, objects, value);
+                        this._property = property;
+                    }
+                    getValue(obj) {
+                        return this._property.getValue(obj);
+                    }
+                    setValue(obj, value) {
+                        this._property.setValue(obj, value);
+                    }
+                }
+                sceneobjects.SimpleOperation = SimpleOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../Component.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TransformComponent extends sceneobjects.Component {
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        const obj = this.getObject();
+                        this.buildSetObjectPropertyCodeDOM_Float("scaleX", obj.scaleX, 1, args);
+                        this.buildSetObjectPropertyCodeDOM_Float("scaleY", obj.scaleY, 1, args);
+                        this.buildSetObjectPropertyCodeDOM_Float("angle", obj.angle, 0, args);
+                    }
+                    readJSON(ser) {
+                        this.readLocal(ser, TransformComponent.x, TransformComponent.y);
+                        this.read(ser, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
+                    }
+                    writeJSON(ser) {
+                        this.writeLocal(ser, TransformComponent.x, TransformComponent.y);
+                        this.write(ser, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
+                    }
+                }
+                TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X");
+                TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y");
+                TransformComponent.position = {
+                    label: "Position",
+                    x: TransformComponent.x,
+                    y: TransformComponent.y
+                };
+                TransformComponent.scaleX = sceneobjects.SimpleProperty("scaleX", 1, "X");
+                TransformComponent.scaleY = sceneobjects.SimpleProperty("scaleY", 1, "Y");
+                TransformComponent.scale = {
+                    label: "Scale",
+                    x: TransformComponent.scaleX,
+                    y: TransformComponent.scaleY
+                };
+                TransformComponent.angle = sceneobjects.SimpleProperty("angle", 0, "Angle");
+                sceneobjects.TransformComponent = TransformComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class VariableComponent extends sceneobjects.Component {
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        // nothing
+                    }
+                    writeJSON(ser) {
+                        this.writeLocal(ser, VariableComponent.label);
+                        this.writeLocal(ser, VariableComponent.scope);
+                    }
+                    readJSON(ser) {
+                        this.readLocal(ser, VariableComponent.label);
+                        this.readLocal(ser, VariableComponent.scope);
+                    }
+                }
+                VariableComponent.label = {
+                    name: "label",
+                    tooltip: "The variable name of the object.",
+                    defValue: undefined,
+                    getValue: obj => obj.getEditorSupport().getLabel(),
+                    setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
+                };
+                VariableComponent.scope = {
+                    name: "scope",
+                    tooltip: "The variable lexical scope.",
+                    defValue: sceneobjects.ObjectScope.METHOD,
+                    getValue: obj => obj.getEditorSupport().getScope(),
+                    setValue: (obj, value) => obj.getEditorSupport().setScope(value),
+                    values: [sceneobjects.ObjectScope.METHOD, sceneobjects.ObjectScope.CLASS, sceneobjects.ObjectScope.PUBLIC],
+                    getValueLabel: value => value[0] + value.toLowerCase().substring(1)
+                };
+                sceneobjects.VariableComponent = VariableComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5583,65 +5834,6 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="../Component.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                var code = scene.core.code;
-                class OriginComponent extends sceneobjects.Component {
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        const obj = this.getObject();
-                        let add = false;
-                        if (args.prefabSerializer) {
-                            add = obj.originX !== args.prefabSerializer.read("originX", 0.5)
-                                || obj.originY !== args.prefabSerializer.read("originY", 0.5);
-                        }
-                        else {
-                            add = obj.originX !== 0.5 || obj.originY !== 0.5;
-                        }
-                        if (add) {
-                            const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
-                            dom.argFloat(obj.originX);
-                            dom.argFloat(obj.originY);
-                            args.result.push(dom);
-                        }
-                    }
-                    readJSON(ser) {
-                        this.read(ser, OriginComponent.originX, OriginComponent.originY);
-                    }
-                    writeJSON(ser) {
-                        this.write(ser, OriginComponent.originX, OriginComponent.originY);
-                    }
-                }
-                OriginComponent.originX = {
-                    name: "originX",
-                    label: "X",
-                    defValue: 0.5,
-                    getValue: obj => obj.originX,
-                    setValue: (obj, value) => obj.setOrigin(value, obj.originY)
-                };
-                OriginComponent.originY = {
-                    name: "originY",
-                    label: "Y",
-                    defValue: 0.5,
-                    getValue: obj => obj.originY,
-                    setValue: (obj, value) => obj.setOrigin(obj.originX, value)
-                };
-                OriginComponent.origin = {
-                    label: "Origin",
-                    x: OriginComponent.originX,
-                    y: OriginComponent.originY
-                };
-                sceneobjects.OriginComponent = OriginComponent;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5670,53 +5862,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class SceneObjectOperation extends ui.editor.undo.SceneEditorOperation {
-                    constructor(editor, objects, value) {
-                        super(editor);
-                        this._objects = objects;
-                        this._value = value;
-                    }
-                    execute() {
-                        this._objIdList = this._objects.map(obj => obj.getEditorSupport().getId());
-                        this._values1 = this._objects.map(_ => this._value);
-                        this._values2 = this._objects.map(obj => this.getValue(obj));
-                        // don't keep the objects reference, we have the ids.
-                        this._objects = null;
-                        this.update(this._values1);
-                    }
-                    undo() {
-                        this.update(this._values2);
-                    }
-                    redo() {
-                        this.update(this._values1);
-                    }
-                    update(values) {
-                        for (let i = 0; i < this._objIdList.length; i++) {
-                            const id = this._objIdList[i];
-                            const obj = this._editor.getScene().getByEditorId(id);
-                            const value = values[i];
-                            if (obj) {
-                                this.setValue(obj, value);
-                            }
-                        }
-                        this._editor.setSelection(this._editor.getSelection());
-                        this._editor.setDirty(true);
-                    }
-                }
-                sceneobjects.SceneObjectOperation = SceneObjectOperation;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./SceneObjectOperation.ts"/>
+/// <reference path="../SceneObjectOperation.ts"/>
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5754,6 +5900,90 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.PropertyUnlockOperation = PropertyUnlockOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../../../editor/properties/BaseSceneSection.ts"/>
+/// <reference path="./ObjectSceneSection.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TransformSection extends sceneobjects.ObjectSceneSection {
+                    constructor(page) {
+                        super(page, "SceneEditor.TransformSection", "Transform", false);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElementWithPropertiesXY(parent);
+                        this.createPropertyXYRow(comp, sceneobjects.TransformComponent.position, false);
+                        this.createPropertyXYRow(comp, sceneobjects.TransformComponent.scale);
+                        this.createNumberPropertyRow(comp, sceneobjects.TransformComponent.angle, false);
+                    }
+                    canEdit(obj, n) {
+                        return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TransformComponent) !== null;
+                    }
+                    canEditNumber(n) {
+                        return n > 0;
+                    }
+                }
+                sceneobjects.TransformSection = TransformSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class VariableSection extends sceneobjects.ObjectSceneSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.scene.ui.sceneobjects", "Variable", false);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElement(parent, 2);
+                        {
+                            // Name
+                            this.createLabel(comp, "Name");
+                            this.createStringField(comp, sceneobjects.VariableComponent.label, false);
+                        }
+                        {
+                            // Type
+                            this.createLabel(comp, "Type");
+                            const text = this.createText(comp, true);
+                            this.addUpdater(() => {
+                                text.value = this.flatValues_StringJoin(this.getSelection().map(obj => {
+                                    const support = obj.getEditorSupport();
+                                    let typename = support.getObjectType();
+                                    if (support.isPrefabInstance()) {
+                                        typename = `prefab ${support.getPrefabName()} (${typename})`;
+                                    }
+                                    return typename;
+                                }));
+                            });
+                        }
+                        {
+                            // Scope
+                            this.createLabel(comp, "Scope", "The lexical scope of the object.");
+                            this.createEnumField(comp, sceneobjects.VariableComponent.scope, false);
+                        }
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof Phaser.GameObjects.GameObject;
+                    }
+                    canEditNumber(n) {
+                        return n === 1;
+                    }
+                }
+                sceneobjects.VariableSection = VariableSection;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5818,7 +6048,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="../../editor/tools/SceneToolOperation.ts" />
+/// <reference path="../../../editor/tools/SceneToolOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5957,24 +6187,22 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class SimpleOperation extends sceneobjects.SceneObjectOperation {
-                    constructor(editor, objects, property, value) {
-                        super(editor, objects, value);
-                        this._property = property;
+                class ScaleTool extends ui.editor.tools.SceneTool {
+                    constructor() {
+                        super(ScaleTool.ID);
+                        this.addItems(new sceneobjects.ScaleToolItem(1, 0.5), new sceneobjects.ScaleToolItem(1, 1), new sceneobjects.ScaleToolItem(0.5, 1));
                     }
-                    getValue(obj) {
-                        return this._property.getValue(obj);
-                    }
-                    setValue(obj, value) {
-                        this._property.setValue(obj, value);
+                    canEdit(obj) {
+                        return obj instanceof Phaser.GameObjects.GameObject
+                            && obj.getEditorSupport().hasComponent(sceneobjects.TransformComponent);
                     }
                 }
-                sceneobjects.SimpleOperation = SimpleOperation;
+                ScaleTool.ID = "phasereditor2d.scene.ui.sceneobjects.ScaleTool";
+                sceneobjects.ScaleTool = ScaleTool;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="../Component.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5983,75 +6211,104 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TransformComponent extends sceneobjects.Component {
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        const obj = this.getObject();
-                        this.buildSetObjectPropertyCodeDOM_Float("scaleX", obj.scaleX, 1, args);
-                        this.buildSetObjectPropertyCodeDOM_Float("scaleY", obj.scaleY, 1, args);
-                        this.buildSetObjectPropertyCodeDOM_Float("angle", obj.angle, 0, args);
+                class ScaleToolItem extends ui.editor.tools.SceneToolItem {
+                    constructor(x, y) {
+                        super();
+                        this._x = x;
+                        this._y = y;
                     }
-                    readJSON(ser) {
-                        this.readLocal(ser, TransformComponent.x, TransformComponent.y);
-                        this.read(ser, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
+                    getPoint(args) {
+                        return this.getAvgScreenPointOfObjects(args, (sprite) => this._x - sprite.originX, (sprite) => this._y - sprite.originY);
                     }
-                    writeJSON(ser) {
-                        this.writeLocal(ser, TransformComponent.x, TransformComponent.y);
-                        this.write(ser, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
+                    render(args) {
+                        const point = this.getPoint(args);
+                        const ctx = args.canvasContext;
+                        ctx.save();
+                        ctx.translate(point.x, point.y);
+                        // this.drawRect(args.canvasContext, "#f0f");
+                        this.drawCircle(ctx, "#0ff");
+                        ctx.restore();
+                    }
+                    containsPoint(args) {
+                        const point = this.getPoint(args);
+                        return Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y) < 20;
+                    }
+                    onStartDrag(args) {
+                        if (!this.containsPoint(args)) {
+                            return;
+                        }
+                        this._dragging = true;
+                        const point = this.getPoint(args);
+                        for (const obj of args.objects) {
+                            const sprite = obj;
+                            const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
+                            const initLocalPos = new Phaser.Math.Vector2();
+                            sprite.getWorldTransformMatrix(worldTx);
+                            worldTx.applyInverse(point.x, point.y, initLocalPos);
+                            sprite.setData("ScaleToolItem", {
+                                initScaleX: sprite.scaleX,
+                                initScaleY: sprite.scaleY,
+                                initWidth: sprite.width,
+                                initHeight: sprite.height,
+                                initLocalPos: initLocalPos,
+                                initWorldTx: worldTx
+                            });
+                        }
+                    }
+                    onDrag(args) {
+                        if (!this._dragging) {
+                            return;
+                        }
+                        for (const obj of args.objects) {
+                            const sprite = obj;
+                            const data = sprite.data.get("ScaleToolItem");
+                            const initLocalPos = data.initLocalPos;
+                            const localPos = new Phaser.Math.Vector2();
+                            const worldTx = data.initWorldTx;
+                            worldTx.applyInverse(args.x, args.y, localPos);
+                            let flipX = sprite.flipX ? -1 : 1;
+                            let flipY = sprite.flipY ? -1 : 1;
+                            if (sprite instanceof Phaser.GameObjects.TileSprite) {
+                                flipX = 1;
+                                flipY = 1;
+                            }
+                            const dx = (localPos.x - initLocalPos.x) * flipX / args.camera.zoom;
+                            const dy = (localPos.y - initLocalPos.y) * flipY / args.camera.zoom;
+                            let width = data.initWidth - sprite.displayOriginX;
+                            let height = data.initHeight - sprite.displayOriginY;
+                            if (width === 0) {
+                                width = data.initWidth;
+                            }
+                            if (height === 0) {
+                                height = data.initHeight;
+                            }
+                            const scaleDX = dx / width * data.initScaleX;
+                            const scaleDY = dy / height * data.initScaleY;
+                            const newScaleX = data.initScaleX + scaleDX;
+                            const newScaleY = data.initScaleY + scaleDY;
+                            const changeAll = this._x === 1 && this._y === 1;
+                            const changeX = this._x === 1 && this._y === 0.5 || changeAll;
+                            const changeY = this._x === 0.5 && this._y === 1 || changeAll;
+                            console.log(changeX + " " + changeY);
+                            if (changeX) {
+                                sprite.scaleX = newScaleX;
+                            }
+                            if (changeY) {
+                                sprite.scaleY = newScaleY;
+                            }
+                            args.editor.dispatchSelectionChanged();
+                        }
+                    }
+                    onStopDrag(args) {
+                        this._dragging = false;
                     }
                 }
-                TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X");
-                TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y");
-                TransformComponent.position = {
-                    label: "Position",
-                    x: TransformComponent.x,
-                    y: TransformComponent.y
-                };
-                TransformComponent.scaleX = sceneobjects.SimpleProperty("scaleX", 1, "X");
-                TransformComponent.scaleY = sceneobjects.SimpleProperty("scaleY", 1, "Y");
-                TransformComponent.scale = {
-                    label: "Scale",
-                    x: TransformComponent.scaleX,
-                    y: TransformComponent.scaleY
-                };
-                TransformComponent.angle = sceneobjects.SimpleProperty("angle", 0, "Angle");
-                sceneobjects.TransformComponent = TransformComponent;
+                sceneobjects.ScaleToolItem = ScaleToolItem;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="../../editor/properties/BaseSceneSection.ts"/>
-/// <reference path="./ObjectSceneSection.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class TransformSection extends sceneobjects.ObjectSceneSection {
-                    constructor(page) {
-                        super(page, "SceneEditor.TransformSection", "Transform", false);
-                    }
-                    createForm(parent) {
-                        const comp = this.createGridElementWithPropertiesXY(parent);
-                        this.createPropertyXYRow(comp, sceneobjects.TransformComponent.position, false);
-                        this.createPropertyXYRow(comp, sceneobjects.TransformComponent.scale);
-                        this.createNumberPropertyRow(comp, sceneobjects.TransformComponent.angle, false);
-                    }
-                    canEdit(obj, n) {
-                        return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TransformComponent) !== null;
-                    }
-                    canEditNumber(n) {
-                        return n > 0;
-                    }
-                }
-                sceneobjects.TransformSection = TransformSection;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="../../editor/tools/SceneToolOperation.ts" />
+/// <reference path="../../../editor/tools/SceneToolOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -6189,100 +6446,6 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.TranslateToolItem = TranslateToolItem;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class VariableComponent extends sceneobjects.Component {
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        // nothing
-                    }
-                    writeJSON(ser) {
-                        this.writeLocal(ser, VariableComponent.label);
-                        this.writeLocal(ser, VariableComponent.scope);
-                    }
-                    readJSON(ser) {
-                        this.readLocal(ser, VariableComponent.label);
-                        this.readLocal(ser, VariableComponent.scope);
-                    }
-                }
-                VariableComponent.label = {
-                    name: "label",
-                    tooltip: "The variable name of the object.",
-                    defValue: undefined,
-                    getValue: obj => obj.getEditorSupport().getLabel(),
-                    setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
-                };
-                VariableComponent.scope = {
-                    name: "scope",
-                    tooltip: "The variable lexical scope.",
-                    defValue: sceneobjects.ObjectScope.METHOD,
-                    getValue: obj => obj.getEditorSupport().getScope(),
-                    setValue: (obj, value) => obj.getEditorSupport().setScope(value),
-                    values: [sceneobjects.ObjectScope.METHOD, sceneobjects.ObjectScope.CLASS, sceneobjects.ObjectScope.PUBLIC],
-                    getValueLabel: value => value[0] + value.toLowerCase().substring(1)
-                };
-                sceneobjects.VariableComponent = VariableComponent;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class VariableSection extends sceneobjects.ObjectSceneSection {
-                    constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects", "Variable", false);
-                    }
-                    createForm(parent) {
-                        const comp = this.createGridElement(parent, 2);
-                        {
-                            // Name
-                            this.createLabel(comp, "Name");
-                            this.createStringField(comp, sceneobjects.VariableComponent.label, false);
-                        }
-                        {
-                            // Type
-                            this.createLabel(comp, "Type");
-                            const text = this.createText(comp, true);
-                            this.addUpdater(() => {
-                                text.value = this.flatValues_StringJoin(this.getSelection().map(obj => {
-                                    const support = obj.getEditorSupport();
-                                    let typename = support.getObjectType();
-                                    if (support.isPrefabInstance()) {
-                                        typename = `prefab ${support.getPrefabName()} (${typename})`;
-                                    }
-                                    return typename;
-                                }));
-                            });
-                        }
-                        {
-                            // Scope
-                            this.createLabel(comp, "Scope", "The lexical scope of the object.");
-                            this.createEnumField(comp, sceneobjects.VariableComponent.scope, false);
-                        }
-                    }
-                    canEdit(obj, n) {
-                        return obj instanceof Phaser.GameObjects.GameObject;
-                    }
-                    canEditNumber(n) {
-                        return n === 1;
-                    }
-                }
-                sceneobjects.VariableSection = VariableSection;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

@@ -1,4 +1,4 @@
-/// <reference path="../../editor/properties/BaseSceneSection.ts"/>
+/// <reference path="../../../editor/properties/BaseSceneSection.ts"/>
 /// <reference path="./ObjectSceneSection.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {

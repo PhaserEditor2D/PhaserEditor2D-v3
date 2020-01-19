@@ -1,4 +1,4 @@
-/// <reference path="./SceneObjectOperation.ts"/>
+/// <reference path="../SceneObjectOperation.ts"/>
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 

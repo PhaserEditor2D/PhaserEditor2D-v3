@@ -76,12 +76,39 @@ namespace phasereditor2d.scene.ui.editor.tools {
             ctx.restore();
         }
 
+        protected drawCircle(ctx: CanvasRenderingContext2D, color: string) {
+
+            ctx.fillStyle = color;
+
+            ctx.beginPath();
+            ctx.arc(0, 0, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = "#000";
+            ctx.stroke();
+        }
+
+        protected drawRect(ctx: CanvasRenderingContext2D, color: string) {
+
+            ctx.save();
+
+            ctx.translate(-5, -5);
+            ctx.beginPath();
+            ctx.rect(0, 0, 10, 10);
+
+            ctx.fillStyle = color;
+            ctx.strokeStyle = "#000";
+
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
         protected getAvgScreenPointOfObjects(
             args: ISceneToolContextArgs,
             fx: (ob: Phaser.GameObjects.Sprite) => number = obj => 0,
             fy: (ob: Phaser.GameObjects.Sprite) => number = obj => 0) {
-
-            const worldPoint = new Phaser.Math.Vector2(0, 0);
 
             let avgY = 0;
             let avgX = 0;
