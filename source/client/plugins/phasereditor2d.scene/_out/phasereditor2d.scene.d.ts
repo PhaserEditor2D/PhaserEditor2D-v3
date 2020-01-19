@@ -822,7 +822,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
             y: number;
         };
         protected globalAngle(sprite: Phaser.GameObjects.Sprite): number;
-        protected drawArrowPath(ctx: CanvasRenderingContext2D): void;
+        protected drawArrowPath(ctx: CanvasRenderingContext2D, color: string): void;
         protected drawCircle(ctx: CanvasRenderingContext2D, color: string): void;
         protected drawRect(ctx: CanvasRenderingContext2D, color: string): void;
         protected getAvgScreenPointOfObjects(args: ISceneToolContextArgs, fx?: (ob: Phaser.GameObjects.Sprite) => number, fy?: (ob: Phaser.GameObjects.Sprite) => number): Phaser.Math.Vector2;

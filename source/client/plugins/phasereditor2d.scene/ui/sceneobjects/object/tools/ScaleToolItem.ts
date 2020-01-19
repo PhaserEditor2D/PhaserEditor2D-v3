@@ -36,8 +36,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ctx.translate(point.x, point.y);
 
-            // this.drawRect(args.canvasContext, "#f0f");
-            this.drawCircle(ctx, "#0ff");
+            const angle = this.globalAngle(args.objects[0] as any);
+
+            ctx.rotate(Phaser.Math.DegToRad(angle));
+
+            this.drawRect(ctx, "#0ff");
 
             ctx.restore();
         }
@@ -133,8 +136,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const changeAll = this._x === 1 && this._y === 1;
                 const changeX = this._x === 1 && this._y === 0.5 || changeAll;
                 const changeY = this._x === 0.5 && this._y === 1 || changeAll;
-
-                console.log(changeX + " " + changeY);
 
                 if (changeX) {
                     sprite.scaleX = newScaleX;

@@ -60,9 +60,12 @@ namespace phasereditor2d.scene.ui.editor.tools {
             return a;
         }
 
-        protected drawArrowPath(ctx: CanvasRenderingContext2D) {
+        protected drawArrowPath(ctx: CanvasRenderingContext2D, color: string) {
 
             ctx.save();
+
+            ctx.fillStyle = color;
+            ctx.strokeStyle = "#000";
 
             ctx.beginPath();
             ctx.moveTo(0, -6);

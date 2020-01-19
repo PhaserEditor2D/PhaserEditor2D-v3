@@ -4136,8 +4136,10 @@ var phasereditor2d;
                             }
                             return a;
                         }
-                        drawArrowPath(ctx) {
+                        drawArrowPath(ctx, color) {
                             ctx.save();
+                            ctx.fillStyle = color;
+                            ctx.strokeStyle = "#000";
                             ctx.beginPath();
                             ctx.moveTo(0, -6);
                             ctx.lineTo(12, 0);
@@ -6225,8 +6227,9 @@ var phasereditor2d;
                         const ctx = args.canvasContext;
                         ctx.save();
                         ctx.translate(point.x, point.y);
-                        // this.drawRect(args.canvasContext, "#f0f");
-                        this.drawCircle(ctx, "#0ff");
+                        const angle = this.globalAngle(args.objects[0]);
+                        ctx.rotate(Phaser.Math.DegToRad(angle));
+                        this.drawRect(ctx, "#0ff");
                         ctx.restore();
                     }
                     containsPoint(args) {
@@ -6289,7 +6292,6 @@ var phasereditor2d;
                             const changeAll = this._x === 1 && this._y === 1;
                             const changeX = this._x === 1 && this._y === 0.5 || changeAll;
                             const changeY = this._x === 0.5 && this._y === 1 || changeAll;
-                            console.log(changeX + " " + changeY);
                             if (changeX) {
                                 sprite.scaleX = newScaleX;
                             }
@@ -6431,16 +6433,18 @@ var phasereditor2d;
                         const ctx = args.canvasContext;
                         ctx.strokeStyle = "#000";
                         if (this._axis === "xy") {
-                            ctx.fillStyle = "#ffff00";
-                            ctx.fillRect(x - 5, y - 5, 10, 10);
-                            ctx.strokeRect(x - 5, y - 5, 10, 10);
-                        }
-                        else {
-                            ctx.fillStyle = this._axis === "x" ? "#f00" : "#0f0";
                             ctx.save();
                             ctx.translate(x, y);
-                            ctx.rotate(this._axis === "x" ? 0 : Math.PI / 2);
-                            this.drawArrowPath(ctx);
+                            this.drawCircle(ctx, "#ff0");
+                            ctx.restore();
+                        }
+                        else {
+                            ctx.save();
+                            ctx.translate(x, y);
+                            if (this._axis === "y") {
+                                ctx.rotate(Math.PI / 2);
+                            }
+                            this.drawArrowPath(ctx, this._axis === "x" ? "#f00" : "#0f0");
                             ctx.restore();
                         }
                     }

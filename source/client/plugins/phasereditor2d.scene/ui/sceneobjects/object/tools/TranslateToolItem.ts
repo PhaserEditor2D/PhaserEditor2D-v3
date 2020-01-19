@@ -102,21 +102,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._axis === "xy") {
 
-                ctx.fillStyle = "#ffff00";
-                ctx.fillRect(x - 5, y - 5, 10, 10);
-                ctx.strokeRect(x - 5, y - 5, 10, 10);
+                ctx.save();
+
+                ctx.translate(x, y);
+
+                this.drawCircle(ctx, "#ff0");
+
+                ctx.restore();
 
             } else {
-
-                ctx.fillStyle = this._axis === "x" ? "#f00" : "#0f0";
 
                 ctx.save();
 
                 ctx.translate(x, y);
 
-                ctx.rotate(this._axis === "x" ? 0 : Math.PI / 2);
+                if (this._axis === "y") {
 
-                this.drawArrowPath(ctx);
+                    ctx.rotate(Math.PI / 2);
+                }
+
+                this.drawArrowPath(ctx, this._axis === "x" ? "#f00" : "#0f0");
 
                 ctx.restore();
             }
