@@ -120,7 +120,7 @@ namespace colibri.ui.controls {
         }
 
         private static renderTooltip(keyString: string, tooltip: string) {
-            return "<span class='TooltipKeyString'>" + keyString + "</span> " + tooltip;
+            return "<span class='TooltipKeyString'>(" + keyString + ")</span> " + tooltip;
         }
 
     }

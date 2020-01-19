@@ -3282,7 +3282,7 @@ var colibri;
                     return this.tooltip(element, tooltip);
                 }
                 static renderTooltip(keyString, tooltip) {
-                    return "<span class='TooltipKeyString'>" + keyString + "</span> " + tooltip;
+                    return "<span class='TooltipKeyString'>(" + keyString + ")</span> " + tooltip;
                 }
             }
             controls.Tooltip = Tooltip;
