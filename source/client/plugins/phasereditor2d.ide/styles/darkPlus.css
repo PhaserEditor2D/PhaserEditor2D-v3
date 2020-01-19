@@ -172,6 +172,10 @@ Important:
     background: rgba(255, 255, 255, 0.3);
 }
 
+.darkPlus .ToolbarItem.ActionSelected {
+    border-color: #858585;
+}
+
 /* ProgressBar */
 
 .darkPlus .ProgressBar {
