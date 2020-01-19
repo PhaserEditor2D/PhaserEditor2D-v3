@@ -29,6 +29,8 @@ namespace phasereditor2d.scene.ui.editor.tools {
                 this._values0.set(id, value0);
                 this._values1.set(id, value1);
             }
+
+            this.getEditor().setDirty(true);
         }
 
         abstract getInitialValue(obj: any): TValue;

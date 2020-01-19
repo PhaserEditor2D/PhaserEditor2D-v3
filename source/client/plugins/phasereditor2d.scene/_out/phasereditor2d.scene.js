@@ -4432,6 +4432,7 @@ var phasereditor2d;
                                 this._values0.set(id, value0);
                                 this._values1.set(id, value1);
                             }
+                            this.getEditor().setDirty(true);
                         }
                         setValues(values) {
                             for (const obj of this._objects) {
@@ -6194,6 +6195,32 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                class ScaleOperation extends ui.editor.tools.SceneToolOperation {
+                    getInitialValue(obj) {
+                        return sceneobjects.ScaleToolItem.getInitialScale(obj);
+                    }
+                    getFinalValue(obj) {
+                        const sprite = obj;
+                        return { x: sprite.scaleX, y: sprite.scaleY };
+                    }
+                    setValue(obj, value) {
+                        const sprite = obj;
+                        sprite.setScale(value.x, value.y);
+                    }
+                }
+                sceneobjects.ScaleOperation = ScaleOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 class ScaleTool extends ui.editor.tools.SceneTool {
                     constructor() {
                         super(ScaleTool.ID);
@@ -6263,6 +6290,10 @@ var phasereditor2d;
                             });
                         }
                     }
+                    static getInitialScale(obj) {
+                        const data = obj.getData("ScaleToolItem");
+                        return { x: data.initScaleX, y: data.initScaleY };
+                    }
                     onDrag(args) {
                         if (!this._dragging) {
                             return;
@@ -6307,7 +6338,10 @@ var phasereditor2d;
                         }
                     }
                     onStopDrag(args) {
-                        this._dragging = false;
+                        if (this._dragging) {
+                            args.editor.getUndoManager().add(new sceneobjects.ScaleOperation(args));
+                            this._dragging = false;
+                        }
                     }
                 }
                 sceneobjects.ScaleToolItem = ScaleToolItem;

@@ -85,6 +85,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        static getInitialScale(obj: any): { x: number, y: number } {
+
+            const data = obj.getData("ScaleToolItem");
+
+            return { x: data.initScaleX, y: data.initScaleY };
+        }
+
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
             if (!this._dragging) {
@@ -151,7 +158,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
-            this._dragging = false;
+            if (this._dragging) {
+
+                args.editor.getUndoManager().add(new ScaleOperation(args));
+
+                this._dragging = false;
+            }
         }
     }
 }

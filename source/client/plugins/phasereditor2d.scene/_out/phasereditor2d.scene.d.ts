@@ -1472,6 +1472,25 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class ScaleOperation extends editor.tools.SceneToolOperation<{
+        x: number;
+        y: number;
+    }> {
+        getInitialValue(obj: any): {
+            x: number;
+            y: number;
+        };
+        getFinalValue(obj: any): {
+            x: number;
+            y: number;
+        };
+        setValue(obj: any, value: {
+            x: number;
+            y: number;
+        }): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ScaleTool extends editor.tools.SceneTool {
         static ID: string;
         constructor();
@@ -1492,6 +1511,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         render(args: editor.tools.ISceneToolRenderArgs): void;
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        static getInitialScale(obj: any): {
+            x: number;
+            y: number;
+        };
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
     }
