@@ -161,6 +161,10 @@ Important:
     background: rgba(255, 255, 255, 0.7);
 }
 
+.light .ToolbarItem.ActionSelected {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 /* ProgressBar */
 
 .light .ProgressBar {

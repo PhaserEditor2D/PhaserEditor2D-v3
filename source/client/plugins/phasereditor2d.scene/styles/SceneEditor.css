@@ -15,20 +15,29 @@
     cursor: pointer;
 }
 
+
+/* light */ 
+
 .light .SceneEditor .SceneEditorContainer {
     background: #8e8e8e;
 }
 
+/* light blue */
 
 .lightBlue .SceneEditor .SceneEditorContainer {
     background: slategray;
 }
+
+/* dark */
 
 .dark .SceneEditor .SceneEditorContainer {
     background: #3f3f3f;
     border-radius: 3px;
 }
 
+/* dark plus */
+
 .darkPlus .SceneEditor {
     padding: 0px !important;
 }
+

@@ -456,6 +456,7 @@ declare namespace colibri.ui.controls {
         enabled?: boolean;
         showText?: boolean;
         commandId?: string;
+        selected?: boolean;
         callback?: () => void;
     };
     class Action extends EventTarget {
@@ -465,8 +466,11 @@ declare namespace colibri.ui.controls {
         private _icon;
         private _enabled;
         private _showText;
+        private _selected;
         private _callback;
         constructor(config: ActionConfig);
+        isSelected(): boolean;
+        setSelected(selected: boolean): void;
         getCommandId(): string;
         getCommandKeyString(): string;
         isEnabled(): boolean;

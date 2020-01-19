@@ -582,6 +582,7 @@ declare namespace phasereditor2d.scene.ui.editor {
     import io = colibri.core.io;
     interface IEditorState {
         cameraState: ICameraState;
+        toolsState: tools.ISceneToolsState;
     }
     export class SceneEditor extends colibri.ui.ide.FileEditor {
         private _blocksProvider;
@@ -614,6 +615,9 @@ declare namespace phasereditor2d.scene.ui.editor {
         private createGame;
         private updateTitleIcon;
         getIcon(): controls.IImage;
+        private _toolActionMap;
+        private createActions;
+        getToolActionMap(): Map<string, controls.Action>;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
         private readScene;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
@@ -925,14 +929,20 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.tools {
+    interface ISceneToolsState {
+        selectedId: string;
+    }
     class SceneToolsManager {
         private _editor;
         private _activeTool;
         private _tools;
         constructor(editor: SceneEditor);
+        setState(state: ISceneToolsState): void;
+        getState(): ISceneToolsState;
         findTool(toolId: string): SceneTool;
         getActiveTool(): SceneTool;
         setActiveTool(tool: SceneTool): void;
+        private updateAction;
         swapTool(toolId: string): void;
     }
 }

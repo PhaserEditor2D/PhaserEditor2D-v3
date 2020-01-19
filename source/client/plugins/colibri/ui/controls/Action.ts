@@ -9,6 +9,7 @@ namespace colibri.ui.controls {
         enabled?: boolean,
         showText?: boolean,
         commandId?: string,
+        selected?: boolean,
         callback?: () => void
     };
 
@@ -20,6 +21,7 @@ namespace colibri.ui.controls {
         private _icon: IImage;
         private _enabled: boolean;
         private _showText: boolean;
+        private _selected: boolean;
         private _callback: () => void;
 
         constructor(config: ActionConfig) {
@@ -32,6 +34,7 @@ namespace colibri.ui.controls {
             this._enabled = config.enabled === undefined || config.enabled;
             this._callback = config.callback ?? null;
             this._commandId = config.commandId ?? null;
+            this._selected = config.selected ?? false;
 
             if (this._commandId) {
 
@@ -46,6 +49,17 @@ namespace colibri.ui.controls {
                     this._icon = this._icon || command.getIcon();
                 }
             }
+        }
+
+        isSelected() {
+            return this._selected;
+        }
+
+        setSelected(selected: boolean) {
+
+            this._selected = selected;
+
+            this.dispatchEvent(new CustomEvent(EVENT_ACTION_CHANGED));
         }
 
         getCommandId() {
@@ -96,8 +110,6 @@ namespace colibri.ui.controls {
 
                 Platform.getWorkbench().getCommandManager().executeCommand(this._commandId);
             }
-
         }
-
     }
 }

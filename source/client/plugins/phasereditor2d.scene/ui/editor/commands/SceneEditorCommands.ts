@@ -134,6 +134,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_MOVE_SCENE_OBJECT,
                     name: "Move Objects",
+                    icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
                     tooltip: "Translate the selected scene objects",
                 },
                 handler: {
@@ -150,6 +151,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_ROTATE_SCENE_OBJECT,
                     name: "Rotate objects",
+                    icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
                     tooltip: "Rotate the selected scene objects",
                 },
                 handler: {
@@ -166,6 +168,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_SCALE_SCENE_OBJECT,
                     name: "Scale objects",
+                    icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
                     tooltip: "Scale the selected scene objects",
                 },
                 handler: {

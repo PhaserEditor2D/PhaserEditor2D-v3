@@ -33,6 +33,7 @@ namespace phasereditor2d.scene.ui.editor {
     interface IEditorState {
 
         cameraState: ICameraState;
+        toolsState: tools.ISceneToolsState;
     }
 
     export class SceneEditor extends colibri.ui.ide.FileEditor {
@@ -128,11 +129,14 @@ namespace phasereditor2d.scene.ui.editor {
             }
 
             state.cameraState = this._cameraManager.getState();
+            state.toolsState = this._toolsManager.getState();
         }
 
         restoreState(state: IEditorState) {
 
             this._editorState = state;
+
+            this._toolsManager.setState(state.toolsState);
         }
 
         protected onEditorInputContentChanged() {
@@ -184,6 +188,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._actionManager = new ActionManager(this);
             this._toolsManager = new tools.SceneToolsManager(this);
             this._mouseManager = new MouseManager(this);
+
         }
 
         private createGame() {
@@ -253,7 +258,40 @@ namespace phasereditor2d.scene.ui.editor {
             return super.getIcon();
         }
 
+        private _toolActionMap: Map<string, controls.Action>;
+
+        private createActions() {
+
+            if (this._toolActionMap) {
+                return;
+            }
+
+            this._toolActionMap = new Map();
+
+            const tuples = [
+                [sceneobjects.TranslateTool.ID, commands.CMD_MOVE_SCENE_OBJECT],
+                [sceneobjects.ScaleTool.ID, commands.CMD_SCALE_SCENE_OBJECT],
+                [sceneobjects.RotateTool.ID, commands.CMD_ROTATE_SCENE_OBJECT]
+            ];
+
+            for (const info of tuples) {
+
+                const [toolId, cmd] = info;
+
+                this._toolActionMap.set(toolId, new controls.Action({
+                    commandId: cmd,
+                    showText: false
+                }));
+            }
+        }
+
+        getToolActionMap() {
+            return this._toolActionMap;
+        }
+
         createEditorToolbar(parent: HTMLElement) {
+
+            this.createActions();
 
             const manager = new controls.ToolbarManager(parent);
 
@@ -262,20 +300,11 @@ namespace phasereditor2d.scene.ui.editor {
                 showText: false
             }));
 
-            manager.add(new controls.Action({
-                icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
-                showText: false
-            }));
+            manager.add(this._toolActionMap.get(sceneobjects.TranslateTool.ID));
 
-            manager.add(new controls.Action({
-                icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
-                showText: false
-            }));
+            manager.add(this._toolActionMap.get(sceneobjects.ScaleTool.ID));
 
-            manager.add(new controls.Action({
-                icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
-                showText: false
-            }));
+            manager.add(this._toolActionMap.get(sceneobjects.RotateTool.ID));
 
             manager.addCommand(commands.CMD_OPEN_COMPILED_FILE, {
                 showText: false

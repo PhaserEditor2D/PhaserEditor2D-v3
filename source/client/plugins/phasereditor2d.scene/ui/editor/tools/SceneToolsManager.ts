@@ -1,5 +1,10 @@
 namespace phasereditor2d.scene.ui.editor.tools {
 
+    export interface ISceneToolsState {
+
+        selectedId: string;
+    }
+
     export class SceneToolsManager {
 
         private _editor: SceneEditor;
@@ -13,7 +18,29 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             this._tools = exts.flatMap(ext => ext.getTools());
 
-            console.log(this._tools);
+            this.setActiveTool(this.findTool(sceneobjects.TranslateTool.ID));
+        }
+
+        setState(state: ISceneToolsState) {
+
+            if (state) {
+
+                const id = state.selectedId;
+
+                const tool = this.findTool(id);
+
+                if (tool) {
+
+                    this.setActiveTool(tool);
+                }
+            }
+        }
+
+        getState(): ISceneToolsState {
+
+            return {
+                selectedId: this._activeTool ? this._activeTool.getId() : undefined
+            };
         }
 
         findTool(toolId: string) {
@@ -29,9 +56,26 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             console.log("Set tool: " + (tool ? tool.getId() : "null"));
 
+            this.updateAction(this._activeTool, false);
+            this.updateAction(tool, true);
+
             this._activeTool = tool;
 
             this._editor.repaint();
+
+        }
+
+        private updateAction(tool: tools.SceneTool, selected: boolean) {
+
+            if (tool) {
+
+                const action = this._editor.getToolActionMap().get(tool.getId());
+
+                if (action) {
+
+                    action.setSelected(selected);
+                }
+            }
         }
 
         swapTool(toolId: string) {

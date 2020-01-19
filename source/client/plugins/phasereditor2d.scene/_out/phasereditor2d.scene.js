@@ -2971,9 +2971,11 @@ var phasereditor2d;
                             return;
                         }
                         state.cameraState = this._cameraManager.getState();
+                        state.toolsState = this._toolsManager.getState();
                     }
                     restoreState(state) {
                         this._editorState = state;
+                        this._toolsManager.setState(state.toolsState);
                     }
                     onEditorInputContentChanged() {
                         // TODO: missing to implement
@@ -3054,24 +3056,37 @@ var phasereditor2d;
                         }
                         return super.getIcon();
                     }
+                    createActions() {
+                        if (this._toolActionMap) {
+                            return;
+                        }
+                        this._toolActionMap = new Map();
+                        const tuples = [
+                            [ui.sceneobjects.TranslateTool.ID, editor.commands.CMD_MOVE_SCENE_OBJECT],
+                            [ui.sceneobjects.ScaleTool.ID, editor.commands.CMD_SCALE_SCENE_OBJECT],
+                            [ui.sceneobjects.RotateTool.ID, editor.commands.CMD_ROTATE_SCENE_OBJECT]
+                        ];
+                        for (const info of tuples) {
+                            const [toolId, cmd] = info;
+                            this._toolActionMap.set(toolId, new controls.Action({
+                                commandId: cmd,
+                                showText: false
+                            }));
+                        }
+                    }
+                    getToolActionMap() {
+                        return this._toolActionMap;
+                    }
                     createEditorToolbar(parent) {
+                        this.createActions();
                         const manager = new controls.ToolbarManager(parent);
                         manager.add(new controls.Action({
                             icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
                             showText: false
                         }));
-                        manager.add(new controls.Action({
-                            icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_TRANSLATE),
-                            showText: false
-                        }));
-                        manager.add(new controls.Action({
-                            icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_SCALE),
-                            showText: false
-                        }));
-                        manager.add(new controls.Action({
-                            icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ANGLE),
-                            showText: false
-                        }));
+                        manager.add(this._toolActionMap.get(ui.sceneobjects.TranslateTool.ID));
+                        manager.add(this._toolActionMap.get(ui.sceneobjects.ScaleTool.ID));
+                        manager.add(this._toolActionMap.get(ui.sceneobjects.RotateTool.ID));
                         manager.addCommand(editor.commands.CMD_OPEN_COMPILED_FILE, {
                             showText: false
                         });
@@ -3441,6 +3456,7 @@ var phasereditor2d;
                                 command: {
                                     id: commands.CMD_MOVE_SCENE_OBJECT,
                                     name: "Move Objects",
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_TRANSLATE),
                                     tooltip: "Translate the selected scene objects",
                                 },
                                 handler: {
@@ -3456,6 +3472,7 @@ var phasereditor2d;
                                 command: {
                                     id: commands.CMD_ROTATE_SCENE_OBJECT,
                                     name: "Rotate objects",
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ANGLE),
                                     tooltip: "Rotate the selected scene objects",
                                 },
                                 handler: {
@@ -3471,6 +3488,7 @@ var phasereditor2d;
                                 command: {
                                     id: commands.CMD_SCALE_SCENE_OBJECT,
                                     name: "Scale objects",
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_SCALE),
                                     tooltip: "Scale the selected scene objects",
                                 },
                                 handler: {
@@ -4472,7 +4490,21 @@ var phasereditor2d;
                             this._editor = editor;
                             const exts = colibri.Platform.getExtensions(tools.SceneToolExtension.POINT_ID);
                             this._tools = exts.flatMap(ext => ext.getTools());
-                            console.log(this._tools);
+                            this.setActiveTool(this.findTool(ui.sceneobjects.TranslateTool.ID));
+                        }
+                        setState(state) {
+                            if (state) {
+                                const id = state.selectedId;
+                                const tool = this.findTool(id);
+                                if (tool) {
+                                    this.setActiveTool(tool);
+                                }
+                            }
+                        }
+                        getState() {
+                            return {
+                                selectedId: this._activeTool ? this._activeTool.getId() : undefined
+                            };
                         }
                         findTool(toolId) {
                             return this._tools.find(tool => tool.getId() === toolId);
@@ -4482,8 +4514,18 @@ var phasereditor2d;
                         }
                         setActiveTool(tool) {
                             console.log("Set tool: " + (tool ? tool.getId() : "null"));
+                            this.updateAction(this._activeTool, false);
+                            this.updateAction(tool, true);
                             this._activeTool = tool;
                             this._editor.repaint();
+                        }
+                        updateAction(tool, selected) {
+                            if (tool) {
+                                const action = this._editor.getToolActionMap().get(tool.getId());
+                                if (action) {
+                                    action.setSelected(selected);
+                                }
+                            }
                         }
                         swapTool(toolId) {
                             const tool = this.findTool(toolId);

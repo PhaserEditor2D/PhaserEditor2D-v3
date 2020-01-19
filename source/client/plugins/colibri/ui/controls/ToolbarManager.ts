@@ -85,7 +85,15 @@ namespace colibri.ui.controls {
         private updateButtonWithAction(btn: HTMLElement, action: Action) {
             const textElement = btn["__text"] as HTMLElement;
             textElement.innerText = action.getText();
-        }
 
+            if (action.isSelected()) {
+
+                btn.classList.add("ActionSelected");
+
+            } else {
+
+                btn.classList.remove("ActionSelected");
+            }
+        }
     }
 }

@@ -147,6 +147,10 @@
     background: rgba(255, 255, 255, 0.7);
 }
 
+.lightBlue .ToolbarItem.ActionSelected {
+    background: #d4e2f5;
+}
+
 /* ProgressBar */
 
 .lightBlue .ProgressBar {

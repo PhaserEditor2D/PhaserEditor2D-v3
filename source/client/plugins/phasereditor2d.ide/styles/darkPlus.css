@@ -167,7 +167,8 @@ Important:
     border-color: #757575;
 }
 
-.darkPlus .ToolbarItem:active {
+.darkPlus .ToolbarItem:active,
+.darkPlus .ToolbarItem.ActionSelected {
     background: rgba(255, 255, 255, 0.3);
 }
 

@@ -1765,7 +1765,7 @@ var colibri;
             controls.EVENT_ACTION_CHANGED = "actionChanged";
             class Action extends EventTarget {
                 constructor(config) {
-                    var _a, _b, _c, _d, _e;
+                    var _a, _b, _c, _d, _e, _f;
                     super();
                     this._text = (_a = config.text, (_a !== null && _a !== void 0 ? _a : ""));
                     this._tooltip = (_b = config.tooltip, (_b !== null && _b !== void 0 ? _b : ""));
@@ -1774,6 +1774,7 @@ var colibri;
                     this._enabled = config.enabled === undefined || config.enabled;
                     this._callback = (_d = config.callback, (_d !== null && _d !== void 0 ? _d : null));
                     this._commandId = (_e = config.commandId, (_e !== null && _e !== void 0 ? _e : null));
+                    this._selected = (_f = config.selected, (_f !== null && _f !== void 0 ? _f : false));
                     if (this._commandId) {
                         const manager = colibri.Platform.getWorkbench().getCommandManager();
                         const command = manager.getCommand(this._commandId);
@@ -1783,6 +1784,13 @@ var colibri;
                             this._icon = this._icon || command.getIcon();
                         }
                     }
+                }
+                isSelected() {
+                    return this._selected;
+                }
+                setSelected(selected) {
+                    this._selected = selected;
+                    this.dispatchEvent(new CustomEvent(controls.EVENT_ACTION_CHANGED));
                 }
                 getCommandId() {
                     return this._commandId;
@@ -3183,6 +3191,12 @@ var colibri;
                 updateButtonWithAction(btn, action) {
                     const textElement = btn["__text"];
                     textElement.innerText = action.getText();
+                    if (action.isSelected()) {
+                        btn.classList.add("ActionSelected");
+                    }
+                    else {
+                        btn.classList.remove("ActionSelected");
+                    }
                 }
             }
             controls.ToolbarManager = ToolbarManager;
