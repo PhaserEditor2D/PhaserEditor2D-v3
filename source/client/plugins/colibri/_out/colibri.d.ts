@@ -1789,7 +1789,7 @@ declare namespace colibri.ui.ide.commands {
         private makeArgs;
         getCommand(id: string): Command;
         getCommandKeyString(commandId: string): string;
-        executeCommand(commandId: string): void;
+        executeCommand(commandId: string, checkContext?: boolean): void;
         addKeyBinding(commandId: string, matcher: KeyMatcher): void;
         addKeyBindingHelper(commandId: string, config: IKeyMatcherConfig): void;
         addHandler(commandId: string, handler: CommandHandler): void;

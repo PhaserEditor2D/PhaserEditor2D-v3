@@ -48,12 +48,13 @@ namespace colibri.ui.ide.commands {
             }
         }
 
-        private executeHandler(command: Command, args: HandlerArgs) {
+        private executeHandler(command: Command, args: HandlerArgs, checkContext: boolean = true) {
+
             const handlers = this._commandHandlerMap.get(command);
 
             for (const handler of handlers) {
 
-                if (handler.test(args)) {
+                if (!checkContext || handler.test(args)) {
 
                     event.preventDefault();
 
@@ -130,13 +131,13 @@ namespace colibri.ui.ide.commands {
             return "";
         }
 
-        executeCommand(commandId: string) {
+        executeCommand(commandId: string, checkContext: boolean = true) {
 
             const command = this.getCommand(commandId);
 
             if (command) {
 
-                this.executeHandler(command, this.makeArgs());
+                this.executeHandler(command, this.makeArgs(), checkContext);
             }
         }
 

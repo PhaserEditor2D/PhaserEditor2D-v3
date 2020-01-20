@@ -3158,7 +3158,9 @@ var phasereditor2d;
                     createEditorToolbar(parent) {
                         this.createActions();
                         const manager = new controls.ToolbarManager(parent);
-                        manager.addCommand(editor.commands.CMD_ADD_SCENE_OBJECT, { showText: false });
+                        manager.addCommand(editor.commands.CMD_ADD_SCENE_OBJECT, {
+                            showText: false,
+                        });
                         manager.add(this._toolActionMap.get(ui.sceneobjects.TranslateTool.ID));
                         manager.add(this._toolActionMap.get(ui.sceneobjects.ScaleTool.ID));
                         manager.add(this._toolActionMap.get(ui.sceneobjects.RotateTool.ID));
@@ -3461,9 +3463,10 @@ var phasereditor2d;
                     commands.CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
                     commands.CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
                     function isSceneScope(args) {
-                        return args.activePart instanceof editor_8.SceneEditor ||
-                            args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
-                                && args.activeEditor instanceof editor_8.SceneEditor;
+                        return args.activePart instanceof editor_8.SceneEditor
+                            || (args.activeEditor instanceof editor_8.SceneEditor &&
+                                (args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
+                                    || args.activePart instanceof phasereditor2d.inspector.ui.views.InspectorView));
                     }
                     class SceneEditorCommands {
                         static registerCommands(manager) {
@@ -3589,7 +3592,7 @@ var phasereditor2d;
                                     tooltip: "Add a new object to the scene"
                                 },
                                 handler: {
-                                    testFunc: args => args.activePart instanceof editor.SceneEditor,
+                                    testFunc: isSceneScope,
                                     executeFunc: args => args.activeEditor.openAddObjectDialog()
                                 },
                                 keys: {

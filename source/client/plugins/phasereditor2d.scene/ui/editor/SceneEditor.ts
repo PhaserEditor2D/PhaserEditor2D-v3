@@ -295,7 +295,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             const manager = new controls.ToolbarManager(parent);
 
-            manager.addCommand(commands.CMD_ADD_SCENE_OBJECT, { showText: false });
+            manager.addCommand(commands.CMD_ADD_SCENE_OBJECT, {
+                showText: false,
+            });
 
             manager.add(this._toolActionMap.get(sceneobjects.TranslateTool.ID));
 

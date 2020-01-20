@@ -1823,7 +1823,7 @@ var colibri;
                         return;
                     }
                     if (this._commandId) {
-                        colibri.Platform.getWorkbench().getCommandManager().executeCommand(this._commandId);
+                        colibri.Platform.getWorkbench().getCommandManager().executeCommand(this._commandId, false);
                     }
                 }
             }
@@ -7348,10 +7348,10 @@ var colibri;
                             }
                         }
                     }
-                    executeHandler(command, args) {
+                    executeHandler(command, args, checkContext = true) {
                         const handlers = this._commandHandlerMap.get(command);
                         for (const handler of handlers) {
-                            if (handler.test(args)) {
+                            if (!checkContext || handler.test(args)) {
                                 event.preventDefault();
                                 handler.execute(args);
                                 return;
@@ -7394,10 +7394,10 @@ var colibri;
                         }
                         return "";
                     }
-                    executeCommand(commandId) {
+                    executeCommand(commandId, checkContext = true) {
                         const command = this.getCommand(commandId);
                         if (command) {
-                            this.executeHandler(command, this.makeArgs());
+                            this.executeHandler(command, this.makeArgs(), checkContext);
                         }
                     }
                     addKeyBinding(commandId, matcher) {

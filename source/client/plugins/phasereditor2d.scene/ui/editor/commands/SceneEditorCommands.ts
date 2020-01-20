@@ -12,9 +12,13 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
-        return args.activePart instanceof SceneEditor ||
-            args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
-            && args.activeEditor instanceof SceneEditor;
+        return args.activePart instanceof SceneEditor
+
+            || (args.activeEditor instanceof SceneEditor &&
+                (
+                    args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
+                    || args.activePart instanceof phasereditor2d.inspector.ui.views.InspectorView
+                ));
     }
 
     export class SceneEditorCommands {
@@ -182,7 +186,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 }
             });
 
-
             // add object dialog
 
             manager.add({
@@ -193,7 +196,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Add a new object to the scene"
                 },
                 handler: {
-                    testFunc: args => args.activePart instanceof editor.SceneEditor,
+                    testFunc: isSceneScope,
                     executeFunc: args => (args.activeEditor as editor.SceneEditor).openAddObjectDialog()
                 },
                 keys: {

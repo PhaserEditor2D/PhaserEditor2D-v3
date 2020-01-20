@@ -108,7 +108,7 @@ namespace colibri.ui.controls {
 
             if (this._commandId) {
 
-                Platform.getWorkbench().getCommandManager().executeCommand(this._commandId);
+                Platform.getWorkbench().getCommandManager().executeCommand(this._commandId, false);
             }
         }
     }
