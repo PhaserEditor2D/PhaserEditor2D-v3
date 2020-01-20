@@ -93,6 +93,7 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(
                 ui.sceneobjects.ImageExtension.getInstance(),
+                ui.sceneobjects.SpriteExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance()
             );
 

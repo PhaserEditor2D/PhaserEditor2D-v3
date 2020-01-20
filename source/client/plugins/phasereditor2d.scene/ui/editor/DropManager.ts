@@ -132,6 +132,8 @@ namespace phasereditor2d.scene.ui.editor {
                         });
 
                         sprites.push(sprite);
+
+                        break;
                     }
                 }
             }

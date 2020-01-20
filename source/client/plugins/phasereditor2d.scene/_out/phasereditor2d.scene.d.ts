@@ -1313,22 +1313,43 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class Image extends Phaser.GameObjects.Image implements ISceneObject {
-        private _editorSupport;
-        constructor(scene: Scene, x: number, y: number, texture: string, frame?: string | number);
-        getEditorSupport(): ImageEditorSupport;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
     import code = core.code;
-    class ImageCodeDOMBuilder extends ObjectCodeDOMBuilder {
-        private static _instance;
-        static getInstance(): ObjectCodeDOMBuilder;
+    class BaseImageCodeDOMBuilder extends ObjectCodeDOMBuilder {
+        private _factoryMethodName;
+        constructor(factoryMethodName: string);
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
         private addArgsToCreateMethodDOM;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class BaseImageEditorSupport<T extends ISceneObject> extends EditorSupport<T> {
+        constructor(extension: SceneObjectExtension, obj: T);
+        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
+        getTextureComponent(): TextureComponent;
+        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    abstract class BaseImageExtension extends SceneObjectExtension {
+        abstract getCodeDOMBuilder(): ObjectCodeDOMBuilder;
+        getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
+        static isImageOrImageFrameAsset(data: any): boolean;
+        acceptsDropData(data: any): boolean;
+        createEmptySceneObject(args: ICreateEmptyArgs): ISceneObject;
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
+        createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
+        protected abstract newObject(scene: Scene, key?: string, frame?: string | number): ISceneObject;
+        private createImageObject;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class Image extends Phaser.GameObjects.Image implements ISceneObject {
+        private _editorSupport;
+        constructor(scene: Scene, x: number, y: number, texture: string, frame?: string | number);
+        getEditorSupport(): ImageEditorSupport;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1340,18 +1361,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class ImageExtension extends SceneObjectExtension {
+    class ImageExtension extends BaseImageExtension {
         private static _instance;
         static getInstance(): any;
         private constructor();
         getCodeDOMBuilder(): ObjectCodeDOMBuilder;
-        getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
-        static isImageOrImageFrameAsset(data: any): boolean;
-        acceptsDropData(data: any): boolean;
-        createEmptySceneObject(args: ICreateEmptyArgs): Image;
-        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
-        createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
-        private createImageObject;
+        protected newObject(scene: Scene, key?: string, frame?: string | number): ISceneObject;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1605,6 +1620,27 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
             y: number;
         };
         render(args: editor.tools.ISceneToolRenderArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class Sprite extends Phaser.GameObjects.Image implements ISceneObject {
+        private _editorSupport;
+        constructor(scene: Scene, x: number, y: number, texture: string, frame?: string | number);
+        getEditorSupport(): SpriteEditorSupport;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class SpriteEditorSupport extends BaseImageEditorSupport<Sprite> {
+        constructor(obj: Sprite);
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class SpriteExtension extends BaseImageExtension {
+        private static _instance;
+        static getInstance(): SpriteExtension;
+        constructor();
+        getCodeDOMBuilder(): ObjectCodeDOMBuilder;
+        protected newObject(scene: Scene, key?: string, frame?: string | number): ISceneObject;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

@@ -4,12 +4,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class ImageCodeDOMBuilder extends ObjectCodeDOMBuilder {
+    export class BaseImageCodeDOMBuilder extends ObjectCodeDOMBuilder {
 
-        private static _instance: ImageCodeDOMBuilder = new ImageCodeDOMBuilder();
+        private _factoryMethodName: string;
 
-        static getInstance(): ObjectCodeDOMBuilder {
-            return this._instance;
+        constructor(factoryMethodName: string) {
+            super();
+
+            this._factoryMethodName = factoryMethodName;
         }
 
         buildPrefabConstructorDeclarationSupperCallCodeDOM(
@@ -74,7 +76,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
-            const call = new code.MethodCallCodeDOM("image", args.gameObjectFactoryExpr);
+            const call = new code.MethodCallCodeDOM(this._factoryMethodName, args.gameObjectFactoryExpr);
 
             this.addArgsToCreateMethodDOM(call, args.obj as Image);
 
