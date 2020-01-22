@@ -1,6 +1,5 @@
 namespace phasereditor2d.files.ui.actions {
 
-
     import io = colibri.core.io;
 
     export class UploadFilesAction extends colibri.ui.ide.actions.ViewerViewAction<views.FilesView> {

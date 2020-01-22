@@ -294,6 +294,7 @@ namespace colibri.ui.controls {
             const label = this.getLabelFromContent(content);
 
             if (label) {
+
                 this.closeTabLabel(label);
             }
         }
@@ -309,6 +310,7 @@ namespace colibri.ui.controls {
 
             {
                 const content = TabPane.getContentFromLabel(labelElement);
+
                 const event = new CustomEvent(EVENT_TAB_CLOSED, {
                     detail: content,
                     cancelable: true
@@ -342,7 +344,6 @@ namespace colibri.ui.controls {
                 if (nextInHistory) {
 
                     toSelectLabel = nextInHistory;
-
                 }
             }
 
@@ -355,6 +356,7 @@ namespace colibri.ui.controls {
             }
 
             if (toSelectLabel) {
+
                 this.selectTab(toSelectLabel);
             }
         }

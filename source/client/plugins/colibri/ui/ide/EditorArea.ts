@@ -130,9 +130,7 @@ namespace colibri.ui.ide {
 
         closeAllEditors() {
 
-            for (const editor of this.getEditors()) {
-                this.closeTab(editor);
-            }
+            this.closeEditors(this.getEditors());
         }
 
         closeEditors(editors: EditorPart[]) {
@@ -146,6 +144,11 @@ namespace colibri.ui.ide {
             }
 
             this._tabsToBeClosed = null;
+
+            if (this.getEditors().length === 0) {
+
+                Platform.getWorkbench().setActiveEditor(null);
+            }
         }
 
         selectTab(label: HTMLElement) {

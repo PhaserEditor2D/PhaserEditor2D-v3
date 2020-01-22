@@ -352,6 +352,7 @@ namespace colibri.ui.ide {
          * Users may not call this method. This is public only for convenience.
          */
         setActivePart(part: Part): void {
+
             if (part !== this._activePart) {
 
                 const old = this._activePart;

@@ -5902,9 +5902,7 @@ var colibri;
                     menu.addCommand(ide.actions.CMD_EDITOR_TABS_SIZE_DOWN);
                 }
                 closeAllEditors() {
-                    for (const editor of this.getEditors()) {
-                        this.closeTab(editor);
-                    }
+                    this.closeEditors(this.getEditors());
                 }
                 closeEditors(editors) {
                     this._tabsToBeClosed = new Set(editors.map(editor => this.getLabelFromContent(editor)));
@@ -5912,6 +5910,9 @@ var colibri;
                         this.closeTab(editor);
                     }
                     this._tabsToBeClosed = null;
+                    if (this.getEditors().length === 0) {
+                        colibri.Platform.getWorkbench().setActiveEditor(null);
+                    }
                 }
                 selectTab(label) {
                     if (this._tabsToBeClosed) {
