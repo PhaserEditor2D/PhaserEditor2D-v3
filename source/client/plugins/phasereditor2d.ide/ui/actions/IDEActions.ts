@@ -55,9 +55,7 @@ namespace phasereditor2d.ide.ui.actions {
                 });
 
             manager.addKeyBinding(CMD_PLAY_PROJECT, new commands.KeyMatcher({
-                control: true,
-                alt: true,
-                key: "G"
+                key: "F12"
             }));
 
             // reload project
