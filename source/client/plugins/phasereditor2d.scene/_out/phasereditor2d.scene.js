@@ -3187,9 +3187,8 @@ var phasereditor2d;
                         const exts = colibri.Platform.getExtensions(editor.tools.SceneToolExtension.POINT_ID);
                         for (const ext of exts) {
                             for (const tool of ext.getTools()) {
-                                const command = cmdManager.getCommand(tool.getCommandId());
                                 menu.addCommand(tool.getCommandId(), {
-                                    text: command.getName() + " " + (activeTool === tool ? "(ON)" : "")
+                                    selected: activeTool === tool
                                 });
                             }
                         }

@@ -187,10 +187,6 @@
     background: #b0b0b0;
 }
 
-.lightBlue .MenuItem {
-    padding: 5px 20px;
-}
-
 .lightBlue .MenuItem:hover {
     background: #4242ff;
     color: #f0f0f0;

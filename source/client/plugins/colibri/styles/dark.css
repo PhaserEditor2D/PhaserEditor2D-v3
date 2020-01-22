@@ -215,10 +215,6 @@ Important:
     background: #3f3f3f;
 }
 
-.dark .MenuItem {
-    padding: 5px 20px;
-}
-
 .dark .MenuItem:hover {
     background: #f0a050;
     color: #0e0e0e;

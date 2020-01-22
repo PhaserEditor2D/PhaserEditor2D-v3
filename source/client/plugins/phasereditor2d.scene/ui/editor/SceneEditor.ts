@@ -339,10 +339,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                 for (const tool of ext.getTools()) {
 
-                    const command = cmdManager.getCommand(tool.getCommandId());
-
                     menu.addCommand(tool.getCommandId(), {
-                        text: command.getName() + " " + (activeTool === tool ? "(ON)" : "")
+                        selected: activeTool === tool
                     });
                 }
             }

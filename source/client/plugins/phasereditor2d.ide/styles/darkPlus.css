@@ -212,10 +212,6 @@ Important:
     background: #3f3f3f;
 }
 
-.darkPlus .MenuItem {
-    padding: 5px 20px;
-}
-
 .darkPlus .MenuItem:hover {
     background: #f0a050;
     color: #0e0e0e;

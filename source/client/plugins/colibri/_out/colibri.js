@@ -375,6 +375,7 @@ var colibri;
             ide.ICON_FILE = "file";
             ide.ICON_FOLDER = "folder";
             ide.ICON_PLUS = "plus";
+            ide.ICON_CHECKED = "checked";
             class Workbench extends EventTarget {
                 constructor() {
                     super();
@@ -499,6 +500,7 @@ var colibri;
                     await this.getWorkbenchIcon(ide.ICON_FILE).preload();
                     await this.getWorkbenchIcon(ide.ICON_FOLDER).preload();
                     await this.getWorkbenchIcon(ide.ICON_PLUS).preload();
+                    await this.getWorkbenchIcon(ide.ICON_CHECKED).preload();
                     const extensions = colibri.Platform
                         .getExtensions(ide.IconLoaderExtension.POINT_ID);
                     for (const extension of extensions) {
@@ -2296,7 +2298,11 @@ var colibri;
                         lastIsSeparator = false;
                         const item = document.createElement("div");
                         item.classList.add("MenuItem");
-                        const keyString = action.getCommandKeyString();
+                        if (action.isSelected()) {
+                            const checkedElement = controls.Controls.createIconElement(colibri.Platform.getWorkbench().getWorkbenchIcon(ui.ide.ICON_CHECKED));
+                            checkedElement.classList.add("MenuItemCheckedIcon");
+                            item.appendChild(checkedElement);
+                        }
                         if (action.getIcon()) {
                             const iconElement = controls.Controls.createIconElement(action.getIcon());
                             iconElement.classList.add("MenuItemIcon");
@@ -2306,6 +2312,7 @@ var colibri;
                         labelElement.classList.add("MenuItemText");
                         labelElement.innerText = action.getText();
                         item.appendChild(labelElement);
+                        const keyString = action.getCommandKeyString();
                         if (keyString) {
                             const keyElement = document.createElement("span");
                             keyElement.innerText = keyString;

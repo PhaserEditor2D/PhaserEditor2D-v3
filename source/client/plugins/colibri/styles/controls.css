@@ -347,23 +347,29 @@ canvas {
 
 .MenuItem {
     display: grid;
-    grid-template-columns: 2em 1fr auto;
+    grid-template-columns: 30px 20px 1fr auto;
+    padding: 5px 10px 5px 0px;
+}
+
+.MenuItemCheckedIcon {
+    grid-column-start: 1;
+    justify-self: center;
 }
 
 .MenuItemIcon {
-    grid-column-start: 1;
-    justify-self: end;
+    grid-column-start: 2;
+    justify-self: center;
     margin-right: 5px;
 }
 
 .MenuItemText {
-    grid-column-start: 2;
+    grid-column-start: 3;
 }
 
 .MenuItemKeyString {
     font-family: monospace;
     margin-left: 3em;
-    grid-column-start: 3;
+    grid-column-start: 4;
 }
 
 .MenuContainer {

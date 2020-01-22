@@ -206,10 +206,6 @@ Important:
     background: #b0b0b0;
 }
 
-.light .MenuItem {
-    padding: 5px 20px;
-}
-
 .light .MenuItem:hover {
     background: #4242ff;
     color: #f0f0f0;

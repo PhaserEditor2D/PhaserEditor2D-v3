@@ -88,7 +88,14 @@ namespace colibri.ui.controls {
                 const item = document.createElement("div");
                 item.classList.add("MenuItem");
 
-                const keyString = action.getCommandKeyString();
+                if (action.isSelected()) {
+
+                    const checkedElement = Controls.createIconElement(
+                        Platform.getWorkbench().getWorkbenchIcon(ide.ICON_CHECKED));
+                    checkedElement.classList.add("MenuItemCheckedIcon");
+
+                    item.appendChild(checkedElement);
+                }
 
                 if (action.getIcon()) {
 
@@ -101,6 +108,8 @@ namespace colibri.ui.controls {
                 labelElement.classList.add("MenuItemText");
                 labelElement.innerText = action.getText();
                 item.appendChild(labelElement);
+
+                const keyString = action.getCommandKeyString();
 
                 if (keyString) {
 
