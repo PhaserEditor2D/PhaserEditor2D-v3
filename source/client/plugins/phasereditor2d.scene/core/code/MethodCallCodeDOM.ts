@@ -54,21 +54,23 @@ namespace phasereditor2d.scene.core.code {
         }
 
         arg(expr: string) {
+
             this._args.push(expr);
         }
 
         argLiteral(expr: string) {
+
             this._args.push(CodeDOM.quote(expr));
         }
 
         argFloat(n: number) {
-            // tslint:disable-next-line:no-construct
-            this._args.push(new Number(n).toString());
+
+            this._args.push(n + "");
         }
 
         argInt(n: number) {
-            // tslint:disable-next-line:no-construct
-            this._args.push(new Number(Math.floor(n)).toString());
+
+            this._args.push(Math.floor(n) + "");
         }
 
         getMethodName() {

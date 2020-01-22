@@ -8,6 +8,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super("tileSprite");
         }
 
+        buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
+
+            const ctr = args.ctrDeclCodeDOM;
+
+            ctr.addArg("x", "number");
+            ctr.addArg("y", "number");
+            ctr.addArg("width", "number", true);
+            ctr.addArg("height", "number", true);
+            ctr.addArg("texture", "string", true);
+            ctr.addArg("frame", "number | string", true);
+        }
+
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(
+            args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
+
+            const obj = args.prefabObj as TileSprite;
+
+            const call = args.superMethodCallCodeDOM;
+
+            call.arg("x");
+            call.arg("y");
+
+            call.arg("typeof width === \"number\" ? width : " + obj.width);
+            call.arg("typeof height === \"number\" ? height : " + obj.width);
+
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args, call);
+        }
+
         protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject) {
 
             const tileSprite = obj as TileSprite;
@@ -22,21 +50,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (support.isPrefabInstance()) {
 
-                const prefabSerializer = support.getPrefabSerializer();
+                if (!support.isUnlockedProperty(TileSpriteComponent.width.name)) {
+                    width = undefined;
+                }
 
-                if (prefabSerializer) {
-
-                    if (!prefabSerializer.isUnlocked(TileSpriteComponent.width.name)) {
-                        width = undefined;
-                    }
-
-                    if (!prefabSerializer.isUnlocked(TileSpriteComponent.height.name)) {
-                        height = undefined;
-                    }
-
-                } else {
-
-                    throw new Error(`Cannot find prefab with id ${support.getPrefabId()}.`);
+                if (!support.isUnlockedProperty(TileSpriteComponent.height.name)) {
+                    height = undefined;
                 }
             }
 

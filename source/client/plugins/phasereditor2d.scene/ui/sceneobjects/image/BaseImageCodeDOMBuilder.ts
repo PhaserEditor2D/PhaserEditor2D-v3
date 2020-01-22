@@ -22,9 +22,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.arg("x");
             call.arg("y");
 
-            const obj = args.prefabObj as Image;
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args, call);
+        }
 
-            const textureComponent = obj.getEditorSupport().getTextureComponent();
+        protected buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(
+            args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs,
+            call: code.MethodCallCodeDOM) {
+
+            const obj = args.prefabObj;
+
+            const textureComponent = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
 
             const { key, frame } = textureComponent.getTextureKeys();
 
@@ -61,7 +68,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ctr.addArg("x", "number");
             ctr.addArg("y", "number");
-            ctr.addArg("texture", "string");
+            ctr.addArg("texture", "string", true);
             ctr.addArg("frame", "number | string", true);
         }
 

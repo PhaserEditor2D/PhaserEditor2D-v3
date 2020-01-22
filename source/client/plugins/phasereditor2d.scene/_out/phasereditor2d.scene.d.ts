@@ -1324,6 +1324,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _factoryMethodName;
         constructor(factoryMethodName: string);
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+        protected buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs, call: code.MethodCallCodeDOM): void;
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
@@ -1719,6 +1720,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     import code = core.code;
     class TileSpriteCodeDOMBuilder extends BaseImageCodeDOMBuilder {
         constructor();
+        buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
         protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject): void;
     }
 }

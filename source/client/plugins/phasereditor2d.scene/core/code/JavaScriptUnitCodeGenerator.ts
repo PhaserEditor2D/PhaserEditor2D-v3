@@ -182,7 +182,14 @@ namespace phasereditor2d.scene.core.code {
             this.append(call.getMethodName());
             this.append("(");
 
-            this.join(call.getArgs());
+            const args = [...call.getArgs()];
+
+            while (args.length > 0 && args[args.length - 1] === "undefined") {
+
+                args.pop();
+            }
+
+            this.join(args);
 
             this.line(");");
         }
