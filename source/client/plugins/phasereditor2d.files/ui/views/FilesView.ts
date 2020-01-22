@@ -38,6 +38,10 @@ namespace phasereditor2d.files.ui.views {
             menu.add(new actions.CopyFilesAction(this));
 
             menu.add(new actions.DeleteFilesAction(this));
+
+            menu.addSeparator();
+
+            menu.add(new actions.UploadFilesAction(this));
         }
 
         getPropertyProvider() {

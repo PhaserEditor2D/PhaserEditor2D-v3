@@ -59,6 +59,12 @@ declare namespace phasereditor2d.files.ui.actions {
         run(): void;
     }
 }
+declare namespace phasereditor2d.files.ui.actions {
+    class UploadFilesAction extends colibri.ui.ide.actions.ViewerViewAction<views.FilesView> {
+        constructor(view: views.FilesView);
+        run(): void;
+    }
+}
 declare namespace phasereditor2d.files.ui.dialogs {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
@@ -164,6 +170,15 @@ declare namespace phasereditor2d.files.ui.dialogs {
     class NewGenericFileExtension extends NewFileContentExtension {
         constructor();
         createFileContent(): string;
+    }
+}
+declare namespace phasereditor2d.files.ui.dialogs {
+    import controls = colibri.ui.controls;
+    import io = colibri.core.io;
+    class UploadDialog extends controls.dialogs.ViewerDialog {
+        private _uploadFolder;
+        constructor(uploadFolder: io.FilePath);
+        create(): void;
     }
 }
 declare namespace phasereditor2d.files.ui.viewers {

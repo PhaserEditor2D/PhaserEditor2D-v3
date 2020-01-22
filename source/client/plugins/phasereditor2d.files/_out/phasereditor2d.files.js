@@ -426,6 +426,40 @@ var phasereditor2d;
     (function (files) {
         var ui;
         (function (ui) {
+            var actions;
+            (function (actions) {
+                var io = colibri.core.io;
+                class UploadFilesAction extends colibri.ui.ide.actions.ViewerViewAction {
+                    constructor(view) {
+                        super(view, {
+                            text: "Upload Files"
+                        });
+                    }
+                    run() {
+                        let folder = this.getViewViewer().getSelectionFirstElement();
+                        if (folder instanceof io.FilePath) {
+                            if (folder.isFile()) {
+                                folder = folder.getParent();
+                            }
+                        }
+                        else {
+                            folder = colibri.ui.ide.FileUtils.getRoot();
+                        }
+                        const dlg = new ui.dialogs.UploadDialog(folder);
+                        dlg.create();
+                    }
+                }
+                actions.UploadFilesAction = UploadFilesAction;
+            })(actions = ui.actions || (ui.actions = {}));
+        })(ui = files.ui || (files.ui = {}));
+    })(files = phasereditor2d.files || (phasereditor2d.files = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var files;
+    (function (files) {
+        var ui;
+        (function (ui) {
             var dialogs;
             (function (dialogs) {
                 var controls = colibri.ui.controls;
@@ -780,6 +814,108 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var files;
+    (function (files_3) {
+        var ui;
+        (function (ui) {
+            var dialogs;
+            (function (dialogs) {
+                var controls = colibri.ui.controls;
+                class UploadDialog extends controls.dialogs.ViewerDialog {
+                    constructor(uploadFolder) {
+                        super(new controls.viewers.TreeViewer());
+                        this._uploadFolder = uploadFolder;
+                    }
+                    create() {
+                        const filesViewer = this.getViewer();
+                        filesViewer.setLabelProvider(new ui.viewers.InputFileLabelProvider());
+                        filesViewer.setCellRendererProvider(new ui.viewers.InputFileCellRendererProvider());
+                        filesViewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        filesViewer.setInput([]);
+                        super.create();
+                        const filesInput = document.createElement("input");
+                        this.setTitle("Upload Files");
+                        const uploadBtn = super.addButton("Upload", () => { });
+                        uploadBtn.disabled = true;
+                        uploadBtn.disabled = true;
+                        uploadBtn.innerText = "Upload";
+                        uploadBtn.addEventListener("click", async (e) => {
+                            const input = filesViewer.getInput();
+                            const files = input.slice();
+                            const uploadFolder = this._uploadFolder;
+                            const cancelFlag = {
+                                canceled: false
+                            };
+                            const dlg = new controls.dialogs.ProgressDialog();
+                            dlg.create();
+                            dlg.setTitle("Uploading");
+                            dlg.setCloseWithEscapeKey(false);
+                            {
+                                const btn = dlg.addButton("Cancel", () => {
+                                    if (cancelFlag.canceled) {
+                                        return;
+                                    }
+                                    cancelFlag.canceled = true;
+                                    btn.innerText = "Canceling";
+                                });
+                            }
+                            dlg.setProgress(0);
+                            const ioFiles = [];
+                            for (const file of files) {
+                                if (cancelFlag.canceled) {
+                                    dlg.close();
+                                    break;
+                                }
+                                try {
+                                    const ioFile = await colibri.ui.ide.FileUtils.uploadFile_async(uploadFolder, file);
+                                    ioFiles.push(ioFile);
+                                }
+                                catch (error) {
+                                    break;
+                                }
+                                input.shift();
+                                filesViewer.repaint();
+                                dlg.setProgress(1 - (input.length / files.length));
+                            }
+                            dlg.close();
+                            if (ioFiles.length > 0) {
+                                const view = colibri.ui.ide.Workbench
+                                    .getWorkbench()
+                                    .getActiveWindow()
+                                    .getView(ui.views.FilesView.ID);
+                                view.getViewer().setSelection(ioFiles);
+                                view.getViewer().reveal(ioFiles[0]);
+                                view.getViewer().repaint();
+                            }
+                            this.close();
+                        });
+                        super.addButton("Browse", () => {
+                            filesInput.click();
+                        });
+                        filesInput.type = "file";
+                        filesInput.name = "files";
+                        filesInput.multiple = true;
+                        filesInput.addEventListener("change", e => {
+                            const files = filesInput.files;
+                            const input = [];
+                            for (let i = 0; i < files.length; i++) {
+                                input.push(files.item(i));
+                            }
+                            filesViewer.setInput(input);
+                            filesViewer.repaint();
+                            uploadBtn.disabled = input.length === 0;
+                            uploadBtn.textContent = input.length === 0 ? "Upload" : "Upload " + input.length + " Files";
+                        });
+                        super.addButton("Cancel", () => this.close());
+                    }
+                }
+                dialogs.UploadDialog = UploadDialog;
+            })(dialogs = ui.dialogs || (ui.dialogs = {}));
+        })(ui = files_3.ui || (files_3.ui = {}));
+    })(files = phasereditor2d.files || (phasereditor2d.files = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var files;
     (function (files) {
         var ui;
         (function (ui) {
@@ -898,7 +1034,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var files;
-    (function (files_3) {
+    (function (files_4) {
         var ui;
         (function (ui) {
             var viewers;
@@ -935,7 +1071,7 @@ var phasereditor2d;
                 }
                 viewers.FileTreeContentProvider = FileTreeContentProvider;
             })(viewers = ui.viewers || (ui.viewers = {}));
-        })(ui = files_3.ui || (files_3.ui = {}));
+        })(ui = files_4.ui || (files_4.ui = {}));
     })(files = phasereditor2d.files || (phasereditor2d.files = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -1124,6 +1260,8 @@ var phasereditor2d;
                         menu.add(new ui.actions.MoveFilesAction(this));
                         menu.add(new ui.actions.CopyFilesAction(this));
                         menu.add(new ui.actions.DeleteFilesAction(this));
+                        menu.addSeparator();
+                        menu.add(new ui.actions.UploadFilesAction(this));
                     }
                     getPropertyProvider() {
                         return this._propertyProvider;
@@ -1289,124 +1427,28 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var files;
-    (function (files_4) {
+    (function (files) {
         var ui;
         (function (ui) {
             var views;
             (function (views) {
                 var controls = colibri.ui.controls;
-                var ide = colibri.ui.ide;
                 var io = colibri.core.io;
                 class UploadSection extends controls.properties.PropertySection {
                     constructor(page) {
-                        super(page, "phasereditor2d.files.ui.views", "Upload", true, true);
+                        super(page, "phasereditor2d.files.ui.views", "Upload");
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent, 1);
                         comp.classList.add("UploadSection");
                         comp.style.display = "grid";
                         comp.style.gridTemplateColumns = "1fr";
-                        comp.style.gridTemplateRows = "auto auto 1fr";
+                        comp.style.justifySelf = "center";
                         comp.style.gridGap = "5px";
-                        const filesInput = document.createElement("input");
-                        const browseBtn = document.createElement("button");
-                        const uploadBtn = document.createElement("button");
-                        const filesViewer = new controls.viewers.TreeViewer();
-                        const filesFilteredViewer = new ide.properties.FilteredViewerInPropertySection(this.getPage(), filesViewer);
-                        {
-                            // browse button
-                            browseBtn.innerText = "Browse";
-                            browseBtn.style.alignItems = "start";
-                            browseBtn.addEventListener("click", e => filesInput.click());
-                        }
-                        {
-                            // file list
-                            filesViewer.setLabelProvider(new ui.viewers.InputFileLabelProvider());
-                            filesViewer.setCellRendererProvider(new ui.viewers.InputFileCellRendererProvider());
-                            filesViewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                            filesViewer.setInput([]);
-                            this.addUpdater(() => {
-                                filesViewer.setInput([]);
-                                filesViewer.repaint();
-                            });
-                        }
-                        {
-                            filesInput.type = "file";
-                            filesInput.name = "files";
-                            filesInput.multiple = true;
-                            filesInput.addEventListener("change", e => {
-                                const files = filesInput.files;
-                                const input = [];
-                                for (let i = 0; i < files.length; i++) {
-                                    input.push(files.item(i));
-                                }
-                                filesViewer.setInput(input);
-                                filesViewer.repaint();
-                                uploadBtn.disabled = input.length === 0;
-                            });
-                            this.addUpdater(() => {
-                                filesInput.value = "";
-                            });
-                            {
-                                // submit button
-                                uploadBtn.disabled = true;
-                                uploadBtn.innerText = "Upload";
-                                uploadBtn.addEventListener("click", async (e) => {
-                                    const input = filesViewer.getInput();
-                                    const files = input.slice();
-                                    const uploadFolder = this.getSelection()[0];
-                                    const cancelFlag = {
-                                        canceled: false
-                                    };
-                                    const dlg = new controls.dialogs.ProgressDialog();
-                                    dlg.create();
-                                    dlg.setTitle("Uploading");
-                                    dlg.setCloseWithEscapeKey(false);
-                                    {
-                                        const btn = dlg.addButton("Cancel", () => {
-                                            if (cancelFlag.canceled) {
-                                                return;
-                                            }
-                                            cancelFlag.canceled = true;
-                                            btn.innerText = "Canceling";
-                                        });
-                                    }
-                                    dlg.setProgress(0);
-                                    const ioFiles = [];
-                                    for (const file of files) {
-                                        if (cancelFlag.canceled) {
-                                            dlg.close();
-                                            break;
-                                        }
-                                        try {
-                                            const ioFile = await colibri.ui.ide.FileUtils.uploadFile_async(uploadFolder, file);
-                                            ioFiles.push(ioFile);
-                                        }
-                                        catch (error) {
-                                            break;
-                                        }
-                                        input.shift();
-                                        filesViewer.repaint();
-                                        dlg.setProgress(1 - (input.length / files.length));
-                                    }
-                                    dlg.close();
-                                    uploadBtn.disabled = filesViewer.getInput().length === 0;
-                                    if (ioFiles.length > 0) {
-                                        const view = colibri.ui.ide.Workbench
-                                            .getWorkbench()
-                                            .getActiveWindow()
-                                            .getView(views.FilesView.ID);
-                                        view.getViewer().setSelection(ioFiles);
-                                        view.getViewer().reveal(ioFiles[0]);
-                                        view.getViewer().repaint();
-                                    }
-                                });
-                            }
-                        }
-                        comp.appendChild(browseBtn);
-                        comp.appendChild(uploadBtn);
-                        comp.appendChild(filesFilteredViewer.getElement());
-                        comp.appendChild(filesInput);
+                        this.createButton(comp, "Upload Files To Folder", () => {
+                            const dlg = new ui.dialogs.UploadDialog(this.getSelection()[0]);
+                            dlg.create();
+                        });
                     }
                     canEdit(obj, n) {
                         return obj instanceof io.FilePath && obj.isFolder();
@@ -1417,6 +1459,6 @@ var phasereditor2d;
                 }
                 views.UploadSection = UploadSection;
             })(views = ui.views || (ui.views = {}));
-        })(ui = files_4.ui || (files_4.ui = {}));
+        })(ui = files.ui || (files.ui = {}));
     })(files = phasereditor2d.files || (phasereditor2d.files = {}));
 })(phasereditor2d || (phasereditor2d = {}));
