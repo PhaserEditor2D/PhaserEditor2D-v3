@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
-    export const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+    export const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
@@ -138,8 +138,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.add({
                 command: {
-                    id: CMD_MOVE_SCENE_OBJECT,
-                    name: "Move Objects",
+                    id: CMD_TRANSLATE_SCENE_OBJECT,
+                    name: "Translate",
                     icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
                     tooltip: "Translate the selected scene objects",
                 },
@@ -156,7 +156,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_ROTATE_SCENE_OBJECT,
-                    name: "Rotate objects",
+                    name: "Rotate",
                     icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
                     tooltip: "Rotate the selected scene objects",
                 },
@@ -173,7 +173,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_SCALE_SCENE_OBJECT,
-                    name: "Scale objects",
+                    name: "Scale",
                     icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
                     tooltip: "Scale the selected scene objects",
                 },

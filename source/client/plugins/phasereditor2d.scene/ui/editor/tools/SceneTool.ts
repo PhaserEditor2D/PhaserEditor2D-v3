@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.editor.tools {
 
     import ISceneObject = ui.sceneobjects.ISceneObject;
+    import controls = colibri.ui.controls;
 
     export interface ISceneToolContextArgs {
 
@@ -21,21 +22,31 @@ namespace phasereditor2d.scene.ui.editor.tools {
         y: number;
     }
 
+    export interface ISceneToolConfig {
+
+        id: string;
+        command: string;
+    }
+
     export abstract class SceneTool {
 
         static COLOR_CANNOT_EDIT = "#808080";
 
-        private _id: string;
+        private _config: ISceneToolConfig;
         private _items: SceneToolItem[];
 
-        constructor(id: string) {
+        constructor(config: ISceneToolConfig) {
 
-            this._id = id;
+            this._config = config;
             this._items = [];
         }
 
         getId() {
-            return this._id;
+            return this._config.id;
+        }
+
+        getCommandId() {
+            return this._config.command;
         }
 
         getItems() {

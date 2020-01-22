@@ -2280,28 +2280,37 @@ var colibri;
                 }
                 create(e) {
                     Menu._activeMenu = this;
-                    this._element = document.createElement("ul");
+                    this._element = document.createElement("div");
                     this._element.classList.add("Menu");
                     let lastIsSeparator = true;
                     for (const action of this._actions) {
                         if (action === null) {
                             if (!lastIsSeparator) {
                                 lastIsSeparator = true;
-                                const sepElement = document.createElement("li");
+                                const sepElement = document.createElement("div");
                                 sepElement.classList.add("MenuItemSeparator");
                                 this._element.appendChild(sepElement);
                             }
                             continue;
                         }
                         lastIsSeparator = false;
-                        const item = document.createElement("li");
+                        const item = document.createElement("div");
                         item.classList.add("MenuItem");
                         const keyString = action.getCommandKeyString();
-                        if (keyString) {
-                            item.innerHTML = `${action.getText()} <span class="MenuItemKeyString">${keyString}</span>`;
+                        if (action.getIcon()) {
+                            const iconElement = controls.Controls.createIconElement(action.getIcon());
+                            iconElement.classList.add("MenuItemIcon");
+                            item.appendChild(iconElement);
                         }
-                        else {
-                            item.innerHTML = action.getText();
+                        const labelElement = document.createElement("label");
+                        labelElement.classList.add("MenuItemText");
+                        labelElement.innerText = action.getText();
+                        item.appendChild(labelElement);
+                        if (keyString) {
+                            const keyElement = document.createElement("span");
+                            keyElement.innerText = keyString;
+                            keyElement.classList.add("MenuItemKeyString");
+                            item.appendChild(keyElement);
                         }
                         if (action.isEnabled()) {
                             item.addEventListener("click", ev => {
@@ -4810,17 +4819,6 @@ var colibri;
                             e.preventDefault();
                         }
                     }
-                    getMenu() {
-                        return this._menu;
-                    }
-                    setMenu(menu) {
-                        this._menu = menu;
-                        if (this._menu) {
-                            this._menu.setMenuClosedCallback(() => {
-                                this._menu = null;
-                            });
-                        }
-                    }
                     getLabelProvider() {
                         return this._labelProvider;
                     }
@@ -6104,7 +6102,6 @@ var colibri;
                     e.preventDefault();
                     this._viewer.onMouseUp(e);
                     const menu = new ui.controls.Menu();
-                    this._viewer.setMenu(menu);
                     this.fillContextMenu(menu);
                     menu.create(e);
                 }

@@ -7,7 +7,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static ID = "phasereditor2d.scene.ui.sceneobjects.ScaleTool";
 
         constructor() {
-            super(ScaleTool.ID, TransformComponent.scaleX, TransformComponent.scaleY);
+            super({
+                id: ScaleTool.ID,
+                command: editor.commands.CMD_SCALE_SCENE_OBJECT,
+            }, TransformComponent.scaleX, TransformComponent.scaleY);
 
             this.addItems(
                 new ScaleToolItem(1, 0.5),

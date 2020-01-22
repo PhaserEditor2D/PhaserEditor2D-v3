@@ -189,6 +189,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._toolsManager = new tools.SceneToolsManager(this);
             this._mouseManager = new MouseManager(this);
 
+            this._overlayLayer.getCanvas().addEventListener("contextmenu", e => this.onMenu(e));
         }
 
         private createGame() {
@@ -260,7 +261,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private _toolActionMap: Map<string, controls.Action>;
 
-        private createActions() {
+        private createToolActions() {
 
             if (this._toolActionMap) {
                 return;
@@ -269,7 +270,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._toolActionMap = new Map();
 
             const tuples = [
-                [sceneobjects.TranslateTool.ID, commands.CMD_MOVE_SCENE_OBJECT],
+                [sceneobjects.TranslateTool.ID, commands.CMD_TRANSLATE_SCENE_OBJECT],
                 [sceneobjects.ScaleTool.ID, commands.CMD_SCALE_SCENE_OBJECT],
                 [sceneobjects.RotateTool.ID, commands.CMD_ROTATE_SCENE_OBJECT]
             ];
@@ -291,7 +292,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         createEditorToolbar(parent: HTMLElement) {
 
-            this.createActions();
+            this.createToolActions();
 
             const manager = new controls.ToolbarManager(parent);
 
@@ -314,6 +315,37 @@ namespace phasereditor2d.scene.ui.editor {
             });
 
             return manager;
+        }
+
+        private onMenu(e: MouseEvent) {
+
+            e.preventDefault();
+
+            const menu = new controls.Menu();
+
+            this.fillContextMenu(menu);
+
+            menu.create(e);
+        }
+
+        private fillContextMenu(menu: controls.Menu) {
+
+            const cmdManager = colibri.Platform.getWorkbench().getCommandManager();
+            const activeTool = this.getToolsManager().getActiveTool();
+
+            const exts = colibri.Platform.getExtensions<tools.SceneToolExtension>(tools.SceneToolExtension.POINT_ID);
+
+            for (const ext of exts) {
+
+                for (const tool of ext.getTools()) {
+
+                    const command = cmdManager.getCommand(tool.getCommandId());
+
+                    menu.addCommand(tool.getCommandId(), {
+                        text: command.getName() + " " + (activeTool === tool ? "(ON)" : "")
+                    });
+                }
+            }
         }
 
         openAddObjectDialog() {

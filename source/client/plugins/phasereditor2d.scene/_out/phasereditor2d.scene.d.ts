@@ -625,9 +625,11 @@ declare namespace phasereditor2d.scene.ui.editor {
         private updateTitleIcon;
         getIcon(): controls.IImage;
         private _toolActionMap;
-        private createActions;
+        private createToolActions;
         getToolActionMap(): Map<string, controls.Action>;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
+        private onMenu;
+        private fillContextMenu;
         openAddObjectDialog(): void;
         toggleSnapping(): void;
         private readScene;
@@ -677,7 +679,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
-    const CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+    const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
@@ -904,12 +906,17 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         x: number;
         y: number;
     }
+    interface ISceneToolConfig {
+        id: string;
+        command: string;
+    }
     abstract class SceneTool {
         static COLOR_CANNOT_EDIT: string;
-        private _id;
+        private _config;
         private _items;
-        constructor(id: string);
+        constructor(config: ISceneToolConfig);
         getId(): string;
+        getCommandId(): string;
         getItems(): SceneToolItem[];
         addItems(...items: SceneToolItem[]): void;
         abstract canEdit(obj: unknown): boolean;
@@ -1493,7 +1500,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class BaseObjectTool extends editor.tools.SceneTool {
         private _properties;
-        constructor(id: string, ...properties: Array<IProperty<any>>);
+        constructor(config: editor.tools.ISceneToolConfig, ...properties: Array<IProperty<any>>);
         canEdit(obj: unknown): boolean;
         canRender(obj: unknown): boolean;
     }

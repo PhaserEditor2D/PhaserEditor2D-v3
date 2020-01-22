@@ -3088,6 +3088,7 @@ var phasereditor2d;
                         this._actionManager = new editor.ActionManager(this);
                         this._toolsManager = new editor.tools.SceneToolsManager(this);
                         this._mouseManager = new editor.MouseManager(this);
+                        this._overlayLayer.getCanvas().addEventListener("contextmenu", e => this.onMenu(e));
                     }
                     createGame() {
                         this._scene = new ui.Scene();
@@ -3136,13 +3137,13 @@ var phasereditor2d;
                         }
                         return super.getIcon();
                     }
-                    createActions() {
+                    createToolActions() {
                         if (this._toolActionMap) {
                             return;
                         }
                         this._toolActionMap = new Map();
                         const tuples = [
-                            [ui.sceneobjects.TranslateTool.ID, editor.commands.CMD_MOVE_SCENE_OBJECT],
+                            [ui.sceneobjects.TranslateTool.ID, editor.commands.CMD_TRANSLATE_SCENE_OBJECT],
                             [ui.sceneobjects.ScaleTool.ID, editor.commands.CMD_SCALE_SCENE_OBJECT],
                             [ui.sceneobjects.RotateTool.ID, editor.commands.CMD_ROTATE_SCENE_OBJECT]
                         ];
@@ -3158,7 +3159,7 @@ var phasereditor2d;
                         return this._toolActionMap;
                     }
                     createEditorToolbar(parent) {
-                        this.createActions();
+                        this.createToolActions();
                         const manager = new controls.ToolbarManager(parent);
                         manager.addCommand(editor.commands.CMD_ADD_SCENE_OBJECT, {
                             showText: false,
@@ -3173,6 +3174,25 @@ var phasereditor2d;
                             showText: false
                         });
                         return manager;
+                    }
+                    onMenu(e) {
+                        e.preventDefault();
+                        const menu = new controls.Menu();
+                        this.fillContextMenu(menu);
+                        menu.create(e);
+                    }
+                    fillContextMenu(menu) {
+                        const cmdManager = colibri.Platform.getWorkbench().getCommandManager();
+                        const activeTool = this.getToolsManager().getActiveTool();
+                        const exts = colibri.Platform.getExtensions(editor.tools.SceneToolExtension.POINT_ID);
+                        for (const ext of exts) {
+                            for (const tool of ext.getTools()) {
+                                const command = cmdManager.getCommand(tool.getCommandId());
+                                menu.addCommand(tool.getCommandId(), {
+                                    text: command.getName() + " " + (activeTool === tool ? "(ON)" : "")
+                                });
+                            }
+                        }
                     }
                     openAddObjectDialog() {
                         const dlg = new editor.AddObjectDialog(this);
@@ -3471,7 +3491,7 @@ var phasereditor2d;
                     commands.CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
                     commands.CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
                     commands.CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
-                    commands.CMD_MOVE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+                    commands.CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
                     commands.CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
                     commands.CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
                     commands.CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
@@ -3551,8 +3571,8 @@ var phasereditor2d;
                             // scene tools
                             manager.add({
                                 command: {
-                                    id: commands.CMD_MOVE_SCENE_OBJECT,
-                                    name: "Move Objects",
+                                    id: commands.CMD_TRANSLATE_SCENE_OBJECT,
+                                    name: "Translate",
                                     icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_TRANSLATE),
                                     tooltip: "Translate the selected scene objects",
                                 },
@@ -3568,7 +3588,7 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_ROTATE_SCENE_OBJECT,
-                                    name: "Rotate objects",
+                                    name: "Rotate",
                                     icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ANGLE),
                                     tooltip: "Rotate the selected scene objects",
                                 },
@@ -3584,7 +3604,7 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_SCALE_SCENE_OBJECT,
-                                    name: "Scale objects",
+                                    name: "Scale",
                                     icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_SCALE),
                                     tooltip: "Scale the selected scene objects",
                                 },
@@ -4482,12 +4502,15 @@ var phasereditor2d;
                 var tools;
                 (function (tools) {
                     class SceneTool {
-                        constructor(id) {
-                            this._id = id;
+                        constructor(config) {
+                            this._config = config;
                             this._items = [];
                         }
                         getId() {
-                            return this._id;
+                            return this._config.id;
+                        }
+                        getCommandId() {
+                            return this._config.command;
                         }
                         getItems() {
                             return this._items;
@@ -6343,8 +6366,8 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class BaseObjectTool extends ui.editor.tools.SceneTool {
-                    constructor(id, ...properties) {
-                        super(id);
+                    constructor(config, ...properties) {
+                        super(config);
                         this._properties = properties;
                     }
                     canEdit(obj) {
@@ -6475,7 +6498,10 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class RotateTool extends sceneobjects.BaseObjectTool {
                     constructor() {
-                        super(RotateTool.ID, sceneobjects.TransformComponent.angle);
+                        super({
+                            id: RotateTool.ID,
+                            command: ui.editor.commands.CMD_ROTATE_SCENE_OBJECT,
+                        }, sceneobjects.TransformComponent.angle);
                         this.addItems(new sceneobjects.RotateLineToolItem(true), new sceneobjects.RotateLineToolItem(false), new ui.editor.tools.CenterPointToolItem(sceneobjects.RotateToolItem.COLOR), new sceneobjects.RotateToolItem());
                     }
                 }
@@ -6604,7 +6630,10 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class ScaleTool extends sceneobjects.BaseObjectTool {
                     constructor() {
-                        super(ScaleTool.ID, sceneobjects.TransformComponent.scaleX, sceneobjects.TransformComponent.scaleY);
+                        super({
+                            id: ScaleTool.ID,
+                            command: ui.editor.commands.CMD_SCALE_SCENE_OBJECT,
+                        }, sceneobjects.TransformComponent.scaleX, sceneobjects.TransformComponent.scaleY);
                         this.addItems(new sceneobjects.ScaleToolItem(1, 0.5), new sceneobjects.ScaleToolItem(1, 1), new sceneobjects.ScaleToolItem(0.5, 1));
                     }
                 }
@@ -6764,7 +6793,10 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class TranslateTool extends sceneobjects.BaseObjectTool {
                     constructor() {
-                        super(TranslateTool.ID, sceneobjects.TransformComponent.x, sceneobjects.TransformComponent.y);
+                        super({
+                            id: TranslateTool.ID,
+                            command: ui.editor.commands.CMD_TRANSLATE_SCENE_OBJECT,
+                        }, sceneobjects.TransformComponent.x, sceneobjects.TransformComponent.y);
                         const x = new sceneobjects.TranslateToolItem("x");
                         const y = new sceneobjects.TranslateToolItem("y");
                         const xy = new sceneobjects.TranslateToolItem("xy");

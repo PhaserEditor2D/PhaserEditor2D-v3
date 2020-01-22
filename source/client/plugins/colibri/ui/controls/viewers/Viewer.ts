@@ -131,21 +131,6 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        getMenu() {
-            return this._menu;
-        }
-
-        setMenu(menu: controls.Menu) {
-
-            this._menu = menu;
-
-            if (this._menu) {
-                this._menu.setMenuClosedCallback(() => {
-                    this._menu = null;
-                });
-            }
-        }
-
         getLabelProvider() {
             return this._labelProvider;
         }

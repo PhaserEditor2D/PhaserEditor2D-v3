@@ -449,7 +449,7 @@ declare namespace colibri.lang {
 }
 declare namespace colibri.ui.controls {
     const EVENT_ACTION_CHANGED = "actionChanged";
-    type ActionConfig = {
+    interface IActionConfig {
         text?: string;
         tooltip?: string;
         icon?: IImage;
@@ -457,8 +457,8 @@ declare namespace colibri.ui.controls {
         showText?: boolean;
         commandId?: string;
         selected?: boolean;
-        callback?: () => void;
-    };
+        callback?(): void;
+    }
     class Action extends EventTarget {
         private _text;
         private _tooltip;
@@ -468,7 +468,7 @@ declare namespace colibri.ui.controls {
         private _showText;
         private _selected;
         private _callback;
-        constructor(config: ActionConfig);
+        constructor(config: IActionConfig);
         isSelected(): boolean;
         setSelected(selected: boolean): void;
         getCommandId(): string;
@@ -618,11 +618,11 @@ declare namespace colibri.ui.controls {
         constructor();
         setMenuClosedCallback(callback: () => void): void;
         add(action: Action): void;
-        addCommand(commandId: string, config?: ActionConfig): void;
+        addCommand(commandId: string, config?: IActionConfig): void;
         addExtension(menuId: string): void;
         addSeparator(): void;
         isEmpty(): boolean;
-        getElement(): HTMLUListElement;
+        getElement(): HTMLDivElement;
         static getActiveMenu(): Menu;
         create(e: MouseEvent): void;
         close(): void;
@@ -793,7 +793,7 @@ declare namespace colibri.ui.controls {
         private _toolbarElement;
         private _actionDataMap;
         constructor(toolbarElement: HTMLElement);
-        addCommand(commandId: string, config?: ActionConfig): void;
+        addCommand(commandId: string, config?: IActionConfig): void;
         add(action: Action): void;
         dispose(): void;
         private updateButtonWithAction;
@@ -1145,8 +1145,6 @@ declare namespace colibri.ui.controls.viewers {
         private onKeyDown;
         private moveCursor;
         private onDragStart;
-        getMenu(): Menu;
-        setMenu(menu: controls.Menu): void;
         getLabelProvider(): ILabelProvider;
         setLabelProvider(labelProvider: ILabelProvider): void;
         setFilterText(filterText: string): void;
@@ -1710,13 +1708,13 @@ declare namespace colibri.ui.ide.actions {
 declare namespace colibri.ui.ide.actions {
     abstract class PartAction<T extends ide.Part> extends controls.Action {
         private _part;
-        constructor(part: T, config: controls.ActionConfig);
+        constructor(part: T, config: controls.IActionConfig);
         getPart(): T;
     }
 }
 declare namespace colibri.ui.ide.actions {
     abstract class ViewerViewAction<T extends ide.ViewerView> extends PartAction<T> {
-        constructor(view: T, config: controls.ActionConfig);
+        constructor(view: T, config: controls.IActionConfig);
         getViewViewer(): controls.viewers.TreeViewer;
         getViewViewerSelection(): any[];
     }

@@ -4,8 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _properties: Array<IProperty<any>>;
 
-        constructor(id: string, ...properties: Array<IProperty<any>>) {
-            super(id);
+        constructor(config: editor.tools.ISceneToolConfig, ...properties: Array<IProperty<any>>) {
+            super(config);
 
             this._properties = properties;
         }

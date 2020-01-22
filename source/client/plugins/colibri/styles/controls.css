@@ -345,10 +345,25 @@ canvas {
     position: fixed;
 }
 
+.MenuItem {
+    display: grid;
+    grid-template-columns: 2em 1fr auto;
+}
+
+.MenuItemIcon {
+    grid-column-start: 1;
+    justify-self: end;
+    margin-right: 5px;
+}
+
+.MenuItemText {
+    grid-column-start: 2;
+}
+
 .MenuItemKeyString {
-    float: right;
     font-family: monospace;
     margin-left: 3em;
+    grid-column-start: 3;
 }
 
 .MenuContainer {

@@ -41,8 +41,6 @@ namespace colibri.ui.ide {
 
             const menu = new controls.Menu();
 
-            this._viewer.setMenu(menu);
-
             this.fillContextMenu(menu);
 
             menu.create(e);

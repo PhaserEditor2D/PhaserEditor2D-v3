@@ -7,7 +7,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static ID = "phasereditor2d.scene.ui.sceneobjects.RotateTool";
 
         constructor() {
-            super(RotateTool.ID, TransformComponent.angle);
+            super({
+                id: RotateTool.ID,
+                command: editor.commands.CMD_ROTATE_SCENE_OBJECT,
+            }, TransformComponent.angle);
 
             this.addItems(
                 new RotateLineToolItem(true),

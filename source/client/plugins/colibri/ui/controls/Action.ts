@@ -2,16 +2,17 @@ namespace colibri.ui.controls {
 
     export const EVENT_ACTION_CHANGED = "actionChanged";
 
-    export declare type ActionConfig = {
-        text?: string,
-        tooltip?: string,
-        icon?: IImage,
-        enabled?: boolean,
-        showText?: boolean,
-        commandId?: string,
-        selected?: boolean,
-        callback?: () => void
-    };
+    export interface IActionConfig {
+
+        text?: string;
+        tooltip?: string;
+        icon?: IImage;
+        enabled?: boolean;
+        showText?: boolean;
+        commandId?: string;
+        selected?: boolean;
+        callback?(): void;
+    }
 
     export class Action extends EventTarget {
 
@@ -24,7 +25,7 @@ namespace colibri.ui.controls {
         private _selected: boolean;
         private _callback: () => void;
 
-        constructor(config: ActionConfig) {
+        constructor(config: IActionConfig) {
             super();
 
             this._text = config.text ?? "";

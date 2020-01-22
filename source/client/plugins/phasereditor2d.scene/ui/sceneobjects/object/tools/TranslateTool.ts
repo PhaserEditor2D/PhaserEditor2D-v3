@@ -5,7 +5,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static ID = "phasereditor2d.scene.ui.sceneobjects.TranslateTool";
 
         constructor() {
-            super(TranslateTool.ID, TransformComponent.x, TransformComponent.y);
+            super({
+                id: TranslateTool.ID,
+                command: editor.commands.CMD_TRANSLATE_SCENE_OBJECT,
+            }, TransformComponent.x, TransformComponent.y);
 
             const x = new TranslateToolItem("x");
             const y = new TranslateToolItem("y");

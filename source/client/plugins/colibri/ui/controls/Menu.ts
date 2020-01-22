@@ -3,7 +3,7 @@ namespace colibri.ui.controls {
     export class Menu {
 
         private _actions: Action[];
-        private _element: HTMLUListElement;
+        private _element: HTMLDivElement;
         private _bgElement: HTMLDivElement;
         private _menuCloseCallback: () => void;
         private static _activeMenu: Menu = null;
@@ -20,7 +20,7 @@ namespace colibri.ui.controls {
             this._actions.push(action);
         }
 
-        addCommand(commandId: string, config?: ActionConfig) {
+        addCommand(commandId: string, config?: IActionConfig) {
 
             if (!config) {
 
@@ -62,7 +62,7 @@ namespace colibri.ui.controls {
 
             Menu._activeMenu = this;
 
-            this._element = document.createElement("ul");
+            this._element = document.createElement("div");
             this._element.classList.add("Menu");
 
             let lastIsSeparator = true;
@@ -75,7 +75,7 @@ namespace colibri.ui.controls {
 
                         lastIsSeparator = true;
 
-                        const sepElement = document.createElement("li");
+                        const sepElement = document.createElement("div");
                         sepElement.classList.add("MenuItemSeparator");
                         this._element.appendChild(sepElement);
                     }
@@ -85,19 +85,29 @@ namespace colibri.ui.controls {
 
                 lastIsSeparator = false;
 
-                const item = document.createElement("li");
-
+                const item = document.createElement("div");
                 item.classList.add("MenuItem");
 
                 const keyString = action.getCommandKeyString();
 
+                if (action.getIcon()) {
+
+                    const iconElement = Controls.createIconElement(action.getIcon());
+                    iconElement.classList.add("MenuItemIcon");
+                    item.appendChild(iconElement);
+                }
+
+                const labelElement = document.createElement("label");
+                labelElement.classList.add("MenuItemText");
+                labelElement.innerText = action.getText();
+                item.appendChild(labelElement);
+
                 if (keyString) {
 
-                    item.innerHTML = `${action.getText()} <span class="MenuItemKeyString">${keyString}</span>`;
-
-                } else {
-
-                    item.innerHTML = action.getText();
+                    const keyElement = document.createElement("span");
+                    keyElement.innerText = keyString;
+                    keyElement.classList.add("MenuItemKeyString");
+                    item.appendChild(keyElement);
                 }
 
                 if (action.isEnabled()) {
