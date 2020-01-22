@@ -370,9 +370,7 @@ var phasereditor2d;
                             controls.Controls.openUrlInNewPage(url);
                         });
                         manager.addKeyBinding(actions.CMD_PLAY_PROJECT, new commands.KeyMatcher({
-                            control: true,
-                            alt: true,
-                            key: "G"
+                            key: "F12"
                         }));
                         // reload project
                         manager.addCommandHelper({

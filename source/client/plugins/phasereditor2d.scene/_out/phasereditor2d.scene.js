@@ -3936,7 +3936,7 @@ var phasereditor2d;
                 (function (properties) {
                     class BorderSection extends properties.SceneSection {
                         constructor(page) {
-                            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Border");
+                            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Border", false, true);
                         }
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
@@ -4038,7 +4038,7 @@ var phasereditor2d;
                     var controls = colibri.ui.controls;
                     class CompilerSection extends properties.SceneSection {
                         constructor(page) {
-                            super(page, "id", "Compiler");
+                            super(page, "id", "Compiler", false, true);
                         }
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
@@ -6156,7 +6156,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class OriginSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
-                        super(page, "SceneEditor.OriginSection", "Origin", false);
+                        super(page, "SceneEditor.OriginSection", "Origin", false, true);
                     }
                     createForm(parent) {
                         const comp = this.createGridElementWithPropertiesXY(parent);
@@ -7048,7 +7048,7 @@ var phasereditor2d;
                 var ide = colibri.ui.ide;
                 class TextureSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture");
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture", false, true);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent);
@@ -7387,7 +7387,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class TileSpriteSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects.TileSprite", "Tile Sprite");
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.TileSprite", "Tile Sprite", false, true);
                     }
                     createForm(parent) {
                         const comp = this.createGridElementWithPropertiesXY(parent);

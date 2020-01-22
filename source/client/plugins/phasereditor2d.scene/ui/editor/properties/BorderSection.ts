@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
     export class BorderSection extends SceneSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Border");
+            super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Border", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {

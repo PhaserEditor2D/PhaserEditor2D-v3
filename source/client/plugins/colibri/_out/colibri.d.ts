@@ -931,13 +931,15 @@ declare namespace colibri.ui.controls.properties {
         private _page;
         private _updaters;
         private _fillSpace;
-        constructor(page: PropertyPage, id: string, title: string, fillSpace?: boolean);
+        private _collapsedByDefault;
+        constructor(page: PropertyPage, id: string, title: string, fillSpace?: boolean, collapsedByDefault?: boolean);
         protected abstract createForm(parent: HTMLDivElement): any;
         abstract canEdit(obj: any, n: number): boolean;
         abstract canEditNumber(n: number): boolean;
         updateWithSelection(): void;
         addUpdater(updater: Updater): void;
         isFillSpace(): boolean;
+        isCollapsedByDefault(): boolean;
         getPage(): PropertyPage;
         getSelection(): T[];
         getId(): string;

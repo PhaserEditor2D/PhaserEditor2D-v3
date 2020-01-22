@@ -1299,7 +1299,7 @@ var phasereditor2d;
                 var io = colibri.core.io;
                 class UploadSection extends controls.properties.PropertySection {
                     constructor(page) {
-                        super(page, "phasereditor2d.files.ui.views", "Upload", true);
+                        super(page, "phasereditor2d.files.ui.views", "Upload", true, true);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent, 1);

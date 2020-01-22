@@ -7,7 +7,7 @@ namespace phasereditor2d.files.ui.views {
     export class UploadSection extends controls.properties.PropertySection<io.FilePath> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.files.ui.views", "Upload", true);
+            super(page, "phasereditor2d.files.ui.views", "Upload", true, true);
         }
 
         protected createForm(parent: HTMLDivElement) {

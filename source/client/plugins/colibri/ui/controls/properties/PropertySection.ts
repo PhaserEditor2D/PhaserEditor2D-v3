@@ -9,12 +9,15 @@ namespace colibri.ui.controls.properties {
         private _page: PropertyPage;
         private _updaters: Updater[];
         private _fillSpace: boolean;
+        private _collapsedByDefault: boolean;
 
-        constructor(page: PropertyPage, id: string, title: string, fillSpace = false) {
+        constructor(page: PropertyPage, id: string, title: string, fillSpace = false, collapsedByDefault = false) {
+
             this._page = page;
             this._id = id;
             this._title = title;
             this._fillSpace = fillSpace;
+            this._collapsedByDefault = collapsedByDefault;
             this._updaters = [];
         }
 
@@ -37,6 +40,10 @@ namespace colibri.ui.controls.properties {
 
         isFillSpace() {
             return this._fillSpace;
+        }
+
+        isCollapsedByDefault() {
+            return this._collapsedByDefault;
         }
 
         getPage() {

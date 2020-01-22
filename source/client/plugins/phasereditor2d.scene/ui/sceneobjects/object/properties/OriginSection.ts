@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class OriginSection extends SceneObjectSection<IOriginLikeObject> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "SceneEditor.OriginSection", "Origin", false);
+            super(page, "SceneEditor.OriginSection", "Origin", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {

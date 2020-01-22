@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class TileSpriteSection extends SceneObjectSection<TileSprite> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.TileSprite", "Tile Sprite");
+            super(page, "phasereditor2d.scene.ui.sceneobjects.TileSprite", "Tile Sprite", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {

@@ -3702,6 +3702,9 @@ var colibri;
                             this.getElement().appendChild(this._titleArea);
                             this.getElement().appendChild(this._formArea);
                             this.updateExpandIcon();
+                            if (this._section.isCollapsedByDefault()) {
+                                this.toggleSection();
+                            }
                         }
                         this._section.updateWithSelection();
                     }
@@ -3862,11 +3865,12 @@ var colibri;
             var properties;
             (function (properties) {
                 class PropertySection {
-                    constructor(page, id, title, fillSpace = false) {
+                    constructor(page, id, title, fillSpace = false, collapsedByDefault = false) {
                         this._page = page;
                         this._id = id;
                         this._title = title;
                         this._fillSpace = fillSpace;
+                        this._collapsedByDefault = collapsedByDefault;
                         this._updaters = [];
                     }
                     updateWithSelection() {
@@ -3879,6 +3883,9 @@ var colibri;
                     }
                     isFillSpace() {
                         return this._fillSpace;
+                    }
+                    isCollapsedByDefault() {
+                        return this._collapsedByDefault;
                     }
                     getPage() {
                         return this._page;

@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class TextureSection extends SceneObjectSection<ITextureLikeObject> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture");
+            super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {

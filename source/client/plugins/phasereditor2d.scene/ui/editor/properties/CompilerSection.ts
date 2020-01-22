@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
     export class CompilerSection extends SceneSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "id", "Compiler");
+            super(page, "id", "Compiler", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {

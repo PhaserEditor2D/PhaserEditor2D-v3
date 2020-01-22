@@ -20,6 +20,7 @@ namespace colibri.ui.controls.properties {
         }
 
         createOrUpdateWithSelection() {
+
             if (!this._formArea) {
 
                 this._titleArea = document.createElement("div");
@@ -49,6 +50,11 @@ namespace colibri.ui.controls.properties {
                 this.getElement().appendChild(this._formArea);
 
                 this.updateExpandIcon();
+
+                if (this._section.isCollapsedByDefault()) {
+
+                    this.toggleSection();
+                }
             }
 
             this._section.updateWithSelection();
@@ -61,9 +67,12 @@ namespace colibri.ui.controls.properties {
         private toggleSection(): void {
 
             if (this.isExpanded()) {
+
                 this._formArea.style.display = "none";
                 this._expandIconElement.classList.remove("expanded");
+
             } else {
+
                 this._formArea.style.display = "grid";
                 this._expandIconElement.classList.add("expanded");
             }
@@ -221,7 +230,6 @@ namespace colibri.ui.controls.properties {
             }
 
             this.updateExpandStatus();
-
         }
 
         updateExpandStatus() {
