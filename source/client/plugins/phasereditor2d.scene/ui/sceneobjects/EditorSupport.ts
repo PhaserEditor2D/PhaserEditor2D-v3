@@ -52,29 +52,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        isUnlockedProperty(propName: string) {
+        isUnlockedProperty(property: IProperty<any>) {
 
-            if (propName === TransformComponent.x.name || propName === TransformComponent.y.name) {
+            if (property === TransformComponent.x || property === TransformComponent.y) {
                 return true;
             }
 
             if (this.isPrefabInstance()) {
 
-                return this._unlockedProperties.has(propName);
+                return this._unlockedProperties.has(property.name);
             }
 
             return true;
         }
 
-        setUnlockedProperty(propName: string, unlock: boolean) {
+        setUnlockedProperty(property: IProperty<any>, unlock: boolean) {
 
             if (unlock) {
 
-                this._unlockedProperties.add(propName);
+                this._unlockedProperties.add(property.name);
 
             } else {
 
-                this._unlockedProperties.delete(propName);
+                this._unlockedProperties.delete(property.name);
             }
         }
 

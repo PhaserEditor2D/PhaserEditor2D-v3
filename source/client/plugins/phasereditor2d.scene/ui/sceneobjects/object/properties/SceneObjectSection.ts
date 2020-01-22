@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 for (const property of properties) {
 
-                    const locked = !obj.getEditorSupport().isUnlockedProperty(property.name);
+                    const locked = !obj.getEditorSupport().isUnlockedProperty(property);
 
                     if (locked) {
 

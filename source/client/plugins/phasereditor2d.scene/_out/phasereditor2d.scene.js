@@ -4897,21 +4897,21 @@ var phasereditor2d;
                         }
                         return false;
                     }
-                    isUnlockedProperty(propName) {
-                        if (propName === sceneobjects.TransformComponent.x.name || propName === sceneobjects.TransformComponent.y.name) {
+                    isUnlockedProperty(property) {
+                        if (property === sceneobjects.TransformComponent.x || property === sceneobjects.TransformComponent.y) {
                             return true;
                         }
                         if (this.isPrefabInstance()) {
-                            return this._unlockedProperties.has(propName);
+                            return this._unlockedProperties.has(property.name);
                         }
                         return true;
                     }
-                    setUnlockedProperty(propName, unlock) {
+                    setUnlockedProperty(property, unlock) {
                         if (unlock) {
-                            this._unlockedProperties.add(propName);
+                            this._unlockedProperties.add(property.name);
                         }
                         else {
-                            this._unlockedProperties.delete(propName);
+                            this._unlockedProperties.delete(property.name);
                         }
                     }
                     static async buildPrefabDependencyHash(builder, prefabId) {
@@ -6071,7 +6071,7 @@ var phasereditor2d;
                     isUnlocked(...properties) {
                         for (const obj of this.getSelection()) {
                             for (const property of properties) {
-                                const locked = !obj.getEditorSupport().isUnlockedProperty(property.name);
+                                const locked = !obj.getEditorSupport().isUnlockedProperty(property);
                                 if (locked) {
                                     return false;
                                 }
@@ -6195,7 +6195,7 @@ var phasereditor2d;
                     }
                     getValue(obj) {
                         for (const prop of this._properties) {
-                            const locked = !obj.getEditorSupport().isUnlockedProperty(prop.name);
+                            const locked = !obj.getEditorSupport().isUnlockedProperty(prop);
                             if (locked) {
                                 return false;
                             }
@@ -6211,7 +6211,7 @@ var phasereditor2d;
                                     const propValue = prefabSer.read(prop.name, prop.defValue);
                                     prop.setValue(obj, propValue);
                                 }
-                                obj.getEditorSupport().setUnlockedProperty(prop.name, unlocked);
+                                obj.getEditorSupport().setUnlockedProperty(prop, unlocked);
                             }
                         }
                     }
@@ -6325,7 +6325,7 @@ var phasereditor2d;
                                 if (!support.hasProperty(prop)) {
                                     return false;
                                 }
-                                if (!support.isUnlockedProperty(prop.name)) {
+                                if (!support.isUnlockedProperty(prop)) {
                                     return false;
                                 }
                             }
@@ -7272,10 +7272,10 @@ var phasereditor2d;
                         let width = tileSprite.width;
                         let height = tileSprite.height;
                         if (support.isPrefabInstance()) {
-                            if (!support.isUnlockedProperty(sceneobjects.TileSpriteComponent.width.name)) {
+                            if (!support.isUnlockedProperty(sceneobjects.TileSpriteComponent.width)) {
                                 width = undefined;
                             }
-                            if (!support.isUnlockedProperty(sceneobjects.TileSpriteComponent.height.name)) {
+                            if (!support.isUnlockedProperty(sceneobjects.TileSpriteComponent.height)) {
                                 height = undefined;
                             }
                         }

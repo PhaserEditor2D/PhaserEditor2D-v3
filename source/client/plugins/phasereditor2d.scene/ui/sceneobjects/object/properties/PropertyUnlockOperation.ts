@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of this._properties) {
 
-                const locked = !obj.getEditorSupport().isUnlockedProperty(prop.name);
+                const locked = !obj.getEditorSupport().isUnlockedProperty(prop);
 
                 if (locked) {
                     return false;
@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         prop.setValue(obj, propValue);
                     }
 
-                    obj.getEditorSupport().setUnlockedProperty(prop.name, unlocked);
+                    obj.getEditorSupport().setUnlockedProperty(prop, unlocked);
                 }
             }
         }

@@ -50,11 +50,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (support.isPrefabInstance()) {
 
-                if (!support.isUnlockedProperty(TileSpriteComponent.width.name)) {
+                if (!support.isUnlockedProperty(TileSpriteComponent.width)) {
                     width = undefined;
                 }
 
-                if (!support.isUnlockedProperty(TileSpriteComponent.height.name)) {
+                if (!support.isUnlockedProperty(TileSpriteComponent.height)) {
                     height = undefined;
                 }
             }

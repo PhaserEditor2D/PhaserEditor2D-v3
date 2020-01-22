@@ -1035,8 +1035,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _unlockedProperties;
         constructor(extension: SceneObjectExtension, obj: T);
         hasProperty(property: IProperty<any>): boolean;
-        isUnlockedProperty(propName: string): boolean;
-        setUnlockedProperty(propName: string, unlock: boolean): void;
+        isUnlockedProperty(property: IProperty<any>): boolean;
+        setUnlockedProperty(property: IProperty<any>, unlock: boolean): void;
         private static buildPrefabDependencyHash;
         buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];

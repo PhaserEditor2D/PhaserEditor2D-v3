@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         return false;
                     }
 
-                    if (!support.isUnlockedProperty(prop.name)) {
+                    if (!support.isUnlockedProperty(prop)) {
                         return false;
                     }
                 }
