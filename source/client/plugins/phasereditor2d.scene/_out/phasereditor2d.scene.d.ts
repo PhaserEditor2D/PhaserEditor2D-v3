@@ -1115,7 +1115,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    function getAlpha_SharedTexture(hitArea: any, x: number, y: number, obj: ITransformLikeObject): number;
+    function interactive_getAlpha_SharedTexture(hitArea: any, x: number, y: number, obj: ITransformLikeObject): number;
+    function interactive_getAlpha_RenderTexture(hitArea: any, x: number, y: number, obj: ITransformLikeObject): boolean;
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import code = core.code;
@@ -1739,6 +1740,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TileSpriteEditorSupport extends BaseImageEditorSupport<TileSprite> {
         constructor(obj: TileSprite);
+        setInteractive(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

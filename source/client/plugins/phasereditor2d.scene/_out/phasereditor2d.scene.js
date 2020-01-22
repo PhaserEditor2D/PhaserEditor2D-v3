@@ -5146,12 +5146,12 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene) {
+    (function (scene_16) {
         var ui;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                function getAlpha_SharedTexture(hitArea, x, y, obj) {
+                function interactive_getAlpha_SharedTexture(hitArea, x, y, obj) {
                     const sprite = obj;
                     if (sprite.flipX) {
                         x = 2 * sprite.displayOriginX - x;
@@ -5163,9 +5163,43 @@ var phasereditor2d;
                     const alpha = textureManager.getPixelAlpha(x, y, sprite.texture.key, sprite.frame.name);
                     return alpha;
                 }
-                sceneobjects.getAlpha_SharedTexture = getAlpha_SharedTexture;
+                sceneobjects.interactive_getAlpha_SharedTexture = interactive_getAlpha_SharedTexture;
+                function interactive_getAlpha_RenderTexture(hitArea, x, y, obj) {
+                    const sprite = obj;
+                    const hitBounds = x >= 0 && y >= 0 && x <= sprite.width && y <= sprite.height;
+                    if (!hitBounds) {
+                        return false;
+                    }
+                    const scene = obj.getEditorSupport().getScene();
+                    const renderTexture = new Phaser.GameObjects.RenderTexture(scene, 0, 0, 1, 1);
+                    const scaleX = sprite.scaleX;
+                    const scaleY = sprite.scaleY;
+                    const originX = sprite.originX;
+                    const originY = sprite.originY;
+                    const angle = sprite.angle;
+                    sprite.scaleX = 1;
+                    sprite.scaleY = 1;
+                    sprite.originX = 0;
+                    sprite.originY = 0;
+                    sprite.angle = 0;
+                    renderTexture.draw([sprite], -x, -y);
+                    sprite.scaleX = scaleX;
+                    sprite.scaleY = scaleY;
+                    sprite.originX = originX;
+                    sprite.originY = originY;
+                    sprite.angle = angle;
+                    const colorArray = [];
+                    renderTexture.snapshotPixel(0, 0, (c) => {
+                        colorArray[0] = c;
+                    });
+                    renderTexture.destroy();
+                    const color = colorArray[0];
+                    const alpha = color ? color.alpha : 0;
+                    return alpha > 0;
+                }
+                sceneobjects.interactive_getAlpha_RenderTexture = interactive_getAlpha_RenderTexture;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
+        })(ui = scene_16.ui || (scene_16.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -5243,7 +5277,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_16) {
+    (function (scene_17) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -5265,7 +5299,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Container = Container;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_16.ui || (scene_16.ui = {}));
+        })(ui = scene_17.ui || (scene_17.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -5404,7 +5438,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_17) {
+    (function (scene_18) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -5428,7 +5462,7 @@ var phasereditor2d;
                         for (const objData of children) {
                             const ser = args.serializer.getSerializer(objData);
                             const type = ser.getType();
-                            const ext = scene_17.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                            const ext = scene_18.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                             if (ext) {
                                 const list2 = await ext.getAssetsFromObjectData({
                                     serializer: ser,
@@ -5469,7 +5503,7 @@ var phasereditor2d;
                 }
                 sceneobjects.ContainerExtension = ContainerExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_17.ui || (scene_17.ui = {}));
+        })(ui = scene_18.ui || (scene_18.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../ObjectCodeDOMBuilder.ts" />
@@ -5627,7 +5661,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_18) {
+    (function (scene_19) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -5695,13 +5729,13 @@ var phasereditor2d;
                 }
                 sceneobjects.BaseImageExtension = BaseImageExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_18.ui || (scene_18.ui = {}));
+        })(ui = scene_19.ui || (scene_19.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_19) {
+    (function (scene_20) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -5717,7 +5751,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Image = Image;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_19.ui || (scene_19.ui = {}));
+        })(ui = scene_20.ui || (scene_20.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -5733,7 +5767,7 @@ var phasereditor2d;
                         super(sceneobjects.ImageExtension.getInstance(), obj);
                     }
                     setInteractive() {
-                        this.getObject().setInteractive(sceneobjects.getAlpha_SharedTexture);
+                        this.getObject().setInteractive(sceneobjects.interactive_getAlpha_SharedTexture);
                     }
                 }
                 sceneobjects.ImageEditorSupport = ImageEditorSupport;
@@ -5745,7 +5779,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_20) {
+    (function (scene_21) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -5770,7 +5804,7 @@ var phasereditor2d;
                 }
                 sceneobjects.ImageExtension = ImageExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_20.ui || (scene_20.ui = {}));
+        })(ui = scene_21.ui || (scene_21.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../Component.ts" />
@@ -6801,7 +6835,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_21) {
+    (function (scene_22) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6817,7 +6851,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Sprite = Sprite;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_21.ui || (scene_21.ui = {}));
+        })(ui = scene_22.ui || (scene_22.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../image/BaseImageEditorSupport.ts" />
@@ -6842,7 +6876,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_22) {
+    (function (scene_23) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6867,7 +6901,7 @@ var phasereditor2d;
                 SpriteExtension._instance = new SpriteExtension();
                 sceneobjects.SpriteExtension = SpriteExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_22.ui || (scene_22.ui = {}));
+        })(ui = scene_23.ui || (scene_23.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -7176,7 +7210,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_23) {
+    (function (scene_24) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -7192,7 +7226,7 @@ var phasereditor2d;
                 }
                 sceneobjects.TileSprite = TileSprite;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_23.ui || (scene_23.ui = {}));
+        })(ui = scene_24.ui || (scene_24.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -7300,6 +7334,9 @@ var phasereditor2d;
                         super(sceneobjects.TileSpriteExtension.getInstance(), obj);
                         this.addComponent(new sceneobjects.TileSpriteComponent(obj));
                     }
+                    setInteractive() {
+                        this.getObject().setInteractive(sceneobjects.interactive_getAlpha_RenderTexture);
+                    }
                 }
                 sceneobjects.TileSpriteEditorSupport = TileSpriteEditorSupport;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
@@ -7309,7 +7346,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_24) {
+    (function (scene_25) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -7337,7 +7374,7 @@ var phasereditor2d;
                 TileSpriteExtension._instance = new TileSpriteExtension();
                 sceneobjects.TileSpriteExtension = TileSpriteExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_24.ui || (scene_24.ui = {}));
+        })(ui = scene_25.ui || (scene_25.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;

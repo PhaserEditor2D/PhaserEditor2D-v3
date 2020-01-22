@@ -7,5 +7,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(new TileSpriteComponent(obj));
         }
+
+        setInteractive() {
+
+            this.getObject().setInteractive(interactive_getAlpha_RenderTexture);
+        }
     }
 }
