@@ -102,7 +102,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          */
         abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
 
-
         /**
          * Create an empty object of this extension.
          *

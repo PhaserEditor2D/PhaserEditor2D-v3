@@ -61,7 +61,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             support.setLabel(baseLabel);
 
             const textureComponent = (support.getComponent(TextureComponent) as TextureComponent);
-
             textureComponent.setTextureKeys({ key, frame });
 
             return sprite;
@@ -69,25 +68,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject {
 
-            const sprite = this.createImageObject(args.scene, 0, 0, undefined);
+            let key: string;
+            let frame: string | number;
+
+            const textureData = args.data as ITextureData;
+
+            if (textureData.texture) {
+
+                key = textureData.texture.key;
+                frame = textureData.texture.frame;
+            }
+
+            const sprite = this.createImageObject(args.scene, 0, 0, key, frame);
 
             sprite.getEditorSupport().readJSON(args.data);
 
             return sprite;
         }
 
-        protected abstract newObject(scene: Scene, key?: string, frame?: string | number): ISceneObject;
+        protected abstract newObject(
+            scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject;
 
         private createImageObject(
             scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
 
-            const sprite = this.newObject(scene, key, frame);
+            const sprite = this.newObject(scene, x, y, key, frame);
 
-            const transformObj = sprite as unknown as ITransformLikeObject;
-            transformObj.x = x;
-            transformObj.y = y;
+            const editorSupport  = sprite.getEditorSupport();
 
-            sprite.getEditorSupport().setScene(scene);
+            editorSupport.setScene(scene);
+
+            editorSupport.setInteractive();
 
             scene.sys.displayList.add(sprite);
 

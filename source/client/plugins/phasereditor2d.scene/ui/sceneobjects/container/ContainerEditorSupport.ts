@@ -15,6 +15,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new TransformComponent(obj));
         }
 
+        setInteractive() {
+            // nothing
+        }
+
         async buildDependencyHash(args: IBuildDependencyHashArgs) {
 
             super.buildDependencyHash(args);

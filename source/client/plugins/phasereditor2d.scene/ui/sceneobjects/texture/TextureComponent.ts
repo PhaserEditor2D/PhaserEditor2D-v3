@@ -68,9 +68,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const obj = this.getObject();
 
             obj.setTexture(keys.key || null, keys.frame);
-
-            // this should be called each time the texture is changed
-            obj.setInteractive();
         }
 
         removeTexture() {

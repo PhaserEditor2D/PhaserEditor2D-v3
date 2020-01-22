@@ -585,7 +585,9 @@ namespace phasereditor2d.scene.ui.editor {
             this.refreshOutline();
 
             // for some reason, we should do this after a time, or the game is not stopped well.
-            setTimeout(() => this._game.loop.stop(), 500);
+            setTimeout(() => {
+                this._game.loop.stop();
+            }, 500);
 
             this.updateTitleIcon(true);
         }

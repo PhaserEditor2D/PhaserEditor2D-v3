@@ -70,10 +70,24 @@ namespace phasereditor2d.scene {
                 ])
             );
 
+            // loader updates
+
+            reg.addExtension(
+                new ui.sceneobjects.ImageLoaderUpdater()
+            );
+
             // commands
 
             reg.addExtension(
                 new ide.commands.CommandExtension(ui.editor.commands.SceneEditorCommands.registerCommands));
+
+            // main menu
+
+            reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN,
+                {
+                    command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
+                }
+            ));
 
             // editors
 
@@ -94,13 +108,8 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 ui.sceneobjects.ImageExtension.getInstance(),
                 ui.sceneobjects.SpriteExtension.getInstance(),
+                ui.sceneobjects.TileSpriteExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance()
-            );
-
-            // loader updates
-
-            reg.addExtension(
-                new ui.sceneobjects.ImageLoaderUpdater()
             );
 
             // property sections
@@ -109,15 +118,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.VariableSection(page),
                 page => new ui.sceneobjects.TransformSection(page),
                 page => new ui.sceneobjects.OriginSection(page),
+                page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.TextureSection(page)
-            ));
-
-            // main menu
-
-            reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN,
-                {
-                    command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
-                }
             ));
 
             // scene tools

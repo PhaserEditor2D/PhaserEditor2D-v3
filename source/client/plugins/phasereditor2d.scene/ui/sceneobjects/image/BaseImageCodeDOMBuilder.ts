@@ -71,26 +71,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.arg(args.sceneExpr);
 
-            this.addArgsToCreateMethodDOM(call, args.obj as Image);
+            this.addArgsToObjectFactoryMethodCallDOM(call, args.obj as Image);
         }
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
             const call = new code.MethodCallCodeDOM(this._factoryMethodName, args.gameObjectFactoryExpr);
 
-            this.addArgsToCreateMethodDOM(call, args.obj as Image);
+            this.addArgsToObjectFactoryMethodCallDOM(call, args.obj as Image);
 
             return call;
         }
 
-        private addArgsToCreateMethodDOM(call: code.MethodCallCodeDOM, obj: Image) {
+        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject) {
 
             call.argFloat(obj.x);
             call.argFloat(obj.y);
 
+            this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj);
+        }
+
+        protected addTextureFrameArgsToObjectFactoryMethodCallDOM(
+            call: code.MethodCallCodeDOM, obj: ITransformLikeObject) {
+
             const support = obj.getEditorSupport();
 
-            const textureComponent = obj.getEditorSupport().getTextureComponent();
+            const textureComponent = support.getComponent(TextureComponent) as TextureComponent;
 
             const { key, frame } = textureComponent.getTextureKeys();
 
@@ -104,7 +110,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (prefabKeys.key === key) {
 
-                        return call;
+                        return;
                     }
 
                 } else {
@@ -123,7 +129,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 call.argLiteral(frame);
             }
-
         }
     }
 }

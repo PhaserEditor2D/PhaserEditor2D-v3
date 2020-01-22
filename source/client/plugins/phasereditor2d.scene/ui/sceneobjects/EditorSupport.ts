@@ -122,6 +122,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
 
+        abstract setInteractive(): void;
+
         // tslint:disable-next-line:ban-types
         getComponent(ctr: Function): Component<any> {
             return this._componentMap.get(ctr);

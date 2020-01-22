@@ -1041,6 +1041,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
         abstract getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
+        abstract setInteractive(): void;
         getComponent(ctr: Function): Component<any>;
         hasComponent(ctr: Function): boolean;
         getComponents(): IterableIterator<Component<any>>;
@@ -1112,6 +1113,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         acceptAsset(asset: any): boolean;
         updateLoader(scene: Scene, asset: any): Promise<void>;
     }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    function getAlpha_SharedTexture(hitArea: any, x: number, y: number, obj: ITransformLikeObject): number;
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import code = core.code;
@@ -1286,6 +1290,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
     class ContainerEditorSupport extends EditorSupport<Container> {
         constructor(obj: Container);
+        setInteractive(): void;
         buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
         writeJSON(containerData: IContainerData): void;
@@ -1321,7 +1326,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
-        private addArgsToCreateMethodDOM;
+        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject): void;
+        protected addTextureFrameArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1329,6 +1335,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(extension: SceneObjectExtension, obj: T);
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
         getTextureComponent(): TextureComponent;
+        setInteractive(): void;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
     }
 }
@@ -1341,7 +1348,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createEmptySceneObject(args: ICreateEmptyArgs): ISceneObject;
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
         createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
-        protected abstract newObject(scene: Scene, key?: string, frame?: string | number): ISceneObject;
+        protected abstract newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject;
         private createImageObject;
     }
 }
@@ -1353,11 +1360,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class ImageEditorSupport extends EditorSupport<Image> {
+    class ImageEditorSupport extends BaseImageEditorSupport<Image> {
         constructor(obj: Image);
-        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
-        getTextureComponent(): TextureComponent;
-        getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+        setInteractive(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1366,7 +1371,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static getInstance(): any;
         private constructor();
         getCodeDOMBuilder(): ObjectCodeDOMBuilder;
-        protected newObject(scene: Scene, key?: string, frame?: string | number): ISceneObject;
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1436,7 +1441,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    abstract class ObjectSceneSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+    abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
         protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
         protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
@@ -1449,7 +1454,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class OriginSection extends ObjectSceneSection<IOriginLikeObject> {
+    class OriginSection extends SceneObjectSection<IOriginLikeObject> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -1465,7 +1470,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class TransformSection extends ObjectSceneSection<sceneobjects.ITransformLikeObject> {
+    class TransformSection extends SceneObjectSection<sceneobjects.ITransformLikeObject> {
         constructor(page: colibri.ui.controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -1474,7 +1479,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class VariableSection extends ObjectSceneSection<ISceneObjectLike> {
+    class VariableSection extends SceneObjectSection<ISceneObjectLike> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -1640,7 +1645,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static getInstance(): SpriteExtension;
         constructor();
         getCodeDOMBuilder(): ObjectCodeDOMBuilder;
-        protected newObject(scene: Scene, key?: string, frame?: string | number): ISceneObject;
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1683,7 +1688,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class TextureSection extends ObjectSceneSection<ITextureLikeObject> {
+    class TextureSection extends SceneObjectSection<ITextureLikeObject> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         private getSelectedFrames;
@@ -1700,6 +1705,58 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _callback;
         private constructor();
         create(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TileSprite extends Phaser.GameObjects.TileSprite implements ISceneObject {
+        private _editorSupport;
+        constructor(scene: Scene, x: number, y: number, width: number, height: number, texture: string, frame: string | number);
+        getEditorSupport(): EditorSupport<ISceneObject>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import code = core.code;
+    class TileSpriteCodeDOMBuilder extends BaseImageCodeDOMBuilder {
+        constructor();
+        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TileSpriteComponent extends Component<TileSprite> {
+        static width: IProperty<any>;
+        static height: IProperty<any>;
+        static tilePositionX: IProperty<any>;
+        static tilePositionY: IProperty<any>;
+        static tileScaleX: IProperty<any>;
+        static tileScaleY: IProperty<any>;
+        static size: IPropertyXY;
+        static tilePosition: IPropertyXY;
+        static tileScale: IPropertyXY;
+        constructor(obj: TileSprite);
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TileSpriteEditorSupport extends BaseImageEditorSupport<TileSprite> {
+        constructor(obj: TileSprite);
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TileSpriteExtension extends BaseImageExtension {
+        private static _instance;
+        static getInstance(): TileSpriteExtension;
+        constructor();
+        getCodeDOMBuilder(): ObjectCodeDOMBuilder;
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class TileSpriteSection extends SceneObjectSection<TileSprite> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.viewers {

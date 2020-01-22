@@ -2,10 +2,6 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import write = colibri.core.json.write;
-    import read = colibri.core.json.read;
-    import json = core.json;
-
     export interface ITransformLikeObject extends ISceneObjectLike {
 
         x: number;

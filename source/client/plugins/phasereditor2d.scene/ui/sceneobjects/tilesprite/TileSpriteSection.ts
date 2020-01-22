@@ -1,31 +1,31 @@
-/// <reference path="./SceneObjectSection.ts" />
-
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
-    import ide = colibri.ui.ide;
-    import core = colibri.core;
 
-    export class OriginSection extends SceneObjectSection<IOriginLikeObject> {
+    export class TileSpriteSection extends SceneObjectSection<TileSprite> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "SceneEditor.OriginSection", "Origin", false);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.TileSprite", "Tile Sprite");
         }
 
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
 
-            this.createPropertyXYRow(comp, OriginComponent.origin);
+            this.createPropertyXYRow(comp, TileSpriteComponent.size);
+
+            this.createPropertyXYRow(comp, TileSpriteComponent.tilePosition);
+
+            this.createPropertyXYRow(comp, TileSpriteComponent.tileScale);
         }
 
         canEdit(obj: any, n: number): boolean {
-            return EditorSupport.getObjectComponent(obj, OriginComponent) !== null;
+
+            return obj instanceof TileSprite && n > 0;
         }
 
         canEditNumber(n: number): boolean {
             return n > 0;
         }
     }
-
 }

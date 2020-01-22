@@ -19,8 +19,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new BaseImageCodeDOMBuilder("sprite");
         }
 
-        protected newObject(scene: Scene, key?: string, frame?: string | number): ISceneObject {
-            return new Sprite(scene, 0, 0, key, frame);
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
+            return new Sprite(scene, x, y, key, frame);
         }
     }
 }

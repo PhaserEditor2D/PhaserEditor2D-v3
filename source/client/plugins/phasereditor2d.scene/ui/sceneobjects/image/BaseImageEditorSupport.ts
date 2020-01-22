@@ -22,6 +22,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.getComponent(TextureComponent) as TextureComponent;
         }
 
+        setInteractive() {
+
+            this.getObject().setInteractive();
+        }
+
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
 
             const sprite = this.getObject() as unknown as Phaser.GameObjects.Sprite;
