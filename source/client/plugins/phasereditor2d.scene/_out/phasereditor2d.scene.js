@@ -3178,6 +3178,15 @@ var phasereditor2d;
                         const dlg = new editor.AddObjectDialog(this);
                         dlg.create();
                     }
+                    toggleSnapping() {
+                        const enabled = !this.getScene().getSettings().snapEnabled;
+                        this.getUndoManager().add(new editor.properties.ChangeSettingsPropertyOperation({
+                            editor: this,
+                            name: "snapEnabled",
+                            value: enabled,
+                            repaint: true
+                        }));
+                    }
                     async readScene() {
                         const maker = this._scene.getMaker();
                         this._sceneRead = true;
@@ -3466,6 +3475,7 @@ var phasereditor2d;
                     commands.CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
                     commands.CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
                     commands.CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
+                    commands.CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_8.SceneEditor
                             || (args.activeEditor instanceof editor_8.SceneEditor &&
@@ -3601,6 +3611,25 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "A"
+                                }
+                            });
+                            // snapping
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_TOGGLE_SNAPPING,
+                                    name: "Toggle Snapping",
+                                    tooltip: "Enable/disable the snapping."
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => {
+                                        console.log("change!");
+                                        const editor = args.activeEditor;
+                                        editor.toggleSnapping();
+                                    }
+                                },
+                                keys: {
+                                    key: "E"
                                 }
                             });
                         }

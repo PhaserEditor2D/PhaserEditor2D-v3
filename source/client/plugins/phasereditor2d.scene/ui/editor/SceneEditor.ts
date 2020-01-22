@@ -323,6 +323,18 @@ namespace phasereditor2d.scene.ui.editor {
             dlg.create();
         }
 
+        toggleSnapping() {
+
+            const enabled = !this.getScene().getSettings().snapEnabled;
+
+            this.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
+                editor: this,
+                name: "snapEnabled",
+                value: enabled,
+                repaint: true
+            }));
+        }
+
         private async readScene() {
 
             const maker = this._scene.getMaker();

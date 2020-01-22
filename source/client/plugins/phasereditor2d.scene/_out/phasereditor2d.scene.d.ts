@@ -629,6 +629,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         getToolActionMap(): Map<string, controls.Action>;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
         openAddObjectDialog(): void;
+        toggleSnapping(): void;
         private readScene;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
         getToolsManager(): tools.SceneToolsManager;
@@ -680,6 +681,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
+    const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }

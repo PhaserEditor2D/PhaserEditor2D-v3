@@ -10,6 +10,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
+    export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor
@@ -201,6 +202,30 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "A"
+                }
+            });
+
+            // snapping
+
+            manager.add({
+                command: {
+                    id: CMD_TOGGLE_SNAPPING,
+                    name: "Toggle Snapping",
+                    tooltip: "Enable/disable the snapping."
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        console.log("change!");
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        editor.toggleSnapping();
+                    }
+                },
+                keys: {
+                    key: "E"
                 }
             });
         }
