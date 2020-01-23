@@ -215,13 +215,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_CONVERT_OBJECTS,
-                    name: "Change Type",
+                    name: "Convert To Other Type",
                     tooltip: "Change the type of the selected objects to other type."
                 },
                 handler: {
-                    testFunc: args => isSceneScope(args) && ChangeTypeDialog.canMorph(args.activeEditor as SceneEditor),
+                    testFunc: args => isSceneScope(args)
+                        && ConvertTypeDialog.canConvert(args.activeEditor as SceneEditor),
                     executeFunc: args => {
-                        const dlg = new editor.ChangeTypeDialog(args.activeEditor as SceneEditor);
+                        const dlg = new editor.ConvertTypeDialog(args.activeEditor as SceneEditor);
                         dlg.create();
                     }
                 }
@@ -236,12 +237,13 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Convert the selected objects into TileSprite instances."
                 },
                 handler: {
-                    testFunc: args => isSceneScope(args) && ChangeTypeDialog.canMorph(args.activeEditor as SceneEditor),
+                    testFunc: args => isSceneScope(args)
+                        && ConvertTypeDialog.canConvert(args.activeEditor as SceneEditor),
                     executeFunc: args => {
 
                         const editor = args.activeEditor as SceneEditor;
                         editor.getUndoManager().add(
-                            new undo.ChangeTypeOperation(editor, sceneobjects.TileSpriteExtension.getInstance()));
+                            new undo.ConvertTypeOperation(editor, sceneobjects.TileSpriteExtension.getInstance()));
                     }
                 },
                 keys: {

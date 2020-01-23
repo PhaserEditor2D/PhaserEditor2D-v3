@@ -553,10 +553,10 @@ declare namespace phasereditor2d.scene.ui.editor {
 }
 declare namespace phasereditor2d.scene.ui.editor {
     import controls = colibri.ui.controls;
-    class ChangeTypeDialog extends controls.dialogs.ViewerDialog {
+    class ConvertTypeDialog extends controls.dialogs.ViewerDialog {
         private _editor;
         constructor(editor: SceneEditor);
-        static canMorph(editor: SceneEditor): boolean;
+        static canConvert(editor: SceneEditor): boolean;
         private static getObjectsToMorph;
         create(): void;
     }
@@ -995,7 +995,7 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     import io = colibri.core.io;
-    class ChangeTypeOperation extends undo.SceneEditorOperation {
+    class ConvertTypeOperation extends undo.SceneEditorOperation {
         private _targetType;
         private _beforeData;
         private _afterData;

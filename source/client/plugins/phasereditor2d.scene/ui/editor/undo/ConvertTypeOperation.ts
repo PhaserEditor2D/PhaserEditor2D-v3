@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
         objData: json.IObjectData;
     }
 
-    export class ChangeTypeOperation extends undo.SceneEditorOperation {
+    export class ConvertTypeOperation extends undo.SceneEditorOperation {
 
         private _targetType: sceneobjects.SceneObjectExtension | io.FilePath;
         private _beforeData: IObjectConversionData[];

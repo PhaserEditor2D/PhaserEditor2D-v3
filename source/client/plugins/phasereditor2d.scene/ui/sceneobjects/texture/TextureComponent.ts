@@ -56,7 +56,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const support = originalObject.getEditorSupport();
 
-            if (support.isPrefabInstance()) {
+            if (support.isPrefabInstance() && support.hasComponent(TextureComponent)) {
 
                 if (!support.isUnlockedProperty(TextureComponent.texture)) {
 

@@ -2566,12 +2566,12 @@ var phasereditor2d;
             (function (editor_4) {
                 var controls = colibri.ui.controls;
                 var io = colibri.core.io;
-                class ChangeTypeDialog extends controls.dialogs.ViewerDialog {
+                class ConvertTypeDialog extends controls.dialogs.ViewerDialog {
                     constructor(editor) {
                         super(new controls.viewers.TreeViewer());
                         this._editor = editor;
                     }
-                    static canMorph(editor) {
+                    static canConvert(editor) {
                         return this.getObjectsToMorph(editor).length > 0;
                     }
                     static getObjectsToMorph(editor) {
@@ -2592,16 +2592,16 @@ var phasereditor2d;
                             ...scene.ScenePlugin.getInstance().getSceneFinder().getPrefabFiles()
                         ]);
                         super.create();
-                        this.setTitle("Change Type");
+                        this.setTitle("Convert Type");
                         this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Change", (sel) => {
-                            this._editor.getUndoManager().add(new editor_4.undo.ChangeTypeOperation(this._editor, viewer.getSelectionFirstElement()));
+                            this._editor.getUndoManager().add(new editor_4.undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));
                             this.close();
                         }));
                         viewer.selectFirst();
                         this.addButton("Cancel", () => this.close());
                     }
                 }
-                editor_4.ChangeTypeDialog = ChangeTypeDialog;
+                editor_4.ConvertTypeDialog = ConvertTypeDialog;
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3708,13 +3708,14 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_CONVERT_OBJECTS,
-                                    name: "Change Type",
+                                    name: "Convert To Other Type",
                                     tooltip: "Change the type of the selected objects to other type."
                                 },
                                 handler: {
-                                    testFunc: args => isSceneScope(args) && editor_9.ChangeTypeDialog.canMorph(args.activeEditor),
+                                    testFunc: args => isSceneScope(args)
+                                        && editor_9.ConvertTypeDialog.canConvert(args.activeEditor),
                                     executeFunc: args => {
-                                        const dlg = new editor.ChangeTypeDialog(args.activeEditor);
+                                        const dlg = new editor.ConvertTypeDialog(args.activeEditor);
                                         dlg.create();
                                     }
                                 }
@@ -3727,10 +3728,11 @@ var phasereditor2d;
                                     tooltip: "Convert the selected objects into TileSprite instances."
                                 },
                                 handler: {
-                                    testFunc: args => isSceneScope(args) && editor_9.ChangeTypeDialog.canMorph(args.activeEditor),
+                                    testFunc: args => isSceneScope(args)
+                                        && editor_9.ConvertTypeDialog.canConvert(args.activeEditor),
                                     executeFunc: args => {
                                         const editor = args.activeEditor;
-                                        editor.getUndoManager().add(new editor_9.undo.ChangeTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance()));
+                                        editor.getUndoManager().add(new editor_9.undo.ConvertTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance()));
                                     }
                                 },
                                 keys: {
@@ -4858,7 +4860,7 @@ var phasereditor2d;
                 var undo;
                 (function (undo) {
                     var io = colibri.core.io;
-                    class ChangeTypeOperation extends undo.SceneEditorOperation {
+                    class ConvertTypeOperation extends undo.SceneEditorOperation {
                         constructor(editor, targetType) {
                             super(editor);
                             this._targetType = targetType;
@@ -4957,7 +4959,7 @@ var phasereditor2d;
                             this.loadData(this._afterData);
                         }
                     }
-                    undo.ChangeTypeOperation = ChangeTypeOperation;
+                    undo.ConvertTypeOperation = ConvertTypeOperation;
                 })(undo = editor_17.undo || (editor_17.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_12.ui || (scene_12.ui = {}));
@@ -7310,7 +7312,7 @@ var phasereditor2d;
                     }
                     adjustAfterTypeChange(originalObject) {
                         const support = originalObject.getEditorSupport();
-                        if (support.isPrefabInstance()) {
+                        if (support.isPrefabInstance() && support.hasComponent(TextureComponent)) {
                             if (!support.isUnlockedProperty(TextureComponent.texture)) {
                                 const textureComp = support.getComponent(TextureComponent);
                                 const originalTextureKeys = textureComp.getTextureKeys();

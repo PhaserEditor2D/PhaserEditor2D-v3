@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.editor {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export class ChangeTypeDialog extends controls.dialogs.ViewerDialog {
+    export class ConvertTypeDialog extends controls.dialogs.ViewerDialog {
 
         private _editor: SceneEditor;
 
@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor = editor;
         }
 
-        static canMorph(editor: SceneEditor) {
+        static canConvert(editor: SceneEditor) {
 
             return this.getObjectsToMorph(editor).length > 0;
         }
@@ -44,13 +44,13 @@ namespace phasereditor2d.scene.ui.editor {
 
             super.create();
 
-            this.setTitle("Change Type");
+            this.setTitle("Convert Type");
 
             this.enableButtonOnlyWhenOneElementIsSelected(
                 this.addOpenButton("Change", (sel: any[]) => {
 
                     this._editor.getUndoManager().add(
-                        new undo.ChangeTypeOperation(this._editor, viewer.getSelectionFirstElement()));
+                        new undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));
 
                     this.close();
                 })
