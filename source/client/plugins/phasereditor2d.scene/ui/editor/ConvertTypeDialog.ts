@@ -47,7 +47,7 @@ namespace phasereditor2d.scene.ui.editor {
             this.setTitle("Convert Type");
 
             this.enableButtonOnlyWhenOneElementIsSelected(
-                this.addOpenButton("Change", (sel: any[]) => {
+                this.addOpenButton("Convert", (sel: any[]) => {
 
                     this._editor.getUndoManager().add(
                         new undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));

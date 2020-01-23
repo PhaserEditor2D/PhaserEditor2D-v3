@@ -24,6 +24,12 @@ input {
     box-sizing: border-box;
 }
 
+button {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 button:active,
 button:focus {
     outline-width: 1px;

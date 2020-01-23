@@ -44,8 +44,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 editor.getUndoManager().add(new ChangeSettingsPropertyOperation({
                     editor: editor,
-                    name: name,
-                    value: textElement.value,
+                    props: [{
+                        name,
+                        value: textElement.value,
+                    }],
                     repaint: true
                 }));
             });
@@ -73,8 +75,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 editor.getUndoManager().add(new ChangeSettingsPropertyOperation({
                     editor: editor,
-                    name: name,
-                    value: Number.parseInt(textElement.value, 10),
+                    props: [{
+                        name: name,
+                        value: Number.parseInt(textElement.value, 10),
+                    }],
                     repaint: true
                 }));
             });
@@ -98,8 +102,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 editor.getUndoManager().add(new ChangeSettingsPropertyOperation({
                     editor: editor,
-                    name: name,
-                    value: value,
+                    props: [{
+                        name: name,
+                        value: value,
+                    }],
                     repaint: true
                 }));
             });
@@ -127,8 +133,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 editor.getUndoManager().add(new ChangeSettingsPropertyOperation({
                     editor: editor,
-                    name: name,
-                    value: checkElement.checked,
+                    props: [{
+                        name: name,
+                        value: checkElement.checked,
+                    }],
                     repaint: true
                 }));
             });

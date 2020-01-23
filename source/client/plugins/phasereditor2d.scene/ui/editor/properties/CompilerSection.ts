@@ -99,8 +99,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     this.getEditor().getUndoManager().add(new ChangeSettingsPropertyOperation({
                         editor: this.getEditor(),
-                        name: "preloadPackFiles",
-                        value: names,
+                        props: [{
+                            name: "preloadPackFiles",
+                            value: names
+                        }],
                         repaint: false
                     }));
 

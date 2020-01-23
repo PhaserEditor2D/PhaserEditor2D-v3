@@ -645,6 +645,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private fillContextMenu;
         openAddObjectDialog(): void;
         toggleSnapping(): void;
+        setSnappingToObjectSize(): void;
         private readScene;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
         getToolsManager(): tools.SceneToolsManager;
@@ -697,8 +698,10 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
+    const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
     const CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
     const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
+    const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
@@ -794,16 +797,19 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
     class ChangeSettingsPropertyOperation extends undo.SceneEditorOperation {
-        private _name;
-        private _value;
-        private _oldValue;
+        private _props;
+        private _before;
+        private _after;
         private _repaint;
         constructor(args: {
             editor: SceneEditor;
-            name: string;
-            value: any;
+            props: Array<{
+                name: string;
+                value: any;
+            }>;
             repaint: boolean;
         });
+        execute(): void;
         private setValue;
         undo(): void;
         redo(): void;
@@ -1086,6 +1092,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getComponents(): IterableIterator<Component<any>>;
         adjustAfterTypeChange(originalObject: ISceneObject): void;
         static getObjectComponent(obj: any, ctr: Function): Component<any>;
+        static hasObjectComponent(obj: any, ctr: Function): boolean;
         protected addComponent(...components: Array<Component<any>>): void;
         protected setNewId(sprite: sceneobjects.ISceneObject): void;
         getExtension(): SceneObjectExtension;

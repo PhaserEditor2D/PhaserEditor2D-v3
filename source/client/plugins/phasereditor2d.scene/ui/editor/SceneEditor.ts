@@ -347,9 +347,18 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addSeparator();
 
+            menu.addCommand(commands.CMD_ADD_SCENE_OBJECT);
             menu.addCommand(commands.CMD_CONVERT_OBJECTS);
             menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
-            menu.addCommand(commands.CMD_ADD_SCENE_OBJECT);
+
+            menu.addSeparator();
+
+            menu.addCommand(commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
+
+            menu.addSeparator();
+
+            menu.addCommand(commands.CMD_TOGGLE_SNAPPING);
+            menu.addCommand(commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE);
 
             menu.addSeparator();
 
@@ -369,10 +378,44 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
                 editor: this,
-                name: "snapEnabled",
-                value: enabled,
+                props: [
+                    {
+                        name: "snapEnabled",
+                        value: enabled,
+                    }
+                ],
                 repaint: true
             }));
+        }
+
+        setSnappingToObjectSize() {
+
+            const obj = this.getSelectedGameObjects()[0] as any;
+
+            if (obj) {
+
+                if (obj.width !== undefined && obj.height !== undefined) {
+
+                    this.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
+                        editor: this,
+                        props: [
+                            {
+                                name: "snapEnabled",
+                                value: true,
+                            },
+                            {
+                                name: "snapWidth",
+                                value: obj.width
+                            },
+                            {
+                                name: "snapHeight",
+                                value: obj.height
+                            }
+                        ],
+                        repaint: true
+                    }));
+                }
+            }
         }
 
         private async readScene() {

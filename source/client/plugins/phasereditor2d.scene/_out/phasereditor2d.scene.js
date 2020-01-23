@@ -2593,7 +2593,7 @@ var phasereditor2d;
                         ]);
                         super.create();
                         this.setTitle("Convert Type");
-                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Change", (sel) => {
+                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Convert", (sel) => {
                             this._editor.getUndoManager().add(new editor_4.undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));
                             this.close();
                         }));
@@ -3254,9 +3254,14 @@ var phasereditor2d;
                             }
                         }
                         menu.addSeparator();
+                        menu.addCommand(editor.commands.CMD_ADD_SCENE_OBJECT);
                         menu.addCommand(editor.commands.CMD_CONVERT_OBJECTS);
                         menu.addCommand(editor.commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
-                        menu.addCommand(editor.commands.CMD_ADD_SCENE_OBJECT);
+                        menu.addSeparator();
+                        menu.addCommand(editor.commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
+                        menu.addSeparator();
+                        menu.addCommand(editor.commands.CMD_TOGGLE_SNAPPING);
+                        menu.addCommand(editor.commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE);
                         menu.addSeparator();
                         menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
                     }
@@ -3268,10 +3273,39 @@ var phasereditor2d;
                         const enabled = !this.getScene().getSettings().snapEnabled;
                         this.getUndoManager().add(new editor.properties.ChangeSettingsPropertyOperation({
                             editor: this,
-                            name: "snapEnabled",
-                            value: enabled,
+                            props: [
+                                {
+                                    name: "snapEnabled",
+                                    value: enabled,
+                                }
+                            ],
                             repaint: true
                         }));
+                    }
+                    setSnappingToObjectSize() {
+                        const obj = this.getSelectedGameObjects()[0];
+                        if (obj) {
+                            if (obj.width !== undefined && obj.height !== undefined) {
+                                this.getUndoManager().add(new editor.properties.ChangeSettingsPropertyOperation({
+                                    editor: this,
+                                    props: [
+                                        {
+                                            name: "snapEnabled",
+                                            value: true,
+                                        },
+                                        {
+                                            name: "snapWidth",
+                                            value: obj.width
+                                        },
+                                        {
+                                            name: "snapHeight",
+                                            value: obj.height
+                                        }
+                                    ],
+                                    repaint: true
+                                }));
+                            }
+                        }
                     }
                     async readScene() {
                         const maker = this._scene.getMaker();
@@ -3562,8 +3596,10 @@ var phasereditor2d;
                     commands.CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
                     commands.CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
                     commands.CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
+                    commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
                     commands.CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
                     commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
+                    commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_9.SceneEditor
                             || (args.activeEditor instanceof editor_9.SceneEditor &&
@@ -3585,7 +3621,7 @@ var phasereditor2d;
                                 editor.getSelectionManager().clearSelection();
                             });
                             // delete
-                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE, isSceneScope, args => {
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE, args => isSceneScope(args) && args.activeEditor.getSelection().length > 0, args => {
                                 const editor = args.activeEditor;
                                 editor.getActionManager().deleteObjects();
                             });
@@ -3739,6 +3775,43 @@ var phasereditor2d;
                                     key: "L"
                                 }
                             });
+                            // texture
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE,
+                                    name: "Select All With Same Texture",
+                                    tooltip: "Select all the objects with the same texture."
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args)
+                                        && args.activeEditor.getSelection()
+                                            .filter(obj => obj instanceof Phaser.GameObjects.GameObject
+                                            && ui.sceneobjects.EditorSupport.hasObjectComponent(obj, ui.sceneobjects.TextureComponent))
+                                            .length > 0,
+                                    executeFunc: args => {
+                                        const editor = args.activeEditor;
+                                        const textures = new Set();
+                                        for (const obj of args.activeEditor.getSelection()) {
+                                            const textureComponent = ui.sceneobjects.EditorSupport
+                                                .getObjectComponent(obj, ui.sceneobjects.TextureComponent);
+                                            const keys = textureComponent.getTextureKeys();
+                                            textures.add(JSON.stringify(keys));
+                                        }
+                                        const sel = [];
+                                        editor.getScene().visit(obj => {
+                                            const textureComponent = ui.sceneobjects.EditorSupport
+                                                .getObjectComponent(obj, ui.sceneobjects.TextureComponent);
+                                            if (textureComponent) {
+                                                const keys = textureComponent.getTextureKeys();
+                                                if (textures.has(JSON.stringify(keys))) {
+                                                    sel.push(obj);
+                                                }
+                                            }
+                                        });
+                                        editor.setSelection(sel);
+                                    }
+                                }
+                            });
                             // snapping
                             manager.add({
                                 command: {
@@ -3749,13 +3822,30 @@ var phasereditor2d;
                                 handler: {
                                     testFunc: isSceneScope,
                                     executeFunc: args => {
-                                        console.log("change!");
                                         const editor = args.activeEditor;
                                         editor.toggleSnapping();
                                     }
                                 },
                                 keys: {
                                     key: "E"
+                                }
+                            });
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE,
+                                    name: "Snap To Object Size",
+                                    tooltip: "Enable snapping and set size to the selected object."
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args)
+                                        && args.activeEditor.getSelectedGameObjects().length > 0,
+                                    executeFunc: args => {
+                                        const editor = args.activeEditor;
+                                        editor.setSnappingToObjectSize();
+                                    }
+                                },
+                                keys: {
+                                    key: "W"
                                 }
                             });
                         }
@@ -4011,8 +4101,10 @@ var phasereditor2d;
                                 const editor = this.getEditor();
                                 editor.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
                                     editor: editor,
-                                    name: name,
-                                    value: textElement.value,
+                                    props: [{
+                                            name,
+                                            value: textElement.value,
+                                        }],
                                     repaint: true
                                 }));
                             });
@@ -4031,8 +4123,10 @@ var phasereditor2d;
                                 const editor = this.getEditor();
                                 editor.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
                                     editor: editor,
-                                    name: name,
-                                    value: Number.parseInt(textElement.value, 10),
+                                    props: [{
+                                            name: name,
+                                            value: Number.parseInt(textElement.value, 10),
+                                        }],
                                     repaint: true
                                 }));
                             });
@@ -4047,8 +4141,10 @@ var phasereditor2d;
                                 const editor = this.getEditor();
                                 editor.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
                                     editor: editor,
-                                    name: name,
-                                    value: value,
+                                    props: [{
+                                            name: name,
+                                            value: value,
+                                        }],
                                     repaint: true
                                 }));
                             });
@@ -4066,8 +4162,10 @@ var phasereditor2d;
                                 const editor = this.getEditor();
                                 editor.getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
                                     editor: editor,
-                                    name: name,
-                                    value: checkElement.checked,
+                                    props: [{
+                                            name: name,
+                                            value: checkElement.checked,
+                                        }],
                                     repaint: true
                                 }));
                             });
@@ -4155,14 +4253,24 @@ var phasereditor2d;
                     class ChangeSettingsPropertyOperation extends editor.undo.SceneEditorOperation {
                         constructor(args) {
                             super(args.editor);
-                            this._name = args.name;
-                            this._value = args.value;
+                            this._props = args.props;
                             this._repaint = args.repaint;
-                            this._oldValue = this._editor.getScene().getSettings()[this._name];
-                            this.setValue(this._value);
+                        }
+                        execute() {
+                            const settings = this._editor.getScene().getSettings();
+                            this._before = new Map();
+                            this._after = new Map();
+                            for (const prop of this._props) {
+                                this._before.set(prop.name, settings[prop.name]);
+                                this._after.set(prop.name, prop.value);
+                            }
+                            this.setValue(this._after);
                         }
                         setValue(value) {
-                            this._editor.getScene().getSettings()[this._name] = value;
+                            const settings = this._editor.getScene().getSettings();
+                            for (const prop of this._props) {
+                                settings[prop.name] = value.get(prop.name);
+                            }
                             this._editor.setSelection(this._editor.getSelection());
                             this._editor.setDirty(true);
                             if (this._repaint) {
@@ -4170,10 +4278,10 @@ var phasereditor2d;
                             }
                         }
                         undo() {
-                            this.setValue(this._oldValue);
+                            this.setValue(this._before);
                         }
                         redo() {
-                            this.setValue(this._value);
+                            this.setValue(this._after);
                         }
                     }
                     properties.ChangeSettingsPropertyOperation = ChangeSettingsPropertyOperation;
@@ -4245,8 +4353,10 @@ var phasereditor2d;
                                     const names = files.map(file => file.getFullName());
                                     this.getEditor().getUndoManager().add(new properties.ChangeSettingsPropertyOperation({
                                         editor: this.getEditor(),
-                                        name: "preloadPackFiles",
-                                        value: names,
+                                        props: [{
+                                                name: "preloadPackFiles",
+                                                value: names
+                                            }],
                                         repaint: false
                                     }));
                                     this.updateWithSelection();
@@ -5245,6 +5355,10 @@ var phasereditor2d;
                             return _a = support.getComponent(ctr), (_a !== null && _a !== void 0 ? _a : null);
                         }
                         return null;
+                    }
+                    // tslint:disable-next-line:ban-types
+                    static hasObjectComponent(obj, ctr) {
+                        return this.getObjectComponent(obj, ctr) !== null;
                     }
                     addComponent(...components) {
                         for (const c of components) {

@@ -11,8 +11,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
+    export const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
     export const CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
     export const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
+    export const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor
@@ -60,7 +62,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
 
-                isSceneScope,
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
 
                 args => {
                     const editor = args.activeEditor as SceneEditor;
@@ -237,8 +239,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Convert the selected objects into TileSprite instances."
                 },
                 handler: {
+
                     testFunc: args => isSceneScope(args)
                         && ConvertTypeDialog.canConvert(args.activeEditor as SceneEditor),
+
                     executeFunc: args => {
 
                         const editor = args.activeEditor as SceneEditor;
@@ -248,6 +252,64 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "L"
+                }
+            });
+
+            // texture
+
+            manager.add({
+                command: {
+                    id: CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE,
+                    name: "Select All With Same Texture",
+                    tooltip: "Select all the objects with the same texture."
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection()
+                            .filter(
+                                obj => obj instanceof Phaser.GameObjects.GameObject
+                                    && sceneobjects.EditorSupport.hasObjectComponent(
+                                        obj, sceneobjects.TextureComponent))
+                            .length > 0,
+
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const textures = new Set<string>();
+
+                        for (const obj of args.activeEditor.getSelection()) {
+
+                            const textureComponent = sceneobjects.EditorSupport
+                                .getObjectComponent(
+                                    obj, sceneobjects.TextureComponent) as sceneobjects.TextureComponent;
+
+                            const keys = textureComponent.getTextureKeys();
+                            textures.add(JSON.stringify(keys));
+                        }
+
+                        const sel = [];
+
+                        editor.getScene().visit(obj => {
+
+                            const textureComponent = sceneobjects.EditorSupport
+                                .getObjectComponent(
+                                    obj, sceneobjects.TextureComponent) as sceneobjects.TextureComponent;
+
+                            if (textureComponent) {
+
+                                const keys = textureComponent.getTextureKeys();
+
+                                if (textures.has(JSON.stringify(keys))) {
+
+                                    sel.push(obj);
+                                }
+                            }
+                        });
+
+                        editor.setSelection(sel);
+                    }
                 }
             });
 
@@ -263,8 +325,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     testFunc: isSceneScope,
                     executeFunc: args => {
 
-                        console.log("change!");
-
                         const editor = args.activeEditor as SceneEditor;
 
                         editor.toggleSnapping();
@@ -272,6 +332,27 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "E"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SET_SNAPPING_TO_OBJECT_SIZE,
+                    name: "Snap To Object Size",
+                    tooltip: "Enable snapping and set size to the selected object."
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args)
+                        && (args.activeEditor as SceneEditor).getSelectedGameObjects().length > 0,
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        editor.setSnappingToObjectSize();
+                    }
+                },
+                keys: {
+                    key: "W"
                 }
             });
         }

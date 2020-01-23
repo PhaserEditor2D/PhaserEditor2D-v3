@@ -167,6 +167,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
+        // tslint:disable-next-line:ban-types
+        static hasObjectComponent(obj: any, ctr: Function) {
+
+            return this.getObjectComponent(obj, ctr) !== null;
+        }
+
         protected addComponent(...components: Array<Component<any>>) {
 
             for (const c of components) {
