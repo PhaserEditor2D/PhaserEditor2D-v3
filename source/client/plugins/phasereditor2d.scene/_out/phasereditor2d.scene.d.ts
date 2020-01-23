@@ -1723,6 +1723,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _textureKeys;
         constructor(obj: ITextureLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+        adjustAfterTypeChange(originalObject: ISceneObject): void;
         getTextureKeys(): ITextureKeys;
         setTextureKeys(keys: ITextureKeys): void;
         removeTexture(): void;

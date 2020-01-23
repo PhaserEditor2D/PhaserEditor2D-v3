@@ -7288,6 +7288,16 @@ var phasereditor2d;
                     buildSetObjectPropertiesCodeDOM(args) {
                         // nothing, the properties are set when the object is created.
                     }
+                    adjustAfterTypeChange(originalObject) {
+                        const support = originalObject.getEditorSupport();
+                        if (support.isPrefabInstance()) {
+                            if (!support.isUnlockedProperty(TextureComponent.texture)) {
+                                const textureComp = support.getComponent(TextureComponent);
+                                const originalTextureKeys = textureComp.getTextureKeys();
+                                this.setTextureKeys(originalTextureKeys);
+                            }
+                        }
+                    }
                     getTextureKeys() {
                         return this._textureKeys;
                     }
