@@ -277,6 +277,7 @@ declare namespace phasereditor2d.scene.core.json {
         private handleStorageChange;
         getProjectPreloader(): SceneFinderPreloader;
         preload(monitor: controls.IProgressMonitor): Promise<void>;
+        getPrefabId(file: io.FilePath): string;
         getFiles(): io.FilePath[];
         getPrefabFiles(): io.FilePath[];
         getPrefabData(prefabId: string): IObjectData;
@@ -995,9 +996,11 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     import io = colibri.core.io;
     class ChangeTypeOperation extends undo.SceneEditorOperation {
         private _targetType;
-        private _currentObjectData;
+        private _beforeData;
+        private _afterData;
         constructor(editor: SceneEditor, targetType: sceneobjects.SceneObjectExtension | io.FilePath);
         execute(): void;
+        private loadData;
         undo(): void;
         redo(): void;
     }
@@ -1034,6 +1037,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _obj;
         private _properties;
         constructor(obj: T, properties: Array<IProperty<any>>);
+        adjustAfterTypeChange(originalObject: ISceneObject): void;
         getProperties(): Set<IProperty<any>>;
         getObject(): T;
         write(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
@@ -1067,6 +1071,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _componentMap;
         private _unlockedProperties;
         constructor(extension: SceneObjectExtension, obj: T);
+        destroy(): void;
         hasProperty(property: IProperty<any>): boolean;
         isUnlockedProperty(property: IProperty<any>): boolean;
         setUnlockedProperty(property: IProperty<any>, unlock: boolean): void;
@@ -1078,6 +1083,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getComponent(ctr: Function): Component<any>;
         hasComponent(ctr: Function): boolean;
         getComponents(): IterableIterator<Component<any>>;
+        adjustAfterTypeChange(originalObject: ISceneObject): void;
         static getObjectComponent(obj: any, ctr: Function): Component<any>;
         protected addComponent(...components: Array<Component<any>>): void;
         protected setNewId(sprite: sceneobjects.ISceneObject): void;
@@ -1771,6 +1777,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static tilePosition: IPropertyXY;
         static tileScale: IPropertyXY;
         constructor(obj: TileSprite);
+        adjustAfterTypeChange(originalObject: ISceneObject): void;
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
     }
 }

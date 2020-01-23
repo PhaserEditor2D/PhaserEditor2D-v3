@@ -507,7 +507,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
-                obj.destroy();
+                obj.getEditorSupport().destroy();
             }
 
             this._scene.sys.updateList.removeAll();

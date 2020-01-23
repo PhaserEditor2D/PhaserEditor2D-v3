@@ -833,6 +833,7 @@ declare namespace colibri.ui.controls.dialogs {
         private _parentDialog;
         private _closeWithEscapeKey;
         constructor(...classList: string[]);
+        static closeAllDialogs(): void;
         static getActiveDialog(): Dialog;
         getDialogBackgroundElement(): HTMLElement;
         setCloseWithEscapeKey(closeWithEscapeKey: boolean): void;
@@ -906,7 +907,7 @@ declare namespace colibri.ui.controls.dialogs {
         createDialogArea(): void;
         getViewer(): viewers.TreeViewer;
         goFront(): void;
-        enableButtonOnlyWhenSelectedOne(btn: HTMLButtonElement): void;
+        enableButtonOnlyWhenOneElementIsSelected(btn: HTMLButtonElement): void;
         addOpenButton(text: string, callback: (selection: any[]) => void): HTMLButtonElement;
     }
 }

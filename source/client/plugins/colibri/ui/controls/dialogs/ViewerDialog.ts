@@ -34,7 +34,7 @@ namespace colibri.ui.controls.dialogs {
             }
         }
 
-        enableButtonOnlyWhenSelectedOne(btn: HTMLButtonElement) {
+        enableButtonOnlyWhenOneElementIsSelected(btn: HTMLButtonElement) {
 
             this.getViewer().addEventListener(EVENT_SELECTION_CHANGED, e => {
 

@@ -46,12 +46,15 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.setTitle("Change Type");
 
-            const morphBtn = this.addOpenButton("Change", (sel: any[]) => {
+            this.enableButtonOnlyWhenOneElementIsSelected(
+                this.addOpenButton("Change", (sel: any[]) => {
 
-                this.close();
-            });
+                    this._editor.getUndoManager().add(
+                        new undo.ChangeTypeOperation(this._editor, viewer.getSelectionFirstElement()));
 
-            this.enableButtonOnlyWhenSelectedOne(morphBtn);
+                    this.close();
+                })
+            );
 
             viewer.selectFirst();
 

@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             }
 
-            container.destroy();
+            container.getEditorSupport().destroy();
 
             this.updateEditor();
         }

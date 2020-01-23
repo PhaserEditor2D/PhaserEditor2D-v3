@@ -39,6 +39,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new VariableComponent(this._object));
         }
 
+        destroy() {
+
+            const obj = this.getObject();
+
+            obj.disableInteractive();
+            obj.destroy();
+        }
+
         hasProperty(property: IProperty<any>) {
 
             for (const comp of this._componentMap.values()) {
@@ -138,6 +146,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._componentMap.values();
         }
 
+        adjustAfterTypeChange(originalObject: ISceneObject) {
+
+            for (const comp of this.getComponents()) {
+
+                comp.adjustAfterTypeChange(originalObject);
+            }
+        }
+
         // tslint:disable-next-line:ban-types
         static getObjectComponent(obj: any, ctr: Function) {
 
@@ -232,7 +248,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getPrefabName() {
 
-            const file= this.getPrefabFile();
+            const file = this.getPrefabFile();
 
             if (file) {
 

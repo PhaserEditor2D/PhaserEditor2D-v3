@@ -3392,6 +3392,11 @@ var colibri;
                         }
                         Dialog._dialogs.push(this);
                     }
+                    static closeAllDialogs() {
+                        for (const dlg of this._dialogs) {
+                            dlg.close();
+                        }
+                    }
                     static getActiveDialog() {
                         return Dialog._dialogs[Dialog._dialogs.length - 1];
                     }
@@ -3678,7 +3683,7 @@ var colibri;
                             this._viewer.repaint();
                         }
                     }
-                    enableButtonOnlyWhenSelectedOne(btn) {
+                    enableButtonOnlyWhenOneElementIsSelected(btn) {
                         this.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
                             btn.disabled = this.getViewer().getSelection().length !== 1;
                         });

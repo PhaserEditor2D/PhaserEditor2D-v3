@@ -21,6 +21,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._properties = new Set(properties);
         }
 
+        adjustAfterTypeChange(originalObject: ISceneObject): void {
+            //
+        }
+
         getProperties() {
             return this._properties;
         }

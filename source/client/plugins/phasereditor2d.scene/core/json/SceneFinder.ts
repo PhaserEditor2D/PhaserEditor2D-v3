@@ -90,8 +90,8 @@ namespace phasereditor2d.scene.core.json {
             const dataMap = new Map<string, IObjectData>();
             const sceneDataMap = new Map<string, ISceneData>();
             const fileMap = new Map<string, io.FilePath>();
-            const newFiles = [];
-            const newPrefabFiles = [];
+            const sceneFiles = [];
+            const prefabFiles = [];
 
             const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
 
@@ -117,11 +117,11 @@ namespace phasereditor2d.scene.core.json {
 
                         if (data.sceneType === SceneType.PREFAB) {
 
-                            newPrefabFiles.push(file);
+                            prefabFiles.push(file);
                         }
                     }
 
-                    newFiles.push(file);
+                    sceneFiles.push(file);
 
                 } catch (e) {
                     console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
@@ -133,8 +133,23 @@ namespace phasereditor2d.scene.core.json {
             this._dataMap = dataMap;
             this._sceneDataMap = sceneDataMap;
             this._fileMap = fileMap;
-            this._files = newFiles;
-            this._prefabFiles = newPrefabFiles;
+            this._files = sceneFiles;
+            this._prefabFiles = prefabFiles;
+        }
+
+        getPrefabId(file: io.FilePath) {
+
+            const data = this.getSceneData(file);
+
+            if (data) {
+
+                if (data.sceneType === SceneType.PREFAB) {
+
+                    return data.id;
+                }
+            }
+
+            return null;
         }
 
         getFiles() {

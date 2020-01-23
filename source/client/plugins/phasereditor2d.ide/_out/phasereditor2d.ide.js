@@ -83,6 +83,7 @@ var phasereditor2d;
             }
             async ideOpenProject(projectName) {
                 this._openingProject = true;
+                controls.dialogs.Dialog.closeAllDialogs();
                 const dlg = new ide_1.ui.dialogs.OpeningProjectDialog();
                 dlg.create();
                 dlg.setTitle("Opening " + projectName);

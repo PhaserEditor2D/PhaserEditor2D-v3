@@ -138,6 +138,8 @@ namespace phasereditor2d.ide {
 
             this._openingProject = true;
 
+            controls.dialogs.Dialog.closeAllDialogs();
+
             const dlg = new ui.dialogs.OpeningProjectDialog();
             dlg.create();
             dlg.setTitle("Opening " + projectName);

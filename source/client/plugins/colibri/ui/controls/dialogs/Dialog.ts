@@ -60,6 +60,13 @@ namespace colibri.ui.controls.dialogs {
             Dialog._dialogs.push(this);
         }
 
+        static closeAllDialogs() {
+
+            for (const dlg of this._dialogs) {
+                dlg.close();
+            }
+        }
+
         static getActiveDialog() {
             return Dialog._dialogs[Dialog._dialogs.length - 1];
         }
