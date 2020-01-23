@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
         createFileContent(): string {
 
-            const sceneData: core.json.SceneData = {
+            const sceneData: core.json.ISceneData = {
                 id: Phaser.Utils.String.UUID(),
                 settings: {},
                 sceneType: core.json.SceneType.PREFAB,

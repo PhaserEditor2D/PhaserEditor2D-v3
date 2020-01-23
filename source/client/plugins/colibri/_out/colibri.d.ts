@@ -906,6 +906,8 @@ declare namespace colibri.ui.controls.dialogs {
         createDialogArea(): void;
         getViewer(): viewers.TreeViewer;
         goFront(): void;
+        enableButtonOnlyWhenSelectedOne(btn: HTMLButtonElement): void;
+        addOpenButton(text: string, callback: (selection: any[]) => void): HTMLButtonElement;
     }
 }
 declare namespace colibri.ui.controls.properties {
@@ -1094,7 +1096,7 @@ declare namespace colibri.ui.controls.viewers {
 declare namespace colibri.ui.controls.viewers {
     interface ICellRendererProvider {
         getCellRenderer(element: any): ICellRenderer;
-        preload(element: any): Promise<PreloadResult>;
+        preload(args: PreloadCellArgs): Promise<PreloadResult>;
     }
 }
 declare namespace colibri.ui.controls.viewers {
@@ -1192,6 +1194,7 @@ declare namespace colibri.ui.controls.viewers {
         setCellRendererProvider(cellRendererProvider: ICellRendererProvider): void;
         getInput(): any;
         setInput(input: any): void;
+        selectFirst(): void;
         getState(): ViewerState;
         setState(state: ViewerState): void;
         selectAll(): void;
@@ -1779,6 +1782,7 @@ declare namespace colibri.ui.ide.commands {
         private _commandHandlerMap;
         constructor();
         private onKeyDown;
+        canRunCommand(commandId: string): boolean;
         private executeHandler;
         addCommand(cmd: Command): void;
         addCommandHelper(config: {

@@ -6,6 +6,6 @@ namespace colibri.ui.controls.viewers {
 
         getCellRenderer(element: any): ICellRenderer;
 
-        preload(element: any): Promise<PreloadResult>;
+        preload(args: PreloadCellArgs): Promise<PreloadResult>;
     }
 }

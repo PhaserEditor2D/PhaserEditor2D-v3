@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui {
 
     export class OfflineScene extends Scene {
 
-        static async createScene(data: core.json.SceneData) {
+        static async createScene(data: core.json.ISceneData) {
 
             const promise = new Promise<OfflineScene>((resolve, reject) => {
 
@@ -28,10 +28,10 @@ namespace phasereditor2d.scene.ui {
             return promise;
         }
 
-        private _data: core.json.SceneData;
+        private _data: core.json.ISceneData;
         private _callback: () => void;
 
-        private constructor(data: core.json.SceneData) {
+        private constructor(data: core.json.ISceneData) {
             super(false);
 
             this._data = data;

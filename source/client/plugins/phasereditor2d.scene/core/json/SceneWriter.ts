@@ -8,9 +8,9 @@ namespace phasereditor2d.scene.core.json {
             this._scene = scene;
         }
 
-        toJSON(): SceneData {
+        toJSON(): ISceneData {
 
-            const sceneData: SceneData = {
+            const sceneData: ISceneData = {
                 id: this._scene.getId(),
                 sceneType: this._scene.getSceneType(),
                 settings: this._scene.getSettings().toJSON(),

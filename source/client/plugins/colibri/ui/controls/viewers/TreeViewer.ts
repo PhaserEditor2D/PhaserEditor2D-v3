@@ -188,7 +188,7 @@ namespace colibri.ui.controls.viewers {
 
                 const provider = this.getCellRendererProvider();
 
-                list.push(provider.preload(obj).then(r1 => {
+                list.push(provider.preload(new PreloadCellArgs(obj, viewer)).then(r1 => {
 
                     const renderer = provider.getCellRenderer(obj);
 

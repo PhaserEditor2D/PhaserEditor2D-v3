@@ -58,7 +58,7 @@ namespace phasereditor2d.scene.ui {
             return false;
         }
 
-        static isValidSceneDataFormat(data: json.SceneData) {
+        static isValidSceneDataFormat(data: json.ISceneData) {
             return "displayList" in data && Array.isArray(data.displayList);
         }
 
@@ -146,7 +146,7 @@ namespace phasereditor2d.scene.ui {
 
             try {
 
-                const prefabData = JSON.parse(content) as json.SceneData;
+                const prefabData = JSON.parse(content) as json.ISceneData;
 
                 const obj = this.createObject({
                     id: Phaser.Utils.String.UUID(),
@@ -168,7 +168,7 @@ namespace phasereditor2d.scene.ui {
             return new json.Serializer(data);
         }
 
-        createScene(sceneData: json.SceneData) {
+        createScene(sceneData: json.ISceneData) {
 
             if (sceneData.settings) {
 
@@ -186,7 +186,7 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        async updateSceneLoader(sceneData: json.SceneData) {
+        async updateSceneLoader(sceneData: json.ISceneData) {
 
             const finder = new pack.core.PackFinder();
 

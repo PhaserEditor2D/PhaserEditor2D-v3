@@ -246,7 +246,7 @@ declare namespace phasereditor2d.scene.core.json {
         SCENE = "SCENE",
         PREFAB = "PREFAB"
     }
-    type SceneData = {
+    interface ISceneData {
         id: string;
         sceneType: SceneType;
         settings: object;
@@ -256,7 +256,7 @@ declare namespace phasereditor2d.scene.core.json {
             url: string;
             contentType: string;
         };
-    };
+    }
 }
 declare namespace phasereditor2d.scene.core.json {
     import io = colibri.core.io;
@@ -272,14 +272,16 @@ declare namespace phasereditor2d.scene.core.json {
         private _sceneDataMap;
         private _fileMap;
         private _files;
+        private _prefabFiles;
         constructor();
         private handleStorageChange;
         getProjectPreloader(): SceneFinderPreloader;
         preload(monitor: controls.IProgressMonitor): Promise<void>;
         getFiles(): io.FilePath[];
+        getPrefabFiles(): io.FilePath[];
         getPrefabData(prefabId: string): IObjectData;
         getPrefabFile(prefabId: string): io.FilePath;
-        getSceneData(file: io.FilePath): SceneData;
+        getSceneData(file: io.FilePath): ISceneData;
     }
     export {};
 }
@@ -314,7 +316,7 @@ declare namespace phasereditor2d.scene.core.json {
     class SceneWriter {
         private _scene;
         constructor(scene: ui.Scene);
-        toJSON(): SceneData;
+        toJSON(): ISceneData;
         toString(): string;
     }
 }
@@ -378,7 +380,7 @@ declare namespace phasereditor2d.scene.ui {
 }
 declare namespace phasereditor2d.scene.ui {
     class OfflineScene extends Scene {
-        static createScene(data: core.json.SceneData): Promise<OfflineScene>;
+        static createScene(data: core.json.ISceneData): Promise<OfflineScene>;
         private _data;
         private _callback;
         private constructor();
@@ -394,15 +396,15 @@ declare namespace phasereditor2d.scene.ui {
         private _packFinder;
         constructor(scene: Scene);
         static acceptDropFile(dropFile: io.FilePath, editorFile: io.FilePath): any;
-        static isValidSceneDataFormat(data: json.SceneData): boolean;
+        static isValidSceneDataFormat(data: json.ISceneData): boolean;
         getPackFinder(): pack.core.PackFinder;
         preload(): Promise<void>;
         buildDependenciesHash(): Promise<string>;
         isPrefabFile(file: io.FilePath): boolean;
         createPrefabInstanceWithFile(file: io.FilePath): Promise<sceneobjects.ISceneObject>;
         getSerializer(data: json.IObjectData): json.Serializer;
-        createScene(sceneData: json.SceneData): void;
-        updateSceneLoader(sceneData: json.SceneData): Promise<void>;
+        createScene(sceneData: json.ISceneData): void;
+        updateSceneLoader(sceneData: json.ISceneData): Promise<void>;
         createEmptyObject(ext: sceneobjects.SceneObjectExtension): sceneobjects.ISceneObject;
         createObject(data: json.IObjectData): sceneobjects.ISceneObject;
     }
@@ -549,6 +551,16 @@ declare namespace phasereditor2d.scene.ui.editor {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor {
+    import controls = colibri.ui.controls;
+    class ChangeTypeDialog extends controls.dialogs.ViewerDialog {
+        private _editor;
+        constructor(editor: SceneEditor);
+        static canMorph(editor: SceneEditor): boolean;
+        private static getObjectsToMorph;
+        create(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor {
     class DropManager {
         private _editor;
         constructor(editor: SceneEditor);
@@ -684,6 +696,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
+    const CMD_MORPH_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
@@ -979,6 +992,17 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
+    import io = colibri.core.io;
+    class ChangeTypeOperation extends undo.SceneEditorOperation {
+        private _targetType;
+        private _currentObjectData;
+        constructor(editor: SceneEditor, targetType: sceneobjects.SceneObjectExtension | io.FilePath);
+        execute(): void;
+        undo(): void;
+        redo(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
     class JoinObjectsInContainerOperation extends SceneEditorOperation {
         private _containerId;
         private _objectsIdList;
@@ -1071,6 +1095,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getOwnerPrefabInstance(): ISceneObject;
         getPrefabId(): string;
         getPrefabName(): string;
+        getPrefabFile(): colibri.core.io.FilePath;
         getPrefabData(): json.IObjectData;
         getPrefabSerializer(): json.Serializer;
         getObjectType(): any;
@@ -1775,9 +1800,34 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.viewers {
     import controls = colibri.ui.controls;
+    class ObjectExtensionCellRendererProvider extends controls.viewers.EmptyCellRendererProvider {
+        constructor();
+    }
+}
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
+    class ObjectExtensionLabelProvider extends controls.viewers.LabelProvider {
+        getLabel(ext: sceneobjects.SceneObjectExtension): string;
+    }
+}
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
+    class ObjectExtensionViewer extends controls.viewers.TreeViewer {
+        constructor();
+    }
+}
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
     class SceneFileCellRenderer implements controls.viewers.ICellRenderer {
         renderCell(args: controls.viewers.RenderCellArgs): void;
         cellHeight(args: controls.viewers.RenderCellArgs): number;
+        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
+    class TypeAndPrefabCellRendererProvider implements controls.viewers.ICellRendererProvider {
+        getCellRenderer(element: any): controls.viewers.ICellRenderer;
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
     }
 }

@@ -48,6 +48,28 @@ namespace colibri.ui.ide.commands {
             }
         }
 
+        canRunCommand(commandId: string) {
+
+            const args = this.makeArgs();
+
+            const command = this.getCommand(commandId);
+
+            if (command) {
+
+                const handlers = this._commandHandlerMap.get(command);
+
+                for (const handler of handlers) {
+
+                    if (handler.test(args)) {
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private executeHandler(command: Command, args: HandlerArgs, checkContext: boolean = true) {
 
             const handlers = this._commandHandlerMap.get(command);

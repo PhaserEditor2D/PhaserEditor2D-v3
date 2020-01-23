@@ -33,5 +33,27 @@ namespace colibri.ui.controls.dialogs {
                 this._viewer.repaint();
             }
         }
+
+        enableButtonOnlyWhenSelectedOne(btn: HTMLButtonElement) {
+
+            this.getViewer().addEventListener(EVENT_SELECTION_CHANGED, e => {
+
+                btn.disabled = this.getViewer().getSelection().length !== 1;
+            });
+        }
+
+        addOpenButton(text: string, callback: (selection: any[]) => void) {
+
+            const callback2 = () => {
+
+                callback(this.getViewer().getSelection());
+
+                this.close();
+            };
+
+            this.getViewer().addEventListener(controls.viewers.EVENT_OPEN_ITEM, callback2);
+
+            return this.addButton(text, callback2);
+        }
     }
 }

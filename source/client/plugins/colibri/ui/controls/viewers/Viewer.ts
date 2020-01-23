@@ -550,6 +550,16 @@ namespace colibri.ui.controls.viewers {
             this._input = input;
         }
 
+        selectFirst() {
+
+            const input = this.getInput();
+
+            if (Array.isArray(input) && input.length > 0) {
+
+                this.setSelection([input[0]]);
+            }
+        }
+
         getState(): ViewerState {
             return {
                 filterText: this._filterText,

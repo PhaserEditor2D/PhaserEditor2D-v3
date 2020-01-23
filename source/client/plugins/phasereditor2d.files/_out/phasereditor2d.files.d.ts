@@ -206,7 +206,7 @@ declare namespace phasereditor2d.files.ui.viewers {
         private _layout;
         constructor(layout?: "tree" | "grid");
         getCellRenderer(file: io.FilePath): viewers.ICellRenderer;
-        preload(file: io.FilePath): Promise<controls.PreloadResult>;
+        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
     }
 }
 declare namespace phasereditor2d.files.ui.viewers {

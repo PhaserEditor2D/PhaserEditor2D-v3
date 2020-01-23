@@ -344,6 +344,15 @@ namespace phasereditor2d.scene.ui.editor {
                     });
                 }
             }
+
+            menu.addSeparator();
+
+            menu.addCommand(commands.CMD_MORPH_OBJECTS);
+            menu.addCommand(commands.CMD_ADD_SCENE_OBJECT);
+
+            menu.addSeparator();
+
+            menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
         }
 
         openAddObjectDialog() {

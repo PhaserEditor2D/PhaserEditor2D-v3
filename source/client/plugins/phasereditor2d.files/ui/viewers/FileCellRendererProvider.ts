@@ -32,8 +32,8 @@ namespace phasereditor2d.files.ui.viewers {
             return new FileCellRenderer();
         }
 
-        preload(file: io.FilePath): Promise<controls.PreloadResult> {
-            return ide.Workbench.getWorkbench().getContentTypeRegistry().preload(file);
+        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
+            return ide.Workbench.getWorkbench().getContentTypeRegistry().preload(args.obj);
         }
     }
 }

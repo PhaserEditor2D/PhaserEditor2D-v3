@@ -6,10 +6,10 @@ namespace phasereditor2d.scene.ui {
 
     class ThumbnailScene extends Scene {
 
-        private _data: core.json.SceneData;
+        private _data: core.json.ISceneData;
         private _callback: (element: HTMLImageElement) => void;
 
-        constructor(data: core.json.SceneData, callback: (element: HTMLImageElement) => void) {
+        constructor(data: core.json.ISceneData, callback: (element: HTMLImageElement) => void) {
             super(false);
 
             this._data = data;
@@ -148,7 +148,7 @@ namespace phasereditor2d.scene.ui {
 
                 const content = ide.FileUtils.getFileString(this._file);
 
-                const data: core.json.SceneData = JSON.parse(content);
+                const data: core.json.ISceneData = JSON.parse(content);
 
                 const width = 1200;
                 const height = 800;

@@ -48,6 +48,9 @@ namespace colibri.ui.controls {
                     this._text = this._text || command.getName();
                     this._tooltip = this._tooltip || command.getTooltip();
                     this._icon = this._icon || command.getIcon();
+                    this._enabled = config.enabled === undefined
+                        ? manager.canRunCommand(command.getId())
+                        : config.enabled;
                 }
             }
         }

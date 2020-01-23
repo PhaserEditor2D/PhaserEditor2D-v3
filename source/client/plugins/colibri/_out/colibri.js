@@ -1784,6 +1784,9 @@ var colibri;
                             this._text = this._text || command.getName();
                             this._tooltip = this._tooltip || command.getTooltip();
                             this._icon = this._icon || command.getIcon();
+                            this._enabled = config.enabled === undefined
+                                ? manager.canRunCommand(command.getId())
+                                : config.enabled;
                         }
                     }
                 }
@@ -3675,6 +3678,19 @@ var colibri;
                             this._viewer.repaint();
                         }
                     }
+                    enableButtonOnlyWhenSelectedOne(btn) {
+                        this.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                            btn.disabled = this.getViewer().getSelection().length !== 1;
+                        });
+                    }
+                    addOpenButton(text, callback) {
+                        const callback2 = () => {
+                            callback(this.getViewer().getSelection());
+                            this.close();
+                        };
+                        this.getViewer().addEventListener(controls.viewers.EVENT_OPEN_ITEM, callback2);
+                        return this.addButton(text, callback2);
+                    }
                 }
                 dialogs.ViewerDialog = ViewerDialog;
             })(dialogs = controls.dialogs || (controls.dialogs = {}));
@@ -5130,6 +5146,12 @@ var colibri;
                     setInput(input) {
                         this._input = input;
                     }
+                    selectFirst() {
+                        const input = this.getInput();
+                        if (Array.isArray(input) && input.length > 0) {
+                            this.setSelection([input[0]]);
+                        }
+                    }
                     getState() {
                         return {
                             filterText: this._filterText,
@@ -5462,7 +5484,7 @@ var colibri;
                         const viewer = this;
                         this.visitObjects(obj => {
                             const provider = this.getCellRendererProvider();
-                            list.push(provider.preload(obj).then(r1 => {
+                            list.push(provider.preload(new viewers.PreloadCellArgs(obj, viewer)).then(r1 => {
                                 const renderer = provider.getCellRenderer(obj);
                                 return renderer.preload(new viewers.PreloadCellArgs(obj, viewer)).then(r2 => {
                                     return Math.max(r1, r2);
@@ -7359,6 +7381,19 @@ var colibri;
                                 this.executeHandler(command, args);
                             }
                         }
+                    }
+                    canRunCommand(commandId) {
+                        const args = this.makeArgs();
+                        const command = this.getCommand(commandId);
+                        if (command) {
+                            const handlers = this._commandHandlerMap.get(command);
+                            for (const handler of handlers) {
+                                if (handler.test(args)) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
                     }
                     executeHandler(command, args, checkContext = true) {
                         const handlers = this._commandHandlerMap.get(command);

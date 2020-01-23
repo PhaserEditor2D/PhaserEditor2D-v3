@@ -11,6 +11,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
+    export const CMD_MORPH_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor
@@ -149,7 +150,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         .getToolsManager().swapTool(ui.sceneobjects.TranslateTool.ID)
                 },
                 keys: {
-                    key: "M"
+                    key: "T"
                 }
             });
 
@@ -166,7 +167,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         .getToolsManager().swapTool(ui.sceneobjects.RotateTool.ID)
                 },
                 keys: {
-                    key: "N"
+                    key: "R"
                 }
             });
 
@@ -198,10 +199,30 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 handler: {
                     testFunc: isSceneScope,
-                    executeFunc: args => (args.activeEditor as editor.SceneEditor).openAddObjectDialog()
+                    executeFunc: args => {
+                        const dlg = new editor.AddObjectDialog(args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
                 },
                 keys: {
                     key: "A"
+                }
+            });
+
+            // morph dialog
+
+            manager.add({
+                command: {
+                    id: CMD_MORPH_OBJECTS,
+                    name: "Change Type",
+                    tooltip: "Change the type of the selected objects to other type."
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args) && ChangeTypeDialog.canMorph(args.activeEditor as SceneEditor),
+                    executeFunc: args => {
+                        const dlg = new editor.ChangeTypeDialog(args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
                 }
             });
 

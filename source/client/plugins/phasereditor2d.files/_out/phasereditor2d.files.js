@@ -1004,8 +1004,8 @@ var phasereditor2d;
                         }
                         return new viewers_2.FileCellRenderer();
                     }
-                    preload(file) {
-                        return ide.Workbench.getWorkbench().getContentTypeRegistry().preload(file);
+                    preload(args) {
+                        return ide.Workbench.getWorkbench().getContentTypeRegistry().preload(args.obj);
                     }
                 }
                 viewers_2.FileCellRendererProvider = FileCellRendererProvider;

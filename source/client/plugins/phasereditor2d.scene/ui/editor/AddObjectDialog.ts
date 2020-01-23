@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
-            super(new controls.viewers.TreeViewer());
+            super(new viewers.ObjectExtensionViewer());
 
             this._editor = editor;
         }
@@ -15,20 +15,6 @@ namespace phasereditor2d.scene.ui.editor {
         create() {
 
             const viewer = this.getViewer();
-
-            viewer.setLabelProvider(new controls.viewers.LabelProvider(
-                (ext: sceneobjects.SceneObjectExtension) => {
-                    return ext.getTypeName();
-                }));
-
-            viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-
-            viewer.setCellRendererProvider(
-                new controls.viewers.EmptyCellRendererProvider(
-                    _ => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP)))
-            );
-
-            viewer.setInput(ScenePlugin.getInstance().getObjectExtensions());
 
             super.create();
 

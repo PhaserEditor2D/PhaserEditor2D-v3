@@ -232,16 +232,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getPrefabName() {
 
+            const file= this.getPrefabFile();
+
+            if (file) {
+
+                return file.getNameWithoutExtension();
+
+            }
+
+            return null;
+        }
+
+        getPrefabFile() {
+
             if (this._prefabId) {
 
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
                 const file = finder.getPrefabFile(this._prefabId);
 
-                if (file) {
-
-                    return file.getNameWithoutExtension();
-                }
+                return file;
             }
 
             return null;

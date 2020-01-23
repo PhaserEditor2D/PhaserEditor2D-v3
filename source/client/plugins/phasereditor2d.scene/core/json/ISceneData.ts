@@ -6,17 +6,17 @@ namespace phasereditor2d.scene.core.json {
         PREFAB = "PREFAB"
     }
 
-    export declare type SceneData = {
+    export interface ISceneData {
 
-        id: string,
+        id: string;
         sceneType: SceneType;
-        settings: object,
-        displayList: IObjectData[],
+        settings: object;
+        displayList: IObjectData[];
         meta: {
             app: string,
             url: string,
             contentType: string
-        }
-    };
+        };
+    }
 
 }
