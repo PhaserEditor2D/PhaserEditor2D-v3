@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
-    export const CMD_MORPH_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
+    export const CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
+    export const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor
@@ -209,11 +210,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 }
             });
 
-            // morph dialog
+            // change type dialog
 
             manager.add({
                 command: {
-                    id: CMD_MORPH_OBJECTS,
+                    id: CMD_CONVERT_OBJECTS,
                     name: "Change Type",
                     tooltip: "Change the type of the selected objects to other type."
                 },
@@ -223,6 +224,28 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const dlg = new editor.ChangeTypeDialog(args.activeEditor as SceneEditor);
                         dlg.create();
                     }
+                }
+            });
+
+            // change type to tile sprite
+
+            manager.add({
+                command: {
+                    id: CMD_CONVERT_TO_TILE_SPRITE_OBJECTS,
+                    name: "Convert To TileSprite",
+                    tooltip: "Convert the selected objects into TileSprite instances."
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args) && ChangeTypeDialog.canMorph(args.activeEditor as SceneEditor),
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+                        editor.getUndoManager().add(
+                            new undo.ChangeTypeOperation(editor, sceneobjects.TileSpriteExtension.getInstance()));
+                    }
+                },
+                keys: {
+                    key: "L"
                 }
             });
 

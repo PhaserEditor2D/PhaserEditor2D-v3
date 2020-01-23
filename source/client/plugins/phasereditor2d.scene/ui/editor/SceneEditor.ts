@@ -347,7 +347,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addSeparator();
 
-            menu.addCommand(commands.CMD_MORPH_OBJECTS);
+            menu.addCommand(commands.CMD_CONVERT_OBJECTS);
+            menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
             menu.addCommand(commands.CMD_ADD_SCENE_OBJECT);
 
             menu.addSeparator();

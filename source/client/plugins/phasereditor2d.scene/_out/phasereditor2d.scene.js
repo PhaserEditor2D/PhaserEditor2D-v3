@@ -3254,7 +3254,8 @@ var phasereditor2d;
                             }
                         }
                         menu.addSeparator();
-                        menu.addCommand(editor.commands.CMD_MORPH_OBJECTS);
+                        menu.addCommand(editor.commands.CMD_CONVERT_OBJECTS);
+                        menu.addCommand(editor.commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
                         menu.addCommand(editor.commands.CMD_ADD_SCENE_OBJECT);
                         menu.addSeparator();
                         menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
@@ -3561,7 +3562,8 @@ var phasereditor2d;
                     commands.CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
                     commands.CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
                     commands.CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
-                    commands.CMD_MORPH_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
+                    commands.CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
+                    commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_9.SceneEditor
                             || (args.activeEditor instanceof editor_9.SceneEditor &&
@@ -3702,10 +3704,10 @@ var phasereditor2d;
                                     key: "A"
                                 }
                             });
-                            // morph dialog
+                            // change type dialog
                             manager.add({
                                 command: {
-                                    id: commands.CMD_MORPH_OBJECTS,
+                                    id: commands.CMD_CONVERT_OBJECTS,
                                     name: "Change Type",
                                     tooltip: "Change the type of the selected objects to other type."
                                 },
@@ -3715,6 +3717,24 @@ var phasereditor2d;
                                         const dlg = new editor.ChangeTypeDialog(args.activeEditor);
                                         dlg.create();
                                     }
+                                }
+                            });
+                            // change type to tile sprite
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS,
+                                    name: "Convert To TileSprite",
+                                    tooltip: "Convert the selected objects into TileSprite instances."
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args) && editor_9.ChangeTypeDialog.canMorph(args.activeEditor),
+                                    executeFunc: args => {
+                                        const editor = args.activeEditor;
+                                        editor.getUndoManager().add(new editor_9.undo.ChangeTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance()));
+                                    }
+                                },
+                                keys: {
+                                    key: "L"
                                 }
                             });
                             // snapping

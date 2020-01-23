@@ -697,7 +697,8 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
-    const CMD_MORPH_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
+    const CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
+    const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
