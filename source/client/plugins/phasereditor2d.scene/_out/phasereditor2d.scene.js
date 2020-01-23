@@ -4899,10 +4899,17 @@ var phasereditor2d;
                             }
                             this.loadData(this._afterData);
                         }
-                        loadData(conversionData) {
+                        async loadData(conversionData) {
+                            const finder = scene_12.ScenePlugin.getInstance().getSceneFinder();
                             const scene = this.getScene();
                             const maker = scene.getMaker();
                             const displayList = scene.sys.displayList;
+                            if (this._targetType instanceof io.FilePath) {
+                                const sceneData = finder.getSceneData(this._targetType);
+                                if (sceneData) {
+                                    await maker.updateSceneLoader(sceneData);
+                                }
+                            }
                             const sel = [];
                             for (const data of conversionData) {
                                 const oldObj = scene.getByEditorId(data.objData.id);

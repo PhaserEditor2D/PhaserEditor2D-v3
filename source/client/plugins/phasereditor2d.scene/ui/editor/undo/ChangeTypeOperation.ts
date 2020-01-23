@@ -106,11 +106,21 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this.loadData(this._afterData);
         }
 
-        private loadData(conversionData: IObjectConversionData[]) {
+        private async loadData(conversionData: IObjectConversionData[]) {
 
+            const finder = ScenePlugin.getInstance().getSceneFinder();
             const scene = this.getScene();
             const maker = scene.getMaker();
             const displayList = scene.sys.displayList;
+
+            if (this._targetType instanceof io.FilePath) {
+
+                const sceneData = finder.getSceneData(this._targetType as io.FilePath);
+
+                if (sceneData) {
+                    await maker.updateSceneLoader(sceneData);
+                }
+            }
 
             const sel = [];
 
