@@ -40,12 +40,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         };
 
-        private _textureKeys: ITextureKeys = {};
+        private _textureKeys: ITextureKeys;
 
         constructor(obj: ITextureLikeObject) {
             super(obj, [
                 TextureComponent.texture
             ]);
+            this._textureKeys = {};
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
@@ -54,13 +55,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         adjustAfterTypeChange(originalObject: ISceneObject) {
 
-            const support = originalObject.getEditorSupport();
+            if (!this._textureKeys.key) {
 
-            if (support.isPrefabInstance() && support.hasComponent(TextureComponent)) {
+                const textureComp = originalObject.getEditorSupport()
+                    .getComponent(TextureComponent) as TextureComponent;
 
-                if (!support.isUnlockedProperty(TextureComponent.texture)) {
-
-                    const textureComp = support.getComponent(TextureComponent) as TextureComponent;
+                if (textureComp) {
 
                     const originalTextureKeys = textureComp.getTextureKeys();
 

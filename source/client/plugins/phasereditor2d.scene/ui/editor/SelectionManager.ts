@@ -13,6 +13,22 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor.addEventListener(controls.EVENT_SELECTION_CHANGED, e => this.updateOutlineSelection());
         }
 
+        getSelectionIds() {
+
+            return this._editor.getSelectedGameObjects().map(obj => obj.getEditorSupport().getId());
+        }
+
+        setSelectionByIds(ids: string[]) {
+
+            const map = this._editor.getScene().getIdObjectMap();
+
+            const sel = ids
+                .map(id => map.get(id))
+                .filter(obj => obj !== undefined);
+
+            this._editor.setSelection(sel);
+        }
+
         clearSelection() {
 
             this._editor.setSelection([]);
@@ -39,7 +55,9 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private updateOutlineSelection(): void {
+
             const provider = this._editor.getOutlineProvider();
+
             provider.setSelection(this._editor.getSelection(), true, true);
             provider.repaint();
         }

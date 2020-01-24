@@ -188,11 +188,16 @@ namespace phasereditor2d.scene.ui {
 
         async updateSceneLoader(sceneData: json.ISceneData) {
 
+            await this.updateSceneLoaderWithObjDataList(sceneData.displayList);
+        }
+
+        async updateSceneLoaderWithObjDataList(list: json.IObjectData[]) {
+
             const finder = new pack.core.PackFinder();
 
             await finder.preload();
 
-            for (const objData of sceneData.displayList) {
+            for (const objData of list) {
 
                 const ser = this.getSerializer(objData);
 

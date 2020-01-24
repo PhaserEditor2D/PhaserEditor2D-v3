@@ -105,6 +105,18 @@ namespace phasereditor2d.scene.ui {
             return nameMaker.makeName(baseName);
         }
 
+        getIdObjectMap() {
+
+            const map = new Map<string, sceneobjects.ISceneObject>();
+
+            this.visit(obj => {
+
+                map.set(obj.getEditorSupport().getId(), obj);
+            });
+
+            return map;
+        }
+
         getByEditorId(id: string) {
 
             const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);

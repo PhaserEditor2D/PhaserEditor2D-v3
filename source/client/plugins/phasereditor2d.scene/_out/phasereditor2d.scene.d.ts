@@ -373,6 +373,7 @@ declare namespace phasereditor2d.scene.ui {
         getDisplayListChildren(): sceneobjects.ISceneObject[];
         visit(visitor: (obj: sceneobjects.ISceneObject) => void): void;
         makeNewName(baseName: string): string;
+        getIdObjectMap(): Map<string, sceneobjects.ISceneObject>;
         getByEditorId(id: string): any;
         static findByEditorId(list: sceneobjects.ISceneObject[], id: string): any;
         getCamera(): Phaser.Cameras.Scene2D.Camera;
@@ -406,6 +407,7 @@ declare namespace phasereditor2d.scene.ui {
         getSerializer(data: json.IObjectData): json.Serializer;
         createScene(sceneData: json.ISceneData): void;
         updateSceneLoader(sceneData: json.ISceneData): Promise<void>;
+        updateSceneLoaderWithObjDataList(list: json.IObjectData[]): Promise<void>;
         createEmptyObject(ext: sceneobjects.SceneObjectExtension): sceneobjects.ISceneObject;
         createObject(data: json.IObjectData): sceneobjects.ISceneObject;
     }
@@ -680,6 +682,8 @@ declare namespace phasereditor2d.scene.ui.editor {
     class SelectionManager {
         private _editor;
         constructor(editor: SceneEditor);
+        getSelectionIds(): string[];
+        setSelectionByIds(ids: string[]): void;
         clearSelection(): void;
         refreshSelection(): void;
         selectAll(): void;
@@ -1000,17 +1004,32 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
-    import io = colibri.core.io;
-    class ConvertTypeOperation extends undo.SceneEditorOperation {
-        private _targetType;
-        private _beforeData;
-        private _afterData;
-        constructor(editor: SceneEditor, targetType: sceneobjects.SceneObjectExtension | io.FilePath);
+    import ISceneObject = sceneobjects.ISceneObject;
+    abstract class ObjectSnapshotOperation extends SceneEditorOperation {
+        private _before;
+        private _after;
+        private _objects;
+        constructor(editor: SceneEditor, objects: ISceneObject[]);
+        abstract performChange(input: ISceneObject[]): ISceneObject[];
         execute(): void;
-        private loadData;
+        private takeSnapshot;
+        private loadSnapshot;
         undo(): void;
         redo(): void;
     }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
+    import io = colibri.core.io;
+    import ISceneObject = sceneobjects.ISceneObject;
+    type ITargetType = sceneobjects.SceneObjectExtension | io.FilePath;
+    export class ConvertTypeOperation extends undo.ObjectSnapshotOperation {
+        private _targetType;
+        constructor(editor: SceneEditor, targetType: ITargetType);
+        execute(): Promise<void>;
+        private static filterObjects;
+        performChange(input: ISceneObject[]): ISceneObject[];
+    }
+    export {};
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class JoinObjectsInContainerOperation extends SceneEditorOperation {
