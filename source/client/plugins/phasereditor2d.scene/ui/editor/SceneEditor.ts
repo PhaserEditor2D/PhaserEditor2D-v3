@@ -296,23 +296,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             const manager = new controls.ToolbarManager(parent);
 
-            manager.addCommand(commands.CMD_ADD_SCENE_OBJECT, {
-                showText: false,
-            });
-
             manager.add(this._toolActionMap.get(sceneobjects.TranslateTool.ID));
 
             manager.add(this._toolActionMap.get(sceneobjects.ScaleTool.ID));
 
             manager.add(this._toolActionMap.get(sceneobjects.RotateTool.ID));
-
-            manager.addCommand(commands.CMD_OPEN_COMPILED_FILE, {
-                showText: false
-            });
-
-            manager.addCommand(commands.CMD_COMPILE_SCENE_EDITOR, {
-                showText: false
-            });
 
             return manager;
         }
@@ -359,6 +347,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_TOGGLE_SNAPPING);
             menu.addCommand(commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE);
+
+            menu.addSeparator();
+
+            menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
+            menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
 
             menu.addSeparator();
 

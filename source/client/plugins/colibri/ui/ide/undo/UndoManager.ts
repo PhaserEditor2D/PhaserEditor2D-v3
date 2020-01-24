@@ -28,7 +28,6 @@ namespace colibri.ui.ide.undo {
 
                 this._redoList.push(op);
             }
-
         }
 
         redo() {
@@ -40,11 +39,7 @@ namespace colibri.ui.ide.undo {
                 op.redo();
 
                 this._undoList.push(op);
-
             }
-
         }
-
     }
-
 }

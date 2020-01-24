@@ -3247,18 +3247,9 @@ var phasereditor2d;
                     createEditorToolbar(parent) {
                         this.createToolActions();
                         const manager = new controls.ToolbarManager(parent);
-                        manager.addCommand(editor.commands.CMD_ADD_SCENE_OBJECT, {
-                            showText: false,
-                        });
                         manager.add(this._toolActionMap.get(ui.sceneobjects.TranslateTool.ID));
                         manager.add(this._toolActionMap.get(ui.sceneobjects.ScaleTool.ID));
                         manager.add(this._toolActionMap.get(ui.sceneobjects.RotateTool.ID));
-                        manager.addCommand(editor.commands.CMD_OPEN_COMPILED_FILE, {
-                            showText: false
-                        });
-                        manager.addCommand(editor.commands.CMD_COMPILE_SCENE_EDITOR, {
-                            showText: false
-                        });
                         return manager;
                     }
                     onMenu(e) {
@@ -3287,6 +3278,9 @@ var phasereditor2d;
                         menu.addSeparator();
                         menu.addCommand(editor.commands.CMD_TOGGLE_SNAPPING);
                         menu.addCommand(editor.commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE);
+                        menu.addSeparator();
+                        menu.addCommand(editor.commands.CMD_COMPILE_SCENE_EDITOR);
+                        menu.addCommand(editor.commands.CMD_OPEN_COMPILED_FILE);
                         menu.addSeparator();
                         menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
                     }
@@ -3681,7 +3675,7 @@ var phasereditor2d;
                             manager.addCommandHelper({
                                 id: commands.CMD_OPEN_COMPILED_FILE,
                                 icon: phasereditor2d.webContentTypes.WebContentTypesPlugin.getInstance().getIcon(phasereditor2d.webContentTypes.ICON_FILE_SCRIPT),
-                                name: "Open Scene Output File",
+                                name: "Open Output File",
                                 tooltip: "Open the output source file of the scene."
                             });
                             manager.addHandlerHelper(commands.CMD_OPEN_COMPILED_FILE, args => args.activeEditor instanceof editor_9.SceneEditor, args => args.activeEditor.openSourceFileInEditor());

@@ -95,7 +95,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.addCommandHelper({
                 id: CMD_OPEN_COMPILED_FILE,
                 icon: webContentTypes.WebContentTypesPlugin.getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
-                name: "Open Scene Output File",
+                name: "Open Output File",
                 tooltip: "Open the output source file of the scene."
             });
 
