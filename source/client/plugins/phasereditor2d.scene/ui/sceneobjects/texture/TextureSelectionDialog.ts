@@ -31,6 +31,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._finder = finder;
             this._callback = callback;
+
+            const size = this.getSize();
+            this.setSize(size.width, size.height * 1.5);
         }
 
         create() {
@@ -38,7 +41,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const viewer = this.getViewer();
 
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
-            viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("tree"));
+            viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
+            viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setCellSize(64);
             viewer.setInput(

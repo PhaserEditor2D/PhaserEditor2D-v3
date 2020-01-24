@@ -7723,6 +7723,8 @@ var phasereditor2d;
                         super(new controls.viewers.TreeViewer());
                         this._finder = finder;
                         this._callback = callback;
+                        const size = this.getSize();
+                        this.setSize(size.width, size.height * 1.5);
                     }
                     static async createDialog(finder, selected, callback) {
                         const dlg = new TextureSelectionDialog(finder, callback);
@@ -7734,7 +7736,8 @@ var phasereditor2d;
                     create() {
                         const viewer = this.getViewer();
                         viewer.setLabelProvider(new phasereditor2d.pack.ui.viewers.AssetPackLabelProvider());
-                        viewer.setCellRendererProvider(new phasereditor2d.pack.ui.viewers.AssetPackCellRendererProvider("tree"));
+                        viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
+                        viewer.setCellRendererProvider(new phasereditor2d.pack.ui.viewers.AssetPackCellRendererProvider("grid"));
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
                         viewer.setCellSize(64);
                         viewer.setInput(this._finder.getPacks()
