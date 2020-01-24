@@ -235,8 +235,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_CONVERT_TO_TILE_SPRITE_OBJECTS,
-                    name: "Convert To TileSprite",
-                    tooltip: "Convert the selected objects into TileSprite instances."
+                    name: "Convert To/Resize TileSprite",
+                    tooltip: "Convert the selected objects into TileSprite instances. Or resize it if it is a TileSprite."
                 },
                 handler: {
 

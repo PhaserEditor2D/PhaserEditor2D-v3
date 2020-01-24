@@ -99,6 +99,25 @@ namespace phasereditor2d.scene.core.json {
             return true;
         }
 
+        setUnlocked(name: string, unlocked: boolean) {
+
+            if (this.isPrefabInstance()) {
+
+                const set = new Set(...(this._data.unlock ? this._data.unlock : []));
+
+                if (unlocked) {
+
+                    set.add(name);
+
+                } else {
+
+                    set.delete(name);
+                }
+
+                this._data.unlock = [...set];
+            }
+        }
+
         isPrefabInstance() {
 
             return typeof this._data.prefabId === "string";

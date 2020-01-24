@@ -338,6 +338,7 @@ declare namespace phasereditor2d.scene.core.json {
         getPhaserType(): any;
         private getDefaultValue;
         isUnlocked(name: string): boolean;
+        setUnlocked(name: string, unlocked: boolean): void;
         isPrefabInstance(): boolean;
         write(name: string, value: any, defValue?: any): void;
         read(name: string, defValue?: any): any;
@@ -373,7 +374,7 @@ declare namespace phasereditor2d.scene.ui {
         getDisplayListChildren(): sceneobjects.ISceneObject[];
         visit(visitor: (obj: sceneobjects.ISceneObject) => void): void;
         makeNewName(baseName: string): string;
-        getIdObjectMap(): Map<string, sceneobjects.ISceneObject>;
+        buildObjectIdMap(): Map<string, sceneobjects.ISceneObject>;
         getByEditorId(id: string): any;
         static findByEditorId(list: sceneobjects.ISceneObject[], id: string): any;
         getCamera(): Phaser.Cameras.Scene2D.Camera;
@@ -1008,15 +1009,23 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
+    import json = core.json;
     import ISceneObject = sceneobjects.ISceneObject;
+    interface IObjectSnapshot {
+        parentId: string;
+        objData: json.IObjectData;
+    }
+    interface ISnapshot {
+        objects: IObjectSnapshot[];
+    }
     abstract class ObjectSnapshotOperation extends SceneEditorOperation {
-        private _before;
-        private _after;
-        private _objects;
+        protected _before: ISnapshot;
+        protected _after: ISnapshot;
+        protected _objects: ISceneObject[];
         constructor(editor: SceneEditor, objects: ISceneObject[]);
-        abstract performChange(input: ISceneObject[]): ISceneObject[];
+        protected abstract makeChangeSnapshot(input: ISceneObject[]): ISnapshot;
         execute(): void;
-        private takeSnapshot;
+        protected takeSnapshot(objects: ISceneObject[]): ISnapshot;
         private loadSnapshot;
         undo(): void;
         redo(): void;
@@ -1030,8 +1039,8 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
         private _targetType;
         constructor(editor: SceneEditor, targetType: ITargetType);
         execute(): Promise<void>;
+        makeChangeSnapshot(input: ISceneObject[]): ISnapshot;
         private static filterObjects;
-        performChange(input: ISceneObject[]): ISceneObject[];
     }
     export {};
 }
@@ -1067,7 +1076,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _obj;
         private _properties;
         constructor(obj: T, properties: Array<IProperty<any>>);
-        adjustAfterTypeChange(originalObject: ISceneObject): void;
         getProperties(): Set<IProperty<any>>;
         getObject(): T;
         write(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
@@ -1113,7 +1121,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getComponent(ctr: Function): Component<any>;
         hasComponent(ctr: Function): boolean;
         getComponents(): IterableIterator<Component<any>>;
-        adjustAfterTypeChange(originalObject: ISceneObject): void;
         static getObjectComponent(obj: any, ctr: Function): Component<any>;
         static hasObjectComponent(obj: any, ctr: Function): boolean;
         protected addComponent(...components: Array<Component<any>>): void;
@@ -1122,6 +1129,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getObject(): T;
         getId(): string;
         setId(id: string): void;
+        getParentId(): string;
         getLabel(): string;
         setLabel(label: string): void;
         getScope(): ObjectScope;
@@ -1129,6 +1137,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getScene(): Scene;
         setScene(scene: Scene): void;
         isPrefabInstance(): boolean;
+        _setPrefabId(prefabId: string): void;
         getOwnerPrefabInstance(): ISceneObject;
         getPrefabId(): string;
         getPrefabName(): string;
@@ -1294,6 +1303,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getTypeName(): string;
         getPhaserTypeName(): string;
         /**
+         * Adapt the data taken from a type conversion.
+         *
+         * @param serializer Serializer of the data resulted by the type-conversion.
+         * @param originalObject The original object that was converted.
+         */
+        adaptDataAfterTypeConversion(serializer: json.Serializer, originalObject: ISceneObject): void;
+        /**
          * Check if an object dropped into the scene can be used to create the scene object of this extension.
          *
          * @param data Data dropped from outside the scene editor. For example, items from the Blocks view.
@@ -1424,6 +1440,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
         protected abstract newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject;
         private createImageObject;
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1755,7 +1772,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _textureKeys;
         constructor(obj: ITextureLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-        adjustAfterTypeChange(originalObject: ISceneObject): void;
         getTextureKeys(): ITextureKeys;
         setTextureKeys(keys: ITextureKeys): void;
         removeTexture(): void;
@@ -1810,7 +1826,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static tilePosition: IPropertyXY;
         static tileScale: IPropertyXY;
         constructor(obj: TileSprite);
-        adjustAfterTypeChange(originalObject: ISceneObject): void;
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
     }
 }
@@ -1825,6 +1840,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private static _instance;
         static getInstance(): TileSpriteExtension;
         constructor();
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject): void;
         getCodeDOMBuilder(): ObjectCodeDOMBuilder;
         protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject;
     }

@@ -88,6 +88,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         /**
+         * Adapt the data taken from a type conversion.
+         *
+         * @param serializer Serializer of the data resulted by the type-conversion.
+         * @param originalObject The original object that was converted.
+         */
+        adaptDataAfterTypeConversion(serializer: json.Serializer, originalObject: ISceneObject) {
+            // nothing by default
+        }
+
+        /**
          * Check if an object dropped into the scene can be used to create the scene object of this extension.
          *
          * @param data Data dropped from outside the scene editor. For example, items from the Blocks view.

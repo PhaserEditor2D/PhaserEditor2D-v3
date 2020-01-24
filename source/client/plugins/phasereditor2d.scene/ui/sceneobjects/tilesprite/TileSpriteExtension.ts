@@ -15,6 +15,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject) {
+
+            super.adaptDataAfterTypeConversion(serializer, originalObject);
+
+            const obj = originalObject as unknown as Phaser.GameObjects.Components.ComputedSize;
+
+            const width = obj.width === undefined ? 20 : obj.width;
+            const height = obj.height === undefined ? 20 : obj.height;
+
+            serializer.getData()[TileSpriteComponent.width.name] = width;
+            serializer.getData()[TileSpriteComponent.height.name] = height;
+        }
+
         getCodeDOMBuilder(): ObjectCodeDOMBuilder {
 
             return new TileSpriteCodeDOMBuilder();

@@ -38,17 +38,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ]);
         }
 
-        adjustAfterTypeChange(originalObject: ISceneObject) {
-
-            const obj = this.getObject();
-            const sprite = originalObject as unknown as Phaser.GameObjects.Image;
-
-            obj.setSize(
-                obj.width === undefined ? sprite.width : obj.width,
-                obj.height === undefined ? sprite.width : obj.height
-            );
-        }
-
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args,

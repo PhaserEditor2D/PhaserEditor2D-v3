@@ -40,6 +40,62 @@ namespace phasereditor2d.scene.ui.editor.undo {
             super.execute();
         }
 
+        makeChangeSnapshot(input: ISceneObject[]): ISnapshot {
+
+            const result: ISnapshot = {
+                objects: []
+            };
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            for (const obj of input) {
+
+                let parentId: string;
+
+                if (obj.parentContainer) {
+
+                    parentId = obj.getEditorSupport().getParentId();
+                }
+
+                const support = obj.getEditorSupport();
+
+                const objData: json.IObjectData = {} as any;
+
+                support.writeJSON(objData);
+
+                if (support.isPrefabInstance()) {
+
+                    delete objData.prefabId;
+
+                } else {
+
+                    delete objData.type;
+                }
+
+                if (this._targetType instanceof io.FilePath) {
+
+                    objData.prefabId = finder.getPrefabId(this._targetType);
+
+                } else {
+
+                    objData.type = this._targetType.getTypeName();
+                }
+
+                const ser = this._editor.getScene().getMaker().getSerializer(objData);
+                const type = ser.getType();
+                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+
+                ext.adaptDataAfterTypeConversion(ser, obj);
+
+                result.objects.push({
+                    objData,
+                    parentId
+                });
+            }
+
+            return result;
+        }
+
         private static filterObjects(input: ISceneObject[], targetType: ITargetType) {
 
             return input.filter(obj => {
@@ -59,51 +115,6 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 return true;
 
             });
-        }
-
-        performChange(input: ISceneObject[]): ISceneObject[] {
-
-            const result: ISceneObject[] = [];
-
-            const finder = ScenePlugin.getInstance().getSceneFinder();
-            const scene = this.getScene();
-            const maker = scene.getMaker();
-
-            for (const oldObj of input) {
-
-                const support = oldObj.getEditorSupport();
-
-                const data: json.IObjectData = {} as any;
-
-                support.writeJSON(data);
-
-                if (support.isPrefabInstance()) {
-
-                    delete data.prefabId;
-
-                } else {
-
-                    delete data.type;
-                }
-
-                if (this._targetType instanceof io.FilePath) {
-
-                    data.prefabId = finder.getPrefabId(this._targetType);
-
-                } else {
-
-                    data.type = this._targetType.getTypeName();
-                }
-
-                const newObj = maker.createObject(data);
-                scene.sys.displayList.remove(newObj);
-
-                newObj.getEditorSupport().adjustAfterTypeChange(oldObj);
-
-                result.push(newObj);
-            }
-
-            return result;
         }
     }
 }

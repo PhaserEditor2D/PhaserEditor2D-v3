@@ -105,7 +105,7 @@ namespace phasereditor2d.scene.ui {
             return nameMaker.makeName(baseName);
         }
 
-        getIdObjectMap() {
+        buildObjectIdMap() {
 
             const map = new Map<string, sceneobjects.ISceneObject>();
 

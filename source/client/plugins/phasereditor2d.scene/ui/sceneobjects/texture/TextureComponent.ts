@@ -53,22 +53,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // nothing, the properties are set when the object is created.
         }
 
-        adjustAfterTypeChange(originalObject: ISceneObject) {
-
-            if (!this._textureKeys.key) {
-
-                const textureComp = originalObject.getEditorSupport()
-                    .getComponent(TextureComponent) as TextureComponent;
-
-                if (textureComp) {
-
-                    const originalTextureKeys = textureComp.getTextureKeys();
-
-                    this.setTextureKeys(originalTextureKeys);
-                }
-            }
-        }
-
         getTextureKeys(): ITextureKeys {
             return this._textureKeys;
         }

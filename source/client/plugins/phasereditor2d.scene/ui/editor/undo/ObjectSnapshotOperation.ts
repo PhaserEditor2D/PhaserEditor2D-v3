@@ -3,22 +3,22 @@ namespace phasereditor2d.scene.ui.editor.undo {
     import json = core.json;
     import ISceneObject = sceneobjects.ISceneObject;
 
-    interface IObjectSnapshot {
+    export interface IObjectSnapshot {
 
         parentId: string;
         objData: json.IObjectData;
     }
 
-    interface ISnapshot {
+    export interface ISnapshot {
 
         objects: IObjectSnapshot[];
     }
 
     export abstract class ObjectSnapshotOperation extends SceneEditorOperation {
 
-        private _before: ISnapshot;
-        private _after: ISnapshot;
-        private _objects: ISceneObject[];
+        protected _before: ISnapshot;
+        protected _after: ISnapshot;
+        protected _objects: ISceneObject[];
 
         constructor(editor: SceneEditor, objects: ISceneObject[]) {
             super(editor);
@@ -26,20 +26,18 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._objects = objects;
         }
 
-        abstract performChange(input: ISceneObject[]): ISceneObject[];
+        protected abstract makeChangeSnapshot(input: ISceneObject[]): ISnapshot;
 
         execute() {
 
             this._before = this.takeSnapshot(this._objects);
 
-            const result = this.performChange(this._objects);
-
-            this._after = this.takeSnapshot(result);
+            this._after = this.makeChangeSnapshot(this._objects);
 
             this.loadSnapshot(this._after);
         }
 
-        private takeSnapshot(objects: ISceneObject[]) {
+        protected takeSnapshot(objects: ISceneObject[]) {
 
             const snapshot: ISnapshot = {
                 objects: []

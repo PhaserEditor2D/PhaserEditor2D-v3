@@ -41,10 +41,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         destroy() {
 
-            const obj = this.getObject();
+            const obj = this.getObject() as Phaser.GameObjects.GameObject;
 
             obj.disableInteractive();
             obj.destroy();
+            obj.active = false;
+            (obj as unknown as Phaser.GameObjects.Components.Visible).visible = false;
+
+            // hack, to remove the object from the input list
+
+            const list = this._scene.input["_list"] as any[];
+
+            const i = list.indexOf(obj);
+
+            if (i > 0) {
+
+                list.splice(i, 1);
+            }
+
+            window["__obj"] = obj;
         }
 
         hasProperty(property: IProperty<any>) {
@@ -146,14 +161,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._componentMap.values();
         }
 
-        adjustAfterTypeChange(originalObject: ISceneObject) {
-
-            for (const comp of this.getComponents()) {
-
-                comp.adjustAfterTypeChange(originalObject);
-            }
-        }
-
         // tslint:disable-next-line:ban-types
         static getObjectComponent(obj: any, ctr: Function) {
 
@@ -203,6 +210,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._object.name = id;
         }
 
+        getParentId(): string {
+
+            if (this.getObject().parentContainer) {
+
+                return (this.getObject().parentContainer as unknown as ISceneObject)
+                    .getEditorSupport().getId();
+            }
+
+            return undefined;
+        }
+
         getLabel() {
             return this._label;
         }
@@ -229,6 +247,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isPrefabInstance() {
             return typeof this._prefabId === "string";
+        }
+
+        _setPrefabId(prefabId: string) {
+            this._prefabId = prefabId;
         }
 
         getOwnerPrefabInstance(): ISceneObject {

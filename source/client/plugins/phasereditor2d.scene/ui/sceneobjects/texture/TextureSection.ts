@@ -134,7 +134,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return [];
             }
 
-            const finder = this.getEditor().getPackFinder();
+            const cache = this.getEditor().getScene().getPackCache();
 
             const images = new Set<pack.core.AssetPackImageFrame>();
 
@@ -144,11 +144,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const { key, frame } = textureComp.getTextureKeys();
 
-                const img = finder.getAssetPackItemImage(key, frame);
+                const img = cache.getImage(key, frame);
 
                 if (img) {
 
-                    images.add(img);
+                    images.add(img as pack.core.AssetPackImageFrame);
                 }
             }
 

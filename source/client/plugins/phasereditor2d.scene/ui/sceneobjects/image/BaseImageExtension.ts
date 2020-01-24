@@ -94,7 +94,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const sprite = this.newObject(scene, x, y, key, frame);
 
-            const editorSupport  = sprite.getEditorSupport();
+            const editorSupport = sprite.getEditorSupport();
 
             editorSupport.setScene(scene);
 
@@ -103,6 +103,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             scene.sys.displayList.add(sprite);
 
             return sprite;
+        }
+
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject) {
+
+            const support = originalObject.getEditorSupport();
+
+            if (support.isPrefabInstance()) {
+
+                const textureComponent = support.getComponent(TextureComponent) as TextureComponent;
+
+                const keys = textureComponent.getTextureKeys();
+
+                serializer.write(TextureComponent.texture.name, keys, {});
+            }
         }
     }
 }

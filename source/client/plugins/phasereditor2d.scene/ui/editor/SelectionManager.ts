@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         setSelectionByIds(ids: string[]) {
 
-            const map = this._editor.getScene().getIdObjectMap();
+            const map = this._editor.getScene().buildObjectIdMap();
 
             const sel = ids
                 .map(id => map.get(id))
