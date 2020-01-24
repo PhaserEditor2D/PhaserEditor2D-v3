@@ -711,6 +711,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
     const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
     const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
+    const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
     }
@@ -1741,6 +1742,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ChangeTextureOperation extends SceneObjectOperation<ITextureLikeObject> {
+        static runDialog(editor: editor.SceneEditor): void;
         constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: ITextureKeys);
         getValue(obj: ITextureLikeObject): ITextureKeys;
         setValue(obj: ITextureLikeObject, value: ITextureKeys): void;

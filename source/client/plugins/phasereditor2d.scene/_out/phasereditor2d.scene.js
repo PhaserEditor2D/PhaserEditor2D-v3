@@ -3259,7 +3259,6 @@ var phasereditor2d;
                         menu.create(e);
                     }
                     fillContextMenu(menu) {
-                        const cmdManager = colibri.Platform.getWorkbench().getCommandManager();
                         const activeTool = this.getToolsManager().getActiveTool();
                         const exts = colibri.Platform.getExtensions(editor.tools.SceneToolExtension.POINT_ID);
                         for (const ext of exts) {
@@ -3275,6 +3274,7 @@ var phasereditor2d;
                         menu.addCommand(editor.commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
                         menu.addSeparator();
                         menu.addCommand(editor.commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
+                        menu.addCommand(editor.commands.CMD_REPLACE_TEXTURE);
                         menu.addSeparator();
                         menu.addCommand(editor.commands.CMD_TOGGLE_SNAPPING);
                         menu.addCommand(editor.commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE);
@@ -3633,6 +3633,7 @@ var phasereditor2d;
                     commands.CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
                     commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
                     commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
+                    commands.CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_9.SceneEditor
                             || (args.activeEditor instanceof editor_9.SceneEditor &&
@@ -3843,6 +3844,23 @@ var phasereditor2d;
                                         });
                                         editor.setSelection(sel);
                                     }
+                                }
+                            });
+                            // change texture
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_REPLACE_TEXTURE,
+                                    name: "Replace Texture",
+                                    tooltip: "Change the texture of the selected objects."
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                                    executeFunc: args => {
+                                        ui.sceneobjects.ChangeTextureOperation.runDialog(args.activeEditor);
+                                    }
+                                },
+                                keys: {
+                                    key: "X"
                                 }
                             });
                             // snapping
@@ -7444,6 +7462,32 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class ChangeTextureOperation extends sceneobjects.SceneObjectOperation {
+                    static runDialog(editor) {
+                        const finder = editor.getPackFinder();
+                        const cache = editor.getScene().getPackCache();
+                        const objects = editor.getSelectedGameObjects()
+                            .filter(obj => sceneobjects.EditorSupport.hasObjectComponent(obj, sceneobjects.TextureComponent))
+                            .filter(obj => !obj.getEditorSupport().isPrefabInstance()
+                            || obj.getEditorSupport().isUnlockedProperty(sceneobjects.TextureComponent.texture));
+                        const objectKeys = objects
+                            .map(obj => sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.TextureComponent))
+                            .map(comp => comp.getTextureKeys());
+                        const selectedFrames = objectKeys.map(k => cache.getImage(k.key, k.frame));
+                        sceneobjects.TextureSelectionDialog.createDialog(finder, selectedFrames, async (sel) => {
+                            const frame = sel[0];
+                            let newKeys;
+                            const item = frame.getPackItem();
+                            item.addToPhaserCache(editor.getGame(), cache);
+                            if (item instanceof phasereditor2d.pack.core.ImageAssetPackItem) {
+                                newKeys = { key: item.getKey() };
+                            }
+                            else {
+                                newKeys = { key: item.getKey(), frame: frame.getName() };
+                            }
+                            editor
+                                .getUndoManager().add(new ChangeTextureOperation(editor, objects, newKeys));
+                        });
+                    }
                     constructor(editor, objects, value) {
                         super(editor, objects, value);
                     }
@@ -7604,22 +7648,7 @@ var phasereditor2d;
                         // Buttons
                         {
                             const changeBtn = this.createButton(comp, "Select", e => {
-                                const finder = this.getEditor().getPackFinder();
-                                sceneobjects.TextureSelectionDialog.createDialog(finder, this.getSelectedFrames(), async (sel) => {
-                                    const frame = sel[0];
-                                    let textureData;
-                                    const item = frame.getPackItem();
-                                    item.addToPhaserCache(this.getEditor().getGame(), this.getEditor().getScene().getPackCache());
-                                    if (item instanceof phasereditor2d.pack.core.ImageAssetPackItem) {
-                                        textureData = { key: item.getKey() };
-                                    }
-                                    else {
-                                        textureData = { key: item.getKey(), frame: frame.getName() };
-                                    }
-                                    this.getEditor()
-                                        .getUndoManager().add(new sceneobjects.ChangeTextureOperation(this.getEditor(), this.getSelection(), textureData));
-                                    this.getEditor().refreshDependenciesHash();
-                                });
+                                sceneobjects.ChangeTextureOperation.runDialog(this.getEditor());
                             });
                             const deleteBtn = this.createButton(comp, "Delete", e => {
                                 this.getEditor().getUndoManager()

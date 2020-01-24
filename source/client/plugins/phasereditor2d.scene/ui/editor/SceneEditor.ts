@@ -318,7 +318,6 @@ namespace phasereditor2d.scene.ui.editor {
 
         private fillContextMenu(menu: controls.Menu) {
 
-            const cmdManager = colibri.Platform.getWorkbench().getCommandManager();
             const activeTool = this.getToolsManager().getActiveTool();
 
             const exts = colibri.Platform.getExtensions<tools.SceneToolExtension>(tools.SceneToolExtension.POINT_ID);
@@ -342,6 +341,7 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addSeparator();
 
             menu.addCommand(commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
+            menu.addCommand(commands.CMD_REPLACE_TEXTURE);
 
             menu.addSeparator();
 

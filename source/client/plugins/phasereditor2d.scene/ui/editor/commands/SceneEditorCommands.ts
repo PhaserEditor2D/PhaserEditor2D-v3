@@ -15,6 +15,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
     export const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
     export const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
+    export const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof SceneEditor
@@ -310,6 +311,27 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         editor.setSelection(sel);
                     }
+                }
+            });
+
+            // change texture
+
+            manager.add({
+                command: {
+                    id: CMD_REPLACE_TEXTURE,
+                    name: "Replace Texture",
+                    tooltip: "Change the texture of the selected objects."
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+
+                    executeFunc: args => {
+                        sceneobjects.ChangeTextureOperation.runDialog(args.activeEditor as SceneEditor);
+                    }
+                },
+                keys: {
+                    key: "X"
                 }
             });
 

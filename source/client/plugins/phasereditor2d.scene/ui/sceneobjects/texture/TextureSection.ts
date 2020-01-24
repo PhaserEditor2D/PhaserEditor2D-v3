@@ -49,38 +49,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 const changeBtn = this.createButton(comp, "Select", e => {
 
-                    const finder = this.getEditor().getPackFinder();
-
-                    TextureSelectionDialog.createDialog(finder, this.getSelectedFrames(), async (sel) => {
-
-                        const frame = sel[0];
-
-                        let textureData: ITextureKeys;
-
-                        const item = frame.getPackItem();
-
-                        item.addToPhaserCache(
-                            this.getEditor().getGame(), this.getEditor().getScene().getPackCache());
-
-                        if (item instanceof pack.core.ImageAssetPackItem) {
-
-                            textureData = { key: item.getKey() };
-
-                        } else {
-
-                            textureData = { key: item.getKey(), frame: frame.getName() };
-                        }
-
-                        this.getEditor()
-
-                            .getUndoManager().add(new ChangeTextureOperation(
-                                this.getEditor(),
-                                this.getSelection(),
-                                textureData)
-                            );
-
-                        this.getEditor().refreshDependenciesHash();
-                    });
+                    ChangeTextureOperation.runDialog(this.getEditor());
                 });
 
                 const deleteBtn = this.createButton(comp, "Delete", e => {
