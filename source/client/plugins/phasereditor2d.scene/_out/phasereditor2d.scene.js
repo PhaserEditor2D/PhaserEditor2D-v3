@@ -1438,19 +1438,21 @@ var phasereditor2d;
                         const ext = scene.ScenePlugin.getInstance().getObjectExtensionByObjectType(this._data.type);
                         return ext.getPhaserTypeName();
                     }
-                    getDefaultValue(name, defValue) {
-                        const value = this._data[name];
-                        if (value !== undefined) {
-                            return value;
+                    getDefaultValue(name, defaultValue) {
+                        if (this.isPrefabInstance()) {
+                            if (!this.isUnlocked(name)) {
+                                const defaultPrefabValue = this._prefabSer.getDefaultValue(name, defaultValue);
+                                if (defaultPrefabValue !== undefined) {
+                                    return defaultPrefabValue;
+                                }
+                                return defaultValue;
+                            }
                         }
-                        let defValueInPrefab;
-                        if (this._prefabSer) {
-                            defValueInPrefab = this._prefabSer.getDefaultValue(name, defValue);
+                        const localValue = this._data[name];
+                        if (localValue === undefined) {
+                            return defaultValue;
                         }
-                        if (defValueInPrefab !== undefined) {
-                            return defValueInPrefab;
-                        }
-                        return defValue;
+                        return localValue;
                     }
                     isUnlocked(name) {
                         if (this.isPrefabInstance()) {
@@ -5060,7 +5062,7 @@ var phasereditor2d;
                             }
                             this.getEditor().setDirty(true);
                             this.getEditor().setSelection(sel);
-                            this.getEditor().refreshScene();
+                            this.getEditor().refreshDependenciesHash();
                         }
                         undo() {
                             this.loadData(this._beforeData);

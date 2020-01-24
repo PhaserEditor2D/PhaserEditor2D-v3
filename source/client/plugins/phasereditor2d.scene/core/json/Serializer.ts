@@ -57,25 +57,29 @@ namespace phasereditor2d.scene.core.json {
             return ext.getPhaserTypeName();
         }
 
-        private getDefaultValue(name: string, defValue?: any) {
+        private getDefaultValue(name: string, defaultValue?: any) {
 
-            const value = this._data[name];
+            if (this.isPrefabInstance()) {
 
-            if (value !== undefined) {
-                return value;
+                if (!this.isUnlocked(name)) {
+
+                    const defaultPrefabValue = this._prefabSer.getDefaultValue(name, defaultValue);
+
+                    if (defaultPrefabValue !== undefined) {
+                        return defaultPrefabValue;
+                    }
+
+                    return defaultValue;
+                }
             }
 
-            let defValueInPrefab: any;
+            const localValue = this._data[name];
 
-            if (this._prefabSer) {
-                defValueInPrefab = this._prefabSer.getDefaultValue(name, defValue);
+            if (localValue === undefined) {
+                return defaultValue;
             }
 
-            if (defValueInPrefab !== undefined) {
-                return defValueInPrefab;
-            }
-
-            return defValue;
+            return localValue;
         }
 
         isUnlocked(name: string) {

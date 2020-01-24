@@ -150,7 +150,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             this.getEditor().setDirty(true);
             this.getEditor().setSelection(sel);
-            this.getEditor().refreshScene();
+            this.getEditor().refreshDependenciesHash();
         }
 
         undo(): void {
