@@ -68,7 +68,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             let next = [];
 
-            if (result) {
+            if (result && result.length > 0) {
 
                 const current = this._editor.getSelection();
                 let selected = result.pop();

@@ -57,7 +57,7 @@ var phasereditor2d;
                 // property sections
                 reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.VariableSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page)));
                 // scene tools
-                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool()));
+                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
             getSceneFinder() {
                 return this._sceneFinder;
@@ -3570,7 +3570,7 @@ var phasereditor2d;
                     onMouseClick(e) {
                         const result = this.hitTestOfActivePointer();
                         let next = [];
-                        if (result) {
+                        if (result && result.length > 0) {
                             const current = this._editor.getSelection();
                             let selected = result.pop();
                             if (selected) {
@@ -3627,6 +3627,7 @@ var phasereditor2d;
                     commands.CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
                     commands.CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
                     commands.CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
+                    commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
                     commands.CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
                     commands.CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
                     commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
@@ -3755,6 +3756,21 @@ var phasereditor2d;
                                     key: "S"
                                 }
                             });
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
+                                    name: "Resize TileSprite",
+                                    tooltip: "Resize selected TileSprite objects.",
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.TileSpriteSizeTool.ID)
+                                },
+                                keys: {
+                                    key: "Z"
+                                }
+                            });
                             // add object dialog
                             manager.add({
                                 command: {
@@ -3794,7 +3810,7 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS,
-                                    name: "Convert To/Resize TileSprite",
+                                    name: "Convert To TileSprite",
                                     tooltip: "Convert the selected objects into TileSprite instances. Or resize it if it is a TileSprite."
                                 },
                                 handler: {
@@ -7234,6 +7250,141 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.ScaleToolItem = ScaleToolItem;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TileSpriteSizeItem extends ui.editor.tools.SceneToolItem {
+                    constructor(x, y) {
+                        super();
+                        this._x = x;
+                        this._y = y;
+                    }
+                    getPoint(args) {
+                        return this.getAvgScreenPointOfObjects(args, (sprite) => this._x - sprite.originX, (sprite) => this._y - sprite.originY);
+                    }
+                    render(args) {
+                        const point = this.getPoint(args);
+                        const ctx = args.canvasContext;
+                        ctx.save();
+                        ctx.translate(point.x, point.y);
+                        const angle = this.globalAngle(args.objects[0]);
+                        ctx.rotate(Phaser.Math.DegToRad(angle));
+                        this.drawRect(ctx, args.canEdit ? "#00f" : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                        ctx.restore();
+                    }
+                    containsPoint(args) {
+                        const point = this.getPoint(args);
+                        return Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y) < 20;
+                    }
+                    onStartDrag(args) {
+                        if (!this.containsPoint(args)) {
+                            return;
+                        }
+                        this._dragging = true;
+                        const point = this.getPoint(args);
+                        // for (const obj of args.objects) {
+                        //     const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+                        //     const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
+                        //     const initLocalPos = new Phaser.Math.Vector2();
+                        //     sprite.getWorldTransformMatrix(worldTx);
+                        //     worldTx.applyInverse(point.x, point.y, initLocalPos);
+                        //     sprite.setData("ScaleToolItem", {
+                        //         initScaleX: sprite.scaleX,
+                        //         initScaleY: sprite.scaleY,
+                        //         initWidth: sprite.width,
+                        //         initHeight: sprite.height,
+                        //         initLocalPos: initLocalPos,
+                        //         initWorldTx: worldTx
+                        //     });
+                        // }
+                    }
+                    static getInitialScale(obj) {
+                        const data = obj.getData("ScaleToolItem");
+                        return { x: data.initScaleX, y: data.initScaleY };
+                    }
+                    onDrag(args) {
+                        if (!this._dragging) {
+                            return;
+                        }
+                        for (const obj of args.objects) {
+                            const sprite = obj;
+                            const data = sprite.data.get("ScaleToolItem");
+                            const initLocalPos = data.initLocalPos;
+                            const localPos = new Phaser.Math.Vector2();
+                            const worldTx = data.initWorldTx;
+                            worldTx.applyInverse(args.x, args.y, localPos);
+                            let flipX = sprite.flipX ? -1 : 1;
+                            let flipY = sprite.flipY ? -1 : 1;
+                            if (sprite instanceof Phaser.GameObjects.TileSprite) {
+                                flipX = 1;
+                                flipY = 1;
+                            }
+                            const dx = (localPos.x - initLocalPos.x) * flipX / args.camera.zoom;
+                            const dy = (localPos.y - initLocalPos.y) * flipY / args.camera.zoom;
+                            let width = data.initWidth - sprite.displayOriginX;
+                            let height = data.initHeight - sprite.displayOriginY;
+                            if (width === 0) {
+                                width = data.initWidth;
+                            }
+                            if (height === 0) {
+                                height = data.initHeight;
+                            }
+                            const scaleDX = dx / width * data.initScaleX;
+                            const scaleDY = dy / height * data.initScaleY;
+                            const newScaleX = data.initScaleX + scaleDX;
+                            const newScaleY = data.initScaleY + scaleDY;
+                            const changeAll = this._x === 1 && this._y === 1;
+                            const changeX = this._x === 1 && this._y === 0.5 || changeAll;
+                            const changeY = this._x === 0.5 && this._y === 1 || changeAll;
+                            if (changeX) {
+                                sprite.scaleX = newScaleX;
+                            }
+                            if (changeY) {
+                                sprite.scaleY = newScaleY;
+                            }
+                            args.editor.dispatchSelectionChanged();
+                        }
+                    }
+                    onStopDrag(args) {
+                        if (this._dragging) {
+                            args.editor.getUndoManager().add(new sceneobjects.ScaleOperation(args));
+                            this._dragging = false;
+                        }
+                    }
+                }
+                sceneobjects.TileSpriteSizeItem = TileSpriteSizeItem;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TileSpriteSizeTool extends sceneobjects.BaseObjectTool {
+                    constructor() {
+                        super({
+                            id: TileSpriteSizeTool.ID,
+                            command: ui.editor.commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
+                        }, sceneobjects.TileSpriteComponent.width, sceneobjects.TileSpriteComponent.height);
+                        this.addItems(new sceneobjects.TileSpriteSizeItem(1, 0.5), new sceneobjects.TileSpriteSizeItem(1, 1), new sceneobjects.TileSpriteSizeItem(0.5, 1));
+                    }
+                }
+                TileSpriteSizeTool.ID = "phasereditor2d.scene.ui.sceneobjects.TileSpriteResizeTool";
+                sceneobjects.TileSpriteSizeTool = TileSpriteSizeTool;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

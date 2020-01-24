@@ -705,6 +705,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
+    const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
     const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
     const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
@@ -1672,6 +1673,33 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         };
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TileSpriteSizeItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        private _x;
+        private _y;
+        private _dragging;
+        constructor(x: IScaleAxis, y: IScaleAxis);
+        getPoint(args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        render(args: editor.tools.ISceneToolRenderArgs): void;
+        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
+        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        static getInitialScale(obj: any): {
+            x: number;
+            y: number;
+        };
+        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TileSpriteSizeTool extends BaseObjectTool {
+        static ID: string;
+        constructor();
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

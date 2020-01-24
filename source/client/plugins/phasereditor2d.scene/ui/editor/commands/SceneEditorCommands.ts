@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
+    export const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
     export const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
@@ -192,6 +193,22 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 }
             });
 
+            manager.add({
+                command: {
+                    id: CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
+                    name: "Resize TileSprite",
+                    tooltip: "Resize selected TileSprite objects.",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.TileSpriteSizeTool.ID)
+                },
+                keys: {
+                    key: "Z"
+                }
+            });
+
             // add object dialog
 
             manager.add({
@@ -236,7 +253,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_CONVERT_TO_TILE_SPRITE_OBJECTS,
-                    name: "Convert To/Resize TileSprite",
+                    name: "Convert To TileSprite",
                     tooltip: "Convert the selected objects into TileSprite instances. Or resize it if it is a TileSprite."
                 },
                 handler: {
@@ -247,6 +264,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     executeFunc: args => {
 
                         const editor = args.activeEditor as SceneEditor;
+
                         editor.getUndoManager().add(
                             new undo.ConvertTypeOperation(editor, sceneobjects.TileSpriteExtension.getInstance()));
                     }
