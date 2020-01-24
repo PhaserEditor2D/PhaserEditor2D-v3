@@ -11,6 +11,9 @@ namespace phasereditor2d.scene.ui.editor {
             super(new viewers.ObjectExtensionAndPrefabViewer());
 
             this._editor = editor;
+
+            const size = this.getSize();
+            this.setSize(size.width, size.height * 1.5);
         }
 
         static canConvert(editor: SceneEditor) {
@@ -29,10 +32,10 @@ namespace phasereditor2d.scene.ui.editor {
 
             super.create();
 
-            this.setTitle("Convert Type");
+            this.setTitle("Replace Type");
 
             this.enableButtonOnlyWhenOneElementIsSelected(
-                this.addOpenButton("Convert", (sel: any[]) => {
+                this.addOpenButton("Replace", (sel: any[]) => {
 
                     this._editor.getUndoManager().add(
                         new undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));

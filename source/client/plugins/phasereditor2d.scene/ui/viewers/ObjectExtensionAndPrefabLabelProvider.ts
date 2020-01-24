@@ -10,9 +10,13 @@ namespace phasereditor2d.scene.ui.viewers {
             if (obj instanceof io.FilePath) {
 
                 return obj.getNameWithoutExtension();
+
+            } else if (obj instanceof sceneobjects.SceneObjectExtension) {
+
+                return obj.getTypeName();
             }
 
-            return (obj as sceneobjects.SceneObjectExtension).getTypeName();
+            return obj as string;
         }
     }
 }

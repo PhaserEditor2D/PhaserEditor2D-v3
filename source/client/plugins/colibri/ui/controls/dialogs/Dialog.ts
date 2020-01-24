@@ -156,6 +156,10 @@ namespace colibri.ui.controls.dialogs {
             this._height = height;
         }
 
+        getSize() {
+            return { width: this._width, height: this._height };
+        }
+
         close() {
 
             Dialog._dialogs = Dialog._dialogs.filter(d => d !== this);

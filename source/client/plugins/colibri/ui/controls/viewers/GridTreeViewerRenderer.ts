@@ -50,11 +50,14 @@ namespace colibri.ui.controls.viewers {
             let cellSize = viewer.getCellSize();
 
             if (this._flat) {
+
                 if (cellSize < 64) {
                     cellSize = 64;
                     viewer.setCellSize(cellSize);
                 }
+
             } else {
+
                 if (cellSize <= 48) {
                     return super.paintItems(objects, treeIconList, paintItems, null, x, y);
                 }

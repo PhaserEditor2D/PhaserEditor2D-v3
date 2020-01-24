@@ -11,13 +11,14 @@ namespace phasereditor2d.scene.ui.editor {
             super(new viewers.ObjectExtensionAndPrefabViewer());
 
             this._editor = editor;
+
+            const size = this.getSize();
+            this.setSize(size.width, size.height * 1.5);
         }
 
         create() {
 
             super.create();
-
-            this.style.width = "20em";
 
             this.setTitle("Add Object");
 

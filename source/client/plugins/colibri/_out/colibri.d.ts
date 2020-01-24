@@ -846,6 +846,10 @@ declare namespace colibri.ui.controls.dialogs {
         protected createDialogArea(): void;
         protected resize(): void;
         setSize(width: number, height: number): void;
+        getSize(): {
+            width: number;
+            height: number;
+        };
         close(): void;
         protected goFront(): void;
         closeAll(): void;
@@ -1268,6 +1272,14 @@ declare namespace colibri.ui.controls.viewers {
         center: boolean;
         constructor(canvasContext: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, obj: any, viewer: Viewer, center?: boolean);
         clone(): RenderCellArgs;
+    }
+}
+declare namespace colibri.ui.controls.viewers {
+    import controls = colibri.ui.controls;
+    class ShadowGridTreeViewerRenderer extends controls.viewers.GridTreeViewerRenderer {
+        constructor(viewer: controls.viewers.TreeViewer, flat?: boolean, center?: boolean);
+        renderCellBack(args: controls.viewers.RenderCellArgs, selected: boolean, isLastChild: boolean): void;
+        protected isShadowAsChild(obj: any): boolean;
     }
 }
 declare namespace colibri.ui.controls.viewers {

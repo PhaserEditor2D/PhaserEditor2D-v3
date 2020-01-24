@@ -1854,6 +1854,9 @@ declare namespace phasereditor2d.scene.ui.viewers {
 declare namespace phasereditor2d.scene.ui.viewers {
     import controls = colibri.ui.controls;
     class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
+        static TYPE_SECTION: string;
+        static PREFAB_SECTION: string;
+        static SECTIONS: string[];
         constructor();
     }
 }

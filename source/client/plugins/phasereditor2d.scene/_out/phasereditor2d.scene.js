@@ -2457,10 +2457,11 @@ var phasereditor2d;
                     constructor(editor) {
                         super(new ui.viewers.ObjectExtensionAndPrefabViewer());
                         this._editor = editor;
+                        const size = this.getSize();
+                        this.setSize(size.width, size.height * 1.5);
                     }
                     create() {
                         super.create();
-                        this.style.width = "20em";
                         this.setTitle("Add Object");
                         this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Create", async (sel) => {
                             const type = sel[0];
@@ -2591,6 +2592,8 @@ var phasereditor2d;
                     constructor(editor) {
                         super(new ui.viewers.ObjectExtensionAndPrefabViewer());
                         this._editor = editor;
+                        const size = this.getSize();
+                        this.setSize(size.width, size.height * 1.5);
                     }
                     static canConvert(editor) {
                         return this.getObjectsToMorph(editor).length > 0;
@@ -2601,8 +2604,8 @@ var phasereditor2d;
                     create() {
                         const viewer = this.getViewer();
                         super.create();
-                        this.setTitle("Convert Type");
-                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Convert", (sel) => {
+                        this.setTitle("Replace Type");
+                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Replace", (sel) => {
                             this._editor.getUndoManager().add(new editor_4.undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));
                             this.close();
                         }));
@@ -7965,7 +7968,10 @@ var phasereditor2d;
                         if (obj instanceof io.FilePath) {
                             return obj.getNameWithoutExtension();
                         }
-                        return obj.getTypeName();
+                        else if (obj instanceof ui.sceneobjects.SceneObjectExtension) {
+                            return obj.getTypeName();
+                        }
+                        return obj;
                     }
                 }
                 viewers.ObjectExtensionAndPrefabLabelProvider = ObjectExtensionAndPrefabLabelProvider;
@@ -7985,16 +7991,38 @@ var phasereditor2d;
                 class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
                     constructor() {
                         super();
+                        const treeRenderer = new controls.viewers.ShadowGridTreeViewerRenderer(this);
+                        treeRenderer.setSections(ObjectExtensionAndPrefabViewer.SECTIONS);
                         this.setLabelProvider(new viewers.ObjectExtensionAndPrefabLabelProvider());
                         this.setCellRendererProvider(new viewers.ObjectExtensionAndPrefabCellRendererProvider());
-                        this.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        this.setInput([
-                            ...scene.ScenePlugin.getInstance().getObjectExtensions(),
-                            ...scene.ScenePlugin.getInstance().getSceneFinder().getPrefabFiles()
-                        ]);
+                        this.setContentProvider(new ObjectExtensionAndPrefabContentProvider());
+                        this.setTreeRenderer(treeRenderer);
+                        this.setInput(ObjectExtensionAndPrefabViewer.SECTIONS);
+                        this.setCellSize(64);
                     }
                 }
+                ObjectExtensionAndPrefabViewer.TYPE_SECTION = "Phaser Type";
+                ObjectExtensionAndPrefabViewer.PREFAB_SECTION = "User Prefab";
+                ObjectExtensionAndPrefabViewer.SECTIONS = [
+                    ObjectExtensionAndPrefabViewer.TYPE_SECTION,
+                    ObjectExtensionAndPrefabViewer.PREFAB_SECTION,
+                ];
                 viewers.ObjectExtensionAndPrefabViewer = ObjectExtensionAndPrefabViewer;
+                class ObjectExtensionAndPrefabContentProvider {
+                    getRoots(input) {
+                        return ObjectExtensionAndPrefabViewer.SECTIONS;
+                    }
+                    getChildren(parent) {
+                        const plugin = scene.ScenePlugin.getInstance();
+                        if (parent === ObjectExtensionAndPrefabViewer.TYPE_SECTION) {
+                            return plugin.getObjectExtensions();
+                        }
+                        else if (parent === ObjectExtensionAndPrefabViewer.PREFAB_SECTION) {
+                            return plugin.getSceneFinder().getPrefabFiles();
+                        }
+                        return [];
+                    }
+                }
             })(viewers = ui.viewers || (ui.viewers = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

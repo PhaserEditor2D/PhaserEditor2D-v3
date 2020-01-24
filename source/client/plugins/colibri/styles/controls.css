@@ -267,7 +267,10 @@ canvas {
     display: grid;
     grid-template-columns: 5px 1fr 5px;
     grid-template-rows: 5px auto 5px 1fr 5px auto 5px;
-    ;
+}
+
+.DialogHalfScreenHeight {
+    height: 50%;
 }
 
 .Dialog .DialogTitlePane {

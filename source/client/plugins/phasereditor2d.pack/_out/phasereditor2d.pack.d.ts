@@ -602,10 +602,9 @@ declare namespace phasereditor2d.pack.ui.editor {
 }
 declare namespace phasereditor2d.pack.ui.viewers {
     import controls = colibri.ui.controls;
-    class AssetPackTreeViewerRenderer extends controls.viewers.GridTreeViewerRenderer {
+    class AssetPackTreeViewerRenderer extends controls.viewers.ShadowGridTreeViewerRenderer {
         constructor(viewer: controls.viewers.TreeViewer, flat: boolean);
-        renderCellBack(args: controls.viewers.RenderCellArgs, selected: boolean, isLastChild: boolean): void;
-        protected isChild(obj: any): boolean;
+        isShadowAsChild(obj: any): boolean;
     }
 }
 declare namespace phasereditor2d.pack.ui.editor {
