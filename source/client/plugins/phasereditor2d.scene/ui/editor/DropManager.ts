@@ -33,6 +33,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                 this._editor.refreshOutline();
 
+                await this._editor.refreshDependenciesHash();
+
                 this._editor.setDirty(true);
 
                 this._editor.repaint();

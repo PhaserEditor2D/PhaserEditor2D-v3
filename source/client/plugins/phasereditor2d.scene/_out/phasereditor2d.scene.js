@@ -2644,6 +2644,7 @@ var phasereditor2d;
                             this._editor.getUndoManager().add(new editor_5.undo.AddObjectsOperation(this._editor, sprites));
                             this._editor.setSelection(sprites);
                             this._editor.refreshOutline();
+                            await this._editor.refreshDependenciesHash();
                             this._editor.setDirty(true);
                             this._editor.repaint();
                             ide.Workbench.getWorkbench().setActivePart(this._editor);
@@ -3407,7 +3408,6 @@ var phasereditor2d;
                         for (const obj of this._scene.getDisplayListChildren()) {
                             obj.getEditorSupport().destroy();
                         }
-                        // to clear the pending removals
                         this._scene.sys.updateList.removeAll();
                         this._scene.sys.displayList.removeAll();
                         // a hack to clean the whole scene
@@ -5049,9 +5049,9 @@ var phasereditor2d;
                                     oldObj.getEditorSupport().destroy();
                                 }
                             }
+                            await this.getEditor().refreshDependenciesHash();
                             this._editor.setDirty(true);
                             this._editor.getSelectionManager().setSelectionByIds(selectionIds);
-                            this.getEditor().refreshDependenciesHash();
                         }
                         undo() {
                             this.loadSnapshot(this._before);
