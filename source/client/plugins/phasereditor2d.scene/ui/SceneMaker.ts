@@ -154,6 +154,19 @@ namespace phasereditor2d.scene.ui {
                     label: "temporal"
                 });
 
+                const { x, y } = this.getCanvasCenterPoint();
+
+                const transformComponent = obj.getEditorSupport()
+                    .getComponent(sceneobjects.TransformComponent) as sceneobjects.TransformComponent;
+
+                if (transformComponent) {
+
+                    const sprite = obj as unknown as sceneobjects.ITransformLikeObject;
+
+                    sprite.x = x;
+                    sprite.y = y;
+                }
+
                 return obj;
 
             } catch (e) {
@@ -226,7 +239,7 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        createEmptyObject(ext: sceneobjects.SceneObjectExtension) {
+        getCanvasCenterPoint() {
 
             const canvas = this._scene.game.canvas;
 
@@ -237,6 +250,13 @@ namespace phasereditor2d.scene.ui {
 
             x = Math.floor(worldPoint.x);
             y = Math.floor(worldPoint.y);
+
+            return { x, y };
+        }
+
+        createEmptyObject(ext: sceneobjects.SceneObjectExtension) {
+
+            const { x, y } = this.getCanvasCenterPoint();
 
             const newObject = ext.createEmptySceneObject({
                 scene: this._scene,

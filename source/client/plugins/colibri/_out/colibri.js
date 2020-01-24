@@ -3434,6 +3434,9 @@ var colibri;
                     setTitle(title) {
                         this._titlePaneElement.innerText = title;
                     }
+                    addCancelButton() {
+                        this.addButton("Cancel", () => this.close());
+                    }
                     addButton(text, callback) {
                         const btn = document.createElement("button");
                         btn.innerText = text;

@@ -408,6 +408,10 @@ declare namespace phasereditor2d.scene.ui {
         createScene(sceneData: json.ISceneData): void;
         updateSceneLoader(sceneData: json.ISceneData): Promise<void>;
         updateSceneLoaderWithObjDataList(list: json.IObjectData[]): Promise<void>;
+        getCanvasCenterPoint(): {
+            x: number;
+            y: number;
+        };
         createEmptyObject(ext: sceneobjects.SceneObjectExtension): sceneobjects.ISceneObject;
         createObject(data: json.IObjectData): sceneobjects.ISceneObject;
     }
@@ -1836,6 +1840,25 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.viewers {
     import controls = colibri.ui.controls;
+    class ObjectExtensionAndPrefabCellRendererProvider implements controls.viewers.ICellRendererProvider {
+        getCellRenderer(element: any): controls.viewers.ICellRenderer;
+        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
+    class ObjectExtensionAndPrefabLabelProvider extends controls.viewers.LabelProvider {
+        getLabel(obj: any): string;
+    }
+}
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
+    class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
+        constructor();
+    }
+}
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
     class ObjectExtensionCellRendererProvider extends controls.viewers.EmptyCellRendererProvider {
         constructor();
     }
@@ -1848,22 +1871,9 @@ declare namespace phasereditor2d.scene.ui.viewers {
 }
 declare namespace phasereditor2d.scene.ui.viewers {
     import controls = colibri.ui.controls;
-    class ObjectExtensionViewer extends controls.viewers.TreeViewer {
-        constructor();
-    }
-}
-declare namespace phasereditor2d.scene.ui.viewers {
-    import controls = colibri.ui.controls;
     class SceneFileCellRenderer implements controls.viewers.ICellRenderer {
         renderCell(args: controls.viewers.RenderCellArgs): void;
         cellHeight(args: controls.viewers.RenderCellArgs): number;
-        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
-    }
-}
-declare namespace phasereditor2d.scene.ui.viewers {
-    import controls = colibri.ui.controls;
-    class TypeAndPrefabCellRendererProvider implements controls.viewers.ICellRendererProvider {
-        getCellRenderer(element: any): controls.viewers.ICellRenderer;
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
     }
 }

@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.viewers {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export class TypeAndPrefabCellRendererProvider implements controls.viewers.ICellRendererProvider {
+    export class ObjectExtensionAndPrefabCellRendererProvider implements controls.viewers.ICellRendererProvider {
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 

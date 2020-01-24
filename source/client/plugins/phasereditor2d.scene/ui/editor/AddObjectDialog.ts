@@ -1,20 +1,19 @@
 namespace phasereditor2d.scene.ui.editor {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export class AddObjectDialog extends controls.dialogs.ViewerDialog {
 
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
-            super(new viewers.ObjectExtensionViewer());
+            super(new viewers.ObjectExtensionAndPrefabViewer());
 
             this._editor = editor;
         }
 
         create() {
-
-            const viewer = this.getViewer();
 
             super.create();
 
@@ -22,38 +21,33 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.setTitle("Add Object");
 
-            const createObject = () => {
+            this.enableButtonOnlyWhenOneElementIsSelected(
 
-                const ext = viewer.getSelectionFirstElement() as sceneobjects.SceneObjectExtension;
+                this.addOpenButton("Create", async (sel) => {
 
-                const obj = this._editor.getSceneMaker().createEmptyObject(ext);
+                    const type = sel[0];
 
-                this._editor.setSelection([obj]);
+                    const maker = this._editor.getSceneMaker();
 
-                this._editor.getUndoManager().add(new undo.AddObjectsOperation(this._editor, [obj]));
+                    let obj;
 
-                this.close();
-            };
+                    if (type instanceof io.FilePath) {
 
-            viewer.getElement().addEventListener("dblclick", e => {
+                        obj = await maker.createPrefabInstanceWithFile(type);
 
-                if (viewer.getSelection().length === 1) {
+                    } else {
 
-                    createObject();
-                }
-            });
+                        obj = maker.createEmptyObject(type);
+                    }
 
-            const btn = this.addButton("Create", () => {
+                    this._editor.setSelection([obj]);
+                    this._editor.setDirty(true);
+                    this._editor.refreshDependenciesHash();
 
-                createObject();
-            });
+                    this._editor.getUndoManager().add(new undo.AddObjectsOperation(this._editor, [obj]));
+                }));
 
-            btn.disabled = true;
-
-            viewer.addEventListener(controls.EVENT_SELECTION_CHANGED,
-                e => btn.disabled = (viewer.getSelection().length !== 1));
-
-            this.addButton("Cancel", () => this.close());
+            this.addCancelButton();
         }
     }
 }

@@ -841,6 +841,7 @@ declare namespace colibri.ui.controls.dialogs {
         getParentDialog(): Dialog;
         create(): void;
         setTitle(title: string): void;
+        addCancelButton(): void;
         addButton(text: string, callback: () => void): HTMLButtonElement;
         protected createDialogArea(): void;
         protected resize(): void;

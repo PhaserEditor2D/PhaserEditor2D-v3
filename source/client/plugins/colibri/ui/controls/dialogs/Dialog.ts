@@ -120,6 +120,10 @@ namespace colibri.ui.controls.dialogs {
             this._titlePaneElement.innerText = title;
         }
 
+        addCancelButton() {
+            this.addButton("Cancel", () => this.close());
+        }
+
         addButton(text: string, callback: () => void) {
 
             const btn = document.createElement("button");

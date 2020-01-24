@@ -1777,6 +1777,14 @@ var phasereditor2d;
                             prefabId: prefabData.id,
                             label: "temporal"
                         });
+                        const { x, y } = this.getCanvasCenterPoint();
+                        const transformComponent = obj.getEditorSupport()
+                            .getComponent(ui.sceneobjects.TransformComponent);
+                        if (transformComponent) {
+                            const sprite = obj;
+                            sprite.x = x;
+                            sprite.y = y;
+                        }
                         return obj;
                     }
                     catch (e) {
@@ -1823,13 +1831,17 @@ var phasereditor2d;
                         }
                     }
                 }
-                createEmptyObject(ext) {
+                getCanvasCenterPoint() {
                     const canvas = this._scene.game.canvas;
                     let x = canvas.width / 2;
                     let y = canvas.height / 2;
                     const worldPoint = this._scene.getCamera().getWorldPoint(x, y);
                     x = Math.floor(worldPoint.x);
                     y = Math.floor(worldPoint.y);
+                    return { x, y };
+                }
+                createEmptyObject(ext) {
+                    const { x, y } = this.getCanvasCenterPoint();
                     const newObject = ext.createEmptySceneObject({
                         scene: this._scene,
                         x: x,
@@ -2440,34 +2452,32 @@ var phasereditor2d;
             var editor;
             (function (editor_2) {
                 var controls = colibri.ui.controls;
+                var io = colibri.core.io;
                 class AddObjectDialog extends controls.dialogs.ViewerDialog {
                     constructor(editor) {
-                        super(new ui.viewers.ObjectExtensionViewer());
+                        super(new ui.viewers.ObjectExtensionAndPrefabViewer());
                         this._editor = editor;
                     }
                     create() {
-                        const viewer = this.getViewer();
                         super.create();
                         this.style.width = "20em";
                         this.setTitle("Add Object");
-                        const createObject = () => {
-                            const ext = viewer.getSelectionFirstElement();
-                            const obj = this._editor.getSceneMaker().createEmptyObject(ext);
-                            this._editor.setSelection([obj]);
-                            this._editor.getUndoManager().add(new editor_2.undo.AddObjectsOperation(this._editor, [obj]));
-                            this.close();
-                        };
-                        viewer.getElement().addEventListener("dblclick", e => {
-                            if (viewer.getSelection().length === 1) {
-                                createObject();
+                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Create", async (sel) => {
+                            const type = sel[0];
+                            const maker = this._editor.getSceneMaker();
+                            let obj;
+                            if (type instanceof io.FilePath) {
+                                obj = await maker.createPrefabInstanceWithFile(type);
                             }
-                        });
-                        const btn = this.addButton("Create", () => {
-                            createObject();
-                        });
-                        btn.disabled = true;
-                        viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => btn.disabled = (viewer.getSelection().length !== 1));
-                        this.addButton("Cancel", () => this.close());
+                            else {
+                                obj = maker.createEmptyObject(type);
+                            }
+                            this._editor.setSelection([obj]);
+                            this._editor.setDirty(true);
+                            this._editor.refreshDependenciesHash();
+                            this._editor.getUndoManager().add(new editor_2.undo.AddObjectsOperation(this._editor, [obj]));
+                        }));
+                        this.addCancelButton();
                     }
                 }
                 editor_2.AddObjectDialog = AddObjectDialog;
@@ -2577,10 +2587,9 @@ var phasereditor2d;
             var editor;
             (function (editor_4) {
                 var controls = colibri.ui.controls;
-                var io = colibri.core.io;
                 class ConvertTypeDialog extends controls.dialogs.ViewerDialog {
                     constructor(editor) {
-                        super(new controls.viewers.TreeViewer());
+                        super(new ui.viewers.ObjectExtensionAndPrefabViewer());
                         this._editor = editor;
                     }
                     static canConvert(editor) {
@@ -2591,18 +2600,6 @@ var phasereditor2d;
                     }
                     create() {
                         const viewer = this.getViewer();
-                        viewer.setLabelProvider(new controls.viewers.LabelProvider(obj => {
-                            if (obj instanceof io.FilePath) {
-                                return obj.getNameWithoutExtension();
-                            }
-                            return obj.getTypeName();
-                        }));
-                        viewer.setCellRendererProvider(new ui.viewers.TypeAndPrefabCellRendererProvider());
-                        viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setInput([
-                            ...scene.ScenePlugin.getInstance().getObjectExtensions(),
-                            ...scene.ScenePlugin.getInstance().getSceneFinder().getPrefabFiles()
-                        ]);
                         super.create();
                         this.setTitle("Convert Type");
                         this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Convert", (sel) => {
@@ -7933,6 +7930,84 @@ var phasereditor2d;
             var viewers;
             (function (viewers) {
                 var controls = colibri.ui.controls;
+                var io = colibri.core.io;
+                class ObjectExtensionAndPrefabCellRendererProvider {
+                    getCellRenderer(element) {
+                        if (element instanceof io.FilePath) {
+                            return new viewers.SceneFileCellRenderer();
+                        }
+                        return new viewers.ObjectExtensionCellRendererProvider().getCellRenderer(element);
+                    }
+                    preload(args) {
+                        if (args.obj instanceof io.FilePath) {
+                            return new viewers.SceneFileCellRenderer().preload(args);
+                        }
+                        return controls.Controls.resolveNothingLoaded();
+                    }
+                }
+                viewers.ObjectExtensionAndPrefabCellRendererProvider = ObjectExtensionAndPrefabCellRendererProvider;
+            })(viewers = ui.viewers || (ui.viewers = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var viewers;
+            (function (viewers) {
+                var controls = colibri.ui.controls;
+                var io = colibri.core.io;
+                class ObjectExtensionAndPrefabLabelProvider extends controls.viewers.LabelProvider {
+                    getLabel(obj) {
+                        if (obj instanceof io.FilePath) {
+                            return obj.getNameWithoutExtension();
+                        }
+                        return obj.getTypeName();
+                    }
+                }
+                viewers.ObjectExtensionAndPrefabLabelProvider = ObjectExtensionAndPrefabLabelProvider;
+            })(viewers = ui.viewers || (ui.viewers = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var viewers;
+            (function (viewers) {
+                var controls = colibri.ui.controls;
+                class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
+                    constructor() {
+                        super();
+                        this.setLabelProvider(new viewers.ObjectExtensionAndPrefabLabelProvider());
+                        this.setCellRendererProvider(new viewers.ObjectExtensionAndPrefabCellRendererProvider());
+                        this.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        this.setInput([
+                            ...scene.ScenePlugin.getInstance().getObjectExtensions(),
+                            ...scene.ScenePlugin.getInstance().getSceneFinder().getPrefabFiles()
+                        ]);
+                    }
+                }
+                viewers.ObjectExtensionAndPrefabViewer = ObjectExtensionAndPrefabViewer;
+            })(viewers = ui.viewers || (ui.viewers = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var viewers;
+            (function (viewers) {
+                var controls = colibri.ui.controls;
                 class ObjectExtensionCellRendererProvider extends controls.viewers.EmptyCellRendererProvider {
                     constructor() {
                         super(_ => new controls.viewers.IconImageCellRenderer(scene.ScenePlugin.getInstance().getIcon(scene.ICON_GROUP)));
@@ -7970,29 +8045,6 @@ var phasereditor2d;
         (function (ui) {
             var viewers;
             (function (viewers) {
-                var controls = colibri.ui.controls;
-                class ObjectExtensionViewer extends controls.viewers.TreeViewer {
-                    constructor() {
-                        super();
-                        this.setLabelProvider(new viewers.ObjectExtensionLabelProvider());
-                        this.setCellRendererProvider(new viewers.ObjectExtensionCellRendererProvider());
-                        this.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        this.setInput(scene.ScenePlugin.getInstance().getObjectExtensions());
-                    }
-                }
-                viewers.ObjectExtensionViewer = ObjectExtensionViewer;
-            })(viewers = ui.viewers || (ui.viewers = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var viewers;
-            (function (viewers) {
                 class SceneFileCellRenderer {
                     renderCell(args) {
                         const file = args.obj;
@@ -8010,35 +8062,6 @@ var phasereditor2d;
                     }
                 }
                 viewers.SceneFileCellRenderer = SceneFileCellRenderer;
-            })(viewers = ui.viewers || (ui.viewers = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var viewers;
-            (function (viewers) {
-                var controls = colibri.ui.controls;
-                var io = colibri.core.io;
-                class TypeAndPrefabCellRendererProvider {
-                    getCellRenderer(element) {
-                        if (element instanceof io.FilePath) {
-                            return new viewers.SceneFileCellRenderer();
-                        }
-                        return new viewers.ObjectExtensionCellRendererProvider().getCellRenderer(element);
-                    }
-                    preload(args) {
-                        if (args.obj instanceof io.FilePath) {
-                            return new viewers.SceneFileCellRenderer().preload(args);
-                        }
-                        return controls.Controls.resolveNothingLoaded();
-                    }
-                }
-                viewers.TypeAndPrefabCellRendererProvider = TypeAndPrefabCellRendererProvider;
             })(viewers = ui.viewers || (ui.viewers = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
