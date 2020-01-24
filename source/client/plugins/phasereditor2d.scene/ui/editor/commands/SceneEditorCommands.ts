@@ -217,8 +217,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_CONVERT_OBJECTS,
-                    name: "Convert To Other Type",
-                    tooltip: "Change the type of the selected objects to other type."
+                    name: "Replace Type",
+                    tooltip: "Replace the type of the selected objects."
                 },
                 handler: {
                     testFunc: args => isSceneScope(args)

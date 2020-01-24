@@ -3766,8 +3766,8 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_CONVERT_OBJECTS,
-                                    name: "Convert To Other Type",
-                                    tooltip: "Change the type of the selected objects to other type."
+                                    name: "Replace Type",
+                                    tooltip: "Replace the type of the selected objects."
                                 },
                                 handler: {
                                     testFunc: args => isSceneScope(args)
