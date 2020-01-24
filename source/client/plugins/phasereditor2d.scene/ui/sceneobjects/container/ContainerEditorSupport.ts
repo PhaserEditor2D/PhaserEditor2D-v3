@@ -19,6 +19,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // nothing
         }
 
+        destroy() {
+
+            for (const obj of this.getObject().list) {
+
+                obj.getEditorSupport().destroy();
+            }
+
+            super.destroy();
+        }
+
         async buildDependencyHash(args: IBuildDependencyHashArgs) {
 
             super.buildDependencyHash(args);

@@ -554,8 +554,15 @@ namespace phasereditor2d.scene.ui.editor {
                 obj.getEditorSupport().destroy();
             }
 
+            // to clear the pending removals
+
             this._scene.sys.updateList.removeAll();
             this._scene.sys.displayList.removeAll();
+
+            // a hack to clean the whole scene
+            this._scene.input["_list"].length = 0;
+            this._scene.input["_pendingInsertion"].length = 0;
+            this._scene.input["_pendingRemoval"].length = 0;
 
             const maker = this.getSceneMaker();
 

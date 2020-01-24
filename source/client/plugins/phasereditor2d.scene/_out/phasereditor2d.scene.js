@@ -2402,7 +2402,7 @@ var phasereditor2d;
                         // create the undo-operation before destroy the objects
                         this._editor.getUndoManager().add(new editor_1.undo.RemoveObjectsOperation(this._editor, objects));
                         for (const obj of objects) {
-                            obj.destroy();
+                            obj.getEditorSupport().destroy();
                         }
                         this._editor.refreshOutline();
                         this._editor.getSelectionManager().refreshSelection();
@@ -3407,8 +3407,13 @@ var phasereditor2d;
                         for (const obj of this._scene.getDisplayListChildren()) {
                             obj.getEditorSupport().destroy();
                         }
+                        // to clear the pending removals
                         this._scene.sys.updateList.removeAll();
                         this._scene.sys.displayList.removeAll();
+                        // a hack to clean the whole scene
+                        this._scene.input["_list"].length = 0;
+                        this._scene.input["_pendingInsertion"].length = 0;
+                        this._scene.input["_pendingRemoval"].length = 0;
                         const maker = this.getSceneMaker();
                         await maker.preload();
                         await maker.updateSceneLoader(sceneData);
@@ -5829,6 +5834,12 @@ var phasereditor2d;
                     }
                     setInteractive() {
                         // nothing
+                    }
+                    destroy() {
+                        for (const obj of this.getObject().list) {
+                            obj.getEditorSupport().destroy();
+                        }
+                        super.destroy();
                     }
                     async buildDependencyHash(args) {
                         super.buildDependencyHash(args);

@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             for (const obj of objects) {
 
-                obj.destroy();
+                obj.getEditorSupport().destroy();
             }
 
             this._editor.refreshOutline();

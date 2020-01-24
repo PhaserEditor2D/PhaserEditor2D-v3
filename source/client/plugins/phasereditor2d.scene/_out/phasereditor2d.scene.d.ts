@@ -1359,6 +1359,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ContainerEditorSupport extends EditorSupport<Container> {
         constructor(obj: Container);
         setInteractive(): void;
+        destroy(): void;
         buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
         writeJSON(containerData: IContainerData): void;
