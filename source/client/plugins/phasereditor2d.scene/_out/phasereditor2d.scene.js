@@ -1611,6 +1611,15 @@ var phasereditor2d;
                     });
                     return map;
                 }
+                snapPoint(x, y) {
+                    if (this._settings.snapEnabled) {
+                        return {
+                            x: Math.round(x / this._settings.snapWidth) * this._settings.snapWidth,
+                            y: Math.round(y / this._settings.snapHeight) * this._settings.snapHeight
+                        };
+                    }
+                    return { x, y };
+                }
                 getByEditorId(id) {
                     const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
                     if (!obj) {
@@ -3504,16 +3513,6 @@ var phasereditor2d;
                         }
                         this._game.loop.tick();
                         this._overlayLayer.render();
-                    }
-                    snapPoint(x, y) {
-                        const settings = this._scene.getSettings();
-                        if (settings.snapEnabled) {
-                            return {
-                                x: Math.round(x / settings.snapWidth) * settings.snapWidth,
-                                y: Math.round(y / settings.snapHeight) * settings.snapHeight
-                            };
-                        }
-                        return { x, y };
                     }
                 }
                 editor.SceneEditor = SceneEditor;
@@ -7262,7 +7261,59 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TileSpriteSizeItem extends ui.editor.tools.SceneToolItem {
+                class TileSpriteSizeOperation extends ui.editor.tools.SceneToolOperation {
+                    getInitialValue(obj) {
+                        return sceneobjects.TileSpriteSizeToolItem.getInitialSize(obj);
+                    }
+                    getFinalValue(obj) {
+                        const sprite = obj;
+                        return { x: sprite.width, y: sprite.height };
+                    }
+                    setValue(obj, value) {
+                        const sprite = obj;
+                        sprite.setSize(value.x, value.y);
+                    }
+                }
+                sceneobjects.TileSpriteSizeOperation = TileSpriteSizeOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TileSpriteSizeTool extends sceneobjects.BaseObjectTool {
+                    constructor() {
+                        super({
+                            id: TileSpriteSizeTool.ID,
+                            command: ui.editor.commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
+                        }, sceneobjects.TileSpriteComponent.width, sceneobjects.TileSpriteComponent.height);
+                        this.addItems(new sceneobjects.TileSpriteSizeToolItem(1, 0.5), new sceneobjects.TileSpriteSizeToolItem(1, 1), new sceneobjects.TileSpriteSizeToolItem(0.5, 1));
+                    }
+                    canEdit(obj) {
+                        return obj instanceof sceneobjects.TileSprite;
+                    }
+                }
+                TileSpriteSizeTool.ID = "phasereditor2d.scene.ui.sceneobjects.TileSpriteResizeTool";
+                sceneobjects.TileSpriteSizeTool = TileSpriteSizeTool;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TileSpriteSizeToolItem extends ui.editor.tools.SceneToolItem {
                     constructor(x, y) {
                         super();
                         this._x = x;
@@ -7291,100 +7342,61 @@ var phasereditor2d;
                         }
                         this._dragging = true;
                         const point = this.getPoint(args);
-                        // for (const obj of args.objects) {
-                        //     const sprite = obj as unknown as Phaser.GameObjects.Sprite;
-                        //     const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
-                        //     const initLocalPos = new Phaser.Math.Vector2();
-                        //     sprite.getWorldTransformMatrix(worldTx);
-                        //     worldTx.applyInverse(point.x, point.y, initLocalPos);
-                        //     sprite.setData("ScaleToolItem", {
-                        //         initScaleX: sprite.scaleX,
-                        //         initScaleY: sprite.scaleY,
-                        //         initWidth: sprite.width,
-                        //         initHeight: sprite.height,
-                        //         initLocalPos: initLocalPos,
-                        //         initWorldTx: worldTx
-                        //     });
-                        // }
+                        const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
+                        for (const obj of args.objects) {
+                            const sprite = obj;
+                            const initLocalPos = new Phaser.Math.Vector2();
+                            sprite.getWorldTransformMatrix(worldTx);
+                            worldTx.applyInverse(point.x, point.y, initLocalPos);
+                            sprite.setData("TileSizeTool", {
+                                initWidth: sprite.width,
+                                initHeight: sprite.height,
+                                initLocalPos: initLocalPos
+                            });
+                        }
                     }
-                    static getInitialScale(obj) {
-                        const data = obj.getData("ScaleToolItem");
-                        return { x: data.initScaleX, y: data.initScaleY };
+                    static getInitialSize(obj) {
+                        const data = obj.getData("TileSizeTool");
+                        return { x: data.initWidth, y: data.initHeight };
                     }
                     onDrag(args) {
                         if (!this._dragging) {
                             return;
                         }
+                        const camera = args.camera;
+                        const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
                         for (const obj of args.objects) {
                             const sprite = obj;
-                            const data = sprite.data.get("ScaleToolItem");
+                            const data = sprite.data.get("TileSizeTool");
                             const initLocalPos = data.initLocalPos;
                             const localPos = new Phaser.Math.Vector2();
-                            const worldTx = data.initWorldTx;
+                            sprite.getWorldTransformMatrix(worldTx);
                             worldTx.applyInverse(args.x, args.y, localPos);
-                            let flipX = sprite.flipX ? -1 : 1;
-                            let flipY = sprite.flipY ? -1 : 1;
-                            if (sprite instanceof Phaser.GameObjects.TileSprite) {
-                                flipX = 1;
-                                flipY = 1;
-                            }
-                            const dx = (localPos.x - initLocalPos.x) * flipX / args.camera.zoom;
-                            const dy = (localPos.y - initLocalPos.y) * flipY / args.camera.zoom;
-                            let width = data.initWidth - sprite.displayOriginX;
-                            let height = data.initHeight - sprite.displayOriginY;
-                            if (width === 0) {
-                                width = data.initWidth;
-                            }
-                            if (height === 0) {
-                                height = data.initHeight;
-                            }
-                            const scaleDX = dx / width * data.initScaleX;
-                            const scaleDY = dy / height * data.initScaleY;
-                            const newScaleX = data.initScaleX + scaleDX;
-                            const newScaleY = data.initScaleY + scaleDY;
+                            const flipX = sprite.flipX ? -1 : 1;
+                            const flipY = sprite.flipY ? -1 : 1;
+                            const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
+                            const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
+                            const { x: width, y: height } = args.editor.getScene().snapPoint(data.initWidth + dx, data.initHeight + dy);
                             const changeAll = this._x === 1 && this._y === 1;
                             const changeX = this._x === 1 && this._y === 0.5 || changeAll;
                             const changeY = this._x === 0.5 && this._y === 1 || changeAll;
                             if (changeX) {
-                                sprite.scaleX = newScaleX;
+                                sprite.setSize(width, sprite.height);
                             }
                             if (changeY) {
-                                sprite.scaleY = newScaleY;
+                                sprite.setSize(sprite.width, height);
                             }
                             args.editor.dispatchSelectionChanged();
                         }
                     }
                     onStopDrag(args) {
                         if (this._dragging) {
-                            args.editor.getUndoManager().add(new sceneobjects.ScaleOperation(args));
+                            args.editor.getUndoManager().add(new sceneobjects.TileSpriteSizeOperation(args));
                             this._dragging = false;
                         }
                     }
                 }
-                sceneobjects.TileSpriteSizeItem = TileSpriteSizeItem;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class TileSpriteSizeTool extends sceneobjects.BaseObjectTool {
-                    constructor() {
-                        super({
-                            id: TileSpriteSizeTool.ID,
-                            command: ui.editor.commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
-                        }, sceneobjects.TileSpriteComponent.width, sceneobjects.TileSpriteComponent.height);
-                        this.addItems(new sceneobjects.TileSpriteSizeItem(1, 0.5), new sceneobjects.TileSpriteSizeItem(1, 1), new sceneobjects.TileSpriteSizeItem(0.5, 1));
-                    }
-                }
-                TileSpriteSizeTool.ID = "phasereditor2d.scene.ui.sceneobjects.TileSpriteResizeTool";
-                sceneobjects.TileSpriteSizeTool = TileSpriteSizeTool;
+                sceneobjects.TileSpriteSizeToolItem = TileSpriteSizeToolItem;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -7484,7 +7496,7 @@ var phasereditor2d;
                             const { x, y } = sprite.getData("TranslateTool.initPosition");
                             const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
                             const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
-                            const { x: x2, y: y2 } = args.editor.snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
+                            const { x: x2, y: y2 } = args.editor.getScene().snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
                             sprite.setPosition(x2, y2);
                         }
                         args.editor.dispatchSelectionChanged();

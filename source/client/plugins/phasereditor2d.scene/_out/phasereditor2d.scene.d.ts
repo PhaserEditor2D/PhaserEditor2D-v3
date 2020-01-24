@@ -375,6 +375,10 @@ declare namespace phasereditor2d.scene.ui {
         visit(visitor: (obj: sceneobjects.ISceneObject) => void): void;
         makeNewName(baseName: string): string;
         buildObjectIdMap(): Map<string, sceneobjects.ISceneObject>;
+        snapPoint(x: number, y: number): {
+            x: number;
+            y: number;
+        };
         getByEditorId(id: string): any;
         static findByEditorId(list: sceneobjects.ISceneObject[], id: string): any;
         getCamera(): Phaser.Cameras.Scene2D.Camera;
@@ -676,10 +680,6 @@ declare namespace phasereditor2d.scene.ui.editor {
         refreshOutline(): void;
         private onGameBoot;
         repaint(): void;
-        snapPoint(x: number, y: number): {
-            x: number;
-            y: number;
-        };
     }
     export {};
 }
@@ -1676,7 +1676,33 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class TileSpriteSizeItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+    class TileSpriteSizeOperation extends editor.tools.SceneToolOperation<{
+        x: number;
+        y: number;
+    }> {
+        getInitialValue(obj: any): {
+            x: number;
+            y: number;
+        };
+        getFinalValue(obj: any): {
+            x: number;
+            y: number;
+        };
+        setValue(obj: any, value: {
+            x: number;
+            y: number;
+        }): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TileSpriteSizeTool extends BaseObjectTool {
+        static ID: string;
+        constructor();
+        canEdit(obj: unknown): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TileSpriteSizeToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
         private _x;
         private _y;
         private _dragging;
@@ -1688,18 +1714,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         render(args: editor.tools.ISceneToolRenderArgs): void;
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
-        static getInitialScale(obj: any): {
+        static getInitialSize(obj: any): {
             x: number;
             y: number;
         };
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class TileSpriteSizeTool extends BaseObjectTool {
-        static ID: string;
-        constructor();
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

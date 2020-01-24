@@ -695,21 +695,5 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._overlayLayer.render();
         }
-
-        snapPoint(x: number, y: number): { x: number, y: number } {
-
-            const settings = this._scene.getSettings();
-
-            if (settings.snapEnabled) {
-
-                return {
-                    x: Math.round(x / settings.snapWidth) * settings.snapWidth,
-                    y: Math.round(y / settings.snapHeight) * settings.snapHeight
-                };
-            }
-
-            return { x, y };
-        }
     }
-
 }

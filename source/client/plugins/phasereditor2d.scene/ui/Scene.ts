@@ -117,6 +117,19 @@ namespace phasereditor2d.scene.ui {
             return map;
         }
 
+        snapPoint(x: number, y: number): { x: number, y: number } {
+
+            if (this._settings.snapEnabled) {
+
+                return {
+                    x: Math.round(x / this._settings.snapWidth) * this._settings.snapWidth,
+                    y: Math.round(y / this._settings.snapHeight) * this._settings.snapHeight
+                };
+            }
+
+            return { x, y };
+        }
+
         getByEditorId(id: string) {
 
             const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);

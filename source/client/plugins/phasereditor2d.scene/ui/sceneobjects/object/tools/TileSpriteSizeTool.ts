@@ -11,10 +11,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }, TileSpriteComponent.width, TileSpriteComponent.height);
 
             this.addItems(
-                new TileSpriteSizeItem(1, 0.5),
-                new TileSpriteSizeItem(1, 1),
-                new TileSpriteSizeItem(0.5, 1),
+                new TileSpriteSizeToolItem(1, 0.5),
+                new TileSpriteSizeToolItem(1, 1),
+                new TileSpriteSizeToolItem(0.5, 1),
             );
+        }
+
+        canEdit(obj: unknown) {
+
+            return obj instanceof TileSprite;
         }
     }
 }

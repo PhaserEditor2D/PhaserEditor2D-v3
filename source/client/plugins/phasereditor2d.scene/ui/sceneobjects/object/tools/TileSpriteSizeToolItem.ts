@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TileSpriteSizeItem
+    export class TileSpriteSizeToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
         private _x: IScaleAxis;
@@ -60,34 +60,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const point = this.getPoint(args);
 
-            // for (const obj of args.objects) {
+            const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
 
-            //     const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+            for (const obj of args.objects) {
 
-            //     const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
+                const sprite = obj as unknown as TileSprite;
 
-            //     const initLocalPos = new Phaser.Math.Vector2();
+                const initLocalPos = new Phaser.Math.Vector2();
+                sprite.getWorldTransformMatrix(worldTx);
+                worldTx.applyInverse(point.x, point.y, initLocalPos);
 
-            //     sprite.getWorldTransformMatrix(worldTx);
-
-            //     worldTx.applyInverse(point.x, point.y, initLocalPos);
-
-            //     sprite.setData("ScaleToolItem", {
-            //         initScaleX: sprite.scaleX,
-            //         initScaleY: sprite.scaleY,
-            //         initWidth: sprite.width,
-            //         initHeight: sprite.height,
-            //         initLocalPos: initLocalPos,
-            //         initWorldTx: worldTx
-            //     });
-            // }
+                sprite.setData("TileSizeTool", {
+                    initWidth: sprite.width,
+                    initHeight: sprite.height,
+                    initLocalPos: initLocalPos
+                });
+            }
         }
 
-        static getInitialScale(obj: any): { x: number, y: number } {
+        static getInitialSize(obj: any): { x: number, y: number } {
 
-            const data = obj.getData("ScaleToolItem");
+            const data = obj.getData("TileSizeTool");
 
-            return { x: data.initScaleX, y: data.initScaleY };
+            return { x: data.initWidth, y: data.initHeight };
         }
 
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
@@ -96,58 +91,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
+            const camera = args.camera;
+
+            const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
+
             for (const obj of args.objects) {
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
-
-                const data = sprite.data.get("ScaleToolItem");
-
+                const sprite = obj as TileSprite;
+                const data = sprite.data.get("TileSizeTool");
                 const initLocalPos: Phaser.Math.Vector2 = data.initLocalPos;
 
                 const localPos = new Phaser.Math.Vector2();
-
-                const worldTx = data.initWorldTx;
-
+                sprite.getWorldTransformMatrix(worldTx);
                 worldTx.applyInverse(args.x, args.y, localPos);
 
-                let flipX = sprite.flipX ? -1 : 1;
-                let flipY = sprite.flipY ? -1 : 1;
+                const flipX = sprite.flipX ? -1 : 1;
+                const flipY = sprite.flipY ? -1 : 1;
 
-                if (sprite instanceof Phaser.GameObjects.TileSprite) {
-                    flipX = 1;
-                    flipY = 1;
-                }
+                const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
+                const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
 
-                const dx = (localPos.x - initLocalPos.x) * flipX / args.camera.zoom;
-                const dy = (localPos.y - initLocalPos.y) * flipY / args.camera.zoom;
-
-                let width = data.initWidth - sprite.displayOriginX;
-                let height = data.initHeight - sprite.displayOriginY;
-
-                if (width === 0) {
-                    width = data.initWidth;
-                }
-
-                if (height === 0) {
-                    height = data.initHeight;
-                }
-
-                const scaleDX = dx / width * data.initScaleX;
-                const scaleDY = dy / height * data.initScaleY;
-
-                const newScaleX = data.initScaleX + scaleDX;
-                const newScaleY = data.initScaleY + scaleDY;
+                const { x: width, y: height } = args.editor.getScene().snapPoint(
+                    data.initWidth + dx,
+                    data.initHeight + dy);
 
                 const changeAll = this._x === 1 && this._y === 1;
                 const changeX = this._x === 1 && this._y === 0.5 || changeAll;
                 const changeY = this._x === 0.5 && this._y === 1 || changeAll;
 
                 if (changeX) {
-                    sprite.scaleX = newScaleX;
+                    sprite.setSize(width, sprite.height);
                 }
 
                 if (changeY) {
-                    sprite.scaleY = newScaleY;
+                    sprite.setSize(sprite.width, height);
                 }
 
                 args.editor.dispatchSelectionChanged();
@@ -158,7 +135,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._dragging) {
 
-                args.editor.getUndoManager().add(new ScaleOperation(args));
+                args.editor.getUndoManager().add(new TileSpriteSizeOperation(args));
 
                 this._dragging = false;
             }
