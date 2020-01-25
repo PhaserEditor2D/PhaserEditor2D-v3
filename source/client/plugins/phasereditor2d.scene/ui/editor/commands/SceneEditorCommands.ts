@@ -467,7 +467,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     },
                 });
             }
-
         }
     }
 }

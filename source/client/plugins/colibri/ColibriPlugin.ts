@@ -33,7 +33,7 @@ namespace colibri {
 
             reg.addExtension(
                 new colibri.ui.ide.commands.CommandExtension(
-                    ui.ide.actions.IDECommands.registerCommands
+                    ui.ide.actions.ColibriCommands.registerCommands
                 )
             );
 

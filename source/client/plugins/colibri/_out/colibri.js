@@ -376,6 +376,7 @@ var colibri;
             ide.ICON_FOLDER = "folder";
             ide.ICON_PLUS = "plus";
             ide.ICON_CHECKED = "checked";
+            ide.ICON_KEYMAP = "keymap";
             class Workbench extends EventTarget {
                 constructor() {
                     super();
@@ -501,6 +502,7 @@ var colibri;
                     await this.getWorkbenchIcon(ide.ICON_FOLDER).preload();
                     await this.getWorkbenchIcon(ide.ICON_PLUS).preload();
                     await this.getWorkbenchIcon(ide.ICON_CHECKED).preload();
+                    await this.getWorkbenchIcon(ide.ICON_KEYMAP).preload();
                     const extensions = colibri.Platform
                         .getExtensions(ide.IconLoaderExtension.POINT_ID);
                     for (const extension of extensions) {
@@ -754,7 +756,7 @@ var colibri;
             // themes
             reg.addExtension(new colibri.ui.ide.themes.ThemeExtension(colibri.ui.controls.Controls.LIGHT_THEME), new colibri.ui.ide.themes.ThemeExtension(colibri.ui.controls.Controls.DARK_THEME));
             // keys
-            reg.addExtension(new colibri.ui.ide.commands.CommandExtension(colibri.ui.ide.actions.IDECommands.registerCommands));
+            reg.addExtension(new colibri.ui.ide.commands.CommandExtension(colibri.ui.ide.actions.ColibriCommands.registerCommands));
             // editor inputs
             reg.addExtension(new colibri.ui.ide.FileEditorInputExtension());
         }
@@ -3540,6 +3542,91 @@ var colibri;
         (function (controls) {
             var dialogs;
             (function (dialogs) {
+                class ViewerDialog extends dialogs.Dialog {
+                    constructor(viewer) {
+                        super("ViewerDialog");
+                        this._viewer = viewer;
+                    }
+                    createDialogArea() {
+                        this._filteredViewer = new controls.viewers.FilteredViewer(this._viewer, "DialogClientArea");
+                        this.add(this._filteredViewer);
+                        this._filteredViewer.getFilterControl().getFilterElement().focus();
+                    }
+                    getViewer() {
+                        return this._viewer;
+                    }
+                    goFront() {
+                        this.resize();
+                        if (this._viewer) {
+                            this._viewer.repaint();
+                        }
+                    }
+                    enableButtonOnlyWhenOneElementIsSelected(btn) {
+                        this.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                            btn.disabled = this.getViewer().getSelection().length !== 1;
+                        });
+                    }
+                    addOpenButton(text, callback) {
+                        const callback2 = () => {
+                            callback(this.getViewer().getSelection());
+                            this.close();
+                        };
+                        this.getViewer().addEventListener(controls.viewers.EVENT_OPEN_ITEM, callback2);
+                        return this.addButton(text, callback2);
+                    }
+                }
+                dialogs.ViewerDialog = ViewerDialog;
+            })(dialogs = controls.dialogs || (controls.dialogs = {}));
+        })(controls = ui.controls || (ui.controls = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+/// <reference path="./ViewerDialog.ts" />
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var controls;
+        (function (controls) {
+            var dialogs;
+            (function (dialogs) {
+                class CommandDialog extends controls.dialogs.ViewerDialog {
+                    constructor() {
+                        super(new controls.viewers.TreeViewer());
+                    }
+                    create() {
+                        const manager = colibri.Platform.getWorkbench().getCommandManager();
+                        const viewer = this.getViewer();
+                        viewer.setLabelProvider(new controls.viewers.LabelProvider(obj => {
+                            const cmd = obj;
+                            const keys = manager.getCommandKeyString(cmd.getId());
+                            if (keys) {
+                                return cmd.getName() + " (" + keys + ")";
+                            }
+                            return cmd.getName();
+                        }));
+                        viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(args => new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_KEYMAP))));
+                        viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        viewer.setInput(manager.getActiveCommands());
+                        super.create();
+                        this.setTitle("Command Palette");
+                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Execute", sel => {
+                            manager.executeCommand(sel[0].getId());
+                        }));
+                    }
+                }
+                dialogs.CommandDialog = CommandDialog;
+            })(dialogs = controls.dialogs || (controls.dialogs = {}));
+        })(controls = ui.controls || (ui.controls = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var controls;
+        (function (controls) {
+            var dialogs;
+            (function (dialogs) {
                 class InputDialog extends dialogs.Dialog {
                     constructor() {
                         super("InputDialog");
@@ -3658,52 +3745,6 @@ var colibri;
                     }
                 }
                 dialogs.ProgressDialogMonitor = ProgressDialogMonitor;
-            })(dialogs = controls.dialogs || (controls.dialogs = {}));
-        })(controls = ui.controls || (ui.controls = {}));
-    })(ui = colibri.ui || (colibri.ui = {}));
-})(colibri || (colibri = {}));
-var colibri;
-(function (colibri) {
-    var ui;
-    (function (ui) {
-        var controls;
-        (function (controls) {
-            var dialogs;
-            (function (dialogs) {
-                class ViewerDialog extends dialogs.Dialog {
-                    constructor(viewer) {
-                        super("ViewerDialog");
-                        this._viewer = viewer;
-                    }
-                    createDialogArea() {
-                        this._filteredViewer = new controls.viewers.FilteredViewer(this._viewer, "DialogClientArea");
-                        this.add(this._filteredViewer);
-                        this._filteredViewer.getFilterControl().getFilterElement().focus();
-                    }
-                    getViewer() {
-                        return this._viewer;
-                    }
-                    goFront() {
-                        this.resize();
-                        if (this._viewer) {
-                            this._viewer.repaint();
-                        }
-                    }
-                    enableButtonOnlyWhenOneElementIsSelected(btn) {
-                        this.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
-                            btn.disabled = this.getViewer().getSelection().length !== 1;
-                        });
-                    }
-                    addOpenButton(text, callback) {
-                        const callback2 = () => {
-                            callback(this.getViewer().getSelection());
-                            this.close();
-                        };
-                        this.getViewer().addEventListener(controls.viewers.EVENT_OPEN_ITEM, callback2);
-                        return this.addButton(text, callback2);
-                    }
-                }
-                dialogs.ViewerDialog = ViewerDialog;
             })(dialogs = controls.dialogs || (controls.dialogs = {}));
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -7052,6 +7093,7 @@ var colibri;
                 actions.CMD_SELECT_ALL = "colibri.ui.ide.actions.SelectAll";
                 actions.CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
                 actions.CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
+                actions.CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
                 function isViewerScope(args) {
                     if (args.activeElement) {
                         const control = ui.controls.Control.getControlOf(args.activeElement);
@@ -7061,12 +7103,32 @@ var colibri;
                     }
                     return false;
                 }
-                class IDECommands {
+                class ColibriCommands {
                     static registerCommands(manager) {
-                        IDECommands.initEditors(manager);
-                        IDECommands.initEdit(manager);
-                        IDECommands.initUndo(manager);
-                        IDECommands.initViewer(manager);
+                        ColibriCommands.initEditors(manager);
+                        ColibriCommands.initEdit(manager);
+                        ColibriCommands.initUndo(manager);
+                        ColibriCommands.initViewer(manager);
+                        ColibriCommands.initPalette(manager);
+                    }
+                    static initPalette(manager) {
+                        manager.add({
+                            command: {
+                                id: actions.CMD_SHOW_COMMAND_PALETTE,
+                                name: "Command Palette",
+                                tooltip: "Show a dialog with the list of commands active in that context."
+                            },
+                            handler: {
+                                executeFunc: args => {
+                                    const dlg = new ui.controls.dialogs.CommandDialog();
+                                    dlg.create();
+                                }
+                            },
+                            keys: {
+                                control: true,
+                                key: "K"
+                            }
+                        });
                     }
                     static initEditors(manager) {
                         // editor tabs size
@@ -7253,7 +7315,7 @@ var colibri;
                         }));
                     }
                 }
-                actions.IDECommands = IDECommands;
+                actions.ColibriCommands = ColibriCommands;
             })(actions = ide.actions || (ide.actions = {}));
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -7486,6 +7548,19 @@ var colibri;
                             activeElement = activeMenu.getElement();
                         }
                         return new commands.HandlerArgs(wb.getActivePart(), wb.getActiveEditor(), activeElement, activeMenu, wb.getActiveWindow(), wb.getActiveDialog());
+                    }
+                    getCommands() {
+                        return this._commands;
+                    }
+                    getActiveCommands() {
+                        return this._commands.filter(command => {
+                            const args = this.makeArgs();
+                            const handlers = this._commandHandlerMap.get(command);
+                            for (const handler of handlers) {
+                                return handler.test(args);
+                            }
+                            return false;
+                        });
                     }
                     getCommand(id) {
                         const command = this._commandIdMap.get(id);

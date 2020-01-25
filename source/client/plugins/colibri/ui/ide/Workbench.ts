@@ -13,6 +13,7 @@ namespace colibri.ui.ide {
     export const ICON_FOLDER = "folder";
     export const ICON_PLUS = "plus";
     export const ICON_CHECKED = "checked";
+    export const ICON_KEYMAP = "keymap";
 
     export class Workbench extends EventTarget {
 
@@ -237,6 +238,7 @@ namespace colibri.ui.ide {
             await this.getWorkbenchIcon(ICON_FOLDER).preload();
             await this.getWorkbenchIcon(ICON_PLUS).preload();
             await this.getWorkbenchIcon(ICON_CHECKED).preload();
+            await this.getWorkbenchIcon(ICON_KEYMAP).preload();
 
             const extensions = Platform
                 .getExtensions<IconLoaderExtension>(IconLoaderExtension.POINT_ID);

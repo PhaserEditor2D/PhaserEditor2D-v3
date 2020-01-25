@@ -18,6 +18,7 @@ namespace colibri.ui.ide.actions {
     export const CMD_SELECT_ALL = "colibri.ui.ide.actions.SelectAll";
     export const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
     export const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
+    export const CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
 
     function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -33,17 +34,41 @@ namespace colibri.ui.ide.actions {
         return false;
     }
 
-    export class IDECommands {
+    export class ColibriCommands {
 
         static registerCommands(manager: commands.CommandManager) {
 
-            IDECommands.initEditors(manager);
+            ColibriCommands.initEditors(manager);
 
-            IDECommands.initEdit(manager);
+            ColibriCommands.initEdit(manager);
 
-            IDECommands.initUndo(manager);
+            ColibriCommands.initUndo(manager);
 
-            IDECommands.initViewer(manager);
+            ColibriCommands.initViewer(manager);
+
+            ColibriCommands.initPalette(manager);
+        }
+
+        private static initPalette(manager: commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_SHOW_COMMAND_PALETTE,
+                    name: "Command Palette",
+                    tooltip: "Show a dialog with the list of commands active in that context."
+                },
+                handler: {
+                    executeFunc: args => {
+
+                        const dlg = new controls.dialogs.CommandDialog();
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    control: true,
+                    key: "K"
+                }
+            });
         }
 
         private static initEditors(manager: commands.CommandManager) {

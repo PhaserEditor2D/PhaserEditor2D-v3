@@ -430,6 +430,7 @@ var phasereditor2d;
                         menu.addCommand(actions.CMD_CHANGE_THEME);
                         menu.addExtension(ui.DesignWindow.MENU_MAIN);
                         menu.addSeparator();
+                        menu.addCommand(colibri.ui.ide.actions.CMD_SHOW_COMMAND_PALETTE);
                         menu.add(new controls.Action({
                             text: "Help",
                             callback: () => controls.Controls.openUrlInNewPage("https://phasereditor2d.com/docs/v3")

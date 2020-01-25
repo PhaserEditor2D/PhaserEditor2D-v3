@@ -124,7 +124,33 @@ namespace colibri.ui.ide.commands {
             );
         }
 
+        getCommands() {
+
+            return this._commands;
+        }
+
+        getActiveCommands() {
+
+            return this._commands.filter(
+
+                command => {
+
+                    const args = this.makeArgs();
+
+                    const handlers = this._commandHandlerMap.get(command);
+
+                    for (const handler of handlers) {
+
+                        return handler.test(args);
+                    }
+
+                    return false;
+                }
+            );
+        }
+
         getCommand(id: string) {
+
             const command = this._commandIdMap.get(id);
 
             if (!command) {

@@ -112,6 +112,7 @@ declare namespace colibri.ui.ide {
     const ICON_FOLDER = "folder";
     const ICON_PLUS = "plus";
     const ICON_CHECKED = "checked";
+    const ICON_KEYMAP = "keymap";
     class Workbench extends EventTarget {
         private static _workbench;
         static getWorkbench(): Workbench;
@@ -866,6 +867,24 @@ declare namespace colibri.ui.controls.dialogs {
     }
 }
 declare namespace colibri.ui.controls.dialogs {
+    class ViewerDialog extends Dialog {
+        private _viewer;
+        private _filteredViewer;
+        constructor(viewer: viewers.TreeViewer);
+        createDialogArea(): void;
+        getViewer(): viewers.TreeViewer;
+        goFront(): void;
+        enableButtonOnlyWhenOneElementIsSelected(btn: HTMLButtonElement): void;
+        addOpenButton(text: string, callback: (selection: any[]) => void): HTMLButtonElement;
+    }
+}
+declare namespace colibri.ui.controls.dialogs {
+    class CommandDialog extends controls.dialogs.ViewerDialog {
+        constructor();
+        create(): void;
+    }
+}
+declare namespace colibri.ui.controls.dialogs {
     type InputValidator = (input: string) => boolean;
     type ResultCallback = (value: string) => void;
     class InputDialog extends Dialog {
@@ -902,18 +921,6 @@ declare namespace colibri.ui.controls.dialogs {
         private updateDialog;
         addTotal(total: number): void;
         step(): void;
-    }
-}
-declare namespace colibri.ui.controls.dialogs {
-    class ViewerDialog extends Dialog {
-        private _viewer;
-        private _filteredViewer;
-        constructor(viewer: viewers.TreeViewer);
-        createDialogArea(): void;
-        getViewer(): viewers.TreeViewer;
-        goFront(): void;
-        enableButtonOnlyWhenOneElementIsSelected(btn: HTMLButtonElement): void;
-        addOpenButton(text: string, callback: (selection: any[]) => void): HTMLButtonElement;
     }
 }
 declare namespace colibri.ui.controls.properties {
@@ -1715,8 +1722,10 @@ declare namespace colibri.ui.ide.actions {
     const CMD_SELECT_ALL = "colibri.ui.ide.actions.SelectAll";
     const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
     const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
-    class IDECommands {
+    const CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
+    class ColibriCommands {
         static registerCommands(manager: commands.CommandManager): void;
+        private static initPalette;
         private static initEditors;
         private static initViewer;
         private static initUndo;
@@ -1806,6 +1815,8 @@ declare namespace colibri.ui.ide.commands {
             icon?: controls.IImage;
         }): void;
         private makeArgs;
+        getCommands(): Command[];
+        getActiveCommands(): Command[];
         getCommand(id: string): Command;
         getCommandKeyString(commandId: string): string;
         executeCommand(commandId: string, checkContext?: boolean): void;
