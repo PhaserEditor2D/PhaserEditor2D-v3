@@ -715,6 +715,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
+        private static registerOriginCommands;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.outline {

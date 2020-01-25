@@ -209,6 +209,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 }
             });
 
+            // origin shortcuts
+
+            SceneEditorCommands.registerOriginCommands(manager);
+
             // add object dialog
 
             manager.add({
@@ -395,6 +399,75 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "W"
                 }
             });
+        }
+
+        private static registerOriginCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            const names = [
+                "Top/Left",
+                "Top/Center",
+                "Top/Right",
+                "Middle/Left",
+                "Middle/Center",
+                "Middle/Right",
+                "Bottom/Left",
+                "Bottom/Center",
+                "Bottom/Right"
+            ];
+
+            const values = [
+                [0, 1],
+                [0.5, 1],
+                [1, 1],
+                [0, 0.5],
+                [0.5, 0.5],
+                [1, 0.5],
+                [0, 0],
+                [0.5, 0],
+                [1, 0],
+            ];
+
+            const originProperty: sceneobjects.IProperty<sceneobjects.IOriginLikeObject> = {
+                name: "origin",
+                defValue: undefined,
+                getValue: obj => ({ x: obj.originX, y: obj.originY }),
+                setValue: (obj, value) => obj.setOrigin(value.x, value.y)
+            };
+
+            for (let i = 0; i < 9; i++) {
+
+                manager.add({
+                    command: {
+                        id: "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + (i + 1) + "_ToObject",
+                        name: "Set Origin To " + names[i],
+                        tooltip: `Set the origin of the object to (${values[i][0]},${values[i][1]}`
+                    },
+                    keys: {
+                        key: (i + 1).toString(),
+                        shift: true,
+                    },
+                    handler: {
+                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                        executeFunc: args => {
+
+                            const objects = args.activeEditor.getSelection()
+                                .filter(obj => sceneobjects.EditorSupport
+                                    .hasObjectComponent(obj, sceneobjects.TransformComponent));
+
+                            args.activeEditor.getUndoManager().add(
+                                new sceneobjects.SimpleOperation(
+                                    args.activeEditor as SceneEditor,
+                                    objects,
+                                    originProperty,
+                                    {
+                                        x: values[i][0],
+                                        y: values[i][1]
+                                    }));
+                        }
+                    },
+                });
+            }
+
         }
     }
 }

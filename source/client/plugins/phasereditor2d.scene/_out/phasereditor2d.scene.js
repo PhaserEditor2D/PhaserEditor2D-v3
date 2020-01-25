@@ -3770,6 +3770,8 @@ var phasereditor2d;
                                     key: "Z"
                                 }
                             });
+                            // origin shortcuts
+                            SceneEditorCommands.registerOriginCommands(manager);
                             // add object dialog
                             manager.add({
                                 command: {
@@ -3914,6 +3916,61 @@ var phasereditor2d;
                                     key: "W"
                                 }
                             });
+                        }
+                        static registerOriginCommands(manager) {
+                            const names = [
+                                "Top/Left",
+                                "Top/Center",
+                                "Top/Right",
+                                "Middle/Left",
+                                "Middle/Center",
+                                "Middle/Right",
+                                "Bottom/Left",
+                                "Bottom/Center",
+                                "Bottom/Right"
+                            ];
+                            const values = [
+                                [0, 1],
+                                [0.5, 1],
+                                [1, 1],
+                                [0, 0.5],
+                                [0.5, 0.5],
+                                [1, 0.5],
+                                [0, 0],
+                                [0.5, 0],
+                                [1, 0],
+                            ];
+                            const originProperty = {
+                                name: "origin",
+                                defValue: undefined,
+                                getValue: obj => ({ x: obj.originX, y: obj.originY }),
+                                setValue: (obj, value) => obj.setOrigin(value.x, value.y)
+                            };
+                            for (let i = 0; i < 9; i++) {
+                                manager.add({
+                                    command: {
+                                        id: "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + (i + 1) + "_ToObject",
+                                        name: "Set Origin To " + names[i],
+                                        tooltip: `Set the origin of the object to (${values[i][0]},${values[i][1]}`
+                                    },
+                                    keys: {
+                                        key: (i + 1).toString(),
+                                        shift: true,
+                                    },
+                                    handler: {
+                                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                                        executeFunc: args => {
+                                            const objects = args.activeEditor.getSelection()
+                                                .filter(obj => ui.sceneobjects.EditorSupport
+                                                .hasObjectComponent(obj, ui.sceneobjects.TransformComponent));
+                                            args.activeEditor.getUndoManager().add(new ui.sceneobjects.SimpleOperation(args.activeEditor, objects, originProperty, {
+                                                x: values[i][0],
+                                                y: values[i][1]
+                                            }));
+                                        }
+                                    },
+                                });
+                            }
                         }
                     }
                     commands.SceneEditorCommands = SceneEditorCommands;
