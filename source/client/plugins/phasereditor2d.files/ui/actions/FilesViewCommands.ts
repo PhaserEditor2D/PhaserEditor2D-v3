@@ -2,7 +2,8 @@ namespace phasereditor2d.files.ui.actions {
 
     import controls = colibri.ui.controls;
 
-    export const CMD_NEW_FILE = "phasereditor2d.files.ui.actions.newfile";
+    export const CMD_NEW_FILE = "phasereditor2d.files.ui.actions.newFile";
+    export const CAT_NEW_FILE = "phasereditor2d.fines.ui.actions.NewFileCategory";
 
     function isFilesViewScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof views.FilesView;
@@ -12,12 +13,18 @@ namespace phasereditor2d.files.ui.actions {
 
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
+            manager.addCategory({
+                id: CAT_NEW_FILE,
+                name: "New File"
+            });
+
             // new file
 
             manager.addCommandHelper({
                 id: CMD_NEW_FILE,
                 name: "New File",
-                tooltip: "Create new content."
+                tooltip: "Create new content.",
+                category: CAT_NEW_FILE
             });
 
             manager.addHandlerHelper(CMD_NEW_FILE,

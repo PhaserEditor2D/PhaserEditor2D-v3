@@ -3458,8 +3458,8 @@ var colibri;
                         });
                     }
                     setSize(width, height) {
-                        this._width = width;
-                        this._height = height;
+                        this._width = Math.floor(width);
+                        this._height = Math.floor(height);
                     }
                     getSize() {
                         return { width: this._width, height: this._height };
@@ -3592,17 +3592,21 @@ var colibri;
                 class CommandDialog extends controls.dialogs.ViewerDialog {
                     constructor() {
                         super(new controls.viewers.TreeViewer());
+                        const size = this.getSize();
+                        this.setSize(size.width, size.height * 1.5);
                     }
                     create() {
                         const manager = colibri.Platform.getWorkbench().getCommandManager();
                         const viewer = this.getViewer();
                         viewer.setLabelProvider(new controls.viewers.LabelProvider(obj => {
                             const cmd = obj;
+                            const label = manager.getCategory(cmd.getCategoryId()).name
+                                + ": " + cmd.getName();
                             const keys = manager.getCommandKeyString(cmd.getId());
                             if (keys) {
-                                return cmd.getName() + " (" + keys + ")";
+                                return label + " (" + keys + ")";
                             }
-                            return cmd.getName();
+                            return label;
                         }));
                         viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(args => new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_KEYMAP))));
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
@@ -3610,8 +3614,13 @@ var colibri;
                         super.create();
                         this.setTitle("Command Palette");
                         this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Execute", sel => {
-                            manager.executeCommand(sel[0].getId());
+                            manager.executeCommand(sel[0].getId(), true);
                         }));
+                        this.addCancelButton();
+                        // this.addButton("Show All", () => {
+                        //     viewer.setInput(manager.getCommands());
+                        //     viewer.repaint();
+                        // });
                     }
                 }
                 dialogs.CommandDialog = CommandDialog;
@@ -7094,6 +7103,8 @@ var colibri;
                 actions.CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
                 actions.CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
                 actions.CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
+                actions.CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
+                actions.CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
                 function isViewerScope(args) {
                     if (args.activeElement) {
                         const control = ui.controls.Control.getControlOf(args.activeElement);
@@ -7105,6 +7116,14 @@ var colibri;
                 }
                 class ColibriCommands {
                     static registerCommands(manager) {
+                        manager.addCategory({
+                            id: actions.CAT_GENERAL,
+                            name: "General"
+                        });
+                        manager.addCategory({
+                            id: actions.CAT_EDIT,
+                            name: "Edit"
+                        });
                         ColibriCommands.initEditors(manager);
                         ColibriCommands.initEdit(manager);
                         ColibriCommands.initUndo(manager);
@@ -7116,7 +7135,8 @@ var colibri;
                             command: {
                                 id: actions.CMD_SHOW_COMMAND_PALETTE,
                                 name: "Command Palette",
-                                tooltip: "Show a dialog with the list of commands active in that context."
+                                tooltip: "Show a dialog with the list of commands active in that context.",
+                                category: actions.CAT_GENERAL
                             },
                             handler: {
                                 executeFunc: args => {
@@ -7135,12 +7155,14 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_EDITOR_TABS_SIZE_DOWN,
                             name: "Decrement Tab Size",
-                            tooltip: "Make bigger the editor tabs."
+                            tooltip: "Make bigger the editor tabs.",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addCommandHelper({
                             id: actions.CMD_EDITOR_TABS_SIZE_UP,
                             name: "Increment Tab Size",
-                            tooltip: "Make smaller the editor tabs."
+                            tooltip: "Make smaller the editor tabs.",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addHandlerHelper(actions.CMD_EDITOR_TABS_SIZE_DOWN, e => true, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(-5));
                         manager.addHandlerHelper(actions.CMD_EDITOR_TABS_SIZE_UP, e => true, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().incrementTabIconSize(5));
@@ -7157,6 +7179,7 @@ var colibri;
                             id: actions.CMD_EDITOR_CLOSE,
                             name: "Close Editor",
                             tooltip: "Close active editor.",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addHandlerHelper(actions.CMD_EDITOR_CLOSE, args => typeof args.activeEditor === "object", args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().closeTab(args.activeEditor));
                         manager.addKeyBinding(actions.CMD_EDITOR_CLOSE, new KeyMatcher({
@@ -7168,6 +7191,7 @@ var colibri;
                             id: actions.CMD_EDITOR_CLOSE_ALL,
                             name: "Close All Editors",
                             tooltip: "Close all editors.",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addHandlerHelper(actions.CMD_EDITOR_CLOSE_ALL, args => true, args => colibri.Platform.getWorkbench().getActiveWindow().getEditorArea().closeAllEditors());
                         manager.addKeyBinding(actions.CMD_EDITOR_CLOSE_ALL, new KeyMatcher({
@@ -7181,7 +7205,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_COLLAPSE_ALL,
                             name: "Collapse All",
-                            tooltip: "Collapse all elements"
+                            tooltip: "Collapse all elements",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addHandlerHelper(actions.CMD_COLLAPSE_ALL, isViewerScope, args => {
                             const viewer = ui.controls.Control.getControlOf(args.activeElement);
@@ -7195,7 +7220,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_SELECT_ALL,
                             name: "Select All",
-                            tooltip: "Select all elements"
+                            tooltip: "Select all elements",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addHandlerHelper(actions.CMD_SELECT_ALL, isViewerScope, args => {
                             const viewer = ui.controls.Control.getControlOf(args.activeElement);
@@ -7210,7 +7236,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_EXPAND_COLLAPSE_BRANCH,
                             name: "Expand/Collapse the tree branch",
-                            tooltip: "Expand or collapse a branch of the select element"
+                            tooltip: "Expand or collapse a branch of the select element",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addHandlerHelper(actions.CMD_EXPAND_COLLAPSE_BRANCH, args => args.activeElement !== null
                             && ui.controls.Control.getControlOf(args.activeElement) instanceof ui.controls.viewers.Viewer, args => {
@@ -7229,7 +7256,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_ESCAPE,
                             name: "Escape",
-                            tooltip: "Escape"
+                            tooltip: "Escape",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addKeyBinding(actions.CMD_ESCAPE, new KeyMatcher({
                             key: "Escape"
@@ -7247,7 +7275,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_UNDO,
                             name: "Undo",
-                            tooltip: "Undo operation"
+                            tooltip: "Undo operation",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addHandlerHelper(actions.CMD_UNDO, args => args.activePart !== null, args => args.activePart.getUndoManager().undo());
                         manager.addKeyBinding(actions.CMD_UNDO, new KeyMatcher({
@@ -7258,7 +7287,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_REDO,
                             name: "Redo",
-                            tooltip: "Redo operation"
+                            tooltip: "Redo operation",
+                            category: actions.CAT_GENERAL
                         });
                         manager.addHandlerHelper(actions.CMD_REDO, args => args.activePart !== null, args => args.activePart.getUndoManager().redo());
                         manager.addKeyBinding(actions.CMD_REDO, new KeyMatcher({
@@ -7270,7 +7300,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_UPDATE_CURRENT_EDITOR,
                             name: "Update Current Editor",
-                            tooltip: "Refresh the current editor's content."
+                            tooltip: "Refresh the current editor's content.",
+                            category: actions.CAT_EDIT
                         });
                         manager.addKeyBinding(actions.CMD_UPDATE_CURRENT_EDITOR, new KeyMatcher({
                             control: true,
@@ -7283,7 +7314,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_SAVE,
                             name: "Save",
-                            tooltip: "Save"
+                            tooltip: "Save",
+                            category: actions.CAT_EDIT
                         });
                         manager.addHandlerHelper(actions.CMD_SAVE, args => args.activeEditor ? true : false, args => {
                             if (args.activeEditor.isDirty()) {
@@ -7299,7 +7331,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_DELETE,
                             name: "Delete",
-                            tooltip: "Delete"
+                            tooltip: "Delete",
+                            category: actions.CAT_EDIT
                         });
                         manager.addKeyBinding(actions.CMD_DELETE, new KeyMatcher({
                             key: "Delete"
@@ -7308,7 +7341,8 @@ var colibri;
                         manager.addCommandHelper({
                             id: actions.CMD_RENAME,
                             name: "Rename",
-                            tooltip: "Rename"
+                            tooltip: "Rename",
+                            category: actions.CAT_EDIT
                         });
                         manager.addKeyBinding(actions.CMD_RENAME, new KeyMatcher({
                             key: "F2"
@@ -7381,6 +7415,10 @@ var colibri;
                         this._name = config.name;
                         this._tooltip = config.tooltip;
                         this._icon = (_a = config.icon, (_a !== null && _a !== void 0 ? _a : null));
+                        this._categoryId = config.category;
+                    }
+                    getCategoryId() {
+                        return this._categoryId;
                     }
                     getId() {
                         return this._id;
@@ -7487,6 +7525,8 @@ var colibri;
                         this._commandIdMap = new Map();
                         this._commandMatcherMap = new Map();
                         this._commandHandlerMap = new Map();
+                        this._categoryMap = new Map();
+                        this._categories = [];
                         window.addEventListener("keydown", e => { this.onKeyDown(e); });
                     }
                     onKeyDown(event) {
@@ -7526,10 +7566,24 @@ var colibri;
                         for (const handler of handlers) {
                             if (!checkContext || handler.test(args)) {
                                 event.preventDefault();
+                                const dlg = colibri.Platform.getWorkbench().getActiveDialog();
+                                if (dlg instanceof ui.controls.dialogs.CommandDialog) {
+                                    dlg.close();
+                                }
                                 handler.execute(args);
                                 return;
                             }
                         }
+                    }
+                    addCategory(category) {
+                        this._categoryMap.set(category.id, category);
+                        this._categories.push(category);
+                    }
+                    getCategories() {
+                        return this._categories;
+                    }
+                    getCategory(id) {
+                        return this._categoryMap.get(id);
                     }
                     addCommand(cmd) {
                         this._commands.push(cmd);
@@ -7547,20 +7601,23 @@ var colibri;
                         if (activeMenu) {
                             activeElement = activeMenu.getElement();
                         }
-                        return new commands.HandlerArgs(wb.getActivePart(), wb.getActiveEditor(), activeElement, activeMenu, wb.getActiveWindow(), wb.getActiveDialog());
+                        // do not consider the command palette dialog as active dialog,
+                        // because we can execute any command there!
+                        const activeDialog = wb.getActiveDialog() instanceof ui.controls.dialogs.CommandDialog
+                            ? null : wb.getActiveDialog();
+                        return new commands.HandlerArgs(wb.getActivePart(), wb.getActiveEditor(), activeElement, activeMenu, wb.getActiveWindow(), activeDialog);
                     }
                     getCommands() {
-                        return this._commands;
+                        const list = [...this._commands];
+                        list.sort((a, b) => {
+                            return ((a.getCategoryId() || "") + a.getName())
+                                .localeCompare((b.getCategoryId() || "") + b.getName());
+                        });
+                        return list;
+                        return list;
                     }
                     getActiveCommands() {
-                        return this._commands.filter(command => {
-                            const args = this.makeArgs();
-                            const handlers = this._commandHandlerMap.get(command);
-                            for (const handler of handlers) {
-                                return handler.test(args);
-                            }
-                            return false;
-                        });
+                        return this.getCommands().filter(command => this.canRunCommand(command.getId()));
                     }
                     getCommand(id) {
                         const command = this._commandIdMap.get(id);

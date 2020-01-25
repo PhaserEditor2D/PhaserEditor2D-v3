@@ -6,6 +6,8 @@ namespace colibri.ui.ide.commands {
         private _commands: Command[];
         private _commandMatcherMap: Map<Command, KeyMatcher[]>;
         private _commandHandlerMap: Map<Command, CommandHandler[]>;
+        private _categoryMap: Map<string, ICommandCategory>;
+        private _categories: ICommandCategory[];
 
         constructor() {
 
@@ -13,6 +15,8 @@ namespace colibri.ui.ide.commands {
             this._commandIdMap = new Map();
             this._commandMatcherMap = new Map();
             this._commandHandlerMap = new Map();
+            this._categoryMap = new Map();
+            this._categories = [];
 
             window.addEventListener("keydown", e => { this.onKeyDown(e); });
         }
@@ -80,11 +84,33 @@ namespace colibri.ui.ide.commands {
 
                     event.preventDefault();
 
+                    const dlg = colibri.Platform.getWorkbench().getActiveDialog();
+
+                    if (dlg instanceof controls.dialogs.CommandDialog) {
+
+                        dlg.close();
+                    }
+
                     handler.execute(args);
 
                     return;
                 }
             }
+        }
+
+        addCategory(category: ICommandCategory) {
+
+            this._categoryMap.set(category.id, category);
+            this._categories.push(category);
+        }
+
+        getCategories() {
+            return this._categories;
+        }
+
+        getCategory(id: string) {
+
+            return this._categoryMap.get(id);
         }
 
         addCommand(cmd: Command): void {
@@ -98,7 +124,8 @@ namespace colibri.ui.ide.commands {
             id: string,
             name: string,
             tooltip: string,
-            icon?: controls.IImage
+            category: string,
+            icon?: controls.IImage,
         }) {
             this.addCommand(new Command(config));
         }
@@ -114,38 +141,41 @@ namespace colibri.ui.ide.commands {
                 activeElement = activeMenu.getElement();
             }
 
+            // do not consider the command palette dialog as active dialog,
+            // because we can execute any command there!
+            const activeDialog = wb.getActiveDialog() instanceof ui.controls.dialogs.CommandDialog
+                ? null : wb.getActiveDialog();
+
             return new HandlerArgs(
                 wb.getActivePart(),
                 wb.getActiveEditor(),
                 activeElement,
                 activeMenu,
                 wb.getActiveWindow(),
-                wb.getActiveDialog()
+                activeDialog
             );
         }
 
         getCommands() {
 
-            return this._commands;
+            const list = [...this._commands];
+
+            list.sort((a, b) => {
+
+                return ((a.getCategoryId() || "") + a.getName())
+                    .localeCompare((b.getCategoryId() || "") + b.getName());
+            });
+
+            return list;
+
+            return list;
         }
 
         getActiveCommands() {
 
-            return this._commands.filter(
+            return this.getCommands().filter(
 
-                command => {
-
-                    const args = this.makeArgs();
-
-                    const handlers = this._commandHandlerMap.get(command);
-
-                    for (const handler of handlers) {
-
-                        return handler.test(args);
-                    }
-
-                    return false;
-                }
+                command => this.canRunCommand(command.getId())
             );
         }
 

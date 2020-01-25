@@ -1723,6 +1723,8 @@ declare namespace colibri.ui.ide.actions {
     const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
     const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
     const CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
+    const CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
+    const CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
     class ColibriCommands {
         static registerCommands(manager: commands.CommandManager): void;
         private static initPalette;
@@ -1752,13 +1754,16 @@ declare namespace colibri.ui.ide.commands {
         name: string;
         tooltip: string;
         icon?: controls.IImage;
+        category: string;
     }
     class Command {
         private _id;
         private _name;
         private _tooltip;
         private _icon;
+        private _categoryId;
         constructor(config: ICommandConfig);
+        getCategoryId(): string;
         getId(): string;
         getName(): string;
         getTooltip(): string;
@@ -1803,15 +1808,21 @@ declare namespace colibri.ui.ide.commands {
         private _commands;
         private _commandMatcherMap;
         private _commandHandlerMap;
+        private _categoryMap;
+        private _categories;
         constructor();
         private onKeyDown;
         canRunCommand(commandId: string): boolean;
         private executeHandler;
+        addCategory(category: ICommandCategory): void;
+        getCategories(): ICommandCategory[];
+        getCategory(id: string): ICommandCategory;
         addCommand(cmd: Command): void;
         addCommandHelper(config: {
             id: string;
             name: string;
             tooltip: string;
+            category: string;
             icon?: controls.IImage;
         }): void;
         private makeArgs;
@@ -1829,6 +1840,12 @@ declare namespace colibri.ui.ide.commands {
             handler?: IHandlerConfig;
             keys?: IKeyMatcherConfig;
         }, commandId?: string): void;
+    }
+}
+declare namespace colibri.ui.ide.commands {
+    interface ICommandCategory {
+        id: string;
+        name: string;
     }
 }
 declare namespace colibri.ui.ide.properties {

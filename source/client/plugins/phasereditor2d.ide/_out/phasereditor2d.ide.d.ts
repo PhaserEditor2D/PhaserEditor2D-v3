@@ -71,6 +71,7 @@ declare namespace phasereditor2d.ide.ui {
     }
 }
 declare namespace phasereditor2d.ide.ui.actions {
+    const CAT_PROJECT = "phasereditor2d.ide.ui.actions.ProjectCategory";
     const CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
     const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";

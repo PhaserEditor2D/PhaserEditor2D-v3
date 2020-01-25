@@ -19,6 +19,8 @@ namespace colibri.ui.ide.actions {
     export const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
     export const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
     export const CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
+    export const CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
+    export const CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
 
     function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -38,6 +40,16 @@ namespace colibri.ui.ide.actions {
 
         static registerCommands(manager: commands.CommandManager) {
 
+            manager.addCategory({
+                id: CAT_GENERAL,
+                name: "General"
+            });
+
+            manager.addCategory({
+                id: CAT_EDIT,
+                name: "Edit"
+            });
+
             ColibriCommands.initEditors(manager);
 
             ColibriCommands.initEdit(manager);
@@ -55,7 +67,8 @@ namespace colibri.ui.ide.actions {
                 command: {
                     id: CMD_SHOW_COMMAND_PALETTE,
                     name: "Command Palette",
-                    tooltip: "Show a dialog with the list of commands active in that context."
+                    tooltip: "Show a dialog with the list of commands active in that context.",
+                    category: CAT_GENERAL
                 },
                 handler: {
                     executeFunc: args => {
@@ -78,13 +91,15 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_EDITOR_TABS_SIZE_DOWN,
                 name: "Decrement Tab Size",
-                tooltip: "Make bigger the editor tabs."
+                tooltip: "Make bigger the editor tabs.",
+                category: CAT_GENERAL
             });
 
             manager.addCommandHelper({
                 id: CMD_EDITOR_TABS_SIZE_UP,
                 name: "Increment Tab Size",
-                tooltip: "Make smaller the editor tabs."
+                tooltip: "Make smaller the editor tabs.",
+                category: CAT_GENERAL
             });
 
             manager.addHandlerHelper(CMD_EDITOR_TABS_SIZE_DOWN,
@@ -115,6 +130,7 @@ namespace colibri.ui.ide.actions {
                 id: CMD_EDITOR_CLOSE,
                 name: "Close Editor",
                 tooltip: "Close active editor.",
+                category: CAT_GENERAL
             });
 
             manager.addHandlerHelper(CMD_EDITOR_CLOSE,
@@ -132,6 +148,7 @@ namespace colibri.ui.ide.actions {
                 id: CMD_EDITOR_CLOSE_ALL,
                 name: "Close All Editors",
                 tooltip: "Close all editors.",
+                category: CAT_GENERAL
             });
 
             manager.addHandlerHelper(CMD_EDITOR_CLOSE_ALL,
@@ -152,7 +169,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_COLLAPSE_ALL,
                 name: "Collapse All",
-                tooltip: "Collapse all elements"
+                tooltip: "Collapse all elements",
+                category: CAT_GENERAL
             });
 
             manager.addHandlerHelper(CMD_COLLAPSE_ALL,
@@ -173,7 +191,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_SELECT_ALL,
                 name: "Select All",
-                tooltip: "Select all elements"
+                tooltip: "Select all elements",
+                category: CAT_GENERAL
             });
 
             manager.addHandlerHelper(CMD_SELECT_ALL,
@@ -195,7 +214,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_EXPAND_COLLAPSE_BRANCH,
                 name: "Expand/Collapse the tree branch",
-                tooltip: "Expand or collapse a branch of the select element"
+                tooltip: "Expand or collapse a branch of the select element",
+                category: CAT_GENERAL
             });
 
             manager.addHandlerHelper(CMD_EXPAND_COLLAPSE_BRANCH,
@@ -226,7 +246,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_ESCAPE,
                 name: "Escape",
-                tooltip: "Escape"
+                tooltip: "Escape",
+                category: CAT_GENERAL
             });
 
             manager.addKeyBinding(CMD_ESCAPE, new KeyMatcher({
@@ -257,7 +278,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_UNDO,
                 name: "Undo",
-                tooltip: "Undo operation"
+                tooltip: "Undo operation",
+                category: CAT_GENERAL
             });
 
             manager.addHandlerHelper(CMD_UNDO,
@@ -275,7 +297,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_REDO,
                 name: "Redo",
-                tooltip: "Redo operation"
+                tooltip: "Redo operation",
+                category: CAT_GENERAL
             });
 
             manager.addHandlerHelper(CMD_REDO,
@@ -295,7 +318,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_UPDATE_CURRENT_EDITOR,
                 name: "Update Current Editor",
-                tooltip: "Refresh the current editor's content."
+                tooltip: "Refresh the current editor's content.",
+                category: CAT_EDIT
             });
 
             manager.addKeyBinding(CMD_UPDATE_CURRENT_EDITOR, new KeyMatcher({
@@ -312,7 +336,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_SAVE,
                 name: "Save",
-                tooltip: "Save"
+                tooltip: "Save",
+                category: CAT_EDIT
             });
 
             manager.addHandlerHelper(CMD_SAVE,
@@ -336,7 +361,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_DELETE,
                 name: "Delete",
-                tooltip: "Delete"
+                tooltip: "Delete",
+                category: CAT_EDIT
             });
 
             manager.addKeyBinding(CMD_DELETE, new KeyMatcher({
@@ -348,7 +374,8 @@ namespace colibri.ui.ide.actions {
             manager.addCommandHelper({
                 id: CMD_RENAME,
                 name: "Rename",
-                tooltip: "Rename"
+                tooltip: "Rename",
+                category: CAT_EDIT
             });
 
             manager.addKeyBinding(CMD_RENAME, new KeyMatcher({

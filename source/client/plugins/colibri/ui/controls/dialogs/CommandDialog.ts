@@ -6,6 +6,9 @@ namespace colibri.ui.controls.dialogs {
 
         constructor() {
             super(new controls.viewers.TreeViewer());
+
+            const size = this.getSize();
+            this.setSize(size.width, size.height * 1.5);
         }
 
         create() {
@@ -19,14 +22,17 @@ namespace colibri.ui.controls.dialogs {
 
                     const cmd = obj as ide.commands.Command;
 
+                    const label = manager.getCategory(cmd.getCategoryId()).name
+                        + ": " + cmd.getName();
+
                     const keys = manager.getCommandKeyString(cmd.getId());
 
                     if (keys) {
 
-                        return cmd.getName() + " (" + keys + ")";
+                        return label + " (" + keys + ")";
                     }
 
-                    return cmd.getName();
+                    return label;
                 }));
 
             viewer.setCellRendererProvider(
@@ -43,10 +49,19 @@ namespace colibri.ui.controls.dialogs {
             this.setTitle("Command Palette");
 
             this.enableButtonOnlyWhenOneElementIsSelected(
+
                 this.addOpenButton("Execute", sel => {
-                    manager.executeCommand((sel[0] as ide.commands.Command).getId());
+
+                    manager.executeCommand((sel[0] as ide.commands.Command).getId(), true);
                 })
             );
+
+            this.addCancelButton();
+
+            // this.addButton("Show All", () => {
+            //     viewer.setInput(manager.getCommands());
+            //     viewer.repaint();
+            // });
         }
     }
 }

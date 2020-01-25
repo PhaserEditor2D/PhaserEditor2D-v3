@@ -2,6 +2,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
     import controls = colibri.ui.controls;
 
+    export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
@@ -31,6 +32,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export class SceneEditorCommands {
 
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.addCategory({
+                id: CAT_SCENE_EDITOR,
+                name: "Scene Editor"
+            });
 
             // update current editor
 
@@ -73,52 +79,57 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             // join in container
 
-            manager.addCommandHelper({
-                id: CMD_JOIN_IN_CONTAINER,
-                name: "Join Objects",
-                tooltip: "Create a container with the selected objects"
+            manager.add({
+                command: {
+                    id: CMD_JOIN_IN_CONTAINER,
+                    name: "Join Objects",
+                    tooltip: "Create a container with the selected objects",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args),
+
+                    executeFunc: args => {
+                        const editor = args.activeEditor as SceneEditor;
+                        editor.getActionManager().joinObjectsInContainer();
+                    }
+                },
+                keys: {
+                    key: "J"
+                }
             });
-
-            manager.addHandlerHelper(CMD_JOIN_IN_CONTAINER,
-
-                args => isSceneScope(args),
-
-                args => {
-                    const editor = args.activeEditor as SceneEditor;
-                    editor.getActionManager().joinObjectsInContainer();
-                });
-
-            manager.addKeyBinding(CMD_JOIN_IN_CONTAINER, new colibri.ui.ide.commands.KeyMatcher({
-                key: "j"
-            }));
 
             // open compiled file
 
-            manager.addCommandHelper({
-                id: CMD_OPEN_COMPILED_FILE,
-                icon: webContentTypes.WebContentTypesPlugin.getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
-                name: "Open Output File",
-                tooltip: "Open the output source file of the scene."
+            manager.add({
+                command: {
+                    id: CMD_OPEN_COMPILED_FILE,
+                    icon: webContentTypes.WebContentTypesPlugin.getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
+                    name: "Open Output File",
+                    tooltip: "Open the output source file of the scene.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => args.activeEditor instanceof SceneEditor,
+                    executeFunc: args => (args.activeEditor as SceneEditor).openSourceFileInEditor()
+                }
             });
-
-            manager.addHandlerHelper(
-                CMD_OPEN_COMPILED_FILE,
-                args => args.activeEditor instanceof SceneEditor,
-                args => (args.activeEditor as SceneEditor).openSourceFileInEditor());
 
             // compile scene editor
 
-            manager.addCommandHelper({
-                id: CMD_COMPILE_SCENE_EDITOR,
-                icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
-                name: "Compile Scene",
-                tooltip: "Compile the editor's Scene."
+            manager.add({
+                command: {
+                    id: CMD_COMPILE_SCENE_EDITOR,
+                    icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
+                    name: "Compile Scene",
+                    tooltip: "Compile the editor's Scene.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => args.activeEditor instanceof SceneEditor,
+                    executeFunc: args => (args.activeEditor as SceneEditor).compile(),
+                }
             });
-
-            manager.addHandlerHelper(
-                CMD_COMPILE_SCENE_EDITOR,
-                args => args.activeEditor instanceof SceneEditor,
-                args => (args.activeEditor as SceneEditor).compile());
 
             // compile all scene files
 
@@ -127,7 +138,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     id: CMD_COMPILE_ALL_SCENE_FILES,
                     icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
                     name: "Compile All Scene Files",
-                    tooltip: "Compile all the Scene files of the project."
+                    tooltip: "Compile all the Scene files of the project.",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: args => args.activeWindow instanceof ide.ui.DesignWindow,
@@ -148,6 +160,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     name: "Translate",
                     icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
                     tooltip: "Translate the selected scene objects",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -165,6 +178,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     name: "Rotate",
                     icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
                     tooltip: "Rotate the selected scene objects",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -182,6 +196,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     name: "Scale",
                     icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
                     tooltip: "Scale the selected scene objects",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -198,6 +213,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     id: CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
                     name: "Resize TileSprite",
                     tooltip: "Resize selected TileSprite objects.",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -220,7 +236,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     id: CMD_ADD_SCENE_OBJECT,
                     icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
                     name: "Add Object",
-                    tooltip: "Add a new object to the scene"
+                    tooltip: "Add a new object to the scene",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -240,7 +257,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_CONVERT_OBJECTS,
                     name: "Replace Type",
-                    tooltip: "Replace the type of the selected objects."
+                    tooltip: "Replace the type of the selected objects.",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: args => isSceneScope(args)
@@ -258,7 +276,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_CONVERT_TO_TILE_SPRITE_OBJECTS,
                     name: "Convert To TileSprite",
-                    tooltip: "Convert the selected objects into TileSprite instances. Or resize it if it is a TileSprite."
+                    tooltip: "Convert the selected objects into TileSprite instances. Or resize it if it is a TileSprite.",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
 
@@ -284,7 +303,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE,
                     name: "Select All With Same Texture",
-                    tooltip: "Select all the objects with the same texture."
+                    tooltip: "Select all the objects with the same texture.",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
 
@@ -342,7 +362,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_REPLACE_TEXTURE,
                     name: "Replace Texture",
-                    tooltip: "Change the texture of the selected objects."
+                    tooltip: "Change the texture of the selected objects.",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
 
@@ -363,7 +384,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_TOGGLE_SNAPPING,
                     name: "Toggle Snapping",
-                    tooltip: "Enable/disable the snapping."
+                    tooltip: "Enable/disable the snapping.",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -383,7 +405,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_SET_SNAPPING_TO_OBJECT_SIZE,
                     name: "Snap To Object Size",
-                    tooltip: "Enable snapping and set size to the selected object."
+                    tooltip: "Enable snapping and set size to the selected object.",
+                    category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: args => isSceneScope(args)
@@ -440,7 +463,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     command: {
                         id: "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + (i + 1) + "_ToObject",
                         name: "Set Origin To " + names[i],
-                        tooltip: `Set the origin of the object to (${values[i][0]},${values[i][1]}`
+                        tooltip: `Set the origin of the object to (${values[i][0]},${values[i][1]}`,
+                        category: CAT_SCENE_EDITOR
                     },
                     keys: {
                         key: (i + 1).toString(),

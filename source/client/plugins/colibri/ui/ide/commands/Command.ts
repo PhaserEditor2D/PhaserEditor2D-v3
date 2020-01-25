@@ -5,6 +5,7 @@ namespace colibri.ui.ide.commands {
         name: string;
         tooltip: string;
         icon?: controls.IImage;
+        category: string;
     }
 
     export class Command {
@@ -13,6 +14,7 @@ namespace colibri.ui.ide.commands {
         private _name: string;
         private _tooltip: string;
         private _icon: controls.IImage;
+        private _categoryId: string;
 
         constructor(config: ICommandConfig) {
 
@@ -20,6 +22,11 @@ namespace colibri.ui.ide.commands {
             this._name = config.name;
             this._tooltip = config.tooltip;
             this._icon = config.icon ?? null;
+            this._categoryId = config.category;
+        }
+
+        getCategoryId() {
+            return this._categoryId;
         }
 
         getId() {

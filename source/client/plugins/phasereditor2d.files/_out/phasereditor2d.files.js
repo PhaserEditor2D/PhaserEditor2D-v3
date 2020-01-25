@@ -154,17 +154,23 @@ var phasereditor2d;
         (function (ui) {
             var actions;
             (function (actions) {
-                actions.CMD_NEW_FILE = "phasereditor2d.files.ui.actions.newfile";
+                actions.CMD_NEW_FILE = "phasereditor2d.files.ui.actions.newFile";
+                actions.CAT_NEW_FILE = "phasereditor2d.fines.ui.actions.NewFileCategory";
                 function isFilesViewScope(args) {
                     return args.activePart instanceof ui.views.FilesView;
                 }
                 class FilesViewCommands {
                     static registerCommands(manager) {
+                        manager.addCategory({
+                            id: actions.CAT_NEW_FILE,
+                            name: "New File"
+                        });
                         // new file
                         manager.addCommandHelper({
                             id: actions.CMD_NEW_FILE,
                             name: "New File",
-                            tooltip: "Create new content."
+                            tooltip: "Create new content.",
+                            category: actions.CAT_NEW_FILE
                         });
                         manager.addHandlerHelper(actions.CMD_NEW_FILE, actions.OpenNewFileDialogAction.commandTest, args => {
                             new actions.OpenNewFileDialogAction().run();
