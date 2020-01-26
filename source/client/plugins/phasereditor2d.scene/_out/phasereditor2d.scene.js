@@ -3750,7 +3750,7 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_TRANSLATE_SCENE_OBJECT,
-                                    name: "Translate",
+                                    name: "Translate Tool",
                                     icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_TRANSLATE),
                                     tooltip: "Translate the selected scene objects",
                                     category: commands.CAT_SCENE_EDITOR
@@ -3767,7 +3767,7 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_ROTATE_SCENE_OBJECT,
-                                    name: "Rotate",
+                                    name: "Rotate Tool",
                                     icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ANGLE),
                                     tooltip: "Rotate the selected scene objects",
                                     category: commands.CAT_SCENE_EDITOR
@@ -3784,7 +3784,7 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_SCALE_SCENE_OBJECT,
-                                    name: "Scale",
+                                    name: "Scale Tool",
                                     icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_SCALE),
                                     tooltip: "Scale the selected scene objects",
                                     category: commands.CAT_SCENE_EDITOR
@@ -3801,7 +3801,7 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
-                                    name: "Resize TileSprite",
+                                    name: "Resize TileSprite Tool",
                                     tooltip: "Resize selected TileSprite objects.",
                                     category: commands.CAT_SCENE_EDITOR
                                 },

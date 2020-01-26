@@ -157,7 +157,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_TRANSLATE_SCENE_OBJECT,
-                    name: "Translate",
+                    name: "Translate Tool",
                     icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
                     tooltip: "Translate the selected scene objects",
                     category: CAT_SCENE_EDITOR
@@ -175,7 +175,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_ROTATE_SCENE_OBJECT,
-                    name: "Rotate",
+                    name: "Rotate Tool",
                     icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
                     tooltip: "Rotate the selected scene objects",
                     category: CAT_SCENE_EDITOR
@@ -193,7 +193,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_SCALE_SCENE_OBJECT,
-                    name: "Scale",
+                    name: "Scale Tool",
                     icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
                     tooltip: "Scale the selected scene objects",
                     category: CAT_SCENE_EDITOR
@@ -211,7 +211,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
-                    name: "Resize TileSprite",
+                    name: "Resize TileSprite Tool",
                     tooltip: "Resize selected TileSprite objects.",
                     category: CAT_SCENE_EDITOR
                 },
