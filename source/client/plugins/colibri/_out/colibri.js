@@ -2923,7 +2923,6 @@ var colibri;
             class TabPane extends controls.Control {
                 constructor(...classList) {
                     super("div", "TabPane", ...classList);
-                    this._selectionHistoryLabelElement = [];
                     this._titleBarElement = document.createElement("div");
                     this._titleBarElement.classList.add("TabPaneTitleBar");
                     this.getElement().appendChild(this._titleBarElement);
@@ -3021,7 +3020,6 @@ var colibri;
                 closeAll() {
                     this._titleBarElement.innerHTML = "";
                     this._contentAreaElement.innerHTML = "";
-                    this._selectionHistoryLabelElement = [];
                 }
                 closeTabLabel(labelElement) {
                     {
@@ -3034,29 +3032,24 @@ var colibri;
                             return;
                         }
                     }
-                    const i = this._selectionHistoryLabelElement.indexOf(labelElement);
-                    if (i >= 0) {
-                        this._selectionHistoryLabelElement.splice(i, 1);
-                    }
                     this._titleBarElement.removeChild(labelElement);
                     const contentArea = labelElement["__contentArea"];
                     this._contentAreaElement.removeChild(contentArea);
-                    let toSelectLabel = null;
                     const selectedLabel = this.getSelectedLabelElement();
                     if (selectedLabel === labelElement) {
-                        this._selectionHistoryLabelElement.pop();
-                        const nextInHistory = this._selectionHistoryLabelElement.pop();
-                        if (nextInHistory) {
-                            toSelectLabel = nextInHistory;
+                        let toSelectLabel = null;
+                        let maxTime = Number.MIN_VALUE;
+                        for (let j = 0; j < this._titleBarElement.children.length; j++) {
+                            const label = this._titleBarElement.children.item(j);
+                            const time = label["__selected_time"] || 0;
+                            if (time > maxTime) {
+                                toSelectLabel = label;
+                                maxTime = time;
+                            }
                         }
-                    }
-                    if (!toSelectLabel) {
-                        if (this._titleBarElement.childElementCount > 0) {
-                            toSelectLabel = this._titleBarElement.firstChild;
+                        if (toSelectLabel) {
+                            this.selectTab(toSelectLabel);
                         }
-                    }
-                    if (toSelectLabel) {
-                        this.selectTab(toSelectLabel);
                     }
                 }
                 setTabTitle(content, title, icon) {
@@ -3102,20 +3095,21 @@ var colibri;
                     }
                 }
                 selectTab(toSelectLabel) {
-                    const selectedLabel = this._selectionHistoryLabelElement.pop();
-                    if (selectedLabel) {
-                        if (selectedLabel === toSelectLabel) {
-                            this._selectionHistoryLabelElement.push(selectedLabel);
+                    if (toSelectLabel) {
+                        toSelectLabel["__selected_time"] = TabPane._selectedTimeCounter++;
+                    }
+                    if (this._selectedLabelElement) {
+                        if (this._selectedLabelElement === toSelectLabel) {
                             return;
                         }
-                        selectedLabel.classList.remove("selected");
-                        const selectedContentArea = TabPane.getContentAreaFromLabel(selectedLabel);
+                        this._selectedLabelElement.classList.remove("selected");
+                        const selectedContentArea = TabPane.getContentAreaFromLabel(this._selectedLabelElement);
                         selectedContentArea.classList.remove("selected");
                     }
+                    this._selectedLabelElement = toSelectLabel;
                     toSelectLabel.classList.add("selected");
                     const toSelectContentArea = TabPane.getContentAreaFromLabel(toSelectLabel);
                     toSelectContentArea.classList.add("selected");
-                    this._selectionHistoryLabelElement.push(toSelectLabel);
                     this.dispatchEvent(new CustomEvent(controls.EVENT_TAB_SELECTED, {
                         detail: TabPane.getContentFromLabel(toSelectLabel)
                     }));
@@ -3142,11 +3136,10 @@ var colibri;
                     return list;
                 }
                 getSelectedLabelElement() {
-                    return this._selectionHistoryLabelElement.length > 0 ?
-                        this._selectionHistoryLabelElement[this._selectionHistoryLabelElement.length - 1]
-                        : null;
+                    return this._selectedLabelElement;
                 }
             }
+            TabPane._selectedTimeCounter = 0;
             controls.TabPane = TabPane;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));

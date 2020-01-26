@@ -749,10 +749,11 @@ declare namespace colibri.ui.controls {
     const EVENT_TAB_SELECTED = "tabSelected";
     const EVENT_TAB_LABEL_RESIZED = "tabResized";
     class TabPane extends Control {
-        private _selectionHistoryLabelElement;
         private _titleBarElement;
         private _contentAreaElement;
         private _iconSize;
+        private _selectedLabelElement;
+        private static _selectedTimeCounter;
         constructor(...classList: string[]);
         addTab(label: string, icon: IImage, content: Control, closeable?: boolean, selectIt?: boolean): void;
         getTabIconSize(): number;

@@ -147,15 +147,14 @@ namespace colibri.ui.controls {
 
     export class TabPane extends Control {
 
-        private _selectionHistoryLabelElement: HTMLElement[];
         private _titleBarElement: HTMLElement;
         private _contentAreaElement: HTMLElement;
         private _iconSize: number;
+        private _selectedLabelElement: HTMLElement;
+        private static _selectedTimeCounter: number = 0;
 
         constructor(...classList: string[]) {
             super("div", "TabPane", ...classList);
-
-            this._selectionHistoryLabelElement = [];
 
             this._titleBarElement = document.createElement("div");
             this._titleBarElement.classList.add("TabPaneTitleBar");
@@ -303,7 +302,6 @@ namespace colibri.ui.controls {
 
             this._titleBarElement.innerHTML = "";
             this._contentAreaElement.innerHTML = "";
-            this._selectionHistoryLabelElement = [];
         }
 
         protected closeTabLabel(labelElement: HTMLElement): void {
@@ -321,43 +319,34 @@ namespace colibri.ui.controls {
                 }
             }
 
-            const i = this._selectionHistoryLabelElement.indexOf(labelElement);
-
-            if (i >= 0) {
-
-                this._selectionHistoryLabelElement.splice(i, 1);
-            }
-
             this._titleBarElement.removeChild(labelElement);
             const contentArea = labelElement["__contentArea"] as HTMLElement;
             this._contentAreaElement.removeChild(contentArea);
-
-            let toSelectLabel: HTMLElement = null;
 
             const selectedLabel = this.getSelectedLabelElement();
 
             if (selectedLabel === labelElement) {
 
-                this._selectionHistoryLabelElement.pop();
-                const nextInHistory = this._selectionHistoryLabelElement.pop();
+                let toSelectLabel: HTMLElement = null;
 
-                if (nextInHistory) {
+                let maxTime = Number.MIN_VALUE;
 
-                    toSelectLabel = nextInHistory;
+                for (let j = 0; j < this._titleBarElement.children.length; j++) {
+
+                    const label = this._titleBarElement.children.item(j);
+                    const time = label["__selected_time"] as number || 0;
+
+                    if (time > maxTime) {
+
+                        toSelectLabel = label as HTMLElement;
+                        maxTime = time;
+                    }
                 }
-            }
 
-            if (!toSelectLabel) {
+                if (toSelectLabel) {
 
-                if (this._titleBarElement.childElementCount > 0) {
-
-                    toSelectLabel = (this._titleBarElement.firstChild as HTMLElement);
+                    this.selectTab(toSelectLabel);
                 }
-            }
-
-            if (toSelectLabel) {
-
-                this.selectTab(toSelectLabel);
             }
         }
 
@@ -426,26 +415,26 @@ namespace colibri.ui.controls {
 
         protected selectTab(toSelectLabel: HTMLElement): void {
 
-            const selectedLabel = this._selectionHistoryLabelElement.pop();
+            if (toSelectLabel) {
+                toSelectLabel["__selected_time"] = TabPane._selectedTimeCounter++;
+            }
 
-            if (selectedLabel) {
+            if (this._selectedLabelElement) {
 
-                if (selectedLabel === toSelectLabel) {
-
-                    this._selectionHistoryLabelElement.push(selectedLabel);
-
+                if (this._selectedLabelElement === toSelectLabel) {
                     return;
                 }
 
-                selectedLabel.classList.remove("selected");
-                const selectedContentArea = TabPane.getContentAreaFromLabel(selectedLabel);
+                this._selectedLabelElement.classList.remove("selected");
+                const selectedContentArea = TabPane.getContentAreaFromLabel(this._selectedLabelElement);
                 selectedContentArea.classList.remove("selected");
             }
+
+            this._selectedLabelElement = toSelectLabel;
 
             toSelectLabel.classList.add("selected");
             const toSelectContentArea = TabPane.getContentAreaFromLabel(toSelectLabel);
             toSelectContentArea.classList.add("selected");
-            this._selectionHistoryLabelElement.push(toSelectLabel);
 
             this.dispatchEvent(new CustomEvent(EVENT_TAB_SELECTED, {
                 detail: TabPane.getContentFromLabel(toSelectLabel)
@@ -490,9 +479,7 @@ namespace colibri.ui.controls {
 
         private getSelectedLabelElement(): HTMLElement {
 
-            return this._selectionHistoryLabelElement.length > 0 ?
-                this._selectionHistoryLabelElement[this._selectionHistoryLabelElement.length - 1]
-                : null;
+            return this._selectedLabelElement;
         }
     }
 
