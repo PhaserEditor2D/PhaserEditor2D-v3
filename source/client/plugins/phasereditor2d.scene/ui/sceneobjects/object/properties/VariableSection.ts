@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected createForm(parent: HTMLDivElement) {
+
             const comp = this.createGridElement(parent, 2);
 
             {

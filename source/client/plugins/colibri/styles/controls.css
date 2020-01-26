@@ -28,6 +28,8 @@ button {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    height: 2em;
+    min-height: 2em;
 }
 
 button:active,

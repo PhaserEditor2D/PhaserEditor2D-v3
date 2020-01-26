@@ -116,6 +116,7 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.VariableSection(page),
+                page => new ui.sceneobjects.ParentSection(page),
                 page => new ui.sceneobjects.TransformSection(page),
                 page => new ui.sceneobjects.OriginSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),

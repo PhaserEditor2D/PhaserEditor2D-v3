@@ -1536,6 +1536,17 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class MoveToContainerOperation extends editor.undo.SceneEditorOperation {
+        private _before;
+        private _after;
+        constructor(editor: editor.SceneEditor, parentId?: string);
+        execute(): void;
+        private loadMove;
+        undo(): void;
+        redo(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
         protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
@@ -1550,6 +1561,26 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class OriginSection extends SceneObjectSection<IOriginLikeObject> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class ParentDialog extends controls.dialogs.ViewerDialog {
+        private _editor;
+        constructor(editor: editor.SceneEditor);
+        create(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    interface IHasParentContainer extends ISceneObject {
+        parentContainer: Container;
+    }
+    class ParentSection extends SceneObjectSection<IHasParentContainer> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
