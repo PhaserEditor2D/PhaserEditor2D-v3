@@ -185,6 +185,7 @@ declare namespace phasereditor2d.scene.core.code {
 declare namespace phasereditor2d.scene.core.code {
     class RawCodeDOM extends CodeDOM {
         private _code;
+        static many(...codes: string[]): RawCodeDOM[];
         constructor(code: string);
         getCode(): string;
     }

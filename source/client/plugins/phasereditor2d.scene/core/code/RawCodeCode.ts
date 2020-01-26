@@ -4,6 +4,11 @@ namespace phasereditor2d.scene.core.code {
 
         private _code: string;
 
+        static many(...codes: string[]) {
+
+            return codes.map(code => new RawCodeDOM(code));
+        }
+
         constructor(code: string) {
             super();
 

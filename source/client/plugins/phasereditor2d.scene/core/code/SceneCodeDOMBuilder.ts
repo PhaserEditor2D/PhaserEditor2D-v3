@@ -22,11 +22,14 @@ namespace phasereditor2d.scene.core.code {
 
             const methods: MemberDeclCodeDOM[] = [];
 
-            if (settings.preloadPackFiles.length > 0) {
+            if (!this._isPrefabScene) {
 
-                const preloadDom = await this.buildPreloadMethod();
+                if (settings.preloadPackFiles.length > 0) {
 
-                methods.push(preloadDom);
+                    const preloadDom = await this.buildPreloadMethod();
+
+                    methods.push(preloadDom);
+                }
             }
 
             const unit = new UnitCodeDOM([]);
@@ -140,6 +143,8 @@ namespace phasereditor2d.scene.core.code {
 
         private buildPrefabConstructorMethod() {
 
+            const settings = this._scene.getSettings();
+
             const ctrDecl = new code.MethodDeclCodeDOM("constructor");
 
             const prefabObj = this._scene.getPrefabObject();
@@ -188,6 +193,23 @@ namespace phasereditor2d.scene.core.code {
                     createMethodDecl: ctrDecl,
                     obj: prefabObj
                 });
+            }
+
+            {
+                const createName = settings.createMethodName;
+
+                if (createName) {
+
+                    const body = ctrDecl.getBody();
+
+                    if (body.length > 1) {
+                        body.push(new RawCodeDOM(""));
+                    }
+
+                    body.push(new RawCodeDOM(
+                        `if (this.${createName}) { this.${createName}(); }`
+                    ));
+                }
             }
 
             return ctrDecl;

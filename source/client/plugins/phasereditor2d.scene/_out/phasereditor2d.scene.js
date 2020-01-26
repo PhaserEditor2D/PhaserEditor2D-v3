@@ -767,6 +767,9 @@ var phasereditor2d;
                         super();
                         this._code = code;
                     }
+                    static many(...codes) {
+                        return codes.map(code => new RawCodeDOM(code));
+                    }
                     getCode() {
                         return this._code;
                     }
@@ -793,9 +796,11 @@ var phasereditor2d;
                     async build() {
                         const settings = this._scene.getSettings();
                         const methods = [];
-                        if (settings.preloadPackFiles.length > 0) {
-                            const preloadDom = await this.buildPreloadMethod();
-                            methods.push(preloadDom);
+                        if (!this._isPrefabScene) {
+                            if (settings.preloadPackFiles.length > 0) {
+                                const preloadDom = await this.buildPreloadMethod();
+                                methods.push(preloadDom);
+                            }
                         }
                         const unit = new code.UnitCodeDOM([]);
                         if (settings.onlyGenerateMethods) {
@@ -867,6 +872,7 @@ var phasereditor2d;
                         }
                     }
                     buildPrefabConstructorMethod() {
+                        const settings = this._scene.getSettings();
                         const ctrDecl = new code.MethodDeclCodeDOM("constructor");
                         const prefabObj = this._scene.getPrefabObject();
                         if (!prefabObj) {
@@ -899,6 +905,16 @@ var phasereditor2d;
                                 createMethodDecl: ctrDecl,
                                 obj: prefabObj
                             });
+                        }
+                        {
+                            const createName = settings.createMethodName;
+                            if (createName) {
+                                const body = ctrDecl.getBody();
+                                if (body.length > 1) {
+                                    body.push(new code.RawCodeDOM(""));
+                                }
+                                body.push(new code.RawCodeDOM(`if (this.${createName}) { this.${createName}(); }`));
+                            }
                         }
                         return ctrDecl;
                     }
