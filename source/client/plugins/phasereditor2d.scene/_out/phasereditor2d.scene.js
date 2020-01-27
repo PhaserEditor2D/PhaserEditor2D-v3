@@ -2457,12 +2457,18 @@ var phasereditor2d;
                         this._editor = editor;
                     }
                     deleteObjects() {
+                        const operations = [];
                         const objects = this._editor.getSelectedGameObjects();
-                        // create the undo-operation before destroy the objects
-                        this._editor.getUndoManager().add(new editor_1.undo.RemoveObjectsOperation(this._editor, objects));
-                        for (const obj of objects) {
-                            obj.getEditorSupport().destroy();
+                        const lists = this._editor.getSelection()
+                            .filter(obj => obj instanceof ui.sceneobjects.ObjectList);
+                        if (lists.length > 0) {
+                            operations.push(new ui.sceneobjects.RemoveObjectListOperation(this._editor, lists));
                         }
+                        if (objects.length > 0) {
+                            operations.push(new editor_1.undo.RemoveObjectsOperation(this._editor, objects));
+                        }
+                        // create the undo-operation before destroy the objects
+                        this._editor.getUndoManager().add(new colibri.ui.ide.undo.MultiOperation(operations));
                         this._editor.refreshOutline();
                         this._editor.getSelectionManager().refreshSelection();
                         this._editor.setDirty(true);
@@ -5528,6 +5534,12 @@ var phasereditor2d;
                     class RemoveObjectsOperation extends undo.AddObjectsOperation {
                         constructor(editor, objects) {
                             super(editor, objects);
+                            this._objects = objects;
+                        }
+                        execute() {
+                            for (const obj of this._objects) {
+                                obj.getEditorSupport().destroy();
+                            }
                         }
                         undo() {
                             super.redo();
@@ -6811,6 +6823,34 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.ObjectLists = ObjectLists;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./GlobalListOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class RemoveObjectListOperation extends sceneobjects.GlobalListOperation {
+                    constructor(editor, toDeleteArray) {
+                        super(editor);
+                        this._toDeleteArray = toDeleteArray;
+                    }
+                    performChange(sceneLists) {
+                        for (const list of this._toDeleteArray) {
+                            const i = sceneLists.getLists().indexOf(list);
+                            sceneLists.getLists().splice(i, 1);
+                        }
+                        this._editor.refreshOutline();
+                        this._editor.setSelection([]);
+                    }
+                }
+                sceneobjects.RemoveObjectListOperation = RemoveObjectListOperation;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

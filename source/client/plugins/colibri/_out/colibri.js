@@ -7753,6 +7753,41 @@ var colibri;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
 })(colibri || (colibri = {}));
+/// <reference path="./Operation.ts" />
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            var undo;
+            (function (undo) {
+                class MultiOperation extends undo.Operation {
+                    constructor(list) {
+                        super();
+                        this._list = list;
+                    }
+                    execute() {
+                        for (const op of this._list) {
+                            op.execute();
+                        }
+                    }
+                    undo() {
+                        for (const op of this._list) {
+                            op.undo();
+                        }
+                    }
+                    redo() {
+                        for (const op of this._list) {
+                            op.redo();
+                        }
+                    }
+                }
+                undo.MultiOperation = MultiOperation;
+            })(undo = ide.undo || (ide.undo = {}));
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
 var colibri;
 (function (colibri) {
     var ui;

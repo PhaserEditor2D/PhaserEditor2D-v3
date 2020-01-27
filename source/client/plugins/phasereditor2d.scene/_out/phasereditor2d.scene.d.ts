@@ -1096,7 +1096,9 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class RemoveObjectsOperation extends AddObjectsOperation {
+        private _objects;
         constructor(editor: SceneEditor, objects: sceneobjects.ISceneObject[]);
+        execute(): void;
         undo(): void;
         redo(): void;
     }
@@ -1553,6 +1555,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         readJSON(sceneData: json.ISceneData): void;
         writeJSON(sceneData: json.ISceneData): void;
         toJSON_lists(): json.IObjectListData[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class RemoveObjectListOperation extends GlobalListOperation {
+        private _toDeleteArray;
+        constructor(editor: editor.SceneEditor, toDeleteArray: ObjectList[]);
+        performChange(sceneLists: ObjectLists): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

@@ -1871,6 +1871,15 @@ declare namespace colibri.ui.ide.undo {
     }
 }
 declare namespace colibri.ui.ide.undo {
+    class MultiOperation extends Operation {
+        private _list;
+        constructor(list: Operation[]);
+        execute(): void;
+        undo(): void;
+        redo(): void;
+    }
+}
+declare namespace colibri.ui.ide.undo {
     class UndoManager {
         private _undoList;
         private _redoList;
