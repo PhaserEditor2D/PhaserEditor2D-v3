@@ -111,6 +111,7 @@ declare namespace colibri.ui.ide {
     const ICON_FILE = "file";
     const ICON_FOLDER = "folder";
     const ICON_PLUS = "plus";
+    const ICON_MINUS = "minus";
     const ICON_CHECKED = "checked";
     const ICON_KEYMAP = "keymap";
     class Workbench extends EventTarget {

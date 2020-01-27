@@ -375,6 +375,7 @@ var colibri;
             ide.ICON_FILE = "file";
             ide.ICON_FOLDER = "folder";
             ide.ICON_PLUS = "plus";
+            ide.ICON_MINUS = "minus";
             ide.ICON_CHECKED = "checked";
             ide.ICON_KEYMAP = "keymap";
             class Workbench extends EventTarget {
@@ -501,6 +502,7 @@ var colibri;
                     await this.getWorkbenchIcon(ide.ICON_FILE).preload();
                     await this.getWorkbenchIcon(ide.ICON_FOLDER).preload();
                     await this.getWorkbenchIcon(ide.ICON_PLUS).preload();
+                    await this.getWorkbenchIcon(ide.ICON_MINUS).preload();
                     await this.getWorkbenchIcon(ide.ICON_CHECKED).preload();
                     await this.getWorkbenchIcon(ide.ICON_KEYMAP).preload();
                     const extensions = colibri.Platform

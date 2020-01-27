@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         loadData(listData: json.IObjectListData) {
 
-            const list = this._editor.getScene().getObjectLists().getById(listData.id);
+            const list = this._editor.getScene().getObjectLists().getListById(listData.id);
 
             list.readJSON(listData);
 

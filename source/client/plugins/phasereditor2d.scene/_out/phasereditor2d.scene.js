@@ -6662,115 +6662,6 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class GlobalListOperation extends ui.editor.undo.SceneEditorOperation {
-                    constructor(editor) {
-                        super(editor);
-                    }
-                    execute() {
-                        const selManager = this._editor.getSelectionManager();
-                        const lists = this._editor.getScene().getObjectLists();
-                        this._before = lists.toJSON_lists();
-                        this.performChange(lists);
-                        this._after = lists.toJSON_lists();
-                        const sel = selManager.getSelectionIds();
-                        this.loadData(this._after, sel);
-                    }
-                    loadData(data, selection) {
-                        const lists = this._editor.getScene().getObjectLists();
-                        lists.readJSON_lists(data);
-                        this._editor.setDirty(true);
-                        this._editor.refreshOutline();
-                        if (selection) {
-                            this._editor.getSelectionManager().setSelectionByIds(selection);
-                        }
-                    }
-                    undo() {
-                        this.loadData(this._before);
-                    }
-                    redo() {
-                        this.loadData(this._after);
-                    }
-                }
-                sceneobjects.GlobalListOperation = GlobalListOperation;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./GlobalListOperation.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class AddObjectListOperation extends sceneobjects.GlobalListOperation {
-                    constructor(editor, list) {
-                        super(editor);
-                        this._list = list;
-                    }
-                    performChange(lists) {
-                        lists.getLists().push(this._list);
-                        this._editor.refreshOutline();
-                        this._editor.setSelection([this._list]);
-                    }
-                }
-                sceneobjects.AddObjectListOperation = AddObjectListOperation;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class ChangeListOperation extends ui.editor.undo.SceneEditorOperation {
-                    constructor(editor, list, performChange) {
-                        super(editor);
-                        this._list = list;
-                        this._performChange = performChange;
-                    }
-                    execute() {
-                        this._before = {};
-                        this._list.writeJSON(this._before);
-                        this._performChange(this._list);
-                        this._after = {};
-                        this._list.writeJSON(this._after);
-                        delete this._list;
-                        this.loadData(this._after);
-                    }
-                    loadData(listData) {
-                        const list = this._editor.getScene().getObjectLists().getById(listData.id);
-                        list.readJSON(listData);
-                        this._editor.setDirty(true);
-                        this._editor.refreshOutline();
-                        this._editor.dispatchSelectionChanged();
-                    }
-                    undo() {
-                        this.loadData(this._before);
-                    }
-                    redo() {
-                        this.loadData(this._after);
-                    }
-                }
-                sceneobjects.ChangeListOperation = ChangeListOperation;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
                 class ListVariableSection extends ui.editor.properties.BaseSceneSection {
                     constructor(page) {
                         super(page, "phasereditor2d.scene.ui.sceneobjects.ListVariableSection", "Variable", false);
@@ -6848,6 +6739,9 @@ var phasereditor2d;
                     getObjectIds() {
                         return this._objectIds;
                     }
+                    setObjectsIds(ids) {
+                        this._objectIds = ids;
+                    }
                     getId() {
                         return this._id;
                     }
@@ -6899,8 +6793,13 @@ var phasereditor2d;
                     getLists() {
                         return this._lists;
                     }
-                    getById(id) {
+                    getListById(id) {
                         return this._lists.find(list => list.getId() === id);
+                    }
+                    getListsByObjectId(objectId) {
+                        const result = this._lists
+                            .filter(list => list.getObjectIds().findIndex(id => id === objectId) >= 0);
+                        return result;
                     }
                     readJSON_lists(listsArray) {
                         this._lists = [];
@@ -6942,6 +6841,140 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class GlobalListOperation extends ui.editor.undo.SceneEditorOperation {
+                    constructor(editor) {
+                        super(editor);
+                    }
+                    execute() {
+                        const selManager = this._editor.getSelectionManager();
+                        const lists = this._editor.getScene().getObjectLists();
+                        this._before = lists.toJSON_lists();
+                        this.performChange(lists);
+                        this._after = lists.toJSON_lists();
+                        const sel = selManager.getSelectionIds();
+                        this.loadData(this._after, sel);
+                    }
+                    loadData(data, selection) {
+                        const lists = this._editor.getScene().getObjectLists();
+                        lists.readJSON_lists(data);
+                        this._editor.setDirty(true);
+                        this._editor.refreshOutline();
+                        if (selection) {
+                            this._editor.getSelectionManager().setSelectionByIds(selection);
+                        }
+                    }
+                    undo() {
+                        this.loadData(this._before);
+                    }
+                    redo() {
+                        this.loadData(this._after);
+                    }
+                }
+                sceneobjects.GlobalListOperation = GlobalListOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./GlobalListOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class AddObjectListOperation extends sceneobjects.GlobalListOperation {
+                    constructor(editor, list) {
+                        super(editor);
+                        this._list = list;
+                    }
+                    performChange(lists) {
+                        lists.getLists().push(this._list);
+                        this._editor.refreshOutline();
+                        this._editor.setSelection([this._list]);
+                    }
+                }
+                sceneobjects.AddObjectListOperation = AddObjectListOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class AddObjectsToListOperation extends sceneobjects.GlobalListOperation {
+                    constructor(editor, list, objects) {
+                        super(editor);
+                        this._list = list;
+                        this._objects = objects;
+                    }
+                    performChange(lists) {
+                        this._list.getObjectIds().push(...this._objects.map(obj => obj.getEditorSupport().getId()));
+                        delete this._list;
+                        delete this._objects;
+                    }
+                }
+                sceneobjects.AddObjectsToListOperation = AddObjectsToListOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class ChangeListOperation extends ui.editor.undo.SceneEditorOperation {
+                    constructor(editor, list, performChange) {
+                        super(editor);
+                        this._list = list;
+                        this._performChange = performChange;
+                    }
+                    execute() {
+                        this._before = {};
+                        this._list.writeJSON(this._before);
+                        this._performChange(this._list);
+                        this._after = {};
+                        this._list.writeJSON(this._after);
+                        delete this._list;
+                        this.loadData(this._after);
+                    }
+                    loadData(listData) {
+                        const list = this._editor.getScene().getObjectLists().getListById(listData.id);
+                        list.readJSON(listData);
+                        this._editor.setDirty(true);
+                        this._editor.refreshOutline();
+                        this._editor.dispatchSelectionChanged();
+                    }
+                    undo() {
+                        this.loadData(this._before);
+                    }
+                    redo() {
+                        this.loadData(this._after);
+                    }
+                }
+                sceneobjects.ChangeListOperation = ChangeListOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./GlobalListOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -6966,6 +6999,33 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.RemoveObjectListOperation = RemoveObjectListOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class RemoveObjectsFromListOperation extends sceneobjects.GlobalListOperation {
+                    constructor(editor, list, objects) {
+                        super(editor);
+                        this._list = list;
+                        this._objects = objects;
+                    }
+                    performChange(lists) {
+                        const objectsInListIds = this._list.getObjectIds();
+                        const objectsIds = new Set(this._objects.map(obj => obj.getEditorSupport().getId()));
+                        this._list.setObjectsIds(objectsInListIds.filter(id => !objectsIds.has(id)));
+                        delete this._list;
+                        delete this._objects;
+                    }
+                }
+                sceneobjects.RemoveObjectsFromListOperation = RemoveObjectsFromListOperation;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -7317,6 +7377,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var controls = colibri.ui.controls;
                 class GameObjectVariableSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
                         super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectVariableSection", "Variable", false);
@@ -7347,6 +7408,45 @@ var phasereditor2d;
                             // Scope
                             this.createLabel(comp, "Scope", "The lexical scope of the object.");
                             this.createEnumField(comp, sceneobjects.VariableComponent.scope, false);
+                        }
+                        {
+                            // Lists
+                            this.createLabel(comp, "Lists", "The lists where this object belongs to.");
+                            const btn = this.createButton(comp, "", e => {
+                                const listsRoot = this.getEditor().getScene().getObjectLists();
+                                const menu = new controls.Menu();
+                                const selObjIds = this.getSelection().map(obj => obj.getEditorSupport().getId());
+                                const usedLists = new Set(selObjIds.flatMap(objId => listsRoot.getListsByObjectId(objId)));
+                                const notUsedLists = listsRoot.getLists().filter(list => !usedLists.has(list));
+                                for (const list of notUsedLists) {
+                                    menu.add(new controls.Action({
+                                        icon: controls.Controls.getIcon(colibri.ui.ide.ICON_PLUS),
+                                        text: list.getLabel(),
+                                        callback: () => {
+                                            this.getUndoManager().add(new sceneobjects.AddObjectsToListOperation(this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
+                                        }
+                                    }));
+                                }
+                                menu.addSeparator();
+                                for (const list of usedLists) {
+                                    menu.add(new controls.Action({
+                                        icon: controls.Controls.getIcon(colibri.ui.ide.ICON_MINUS),
+                                        text: list.getLabel(),
+                                        callback: () => {
+                                            this.getUndoManager().add(new sceneobjects.RemoveObjectsFromListOperation(this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
+                                        }
+                                    }));
+                                }
+                                menu.create(e);
+                            });
+                            this.addUpdater(() => {
+                                const listsRoot = this.getEditor().getScene().getObjectLists();
+                                const lists = new Set(this.getSelection()
+                                    .map(obj => obj.getEditorSupport().getId())
+                                    .flatMap(objId => listsRoot.getListsByObjectId(objId))
+                                    .map(list => list.getLabel()));
+                                btn.textContent = "[" + [...lists].join(",") + "]";
+                            });
                         }
                     }
                     canEdit(obj, n) {

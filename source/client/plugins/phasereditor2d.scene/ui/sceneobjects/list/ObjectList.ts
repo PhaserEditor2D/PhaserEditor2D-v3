@@ -21,6 +21,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._objectIds;
         }
 
+        setObjectsIds(ids: string[]) {
+            this._objectIds = ids;
+        }
+
         getId() {
             return this._id;
         }

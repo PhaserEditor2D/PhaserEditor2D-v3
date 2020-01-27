@@ -12,6 +12,7 @@ namespace colibri.ui.ide {
     export const ICON_FILE = "file";
     export const ICON_FOLDER = "folder";
     export const ICON_PLUS = "plus";
+    export const ICON_MINUS = "minus";
     export const ICON_CHECKED = "checked";
     export const ICON_KEYMAP = "keymap";
 
@@ -237,6 +238,7 @@ namespace colibri.ui.ide {
             await this.getWorkbenchIcon(ICON_FILE).preload();
             await this.getWorkbenchIcon(ICON_FOLDER).preload();
             await this.getWorkbenchIcon(ICON_PLUS).preload();
+            await this.getWorkbenchIcon(ICON_MINUS).preload();
             await this.getWorkbenchIcon(ICON_CHECKED).preload();
             await this.getWorkbenchIcon(ICON_KEYMAP).preload();
 

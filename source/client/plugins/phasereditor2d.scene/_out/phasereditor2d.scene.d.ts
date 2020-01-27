@@ -1509,6 +1509,50 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class ListVariableSection extends editor.properties.BaseSceneSection<ObjectList> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        private performChange;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import json = core.json;
+    class ObjectList {
+        private _id;
+        private _label;
+        private _scope;
+        private _objectIds;
+        constructor();
+        getObjectIds(): string[];
+        setObjectsIds(ids: string[]): void;
+        getId(): string;
+        setId(id: string): void;
+        getLabel(): string;
+        setLabel(label: string): void;
+        getScope(): ObjectScope;
+        setScope(scope: ObjectScope): void;
+        readJSON(data: json.IObjectListData): void;
+        writeJSON(data: json.IObjectListData): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import json = core.json;
+    class ObjectLists {
+        private _lists;
+        constructor();
+        getLists(): ObjectList[];
+        getListById(id: string): ObjectList;
+        getListsByObjectId(objectId: string): ObjectList[];
+        readJSON_lists(listsArray: json.IObjectListData[]): void;
+        readJSON(sceneData: json.ISceneData): void;
+        writeJSON(sceneData: json.ISceneData): void;
+        toJSON_lists(): json.IObjectListData[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class GlobalListOperation extends editor.undo.SceneEditorOperation {
         private _before;
         private _after;
@@ -1528,6 +1572,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class AddObjectsToListOperation extends GlobalListOperation {
+        private _objects;
+        private _list;
+        constructor(editor: editor.SceneEditor, list: ObjectList, objects: ISceneObject[]);
+        performChange(lists: ObjectLists): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     class ChangeListOperation extends editor.undo.SceneEditorOperation {
         private _performChange;
@@ -1542,52 +1594,18 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import controls = colibri.ui.controls;
-    class ListVariableSection extends editor.properties.BaseSceneSection<ObjectList> {
-        constructor(page: controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
-        private performChange;
-        canEdit(obj: any, n: number): boolean;
-        canEditNumber(n: number): boolean;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import json = core.json;
-    class ObjectList {
-        private _id;
-        private _label;
-        private _scope;
-        private _objectIds;
-        constructor();
-        getObjectIds(): string[];
-        getId(): string;
-        setId(id: string): void;
-        getLabel(): string;
-        setLabel(label: string): void;
-        getScope(): ObjectScope;
-        setScope(scope: ObjectScope): void;
-        readJSON(data: json.IObjectListData): void;
-        writeJSON(data: json.IObjectListData): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import json = core.json;
-    class ObjectLists {
-        private _lists;
-        constructor();
-        getLists(): ObjectList[];
-        getById(id: string): ObjectList;
-        readJSON_lists(listsArray: json.IObjectListData[]): void;
-        readJSON(sceneData: json.ISceneData): void;
-        writeJSON(sceneData: json.ISceneData): void;
-        toJSON_lists(): json.IObjectListData[];
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
     class RemoveObjectListOperation extends GlobalListOperation {
         private _toDeleteArray;
         constructor(editor: editor.SceneEditor, toDeleteArray: ObjectList[]);
         performChange(sceneLists: ObjectLists): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class RemoveObjectsFromListOperation extends GlobalListOperation {
+        private _objects;
+        private _list;
+        constructor(editor: editor.SceneEditor, list: ObjectList, objects: ISceneObject[]);
+        performChange(lists: ObjectLists): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

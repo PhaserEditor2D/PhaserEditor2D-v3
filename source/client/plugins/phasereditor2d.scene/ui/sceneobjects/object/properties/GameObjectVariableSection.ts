@@ -56,6 +56,72 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createLabel(comp, "Scope", "The lexical scope of the object.");
                 this.createEnumField(comp, VariableComponent.scope, false);
             }
+
+            {
+                // Lists
+
+                this.createLabel(comp, "Lists", "The lists where this object belongs to.");
+
+                const btn = this.createButton(comp, "", e => {
+
+                    const listsRoot = this.getEditor().getScene().getObjectLists();
+
+                    const menu = new controls.Menu();
+
+                    const selObjIds = this.getSelection().map(obj => obj.getEditorSupport().getId());
+
+                    const usedLists = new Set(selObjIds.flatMap(objId => listsRoot.getListsByObjectId(objId)));
+
+                    const notUsedLists = listsRoot.getLists().filter(list => !usedLists.has(list));
+
+                    for (const list of notUsedLists) {
+
+                        menu.add(new controls.Action({
+                            icon: controls.Controls.getIcon(colibri.ui.ide.ICON_PLUS),
+                            text: list.getLabel(),
+                            callback: () => {
+
+                                this.getUndoManager().add(
+                                    new AddObjectsToListOperation(
+                                        this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
+
+                            }
+                        }));
+                    }
+
+                    menu.addSeparator();
+
+                    for (const list of usedLists) {
+
+                        menu.add(new controls.Action({
+                            icon: controls.Controls.getIcon(colibri.ui.ide.ICON_MINUS),
+                            text: list.getLabel(),
+                            callback: () => {
+
+                                this.getUndoManager().add(
+                                    new RemoveObjectsFromListOperation(
+                                        this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
+                            }
+                        }));
+                    }
+
+                    menu.create(e);
+                });
+
+                this.addUpdater(() => {
+
+                    const listsRoot = this.getEditor().getScene().getObjectLists();
+
+                    const lists = new Set(
+                        this.getSelection()
+                            .map(obj => obj.getEditorSupport().getId())
+                            .flatMap(objId => listsRoot.getListsByObjectId(objId))
+                            .map(list => list.getLabel())
+                    );
+
+                    btn.textContent = "[" + [...lists].join(",") + "]";
+                });
+            }
         }
 
         canEdit(obj: any, n: number): boolean {
