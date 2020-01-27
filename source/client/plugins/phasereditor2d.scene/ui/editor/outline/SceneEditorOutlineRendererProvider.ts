@@ -13,9 +13,14 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return obj.getEditorSupport().getCellRenderer();
 
-            } else if (element instanceof Phaser.GameObjects.DisplayList) {
+            } else if (element instanceof Phaser.GameObjects.DisplayList
+                || element instanceof sceneobjects.ObjectLists) {
 
                 return new controls.viewers.IconImageCellRenderer(controls.Controls.getIcon(ide.ICON_FOLDER));
+
+            } else if (element instanceof sceneobjects.ObjectList) {
+
+                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
             }
 
             return new controls.viewers.EmptyCellRenderer(false);

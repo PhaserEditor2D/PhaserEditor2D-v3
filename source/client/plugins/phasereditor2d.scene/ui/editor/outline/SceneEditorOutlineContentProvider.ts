@@ -10,11 +10,16 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             const displayList = editor.getScene().sys.displayList;
 
+            const roots = [];
+
             if (displayList) {
-                return [displayList];
+
+                roots.push(displayList);
             }
 
-            return [];
+            roots.push(editor.getScene().getObjectLists());
+
+            return roots;
         }
 
         getChildren(parent: sceneobjects.ISceneObject): any[] {
@@ -32,6 +37,9 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return parent.list;
 
+            } else if (parent instanceof sceneobjects.ObjectLists) {
+
+                return parent.getLists();
             }
 
             return [];

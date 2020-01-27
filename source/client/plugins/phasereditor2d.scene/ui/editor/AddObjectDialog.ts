@@ -1,3 +1,6 @@
+/// <reference path="../viewers/ObjectExtensionAndPrefabLabelProvider.ts"/>
+/// <reference path="../viewers/ObjectExtensionAndPrefabViewer.ts"/>
+
 namespace phasereditor2d.scene.ui.editor {
 
     import controls = colibri.ui.controls;
@@ -5,10 +8,12 @@ namespace phasereditor2d.scene.ui.editor {
 
     export class AddObjectDialog extends controls.dialogs.ViewerDialog {
 
+        static OBJECT_LIST_TYPE = "ObjectListType";
+
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
-            super(new viewers.ObjectExtensionAndPrefabViewer());
+            super(new AddObjectDialogViewer());
 
             this._editor = editor;
 
@@ -28,27 +33,99 @@ namespace phasereditor2d.scene.ui.editor {
 
                     const type = sel[0];
 
-                    const maker = this._editor.getSceneMaker();
+                    if (type === AddObjectDialog.OBJECT_LIST_TYPE) {
 
-                    let obj;
+                        // TODO: missing undo operation
 
-                    if (type instanceof io.FilePath) {
+                        const scene = this._editor.getScene();
+                        const lists = scene.getObjectLists().getLists();
 
-                        obj = await maker.createPrefabInstanceWithFile(type);
+                        const newList = new sceneobjects.ObjectList();
+
+                        const nameMaker = new colibri.ui.ide.utils.NameMaker(
+                            (obj: sceneobjects.ObjectList) => obj.getLabel());
+
+                        nameMaker.update(lists);
+
+                        newList.setLabel(nameMaker.makeName("list"));
+
+                        this._editor.getUndoManager().add(
+                            new sceneobjects.AddObjectListOperation(this._editor, newList));
+
+                        // lists.push(newList);
+                        // this._editor.setSelection([newList]);
+                        // this._editor.setDirty(true);
 
                     } else {
 
-                        obj = maker.createEmptyObject(type);
+                        const maker = this._editor.getSceneMaker();
+
+                        let obj;
+
+                        if (type instanceof io.FilePath) {
+
+                            obj = await maker.createPrefabInstanceWithFile(type);
+
+                        } else {
+
+                            obj = maker.createEmptyObject(type);
+                        }
+
+                        this._editor.getUndoManager().add(new undo.AddObjectsOperation(this._editor, [obj]));
                     }
-
-                    this._editor.setSelection([obj]);
-                    this._editor.setDirty(true);
-                    this._editor.refreshDependenciesHash();
-
-                    this._editor.getUndoManager().add(new undo.AddObjectsOperation(this._editor, [obj]));
                 }));
 
             this.addCancelButton();
+        }
+    }
+
+    class AddObjectDialogViewer extends viewers.ObjectExtensionAndPrefabViewer {
+
+        constructor() {
+            super();
+
+            this.setLabelProvider(new class extends viewers.ObjectExtensionAndPrefabLabelProvider {
+
+                getLabel(obj: any) {
+
+                    if (obj === AddObjectDialog.OBJECT_LIST_TYPE) {
+                        return "List";
+                    }
+
+                    return super.getLabel(obj);
+                }
+            }());
+
+            this.setCellRendererProvider(new class extends viewers.ObjectExtensionAndPrefabCellRendererProvider {
+
+                getCellRenderer(obj: any) {
+
+                    if (obj === AddObjectDialog.OBJECT_LIST_TYPE) {
+
+                        return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
+                    }
+
+                    return super.getCellRenderer(obj);
+                }
+            }());
+
+            this.setContentProvider(new class extends viewers.ObjectExtensionAndPrefabContentProvider {
+
+                getChildren(obj: any) {
+
+                    if (obj === viewers.ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION) {
+
+                        const list = [...super.getChildren(obj)];
+
+                        list.push(AddObjectDialog.OBJECT_LIST_TYPE);
+
+                        return list;
+                    }
+
+                    return super.getChildren(obj);
+                }
+
+            }());
         }
     }
 }

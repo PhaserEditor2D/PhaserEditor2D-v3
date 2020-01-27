@@ -11,6 +11,7 @@ namespace phasereditor2d.scene {
     export const ICON_BUILD = "build";
     export const ICON_LOCKED = "locked";
     export const ICON_UNLOCKED = "unlocked";
+    export const ICON_LIST = "list";
 
     export class ScenePlugin extends colibri.Plugin {
 
@@ -66,7 +67,8 @@ namespace phasereditor2d.scene {
                     ICON_TRANSLATE,
                     ICON_BUILD,
                     ICON_LOCKED,
-                    ICON_UNLOCKED
+                    ICON_UNLOCKED,
+                    ICON_LIST
                 ])
             );
 
@@ -115,7 +117,7 @@ namespace phasereditor2d.scene {
             // property sections
 
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
-                page => new ui.sceneobjects.VariableSection(page),
+                page => new ui.sceneobjects.GameObjectVariableSection(page),
                 page => new ui.sceneobjects.ParentSection(page),
                 page => new ui.sceneobjects.TransformSection(page),
                 page => new ui.sceneobjects.OriginSection(page),

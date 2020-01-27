@@ -15,12 +15,27 @@ namespace phasereditor2d.scene.ui.editor {
 
         getSelectionIds() {
 
-            return this._editor.getSelectedGameObjects().map(obj => obj.getEditorSupport().getId());
+            const list = [];
+
+            list.push(...this._editor.getSelectedGameObjects()
+                .map(obj => obj.getEditorSupport().getId()));
+
+            list.push(...this._editor.getSelection()
+                .filter(obj => obj instanceof sceneobjects.ObjectList)
+                .map(obj => (obj as sceneobjects.ObjectList).getId()));
+
+            return list;
         }
 
         setSelectionByIds(ids: string[]) {
 
-            const map = this._editor.getScene().buildObjectIdMap();
+            const map: Map<string, any> = new Map(
+                this._editor.getScene().buildObjectIdMap());
+
+            for (const list of this._editor.getScene().getObjectLists().getLists()) {
+
+                map.set(list.getId(), list);
+            }
 
             const sel = ids
                 .map(id => map.get(id))

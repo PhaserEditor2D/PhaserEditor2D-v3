@@ -52,11 +52,11 @@ namespace phasereditor2d.scene.ui.editor.undo {
         }
 
         private updateEditor() {
+
             this._editor.setDirty(true);
             this._editor.repaint();
             this._editor.refreshOutline();
+            this._editor.refreshDependenciesHash();
         }
-
     }
-
 }

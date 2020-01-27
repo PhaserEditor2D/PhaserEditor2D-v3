@@ -7,6 +7,7 @@ declare namespace phasereditor2d.scene {
     const ICON_BUILD = "build";
     const ICON_LOCKED = "locked";
     const ICON_UNLOCKED = "unlocked";
+    const ICON_LIST = "list";
     class ScenePlugin extends colibri.Plugin {
         private static _instance;
         private _sceneFinder;
@@ -243,6 +244,17 @@ declare namespace phasereditor2d.scene.core.json {
     }
 }
 declare namespace phasereditor2d.scene.core.json {
+    interface IObjectListsData {
+        lists: IObjectListData[];
+    }
+    interface IObjectListData {
+        id: string;
+        label: string;
+        scope?: ui.sceneobjects.ObjectScope;
+        objectIds?: string[];
+    }
+}
+declare namespace phasereditor2d.scene.core.json {
     enum SceneType {
         SCENE = "SCENE",
         PREFAB = "PREFAB"
@@ -251,6 +263,7 @@ declare namespace phasereditor2d.scene.core.json {
         id: string;
         sceneType: SceneType;
         settings: object;
+        lists?: IObjectListsData;
         displayList: IObjectData[];
         meta: {
             app: string;
@@ -359,12 +372,14 @@ declare namespace phasereditor2d.scene.ui {
         private _inEditor;
         private _maker;
         private _settings;
+        private _objectLists;
         private _packCache;
         constructor(inEditor?: boolean);
         protected registerDestroyListener(name: string): void;
         getPackCache(): pack.core.parsers.AssetPackCache;
         destroyGame(): void;
         getPrefabObject(): sceneobjects.ISceneObject;
+        getObjectLists(): sceneobjects.ObjectLists;
         getSettings(): core.json.SceneSettings;
         getId(): string;
         setId(id: string): void;
@@ -533,9 +548,29 @@ declare namespace phasereditor2d.scene.ui.editor {
         joinObjectsInContainer(): void;
     }
 }
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
+    class ObjectExtensionAndPrefabLabelProvider extends controls.viewers.LabelProvider {
+        getLabel(obj: any): string;
+    }
+}
+declare namespace phasereditor2d.scene.ui.viewers {
+    import controls = colibri.ui.controls;
+    class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
+        static BUILT_IN_SECTION: string;
+        static PREFAB_SECTION: string;
+        static SECTIONS: string[];
+        constructor();
+    }
+    class ObjectExtensionAndPrefabContentProvider implements controls.viewers.ITreeContentProvider {
+        getRoots(input: any): any[];
+        getChildren(parent: any): any[];
+    }
+}
 declare namespace phasereditor2d.scene.ui.editor {
     import controls = colibri.ui.controls;
     class AddObjectDialog extends controls.dialogs.ViewerDialog {
+        static OBJECT_LIST_TYPE: string;
         private _editor;
         constructor(editor: SceneEditor);
         create(): void;
@@ -688,7 +723,7 @@ declare namespace phasereditor2d.scene.ui.editor {
     class SelectionManager {
         private _editor;
         constructor(editor: SceneEditor);
-        getSelectionIds(): string[];
+        getSelectionIds(): any[];
         setSelectionByIds(ids: string[]): void;
         clearSelection(): void;
         refreshSelection(): void;
@@ -1471,6 +1506,56 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    abstract class GlobalListOperation extends editor.undo.SceneEditorOperation {
+        private _before;
+        private _after;
+        constructor(editor: editor.SceneEditor);
+        abstract performChange(lists: ObjectLists): void;
+        execute(): void;
+        private loadData;
+        undo(): void;
+        redo(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class AddObjectListOperation extends GlobalListOperation {
+        private _list;
+        constructor(editor: editor.SceneEditor, list: ObjectList);
+        performChange(lists: ObjectLists): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import json = core.json;
+    class ObjectList {
+        private _id;
+        private _label;
+        private _scope;
+        private _objectIds;
+        constructor();
+        getObjectIds(): string[];
+        getId(): string;
+        setId(id: string): void;
+        getLabel(): string;
+        setLabel(label: string): void;
+        getScope(): ObjectScope;
+        setScope(scope: ObjectScope): void;
+        readJSON(data: json.IObjectListData): void;
+        writeJSON(data: json.IObjectListData): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import json = core.json;
+    class ObjectLists {
+        private _lists;
+        constructor();
+        getLists(): ObjectList[];
+        readJSON_lists(listsArray: json.IObjectListData[]): void;
+        readJSON(sceneData: json.ISceneData): void;
+        writeJSON(sceneData: json.ISceneData): void;
+        toJSON_lists(): json.IObjectListData[];
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IOriginLikeObject extends ISceneObject {
         originX: number;
         originY: number;
@@ -1606,7 +1691,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
-    class VariableSection extends SceneObjectSection<ISceneObjectLike> {
+    class GameObjectVariableSection extends SceneObjectSection<ISceneObjectLike> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
@@ -1943,21 +2028,6 @@ declare namespace phasereditor2d.scene.ui.viewers {
     class ObjectExtensionAndPrefabCellRendererProvider implements controls.viewers.ICellRendererProvider {
         getCellRenderer(element: any): controls.viewers.ICellRenderer;
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
-    }
-}
-declare namespace phasereditor2d.scene.ui.viewers {
-    import controls = colibri.ui.controls;
-    class ObjectExtensionAndPrefabLabelProvider extends controls.viewers.LabelProvider {
-        getLabel(obj: any): string;
-    }
-}
-declare namespace phasereditor2d.scene.ui.viewers {
-    import controls = colibri.ui.controls;
-    class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
-        static TYPE_SECTION: string;
-        static PREFAB_SECTION: string;
-        static SECTIONS: string[];
-        constructor();
     }
 }
 declare namespace phasereditor2d.scene.ui.viewers {
