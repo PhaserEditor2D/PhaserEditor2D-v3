@@ -51,7 +51,13 @@ namespace colibri.ui.controls.properties {
         }
 
         getSelection(): T[] {
+
             return this._page.getSelection();
+        }
+
+        getSelectionFirstElement(): T {
+
+            return this.getSelection()[0];
         }
 
         getId() {

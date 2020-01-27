@@ -15,6 +15,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._lists;
         }
 
+        getById(id: string) {
+
+            return this._lists.find(list => list.getId() === id);
+        }
+
         readJSON_lists(listsArray: json.IObjectListData[]) {
 
             this._lists = [];

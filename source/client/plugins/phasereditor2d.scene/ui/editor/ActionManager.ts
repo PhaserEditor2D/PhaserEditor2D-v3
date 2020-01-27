@@ -13,6 +13,7 @@ namespace phasereditor2d.scene.ui.editor {
             const operations: colibri.ui.ide.undo.Operation[] = [];
 
             const objects = this._editor.getSelectedGameObjects();
+
             const lists = this._editor.getSelection()
                 .filter(obj => obj instanceof sceneobjects.ObjectList);
 

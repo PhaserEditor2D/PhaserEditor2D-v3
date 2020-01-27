@@ -17,6 +17,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 .getActiveWindow().getEditorArea()
                 .getSelectedEditor() as SceneEditor;
         }
+
+        protected getUndoManager() {
+
+            return this.getEditor().getUndoManager();
+        }
     }
 
 }

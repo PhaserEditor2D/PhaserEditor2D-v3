@@ -959,6 +959,7 @@ declare namespace colibri.ui.controls.properties {
         isCollapsedByDefault(): boolean;
         getPage(): PropertyPage;
         getSelection(): T[];
+        getSelectionFirstElement(): T;
         getId(): string;
         getTitle(): string;
         create(parent: HTMLDivElement): void;

@@ -3979,6 +3979,9 @@ var colibri;
                     getSelection() {
                         return this._page.getSelection();
                     }
+                    getSelectionFirstElement() {
+                        return this.getSelection()[0];
+                    }
                     getId() {
                         return this._id;
                     }

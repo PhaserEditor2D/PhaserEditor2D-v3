@@ -117,7 +117,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     };
                 });
 
-            const btn = this.createMenuButton(parent, "-", items, value => {
+            const btn = this.createMenuButton(parent, "", items, value => {
 
                 this.getEditor().getUndoManager().add(
                     new SimpleOperation(this.getEditor(), this.getSelection(), property, value));

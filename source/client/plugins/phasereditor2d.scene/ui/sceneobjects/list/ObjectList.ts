@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._id = Phaser.Utils.String.UUID();
             this._label = "list";
-            this._scope = ObjectScope.METHOD;
+            this._scope = ObjectScope.CLASS;
             this._objectIds = [];
         }
 

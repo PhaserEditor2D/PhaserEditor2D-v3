@@ -1,0 +1,84 @@
+namespace phasereditor2d.scene.ui.sceneobjects {
+
+    import controls = colibri.ui.controls;
+
+    export class ListVariableSection extends editor.properties.BaseSceneSection<ObjectList> {
+
+        constructor(page: controls.properties.PropertyPage) {
+            super(page, "phasereditor2d.scene.ui.sceneobjects.ListVariableSection", "Variable", false);
+        }
+
+        protected createForm(parent: HTMLDivElement) {
+
+            const comp = this.createGridElement(parent, 2);
+
+            {
+                // Name
+
+                this.createLabel(comp, "Name");
+
+                const text = this.createText(comp);
+
+                text.addEventListener("change", e => {
+
+                    this.performChange(list => {
+                        list.setLabel(text.value);
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    text.value = this.getSelectionFirstElement().getLabel();
+                });
+            }
+
+            {
+                // Scope
+
+                this.createLabel(comp, "Scope", "The lexical scope of the object.");
+
+                const items = [{
+                    name: "Method",
+                    value: ObjectScope.METHOD
+                }, {
+                    name: "Class",
+                    value: ObjectScope.CLASS
+                }, {
+                    name: "Public",
+                    value: ObjectScope.PUBLIC
+                }];
+
+                const btn = this.createMenuButton(comp, "", items, scope => {
+
+                    this.performChange(list => {
+
+                        list.setScope(scope);
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    btn.textContent = items
+                        .find(item => item.value === this.getSelectionFirstElement().getScope())
+                        .name;
+                });
+            }
+        }
+
+        private performChange(performChange: (list: ObjectList) => void) {
+            this.getUndoManager().add(
+                new ChangeListOperation(this.getEditor(),
+                    this.getSelectionFirstElement(),
+                    performChange)
+            );
+        }
+
+        canEdit(obj: any, n: number): boolean {
+            return obj instanceof ObjectList;
+        }
+
+        canEditNumber(n: number): boolean {
+            return n === 1;
+        }
+    }
+}

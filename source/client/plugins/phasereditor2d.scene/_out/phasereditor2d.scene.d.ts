@@ -804,6 +804,7 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
         protected getHelp(key: string): string;
         protected getScene(): T;
         getEditor(): SceneEditor;
+        protected getUndoManager(): colibri.ui.ide.undo.UndoManager;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
@@ -1528,6 +1529,30 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
+    class ChangeListOperation extends editor.undo.SceneEditorOperation {
+        private _performChange;
+        private _list;
+        private _before;
+        private _after;
+        constructor(editor: editor.SceneEditor, list: ObjectList, performChange: (list: ObjectList) => void);
+        execute(): void;
+        loadData(listData: json.IObjectListData): void;
+        undo(): void;
+        redo(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class ListVariableSection extends editor.properties.BaseSceneSection<ObjectList> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        private performChange;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import json = core.json;
     class ObjectList {
         private _id;
         private _label;
@@ -1551,6 +1576,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _lists;
         constructor();
         getLists(): ObjectList[];
+        getById(id: string): ObjectList;
         readJSON_lists(listsArray: json.IObjectListData[]): void;
         readJSON(sceneData: json.ISceneData): void;
         writeJSON(sceneData: json.ISceneData): void;
@@ -1631,17 +1657,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class MoveToContainerOperation extends editor.undo.SceneEditorOperation {
-        private _before;
-        private _after;
-        constructor(editor: editor.SceneEditor, parentId?: string);
-        execute(): void;
-        private loadMove;
-        undo(): void;
-        redo(): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
         protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
@@ -1651,6 +1666,26 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
         createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class GameObjectVariableSection extends SceneObjectSection<ISceneObjectLike> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class MoveToContainerOperation extends editor.undo.SceneEditorOperation {
+        private _before;
+        private _after;
+        constructor(editor: editor.SceneEditor, parentId?: string);
+        execute(): void;
+        private loadMove;
+        undo(): void;
+        redo(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1693,15 +1728,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TransformSection extends SceneObjectSection<sceneobjects.ITransformLikeObject> {
         constructor(page: colibri.ui.controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
-        canEdit(obj: any, n: number): boolean;
-        canEditNumber(n: number): boolean;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    import controls = colibri.ui.controls;
-    class GameObjectVariableSection extends SceneObjectSection<ISceneObjectLike> {
-        constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;

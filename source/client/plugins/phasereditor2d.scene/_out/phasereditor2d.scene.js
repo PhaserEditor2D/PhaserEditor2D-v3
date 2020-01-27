@@ -57,7 +57,7 @@ var phasereditor2d;
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page)));
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
@@ -4406,6 +4406,9 @@ var phasereditor2d;
                                 .getActiveWindow().getEditorArea()
                                 .getSelectedEditor();
                         }
+                        getUndoManager() {
+                            return this.getEditor().getUndoManager();
+                        }
                     }
                     properties.BaseSceneSection = BaseSceneSection;
                 })(properties = editor.properties || (editor.properties = {}));
@@ -6726,11 +6729,120 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                class ChangeListOperation extends ui.editor.undo.SceneEditorOperation {
+                    constructor(editor, list, performChange) {
+                        super(editor);
+                        this._list = list;
+                        this._performChange = performChange;
+                    }
+                    execute() {
+                        this._before = {};
+                        this._list.writeJSON(this._before);
+                        this._performChange(this._list);
+                        this._after = {};
+                        this._list.writeJSON(this._after);
+                        delete this._list;
+                        this.loadData(this._after);
+                    }
+                    loadData(listData) {
+                        const list = this._editor.getScene().getObjectLists().getById(listData.id);
+                        list.readJSON(listData);
+                        this._editor.setDirty(true);
+                        this._editor.refreshOutline();
+                        this._editor.dispatchSelectionChanged();
+                    }
+                    undo() {
+                        this.loadData(this._before);
+                    }
+                    redo() {
+                        this.loadData(this._after);
+                    }
+                }
+                sceneobjects.ChangeListOperation = ChangeListOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class ListVariableSection extends ui.editor.properties.BaseSceneSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.ListVariableSection", "Variable", false);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElement(parent, 2);
+                        {
+                            // Name
+                            this.createLabel(comp, "Name");
+                            const text = this.createText(comp);
+                            text.addEventListener("change", e => {
+                                this.performChange(list => {
+                                    list.setLabel(text.value);
+                                });
+                            });
+                            this.addUpdater(() => {
+                                text.value = this.getSelectionFirstElement().getLabel();
+                            });
+                        }
+                        {
+                            // Scope
+                            this.createLabel(comp, "Scope", "The lexical scope of the object.");
+                            const items = [{
+                                    name: "Method",
+                                    value: sceneobjects.ObjectScope.METHOD
+                                }, {
+                                    name: "Class",
+                                    value: sceneobjects.ObjectScope.CLASS
+                                }, {
+                                    name: "Public",
+                                    value: sceneobjects.ObjectScope.PUBLIC
+                                }];
+                            const btn = this.createMenuButton(comp, "", items, scope => {
+                                this.performChange(list => {
+                                    list.setScope(scope);
+                                });
+                            });
+                            this.addUpdater(() => {
+                                btn.textContent = items
+                                    .find(item => item.value === this.getSelectionFirstElement().getScope())
+                                    .name;
+                            });
+                        }
+                    }
+                    performChange(performChange) {
+                        this.getUndoManager().add(new sceneobjects.ChangeListOperation(this.getEditor(), this.getSelectionFirstElement(), performChange));
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof sceneobjects.ObjectList;
+                    }
+                    canEditNumber(n) {
+                        return n === 1;
+                    }
+                }
+                sceneobjects.ListVariableSection = ListVariableSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 class ObjectList {
                     constructor() {
                         this._id = Phaser.Utils.String.UUID();
                         this._label = "list";
-                        this._scope = sceneobjects.ObjectScope.METHOD;
+                        this._scope = sceneobjects.ObjectScope.CLASS;
                         this._objectIds = [];
                     }
                     getObjectIds() {
@@ -6786,6 +6898,9 @@ var phasereditor2d;
                     }
                     getLists() {
                         return this._lists;
+                    }
+                    getById(id) {
+                        return this._lists.find(list => list.getId() === id);
                     }
                     readJSON_lists(listsArray) {
                         this._lists = [];
@@ -7073,6 +7188,182 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                var controls = colibri.ui.controls;
+                class SceneObjectSection extends ui.editor.properties.BaseSceneSection {
+                    createGridElementWithPropertiesXY(parent) {
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
+                        return comp;
+                    }
+                    createLock(parent, ...properties) {
+                        const mutableIcon = new controls.MutableIcon();
+                        const element = mutableIcon.getElement();
+                        element.classList.add("PropertyLockIcon");
+                        parent.appendChild(element);
+                        const lockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_LOCKED);
+                        const unlockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_UNLOCKED);
+                        element.addEventListener("click", e => {
+                            const unlocked = !this.isUnlocked(...properties);
+                            this.getEditor().getUndoManager().add(new sceneobjects.PropertyUnlockOperation(this.getEditor(), this.getSelection(), properties, unlocked));
+                        });
+                        this.addUpdater(() => {
+                            const thereIsPrefabInstances = this.getSelection()
+                                .map(obj => obj.getEditorSupport().isPrefabInstance())
+                                .find(b => b);
+                            if (thereIsPrefabInstances) {
+                                element.style.width = controls.ICON_SIZE + "px";
+                                const unlocked = this.isUnlocked(...properties);
+                                mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
+                                mutableIcon.repaint();
+                            }
+                            else {
+                                element.style.width = "0px";
+                            }
+                        });
+                    }
+                    isUnlocked(...properties) {
+                        for (const obj of this.getSelection()) {
+                            for (const property of properties) {
+                                const locked = !obj.getEditorSupport().isUnlockedProperty(property);
+                                if (locked) {
+                                    return false;
+                                }
+                            }
+                        }
+                        return true;
+                    }
+                    createNumberPropertyRow(parent, prop, fullWidth = true) {
+                        this.createLock(parent, prop);
+                        this.createLabel(parent, prop.label)
+                            .style.gridColumn = "2/ span 2";
+                        this.createFloatField(parent, prop)
+                            .style.gridColumn = fullWidth ? "4 / span 3" : "4";
+                    }
+                    createPropertyXYRow(parent, propXY, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, propXY.x, propXY.y);
+                            this.createLabel(parent, propXY.label);
+                        }
+                        else {
+                            const label = this.createLabel(parent, propXY.label);
+                            label.style.gridColumn = "2";
+                        }
+                        for (const prop of [propXY.x, propXY.y]) {
+                            this.createLabel(parent, prop.label);
+                            this.createFloatField(parent, prop);
+                        }
+                    }
+                    createEnumField(parent, property, checkUnlocked = true) {
+                        const items = property.values
+                            .map(value => {
+                            return {
+                                name: property.getValueLabel(value),
+                                value
+                            };
+                        });
+                        const btn = this.createMenuButton(parent, "", items, value => {
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            btn.disabled = checkUnlocked && !this.isUnlocked(property);
+                            btn.textContent = this.flatValues_StringOneOrNothing(this.getSelection()
+                                .map(obj => property.getValueLabel(property.getValue(obj))));
+                        });
+                    }
+                    // tslint:disable-next-line:ban-types
+                    createFloatField(parent, property) {
+                        const text = this.createText(parent, false);
+                        text.addEventListener("change", e => {
+                            const value = Number.parseFloat(text.value);
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            text.readOnly = !this.isUnlocked(property);
+                            text.value = this.flatValues_Number(this.getSelection()
+                                .map(obj => property.getValue(obj)));
+                        });
+                        return text;
+                    }
+                    createStringField(parent, property, checkUnlock = true) {
+                        const text = this.createText(parent, false);
+                        text.addEventListener("change", e => {
+                            const value = text.value;
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            text.readOnly = checkUnlock && !this.isUnlocked(property);
+                            text.value = this.flatValues_StringOneOrNothing(this.getSelection()
+                                .map(obj => property.getValue(obj)));
+                        });
+                        return text;
+                    }
+                }
+                sceneobjects.SceneObjectSection = SceneObjectSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneObjectSection.ts"/>
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class GameObjectVariableSection extends sceneobjects.SceneObjectSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectVariableSection", "Variable", false);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElement(parent, 2);
+                        {
+                            // Name
+                            this.createLabel(comp, "Name");
+                            this.createStringField(comp, sceneobjects.VariableComponent.label, false);
+                        }
+                        {
+                            // Type
+                            this.createLabel(comp, "Type");
+                            const text = this.createText(comp, true);
+                            this.addUpdater(() => {
+                                text.value = this.flatValues_StringJoin(this.getSelection().map(obj => {
+                                    const support = obj.getEditorSupport();
+                                    let typename = support.getObjectType();
+                                    if (support.isPrefabInstance()) {
+                                        typename = `prefab ${support.getPrefabName()} (${typename})`;
+                                    }
+                                    return typename;
+                                }));
+                            });
+                        }
+                        {
+                            // Scope
+                            this.createLabel(comp, "Scope", "The lexical scope of the object.");
+                            this.createEnumField(comp, sceneobjects.VariableComponent.scope, false);
+                        }
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof Phaser.GameObjects.GameObject;
+                    }
+                    canEditNumber(n) {
+                        return n === 1;
+                    }
+                }
+                sceneobjects.GameObjectVariableSection = GameObjectVariableSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
     (function (scene_24) {
         var ui;
         (function (ui) {
@@ -7168,129 +7459,6 @@ var phasereditor2d;
                 sceneobjects.MoveToContainerOperation = MoveToContainerOperation;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene_24.ui || (scene_24.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                var controls = colibri.ui.controls;
-                class SceneObjectSection extends ui.editor.properties.BaseSceneSection {
-                    createGridElementWithPropertiesXY(parent) {
-                        const comp = this.createGridElement(parent);
-                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
-                        return comp;
-                    }
-                    createLock(parent, ...properties) {
-                        const mutableIcon = new controls.MutableIcon();
-                        const element = mutableIcon.getElement();
-                        element.classList.add("PropertyLockIcon");
-                        parent.appendChild(element);
-                        const lockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_LOCKED);
-                        const unlockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_UNLOCKED);
-                        element.addEventListener("click", e => {
-                            const unlocked = !this.isUnlocked(...properties);
-                            this.getEditor().getUndoManager().add(new sceneobjects.PropertyUnlockOperation(this.getEditor(), this.getSelection(), properties, unlocked));
-                        });
-                        this.addUpdater(() => {
-                            const thereIsPrefabInstances = this.getSelection()
-                                .map(obj => obj.getEditorSupport().isPrefabInstance())
-                                .find(b => b);
-                            if (thereIsPrefabInstances) {
-                                element.style.width = controls.ICON_SIZE + "px";
-                                const unlocked = this.isUnlocked(...properties);
-                                mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
-                                mutableIcon.repaint();
-                            }
-                            else {
-                                element.style.width = "0px";
-                            }
-                        });
-                    }
-                    isUnlocked(...properties) {
-                        for (const obj of this.getSelection()) {
-                            for (const property of properties) {
-                                const locked = !obj.getEditorSupport().isUnlockedProperty(property);
-                                if (locked) {
-                                    return false;
-                                }
-                            }
-                        }
-                        return true;
-                    }
-                    createNumberPropertyRow(parent, prop, fullWidth = true) {
-                        this.createLock(parent, prop);
-                        this.createLabel(parent, prop.label)
-                            .style.gridColumn = "2/ span 2";
-                        this.createFloatField(parent, prop)
-                            .style.gridColumn = fullWidth ? "4 / span 3" : "4";
-                    }
-                    createPropertyXYRow(parent, propXY, lockIcon = true) {
-                        if (lockIcon) {
-                            this.createLock(parent, propXY.x, propXY.y);
-                            this.createLabel(parent, propXY.label);
-                        }
-                        else {
-                            const label = this.createLabel(parent, propXY.label);
-                            label.style.gridColumn = "2";
-                        }
-                        for (const prop of [propXY.x, propXY.y]) {
-                            this.createLabel(parent, prop.label);
-                            this.createFloatField(parent, prop);
-                        }
-                    }
-                    createEnumField(parent, property, checkUnlocked = true) {
-                        const items = property.values
-                            .map(value => {
-                            return {
-                                name: property.getValueLabel(value),
-                                value
-                            };
-                        });
-                        const btn = this.createMenuButton(parent, "-", items, value => {
-                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
-                        });
-                        this.addUpdater(() => {
-                            btn.disabled = checkUnlocked && !this.isUnlocked(property);
-                            btn.textContent = this.flatValues_StringOneOrNothing(this.getSelection()
-                                .map(obj => property.getValueLabel(property.getValue(obj))));
-                        });
-                    }
-                    // tslint:disable-next-line:ban-types
-                    createFloatField(parent, property) {
-                        const text = this.createText(parent, false);
-                        text.addEventListener("change", e => {
-                            const value = Number.parseFloat(text.value);
-                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
-                        });
-                        this.addUpdater(() => {
-                            text.readOnly = !this.isUnlocked(property);
-                            text.value = this.flatValues_Number(this.getSelection()
-                                .map(obj => property.getValue(obj)));
-                        });
-                        return text;
-                    }
-                    createStringField(parent, property, checkUnlock = true) {
-                        const text = this.createText(parent, false);
-                        text.addEventListener("change", e => {
-                            const value = text.value;
-                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
-                        });
-                        this.addUpdater(() => {
-                            text.readOnly = checkUnlock && !this.isUnlocked(property);
-                            text.value = this.flatValues_StringOneOrNothing(this.getSelection()
-                                .map(obj => property.getValue(obj)));
-                        });
-                        return text;
-                    }
-                }
-                sceneobjects.SceneObjectSection = SceneObjectSection;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./SceneObjectSection.ts" />
@@ -7488,58 +7656,6 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.TransformSection = TransformSection;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                class GameObjectVariableSection extends sceneobjects.SceneObjectSection {
-                    constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectVariableSection", "Variable", false);
-                    }
-                    createForm(parent) {
-                        const comp = this.createGridElement(parent, 2);
-                        {
-                            // Name
-                            this.createLabel(comp, "Name");
-                            this.createStringField(comp, sceneobjects.VariableComponent.label, false);
-                        }
-                        {
-                            // Type
-                            this.createLabel(comp, "Type");
-                            const text = this.createText(comp, true);
-                            this.addUpdater(() => {
-                                text.value = this.flatValues_StringJoin(this.getSelection().map(obj => {
-                                    const support = obj.getEditorSupport();
-                                    let typename = support.getObjectType();
-                                    if (support.isPrefabInstance()) {
-                                        typename = `prefab ${support.getPrefabName()} (${typename})`;
-                                    }
-                                    return typename;
-                                }));
-                            });
-                        }
-                        {
-                            // Scope
-                            this.createLabel(comp, "Scope", "The lexical scope of the object.");
-                            this.createEnumField(comp, sceneobjects.VariableComponent.scope, false);
-                        }
-                    }
-                    canEdit(obj, n) {
-                        return obj instanceof Phaser.GameObjects.GameObject;
-                    }
-                    canEditNumber(n) {
-                        return n === 1;
-                    }
-                }
-                sceneobjects.GameObjectVariableSection = GameObjectVariableSection;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
