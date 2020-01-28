@@ -51,6 +51,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _actionManager: ActionManager;
         private _toolsManager: tools.SceneToolsManager;
         private _mouseManager: MouseManager;
+        private _clipboardManager: ClipboardManager;
         private _gameBooted: boolean;
         private _sceneRead: boolean;
         private _currentRefreshHash: string;
@@ -188,6 +189,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._actionManager = new ActionManager(this);
             this._toolsManager = new tools.SceneToolsManager(this);
             this._mouseManager = new MouseManager(this);
+            this._clipboardManager = new ClipboardManager(this);
 
             this._overlayLayer.getCanvas().addEventListener("contextmenu", e => this.onMenu(e));
         }
@@ -454,12 +456,20 @@ namespace phasereditor2d.scene.ui.editor {
                 .map(obj => obj as sceneobjects.ISceneObject);
         }
 
+        getClipboardManager() {
+            return this._clipboardManager;
+        }
+
         getToolsManager() {
             return this._toolsManager;
         }
 
         getActionManager() {
             return this._actionManager;
+        }
+
+        getMouseManager() {
+            return this._mouseManager;
         }
 
         getSelectionManager() {
@@ -547,13 +557,7 @@ namespace phasereditor2d.scene.ui.editor {
                 obj.getEditorSupport().destroy();
             }
 
-            this._scene.sys.updateList.removeAll();
-            this._scene.sys.displayList.removeAll();
-
-            // a hack to clean the whole scene
-            this._scene.input["_list"].length = 0;
-            this._scene.input["_pendingInsertion"].length = 0;
-            this._scene.input["_pendingRemoval"].length = 0;
+            this._scene.removeAll();
 
             const maker = this.getSceneMaker();
 
@@ -694,6 +698,10 @@ namespace phasereditor2d.scene.ui.editor {
             this._game.loop.tick();
 
             this._overlayLayer.render();
+        }
+
+        copy() {
+            console.log("copy!");
         }
     }
 }

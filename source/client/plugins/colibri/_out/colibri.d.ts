@@ -1711,6 +1711,8 @@ declare namespace colibri.ui.ide.commands {
     }
 }
 declare namespace colibri.ui.ide.actions {
+    const CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
+    const CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
     const CMD_SAVE = "colibri.ui.ide.actions.Save";
     const CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
     const CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
@@ -1726,8 +1728,9 @@ declare namespace colibri.ui.ide.actions {
     const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
     const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
     const CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
-    const CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
-    const CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
+    const CMD_COPY = "colibri.ui.ide.actions.Copy";
+    const CMD_CUT = "colibri.ui.ide.actions.Cut";
+    const CMD_PASTE = "colibri.ui.ide.actions.Paste";
     class ColibriCommands {
         static registerCommands(manager: commands.CommandManager): void;
         private static initPalette;

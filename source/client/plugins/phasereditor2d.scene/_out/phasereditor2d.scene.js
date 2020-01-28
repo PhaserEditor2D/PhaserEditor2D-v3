@@ -1636,6 +1636,17 @@ var phasereditor2d;
                         this.game.loop.tick();
                     }
                 }
+                removeAll() {
+                    this.sys.updateList.removeAll();
+                    this.sys.displayList.removeAll();
+                    // a hack to clean the whole scene
+                    this.input["_list"].length = 0;
+                    this.input["_pendingInsertion"].length = 0;
+                    this.input["_pendingRemoval"].length = 0;
+                    for (const obj of this.getDisplayListChildren()) {
+                        obj.getEditorSupport().destroy();
+                    }
+                }
                 getPrefabObject() {
                     return this.getDisplayListChildren()[0];
                 }
@@ -2520,6 +2531,7 @@ var phasereditor2d;
         (function (ui) {
             var editor;
             (function (editor_1) {
+                // TODO: please, deprecate this! Migrate this to the operations.
                 class ActionManager {
                     constructor(editor) {
                         this._editor = editor;
@@ -2829,6 +2841,64 @@ var phasereditor2d;
         (function (ui) {
             var editor;
             (function (editor_4) {
+                class ClipboardManager {
+                    constructor(editor) {
+                        this._editor = editor;
+                        this._clipboard = [];
+                    }
+                    getClipboard() {
+                        return this._clipboard;
+                    }
+                    getClipboardCopy() {
+                        return this._clipboard.map(obj => JSON.parse(JSON.stringify(obj)));
+                    }
+                    copy() {
+                        this._clipboard = [];
+                        for (const obj of this._editor.getSelection()) {
+                            if (obj instanceof Phaser.GameObjects.GameObject) {
+                                const objData = {};
+                                obj.getEditorSupport().writeJSON(objData);
+                                this._clipboard.push({
+                                    type: "ISceneObject",
+                                    data: objData
+                                });
+                            }
+                            else if (obj instanceof ui.sceneobjects.ObjectList) {
+                                const listData = {};
+                                obj.writeJSON(listData);
+                                this._clipboard.push({
+                                    type: "ObjectList",
+                                    data: listData
+                                });
+                            }
+                        }
+                    }
+                    paste() {
+                        // console.log("paste!!");
+                        // if (this._clipboard.length > 0) {
+                        //     this._editor.getUndoManager().add(new undo.PasteOperation(this._editor));
+                        // }
+                        if (this._clipboard.length > 0) {
+                            this._editor.getUndoManager().add(new editor_4.undo.PasteOperation(this._editor));
+                        }
+                    }
+                    cut() {
+                        throw new Error("Method not implemented.");
+                    }
+                }
+                editor_4.ClipboardManager = ClipboardManager;
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_5) {
                 var controls = colibri.ui.controls;
                 class ConvertTypeDialog extends controls.dialogs.ViewerDialog {
                     constructor(editor) {
@@ -2848,14 +2918,14 @@ var phasereditor2d;
                         super.create();
                         this.setTitle("Replace Type");
                         this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Replace", (sel) => {
-                            this._editor.getUndoManager().add(new editor_4.undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));
+                            this._editor.getUndoManager().add(new editor_5.undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));
                             this.close();
                         }));
                         viewer.selectFirst();
                         this.addButton("Cancel", () => this.close());
                     }
                 }
-                editor_4.ConvertTypeDialog = ConvertTypeDialog;
+                editor_5.ConvertTypeDialog = ConvertTypeDialog;
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -2867,7 +2937,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_5) {
+            (function (editor_6) {
                 var controls = colibri.ui.controls;
                 var ide = colibri.ui.ide;
                 var io = colibri.core.io;
@@ -2883,7 +2953,7 @@ var phasereditor2d;
                         if (this.acceptDropDataArray(dataArray)) {
                             e.preventDefault();
                             const sprites = await this.createWithDropEvent(e, dataArray);
-                            this._editor.getUndoManager().add(new editor_5.undo.AddObjectsOperation(this._editor, sprites));
+                            this._editor.getUndoManager().add(new editor_6.undo.AddObjectsOperation(this._editor, sprites));
                             this._editor.setSelection(sprites);
                             this._editor.refreshOutline();
                             await this._editor.refreshDependenciesHash();
@@ -2989,7 +3059,7 @@ var phasereditor2d;
                         return true;
                     }
                 }
-                editor_5.DropManager = DropManager;
+                editor_6.DropManager = DropManager;
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_10.ui || (scene_10.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3001,12 +3071,13 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_6) {
+            (function (editor_7) {
                 class MouseManager {
                     constructor(editor) {
                         this._editor = editor;
                         this._toolInAction = false;
                         const canvas = editor.getOverlayLayer().getCanvas();
+                        this._mousePosition = { x: 0, y: 0 };
                         canvas.addEventListener("click", e => this.onClick(e));
                         canvas.addEventListener("mousedown", e => this.onMouseDown(e));
                         canvas.addEventListener("mouseup", e => this.onMouseUp(e));
@@ -3040,7 +3111,17 @@ var phasereditor2d;
                             }
                         }
                     }
+                    getMousePosition() {
+                        return this._mousePosition;
+                    }
+                    getDropPosition() {
+                        const p = this._editor.getScene().getCamera()
+                            .getWorldPoint(this._mousePosition.x, this._mousePosition.y);
+                        return this._editor.getScene().snapPoint(p.x, p.y);
+                    }
                     onMouseMove(e) {
+                        this._mousePosition.x = e.offsetX;
+                        this._mousePosition.y = e.offsetY;
                         const toolsManager = this._editor.getToolsManager();
                         const tool = toolsManager.getActiveTool();
                         if (tool && this._toolInAction) {
@@ -3085,7 +3166,7 @@ var phasereditor2d;
                         selManager.onMouseClick(e);
                     }
                 }
-                editor_6.MouseManager = MouseManager;
+                editor_7.MouseManager = MouseManager;
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3097,7 +3178,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_7) {
+            (function (editor_8) {
                 var controls = colibri.ui.controls;
                 class OverlayLayer {
                     constructor(editor) {
@@ -3301,7 +3382,7 @@ var phasereditor2d;
                         }
                     }
                 }
-                editor_7.OverlayLayer = OverlayLayer;
+                editor_8.OverlayLayer = OverlayLayer;
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3416,6 +3497,7 @@ var phasereditor2d;
                         this._actionManager = new editor.ActionManager(this);
                         this._toolsManager = new editor.tools.SceneToolsManager(this);
                         this._mouseManager = new editor.MouseManager(this);
+                        this._clipboardManager = new editor.ClipboardManager(this);
                         this._overlayLayer.getCanvas().addEventListener("contextmenu", e => this.onMenu(e));
                     }
                     createGame() {
@@ -3595,11 +3677,17 @@ var phasereditor2d;
                             .filter(obj => obj instanceof Phaser.GameObjects.GameObject)
                             .map(obj => obj);
                     }
+                    getClipboardManager() {
+                        return this._clipboardManager;
+                    }
                     getToolsManager() {
                         return this._toolsManager;
                     }
                     getActionManager() {
                         return this._actionManager;
+                    }
+                    getMouseManager() {
+                        return this._mouseManager;
                     }
                     getSelectionManager() {
                         return this._selectionManager;
@@ -3656,12 +3744,7 @@ var phasereditor2d;
                         for (const obj of this._scene.getDisplayListChildren()) {
                             obj.getEditorSupport().destroy();
                         }
-                        this._scene.sys.updateList.removeAll();
-                        this._scene.sys.displayList.removeAll();
-                        // a hack to clean the whole scene
-                        this._scene.input["_list"].length = 0;
-                        this._scene.input["_pendingInsertion"].length = 0;
-                        this._scene.input["_pendingRemoval"].length = 0;
+                        this._scene.removeAll();
                         const maker = this.getSceneMaker();
                         await maker.preload();
                         await maker.updateSceneLoader(sceneData);
@@ -3747,6 +3830,9 @@ var phasereditor2d;
                         this._game.loop.tick();
                         this._overlayLayer.render();
                     }
+                    copy() {
+                        console.log("copy!");
+                    }
                 }
                 editor.SceneEditor = SceneEditor;
             })(editor = ui.editor || (ui.editor = {}));
@@ -3760,7 +3846,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_8) {
+            (function (editor_9) {
                 var controls = colibri.ui.controls;
                 class SelectionManager {
                     constructor(editor) {
@@ -3852,7 +3938,7 @@ var phasereditor2d;
                         return result;
                     }
                 }
-                editor_8.SelectionManager = SelectionManager;
+                editor_9.SelectionManager = SelectionManager;
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_11.ui || (scene_11.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -3864,7 +3950,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_9) {
+            (function (editor_10) {
                 var commands;
                 (function (commands) {
                     commands.CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
@@ -3884,8 +3970,8 @@ var phasereditor2d;
                     commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
                     commands.CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
                     function isSceneScope(args) {
-                        return args.activePart instanceof editor_9.SceneEditor
-                            || (args.activeEditor instanceof editor_9.SceneEditor &&
+                        return args.activePart instanceof editor_10.SceneEditor
+                            || (args.activeEditor instanceof editor_10.SceneEditor &&
                                 (args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
                                     || args.activePart instanceof phasereditor2d.inspector.ui.views.InspectorView));
                     }
@@ -3895,10 +3981,22 @@ var phasereditor2d;
                                 id: commands.CAT_SCENE_EDITOR,
                                 name: "Scene Editor"
                             });
+                            // copy
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_COPY, args => isSceneScope(args) && args.activeEditor.getSelection().length > 0, args => {
+                                args.activeEditor.getClipboardManager().copy();
+                            });
+                            // paste
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_PASTE, args => isSceneScope(args), args => {
+                                args.activeEditor.getClipboardManager().paste();
+                            });
+                            // cut
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_CUT, args => isSceneScope(args) && args.activeEditor.getSelection().length > 0, args => {
+                                args.activeEditor.getClipboardManager().cut();
+                            });
                             // update current editor
-                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, args => args.activeEditor instanceof editor_9.SceneEditor, args => args.activeEditor.refreshScene());
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, args => args.activeEditor instanceof editor_10.SceneEditor, args => args.activeEditor.refreshScene());
                             // select all
-                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL, args => args.activePart instanceof editor_9.SceneEditor, args => {
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL, args => args.activePart instanceof editor_10.SceneEditor, args => {
                                 const editor = args.activeEditor;
                                 editor.getSelectionManager().selectAll();
                             });
@@ -3941,7 +4039,7 @@ var phasereditor2d;
                                     category: commands.CAT_SCENE_EDITOR
                                 },
                                 handler: {
-                                    testFunc: args => args.activeEditor instanceof editor_9.SceneEditor,
+                                    testFunc: args => args.activeEditor instanceof editor_10.SceneEditor,
                                     executeFunc: args => args.activeEditor.openSourceFileInEditor()
                                 }
                             });
@@ -3955,7 +4053,7 @@ var phasereditor2d;
                                     category: commands.CAT_SCENE_EDITOR
                                 },
                                 handler: {
-                                    testFunc: args => args.activeEditor instanceof editor_9.SceneEditor,
+                                    testFunc: args => args.activeEditor instanceof editor_10.SceneEditor,
                                     executeFunc: args => args.activeEditor.compile(),
                                 }
                             });
@@ -4078,7 +4176,7 @@ var phasereditor2d;
                                 },
                                 handler: {
                                     testFunc: args => isSceneScope(args)
-                                        && editor_9.ConvertTypeDialog.canConvert(args.activeEditor),
+                                        && editor_10.ConvertTypeDialog.canConvert(args.activeEditor),
                                     executeFunc: args => {
                                         const dlg = new editor.ConvertTypeDialog(args.activeEditor);
                                         dlg.create();
@@ -4095,10 +4193,10 @@ var phasereditor2d;
                                 },
                                 handler: {
                                     testFunc: args => isSceneScope(args)
-                                        && editor_9.ConvertTypeDialog.canConvert(args.activeEditor),
+                                        && editor_10.ConvertTypeDialog.canConvert(args.activeEditor),
                                     executeFunc: args => {
                                         const editor = args.activeEditor;
-                                        editor.getUndoManager().add(new editor_9.undo.ConvertTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance()));
+                                        editor.getUndoManager().add(new editor_10.undo.ConvertTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance()));
                                     }
                                 },
                                 keys: {
@@ -4258,7 +4356,7 @@ var phasereditor2d;
                         }
                     }
                     commands.SceneEditorCommands = SceneEditorCommands;
-                })(commands = editor_9.commands || (editor_9.commands = {}));
+                })(commands = editor_10.commands || (editor_10.commands = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4270,7 +4368,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_10) {
+            (function (editor_11) {
                 var outline;
                 (function (outline) {
                     class SceneEditorOutlineContentProvider {
@@ -4301,7 +4399,7 @@ var phasereditor2d;
                         }
                     }
                     outline.SceneEditorOutlineContentProvider = SceneEditorOutlineContentProvider;
-                })(outline = editor_10.outline || (editor_10.outline = {}));
+                })(outline = editor_11.outline || (editor_11.outline = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4346,7 +4444,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_11) {
+            (function (editor_12) {
                 var outline;
                 (function (outline) {
                     var ide = colibri.ui.ide;
@@ -4385,7 +4483,7 @@ var phasereditor2d;
                         }
                     }
                     outline.SceneEditorOutlineProvider = SceneEditorOutlineProvider;
-                })(outline = editor_11.outline || (editor_11.outline = {}));
+                })(outline = editor_12.outline || (editor_12.outline = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4497,7 +4595,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_12) {
+            (function (editor_13) {
                 var properties;
                 (function (properties) {
                     class SceneSection extends properties.BaseSceneSection {
@@ -4598,7 +4696,7 @@ var phasereditor2d;
                         }
                     }
                     properties.SceneSection = SceneSection;
-                })(properties = editor_12.properties || (editor_12.properties = {}));
+                })(properties = editor_13.properties || (editor_13.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4642,7 +4740,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_13) {
+            (function (editor_14) {
                 var undo;
                 (function (undo) {
                     var ide = colibri.ui.ide;
@@ -4659,7 +4757,7 @@ var phasereditor2d;
                         }
                     }
                     undo.SceneEditorOperation = SceneEditorOperation;
-                })(undo = editor_13.undo || (editor_13.undo = {}));
+                })(undo = editor_14.undo || (editor_14.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -4824,7 +4922,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_14) {
+            (function (editor_15) {
                 var properties;
                 (function (properties) {
                     var controls = colibri.ui.controls;
@@ -4848,7 +4946,7 @@ var phasereditor2d;
                         }
                     }
                     properties.SceneEditorSectionProvider = SceneEditorSectionProvider;
-                })(properties = editor_14.properties || (editor_14.properties = {}));
+                })(properties = editor_15.properties || (editor_15.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5279,7 +5377,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_15) {
+            (function (editor_16) {
                 var tools;
                 (function (tools) {
                     class SceneToolsManager {
@@ -5329,7 +5427,7 @@ var phasereditor2d;
                         }
                     }
                     tools.SceneToolsManager = SceneToolsManager;
-                })(tools = editor_15.tools || (editor_15.tools = {}));
+                })(tools = editor_16.tools || (editor_16.tools = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5342,7 +5440,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_16) {
+            (function (editor_17) {
                 var undo;
                 (function (undo) {
                     class AddObjectsOperation extends undo.SceneEditorOperation {
@@ -5380,7 +5478,7 @@ var phasereditor2d;
                         }
                     }
                     undo.AddObjectsOperation = AddObjectsOperation;
-                })(undo = editor_16.undo || (editor_16.undo = {}));
+                })(undo = editor_17.undo || (editor_17.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_12.ui || (scene_12.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5392,7 +5490,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_17) {
+            (function (editor_18) {
                 var undo;
                 (function (undo) {
                     class ObjectSnapshotOperation extends undo.SceneEditorOperation {
@@ -5459,7 +5557,7 @@ var phasereditor2d;
                         }
                     }
                     undo.ObjectSnapshotOperation = ObjectSnapshotOperation;
-                })(undo = editor_17.undo || (editor_17.undo = {}));
+                })(undo = editor_18.undo || (editor_18.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_13.ui || (scene_13.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5472,7 +5570,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_18) {
+            (function (editor_19) {
                 var undo;
                 (function (undo) {
                     var io = colibri.core.io;
@@ -5540,7 +5638,7 @@ var phasereditor2d;
                         }
                     }
                     undo.ConvertTypeOperation = ConvertTypeOperation;
-                })(undo = editor_18.undo || (editor_18.undo = {}));
+                })(undo = editor_19.undo || (editor_19.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5552,7 +5650,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_19) {
+            (function (editor_20) {
                 var undo;
                 (function (undo) {
                     class JoinObjectsInContainerOperation extends undo.SceneEditorOperation {
@@ -5593,9 +5691,122 @@ var phasereditor2d;
                         }
                     }
                     undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
-                })(undo = editor_19.undo || (editor_19.undo = {}));
+                })(undo = editor_20.undo || (editor_20.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_14.ui || (scene_14.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene_15) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_21) {
+                var undo;
+                (function (undo) {
+                    class SceneSnapshotOperation extends undo.SceneEditorOperation {
+                        constructor(editor, modification) {
+                            super(editor);
+                            this._modification = modification;
+                        }
+                        execute() {
+                            this._before = this.takeSnapshot();
+                            this.performModification();
+                            this._after = this.takeSnapshot();
+                            this._editor.setDirty(true);
+                            this._editor.refreshOutline();
+                        }
+                        performModification() {
+                            this._modification();
+                        }
+                        takeSnapshot() {
+                            const scene = this.getScene();
+                            return {
+                                displayList: scene.getDisplayListChildren().map(obj => {
+                                    const data = {};
+                                    obj.getEditorSupport().writeJSON(data);
+                                    return data;
+                                }),
+                                lists: scene.getObjectLists().getLists().map(list => {
+                                    const data = {};
+                                    list.writeJSON(data);
+                                    return data;
+                                }),
+                                selection: this.getEditor().getSelectionManager().getSelectionIds()
+                            };
+                        }
+                        loadSnapshot(snapshot) {
+                            const editor = this.getEditor();
+                            const scene = this.getScene();
+                            const maker = scene.getMaker();
+                            scene.removeAll();
+                            for (const data of snapshot.displayList) {
+                                maker.createObject(data);
+                            }
+                            scene.getObjectLists().readJSON_lists(snapshot.lists);
+                            editor.setDirty(true);
+                            editor.repaint();
+                            editor.refreshOutline();
+                            editor.getSelectionManager().setSelectionByIds(snapshot.selection);
+                        }
+                        undo() {
+                            this.loadSnapshot(this._before);
+                        }
+                        redo() {
+                            this.loadSnapshot(this._after);
+                        }
+                    }
+                    undo.SceneSnapshotOperation = SceneSnapshotOperation;
+                })(undo = editor_21.undo || (editor_21.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene_15.ui || (scene_15.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneSnapshotOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_22) {
+                var undo;
+                (function (undo) {
+                    class PasteOperation extends undo.SceneSnapshotOperation {
+                        constructor(editor) {
+                            super(editor);
+                        }
+                        performModification() {
+                            const items = this.getEditor().getClipboardManager().getClipboardCopy();
+                            const maker = this._editor.getSceneMaker();
+                            const sel = [];
+                            const nameMaker = new colibri.ui.ide.utils.NameMaker((obj) => obj.getEditorSupport().getLabel());
+                            this.getScene().visitAskChildren(obj => {
+                                nameMaker.update([obj]);
+                                return !obj.getEditorSupport().isPrefabInstance();
+                            });
+                            for (const item of items) {
+                                if (item.type === "ISceneObject") {
+                                    const data = item.data;
+                                    data.id = Phaser.Utils.String.UUID();
+                                    data.label = nameMaker.makeName(data.label);
+                                    const { x, y } = this.getEditor().getMouseManager().getDropPosition();
+                                    data[ui.sceneobjects.TransformComponent.x.name] = x;
+                                    data[ui.sceneobjects.TransformComponent.y.name] = y;
+                                    const obj = maker.createObject(data);
+                                    sel.push(obj);
+                                }
+                            }
+                            this._editor.setSelection(sel);
+                        }
+                    }
+                    undo.PasteOperation = PasteOperation;
+                })(undo = editor_22.undo || (editor_22.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -5605,7 +5816,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_20) {
+            (function (editor_23) {
                 var undo;
                 (function (undo) {
                     class RemoveObjectsOperation extends undo.AddObjectsOperation {
@@ -5626,7 +5837,7 @@ var phasereditor2d;
                         }
                     }
                     undo.RemoveObjectsOperation = RemoveObjectsOperation;
-                })(undo = editor_20.undo || (editor_20.undo = {}));
+                })(undo = editor_23.undo || (editor_23.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5726,7 +5937,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_15) {
+    (function (scene_16) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -5795,7 +6006,7 @@ var phasereditor2d;
                         if (!prefabId) {
                             return;
                         }
-                        const finder = scene_15.ScenePlugin.getInstance().getSceneFinder();
+                        const finder = scene_16.ScenePlugin.getInstance().getSceneFinder();
                         const file = finder.getPrefabFile(prefabId);
                         if (!file) {
                             return;
@@ -5914,7 +6125,7 @@ var phasereditor2d;
                     }
                     getPrefabFile() {
                         if (this._prefabId) {
-                            const finder = scene_15.ScenePlugin.getInstance().getSceneFinder();
+                            const finder = scene_16.ScenePlugin.getInstance().getSceneFinder();
                             const file = finder.getPrefabFile(this._prefabId);
                             return file;
                         }
@@ -5922,7 +6133,7 @@ var phasereditor2d;
                     }
                     getPrefabData() {
                         if (this._prefabId) {
-                            const finder = scene_15.ScenePlugin.getInstance().getSceneFinder();
+                            const finder = scene_16.ScenePlugin.getInstance().getSceneFinder();
                             const data = finder.getPrefabData(this._prefabId);
                             return data;
                         }
@@ -5985,13 +6196,13 @@ var phasereditor2d;
                 }
                 sceneobjects.EditorSupport = EditorSupport;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_15.ui || (scene_15.ui = {}));
+        })(ui = scene_16.ui || (scene_16.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_16) {
+    (function (scene_17) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6004,14 +6215,14 @@ var phasereditor2d;
                 LoaderUpdaterExtension.POINT_ID = "phasereditor2d.scene.ui.sceneobjects.AssetLoaderExtension";
                 sceneobjects.LoaderUpdaterExtension = LoaderUpdaterExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_16.ui || (scene_16.ui = {}));
+        })(ui = scene_17.ui || (scene_17.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./LoaderUpdaterExtension.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_17) {
+    (function (scene_18) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6038,13 +6249,13 @@ var phasereditor2d;
                 }
                 sceneobjects.ImageLoaderUpdater = ImageLoaderUpdater;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_17.ui || (scene_17.ui = {}));
+        })(ui = scene_18.ui || (scene_18.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_18) {
+    (function (scene_19) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6097,7 +6308,7 @@ var phasereditor2d;
                 }
                 sceneobjects.interactive_getAlpha_RenderTexture = interactive_getAlpha_RenderTexture;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_18.ui || (scene_18.ui = {}));
+        })(ui = scene_19.ui || (scene_19.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -6184,7 +6395,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_19) {
+    (function (scene_20) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6206,7 +6417,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Container = Container;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_19.ui || (scene_19.ui = {}));
+        })(ui = scene_20.ui || (scene_20.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -6351,7 +6562,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_20) {
+    (function (scene_21) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6375,7 +6586,7 @@ var phasereditor2d;
                         for (const objData of children) {
                             const ser = args.serializer.getSerializer(objData);
                             const type = ser.getType();
-                            const ext = scene_20.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                            const ext = scene_21.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                             if (ext) {
                                 const list2 = await ext.getAssetsFromObjectData({
                                     serializer: ser,
@@ -6416,7 +6627,7 @@ var phasereditor2d;
                 }
                 sceneobjects.ContainerExtension = ContainerExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_20.ui || (scene_20.ui = {}));
+        })(ui = scene_21.ui || (scene_21.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../ObjectCodeDOMBuilder.ts" />
@@ -6577,7 +6788,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_21) {
+    (function (scene_22) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6653,13 +6864,13 @@ var phasereditor2d;
                 }
                 sceneobjects.BaseImageExtension = BaseImageExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_21.ui || (scene_21.ui = {}));
+        })(ui = scene_22.ui || (scene_22.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_22) {
+    (function (scene_23) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6675,7 +6886,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Image = Image;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_22.ui || (scene_22.ui = {}));
+        })(ui = scene_23.ui || (scene_23.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -6703,7 +6914,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_23) {
+    (function (scene_24) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -6728,7 +6939,7 @@ var phasereditor2d;
                 }
                 sceneobjects.ImageExtension = ImageExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_23.ui || (scene_23.ui = {}));
+        })(ui = scene_24.ui || (scene_24.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -7623,7 +7834,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_24) {
+    (function (scene_25) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -7717,7 +7928,7 @@ var phasereditor2d;
                 }
                 sceneobjects.MoveToContainerOperation = MoveToContainerOperation;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_24.ui || (scene_24.ui = {}));
+        })(ui = scene_25.ui || (scene_25.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./SceneObjectSection.ts" />
@@ -8611,7 +8822,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_25) {
+    (function (scene_26) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -8627,7 +8838,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Sprite = Sprite;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_25.ui || (scene_25.ui = {}));
+        })(ui = scene_26.ui || (scene_26.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../image/BaseImageEditorSupport.ts" />
@@ -8652,7 +8863,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_26) {
+    (function (scene_27) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -8677,7 +8888,7 @@ var phasereditor2d;
                 SpriteExtension._instance = new SpriteExtension();
                 sceneobjects.SpriteExtension = SpriteExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_26.ui || (scene_26.ui = {}));
+        })(ui = scene_27.ui || (scene_27.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -9000,7 +9211,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_27) {
+    (function (scene_28) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -9016,7 +9227,7 @@ var phasereditor2d;
                 }
                 sceneobjects.TileSprite = TileSprite;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_27.ui || (scene_27.ui = {}));
+        })(ui = scene_28.ui || (scene_28.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -9148,7 +9359,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_28) {
+    (function (scene_29) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -9184,7 +9395,7 @@ var phasereditor2d;
                 TileSpriteExtension._instance = new TileSpriteExtension();
                 sceneobjects.TileSpriteExtension = TileSpriteExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_28.ui || (scene_28.ui = {}));
+        })(ui = scene_29.ui || (scene_29.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;

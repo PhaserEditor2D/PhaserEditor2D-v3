@@ -38,6 +38,35 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 name: "Scene Editor"
             });
 
+            // copy
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_COPY,
+
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+
+                args => {
+                    (args.activeEditor as SceneEditor).getClipboardManager().copy();
+                });
+
+            // paste
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_PASTE,
+
+                args => isSceneScope(args),
+
+                args => {
+                    (args.activeEditor as SceneEditor).getClipboardManager().paste();
+                });
+
+            // cut
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_CUT,
+
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+
+                args => {
+                    (args.activeEditor as SceneEditor).getClipboardManager().cut();
+                });
+
             // update current editor
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR,

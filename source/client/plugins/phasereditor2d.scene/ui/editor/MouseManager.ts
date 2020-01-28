@@ -4,6 +4,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private _editor: SceneEditor;
         private _toolInAction: boolean;
+        private _mousePosition: { x: number, y: number };
 
         constructor(editor: SceneEditor) {
 
@@ -12,6 +13,8 @@ namespace phasereditor2d.scene.ui.editor {
             this._toolInAction = false;
 
             const canvas = editor.getOverlayLayer().getCanvas();
+
+            this._mousePosition = { x: 0, y: 0 };
 
             canvas.addEventListener("click", e => this.onClick(e));
             canvas.addEventListener("mousedown", e => this.onMouseDown(e));
@@ -59,7 +62,22 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
+        getMousePosition() {
+            return this._mousePosition;
+        }
+
+        getDropPosition() {
+
+            const p = this._editor.getScene().getCamera()
+                .getWorldPoint(this._mousePosition.x, this._mousePosition.y);
+
+            return this._editor.getScene().snapPoint(p.x, p.y);
+        }
+
         private onMouseMove(e: MouseEvent) {
+
+            this._mousePosition.x = e.offsetX;
+            this._mousePosition.y = e.offsetY;
 
             const toolsManager = this._editor.getToolsManager();
 

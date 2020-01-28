@@ -4,6 +4,8 @@ namespace colibri.ui.ide.actions {
 
     import KeyMatcher = commands.KeyMatcher;
 
+    export const CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
+    export const CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
     export const CMD_SAVE = "colibri.ui.ide.actions.Save";
     export const CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
     export const CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
@@ -19,8 +21,9 @@ namespace colibri.ui.ide.actions {
     export const CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
     export const CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
     export const CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
-    export const CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
-    export const CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
+    export const CMD_COPY = "colibri.ui.ide.actions.Copy";
+    export const CMD_CUT = "colibri.ui.ide.actions.Cut";
+    export const CMD_PASTE = "colibri.ui.ide.actions.Paste";
 
     function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -381,8 +384,47 @@ namespace colibri.ui.ide.actions {
             manager.addKeyBinding(CMD_RENAME, new KeyMatcher({
                 key: "F2"
             }));
+
+            // copy/cut/paste
+
+            manager.add({
+                command: {
+                    id: CMD_COPY,
+                    name: "Copy",
+                    tooltip: "Copy selected objects.",
+                    category: CAT_EDIT
+                },
+                keys: {
+                    control: true,
+                    key: "C"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_CUT,
+                    name: "Cut",
+                    tooltip: "Cut selected objects.",
+                    category: CAT_EDIT
+                },
+                keys: {
+                    control: true,
+                    key: "X"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_PASTE,
+                    name: "Paste",
+                    tooltip: "Paste clipboard content.",
+                    category: CAT_EDIT
+                },
+                keys: {
+                    control: true,
+                    key: "V"
+                }
+            });
         }
-
     }
-
 }

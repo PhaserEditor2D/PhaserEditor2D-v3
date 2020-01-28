@@ -1,5 +1,6 @@
 namespace phasereditor2d.scene.ui.editor {
 
+    // TODO: please, deprecate this! Migrate this to the operations.
     export class ActionManager {
 
         private _editor: SceneEditor;

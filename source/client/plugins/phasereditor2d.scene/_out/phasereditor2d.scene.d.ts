@@ -381,6 +381,7 @@ declare namespace phasereditor2d.scene.ui {
         protected registerDestroyListener(name: string): void;
         getPackCache(): pack.core.parsers.AssetPackCache;
         destroyGame(): void;
+        removeAll(): void;
         getPrefabObject(): sceneobjects.ISceneObject;
         getObjectLists(): sceneobjects.ObjectLists;
         getSettings(): core.json.SceneSettings;
@@ -603,6 +604,22 @@ declare namespace phasereditor2d.scene.ui.editor {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor {
+    interface IClipboardItem {
+        type: string;
+        data: object;
+    }
+    class ClipboardManager {
+        private _clipboard;
+        private _editor;
+        constructor(editor: SceneEditor);
+        getClipboard(): IClipboardItem[];
+        getClipboardCopy(): IClipboardItem[];
+        copy(): void;
+        paste(): void;
+        cut(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor {
     import controls = colibri.ui.controls;
     class ConvertTypeDialog extends controls.dialogs.ViewerDialog {
         private _editor;
@@ -627,9 +644,18 @@ declare namespace phasereditor2d.scene.ui.editor {
     class MouseManager {
         private _editor;
         private _toolInAction;
+        private _mousePosition;
         constructor(editor: SceneEditor);
         private createArgs;
         private onMouseDown;
+        getMousePosition(): {
+            x: number;
+            y: number;
+        };
+        getDropPosition(): {
+            x: number;
+            y: number;
+        };
         private onMouseMove;
         private onMouseUp;
         private onClick;
@@ -671,6 +697,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _actionManager;
         private _toolsManager;
         private _mouseManager;
+        private _clipboardManager;
         private _gameBooted;
         private _sceneRead;
         private _currentRefreshHash;
@@ -699,8 +726,10 @@ declare namespace phasereditor2d.scene.ui.editor {
         setSnappingToObjectSize(): void;
         private readScene;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
+        getClipboardManager(): ClipboardManager;
         getToolsManager(): tools.SceneToolsManager;
         getActionManager(): ActionManager;
+        getMouseManager(): MouseManager;
         getSelectionManager(): SelectionManager;
         getOverlayLayer(): OverlayLayer;
         getGameCanvas(): HTMLCanvasElement;
@@ -720,6 +749,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         refreshOutline(): void;
         private onGameBoot;
         repaint(): void;
+        copy(): void;
     }
     export {};
 }
@@ -1097,6 +1127,26 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
         undo(): void;
         redo(): void;
         private updateEditor;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
+    class SceneSnapshotOperation extends SceneEditorOperation {
+        private _modification;
+        private _before;
+        private _after;
+        constructor(editor: SceneEditor, modification?: () => void);
+        execute(): void;
+        protected performModification(): void;
+        private takeSnapshot;
+        private loadSnapshot;
+        undo(): void;
+        redo(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
+    class PasteOperation extends SceneSnapshotOperation {
+        constructor(editor: SceneEditor);
+        performModification(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {

@@ -46,6 +46,22 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
+        removeAll() {
+
+            this.sys.updateList.removeAll();
+            this.sys.displayList.removeAll();
+
+            // a hack to clean the whole scene
+            this.input["_list"].length = 0;
+            this.input["_pendingInsertion"].length = 0;
+            this.input["_pendingRemoval"].length = 0;
+
+            for (const obj of this.getDisplayListChildren()) {
+
+                obj.getEditorSupport().destroy();
+            }
+        }
+
         getPrefabObject(): sceneobjects.ISceneObject {
             return this.getDisplayListChildren()[0];
         }

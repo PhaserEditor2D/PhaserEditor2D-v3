@@ -7086,6 +7086,8 @@ var colibri;
             var actions;
             (function (actions) {
                 var KeyMatcher = ide.commands.KeyMatcher;
+                actions.CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
+                actions.CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
                 actions.CMD_SAVE = "colibri.ui.ide.actions.Save";
                 actions.CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
                 actions.CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
@@ -7101,8 +7103,9 @@ var colibri;
                 actions.CMD_ESCAPE = "colibri.ui.ide.actions.Escape";
                 actions.CMD_UPDATE_CURRENT_EDITOR = "colibri.ui.ide.actions.UpdateCurrentEditor";
                 actions.CMD_SHOW_COMMAND_PALETTE = "colibri.ui.ide.actions.ShowCommandPalette";
-                actions.CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
-                actions.CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
+                actions.CMD_COPY = "colibri.ui.ide.actions.Copy";
+                actions.CMD_CUT = "colibri.ui.ide.actions.Cut";
+                actions.CMD_PASTE = "colibri.ui.ide.actions.Paste";
                 function isViewerScope(args) {
                     if (args.activeElement) {
                         const control = ui.controls.Control.getControlOf(args.activeElement);
@@ -7345,6 +7348,43 @@ var colibri;
                         manager.addKeyBinding(actions.CMD_RENAME, new KeyMatcher({
                             key: "F2"
                         }));
+                        // copy/cut/paste
+                        manager.add({
+                            command: {
+                                id: actions.CMD_COPY,
+                                name: "Copy",
+                                tooltip: "Copy selected objects.",
+                                category: actions.CAT_EDIT
+                            },
+                            keys: {
+                                control: true,
+                                key: "C"
+                            }
+                        });
+                        manager.add({
+                            command: {
+                                id: actions.CMD_CUT,
+                                name: "Cut",
+                                tooltip: "Cut selected objects.",
+                                category: actions.CAT_EDIT
+                            },
+                            keys: {
+                                control: true,
+                                key: "X"
+                            }
+                        });
+                        manager.add({
+                            command: {
+                                id: actions.CMD_PASTE,
+                                name: "Paste",
+                                tooltip: "Paste clipboard content.",
+                                category: actions.CAT_EDIT
+                            },
+                            keys: {
+                                control: true,
+                                key: "V"
+                            }
+                        });
                     }
                 }
                 actions.ColibriCommands = ColibriCommands;
