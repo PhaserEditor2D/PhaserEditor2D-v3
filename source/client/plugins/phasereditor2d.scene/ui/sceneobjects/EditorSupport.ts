@@ -62,6 +62,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             window["__obj"] = obj;
         }
 
+        isMethodScope() {
+
+            return this._scope === ObjectScope.METHOD;
+        }
+
         hasProperty(property: IProperty<any>) {
 
             for (const comp of this._componentMap.values()) {

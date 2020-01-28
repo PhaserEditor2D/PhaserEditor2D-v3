@@ -101,6 +101,24 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
+        visitAskChildren(visitor: (obj: sceneobjects.ISceneObject) => boolean) {
+
+            for (const obj of this.getDisplayListChildren()) {
+
+                const visitChildren = visitor(obj);
+
+                if (visitChildren) {
+
+                    if (obj instanceof sceneobjects.Container) {
+
+                        for (const child of obj.list) {
+                            visitor(child);
+                        }
+                    }
+                }
+            }
+        }
+
         makeNewName(baseName: string) {
 
             const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: sceneobjects.ISceneObject) => {

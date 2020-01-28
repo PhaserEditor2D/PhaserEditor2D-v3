@@ -224,10 +224,10 @@ var phasereditor2d;
             var code;
             (function (code) {
                 class AssignPropertyCodeDOM extends code.CodeDOM {
-                    constructor(propertyName, contentExpr) {
+                    constructor(propertyName, context) {
                         super();
                         this._propertyName = propertyName;
-                        this._contextExpr = contentExpr;
+                        this._contextExpr = context;
                     }
                     value(expr) {
                         this._propertyValueExpr = expr;
@@ -252,6 +252,9 @@ var phasereditor2d;
                     }
                     getContextExpr() {
                         return this._contextExpr;
+                    }
+                    setContextExpr(contextExpr) {
+                        this._contextExpr = contextExpr;
                     }
                     getPropertyValueExpr() {
                         return this._propertyValueExpr;
@@ -599,8 +602,10 @@ var phasereditor2d;
                     }
                     generateAssignProperty(assign) {
                         this.generateTypeAnnotation(assign);
-                        this.append(assign.getContextExpr());
-                        this.append(".");
+                        if (assign.getContextExpr()) {
+                            this.append(assign.getContextExpr());
+                            this.append(".");
+                        }
                         this.append(assign.getPropertyName());
                         this.append(" = ");
                         this.append(assign.getPropertyValueExpr());
@@ -616,7 +621,7 @@ var phasereditor2d;
                     generateMethodCall(call) {
                         if (call.getReturnToVar()) {
                             if (call.isDeclareReturnToVar()) {
-                                this.append(call.isDeclareReturnToField() ? "this." : "const ");
+                                this.append("const ");
                             }
                             this.append(call.getReturnToVar());
                             this.append(" = ");
@@ -848,14 +853,23 @@ var phasereditor2d;
                                 methods.push(createMethodDecl);
                             }
                             const fields = [];
-                            this.buildClassFields(fields, this._scene.getDisplayListChildren());
+                            this.buildObjectClassFields(fields, this._scene.getDisplayListChildren());
+                            this.buildListClassFields(fields);
                             clsDecl.getBody().push(...methods);
                             clsDecl.getBody().push(...fields);
                             unit.getBody().push(clsDecl);
                         }
                         return unit;
                     }
-                    buildClassFields(fields, children) {
+                    buildListClassFields(fields) {
+                        for (const list of this._scene.getObjectLists().getLists()) {
+                            if (list.getScope() !== scene_2.ui.sceneobjects.ObjectScope.METHOD) {
+                                const dom = new code.FieldDeclCodeDOM(code.formatToValidVarName(list.getLabel()), "any[]", list.getScope() === scene_2.ui.sceneobjects.ObjectScope.PUBLIC);
+                                fields.push(dom);
+                            }
+                        }
+                    }
+                    buildObjectClassFields(fields, children) {
                         for (const obj of children) {
                             const support = obj.getEditorSupport();
                             const scope = support.getScope();
@@ -868,8 +882,9 @@ var phasereditor2d;
                                 const field = new code.FieldDeclCodeDOM(varName, type, isPublic);
                                 fields.push(field);
                             }
-                            if (obj instanceof scene_2.ui.sceneobjects.Container) {
-                                this.buildClassFields(fields, obj.list);
+                            if (obj instanceof scene_2.ui.sceneobjects.Container
+                                && !obj.getEditorSupport().isPrefabInstance()) {
+                                this.buildObjectClassFields(fields, obj.list);
                             }
                         }
                     }
@@ -908,6 +923,7 @@ var phasereditor2d;
                                 obj: prefabObj
                             });
                         }
+                        this.addFieldInitCode(ctrDecl.getBody());
                         {
                             const createName = settings.createMethodName;
                             if (createName) {
@@ -915,7 +931,7 @@ var phasereditor2d;
                                 if (body.length > 1) {
                                     body.push(new code.RawCodeDOM(""));
                                 }
-                                body.push(new code.RawCodeDOM(`if (this.${createName}) { this.${createName}(); }`));
+                                body.push(new code.RawCodeDOM(`if ("${createName}" in this) { this.${createName}(); }`));
                             }
                         }
                         return ctrDecl;
@@ -932,7 +948,43 @@ var phasereditor2d;
                             body.push(new code.RawCodeDOM("// " + obj.getEditorSupport().getLabel()));
                             this.addCreateObjectCode(obj, createMethodDecl);
                         }
+                        this.addFieldInitCode(body);
                         return createMethodDecl;
+                    }
+                    addFieldInitCode(body) {
+                        const fields = [];
+                        this._scene.visitAskChildren(obj => {
+                            const support = obj.getEditorSupport();
+                            if (!support.isMethodScope()) {
+                                const varname = code.formatToValidVarName(support.getLabel());
+                                const dom = new code.AssignPropertyCodeDOM(varname, "this");
+                                dom.value(varname);
+                                fields.push(dom);
+                            }
+                            return !support.isPrefabInstance();
+                        });
+                        for (const list of this._scene.getObjectLists().getLists()) {
+                            if (list.getScope() !== scene_2.ui.sceneobjects.ObjectScope.METHOD) {
+                                const map = this._scene.buildObjectIdMap();
+                                const objectVarnames = [];
+                                for (const objId of list.getObjectIds()) {
+                                    const obj = map.get(objId);
+                                    if (obj) {
+                                        objectVarnames.push(code.formatToValidVarName(obj.getEditorSupport().getLabel()));
+                                    }
+                                }
+                                const varname = code.formatToValidVarName(list.getLabel());
+                                const dom = new code.AssignPropertyCodeDOM(varname, "this");
+                                dom.value("[" + objectVarnames.join(", ") + "]");
+                                fields.push(dom);
+                            }
+                        }
+                        ;
+                        if (fields.length > 0) {
+                            body.push(new code.RawCodeDOM(""));
+                            body.push(new code.RawCodeDOM("// fields"));
+                            body.push(...fields);
+                        }
                     }
                     addCreateObjectCode(obj, createMethodDecl) {
                         const objSupport = obj.getEditorSupport();
@@ -974,6 +1026,14 @@ var phasereditor2d;
                                 createMethodDecl.getBody().push(addToScene);
                             }
                         }
+                        const setPropsCode = this.buildSetObjectProperties({
+                            obj,
+                            varname
+                        });
+                        if (setPropsCode.length > 0) {
+                            createObjectMethodCall.setDeclareReturnToVar(true);
+                            createMethodDecl.getBody().push(...setPropsCode);
+                        }
                         if (obj.parentContainer) {
                             createObjectMethodCall.setDeclareReturnToVar(true);
                             const container = obj.parentContainer;
@@ -985,14 +1045,6 @@ var phasereditor2d;
                             addToContainerCall.arg(varname);
                             createMethodDecl.getBody().push(addToContainerCall);
                         }
-                        const setPropsCode = this.buildSetObjectProperties({
-                            obj,
-                            varname
-                        });
-                        if (setPropsCode.length > 0) {
-                            createObjectMethodCall.setDeclareReturnToVar(true);
-                            createMethodDecl.getBody().push(...setPropsCode);
-                        }
                         if (obj instanceof scene_2.ui.sceneobjects.Container && !objSupport.isPrefabInstance()) {
                             createObjectMethodCall.setDeclareReturnToVar(true);
                             this.addChildrenObjects({
@@ -1000,9 +1052,15 @@ var phasereditor2d;
                                 obj: obj
                             });
                         }
+                        {
+                            const lists = objSupport.getScene().getObjectLists().getListsByObjectId(objSupport.getId());
+                            if (lists.length > 0) {
+                                createObjectMethodCall.setDeclareReturnToVar(true);
+                            }
+                        }
                         if (createObjectMethodCall.isDeclareReturnToVar()) {
                             createObjectMethodCall.setReturnToVar(varname);
-                            if (obj.getEditorSupport().getScope() !== scene_2.ui.sceneobjects.ObjectScope.METHOD) {
+                            if (!objSupport.isMethodScope()) {
                                 createObjectMethodCall.setDeclareReturnToField(true);
                             }
                         }
@@ -1033,7 +1091,6 @@ var phasereditor2d;
                         }
                     }
                     buildSceneConstructorMethod(sceneKey) {
-                        const settings = this._scene.getSettings();
                         const methodDecl = new code.MethodDeclCodeDOM("constructor");
                         const superCall = new code.MethodCallCodeDOM("super", null);
                         superCall.argLiteral(sceneKey);
@@ -1616,6 +1673,18 @@ var phasereditor2d;
                         if (obj instanceof ui.sceneobjects.Container) {
                             for (const child of obj.list) {
                                 visitor(child);
+                            }
+                        }
+                    }
+                }
+                visitAskChildren(visitor) {
+                    for (const obj of this.getDisplayListChildren()) {
+                        const visitChildren = visitor(obj);
+                        if (visitChildren) {
+                            if (obj instanceof ui.sceneobjects.Container) {
+                                for (const child of obj.list) {
+                                    visitor(child);
+                                }
                             }
                         }
                     }
@@ -5694,6 +5763,9 @@ var phasereditor2d;
                             list.splice(i, 1);
                         }
                         window["__obj"] = obj;
+                    }
+                    isMethodScope() {
+                        return this._scope === ObjectScope.METHOD;
                     }
                     hasProperty(property) {
                         for (const comp of this._componentMap.values()) {

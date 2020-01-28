@@ -137,8 +137,12 @@ namespace phasereditor2d.scene.core.code {
         private generateAssignProperty(assign: AssignPropertyCodeDOM) {
 
             this.generateTypeAnnotation(assign);
-            this.append(assign.getContextExpr());
-            this.append(".");
+
+            if (assign.getContextExpr()) {
+                this.append(assign.getContextExpr());
+                this.append(".");
+            }
+
             this.append(assign.getPropertyName());
             this.append(" = ");
             this.append(assign.getPropertyValueExpr());
@@ -162,7 +166,7 @@ namespace phasereditor2d.scene.core.code {
 
                 if (call.isDeclareReturnToVar()) {
 
-                    this.append(call.isDeclareReturnToField() ? "this." : "const ");
+                    this.append("const ");
                 }
 
                 this.append(call.getReturnToVar());

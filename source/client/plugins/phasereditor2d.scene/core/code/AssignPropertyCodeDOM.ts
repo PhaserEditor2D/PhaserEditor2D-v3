@@ -9,11 +9,11 @@ namespace phasereditor2d.scene.core.code {
         private _contextExpr: string;
         private _propertyType: string;
 
-        constructor(propertyName: string, contentExpr: string) {
+        constructor(propertyName: string, context?: string) {
             super();
 
             this._propertyName = propertyName;
-            this._contextExpr = contentExpr;
+            this._contextExpr = context;
         }
 
         value(expr: string) {
@@ -45,6 +45,10 @@ namespace phasereditor2d.scene.core.code {
 
         getContextExpr() {
             return this._contextExpr;
+        }
+
+        setContextExpr(contextExpr: string) {
+            this._contextExpr = contextExpr;
         }
 
         getPropertyValueExpr() {

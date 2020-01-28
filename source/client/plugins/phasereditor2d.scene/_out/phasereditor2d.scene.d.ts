@@ -46,7 +46,7 @@ declare namespace phasereditor2d.scene.core.code {
         private _propertyValueExpr;
         private _contextExpr;
         private _propertyType;
-        constructor(propertyName: string, contentExpr: string);
+        constructor(propertyName: string, context?: string);
         value(expr: string): void;
         valueLiteral(expr: string): void;
         valueFloat(n: number): void;
@@ -54,6 +54,7 @@ declare namespace phasereditor2d.scene.core.code {
         valueBool(b: boolean): void;
         getPropertyName(): string;
         getContextExpr(): string;
+        setContextExpr(contextExpr: string): void;
         getPropertyValueExpr(): string;
         getPropertyType(): string;
         setPropertyType(propertyType: string): void;
@@ -199,9 +200,11 @@ declare namespace phasereditor2d.scene.core.code {
         private _file;
         constructor(scene: ui.Scene, file: io.FilePath);
         build(): Promise<UnitCodeDOM>;
-        private buildClassFields;
+        private buildListClassFields;
+        private buildObjectClassFields;
         private buildPrefabConstructorMethod;
         private buildCreateMethod;
+        private addFieldInitCode;
         private addCreateObjectCode;
         private buildSetObjectProperties;
         private addChildrenObjects;
@@ -389,6 +392,7 @@ declare namespace phasereditor2d.scene.ui {
         getMaker(): SceneMaker;
         getDisplayListChildren(): sceneobjects.ISceneObject[];
         visit(visitor: (obj: sceneobjects.ISceneObject) => void): void;
+        visitAskChildren(visitor: (obj: sceneobjects.ISceneObject) => boolean): void;
         makeNewName(baseName: string): string;
         buildObjectIdMap(): Map<string, sceneobjects.ISceneObject>;
         snapPoint(x: number, y: number): {
@@ -1153,6 +1157,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _unlockedProperties;
         constructor(extension: SceneObjectExtension, obj: T);
         destroy(): void;
+        isMethodScope(): boolean;
         hasProperty(property: IProperty<any>): boolean;
         isUnlockedProperty(property: IProperty<any>): boolean;
         setUnlockedProperty(property: IProperty<any>, unlock: boolean): void;
