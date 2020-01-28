@@ -52,14 +52,25 @@ namespace phasereditor2d.scene.ui.editor {
 
         refreshSelection() {
 
-            this._editor.setSelection(this._editor.getSelection().filter(obj => {
+            this._editor.setSelection(this._editor.getSelection()
+                .map(obj => {
 
-                if (obj instanceof Phaser.GameObjects.GameObject) {
-                    return this._editor.getScene().sys.displayList.exists(obj);
-                }
+                    const objMap = this._editor.getScene().buildObjectIdMap();
 
-                return true;
-            }));
+                    if (obj instanceof Phaser.GameObjects.GameObject) {
+
+                        return objMap.get((obj as sceneobjects.ISceneObject).getEditorSupport().getId());
+                    }
+
+                    if (obj instanceof sceneobjects.ObjectList) {
+
+                        return this._editor.getScene().getObjectLists().getListById(obj.getId());
+                    }
+
+                    return undefined;
+                })
+                .filter(obj => obj !== undefined && obj !== null)
+            );
         }
 
         selectAll() {

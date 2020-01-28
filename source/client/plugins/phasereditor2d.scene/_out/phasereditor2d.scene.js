@@ -57,7 +57,7 @@ var phasereditor2d;
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
@@ -3723,12 +3723,18 @@ var phasereditor2d;
                         this._editor.repaint();
                     }
                     refreshSelection() {
-                        this._editor.setSelection(this._editor.getSelection().filter(obj => {
+                        this._editor.setSelection(this._editor.getSelection()
+                            .map(obj => {
+                            const objMap = this._editor.getScene().buildObjectIdMap();
                             if (obj instanceof Phaser.GameObjects.GameObject) {
-                                return this._editor.getScene().sys.displayList.exists(obj);
+                                return objMap.get(obj.getEditorSupport().getId());
                             }
-                            return true;
-                        }));
+                            if (obj instanceof ui.sceneobjects.ObjectList) {
+                                return this._editor.getScene().getObjectLists().getListById(obj.getId());
+                            }
+                            return undefined;
+                        })
+                            .filter(obj => obj !== undefined && obj !== null));
                     }
                     selectAll() {
                         const sel = this._editor.getScene().getDisplayListChildren();
@@ -6662,6 +6668,67 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var controls = colibri.ui.controls;
+                class ListSection extends ui.editor.properties.BaseSceneSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.ListSection", "List", true);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "1fr";
+                        comp.style.gridTemplateRows = "1fr auto";
+                        const viewer = new controls.viewers.TreeViewer();
+                        viewer.setCellSize(64);
+                        viewer.setLabelProvider(new ui.editor.outline.SceneEditorOutlineLabelProvider());
+                        viewer.setCellRendererProvider(new ui.editor.outline.SceneEditorOutlineRendererProvider());
+                        viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        const filteredViewer = new colibri.ui.ide.properties
+                            .FilteredViewerInPropertySection(this.getPage(), viewer);
+                        comp.appendChild(filteredViewer.getElement());
+                        this.addUpdater(() => {
+                            const list = this.getSelectionFirstElement();
+                            const map = this.getEditor().getScene().buildObjectIdMap();
+                            const input = list.getObjectIds()
+                                .map(id => map.get(id))
+                                .filter(obj => obj !== undefined);
+                            viewer.setInput(input);
+                            viewer.setSelection([]);
+                        });
+                        const btnRow = document.createElement("div");
+                        comp.appendChild(btnRow);
+                        const selectBtn = this.createButton(btnRow, "Select In Scene", () => {
+                            this.getEditor().setSelection(viewer.getSelection());
+                        });
+                        selectBtn.style.float = "right";
+                        const removeBtn = this.createButton(btnRow, "Remove From List", () => {
+                            this.getUndoManager().add(new sceneobjects.RemoveObjectsFromListOperation(this.getEditor(), this.getSelectionFirstElement(), viewer.getSelection()));
+                        });
+                        removeBtn.style.float = "right";
+                        removeBtn.style.marginRight = "5px";
+                        viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                            selectBtn.disabled = removeBtn.disabled = viewer.getSelection().length === 0;
+                        });
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof sceneobjects.ObjectList;
+                    }
+                    canEditNumber(n) {
+                        return n === 1;
+                    }
+                }
+                sceneobjects.ListSection = ListSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 class ListVariableSection extends ui.editor.properties.BaseSceneSection {
                     constructor(page) {
                         super(page, "phasereditor2d.scene.ui.sceneobjects.ListVariableSection", "Variable", false);
@@ -6854,22 +6921,18 @@ var phasereditor2d;
                         super(editor);
                     }
                     execute() {
-                        const selManager = this._editor.getSelectionManager();
                         const lists = this._editor.getScene().getObjectLists();
                         this._before = lists.toJSON_lists();
                         this.performChange(lists);
                         this._after = lists.toJSON_lists();
-                        const sel = selManager.getSelectionIds();
-                        this.loadData(this._after, sel);
+                        this.loadData(this._after);
                     }
-                    loadData(data, selection) {
+                    loadData(data) {
                         const lists = this._editor.getScene().getObjectLists();
                         lists.readJSON_lists(data);
                         this._editor.setDirty(true);
                         this._editor.refreshOutline();
-                        if (selection) {
-                            this._editor.getSelectionManager().setSelectionByIds(selection);
-                        }
+                        this._editor.getSelectionManager().refreshSelection();
                     }
                     undo() {
                         this.loadData(this._before);
