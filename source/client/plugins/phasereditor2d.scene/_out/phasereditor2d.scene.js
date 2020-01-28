@@ -57,7 +57,7 @@ var phasereditor2d;
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
@@ -979,7 +979,6 @@ var phasereditor2d;
                                 fields.push(dom);
                             }
                         }
-                        ;
                         if (fields.length > 0) {
                             body.push(new code.RawCodeDOM(""));
                             body.push(new code.RawCodeDOM("// fields"));
@@ -7513,6 +7512,70 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 var controls = colibri.ui.controls;
+                class GameObjectListSection extends sceneobjects.SceneObjectSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectListSection", "Lists", false, true);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElement(parent, 2);
+                        this.createLabel(comp, "Lists", "The lists where this object belongs to.");
+                        const btn = this.createButton(comp, "", e => {
+                            const listsRoot = this.getEditor().getScene().getObjectLists();
+                            const menu = new controls.Menu();
+                            const selObjIds = this.getSelection().map(obj => obj.getEditorSupport().getId());
+                            const usedLists = new Set(selObjIds.flatMap(objId => listsRoot.getListsByObjectId(objId)));
+                            const notUsedLists = listsRoot.getLists().filter(list => !usedLists.has(list));
+                            for (const list of notUsedLists) {
+                                menu.add(new controls.Action({
+                                    icon: controls.Controls.getIcon(colibri.ui.ide.ICON_PLUS),
+                                    text: list.getLabel(),
+                                    callback: () => {
+                                        this.getUndoManager().add(new sceneobjects.AddObjectsToListOperation(this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
+                                    }
+                                }));
+                            }
+                            menu.addSeparator();
+                            for (const list of usedLists) {
+                                menu.add(new controls.Action({
+                                    icon: controls.Controls.getIcon(colibri.ui.ide.ICON_MINUS),
+                                    text: list.getLabel(),
+                                    callback: () => {
+                                        this.getUndoManager().add(new sceneobjects.RemoveObjectsFromListOperation(this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
+                                    }
+                                }));
+                            }
+                            menu.create(e);
+                        });
+                        this.addUpdater(() => {
+                            const listsRoot = this.getEditor().getScene().getObjectLists();
+                            const lists = new Set(this.getSelection()
+                                .map(obj => obj.getEditorSupport().getId())
+                                .flatMap(objId => listsRoot.getListsByObjectId(objId))
+                                .map(list => list.getLabel()));
+                            btn.textContent = "[" + [...lists].join(",") + "]";
+                        });
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof Phaser.GameObjects.GameObject;
+                    }
+                    canEditNumber(n) {
+                        return n > 0;
+                    }
+                }
+                sceneobjects.GameObjectListSection = GameObjectListSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneObjectSection.ts"/>
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 class GameObjectVariableSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
                         super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectVariableSection", "Variable", false);
@@ -7543,45 +7606,6 @@ var phasereditor2d;
                             // Scope
                             this.createLabel(comp, "Scope", "The lexical scope of the object.");
                             this.createEnumField(comp, sceneobjects.VariableComponent.scope, false);
-                        }
-                        {
-                            // Lists
-                            this.createLabel(comp, "Lists", "The lists where this object belongs to.");
-                            const btn = this.createButton(comp, "", e => {
-                                const listsRoot = this.getEditor().getScene().getObjectLists();
-                                const menu = new controls.Menu();
-                                const selObjIds = this.getSelection().map(obj => obj.getEditorSupport().getId());
-                                const usedLists = new Set(selObjIds.flatMap(objId => listsRoot.getListsByObjectId(objId)));
-                                const notUsedLists = listsRoot.getLists().filter(list => !usedLists.has(list));
-                                for (const list of notUsedLists) {
-                                    menu.add(new controls.Action({
-                                        icon: controls.Controls.getIcon(colibri.ui.ide.ICON_PLUS),
-                                        text: list.getLabel(),
-                                        callback: () => {
-                                            this.getUndoManager().add(new sceneobjects.AddObjectsToListOperation(this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
-                                        }
-                                    }));
-                                }
-                                menu.addSeparator();
-                                for (const list of usedLists) {
-                                    menu.add(new controls.Action({
-                                        icon: controls.Controls.getIcon(colibri.ui.ide.ICON_MINUS),
-                                        text: list.getLabel(),
-                                        callback: () => {
-                                            this.getUndoManager().add(new sceneobjects.RemoveObjectsFromListOperation(this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
-                                        }
-                                    }));
-                                }
-                                menu.create(e);
-                            });
-                            this.addUpdater(() => {
-                                const listsRoot = this.getEditor().getScene().getObjectLists();
-                                const lists = new Set(this.getSelection()
-                                    .map(obj => obj.getEditorSupport().getId())
-                                    .flatMap(objId => listsRoot.getListsByObjectId(objId))
-                                    .map(list => list.getLabel()));
-                                btn.textContent = "[" + [...lists].join(",") + "]";
-                            });
                         }
                     }
                     canEdit(obj, n) {
