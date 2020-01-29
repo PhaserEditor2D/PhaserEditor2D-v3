@@ -110,17 +110,16 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_JOIN_IN_CONTAINER,
-                    name: "Join Objects",
+                    name: "Join Objects In Container",
                     tooltip: "Create a container with the selected objects",
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: args => isSceneScope(args),
 
-                    executeFunc: args => {
-                        const editor = args.activeEditor as SceneEditor;
-                        editor.getActionManager().joinObjectsInContainer();
-                    }
+                    executeFunc: args => args.activeEditor.getUndoManager().add(
+                        new undo.CreateContainerWithObjectsOperation(args.activeEditor as SceneEditor)
+                    )
                 },
                 keys: {
                     key: "J"

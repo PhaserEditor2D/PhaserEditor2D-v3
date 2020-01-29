@@ -11,6 +11,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
         performModification() {
 
             this._editor.getClipboardManager().copy();
+
             const lists = this._editor.getScene().getObjectLists();
 
             for (const obj of this._editor.getSelection()) {

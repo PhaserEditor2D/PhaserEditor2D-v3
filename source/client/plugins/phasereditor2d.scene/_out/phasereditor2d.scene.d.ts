@@ -542,13 +542,6 @@ declare namespace phasereditor2d.scene.ui.dialogs {
         getInitialFileLocation(): colibri.core.io.FilePath;
     }
 }
-declare namespace phasereditor2d.scene.ui.editor {
-    class ActionManager {
-        private _editor;
-        constructor(editor: SceneEditor);
-        joinObjectsInContainer(): void;
-    }
-}
 declare namespace phasereditor2d.scene.ui.viewers {
     import controls = colibri.ui.controls;
     class ObjectExtensionAndPrefabLabelProvider extends controls.viewers.LabelProvider {
@@ -690,7 +683,6 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _dropManager;
         private _cameraManager;
         private _selectionManager;
-        private _actionManager;
         private _toolsManager;
         private _mouseManager;
         private _clipboardManager;
@@ -725,7 +717,6 @@ declare namespace phasereditor2d.scene.ui.editor {
         getSelectedLists(): sceneobjects.ObjectList[];
         getClipboardManager(): ClipboardManager;
         getToolsManager(): tools.SceneToolsManager;
-        getActionManager(): ActionManager;
         getMouseManager(): MouseManager;
         getSelectionManager(): SelectionManager;
         getOverlayLayer(): OverlayLayer;
@@ -1130,6 +1121,11 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
+    class CreateContainerWithObjectsOperation extends SceneSnapshotOperation {
+        protected performModification(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
     class CutOperation extends SceneSnapshotOperation {
         constructor(editor: SceneEditor);
         performModification(): void;
@@ -1139,16 +1135,6 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     class DeleteOperation extends SceneSnapshotOperation {
         constructor(editor: SceneEditor);
         performModification(): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.editor.undo {
-    class JoinObjectsInContainerOperation extends SceneEditorOperation {
-        private _containerId;
-        private _objectsIdList;
-        constructor(editor: SceneEditor, container: sceneobjects.Container);
-        undo(): void;
-        redo(): void;
-        private updateEditor;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {

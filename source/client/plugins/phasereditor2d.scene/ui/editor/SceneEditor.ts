@@ -48,7 +48,6 @@ namespace phasereditor2d.scene.ui.editor {
         private _dropManager: DropManager;
         private _cameraManager: CameraManager;
         private _selectionManager: SelectionManager;
-        private _actionManager: ActionManager;
         private _toolsManager: tools.SceneToolsManager;
         private _mouseManager: MouseManager;
         private _clipboardManager: ClipboardManager;
@@ -186,7 +185,6 @@ namespace phasereditor2d.scene.ui.editor {
             this._dropManager = new DropManager(this);
             this._cameraManager = new CameraManager(this);
             this._selectionManager = new SelectionManager(this);
-            this._actionManager = new ActionManager(this);
             this._toolsManager = new tools.SceneToolsManager(this);
             this._mouseManager = new MouseManager(this);
             this._clipboardManager = new ClipboardManager(this);
@@ -467,10 +465,6 @@ namespace phasereditor2d.scene.ui.editor {
 
         getToolsManager() {
             return this._toolsManager;
-        }
-
-        getActionManager() {
-            return this._actionManager;
         }
 
         getMouseManager() {
