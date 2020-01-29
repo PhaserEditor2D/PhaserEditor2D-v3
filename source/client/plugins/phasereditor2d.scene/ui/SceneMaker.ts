@@ -40,7 +40,7 @@ namespace phasereditor2d.scene.ui {
                     return false;
                 }
 
-                const objData = sceneData.displayList[0];
+                const objData = sceneData.displayList[sceneData.displayList.length - 1];
 
                 if (objData.prefabId) {
 

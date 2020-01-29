@@ -109,7 +109,7 @@ namespace phasereditor2d.scene.core.json {
 
                         if (data.displayList.length > 0) {
 
-                            const objData = data.displayList[0];
+                            const objData = data.displayList[data.displayList.length - 1];
 
                             dataMap.set(data.id, objData);
                             fileMap.set(data.id, file);

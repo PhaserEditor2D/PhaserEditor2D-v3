@@ -1301,7 +1301,7 @@ var phasereditor2d;
                                 sceneDataMap.set(file.getFullName(), data);
                                 if (data.id) {
                                     if (data.displayList.length > 0) {
-                                        const objData = data.displayList[0];
+                                        const objData = data.displayList[data.displayList.length - 1];
                                         dataMap.set(data.id, objData);
                                         fileMap.set(data.id, file);
                                     }
@@ -1648,7 +1648,8 @@ var phasereditor2d;
                     }
                 }
                 getPrefabObject() {
-                    return this.getDisplayListChildren()[0];
+                    const list = this.getDisplayListChildren();
+                    return list[list.length - 1];
                 }
                 getObjectLists() {
                     return this._objectLists;
@@ -1840,7 +1841,7 @@ var phasereditor2d;
                         if (sceneData.displayList.length === 0) {
                             return false;
                         }
-                        const objData = sceneData.displayList[0];
+                        const objData = sceneData.displayList[sceneData.displayList.length - 1];
                         if (objData.prefabId) {
                             const prefabFile = sceneFinder.getPrefabFile(objData.prefabId);
                             if (prefabFile) {
