@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class RemoveObjectsFromListOperation extends GlobalListOperation {
+    export class RemoveObjectsFromListOperation extends ListsSnapshotOperation {
 
         private _objects: ISceneObject[];
         private _list: ObjectList;

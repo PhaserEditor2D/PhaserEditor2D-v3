@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export abstract class GlobalListOperation extends editor.undo.SceneEditorOperation {
+    export abstract class ListsSnapshotOperation extends editor.undo.SceneEditorOperation {
 
         private _before: json.IObjectListData[];
         private _after: json.IObjectListData[];

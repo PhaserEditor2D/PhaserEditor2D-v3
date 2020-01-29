@@ -49,6 +49,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 });
 
             // paste
+            
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_PASTE,
 
                 args => isSceneScope(args),

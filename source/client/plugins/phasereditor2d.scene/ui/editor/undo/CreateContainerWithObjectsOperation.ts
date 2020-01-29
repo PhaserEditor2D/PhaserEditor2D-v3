@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
     export class CreateContainerWithObjectsOperation extends SceneSnapshotOperation {
 
-        protected performModification() {
+        protected async performModification() {
 
             const container = sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
                 scene: this.getScene(),

@@ -52,26 +52,9 @@ namespace phasereditor2d.scene.ui.editor {
                         this._editor.getUndoManager().add(
                             new sceneobjects.AddObjectListOperation(this._editor, newList));
 
-                        // lists.push(newList);
-                        // this._editor.setSelection([newList]);
-                        // this._editor.setDirty(true);
-
                     } else {
 
-                        const maker = this._editor.getSceneMaker();
-
-                        let obj;
-
-                        if (type instanceof io.FilePath) {
-
-                            obj = await maker.createPrefabInstanceWithFile(type);
-
-                        } else {
-
-                            obj = maker.createEmptyObject(type);
-                        }
-
-                        this._editor.getUndoManager().add(new undo.AddObjectsOperation(this._editor, [obj]));
+                        this._editor.getUndoManager().add(new undo.AddObjectOperation(this._editor, type));
                     }
                 }));
 

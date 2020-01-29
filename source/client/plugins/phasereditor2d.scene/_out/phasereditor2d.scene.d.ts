@@ -1063,6 +1063,27 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
+    abstract class SceneSnapshotOperation extends SceneEditorOperation {
+        private _before;
+        private _after;
+        constructor(editor: SceneEditor);
+        execute(): Promise<void>;
+        protected abstract performModification(): any;
+        private takeSnapshot;
+        private loadSnapshot;
+        undo(): void;
+        redo(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
+    import io = colibri.core.io;
+    class AddObjectOperation2 extends SceneSnapshotOperation {
+        private _type;
+        constructor(editor: SceneEditor, type: sceneobjects.SceneObjectExtension | io.FilePath);
+        protected performModification(): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
     class AddObjectsOperation extends SceneEditorOperation {
         private _dataList;
         constructor(editor: SceneEditor, objects: sceneobjects.ISceneObject[]);
@@ -1108,39 +1129,26 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     export {};
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
-    abstract class SceneSnapshotOperation extends SceneEditorOperation {
-        private _before;
-        private _after;
-        constructor(editor: SceneEditor);
-        execute(): void;
-        protected abstract performModification(): any;
-        private takeSnapshot;
-        private loadSnapshot;
-        undo(): void;
-        redo(): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.editor.undo {
     class CreateContainerWithObjectsOperation extends SceneSnapshotOperation {
-        protected performModification(): void;
+        protected performModification(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class CutOperation extends SceneSnapshotOperation {
         constructor(editor: SceneEditor);
-        performModification(): void;
+        protected performModification(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class DeleteOperation extends SceneSnapshotOperation {
         constructor(editor: SceneEditor);
-        performModification(): void;
+        protected performModification(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class PasteOperation extends SceneSnapshotOperation {
         constructor(editor: SceneEditor);
-        performModification(): void;
+        protected performModification(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1604,7 +1612,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    abstract class GlobalListOperation extends editor.undo.SceneEditorOperation {
+    abstract class ListsSnapshotOperation extends editor.undo.SceneEditorOperation {
         private _before;
         private _after;
         constructor(editor: editor.SceneEditor);
@@ -1616,14 +1624,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class AddObjectListOperation extends GlobalListOperation {
+    class AddObjectListOperation extends ListsSnapshotOperation {
         private _list;
         constructor(editor: editor.SceneEditor, list: ObjectList);
         performChange(lists: ObjectLists): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class AddObjectsToListOperation extends GlobalListOperation {
+    class AddObjectsToListOperation extends ListsSnapshotOperation {
         private _objects;
         private _list;
         constructor(editor: editor.SceneEditor, list: ObjectList, objects: ISceneObject[]);
@@ -1645,14 +1653,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class RemoveObjectListOperation extends GlobalListOperation {
+    class RemoveObjectListOperation extends ListsSnapshotOperation {
         private _toDeleteArray;
         constructor(editor: editor.SceneEditor, toDeleteArray: ObjectList[]);
         performChange(sceneLists: ObjectLists): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class RemoveObjectsFromListOperation extends GlobalListOperation {
+    class RemoveObjectsFromListOperation extends ListsSnapshotOperation {
         private _objects;
         private _list;
         constructor(editor: editor.SceneEditor, list: ObjectList, objects: ISceneObject[]);

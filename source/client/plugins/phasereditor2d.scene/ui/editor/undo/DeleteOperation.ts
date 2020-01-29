@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
             super(editor);
         }
 
-        performModification() {
+        protected async performModification() {
 
             const editor = this._editor;
             const lists = editor.getScene().getObjectLists();

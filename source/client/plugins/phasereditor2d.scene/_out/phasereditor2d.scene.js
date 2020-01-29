@@ -2609,7 +2609,6 @@ var phasereditor2d;
             var editor;
             (function (editor_1) {
                 var controls = colibri.ui.controls;
-                var io = colibri.core.io;
                 class AddObjectDialog extends controls.dialogs.ViewerDialog {
                     constructor(editor) {
                         super(new AddObjectDialogViewer());
@@ -2631,20 +2630,9 @@ var phasereditor2d;
                                 nameMaker.update(lists);
                                 newList.setLabel(nameMaker.makeName("list"));
                                 this._editor.getUndoManager().add(new ui.sceneobjects.AddObjectListOperation(this._editor, newList));
-                                // lists.push(newList);
-                                // this._editor.setSelection([newList]);
-                                // this._editor.setDirty(true);
                             }
                             else {
-                                const maker = this._editor.getSceneMaker();
-                                let obj;
-                                if (type instanceof io.FilePath) {
-                                    obj = await maker.createPrefabInstanceWithFile(type);
-                                }
-                                else {
-                                    obj = maker.createEmptyObject(type);
-                                }
-                                this._editor.getUndoManager().add(new editor_1.undo.AddObjectsOperation(this._editor, [obj]));
+                                this._editor.getUndoManager().add(new editor_1.undo.AddObjectOperation2(this._editor, type));
                             }
                         }));
                         this.addCancelButton();
@@ -5371,7 +5359,6 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./SceneEditorOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5380,6 +5367,106 @@ var phasereditor2d;
         (function (ui) {
             var editor;
             (function (editor_16) {
+                var undo;
+                (function (undo) {
+                    class SceneSnapshotOperation extends undo.SceneEditorOperation {
+                        constructor(editor) {
+                            super(editor);
+                        }
+                        async execute() {
+                            this._before = this.takeSnapshot();
+                            await this.performModification();
+                            this._after = this.takeSnapshot();
+                            this._editor.setDirty(true);
+                            this._editor.refreshOutline();
+                        }
+                        takeSnapshot() {
+                            const scene = this.getScene();
+                            return {
+                                displayList: scene.getDisplayListChildren().map(obj => {
+                                    const data = {};
+                                    obj.getEditorSupport().writeJSON(data);
+                                    return data;
+                                }),
+                                lists: scene.getObjectLists().getLists().map(list => {
+                                    const data = {};
+                                    list.writeJSON(data);
+                                    return data;
+                                }),
+                                selection: this.getEditor().getSelectionManager().getSelectionIds()
+                            };
+                        }
+                        loadSnapshot(snapshot) {
+                            const editor = this.getEditor();
+                            const scene = this.getScene();
+                            const maker = scene.getMaker();
+                            scene.removeAll();
+                            for (const data of snapshot.displayList) {
+                                maker.createObject(data);
+                            }
+                            scene.getObjectLists().readJSON_lists(snapshot.lists);
+                            editor.setDirty(true);
+                            editor.repaint();
+                            editor.refreshOutline();
+                            editor.getSelectionManager().setSelectionByIds(snapshot.selection);
+                        }
+                        undo() {
+                            this.loadSnapshot(this._before);
+                        }
+                        redo() {
+                            this.loadSnapshot(this._after);
+                        }
+                    }
+                    undo.SceneSnapshotOperation = SceneSnapshotOperation;
+                })(undo = editor_16.undo || (editor_16.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene_12.ui || (scene_12.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneSnapshotOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_17) {
+                var undo;
+                (function (undo) {
+                    var io = colibri.core.io;
+                    class AddObjectOperation2 extends undo.SceneSnapshotOperation {
+                        constructor(editor, type) {
+                            super(editor);
+                            this._type = type;
+                        }
+                        async performModification() {
+                            const maker = this._editor.getSceneMaker();
+                            let obj;
+                            if (this._type instanceof io.FilePath) {
+                                obj = await maker.createPrefabInstanceWithFile(this._type);
+                            }
+                            else {
+                                obj = maker.createEmptyObject(this._type);
+                            }
+                            this.getEditor().setSelection([obj]);
+                        }
+                    }
+                    undo.AddObjectOperation2 = AddObjectOperation2;
+                })(undo = editor_17.undo || (editor_17.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneEditorOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene_13) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_18) {
                 var undo;
                 (function (undo) {
                     class AddObjectsOperation extends undo.SceneEditorOperation {
@@ -5417,19 +5504,19 @@ var phasereditor2d;
                         }
                     }
                     undo.AddObjectsOperation = AddObjectsOperation;
-                })(undo = editor_16.undo || (editor_16.undo = {}));
+                })(undo = editor_18.undo || (editor_18.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_12.ui || (scene_12.ui = {}));
+        })(ui = scene_13.ui || (scene_13.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_13) {
+    (function (scene_14) {
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_17) {
+            (function (editor_19) {
                 var undo;
                 (function (undo) {
                     class ObjectSnapshotOperation extends undo.SceneEditorOperation {
@@ -5496,9 +5583,9 @@ var phasereditor2d;
                         }
                     }
                     undo.ObjectSnapshotOperation = ObjectSnapshotOperation;
-                })(undo = editor_17.undo || (editor_17.undo = {}));
+                })(undo = editor_19.undo || (editor_19.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_13.ui || (scene_13.ui = {}));
+        })(ui = scene_14.ui || (scene_14.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./ObjectSnapshotOperation.ts" />
@@ -5509,7 +5596,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_18) {
+            (function (editor_20) {
                 var undo;
                 (function (undo) {
                     var io = colibri.core.io;
@@ -5577,73 +5664,9 @@ var phasereditor2d;
                         }
                     }
                     undo.ConvertTypeOperation = ConvertTypeOperation;
-                })(undo = editor_18.undo || (editor_18.undo = {}));
+                })(undo = editor_20.undo || (editor_20.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene_14) {
-        var ui;
-        (function (ui) {
-            var editor;
-            (function (editor_19) {
-                var undo;
-                (function (undo) {
-                    class SceneSnapshotOperation extends undo.SceneEditorOperation {
-                        constructor(editor) {
-                            super(editor);
-                        }
-                        execute() {
-                            this._before = this.takeSnapshot();
-                            this.performModification();
-                            this._after = this.takeSnapshot();
-                            this._editor.setDirty(true);
-                            this._editor.refreshOutline();
-                        }
-                        takeSnapshot() {
-                            const scene = this.getScene();
-                            return {
-                                displayList: scene.getDisplayListChildren().map(obj => {
-                                    const data = {};
-                                    obj.getEditorSupport().writeJSON(data);
-                                    return data;
-                                }),
-                                lists: scene.getObjectLists().getLists().map(list => {
-                                    const data = {};
-                                    list.writeJSON(data);
-                                    return data;
-                                }),
-                                selection: this.getEditor().getSelectionManager().getSelectionIds()
-                            };
-                        }
-                        loadSnapshot(snapshot) {
-                            const editor = this.getEditor();
-                            const scene = this.getScene();
-                            const maker = scene.getMaker();
-                            scene.removeAll();
-                            for (const data of snapshot.displayList) {
-                                maker.createObject(data);
-                            }
-                            scene.getObjectLists().readJSON_lists(snapshot.lists);
-                            editor.setDirty(true);
-                            editor.repaint();
-                            editor.refreshOutline();
-                            editor.getSelectionManager().setSelectionByIds(snapshot.selection);
-                        }
-                        undo() {
-                            this.loadSnapshot(this._before);
-                        }
-                        redo() {
-                            this.loadSnapshot(this._after);
-                        }
-                    }
-                    undo.SceneSnapshotOperation = SceneSnapshotOperation;
-                })(undo = editor_19.undo || (editor_19.undo = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_14.ui || (scene_14.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./SceneSnapshotOperation.ts" />
@@ -5658,7 +5681,7 @@ var phasereditor2d;
                 var undo;
                 (function (undo) {
                     class CreateContainerWithObjectsOperation extends undo.SceneSnapshotOperation {
-                        performModification() {
+                        async performModification() {
                             const container = ui.sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
                                 scene: this.getScene(),
                                 x: 0,
@@ -5693,14 +5716,14 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_20) {
+            (function (editor_21) {
                 var undo;
                 (function (undo) {
                     class CutOperation extends undo.SceneSnapshotOperation {
                         constructor(editor) {
                             super(editor);
                         }
-                        performModification() {
+                        async performModification() {
                             this._editor.getClipboardManager().copy();
                             const lists = this._editor.getScene().getObjectLists();
                             for (const obj of this._editor.getSelection()) {
@@ -5718,7 +5741,7 @@ var phasereditor2d;
                         }
                     }
                     undo.CutOperation = CutOperation;
-                })(undo = editor_20.undo || (editor_20.undo = {}));
+                })(undo = editor_21.undo || (editor_21.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5730,14 +5753,14 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_21) {
+            (function (editor_22) {
                 var undo;
                 (function (undo) {
                     class DeleteOperation extends undo.SceneSnapshotOperation {
                         constructor(editor) {
                             super(editor);
                         }
-                        performModification() {
+                        async performModification() {
                             const editor = this._editor;
                             const lists = editor.getScene().getObjectLists();
                             for (const obj of editor.getSelectedGameObjects()) {
@@ -5751,7 +5774,7 @@ var phasereditor2d;
                         }
                     }
                     undo.DeleteOperation = DeleteOperation;
-                })(undo = editor_21.undo || (editor_21.undo = {}));
+                })(undo = editor_22.undo || (editor_22.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5764,14 +5787,14 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_22) {
+            (function (editor_23) {
                 var undo;
                 (function (undo) {
                     class PasteOperation extends undo.SceneSnapshotOperation {
                         constructor(editor) {
                             super(editor);
                         }
-                        performModification() {
+                        async performModification() {
                             const items = this.getEditor().getClipboardManager().getClipboardCopy();
                             const maker = this._editor.getSceneMaker();
                             const sel = [];
@@ -5796,7 +5819,7 @@ var phasereditor2d;
                         }
                     }
                     undo.PasteOperation = PasteOperation;
-                })(undo = editor_22.undo || (editor_22.undo = {}));
+                })(undo = editor_23.undo || (editor_23.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -7168,7 +7191,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class GlobalListOperation extends ui.editor.undo.SceneEditorOperation {
+                class ListsSnapshotOperation extends ui.editor.undo.SceneEditorOperation {
                     constructor(editor) {
                         super(editor);
                     }
@@ -7193,12 +7216,12 @@ var phasereditor2d;
                         this.loadData(this._after);
                     }
                 }
-                sceneobjects.GlobalListOperation = GlobalListOperation;
+                sceneobjects.ListsSnapshotOperation = ListsSnapshotOperation;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./GlobalListOperation.ts" />
+/// <reference path="./ListsSnapshotOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -7207,7 +7230,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class AddObjectListOperation extends sceneobjects.GlobalListOperation {
+                class AddObjectListOperation extends sceneobjects.ListsSnapshotOperation {
                     constructor(editor, list) {
                         super(editor);
                         this._list = list;
@@ -7231,7 +7254,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class AddObjectsToListOperation extends sceneobjects.GlobalListOperation {
+                class AddObjectsToListOperation extends sceneobjects.ListsSnapshotOperation {
                     constructor(editor, list, objects) {
                         super(editor);
                         this._list = list;
@@ -7290,7 +7313,7 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./GlobalListOperation.ts" />
+/// <reference path="./ListsSnapshotOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -7299,7 +7322,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class RemoveObjectListOperation extends sceneobjects.GlobalListOperation {
+                class RemoveObjectListOperation extends sceneobjects.ListsSnapshotOperation {
                     constructor(editor, toDeleteArray) {
                         super(editor);
                         this._toDeleteArray = toDeleteArray;
@@ -7326,7 +7349,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class RemoveObjectsFromListOperation extends sceneobjects.GlobalListOperation {
+                class RemoveObjectsFromListOperation extends sceneobjects.ListsSnapshotOperation {
                     constructor(editor, list, objects) {
                         super(editor);
                         this._list = list;

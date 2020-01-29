@@ -1,10 +1,10 @@
-/// <reference path="./GlobalListOperation.ts" />
+/// <reference path="./ListsSnapshotOperation.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export class AddObjectListOperation extends GlobalListOperation {
+    export class AddObjectListOperation extends ListsSnapshotOperation {
 
         private _list: ObjectList;
 

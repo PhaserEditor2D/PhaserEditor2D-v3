@@ -18,11 +18,11 @@ namespace phasereditor2d.scene.ui.editor.undo {
             super(editor);
         }
 
-        execute() {
+        async execute() {
 
             this._before = this.takeSnapshot();
 
-            this.performModification();
+            await this.performModification();
 
             this._after = this.takeSnapshot();
 
@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._editor.refreshOutline();
         }
 
-        protected abstract performModification();
+        protected async abstract performModification();
 
         private takeSnapshot(): ISceneSnapshot {
 

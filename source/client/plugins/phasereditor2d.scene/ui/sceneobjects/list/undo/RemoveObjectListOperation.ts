@@ -1,10 +1,10 @@
-/// <reference path="./GlobalListOperation.ts" />
+/// <reference path="./ListsSnapshotOperation.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export class RemoveObjectListOperation extends GlobalListOperation {
+    export class RemoveObjectListOperation extends ListsSnapshotOperation {
 
         private _toDeleteArray: ObjectList[];
 
