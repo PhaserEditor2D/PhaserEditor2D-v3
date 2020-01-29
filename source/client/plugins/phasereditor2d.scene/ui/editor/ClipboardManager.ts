@@ -60,13 +60,6 @@ namespace phasereditor2d.scene.ui.editor {
 
         paste() {
 
-            // console.log("paste!!");
-
-            // if (this._clipboard.length > 0) {
-
-            //     this._editor.getUndoManager().add(new undo.PasteOperation(this._editor));
-            // }
-
             if (this._clipboard.length > 0) {
 
                 this._editor.getUndoManager().add(new undo.PasteOperation(this._editor));
@@ -75,7 +68,10 @@ namespace phasereditor2d.scene.ui.editor {
 
         cut() {
 
-            throw new Error("Method not implemented.");
+            if (this._editor.getSelection().length > 0) {
+
+                this._editor.getUndoManager().add(new undo.CutOperation(this._editor));
+            }
         }
     }
 }

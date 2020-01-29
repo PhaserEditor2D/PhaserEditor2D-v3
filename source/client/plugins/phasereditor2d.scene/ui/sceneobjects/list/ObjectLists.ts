@@ -83,5 +83,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return listsData;
         }
+
+        remove(obj: ObjectList) {
+
+            this._lists = this._lists.filter(list => list !== obj);
+        }
     }
 }

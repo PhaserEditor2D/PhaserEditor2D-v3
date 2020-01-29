@@ -2874,16 +2874,14 @@ var phasereditor2d;
                         }
                     }
                     paste() {
-                        // console.log("paste!!");
-                        // if (this._clipboard.length > 0) {
-                        //     this._editor.getUndoManager().add(new undo.PasteOperation(this._editor));
-                        // }
                         if (this._clipboard.length > 0) {
                             this._editor.getUndoManager().add(new editor_4.undo.PasteOperation(this._editor));
                         }
                     }
                     cut() {
-                        throw new Error("Method not implemented.");
+                        if (this._editor.getSelection().length > 0) {
+                            this._editor.getUndoManager().add(new editor_4.undo.CutOperation(this._editor));
+                        }
                     }
                 }
                 editor_4.ClipboardManager = ClipboardManager;
@@ -5653,59 +5651,6 @@ var phasereditor2d;
             (function (editor_20) {
                 var undo;
                 (function (undo) {
-                    class JoinObjectsInContainerOperation extends undo.SceneEditorOperation {
-                        constructor(editor, container) {
-                            super(editor);
-                            this._containerId = container.getEditorSupport().getId();
-                            this._objectsIdList = container.list.map(obj => obj.getEditorSupport().getId());
-                        }
-                        undo() {
-                            const scene = this._editor.getScene();
-                            const displayList = this._editor.getScene().sys.displayList;
-                            const container = scene.getByEditorId(this._containerId);
-                            for (const id of this._objectsIdList) {
-                                const obj = ui.Scene.findByEditorId(container.list, id);
-                                if (obj) {
-                                    container.remove(obj);
-                                    displayList.add(obj);
-                                }
-                                else {
-                                    console.error(`Undo: child with id=${id} not found in container ${this._containerId}`);
-                                }
-                            }
-                            container.getEditorSupport().destroy();
-                            this.updateEditor();
-                        }
-                        redo() {
-                            const scene = this._editor.getScene();
-                            const objects = this._objectsIdList.map(id => scene.getByEditorId(id));
-                            const container = ui.sceneobjects.ContainerExtension.getInstance()
-                                .createContainerObjectWithChildren(scene, objects);
-                            container.getEditorSupport().setId(this._containerId);
-                            this.updateEditor();
-                        }
-                        updateEditor() {
-                            this._editor.setDirty(true);
-                            this._editor.refreshOutline();
-                            this._editor.repaint();
-                        }
-                    }
-                    undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
-                })(undo = editor_20.undo || (editor_20.undo = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene_14.ui || (scene_14.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene_15) {
-        var ui;
-        (function (ui) {
-            var editor;
-            (function (editor_21) {
-                var undo;
-                (function (undo) {
                     class SceneSnapshotOperation extends undo.SceneEditorOperation {
                         constructor(editor, modification) {
                             super(editor);
@@ -5759,7 +5704,94 @@ var phasereditor2d;
                         }
                     }
                     undo.SceneSnapshotOperation = SceneSnapshotOperation;
+                })(undo = editor_20.undo || (editor_20.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene_14.ui || (scene_14.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneSnapshotOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_21) {
+                var undo;
+                (function (undo) {
+                    class CutOperation extends undo.SceneSnapshotOperation {
+                        constructor(editor) {
+                            super(editor);
+                        }
+                        performModification() {
+                            this._editor.getClipboardManager().copy();
+                            for (const obj of this._editor.getSelection()) {
+                                if (obj instanceof Phaser.GameObjects.GameObject) {
+                                    obj.getEditorSupport().destroy();
+                                }
+                                else if (obj instanceof ui.sceneobjects.ObjectList) {
+                                    this._editor.getScene().getObjectLists().remove(obj);
+                                }
+                            }
+                            this._editor.setSelection([]);
+                        }
+                    }
+                    undo.CutOperation = CutOperation;
                 })(undo = editor_21.undo || (editor_21.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene_15) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_22) {
+                var undo;
+                (function (undo) {
+                    class JoinObjectsInContainerOperation extends undo.SceneEditorOperation {
+                        constructor(editor, container) {
+                            super(editor);
+                            this._containerId = container.getEditorSupport().getId();
+                            this._objectsIdList = container.list.map(obj => obj.getEditorSupport().getId());
+                        }
+                        undo() {
+                            const scene = this._editor.getScene();
+                            const displayList = this._editor.getScene().sys.displayList;
+                            const container = scene.getByEditorId(this._containerId);
+                            for (const id of this._objectsIdList) {
+                                const obj = ui.Scene.findByEditorId(container.list, id);
+                                if (obj) {
+                                    container.remove(obj);
+                                    displayList.add(obj);
+                                }
+                                else {
+                                    console.error(`Undo: child with id=${id} not found in container ${this._containerId}`);
+                                }
+                            }
+                            container.getEditorSupport().destroy();
+                            this.updateEditor();
+                        }
+                        redo() {
+                            const scene = this._editor.getScene();
+                            const objects = this._objectsIdList.map(id => scene.getByEditorId(id));
+                            const container = ui.sceneobjects.ContainerExtension.getInstance()
+                                .createContainerObjectWithChildren(scene, objects);
+                            container.getEditorSupport().setId(this._containerId);
+                            this.updateEditor();
+                        }
+                        updateEditor() {
+                            this._editor.setDirty(true);
+                            this._editor.refreshOutline();
+                            this._editor.repaint();
+                        }
+                    }
+                    undo.JoinObjectsInContainerOperation = JoinObjectsInContainerOperation;
+                })(undo = editor_22.undo || (editor_22.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene_15.ui || (scene_15.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5772,7 +5804,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_22) {
+            (function (editor_23) {
                 var undo;
                 (function (undo) {
                     class PasteOperation extends undo.SceneSnapshotOperation {
@@ -5804,7 +5836,7 @@ var phasereditor2d;
                         }
                     }
                     undo.PasteOperation = PasteOperation;
-                })(undo = editor_22.undo || (editor_22.undo = {}));
+                })(undo = editor_23.undo || (editor_23.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -5816,7 +5848,7 @@ var phasereditor2d;
         var ui;
         (function (ui) {
             var editor;
-            (function (editor_23) {
+            (function (editor_24) {
                 var undo;
                 (function (undo) {
                     class RemoveObjectsOperation extends undo.AddObjectsOperation {
@@ -5837,7 +5869,7 @@ var phasereditor2d;
                         }
                     }
                     undo.RemoveObjectsOperation = RemoveObjectsOperation;
-                })(undo = editor_23.undo || (editor_23.undo = {}));
+                })(undo = editor_24.undo || (editor_24.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -7183,6 +7215,9 @@ var phasereditor2d;
                             listsData.push(listData);
                         }
                         return listsData;
+                    }
+                    remove(obj) {
+                        this._lists = this._lists.filter(list => list !== obj);
                     }
                 }
                 sceneobjects.ObjectLists = ObjectLists;
