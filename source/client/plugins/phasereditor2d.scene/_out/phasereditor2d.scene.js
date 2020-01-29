@@ -4072,8 +4072,8 @@ var phasereditor2d;
                                     key: "Z"
                                 }
                             });
-                            // origin shortcuts
                             SceneEditorCommands.registerOriginCommands(manager);
+                            SceneEditorCommands.registerDepthCommands(manager);
                             // add object dialog
                             manager.add({
                                 command: {
@@ -4225,6 +4225,27 @@ var phasereditor2d;
                                     key: "W"
                                 }
                             });
+                        }
+                        static registerDepthCommands(manager) {
+                            for (const tuple of [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]]) {
+                                const move = tuple[0];
+                                const key = tuple[1];
+                                manager.add({
+                                    command: {
+                                        id: "phasereditor2d.scene.ui.editor.commands.Depth" + move,
+                                        name: "Move Object " + move,
+                                        category: commands.CAT_SCENE_EDITOR,
+                                        tooltip: "Move the object in its container to " + move + "."
+                                    },
+                                    handler: {
+                                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                                        executeFunc: args => args.activeEditor.getUndoManager().add(new editor_9.undo.DepthOperation(args.activeEditor, move))
+                                    },
+                                    keys: {
+                                        key
+                                    }
+                                });
+                            }
                         }
                         static registerOriginCommands(manager) {
                             const names = [
@@ -5561,7 +5582,7 @@ var phasereditor2d;
                                 const sceneData = finder.getSceneData(this._targetType);
                                 await this.getEditor().getSceneMaker().updateSceneLoader(sceneData);
                             }
-                            super.execute();
+                            await super.execute();
                         }
                         makeChangeSnapshot(input) {
                             const result = {
@@ -5756,7 +5777,6 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./SceneSnapshotOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -5765,6 +5785,63 @@ var phasereditor2d;
         (function (ui) {
             var editor;
             (function (editor_23) {
+                var undo;
+                (function (undo) {
+                    class DepthOperation extends undo.SceneSnapshotOperation {
+                        constructor(editor, depthMove) {
+                            super(editor);
+                            this._depthMove = depthMove;
+                        }
+                        performModification() {
+                            const objects = this.getEditor().getSelectedGameObjects();
+                            const displayList = this.getScene().sys.displayList;
+                            objects.sort((a, b) => {
+                                const aa = a.parentContainer ? a.parentContainer.getIndex(a) : displayList.getIndex(a);
+                                const bb = b.parentContainer ? b.parentContainer.getIndex(b) : displayList.getIndex(b);
+                                return aa - bb;
+                            });
+                            switch (this._depthMove) {
+                                case "Top":
+                                    for (const obj of objects) {
+                                        (obj.parentContainer || displayList).bringToTop(obj);
+                                    }
+                                    break;
+                                case "Bottom":
+                                    for (let i = 0; i < objects.length; i++) {
+                                        const obj = objects[objects.length - i - 1];
+                                        (obj.parentContainer || displayList).sendToBack(obj);
+                                    }
+                                    break;
+                                case "Up":
+                                    for (let i = 0; i < objects.length; i++) {
+                                        const obj = objects[objects.length - i - 1];
+                                        (obj.parentContainer || displayList).moveUp(obj);
+                                    }
+                                    break;
+                                case "Down":
+                                    for (const obj of objects) {
+                                        (obj.parentContainer || displayList).moveDown(obj);
+                                    }
+                                    break;
+                            }
+                            this.getEditor().repaint();
+                        }
+                    }
+                    undo.DepthOperation = DepthOperation;
+                })(undo = editor_23.undo || (editor_23.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneSnapshotOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor_24) {
                 var undo;
                 (function (undo) {
                     class PasteOperation extends undo.SceneSnapshotOperation {
@@ -5796,7 +5873,7 @@ var phasereditor2d;
                         }
                     }
                     undo.PasteOperation = PasteOperation;
-                })(undo = editor_23.undo || (editor_23.undo = {}));
+                })(undo = editor_24.undo || (editor_24.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

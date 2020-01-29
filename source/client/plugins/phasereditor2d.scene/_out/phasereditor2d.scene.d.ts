@@ -775,6 +775,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
+        private static registerDepthCommands;
         private static registerOriginCommands;
     }
 }
@@ -1143,6 +1144,14 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     class DeleteOperation extends SceneSnapshotOperation {
         constructor(editor: SceneEditor);
         protected performModification(): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
+    type DepthMove = "Up" | "Down" | "Top" | "Bottom";
+    class DepthOperation extends SceneSnapshotOperation {
+        private _depthMove;
+        constructor(editor: SceneEditor, depthMove: DepthMove);
+        protected performModification(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {

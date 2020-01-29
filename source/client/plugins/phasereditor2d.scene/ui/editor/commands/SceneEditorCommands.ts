@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 });
 
             // paste
-            
+
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_PASTE,
 
                 args => isSceneScope(args),
@@ -253,9 +253,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 }
             });
 
-            // origin shortcuts
-
             SceneEditorCommands.registerOriginCommands(manager);
+
+            SceneEditorCommands.registerDepthCommands(manager);
 
             // add object dialog
 
@@ -450,6 +450,36 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "W"
                 }
             });
+        }
+
+        private static registerDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            for (const tuple of [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]]) {
+
+                const move = tuple[0];
+                const key = tuple[1];
+
+                manager.add({
+
+                    command: {
+                        id: "phasereditor2d.scene.ui.editor.commands.Depth" + move,
+                        name: "Move Object " + move,
+                        category: CAT_SCENE_EDITOR,
+                        tooltip: "Move the object in its container to " + move + "."
+                    },
+
+                    handler: {
+                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+
+                        executeFunc: args => args.activeEditor.getUndoManager().add(
+                            new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move as any))
+                    },
+
+                    keys: {
+                        key
+                    }
+                });
+            }
         }
 
         private static registerOriginCommands(manager: colibri.ui.ide.commands.CommandManager) {

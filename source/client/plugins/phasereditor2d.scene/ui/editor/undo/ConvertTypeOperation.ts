@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 await this.getEditor().getSceneMaker().updateSceneLoader(sceneData);
             }
 
-            super.execute();
+            await super.execute();
         }
 
         makeChangeSnapshot(input: ISceneObject[]): ISnapshot {
