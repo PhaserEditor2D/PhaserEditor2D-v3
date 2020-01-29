@@ -6,9 +6,8 @@ namespace colibri.ui.ide.undo {
 
         abstract redo(): void;
 
-        execute(): void {
+        async execute(): Promise<any> {
             // nothing by default
         }
-
     }
 }

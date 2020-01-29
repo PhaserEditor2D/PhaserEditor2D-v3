@@ -2887,7 +2887,8 @@ var phasereditor2d;
                         const dataArray = controls.Controls.getApplicationDragDataAndClean();
                         if (this.acceptDropDataArray(dataArray)) {
                             e.preventDefault();
-                            this._editor.getUndoManager().add(new editor_5.undo.CreateObjectWithAssetOperation(this._editor, e, dataArray));
+                            await this._editor.getUndoManager()
+                                .add(new editor_5.undo.CreateObjectWithAssetOperation(this._editor, e, dataArray));
                             await this._editor.refreshDependenciesHash();
                             ide.Workbench.getWorkbench().setActivePart(this._editor);
                         }
@@ -4706,7 +4707,7 @@ var phasereditor2d;
                             this._props = args.props;
                             this._repaint = args.repaint;
                         }
-                        execute() {
+                        async execute() {
                             const settings = this._editor.getScene().getSettings();
                             this._before = new Map();
                             this._after = new Map();
@@ -5263,7 +5264,7 @@ var phasereditor2d;
                             this._values0 = new Map();
                             this._values1 = new Map();
                         }
-                        execute() {
+                        async execute() {
                             for (const obj of this._objects) {
                                 const sprite = obj;
                                 const value0 = this.getInitialValue(sprite);
@@ -5473,7 +5474,7 @@ var phasereditor2d;
                             super(editor);
                             this._objects = objects;
                         }
-                        execute() {
+                        async execute() {
                             this._before = this.takeSnapshot(this._objects);
                             this._after = this.makeChangeSnapshot(this._objects);
                             this.loadSnapshot(this._after);
@@ -7171,7 +7172,7 @@ var phasereditor2d;
                     constructor(editor) {
                         super(editor);
                     }
-                    execute() {
+                    async execute() {
                         const lists = this._editor.getScene().getObjectLists();
                         this._before = lists.toJSON_lists();
                         this.performChange(lists);
@@ -7261,7 +7262,7 @@ var phasereditor2d;
                         this._list = list;
                         this._performChange = performChange;
                     }
-                    execute() {
+                    async execute() {
                         this._before = {};
                         this._list.writeJSON(this._before);
                         this._performChange(this._list);
@@ -7438,7 +7439,7 @@ var phasereditor2d;
                         this._objects = objects;
                         this._value = value;
                     }
-                    execute() {
+                    async execute() {
                         this._objIdList = this._objects.map(obj => obj.getEditorSupport().getId());
                         this._values1 = this._objects.map(_ => this._value);
                         this._values2 = this._objects.map(obj => this.getValue(obj));
@@ -7879,7 +7880,7 @@ var phasereditor2d;
                             }
                         }
                     }
-                    execute() {
+                    async execute() {
                         this.loadMove(this._after);
                     }
                     loadMove(moves) {

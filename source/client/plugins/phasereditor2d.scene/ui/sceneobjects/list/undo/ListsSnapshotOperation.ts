@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract performChange(lists: ObjectLists): void;
 
-        execute() {
+        async execute() {
 
             const lists = this._editor.getScene().getObjectLists();
 

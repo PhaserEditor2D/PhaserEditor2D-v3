@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        execute() {
+        async execute() {
 
             this.loadMove(this._after);
         }

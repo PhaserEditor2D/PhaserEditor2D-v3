@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._performChange = performChange;
         }
 
-        execute() {
+        async execute() {
 
             this._before = {} as any;
             this._list.writeJSON(this._before);

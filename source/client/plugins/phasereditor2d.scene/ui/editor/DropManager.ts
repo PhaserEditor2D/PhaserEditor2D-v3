@@ -25,7 +25,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                 e.preventDefault();
 
-                this._editor.getUndoManager().add(new undo.CreateObjectWithAssetOperation(this._editor, e, dataArray));
+                await this._editor.getUndoManager()
+                    .add(new undo.CreateObjectWithAssetOperation(this._editor, e, dataArray));
 
                 await this._editor.refreshDependenciesHash();
 

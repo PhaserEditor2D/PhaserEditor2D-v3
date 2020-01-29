@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             this._values1 = new Map();
         }
 
-        execute() {
+        async execute() {
 
             for (const obj of this._objects) {
 

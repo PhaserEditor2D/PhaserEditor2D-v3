@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this._repaint = args.repaint;
         }
 
-        execute() {
+        async execute() {
 
             const settings = this._editor.getScene().getSettings();
 

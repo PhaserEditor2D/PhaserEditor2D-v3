@@ -10,12 +10,12 @@ namespace colibri.ui.ide.undo {
             this._redoList = [];
         }
 
-        add(op: Operation) {
+        async add(op: Operation) {
 
             this._undoList.push(op);
             this._redoList = [];
 
-            op.execute();
+            await op.execute();
         }
 
         undo() {

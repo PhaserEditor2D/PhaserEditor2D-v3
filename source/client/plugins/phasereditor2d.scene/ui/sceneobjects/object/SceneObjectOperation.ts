@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract setValue(obj: T, value: any): void;
 
-        execute() {
+        async execute() {
 
             this._objIdList = this._objects.map(obj => obj.getEditorSupport().getId());
 

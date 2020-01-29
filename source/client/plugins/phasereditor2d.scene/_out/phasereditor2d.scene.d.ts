@@ -882,7 +882,7 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
             }>;
             repaint: boolean;
         });
-        execute(): void;
+        execute(): Promise<void>;
         private setValue;
         undo(): void;
         redo(): void;
@@ -1036,7 +1036,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         private _values0;
         private _values1;
         constructor(toolArgs: editor.tools.ISceneToolContextArgs);
-        execute(): void;
+        execute(): Promise<void>;
         abstract getInitialValue(obj: any): TValue;
         abstract getFinalValue(obj: any): TValue;
         abstract setValue(obj: any, value: TValue): any;
@@ -1100,7 +1100,7 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
         protected _objects: ISceneObject[];
         constructor(editor: SceneEditor, objects: ISceneObject[]);
         protected abstract makeChangeSnapshot(input: ISceneObject[]): ISnapshot;
-        execute(): void;
+        execute(): Promise<void>;
         protected takeSnapshot(objects: ISceneObject[]): ISnapshot;
         private loadSnapshot;
         undo(): void;
@@ -1617,7 +1617,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _after;
         constructor(editor: editor.SceneEditor);
         abstract performChange(lists: ObjectLists): void;
-        execute(): void;
+        execute(): Promise<void>;
         private loadData;
         undo(): void;
         redo(): void;
@@ -1646,7 +1646,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _before;
         private _after;
         constructor(editor: editor.SceneEditor, list: ObjectList, performChange: (list: ObjectList) => void);
-        execute(): void;
+        execute(): Promise<void>;
         loadData(listData: json.IObjectListData): void;
         undo(): void;
         redo(): void;
@@ -1696,7 +1696,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(editor: editor.SceneEditor, objects: T[], value: any);
         abstract getValue(obj: T): any;
         abstract setValue(obj: T, value: any): void;
-        execute(): void;
+        execute(): Promise<void>;
         undo(): void;
         redo(): void;
         private update;
@@ -1773,7 +1773,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _before;
         private _after;
         constructor(editor: editor.SceneEditor, parentId?: string);
-        execute(): void;
+        execute(): Promise<void>;
         private loadMove;
         undo(): void;
         redo(): void;

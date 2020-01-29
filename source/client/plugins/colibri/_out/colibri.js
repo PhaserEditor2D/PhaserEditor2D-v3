@@ -7789,46 +7789,11 @@ var colibri;
             var undo;
             (function (undo) {
                 class Operation {
-                    execute() {
+                    async execute() {
                         // nothing by default
                     }
                 }
                 undo.Operation = Operation;
-            })(undo = ide.undo || (ide.undo = {}));
-        })(ide = ui.ide || (ui.ide = {}));
-    })(ui = colibri.ui || (colibri.ui = {}));
-})(colibri || (colibri = {}));
-/// <reference path="./Operation.ts" />
-var colibri;
-(function (colibri) {
-    var ui;
-    (function (ui) {
-        var ide;
-        (function (ide) {
-            var undo;
-            (function (undo) {
-                class MultiOperation extends undo.Operation {
-                    constructor(list) {
-                        super();
-                        this._list = list;
-                    }
-                    execute() {
-                        for (const op of this._list) {
-                            op.execute();
-                        }
-                    }
-                    undo() {
-                        for (const op of this._list) {
-                            op.undo();
-                        }
-                    }
-                    redo() {
-                        for (const op of this._list) {
-                            op.redo();
-                        }
-                    }
-                }
-                undo.MultiOperation = MultiOperation;
             })(undo = ide.undo || (ide.undo = {}));
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -7846,10 +7811,10 @@ var colibri;
                         this._undoList = [];
                         this._redoList = [];
                     }
-                    add(op) {
+                    async add(op) {
                         this._undoList.push(op);
                         this._redoList = [];
-                        op.execute();
+                        await op.execute();
                     }
                     undo() {
                         if (this._undoList.length > 0) {

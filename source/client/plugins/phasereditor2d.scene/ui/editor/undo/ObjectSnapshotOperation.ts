@@ -28,7 +28,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         protected abstract makeChangeSnapshot(input: ISceneObject[]): ISnapshot;
 
-        execute() {
+        async execute() {
 
             this._before = this.takeSnapshot(this._objects);
 

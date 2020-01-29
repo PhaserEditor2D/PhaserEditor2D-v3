@@ -1872,16 +1872,7 @@ declare namespace colibri.ui.ide.undo {
     abstract class Operation {
         abstract undo(): void;
         abstract redo(): void;
-        execute(): void;
-    }
-}
-declare namespace colibri.ui.ide.undo {
-    class MultiOperation extends Operation {
-        private _list;
-        constructor(list: Operation[]);
-        execute(): void;
-        undo(): void;
-        redo(): void;
+        execute(): Promise<any>;
     }
 }
 declare namespace colibri.ui.ide.undo {
@@ -1889,7 +1880,7 @@ declare namespace colibri.ui.ide.undo {
         private _undoList;
         private _redoList;
         constructor();
-        add(op: Operation): void;
+        add(op: Operation): Promise<void>;
         undo(): void;
         redo(): void;
     }
