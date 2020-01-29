@@ -97,7 +97,8 @@ namespace phasereditor2d.scene.ui.editor {
             if (result && result.length > 0) {
 
                 const current = this._editor.getSelection();
-                let selected = result.pop();
+
+                let selected = result[result.length - 1];
 
                 if (selected) {
 
@@ -131,16 +132,19 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor.repaint();
         }
 
-        hitTestOfActivePointer(): Phaser.GameObjects.GameObject[] {
+        private hitTestOfActivePointer(): Phaser.GameObjects.GameObject[] {
+
             const scene = this._editor.getScene();
+
             const input = scene.input;
 
             // const real = input["real_hitTest"];
             // const fake = input["hitTest"];
 
             // input["hitTest"] = real;
-
             const result = input.hitTestPointer(scene.input.activePointer);
+
+            console.log(result);
 
             // input["hitTest"] = fake;
 

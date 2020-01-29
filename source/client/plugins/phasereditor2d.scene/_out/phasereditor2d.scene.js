@@ -3839,7 +3839,7 @@ var phasereditor2d;
                         let next = [];
                         if (result && result.length > 0) {
                             const current = this._editor.getSelection();
-                            let selected = result.pop();
+                            let selected = result[result.length - 1];
                             if (selected) {
                                 const obj = selected;
                                 const owner = obj.getEditorSupport().getOwnerPrefabInstance();
@@ -3868,6 +3868,7 @@ var phasereditor2d;
                         // const fake = input["hitTest"];
                         // input["hitTest"] = real;
                         const result = input.hitTestPointer(scene.input.activePointer);
+                        console.log(result);
                         // input["hitTest"] = fake;
                         return result;
                     }

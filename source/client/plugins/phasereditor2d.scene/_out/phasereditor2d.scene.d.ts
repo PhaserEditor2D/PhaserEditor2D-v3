@@ -753,7 +753,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         selectAll(): void;
         private updateOutlineSelection;
         onMouseClick(e: MouseEvent): void;
-        hitTestOfActivePointer(): Phaser.GameObjects.GameObject[];
+        private hitTestOfActivePointer;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.commands {
