@@ -623,7 +623,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _editor;
         constructor(editor: SceneEditor);
         onDragDrop_async(e: DragEvent): Promise<void>;
-        private createWithDropEvent;
+        createWithDropEvent(e: DragEvent, dropAssetArray: any[]): Promise<sceneobjects.ISceneObject[]>;
         private onDragOver;
         private acceptDropData;
         private acceptDropDataArray;
@@ -715,6 +715,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private readScene;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
         getSelectedLists(): sceneobjects.ObjectList[];
+        getDropManager(): DropManager;
         getClipboardManager(): ClipboardManager;
         getToolsManager(): tools.SceneToolsManager;
         getMouseManager(): MouseManager;
@@ -1077,19 +1078,10 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     import io = colibri.core.io;
-    class AddObjectOperation2 extends SceneSnapshotOperation {
+    class AddObjectOperation extends SceneSnapshotOperation {
         private _type;
         constructor(editor: SceneEditor, type: sceneobjects.SceneObjectExtension | io.FilePath);
         protected performModification(): Promise<void>;
-    }
-}
-declare namespace phasereditor2d.scene.ui.editor.undo {
-    class AddObjectsOperation extends SceneEditorOperation {
-        private _dataList;
-        constructor(editor: SceneEditor, objects: sceneobjects.ISceneObject[]);
-        undo(): void;
-        redo(): void;
-        private updateEditor;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
@@ -1130,6 +1122,14 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class CreateContainerWithObjectsOperation extends SceneSnapshotOperation {
+        protected performModification(): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
+    class CreateObjectWithAssetOperation extends SceneSnapshotOperation {
+        private _e;
+        private _data;
+        constructor(editor: SceneEditor, e: DragEvent, data: any[]);
         protected performModification(): Promise<void>;
     }
 }
@@ -1650,6 +1650,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         loadData(listData: json.IObjectListData): void;
         undo(): void;
         redo(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class NewListOperation extends ListsSnapshotOperation {
+        performChange(lists: ObjectLists): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

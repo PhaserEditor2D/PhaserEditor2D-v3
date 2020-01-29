@@ -35,22 +35,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (type === AddObjectDialog.OBJECT_LIST_TYPE) {
 
-                        // TODO: missing undo operation
-
-                        const scene = this._editor.getScene();
-                        const lists = scene.getObjectLists().getLists();
-
-                        const newList = new sceneobjects.ObjectList();
-
-                        const nameMaker = new colibri.ui.ide.utils.NameMaker(
-                            (obj: sceneobjects.ObjectList) => obj.getLabel());
-
-                        nameMaker.update(lists);
-
-                        newList.setLabel(nameMaker.makeName("list"));
-
                         this._editor.getUndoManager().add(
-                            new sceneobjects.AddObjectListOperation(this._editor, newList));
+                            new sceneobjects.NewListOperation(this._editor));
 
                     } else {
 

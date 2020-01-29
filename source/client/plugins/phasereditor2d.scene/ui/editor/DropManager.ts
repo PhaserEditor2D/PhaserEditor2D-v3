@@ -25,25 +25,15 @@ namespace phasereditor2d.scene.ui.editor {
 
                 e.preventDefault();
 
-                const sprites = await this.createWithDropEvent(e, dataArray);
-
-                this._editor.getUndoManager().add(new undo.AddObjectsOperation(this._editor, sprites));
-
-                this._editor.setSelection(sprites);
-
-                this._editor.refreshOutline();
+                this._editor.getUndoManager().add(new undo.CreateObjectWithAssetOperation(this._editor, e, dataArray));
 
                 await this._editor.refreshDependenciesHash();
-
-                this._editor.setDirty(true);
-
-                this._editor.repaint();
 
                 ide.Workbench.getWorkbench().setActivePart(this._editor);
             }
         }
 
-        private async createWithDropEvent(e: DragEvent, dropAssetArray: any[]) {
+        async createWithDropEvent(e: DragEvent, dropAssetArray: any[]) {
 
             const scene = this._editor.getScene();
 

@@ -137,11 +137,27 @@ namespace phasereditor2d.scene.ui {
 
         makeNewName(baseName: string) {
 
-            const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: sceneobjects.ISceneObject) => {
-                return obj.getEditorSupport().getLabel();
+            const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: any) => {
+
+                if (obj instanceof Phaser.GameObjects.GameObject) {
+
+                    return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
+                }
+
+                return (obj as sceneobjects.ObjectList).getLabel();
             });
 
-            this.visit(obj => nameMaker.update([obj]));
+            this.visitAskChildren(obj => {
+
+                nameMaker.update([obj]);
+
+                return !obj.getEditorSupport().isPrefabInstance();
+            });
+
+            for (const list of this._objectLists.getLists()) {
+
+                nameMaker.update([list]);
+            }
 
             return nameMaker.makeName(baseName);
         }

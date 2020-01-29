@@ -459,6 +459,10 @@ namespace phasereditor2d.scene.ui.editor {
                 .filter(obj => obj instanceof sceneobjects.ObjectList) as any;
         }
 
+        getDropManager() {
+            return this._dropManager;
+        }
+
         getClipboardManager() {
             return this._clipboardManager;
         }
