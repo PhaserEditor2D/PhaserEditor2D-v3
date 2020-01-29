@@ -447,13 +447,18 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
-        getSelectedGameObjects() {
+        getSelectedGameObjects(): sceneobjects.ISceneObject[] {
 
             return this.getSelection()
 
-                .filter(obj => obj instanceof Phaser.GameObjects.GameObject)
+                .filter(obj => obj instanceof Phaser.GameObjects.GameObject) as any;
+        }
 
-                .map(obj => obj as sceneobjects.ISceneObject);
+        getSelectedLists(): sceneobjects.ObjectList[] {
+
+            return this.getSelection()
+
+                .filter(obj => obj instanceof sceneobjects.ObjectList) as any;
         }
 
         getClipboardManager() {

@@ -44,11 +44,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(sceneData: json.ISceneData) {
 
-            const data = sceneData.lists;
+            const lists = sceneData.lists;
 
-            if (data.lists) {
+            if (Array.isArray(lists)) {
 
-                this.readJSON_lists(data.lists);
+                this.readJSON_lists(lists);
 
             } else {
 
@@ -62,9 +62,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._lists.length > 0) {
 
-                sceneData.lists = {
-                    lists: this.toJSON_lists()
-                };
+                sceneData.lists = this.toJSON_lists();
             }
         }
 
@@ -84,9 +82,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return listsData;
         }
 
-        remove(obj: ObjectList) {
+        removeListById(id: string) {
 
-            this._lists = this._lists.filter(list => list !== obj);
+            const i = this._lists.findIndex(l => l.getId() === id);
+
+            if (i >= 0) {
+
+                this._lists.splice(i, 1);
+            }
+        }
+
+        removeObjectById(objId: string) {
+
+            for (const list of this._lists) {
+
+                const i = list.getObjectIds().findIndex(id => id === objId);
+
+                if (i >= 0) {
+
+                    list.getObjectIds().splice(i, 1);
+                }
+            }
         }
     }
 }

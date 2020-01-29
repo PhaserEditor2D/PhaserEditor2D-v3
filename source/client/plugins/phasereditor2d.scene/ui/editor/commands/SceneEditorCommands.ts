@@ -101,10 +101,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                 args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
 
-                args => {
-                    const editor = args.activeEditor as SceneEditor;
-                    editor.getActionManager().deleteObjects();
-                });
+                args => args.activeEditor.getUndoManager()
+                    .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
+            );
 
             // join in container
 

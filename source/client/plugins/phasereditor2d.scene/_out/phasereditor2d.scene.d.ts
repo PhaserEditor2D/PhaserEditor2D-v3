@@ -247,9 +247,6 @@ declare namespace phasereditor2d.scene.core.json {
     }
 }
 declare namespace phasereditor2d.scene.core.json {
-    interface IObjectListsData {
-        lists: IObjectListData[];
-    }
     interface IObjectListData {
         id: string;
         label: string;
@@ -266,7 +263,7 @@ declare namespace phasereditor2d.scene.core.json {
         id: string;
         sceneType: SceneType;
         settings: object;
-        lists?: IObjectListsData;
+        lists?: IObjectListData[];
         displayList: IObjectData[];
         meta: {
             app: string;
@@ -549,7 +546,6 @@ declare namespace phasereditor2d.scene.ui.editor {
     class ActionManager {
         private _editor;
         constructor(editor: SceneEditor);
-        deleteObjects(): void;
         joinObjectsInContainer(): void;
     }
 }
@@ -726,6 +722,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         setSnappingToObjectSize(): void;
         private readScene;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
+        getSelectedLists(): sceneobjects.ObjectList[];
         getClipboardManager(): ClipboardManager;
         getToolsManager(): tools.SceneToolsManager;
         getActionManager(): ActionManager;
@@ -1120,13 +1117,12 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     export {};
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
-    class SceneSnapshotOperation extends SceneEditorOperation {
-        private _modification;
+    abstract class SceneSnapshotOperation extends SceneEditorOperation {
         private _before;
         private _after;
-        constructor(editor: SceneEditor, modification?: () => void);
+        constructor(editor: SceneEditor);
         execute(): void;
-        protected performModification(): void;
+        protected abstract performModification(): any;
         private takeSnapshot;
         private loadSnapshot;
         undo(): void;
@@ -1135,6 +1131,12 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class CutOperation extends SceneSnapshotOperation {
+        constructor(editor: SceneEditor);
+        performModification(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
+    class DeleteOperation extends SceneSnapshotOperation {
         constructor(editor: SceneEditor);
         performModification(): void;
     }
@@ -1153,15 +1155,6 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     class PasteOperation extends SceneSnapshotOperation {
         constructor(editor: SceneEditor);
         performModification(): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.editor.undo {
-    class RemoveObjectsOperation extends AddObjectsOperation {
-        private _objects;
-        constructor(editor: SceneEditor, objects: sceneobjects.ISceneObject[]);
-        execute(): void;
-        undo(): void;
-        redo(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1620,7 +1613,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         readJSON(sceneData: json.ISceneData): void;
         writeJSON(sceneData: json.ISceneData): void;
         toJSON_lists(): json.IObjectListData[];
-        remove(obj: ObjectList): void;
+        removeListById(id: string): void;
+        removeObjectById(objId: string): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

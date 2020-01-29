@@ -9,16 +9,13 @@ namespace phasereditor2d.scene.ui.editor.undo {
         lists: json.IObjectListData[];
     }
 
-    export class SceneSnapshotOperation extends SceneEditorOperation {
+    export abstract class SceneSnapshotOperation extends SceneEditorOperation {
 
-        private _modification: () => void;
         private _before: ISceneSnapshot;
         private _after: ISceneSnapshot;
 
-        constructor(editor: SceneEditor, modification?: () => void) {
+        constructor(editor: SceneEditor) {
             super(editor);
-
-            this._modification = modification;
         }
 
         execute() {
@@ -33,10 +30,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._editor.refreshOutline();
         }
 
-        protected performModification() {
-
-            this._modification();
-        }
+        protected abstract performModification();
 
         private takeSnapshot(): ISceneSnapshot {
 

@@ -61,7 +61,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             data.id = this._id;
             data.label = this._label;
-            data.objectIds = this._objectIds.length === 0 ? undefined : this._objectIds;
+            data.objectIds = this._objectIds.length === 0 ? undefined : [...this._objectIds];
             data.scope = this._scope === sceneobjects.ObjectScope.CLASS ? undefined : this._scope;
         }
     }

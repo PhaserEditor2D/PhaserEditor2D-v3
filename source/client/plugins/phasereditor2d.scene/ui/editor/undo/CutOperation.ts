@@ -11,16 +11,21 @@ namespace phasereditor2d.scene.ui.editor.undo {
         performModification() {
 
             this._editor.getClipboardManager().copy();
+            const lists = this._editor.getScene().getObjectLists();
 
             for (const obj of this._editor.getSelection()) {
 
                 if (obj instanceof Phaser.GameObjects.GameObject) {
 
-                    (obj as sceneobjects.ISceneObject).getEditorSupport().destroy();
+                    const sprite = obj as sceneobjects.ISceneObject;
+
+                    sprite.getEditorSupport().destroy();
+                    lists
+                        .removeObjectById(sprite.getEditorSupport().getId());
 
                 } else if (obj instanceof sceneobjects.ObjectList) {
 
-                    this._editor.getScene().getObjectLists().remove(obj);
+                    lists.removeListById(obj.getId());
                 }
             }
 

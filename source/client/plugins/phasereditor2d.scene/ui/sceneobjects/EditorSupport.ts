@@ -59,7 +59,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 list.splice(i, 1);
             }
 
-            window["__obj"] = obj;
         }
 
         isMethodScope() {
