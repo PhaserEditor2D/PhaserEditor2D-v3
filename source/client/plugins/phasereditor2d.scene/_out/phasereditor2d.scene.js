@@ -4333,13 +4333,17 @@ var phasereditor2d;
                         }
                         getChildren(parent) {
                             if (parent instanceof Phaser.GameObjects.DisplayList) {
-                                return parent.getChildren();
+                                const list = [...parent.getChildren()];
+                                list.reverse();
+                                return list;
                             }
                             else if (parent instanceof Phaser.GameObjects.Container) {
                                 if (parent.getEditorSupport().isPrefabInstance()) {
                                     return [];
                                 }
-                                return parent.list;
+                                const list = [...parent.list];
+                                list.reverse();
+                                return list;
                             }
                             else if (parent instanceof ui.sceneobjects.ObjectLists) {
                                 return parent.getLists();

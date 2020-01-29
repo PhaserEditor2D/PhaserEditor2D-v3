@@ -26,7 +26,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             if (parent instanceof Phaser.GameObjects.DisplayList) {
 
-                return parent.getChildren();
+                const list = [...parent.getChildren()];
+
+                list.reverse();
+
+                return list;
 
             } else if (parent instanceof Phaser.GameObjects.Container) {
 
@@ -35,7 +39,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
                     return [];
                 }
 
-                return parent.list;
+                const list = [...parent.list];
+
+                list.reverse();
+
+                return list;
 
             } else if (parent instanceof sceneobjects.ObjectLists) {
 
