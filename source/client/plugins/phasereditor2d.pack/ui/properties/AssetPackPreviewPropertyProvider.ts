@@ -10,6 +10,10 @@ namespace phasereditor2d.pack.ui.properties {
             sections.push(new pack.ui.properties.AssetPackItemSection(page));
             sections.push(new pack.ui.properties.ImagePreviewSection(page));
             sections.push(new pack.ui.properties.ManyImageSection(page));
+
+            const provider = new files.ui.views.FilePropertySectionProvider();
+
+            provider.addSections(page, sections);
         }
     }
 }

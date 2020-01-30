@@ -4106,6 +4106,8 @@ var phasereditor2d;
                         sections.push(new pack.ui.properties.AssetPackItemSection(page));
                         sections.push(new pack.ui.properties.ImagePreviewSection(page));
                         sections.push(new pack.ui.properties.ManyImageSection(page));
+                        const provider = new phasereditor2d.files.ui.views.FilePropertySectionProvider();
+                        provider.addSections(page, sections);
                     }
                 }
                 properties.AssetPackPreviewPropertyProvider = AssetPackPreviewPropertyProvider;

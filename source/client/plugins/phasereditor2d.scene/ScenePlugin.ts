@@ -105,6 +105,13 @@ namespace phasereditor2d.scene {
                 new ui.dialogs.NewPrefabFileDialogExtension()
             );
 
+            // file properties
+
+            reg.addExtension(new files.ui.views.FilePropertySectionExtension(
+                page => new ui.SceneFileSection(page),
+                page => new ui.ManySceneFileSection(page)
+            ));
+
             // scene object extensions
 
             reg.addExtension(
@@ -125,7 +132,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.OriginSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.TextureSection(page),
-                page => new ui.sceneobjects.ListSection(page)
+                page => new ui.sceneobjects.ListSection(page),
             ));
 
             // scene tools

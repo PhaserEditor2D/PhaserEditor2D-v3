@@ -1425,6 +1425,7 @@ var phasereditor2d;
                         this.getCanvas().classList.add("PreviewBackground");
                     }
                 }
+                views.GridImageFileViewer = GridImageFileViewer;
                 class ManyImageFileSection extends controls.properties.PropertySection {
                     constructor(page) {
                         super(page, "files.ManyImageFileSection", "Images", true);

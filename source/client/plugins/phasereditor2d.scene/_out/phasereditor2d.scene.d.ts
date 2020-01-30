@@ -367,6 +367,16 @@ declare namespace Phaser.Cameras.Scene2D {
 declare namespace phasereditor2d.scene.ui {
 }
 declare namespace phasereditor2d.scene.ui {
+    import controls = colibri.ui.controls;
+    import io = colibri.core.io;
+    class ManySceneFileSection extends controls.properties.PropertySection<io.FilePath> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: io.FilePath, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui {
     class Scene extends Phaser.Scene {
         private _id;
         private _inEditor;
@@ -411,6 +421,16 @@ declare namespace phasereditor2d.scene.ui {
         private constructor();
         setCallback(callback: () => void): void;
         create(): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui {
+    import controls = colibri.ui.controls;
+    import io = colibri.core.io;
+    class SceneFileSection extends controls.properties.PropertySection<io.FilePath> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: io.FilePath, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui {

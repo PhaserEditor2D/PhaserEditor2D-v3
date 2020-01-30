@@ -5,7 +5,7 @@ namespace phasereditor2d.files.ui.views {
     import ide = colibri.ui.ide;
     import core = colibri.core;
 
-    class GridImageFileViewer extends controls.viewers.TreeViewer {
+    export class GridImageFileViewer extends controls.viewers.TreeViewer {
 
         constructor(...classList: string[]) {
             super("PreviewBackground", ...classList);

@@ -21,7 +21,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
             page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void {
 
             sections.push(
-
                 new SnappingSection(page),
                 new BorderSection(page),
                 new CompilerSection(page)

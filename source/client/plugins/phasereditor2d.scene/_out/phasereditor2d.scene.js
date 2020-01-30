@@ -54,6 +54,8 @@ var phasereditor2d;
                 ]));
                 // new file wizards
                 reg.addExtension(new scene_1.ui.dialogs.NewSceneFileDialogExtension(), new scene_1.ui.dialogs.NewPrefabFileDialogExtension());
+                // file properties
+                reg.addExtension(new phasereditor2d.files.ui.views.FilePropertySectionExtension(page => new scene_1.ui.SceneFileSection(page), page => new scene_1.ui.ManySceneFileSection(page)));
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
@@ -1611,6 +1613,42 @@ var phasereditor2d;
     (function (scene) {
         var ui;
         (function (ui) {
+            var controls = colibri.ui.controls;
+            var io = colibri.core.io;
+            class ManySceneFileSection extends controls.properties.PropertySection {
+                constructor(page) {
+                    super(page, "phasereditor2d.scene.ui.ManySceneFileSection", "Scene", true, false);
+                }
+                createForm(parent) {
+                    const viewer = new phasereditor2d.files.ui.views.GridImageFileViewer();
+                    const filteredViewer = new colibri.ui.ide.properties.FilteredViewerInPropertySection(this.getPage(), viewer);
+                    parent.appendChild(filteredViewer.getElement());
+                    this.addUpdater(() => {
+                        viewer.setInput([]);
+                        viewer.repaint();
+                        viewer.setInput(this.getSelection());
+                        filteredViewer.resizeTo();
+                    });
+                }
+                canEdit(obj, n) {
+                    return obj instanceof io.FilePath
+                        && colibri.Platform.getWorkbench().getContentTypeRegistry()
+                            .getCachedContentType(obj) === scene.core.CONTENT_TYPE_SCENE;
+                }
+                canEditNumber(n) {
+                    return n > 1;
+                }
+            }
+            ui.ManySceneFileSection = ManySceneFileSection;
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
             class Scene extends Phaser.Scene {
                 constructor(inEditor = true) {
                     super("ObjectScene");
@@ -1812,6 +1850,46 @@ var phasereditor2d;
             }
             ui.OfflineScene = OfflineScene;
         })(ui = scene_5.ui || (scene_5.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var controls = colibri.ui.controls;
+            var io = colibri.core.io;
+            class SceneFileSection extends controls.properties.PropertySection {
+                constructor(page) {
+                    super(page, "phasereditor2d.scene.ui.SceneFileSection", "Scene", true, false);
+                }
+                createForm(parent) {
+                    const imgControl = new controls.ImageControl();
+                    this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e) => {
+                        imgControl.resizeTo();
+                    });
+                    parent.appendChild(imgControl.getElement());
+                    this.addUpdater(async () => {
+                        const file = this.getSelectionFirstElement();
+                        const cache = ui.SceneThumbnailCache.getInstance();
+                        await cache.preload(file);
+                        const image = ui.SceneThumbnailCache.getInstance().getContent(file);
+                        imgControl.setImage(image);
+                        setTimeout(() => imgControl.resizeTo(), 1);
+                    });
+                }
+                canEdit(obj, n) {
+                    return obj instanceof io.FilePath
+                        && colibri.Platform.getWorkbench().getContentTypeRegistry()
+                            .getCachedContentType(obj) === scene.core.CONTENT_TYPE_SCENE;
+                }
+                canEditNumber(n) {
+                    return n === 1;
+                }
+            }
+            ui.SceneFileSection = SceneFileSection;
+        })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;

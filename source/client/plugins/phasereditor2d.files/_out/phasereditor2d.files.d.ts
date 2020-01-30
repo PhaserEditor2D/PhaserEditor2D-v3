@@ -302,6 +302,9 @@ declare namespace phasereditor2d.files.ui.views {
 declare namespace phasereditor2d.files.ui.views {
     import controls = colibri.ui.controls;
     import core = colibri.core;
+    class GridImageFileViewer extends controls.viewers.TreeViewer {
+        constructor(...classList: string[]);
+    }
     class ManyImageFileSection extends controls.properties.PropertySection<core.io.FilePath> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
