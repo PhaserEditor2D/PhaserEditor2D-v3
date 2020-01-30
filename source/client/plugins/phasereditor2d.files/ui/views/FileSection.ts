@@ -48,6 +48,21 @@ namespace phasereditor2d.files.ui.views {
                 });
             }
 
+            {
+                // Open
+
+                const btn = this.createButton(comp, "Open File", () => {
+
+                    for (const file of this.getSelection()) {
+
+                        colibri.Platform.getWorkbench().openEditor(file);
+                    }
+                });
+
+                btn.style.gridColumn = "1 / span 2";
+                btn.style.justifySelf = "end";
+            }
+
         }
 
         canEdit(obj: any): boolean {

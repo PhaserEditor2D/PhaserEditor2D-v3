@@ -1252,6 +1252,16 @@ var phasereditor2d;
                                 text.value = filesize(total);
                             });
                         }
+                        {
+                            // Open
+                            const btn = this.createButton(comp, "Open File", () => {
+                                for (const file of this.getSelection()) {
+                                    colibri.Platform.getWorkbench().openEditor(file);
+                                }
+                            });
+                            btn.style.gridColumn = "1 / span 2";
+                            btn.style.justifySelf = "end";
+                        }
                     }
                     canEdit(obj) {
                         return obj instanceof core.io.FilePath;
