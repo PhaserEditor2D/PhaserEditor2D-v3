@@ -23,15 +23,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-        const hitBounds = x >= 0 && y >= 0 && x <= sprite.width && y <= sprite.height;
-
-        if (!hitBounds) {
-            return false;
-        }
+        // TODO: lets fix the bound checking.
+        // const hitBounds = x >= 0 && y >= 0 && x <= sprite.width && y <= sprite.height;
+        // if (!hitBounds) {
+        //     return false;
+        // }
 
         const scene = obj.getEditorSupport().getScene();
 
-        const renderTexture = new Phaser.GameObjects.RenderTexture(scene, 0, 0, 1, 1);
+        const renderTexture = new Phaser.GameObjects.RenderTexture(scene, 0, 0, 500, 500);
 
         const scaleX = sprite.scaleX;
         const scaleY = sprite.scaleY;
@@ -45,7 +45,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         sprite.originY = 0;
         sprite.angle = 0;
 
-        renderTexture.draw([sprite], -x, -y);
+        let renderX = -x;
+        let renderY = -y;
+
+        if (sprite instanceof TileSprite) {
+
+            renderX = -x - sprite.width * originX;
+            renderY = -y - sprite.height * originY;
+        }
+
+        renderTexture.draw([sprite], renderX, renderY);
 
         sprite.scaleX = scaleX;
         sprite.scaleY = scaleY;

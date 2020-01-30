@@ -3554,8 +3554,6 @@ var phasereditor2d;
                         });
                         menu.addCommand(editor.commands.CMD_COMPILE_SCENE_EDITOR);
                         menu.addCommand(editor.commands.CMD_OPEN_COMPILED_FILE);
-                        menu.addSeparator();
-                        menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
                     }
                     openAddObjectDialog() {
                         const dlg = new editor.AddObjectDialog(this);
@@ -6333,12 +6331,13 @@ var phasereditor2d;
                 sceneobjects.interactive_getAlpha_SharedTexture = interactive_getAlpha_SharedTexture;
                 function interactive_getAlpha_RenderTexture(hitArea, x, y, obj) {
                     const sprite = obj;
-                    const hitBounds = x >= 0 && y >= 0 && x <= sprite.width && y <= sprite.height;
-                    if (!hitBounds) {
-                        return false;
-                    }
+                    // TODO: lets fix the bound checking.
+                    // const hitBounds = x >= 0 && y >= 0 && x <= sprite.width && y <= sprite.height;
+                    // if (!hitBounds) {
+                    //     return false;
+                    // }
                     const scene = obj.getEditorSupport().getScene();
-                    const renderTexture = new Phaser.GameObjects.RenderTexture(scene, 0, 0, 1, 1);
+                    const renderTexture = new Phaser.GameObjects.RenderTexture(scene, 0, 0, 500, 500);
                     const scaleX = sprite.scaleX;
                     const scaleY = sprite.scaleY;
                     const originX = sprite.originX;
@@ -6349,7 +6348,13 @@ var phasereditor2d;
                     sprite.originX = 0;
                     sprite.originY = 0;
                     sprite.angle = 0;
-                    renderTexture.draw([sprite], -x, -y);
+                    let renderX = -x;
+                    let renderY = -y;
+                    if (sprite instanceof sceneobjects.TileSprite) {
+                        renderX = -x - sprite.width * originX;
+                        renderY = -y - sprite.height * originY;
+                    }
+                    renderTexture.draw([sprite], renderX, renderY);
                     sprite.scaleX = scaleX;
                     sprite.scaleY = scaleY;
                     sprite.originX = originX;
