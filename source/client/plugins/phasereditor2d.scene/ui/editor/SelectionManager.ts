@@ -144,8 +144,6 @@ namespace phasereditor2d.scene.ui.editor {
             // input["hitTest"] = real;
             const result = input.hitTestPointer(scene.input.activePointer);
 
-            console.log(result);
-
             // input["hitTest"] = fake;
 
             return result;

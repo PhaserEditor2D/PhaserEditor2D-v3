@@ -64,7 +64,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(() => {
 
-                const listsRoot = this.getEditor().getScene().getObjectLists();
+                const scene = this.getEditor().getScene();
+
+                if (!scene) {
+
+                    return;
+                }
+
+                const listsRoot = scene.getObjectLists();
 
                 const lists = new Set(
                     this.getSelection()

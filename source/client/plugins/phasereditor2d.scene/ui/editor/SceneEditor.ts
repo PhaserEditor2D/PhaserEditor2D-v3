@@ -350,6 +350,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addSeparator();
 
+            menu.addCommand(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, {
+                text: "Refresh Scene"
+            });
             menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
 
