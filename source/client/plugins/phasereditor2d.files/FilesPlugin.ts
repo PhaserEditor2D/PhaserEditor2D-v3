@@ -1,7 +1,6 @@
 namespace phasereditor2d.files {
 
     import ide = colibri.ui.ide;
-    import controls = colibri.ui.controls;
 
     export const ICON_NEW_FILE = "file-new";
     export const ICON_PROJECT = "project";
@@ -39,6 +38,15 @@ namespace phasereditor2d.files {
 
             reg.addExtension(
                 new ide.commands.CommandExtension(ui.actions.FilesViewCommands.registerCommands));
+
+            // properties
+
+            reg.addExtension(new ui.views.FilePropertySectionExtension(
+                page => new ui.views.FileSection(page),
+                page => new ui.views.ImageFileSection(page),
+                page => new ui.views.ManyImageFileSection(page),
+                page => new ui.views.UploadSection(page),
+            ));
         }
     }
 

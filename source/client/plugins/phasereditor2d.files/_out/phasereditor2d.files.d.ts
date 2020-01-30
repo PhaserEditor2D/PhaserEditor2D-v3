@@ -256,6 +256,16 @@ declare namespace phasereditor2d.files.ui.views {
 }
 declare namespace phasereditor2d.files.ui.views {
     import controls = colibri.ui.controls;
+    type GetPropertySection = (page: controls.properties.PropertyPage) => controls.properties.PropertySection<any>;
+    class FilePropertySectionExtension extends colibri.Extension {
+        static POINT_ID: string;
+        private _sectionProviders;
+        constructor(...sectionProviders: GetPropertySection[]);
+        getSectionProviders(): GetPropertySection[];
+    }
+}
+declare namespace phasereditor2d.files.ui.views {
+    import controls = colibri.ui.controls;
     import core = colibri.core;
     class FileSection extends controls.properties.PropertySection<core.io.FilePath> {
         constructor(page: controls.properties.PropertyPage);

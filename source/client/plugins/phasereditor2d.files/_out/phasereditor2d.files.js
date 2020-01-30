@@ -22,6 +22,8 @@ var phasereditor2d;
                 reg.addExtension(new files.ui.dialogs.NewFolderExtension(), new files.ui.dialogs.NewGenericFileExtension());
                 // commands
                 reg.addExtension(new ide.commands.CommandExtension(files.ui.actions.FilesViewCommands.registerCommands));
+                // properties
+                reg.addExtension(new files.ui.views.FilePropertySectionExtension(page => new files.ui.views.FileSection(page), page => new files.ui.views.ImageFileSection(page), page => new files.ui.views.ManyImageFileSection(page), page => new files.ui.views.UploadSection(page)));
             }
         }
         FilesPlugin._instance = new FilesPlugin();
@@ -1169,13 +1171,39 @@ var phasereditor2d;
                 var controls = colibri.ui.controls;
                 class FilePropertySectionProvider extends controls.properties.PropertySectionProvider {
                     addSections(page, sections) {
-                        sections.push(new views.FileSection(page));
-                        sections.push(new views.ImageFileSection(page));
-                        sections.push(new views.ManyImageFileSection(page));
-                        sections.push(new views.UploadSection(page));
+                        const exts = colibri.Platform
+                            .getExtensions(views.FilePropertySectionExtension.POINT_ID);
+                        for (const ext of exts) {
+                            for (const provider of ext.getSectionProviders()) {
+                                sections.push(provider(page));
+                            }
+                        }
                     }
                 }
                 views.FilePropertySectionProvider = FilePropertySectionProvider;
+            })(views = ui.views || (ui.views = {}));
+        })(ui = files.ui || (files.ui = {}));
+    })(files = phasereditor2d.files || (phasereditor2d.files = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var files;
+    (function (files) {
+        var ui;
+        (function (ui) {
+            var views;
+            (function (views) {
+                class FilePropertySectionExtension extends colibri.Extension {
+                    constructor(...sectionProviders) {
+                        super(FilePropertySectionExtension.POINT_ID);
+                        this._sectionProviders = sectionProviders;
+                    }
+                    getSectionProviders() {
+                        return this._sectionProviders;
+                    }
+                }
+                FilePropertySectionExtension.POINT_ID = "phasereditor2d.files.ui.views.FilePropertySectionExtension";
+                views.FilePropertySectionExtension = FilePropertySectionExtension;
             })(views = ui.views || (ui.views = {}));
         })(ui = files.ui || (files.ui = {}));
     })(files = phasereditor2d.files || (phasereditor2d.files = {}));

@@ -7,13 +7,16 @@ namespace phasereditor2d.files.ui.views {
         addSections(
             page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void {
 
-            sections.push(new FileSection(page));
+            const exts = colibri.Platform
+                .getExtensions<FilePropertySectionExtension>(FilePropertySectionExtension.POINT_ID);
 
-            sections.push(new ImageFileSection(page));
+            for (const ext of exts) {
 
-            sections.push(new ManyImageFileSection(page));
+                for (const provider of ext.getSectionProviders()) {
 
-            sections.push(new UploadSection(page));
+                    sections.push(provider(page));
+                }
+            }
         }
     }
 }
