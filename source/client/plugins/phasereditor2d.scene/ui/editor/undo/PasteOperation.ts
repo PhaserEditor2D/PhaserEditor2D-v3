@@ -39,8 +39,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     const { x, y } = this.getEditor().getMouseManager().getDropPosition();
 
-                    data[sceneobjects.TransformComponent.x.name] = x;
-                    data[sceneobjects.TransformComponent.y.name] = y;
+                    data["x"] = data["x"] + x;
+                    data["y"] = data["y"] + y;
 
                     const obj = maker.createObject(data);
 

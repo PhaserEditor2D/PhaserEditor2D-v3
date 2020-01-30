@@ -32,29 +32,52 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._clipboard = [];
 
-            for (const obj of this._editor.getSelection()) {
+            let minX = Number.MAX_VALUE;
+            let minY = Number.MAX_VALUE;
 
-                if (obj instanceof Phaser.GameObjects.GameObject) {
+            const p = new Phaser.Math.Vector2();
 
-                    const objData = {} as any;
+            for (const obj of this._editor.getSelectedGameObjects()) {
 
-                    (obj as sceneobjects.ISceneObject).getEditorSupport().writeJSON(objData);
+                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-                    this._clipboard.push({
-                        type: "ISceneObject",
-                        data: objData
-                    });
+                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
 
-                } else if (obj instanceof sceneobjects.ObjectList) {
+                minX = Math.min(minX, p.x);
+                minY = Math.min(minY, p.y);
+            }
 
-                    const listData = {} as any;
-                    obj.writeJSON(listData);
+            for (const obj of this._editor.getSelectedGameObjects()) {
 
-                    this._clipboard.push({
-                        type: "ObjectList",
-                        data: listData
-                    });
-                }
+                const objData = {} as any;
+
+                obj.getEditorSupport().writeJSON(objData);
+
+                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+
+                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+
+                p.x -= minX;
+                p.y -= minY;
+
+                objData["x"] = p.x;
+                objData["y"] = p.y;
+
+                this._clipboard.push({
+                    type: "ISceneObject",
+                    data: objData
+                });
+            }
+
+            for (const list of this._editor.getSelectedLists()) {
+
+                const listData = {} as any;
+                list.writeJSON(listData);
+
+                this._clipboard.push({
+                    type: "ObjectList",
+                    data: listData
+                });
             }
         }
 

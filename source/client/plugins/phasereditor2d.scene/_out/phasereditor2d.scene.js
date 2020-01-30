@@ -2807,23 +2807,36 @@ var phasereditor2d;
                     }
                     copy() {
                         this._clipboard = [];
-                        for (const obj of this._editor.getSelection()) {
-                            if (obj instanceof Phaser.GameObjects.GameObject) {
-                                const objData = {};
-                                obj.getEditorSupport().writeJSON(objData);
-                                this._clipboard.push({
-                                    type: "ISceneObject",
-                                    data: objData
-                                });
-                            }
-                            else if (obj instanceof ui.sceneobjects.ObjectList) {
-                                const listData = {};
-                                obj.writeJSON(listData);
-                                this._clipboard.push({
-                                    type: "ObjectList",
-                                    data: listData
-                                });
-                            }
+                        let minX = Number.MAX_VALUE;
+                        let minY = Number.MAX_VALUE;
+                        const p = new Phaser.Math.Vector2();
+                        for (const obj of this._editor.getSelectedGameObjects()) {
+                            const sprite = obj;
+                            sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                            minX = Math.min(minX, p.x);
+                            minY = Math.min(minY, p.y);
+                        }
+                        for (const obj of this._editor.getSelectedGameObjects()) {
+                            const objData = {};
+                            obj.getEditorSupport().writeJSON(objData);
+                            const sprite = obj;
+                            sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                            p.x -= minX;
+                            p.y -= minY;
+                            objData["x"] = p.x;
+                            objData["y"] = p.y;
+                            this._clipboard.push({
+                                type: "ISceneObject",
+                                data: objData
+                            });
+                        }
+                        for (const list of this._editor.getSelectedLists()) {
+                            const listData = {};
+                            list.writeJSON(listData);
+                            this._clipboard.push({
+                                type: "ObjectList",
+                                data: listData
+                            });
                         }
                     }
                     paste() {
@@ -5884,8 +5897,8 @@ var phasereditor2d;
                                     data.id = Phaser.Utils.String.UUID();
                                     data.label = nameMaker.makeName(data.label);
                                     const { x, y } = this.getEditor().getMouseManager().getDropPosition();
-                                    data[ui.sceneobjects.TransformComponent.x.name] = x;
-                                    data[ui.sceneobjects.TransformComponent.y.name] = y;
+                                    data["x"] = data["x"] + x;
+                                    data["y"] = data["y"] + y;
                                     const obj = maker.createObject(data);
                                     sel.push(obj);
                                 }
