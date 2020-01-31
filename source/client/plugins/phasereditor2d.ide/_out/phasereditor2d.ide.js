@@ -340,6 +340,7 @@ var phasereditor2d;
                 actions.CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
                 actions.CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
                 actions.CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
+                actions.CMD_QUICK_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.QuickPlayProject";
                 var controls = colibri.ui.controls;
                 var commands = colibri.ui.ide.commands;
                 function isNotWelcomeWindowScope(args) {
@@ -366,20 +367,45 @@ var phasereditor2d;
                             filterInputElements: false
                         }));
                         // play game
-                        manager.addCommandHelper({
-                            id: actions.CMD_PLAY_PROJECT,
-                            name: "Play Project",
-                            tooltip: "Run this project in other tab",
-                            icon: ide.IDEPlugin.getInstance().getIcon(ide.ICON_PLAY),
-                            category: actions.CAT_PROJECT
+                        manager.add({
+                            command: {
+                                id: actions.CMD_PLAY_PROJECT,
+                                name: "Play Project",
+                                tooltip: "Run this project in other tab",
+                                icon: ide.IDEPlugin.getInstance().getIcon(ide.ICON_PLAY),
+                                category: actions.CAT_PROJECT
+                            },
+                            handler: {
+                                testFunc: isNotWelcomeWindowScope,
+                                executeFunc: args => {
+                                    const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                                    controls.Controls.openUrlInNewPage(url);
+                                }
+                            },
+                            keys: {
+                                key: "F12"
+                            }
                         });
-                        manager.addHandlerHelper(actions.CMD_PLAY_PROJECT, isNotWelcomeWindowScope, args => {
-                            const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
-                            controls.Controls.openUrlInNewPage(url);
+                        manager.add({
+                            command: {
+                                id: actions.CMD_QUICK_PLAY_PROJECT,
+                                name: "Quick Play Project",
+                                tooltip: "Run this project in a dialog.",
+                                icon: ide.IDEPlugin.getInstance().getIcon(ide.ICON_PLAY),
+                                category: actions.CAT_PROJECT
+                            },
+                            handler: {
+                                testFunc: isNotWelcomeWindowScope,
+                                executeFunc: args => {
+                                    const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                                    const dlg = new ui.dialogs.PlayDialog(url);
+                                    dlg.create();
+                                }
+                            },
+                            keys: {
+                                key: "F10"
+                            }
                         });
-                        manager.addKeyBinding(actions.CMD_PLAY_PROJECT, new commands.KeyMatcher({
-                            key: "F12"
-                        }));
                         // reload project
                         manager.addCommandHelper({
                             id: actions.CMD_RELOAD_PROJECT,
@@ -776,6 +802,54 @@ var phasereditor2d;
                     }
                 }
                 dialogs.OpeningProjectDialog = OpeningProjectDialog;
+            })(dialogs = ui.dialogs || (ui.dialogs = {}));
+        })(ui = ide.ui || (ide.ui = {}));
+    })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var ide;
+    (function (ide) {
+        var ui;
+        (function (ui) {
+            var dialogs;
+            (function (dialogs) {
+                var controls = colibri.ui.controls;
+                class PlayDialog extends controls.dialogs.Dialog {
+                    constructor(url) {
+                        super("PlayDialog");
+                        this._url = url;
+                    }
+                    resize() {
+                        const width = Math.floor(window.innerWidth * 0.6);
+                        const height = Math.floor(window.innerHeight * 0.75);
+                        this.setBounds({
+                            x: window.innerWidth / 2 - width / 2,
+                            y: 10,
+                            width: width,
+                            height: height
+                        });
+                    }
+                    createDialogArea() {
+                        const frameElement = document.createElement("iframe");
+                        frameElement.classList.add("DialogClientArea");
+                        frameElement.src = this._url;
+                        frameElement.addEventListener("load", e => {
+                            frameElement.contentDocument.addEventListener("keydown", e => {
+                                if (e.key === "Escape") {
+                                    this.close();
+                                }
+                            });
+                        });
+                        this.getElement().appendChild(frameElement);
+                    }
+                    create() {
+                        super.create();
+                        this.setTitle("Play");
+                        this.addCancelButton();
+                    }
+                }
+                dialogs.PlayDialog = PlayDialog;
             })(dialogs = ui.dialogs || (ui.dialogs = {}));
         })(ui = ide.ui || (ide.ui = {}));
     })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));

@@ -5,3 +5,7 @@
 .AboutDialog .DialogClientArea {
     text-align: center;
 }
+
+.PlayDialog iframe {
+    border-style: none;
+}

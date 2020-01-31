@@ -76,6 +76,7 @@ declare namespace phasereditor2d.ide.ui.actions {
     const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
     const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
+    const CMD_QUICK_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.QuickPlayProject";
     import commands = colibri.ui.ide.commands;
     class IDEActions {
         static registerCommands(manager: commands.CommandManager): void;
@@ -140,6 +141,16 @@ declare namespace phasereditor2d.ide.ui.dialogs {
 declare namespace phasereditor2d.ide.ui.dialogs {
     import controls = colibri.ui.controls;
     class OpeningProjectDialog extends controls.dialogs.ProgressDialog {
+        create(): void;
+    }
+}
+declare namespace phasereditor2d.ide.ui.dialogs {
+    import controls = colibri.ui.controls;
+    class PlayDialog extends controls.dialogs.Dialog {
+        private _url;
+        constructor(url: string);
+        protected resize(): void;
+        createDialogArea(): void;
         create(): void;
     }
 }

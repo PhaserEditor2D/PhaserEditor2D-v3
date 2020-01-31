@@ -5,6 +5,7 @@ namespace phasereditor2d.ide.ui.actions {
     export const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
     export const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
+    export const CMD_QUICK_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.QuickPlayProject";
 
     import controls = colibri.ui.controls;
     import commands = colibri.ui.ide.commands;
@@ -44,27 +45,57 @@ namespace phasereditor2d.ide.ui.actions {
 
             // play game
 
-            manager.addCommandHelper({
-                id: CMD_PLAY_PROJECT,
-                name: "Play Project",
-                tooltip: "Run this project in other tab",
-                icon: IDEPlugin.getInstance().getIcon(ICON_PLAY),
-                category: CAT_PROJECT
+            manager.add({
+
+                command: {
+                    id: CMD_PLAY_PROJECT,
+                    name: "Play Project",
+                    tooltip: "Run this project in other tab",
+                    icon: IDEPlugin.getInstance().getIcon(ICON_PLAY),
+                    category: CAT_PROJECT
+                },
+
+                handler: {
+
+                    testFunc: isNotWelcomeWindowScope,
+
+                    executeFunc: args => {
+
+                        const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+
+                        controls.Controls.openUrlInNewPage(url);
+                    }
+                },
+                keys: {
+                    key: "F12"
+                }
             });
 
-            manager.addHandlerHelper(CMD_PLAY_PROJECT,
-                isNotWelcomeWindowScope,
+            manager.add({
 
-                args => {
+                command: {
+                    id: CMD_QUICK_PLAY_PROJECT,
+                    name: "Quick Play Project",
+                    tooltip: "Run this project in a dialog.",
+                    icon: IDEPlugin.getInstance().getIcon(ICON_PLAY),
+                    category: CAT_PROJECT
+                },
 
-                    const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                handler: {
 
-                    controls.Controls.openUrlInNewPage(url);
-                });
+                    testFunc: isNotWelcomeWindowScope,
 
-            manager.addKeyBinding(CMD_PLAY_PROJECT, new commands.KeyMatcher({
-                key: "F12"
-            }));
+                    executeFunc: args => {
+
+                        const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                        const dlg = new dialogs.PlayDialog(url);
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    key: "F10"
+                }
+            });
 
             // reload project
 
