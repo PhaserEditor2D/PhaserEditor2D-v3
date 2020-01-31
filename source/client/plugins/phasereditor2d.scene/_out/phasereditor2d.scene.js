@@ -1059,11 +1059,12 @@ var phasereditor2d;
                                 createObjectMethodCall.setDeclareReturnToVar(true);
                             }
                         }
+                        if (!objSupport.isMethodScope()) {
+                            createObjectMethodCall.setDeclareReturnToVar(true);
+                            createObjectMethodCall.setDeclareReturnToField(true);
+                        }
                         if (createObjectMethodCall.isDeclareReturnToVar()) {
                             createObjectMethodCall.setReturnToVar(varname);
-                            if (!objSupport.isMethodScope()) {
-                                createObjectMethodCall.setDeclareReturnToField(true);
-                            }
                         }
                     }
                     buildSetObjectProperties(args) {
