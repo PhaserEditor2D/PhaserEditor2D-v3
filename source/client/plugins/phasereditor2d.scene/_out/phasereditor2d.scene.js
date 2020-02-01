@@ -933,7 +933,7 @@ var phasereditor2d;
                                 if (body.length > 1) {
                                     body.push(new code.RawCodeDOM(""));
                                 }
-                                body.push(new code.RawCodeDOM(`if ("${createName}" in this) { this.${createName}(); }`));
+                                body.push(new code.RawCodeDOM(`if ("${createName}" in this) { this["${createName}"](); }`));
                             }
                         }
                         return ctrDecl;
