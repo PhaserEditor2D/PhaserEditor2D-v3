@@ -227,9 +227,7 @@ namespace phasereditor2d.scene.core.code {
                         body.push(new RawCodeDOM(""));
                     }
 
-                    body.push(new RawCodeDOM(
-                        `if ("${createName}" in this) { this["${createName}"](); }`
-                    ));
+                    body.push(new MethodCallCodeDOM(createName, "this"));
                 }
             }
 
