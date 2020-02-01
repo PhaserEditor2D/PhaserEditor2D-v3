@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.core.json {
             write(data, "borderX", this.borderX, 0);
             write(data, "borderY", this.borderY, 0);
             write(data, "borderWidth", this.borderWidth, 800);
-            write(data, "borderHeigh", this.borderHeight, 600);
+            write(data, "borderHeight", this.borderHeight, 600);
 
             return data;
         }
