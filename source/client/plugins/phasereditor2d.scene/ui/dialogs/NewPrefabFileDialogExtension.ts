@@ -6,7 +6,10 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             const sceneData: core.json.ISceneData = {
                 id: Phaser.Utils.String.UUID(),
-                settings: {},
+                settings: {
+                    createMethodName: "",
+                    preloadMethodName: ""
+                },
                 sceneType: core.json.SceneType.PREFAB,
                 displayList: [],
                 meta: {

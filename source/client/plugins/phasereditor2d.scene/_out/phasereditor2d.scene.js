@@ -2559,7 +2559,10 @@ var phasereditor2d;
                     createFileContent() {
                         const sceneData = {
                             id: Phaser.Utils.String.UUID(),
-                            settings: {},
+                            settings: {
+                                createMethodName: "",
+                                preloadMethodName: ""
+                            },
                             sceneType: scene.core.json.SceneType.PREFAB,
                             displayList: [],
                             meta: {
