@@ -48,11 +48,24 @@ namespace phasereditor2d.pack.core.parsers {
             const url = this.getPackItem().getData().url;
             const img = AssetPackUtils.getImageFromPackUrl(url);
 
-            const fd = new controls.FrameData(0,
-                new controls.Rect(0, 0, img.getWidth(), img.getHeight()),
-                new controls.Rect(0, 0, img.getWidth(), img.getHeight()),
-                new controls.Point(img.getWidth(), img.getWidth())
-            );
+            let fd: controls.FrameData;
+
+            if (img) {
+
+                fd = new controls.FrameData(0,
+                    new controls.Rect(0, 0, img.getWidth(), img.getHeight()),
+                    new controls.Rect(0, 0, img.getWidth(), img.getHeight()),
+                    new controls.Point(img.getWidth(), img.getWidth())
+                );
+
+            } else {
+
+                fd = new controls.FrameData(0,
+                    new controls.Rect(0, 0, 10, 10),
+                    new controls.Rect(0, 0, 10, 10),
+                    new controls.Point(10, 10)
+                );
+            }
 
             return [new AssetPackImageFrame(
                 this.getPackItem() as ImageFrameContainerAssetPackItem, this.getPackItem().getKey(), img, fd)];
