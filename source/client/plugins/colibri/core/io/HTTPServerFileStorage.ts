@@ -1,5 +1,12 @@
 namespace colibri.core.io {
 
+    interface IGetProjectFilesData {
+
+        maxNumberOfFiles: number;
+        projectNumberOfFiles: number;
+        rootFile: IFileData;
+    }
+
     export async function apiRequest(method: string, body?: any) {
         try {
 
@@ -41,6 +48,160 @@ namespace colibri.core.io {
             this._root = null;
 
             this._changeListeners = [];
+
+            this.registerDocumentVisibilityListener();
+        }
+
+        private registerDocumentVisibilityListener() {
+
+            window.addEventListener("focus", e => {
+
+                this.updateWithServerChanges();
+            });
+        }
+
+        private async updateWithServerChanges() {
+
+            const data = await apiRequest("GetProjectFiles", {
+                project: this._projectName
+            }) as IGetProjectFilesData;
+
+            if (data.projectNumberOfFiles > data.maxNumberOfFiles) {
+
+                alert(`Your project exceeded the maximum number of files allowed (${data.projectNumberOfFiles} > ${data.maxNumberOfFiles})`);
+
+                return;
+
+            }
+
+            const change = new FileStorageChange();
+
+            const localFiles = this._root.flatTree([], true);
+            const serverFiles = new FilePath(null, data.rootFile).flatTree([], true);
+            const filesToContentTypePreload: FilePath[] = [];
+
+            const localFilesMap = new Map<string, FilePath>();
+
+            for (const file of localFiles) {
+
+                localFilesMap.set(file.getFullName(), file);
+            }
+
+            const serverFilesMap = new Map<string, FilePath>();
+
+            for (const file of serverFiles) {
+
+                serverFilesMap.set(file.getFullName(), file);
+            }
+
+            // compute modified files
+
+            {
+                for (const file of localFiles) {
+
+                    const fileFullName = file.getFullName();
+
+                    const serverFile = serverFilesMap.get(fileFullName);
+
+                    if (serverFile) {
+
+                        if (serverFile.getModTime() !== file.getModTime() || serverFile.getSize() !== file.getSize()) {
+
+                            console.log("Modified " + fileFullName);
+
+                            file._setModTime(serverFile.getModTime());
+                            file._setSize(serverFile.getSize());
+
+                            change.recordModify(fileFullName);
+
+                            filesToContentTypePreload.push(file);
+                        }
+                    }
+                }
+            }
+
+            // compute deleted files
+
+            {
+                const deletedFilesNamesSet = new Set<string>();
+
+                for (const file of localFiles) {
+
+                    const fileFullName = file.getFullName();
+
+                    if (deletedFilesNamesSet.has(fileFullName)) {
+                        // when a parent folder was reported as deleted
+                        continue;
+                    }
+
+                    if (!serverFilesMap.has(fileFullName)) {
+
+                        console.log("Deleted " + fileFullName);
+
+                        file._remove();
+
+                        change.recordDelete(fileFullName);
+
+                        if (file.isFolder()) {
+
+                            for (const child of file.getFiles()) {
+
+                                deletedFilesNamesSet.add(child.getFullName());
+                            }
+                        }
+                    }
+                }
+            }
+
+            // compute added files
+
+            {
+                const addedFilesNamesSet = new Set<string>();
+
+                for (const file of serverFiles) {
+
+                    const fileFullName = file.getFullName();
+
+                    if (addedFilesNamesSet.has(fileFullName)) {
+                        // when a parent folder was reported as added
+                        continue;
+                    }
+
+                    if (!localFilesMap.has(fileFullName)) {
+
+                        console.log("Added " + fileFullName);
+
+                        const localParentFile = localFilesMap.get(file.getParent().getFullName());
+
+                        localParentFile._add(file);
+
+                        file.visit(f => {
+
+                            localFilesMap.set(f.getFullName(), f);
+                            filesToContentTypePreload.push(f);
+                        });
+
+                        change.recordAdd(fileFullName);
+
+                        if (file.isFolder()) {
+
+                            for (const child of file.getFiles()) {
+
+                                addedFilesNamesSet.add(child.getFullName());
+                            }
+                        }
+                    }
+                }
+            }
+
+            const reg = Platform.getWorkbench().getContentTypeRegistry();
+
+            for (const file of filesToContentTypePreload) {
+
+                await reg.preload(file);
+            }
+
+            this.fireChange(change);
         }
 
         addChangeListener(listener: ChangeListenerFunc) {
@@ -104,9 +265,7 @@ namespace colibri.core.io {
 
             const data = await apiRequest("GetProjectFiles", {
                 project: this._projectName
-            });
-
-            const oldRoot = this._root;
+            }) as IGetProjectFilesData;
 
             let newRoot: FilePath;
 
@@ -128,13 +287,6 @@ namespace colibri.core.io {
             }
 
             this._root = newRoot;
-
-            if (oldRoot) {
-
-                const change = FileStorage_HTTPServer.compare(oldRoot, newRoot);
-
-                this.fireChange(change);
-            }
         }
 
         private fireChange(change: FileStorageChange) {
@@ -146,68 +298,6 @@ namespace colibri.core.io {
                     console.error(e);
                 }
             }
-        }
-
-        private static compare(oldRoot: FilePath, newRoot: FilePath): FileStorageChange {
-
-            const oldFiles: FilePath[] = [];
-            const newFiles: FilePath[] = [];
-
-            oldRoot.flatTree(oldFiles, false);
-            newRoot.flatTree(newFiles, false);
-
-            const newNameMap = new Map<string, FilePath>();
-
-            for (const file of newFiles) {
-                newNameMap.set(file.getFullName(), file);
-            }
-
-            const newNameSet = new Set(newFiles.map(file => file.getFullName()));
-            const oldNameSet = new Set(oldFiles.map(file => file.getFullName()));
-
-            const deleted = [];
-            const modified = [];
-            const added = [];
-
-            for (const oldFile of oldFiles) {
-
-                const oldName = oldFile.getFullName();
-
-                if (newNameSet.has(oldName)) {
-
-                    const newFile = newNameMap.get(oldName);
-
-                    if (newFile.getModTime() !== oldFile.getModTime()) {
-                        modified.push(newFile);
-                    }
-
-                } else {
-                    deleted.push(oldFile);
-                }
-            }
-
-            for (const newFile of newFiles) {
-
-                if (!oldNameSet.has(newFile.getFullName())) {
-                    added.push(newFile);
-                }
-            }
-
-            const change = new FileStorageChange();
-
-            for (const file of modified) {
-                change.recordModify(file.getFullName());
-            }
-
-            for (const file of added) {
-                change.recordAdd(file.getFullName());
-            }
-
-            for (const file of deleted) {
-                change.recordDelete(file.getFullName());
-            }
-
-            return change;
         }
 
         async getProjects(): Promise<string[]> {

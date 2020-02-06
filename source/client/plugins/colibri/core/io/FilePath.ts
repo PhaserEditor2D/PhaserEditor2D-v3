@@ -178,6 +178,16 @@ namespace colibri.core.io {
             return this._alive;
         }
 
+        visit(visitor: (file: FilePath) => void) {
+
+            visitor(this);
+
+            for (const file of this._files) {
+
+                file.visit(visitor);
+            }
+        }
+
         _add(file: FilePath) {
 
             file._remove();

@@ -1720,7 +1720,13 @@ var phasereditor2d;
                     parseFrames() {
                         const url = this.getPackItem().getData().url;
                         const img = core.AssetPackUtils.getImageFromPackUrl(url);
-                        const fd = new controls.FrameData(0, new controls.Rect(0, 0, img.getWidth(), img.getHeight()), new controls.Rect(0, 0, img.getWidth(), img.getHeight()), new controls.Point(img.getWidth(), img.getWidth()));
+                        let fd;
+                        if (img) {
+                            fd = new controls.FrameData(0, new controls.Rect(0, 0, img.getWidth(), img.getHeight()), new controls.Rect(0, 0, img.getWidth(), img.getHeight()), new controls.Point(img.getWidth(), img.getWidth()));
+                        }
+                        else {
+                            fd = new controls.FrameData(0, new controls.Rect(0, 0, 10, 10), new controls.Rect(0, 0, 10, 10), new controls.Point(10, 10));
+                        }
                         return [new core.AssetPackImageFrame(this.getPackItem(), this.getPackItem().getKey(), img, fd)];
                     }
                 }

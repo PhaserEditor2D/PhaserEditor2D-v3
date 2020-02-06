@@ -717,7 +717,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         compile(): Promise<void>;
         saveState(state: IEditorState): void;
         restoreState(state: IEditorState): void;
-        protected onEditorInputContentChanged(): void;
+        protected onEditorInputContentChanged(): Promise<void>;
         setInput(file: io.FilePath): void;
         protected createPart(): void;
         private createGame;
@@ -750,6 +750,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         getPropertyProvider(): properties.SceneEditorSectionProvider;
         onPartClosed(): boolean;
         refreshScene(): Promise<void>;
+        private refreshSceneWithData;
         private buildDependenciesHash;
         refreshDependenciesHash(): Promise<void>;
         onPartActivated(): Promise<void>;

@@ -311,6 +311,7 @@ declare namespace colibri.core.io {
         getFiles(): FilePath[];
         _setAlive(alive: boolean): void;
         isAlive(): boolean;
+        visit(visitor: (file: FilePath) => void): void;
         _add(file: FilePath): void;
         _remove(): void;
         flatTree(files: FilePath[], includeFolders: boolean): FilePath[];
@@ -361,6 +362,8 @@ declare namespace colibri.core.io {
         private _changeListeners;
         private _projectName;
         constructor();
+        private registerDocumentVisibilityListener;
+        private updateWithServerChanges;
         addChangeListener(listener: ChangeListenerFunc): void;
         removeChangeListener(listener: ChangeListenerFunc): void;
         getRoot(): FilePath;
@@ -369,7 +372,6 @@ declare namespace colibri.core.io {
         createProject(templatePath: string, projectName: string): Promise<boolean>;
         reload(): Promise<void>;
         private fireChange;
-        private static compare;
         getProjects(): Promise<string[]>;
         createFile(folder: FilePath, fileName: string, content: string): Promise<FilePath>;
         createFolder(container: FilePath, folderName: string): Promise<FilePath>;

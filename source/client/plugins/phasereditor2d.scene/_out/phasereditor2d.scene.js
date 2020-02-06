@@ -3508,8 +3508,11 @@ var phasereditor2d;
                         this._editorState = state;
                         this._toolsManager.setState(state.toolsState);
                     }
-                    onEditorInputContentChanged() {
-                        // TODO: missing to implement
+                    async onEditorInputContentChanged() {
+                        const file = this.getInput();
+                        const str = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+                        const sceneData = JSON.parse(str);
+                        this.refreshSceneWithData(sceneData);
                     }
                     setInput(file) {
                         super.setInput(file);
@@ -3786,6 +3789,9 @@ var phasereditor2d;
                         console.log("Scene Editor: refreshing.");
                         const writer = new json.SceneWriter(this._scene);
                         const sceneData = writer.toJSON();
+                        await this.refreshSceneWithData(sceneData);
+                    }
+                    async refreshSceneWithData(sceneData) {
                         for (const obj of this._scene.getDisplayListChildren()) {
                             obj.getEditorSupport().destroy();
                         }

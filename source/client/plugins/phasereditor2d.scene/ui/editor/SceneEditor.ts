@@ -139,8 +139,15 @@ namespace phasereditor2d.scene.ui.editor {
             this._toolsManager.setState(state.toolsState);
         }
 
-        protected onEditorInputContentChanged() {
-            // TODO: missing to implement
+        protected async onEditorInputContentChanged() {
+
+            const file = this.getInput();
+
+            const str = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+
+            const sceneData = JSON.parse(str) as json.ISceneData;
+
+            this.refreshSceneWithData(sceneData);
         }
 
         setInput(file: io.FilePath) {
@@ -553,6 +560,11 @@ namespace phasereditor2d.scene.ui.editor {
             const writer = new json.SceneWriter(this._scene);
 
             const sceneData = writer.toJSON();
+
+            await this.refreshSceneWithData(sceneData);
+        }
+
+        private async refreshSceneWithData(sceneData: json.ISceneData) {
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
