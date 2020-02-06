@@ -163,7 +163,8 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         protected onEditorInputContentChanged() {
-            // TODO: missing to implement
+
+            this.updateContent();
         }
 
         async onPartActivated() {

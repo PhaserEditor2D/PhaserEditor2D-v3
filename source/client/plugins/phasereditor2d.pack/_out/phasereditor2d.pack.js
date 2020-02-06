@@ -2183,7 +2183,7 @@ var phasereditor2d;
                         }
                     }
                     onEditorInputContentChanged() {
-                        // TODO: missing to implement
+                        this.updateContent();
                     }
                     async onPartActivated() {
                         super.onPartActivated();
