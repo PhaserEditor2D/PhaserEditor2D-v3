@@ -346,6 +346,10 @@ namespace colibri.ui.controls {
                 if (toSelectLabel) {
 
                     this.selectTab(toSelectLabel);
+
+                } else {
+
+                    this._selectedLabelElement = null;
                 }
             }
         }
