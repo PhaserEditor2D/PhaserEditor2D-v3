@@ -2,9 +2,11 @@ namespace colibri.core.io {
 
     interface IGetProjectFilesData {
 
+        hash: string;
         maxNumberOfFiles: number;
         projectNumberOfFiles: number;
         rootFile: IFileData;
+        error: string;
     }
 
     export async function apiRequest(method: string, body?: any) {
@@ -42,10 +44,13 @@ namespace colibri.core.io {
         private _root: FilePath;
         private _changeListeners: ChangeListenerFunc[];
         private _projectName: string;
+        private _hash: string;
 
         constructor() {
 
             this._root = null;
+
+            this._hash = "";
 
             this._changeListeners = [];
 
@@ -62,9 +67,37 @@ namespace colibri.core.io {
 
         private async updateWithServerChanges() {
 
+            const hashData = await apiRequest("GetProjectFilesHash", {
+                project: this._projectName
+            });
+
+            if (hashData.error) {
+
+                alert(hashData.error);
+
+                return;
+            }
+
+            const hash = hashData.hash as string;
+
+            if (hash === this._hash) {
+                // nothing to do!
+                console.log("Server files not changed (hash=" + hash + ")");
+                return;
+            }
+
+            this._hash = hash;
+
             const data = await apiRequest("GetProjectFiles", {
                 project: this._projectName
             }) as IGetProjectFilesData;
+
+            if (data.error) {
+
+                alert(data.error);
+
+                return;
+            }
 
             if (data.projectNumberOfFiles > data.maxNumberOfFiles) {
 
@@ -286,6 +319,8 @@ namespace colibri.core.io {
                 newRoot = new FilePath(null, data.rootFile);
             }
 
+            this._hash = data.hash;
+
             this._root = newRoot;
         }
 
@@ -326,6 +361,8 @@ namespace colibri.core.io {
 
             folder._add(file);
 
+            this._hash = "";
+
             const change = new FileStorageChange();
 
             change.recordAdd(file.getFullName());
@@ -359,6 +396,8 @@ namespace colibri.core.io {
             container["_files"].push(newFolder);
             container._sort();
 
+            this._hash = "";
+
             const change = new FileStorageChange();
 
             change.recordAdd(newFolder.getFullName());
@@ -388,6 +427,8 @@ namespace colibri.core.io {
 
             await this.setFileString_priv(file, content);
 
+            this._hash = "";
+
             const change = new FileStorageChange();
 
             change.recordModify(file.getFullName());
@@ -414,6 +455,7 @@ namespace colibri.core.io {
         }
 
         async deleteFiles(files: FilePath[]) {
+
             const data = await apiRequest("DeleteFiles", {
                 paths: files.map(file => file.getFullName())
             });
@@ -443,6 +485,8 @@ namespace colibri.core.io {
                 change.recordDelete(file.getFullName());
             }
 
+            this._hash = "";
+
             this.fireChange(change);
         }
 
@@ -463,6 +507,8 @@ namespace colibri.core.io {
             file._setName(newName);
 
             file.getParent()._sort();
+
+            this._hash = "";
 
             const change = new FileStorageChange();
 
@@ -504,6 +550,8 @@ namespace colibri.core.io {
 
             toFolder._add(newFile);
 
+            this._hash = "";
+
             const change = new FileStorageChange();
 
             change.recordAdd(newFile.getFullName());
@@ -539,6 +587,8 @@ namespace colibri.core.io {
 
                 moveTo._add(srcFile);
             }
+
+            this._hash = "";
 
             const change = new FileStorageChange();
 
@@ -591,6 +641,8 @@ namespace colibri.core.io {
 
                 change.recordAdd(file.getFullName());
             }
+
+            this._hash = "";
 
             this.fireChange(change);
 

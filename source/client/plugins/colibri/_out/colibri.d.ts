@@ -361,6 +361,7 @@ declare namespace colibri.core.io {
         private _root;
         private _changeListeners;
         private _projectName;
+        private _hash;
         constructor();
         private registerDocumentVisibilityListener;
         private updateWithServerChanges;

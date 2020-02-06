@@ -1293,6 +1293,7 @@ var colibri;
             class FileStorage_HTTPServer {
                 constructor() {
                     this._root = null;
+                    this._hash = "";
                     this._changeListeners = [];
                     this.registerDocumentVisibilityListener();
                 }
@@ -1302,9 +1303,27 @@ var colibri;
                     });
                 }
                 async updateWithServerChanges() {
+                    const hashData = await apiRequest("GetProjectFilesHash", {
+                        project: this._projectName
+                    });
+                    if (hashData.error) {
+                        alert(hashData.error);
+                        return;
+                    }
+                    const hash = hashData.hash;
+                    if (hash === this._hash) {
+                        // nothing to do!
+                        console.log("Server files not changed (hash=" + hash + ")");
+                        return;
+                    }
+                    this._hash = hash;
                     const data = await apiRequest("GetProjectFiles", {
                         project: this._projectName
                     });
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
                     if (data.projectNumberOfFiles > data.maxNumberOfFiles) {
                         alert(`Your project exceeded the maximum number of files allowed (${data.projectNumberOfFiles} > ${data.maxNumberOfFiles})`);
                         return;
@@ -1444,6 +1463,7 @@ var colibri;
                     else {
                         newRoot = new io.FilePath(null, data.rootFile);
                     }
+                    this._hash = data.hash;
                     this._root = newRoot;
                 }
                 fireChange(change) {
@@ -1474,6 +1494,7 @@ var colibri;
                     });
                     await this.setFileString_priv(file, content);
                     folder._add(file);
+                    this._hash = "";
                     const change = new io.FileStorageChange();
                     change.recordAdd(file.getFullName());
                     this.fireChange(change);
@@ -1498,6 +1519,7 @@ var colibri;
                     newFolder["_modTime"] = data["modTime"];
                     container["_files"].push(newFolder);
                     container._sort();
+                    this._hash = "";
                     const change = new io.FileStorageChange();
                     change.recordAdd(newFolder.getFullName());
                     this.fireChange(change);
@@ -1516,6 +1538,7 @@ var colibri;
                 }
                 async setFileString(file, content) {
                     await this.setFileString_priv(file, content);
+                    this._hash = "";
                     const change = new io.FileStorageChange();
                     change.recordModify(file.getFullName());
                     this.fireChange(change);
@@ -1553,6 +1576,7 @@ var colibri;
                         file._remove();
                         change.recordDelete(file.getFullName());
                     }
+                    this._hash = "";
                     this.fireChange(change);
                 }
                 async renameFile(file, newName) {
@@ -1567,6 +1591,7 @@ var colibri;
                     const fromPath = file.getFullName();
                     file._setName(newName);
                     file.getParent()._sort();
+                    this._hash = "";
                     const change = new io.FileStorageChange();
                     change.recordRename(fromPath, file.getFullName());
                     this.fireChange(change);
@@ -1593,6 +1618,7 @@ var colibri;
                     const fileData = data.file;
                     const newFile = new io.FilePath(null, fileData);
                     toFolder._add(newFile);
+                    this._hash = "";
                     const change = new io.FileStorageChange();
                     change.recordAdd(newFile.getFullName());
                     this.fireChange(change);
@@ -1618,6 +1644,7 @@ var colibri;
                         srcFile.getParent().getFiles().splice(i, 1);
                         moveTo._add(srcFile);
                     }
+                    this._hash = "";
                     const change = new io.FileStorageChange();
                     for (const record of records) {
                         change.recordRename(record.from, record.to);
@@ -1650,6 +1677,7 @@ var colibri;
                         uploadFolder._add(file);
                         change.recordAdd(file.getFullName());
                     }
+                    this._hash = "";
                     this.fireChange(change);
                     return file;
                 }
