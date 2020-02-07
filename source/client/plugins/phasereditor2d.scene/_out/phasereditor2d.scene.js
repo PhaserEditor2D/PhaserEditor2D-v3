@@ -3121,8 +3121,8 @@ var phasereditor2d;
                     }
                     fillMenu(menu) {
                         menu.addCommand(editor_6.commands.CMD_ADD_SCENE_OBJECT);
-                        menu.addSeparator();
                         menu.addMenu(this.createToolsMenu());
+                        menu.addSeparator();
                         menu.addMenu(this.createTypeMenu());
                         menu.addMenu(this.createOriginMenu());
                         menu.addMenu(this.createTextureMenu());
@@ -3157,6 +3157,7 @@ var phasereditor2d;
                     }
                     createTypeMenu() {
                         const menu = new controls.Menu("Type");
+                        menu.addCommand(editor_6.commands.CMD_OPEN_PREFAB);
                         menu.addCommand(editor_6.commands.CMD_CONVERT_OBJECTS);
                         menu.addCommand(editor_6.commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
                         return menu;
@@ -4077,6 +4078,7 @@ var phasereditor2d;
                     commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
                     commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
                     commands.CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
+                    commands.CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
                     function isSceneScope(args) {
                         return args.activePart instanceof editor_10.SceneEditor
                             || (args.activeEditor instanceof editor_10.SceneEditor &&
@@ -4149,123 +4151,11 @@ var phasereditor2d;
                                     }
                                 }
                             });
-                            // open compiled file
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_OPEN_COMPILED_FILE,
-                                    icon: phasereditor2d.webContentTypes.WebContentTypesPlugin.getInstance().getIcon(phasereditor2d.webContentTypes.ICON_FILE_SCRIPT),
-                                    name: "Open Output File",
-                                    tooltip: "Open the output source file of the scene.",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: args => args.activeEditor instanceof editor_10.SceneEditor,
-                                    executeFunc: args => args.activeEditor.openSourceFileInEditor()
-                                }
-                            });
-                            // compile scene editor
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_COMPILE_SCENE_EDITOR,
-                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_BUILD),
-                                    name: "Compile Scene",
-                                    tooltip: "Compile the editor's Scene.",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: args => args.activeEditor instanceof editor_10.SceneEditor,
-                                    executeFunc: args => args.activeEditor.compile(),
-                                }
-                            });
-                            // compile all scene files
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_COMPILE_ALL_SCENE_FILES,
-                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_BUILD),
-                                    name: "Compile All Scene Files",
-                                    tooltip: "Compile all the Scene files of the project.",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: args => args.activeWindow instanceof phasereditor2d.ide.ui.DesignWindow,
-                                    executeFunc: args => scene.ScenePlugin.getInstance().compileAll(),
-                                },
-                                keys: {
-                                    control: true,
-                                    alt: true,
-                                    key: "B"
-                                }
-                            });
-                            // scene tools
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_TRANSLATE_SCENE_OBJECT,
-                                    name: "Translate Tool",
-                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_TRANSLATE),
-                                    tooltip: "Translate the selected scene objects",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: isSceneScope,
-                                    executeFunc: args => args.activeEditor
-                                        .getToolsManager().swapTool(ui.sceneobjects.TranslateTool.ID)
-                                },
-                                keys: {
-                                    key: "T"
-                                }
-                            });
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_ROTATE_SCENE_OBJECT,
-                                    name: "Rotate Tool",
-                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ANGLE),
-                                    tooltip: "Rotate the selected scene objects",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: isSceneScope,
-                                    executeFunc: args => args.activeEditor
-                                        .getToolsManager().swapTool(ui.sceneobjects.RotateTool.ID)
-                                },
-                                keys: {
-                                    key: "R"
-                                }
-                            });
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_SCALE_SCENE_OBJECT,
-                                    name: "Scale Tool",
-                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_SCALE),
-                                    tooltip: "Scale the selected scene objects",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: isSceneScope,
-                                    executeFunc: args => args.activeEditor
-                                        .getToolsManager().swapTool(ui.sceneobjects.ScaleTool.ID)
-                                },
-                                keys: {
-                                    key: "S"
-                                }
-                            });
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
-                                    name: "Resize TileSprite Tool",
-                                    tooltip: "Resize selected TileSprite objects.",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: isSceneScope,
-                                    executeFunc: args => args.activeEditor
-                                        .getToolsManager().swapTool(ui.sceneobjects.TileSpriteSizeTool.ID)
-                                },
-                                keys: {
-                                    key: "Z"
-                                }
-                            });
+                            SceneEditorCommands.registerCompilerCommands(manager);
+                            SceneEditorCommands.registerToolsCommands(manager);
                             SceneEditorCommands.registerOriginCommands(manager);
                             SceneEditorCommands.registerDepthCommands(manager);
+                            SceneEditorCommands.registerTypeCommands(manager);
                             // add object dialog
                             manager.add({
                                 command: {
@@ -4284,43 +4174,6 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "A"
-                                }
-                            });
-                            // change type dialog
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_CONVERT_OBJECTS,
-                                    name: "Replace Type",
-                                    tooltip: "Replace the type of the selected objects.",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: args => isSceneScope(args)
-                                        && editor_10.ConvertTypeDialog.canConvert(args.activeEditor),
-                                    executeFunc: args => {
-                                        const dlg = new editor.ConvertTypeDialog(args.activeEditor);
-                                        dlg.create();
-                                    }
-                                }
-                            });
-                            // change type to tile sprite
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS,
-                                    name: "Convert To TileSprite",
-                                    tooltip: "Convert the selected objects into TileSprite instances. Or resize it if it is a TileSprite.",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: args => isSceneScope(args)
-                                        && editor_10.ConvertTypeDialog.canConvert(args.activeEditor),
-                                    executeFunc: args => {
-                                        const editor = args.activeEditor;
-                                        editor.getUndoManager().add(new editor_10.undo.ConvertTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance()));
-                                    }
-                                },
-                                keys: {
-                                    key: "L"
                                 }
                             });
                             // texture
@@ -4415,6 +4268,200 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "W"
+                                }
+                            });
+                        }
+                        static registerTypeCommands(manager) {
+                            // change type dialog
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_CONVERT_OBJECTS,
+                                    name: "Replace Type",
+                                    tooltip: "Replace the type of the selected objects.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args)
+                                        && editor_10.ConvertTypeDialog.canConvert(args.activeEditor),
+                                    executeFunc: args => {
+                                        const dlg = new editor.ConvertTypeDialog(args.activeEditor);
+                                        dlg.create();
+                                    }
+                                }
+                            });
+                            // change type to tile sprite
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS,
+                                    name: "Convert To TileSprite",
+                                    tooltip: "Convert the selected objects into TileSprite instances. Or resize it if it is a TileSprite.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args)
+                                        && editor_10.ConvertTypeDialog.canConvert(args.activeEditor),
+                                    executeFunc: args => {
+                                        const editor = args.activeEditor;
+                                        editor.getUndoManager().add(new editor_10.undo.ConvertTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance()));
+                                    }
+                                },
+                                keys: {
+                                    key: "L"
+                                }
+                            });
+                            // open prefab
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_OPEN_PREFAB,
+                                    name: "Open Prefab",
+                                    category: commands.CAT_SCENE_EDITOR,
+                                    tooltip: "Open the Prefab file of the selected prefab instance."
+                                },
+                                handler: {
+                                    testFunc: args => {
+                                        if (!isSceneScope(args)) {
+                                            return false;
+                                        }
+                                        const editor = args.activeEditor;
+                                        const sel = editor.getSelectedGameObjects();
+                                        for (const obj of sel) {
+                                            if (!obj.getEditorSupport().isPrefabInstance()) {
+                                                return false;
+                                            }
+                                        }
+                                        return true;
+                                    },
+                                    executeFunc: args => {
+                                        const editor = args.activeEditor;
+                                        const sel = editor.getSelectedGameObjects();
+                                        for (const obj of sel) {
+                                            const file = obj.getEditorSupport().getPrefabFile();
+                                            if (file) {
+                                                colibri.Platform.getWorkbench().openEditor(file);
+                                            }
+                                        }
+                                    }
+                                },
+                                keys: {
+                                    key: "F"
+                                }
+                            });
+                        }
+                        static registerCompilerCommands(manager) {
+                            // open compiled file
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_OPEN_COMPILED_FILE,
+                                    icon: phasereditor2d.webContentTypes.WebContentTypesPlugin.getInstance().getIcon(phasereditor2d.webContentTypes.ICON_FILE_SCRIPT),
+                                    name: "Open Output File",
+                                    tooltip: "Open the output source file of the scene.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => args.activeEditor instanceof editor_10.SceneEditor,
+                                    executeFunc: args => args.activeEditor.openSourceFileInEditor()
+                                }
+                            });
+                            // compile scene editor
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_COMPILE_SCENE_EDITOR,
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_BUILD),
+                                    name: "Compile Scene",
+                                    tooltip: "Compile the editor's Scene.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => args.activeEditor instanceof editor_10.SceneEditor,
+                                    executeFunc: args => args.activeEditor.compile(),
+                                }
+                            });
+                            // compile all scene files
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_COMPILE_ALL_SCENE_FILES,
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_BUILD),
+                                    name: "Compile All Scene Files",
+                                    tooltip: "Compile all the Scene files of the project.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => args.activeWindow instanceof phasereditor2d.ide.ui.DesignWindow,
+                                    executeFunc: args => scene.ScenePlugin.getInstance().compileAll(),
+                                },
+                                keys: {
+                                    control: true,
+                                    alt: true,
+                                    key: "B"
+                                }
+                            });
+                        }
+                        static registerToolsCommands(manager) {
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_TRANSLATE_SCENE_OBJECT,
+                                    name: "Translate Tool",
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_TRANSLATE),
+                                    tooltip: "Translate the selected scene objects",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.TranslateTool.ID)
+                                },
+                                keys: {
+                                    key: "T"
+                                }
+                            });
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_ROTATE_SCENE_OBJECT,
+                                    name: "Rotate Tool",
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ANGLE),
+                                    tooltip: "Rotate the selected scene objects",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.RotateTool.ID)
+                                },
+                                keys: {
+                                    key: "R"
+                                }
+                            });
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_SCALE_SCENE_OBJECT,
+                                    name: "Scale Tool",
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_SCALE),
+                                    tooltip: "Scale the selected scene objects",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.ScaleTool.ID)
+                                },
+                                keys: {
+                                    key: "S"
+                                }
+                            });
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
+                                    name: "Resize TileSprite Tool",
+                                    tooltip: "Resize selected TileSprite objects.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: isSceneScope,
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.TileSpriteSizeTool.ID)
+                                },
+                                keys: {
+                                    key: "Z"
                                 }
                             });
                         }

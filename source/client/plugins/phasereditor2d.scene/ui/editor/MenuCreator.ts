@@ -15,9 +15,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_ADD_SCENE_OBJECT);
 
-            menu.addSeparator();
-
             menu.addMenu(this.createToolsMenu());
+
+            menu.addSeparator();
 
             menu.addMenu(this.createTypeMenu());
 
@@ -75,6 +75,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const menu = new controls.Menu("Type");
 
+            menu.addCommand(commands.CMD_OPEN_PREFAB);
             menu.addCommand(commands.CMD_CONVERT_OBJECTS);
             menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
 

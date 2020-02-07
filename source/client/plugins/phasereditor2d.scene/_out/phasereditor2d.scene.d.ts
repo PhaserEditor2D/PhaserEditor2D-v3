@@ -809,8 +809,12 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
     const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
     const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
+    const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
+        private static registerTypeCommands;
+        private static registerCompilerCommands;
+        private static registerToolsCommands;
         private static registerDepthCommands;
         static computeOriginCommandData(): Array<{
             command: string;
