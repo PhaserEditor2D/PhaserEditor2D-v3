@@ -1799,14 +1799,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class MoveToContainerOperation extends editor.undo.SceneEditorOperation {
-        private _before;
-        private _after;
+    class MoveToContainerOperation extends editor.undo.SceneSnapshotOperation {
+        private _parentId;
         constructor(editor: editor.SceneEditor, parentId?: string);
-        execute(): Promise<void>;
-        private loadMove;
-        undo(): void;
-        redo(): void;
+        protected performModification(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

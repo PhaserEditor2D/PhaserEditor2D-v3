@@ -8035,101 +8035,52 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_23) {
+    (function (scene) {
         var ui;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class MoveToContainerOperation extends ui.editor.undo.SceneEditorOperation {
+                class MoveToContainerOperation extends ui.editor.undo.SceneSnapshotOperation {
                     constructor(editor, parentId) {
                         super(editor);
-                        this._before = [];
-                        this._after = [];
-                        const objects = editor.getSelectedGameObjects();
-                        const displayList = this.getScene().sys.displayList;
+                        this._parentId = parentId;
+                    }
+                    performModification() {
                         const map = this.getScene().buildObjectIdMap();
-                        for (const obj of objects) {
-                            if (obj instanceof sceneobjects.Container) {
-                                continue;
-                            }
+                        const displayList = this.getScene().sys.displayList;
+                        for (const obj of this.getEditor().getSelectedGameObjects()) {
                             const sprite = obj;
                             const objSupport = obj.getEditorSupport();
-                            if (objSupport.getParentId() === parentId) {
+                            if (objSupport.getParentId() === this._parentId) {
                                 continue;
                             }
-                            const objParentList = obj.parentContainer ? obj.parentContainer.list : displayList.list;
-                            this._before.push({
-                                dstParentId: objSupport.getParentId(),
-                                dstIndex: objParentList.indexOf(obj),
-                                srcObjectId: objSupport.getId(),
-                                x: sprite.x,
-                                y: sprite.y
-                            });
                             const p = new Phaser.Math.Vector2(0, 0);
-                            if (parentId) {
-                                const container = map.get(parentId);
+                            if (sprite.parentContainer) {
+                                sprite.parentContainer.remove(sprite);
+                            }
+                            else {
+                                displayList.remove(sprite);
+                            }
+                            if (this._parentId) {
+                                const container = map.get(this._parentId);
                                 sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
                                 container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
-                                this._after.push({
-                                    dstParentId: parentId,
-                                    dstIndex: container.length,
-                                    srcObjectId: objSupport.getId(),
-                                    x: p.x,
-                                    y: p.y
-                                });
+                                sprite.x = p.x;
+                                sprite.y = p.y;
+                                container.add(sprite);
                             }
                             else {
                                 sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
-                                this._after.push({
-                                    dstParentId: parentId,
-                                    dstIndex: displayList.length,
-                                    srcObjectId: objSupport.getId(),
-                                    x: p.x,
-                                    y: p.y
-                                });
+                                sprite.x = p.x;
+                                sprite.y = p.y;
+                                displayList.add(sprite);
                             }
                         }
-                    }
-                    async execute() {
-                        this.loadMove(this._after);
-                    }
-                    loadMove(moves) {
-                        const scene = this.getScene();
-                        const displayList = scene.sys.displayList;
-                        const map = scene.buildObjectIdMap();
-                        for (const move of moves) {
-                            const obj = map.get(move.srcObjectId);
-                            obj.x = move.x;
-                            obj.y = move.y;
-                            if (obj.parentContainer) {
-                                obj.parentContainer.remove(obj);
-                            }
-                            else {
-                                displayList.remove(obj);
-                            }
-                            if (move.dstParentId) {
-                                const container = map.get(move.dstParentId);
-                                container.addAt(obj, move.dstIndex);
-                            }
-                            else {
-                                displayList.addAt(obj, move.dstIndex);
-                            }
-                        }
-                        const editor = this.getEditor();
-                        editor.setDirty(true);
-                        editor.refreshOutline();
-                        editor.repaint();
-                    }
-                    undo() {
-                        this.loadMove(this._before);
-                    }
-                    redo() {
-                        this.loadMove(this._after);
                     }
                 }
                 sceneobjects.MoveToContainerOperation = MoveToContainerOperation;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_23.ui || (scene_23.ui = {}));
+        })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./SceneObjectSection.ts" />
@@ -9023,7 +8974,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_24) {
+    (function (scene_23) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -9039,7 +8990,7 @@ var phasereditor2d;
                 }
                 sceneobjects.Sprite = Sprite;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_24.ui || (scene_24.ui = {}));
+        })(ui = scene_23.ui || (scene_23.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../image/BaseImageEditorSupport.ts" />
@@ -9064,7 +9015,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_25) {
+    (function (scene_24) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -9089,7 +9040,7 @@ var phasereditor2d;
                 SpriteExtension._instance = new SpriteExtension();
                 sceneobjects.SpriteExtension = SpriteExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_25.ui || (scene_25.ui = {}));
+        })(ui = scene_24.ui || (scene_24.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -9412,7 +9363,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_26) {
+    (function (scene_25) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -9428,7 +9379,7 @@ var phasereditor2d;
                 }
                 sceneobjects.TileSprite = TileSprite;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_26.ui || (scene_26.ui = {}));
+        })(ui = scene_25.ui || (scene_25.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
@@ -9560,7 +9511,7 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
-    (function (scene_27) {
+    (function (scene_26) {
         var ui;
         (function (ui) {
             var sceneobjects;
@@ -9596,7 +9547,7 @@ var phasereditor2d;
                 TileSpriteExtension._instance = new TileSpriteExtension();
                 sceneobjects.TileSpriteExtension = TileSpriteExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene_27.ui || (scene_27.ui = {}));
+        })(ui = scene_26.ui || (scene_26.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;

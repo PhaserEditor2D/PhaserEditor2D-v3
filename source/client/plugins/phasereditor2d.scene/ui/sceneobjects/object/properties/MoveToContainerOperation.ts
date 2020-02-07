@@ -9,135 +9,66 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         y?: number;
     }
 
-    export class MoveToContainerOperation extends editor.undo.SceneEditorOperation {
+    export class MoveToContainerOperation extends editor.undo.SceneSnapshotOperation {
 
-        private _before: IObjectMove[];
-        private _after: IObjectMove[];
+        private _parentId: string;
 
         constructor(editor: editor.SceneEditor, parentId?: string) {
             super(editor);
 
-            this._before = [];
-            this._after = [];
+            this._parentId = parentId;
+        }
 
-            const objects = editor.getSelectedGameObjects();
-
-            const displayList = this.getScene().sys.displayList;
+        protected performModification() {
 
             const map = this.getScene().buildObjectIdMap();
 
-            for (const obj of objects) {
+            const displayList = this.getScene().sys.displayList;
 
-                if (obj instanceof Container) {
-
-                    continue;
-                }
+            for (const obj of this.getEditor().getSelectedGameObjects()) {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
                 const objSupport = obj.getEditorSupport();
 
-                if (objSupport.getParentId() === parentId) {
+                if (objSupport.getParentId() === this._parentId) {
 
                     continue;
                 }
 
-                const objParentList = obj.parentContainer ? obj.parentContainer.list : displayList.list;
-
-                this._before.push({
-                    dstParentId: objSupport.getParentId(),
-                    dstIndex: objParentList.indexOf(obj),
-                    srcObjectId: objSupport.getId(),
-                    x: sprite.x,
-                    y: sprite.y
-                });
-
                 const p = new Phaser.Math.Vector2(0, 0);
 
-                if (parentId) {
+                if (sprite.parentContainer) {
 
-                    const container = map.get(parentId) as Container;
+                    sprite.parentContainer.remove(sprite);
+
+                } else {
+
+                    displayList.remove(sprite);
+                }
+
+                if (this._parentId) {
+
+                    const container = map.get(this._parentId) as Container;
 
                     sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
                     container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
 
-                    this._after.push({
-                        dstParentId: parentId,
-                        dstIndex: container.length,
-                        srcObjectId: objSupport.getId(),
-                        x: p.x,
-                        y: p.y
-                    });
+                    sprite.x = p.x;
+                    sprite.y = p.y;
+
+                    container.add(sprite);
 
                 } else {
 
                     sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
 
-                    this._after.push({
-                        dstParentId: parentId,
-                        dstIndex: displayList.length,
-                        srcObjectId: objSupport.getId(),
-                        x: p.x,
-                        y: p.y
-                    });
+                    sprite.x = p.x;
+                    sprite.y = p.y;
+
+                    displayList.add(sprite);
                 }
             }
-        }
-
-        async execute() {
-
-            this.loadMove(this._after);
-        }
-
-        private loadMove(moves: IObjectMove[]) {
-
-            const scene = this.getScene();
-            const displayList = scene.sys.displayList;
-
-            const map = scene.buildObjectIdMap();
-
-            for (const move of moves) {
-
-                const obj = map.get(move.srcObjectId) as unknown as Phaser.GameObjects.Sprite;
-
-                obj.x = move.x;
-                obj.y = move.y;
-
-                if (obj.parentContainer) {
-
-                    obj.parentContainer.remove(obj);
-
-                } else {
-
-                    displayList.remove(obj);
-                }
-
-                if (move.dstParentId) {
-
-                    const container = map.get(move.dstParentId) as Container;
-                    container.addAt(obj, move.dstIndex);
-
-                } else {
-
-                    displayList.addAt(obj, move.dstIndex);
-                }
-            }
-
-            const editor = this.getEditor();
-
-            editor.setDirty(true);
-            editor.refreshOutline();
-            editor.repaint();
-        }
-
-        undo(): void {
-
-            this.loadMove(this._before);
-        }
-
-        redo(): void {
-
-            this.loadMove(this._after);
         }
     }
 }
