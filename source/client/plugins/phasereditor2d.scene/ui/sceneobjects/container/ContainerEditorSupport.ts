@@ -9,10 +9,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ContainerEditorSupport extends EditorSupport<Container> {
 
+        private _childrenPickable: boolean;
+
         constructor(obj: Container) {
             super(ContainerExtension.getInstance(), obj);
 
+            this._childrenPickable = false;
+
             this.addComponent(new TransformComponent(obj));
+            this.addComponent(new ContainerComponent(obj));
+        }
+
+        isChildrenPickable() {
+            return this._childrenPickable;
+        }
+
+        setChildrenPickable(childrenPickable: boolean) {
+            this._childrenPickable = childrenPickable;
         }
 
         setInteractive() {

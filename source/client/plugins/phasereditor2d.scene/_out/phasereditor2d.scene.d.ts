@@ -1520,12 +1520,22 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class ContainerComponent extends Component<Container> {
+        static childrenArePickable: IProperty<Container>;
+        constructor(obj: Container);
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     interface IContainerData extends json.IObjectData {
         list: json.IObjectData[];
     }
     class ContainerEditorSupport extends EditorSupport<Container> {
+        private _childrenPickable;
         constructor(obj: Container);
+        isChildrenPickable(): boolean;
+        setChildrenPickable(childrenPickable: boolean): void;
         setInteractive(): void;
         destroy(): void;
         buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
@@ -1552,6 +1562,28 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createContainerObjectWithChildren(scene: Scene, objectList: sceneobjects.ISceneObject[]): sceneobjects.Container;
         acceptsDropData(data: any): boolean;
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+        protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
+        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
+        protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
+        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
+        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
+        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
+        createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
+        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
+        createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class ContainerSection extends SceneObjectSection<Container> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1793,18 +1825,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static scope: IEnumProperty<ISceneObjectLike, ObjectScope>;
         constructor(obj: ISceneObjectLike);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
-        protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
-        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
-        protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
-        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
-        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
-        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
-        createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
-        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

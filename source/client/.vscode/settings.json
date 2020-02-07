@@ -4,6 +4,7 @@
         "GLSL",
         "Mixins",
         "OFIB",
+        "Pickable",
         "Serializable",
         "TILEMAP",
         "colibri",

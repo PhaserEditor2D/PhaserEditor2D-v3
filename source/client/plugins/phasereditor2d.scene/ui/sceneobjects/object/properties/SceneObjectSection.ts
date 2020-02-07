@@ -191,5 +191,35 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
+        createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {
+
+            const labelElement = this.createLabel(parent, property.label, property.tooltip);
+
+            const checkElement = this.createCheckbox(parent, labelElement);
+
+            checkElement.addEventListener("change", e => {
+
+                const value = checkElement.checked;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                checkElement.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                const list = this.getSelection()
+
+                    .map(obj => property.getValue(obj) as boolean)
+
+                    .filter(b => !b);
+
+                checkElement.checked = list.length === 0;
+            });
+
+            return checkElement;
+        }
+
     }
 }
