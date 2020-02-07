@@ -362,6 +362,10 @@ canvas {
     padding: 5px 10px 5px 0px;
 }
 
+.MenuNoIcon .MenuItem {
+    grid-template-columns: 30px 0px 1fr auto;
+}
+
 .MenuItemCheckedIcon {
     grid-column-start: 1;
     justify-self: center;

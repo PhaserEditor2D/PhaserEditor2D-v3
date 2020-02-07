@@ -74,6 +74,8 @@ namespace colibri.ui.controls {
 
             Menu._activeMenu = this;
 
+            let hasIcon = false;
+
             this._element = document.createElement("div");
             this._element.classList.add("Menu");
 
@@ -116,6 +118,8 @@ namespace colibri.ui.controls {
                         const iconElement = Controls.createIconElement(item.getIcon());
                         iconElement.classList.add("MenuItemIcon");
                         itemElement.appendChild(iconElement);
+
+                        hasIcon = true;
                     }
 
                     const labelElement = document.createElement("label");
@@ -185,6 +189,11 @@ namespace colibri.ui.controls {
                 }
 
                 this._element.appendChild(itemElement);
+            }
+
+            if (!hasIcon) {
+
+                this._element.classList.add("MenuNoIcon");
             }
 
             if (modal) {

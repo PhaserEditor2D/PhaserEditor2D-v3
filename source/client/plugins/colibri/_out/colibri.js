@@ -2375,6 +2375,7 @@ var colibri;
                 }
                 create(x, y, modal) {
                     Menu._activeMenu = this;
+                    let hasIcon = false;
                     this._element = document.createElement("div");
                     this._element.classList.add("Menu");
                     let lastIsSeparator = true;
@@ -2401,6 +2402,7 @@ var colibri;
                                 const iconElement = controls.Controls.createIconElement(item.getIcon());
                                 iconElement.classList.add("MenuItemIcon");
                                 itemElement.appendChild(iconElement);
+                                hasIcon = true;
                             }
                             const labelElement = document.createElement("label");
                             labelElement.classList.add("MenuItemText");
@@ -2449,6 +2451,9 @@ var colibri;
                             itemElement.appendChild(keyElement);
                         }
                         this._element.appendChild(itemElement);
+                    }
+                    if (!hasIcon) {
+                        this._element.classList.add("MenuNoIcon");
                     }
                     if (modal) {
                         this._bgElement = document.createElement("div");
