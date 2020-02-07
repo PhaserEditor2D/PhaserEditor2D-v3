@@ -21,6 +21,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createTypeMenu());
 
+            menu.addMenu(this.createOriginMenu());
+
             menu.addMenu(this.createTextureMenu());
 
             menu.addMenu(this.createContainerMenu());
@@ -34,6 +36,18 @@ namespace phasereditor2d.scene.ui.editor {
             });
             menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
+        }
+
+        private createOriginMenu(): controls.Menu {
+
+            const menu = new controls.Menu("Origin");
+
+            for (const data of commands.SceneEditorCommands.computeOriginCommandData()) {
+
+                menu.addCommand(data.command);
+            }
+
+            return menu;
         }
 
         private createToolsMenu(): controls.Menu {

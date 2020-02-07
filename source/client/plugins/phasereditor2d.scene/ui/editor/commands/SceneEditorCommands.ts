@@ -502,7 +502,13 @@ namespace phasereditor2d.scene.ui.editor.commands {
             }
         }
 
-        private static registerOriginCommands(manager: colibri.ui.ide.commands.CommandManager) {
+        static computeOriginCommandData(): Array<{
+            command: string,
+            name: string,
+            key: string,
+            x: number,
+            y: number
+        }> {
 
             const names = [
                 "Top/Left",
@@ -528,6 +534,26 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 [1, 0],
             ];
 
+            const list = [];
+
+            for (let i = 0; i < 9; i++) {
+
+                const id = "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + (i + 1) + "_ToObject";
+
+                list.push({
+                    command: id,
+                    name: "Set Origin To " + names[i],
+                    x: values[i][0],
+                    y: values[i][1],
+                    key: (i + 1).toString(),
+                });
+            }
+
+            return list;
+        }
+
+        private static registerOriginCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
             const originProperty: sceneobjects.IProperty<sceneobjects.IOriginLikeObject> = {
                 name: "origin",
                 defValue: undefined,
@@ -535,17 +561,17 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 setValue: (obj, value) => obj.setOrigin(value.x, value.y)
             };
 
-            for (let i = 0; i < 9; i++) {
+            for (const data of this.computeOriginCommandData()) {
 
                 manager.add({
                     command: {
-                        id: "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + (i + 1) + "_ToObject",
-                        name: "Set Origin To " + names[i],
-                        tooltip: `Set the origin of the object to (${values[i][0]},${values[i][1]}`,
+                        id: data.command,
+                        name: data.name,
+                        tooltip: `Set the origin of the object to (${data.x},${data.y}`,
                         category: CAT_SCENE_EDITOR
                     },
                     keys: {
-                        key: (i + 1).toString(),
+                        key: data.key,
                         shift: true,
                     },
                     handler: {
@@ -562,8 +588,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                     objects,
                                     originProperty,
                                     {
-                                        x: values[i][0],
-                                        y: values[i][1]
+                                        x: data.x,
+                                        y: data.y
                                     }));
                         }
                     },

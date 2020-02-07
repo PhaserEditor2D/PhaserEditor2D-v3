@@ -655,6 +655,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _editor;
         constructor(editor: SceneEditor);
         fillMenu(menu: controls.Menu): void;
+        private createOriginMenu;
         private createToolsMenu;
         private createTypeMenu;
         private createContainerMenu;
@@ -811,6 +812,13 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
         private static registerDepthCommands;
+        static computeOriginCommandData(): Array<{
+            command: string;
+            name: string;
+            key: string;
+            x: number;
+            y: number;
+        }>;
         private static registerOriginCommands;
     }
 }

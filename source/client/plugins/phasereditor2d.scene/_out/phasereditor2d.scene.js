@@ -3124,6 +3124,7 @@ var phasereditor2d;
                         menu.addSeparator();
                         menu.addMenu(this.createToolsMenu());
                         menu.addMenu(this.createTypeMenu());
+                        menu.addMenu(this.createOriginMenu());
                         menu.addMenu(this.createTextureMenu());
                         menu.addMenu(this.createContainerMenu());
                         menu.addMenu(this.createSnappingMenu());
@@ -3133,6 +3134,13 @@ var phasereditor2d;
                         });
                         menu.addCommand(editor_6.commands.CMD_COMPILE_SCENE_EDITOR);
                         menu.addCommand(editor_6.commands.CMD_OPEN_COMPILED_FILE);
+                    }
+                    createOriginMenu() {
+                        const menu = new controls.Menu("Origin");
+                        for (const data of editor_6.commands.SceneEditorCommands.computeOriginCommandData()) {
+                            menu.addCommand(data.command);
+                        }
+                        return menu;
                     }
                     createToolsMenu() {
                         const menu = new controls.Menu("Tools");
@@ -4431,7 +4439,7 @@ var phasereditor2d;
                                 });
                             }
                         }
-                        static registerOriginCommands(manager) {
+                        static computeOriginCommandData() {
                             const names = [
                                 "Top/Left",
                                 "Top/Center",
@@ -4454,22 +4462,36 @@ var phasereditor2d;
                                 [0.5, 0],
                                 [1, 0],
                             ];
+                            const list = [];
+                            for (let i = 0; i < 9; i++) {
+                                const id = "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + (i + 1) + "_ToObject";
+                                list.push({
+                                    command: id,
+                                    name: "Set Origin To " + names[i],
+                                    x: values[i][0],
+                                    y: values[i][1],
+                                    key: (i + 1).toString(),
+                                });
+                            }
+                            return list;
+                        }
+                        static registerOriginCommands(manager) {
                             const originProperty = {
                                 name: "origin",
                                 defValue: undefined,
                                 getValue: obj => ({ x: obj.originX, y: obj.originY }),
                                 setValue: (obj, value) => obj.setOrigin(value.x, value.y)
                             };
-                            for (let i = 0; i < 9; i++) {
+                            for (const data of this.computeOriginCommandData()) {
                                 manager.add({
                                     command: {
-                                        id: "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + (i + 1) + "_ToObject",
-                                        name: "Set Origin To " + names[i],
-                                        tooltip: `Set the origin of the object to (${values[i][0]},${values[i][1]}`,
+                                        id: data.command,
+                                        name: data.name,
+                                        tooltip: `Set the origin of the object to (${data.x},${data.y}`,
                                         category: commands.CAT_SCENE_EDITOR
                                     },
                                     keys: {
-                                        key: (i + 1).toString(),
+                                        key: data.key,
                                         shift: true,
                                     },
                                     handler: {
@@ -4479,8 +4501,8 @@ var phasereditor2d;
                                                 .filter(obj => ui.sceneobjects.EditorSupport
                                                 .hasObjectComponent(obj, ui.sceneobjects.TransformComponent));
                                             args.activeEditor.getUndoManager().add(new ui.sceneobjects.SimpleOperation(args.activeEditor, objects, originProperty, {
-                                                x: values[i][0],
-                                                y: values[i][1]
+                                                x: data.x,
+                                                y: data.y
                                             }));
                                         }
                                     },
