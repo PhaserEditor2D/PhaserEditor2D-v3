@@ -2489,7 +2489,7 @@ var colibri;
                     return this._text;
                 }
                 close() {
-                    Menu._activeMenu = null;
+                    Menu._activeMenu = this._parentMenu;
                     if (this._bgElement) {
                         this._bgElement.remove();
                     }
@@ -2500,6 +2500,12 @@ var colibri;
                     if (this._subMenu) {
                         this._subMenu.close();
                     }
+                }
+                closeAll() {
+                    if (this._parentMenu) {
+                        this._parentMenu.closeAll();
+                    }
+                    this.close();
                 }
             }
             Menu._activeMenu = null;
@@ -7407,7 +7413,7 @@ var colibri;
                             viewer.escape();
                         });
                         // escape menu
-                        manager.addHandlerHelper(actions.CMD_ESCAPE, args => args.activeMenu !== null, args => args.activeMenu.close());
+                        manager.addHandlerHelper(actions.CMD_ESCAPE, args => args.activeMenu !== null, args => args.activeMenu.closeAll());
                     }
                     static initUndo(manager) {
                         // undo

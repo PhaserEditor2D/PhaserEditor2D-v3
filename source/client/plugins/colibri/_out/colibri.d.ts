@@ -639,6 +639,7 @@ declare namespace colibri.ui.controls {
         createWithEvent(e: MouseEvent): void;
         getText(): string;
         close(): void;
+        closeAll(): void;
     }
 }
 declare namespace colibri.ui.controls {

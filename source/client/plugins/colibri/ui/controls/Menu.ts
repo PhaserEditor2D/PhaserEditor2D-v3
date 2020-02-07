@@ -249,7 +249,7 @@ namespace colibri.ui.controls {
 
         close() {
 
-            Menu._activeMenu = null;
+            Menu._activeMenu = this._parentMenu;
 
             if (this._bgElement) {
                 this._bgElement.remove();
@@ -265,6 +265,16 @@ namespace colibri.ui.controls {
 
                 this._subMenu.close();
             }
+        }
+
+        closeAll() {
+
+            if (this._parentMenu) {
+
+                this._parentMenu.closeAll();
+            }
+
+            this.close();
         }
     }
 }

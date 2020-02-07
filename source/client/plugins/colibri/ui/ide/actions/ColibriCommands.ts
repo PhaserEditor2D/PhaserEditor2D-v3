@@ -271,7 +271,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addHandlerHelper(CMD_ESCAPE,
                 args => args.activeMenu !== null,
-                args => args.activeMenu.close()
+                args => args.activeMenu.closeAll()
             );
         }
 
