@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             name: "childrenArePickable",
             label: "Pickable Children",
             tooltip: "If the container children can be pickable in the scene.",
-            defValue: false,
+            defValue: true,
             local: true,
             getValue: obj => obj.getEditorSupport().isChildrenPickable(),
             setValue: (obj, value) => obj.getEditorSupport().setChildrenPickable(value)

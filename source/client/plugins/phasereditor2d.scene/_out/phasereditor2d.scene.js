@@ -4031,6 +4031,14 @@ var phasereditor2d;
                                 const owner = obj.getEditorSupport().getOwnerPrefabInstance();
                                 selected = (owner !== null && owner !== void 0 ? owner : selected);
                             }
+                            if (selected) {
+                                const container = selected.parentContainer;
+                                if (container) {
+                                    if (!container.getEditorSupport().isChildrenPickable()) {
+                                        selected = container;
+                                    }
+                                }
+                            }
                             if (e.ctrlKey || e.metaKey) {
                                 if (new Set(current).has(selected)) {
                                     next = current.filter(obj => obj !== selected);
@@ -6795,7 +6803,7 @@ var phasereditor2d;
                     name: "childrenArePickable",
                     label: "Pickable Children",
                     tooltip: "If the container children can be pickable in the scene.",
-                    defValue: false,
+                    defValue: true,
                     local: true,
                     getValue: obj => obj.getEditorSupport().isChildrenPickable(),
                     setValue: (obj, value) => obj.getEditorSupport().setChildrenPickable(value)
@@ -6817,7 +6825,7 @@ var phasereditor2d;
                 class ContainerEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj) {
                         super(sceneobjects.ContainerExtension.getInstance(), obj);
-                        this._childrenPickable = false;
+                        this._childrenPickable = true;
                         this.addComponent(new sceneobjects.TransformComponent(obj));
                         this.addComponent(new sceneobjects.ContainerComponent(obj));
                     }

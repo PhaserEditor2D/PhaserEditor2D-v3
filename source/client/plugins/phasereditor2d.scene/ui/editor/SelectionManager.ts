@@ -109,6 +109,19 @@ namespace phasereditor2d.scene.ui.editor {
                     selected = owner ?? selected;
                 }
 
+                if (selected) {
+
+                    const container = selected.parentContainer as sceneobjects.Container;
+
+                    if (container) {
+
+                        if (!container.getEditorSupport().isChildrenPickable()) {
+
+                            selected = container;
+                        }
+                    }
+                }
+
                 if (e.ctrlKey || e.metaKey) {
 
                     if (new Set(current).has(selected)) {

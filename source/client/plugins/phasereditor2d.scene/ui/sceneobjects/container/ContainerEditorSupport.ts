@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: Container) {
             super(ContainerExtension.getInstance(), obj);
 
-            this._childrenPickable = false;
+            this._childrenPickable = true;
 
             this.addComponent(new TransformComponent(obj));
             this.addComponent(new ContainerComponent(obj));
