@@ -320,48 +320,14 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.fillContextMenu(menu);
 
-            menu.create(e);
+            menu.createWithEvent(e);
         }
 
         private fillContextMenu(menu: controls.Menu) {
 
-            const activeTool = this.getToolsManager().getActiveTool();
+            const creator = new MenuCreator(this);
 
-            const exts = colibri.Platform.getExtensions<tools.SceneToolExtension>(tools.SceneToolExtension.POINT_ID);
-
-            for (const ext of exts) {
-
-                for (const tool of ext.getTools()) {
-
-                    menu.addCommand(tool.getCommandId(), {
-                        selected: activeTool === tool
-                    });
-                }
-            }
-
-            menu.addSeparator();
-
-            menu.addCommand(commands.CMD_ADD_SCENE_OBJECT);
-            menu.addCommand(commands.CMD_CONVERT_OBJECTS);
-            menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
-
-            menu.addSeparator();
-
-            menu.addCommand(commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
-            menu.addCommand(commands.CMD_REPLACE_TEXTURE);
-
-            menu.addSeparator();
-
-            menu.addCommand(commands.CMD_TOGGLE_SNAPPING);
-            menu.addCommand(commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE);
-
-            menu.addSeparator();
-
-            menu.addCommand(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, {
-                text: "Refresh Scene"
-            });
-            menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
-            menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
+            creator.fillMenu(menu);
         }
 
         openAddObjectDialog() {

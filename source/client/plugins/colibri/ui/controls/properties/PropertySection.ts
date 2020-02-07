@@ -161,7 +161,7 @@ namespace colibri.ui.controls.properties {
                     }));
                 }
 
-                menu.create(e);
+                menu.createWithEvent(e);
             });
 
             return btn;

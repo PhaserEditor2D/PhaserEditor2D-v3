@@ -616,21 +616,28 @@ declare namespace colibri.ui.controls {
 }
 declare namespace colibri.ui.controls {
     class Menu {
-        private _actions;
+        private _text;
+        private _items;
         private _element;
         private _bgElement;
         private _menuCloseCallback;
         private static _activeMenu;
-        constructor();
+        private _subMenu;
+        private _parentMenu;
+        constructor(text?: string);
         setMenuClosedCallback(callback: () => void): void;
         add(action: Action): void;
+        addMenu(subMenu: Menu): void;
         addCommand(commandId: string, config?: IActionConfig): void;
         addExtension(menuId: string): void;
         addSeparator(): void;
         isEmpty(): boolean;
         getElement(): HTMLDivElement;
         static getActiveMenu(): Menu;
-        create(e: MouseEvent): void;
+        create(x: number, y: number, modal?: boolean): void;
+        private closeSubMenu;
+        createWithEvent(e: MouseEvent): void;
+        getText(): string;
         close(): void;
     }
 }

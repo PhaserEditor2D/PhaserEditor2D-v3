@@ -47,7 +47,7 @@ namespace phasereditor2d.ide.ui.actions {
                 text: "Unlock Phaser Editor 2D"
             }));
 
-            menu.create(e);
+            menu.createWithEvent(e);
         }
     }
 }

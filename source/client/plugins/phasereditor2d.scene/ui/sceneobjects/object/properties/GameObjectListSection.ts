@@ -59,7 +59,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }));
                 }
 
-                menu.create(e);
+                menu.createWithEvent(e);
             });
 
             this.addUpdater(() => {

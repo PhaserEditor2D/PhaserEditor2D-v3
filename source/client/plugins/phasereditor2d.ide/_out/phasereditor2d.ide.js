@@ -479,7 +479,7 @@ var phasereditor2d;
                         menu.add(new controls.Action({
                             text: "Unlock Phaser Editor 2D"
                         }));
-                        menu.create(e);
+                        menu.createWithEvent(e);
                     }
                 }
                 actions.OpenMainMenuAction = OpenMainMenuAction;

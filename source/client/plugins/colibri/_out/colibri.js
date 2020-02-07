@@ -2334,14 +2334,19 @@ var colibri;
         var controls;
         (function (controls) {
             class Menu {
-                constructor() {
-                    this._actions = [];
+                constructor(text) {
+                    this._items = [];
+                    this._text = text;
                 }
                 setMenuClosedCallback(callback) {
                     this._menuCloseCallback = callback;
                 }
                 add(action) {
-                    this._actions.push(action);
+                    this._items.push(action);
+                }
+                addMenu(subMenu) {
+                    subMenu._parentMenu = this;
+                    this._items.push(subMenu);
                 }
                 addCommand(commandId, config) {
                     if (!config) {
@@ -2357,10 +2362,10 @@ var colibri;
                     }
                 }
                 addSeparator() {
-                    this._actions.push(null);
+                    this._items.push(null);
                 }
                 isEmpty() {
-                    return this._actions.length === 0;
+                    return this._items.length === 0;
                 }
                 getElement() {
                     return this._element;
@@ -2368,13 +2373,13 @@ var colibri;
                 static getActiveMenu() {
                     return this._activeMenu;
                 }
-                create(e) {
+                create(x, y, modal) {
                     Menu._activeMenu = this;
                     this._element = document.createElement("div");
                     this._element.classList.add("Menu");
                     let lastIsSeparator = true;
-                    for (const action of this._actions) {
-                        if (action === null) {
+                    for (const item of this._items) {
+                        if (item === null) {
                             if (!lastIsSeparator) {
                                 lastIsSeparator = true;
                                 const sepElement = document.createElement("div");
@@ -2384,51 +2389,78 @@ var colibri;
                             continue;
                         }
                         lastIsSeparator = false;
-                        const item = document.createElement("div");
-                        item.classList.add("MenuItem");
-                        if (action.isSelected()) {
-                            const checkedElement = controls.Controls.createIconElement(colibri.Platform.getWorkbench().getWorkbenchIcon(ui.ide.ICON_CHECKED));
-                            checkedElement.classList.add("MenuItemCheckedIcon");
-                            item.appendChild(checkedElement);
-                        }
-                        if (action.getIcon()) {
-                            const iconElement = controls.Controls.createIconElement(action.getIcon());
-                            iconElement.classList.add("MenuItemIcon");
-                            item.appendChild(iconElement);
-                        }
-                        const labelElement = document.createElement("label");
-                        labelElement.classList.add("MenuItemText");
-                        labelElement.innerText = action.getText();
-                        item.appendChild(labelElement);
-                        const keyString = action.getCommandKeyString();
-                        if (keyString) {
-                            const keyElement = document.createElement("span");
-                            keyElement.innerText = keyString;
-                            keyElement.classList.add("MenuItemKeyString");
-                            item.appendChild(keyElement);
-                        }
-                        if (action.isEnabled()) {
-                            item.addEventListener("click", ev => {
-                                this.close();
-                                action.run();
+                        const itemElement = document.createElement("div");
+                        itemElement.classList.add("MenuItem");
+                        if (item instanceof controls.Action) {
+                            if (item.isSelected()) {
+                                const checkedElement = controls.Controls.createIconElement(colibri.Platform.getWorkbench().getWorkbenchIcon(ui.ide.ICON_CHECKED));
+                                checkedElement.classList.add("MenuItemCheckedIcon");
+                                itemElement.appendChild(checkedElement);
+                            }
+                            if (item.getIcon()) {
+                                const iconElement = controls.Controls.createIconElement(item.getIcon());
+                                iconElement.classList.add("MenuItemIcon");
+                                itemElement.appendChild(iconElement);
+                            }
+                            const labelElement = document.createElement("label");
+                            labelElement.classList.add("MenuItemText");
+                            labelElement.innerText = item.getText();
+                            itemElement.appendChild(labelElement);
+                            const keyString = item.getCommandKeyString();
+                            if (keyString) {
+                                const keyElement = document.createElement("span");
+                                keyElement.innerText = keyString;
+                                keyElement.classList.add("MenuItemKeyString");
+                                itemElement.appendChild(keyElement);
+                            }
+                            if (item.isEnabled()) {
+                                itemElement.addEventListener("click", ev => {
+                                    if (this._parentMenu) {
+                                        this._parentMenu.close();
+                                    }
+                                    this.close();
+                                    item.run();
+                                });
+                            }
+                            else {
+                                itemElement.classList.add("MenuItemDisabled");
+                            }
+                            itemElement.addEventListener("mouseenter", e => {
+                                this.closeSubMenu();
                             });
                         }
                         else {
-                            item.classList.add("MenuItemDisabled");
+                            const subMenu = item;
+                            const labelElement = document.createElement("label");
+                            labelElement.classList.add("MenuItemText");
+                            labelElement.innerText = subMenu.getText();
+                            itemElement.appendChild(labelElement);
+                            itemElement.addEventListener("mouseenter", e => {
+                                this.closeSubMenu();
+                                const menuRect = this._element.getClientRects().item(0);
+                                const subMenuX = menuRect.right;
+                                const subMenuY = menuRect.top;
+                                subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
+                                this._subMenu = subMenu;
+                            });
+                            const keyElement = document.createElement("span");
+                            keyElement.innerHTML = "&RightTriangle;";
+                            keyElement.classList.add("MenuItemKeyString");
+                            itemElement.appendChild(keyElement);
                         }
-                        this._element.appendChild(item);
+                        this._element.appendChild(itemElement);
                     }
-                    this._bgElement = document.createElement("div");
-                    this._bgElement.classList.add("MenuContainer");
-                    this._bgElement.addEventListener("mousedown", (ev) => {
-                        ev.preventDefault();
-                        ev.stopImmediatePropagation();
-                        this.close();
-                    });
-                    document.body.appendChild(this._bgElement);
+                    if (modal) {
+                        this._bgElement = document.createElement("div");
+                        this._bgElement.classList.add("MenuContainer");
+                        this._bgElement.addEventListener("mousedown", (ev) => {
+                            ev.preventDefault();
+                            ev.stopImmediatePropagation();
+                            this.close();
+                        });
+                        document.body.appendChild(this._bgElement);
+                    }
                     document.body.appendChild(this._element);
-                    let x = e.clientX;
-                    let y = e.clientY;
                     const rect = this._element.getClientRects()[0];
                     if (y + rect.height > window.innerHeight) {
                         y -= rect.height;
@@ -2439,12 +2471,29 @@ var colibri;
                     this._element.style.left = x + "px";
                     this._element.style.top = y + "px";
                 }
+                closeSubMenu() {
+                    if (this._subMenu) {
+                        this._subMenu.close();
+                        this._subMenu = null;
+                    }
+                }
+                createWithEvent(e) {
+                    this.create(e.clientX, e.clientY, true);
+                }
+                getText() {
+                    return this._text;
+                }
                 close() {
                     Menu._activeMenu = null;
-                    this._bgElement.remove();
+                    if (this._bgElement) {
+                        this._bgElement.remove();
+                    }
                     this._element.remove();
                     if (this._menuCloseCallback) {
                         this._menuCloseCallback();
+                    }
+                    if (this._subMenu) {
+                        this._subMenu.close();
                     }
                 }
             }
@@ -3081,7 +3130,7 @@ var colibri;
                     e.preventDefault();
                     const menu = new controls.Menu();
                     this.fillTabMenu(menu, labelElement);
-                    menu.create(e);
+                    menu.createWithEvent(e);
                 }
                 fillTabMenu(menu, labelElement) {
                     // nothing
@@ -4131,7 +4180,7 @@ var colibri;
                                     }
                                 }));
                             }
-                            menu.create(e);
+                            menu.createWithEvent(e);
                         });
                         return btn;
                     }
@@ -6328,7 +6377,7 @@ var colibri;
                     this._viewer.onMouseUp(e);
                     const menu = new ui.controls.Menu();
                     this.fillContextMenu(menu);
-                    menu.create(e);
+                    menu.createWithEvent(e);
                 }
                 getViewer() {
                     return this._viewer;

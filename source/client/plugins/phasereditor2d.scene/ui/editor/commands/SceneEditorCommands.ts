@@ -1,7 +1,5 @@
 namespace phasereditor2d.scene.ui.editor.commands {
 
-    import controls = colibri.ui.controls;
-
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
@@ -111,7 +109,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_JOIN_IN_CONTAINER,
-                    name: "Join Objects In Container",
+                    name: "Create Container With Selection",
                     tooltip: "Create a container with the selected objects",
                     category: CAT_SCENE_EDITOR
                 },

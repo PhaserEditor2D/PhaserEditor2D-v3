@@ -269,7 +269,7 @@ namespace colibri.ui.controls {
 
             this.fillTabMenu(menu, labelElement);
 
-            menu.create(e);
+            menu.createWithEvent(e);
         }
 
         protected fillTabMenu(menu: Menu, labelElement: HTMLElement) {

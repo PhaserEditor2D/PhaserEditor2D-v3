@@ -650,6 +650,17 @@ declare namespace phasereditor2d.scene.ui.editor {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor {
+    import controls = colibri.ui.controls;
+    class MenuCreator {
+        private _editor;
+        constructor(editor: SceneEditor);
+        fillMenu(menu: controls.Menu): void;
+        private createContainerMenu;
+        private createSnappingMenu;
+        private createTextureMenu;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor {
     class MouseManager {
         private _editor;
         private _toolInAction;

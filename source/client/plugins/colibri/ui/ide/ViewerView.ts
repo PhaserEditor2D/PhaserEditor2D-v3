@@ -43,7 +43,7 @@ namespace colibri.ui.ide {
 
             this.fillContextMenu(menu);
 
-            menu.create(e);
+            menu.createWithEvent(e);
         }
 
         getViewer() {

@@ -2,14 +2,19 @@ namespace colibri.ui.controls {
 
     export class Menu {
 
-        private _actions: Action[];
+        private _text: string;
+        private _items: unknown[];
         private _element: HTMLDivElement;
         private _bgElement: HTMLDivElement;
         private _menuCloseCallback: () => void;
         private static _activeMenu: Menu = null;
+        private _subMenu: Menu;
+        private _parentMenu: Menu;
 
-        constructor() {
-            this._actions = [];
+        constructor(text?: string) {
+
+            this._items = [];
+            this._text = text;
         }
 
         setMenuClosedCallback(callback: () => void) {
@@ -17,7 +22,14 @@ namespace colibri.ui.controls {
         }
 
         add(action: Action) {
-            this._actions.push(action);
+            this._items.push(action);
+        }
+
+        addMenu(subMenu: Menu) {
+
+            subMenu._parentMenu = this;
+
+            this._items.push(subMenu);
         }
 
         addCommand(commandId: string, config?: IActionConfig) {
@@ -43,11 +55,11 @@ namespace colibri.ui.controls {
         }
 
         addSeparator() {
-            this._actions.push(null);
+            this._items.push(null);
         }
 
         isEmpty() {
-            return this._actions.length === 0;
+            return this._items.length === 0;
         }
 
         getElement() {
@@ -58,7 +70,7 @@ namespace colibri.ui.controls {
             return this._activeMenu;
         }
 
-        create(e: MouseEvent) {
+        create(x: number, y: number, modal?: boolean) {
 
             Menu._activeMenu = this;
 
@@ -67,9 +79,9 @@ namespace colibri.ui.controls {
 
             let lastIsSeparator = true;
 
-            for (const action of this._actions) {
+            for (const item of this._items) {
 
-                if (action === null) {
+                if (item === null) {
 
                     if (!lastIsSeparator) {
 
@@ -85,75 +97,114 @@ namespace colibri.ui.controls {
 
                 lastIsSeparator = false;
 
-                const item = document.createElement("div");
-                item.classList.add("MenuItem");
+                const itemElement = document.createElement("div");
+                itemElement.classList.add("MenuItem");
 
-                if (action.isSelected()) {
+                if (item instanceof Action) {
 
-                    const checkedElement = Controls.createIconElement(
-                        Platform.getWorkbench().getWorkbenchIcon(ide.ICON_CHECKED));
-                    checkedElement.classList.add("MenuItemCheckedIcon");
+                    if (item.isSelected()) {
 
-                    item.appendChild(checkedElement);
-                }
+                        const checkedElement = Controls.createIconElement(
+                            Platform.getWorkbench().getWorkbenchIcon(ide.ICON_CHECKED));
+                        checkedElement.classList.add("MenuItemCheckedIcon");
 
-                if (action.getIcon()) {
+                        itemElement.appendChild(checkedElement);
+                    }
 
-                    const iconElement = Controls.createIconElement(action.getIcon());
-                    iconElement.classList.add("MenuItemIcon");
-                    item.appendChild(iconElement);
-                }
+                    if (item.getIcon()) {
 
-                const labelElement = document.createElement("label");
-                labelElement.classList.add("MenuItemText");
-                labelElement.innerText = action.getText();
-                item.appendChild(labelElement);
+                        const iconElement = Controls.createIconElement(item.getIcon());
+                        iconElement.classList.add("MenuItemIcon");
+                        itemElement.appendChild(iconElement);
+                    }
 
-                const keyString = action.getCommandKeyString();
+                    const labelElement = document.createElement("label");
+                    labelElement.classList.add("MenuItemText");
+                    labelElement.innerText = item.getText();
+                    itemElement.appendChild(labelElement);
 
-                if (keyString) {
+                    const keyString = item.getCommandKeyString();
 
-                    const keyElement = document.createElement("span");
-                    keyElement.innerText = keyString;
-                    keyElement.classList.add("MenuItemKeyString");
-                    item.appendChild(keyElement);
-                }
+                    if (keyString) {
 
-                if (action.isEnabled()) {
+                        const keyElement = document.createElement("span");
+                        keyElement.innerText = keyString;
+                        keyElement.classList.add("MenuItemKeyString");
+                        itemElement.appendChild(keyElement);
+                    }
 
-                    item.addEventListener("click", ev => {
+                    if (item.isEnabled()) {
 
-                        this.close();
+                        itemElement.addEventListener("click", ev => {
 
-                        action.run();
+                            if (this._parentMenu) {
+                                this._parentMenu.close();
+                            }
+
+                            this.close();
+
+                            item.run();
+                        });
+
+                    } else {
+
+                        itemElement.classList.add("MenuItemDisabled");
+                    }
+
+                    itemElement.addEventListener("mouseenter", e => {
+
+                        this.closeSubMenu();
                     });
 
                 } else {
 
-                    item.classList.add("MenuItemDisabled");
+                    const subMenu = item as Menu;
+
+                    const labelElement = document.createElement("label");
+                    labelElement.classList.add("MenuItemText");
+                    labelElement.innerText = subMenu.getText();
+                    itemElement.appendChild(labelElement);
+
+                    itemElement.addEventListener("mouseenter", e => {
+
+                        this.closeSubMenu();
+
+                        const menuRect = this._element.getClientRects().item(0);
+                        const subMenuX = menuRect.right;
+                        const subMenuY = menuRect.top;
+
+                        subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
+
+                        this._subMenu = subMenu;
+                    });
+
+                    const keyElement = document.createElement("span");
+                    keyElement.innerHTML = "&RightTriangle;";
+                    keyElement.classList.add("MenuItemKeyString");
+                    itemElement.appendChild(keyElement);
                 }
 
-                this._element.appendChild(item);
+                this._element.appendChild(itemElement);
             }
 
-            this._bgElement = document.createElement("div");
+            if (modal) {
 
-            this._bgElement.classList.add("MenuContainer");
+                this._bgElement = document.createElement("div");
 
-            this._bgElement.addEventListener("mousedown", (ev: MouseEvent) => {
+                this._bgElement.classList.add("MenuContainer");
 
-                ev.preventDefault();
-                ev.stopImmediatePropagation();
+                this._bgElement.addEventListener("mousedown", (ev: MouseEvent) => {
 
-                this.close();
-            });
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
 
-            document.body.appendChild(this._bgElement);
+                    this.close();
+                });
+
+                document.body.appendChild(this._bgElement);
+            }
 
             document.body.appendChild(this._element);
-
-            let x = e.clientX;
-            let y = e.clientY;
 
             const rect = this._element.getClientRects()[0];
 
@@ -169,15 +220,41 @@ namespace colibri.ui.controls {
             this._element.style.top = y + "px";
         }
 
+        private closeSubMenu() {
+
+            if (this._subMenu) {
+
+                this._subMenu.close();
+                this._subMenu = null;
+            }
+        }
+
+        createWithEvent(e: MouseEvent) {
+
+            this.create(e.clientX, e.clientY, true);
+        }
+
+        getText() {
+            return this._text;
+        }
+
         close() {
 
             Menu._activeMenu = null;
 
-            this._bgElement.remove();
+            if (this._bgElement) {
+                this._bgElement.remove();
+            }
+
             this._element.remove();
 
             if (this._menuCloseCallback) {
                 this._menuCloseCallback();
+            }
+
+            if (this._subMenu) {
+
+                this._subMenu.close();
             }
         }
     }
