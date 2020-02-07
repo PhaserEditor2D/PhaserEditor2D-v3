@@ -3120,20 +3120,10 @@ var phasereditor2d;
                         this._editor = editor;
                     }
                     fillMenu(menu) {
-                        const activeTool = this._editor.getToolsManager().getActiveTool();
-                        const exts = colibri.Platform.getExtensions(editor_6.tools.SceneToolExtension.POINT_ID);
-                        for (const ext of exts) {
-                            for (const tool of ext.getTools()) {
-                                menu.addCommand(tool.getCommandId(), {
-                                    selected: activeTool === tool
-                                });
-                            }
-                        }
-                        menu.addSeparator();
                         menu.addCommand(editor_6.commands.CMD_ADD_SCENE_OBJECT);
-                        menu.addCommand(editor_6.commands.CMD_CONVERT_OBJECTS);
-                        menu.addCommand(editor_6.commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
                         menu.addSeparator();
+                        menu.addMenu(this.createToolsMenu());
+                        menu.addMenu(this.createTypeMenu());
                         menu.addMenu(this.createTextureMenu());
                         menu.addMenu(this.createContainerMenu());
                         menu.addMenu(this.createSnappingMenu());
@@ -3144,9 +3134,29 @@ var phasereditor2d;
                         menu.addCommand(editor_6.commands.CMD_COMPILE_SCENE_EDITOR);
                         menu.addCommand(editor_6.commands.CMD_OPEN_COMPILED_FILE);
                     }
+                    createToolsMenu() {
+                        const menu = new controls.Menu("Tools");
+                        const activeTool = this._editor.getToolsManager().getActiveTool();
+                        const exts = colibri.Platform.getExtensions(editor_6.tools.SceneToolExtension.POINT_ID);
+                        for (const ext of exts) {
+                            for (const tool of ext.getTools()) {
+                                menu.addCommand(tool.getCommandId(), {
+                                    selected: activeTool === tool
+                                });
+                            }
+                        }
+                        return menu;
+                    }
+                    createTypeMenu() {
+                        const menu = new controls.Menu("Type");
+                        menu.addCommand(editor_6.commands.CMD_CONVERT_OBJECTS);
+                        menu.addCommand(editor_6.commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
+                        return menu;
+                    }
                     createContainerMenu() {
                         const menu = new controls.Menu("Container");
                         menu.addCommand(editor_6.commands.CMD_JOIN_IN_CONTAINER);
+                        menu.addCommand(editor_6.commands.CMD_MOVE_TO_PARENT);
                         return menu;
                     }
                     createSnappingMenu() {
@@ -4044,6 +4054,7 @@ var phasereditor2d;
                 (function (commands) {
                     commands.CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
                     commands.CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+                    commands.CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
                     commands.CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
                     commands.CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
                     commands.CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
@@ -4111,6 +4122,23 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "J"
+                                }
+                            });
+                            // move to parent
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_MOVE_TO_PARENT,
+                                    name: "Move To Parent",
+                                    tooltip: "Re-parent the selected objects.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args)
+                                        && args.activeEditor.getSelectedGameObjects().length > 0,
+                                    executeFunc: args => {
+                                        const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor);
+                                        dlg.create();
+                                    }
                                 }
                             });
                             // open compiled file

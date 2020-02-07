@@ -2,6 +2,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+    export const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
@@ -14,7 +15,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
     export const CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
     export const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
-    export const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";    
+    export const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
     export const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
@@ -122,6 +123,27 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "J"
+                }
+            });
+
+            // move to parent
+
+            manager.add({
+                command: {
+                    id: CMD_MOVE_TO_PARENT,
+                    name: "Move To Parent",
+                    tooltip: "Re-parent the selected objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args)
+                        && (args.activeEditor as SceneEditor).getSelectedGameObjects().length > 0,
+
+                    executeFunc: args => {
+
+                        const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
                 }
             });
 

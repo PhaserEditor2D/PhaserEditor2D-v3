@@ -13,27 +13,13 @@ namespace phasereditor2d.scene.ui.editor {
 
         fillMenu(menu: controls.Menu) {
 
-            const activeTool = this._editor.getToolsManager().getActiveTool();
-
-            const exts = colibri.Platform.getExtensions<tools.SceneToolExtension>(tools.SceneToolExtension.POINT_ID);
-
-            for (const ext of exts) {
-
-                for (const tool of ext.getTools()) {
-
-                    menu.addCommand(tool.getCommandId(), {
-                        selected: activeTool === tool
-                    });
-                }
-            }
-
-            menu.addSeparator();
-
             menu.addCommand(commands.CMD_ADD_SCENE_OBJECT);
-            menu.addCommand(commands.CMD_CONVERT_OBJECTS);
-            menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
 
             menu.addSeparator();
+
+            menu.addMenu(this.createToolsMenu());
+
+            menu.addMenu(this.createTypeMenu());
 
             menu.addMenu(this.createTextureMenu());
 
@@ -50,12 +36,43 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
         }
 
+        private createToolsMenu(): controls.Menu {
+
+            const menu = new controls.Menu("Tools");
+
+            const activeTool = this._editor.getToolsManager().getActiveTool();
+
+            const exts = colibri.Platform.getExtensions<tools.SceneToolExtension>(tools.SceneToolExtension.POINT_ID);
+
+            for (const ext of exts) {
+
+                for (const tool of ext.getTools()) {
+
+                    menu.addCommand(tool.getCommandId(), {
+                        selected: activeTool === tool
+                    });
+                }
+            }
+
+            return menu;
+        }
+
+        private createTypeMenu(): controls.Menu {
+
+            const menu = new controls.Menu("Type");
+
+            menu.addCommand(commands.CMD_CONVERT_OBJECTS);
+            menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
+
+            return menu;
+        }
 
         private createContainerMenu(): controls.Menu {
 
             const menu = new controls.Menu("Container");
 
             menu.addCommand(commands.CMD_JOIN_IN_CONTAINER);
+            menu.addCommand(commands.CMD_MOVE_TO_PARENT);
 
             return menu;
         }

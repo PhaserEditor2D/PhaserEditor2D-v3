@@ -655,6 +655,8 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _editor;
         constructor(editor: SceneEditor);
         fillMenu(menu: controls.Menu): void;
+        private createToolsMenu;
+        private createTypeMenu;
         private createContainerMenu;
         private createSnappingMenu;
         private createTextureMenu;
@@ -791,6 +793,7 @@ declare namespace phasereditor2d.scene.ui.editor {
 declare namespace phasereditor2d.scene.ui.editor.commands {
     const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+    const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
     const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
