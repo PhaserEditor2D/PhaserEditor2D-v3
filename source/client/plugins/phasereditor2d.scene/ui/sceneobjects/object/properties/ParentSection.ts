@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page,
-                "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Container", false, true);
+                "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent Container", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {

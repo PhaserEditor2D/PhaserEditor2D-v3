@@ -8167,7 +8167,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class ParentSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Container", false, true);
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent Container", false, true);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent, 2);
