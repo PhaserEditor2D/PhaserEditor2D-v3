@@ -655,6 +655,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _editor;
         constructor(editor: SceneEditor);
         fillMenu(menu: controls.Menu): void;
+        private createEditMenu;
         private createOriginMenu;
         private createToolsMenu;
         private createTypeMenu;

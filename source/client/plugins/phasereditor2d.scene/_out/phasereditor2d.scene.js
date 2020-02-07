@@ -3127,13 +3127,25 @@ var phasereditor2d;
                         menu.addMenu(this.createOriginMenu());
                         menu.addMenu(this.createTextureMenu());
                         menu.addMenu(this.createContainerMenu());
+                        menu.addSeparator();
                         menu.addMenu(this.createSnappingMenu());
+                        menu.addMenu(this.createEditMenu());
                         menu.addSeparator();
                         menu.addCommand(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, {
                             text: "Refresh Scene"
                         });
                         menu.addCommand(editor_6.commands.CMD_COMPILE_SCENE_EDITOR);
                         menu.addCommand(editor_6.commands.CMD_OPEN_COMPILED_FILE);
+                    }
+                    createEditMenu() {
+                        const menu = new controls.Menu("Edit");
+                        menu.addCommand(colibri.ui.ide.actions.CMD_UNDO);
+                        menu.addCommand(colibri.ui.ide.actions.CMD_REDO);
+                        menu.addSeparator();
+                        menu.addCommand(colibri.ui.ide.actions.CMD_CUT);
+                        menu.addCommand(colibri.ui.ide.actions.CMD_COPY);
+                        menu.addCommand(colibri.ui.ide.actions.CMD_PASTE);
+                        return menu;
                     }
                     createOriginMenu() {
                         const menu = new controls.Menu("Origin");

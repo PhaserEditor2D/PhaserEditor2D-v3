@@ -27,7 +27,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createContainerMenu());
 
+            menu.addSeparator();
+
             menu.addMenu(this.createSnappingMenu());
+
+            menu.addMenu(this.createEditMenu());
 
             menu.addSeparator();
 
@@ -36,6 +40,22 @@ namespace phasereditor2d.scene.ui.editor {
             });
             menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
+        }
+
+        private createEditMenu() {
+
+            const menu = new controls.Menu("Edit");
+
+            menu.addCommand(colibri.ui.ide.actions.CMD_UNDO);
+            menu.addCommand(colibri.ui.ide.actions.CMD_REDO);
+
+            menu.addSeparator();
+
+            menu.addCommand(colibri.ui.ide.actions.CMD_CUT);
+            menu.addCommand(colibri.ui.ide.actions.CMD_COPY);
+            menu.addCommand(colibri.ui.ide.actions.CMD_PASTE);
+
+            return menu;
         }
 
         private createOriginMenu(): controls.Menu {
