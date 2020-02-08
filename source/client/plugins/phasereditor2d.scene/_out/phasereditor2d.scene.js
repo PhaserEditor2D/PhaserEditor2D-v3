@@ -3178,6 +3178,7 @@ var phasereditor2d;
                         const menu = new controls.Menu("Container");
                         menu.addCommand(editor_6.commands.CMD_JOIN_IN_CONTAINER);
                         menu.addCommand(editor_6.commands.CMD_MOVE_TO_PARENT);
+                        menu.addCommand(editor_6.commands.CMD_SELECT_PARENT);
                         return menu;
                     }
                     createSnappingMenu() {
@@ -4084,6 +4085,7 @@ var phasereditor2d;
                     commands.CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
                     commands.CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
                     commands.CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
+                    commands.CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
                     commands.CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
                     commands.CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
                     commands.CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
@@ -4138,39 +4140,7 @@ var phasereditor2d;
                             // delete
                             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE, args => isSceneScope(args) && args.activeEditor.getSelection().length > 0, args => args.activeEditor.getUndoManager()
                                 .add(new editor_10.undo.DeleteOperation(args.activeEditor)));
-                            // join in container
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_JOIN_IN_CONTAINER,
-                                    name: "Create Container With Selection",
-                                    tooltip: "Create a container with the selected objects",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: args => isSceneScope(args),
-                                    executeFunc: args => args.activeEditor.getUndoManager().add(new editor_10.undo.CreateContainerWithObjectsOperation(args.activeEditor))
-                                },
-                                keys: {
-                                    key: "J"
-                                }
-                            });
-                            // move to parent
-                            manager.add({
-                                command: {
-                                    id: commands.CMD_MOVE_TO_PARENT,
-                                    name: "Move To Parent",
-                                    tooltip: "Re-parent the selected objects.",
-                                    category: commands.CAT_SCENE_EDITOR
-                                },
-                                handler: {
-                                    testFunc: args => isSceneScope(args)
-                                        && args.activeEditor.getSelectedGameObjects().length > 0,
-                                    executeFunc: args => {
-                                        const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor);
-                                        dlg.create();
-                                    }
-                                }
-                            });
+                            SceneEditorCommands.registerContainerCommands(manager);
                             SceneEditorCommands.registerCompilerCommands(manager);
                             SceneEditorCommands.registerToolsCommands(manager);
                             SceneEditorCommands.registerOriginCommands(manager);
@@ -4288,6 +4258,67 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "W"
+                                }
+                            });
+                        }
+                        static registerContainerCommands(manager) {
+                            // join in container
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_JOIN_IN_CONTAINER,
+                                    name: "Create Container With Selection",
+                                    tooltip: "Create a container with the selected objects",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args),
+                                    executeFunc: args => args.activeEditor.getUndoManager().add(new editor_10.undo.CreateContainerWithObjectsOperation(args.activeEditor))
+                                },
+                                keys: {
+                                    key: "J"
+                                }
+                            });
+                            // select parent
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_SELECT_PARENT,
+                                    name: "Select Parent",
+                                    tooltip: "Select the parent container",
+                                    category: commands.CAT_SCENE_EDITOR,
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args) && args.activeEditor
+                                        .getSelectedGameObjects()
+                                        .map(obj => obj.parentContainer)
+                                        .filter(parent => parent !== undefined && parent !== null)
+                                        .length > 0,
+                                    executeFunc: args => {
+                                        const editor = args.activeEditor;
+                                        const sel = editor.getSelectedGameObjects()
+                                            .map(obj => obj.parentContainer)
+                                            .filter(parent => parent !== undefined && parent !== null);
+                                        editor.setSelection(sel);
+                                    }
+                                },
+                                keys: {
+                                    key: "P"
+                                }
+                            });
+                            // move to parent
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_MOVE_TO_PARENT,
+                                    name: "Move To Parent",
+                                    tooltip: "Re-parent the selected objects.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args)
+                                        && args.activeEditor.getSelectedGameObjects().length > 0,
+                                    executeFunc: args => {
+                                        const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor);
+                                        dlg.create();
+                                    }
                                 }
                             });
                         }

@@ -108,6 +108,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_JOIN_IN_CONTAINER);
             menu.addCommand(commands.CMD_MOVE_TO_PARENT);
+            menu.addCommand(commands.CMD_SELECT_PARENT);
 
             return menu;
         }

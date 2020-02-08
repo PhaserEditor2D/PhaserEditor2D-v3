@@ -796,6 +796,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
+    const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
     const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
@@ -813,6 +814,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
     class SceneEditorCommands {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager): void;
+        private static registerContainerCommands;
         private static registerTypeCommands;
         private static registerCompilerCommands;
         private static registerToolsCommands;

@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
+    export const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
@@ -106,47 +107,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
             );
 
-            // join in container
-
-            manager.add({
-                command: {
-                    id: CMD_JOIN_IN_CONTAINER,
-                    name: "Create Container With Selection",
-                    tooltip: "Create a container with the selected objects",
-                    category: CAT_SCENE_EDITOR
-                },
-                handler: {
-                    testFunc: args => isSceneScope(args),
-
-                    executeFunc: args => args.activeEditor.getUndoManager().add(
-                        new undo.CreateContainerWithObjectsOperation(args.activeEditor as SceneEditor)
-                    )
-                },
-                keys: {
-                    key: "J"
-                }
-            });
-
-            // move to parent
-
-            manager.add({
-                command: {
-                    id: CMD_MOVE_TO_PARENT,
-                    name: "Move To Parent",
-                    tooltip: "Re-parent the selected objects.",
-                    category: CAT_SCENE_EDITOR
-                },
-                handler: {
-                    testFunc: args => isSceneScope(args)
-                        && (args.activeEditor as SceneEditor).getSelectedGameObjects().length > 0,
-
-                    executeFunc: args => {
-
-                        const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor as SceneEditor);
-                        dlg.create();
-                    }
-                }
-            });
+            SceneEditorCommands.registerContainerCommands(manager);
 
             SceneEditorCommands.registerCompilerCommands(manager);
 
@@ -306,6 +267,87 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "W"
                 }
             });
+        }
+
+        private static registerContainerCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // join in container
+
+            manager.add({
+                command: {
+                    id: CMD_JOIN_IN_CONTAINER,
+                    name: "Create Container With Selection",
+                    tooltip: "Create a container with the selected objects",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args),
+
+                    executeFunc: args => args.activeEditor.getUndoManager().add(
+                        new undo.CreateContainerWithObjectsOperation(args.activeEditor as SceneEditor)
+                    )
+                },
+                keys: {
+                    key: "J"
+                }
+            });
+
+            // select parent
+
+            manager.add({
+                command: {
+                    id: CMD_SELECT_PARENT,
+                    name: "Select Parent",
+                    tooltip: "Select the parent container",
+                    category: CAT_SCENE_EDITOR,
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args) && (args.activeEditor as SceneEditor)
+                        .getSelectedGameObjects()
+                        .map(obj => obj.parentContainer)
+                        .filter(parent => parent !== undefined && parent !== null)
+                        .length > 0,
+
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const sel = editor.getSelectedGameObjects()
+                            .map(obj => obj.parentContainer)
+                            .filter(parent => parent !== undefined && parent !== null);
+
+                        editor.setSelection(sel);
+                    }
+                },
+                keys: {
+                    key: "P"
+                }
+            });
+
+            // move to parent
+
+            manager.add({
+                command: {
+                    id: CMD_MOVE_TO_PARENT,
+                    name: "Move To Parent",
+                    tooltip: "Re-parent the selected objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args)
+                        && (args.activeEditor as SceneEditor).getSelectedGameObjects().length > 0,
+
+                    executeFunc: args => {
+
+                        const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
+                }
+            });
+
+
+
         }
 
         private static registerTypeCommands(manager: colibri.ui.ide.commands.CommandManager) {
