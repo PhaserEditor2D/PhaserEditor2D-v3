@@ -5827,16 +5827,20 @@ var phasereditor2d;
                             const sel = [];
                             for (const obj of this._editor.getSelectedGameObjects()) {
                                 const container = obj;
-                                for (const child of container.list) {
+                                const children = [...container.list];
+                                for (const child of children) {
                                     const sprite = child;
                                     const p = new Phaser.Math.Vector2(0, 0);
                                     sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
                                     sprite.x = p.x;
                                     sprite.y = p.y;
-                                    container.remove(sprite);
-                                    displayList.add(sprite);
                                     sel.push(sprite);
+                                    container.remove(sprite);
                                 }
+                                container.getEditorSupport().destroy();
+                            }
+                            for (const obj of sel) {
+                                displayList.add(obj);
                             }
                             this.getEditor().setSelection(sel);
                         }

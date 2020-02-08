@@ -14,7 +14,9 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 const container = obj as sceneobjects.Container;
 
-                for (const child of container.list) {
+                const children = [...container.list];
+
+                for (const child of children) {
 
                     const sprite = child as unknown as Phaser.GameObjects.Sprite;
 
@@ -25,12 +27,17 @@ namespace phasereditor2d.scene.ui.editor.undo {
                     sprite.x = p.x;
                     sprite.y = p.y;
 
-                    container.remove(sprite);
-
-                    displayList.add(sprite);
-
                     sel.push(sprite);
+
+                    container.remove(sprite);
                 }
+
+                container.getEditorSupport().destroy();
+            }
+
+            for (const obj of sel) {
+
+                displayList.add(obj);
             }
 
             this.getEditor().setSelection(sel);
