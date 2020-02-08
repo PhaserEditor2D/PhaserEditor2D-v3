@@ -795,6 +795,7 @@ declare namespace phasereditor2d.scene.ui.editor {
 declare namespace phasereditor2d.scene.ui.editor.commands {
     const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+    const CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
     const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
     const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
     const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
@@ -1132,6 +1133,11 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     class AddObjectOperation extends SceneSnapshotOperation {
         private _type;
         constructor(editor: SceneEditor, type: sceneobjects.SceneObjectExtension | io.FilePath);
+        protected performModification(): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.undo {
+    class BreakContainerOperation extends SceneSnapshotOperation {
         protected performModification(): Promise<void>;
     }
 }

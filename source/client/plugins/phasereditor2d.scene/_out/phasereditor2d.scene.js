@@ -3177,6 +3177,7 @@ var phasereditor2d;
                     createContainerMenu() {
                         const menu = new controls.Menu("Container");
                         menu.addCommand(editor_6.commands.CMD_JOIN_IN_CONTAINER);
+                        menu.addCommand(editor_6.commands.CMD_BREAK_CONTAINER);
                         menu.addCommand(editor_6.commands.CMD_MOVE_TO_PARENT);
                         menu.addCommand(editor_6.commands.CMD_SELECT_PARENT);
                         return menu;
@@ -4084,6 +4085,7 @@ var phasereditor2d;
                 (function (commands) {
                     commands.CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
                     commands.CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+                    commands.CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
                     commands.CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
                     commands.CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
                     commands.CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
@@ -4276,6 +4278,22 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "J"
+                                }
+                            });
+                            // break container
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_BREAK_CONTAINER,
+                                    name: "Break Container",
+                                    tooltip: "Destroy container and re-parent children.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => isSceneScope(args) && args.activeEditor.getSelectedGameObjects()
+                                        .filter(obj => obj instanceof ui.sceneobjects.Container)
+                                        .length === args.activeEditor.getSelection().length
+                                        && args.activeEditor.getSelection().length > 0,
+                                    executeFunc: args => args.activeEditor.getUndoManager().add(new editor_10.undo.BreakContainerOperation(args.activeEditor))
                                 }
                             });
                             // select parent
@@ -5784,6 +5802,43 @@ var phasereditor2d;
                     }
                     undo.AddObjectOperation = AddObjectOperation;
                 })(undo = editor_18.undo || (editor_18.undo = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./SceneSnapshotOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var undo;
+                (function (undo) {
+                    class BreakContainerOperation extends undo.SceneSnapshotOperation {
+                        async performModification() {
+                            const displayList = this.getEditor().getScene().sys.displayList;
+                            const sel = [];
+                            for (const obj of this._editor.getSelectedGameObjects()) {
+                                const container = obj;
+                                for (const child of container.list) {
+                                    const sprite = child;
+                                    const p = new Phaser.Math.Vector2(0, 0);
+                                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                                    sprite.x = p.x;
+                                    sprite.y = p.y;
+                                    container.remove(sprite);
+                                    displayList.add(sprite);
+                                    sel.push(sprite);
+                                }
+                            }
+                            this.getEditor().setSelection(sel);
+                        }
+                    }
+                    undo.BreakContainerOperation = BreakContainerOperation;
+                })(undo = editor.undo || (editor.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
