@@ -122,28 +122,32 @@ Important:
 
 /* Scroll Bar */
 
-.darkPlus .ScrollHandler {
-    background: transparent;
+.darkPlus {
+    /* firefox */
+    scrollbar-color: #4b4b4b #858585;
 }
 
-.darkPlus .ScrollBar {
+.darkPlus .ScrollBar,
+.darkPlus ::-webkit-scrollbar-track {
     background: #ffffff08;
 }
 
-.darkPlus .ScrollHandler {
+.darkPlus .ScrollHandler,
+.darkPlus ::-webkit-scrollbar-thumb {
     background: #606060;
 }
 
-.darkPlus .ScrollHandler:hover {
+.darkPlus .ScrollHandler:hover,
+.darkPlus ::-webkit-scrollbar-thumb:hover {
     background: #656565;
 }
 
-.darkPlus .ScrollHandler:active {
+.darkPlus .ScrollHandler:active,
+.darkPlus ::-webkit-scrollbar-thumb:active {
     background: #767676;
 }
 
 /* Property Page */
-
 
 .darkPlus .PropertyTitleArea {
     background: #20202088;

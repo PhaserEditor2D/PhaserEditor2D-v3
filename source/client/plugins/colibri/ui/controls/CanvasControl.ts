@@ -21,6 +21,7 @@ namespace colibri.ui.controls {
         }
 
         resizeTo(parent?: HTMLElement): void {
+
             parent = parent || this.getElement().parentElement;
 
             const b = parent.getBoundingClientRect();

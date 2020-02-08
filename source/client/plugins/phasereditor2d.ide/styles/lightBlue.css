@@ -103,23 +103,28 @@
 
 /* Scroll Bar */
 
-.lightBlue .ScrollHandler {
-    background: transparent;
+.lightBlue {
+    /* firefox */
+    scrollbar-color: #535d68 #e5e5e5;
 }
 
-.lightBlue .ScrollBar {
+.lightBlue .ScrollBar,
+.lightBlue ::-webkit-scrollbar-track {
     background: #e5e5e5;
 }
 
-.lightBlue .ScrollHandler {
+.lightBlue .ScrollHandler,
+.lightBlue ::-webkit-scrollbar-thumb {
     background: #535d68;
 }
 
-.lightBlue .ScrollHandler:hover {
+.lightBlue .ScrollHandler:hover,
+.lightBlue ::-webkit-scrollbar-thumb:hover {
     background: #636f7c;
 }
 
-.lightBlue .ScrollHandler:active {
+.lightBlue .ScrollHandler:active,
+.lightBlue ::-webkit-scrollbar-thumb:active {
     background: #748392;
 }
 

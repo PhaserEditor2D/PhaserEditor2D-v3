@@ -43,6 +43,9 @@ var phasereditor2d;
                     }
                     createPart() {
                         this._propertyPage = new controls.properties.PropertyPage();
+                        this._propertyPage.getElement().addEventListener("scroll", e => {
+                            this.layout();
+                        });
                         this.add(this._propertyPage);
                         this._selectionListener = (e) => this.onPartSelection();
                         ide.Workbench.getWorkbench()

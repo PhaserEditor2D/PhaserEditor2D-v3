@@ -7804,7 +7804,6 @@ var colibri;
                                 .localeCompare((b.getCategoryId() || "") + b.getName());
                         });
                         return list;
-                        return list;
                     }
                     getActiveCommands() {
                         return this.getCommands().filter(command => this.canRunCommand(command.getId()));

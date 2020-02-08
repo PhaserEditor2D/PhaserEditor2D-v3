@@ -15,6 +15,10 @@ Important:
     user-select: none;
 }
 
+body {
+    overflow-y: hidden;
+}
+
 input {
     -webkit-user-select: text !important;
     -khtml-user-select: text !important;
@@ -112,12 +116,17 @@ canvas {
 
 /* ScrollPane */
 
+::-webkit-scrollbar {
+    width: 15px;
+}
+
 .ScrollBar,
 .ScrollHandler {
     position: relative;
 }
 
-.ScrollHandler {
+.ScrollHandler,
+::-webkit-scrollbar-thumb {
     border-radius: 3px;
 }
 
@@ -182,6 +191,7 @@ canvas {
     width: 100%;
     height: 100%;
     row-gap: 5px;
+    overflow-y: auto;
 }
 
 .PropertySectionPane {

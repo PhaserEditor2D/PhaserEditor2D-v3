@@ -9628,6 +9628,7 @@ var phasereditor2d;
                         imgComp.style.height = "200px";
                         comp.appendChild(imgComp);
                         const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
+                        imgControl.getElement().style.position = "relative";
                         this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e) => {
                             setTimeout(() => imgControl.resizeTo(), 1);
                         });

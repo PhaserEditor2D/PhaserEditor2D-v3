@@ -50,7 +50,7 @@ Important:
     background: #323232;
     border-color: #646464;
     color: #f0f0f0;
-    text-shadow: 1px 1px #0e0e0e;    
+    text-shadow: 1px 1px #0e0e0e;
     border-style: solid;
     border-width: 1px;
     border-radius: 3px;
@@ -115,25 +115,35 @@ Important:
 
 /* Scroll Bar */
 
+.dark {
+    /* firefox */
+    scrollbar-color: #858585 #4b4b4b;
+}
+
 .dark .ScrollHandler {
     background: transparent;
 }
 
-.dark .ScrollBar {
-    background: #ffffff11;
+.dark .ScrollBar,
+.dark ::-webkit-scrollbar-track {
+    background: #4b4b4b;
 }
 
-.dark .ScrollHandler {
+.dark .ScrollHandler,
+.dark ::-webkit-scrollbar-thumb {
     background: #858585;
 }
 
-.dark .ScrollHandler:hover {
+.dark .ScrollHandler:hover,
+.dark ::-webkit-scrollbar-thumb:hover {
     background: #585858;
 }
 
-.dark .ScrollHandler:active {
+.dark .ScrollHandler:active,
+.dark ::-webkit-scrollbar-thumb:active {
     background: #282828;
 }
+
 
 /* Property Page */
 

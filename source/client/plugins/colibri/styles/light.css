@@ -113,19 +113,28 @@ Important:
 
 /* Scroll Bar */
 
-.light .ScrollBar {
+.light {
+    /* firefox */
+    scrollbar-color: #b7b7b7 #e5e5e5;
+}
+
+.light .ScrollBar,
+.light ::-webkit-scrollbar-track {
     background: #e5e5e5;
 }
 
-.light .ScrollHandler {
+.light .ScrollHandler,
+.light ::-webkit-scrollbar-thumb {
     background: #b7b7b7;
 }
 
-.light .ScrollHandler:hover {
+.light .ScrollHandler:hover,
+.light ::-webkit-scrollbar-thumb:hover {
     background: #a7a7a7;
 }
 
-.light .ScrollHandler:active {
+.light .ScrollHandler:active,
+.light ::-webkit-scrollbar-thumb:active {
     background: #979797;
 }
 

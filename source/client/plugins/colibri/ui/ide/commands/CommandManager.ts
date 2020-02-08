@@ -167,8 +167,6 @@ namespace colibri.ui.ide.commands {
             });
 
             return list;
-
-            return list;
         }
 
         getActiveCommands() {
