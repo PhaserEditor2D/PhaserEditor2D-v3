@@ -4758,6 +4758,9 @@ var phasereditor2d;
                             super();
                             this._editor = editor;
                         }
+                        fillContextMenu(menu) {
+                            this._editor.fillContextMenu(menu);
+                        }
                         getUndoManager() {
                             return this._editor.getUndoManager();
                         }

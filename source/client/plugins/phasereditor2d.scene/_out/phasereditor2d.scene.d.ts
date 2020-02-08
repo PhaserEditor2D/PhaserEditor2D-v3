@@ -743,7 +743,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         getToolActionMap(): Map<string, controls.Action>;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
         private onMenu;
-        private fillContextMenu;
+        fillContextMenu(menu: controls.Menu): void;
         openAddObjectDialog(): void;
         toggleSnapping(): void;
         setSnappingToObjectSize(): void;
@@ -850,6 +850,7 @@ declare namespace phasereditor2d.scene.ui.editor.outline {
     class SceneEditorOutlineProvider extends ide.EditorViewerProvider {
         private _editor;
         constructor(editor: SceneEditor);
+        fillContextMenu(menu: controls.Menu): void;
         getUndoManager(): ide.undo.UndoManager;
         getContentProvider(): controls.viewers.ITreeContentProvider;
         getLabelProvider(): controls.viewers.ILabelProvider;

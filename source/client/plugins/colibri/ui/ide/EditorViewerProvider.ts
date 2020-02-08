@@ -77,5 +77,9 @@ namespace colibri.ui.ide {
         abstract preload(): Promise<void>;
 
         abstract getUndoManager();
+
+        fillContextMenu(menu: controls.Menu) {
+            // nothing
+        }
     }
 }

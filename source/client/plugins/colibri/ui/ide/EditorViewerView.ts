@@ -36,6 +36,14 @@ namespace colibri.ui.ide {
             Workbench.getWorkbench().addEventListener(EVENT_EDITOR_ACTIVATED, e => this.onWorkbenchEditorActivated());
         }
 
+        fillContextMenu(menu: controls.Menu) {
+
+            if (this._currentViewerProvider) {
+
+                this._currentViewerProvider.fillContextMenu(menu);
+            }
+        }
+
         abstract getViewerProvider(editor: EditorPart): EditorViewerProvider;
 
         private async onWorkbenchEditorActivated() {

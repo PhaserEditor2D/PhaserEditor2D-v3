@@ -12,6 +12,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
             this._editor = editor;
         }
 
+        fillContextMenu(menu: controls.Menu) {
+
+            this._editor.fillContextMenu(menu);
+        }
+
         getUndoManager() {
             return this._editor.getUndoManager();
         }

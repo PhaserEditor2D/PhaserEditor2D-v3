@@ -6338,6 +6338,9 @@ var colibri;
                 prepareViewerState(state) {
                     // nothing
                 }
+                fillContextMenu(menu) {
+                    // nothing
+                }
             }
             ide.EditorViewerProvider = EditorViewerProvider;
         })(ide = ui.ide || (ui.ide = {}));
@@ -6428,6 +6431,11 @@ var colibri;
                 createPart() {
                     super.createPart();
                     ide.Workbench.getWorkbench().addEventListener(ide.EVENT_EDITOR_ACTIVATED, e => this.onWorkbenchEditorActivated());
+                }
+                fillContextMenu(menu) {
+                    if (this._currentViewerProvider) {
+                        this._currentViewerProvider.fillContextMenu(menu);
+                    }
                 }
                 async onWorkbenchEditorActivated() {
                     if (this._currentEditor !== null) {

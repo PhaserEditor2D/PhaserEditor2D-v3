@@ -1482,6 +1482,7 @@ declare namespace colibri.ui.ide {
         abstract getInput(): any;
         abstract preload(): Promise<void>;
         abstract getUndoManager(): any;
+        fillContextMenu(menu: controls.Menu): void;
     }
 }
 declare namespace colibri.ui.ide {
@@ -1511,6 +1512,7 @@ declare namespace colibri.ui.ide {
         constructor(id: string);
         protected createViewer(): viewers.TreeViewer;
         protected createPart(): void;
+        fillContextMenu(menu: controls.Menu): void;
         abstract getViewerProvider(editor: EditorPart): EditorViewerProvider;
         private onWorkbenchEditorActivated;
         getPropertyProvider(): controls.properties.PropertySectionProvider;

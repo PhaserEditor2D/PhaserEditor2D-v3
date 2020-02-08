@@ -323,7 +323,7 @@ namespace phasereditor2d.scene.ui.editor {
             menu.createWithEvent(e);
         }
 
-        private fillContextMenu(menu: controls.Menu) {
+        fillContextMenu(menu: controls.Menu) {
 
             const creator = new MenuCreator(this);
 
