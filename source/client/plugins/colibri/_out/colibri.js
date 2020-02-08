@@ -3912,7 +3912,7 @@ var colibri;
                         this._section = section;
                         this.addClass("PropertySectionPane");
                     }
-                    createOrUpdateWithSelection() {
+                    createSection() {
                         if (!this._formArea) {
                             this._titleArea = document.createElement("div");
                             this._titleArea.classList.add("PropertyTitleArea");
@@ -3938,7 +3938,6 @@ var colibri;
                                 this.toggleSection();
                             }
                         }
-                        this._section.updateWithSelection();
                     }
                     isExpanded() {
                         return this._expandIconElement.classList.contains("expanded");
@@ -4039,7 +4038,8 @@ var colibri;
                             show = show && sectionIdSet.has(section.getId());
                             if (show) {
                                 pane.getElement().style.display = "grid";
-                                pane.createOrUpdateWithSelection();
+                                pane.createSection();
+                                section.updateWithSelection();
                             }
                             else {
                                 pane.getElement().style.display = "none";
@@ -4057,7 +4057,7 @@ var colibri;
                         let templateRows = "";
                         for (const pane of sortedPanes) {
                             if (pane.style.display !== "none") {
-                                pane.createOrUpdateWithSelection();
+                                pane.createSection();
                                 if (pane.isExpanded()) {
                                     templateRows += " " + (pane.getSection().isFillSpace() ? "1fr" : "min-content");
                                 }

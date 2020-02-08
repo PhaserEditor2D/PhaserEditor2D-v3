@@ -19,7 +19,7 @@ namespace colibri.ui.controls.properties {
             this.addClass("PropertySectionPane");
         }
 
-        createOrUpdateWithSelection() {
+        createSection() {
 
             if (!this._formArea) {
 
@@ -56,8 +56,6 @@ namespace colibri.ui.controls.properties {
                     this.toggleSection();
                 }
             }
-
-            this._section.updateWithSelection();
         }
 
         isExpanded() {
@@ -221,7 +219,8 @@ namespace colibri.ui.controls.properties {
                 if (show) {
 
                     pane.getElement().style.display = "grid";
-                    pane.createOrUpdateWithSelection();
+                    pane.createSection();
+                    section.updateWithSelection();
 
                 } else {
 
@@ -252,7 +251,7 @@ namespace colibri.ui.controls.properties {
 
                 if (pane.style.display !== "none") {
 
-                    pane.createOrUpdateWithSelection();
+                    pane.createSection();
 
                     if (pane.isExpanded()) {
 
