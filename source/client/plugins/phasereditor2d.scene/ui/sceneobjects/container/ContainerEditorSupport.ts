@@ -127,16 +127,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const minPoint = new Phaser.Math.Vector2(Number.MAX_VALUE, Number.MAX_VALUE);
             const maxPoint = new Phaser.Math.Vector2(Number.MIN_VALUE, Number.MIN_VALUE);
 
+            const points: Phaser.Math.Vector2[] = [];
+
             for (const obj of container.list) {
 
                 const bounds = obj.getEditorSupport().getScreenBounds(camera);
 
-                for (const point of bounds) {
-                    minPoint.x = Math.min(minPoint.x, point.x);
-                    minPoint.y = Math.min(minPoint.y, point.y);
-                    maxPoint.x = Math.max(maxPoint.x, point.x);
-                    maxPoint.y = Math.max(maxPoint.y, point.y);
-                }
+                points.push(...bounds);
+
+            }
+
+            const p = camera.getScreenPoint(container.x, container.y);
+
+            points.push(p);
+
+            for (const point of points) {
+
+                minPoint.x = Math.min(minPoint.x, point.x);
+                minPoint.y = Math.min(minPoint.y, point.y);
+                maxPoint.x = Math.max(maxPoint.x, point.x);
+                maxPoint.y = Math.max(maxPoint.y, point.y);
             }
 
             return [

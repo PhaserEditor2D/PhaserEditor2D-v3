@@ -4109,6 +4109,9 @@ var phasereditor2d;
                                 (args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
                                     || args.activePart instanceof phasereditor2d.inspector.ui.views.InspectorView));
                     }
+                    function editorHasSelection(args) {
+                        return args.activeEditor && args.activeEditor.getSelection().length > 0;
+                    }
                     class SceneEditorCommands {
                         static registerCommands(manager) {
                             manager.addCategory({
@@ -4289,10 +4292,10 @@ var phasereditor2d;
                                     category: commands.CAT_SCENE_EDITOR
                                 },
                                 handler: {
-                                    testFunc: args => isSceneScope(args) && args.activeEditor.getSelectedGameObjects()
-                                        .filter(obj => obj instanceof ui.sceneobjects.Container)
-                                        .length === args.activeEditor.getSelection().length
-                                        && args.activeEditor.getSelection().length > 0,
+                                    testFunc: args => isSceneScope(args) && editorHasSelection(args)
+                                        && args.activeEditor.getSelectedGameObjects()
+                                            .filter(obj => obj instanceof ui.sceneobjects.Container)
+                                            .length === args.activeEditor.getSelection().length,
                                     executeFunc: args => args.activeEditor.getUndoManager().add(new editor_10.undo.BreakContainerOperation(args.activeEditor))
                                 }
                             });
@@ -4331,8 +4334,9 @@ var phasereditor2d;
                                     category: commands.CAT_SCENE_EDITOR
                                 },
                                 handler: {
-                                    testFunc: args => isSceneScope(args)
-                                        && args.activeEditor.getSelectedGameObjects().length > 0,
+                                    testFunc: args => isSceneScope(args) && editorHasSelection(args)
+                                        && args.activeEditor.getSelectedGameObjects()
+                                            .length === args.activeEditor.getSelection().length,
                                     executeFunc: args => {
                                         const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor);
                                         dlg.create();
@@ -6980,14 +6984,18 @@ var phasereditor2d;
                         }
                         const minPoint = new Phaser.Math.Vector2(Number.MAX_VALUE, Number.MAX_VALUE);
                         const maxPoint = new Phaser.Math.Vector2(Number.MIN_VALUE, Number.MIN_VALUE);
+                        const points = [];
                         for (const obj of container.list) {
                             const bounds = obj.getEditorSupport().getScreenBounds(camera);
-                            for (const point of bounds) {
-                                minPoint.x = Math.min(minPoint.x, point.x);
-                                minPoint.y = Math.min(minPoint.y, point.y);
-                                maxPoint.x = Math.max(maxPoint.x, point.x);
-                                maxPoint.y = Math.max(maxPoint.y, point.y);
-                            }
+                            points.push(...bounds);
+                        }
+                        const p = camera.getScreenPoint(container.x, container.y);
+                        points.push(p);
+                        for (const point of points) {
+                            minPoint.x = Math.min(minPoint.x, point.x);
+                            minPoint.y = Math.min(minPoint.y, point.y);
+                            maxPoint.x = Math.max(maxPoint.x, point.x);
+                            maxPoint.y = Math.max(maxPoint.y, point.y);
                         }
                         return [
                             new Phaser.Math.Vector2(minPoint.x, minPoint.y),

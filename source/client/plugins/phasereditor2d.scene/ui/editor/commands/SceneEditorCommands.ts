@@ -31,6 +31,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 ));
     }
 
+    function editorHasSelection(args: colibri.ui.ide.commands.HandlerArgs) {
+
+        return args.activeEditor && args.activeEditor.getSelection().length > 0;
+    }
+
     export class SceneEditorCommands {
 
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -303,10 +308,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
-                    testFunc: args => isSceneScope(args) && (args.activeEditor as SceneEditor).getSelectedGameObjects()
-                        .filter(obj => obj instanceof sceneobjects.Container)
-                        .length === args.activeEditor.getSelection().length
-                        && args.activeEditor.getSelection().length > 0,
+                    testFunc: args => isSceneScope(args) && editorHasSelection(args)
+                        && (args.activeEditor as SceneEditor).getSelectedGameObjects()
+                            .filter(obj => obj instanceof sceneobjects.Container)
+                            .length === args.activeEditor.getSelection().length,
 
                     executeFunc: args => args.activeEditor.getUndoManager().add(
                         new undo.BreakContainerOperation(args.activeEditor as SceneEditor)
@@ -357,8 +362,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
-                    testFunc: args => isSceneScope(args)
-                        && (args.activeEditor as SceneEditor).getSelectedGameObjects().length > 0,
+                    testFunc: args => isSceneScope(args) && editorHasSelection(args)
+                        && (args.activeEditor as SceneEditor).getSelectedGameObjects()
+                            .length === args.activeEditor.getSelection().length,
 
                     executeFunc: args => {
 
@@ -367,8 +373,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 }
             });
-
-
 
         }
 
