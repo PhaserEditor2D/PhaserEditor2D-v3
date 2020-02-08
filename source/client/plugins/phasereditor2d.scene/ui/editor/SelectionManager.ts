@@ -115,7 +115,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (container) {
 
-                        if (!container.getEditorSupport().isChildrenPickable()) {
+                        if (!container.getEditorSupport().isAllowPickChildren()) {
 
                             selected = container;
                         }

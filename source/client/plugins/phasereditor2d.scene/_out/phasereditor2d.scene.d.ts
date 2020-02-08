@@ -796,6 +796,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     const CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
+    const CMD_TRIM_CONTAINER = "phasereditor2d.scene.ui.editor.commands.TrimContainer";
     const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
     const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
     const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
@@ -1137,11 +1138,6 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
-    class BreakContainerOperation extends SceneSnapshotOperation {
-        protected performModification(): Promise<void>;
-    }
-}
-declare namespace phasereditor2d.scene.ui.editor.undo {
     import json = core.json;
     import ISceneObject = sceneobjects.ISceneObject;
     interface IObjectSnapshot {
@@ -1176,11 +1172,6 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
         private static filterObjects;
     }
     export {};
-}
-declare namespace phasereditor2d.scene.ui.editor.undo {
-    class CreateContainerWithObjectsOperation extends SceneSnapshotOperation {
-        protected performModification(): Promise<void>;
-    }
 }
 declare namespace phasereditor2d.scene.ui.editor.undo {
     class CreateObjectWithAssetOperation extends SceneSnapshotOperation {
@@ -1508,6 +1499,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     function SimpleProperty(name: string, defValue: any, label?: string, tooltip?: string, local?: boolean): IProperty<any>;
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class BreakContainerOperation extends editor.undo.SceneSnapshotOperation {
+        protected performModification(): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class Container extends Phaser.GameObjects.Container implements ISceneObject {
         private _editorSupport;
         constructor(scene: Scene, x: number, y: number, children: ISceneObject[]);
@@ -1529,7 +1525,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ContainerComponent extends Component<Container> {
-        static childrenArePickable: IProperty<Container>;
+        static allowPickChildren: IProperty<Container>;
         constructor(obj: Container);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
     }
@@ -1540,10 +1536,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         list: json.IObjectData[];
     }
     class ContainerEditorSupport extends EditorSupport<Container> {
-        private _childrenPickable;
+        private _allowPickChildren;
         constructor(obj: Container);
-        isChildrenPickable(): boolean;
-        setChildrenPickable(childrenPickable: boolean): void;
+        isAllowPickChildren(): boolean;
+        setAllowPickChildren(childrenPickable: boolean): void;
         setInteractive(): void;
         destroy(): void;
         buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
@@ -1551,6 +1547,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         writeJSON(containerData: IContainerData): void;
         readJSON(containerData: IContainerData): void;
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera): Phaser.Math.Vector2[];
+        trim(): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1592,6 +1589,16 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class CreateContainerWithObjectsOperation extends editor.undo.SceneSnapshotOperation {
+        protected performModification(): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TrimContainerOperation extends editor.undo.SceneSnapshotOperation {
+        protected performModification(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

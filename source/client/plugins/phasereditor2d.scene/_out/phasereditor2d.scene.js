@@ -3177,6 +3177,7 @@ var phasereditor2d;
                     createContainerMenu() {
                         const menu = new controls.Menu("Container");
                         menu.addCommand(editor_6.commands.CMD_JOIN_IN_CONTAINER);
+                        menu.addCommand(editor_6.commands.CMD_TRIM_CONTAINER);
                         menu.addCommand(editor_6.commands.CMD_BREAK_CONTAINER);
                         menu.addCommand(editor_6.commands.CMD_MOVE_TO_PARENT);
                         menu.addCommand(editor_6.commands.CMD_SELECT_PARENT);
@@ -4036,7 +4037,7 @@ var phasereditor2d;
                             if (selected) {
                                 const container = selected.parentContainer;
                                 if (container) {
-                                    if (!container.getEditorSupport().isChildrenPickable()) {
+                                    if (!container.getEditorSupport().isAllowPickChildren()) {
                                         selected = container;
                                     }
                                 }
@@ -4086,6 +4087,7 @@ var phasereditor2d;
                     commands.CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
                     commands.CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
                     commands.CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
+                    commands.CMD_TRIM_CONTAINER = "phasereditor2d.scene.ui.editor.commands.TrimContainer";
                     commands.CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
                     commands.CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
                     commands.CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
@@ -4108,6 +4110,12 @@ var phasereditor2d;
                             || (args.activeEditor instanceof editor_10.SceneEditor &&
                                 (args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
                                     || args.activePart instanceof phasereditor2d.inspector.ui.views.InspectorView));
+                    }
+                    function isOnlyContainerSelected(args) {
+                        return isSceneScope(args) && editorHasSelection(args)
+                            && args.activeEditor.getSelectedGameObjects()
+                                .filter(obj => obj instanceof ui.sceneobjects.Container)
+                                .length === args.activeEditor.getSelection().length;
                     }
                     function editorHasSelection(args) {
                         return args.activeEditor && args.activeEditor.getSelection().length > 0;
@@ -4277,10 +4285,27 @@ var phasereditor2d;
                                 },
                                 handler: {
                                     testFunc: args => isSceneScope(args),
-                                    executeFunc: args => args.activeEditor.getUndoManager().add(new editor_10.undo.CreateContainerWithObjectsOperation(args.activeEditor))
+                                    executeFunc: args => args.activeEditor.getUndoManager().add(new ui.sceneobjects.CreateContainerWithObjectsOperation(args.activeEditor))
                                 },
                                 keys: {
                                     key: "J"
+                                }
+                            });
+                            // trim container
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_TRIM_CONTAINER,
+                                    name: "Trim Container",
+                                    tooltip: "Remove left/top margin of children.",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: isOnlyContainerSelected,
+                                    executeFunc: args => args.activeEditor.getUndoManager().add(new ui.sceneobjects.TrimContainerOperation(args.activeEditor))
+                                },
+                                keys: {
+                                    key: "T",
+                                    shift: true
                                 }
                             });
                             // break container
@@ -4292,11 +4317,12 @@ var phasereditor2d;
                                     category: commands.CAT_SCENE_EDITOR
                                 },
                                 handler: {
-                                    testFunc: args => isSceneScope(args) && editorHasSelection(args)
-                                        && args.activeEditor.getSelectedGameObjects()
-                                            .filter(obj => obj instanceof ui.sceneobjects.Container)
-                                            .length === args.activeEditor.getSelection().length,
-                                    executeFunc: args => args.activeEditor.getUndoManager().add(new editor_10.undo.BreakContainerOperation(args.activeEditor))
+                                    testFunc: isOnlyContainerSelected,
+                                    executeFunc: args => args.activeEditor.getUndoManager().add(new ui.sceneobjects.BreakContainerOperation(args.activeEditor))
+                                },
+                                keys: {
+                                    key: "B",
+                                    shift: true
                                 }
                             });
                             // select parent
@@ -5810,47 +5836,6 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./SceneSnapshotOperation.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var editor;
-            (function (editor) {
-                var undo;
-                (function (undo) {
-                    class BreakContainerOperation extends undo.SceneSnapshotOperation {
-                        async performModification() {
-                            const displayList = this.getEditor().getScene().sys.displayList;
-                            const sel = [];
-                            for (const obj of this._editor.getSelectedGameObjects()) {
-                                const container = obj;
-                                const children = [...container.list];
-                                for (const child of children) {
-                                    const sprite = child;
-                                    const p = new Phaser.Math.Vector2(0, 0);
-                                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
-                                    sprite.x = p.x;
-                                    sprite.y = p.y;
-                                    sel.push(sprite);
-                                    container.remove(sprite);
-                                }
-                                container.getEditorSupport().destroy();
-                            }
-                            for (const obj of sel) {
-                                displayList.add(obj);
-                            }
-                            this.getEditor().setSelection(sel);
-                        }
-                    }
-                    undo.BreakContainerOperation = BreakContainerOperation;
-                })(undo = editor.undo || (editor.undo = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -6007,45 +5992,6 @@ var phasereditor2d;
                     }
                     undo.ConvertTypeOperation = ConvertTypeOperation;
                 })(undo = editor_20.undo || (editor_20.undo = {}));
-            })(editor = ui.editor || (ui.editor = {}));
-        })(ui = scene.ui || (scene.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-/// <reference path="./SceneSnapshotOperation.ts" />
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var editor;
-            (function (editor) {
-                var undo;
-                (function (undo) {
-                    class CreateContainerWithObjectsOperation extends undo.SceneSnapshotOperation {
-                        async performModification() {
-                            const container = ui.sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
-                                scene: this.getScene(),
-                                x: 0,
-                                y: 0
-                            });
-                            container.getEditorSupport().setLabel(this.getScene().makeNewName("container"));
-                            for (const obj of this._editor.getSelectedGameObjects()) {
-                                const sprite = obj;
-                                const p = new Phaser.Math.Vector2(0, 0);
-                                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
-                                if (sprite.parentContainer) {
-                                    sprite.parentContainer.remove(sprite);
-                                }
-                                container.add(sprite);
-                                sprite.x = p.x;
-                                sprite.y = p.y;
-                            }
-                            this.getEditor().setSelection([container]);
-                        }
-                    }
-                    undo.CreateContainerWithObjectsOperation = CreateContainerWithObjectsOperation;
-                })(undo = editor.undo || (editor.undo = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -6805,6 +6751,44 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../../editor/undo/SceneSnapshotOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class BreakContainerOperation extends ui.editor.undo.SceneSnapshotOperation {
+                    async performModification() {
+                        const displayList = this.getEditor().getScene().sys.displayList;
+                        const sel = [];
+                        for (const obj of this._editor.getSelectedGameObjects()) {
+                            const container = obj;
+                            const children = [...container.list];
+                            for (const child of children) {
+                                const sprite = child;
+                                const p = new Phaser.Math.Vector2(0, 0);
+                                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                                sprite.x = p.x;
+                                sprite.y = p.y;
+                                sel.push(sprite);
+                                container.remove(sprite);
+                            }
+                            container.getEditorSupport().destroy();
+                        }
+                        for (const obj of sel) {
+                            displayList.add(obj);
+                        }
+                        this.getEditor().setSelection(sel);
+                    }
+                }
+                sceneobjects.BreakContainerOperation = BreakContainerOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -6887,20 +6871,20 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class ContainerComponent extends sceneobjects.Component {
                     constructor(obj) {
-                        super(obj, [ContainerComponent.childrenArePickable]);
+                        super(obj, [ContainerComponent.allowPickChildren]);
                     }
                     buildSetObjectPropertiesCodeDOM(args) {
                         // nothing
                     }
                 }
-                ContainerComponent.childrenArePickable = {
-                    name: "childrenArePickable",
-                    label: "Pickable Children",
+                ContainerComponent.allowPickChildren = {
+                    name: "allowPickChildren",
+                    label: "Allow Pick Children",
                     tooltip: "If the container children can be pickable in the scene.",
                     defValue: true,
                     local: true,
-                    getValue: obj => obj.getEditorSupport().isChildrenPickable(),
-                    setValue: (obj, value) => obj.getEditorSupport().setChildrenPickable(value)
+                    getValue: obj => obj.getEditorSupport().isAllowPickChildren(),
+                    setValue: (obj, value) => obj.getEditorSupport().setAllowPickChildren(value)
                 };
                 sceneobjects.ContainerComponent = ContainerComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
@@ -6919,15 +6903,15 @@ var phasereditor2d;
                 class ContainerEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj) {
                         super(sceneobjects.ContainerExtension.getInstance(), obj);
-                        this._childrenPickable = true;
+                        this._allowPickChildren = true;
                         this.addComponent(new sceneobjects.TransformComponent(obj));
                         this.addComponent(new sceneobjects.ContainerComponent(obj));
                     }
-                    isChildrenPickable() {
-                        return this._childrenPickable;
+                    isAllowPickChildren() {
+                        return this._allowPickChildren;
                     }
-                    setChildrenPickable(childrenPickable) {
-                        this._childrenPickable = childrenPickable;
+                    setAllowPickChildren(childrenPickable) {
+                        this._allowPickChildren = childrenPickable;
                     }
                     setInteractive() {
                         // nothing
@@ -7007,6 +6991,28 @@ var phasereditor2d;
                             new Phaser.Math.Vector2(maxPoint.x, maxPoint.y),
                             new Phaser.Math.Vector2(minPoint.x, maxPoint.y)
                         ];
+                    }
+                    trim() {
+                        const container = this.getObject();
+                        if (container.length === 0) {
+                            return;
+                        }
+                        let minX = Number.MAX_VALUE;
+                        let minY = Number.MAX_VALUE;
+                        for (const child of container.list) {
+                            const sprite = child;
+                            minX = Math.min(sprite.x, minX);
+                            minY = Math.min(sprite.y, minY);
+                        }
+                        for (const child of container.list) {
+                            const sprite = child;
+                            sprite.x -= minX;
+                            sprite.y -= minY;
+                        }
+                        const p = new Phaser.Math.Vector2(0, 0);
+                        container.getWorldTransformMatrix().transformPoint(minX, minY, p);
+                        container.x += p.x;
+                        container.y += p.y;
                     }
                 }
                 sceneobjects.ContainerEditorSupport = ContainerEditorSupport;
@@ -7239,7 +7245,7 @@ var phasereditor2d;
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent, 2);
-                        this.createBooleanField(comp, sceneobjects.ContainerComponent.childrenArePickable, false);
+                        this.createBooleanField(comp, sceneobjects.ContainerComponent.allowPickChildren, false);
                     }
                     canEdit(obj, n) {
                         return obj instanceof sceneobjects.Container;
@@ -7249,6 +7255,65 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.ContainerSection = ContainerSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../../editor/undo/SceneSnapshotOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class CreateContainerWithObjectsOperation extends ui.editor.undo.SceneSnapshotOperation {
+                    async performModification() {
+                        const container = sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
+                            scene: this.getScene(),
+                            x: 0,
+                            y: 0
+                        });
+                        container.getEditorSupport().setLabel(this.getScene().makeNewName("container"));
+                        for (const obj of this._editor.getSelectedGameObjects()) {
+                            const sprite = obj;
+                            const p = new Phaser.Math.Vector2(0, 0);
+                            sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                            if (sprite.parentContainer) {
+                                sprite.parentContainer.remove(sprite);
+                            }
+                            container.add(sprite);
+                            sprite.x = p.x;
+                            sprite.y = p.y;
+                        }
+                        container.getEditorSupport().trim();
+                        this.getEditor().setSelection([container]);
+                    }
+                }
+                sceneobjects.CreateContainerWithObjectsOperation = CreateContainerWithObjectsOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TrimContainerOperation extends ui.editor.undo.SceneSnapshotOperation {
+                    async performModification() {
+                        for (const obj of this._editor.getSelectedGameObjects()) {
+                            const container = obj;
+                            container.getEditorSupport().trim();
+                        }
+                        this.getEditor().dispatchSelectionChanged();
+                    }
+                }
+                sceneobjects.TrimContainerOperation = TrimContainerOperation;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

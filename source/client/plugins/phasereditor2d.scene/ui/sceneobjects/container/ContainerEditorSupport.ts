@@ -9,23 +9,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ContainerEditorSupport extends EditorSupport<Container> {
 
-        private _childrenPickable: boolean;
+        private _allowPickChildren: boolean;
 
         constructor(obj: Container) {
             super(ContainerExtension.getInstance(), obj);
 
-            this._childrenPickable = true;
+            this._allowPickChildren = true;
 
             this.addComponent(new TransformComponent(obj));
             this.addComponent(new ContainerComponent(obj));
         }
 
-        isChildrenPickable() {
-            return this._childrenPickable;
+        isAllowPickChildren() {
+            return this._allowPickChildren;
         }
 
-        setChildrenPickable(childrenPickable: boolean) {
-            this._childrenPickable = childrenPickable;
+        setAllowPickChildren(childrenPickable: boolean) {
+            this._allowPickChildren = childrenPickable;
         }
 
         setInteractive() {
@@ -155,6 +155,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new Phaser.Math.Vector2(maxPoint.x, maxPoint.y),
                 new Phaser.Math.Vector2(minPoint.x, maxPoint.y)
             ];
+        }
+
+        trim() {
+
+            const container = this.getObject();
+
+            if (container.length === 0) {
+
+                return;
+            }
+
+            let minX = Number.MAX_VALUE;
+            let minY = Number.MAX_VALUE;
+
+            for (const child of container.list) {
+
+                const sprite = child as unknown as Phaser.GameObjects.Sprite;
+
+                minX = Math.min(sprite.x, minX);
+                minY = Math.min(sprite.y, minY);
+            }
+
+            for (const child of container.list) {
+
+                const sprite = child as unknown as Phaser.GameObjects.Sprite;
+
+                sprite.x -= minX;
+                sprite.y -= minY;
+            }
+
+            const p = new Phaser.Math.Vector2(0, 0);
+
+            container.getWorldTransformMatrix().transformPoint(minX, minY, p);
+
+            container.x += p.x;
+            container.y += p.y;
         }
     }
 }

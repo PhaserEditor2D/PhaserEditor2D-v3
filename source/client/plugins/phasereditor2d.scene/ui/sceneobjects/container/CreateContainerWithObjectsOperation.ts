@@ -1,8 +1,8 @@
-/// <reference path="./SceneSnapshotOperation.ts" />
+/// <reference path="../../editor/undo/SceneSnapshotOperation.ts" />
 
-namespace phasereditor2d.scene.ui.editor.undo {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class CreateContainerWithObjectsOperation extends SceneSnapshotOperation {
+    export class CreateContainerWithObjectsOperation extends editor.undo.SceneSnapshotOperation {
 
         protected async performModification() {
 
@@ -32,6 +32,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 sprite.x = p.x;
                 sprite.y = p.y;
             }
+
+            container.getEditorSupport().trim();
 
             this.getEditor().setSelection([container]);
         }

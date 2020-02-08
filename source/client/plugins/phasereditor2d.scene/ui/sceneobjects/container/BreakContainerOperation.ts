@@ -1,8 +1,8 @@
-/// <reference path="./SceneSnapshotOperation.ts" />
+/// <reference path="../../editor/undo/SceneSnapshotOperation.ts" />
 
-namespace phasereditor2d.scene.ui.editor.undo {
+namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class BreakContainerOperation extends SceneSnapshotOperation {
+    export class BreakContainerOperation extends editor.undo.SceneSnapshotOperation {
 
         protected async performModification() {
 
