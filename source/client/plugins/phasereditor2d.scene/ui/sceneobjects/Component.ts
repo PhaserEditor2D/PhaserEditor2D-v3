@@ -65,6 +65,43 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        protected buildSetObjectPropertyCodeDOM_BooleanProperty(
+
+            args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
+
+            for (const prop of properties) {
+
+                this.buildSetObjectPropertyCodeDOM_Boolean(
+                    prop.name,
+                    prop.getValue(this.getObject()),
+                    prop.defValue,
+                    args
+                );
+            }
+        }
+
+        protected buildSetObjectPropertyCodeDOM_Boolean(
+            fieldName: string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void {
+
+            const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
+            let add = false;
+
+            if (args.prefabSerializer) {
+
+                add = value !== args.prefabSerializer.read(fieldName, defValue);
+
+            } else {
+
+                add = value !== defValue;
+            }
+
+            if (add) {
+
+                dom.valueBool(value);
+                args.result.push(dom);
+            }
+        }
+
         protected buildSetObjectPropertyCodeDOM_FloatProperty(
 
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {

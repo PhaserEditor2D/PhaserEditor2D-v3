@@ -1229,6 +1229,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         read(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
         writeLocal(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
         readLocal(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
+        protected buildSetObjectPropertyCodeDOM_BooleanProperty(args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>): void;
+        protected buildSetObjectPropertyCodeDOM_Boolean(fieldName: string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void;
         protected buildSetObjectPropertyCodeDOM_FloatProperty(args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>): void;
         protected buildSetObjectPropertyCodeDOM_Float(fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void;
         buildDependenciesHash(args: IBuildDependencyHashArgs): Promise<void>;
@@ -1573,9 +1575,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
         protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
+        protected createGridElementWithPropertiesBoolXY(parent: HTMLElement): HTMLDivElement;
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
         protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
         protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
+        protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
         protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
         createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
@@ -1778,6 +1782,18 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IFlipLikeObject extends ISceneObject {
+        flipX: boolean;
+        flipY: boolean;
+    }
+    class FlipComponent extends Component<IFlipLikeObject> {
+        static flipX: IProperty<any>;
+        static flipY: IProperty<any>;
+        constructor(obj: IFlipLikeObject);
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IOriginLikeObject extends ISceneObject {
         originX: number;
         originY: number;
@@ -1841,6 +1857,15 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static scope: IEnumProperty<ISceneObjectLike, ObjectScope>;
         constructor(obj: ISceneObjectLike);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class FlipSection extends SceneObjectSection<IOriginLikeObject> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

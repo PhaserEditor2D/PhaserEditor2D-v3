@@ -4,17 +4,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class OriginSection extends SceneObjectSection<IOriginLikeObject> {
+    export class FlipSection extends SceneObjectSection<IOriginLikeObject> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.OriginSection", "Origin", false, true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.FlipSection", "Flip", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElementWithPropertiesXY(parent);
+            const comp = this.createGridElement(parent);
+            comp.style.gridTemplateColumns = "auto auto auto auto auto";
 
-            this.createPropertyXYRow(comp, OriginComponent.origin);
+            this.createLock(comp, FlipComponent.flipX, FlipComponent.flipY);
+
+            this.createBooleanField(comp, FlipComponent.flipX);
+
+            this.createBooleanField(comp, FlipComponent.flipY);
         }
 
         canEdit(obj: any, n: number): boolean {

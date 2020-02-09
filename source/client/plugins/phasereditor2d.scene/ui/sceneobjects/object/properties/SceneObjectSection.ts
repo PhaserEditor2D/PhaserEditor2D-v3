@@ -13,6 +13,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
+
+        protected createGridElementWithPropertiesBoolXY(parent: HTMLElement) {
+
+            const comp = this.createGridElement(parent);
+
+            comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
+
+            return comp;
+        }
+
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>) {
 
             const mutableIcon = new controls.MutableIcon();
@@ -84,6 +94,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createFloatField(parent, prop)
                 .style.gridColumn = fullWidth ? "4 / span 3" : "4";
+        }
+
+        protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
+
+            if (lockIcon) {
+
+                this.createLock(parent, propXY.x, propXY.y);
+
+            } else {
+
+                const label = this.createLabel(parent, propXY.label);
+                label.style.gridColumn = "2";
+            }
+
+            for (const prop of [propXY.x, propXY.y]) {
+
+                this.createLabel(parent, prop.label);
+                this.createBooleanField(parent, prop);
+            }
         }
 
         protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
@@ -207,7 +236,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(() => {
 
-                checkElement.readOnly = checkUnlock && !this.isUnlocked(property);
+                checkElement.disabled = checkUnlock && !this.isUnlocked(property);
 
                 const list = this.getSelection()
 

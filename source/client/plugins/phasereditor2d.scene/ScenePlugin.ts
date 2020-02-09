@@ -131,6 +131,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ContainerSection(page),
                 page => new ui.sceneobjects.TransformSection(page),
                 page => new ui.sceneobjects.OriginSection(page),
+                page => new ui.sceneobjects.FlipSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.TextureSection(page),
                 page => new ui.sceneobjects.ListSection(page),
