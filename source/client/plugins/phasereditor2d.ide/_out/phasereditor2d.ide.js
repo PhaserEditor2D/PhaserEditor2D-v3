@@ -835,8 +835,8 @@ var phasereditor2d;
                         frameElement.classList.add("DialogClientArea");
                         frameElement.src = this._url;
                         frameElement.addEventListener("load", e => {
-                            frameElement.contentDocument.addEventListener("keydown", e => {
-                                if (e.key === "Escape") {
+                            frameElement.contentDocument.addEventListener("keydown", e2 => {
+                                if (e2.key === "Escape") {
                                     this.close();
                                 }
                             });

@@ -13,7 +13,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-
         protected createGridElementWithPropertiesBoolXY(parent: HTMLElement) {
 
             const comp = this.createGridElement(parent);

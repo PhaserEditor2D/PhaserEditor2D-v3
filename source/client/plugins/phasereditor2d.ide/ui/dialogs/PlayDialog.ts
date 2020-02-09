@@ -34,9 +34,9 @@ namespace phasereditor2d.ide.ui.dialogs {
             frameElement.src = this._url;
             frameElement.addEventListener("load", e => {
 
-                frameElement.contentDocument.addEventListener("keydown", e => {
+                frameElement.contentDocument.addEventListener("keydown", e2 => {
 
-                    if (e.key === "Escape") {
+                    if (e2.key === "Escape") {
 
                         this.close();
                     }
