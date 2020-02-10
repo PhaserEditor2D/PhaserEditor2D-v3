@@ -1583,7 +1583,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
         createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
-        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
+        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean, readOnlyOnMultiple?: boolean): HTMLInputElement;
         createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
     }
 }

@@ -4151,8 +4151,13 @@ var colibri;
                     flatValues_StringJoin(values) {
                         return values.join(",");
                     }
+                    flatValues_StringJoinDifferent(values) {
+                        const set = new Set(values);
+                        return [...set].join(",");
+                    }
                     flatValues_StringOneOrNothing(values) {
-                        return values.length === 1 ? values[0] : "(Multiple)";
+                        const set = new Set(values);
+                        return set.size === 1 ? values[0] : `(${values.length} selected)`;
                     }
                     createGridElement(parent, cols = 0, simpleProps = true) {
                         const div = document.createElement("div");

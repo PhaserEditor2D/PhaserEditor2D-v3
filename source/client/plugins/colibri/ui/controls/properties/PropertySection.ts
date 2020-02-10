@@ -90,8 +90,18 @@ namespace colibri.ui.controls.properties {
             return values.join(",");
         }
 
+        flatValues_StringJoinDifferent(values: string[]): string {
+
+            const set = new Set(values);
+
+            return [...set].join(",");
+        }
+
         flatValues_StringOneOrNothing(values: string[]): string {
-            return values.length === 1 ? values[0] : "(Multiple)";
+
+            const set = new Set(values);
+
+            return set.size === 1 ? values[0] : `(${values.length} selected)`;
         }
 
         protected createGridElement(parent: HTMLElement, cols = 0, simpleProps = true) {

@@ -155,7 +155,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 btn.disabled = checkUnlocked && !this.isUnlocked(property);
 
-                btn.textContent = this.flatValues_StringOneOrNothing(
+                btn.textContent = this.flatValues_StringJoinDifferent(
 
                     this.getSelection()
 
@@ -192,7 +192,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {
+        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true, readOnlyOnMultiple = false) {
 
             const text = this.createText(parent, false);
 
@@ -207,6 +207,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addUpdater(() => {
 
                 text.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                if (readOnlyOnMultiple) {
+
+                    text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                }
 
                 text.value = this.flatValues_StringOneOrNothing(
 

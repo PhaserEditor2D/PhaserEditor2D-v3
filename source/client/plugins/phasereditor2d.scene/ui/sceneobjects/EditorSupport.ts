@@ -1,7 +1,5 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import read = colibri.core.json.read;
-    import write = colibri.core.json.write;
     import controls = colibri.ui.controls;
     import json = core.json;
 

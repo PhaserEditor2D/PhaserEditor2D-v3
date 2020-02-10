@@ -7217,7 +7217,7 @@ var phasereditor2d;
                         });
                         this.addUpdater(() => {
                             btn.disabled = checkUnlocked && !this.isUnlocked(property);
-                            btn.textContent = this.flatValues_StringOneOrNothing(this.getSelection()
+                            btn.textContent = this.flatValues_StringJoinDifferent(this.getSelection()
                                 .map(obj => property.getValueLabel(property.getValue(obj))));
                         });
                     }
@@ -7235,7 +7235,7 @@ var phasereditor2d;
                         });
                         return text;
                     }
-                    createStringField(parent, property, checkUnlock = true) {
+                    createStringField(parent, property, checkUnlock = true, readOnlyOnMultiple = false) {
                         const text = this.createText(parent, false);
                         text.addEventListener("change", e => {
                             const value = text.value;
@@ -7243,6 +7243,9 @@ var phasereditor2d;
                         });
                         this.addUpdater(() => {
                             text.readOnly = checkUnlock && !this.isUnlocked(property);
+                            if (readOnlyOnMultiple) {
+                                text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                            }
                             text.value = this.flatValues_StringOneOrNothing(this.getSelection()
                                 .map(obj => property.getValue(obj)));
                         });
@@ -8493,14 +8496,14 @@ var phasereditor2d;
                         {
                             // Name
                             this.createLabel(comp, "Name");
-                            this.createStringField(comp, sceneobjects.VariableComponent.label, false);
+                            this.createStringField(comp, sceneobjects.VariableComponent.label, false, true);
                         }
                         {
                             // Type
                             this.createLabel(comp, "Type");
                             const text = this.createText(comp, true);
                             this.addUpdater(() => {
-                                text.value = this.flatValues_StringJoin(this.getSelection().map(obj => {
+                                text.value = this.flatValues_StringJoinDifferent(this.getSelection().map(obj => {
                                     const support = obj.getEditorSupport();
                                     let typename = support.getObjectType();
                                     if (support.isPrefabInstance()) {
@@ -8520,7 +8523,7 @@ var phasereditor2d;
                         return obj instanceof Phaser.GameObjects.GameObject;
                     }
                     canEditNumber(n) {
-                        return n === 1;
+                        return n > 0;
                     }
                 }
                 sceneobjects.GameObjectVariableSection = GameObjectVariableSection;

@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.createLabel(comp, "Name");
 
-                this.createStringField(comp, VariableComponent.label, false);
+                this.createStringField(comp, VariableComponent.label, false, true);
             }
 
             {
@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.addUpdater(() => {
 
-                    text.value = this.flatValues_StringJoin(
+                    text.value = this.flatValues_StringJoinDifferent(
 
                         this.getSelection().map(obj => {
 
@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEditNumber(n: number): boolean {
-            return n === 1;
+            return n > 0;
         }
     }
 }
