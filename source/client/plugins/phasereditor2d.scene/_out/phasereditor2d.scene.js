@@ -63,6 +63,25 @@ var phasereditor2d;
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
+            getDefaultSceneLanguage() {
+                let typeScript = false;
+                try {
+                    const finder = ScenePlugin.getInstance().getSceneFinder();
+                    const files = [...finder.getFiles()];
+                    files.sort((a, b) => b.getModTime() - a.getModTime());
+                    if (files.length > 0) {
+                        const file = files[0];
+                        const s = new scene_1.core.json.SceneSettings();
+                        s.readJSON(finder.getSceneData(file).settings);
+                        typeScript = s.compilerOutputLanguage === scene_1.core.json.SourceLang.TYPE_SCRIPT;
+                    }
+                }
+                catch (e) {
+                    console.error(e);
+                }
+                return typeScript ?
+                    scene_1.core.json.SourceLang.TYPE_SCRIPT : scene_1.core.json.SourceLang.JAVA_SCRIPT;
+            }
             getSceneFinder() {
                 return this._sceneFinder;
             }
@@ -1349,6 +1368,9 @@ var phasereditor2d;
                     getSceneData(file) {
                         return this._sceneDataMap.get(file.getFullName());
                     }
+                    getAllSceneData() {
+                        return this.getFiles().map(file => this.getSceneData(file));
+                    }
                 }
                 json.SceneFinder = SceneFinder;
             })(json = core.json || (core.json = {}));
@@ -2561,7 +2583,8 @@ var phasereditor2d;
                             id: Phaser.Utils.String.UUID(),
                             settings: {
                                 createMethodName: "",
-                                preloadMethodName: ""
+                                preloadMethodName: "",
+                                compilerOutputLanguage: scene.ScenePlugin.getInstance().getDefaultSceneLanguage()
                             },
                             sceneType: scene.core.json.SceneType.PREFAB,
                             displayList: [],
@@ -2610,7 +2633,9 @@ var phasereditor2d;
                     createFileContent() {
                         const sceneData = {
                             id: Phaser.Utils.String.UUID(),
-                            settings: {},
+                            settings: {
+                                compilerOutputLanguage: scene.ScenePlugin.getInstance().getDefaultSceneLanguage()
+                            },
                             sceneType: scene.core.json.SceneType.SCENE,
                             displayList: [],
                             meta: {

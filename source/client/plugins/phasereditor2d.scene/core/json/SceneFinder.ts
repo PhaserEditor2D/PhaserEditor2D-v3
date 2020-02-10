@@ -174,5 +174,10 @@ namespace phasereditor2d.scene.core.json {
 
             return this._sceneDataMap.get(file.getFullName());
         }
+
+        getAllSceneData() {
+
+            return this.getFiles().map(file => this.getSceneData(file));
+        }
     }
 }

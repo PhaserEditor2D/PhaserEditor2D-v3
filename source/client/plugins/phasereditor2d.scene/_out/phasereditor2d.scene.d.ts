@@ -16,6 +16,7 @@ declare namespace phasereditor2d.scene {
         static getInstance(): ScenePlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        getDefaultSceneLanguage(): core.json.SourceLang;
         getSceneFinder(): core.json.SceneFinder;
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[];
         getObjectExtensionByObjectType(type: string): ui.sceneobjects.SceneObjectExtension;
@@ -297,6 +298,7 @@ declare namespace phasereditor2d.scene.core.json {
         getPrefabData(prefabId: string): IObjectData;
         getPrefabFile(prefabId: string): io.FilePath;
         getSceneData(file: io.FilePath): ISceneData;
+        getAllSceneData(): ISceneData[];
     }
     export {};
 }

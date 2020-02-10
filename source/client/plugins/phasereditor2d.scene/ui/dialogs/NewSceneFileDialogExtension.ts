@@ -15,7 +15,9 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             const sceneData: core.json.ISceneData = {
                 id: Phaser.Utils.String.UUID(),
-                settings: {},
+                settings: {
+                    compilerOutputLanguage: ScenePlugin.getInstance().getDefaultSceneLanguage()
+                },
                 sceneType: core.json.SceneType.SCENE,
                 displayList: [],
                 meta: {

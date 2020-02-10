@@ -48,6 +48,5 @@ namespace phasereditor2d.files.ui.dialogs {
 
             return dlg;
         }
-
     }
 }

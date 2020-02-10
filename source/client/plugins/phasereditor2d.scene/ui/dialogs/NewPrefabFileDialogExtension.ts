@@ -8,7 +8,8 @@ namespace phasereditor2d.scene.ui.dialogs {
                 id: Phaser.Utils.String.UUID(),
                 settings: {
                     createMethodName: "",
-                    preloadMethodName: ""
+                    preloadMethodName: "",
+                    compilerOutputLanguage: ScenePlugin.getInstance().getDefaultSceneLanguage()
                 },
                 sceneType: core.json.SceneType.PREFAB,
                 displayList: [],

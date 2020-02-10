@@ -147,6 +147,37 @@ namespace phasereditor2d.scene {
             ));
         }
 
+        getDefaultSceneLanguage() {
+
+            let typeScript = false;
+
+            try {
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                const files = [...finder.getFiles()];
+
+                files.sort((a, b) => b.getModTime() - a.getModTime());
+
+                if (files.length > 0) {
+
+                    const file = files[0];
+
+                    const s = new core.json.SceneSettings();
+
+                    s.readJSON(finder.getSceneData(file).settings);
+
+                    typeScript = s.compilerOutputLanguage === core.json.SourceLang.TYPE_SCRIPT;
+                }
+
+            } catch (e) {
+
+                console.error(e);
+            }
+
+            return typeScript ?
+                core.json.SourceLang.TYPE_SCRIPT : core.json.SourceLang.JAVA_SCRIPT;
+        }
+
         getSceneFinder() {
             return this._sceneFinder;
         }
