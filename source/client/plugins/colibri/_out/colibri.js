@@ -1266,6 +1266,7 @@ var colibri;
         var io;
         (function (io) {
             async function apiRequest(method, body) {
+                console.log(method + " " + JSON.stringify(body));
                 try {
                     const resp = await fetch("api", {
                         method: "POST",
@@ -1303,6 +1304,9 @@ var colibri;
                     });
                 }
                 async updateWithServerChanges() {
+                    if (!this._projectName) {
+                        return;
+                    }
                     const hashData = await apiRequest("GetProjectFilesHash", {
                         project: this._projectName
                     });

@@ -10,6 +10,9 @@ namespace colibri.core.io {
     }
 
     export async function apiRequest(method: string, body?: any) {
+
+        console.log(method + " " + JSON.stringify(body));
+
         try {
 
             const resp = await fetch("api", {
@@ -66,6 +69,11 @@ namespace colibri.core.io {
         }
 
         private async updateWithServerChanges() {
+
+            if (!this._projectName) {
+
+                return;
+            }
 
             const hashData = await apiRequest("GetProjectFilesHash", {
                 project: this._projectName
