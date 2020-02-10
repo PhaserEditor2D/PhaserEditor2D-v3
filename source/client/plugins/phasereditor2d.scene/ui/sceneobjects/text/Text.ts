@@ -1,5 +1,10 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export interface ITextContentLikeObject extends ISceneObject {
+
+        text: string;
+    }
+
     export class Text extends Phaser.GameObjects.Text implements ISceneObject {
 
         private _editorSupport: TextEditorSupport;

@@ -59,7 +59,7 @@ var phasereditor2d;
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.TextExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
@@ -6267,6 +6267,25 @@ var phasereditor2d;
                             prop.setValue(this._obj, value);
                         }
                     }
+                    buildSetObjectPropertyCodeDOM_String(fieldName, value, defValue, args) {
+                        const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
+                        let add = false;
+                        if (args.prefabSerializer) {
+                            add = value !== args.prefabSerializer.read(fieldName, defValue);
+                        }
+                        else {
+                            add = value !== defValue;
+                        }
+                        if (add) {
+                            dom.valueLiteral(value);
+                            args.result.push(dom);
+                        }
+                    }
+                    buildSetObjectPropertyCodeDOM_StringProperty(args, ...properties) {
+                        for (const prop of properties) {
+                            this.buildSetObjectPropertyCodeDOM_String(prop.name, prop.getValue(this.getObject()), prop.defValue, args);
+                        }
+                    }
                     buildSetObjectPropertyCodeDOM_BooleanProperty(args, ...properties) {
                         for (const prop of properties) {
                             this.buildSetObjectPropertyCodeDOM_Boolean(prop.name, prop.getValue(this.getObject()), prop.defValue, args);
@@ -6833,6 +6852,220 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TextContentComponent extends sceneobjects.Component {
+                    constructor(obj) {
+                        super(obj, [TextContentComponent.text]);
+                    }
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        // nothing
+                    }
+                }
+                TextContentComponent.text = sceneobjects.SimpleProperty("text", "", "Text");
+                sceneobjects.TextContentComponent = TextContentComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                var controls = colibri.ui.controls;
+                class SceneObjectSection extends ui.editor.properties.BaseSceneSection {
+                    createGridElementWithPropertiesXY(parent) {
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
+                        return comp;
+                    }
+                    createGridElementWithPropertiesBoolXY(parent) {
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
+                        return comp;
+                    }
+                    createLock(parent, ...properties) {
+                        const mutableIcon = new controls.MutableIcon();
+                        const element = mutableIcon.getElement();
+                        element.classList.add("PropertyLockIcon");
+                        parent.appendChild(element);
+                        const lockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_LOCKED);
+                        const unlockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_UNLOCKED);
+                        element.addEventListener("click", e => {
+                            const unlocked = !this.isUnlocked(...properties);
+                            this.getEditor().getUndoManager().add(new sceneobjects.PropertyUnlockOperation(this.getEditor(), this.getSelection(), properties, unlocked));
+                        });
+                        this.addUpdater(() => {
+                            const thereIsPrefabInstances = this.getSelection()
+                                .map(obj => obj.getEditorSupport().isPrefabInstance())
+                                .find(b => b);
+                            if (thereIsPrefabInstances) {
+                                element.style.width = controls.ICON_SIZE + "px";
+                                const unlocked = this.isUnlocked(...properties);
+                                mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
+                                mutableIcon.repaint();
+                            }
+                            else {
+                                element.style.width = "0px";
+                            }
+                        });
+                    }
+                    isUnlocked(...properties) {
+                        for (const obj of this.getSelection()) {
+                            for (const property of properties) {
+                                const locked = !obj.getEditorSupport().isUnlockedProperty(property);
+                                if (locked) {
+                                    return false;
+                                }
+                            }
+                        }
+                        return true;
+                    }
+                    createNumberPropertyRow(parent, prop, fullWidth = true) {
+                        this.createLock(parent, prop);
+                        this.createLabel(parent, prop.label)
+                            .style.gridColumn = "2/ span 2";
+                        this.createFloatField(parent, prop)
+                            .style.gridColumn = fullWidth ? "4 / span 3" : "4";
+                    }
+                    createPropertyBoolXYRow(parent, propXY, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, propXY.x, propXY.y);
+                        }
+                        else {
+                            const label = this.createLabel(parent, propXY.label);
+                            label.style.gridColumn = "2";
+                        }
+                        for (const prop of [propXY.x, propXY.y]) {
+                            this.createLabel(parent, prop.label);
+                            this.createBooleanField(parent, prop);
+                        }
+                    }
+                    createPropertyXYRow(parent, propXY, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, propXY.x, propXY.y);
+                            this.createLabel(parent, propXY.label);
+                        }
+                        else {
+                            const label = this.createLabel(parent, propXY.label);
+                            label.style.gridColumn = "2";
+                        }
+                        for (const prop of [propXY.x, propXY.y]) {
+                            this.createLabel(parent, prop.label);
+                            this.createFloatField(parent, prop);
+                        }
+                    }
+                    createEnumField(parent, property, checkUnlocked = true) {
+                        const items = property.values
+                            .map(value => {
+                            return {
+                                name: property.getValueLabel(value),
+                                value
+                            };
+                        });
+                        const btn = this.createMenuButton(parent, "", items, value => {
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            btn.disabled = checkUnlocked && !this.isUnlocked(property);
+                            btn.textContent = this.flatValues_StringJoinDifferent(this.getSelection()
+                                .map(obj => property.getValueLabel(property.getValue(obj))));
+                        });
+                    }
+                    // tslint:disable-next-line:ban-types
+                    createFloatField(parent, property) {
+                        const text = this.createText(parent, false);
+                        text.addEventListener("change", e => {
+                            const value = Number.parseFloat(text.value);
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            text.readOnly = !this.isUnlocked(property);
+                            text.value = this.flatValues_Number(this.getSelection()
+                                .map(obj => property.getValue(obj)));
+                        });
+                        return text;
+                    }
+                    createStringField(parent, property, checkUnlock = true, readOnlyOnMultiple = false) {
+                        const text = this.createText(parent, false);
+                        text.addEventListener("change", e => {
+                            const value = text.value;
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            text.readOnly = checkUnlock && !this.isUnlocked(property);
+                            if (readOnlyOnMultiple) {
+                                text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                            }
+                            text.value = this.flatValues_StringOneOrNothing(this.getSelection()
+                                .map(obj => property.getValue(obj)));
+                        });
+                        return text;
+                    }
+                    createBooleanField(parent, property, checkUnlock = true) {
+                        const labelElement = this.createLabel(parent, property.label, property.tooltip);
+                        const checkElement = this.createCheckbox(parent, labelElement);
+                        checkElement.addEventListener("change", e => {
+                            const value = checkElement.checked;
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            checkElement.disabled = checkUnlock && !this.isUnlocked(property);
+                            const list = this.getSelection()
+                                .map(obj => property.getValue(obj))
+                                .filter(b => !b);
+                            checkElement.checked = list.length === 0;
+                        });
+                        return checkElement;
+                    }
+                }
+                sceneobjects.SceneObjectSection = SceneObjectSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./object/properties/SceneObjectSection.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TextContentSection extends sceneobjects.SceneObjectSection {
+                    constructor(page) {
+                        super(page, "phasereditor.scene.ui.sceneobjects.TextContentSection", "Text Content", false, false);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto 1fr";
+                        this.createLock(comp, sceneobjects.TextContentComponent.text);
+                        this.createLabel(comp, sceneobjects.TextContentComponent.text.label);
+                        this.createStringField(comp, sceneobjects.TextContentComponent.text);
+                    }
+                    canEdit(obj, n) {
+                        return sceneobjects.EditorSupport.hasObjectComponent(obj, sceneobjects.TextContentComponent);
+                    }
+                    canEditNumber(n) {
+                        return n === 1;
+                    }
+                }
+                sceneobjects.TextContentSection = TextContentSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../../editor/undo/SceneSnapshotOperation.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -7171,166 +7404,6 @@ var phasereditor2d;
                 sceneobjects.ContainerExtension = ContainerExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene_19.ui || (scene_19.ui = {}));
-    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var scene;
-    (function (scene) {
-        var ui;
-        (function (ui) {
-            var sceneobjects;
-            (function (sceneobjects) {
-                var controls = colibri.ui.controls;
-                class SceneObjectSection extends ui.editor.properties.BaseSceneSection {
-                    createGridElementWithPropertiesXY(parent) {
-                        const comp = this.createGridElement(parent);
-                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
-                        return comp;
-                    }
-                    createGridElementWithPropertiesBoolXY(parent) {
-                        const comp = this.createGridElement(parent);
-                        comp.style.gridTemplateColumns = "auto auto auto 1fr auto 1fr";
-                        return comp;
-                    }
-                    createLock(parent, ...properties) {
-                        const mutableIcon = new controls.MutableIcon();
-                        const element = mutableIcon.getElement();
-                        element.classList.add("PropertyLockIcon");
-                        parent.appendChild(element);
-                        const lockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_LOCKED);
-                        const unlockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_UNLOCKED);
-                        element.addEventListener("click", e => {
-                            const unlocked = !this.isUnlocked(...properties);
-                            this.getEditor().getUndoManager().add(new sceneobjects.PropertyUnlockOperation(this.getEditor(), this.getSelection(), properties, unlocked));
-                        });
-                        this.addUpdater(() => {
-                            const thereIsPrefabInstances = this.getSelection()
-                                .map(obj => obj.getEditorSupport().isPrefabInstance())
-                                .find(b => b);
-                            if (thereIsPrefabInstances) {
-                                element.style.width = controls.ICON_SIZE + "px";
-                                const unlocked = this.isUnlocked(...properties);
-                                mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
-                                mutableIcon.repaint();
-                            }
-                            else {
-                                element.style.width = "0px";
-                            }
-                        });
-                    }
-                    isUnlocked(...properties) {
-                        for (const obj of this.getSelection()) {
-                            for (const property of properties) {
-                                const locked = !obj.getEditorSupport().isUnlockedProperty(property);
-                                if (locked) {
-                                    return false;
-                                }
-                            }
-                        }
-                        return true;
-                    }
-                    createNumberPropertyRow(parent, prop, fullWidth = true) {
-                        this.createLock(parent, prop);
-                        this.createLabel(parent, prop.label)
-                            .style.gridColumn = "2/ span 2";
-                        this.createFloatField(parent, prop)
-                            .style.gridColumn = fullWidth ? "4 / span 3" : "4";
-                    }
-                    createPropertyBoolXYRow(parent, propXY, lockIcon = true) {
-                        if (lockIcon) {
-                            this.createLock(parent, propXY.x, propXY.y);
-                        }
-                        else {
-                            const label = this.createLabel(parent, propXY.label);
-                            label.style.gridColumn = "2";
-                        }
-                        for (const prop of [propXY.x, propXY.y]) {
-                            this.createLabel(parent, prop.label);
-                            this.createBooleanField(parent, prop);
-                        }
-                    }
-                    createPropertyXYRow(parent, propXY, lockIcon = true) {
-                        if (lockIcon) {
-                            this.createLock(parent, propXY.x, propXY.y);
-                            this.createLabel(parent, propXY.label);
-                        }
-                        else {
-                            const label = this.createLabel(parent, propXY.label);
-                            label.style.gridColumn = "2";
-                        }
-                        for (const prop of [propXY.x, propXY.y]) {
-                            this.createLabel(parent, prop.label);
-                            this.createFloatField(parent, prop);
-                        }
-                    }
-                    createEnumField(parent, property, checkUnlocked = true) {
-                        const items = property.values
-                            .map(value => {
-                            return {
-                                name: property.getValueLabel(value),
-                                value
-                            };
-                        });
-                        const btn = this.createMenuButton(parent, "", items, value => {
-                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
-                        });
-                        this.addUpdater(() => {
-                            btn.disabled = checkUnlocked && !this.isUnlocked(property);
-                            btn.textContent = this.flatValues_StringJoinDifferent(this.getSelection()
-                                .map(obj => property.getValueLabel(property.getValue(obj))));
-                        });
-                    }
-                    // tslint:disable-next-line:ban-types
-                    createFloatField(parent, property) {
-                        const text = this.createText(parent, false);
-                        text.addEventListener("change", e => {
-                            const value = Number.parseFloat(text.value);
-                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
-                        });
-                        this.addUpdater(() => {
-                            text.readOnly = !this.isUnlocked(property);
-                            text.value = this.flatValues_Number(this.getSelection()
-                                .map(obj => property.getValue(obj)));
-                        });
-                        return text;
-                    }
-                    createStringField(parent, property, checkUnlock = true, readOnlyOnMultiple = false) {
-                        const text = this.createText(parent, false);
-                        text.addEventListener("change", e => {
-                            const value = text.value;
-                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
-                        });
-                        this.addUpdater(() => {
-                            text.readOnly = checkUnlock && !this.isUnlocked(property);
-                            if (readOnlyOnMultiple) {
-                                text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
-                            }
-                            text.value = this.flatValues_StringOneOrNothing(this.getSelection()
-                                .map(obj => property.getValue(obj)));
-                        });
-                        return text;
-                    }
-                    createBooleanField(parent, property, checkUnlock = true) {
-                        const labelElement = this.createLabel(parent, property.label, property.tooltip);
-                        const checkElement = this.createCheckbox(parent, labelElement);
-                        checkElement.addEventListener("change", e => {
-                            const value = checkElement.checked;
-                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
-                        });
-                        this.addUpdater(() => {
-                            checkElement.disabled = checkUnlock && !this.isUnlocked(property);
-                            const list = this.getSelection()
-                                .map(obj => property.getValue(obj))
-                                .filter(b => !b);
-                            checkElement.checked = list.length === 0;
-                        });
-                        return checkElement;
-                    }
-                }
-                sceneobjects.SceneObjectSection = SceneObjectSection;
-            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
-        })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../object/properties/SceneObjectSection.ts" />
@@ -9646,7 +9719,7 @@ var phasereditor2d;
                 class TextEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj, scene) {
                         super(sceneobjects.TextExtension.getInstance(), obj, scene);
-                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj));
+                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.TextContentComponent(obj));
                     }
                     getCellRenderer() {
                         return new controls.viewers.EmptyCellRenderer();
@@ -9689,7 +9762,9 @@ var phasereditor2d;
                         return text;
                     }
                     createSceneObjectWithData(args) {
-                        return null;
+                        const text = new sceneobjects.Text(args.scene, 0, 0, "", {});
+                        text.getEditorSupport().readJSON(args.data);
+                        return text;
                     }
                     async getAssetsFromObjectData(args) {
                         return [];

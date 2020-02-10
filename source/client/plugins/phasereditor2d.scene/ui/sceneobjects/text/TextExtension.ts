@@ -31,7 +31,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createSceneObjectWithData(args: ICreateWithDataArgs): ISceneObject {
-            return null;
+
+            const text = new Text(args.scene, 0, 0, "", {});
+
+            text.getEditorSupport().readJSON(args.data);
+
+            return text;
         }
 
         async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {

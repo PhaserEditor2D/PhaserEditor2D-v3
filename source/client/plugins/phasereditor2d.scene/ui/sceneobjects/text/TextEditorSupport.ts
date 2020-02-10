@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 new TransformComponent(obj as unknown as ITransformLikeObject),
                 new OriginComponent(obj as unknown as IOriginLikeObject),
-                new FlipComponent(obj as unknown as IFlipLikeObject)
+                new FlipComponent(obj as unknown as IFlipLikeObject),
+                new TextContentComponent(obj as unknown as ITextContentLikeObject),
             );
         }
 

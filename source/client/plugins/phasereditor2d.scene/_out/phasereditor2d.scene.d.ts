@@ -1231,6 +1231,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         read(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
         writeLocal(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
         readLocal(ser: core.json.Serializer, ...properties: Array<IProperty<T>>): void;
+        protected buildSetObjectPropertyCodeDOM_String(fieldName: string, value: string, defValue: string, args: ISetObjectPropertiesCodeDOMArgs): void;
+        protected buildSetObjectPropertyCodeDOM_StringProperty(args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>): void;
         protected buildSetObjectPropertyCodeDOM_BooleanProperty(args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>): void;
         protected buildSetObjectPropertyCodeDOM_Boolean(fieldName: string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void;
         protected buildSetObjectPropertyCodeDOM_FloatProperty(args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>): void;
@@ -1504,6 +1506,37 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     function SimpleProperty(name: string, defValue: any, label?: string, tooltip?: string, local?: boolean): IProperty<any>;
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TextContentComponent extends Component<ITextContentLikeObject> {
+        static text: IProperty<any>;
+        constructor(obj: ITextContentLikeObject);
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+        protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
+        protected createGridElementWithPropertiesBoolXY(parent: HTMLElement): HTMLDivElement;
+        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
+        protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
+        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
+        protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
+        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
+        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
+        createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
+        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean, readOnlyOnMultiple?: boolean): HTMLInputElement;
+        createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class TextContentSection extends SceneObjectSection<ITextContentLikeObject> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class BreakContainerOperation extends editor.undo.SceneSnapshotOperation {
         protected performModification(): Promise<void>;
     }
@@ -1572,21 +1605,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createContainerObjectWithChildren(scene: Scene, objectList: sceneobjects.ISceneObject[]): sceneobjects.Container;
         acceptsDropData(data: any): boolean;
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
-    }
-}
-declare namespace phasereditor2d.scene.ui.sceneobjects {
-    abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
-        protected createGridElementWithPropertiesXY(parent: HTMLElement): HTMLDivElement;
-        protected createGridElementWithPropertiesBoolXY(parent: HTMLElement): HTMLDivElement;
-        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
-        protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
-        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
-        protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
-        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
-        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
-        createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
-        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean, readOnlyOnMultiple?: boolean): HTMLInputElement;
-        createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -2148,6 +2166,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface ITextContentLikeObject extends ISceneObject {
+        text: string;
+    }
     class Text extends Phaser.GameObjects.Text implements ISceneObject {
         private _editorSupport;
         constructor(scene: Scene, x: number, y: number, text: string, style: Phaser.Types.GameObjects.Text.TextStyle);
