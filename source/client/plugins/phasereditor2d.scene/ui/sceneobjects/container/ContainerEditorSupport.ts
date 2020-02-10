@@ -11,8 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _allowPickChildren: boolean;
 
-        constructor(obj: Container) {
-            super(ContainerExtension.getInstance(), obj);
+        constructor(obj: Container, scene: Scene) {
+            super(ContainerExtension.getInstance(), obj, scene);
 
             this._allowPickChildren = true;
 

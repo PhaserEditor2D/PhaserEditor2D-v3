@@ -118,6 +118,7 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ImageExtension.getInstance(),
                 ui.sceneobjects.SpriteExtension.getInstance(),
                 ui.sceneobjects.TileSpriteExtension.getInstance(),
+                ui.sceneobjects.TextExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance()
             );
 

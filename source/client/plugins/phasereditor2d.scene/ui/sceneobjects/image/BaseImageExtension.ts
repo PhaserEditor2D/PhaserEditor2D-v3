@@ -94,14 +94,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const sprite = this.newObject(scene, x, y, key, frame);
 
-            const editorSupport = sprite.getEditorSupport();
-
-            editorSupport.setScene(scene);
-
-            editorSupport.setInteractive();
-
-            scene.sys.displayList.add(sprite);
-
             return sprite;
         }
 

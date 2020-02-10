@@ -4,8 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class SpriteEditorSupport extends BaseImageEditorSupport<Sprite> {
 
-        constructor(obj: Sprite) {
-            super(SpriteExtension.getInstance(), obj);
+        constructor(obj: Sprite, scene: Scene) {
+            super(SpriteExtension.getInstance(), obj, scene);
         }
     }
 }

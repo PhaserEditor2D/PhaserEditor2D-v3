@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super(scene, x, y, texture, frame);
 
-            this._editorSupport = new SpriteEditorSupport(this);
+            this._editorSupport = new SpriteEditorSupport(this, scene);
         }
 
         getEditorSupport(): SpriteEditorSupport {

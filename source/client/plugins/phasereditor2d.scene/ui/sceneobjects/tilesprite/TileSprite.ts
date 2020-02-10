@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         ) {
             super(scene, x, y, width, height, texture, frame);
 
-            this._editorSupport = new TileSpriteEditorSupport(this);
+            this._editorSupport = new TileSpriteEditorSupport(this, scene);
         }
 
         getEditorSupport(): EditorSupport<ISceneObject> {
