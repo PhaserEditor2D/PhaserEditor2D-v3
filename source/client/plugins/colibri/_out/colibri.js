@@ -1266,7 +1266,6 @@ var colibri;
         var io;
         (function (io) {
             async function apiRequest(method, body) {
-                console.log(method + " " + JSON.stringify(body));
                 try {
                     const resp = await fetch("api", {
                         method: "POST",

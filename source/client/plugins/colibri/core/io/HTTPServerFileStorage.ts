@@ -11,8 +11,6 @@ namespace colibri.core.io {
 
     export async function apiRequest(method: string, body?: any) {
 
-        console.log(method + " " + JSON.stringify(body));
-
         try {
 
             const resp = await fetch("api", {
