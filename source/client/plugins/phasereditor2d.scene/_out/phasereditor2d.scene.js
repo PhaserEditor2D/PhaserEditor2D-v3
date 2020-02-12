@@ -9705,10 +9705,6 @@ var phasereditor2d;
                         call.argFloat(obj.x);
                         call.argFloat(obj.y);
                         call.argLiteral(obj.text);
-                        this.addTextStyleArgsToObjectFactoryMethodCallDOM(call, obj);
-                    }
-                    addTextStyleArgsToObjectFactoryMethodCallDOM(call, obj) {
-                        call.arg("{}");
                     }
                     buildCreatePrefabInstanceCodeDOM(args) {
                         const call = args.methodCallDOM;
@@ -9720,14 +9716,12 @@ var phasereditor2d;
                         call.arg("x");
                         call.arg("y");
                         call.arg("text");
-                        call.arg("style");
                     }
                     buildPrefabConstructorDeclarationCodeDOM(args) {
                         const ctr = args.ctrDeclCodeDOM;
                         ctr.addArg("x", "number");
                         ctr.addArg("y", "number");
                         ctr.addArg("text", "string");
-                        ctr.addArg("style", "Phaser.Types.GameObjects.Text.TextStyle");
                     }
                 }
                 sceneobjects.TextCodeDOMBuilder = TextCodeDOMBuilder;
@@ -9743,6 +9737,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var code = scene.core.code;
                 class TextComponent extends sceneobjects.Component {
                     constructor(obj) {
                         super(obj, [
@@ -9772,7 +9767,98 @@ var phasereditor2d;
                             TextComponent.maxLines
                         ]);
                     }
+                    styleToJson() {
+                        const comp = TextComponent;
+                        const obj = this.getObject();
+                        const support = obj.getEditorSupport();
+                        const data = {};
+                        const simpleProps = [
+                            comp.align,
+                            comp.backgroundColor,
+                            comp.baselineX,
+                            comp.baselineY,
+                            comp.color,
+                            comp.fixedWidth,
+                            comp.fixedHeight,
+                            comp.fontFamily,
+                            comp.fontSize,
+                            comp.fontStyle,
+                            comp.maxLines,
+                            comp.stroke,
+                            comp.strokeThickness,
+                            comp.shadowOffsetX,
+                            comp.shadowOffsetY,
+                            comp.shadowColor,
+                            comp.shadowBlur,
+                            comp.shadowStroke,
+                            comp.shadowFill
+                        ];
+                        if (support.isPrefabInstance()) {
+                            for (const prop of simpleProps) {
+                                if (support.isUnlockedProperty(prop)) {
+                                    data[prop.name] = prop.getValue(obj);
+                                }
+                            }
+                        }
+                        else {
+                            for (const prop of simpleProps) {
+                                const value = prop.getValue(obj);
+                                if (value !== prop.defValue) {
+                                    data[prop.name] = value;
+                                }
+                            }
+                        }
+                        return data;
+                    }
                     buildSetObjectPropertiesCodeDOM(args) {
+                        const obj = this.getObject();
+                        const support = obj.getEditorSupport();
+                        {
+                            // style
+                            const style = this.styleToJson();
+                            const literal = JSON.stringify(style);
+                            if (literal !== "{}") {
+                                const dom = new code.MethodCallCodeDOM("setStyle", args.objectVarName);
+                                dom.arg(literal);
+                                args.result.push(dom);
+                            }
+                        }
+                        {
+                            // padding
+                            const comp = TextComponent;
+                            const padding = {};
+                            const map = {
+                                left: comp.paddingLeft,
+                                top: comp.paddingTop,
+                                right: comp.paddingRight,
+                                bottom: comp.paddingBottom
+                            };
+                            if (support.isPrefabInstance()) {
+                                // tslint:disable-next-line:forin
+                                for (const key in map) {
+                                    const prop = map[key];
+                                    if (support.isUnlockedProperty(prop)) {
+                                        padding[key] = prop.getValue(obj);
+                                    }
+                                }
+                            }
+                            else {
+                                // tslint:disable-next-line:forin
+                                for (const key in map) {
+                                    const prop = map[key];
+                                    const value = prop.getValue(obj);
+                                    if (value !== prop.defValue) {
+                                        padding[key] = value;
+                                    }
+                                }
+                            }
+                            const literal = JSON.stringify(padding);
+                            if (literal !== "{}") {
+                                const dom = new code.MethodCallCodeDOM("setPadding", args.objectVarName);
+                                dom.arg(literal);
+                                args.result.push(dom);
+                            }
+                        }
                     }
                 }
                 TextComponent.fixedWidth = {
@@ -9890,14 +9976,14 @@ var phasereditor2d;
                     setValue: (obj, value) => obj.setBackgroundColor(value)
                 };
                 TextComponent.shadowOffsetX = {
-                    name: "shadowOffsetX",
+                    name: "shadow.offsetX",
                     label: "X",
                     defValue: 0,
                     getValue: obj => obj.style.shadowOffsetX,
                     setValue: (obj, value) => obj.setShadowOffset(value, obj.style.shadowOffsetY)
                 };
                 TextComponent.shadowOffsetY = {
-                    name: "shadowOffsetY",
+                    name: "shadow.offsetY",
                     label: "Y",
                     defValue: 0,
                     getValue: obj => obj.style.shadowOffsetY,
@@ -9909,14 +9995,14 @@ var phasereditor2d;
                     y: TextComponent.shadowOffsetY
                 };
                 TextComponent.shadowStroke = {
-                    name: "shadowStroke",
+                    name: "shadow.stroke",
                     label: "Stroke",
                     defValue: false,
                     getValue: obj => obj.style.shadowStroke,
                     setValue: (obj, value) => obj.setShadowStroke(value)
                 };
                 TextComponent.shadowFill = {
-                    name: "shadowFill",
+                    name: "shadow.fill",
                     label: "Fill",
                     defValue: false,
                     getValue: obj => obj.style.shadowFill,
@@ -9928,14 +10014,14 @@ var phasereditor2d;
                     y: TextComponent.shadowFill
                 };
                 TextComponent.shadowColor = {
-                    name: "shadowColor",
+                    name: "shadow.color",
                     label: "Shadow Color",
                     defValue: "#000",
                     getValue: obj => obj.style.shadowColor,
                     setValue: (obj, value) => obj.setShadowColor(value)
                 };
                 TextComponent.shadowBlur = {
-                    name: "shadowBlur",
+                    name: "shadow.blur",
                     label: "Shadow Blur",
                     defValue: 0,
                     getValue: obj => obj.style.shadowBlur,

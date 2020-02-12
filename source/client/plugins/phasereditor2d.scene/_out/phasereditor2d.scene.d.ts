@@ -2183,7 +2183,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TextCodeDOMBuilder extends ObjectCodeDOMBuilder {
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
         protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: Text): void;
-        private addTextStyleArgsToObjectFactoryMethodCallDOM;
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
@@ -2220,6 +2219,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         static baseline: IPropertyXY;
         static maxLines: IProperty<Text>;
         constructor(obj: Text);
+        styleToJson(): any;
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
     }
 }

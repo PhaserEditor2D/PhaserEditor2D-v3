@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import code = core.code;
+
     export class TextComponent extends Component<Text> {
 
         static fixedWidth: IProperty<Text> = {
@@ -133,7 +135,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static shadowOffsetX: IProperty<Text> = {
-            name: "shadowOffsetX",
+            name: "shadow.offsetX",
             label: "X",
             defValue: 0,
             getValue: obj => obj.style.shadowOffsetX,
@@ -141,7 +143,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static shadowOffsetY: IProperty<Text> = {
-            name: "shadowOffsetY",
+            name: "shadow.offsetY",
             label: "Y",
             defValue: 0,
             getValue: obj => obj.style.shadowOffsetY,
@@ -155,7 +157,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static shadowStroke: IProperty<Text> = {
-            name: "shadowStroke",
+            name: "shadow.stroke",
             label: "Stroke",
             defValue: false,
             getValue: obj => obj.style.shadowStroke,
@@ -163,7 +165,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static shadowFill: IProperty<Text> = {
-            name: "shadowFill",
+            name: "shadow.fill",
             label: "Fill",
             defValue: false,
             getValue: obj => obj.style.shadowFill,
@@ -177,7 +179,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static shadowColor: IProperty<Text> = {
-            name: "shadowColor",
+            name: "shadow.color",
             label: "Shadow Color",
             defValue: "#000",
             getValue: obj => obj.style.shadowColor,
@@ -185,7 +187,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static shadowBlur: IProperty<Text> = {
-            name: "shadowBlur",
+            name: "shadow.blur",
             label: "Shadow Blur",
             defValue: 0,
             getValue: obj => obj.style.shadowBlur,
@@ -251,8 +253,136 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ]);
         }
 
+        styleToJson() {
+
+            const comp = TextComponent;
+
+            const obj = this.getObject();
+            const support = obj.getEditorSupport();
+
+            const data = {} as any;
+
+            const simpleProps = [
+                comp.align,
+                comp.backgroundColor,
+                comp.baselineX,
+                comp.baselineY,
+                comp.color,
+                comp.fixedWidth,
+                comp.fixedHeight,
+                comp.fontFamily,
+                comp.fontSize,
+                comp.fontStyle,
+                comp.maxLines,
+                comp.stroke,
+                comp.strokeThickness,
+                comp.shadowOffsetX,
+                comp.shadowOffsetY,
+                comp.shadowColor,
+                comp.shadowBlur,
+                comp.shadowStroke,
+                comp.shadowFill
+            ];
+
+            if (support.isPrefabInstance()) {
+
+                for (const prop of simpleProps) {
+
+                    if (support.isUnlockedProperty(prop)) {
+
+                        data[prop.name] = prop.getValue(obj);
+                    }
+                }
+
+            } else {
+
+                for (const prop of simpleProps) {
+
+                    const value = prop.getValue(obj);
+
+                    if (value !== prop.defValue) {
+
+                        data[prop.name] = value;
+                    }
+                }
+            }
+
+            return data;
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
+            const obj = this.getObject();
+            const support = obj.getEditorSupport();
+
+            {
+                // style
+
+                const style = this.styleToJson();
+
+                const literal = JSON.stringify(style);
+
+                if (literal !== "{}") {
+
+                    const dom = new code.MethodCallCodeDOM("setStyle", args.objectVarName);
+
+                    dom.arg(literal);
+
+                    args.result.push(dom);
+                }
+            }
+
+            {
+                // padding
+
+                const comp = TextComponent;
+                const padding = {} as any;
+                const map = {
+                    left: comp.paddingLeft,
+                    top: comp.paddingTop,
+                    right: comp.paddingRight,
+                    bottom: comp.paddingBottom
+                };
+
+                if (support.isPrefabInstance()) {
+
+                    // tslint:disable-next-line:forin
+                    for (const key in map) {
+
+                        const prop = map[key] as IProperty<any>;
+
+                        if (support.isUnlockedProperty(prop)) {
+
+                            padding[key] = prop.getValue(obj);
+                        }
+                    }
+
+                } else {
+
+                    // tslint:disable-next-line:forin
+                    for (const key in map) {
+
+                        const prop = map[key] as IProperty<any>;
+                        const value = prop.getValue(obj);
+
+                        if (value !== prop.defValue) {
+
+                            padding[key] = value;
+                        }
+                    }
+                }
+
+                const literal = JSON.stringify(padding);
+
+                if (literal !== "{}") {
+
+                    const dom = new code.MethodCallCodeDOM("setPadding", args.objectVarName);
+
+                    dom.arg(literal);
+
+                    args.result.push(dom);
+                }
+            }
         }
     }
 }

@@ -83,7 +83,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createFloatField(comp3, TextComponent.paddingTop);
                 this.createFloatField(comp3, TextComponent.paddingRight);
                 this.createFloatField(comp3, TextComponent.paddingBottom);
-
             }
 
             // baseline

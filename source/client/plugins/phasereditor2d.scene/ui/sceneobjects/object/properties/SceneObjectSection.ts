@@ -208,7 +208,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 );
             });
 
-
             return btn;
         }
 
