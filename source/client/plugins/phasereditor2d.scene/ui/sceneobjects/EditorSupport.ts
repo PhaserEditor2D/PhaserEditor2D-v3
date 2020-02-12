@@ -42,6 +42,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             scene.sys.displayList.add(obj as Phaser.GameObjects.GameObject);
         }
 
+        computeContentHash() {
+
+            return "";
+        }
+
         destroy() {
 
             const obj = this.getObject() as Phaser.GameObjects.GameObject;

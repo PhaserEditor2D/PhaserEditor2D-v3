@@ -6382,6 +6382,9 @@ var phasereditor2d;
                         this.setInteractive();
                         scene.sys.displayList.add(obj);
                     }
+                    computeContentHash() {
+                        return "";
+                    }
                     destroy() {
                         const obj = this.getObject();
                         obj.disableInteractive();
@@ -8284,6 +8287,53 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                var controls = colibri.ui.controls;
+                class ObjectCellRenderer {
+                    renderCell(args) {
+                        const obj = args.obj;
+                        const support = obj.getEditorSupport();
+                        const hash = support.computeContentHash();
+                        const key = "__renderer__image_" + hash;
+                        const cached = obj.getData(key);
+                        if (cached) {
+                            cached.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
+                            return;
+                        }
+                        // send image to garbage.
+                        obj.data.remove("__last_renderer_image");
+                        const angle = obj.angle;
+                        obj.setAngle(0);
+                        const render = new Phaser.GameObjects.RenderTexture(support.getScene(), 0, 0, obj.width, obj.height);
+                        render.draw(obj, 0, 0);
+                        render.snapshot(imgElement => {
+                            const img = new controls.ImageWrapper(imgElement);
+                            obj.setData("__last_renderer_image", img);
+                            obj.setData(key, img);
+                            img.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
+                        });
+                        obj.setAngle(angle);
+                        render.destroy();
+                    }
+                    cellHeight(args) {
+                        return args.viewer.getCellSize();
+                    }
+                    preload(args) {
+                        return controls.Controls.resolveNothingLoaded();
+                    }
+                }
+                sceneobjects.ObjectCellRenderer = ObjectCellRenderer;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="../Component.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -10070,14 +10120,24 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                var controls = colibri.ui.controls;
                 class TextEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj, scene) {
                         super(sceneobjects.TextExtension.getInstance(), obj, scene);
                         this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.TextComponent(obj));
                     }
+                    computeContentHash() {
+                        const obj = this.getObject();
+                        const hash = JSON.stringify({
+                            text: obj.text,
+                            style: obj.style.toJSON(),
+                            flip: obj.flipX + "," + obj.flipY,
+                            tint: obj.tint,
+                            angle: obj.angle
+                        });
+                        return hash;
+                    }
                     getCellRenderer() {
-                        return new controls.viewers.EmptyCellRenderer();
+                        return new sceneobjects.ObjectCellRenderer();
                     }
                     setInteractive() {
                         this.getObject().setInteractive();

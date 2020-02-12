@@ -1262,6 +1262,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _componentMap;
         private _unlockedProperties;
         constructor(extension: SceneObjectExtension, obj: T, scene: Scene);
+        computeContentHash(): string;
         destroy(): void;
         isMethodScope(): boolean;
         hasProperty(property: IProperty<any>): boolean;
@@ -1815,6 +1816,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class ObjectCellRenderer implements controls.viewers.ICellRenderer {
+        renderCell(args: controls.viewers.RenderCellArgs): void;
+        cellHeight(args: controls.viewers.RenderCellArgs): number;
+        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IOriginLikeObject extends ISceneObject {
         originX: number;
         originY: number;
@@ -2226,6 +2235,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TextEditorSupport extends EditorSupport<Text> {
         constructor(obj: Text, scene: Scene);
+        computeContentHash(): string;
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
         setInteractive(): void;
     }

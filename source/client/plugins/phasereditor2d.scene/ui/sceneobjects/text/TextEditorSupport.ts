@@ -17,15 +17,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
+        computeContentHash() {
+
+            const obj = this.getObject();
+
+            const hash = JSON.stringify({
+                text: obj.text,
+                style: obj.style.toJSON(),
+                flip: obj.flipX + "," + obj.flipY,
+                tint: obj.tint,
+                angle: obj.angle
+            });
+
+            return hash;
+        }
+
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
-            return new controls.viewers.EmptyCellRenderer();
+            return new ObjectCellRenderer();
         }
 
         setInteractive(): void {
 
             this.getObject().setInteractive();
         }
-
     }
 }
