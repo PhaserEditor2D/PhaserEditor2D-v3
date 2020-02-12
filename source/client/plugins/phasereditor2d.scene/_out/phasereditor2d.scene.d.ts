@@ -1520,10 +1520,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
         protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
         protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
+        protected createPropertyFloatRow(parent: HTMLElement, prop: IProperty<any>, lockIcon?: boolean): HTMLInputElement;
+        protected createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon?: boolean): HTMLInputElement | HTMLTextAreaElement;
+        protected createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon?: boolean): HTMLButtonElement;
         protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
-        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): void;
+        createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): HTMLButtonElement;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
-        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean, readOnlyOnMultiple?: boolean): HTMLInputElement;
+        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean, readOnlyOnMultiple?: boolean, multiLine?: boolean): HTMLInputElement | HTMLTextAreaElement;
         createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
     }
 }
@@ -2187,6 +2190,40 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class TextComponent extends Component<Text> {
+        static fixedWidth: IProperty<Text>;
+        static fixedHeight: IProperty<Text>;
+        static fixedSize: IPropertyXY;
+        static paddingLeft: IProperty<Text>;
+        static paddingTop: IProperty<Text>;
+        static paddingRight: IProperty<Text>;
+        static paddingBottom: IProperty<Text>;
+        static lineSpacing: IProperty<Text>;
+        static align: IEnumProperty<Text, string>;
+        static fontFamily: IProperty<Text>;
+        static fontSize: IProperty<Text>;
+        static fontStyle: IEnumProperty<Text, string>;
+        static color: IProperty<Text>;
+        static stroke: IProperty<Text>;
+        static strokeThickness: IProperty<Text>;
+        static backgroundColor: IProperty<Text>;
+        static shadowOffsetX: IProperty<Text>;
+        static shadowOffsetY: IProperty<Text>;
+        static shadowOffset: IPropertyXY;
+        static shadowStroke: IProperty<Text>;
+        static shadowFill: IProperty<Text>;
+        static shadow: IPropertyXY;
+        static shadowColor: IProperty<Text>;
+        static shadowBlur: IProperty<Text>;
+        static baselineX: IProperty<Text>;
+        static baselineY: IProperty<Text>;
+        static baseline: IPropertyXY;
+        static maxLines: IProperty<Text>;
+        constructor(obj: Text);
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TextEditorSupport extends EditorSupport<Text> {
         constructor(obj: Text, scene: Scene);
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
@@ -2204,6 +2241,15 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createSceneObjectWithData(args: ICreateWithDataArgs): ISceneObject;
         getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
         getCodeDOMBuilder(): ObjectCodeDOMBuilder;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class TextSection extends SceneObjectSection<Text> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

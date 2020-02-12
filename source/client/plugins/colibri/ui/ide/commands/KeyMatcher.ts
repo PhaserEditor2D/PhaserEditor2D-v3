@@ -57,6 +57,7 @@ namespace colibri.ui.ide.commands {
         }
 
         matchesKeys(event: KeyboardEvent) {
+
             return event.ctrlKey === this._control
                 && event.shiftKey === this._shift
                 && event.altKey === this._alt
@@ -65,9 +66,12 @@ namespace colibri.ui.ide.commands {
         }
 
         matchesTarget(element: EventTarget) {
+
             if (this._filterInputElements) {
-                return !(element instanceof HTMLInputElement);
+
+                return !(element instanceof HTMLInputElement) && !(element instanceof HTMLTextAreaElement);
             }
+
             return true;
         }
     }

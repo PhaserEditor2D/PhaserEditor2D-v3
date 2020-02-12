@@ -100,6 +100,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (lockIcon) {
 
                 this.createLock(parent, propXY.x, propXY.y);
+                this.createLabel(parent, propXY.label);
 
             } else {
 
@@ -109,9 +110,53 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of [propXY.x, propXY.y]) {
 
-                this.createLabel(parent, prop.label);
                 this.createBooleanField(parent, prop);
             }
+        }
+
+        protected createPropertyFloatRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
+
+            if (lockIcon) {
+
+                this.createLock(parent, prop);
+            }
+
+            const label = this.createLabel(parent, prop.label);
+            label.style.gridColumn = "2";
+
+            const text = this.createFloatField(parent, prop);
+
+            return text;
+        }
+
+        protected createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
+
+            if (lockIcon) {
+
+                this.createLock(parent, prop);
+            }
+
+            const label = this.createLabel(parent, prop.label);
+            label.style.gridColumn = "2";
+
+            const text = this.createStringField(parent, prop);
+
+            return text;
+        }
+
+        protected createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon: boolean = true) {
+
+            if (lockIcon) {
+
+                this.createLock(parent, prop);
+            }
+
+            const label = this.createLabel(parent, prop.label);
+            label.style.gridColumn = "2";
+
+            const btn = this.createEnumField(parent, prop);
+
+            return btn;
         }
 
         protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
@@ -162,6 +207,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         .map(obj => property.getValueLabel(property.getValue(obj)))
                 );
             });
+
+
+            return btn;
         }
 
         // tslint:disable-next-line:ban-types
@@ -192,9 +240,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true, readOnlyOnMultiple = false) {
+        createStringField(
+            parent: HTMLElement, property: IProperty<T>,
+            checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
 
-            const text = this.createText(parent, false);
+            const text = multiLine ? this.createTextArea(parent, false) : this.createText(parent, false);
 
             text.addEventListener("change", e => {
 

@@ -7226,7 +7226,7 @@ var colibri;
                     }
                     matchesTarget(element) {
                         if (this._filterInputElements) {
-                            return !(element instanceof HTMLInputElement);
+                            return !(element instanceof HTMLInputElement) && !(element instanceof HTMLTextAreaElement);
                         }
                         return true;
                     }

@@ -9,10 +9,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(
 
-                new TransformComponent(obj as unknown as ITransformLikeObject),
-                new OriginComponent(obj as unknown as IOriginLikeObject),
-                new FlipComponent(obj as unknown as IFlipLikeObject),
-                new TextContentComponent(obj as unknown as ITextContentLikeObject),
+                new TransformComponent(obj),
+                new OriginComponent(obj),
+                new FlipComponent(obj),
+                new TextContentComponent(obj),
+                new TextComponent(obj)
             );
         }
 

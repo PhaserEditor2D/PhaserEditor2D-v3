@@ -59,7 +59,7 @@ var phasereditor2d;
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.TextExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
@@ -6941,15 +6941,42 @@ var phasereditor2d;
                     createPropertyBoolXYRow(parent, propXY, lockIcon = true) {
                         if (lockIcon) {
                             this.createLock(parent, propXY.x, propXY.y);
+                            this.createLabel(parent, propXY.label);
                         }
                         else {
                             const label = this.createLabel(parent, propXY.label);
                             label.style.gridColumn = "2";
                         }
                         for (const prop of [propXY.x, propXY.y]) {
-                            this.createLabel(parent, prop.label);
                             this.createBooleanField(parent, prop);
                         }
+                    }
+                    createPropertyFloatRow(parent, prop, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, prop);
+                        }
+                        const label = this.createLabel(parent, prop.label);
+                        label.style.gridColumn = "2";
+                        const text = this.createFloatField(parent, prop);
+                        return text;
+                    }
+                    createPropertyStringRow(parent, prop, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, prop);
+                        }
+                        const label = this.createLabel(parent, prop.label);
+                        label.style.gridColumn = "2";
+                        const text = this.createStringField(parent, prop);
+                        return text;
+                    }
+                    createPropertyEnumRow(parent, prop, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, prop);
+                        }
+                        const label = this.createLabel(parent, prop.label);
+                        label.style.gridColumn = "2";
+                        const btn = this.createEnumField(parent, prop);
+                        return btn;
                     }
                     createPropertyXYRow(parent, propXY, lockIcon = true) {
                         if (lockIcon) {
@@ -6981,6 +7008,7 @@ var phasereditor2d;
                             btn.textContent = this.flatValues_StringJoinDifferent(this.getSelection()
                                 .map(obj => property.getValueLabel(property.getValue(obj))));
                         });
+                        return btn;
                     }
                     // tslint:disable-next-line:ban-types
                     createFloatField(parent, property) {
@@ -6996,8 +7024,8 @@ var phasereditor2d;
                         });
                         return text;
                     }
-                    createStringField(parent, property, checkUnlock = true, readOnlyOnMultiple = false) {
-                        const text = this.createText(parent, false);
+                    createStringField(parent, property, checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
+                        const text = multiLine ? this.createTextArea(parent, false) : this.createText(parent, false);
                         text.addEventListener("change", e => {
                             const value = text.value;
                             this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
@@ -7052,7 +7080,7 @@ var phasereditor2d;
                         comp.style.gridTemplateColumns = "auto auto 1fr";
                         this.createLock(comp, sceneobjects.TextContentComponent.text);
                         this.createLabel(comp, sceneobjects.TextContentComponent.text.label);
-                        this.createStringField(comp, sceneobjects.TextContentComponent.text);
+                        this.createStringField(comp, sceneobjects.TextContentComponent.text, true, false, true);
                     }
                     canEdit(obj, n) {
                         return sceneobjects.EditorSupport.hasObjectComponent(obj, sceneobjects.TextContentComponent);
@@ -9710,6 +9738,243 @@ var phasereditor2d;
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TextComponent extends sceneobjects.Component {
+                    constructor(obj) {
+                        super(obj, [
+                            TextComponent.fixedWidth,
+                            TextComponent.fixedHeight,
+                            TextComponent.paddingLeft,
+                            TextComponent.paddingTop,
+                            TextComponent.paddingRight,
+                            TextComponent.paddingBottom,
+                            TextComponent.lineSpacing,
+                            TextComponent.align,
+                            TextComponent.fontFamily,
+                            TextComponent.fontSize,
+                            TextComponent.fontStyle,
+                            TextComponent.color,
+                            TextComponent.stroke,
+                            TextComponent.strokeThickness,
+                            TextComponent.backgroundColor,
+                            TextComponent.shadowOffsetX,
+                            TextComponent.shadowOffsetY,
+                            TextComponent.shadowStroke,
+                            TextComponent.shadowFill,
+                            TextComponent.shadowColor,
+                            TextComponent.shadowBlur,
+                            TextComponent.baselineX,
+                            TextComponent.baselineY,
+                            TextComponent.maxLines
+                        ]);
+                    }
+                    buildSetObjectPropertiesCodeDOM(args) {
+                    }
+                }
+                TextComponent.fixedWidth = {
+                    name: "fixedWidth",
+                    label: "Width",
+                    defValue: 0,
+                    getValue: obj => obj.style.fixedWidth,
+                    setValue: (obj, value) => obj.setFixedSize(value, obj.style.fixedHeight)
+                };
+                TextComponent.fixedHeight = {
+                    name: "fixedHeight",
+                    label: "Height",
+                    defValue: 0,
+                    getValue: obj => obj.style.fixedHeight,
+                    setValue: (obj, value) => obj.setFixedSize(obj.style.fixedWidth, value)
+                };
+                TextComponent.fixedSize = {
+                    label: "Fixed Size",
+                    x: TextComponent.fixedWidth,
+                    y: TextComponent.fixedHeight
+                };
+                TextComponent.paddingLeft = {
+                    name: "paddingLeft",
+                    label: "Padding Left",
+                    defValue: 0,
+                    getValue: obj => obj.padding["left"],
+                    setValue: (obj, value) => { obj.padding["left"] = value; obj.updateText(); }
+                };
+                TextComponent.paddingTop = {
+                    name: "paddingTop",
+                    label: "Padding Top",
+                    defValue: 0,
+                    getValue: obj => obj.padding["top"],
+                    setValue: (obj, value) => { obj.padding["top"] = value; obj.updateText(); }
+                };
+                TextComponent.paddingRight = {
+                    name: "paddingRight",
+                    label: "Padding Right",
+                    defValue: 0,
+                    getValue: obj => obj.padding["right"],
+                    setValue: (obj, value) => { obj.padding["right"] = value; obj.updateText(); }
+                };
+                TextComponent.paddingBottom = {
+                    name: "paddingBottom",
+                    label: "Padding Bottom",
+                    defValue: 0,
+                    getValue: obj => obj.padding["bottom"],
+                    setValue: (obj, value) => { obj.padding["bottom"] = value; obj.updateText(); }
+                };
+                TextComponent.lineSpacing = {
+                    name: "lineSpacing",
+                    label: "Line Spacing",
+                    defValue: 0,
+                    getValue: obj => obj.lineSpacing,
+                    setValue: (obj, value) => obj.setLineSpacing(value)
+                };
+                TextComponent.align = {
+                    name: "align",
+                    label: "Align",
+                    defValue: "left",
+                    getValue: obj => obj.style.align,
+                    setValue: (obj, value) => obj.setAlign(value),
+                    values: ["left", "right", "center", "justify"],
+                    getValueLabel: value => value.toUpperCase()
+                };
+                TextComponent.fontFamily = {
+                    name: "fontFamily",
+                    label: "Font Family",
+                    defValue: "Courier",
+                    getValue: obj => obj.style.fontFamily,
+                    setValue: (obj, value) => obj.setFontFamily(value)
+                };
+                TextComponent.fontSize = {
+                    name: "fontSize",
+                    label: "Font Size",
+                    defValue: "16px",
+                    getValue: obj => obj.style.fontSize,
+                    setValue: (obj, value) => obj.setFontSize(value)
+                };
+                TextComponent.fontStyle = {
+                    name: "fontStyle",
+                    label: "Font Style",
+                    defValue: "",
+                    getValue: obj => obj.style.fontStyle,
+                    setValue: (obj, value) => obj.setFontStyle(value),
+                    values: ["", "italic", "bold", "bold italic"],
+                    getValueLabel: value => value === "" ? "(Default)" : value.toUpperCase()
+                };
+                TextComponent.color = {
+                    name: "color",
+                    label: "Color",
+                    defValue: "#fff",
+                    getValue: obj => obj.style.color,
+                    setValue: (obj, value) => obj.setColor(value)
+                };
+                TextComponent.stroke = {
+                    name: "stroke",
+                    label: "Stroke",
+                    defValue: "#fff",
+                    getValue: obj => obj.style.stroke,
+                    setValue: (obj, value) => obj.setStroke(value, obj.style.strokeThickness)
+                };
+                TextComponent.strokeThickness = {
+                    name: "strokeThickness",
+                    label: "Stroke Thickness",
+                    defValue: 0,
+                    getValue: obj => obj.style.strokeThickness,
+                    setValue: (obj, value) => obj.setStroke(obj.style.stroke, value)
+                };
+                TextComponent.backgroundColor = {
+                    name: "backgroundColor",
+                    label: "Background Color",
+                    defValue: null,
+                    getValue: obj => obj.style.backgroundColor,
+                    setValue: (obj, value) => obj.setBackgroundColor(value)
+                };
+                TextComponent.shadowOffsetX = {
+                    name: "shadowOffsetX",
+                    label: "X",
+                    defValue: 0,
+                    getValue: obj => obj.style.shadowOffsetX,
+                    setValue: (obj, value) => obj.setShadowOffset(value, obj.style.shadowOffsetY)
+                };
+                TextComponent.shadowOffsetY = {
+                    name: "shadowOffsetY",
+                    label: "Y",
+                    defValue: 0,
+                    getValue: obj => obj.style.shadowOffsetY,
+                    setValue: (obj, value) => obj.setShadowOffset(obj.style.shadowOffsetX, value)
+                };
+                TextComponent.shadowOffset = {
+                    label: "Shadow Offset",
+                    x: TextComponent.shadowOffsetX,
+                    y: TextComponent.shadowOffsetY
+                };
+                TextComponent.shadowStroke = {
+                    name: "shadowStroke",
+                    label: "Stroke",
+                    defValue: false,
+                    getValue: obj => obj.style.shadowStroke,
+                    setValue: (obj, value) => obj.setShadowStroke(value)
+                };
+                TextComponent.shadowFill = {
+                    name: "shadowFill",
+                    label: "Fill",
+                    defValue: false,
+                    getValue: obj => obj.style.shadowFill,
+                    setValue: (obj, value) => obj.setShadowFill(value)
+                };
+                TextComponent.shadow = {
+                    label: "Shadow",
+                    x: TextComponent.shadowStroke,
+                    y: TextComponent.shadowFill
+                };
+                TextComponent.shadowColor = {
+                    name: "shadowColor",
+                    label: "Shadow Color",
+                    defValue: "#000",
+                    getValue: obj => obj.style.shadowColor,
+                    setValue: (obj, value) => obj.setShadowColor(value)
+                };
+                TextComponent.shadowBlur = {
+                    name: "shadowBlur",
+                    label: "Shadow Blur",
+                    defValue: 0,
+                    getValue: obj => obj.style.shadowBlur,
+                    setValue: (obj, value) => obj.setShadowBlur(value)
+                };
+                TextComponent.baselineX = {
+                    name: "baselineX",
+                    label: "X",
+                    defValue: 1.2,
+                    getValue: obj => obj.style.baselineX,
+                    setValue: (obj, value) => obj.style.baselineX = value
+                };
+                TextComponent.baselineY = {
+                    name: "baselineY",
+                    label: "Y",
+                    defValue: 1.4,
+                    getValue: obj => obj.style.baselineY,
+                    setValue: (obj, value) => obj.style.baselineY = value
+                };
+                TextComponent.baseline = {
+                    label: "Baseline",
+                    x: TextComponent.baselineX,
+                    y: TextComponent.baselineY
+                };
+                TextComponent.maxLines = {
+                    name: "maxLines",
+                    label: "Max Lines",
+                    defValue: 0,
+                    getValue: obj => obj.style.maxLines,
+                    setValue: (obj, value) => obj.setMaxLines(value)
+                };
+                sceneobjects.TextComponent = TextComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
     (function (scene_30) {
         var ui;
         (function (ui) {
@@ -9719,7 +9984,7 @@ var phasereditor2d;
                 class TextEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj, scene) {
                         super(sceneobjects.TextExtension.getInstance(), obj, scene);
-                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.TextContentComponent(obj));
+                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.TextComponent(obj));
                     }
                     getCellRenderer() {
                         return new controls.viewers.EmptyCellRenderer();
@@ -9775,6 +10040,87 @@ var phasereditor2d;
                 }
                 TextExtension._instance = new TextExtension();
                 sceneobjects.TextExtension = TextExtension;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class TextSection extends sceneobjects.SceneObjectSection {
+                    constructor(page) {
+                        super(page, "phasereditor.scene.ui.sceneobjects.TextSection", "Text");
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElementWithPropertiesXY(parent);
+                        // fontFamily
+                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.fontFamily).style.gridColumn = "3 / span 4";
+                        // fontSize
+                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.fontSize).style.gridColumn = "3 / span 4";
+                        // fontStyle
+                        this.createPropertyEnumRow(comp, sceneobjects.TextComponent.fontStyle).style.gridColumn = "3 / span 4";
+                        // align
+                        this.createPropertyEnumRow(comp, sceneobjects.TextComponent.align).style.gridColumn = "3 / span 4";
+                        // color
+                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.color).style.gridColumn = "3 / span 4";
+                        // stroke
+                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.stroke).style.gridColumn = "3 / span 4";
+                        // strokeThickness
+                        this.createPropertyFloatRow(comp, sceneobjects.TextComponent.strokeThickness).style.gridColumn = "3 / span 4";
+                        // backgroundColor
+                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.backgroundColor).style.gridColumn = "3 / span 4";
+                        // shadow
+                        this.createPropertyBoolXYRow(comp, sceneobjects.TextComponent.shadow);
+                        // shadowOffset
+                        this.createPropertyXYRow(comp, sceneobjects.TextComponent.shadowOffset);
+                        // shadowColor
+                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.shadowColor).style.gridColumn = "3 / span 4";
+                        // shadowBlur
+                        this.createPropertyFloatRow(comp, sceneobjects.TextComponent.shadowBlur).style.gridColumn = "3 / span 4";
+                        // fixedSize
+                        this.createPropertyXYRow(comp, sceneobjects.TextComponent.fixedSize);
+                        {
+                            // padding
+                            const comp2 = this.createGridElement(comp);
+                            comp2.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
+                            comp2.style.gridColumn = "3 / span 4";
+                            comp2.style.paddingBottom = "0px";
+                            comp.appendChild(comp2);
+                            this.createLabel(comp2, "Left").style.justifySelf = "center";
+                            this.createLabel(comp2, "Top").style.justifySelf = "center";
+                            this.createLabel(comp2, "Right").style.justifySelf = "center";
+                            this.createLabel(comp2, "Bottom").style.justifySelf = "center";
+                            this.createLock(comp, sceneobjects.TextComponent.paddingLeft, sceneobjects.TextComponent.paddingTop, sceneobjects.TextComponent.paddingRight, sceneobjects.TextComponent.paddingBottom);
+                            this.createLabel(comp, "Padding");
+                            const comp3 = this.createGridElement(comp);
+                            comp3.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
+                            comp3.style.gridColumn = "3 / span 4";
+                            comp.appendChild(comp3);
+                            this.createFloatField(comp3, sceneobjects.TextComponent.paddingLeft);
+                            this.createFloatField(comp3, sceneobjects.TextComponent.paddingTop);
+                            this.createFloatField(comp3, sceneobjects.TextComponent.paddingRight);
+                            this.createFloatField(comp3, sceneobjects.TextComponent.paddingBottom);
+                        }
+                        // baseline
+                        this.createPropertyXYRow(comp, sceneobjects.TextComponent.baseline);
+                        // lineSpacing
+                        this.createPropertyFloatRow(comp, sceneobjects.TextComponent.lineSpacing).style.gridColumn = "3 / span 4";
+                        // maxLines
+                        this.createPropertyFloatRow(comp, sceneobjects.TextComponent.maxLines).style.gridColumn = "3 / span 4";
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof sceneobjects.Text;
+                    }
+                    canEditNumber(n) {
+                        return n > 0;
+                    }
+                }
+                sceneobjects.TextSection = TextSection;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

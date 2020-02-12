@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLabel(comp, TextContentComponent.text.label);
 
-            this.createStringField(comp, TextContentComponent.text);
+            this.createStringField(comp, TextContentComponent.text, true, false, true);
         }
 
         canEdit(obj: any, n: number): boolean {
