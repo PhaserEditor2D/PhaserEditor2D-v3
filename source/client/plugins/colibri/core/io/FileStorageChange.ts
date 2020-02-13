@@ -15,6 +15,7 @@ namespace colibri.core.io {
         private _deletedRecords: Set<string>;
         private _addedRecords: Set<string>;
         private _modifiedRecords: Set<string>;
+        private _fullProjectReload;
 
         constructor() {
 
@@ -24,6 +25,14 @@ namespace colibri.core.io {
             this._addedRecords = new Set();
             this._modifiedRecords = new Set();
             this._renameFromToMap = new Map();
+        }
+
+        fullProjectLoaded() {
+            this._fullProjectReload = true;
+        }
+
+        isFullProjectReload() {
+            return this._fullProjectReload;
         }
 
         recordRename(fromPath: string, toPath: string) {
