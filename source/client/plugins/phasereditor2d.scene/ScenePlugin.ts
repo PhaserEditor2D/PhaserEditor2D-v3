@@ -91,6 +91,12 @@ namespace phasereditor2d.scene {
                 }
             ));
 
+            reg.addExtension(new controls.MenuExtension(files.ui.views.FilesView.MENU_ID,
+                {
+                    command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
+                }
+            ));
+
             // editors
 
             reg.addExtension(

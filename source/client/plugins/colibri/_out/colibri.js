@@ -2361,7 +2361,9 @@ var colibri;
                 addExtension(menuId) {
                     const exts = colibri.Platform.getExtensions(controls.MenuExtension.POINT_ID);
                     for (const ext of exts) {
-                        ext.fillMenu(this);
+                        if (ext.getMenuId() === menuId) {
+                            ext.fillMenu(this);
+                        }
                     }
                 }
                 addSeparator() {

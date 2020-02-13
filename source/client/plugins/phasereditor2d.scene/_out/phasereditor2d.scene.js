@@ -48,6 +48,9 @@ var phasereditor2d;
                 reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN, {
                     command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
                 }));
+                reg.addExtension(new controls.MenuExtension(phasereditor2d.files.ui.views.FilesView.MENU_ID, {
+                    command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
+                }));
                 // editors
                 reg.addExtension(new ide.EditorExtension([
                     scene_1.ui.editor.SceneEditor.getFactory()
@@ -4505,7 +4508,7 @@ var phasereditor2d;
                                 command: {
                                     id: commands.CMD_COMPILE_ALL_SCENE_FILES,
                                     icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_BUILD),
-                                    name: "Compile All Scene Files",
+                                    name: "Compile Scenes",
                                     tooltip: "Compile all the Scene files of the project.",
                                     category: commands.CAT_SCENE_EDITOR
                                 },

@@ -156,7 +156,7 @@ var phasereditor2d;
         (function (ui) {
             var actions;
             (function (actions) {
-                actions.CMD_NEW_FILE = "phasereditor2d.files.ui.actions.newFile";
+                actions.CMD_NEW_FILE = "phasereditor2d.files.ui.actions.NewFile";
                 actions.CAT_NEW_FILE = "phasereditor2d.fines.ui.actions.NewFileCategory";
                 function isFilesViewScope(args) {
                     return args.activePart instanceof ui.views.FilesView;
@@ -1305,6 +1305,8 @@ var phasereditor2d;
                         menu.add(new ui.actions.CopyFilesAction(this));
                         menu.add(new ui.actions.DeleteFilesAction(this));
                         menu.addSeparator();
+                        menu.addExtension(FilesView.MENU_ID);
+                        menu.addSeparator();
                         menu.add(new ui.actions.UploadFilesAction(this));
                     }
                     getPropertyProvider() {
@@ -1363,6 +1365,7 @@ var phasereditor2d;
                     }
                 }
                 FilesView.ID = "phasereditor2d.files.ui.views.FilesView";
+                FilesView.MENU_ID = "phasereditor2d.files.ui.views.FilesView#ContextMenu";
                 views.FilesView = FilesView;
             })(views = ui.views || (ui.views = {}));
         })(ui = files.ui || (files.ui = {}));

@@ -50,7 +50,10 @@ namespace colibri.ui.controls {
 
             for (const ext of exts) {
 
-                ext.fillMenu(this);
+                if (ext.getMenuId() === menuId) {
+
+                    ext.fillMenu(this);
+                }
             }
         }
 

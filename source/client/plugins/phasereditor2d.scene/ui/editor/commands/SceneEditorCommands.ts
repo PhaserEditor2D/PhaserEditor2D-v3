@@ -552,7 +552,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_COMPILE_ALL_SCENE_FILES,
                     icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
-                    name: "Compile All Scene Files",
+                    name: "Compile Scenes",
                     tooltip: "Compile all the Scene files of the project.",
                     category: CAT_SCENE_EDITOR
                 },

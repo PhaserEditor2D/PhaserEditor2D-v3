@@ -12,6 +12,7 @@ namespace phasereditor2d.ide {
         private static _instance = new IDEPlugin();
 
         private _openingProject: boolean;
+        private _desktopMode: boolean;
 
         static getInstance() {
             return this._instance;
@@ -91,6 +92,23 @@ namespace phasereditor2d.ide {
             // new dialogs
 
             reg.addExtension(new ui.dialogs.NewProjectDialogExtension());
+
+            // files view menu
+
+            reg.addExtension(new controls.MenuExtension(files.ui.views.FilesView.MENU_ID, {
+                command: ui.actions.CMD_LOCATE_FILE
+            }));
+        }
+
+        async requestServerMode() {
+
+            const data = await colibri.core.io.apiRequest("GetServerMode");
+
+            this._desktopMode = data.desktop === true;
+        }
+
+        isDesktopMode() {
+            return this._desktopMode;
         }
 
         async openFirstWindow() {
@@ -239,7 +257,7 @@ namespace phasereditor2d.ide {
 
     async function main() {
 
-        console.log(`%c %c Phaser Editor 2D %c v${VER} %c %c https://phasereditor2d.com `,
+        console.log(`%c %c Phaser Editor 2D Workbench %c v${VER} %c %c https://phasereditor2d.com `,
             "background-color:red",
             "background-color:#3f3f3f;color:whitesmoke",
             "background-color:orange;color:black",
@@ -248,6 +266,8 @@ namespace phasereditor2d.ide {
         );
 
         colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
+
+        await IDEPlugin.getInstance().requestServerMode();
 
         await colibri.Platform.start();
 

@@ -1,6 +1,7 @@
 namespace phasereditor2d.ide.ui.actions {
 
     export const CAT_PROJECT = "phasereditor2d.ide.ui.actions.ProjectCategory";
+    export const CMD_LOCATE_FILE = "phasereditor2d.ide.ui.actions.LocateFile";
     export const CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
     export const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
@@ -9,6 +10,7 @@ namespace phasereditor2d.ide.ui.actions {
 
     import controls = colibri.ui.controls;
     import commands = colibri.ui.ide.commands;
+    import io = colibri.core.io;
 
     function isNotWelcomeWindowScope(args: commands.HandlerArgs): boolean {
         return !(args.activeWindow instanceof ui.WelcomeWindow);
@@ -118,6 +120,53 @@ namespace phasereditor2d.ide.ui.actions {
                 alt: true,
                 key: "R"
             }));
+
+            // locate file
+
+            manager.add({
+                command: {
+                    id: CMD_LOCATE_FILE,
+                    category: CAT_PROJECT,
+                    name: "Locate File",
+                    tooltip: "Open the selected file (or project root) in the OS file manager."
+                },
+                keys: {
+                    key: "L",
+                    control: true,
+                    alt: true
+                },
+                handler: {
+
+                    executeFunc: args => {
+
+                        let file = colibri.ui.ide.FileUtils.getRoot();
+
+                        const view = args.activePart;
+
+                        if (view instanceof files.ui.views.FilesView) {
+
+                            const sel = view.getSelection()[0] as io.FilePath;
+
+                            if (sel) {
+
+                                file = sel;
+                            }
+                        }
+
+                        if (!file) {
+
+                            return;
+                        }
+
+                        if (file.isFile()) {
+
+                            file = file.getParent();
+                        }
+
+                        colibri.core.io.apiRequest("OpenFileManager", { file: file.getFullName() });
+                    }
+                }
+            });
 
             // theme dialog
 

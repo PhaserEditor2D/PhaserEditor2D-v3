@@ -8,6 +8,7 @@ namespace phasereditor2d.files.ui.views {
     export class FilesView extends ide.ViewerView {
 
         static ID = "phasereditor2d.files.ui.views.FilesView";
+        static MENU_ID = "phasereditor2d.files.ui.views.FilesView#ContextMenu";
 
         private _propertyProvider = new FilePropertySectionProvider();
 
@@ -38,6 +39,10 @@ namespace phasereditor2d.files.ui.views {
             menu.add(new actions.CopyFilesAction(this));
 
             menu.add(new actions.DeleteFilesAction(this));
+
+            menu.addSeparator();
+
+            menu.addExtension(FilesView.MENU_ID);
 
             menu.addSeparator();
 

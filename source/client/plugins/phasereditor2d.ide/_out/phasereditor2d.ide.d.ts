@@ -6,9 +6,12 @@ declare namespace phasereditor2d.ide {
     class IDEPlugin extends colibri.Plugin {
         private static _instance;
         private _openingProject;
+        private _desktopMode;
         static getInstance(): IDEPlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        requestServerMode(): Promise<void>;
+        isDesktopMode(): boolean;
         openFirstWindow(): Promise<void>;
         ideOpenProject(projectName: string): Promise<void>;
         private validateIndexFile;
@@ -72,6 +75,7 @@ declare namespace phasereditor2d.ide.ui {
 }
 declare namespace phasereditor2d.ide.ui.actions {
     const CAT_PROJECT = "phasereditor2d.ide.ui.actions.ProjectCategory";
+    const CMD_LOCATE_FILE = "phasereditor2d.ide.ui.actions.LocateFile";
     const CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
     const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";

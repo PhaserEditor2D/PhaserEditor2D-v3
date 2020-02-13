@@ -1,8 +1,9 @@
 namespace phasereditor2d.files.ui.actions {
 
-    import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
-    export const CMD_NEW_FILE = "phasereditor2d.files.ui.actions.newFile";
+    export const CMD_NEW_FILE = "phasereditor2d.files.ui.actions.NewFile";
+
     export const CAT_NEW_FILE = "phasereditor2d.fines.ui.actions.NewFileCategory";
 
     function isFilesViewScope(args: colibri.ui.ide.commands.HandlerArgs) {
@@ -59,6 +60,7 @@ namespace phasereditor2d.files.ui.actions {
                 args => {
                     new RenameFileAction(args.activePart as views.FilesView).run();
                 });
+
         }
     }
 }

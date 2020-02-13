@@ -56,6 +56,17 @@ var phasereditor2d;
                 }));
                 // new dialogs
                 reg.addExtension(new ide_1.ui.dialogs.NewProjectDialogExtension());
+                // files view menu
+                reg.addExtension(new controls.MenuExtension(phasereditor2d.files.ui.views.FilesView.MENU_ID, {
+                    command: ide_1.ui.actions.CMD_LOCATE_FILE
+                }));
+            }
+            async requestServerMode() {
+                const data = await colibri.core.io.apiRequest("GetServerMode");
+                this._desktopMode = data.desktop === true;
+            }
+            isDesktopMode() {
+                return this._desktopMode;
             }
             async openFirstWindow() {
                 this.restoreTheme();
@@ -148,8 +159,9 @@ var phasereditor2d;
         /* program entry point */
         ide_1.VER = "3.0.0";
         async function main() {
-            console.log(`%c %c Phaser Editor 2D %c v${ide_1.VER} %c %c https://phasereditor2d.com `, "background-color:red", "background-color:#3f3f3f;color:whitesmoke", "background-color:orange;color:black", "background-color:red", "background-color:silver");
+            console.log(`%c %c Phaser Editor 2D Workbench %c v${ide_1.VER} %c %c https://phasereditor2d.com `, "background-color:red", "background-color:#3f3f3f;color:whitesmoke", "background-color:orange;color:black", "background-color:red", "background-color:silver");
             colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
+            await IDEPlugin.getInstance().requestServerMode();
             await colibri.Platform.start();
             await IDEPlugin.getInstance().openFirstWindow();
         }
@@ -336,6 +348,7 @@ var phasereditor2d;
             var actions;
             (function (actions) {
                 actions.CAT_PROJECT = "phasereditor2d.ide.ui.actions.ProjectCategory";
+                actions.CMD_LOCATE_FILE = "phasereditor2d.ide.ui.actions.LocateFile";
                 actions.CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
                 actions.CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
                 actions.CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
@@ -419,6 +432,39 @@ var phasereditor2d;
                             alt: true,
                             key: "R"
                         }));
+                        // locate file
+                        manager.add({
+                            command: {
+                                id: actions.CMD_LOCATE_FILE,
+                                category: actions.CAT_PROJECT,
+                                name: "Locate File",
+                                tooltip: "Open the selected file (or project root) in the OS file manager."
+                            },
+                            keys: {
+                                key: "L",
+                                control: true,
+                                alt: true
+                            },
+                            handler: {
+                                executeFunc: args => {
+                                    let file = colibri.ui.ide.FileUtils.getRoot();
+                                    const view = args.activePart;
+                                    if (view instanceof phasereditor2d.files.ui.views.FilesView) {
+                                        const sel = view.getSelection()[0];
+                                        if (sel) {
+                                            file = sel;
+                                        }
+                                    }
+                                    if (!file) {
+                                        return;
+                                    }
+                                    if (file.isFile()) {
+                                        file = file.getParent();
+                                    }
+                                    colibri.core.io.apiRequest("OpenFileManager", { file: file.getFullName() });
+                                }
+                            }
+                        });
                         // theme dialog
                         manager.addCommandHelper({
                             id: actions.CMD_CHANGE_THEME,
