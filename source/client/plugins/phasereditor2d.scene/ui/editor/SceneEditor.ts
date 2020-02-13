@@ -679,9 +679,5 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._overlayLayer.render();
         }
-
-        copy() {
-            console.log("copy!");
-        }
     }
 }

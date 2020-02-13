@@ -3981,9 +3981,6 @@ var phasereditor2d;
                         this._game.loop.tick();
                         this._overlayLayer.render();
                     }
-                    copy() {
-                        console.log("copy!");
-                    }
                 }
                 editor.SceneEditor = SceneEditor;
             })(editor = ui.editor || (ui.editor = {}));

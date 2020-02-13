@@ -776,7 +776,6 @@ declare namespace phasereditor2d.scene.ui.editor {
         refreshOutline(): void;
         private onGameBoot;
         repaint(): void;
-        copy(): void;
     }
     export {};
 }
