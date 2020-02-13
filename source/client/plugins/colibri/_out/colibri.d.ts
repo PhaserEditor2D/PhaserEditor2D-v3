@@ -332,7 +332,10 @@ declare namespace colibri.core.io {
         private _deletedRecords;
         private _addedRecords;
         private _modifiedRecords;
+        private _fullProjectReload;
         constructor();
+        fullProjectLoaded(): void;
+        isFullProjectReload(): any;
         recordRename(fromPath: string, toPath: string): void;
         getRenameTo(fromPath: string): any;
         isRenamed(fromPath: string): boolean;

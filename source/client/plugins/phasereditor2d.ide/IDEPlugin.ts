@@ -95,9 +95,12 @@ namespace phasereditor2d.ide {
 
             // files view menu
 
-            reg.addExtension(new controls.MenuExtension(files.ui.views.FilesView.MENU_ID, {
-                command: ui.actions.CMD_LOCATE_FILE
-            }));
+            if (IDEPlugin.getInstance().isDesktopMode()) {
+
+                reg.addExtension(new controls.MenuExtension(files.ui.views.FilesView.MENU_ID, {
+                    command: ui.actions.CMD_LOCATE_FILE
+                }));
+            }
         }
 
         async requestServerMode() {

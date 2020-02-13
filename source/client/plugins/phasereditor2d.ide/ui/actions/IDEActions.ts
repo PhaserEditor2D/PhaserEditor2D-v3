@@ -121,52 +121,55 @@ namespace phasereditor2d.ide.ui.actions {
                 key: "R"
             }));
 
-            // locate file
+            if (IDEPlugin.getInstance().isDesktopMode()) {
 
-            manager.add({
-                command: {
-                    id: CMD_LOCATE_FILE,
-                    category: CAT_PROJECT,
-                    name: "Locate File",
-                    tooltip: "Open the selected file (or project root) in the OS file manager."
-                },
-                keys: {
-                    key: "L",
-                    control: true,
-                    alt: true
-                },
-                handler: {
+                // locate file
 
-                    executeFunc: args => {
+                manager.add({
+                    command: {
+                        id: CMD_LOCATE_FILE,
+                        category: CAT_PROJECT,
+                        name: "Locate File",
+                        tooltip: "Open the selected file (or project root) in the OS file manager."
+                    },
+                    keys: {
+                        key: "L",
+                        control: true,
+                        alt: true
+                    },
+                    handler: {
 
-                        let file = colibri.ui.ide.FileUtils.getRoot();
+                        executeFunc: args => {
 
-                        const view = args.activePart;
+                            let file = colibri.ui.ide.FileUtils.getRoot();
 
-                        if (view instanceof files.ui.views.FilesView) {
+                            const view = args.activePart;
 
-                            const sel = view.getSelection()[0] as io.FilePath;
+                            if (view instanceof files.ui.views.FilesView) {
 
-                            if (sel) {
+                                const sel = view.getSelection()[0] as io.FilePath;
 
-                                file = sel;
+                                if (sel) {
+
+                                    file = sel;
+                                }
                             }
+
+                            if (!file) {
+
+                                return;
+                            }
+
+                            if (file.isFile()) {
+
+                                file = file.getParent();
+                            }
+
+                            colibri.core.io.apiRequest("OpenFileManager", { file: file.getFullName() });
                         }
-
-                        if (!file) {
-
-                            return;
-                        }
-
-                        if (file.isFile()) {
-
-                            file = file.getParent();
-                        }
-
-                        colibri.core.io.apiRequest("OpenFileManager", { file: file.getFullName() });
                     }
-                }
-            });
+                });
+            }
 
             // theme dialog
 

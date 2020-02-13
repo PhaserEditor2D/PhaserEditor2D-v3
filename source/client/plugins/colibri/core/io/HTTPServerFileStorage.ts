@@ -260,11 +260,23 @@ namespace colibri.core.io {
 
         async openProject(projectName: string): Promise<FilePath> {
 
+            this._root = null;
+
             this._projectName = projectName;
+
+            this._hash = "";
 
             await this.reload();
 
-            return this.getRoot();
+            const root = this.getRoot();
+
+            const change = new FileStorageChange();
+
+            change.fullProjectLoaded();
+
+            this.fireChange(change);
+
+            return root;
         }
 
         async getProjectTemplates(): Promise<ProjectTemplatesData> {

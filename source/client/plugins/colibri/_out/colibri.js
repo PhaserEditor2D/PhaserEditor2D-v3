@@ -1192,6 +1192,12 @@ var colibri;
                     this._modifiedRecords = new Set();
                     this._renameFromToMap = new Map();
                 }
+                fullProjectLoaded() {
+                    this._fullProjectReload = true;
+                }
+                isFullProjectReload() {
+                    return this._fullProjectReload;
+                }
                 recordRename(fromPath, toPath) {
                     this._renameRecords_fromPath.add(fromPath);
                     this._renameRecords_toPath.add(toPath);
@@ -1423,9 +1429,15 @@ var colibri;
                     return this._root;
                 }
                 async openProject(projectName) {
+                    this._root = null;
                     this._projectName = projectName;
+                    this._hash = "";
                     await this.reload();
-                    return this.getRoot();
+                    const root = this.getRoot();
+                    const change = new io.FileStorageChange();
+                    change.fullProjectLoaded();
+                    this.fireChange(change);
+                    return root;
                 }
                 async getProjectTemplates() {
                     const data = await apiRequest("GetProjectTemplates", {});
