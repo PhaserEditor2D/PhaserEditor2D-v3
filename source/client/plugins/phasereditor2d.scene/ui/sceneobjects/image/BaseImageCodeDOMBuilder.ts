@@ -66,10 +66,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const ctr = args.ctrDeclCodeDOM;
 
-            ctr.addArg("x", "number");
-            ctr.addArg("y", "number");
-            ctr.addArg("texture", "string", true);
-            ctr.addArg("frame", "number | string", true);
+            ctr.arg("x", "number");
+            ctr.arg("y", "number");
+            ctr.arg("texture", "string", true);
+            ctr.arg("frame", "number | string", true);
         }
 
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs) {

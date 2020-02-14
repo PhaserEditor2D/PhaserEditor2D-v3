@@ -678,13 +678,58 @@ var phasereditor2d;
     (function (pack_11) {
         var core;
         (function (core) {
+            var controls = colibri.ui.controls;
             class BitmapFontAssetPackItem extends core.AssetPackItem {
                 constructor(pack, data) {
                     super(pack, data);
                 }
+                async preload() {
+                    const dataUrl = this.getData().fontDataURL;
+                    if (dataUrl) {
+                        const file = pack.core.AssetPackUtils.getFileFromPackUrl(dataUrl);
+                        if (file) {
+                            return colibri.ui.ide.FileUtils.preloadFileString(file);
+                        }
+                    }
+                    return controls.Controls.resolveNothingLoaded();
+                }
+                createImageAsset() {
+                    const data = this.getData();
+                    const imageAsset = new core.ImageAssetPackItem(this.getPack(), {
+                        key: this.getKey(),
+                        url: data.textureURL,
+                        normalMap: data.normalMap
+                    });
+                    return imageAsset;
+                }
+                async preloadImages() {
+                    const imageAsset = this.createImageAsset();
+                    return imageAsset.preloadImages();
+                }
                 computeUsedFiles(files) {
                     super.computeUsedFiles(files);
                     this.addFilesFromDataKey(files, "fontDataURL", "textureURL");
+                }
+                addToPhaserCache(game, cache) {
+                    const imageAsset = this.createImageAsset();
+                    imageAsset.addToPhaserCache(game, cache);
+                    const key = this.getKey();
+                    const xmlFile = pack.core.AssetPackUtils.getFileFromPackUrl(this.getData().fontDataURL);
+                    if (!xmlFile) {
+                        return;
+                    }
+                    const xmlString = colibri.ui.ide.FileUtils.getFileString(xmlFile);
+                    if (!xmlString) {
+                        return;
+                    }
+                    const xmlDoc = Phaser.DOM.ParseXML(xmlString);
+                    const xmlData = Phaser.GameObjects.BitmapText.ParseXMLBitmapFont(xmlDoc);
+                    game.cache.bitmapFont.add(key, {
+                        data: xmlData,
+                        texture: key,
+                        frame: null
+                    });
+                    cache.addAsset(this);
                 }
             }
             core.BitmapFontAssetPackItem = BitmapFontAssetPackItem;
@@ -4014,6 +4059,7 @@ var phasereditor2d;
                                 new importers.MultiatlasImporter(),
                                 new importers.AtlasXMLImporter(),
                                 new importers.UnityAtlasImporter(),
+                                new importers.BitmapFontImporter(),
                                 new importers.SingleFileImporter(phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, pack.core.IMAGE_TYPE),
                                 new importers.SingleFileImporter(phasereditor2d.webContentTypes.core.CONTENT_TYPE_SVG, pack.core.SVG_TYPE, false, {
                                     svgConfig: {
@@ -4023,7 +4069,6 @@ var phasereditor2d;
                                 }),
                                 new importers.SpritesheetImporter(),
                                 new importers.SingleFileImporter(pack.core.contentTypes.CONTENT_TYPE_ANIMATIONS, pack.core.ANIMATION_TYPE),
-                                new importers.BitmapFontImporter(),
                                 new importers.SingleFileImporter(phasereditor2d.webContentTypes.core.CONTENT_TYPE_CSV, pack.core.TILEMAP_CSV_TYPE),
                                 new importers.SingleFileImporter(pack.core.contentTypes.CONTENT_TYPE_TILEMAP_IMPACT, pack.core.TILEMAP_IMPACT_TYPE),
                                 new importers.SingleFileImporter(pack.core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON, pack.core.TILEMAP_TILED_JSON_TYPE),

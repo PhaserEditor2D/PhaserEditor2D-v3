@@ -2,7 +2,16 @@ namespace phasereditor2d.scene.ui.blocks {
 
     import ide = colibri.ui.ide;
 
-    const SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES = new Set(["image", "atlas", "atlasXML", "multiatlas", "unityAtlas", "spritesheet"]);
+    const SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES = new Set(
+        [
+            pack.core.IMAGE_TYPE,
+            pack.core.ATLAS_TYPE,
+            pack.core.ATLAS_XML_TYPE,
+            pack.core.MULTI_ATLAS_TYPE,
+            pack.core.UNITY_ATLAS_TYPE,
+            pack.core.SPRITESHEET_TYPE,
+            pack.core.BITMAP_FONT_TYPE
+        ]);
 
     export class SceneEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
 
@@ -38,18 +47,15 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getSceneFiles() {
 
-            return ide.FileUtils.getAllFiles()
+            const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                .filter(file => colibri.Platform.getWorkbench()
-                    .getContentTypeRegistry()
-                    .getCachedContentType(file) === core.CONTENT_TYPE_SCENE)
-
-                .filter(file => file !== this._editor.getInput())
+            return finder.getFiles()
 
                 .filter(file => SceneMaker.acceptDropFile(file, this._editor.getInput()));
         }
 
         getChildren(parent: any): any[] {
+
             if (typeof (parent) === "string") {
 
                 switch (parent) {
@@ -57,8 +63,11 @@ namespace phasereditor2d.scene.ui.blocks {
                         return this.getPackItems()
                             .filter(item => item instanceof pack.core.BaseAtlasAssetPackItem);
 
+                    case pack.core.BITMAP_FONT_TYPE:
+                        return this.getPackItems()
+                            .filter(item => item instanceof pack.core.BitmapFontAssetPackItem);
+
                     case PREFAB_SECTION:
-                        // TODO: we need to implement the PrefabFinder
                         const files = this.getSceneFiles();
                         return files;
                 }

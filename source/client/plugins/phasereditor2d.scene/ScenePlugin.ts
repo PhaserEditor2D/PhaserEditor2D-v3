@@ -75,7 +75,8 @@ namespace phasereditor2d.scene {
             // loader updates
 
             reg.addExtension(
-                new ui.sceneobjects.ImageLoaderUpdater()
+                new ui.sceneobjects.ImageLoaderUpdater(),
+                new ui.sceneobjects.BitmapFontLoaderUpdater()
             );
 
             // commands
@@ -125,6 +126,7 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.SpriteExtension.getInstance(),
                 ui.sceneobjects.TileSpriteExtension.getInstance(),
                 ui.sceneobjects.TextExtension.getInstance(),
+                ui.sceneobjects.BitmapTextExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance()
             );
 

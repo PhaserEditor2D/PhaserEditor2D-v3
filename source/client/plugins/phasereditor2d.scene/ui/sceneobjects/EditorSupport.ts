@@ -28,12 +28,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._extension = extension;
             this._object = obj;
             this._scene = scene;
-            this._serializables = [];
-            this._componentMap = new Map();
-            this._object.setDataEnabled();
-            this.setId(Phaser.Utils.String.UUID());
+            this._label = extension.getTypeName().toLocaleLowerCase();
             this._scope = ObjectScope.METHOD;
             this._unlockedProperties = new Set();
+            this._serializables = [];
+            this._componentMap = new Map();
+
+            this._object.setDataEnabled();
+
+            this.setId(Phaser.Utils.String.UUID());
 
             this.addComponent(new VariableComponent(this._object));
 

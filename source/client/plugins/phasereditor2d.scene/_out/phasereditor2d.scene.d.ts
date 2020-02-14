@@ -179,7 +179,7 @@ declare namespace phasereditor2d.scene.core.code {
         private _body;
         private _args;
         constructor(name: string);
-        addArg(name: string, type: string, optional?: boolean): void;
+        arg(name: string, type: string, optional?: boolean): void;
         getArgs(): IArgCodeDOM[];
         getBody(): CodeDOM[];
         setBody(body: CodeDOM[]): void;
@@ -1537,6 +1537,57 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class BitmapFontLoaderUpdater extends LoaderUpdaterExtension {
+        acceptAsset(asset: any): boolean;
+        updateLoader(scene: Scene, asset: any): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class BitmapText extends Phaser.GameObjects.BitmapText implements ISceneObject {
+        private _editorSupport;
+        constructor(scene: Scene, x: number, y: number, font: string, text: string | string[]);
+        getEditorSupport(): EditorSupport<ISceneObject>;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import code = core.code;
+    class BitmapTextCodeDOMBuilder extends ObjectCodeDOMBuilder {
+        buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
+        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: BitmapText): void;
+        buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
+        buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class BitmapTextComponent extends Component<BitmapText> {
+        static font: IProperty<BitmapText>;
+        constructor(obj: BitmapText);
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class BitmapTextEditorSupport extends EditorSupport<BitmapText> {
+        constructor(obj: BitmapText, scene: Scene);
+        computeContentHash(): string;
+        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer;
+        setInteractive(): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class BitmapTextExtension extends SceneObjectExtension {
+        private static _instance;
+        static getInstance(): BitmapTextExtension;
+        constructor();
+        acceptsDropData(data: any): boolean;
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): ISceneObject;
+        createEmptySceneObject(args: ICreateEmptyArgs): ISceneObject;
+        createSceneObjectWithData(args: ICreateWithDataArgs): ISceneObject;
+        getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
+        getCodeDOMBuilder(): ObjectCodeDOMBuilder;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

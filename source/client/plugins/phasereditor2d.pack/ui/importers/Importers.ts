@@ -29,6 +29,8 @@ namespace phasereditor2d.pack.ui.importers {
 
                     new UnityAtlasImporter(),
 
+                    new BitmapFontImporter(),
+
                     new SingleFileImporter(webContentTypes.core.CONTENT_TYPE_IMAGE, core.IMAGE_TYPE),
 
                     new SingleFileImporter(webContentTypes.core.CONTENT_TYPE_SVG, core.SVG_TYPE, false, {
@@ -40,8 +42,6 @@ namespace phasereditor2d.pack.ui.importers {
                     new SpritesheetImporter(),
 
                     new SingleFileImporter(core.contentTypes.CONTENT_TYPE_ANIMATIONS, core.ANIMATION_TYPE),
-
-                    new BitmapFontImporter(),
 
                     new SingleFileImporter(webContentTypes.core.CONTENT_TYPE_CSV, core.TILEMAP_CSV_TYPE),
 

@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.core.code {
             this._body = [];
         }
 
-        addArg(name: string, type: string, optional = false) {
+        arg(name: string, type: string, optional = false) {
             this._args.push({
                 name, type, optional
             });

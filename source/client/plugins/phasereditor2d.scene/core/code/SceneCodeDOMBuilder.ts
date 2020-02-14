@@ -179,7 +179,7 @@ namespace phasereditor2d.scene.core.code {
 
             const objBuilder = ext.getCodeDOMBuilder();
 
-            ctrDecl.addArg("scene", "Phaser.Scene");
+            ctrDecl.arg("scene", "Phaser.Scene");
 
             objBuilder.buildPrefabConstructorDeclarationCodeDOM({
                 ctrDeclCodeDOM: ctrDecl
@@ -242,7 +242,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (settings.onlyGenerateMethods && settings.sceneType === json.SceneType.PREFAB) {
 
-                createMethodDecl.addArg("scene", "Phaser.Scene");
+                createMethodDecl.arg("scene", "Phaser.Scene");
             }
 
             const body = createMethodDecl.getBody();

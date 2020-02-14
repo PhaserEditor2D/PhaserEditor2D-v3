@@ -172,10 +172,15 @@ declare namespace phasereditor2d.pack.core {
     }
 }
 declare namespace phasereditor2d.pack.core {
+    import controls = colibri.ui.controls;
     import io = colibri.core.io;
     class BitmapFontAssetPackItem extends AssetPackItem {
         constructor(pack: AssetPack, data: any);
+        preload(): Promise<controls.PreloadResult>;
+        private createImageAsset;
+        preloadImages(): Promise<controls.PreloadResult>;
         computeUsedFiles(files: Set<io.FilePath>): void;
+        addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache): void;
     }
 }
 declare namespace phasereditor2d.pack.core {
