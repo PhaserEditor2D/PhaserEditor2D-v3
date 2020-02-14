@@ -9,7 +9,6 @@ namespace colibri.ui.controls.dialogs {
             super("ViewerDialog");
 
             this._viewer = viewer;
-
         }
 
         createDialogArea() {
@@ -40,6 +39,8 @@ namespace colibri.ui.controls.dialogs {
 
                 btn.disabled = this.getViewer().getSelection().length !== 1;
             });
+
+            btn.disabled = this.getViewer().getSelection().length !== 1;
         }
 
         addOpenButton(text: string, callback: (selection: any[]) => void) {

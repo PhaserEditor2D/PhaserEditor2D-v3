@@ -27,7 +27,7 @@ namespace phasereditor2d.pack.core {
         }
 
         private createImageAsset() {
-            
+
             const data = this.getData();
 
             const imageAsset = new ImageAssetPackItem(this.getPack(), {
@@ -55,11 +55,16 @@ namespace phasereditor2d.pack.core {
 
         addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
 
+            const key = this.getKey();
+
+            if (game.cache.bitmapFont.has(key)) {
+
+                return;
+            }
+
             const imageAsset = this.createImageAsset();
 
             imageAsset.addToPhaserCache(game, cache);
-
-            const key = this.getKey();
 
             const xmlFile = pack.core.AssetPackUtils.getFileFromPackUrl(this.getData().fontDataURL);
 

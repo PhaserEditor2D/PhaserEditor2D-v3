@@ -484,6 +484,17 @@ declare namespace phasereditor2d.pack.core.parsers {
     }
 }
 declare namespace phasereditor2d.pack.ui.dialogs {
+    import controls = colibri.ui.controls;
+    class AssetSelectionDialog extends controls.dialogs.ViewerDialog {
+        private _selectionCallback;
+        private _cancelCallback;
+        constructor();
+        setSelectionCallback(callback: (selection: any[]) => void): void;
+        setCancelCallback(callback: () => void): void;
+        create(): void;
+    }
+}
+declare namespace phasereditor2d.pack.ui.dialogs {
     import io = colibri.core.io;
     class NewAssetPackFileWizardExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
         constructor();

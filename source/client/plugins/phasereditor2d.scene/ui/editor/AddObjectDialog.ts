@@ -40,11 +40,33 @@ namespace phasereditor2d.scene.ui.editor {
 
                     } else {
 
-                        this._editor.getUndoManager().add(new undo.AddObjectOperation(this._editor, type));
+                        let extraData: any;
+
+                        if (type instanceof sceneobjects.SceneObjectExtension) {
+
+                            const result = await type.collectExtraDataForCreateEmptyObject();
+
+                            if (result.abort) {
+
+                                return;
+                            }
+
+                            if (result.dataNotFoundMessage) {
+
+                                alert(result.dataNotFoundMessage);
+                                return;
+                            }
+
+                            extraData = result.data;
+                        }
+
+                        this._editor.getUndoManager().add(new undo.AddObjectOperation(this._editor, type, extraData));
                     }
                 }));
 
             this.addCancelButton();
+
+            this.getViewer().setSelection([]);
         }
     }
 

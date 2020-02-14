@@ -3721,6 +3721,7 @@ var colibri;
                         this.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
                             btn.disabled = this.getViewer().getSelection().length !== 1;
                         });
+                        btn.disabled = this.getViewer().getSelection().length !== 1;
                     }
                     addOpenButton(text, callback) {
                         const callback2 = () => {

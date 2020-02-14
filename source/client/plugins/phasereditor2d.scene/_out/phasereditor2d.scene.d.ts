@@ -457,7 +457,7 @@ declare namespace phasereditor2d.scene.ui {
             x: number;
             y: number;
         };
-        createEmptyObject(ext: sceneobjects.SceneObjectExtension): sceneobjects.ISceneObject;
+        createEmptyObject(ext: sceneobjects.SceneObjectExtension, extraData?: any): sceneobjects.ISceneObject;
         createObject(data: json.IObjectData): sceneobjects.ISceneObject;
     }
 }
@@ -1135,7 +1135,8 @@ declare namespace phasereditor2d.scene.ui.editor.undo {
     import io = colibri.core.io;
     class AddObjectOperation extends SceneSnapshotOperation {
         private _type;
-        constructor(editor: SceneEditor, type: sceneobjects.SceneObjectExtension | io.FilePath);
+        private _extraData;
+        constructor(editor: SceneEditor, type: sceneobjects.SceneObjectExtension | io.FilePath, extraData: any);
         protected performModification(): Promise<void>;
     }
 }
@@ -1405,6 +1406,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     import code = core.code;
+    interface ICreateExtraDataResult {
+        dataNotFoundMessage?: string;
+        abort?: boolean;
+        data?: any;
+    }
     interface ICreateWithAssetArgs {
         x: number;
         y: number;
@@ -1415,6 +1421,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         x: number;
         y: number;
         scene: Scene;
+        extraData?: any;
     }
     interface ICreateWithDataArgs {
         scene: Scene;
@@ -1476,6 +1483,11 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args The data involved in a drop action.
          */
         abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
+        /**
+         * Collect the data used to create a new, empty object. For example, a BitmapText requires
+         * a BitmapFont key to be created, so this method opens a dialog to select the font.
+         */
+        collectExtraDataForCreateEmptyObject(): Promise<ICreateExtraDataResult>;
         /**
          * Create an empty object of this extension.
          *
@@ -1584,6 +1596,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor();
         acceptsDropData(data: any): boolean;
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): ISceneObject;
+        collectExtraDataForCreateEmptyObject(): Promise<unknown>;
         createEmptySceneObject(args: ICreateEmptyArgs): ISceneObject;
         createSceneObjectWithData(args: ICreateWithDataArgs): ISceneObject;
         getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;

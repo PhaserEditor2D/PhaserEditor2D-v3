@@ -7,11 +7,13 @@ namespace phasereditor2d.scene.ui.editor.undo {
     export class AddObjectOperation extends SceneSnapshotOperation {
 
         private _type: sceneobjects.SceneObjectExtension | io.FilePath;
+        private _extraData: any;
 
-        constructor(editor: SceneEditor, type: sceneobjects.SceneObjectExtension | io.FilePath) {
+        constructor(editor: SceneEditor, type: sceneobjects.SceneObjectExtension | io.FilePath, extraData: any) {
             super(editor);
 
             this._type = type;
+            this._extraData = extraData;
         }
 
         protected async performModification() {
@@ -26,7 +28,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             } else {
 
-                obj = maker.createEmptyObject(this._type);
+                obj = maker.createEmptyObject(this._type, this._extraData);
             }
 
             this.getEditor().setSelection([obj]);

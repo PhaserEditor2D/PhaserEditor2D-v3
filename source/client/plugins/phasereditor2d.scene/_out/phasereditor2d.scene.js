@@ -2080,12 +2080,13 @@ var phasereditor2d;
                     y = Math.floor(worldPoint.y);
                     return { x, y };
                 }
-                createEmptyObject(ext) {
+                createEmptyObject(ext, extraData) {
                     const { x, y } = this.getCanvasCenterPoint();
                     const newObject = ext.createEmptySceneObject({
                         scene: this._scene,
-                        x: x,
-                        y: y,
+                        x,
+                        y,
+                        extraData
                     });
                     const nameMaker = new ide.utils.NameMaker(obj => {
                         return obj.getEditorSupport().getLabel();
@@ -2766,10 +2767,23 @@ var phasereditor2d;
                                 this._editor.getUndoManager().add(new ui.sceneobjects.NewListOperation(this._editor));
                             }
                             else {
-                                this._editor.getUndoManager().add(new editor_1.undo.AddObjectOperation(this._editor, type));
+                                let extraData;
+                                if (type instanceof ui.sceneobjects.SceneObjectExtension) {
+                                    const result = await type.collectExtraDataForCreateEmptyObject();
+                                    if (result.abort) {
+                                        return;
+                                    }
+                                    if (result.dataNotFoundMessage) {
+                                        alert(result.dataNotFoundMessage);
+                                        return;
+                                    }
+                                    extraData = result.data;
+                                }
+                                this._editor.getUndoManager().add(new editor_1.undo.AddObjectOperation(this._editor, type, extraData));
                             }
                         }));
                         this.addCancelButton();
+                        this.getViewer().setSelection([]);
                     }
                 }
                 AddObjectDialog.OBJECT_LIST_TYPE = "ObjectListType";
@@ -5848,9 +5862,10 @@ var phasereditor2d;
                 (function (undo) {
                     var io = colibri.core.io;
                     class AddObjectOperation extends undo.SceneSnapshotOperation {
-                        constructor(editor, type) {
+                        constructor(editor, type, extraData) {
                             super(editor);
                             this._type = type;
+                            this._extraData = extraData;
                         }
                         async performModification() {
                             const maker = this._editor.getSceneMaker();
@@ -5859,7 +5874,7 @@ var phasereditor2d;
                                 obj = await maker.createPrefabInstanceWithFile(this._type);
                             }
                             else {
-                                obj = maker.createEmptyObject(this._type);
+                                obj = maker.createEmptyObject(this._type, this._extraData);
                             }
                             this.getEditor().setSelection([obj]);
                         }
@@ -6831,6 +6846,13 @@ var phasereditor2d;
                     adaptDataAfterTypeConversion(serializer, originalObject) {
                         // nothing by default
                     }
+                    /**
+                     * Collect the data used to create a new, empty object. For example, a BitmapText requires
+                     * a BitmapFont key to be created, so this method opens a dialog to select the font.
+                     */
+                    async collectExtraDataForCreateEmptyObject() {
+                        return {};
+                    }
                 }
                 SceneObjectExtension.POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
                 sceneobjects.SceneObjectExtension = SceneObjectExtension;
@@ -7284,8 +7306,39 @@ var phasereditor2d;
                         const font = args.asset;
                         return new sceneobjects.BitmapText(args.scene, args.x, args.y, font.getKey(), "New BitmapText");
                     }
+                    async collectExtraDataForCreateEmptyObject() {
+                        const finder = new phasereditor2d.pack.core.PackFinder();
+                        await finder.preload();
+                        const dlg = new phasereditor2d.pack.ui.dialogs.AssetSelectionDialog();
+                        dlg.create();
+                        dlg.getViewer().setInput(finder.getPacks()
+                            .flatMap(pack => pack.getItems())
+                            .filter(item => item instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem));
+                        dlg.getViewer().setCellSize(128);
+                        dlg.setTitle("Select Bitmap Font");
+                        const promise = new Promise((resolver, reject) => {
+                            dlg.setSelectionCallback(async (sel) => {
+                                const item = sel[0];
+                                await item.preload();
+                                await item.preloadImages();
+                                const result = {
+                                    data: item
+                                };
+                                resolver(result);
+                            });
+                            dlg.setCancelCallback(() => {
+                                const result = {
+                                    abort: true
+                                };
+                                resolver(result);
+                            });
+                        });
+                        return promise;
+                    }
                     createEmptySceneObject(args) {
-                        return new sceneobjects.BitmapText(args.scene, args.x, args.y, null, "New BitmapText");
+                        const fontAsset = args.extraData;
+                        fontAsset.addToPhaserCache(args.scene.game, args.scene.getPackCache());
+                        return new sceneobjects.BitmapText(args.scene, args.x, args.y, fontAsset.getKey(), "New BitmapText");
                     }
                     createSceneObjectWithData(args) {
                         const serializer = new scene.core.json.Serializer(args.data);

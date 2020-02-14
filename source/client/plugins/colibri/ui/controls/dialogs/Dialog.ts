@@ -152,11 +152,13 @@ namespace colibri.ui.controls.dialogs {
         }
 
         setSize(width: number, height: number) {
+
             this._width = Math.floor(width);
             this._height = Math.floor(height);
         }
 
         getSize() {
+
             return { width: this._width, height: this._height };
         }
 

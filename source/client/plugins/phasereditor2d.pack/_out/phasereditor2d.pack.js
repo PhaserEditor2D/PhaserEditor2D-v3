@@ -711,9 +711,12 @@ var phasereditor2d;
                     this.addFilesFromDataKey(files, "fontDataURL", "textureURL");
                 }
                 addToPhaserCache(game, cache) {
+                    const key = this.getKey();
+                    if (game.cache.bitmapFont.has(key)) {
+                        return;
+                    }
                     const imageAsset = this.createImageAsset();
                     imageAsset.addToPhaserCache(game, cache);
-                    const key = this.getKey();
                     const xmlFile = pack.core.AssetPackUtils.getFileFromPackUrl(this.getData().fontDataURL);
                     if (!xmlFile) {
                         return;
@@ -2079,6 +2082,55 @@ TextureImporter:
   spritePackingTag: Asteroids
 
   */ 
+var phasereditor2d;
+(function (phasereditor2d) {
+    var pack;
+    (function (pack) {
+        var ui;
+        (function (ui) {
+            var dialogs;
+            (function (dialogs) {
+                var controls = colibri.ui.controls;
+                class AssetSelectionDialog extends controls.dialogs.ViewerDialog {
+                    constructor() {
+                        super(new controls.viewers.TreeViewer());
+                        const size = this.getSize();
+                        this.setSize(size.width, size.height * 1.5);
+                    }
+                    setSelectionCallback(callback) {
+                        this._selectionCallback = callback;
+                    }
+                    setCancelCallback(callback) {
+                        this._cancelCallback = callback;
+                    }
+                    create() {
+                        const viewer = this.getViewer();
+                        viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
+                        viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
+                        viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
+                        viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        viewer.setCellSize(64);
+                        viewer.setInput([]);
+                        super.create();
+                        this.setTitle("Select Asset");
+                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Select", sel => {
+                            if (this._selectionCallback) {
+                                this._selectionCallback(sel);
+                            }
+                        }));
+                        this.addButton("Cancel", () => {
+                            this.close();
+                            if (this._cancelCallback) {
+                                this._cancelCallback();
+                            }
+                        });
+                    }
+                }
+                dialogs.AssetSelectionDialog = AssetSelectionDialog;
+            })(dialogs = ui.dialogs || (ui.dialogs = {}));
+        })(ui = pack.ui || (pack.ui = {}));
+    })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var pack;

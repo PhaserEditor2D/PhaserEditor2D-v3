@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import controls = colibri.ui.controls;
+
     export class BitmapTextExtension extends SceneObjectExtension {
 
         private static _instance = new BitmapTextExtension();
@@ -27,9 +29,62 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new BitmapText(args.scene, args.x, args.y, font.getKey(), "New BitmapText");
         }
 
+        async collectExtraDataForCreateEmptyObject() {
+
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
+
+            const dlg = new pack.ui.dialogs.AssetSelectionDialog();
+
+            dlg.create();
+
+            dlg.getViewer().setInput(
+                finder.getPacks()
+                    .flatMap(pack => pack.getItems())
+                    .filter(item => item instanceof pack.core.BitmapFontAssetPackItem));
+
+            dlg.getViewer().setCellSize(128);
+
+            dlg.setTitle("Select Bitmap Font");
+
+            const promise = new Promise((resolver, reject) => {
+
+                dlg.setSelectionCallback(async (sel) => {
+
+                    const item = sel[0] as pack.core.BitmapFontAssetPackItem;
+
+                    await item.preload();
+
+                    await item.preloadImages();
+
+                    const result: ICreateExtraDataResult = {
+                        data: item
+                    };
+
+                    resolver(result);
+                });
+
+                dlg.setCancelCallback(() => {
+
+                    const result: ICreateExtraDataResult = {
+                        abort: true
+                    };
+
+                    resolver(result);
+                });
+            });
+
+            return promise;
+        }
+
         createEmptySceneObject(args: ICreateEmptyArgs): ISceneObject {
 
-            return new BitmapText(args.scene, args.x, args.y, null, "New BitmapText");
+            const fontAsset = args.extraData as pack.core.BitmapFontAssetPackItem;
+
+            fontAsset.addToPhaserCache(args.scene.game, args.scene.getPackCache());
+
+            return new BitmapText(args.scene, args.x, args.y, fontAsset.getKey(), "New BitmapText");
         }
 
         createSceneObjectWithData(args: ICreateWithDataArgs): ISceneObject {

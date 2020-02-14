@@ -259,14 +259,15 @@ namespace phasereditor2d.scene.ui {
             return { x, y };
         }
 
-        createEmptyObject(ext: sceneobjects.SceneObjectExtension) {
+        createEmptyObject(ext: sceneobjects.SceneObjectExtension, extraData?: any) {
 
             const { x, y } = this.getCanvasCenterPoint();
 
             const newObject = ext.createEmptySceneObject({
                 scene: this._scene,
-                x: x,
-                y: y,
+                x,
+                y,
+                extraData
             });
 
             const nameMaker = new ide.utils.NameMaker(obj => {

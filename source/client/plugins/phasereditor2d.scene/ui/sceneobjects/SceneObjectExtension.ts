@@ -3,6 +3,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import json = core.json;
     import code = core.code;
 
+    export interface ICreateExtraDataResult {
+
+        dataNotFoundMessage?: string;
+        abort?: boolean;
+        data?: any;
+    }
+
     export interface ICreateWithAssetArgs {
 
         x: number;
@@ -16,6 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         x: number;
         y: number;
         scene: Scene;
+        extraData?: any;
     }
 
     export interface ICreateWithDataArgs {
@@ -111,6 +119,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args The data involved in a drop action.
          */
         abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
+
+        /**
+         * Collect the data used to create a new, empty object. For example, a BitmapText requires
+         * a BitmapFont key to be created, so this method opens a dialog to select the font.
+         */
+        async collectExtraDataForCreateEmptyObject(): Promise<ICreateExtraDataResult> {
+
+            return {};
+        }
 
         /**
          * Create an empty object of this extension.
