@@ -4375,7 +4375,7 @@ var phasereditor2d;
                                 case pack.core.HTML_TEXTURE_TYPE:
                                     return this.getIconRenderer(filesPlugin.getIcon(phasereditor2d.webContentTypes.ICON_FILE_IMAGE));
                                 case pack.core.BITMAP_FONT_TYPE:
-                                    return this.getIconRenderer(filesPlugin.getIcon(phasereditor2d.webContentTypes.ICON_FILE_FONT));
+                                    return new viewers.BitmapFontAssetCellRenderer();
                                 case pack.core.VIDEO_TYPE:
                                     return this.getIconRenderer(filesPlugin.getIcon(phasereditor2d.webContentTypes.ICON_FILE_VIDEO));
                                 default:
@@ -4461,6 +4461,43 @@ var phasereditor2d;
                     }
                 }
                 viewers.AssetPackLabelProvider = AssetPackLabelProvider;
+            })(viewers = ui.viewers || (ui.viewers = {}));
+        })(ui = pack.ui || (pack.ui = {}));
+    })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var pack;
+    (function (pack) {
+        var ui;
+        (function (ui) {
+            var viewers;
+            (function (viewers) {
+                var controls = colibri.ui.controls;
+                class BitmapFontAssetCellRenderer {
+                    renderCell(args) {
+                        const img = this.getImage(args.obj);
+                        if (img) {
+                            img.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
+                        }
+                    }
+                    async preload(args) {
+                        const img = this.getImage(args.obj);
+                        if (img) {
+                            return img.preload();
+                        }
+                        return controls.Controls.resolveNothingLoaded();
+                    }
+                    getImage(item) {
+                        const url = item.getData().textureURL;
+                        const img = pack.core.AssetPackUtils.getImageFromPackUrl(url);
+                        return img;
+                    }
+                    cellHeight(args) {
+                        return args.viewer.getCellSize();
+                    }
+                }
+                viewers.BitmapFontAssetCellRenderer = BitmapFontAssetCellRenderer;
             })(viewers = ui.viewers || (ui.viewers = {}));
         })(ui = pack.ui || (pack.ui = {}));
     })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));

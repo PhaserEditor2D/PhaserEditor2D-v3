@@ -1031,6 +1031,15 @@ declare namespace phasereditor2d.pack.ui.viewers {
 }
 declare namespace phasereditor2d.pack.ui.viewers {
     import controls = colibri.ui.controls;
+    class BitmapFontAssetCellRenderer implements controls.viewers.ICellRenderer {
+        renderCell(args: controls.viewers.RenderCellArgs): void;
+        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
+        private getImage;
+        cellHeight(args: controls.viewers.RenderCellArgs): number;
+    }
+}
+declare namespace phasereditor2d.pack.ui.viewers {
+    import controls = colibri.ui.controls;
     class ImageAssetPackItemCellRenderer extends controls.viewers.ImageCellRenderer {
         getImage(obj: any): controls.IImage;
     }

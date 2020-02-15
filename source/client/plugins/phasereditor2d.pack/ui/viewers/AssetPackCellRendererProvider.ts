@@ -65,7 +65,7 @@ namespace phasereditor2d.pack.ui.viewers {
                         return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_IMAGE));
 
                     case core.BITMAP_FONT_TYPE:
-                        return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_FONT));
+                        return new BitmapFontAssetCellRenderer();
 
                     case core.VIDEO_TYPE:
                         return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_VIDEO));
