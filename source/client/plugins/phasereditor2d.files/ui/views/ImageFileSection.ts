@@ -12,7 +12,7 @@ namespace phasereditor2d.files.ui.views {
 
         protected createForm(parent: HTMLDivElement) {
 
-            parent.classList.add("ImagePreviewFormArea", "PreviewBackground");
+            parent.classList.add("ImagePreviewFormArea");
 
             const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
 

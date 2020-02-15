@@ -12,7 +12,7 @@ namespace phasereditor2d.pack.ui.properties {
         protected createForm(parent: HTMLDivElement) {
             parent.classList.add("ManyImagePreviewFormArea");
 
-            const viewer = new controls.viewers.TreeViewer("PreviewBackground");
+            const viewer = new controls.viewers.TreeViewer();
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer, false, true));
             viewer.setLabelProvider(new viewers.AssetPackLabelProvider());

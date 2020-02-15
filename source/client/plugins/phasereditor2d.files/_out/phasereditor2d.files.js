@@ -1387,7 +1387,7 @@ var phasereditor2d;
                         super(page, "files.ImagePreviewSection", "Image", true);
                     }
                     createForm(parent) {
-                        parent.classList.add("ImagePreviewFormArea", "PreviewBackground");
+                        parent.classList.add("ImagePreviewFormArea");
                         const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
                         this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e) => {
                             imgControl.resizeTo();
@@ -1430,12 +1430,11 @@ var phasereditor2d;
                 var core = colibri.core;
                 class GridImageFileViewer extends controls.viewers.TreeViewer {
                     constructor(...classList) {
-                        super("PreviewBackground", ...classList);
+                        super(...classList);
                         this.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
                         this.setLabelProvider(new ui.viewers.FileLabelProvider());
                         this.setCellRendererProvider(new ui.viewers.FileCellRendererProvider());
                         this.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(this, false, true));
-                        this.getCanvas().classList.add("PreviewBackground");
                     }
                 }
                 views.GridImageFileViewer = GridImageFileViewer;

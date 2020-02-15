@@ -996,11 +996,28 @@ declare namespace phasereditor2d.pack.ui.properties {
 }
 declare namespace phasereditor2d.pack.ui.properties {
     import controls = colibri.ui.controls;
-    class ImagePreviewSection extends controls.properties.PropertySection<core.AssetPackItem> {
+    import ide = colibri.ui.ide;
+    class BitmapFontPreviewSection extends colibri.ui.ide.properties.BaseImagePreviewSection<core.BitmapFontAssetPackItem> {
         constructor(page: controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
+        protected getSelectedImage(): ide.FileImage;
         canEdit(obj: any): boolean;
-        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.pack.ui.properties {
+    import controls = colibri.ui.controls;
+    class ImagePreviewSection extends colibri.ui.ide.properties.BaseImagePreviewSection<core.AssetPackItem> {
+        constructor(page: controls.properties.PropertyPage);
+        protected getSelectedImage(): controls.IImage;
+        canEdit(obj: any): boolean;
+    }
+}
+declare namespace phasereditor2d.pack.ui.properties {
+    import controls = colibri.ui.controls;
+    class ManyBitmapFontPreviewSection extends colibri.ui.ide.properties.BaseManyImagePreviewSection<pack.core.BitmapFontAssetPackItem> {
+        constructor(page: controls.properties.PropertyPage);
+        protected getViewerInput(): Promise<unknown>;
+        protected prepareViewer(viewer: controls.viewers.TreeViewer): void;
+        canEdit(obj: any, n: number): boolean;
     }
 }
 declare namespace phasereditor2d.pack.ui.properties {

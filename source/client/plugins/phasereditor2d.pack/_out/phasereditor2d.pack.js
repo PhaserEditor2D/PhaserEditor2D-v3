@@ -4209,6 +4209,8 @@ var phasereditor2d;
                         sections.push(new pack.ui.properties.AssetPackItemSection(page));
                         sections.push(new pack.ui.properties.ImagePreviewSection(page));
                         sections.push(new pack.ui.properties.ManyImageSection(page));
+                        sections.push(new pack.ui.properties.BitmapFontPreviewSection(page));
+                        sections.push(new pack.ui.properties.ManyBitmapFontPreviewSection(page));
                         const provider = new phasereditor2d.files.ui.views.FilePropertySectionProvider();
                         provider.addSections(page, sections);
                     }
@@ -4226,41 +4228,81 @@ var phasereditor2d;
         (function (ui) {
             var properties;
             (function (properties) {
+                class BitmapFontPreviewSection extends colibri.ui.ide.properties.BaseImagePreviewSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.pack.ui.properties.BitmapFontPreviewSection", "Bitmap Font Preview", true);
+                    }
+                    getSelectedImage() {
+                        const obj = this.getSelection()[0];
+                        const img = pack.core.AssetPackUtils.getImageFromPackUrl(obj.getData().textureURL);
+                        return img;
+                    }
+                    canEdit(obj) {
+                        return obj instanceof pack.core.BitmapFontAssetPackItem;
+                    }
+                }
+                properties.BitmapFontPreviewSection = BitmapFontPreviewSection;
+            })(properties = ui.properties || (ui.properties = {}));
+        })(ui = pack.ui || (pack.ui = {}));
+    })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var pack;
+    (function (pack) {
+        var ui;
+        (function (ui) {
+            var properties;
+            (function (properties) {
                 var controls = colibri.ui.controls;
-                var ide = colibri.ui.ide;
-                class ImagePreviewSection extends controls.properties.PropertySection {
+                class ImagePreviewSection extends colibri.ui.ide.properties.BaseImagePreviewSection {
                     constructor(page) {
                         super(page, "pack.ImageSection", "Image Preview", true);
                     }
-                    createForm(parent) {
-                        parent.classList.add("ImagePreviewFormArea", "PreviewBackground");
-                        const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
-                        this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e) => {
-                            imgControl.resizeTo();
-                        });
-                        parent.appendChild(imgControl.getElement());
-                        setTimeout(() => imgControl.resizeTo(), 1);
-                        this.addUpdater(() => {
-                            const obj = this.getSelection()[0];
-                            let img;
-                            if (obj instanceof pack.core.AssetPackItem) {
-                                img = pack.core.AssetPackUtils.getImageFromPackUrl(obj.getData().url);
-                            }
-                            else {
-                                img = obj;
-                            }
-                            imgControl.setImage(img);
-                            setTimeout(() => imgControl.resizeTo(), 1);
-                        });
+                    getSelectedImage() {
+                        const obj = this.getSelection()[0];
+                        let img;
+                        if (obj instanceof pack.core.AssetPackItem) {
+                            img = pack.core.AssetPackUtils.getImageFromPackUrl(obj.getData().url);
+                        }
+                        else {
+                            img = obj;
+                        }
+                        return img;
                     }
                     canEdit(obj) {
                         return obj instanceof pack.core.AssetPackItem && obj.getType() === "image" || obj instanceof controls.ImageFrame;
                     }
-                    canEditNumber(n) {
-                        return n === 1;
-                    }
                 }
                 properties.ImagePreviewSection = ImagePreviewSection;
+            })(properties = ui.properties || (ui.properties = {}));
+        })(ui = pack.ui || (pack.ui = {}));
+    })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var pack;
+    (function (pack) {
+        var ui;
+        (function (ui) {
+            var properties;
+            (function (properties) {
+                class ManyBitmapFontPreviewSection extends colibri.ui.ide.properties.BaseManyImagePreviewSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.pack.ui.properties.ManyBitmapFontPreviewSection", "Bitmap Font Preview", true);
+                    }
+                    async getViewerInput() {
+                        return this.getSelection();
+                    }
+                    prepareViewer(viewer) {
+                        viewer.setCellRendererProvider(new ui.viewers.AssetPackCellRendererProvider("grid"));
+                        viewer.setLabelProvider(new ui.viewers.AssetPackLabelProvider());
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof pack.core.BitmapFontAssetPackItem;
+                    }
+                }
+                properties.ManyBitmapFontPreviewSection = ManyBitmapFontPreviewSection;
             })(properties = ui.properties || (ui.properties = {}));
         })(ui = pack.ui || (pack.ui = {}));
     })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
@@ -4281,7 +4323,7 @@ var phasereditor2d;
                     }
                     createForm(parent) {
                         parent.classList.add("ManyImagePreviewFormArea");
-                        const viewer = new controls.viewers.TreeViewer("PreviewBackground");
+                        const viewer = new controls.viewers.TreeViewer();
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
                         viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer, false, true));
                         viewer.setLabelProvider(new ui.viewers.AssetPackLabelProvider());

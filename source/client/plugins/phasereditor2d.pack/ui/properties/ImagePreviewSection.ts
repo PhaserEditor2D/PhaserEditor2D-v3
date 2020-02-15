@@ -3,44 +3,33 @@ namespace phasereditor2d.pack.ui.properties {
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
 
-    export class ImagePreviewSection extends controls.properties.PropertySection<core.AssetPackItem> {
+    export class ImagePreviewSection
+        extends colibri.ui.ide.properties.BaseImagePreviewSection<core.AssetPackItem> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "pack.ImageSection", "Image Preview", true);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        protected getSelectedImage(): controls.IImage {
 
-            parent.classList.add("ImagePreviewFormArea", "PreviewBackground");
+            const obj = this.getSelection()[0];
 
-            const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
+            let img: controls.IImage;
 
-            this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
-                imgControl.resizeTo();
-            });
+            if (obj instanceof core.AssetPackItem) {
 
-            parent.appendChild(imgControl.getElement());
-            setTimeout(() => imgControl.resizeTo(), 1);
+                img = core.AssetPackUtils.getImageFromPackUrl(obj.getData().url);
 
-            this.addUpdater(() => {
-                const obj = this.getSelection()[0];
-                let img: controls.IImage;
-                if (obj instanceof core.AssetPackItem) {
-                    img = core.AssetPackUtils.getImageFromPackUrl(obj.getData().url);
-                } else {
-                    img = obj;
-                }
-                imgControl.setImage(img);
-                setTimeout(() => imgControl.resizeTo(), 1);
-            });
+            } else {
+
+                img = obj;
+            }
+
+            return img;
         }
 
         canEdit(obj: any): boolean {
             return obj instanceof core.AssetPackItem && obj.getType() === "image" || obj instanceof controls.ImageFrame;
-        }
-
-        canEditNumber(n: number): boolean {
-            return n === 1;
         }
     }
 }

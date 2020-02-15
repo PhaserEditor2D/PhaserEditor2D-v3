@@ -1872,6 +1872,22 @@ declare namespace colibri.ui.ide.commands {
     }
 }
 declare namespace colibri.ui.ide.properties {
+    abstract class BaseImagePreviewSection<T> extends controls.properties.PropertySection<T> {
+        protected createForm(parent: HTMLDivElement): void;
+        protected abstract getSelectedImage(): controls.IImage;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace colibri.ui.ide.properties {
+    import controls = colibri.ui.controls;
+    abstract class BaseManyImagePreviewSection<T> extends controls.properties.PropertySection<T> {
+        protected createForm(parent: HTMLDivElement): void;
+        protected abstract getViewerInput(): Promise<unknown>;
+        protected abstract prepareViewer(viewer: controls.viewers.TreeViewer): any;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace colibri.ui.ide.properties {
     class FilteredViewerInPropertySection<T extends controls.viewers.Viewer> extends controls.viewers.FilteredViewer<T> {
         constructor(page: controls.properties.PropertyPage, viewer: T, ...classList: string[]);
         resizeTo(): void;

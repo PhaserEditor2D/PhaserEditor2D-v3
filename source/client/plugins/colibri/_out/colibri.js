@@ -7902,6 +7902,75 @@ var colibri;
         (function (ide) {
             var properties;
             (function (properties) {
+                class BaseImagePreviewSection extends ui.controls.properties.PropertySection {
+                    createForm(parent) {
+                        parent.classList.add("ImagePreviewFormArea");
+                        const imgControl = new ui.controls.ImageControl(ide.IMG_SECTION_PADDING);
+                        this.getPage().addEventListener(ui.controls.EVENT_CONTROL_LAYOUT, (e) => {
+                            imgControl.resizeTo();
+                        });
+                        parent.appendChild(imgControl.getElement());
+                        setTimeout(() => imgControl.resizeTo(), 1);
+                        this.addUpdater(() => {
+                            const img = this.getSelectedImage();
+                            imgControl.setImage(img);
+                            setTimeout(() => imgControl.resizeTo(), 1);
+                        });
+                    }
+                    canEditNumber(n) {
+                        return n === 1;
+                    }
+                }
+                properties.BaseImagePreviewSection = BaseImagePreviewSection;
+            })(properties = ide.properties || (ide.properties = {}));
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide_1) {
+            var properties;
+            (function (properties) {
+                var controls = colibri.ui.controls;
+                var ide = colibri.ui.ide;
+                class BaseManyImagePreviewSection extends controls.properties.PropertySection {
+                    createForm(parent) {
+                        parent.classList.add("ManyImagePreviewFormArea");
+                        const viewer = new controls.viewers.TreeViewer();
+                        viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer, false, true));
+                        this.prepareViewer(viewer);
+                        const filteredViewer = new ide.properties.FilteredViewerInPropertySection(this.getPage(), viewer);
+                        parent.appendChild(filteredViewer.getElement());
+                        this.addUpdater(async () => {
+                            const input = await this.getViewerInput();
+                            // clean the viewer first
+                            viewer.setInput([]);
+                            viewer.repaint();
+                            viewer.setInput(input);
+                            filteredViewer.resizeTo();
+                        });
+                    }
+                    canEditNumber(n) {
+                        return n > 1;
+                    }
+                }
+                properties.BaseManyImagePreviewSection = BaseManyImagePreviewSection;
+            })(properties = ide_1.properties || (ide_1.properties = {}));
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            var properties;
+            (function (properties) {
                 class FilteredViewerInPropertySection extends ui.controls.viewers.FilteredViewer {
                     constructor(page, viewer, ...classList) {
                         super(viewer, ...classList);
