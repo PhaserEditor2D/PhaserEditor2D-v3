@@ -2873,7 +2873,7 @@ var phasereditor2d;
                             sections.push(new properties.SimpleURLSection(page, "phasereditor2d.pack.ui.editor.properties.XMLSection", "XML", "URL", "url", phasereditor2d.webContentTypes.core.CONTENT_TYPE_XML, pack.core.XML_TYPE));
                             // preview sections
                             sections.push(new ui.properties.ImagePreviewSection(page));
-                            sections.push(new ui.properties.ManyImageSection(page));
+                            sections.push(new ui.properties.ManyImagePreviewSection(page));
                         }
                     }
                     properties.AssetPackEditorPropertyProvider = AssetPackEditorPropertyProvider;
@@ -4208,7 +4208,7 @@ var phasereditor2d;
                     addSections(page, sections) {
                         sections.push(new pack.ui.properties.AssetPackItemSection(page));
                         sections.push(new pack.ui.properties.ImagePreviewSection(page));
-                        sections.push(new pack.ui.properties.ManyImageSection(page));
+                        sections.push(new pack.ui.properties.ManyImagePreviewSection(page));
                         sections.push(new pack.ui.properties.BitmapFontPreviewSection(page));
                         sections.push(new pack.ui.properties.ManyBitmapFontPreviewSection(page));
                         const provider = new phasereditor2d.files.ui.views.FilePropertySectionProvider();
@@ -4316,30 +4316,11 @@ var phasereditor2d;
             var properties;
             (function (properties) {
                 var controls = colibri.ui.controls;
-                var ide = colibri.ui.ide;
-                class ManyImageSection extends controls.properties.PropertySection {
+                class ManyImagePreviewSection extends colibri.ui.ide.properties.BaseManyImagePreviewSection {
                     constructor(page) {
-                        super(page, "phasereditor2d.ui.ide.editors.pack.properties.ManyImageSection", "Image Preview", true);
+                        super(page, "phasereditor2d.pack.ui.properties.ManyImagePreviewSection", "Image Preview", true);
                     }
-                    createForm(parent) {
-                        parent.classList.add("ManyImagePreviewFormArea");
-                        const viewer = new controls.viewers.TreeViewer();
-                        viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer, false, true));
-                        viewer.setLabelProvider(new ui.viewers.AssetPackLabelProvider());
-                        viewer.setCellRendererProvider(new ui.viewers.AssetPackCellRendererProvider("grid"));
-                        const filteredViewer = new ide.properties.FilteredViewerInPropertySection(this.getPage(), viewer);
-                        parent.appendChild(filteredViewer.getElement());
-                        this.addUpdater(async () => {
-                            const frames = await this.getImageFrames();
-                            // clean the viewer first
-                            viewer.setInput([]);
-                            viewer.repaint();
-                            viewer.setInput(frames);
-                            filteredViewer.resizeTo();
-                        });
-                    }
-                    async getImageFrames() {
+                    async getViewerInput() {
                         const frames = this.getSelection().flatMap(obj => {
                             if (obj instanceof pack.core.ImageFrameContainerAssetPackItem) {
                                 return obj.getFrames();
@@ -4347,6 +4328,10 @@ var phasereditor2d;
                             return [obj];
                         });
                         return frames;
+                    }
+                    prepareViewer(viewer) {
+                        viewer.setLabelProvider(new ui.viewers.AssetPackLabelProvider());
+                        viewer.setCellRendererProvider(new ui.viewers.AssetPackCellRendererProvider("grid"));
                     }
                     canEdit(obj, n) {
                         if (n === 1) {
@@ -4360,7 +4345,7 @@ var phasereditor2d;
                         return n > 0;
                     }
                 }
-                properties.ManyImageSection = ManyImageSection;
+                properties.ManyImagePreviewSection = ManyImagePreviewSection;
             })(properties = ui.properties || (ui.properties = {}));
         })(ui = pack.ui || (pack.ui = {}));
     })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));

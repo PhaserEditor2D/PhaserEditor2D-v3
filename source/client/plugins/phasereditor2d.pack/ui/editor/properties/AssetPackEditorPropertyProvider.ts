@@ -129,7 +129,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             sections.push(new ui.properties.ImagePreviewSection(page));
 
-            sections.push(new ui.properties.ManyImageSection(page));
+            sections.push(new ui.properties.ManyImagePreviewSection(page));
         }
 
     }

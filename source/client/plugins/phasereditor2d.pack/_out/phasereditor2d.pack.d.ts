@@ -1022,10 +1022,10 @@ declare namespace phasereditor2d.pack.ui.properties {
 }
 declare namespace phasereditor2d.pack.ui.properties {
     import controls = colibri.ui.controls;
-    class ManyImageSection extends controls.properties.PropertySection<any> {
+    class ManyImagePreviewSection extends colibri.ui.ide.properties.BaseManyImagePreviewSection<any> {
         constructor(page: controls.properties.PropertyPage);
-        protected createForm(parent: HTMLDivElement): void;
-        private getImageFrames;
+        protected getViewerInput(): Promise<controls.ImageFrame[]>;
+        protected prepareViewer(viewer: controls.viewers.TreeViewer): void;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;
     }
