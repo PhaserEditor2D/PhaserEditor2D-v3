@@ -21,6 +21,7 @@ declare namespace phasereditor2d.scene {
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[];
         getObjectExtensionByObjectType(type: string): ui.sceneobjects.SceneObjectExtension;
         getLoaderUpdaterForAsset(asset: any): ui.sceneobjects.LoaderUpdaterExtension;
+        getLoaderUpdaters(): ui.sceneobjects.LoaderUpdaterExtension[];
         compileAll(): Promise<void>;
     }
 }
@@ -1339,12 +1340,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     abstract class LoaderUpdaterExtension extends colibri.Extension {
         static POINT_ID: string;
         constructor();
+        abstract clearCache(game: Phaser.Game): void;
         abstract acceptAsset(asset: any): boolean;
         abstract updateLoader(scene: Scene, asset: any): any;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class ImageLoaderUpdater extends LoaderUpdaterExtension {
+        clearCache(game: Phaser.Game): void;
         acceptAsset(asset: any): boolean;
         updateLoader(scene: Scene, asset: any): Promise<void>;
     }
@@ -1553,6 +1556,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class BitmapFontLoaderUpdater extends LoaderUpdaterExtension {
+        clearCache(game: Phaser.Game): void;
         acceptAsset(asset: any): boolean;
         updateLoader(scene: Scene, asset: any): Promise<void>;
     }

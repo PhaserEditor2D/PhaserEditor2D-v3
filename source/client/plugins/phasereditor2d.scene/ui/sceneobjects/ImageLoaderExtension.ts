@@ -4,6 +4,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageLoaderUpdater extends LoaderUpdaterExtension {
 
+        clearCache(game: Phaser.Game): void {
+
+            const list = game.textures.list;
+
+            for (const key in list) {
+
+                if (key === "__DEFAULT" || key === "__MISSING") {
+
+                    continue;
+                }
+
+                if (list.hasOwnProperty(key)) {
+
+                    const texture = list[key];
+
+                    texture.destroy();
+
+                    delete list[key];
+                }
+            }
+        }
+
         acceptAsset(asset: any): boolean {
 
             return asset instanceof pack.core.ImageFrameContainerAssetPackItem

@@ -218,6 +218,14 @@ namespace phasereditor2d.scene {
             return null;
         }
 
+        getLoaderUpdaters() {
+
+            const exts = colibri.Platform
+                .getExtensions<ui.sceneobjects.LoaderUpdaterExtension>(ui.sceneobjects.LoaderUpdaterExtension.POINT_ID);
+
+            return exts;
+        }
+
         async compileAll() {
 
             const files = this._sceneFinder.getFiles();

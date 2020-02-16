@@ -105,6 +105,11 @@ var phasereditor2d;
                 }
                 return null;
             }
+            getLoaderUpdaters() {
+                const exts = colibri.Platform
+                    .getExtensions(scene_1.ui.sceneobjects.LoaderUpdaterExtension.POINT_ID);
+                return exts;
+            }
             async compileAll() {
                 const files = this._sceneFinder.getFiles();
                 const dlg = new controls.dialogs.ProgressDialog();
@@ -1964,23 +1969,9 @@ var phasereditor2d;
                 }
                 async preload() {
                     await this._packFinder.preload();
-                    const list = this._scene.textures.list;
-                    for (const key in this._scene.textures.list) {
-                        if (key === "__DEFAULT" || key === "__MISSING") {
-                            continue;
-                        }
-                        if (list.hasOwnProperty(key)) {
-                            const texture = list[key];
-                            texture.destroy();
-                            delete list[key];
-                        }
-                    }
-                    {
-                        const fontCache = this._scene.cache.bitmapFont;
-                        const keys = fontCache.getKeys();
-                        for (const key of keys) {
-                            fontCache.remove(key);
-                        }
+                    const updaters = scene_6.ScenePlugin.getInstance().getLoaderUpdaters();
+                    for (const updater of updaters) {
+                        updater.clearCache(this._scene.game);
                     }
                 }
                 async buildDependenciesHash() {
@@ -6713,6 +6704,19 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class ImageLoaderUpdater extends sceneobjects.LoaderUpdaterExtension {
+                    clearCache(game) {
+                        const list = game.textures.list;
+                        for (const key in list) {
+                            if (key === "__DEFAULT" || key === "__MISSING") {
+                                continue;
+                            }
+                            if (list.hasOwnProperty(key)) {
+                                const texture = list[key];
+                                texture.destroy();
+                                delete list[key];
+                            }
+                        }
+                    }
                     acceptAsset(asset) {
                         return asset instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem
                             || asset instanceof phasereditor2d.pack.core.AssetPackImageFrame;
@@ -7142,6 +7146,13 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 class BitmapFontLoaderUpdater extends sceneobjects.LoaderUpdaterExtension {
+                    clearCache(game) {
+                        const fontCache = game.cache.bitmapFont;
+                        const keys = fontCache.getKeys();
+                        for (const key of keys) {
+                            fontCache.remove(key);
+                        }
+                    }
                     acceptAsset(asset) {
                         return asset instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem;
                     }

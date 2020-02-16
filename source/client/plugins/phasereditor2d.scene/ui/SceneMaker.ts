@@ -70,34 +70,11 @@ namespace phasereditor2d.scene.ui {
 
             await this._packFinder.preload();
 
-            const list = this._scene.textures.list;
+            const updaters = ScenePlugin.getInstance().getLoaderUpdaters();
 
-            for (const key in this._scene.textures.list) {
+            for (const updater of updaters) {
 
-                if (key === "__DEFAULT" || key === "__MISSING") {
-
-                    continue;
-                }
-
-                if (list.hasOwnProperty(key)) {
-
-                    const texture = list[key];
-
-                    texture.destroy();
-
-                    delete list[key];
-                }
-            }
-
-            {
-                const fontCache = this._scene.cache.bitmapFont;
-
-                const keys = fontCache.getKeys();
-
-                for (const key of keys) {
-
-                    fontCache.remove(key);
-                }
+                updater.clearCache(this._scene.game);
             }
         }
 
