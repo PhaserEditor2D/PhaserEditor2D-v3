@@ -1747,6 +1747,20 @@ var phasereditor2d;
                 getDisplayListChildren() {
                     return this.sys.displayList.getChildren();
                 }
+                getInputSortedObjects() {
+                    const list = [];
+                    for (const child of this.children.list) {
+                        if (child instanceof ui.sceneobjects.Container) {
+                            for (const child2 of child.list) {
+                                list.push(child2);
+                            }
+                        }
+                        else {
+                            list.push(child);
+                        }
+                    }
+                    return list;
+                }
                 visit(visitor) {
                     for (const obj of this.getDisplayListChildren()) {
                         visitor(obj);
@@ -4103,12 +4117,9 @@ var phasereditor2d;
                     }
                     hitTestOfActivePointer() {
                         const scene = this._editor.getScene();
-                        const input = scene.input;
-                        // const real = input["real_hitTest"];
-                        // const fake = input["hitTest"];
-                        // input["hitTest"] = real;
-                        const result = input.hitTestPointer(scene.input.activePointer);
-                        // input["hitTest"] = fake;
+                        const manager = scene.input.manager;
+                        const objects = scene.getInputSortedObjects();
+                        const result = manager.hitTest(scene.input.activePointer, objects, scene.getCamera());
                         return result;
                     }
                 }

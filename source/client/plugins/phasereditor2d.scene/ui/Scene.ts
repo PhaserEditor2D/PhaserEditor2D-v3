@@ -105,6 +105,28 @@ namespace phasereditor2d.scene.ui {
             return this.sys.displayList.getChildren() as any;
         }
 
+        getInputSortedObjects(): Phaser.GameObjects.GameObject[] {
+
+            const list = [];
+
+            for (const child of this.children.list) {
+
+                if (child instanceof sceneobjects.Container) {
+
+                    for (const child2 of child.list) {
+
+                        list.push(child2);
+                    }
+
+                } else {
+
+                    list.push(child);
+                }
+            }
+
+            return list;
+        }
+
         visit(visitor: (obj: sceneobjects.ISceneObject) => void) {
 
             for (const obj of this.getDisplayListChildren()) {

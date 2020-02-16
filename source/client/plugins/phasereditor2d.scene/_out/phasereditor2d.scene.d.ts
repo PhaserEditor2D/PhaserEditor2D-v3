@@ -402,6 +402,7 @@ declare namespace phasereditor2d.scene.ui {
         setSceneType(sceneType: core.json.SceneType): void;
         getMaker(): SceneMaker;
         getDisplayListChildren(): sceneobjects.ISceneObject[];
+        getInputSortedObjects(): Phaser.GameObjects.GameObject[];
         visit(visitor: (obj: sceneobjects.ISceneObject) => void): void;
         visitAskChildren(visitor: (obj: sceneobjects.ISceneObject) => boolean): void;
         makeNewName(baseName: string): string;

@@ -149,18 +149,13 @@ namespace phasereditor2d.scene.ui.editor {
 
             const scene = this._editor.getScene();
 
-            const input = scene.input;
+            const manager = scene.input.manager;
 
-            // const real = input["real_hitTest"];
-            // const fake = input["hitTest"];
+            const objects = scene.getInputSortedObjects();
 
-            // input["hitTest"] = real;
-            const result = input.hitTestPointer(scene.input.activePointer);
-
-            // input["hitTest"] = fake;
+            const result = manager.hitTest(scene.input.activePointer, objects, scene.getCamera());
 
             return result;
         }
     }
-
 }
