@@ -69,7 +69,5 @@ namespace phasereditor2d.pack.core {
 
             parser.addToPhaserCache(game, cache);
         }
-
     }
-
 }

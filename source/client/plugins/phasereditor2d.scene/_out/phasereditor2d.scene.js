@@ -1975,6 +1975,13 @@ var phasereditor2d;
                             delete list[key];
                         }
                     }
+                    {
+                        const fontCache = this._scene.cache.bitmapFont;
+                        const keys = fontCache.getKeys();
+                        for (const key of keys) {
+                            fontCache.remove(key);
+                        }
+                    }
                 }
                 async buildDependenciesHash() {
                     const builder = new phasereditor2d.ide.core.MultiHashBuilder();
