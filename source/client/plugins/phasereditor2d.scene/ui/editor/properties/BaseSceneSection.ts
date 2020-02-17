@@ -6,11 +6,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
             return "";
         }
 
-        protected getScene() {
-
-            return this.getSelection()[0];
-        }
-
         getEditor(): SceneEditor {
 
             return colibri.Platform.getWorkbench()

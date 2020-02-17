@@ -10,8 +10,62 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElementWithPropertiesXY(parent);
+            const comp = this.createGridElement(parent);
+            comp.style.gridTemplateColumns = "auto auto 1fr";
 
+            {
+                // font
+                this.createLock(comp, BitmapTextComponent.font);
+
+                this.createLabel(comp, BitmapTextComponent.font.name);
+
+                const btn = this.createButton(comp, "", async () => {
+
+                    const input = this.getEditor().getPackFinder().getPacks()
+                        .flatMap(pack => pack.getItems())
+                        .filter(item => item instanceof pack.core.BitmapFontAssetPackItem);
+
+                    const dlg = new pack.ui.dialogs.AssetSelectionDialog();
+
+                    dlg.create();
+                    dlg.setTitle("Select Bitmap Font");
+                    dlg.getViewer().setCellSize(128);
+                    dlg.getViewer().setInput(input);
+                    dlg.getViewer().repaint();
+                    dlg.setSelectionCallback(async (sel) => {
+
+                        const item = sel[0] as pack.core.BitmapFontAssetPackItem;
+
+                        await item.preload();
+
+                        await item.preloadImages();
+
+                        item.addToPhaserCache(this.getEditor().getGame(), this.getEditor().getScene().getPackCache());
+
+                        this.getUndoManager().add(
+                            new SimpleOperation(
+                                this.getEditor(), this.getSelection(), BitmapTextComponent.font, item.getKey()));
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    if (this.getSelection().length !== 1) {
+
+                        btn.textContent = this.getSelection().length + " selected";
+
+                    } else {
+
+                        btn.textContent = this.getSelectionFirstElement().font;
+                    }
+                });
+            }
+
+            this.createPropertyFloatRow(comp, BitmapTextComponent.fontSize);
+
+            this.createPropertyEnumRow(comp, BitmapTextComponent.align);
+
+            this.createPropertyFloatRow(comp, BitmapTextComponent.letterSpacing);
         }
 
         canEdit(obj: any, n: number): boolean {

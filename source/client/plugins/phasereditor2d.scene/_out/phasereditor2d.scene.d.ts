@@ -884,7 +884,6 @@ declare namespace phasereditor2d.scene.ui.editor.outline {
 declare namespace phasereditor2d.scene.ui.editor.properties {
     abstract class BaseSceneSection<T> extends colibri.ui.controls.properties.PropertySection<T> {
         protected getHelp(key: string): string;
-        protected getScene(): T;
         getEditor(): SceneEditor;
         protected getUndoManager(): colibri.ui.ide.undo.UndoManager;
     }

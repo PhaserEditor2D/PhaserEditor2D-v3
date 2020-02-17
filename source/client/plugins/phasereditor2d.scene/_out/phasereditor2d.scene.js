@@ -62,7 +62,7 @@ var phasereditor2d;
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.TextExtension.getInstance(), scene_1.ui.sceneobjects.BitmapTextExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.BitmapTextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
@@ -4948,9 +4948,6 @@ var phasereditor2d;
                         getHelp(key) {
                             return "";
                         }
-                        getScene() {
-                            return this.getSelection()[0];
-                        }
                         getEditor() {
                             return colibri.Platform.getWorkbench()
                                 .getActiveWindow().getEditorArea()
@@ -7474,7 +7471,42 @@ var phasereditor2d;
                         super(page, "phasereditor.scene.ui.sceneobjects.BitmapTextSection", "Bitmap Text");
                     }
                     createForm(parent) {
-                        const comp = this.createGridElementWithPropertiesXY(parent);
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto 1fr";
+                        {
+                            // font
+                            this.createLock(comp, sceneobjects.BitmapTextComponent.font);
+                            this.createLabel(comp, sceneobjects.BitmapTextComponent.font.name);
+                            const btn = this.createButton(comp, "", async () => {
+                                const input = this.getEditor().getPackFinder().getPacks()
+                                    .flatMap(pack => pack.getItems())
+                                    .filter(item => item instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem);
+                                const dlg = new phasereditor2d.pack.ui.dialogs.AssetSelectionDialog();
+                                dlg.create();
+                                dlg.setTitle("Select Bitmap Font");
+                                dlg.getViewer().setCellSize(128);
+                                dlg.getViewer().setInput(input);
+                                dlg.getViewer().repaint();
+                                dlg.setSelectionCallback(async (sel) => {
+                                    const item = sel[0];
+                                    await item.preload();
+                                    await item.preloadImages();
+                                    item.addToPhaserCache(this.getEditor().getGame(), this.getEditor().getScene().getPackCache());
+                                    this.getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), sceneobjects.BitmapTextComponent.font, item.getKey()));
+                                });
+                            });
+                            this.addUpdater(() => {
+                                if (this.getSelection().length !== 1) {
+                                    btn.textContent = this.getSelection().length + " selected";
+                                }
+                                else {
+                                    btn.textContent = this.getSelectionFirstElement().font;
+                                }
+                            });
+                        }
+                        this.createPropertyFloatRow(comp, sceneobjects.BitmapTextComponent.fontSize);
+                        this.createPropertyEnumRow(comp, sceneobjects.BitmapTextComponent.align);
+                        this.createPropertyFloatRow(comp, sceneobjects.BitmapTextComponent.letterSpacing);
                     }
                     canEdit(obj, n) {
                         return obj instanceof sceneobjects.BitmapText;
