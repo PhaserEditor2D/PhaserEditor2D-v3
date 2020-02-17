@@ -2271,7 +2271,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     import code = core.code;
     class TextCodeDOMBuilder extends ObjectCodeDOMBuilder {
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: Text): void;
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;

@@ -9,7 +9,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
-            // nothing
+
+            this.buildSetObjectPropertyCodeDOM_StringProperty(args, TextContentComponent.text);
         }
     }
 }

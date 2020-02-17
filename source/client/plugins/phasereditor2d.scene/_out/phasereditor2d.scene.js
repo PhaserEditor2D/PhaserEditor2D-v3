@@ -6922,7 +6922,7 @@ var phasereditor2d;
                         super(obj, [TextContentComponent.text]);
                     }
                     buildSetObjectPropertiesCodeDOM(args) {
-                        // nothing
+                        this.buildSetObjectPropertyCodeDOM_StringProperty(args, TextContentComponent.text);
                     }
                 }
                 TextContentComponent.text = sceneobjects.SimpleProperty("text", "", "Text");
@@ -7280,7 +7280,6 @@ var phasereditor2d;
                         ]);
                     }
                     buildSetObjectPropertiesCodeDOM(args) {
-                        this.buildSetObjectPropertyCodeDOM_StringProperty(args, sceneobjects.TextContentComponent.text);
                         this.buildSetObjectPropertyCodeDOM_FloatProperty(args, BitmapTextComponent.fontSize, BitmapTextComponent.align, BitmapTextComponent.letterSpacing);
                     }
                 }
@@ -10134,31 +10133,28 @@ var phasereditor2d;
                 var code = scene.core.code;
                 class TextCodeDOMBuilder extends sceneobjects.ObjectCodeDOMBuilder {
                     buildCreateObjectWithFactoryCodeDOM(args) {
+                        const obj = args.obj;
                         const call = new code.MethodCallCodeDOM("text", args.gameObjectFactoryExpr);
-                        this.addArgsToObjectFactoryMethodCallDOM(call, args.obj);
-                        return call;
-                    }
-                    addArgsToObjectFactoryMethodCallDOM(call, obj) {
                         call.argFloat(obj.x);
                         call.argFloat(obj.y);
-                        call.argLiteral(obj.text);
+                        return call;
                     }
                     buildCreatePrefabInstanceCodeDOM(args) {
+                        const obj = args.obj;
                         const call = args.methodCallDOM;
                         call.arg(args.sceneExpr);
-                        this.addArgsToObjectFactoryMethodCallDOM(call, args.obj);
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
                     }
                     buildPrefabConstructorDeclarationSupperCallCodeDOM(args) {
                         const call = args.superMethodCallCodeDOM;
                         call.arg("x");
                         call.arg("y");
-                        call.arg("text");
                     }
                     buildPrefabConstructorDeclarationCodeDOM(args) {
                         const ctr = args.ctrDeclCodeDOM;
                         ctr.arg("x", "number");
                         ctr.arg("y", "number");
-                        ctr.arg("text", "string");
                     }
                 }
                 sceneobjects.TextCodeDOMBuilder = TextCodeDOMBuilder;

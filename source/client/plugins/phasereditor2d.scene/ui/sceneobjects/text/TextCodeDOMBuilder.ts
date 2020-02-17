@@ -6,27 +6,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
+            const obj = args.obj as Text;
             const call = new code.MethodCallCodeDOM("text", args.gameObjectFactoryExpr);
 
-            this.addArgsToObjectFactoryMethodCallDOM(call, args.obj as Text);
+            call.argFloat(obj.x);
+            call.argFloat(obj.y);
 
             return call;
         }
 
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: Text) {
-
-            call.argFloat(obj.x);
-            call.argFloat(obj.y);
-            call.argLiteral(obj.text);
-        }
-
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs) {
 
+            const obj = args.obj as Text;
             const call = args.methodCallDOM;
 
             call.arg(args.sceneExpr);
-
-            this.addArgsToObjectFactoryMethodCallDOM(call, args.obj as Text);
+            call.argFloat(obj.x);
+            call.argFloat(obj.y);
         }
 
         buildPrefabConstructorDeclarationSupperCallCodeDOM(
@@ -36,7 +32,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.arg("x");
             call.arg("y");
-            call.arg("text");
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
@@ -45,7 +40,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ctr.arg("x", "number");
             ctr.arg("y", "number");
-            ctr.arg("text", "string");
         }
     }
 }

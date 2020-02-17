@@ -57,8 +57,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
-            this.buildSetObjectPropertyCodeDOM_StringProperty(args, TextContentComponent.text);
-
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args,
                 BitmapTextComponent.fontSize,
                 BitmapTextComponent.align,
