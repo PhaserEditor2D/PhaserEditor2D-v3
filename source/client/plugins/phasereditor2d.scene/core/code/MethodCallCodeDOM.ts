@@ -58,6 +58,30 @@ namespace phasereditor2d.scene.core.code {
             this._args.push(expr);
         }
 
+        argStringOrFloat(expr: string | number) {
+
+            if (typeof expr === "string") {
+
+                this.argLiteral(expr);
+
+            } else {
+
+                this.argFloat(expr);
+            }
+        }
+
+        argStringOrInt(expr: string | number) {
+
+            if (typeof expr === "string") {
+
+                this.argLiteral(expr);
+
+            } else {
+
+                this.argInt(expr);
+            }
+        }
+
         argLiteral(expr: string) {
 
             this._args.push(CodeDOM.quote(expr));

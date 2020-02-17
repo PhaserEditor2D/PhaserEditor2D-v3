@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs,
             call: code.MethodCallCodeDOM) {
 
-            const obj = args.prefabObj;
+            const obj = args.prefabObj as ITextureLikeObject;
             const support = obj.getEditorSupport();
 
             if (support.isLockedProperty(TextureComponent.texture)) {
@@ -39,34 +39,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             } else {
 
-                const textureComponent = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
+                const texture = TextureComponent.texture.getValue(obj) as ITextureKeys;
+                const key = texture.key || "__DEFAULT";
+                const frame = texture.frame;
 
-                const { key, frame } = textureComponent.getTextureKeys();
+                call.arg("texture || " + code.CodeDOM.quote(key));
 
-                if (typeof key === "string") {
+                let frameCode: string;
 
-                    call.arg("texture || " + code.CodeDOM.quote(key));
+                if (typeof frame === "string") {
 
-                    let frameLiteral: string;
+                    frameCode = code.CodeDOM.quote(frame);
 
-                    if (typeof frame === "string") {
+                } else if (typeof frame === "number") {
 
-                        frameLiteral = code.CodeDOM.quote(frame);
+                    frameCode = frame.toString();
+                }
 
-                    } else if (typeof frame === "number") {
+                if (frameCode) {
 
-                        frameLiteral = frame.toString();
-                    }
-
-                    if (frameLiteral) {
-
-                        call.arg("frame !== undefined && frame !== null ? frame : " + frameLiteral);
-                    }
-
-                } else {
-
-                    call.arg("texture");
-                    call.arg("key");
+                    call.arg("frame !== undefined && frame !== null ? frame : " + frameCode);
                 }
             }
         }
@@ -83,67 +75,61 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs) {
 
+            const obj = args.obj as Image;
+            const support = obj.getEditorSupport();
             const call = args.methodCallDOM;
 
             call.arg(args.sceneExpr);
+            call.argFloat(obj.x);
+            call.argFloat(obj.y);
 
-            this.addArgsToObjectFactoryMethodCallDOM(call, args.obj as Image);
+            if (support.isUnlockedProperty(TextureComponent.texture)) {
+
+                this.addTextureFrameArgsToObjectFactoryMethodCallDOM(
+                    args.methodCallDOM, args.obj as ITextureLikeObject);
+            }
         }
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
+            const obj = args.obj as Image;
+            const support = obj.getEditorSupport();
             const call = new code.MethodCallCodeDOM(this._factoryMethodName, args.gameObjectFactoryExpr);
 
-            this.addArgsToObjectFactoryMethodCallDOM(call, args.obj as Image);
+            call.argFloat(obj.x);
+            call.argFloat(obj.y);
+
+            this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, args.obj as ITextureLikeObject);
 
             return call;
         }
 
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject) {
-
-            call.argFloat(obj.x);
-            call.argFloat(obj.y);
+        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject) {
 
             this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj);
         }
 
         protected addTextureFrameArgsToObjectFactoryMethodCallDOM(
-            call: code.MethodCallCodeDOM, obj: ITransformLikeObject) {
+            call: code.MethodCallCodeDOM, obj: ITextureLikeObject) {
 
-            const support = obj.getEditorSupport();
+            const texture = TextureComponent.texture.getValue(obj) as ITextureKeys;
 
-            const textureComponent = support.getComponent(TextureComponent) as TextureComponent;
+            if (texture.key) {
 
-            const { key, frame } = textureComponent.getTextureKeys();
+                call.argLiteral(texture.key);
 
-            if (support.isPrefabInstance()) {
+                if (typeof texture.frame === "string") {
 
-                const prefabSerializer = support.getPrefabSerializer();
-
-                if (prefabSerializer) {
-
-                    const prefabKeys = prefabSerializer.read(TextureComponent.texture.name, {}) as ITextureKeys;
-
-                    if (prefabKeys.key === key) {
-
-                        return;
-                    }
+                    call.argLiteral(texture.frame);
 
                 } else {
 
-                    throw new Error(`Cannot find prefab with id ${support.getPrefabId()}.`);
+                    call.argInt(texture.frame);
                 }
-            }
 
-            call.argLiteral(key);
+            } else {
 
-            if (typeof frame === "number") {
-
-                call.argInt(frame);
-
-            } else if (typeof frame === "string") {
-
-                call.argLiteral(frame);
+                call.argLiteral("__DEFAULT");
             }
         }
     }

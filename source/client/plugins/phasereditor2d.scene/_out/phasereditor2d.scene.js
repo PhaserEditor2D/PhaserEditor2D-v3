@@ -729,6 +729,22 @@ var phasereditor2d;
                     arg(expr) {
                         this._args.push(expr);
                     }
+                    argStringOrFloat(expr) {
+                        if (typeof expr === "string") {
+                            this.argLiteral(expr);
+                        }
+                        else {
+                            this.argFloat(expr);
+                        }
+                    }
+                    argStringOrInt(expr) {
+                        if (typeof expr === "string") {
+                            this.argLiteral(expr);
+                        }
+                        else {
+                            this.argInt(expr);
+                        }
+                    }
                     argLiteral(expr) {
                         this._args.push(code.CodeDOM.quote(expr));
                     }
@@ -7929,24 +7945,19 @@ var phasereditor2d;
                             call.arg("frame");
                         }
                         else {
-                            const textureComponent = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
-                            const { key, frame } = textureComponent.getTextureKeys();
-                            if (typeof key === "string") {
-                                call.arg("texture || " + code.CodeDOM.quote(key));
-                                let frameLiteral;
-                                if (typeof frame === "string") {
-                                    frameLiteral = code.CodeDOM.quote(frame);
-                                }
-                                else if (typeof frame === "number") {
-                                    frameLiteral = frame.toString();
-                                }
-                                if (frameLiteral) {
-                                    call.arg("frame !== undefined && frame !== null ? frame : " + frameLiteral);
-                                }
+                            const texture = sceneobjects.TextureComponent.texture.getValue(obj);
+                            const key = texture.key || "__DEFAULT";
+                            const frame = texture.frame;
+                            call.arg("texture || " + code.CodeDOM.quote(key));
+                            let frameCode;
+                            if (typeof frame === "string") {
+                                frameCode = code.CodeDOM.quote(frame);
                             }
-                            else {
-                                call.arg("texture");
-                                call.arg("key");
+                            else if (typeof frame === "number") {
+                                frameCode = frame.toString();
+                            }
+                            if (frameCode) {
+                                call.arg("frame !== undefined && frame !== null ? frame : " + frameCode);
                             }
                         }
                     }
@@ -7958,42 +7969,41 @@ var phasereditor2d;
                         ctr.arg("frame", "number | string", true);
                     }
                     buildCreatePrefabInstanceCodeDOM(args) {
+                        const obj = args.obj;
+                        const support = obj.getEditorSupport();
                         const call = args.methodCallDOM;
                         call.arg(args.sceneExpr);
-                        this.addArgsToObjectFactoryMethodCallDOM(call, args.obj);
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
+                        if (support.isUnlockedProperty(sceneobjects.TextureComponent.texture)) {
+                            this.addTextureFrameArgsToObjectFactoryMethodCallDOM(args.methodCallDOM, args.obj);
+                        }
                     }
                     buildCreateObjectWithFactoryCodeDOM(args) {
+                        const obj = args.obj;
+                        const support = obj.getEditorSupport();
                         const call = new code.MethodCallCodeDOM(this._factoryMethodName, args.gameObjectFactoryExpr);
-                        this.addArgsToObjectFactoryMethodCallDOM(call, args.obj);
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
+                        this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, args.obj);
                         return call;
                     }
                     addArgsToObjectFactoryMethodCallDOM(call, obj) {
-                        call.argFloat(obj.x);
-                        call.argFloat(obj.y);
                         this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj);
                     }
                     addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj) {
-                        const support = obj.getEditorSupport();
-                        const textureComponent = support.getComponent(sceneobjects.TextureComponent);
-                        const { key, frame } = textureComponent.getTextureKeys();
-                        if (support.isPrefabInstance()) {
-                            const prefabSerializer = support.getPrefabSerializer();
-                            if (prefabSerializer) {
-                                const prefabKeys = prefabSerializer.read(sceneobjects.TextureComponent.texture.name, {});
-                                if (prefabKeys.key === key) {
-                                    return;
-                                }
+                        const texture = sceneobjects.TextureComponent.texture.getValue(obj);
+                        if (texture.key) {
+                            call.argLiteral(texture.key);
+                            if (typeof texture.frame === "string") {
+                                call.argLiteral(texture.frame);
                             }
                             else {
-                                throw new Error(`Cannot find prefab with id ${support.getPrefabId()}.`);
+                                call.argInt(texture.frame);
                             }
                         }
-                        call.argLiteral(key);
-                        if (typeof frame === "number") {
-                            call.argInt(frame);
-                        }
-                        else if (typeof frame === "string") {
-                            call.argLiteral(frame);
+                        else {
+                            call.argLiteral("__DEFAULT");
                         }
                     }
                 }
@@ -11006,6 +11016,29 @@ var phasereditor2d;
                     constructor() {
                         super("tileSprite");
                     }
+                    buildCreatePrefabInstanceCodeDOM(args) {
+                        const obj = args.obj;
+                        const support = obj.getEditorSupport();
+                        const call = args.methodCallDOM;
+                        call.arg(args.sceneExpr);
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
+                        if (support.isUnlockedProperty(sceneobjects.TileSpriteComponent.width)) {
+                            call.argFloat(obj.width);
+                        }
+                        else {
+                            call.arg("undefined");
+                        }
+                        if (support.isUnlockedProperty(sceneobjects.TileSpriteComponent.height)) {
+                            call.argFloat(obj.height);
+                        }
+                        else {
+                            call.arg("undefined");
+                        }
+                        if (support.isUnlockedProperty(sceneobjects.TextureComponent.texture)) {
+                            this.addTextureFrameArgsToObjectFactoryMethodCallDOM(args.methodCallDOM, args.obj);
+                        }
+                    }
                     buildPrefabConstructorDeclarationCodeDOM(args) {
                         const ctr = args.ctrDeclCodeDOM;
                         ctr.arg("x", "number");
@@ -11017,30 +11050,30 @@ var phasereditor2d;
                     }
                     buildPrefabConstructorDeclarationSupperCallCodeDOM(args) {
                         const obj = args.prefabObj;
+                        const support = obj.getEditorSupport();
                         const call = args.superMethodCallCodeDOM;
                         call.arg("x");
                         call.arg("y");
-                        call.arg("typeof width === \"number\" ? width : " + obj.width);
-                        call.arg("typeof height === \"number\" ? height : " + obj.width);
+                        if (support.isLockedProperty(sceneobjects.TileSpriteComponent.width)) {
+                            call.argFloat(obj.width);
+                        }
+                        else {
+                            call.arg("typeof width === \"number\" ? width : " + obj.width);
+                        }
+                        if (support.isLockedProperty(sceneobjects.TileSpriteComponent.height)) {
+                            call.argFloat(obj.height);
+                        }
+                        else {
+                            call.arg("typeof height === \"number\" ? height : " + obj.height);
+                        }
                         this.buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args, call);
                     }
                     addArgsToObjectFactoryMethodCallDOM(call, obj) {
                         const tileSprite = obj;
                         call.argFloat(tileSprite.x);
                         call.argFloat(tileSprite.y);
-                        const support = obj.getEditorSupport();
-                        let width = tileSprite.width;
-                        let height = tileSprite.height;
-                        if (support.isPrefabInstance()) {
-                            if (!support.isUnlockedProperty(sceneobjects.TileSpriteComponent.width)) {
-                                width = undefined;
-                            }
-                            if (!support.isUnlockedProperty(sceneobjects.TileSpriteComponent.height)) {
-                                height = undefined;
-                            }
-                        }
-                        call.argFloat(width);
-                        call.argFloat(height);
+                        call.argFloat(tileSprite.width);
+                        call.argFloat(tileSprite.height);
                         this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj);
                     }
                 }

@@ -161,6 +161,8 @@ declare namespace phasereditor2d.scene.core.code {
         setDeclareReturnToField(declareReturnToField: boolean): void;
         isDeclareReturnToField(): boolean;
         arg(expr: string): void;
+        argStringOrFloat(expr: string | number): void;
+        argStringOrInt(expr: string | number): void;
         argLiteral(expr: string): void;
         argFloat(n: number): void;
         argInt(n: number): void;
@@ -1720,8 +1722,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject): void;
-        protected addTextureFrameArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject): void;
+        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject): void;
+        protected addTextureFrameArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -2412,9 +2414,10 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     import code = core.code;
     class TileSpriteCodeDOMBuilder extends BaseImageCodeDOMBuilder {
         constructor();
+        buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITransformLikeObject): void;
+        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
