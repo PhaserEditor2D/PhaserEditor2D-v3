@@ -767,7 +767,6 @@ declare namespace colibri.ui.controls {
         private _titleBarElement;
         private _contentAreaElement;
         private _iconSize;
-        private _selectedLabelElement;
         private static _selectedTimeCounter;
         constructor(...classList: string[]);
         addTab(label: string, icon: IImage, content: Control, closeable?: boolean, selectIt?: boolean): void;

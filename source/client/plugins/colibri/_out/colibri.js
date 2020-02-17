@@ -3192,13 +3192,13 @@ var colibri;
                             return;
                         }
                     }
+                    const selectedLabel = this.getSelectedLabelElement();
                     this._titleBarElement.removeChild(labelElement);
                     const contentArea = labelElement["__contentArea"];
                     this._contentAreaElement.removeChild(contentArea);
-                    const selectedLabel = this.getSelectedLabelElement();
                     if (selectedLabel === labelElement) {
                         let toSelectLabel = null;
-                        let maxTime = Number.MIN_VALUE;
+                        let maxTime = -1;
                         for (let j = 0; j < this._titleBarElement.children.length; j++) {
                             const label = this._titleBarElement.children.item(j);
                             const time = label["__selected_time"] || 0;
@@ -3209,9 +3209,6 @@ var colibri;
                         }
                         if (toSelectLabel) {
                             this.selectTab(toSelectLabel);
-                        }
-                        else {
-                            this._selectedLabelElement = null;
                         }
                     }
                 }
@@ -3261,15 +3258,15 @@ var colibri;
                     if (toSelectLabel) {
                         toSelectLabel["__selected_time"] = TabPane._selectedTimeCounter++;
                     }
-                    if (this._selectedLabelElement) {
-                        if (this._selectedLabelElement === toSelectLabel) {
+                    const selectedLabelElement = this.getSelectedLabelElement();
+                    if (selectedLabelElement) {
+                        if (selectedLabelElement === toSelectLabel) {
                             return;
                         }
-                        this._selectedLabelElement.classList.remove("selected");
-                        const selectedContentArea = TabPane.getContentAreaFromLabel(this._selectedLabelElement);
+                        selectedLabelElement.classList.remove("selected");
+                        const selectedContentArea = TabPane.getContentAreaFromLabel(selectedLabelElement);
                         selectedContentArea.classList.remove("selected");
                     }
-                    this._selectedLabelElement = toSelectLabel;
                     toSelectLabel.classList.add("selected");
                     const toSelectContentArea = TabPane.getContentAreaFromLabel(toSelectLabel);
                     toSelectContentArea.classList.add("selected");
@@ -3299,7 +3296,13 @@ var colibri;
                     return list;
                 }
                 getSelectedLabelElement() {
-                    return this._selectedLabelElement;
+                    for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
+                        const label = this._titleBarElement.children.item(i);
+                        if (label.classList.contains("selected")) {
+                            return label;
+                        }
+                    }
+                    return undefined;
                 }
             }
             TabPane._selectedTimeCounter = 0;

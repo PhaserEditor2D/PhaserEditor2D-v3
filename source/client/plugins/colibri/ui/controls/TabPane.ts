@@ -150,7 +150,6 @@ namespace colibri.ui.controls {
         private _titleBarElement: HTMLElement;
         private _contentAreaElement: HTMLElement;
         private _iconSize: number;
-        private _selectedLabelElement: HTMLElement;
         private static _selectedTimeCounter: number = 0;
 
         constructor(...classList: string[]) {
@@ -319,17 +318,17 @@ namespace colibri.ui.controls {
                 }
             }
 
+            const selectedLabel = this.getSelectedLabelElement();
+
             this._titleBarElement.removeChild(labelElement);
             const contentArea = labelElement["__contentArea"] as HTMLElement;
             this._contentAreaElement.removeChild(contentArea);
-
-            const selectedLabel = this.getSelectedLabelElement();
 
             if (selectedLabel === labelElement) {
 
                 let toSelectLabel: HTMLElement = null;
 
-                let maxTime = Number.MIN_VALUE;
+                let maxTime = -1;
 
                 for (let j = 0; j < this._titleBarElement.children.length; j++) {
 
@@ -346,10 +345,6 @@ namespace colibri.ui.controls {
                 if (toSelectLabel) {
 
                     this.selectTab(toSelectLabel);
-
-                } else {
-
-                    this._selectedLabelElement = null;
                 }
             }
         }
@@ -423,18 +418,18 @@ namespace colibri.ui.controls {
                 toSelectLabel["__selected_time"] = TabPane._selectedTimeCounter++;
             }
 
-            if (this._selectedLabelElement) {
+            const selectedLabelElement = this.getSelectedLabelElement();
 
-                if (this._selectedLabelElement === toSelectLabel) {
+            if (selectedLabelElement) {
+
+                if (selectedLabelElement === toSelectLabel) {
                     return;
                 }
 
-                this._selectedLabelElement.classList.remove("selected");
-                const selectedContentArea = TabPane.getContentAreaFromLabel(this._selectedLabelElement);
+                selectedLabelElement.classList.remove("selected");
+                const selectedContentArea = TabPane.getContentAreaFromLabel(selectedLabelElement);
                 selectedContentArea.classList.remove("selected");
             }
-
-            this._selectedLabelElement = toSelectLabel;
 
             toSelectLabel.classList.add("selected");
             const toSelectContentArea = TabPane.getContentAreaFromLabel(toSelectLabel);
@@ -483,7 +478,17 @@ namespace colibri.ui.controls {
 
         private getSelectedLabelElement(): HTMLElement {
 
-            return this._selectedLabelElement;
+            for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
+
+                const label = this._titleBarElement.children.item(i) as HTMLLabelElement;
+
+                if (label.classList.contains("selected")) {
+
+                    return label;
+                }
+            }
+
+            return undefined;
         }
     }
 
