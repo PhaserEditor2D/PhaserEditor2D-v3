@@ -30,35 +30,44 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call: code.MethodCallCodeDOM) {
 
             const obj = args.prefabObj;
+            const support = obj.getEditorSupport();
 
-            const textureComponent = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
+            if (support.isPrefabInstance() && !support.isUnlockedProperty(TextureComponent.texture)) {
 
-            const { key, frame } = textureComponent.getTextureKeys();
-
-            if (typeof key === "string") {
-
-                call.arg("texture || " + code.CodeDOM.quote(key));
-
-                let frameLiteral: string;
-
-                if (typeof frame === "string") {
-
-                    frameLiteral = code.CodeDOM.quote(frame);
-
-                } else if (typeof frame === "number") {
-
-                    frameLiteral = frame.toString();
-                }
-
-                if (frameLiteral) {
-
-                    call.arg("frame !== undefined && frame !== null ? frame : " + frameLiteral);
-                }
+                call.arg("texture");
+                call.arg("frame");
 
             } else {
 
-                call.arg("texture");
-                call.arg("key");
+                const textureComponent = obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
+
+                const { key, frame } = textureComponent.getTextureKeys();
+
+                if (typeof key === "string") {
+
+                    call.arg("texture || " + code.CodeDOM.quote(key));
+
+                    let frameLiteral: string;
+
+                    if (typeof frame === "string") {
+
+                        frameLiteral = code.CodeDOM.quote(frame);
+
+                    } else if (typeof frame === "number") {
+
+                        frameLiteral = frame.toString();
+                    }
+
+                    if (frameLiteral) {
+
+                        call.arg("frame !== undefined && frame !== null ? frame : " + frameLiteral);
+                    }
+
+                } else {
+
+                    call.arg("texture");
+                    call.arg("key");
+                }
             }
         }
 
