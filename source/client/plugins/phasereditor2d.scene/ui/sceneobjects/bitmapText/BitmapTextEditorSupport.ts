@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setInteractive(): void {
 
-            this.getObject().setInteractive();
+            this.getObject().setInteractive(interactive_getAlpha_RenderTexture);
         }
     }
 }

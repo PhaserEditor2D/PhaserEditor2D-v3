@@ -7366,7 +7366,7 @@ var phasereditor2d;
                         return new sceneobjects.ObjectCellRenderer();
                     }
                     setInteractive() {
-                        this.getObject().setInteractive();
+                        this.getObject().setInteractive(sceneobjects.interactive_getAlpha_RenderTexture);
                     }
                 }
                 sceneobjects.BitmapTextEditorSupport = BitmapTextEditorSupport;
