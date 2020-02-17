@@ -35,6 +35,11 @@ namespace phasereditor2d.files.ui.viewers {
                 return input;
             }
 
+            if (input === undefined || input === null) {
+
+                return [];
+            }
+
             return this.getChildren(input);
         }
 

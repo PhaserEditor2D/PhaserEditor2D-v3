@@ -111,10 +111,12 @@ var phasereditor2d;
                         }
                     }
                     console.log(`IDEPlugin: opening project ${projectName}`);
+                    const designWindow = wb.activateWindow(ide_1.ui.DesignWindow.ID);
+                    const editorArea = designWindow.getEditorArea();
+                    editorArea.closeAllEditors();
                     await wb.openProject(projectName, monitor);
                     dlg.setProgress(1);
                     this.validateIndexFile();
-                    const designWindow = wb.activateWindow(ide_1.ui.DesignWindow.ID);
                     if (designWindow) {
                         designWindow.restoreState(wb.getProjectPreferences());
                     }

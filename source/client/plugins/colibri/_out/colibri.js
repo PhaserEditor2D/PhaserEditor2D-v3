@@ -7039,7 +7039,6 @@ var colibri;
                 restoreEditors(prefs) {
                     const editorArea = this.getEditorArea();
                     const restoreEditorData = prefs.getValue("restoreEditorState");
-                    editorArea.closeAll();
                     if (restoreEditorData) {
                         if (restoreEditorData.tabIconSize) {
                             editorArea.setTabIconSize(restoreEditorData.tabIconSize);

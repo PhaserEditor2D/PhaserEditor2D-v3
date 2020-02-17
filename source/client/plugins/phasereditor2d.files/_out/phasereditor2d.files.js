@@ -1067,6 +1067,9 @@ var phasereditor2d;
                             }
                             return input;
                         }
+                        if (input === undefined || input === null) {
+                            return [];
+                        }
                         return this.getChildren(input);
                     }
                     getChildren(parent) {

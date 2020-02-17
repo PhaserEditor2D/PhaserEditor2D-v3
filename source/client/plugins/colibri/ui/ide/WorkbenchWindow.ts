@@ -85,8 +85,6 @@ namespace colibri.ui.ide {
 
             const restoreEditorData = prefs.getValue("restoreEditorState") as RestoreEditorData;
 
-            editorArea.closeAll();
-
             if (restoreEditorData) {
 
                 if (restoreEditorData.tabIconSize) {

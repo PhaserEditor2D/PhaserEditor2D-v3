@@ -182,13 +182,17 @@ namespace phasereditor2d.ide {
 
                 console.log(`IDEPlugin: opening project ${projectName}`);
 
+                const designWindow = wb.activateWindow(ui.DesignWindow.ID) as ui.DesignWindow;
+
+                const editorArea = designWindow.getEditorArea();
+
+                editorArea.closeAllEditors();
+
                 await wb.openProject(projectName, monitor);
 
                 dlg.setProgress(1);
 
                 this.validateIndexFile();
-
-                const designWindow = wb.activateWindow(ui.DesignWindow.ID) as ui.DesignWindow;
 
                 if (designWindow) {
 

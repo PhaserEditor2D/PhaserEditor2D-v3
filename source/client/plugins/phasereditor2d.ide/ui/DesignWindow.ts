@@ -49,6 +49,7 @@ namespace phasereditor2d.ide.ui {
         }
 
         restoreState(prefs: colibri.core.preferences.Preferences) {
+
             this.restoreEditors(prefs);
         }
 
