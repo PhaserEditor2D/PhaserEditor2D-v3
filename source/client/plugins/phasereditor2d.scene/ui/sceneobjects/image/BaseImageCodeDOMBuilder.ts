@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const obj = args.prefabObj;
             const support = obj.getEditorSupport();
 
-            if (support.isPrefabInstance() && !support.isUnlockedProperty(TextureComponent.texture)) {
+            if (support.isLockedProperty(TextureComponent.texture)) {
 
                 call.arg("texture");
                 call.arg("frame");

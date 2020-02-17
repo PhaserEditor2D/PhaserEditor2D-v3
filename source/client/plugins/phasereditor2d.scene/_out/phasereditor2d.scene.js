@@ -6440,6 +6440,9 @@ var phasereditor2d;
                         }
                         return false;
                     }
+                    isLockedProperty(property) {
+                        return !this.isUnlockedProperty(property);
+                    }
                     isUnlockedProperty(property) {
                         if (property === sceneobjects.TransformComponent.x || property === sceneobjects.TransformComponent.y) {
                             return true;
@@ -7213,33 +7216,45 @@ var phasereditor2d;
                 class BitmapTextCodeDOMBuilder extends sceneobjects.ObjectCodeDOMBuilder {
                     buildCreateObjectWithFactoryCodeDOM(args) {
                         const call = new code.MethodCallCodeDOM("bitmapText", args.gameObjectFactoryExpr);
-                        this.addArgsToObjectFactoryMethodCallDOM(call, args.obj);
-                        return call;
-                    }
-                    addArgsToObjectFactoryMethodCallDOM(call, obj) {
+                        const obj = args.obj;
                         call.argFloat(obj.x);
                         call.argFloat(obj.y);
                         call.argLiteral(obj.font);
                         call.argLiteral(obj.text);
+                        return call;
                     }
                     buildCreatePrefabInstanceCodeDOM(args) {
                         const call = args.methodCallDOM;
+                        const obj = args.obj;
+                        const support = args.obj.getEditorSupport();
                         call.arg(args.sceneExpr);
-                        this.addArgsToObjectFactoryMethodCallDOM(call, args.obj);
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
+                        if (support.isUnlockedProperty(sceneobjects.BitmapTextComponent.font)) {
+                            call.argLiteral(obj.font);
+                        }
+                        else {
+                            call.arg("undefined");
+                        }
                     }
                     buildPrefabConstructorDeclarationCodeDOM(args) {
                         const ctr = args.ctrDeclCodeDOM;
                         ctr.arg("x", "number");
                         ctr.arg("y", "number");
-                        ctr.arg("font", "string");
-                        ctr.arg("text", "string");
+                        ctr.arg("font", "string", true);
                     }
                     buildPrefabConstructorDeclarationSupperCallCodeDOM(args) {
+                        const obj = args.prefabObj;
+                        const support = obj.getEditorSupport();
                         const call = args.superMethodCallCodeDOM;
                         call.arg("x");
                         call.arg("y");
-                        call.arg("font");
-                        call.arg("text");
+                        if (support.isLockedProperty(sceneobjects.BitmapTextComponent.font)) {
+                            call.arg("font");
+                        }
+                        else {
+                            call.arg("font || " + code.CodeDOM.quote(obj.font));
+                        }
                     }
                 }
                 sceneobjects.BitmapTextCodeDOMBuilder = BitmapTextCodeDOMBuilder;
@@ -7258,11 +7273,15 @@ var phasereditor2d;
                 class BitmapTextComponent extends sceneobjects.Component {
                     constructor(obj) {
                         super(obj, [
-                            BitmapTextComponent.font
+                            BitmapTextComponent.font,
+                            BitmapTextComponent.align,
+                            BitmapTextComponent.fontSize,
+                            BitmapTextComponent.letterSpacing
                         ]);
                     }
                     buildSetObjectPropertiesCodeDOM(args) {
-                        // nothing
+                        this.buildSetObjectPropertyCodeDOM_StringProperty(args, sceneobjects.TextContentComponent.text);
+                        this.buildSetObjectPropertyCodeDOM_FloatProperty(args, BitmapTextComponent.fontSize, BitmapTextComponent.align, BitmapTextComponent.letterSpacing);
                     }
                 }
                 BitmapTextComponent.font = {
@@ -7271,6 +7290,39 @@ var phasereditor2d;
                     defValue: undefined,
                     getValue: obj => obj.font,
                     setValue: (obj, value) => obj.setFont(value)
+                };
+                BitmapTextComponent.align = {
+                    name: "align",
+                    label: "Align",
+                    defValue: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
+                    getValue: obj => obj.align,
+                    setValue: (obj, value) => obj.align = value,
+                    getValueLabel: value => {
+                        return {
+                            [Phaser.GameObjects.BitmapText.ALIGN_LEFT]: "LEFT",
+                            [Phaser.GameObjects.BitmapText.ALIGN_CENTER]: "CENTER",
+                            [Phaser.GameObjects.BitmapText.ALIGN_RIGHT]: "RIGHT"
+                        }[value];
+                    },
+                    values: [
+                        Phaser.GameObjects.BitmapText.ALIGN_LEFT,
+                        Phaser.GameObjects.BitmapText.ALIGN_CENTER,
+                        Phaser.GameObjects.BitmapText.ALIGN_RIGHT
+                    ]
+                };
+                BitmapTextComponent.fontSize = {
+                    name: "fontSize",
+                    label: "Font Size",
+                    defValue: 0,
+                    getValue: obj => obj.fontSize,
+                    setValue: (obj, value) => obj.setFontSize(value)
+                };
+                BitmapTextComponent.letterSpacing = {
+                    name: "letterSpacing",
+                    label: "Letter Spacing",
+                    defValue: 0,
+                    getValue: obj => obj.letterSpacing,
+                    setValue: (obj, value) => obj.setLetterSpacing(value)
                 };
                 sceneobjects.BitmapTextComponent = BitmapTextComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
@@ -7390,6 +7442,33 @@ var phasereditor2d;
                 }
                 BitmapTextExtension._instance = new BitmapTextExtension();
                 sceneobjects.BitmapTextExtension = BitmapTextExtension;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class BitmapTextSection extends sceneobjects.SceneObjectSection {
+                    constructor(page) {
+                        super(page, "phasereditor.scene.ui.sceneobjects.BitmapTextSection", "Bitmap Text");
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElementWithPropertiesXY(parent);
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof sceneobjects.BitmapText;
+                    }
+                    canEditNumber(n) {
+                        return n > 0;
+                    }
+                }
+                sceneobjects.BitmapTextSection = BitmapTextSection;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -7845,24 +7924,31 @@ var phasereditor2d;
                     }
                     buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args, call) {
                         const obj = args.prefabObj;
-                        const textureComponent = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
-                        const { key, frame } = textureComponent.getTextureKeys();
-                        if (typeof key === "string") {
-                            call.arg("texture || " + code.CodeDOM.quote(key));
-                            let frameLiteral;
-                            if (typeof frame === "string") {
-                                frameLiteral = code.CodeDOM.quote(frame);
-                            }
-                            else if (typeof frame === "number") {
-                                frameLiteral = frame.toString();
-                            }
-                            if (frameLiteral) {
-                                call.arg("frame !== undefined && frame !== null ? frame : " + frameLiteral);
-                            }
+                        const support = obj.getEditorSupport();
+                        if (support.isLockedProperty(sceneobjects.TextureComponent.texture)) {
+                            call.arg("texture");
+                            call.arg("frame");
                         }
                         else {
-                            call.arg("texture");
-                            call.arg("key");
+                            const textureComponent = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent);
+                            const { key, frame } = textureComponent.getTextureKeys();
+                            if (typeof key === "string") {
+                                call.arg("texture || " + code.CodeDOM.quote(key));
+                                let frameLiteral;
+                                if (typeof frame === "string") {
+                                    frameLiteral = code.CodeDOM.quote(frame);
+                                }
+                                else if (typeof frame === "number") {
+                                    frameLiteral = frame.toString();
+                                }
+                                if (frameLiteral) {
+                                    call.arg("frame !== undefined && frame !== null ? frame : " + frameLiteral);
+                                }
+                            }
+                            else {
+                                call.arg("texture");
+                                call.arg("key");
+                            }
                         }
                     }
                     buildPrefabConstructorDeclarationCodeDOM(args) {

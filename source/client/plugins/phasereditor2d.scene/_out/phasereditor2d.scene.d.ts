@@ -1268,6 +1268,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         destroy(): void;
         isMethodScope(): boolean;
         hasProperty(property: IProperty<any>): boolean;
+        isLockedProperty(property: IProperty<any>): boolean;
         isUnlockedProperty(property: IProperty<any>): boolean;
         setUnlockedProperty(property: IProperty<any>, unlock: boolean): void;
         private static buildPrefabDependencyHash;
@@ -1573,7 +1574,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     import code = core.code;
     class BitmapTextCodeDOMBuilder extends ObjectCodeDOMBuilder {
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: BitmapText): void;
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
@@ -1582,6 +1582,9 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class BitmapTextComponent extends Component<BitmapText> {
         static font: IProperty<BitmapText>;
+        static align: IEnumProperty<BitmapText, number>;
+        static fontSize: IProperty<BitmapText>;
+        static letterSpacing: IProperty<BitmapText>;
         constructor(obj: BitmapText);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
     }
@@ -1606,6 +1609,15 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         createSceneObjectWithData(args: ICreateWithDataArgs): ISceneObject;
         getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
         getCodeDOMBuilder(): ObjectCodeDOMBuilder;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    import controls = colibri.ui.controls;
+    class BitmapTextSection extends SceneObjectSection<BitmapText> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
