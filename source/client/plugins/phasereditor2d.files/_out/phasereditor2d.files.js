@@ -1185,6 +1185,11 @@ var phasereditor2d;
                                 sections.push(provider(page));
                             }
                         }
+                        sections.sort((a, b) => {
+                            const aa = a.isFillSpace() ? 1 : 0;
+                            const bb = b.isFillSpace() ? 1 : 0;
+                            return aa - bb;
+                        });
                     }
                 }
                 views.FilePropertySectionProvider = FilePropertySectionProvider;

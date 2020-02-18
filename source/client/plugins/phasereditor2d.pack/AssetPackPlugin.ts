@@ -144,6 +144,10 @@ namespace phasereditor2d.pack {
 
             reg.addExtension(
                 new ui.dialogs.NewAssetPackFileWizardExtension());
+
+            reg.addExtension(new files.ui.views.FilePropertySectionExtension(
+                page => new ui.properties.AddFileToPackFileSection(page)
+            ));
         }
 
         private _phaserDocs: phasereditor2d.ide.core.PhaserDocs;

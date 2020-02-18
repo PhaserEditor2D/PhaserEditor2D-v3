@@ -120,6 +120,16 @@ namespace colibri.core.io {
             return this._name;
         }
 
+        getProjectRelativeName() {
+
+            if (this._parent) {
+
+                return this._parent.getProjectRelativeName() + "/" + this._name;
+            }
+
+            return "";
+        }
+
         getUrl() {
 
             if (this._parent) {

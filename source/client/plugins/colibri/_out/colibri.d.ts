@@ -301,6 +301,7 @@ declare namespace colibri.core.io {
         getModTime(): number;
         _setModTime(modTime: number): void;
         getFullName(): string;
+        getProjectRelativeName(): any;
         getUrl(): any;
         getProject(): FilePath;
         getSibling(name: string): FilePath;

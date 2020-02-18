@@ -92,6 +92,7 @@ namespace phasereditor2d.pack.core {
             files.add(this._file);
 
             for (const item of this.getItems()) {
+
                 item.computeUsedFiles(files);
             }
 

@@ -117,5 +117,27 @@ namespace phasereditor2d.pack.core {
 
             return null;
         }
+
+        async findPacksFor(file: core.io.FilePath) {
+
+            const packs = new Set<AssetPack>();
+
+            for (const pack of this.getPacks()) {
+
+                for (const item of pack.getItems()) {
+
+                    await item.preload();
+                }
+
+                const files = pack.computeUsedFiles();
+
+                if (files.has(file)) {
+
+                    packs.add(pack);
+                }
+            }
+
+            return packs;
+        }
     }
 }

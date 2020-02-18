@@ -247,6 +247,7 @@ declare namespace phasereditor2d.pack.core {
 }
 declare namespace phasereditor2d.pack.core {
     import controls = colibri.ui.controls;
+    import core = colibri.core;
     class PackFinder {
         private _packs;
         constructor(...packs: AssetPack[]);
@@ -256,6 +257,7 @@ declare namespace phasereditor2d.pack.core {
         findPackItemOrFrameWithKey(key: string): AssetPackItem | AssetPackImageFrame;
         getAssetPackItemOrFrame(key: string, frame: any): AssetPackItem | AssetPackImageFrame;
         getAssetPackItemImage(key: string, frame: any): AssetPackImageFrame;
+        findPacksFor(file: core.io.FilePath): Promise<Set<AssetPack>>;
     }
 }
 declare namespace phasereditor2d.pack.core {
@@ -977,6 +979,17 @@ declare namespace phasereditor2d.pack.ui.importers {
         private static _list;
         static getAll(): Importer[];
         static getImporter(type: string): Importer;
+    }
+}
+declare namespace phasereditor2d.pack.ui.properties {
+    import controls = colibri.ui.controls;
+    import io = colibri.core.io;
+    class AddFileToPackFileSection extends controls.properties.PropertySection<io.FilePath> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        private buildImportList;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
     }
 }
 declare namespace phasereditor2d.pack.ui.properties {

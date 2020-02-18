@@ -101,6 +101,7 @@ var phasereditor2d;
                 reg.addExtension(new ide.commands.CommandExtension(pack.ui.editor.AssetPackEditor.registerCommands));
                 // new file dialog
                 reg.addExtension(new pack.ui.dialogs.NewAssetPackFileWizardExtension());
+                reg.addExtension(new phasereditor2d.files.ui.views.FilePropertySectionExtension(page => new pack.ui.properties.AddFileToPackFileSection(page)));
             }
             getPhaserDocs() {
                 return this._phaserDocs ?
@@ -956,6 +957,19 @@ var phasereditor2d;
                         return asset;
                     }
                     return null;
+                }
+                async findPacksFor(file) {
+                    const packs = new Set();
+                    for (const pack of this.getPacks()) {
+                        for (const item of pack.getItems()) {
+                            await item.preload();
+                        }
+                        const files = pack.computeUsedFiles();
+                        if (files.has(file)) {
+                            packs.add(pack);
+                        }
+                    }
+                    return packs;
                 }
             }
             core_2.PackFinder = PackFinder;
@@ -4157,6 +4171,93 @@ var phasereditor2d;
                 importers.Importers = Importers;
             })(importers = ui.importers || (ui.importers = {}));
         })(ui = pack.ui || (pack.ui = {}));
+    })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var pack;
+    (function (pack_35) {
+        var ui;
+        (function (ui) {
+            var properties;
+            (function (properties) {
+                var controls = colibri.ui.controls;
+                var io = colibri.core.io;
+                class AddFileToPackFileSection extends controls.properties.PropertySection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.pack.ui.properties.AddFileToPackFileSection", "Asset Pack File", false);
+                    }
+                    createForm(parent) {
+                        console.log("addUpdater " + this.getId());
+                        const comp = this.createGridElement(parent, 1);
+                        this.addUpdater(async () => {
+                            const finder = new pack_35.core.PackFinder();
+                            await finder.preload();
+                            const packFiles = new Set();
+                            for (const file of this.getSelection()) {
+                                const parentPacks = await finder.findPacksFor(file);
+                                for (const pack of parentPacks) {
+                                    packFiles.add(pack.getFile());
+                                }
+                            }
+                            while (comp.children.length > 0) {
+                                comp.children.item(0).remove();
+                            }
+                            for (const file of packFiles) {
+                                const btn = document.createElement("button");
+                                btn.innerHTML =
+                                    `Open "${file.getProjectRelativeName()}"`;
+                                btn.addEventListener("click", async (e) => {
+                                    colibri.Platform.getWorkbench().openEditor(file);
+                                });
+                                comp.appendChild(btn);
+                            }
+                            if (packFiles.size === 0) {
+                                const importList = this.buildImportList();
+                                for (const importData of importList) {
+                                    const btn = document.createElement("button");
+                                    btn.innerText = `Import ${importData.importer.getType()} (${importData.files.length})`;
+                                    btn.addEventListener("click", async (e) => {
+                                        //const editor = ide.Workbench.getWorkbench().getActiveEditor() as AssetPackEditor;
+                                        // await editor.importData_async(importData);
+                                    });
+                                    comp.appendChild(btn);
+                                }
+                            }
+                        });
+                    }
+                    buildImportList() {
+                        const importList = [];
+                        for (const importer of ui.importers.Importers.getAll()) {
+                            const files = this.getSelection().filter(file => importer.acceptFile(file));
+                            if (files.length > 0) {
+                                importList.push({
+                                    importer: importer,
+                                    files: files
+                                });
+                            }
+                        }
+                        return importList;
+                    }
+                    canEdit(obj, n) {
+                        return obj instanceof io.FilePath && obj.isFile();
+                    }
+                    canEditNumber(n) {
+                        for (const obj of this.getSelection()) {
+                            if (!(obj instanceof io.FilePath)) {
+                                return false;
+                            }
+                        }
+                        if (n > 0) {
+                            const list = this.buildImportList();
+                            return list.length > 0;
+                        }
+                        return false;
+                    }
+                }
+                properties.AddFileToPackFileSection = AddFileToPackFileSection;
+            })(properties = ui.properties || (ui.properties = {}));
+        })(ui = pack_35.ui || (pack_35.ui = {}));
     })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
