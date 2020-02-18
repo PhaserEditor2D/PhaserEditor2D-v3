@@ -60,25 +60,29 @@ namespace phasereditor2d.scene.core.code {
 
         argStringOrFloat(expr: string | number) {
 
-            if (typeof expr === "string") {
+            switch (typeof expr) {
 
-                this.argLiteral(expr);
+                case "string":
+                    this.argLiteral(expr);
+                    break;
 
-            } else {
-
-                this.argFloat(expr);
+                case "number":
+                    this.argFloat(expr);
+                    break;
             }
         }
 
         argStringOrInt(expr: string | number) {
 
-            if (typeof expr === "string") {
+            switch (typeof expr) {
 
-                this.argLiteral(expr);
+                case "string":
+                    this.argLiteral(expr);
+                    break;
 
-            } else {
-
-                this.argInt(expr);
+                case "number":
+                    this.argInt(expr);
+                    break;
             }
         }
 

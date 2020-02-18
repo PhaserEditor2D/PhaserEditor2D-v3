@@ -1721,7 +1721,6 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject): void;
         protected addTextureFrameArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject): void;
     }
 }
@@ -2416,7 +2415,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void;
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject): void;
+        buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

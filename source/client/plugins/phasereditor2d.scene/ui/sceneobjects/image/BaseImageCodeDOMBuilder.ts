@@ -93,7 +93,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
             const obj = args.obj as Image;
-            const support = obj.getEditorSupport();
             const call = new code.MethodCallCodeDOM(this._factoryMethodName, args.gameObjectFactoryExpr);
 
             call.argFloat(obj.x);
@@ -102,11 +101,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, args.obj as ITextureLikeObject);
 
             return call;
-        }
-
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject) {
-
-            this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj);
         }
 
         protected addTextureFrameArgsToObjectFactoryMethodCallDOM(
@@ -118,14 +112,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 call.argLiteral(texture.key);
 
-                if (typeof texture.frame === "string") {
-
-                    call.argLiteral(texture.frame);
-
-                } else {
-
-                    call.argInt(texture.frame);
-                }
+                call.argStringOrInt(texture.frame);
 
             } else {
 

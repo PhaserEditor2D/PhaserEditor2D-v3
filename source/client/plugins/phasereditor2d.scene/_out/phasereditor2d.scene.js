@@ -730,19 +730,23 @@ var phasereditor2d;
                         this._args.push(expr);
                     }
                     argStringOrFloat(expr) {
-                        if (typeof expr === "string") {
-                            this.argLiteral(expr);
-                        }
-                        else {
-                            this.argFloat(expr);
+                        switch (typeof expr) {
+                            case "string":
+                                this.argLiteral(expr);
+                                break;
+                            case "number":
+                                this.argFloat(expr);
+                                break;
                         }
                     }
                     argStringOrInt(expr) {
-                        if (typeof expr === "string") {
-                            this.argLiteral(expr);
-                        }
-                        else {
-                            this.argInt(expr);
+                        switch (typeof expr) {
+                            case "string":
+                                this.argLiteral(expr);
+                                break;
+                            case "number":
+                                this.argInt(expr);
+                                break;
                         }
                     }
                     argLiteral(expr) {
@@ -8001,26 +8005,17 @@ var phasereditor2d;
                     }
                     buildCreateObjectWithFactoryCodeDOM(args) {
                         const obj = args.obj;
-                        const support = obj.getEditorSupport();
                         const call = new code.MethodCallCodeDOM(this._factoryMethodName, args.gameObjectFactoryExpr);
                         call.argFloat(obj.x);
                         call.argFloat(obj.y);
                         this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, args.obj);
                         return call;
                     }
-                    addArgsToObjectFactoryMethodCallDOM(call, obj) {
-                        this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj);
-                    }
                     addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj) {
                         const texture = sceneobjects.TextureComponent.texture.getValue(obj);
                         if (texture.key) {
                             call.argLiteral(texture.key);
-                            if (typeof texture.frame === "string") {
-                                call.argLiteral(texture.frame);
-                            }
-                            else {
-                                call.argInt(texture.frame);
-                            }
+                            call.argStringOrInt(texture.frame);
                         }
                         else {
                             call.argLiteral("__DEFAULT");
@@ -11032,6 +11027,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var code = scene.core.code;
                 class TileSpriteCodeDOMBuilder extends sceneobjects.BaseImageCodeDOMBuilder {
                     constructor() {
                         super("tileSprite");
@@ -11088,13 +11084,15 @@ var phasereditor2d;
                         }
                         this.buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args, call);
                     }
-                    addArgsToObjectFactoryMethodCallDOM(call, obj) {
-                        const tileSprite = obj;
-                        call.argFloat(tileSprite.x);
-                        call.argFloat(tileSprite.y);
-                        call.argFloat(tileSprite.width);
-                        call.argFloat(tileSprite.height);
+                    buildCreateObjectWithFactoryCodeDOM(args) {
+                        const obj = args.obj;
+                        const call = new code.MethodCallCodeDOM("tileSprite", args.gameObjectFactoryExpr);
+                        call.argFloat(obj.x);
+                        call.argFloat(obj.y);
+                        call.argFloat(obj.width);
+                        call.argFloat(obj.height);
                         this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj);
+                        return call;
                     }
                 }
                 sceneobjects.TileSpriteCodeDOMBuilder = TileSpriteCodeDOMBuilder;

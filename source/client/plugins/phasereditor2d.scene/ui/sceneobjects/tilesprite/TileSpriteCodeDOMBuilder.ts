@@ -87,16 +87,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args, call);
         }
 
-        protected addArgsToObjectFactoryMethodCallDOM(call: code.MethodCallCodeDOM, obj: ITextureLikeObject) {
+        buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
-            const tileSprite = obj as TileSprite;
+            const obj = args.obj as TileSprite;
+            const call = new code.MethodCallCodeDOM("tileSprite", args.gameObjectFactoryExpr);
 
-            call.argFloat(tileSprite.x);
-            call.argFloat(tileSprite.y);
-            call.argFloat(tileSprite.width);
-            call.argFloat(tileSprite.height);
+            call.argFloat(obj.x);
+            call.argFloat(obj.y);
+            call.argFloat(obj.width);
+            call.argFloat(obj.height);
 
             this.addTextureFrameArgsToObjectFactoryMethodCallDOM(call, obj);
+
+            return call;
         }
     }
 }
