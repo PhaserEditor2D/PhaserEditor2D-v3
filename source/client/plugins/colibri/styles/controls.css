@@ -79,6 +79,11 @@ canvas {
 
 .TabPaneTitleBar {
     display: flex;
+    overflow-x: auto;
+}
+
+div.TabPaneTitleBar::-webkit-scrollbar {
+    height: 7px;    
 }
 
 .TabPaneLabel {
