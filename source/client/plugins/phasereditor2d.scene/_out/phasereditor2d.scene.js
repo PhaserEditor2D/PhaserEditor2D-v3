@@ -879,6 +879,8 @@ var phasereditor2d;
                                 else {
                                     superCls = support.getPhaserType();
                                 }
+                                superCls = settings.superClassName.trim().length === 0 ?
+                                    superCls : settings.superClassName;
                             }
                             else {
                                 superCls = settings.superClassName.trim().length === 0 ?
@@ -1421,7 +1423,7 @@ var phasereditor2d;
                     SourceLang["TYPE_SCRIPT"] = "TYPE_SCRIPT";
                 })(SourceLang = json.SourceLang || (json.SourceLang = {}));
                 class SceneSettings {
-                    constructor(sceneType = json.SceneType.SCENE, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "Phaser.Scene", preloadMethodName = "preload", preloadPackFiles = [], createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                    constructor(sceneType = json.SceneType.SCENE, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "", preloadMethodName = "preload", preloadPackFiles = [], createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
                         this.sceneType = sceneType;
                         this.snapEnabled = snapEnabled;
                         this.snapWidth = snapWidth;
@@ -1446,7 +1448,7 @@ var phasereditor2d;
                         write(data, "snapWidth", this.snapWidth, 16);
                         write(data, "snapHeight", this.snapHeight, 16);
                         write(data, "onlyGenerateMethods", this.onlyGenerateMethods, false);
-                        write(data, "superClassName", this.superClassName, "Phaser.Scene");
+                        write(data, "superClassName", this.superClassName, "");
                         write(data, "preloadMethodName", this.preloadMethodName, "preload");
                         write(data, "preloadPackFiles", this.preloadPackFiles, []);
                         write(data, "createMethodName", this.createMethodName, "create");
@@ -1465,7 +1467,7 @@ var phasereditor2d;
                         this.snapWidth = read(data, "snapWidth", 16);
                         this.snapHeight = read(data, "snapHeight", 16);
                         this.onlyGenerateMethods = read(data, "onlyGenerateMethods", false);
-                        this.superClassName = read(data, "superClassName", "Phaser.Scene");
+                        this.superClassName = read(data, "superClassName", "");
                         this.preloadMethodName = read(data, "preloadMethodName", "preload");
                         this.preloadPackFiles = read(data, "preloadPackFiles", []);
                         this.createMethodName = read(data, "createMethodName", "create");

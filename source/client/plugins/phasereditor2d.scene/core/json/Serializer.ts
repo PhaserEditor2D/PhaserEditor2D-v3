@@ -1,8 +1,5 @@
 namespace phasereditor2d.scene.core.json {
 
-    import read = colibri.core.json.read;
-    import write = colibri.core.json.write;
-
     export class Serializer {
 
         private _data: IObjectData;

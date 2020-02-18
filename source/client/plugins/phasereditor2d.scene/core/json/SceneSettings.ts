@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.core.json {
             public snapWidth = 16,
             public snapHeight = 16,
             public onlyGenerateMethods = false,
-            public superClassName = "Phaser.Scene",
+            public superClassName = "",
             public preloadMethodName = "preload",
             public preloadPackFiles: string[] = [],
             public createMethodName = "create",
@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.core.json {
             write(data, "snapWidth", this.snapWidth, 16);
             write(data, "snapHeight", this.snapHeight, 16);
             write(data, "onlyGenerateMethods", this.onlyGenerateMethods, false);
-            write(data, "superClassName", this.superClassName, "Phaser.Scene");
+            write(data, "superClassName", this.superClassName, "");
             write(data, "preloadMethodName", this.preloadMethodName, "preload");
             write(data, "preloadPackFiles", this.preloadPackFiles, []);
             write(data, "createMethodName", this.createMethodName, "create");
@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.core.json {
             this.snapWidth = read(data, "snapWidth", 16);
             this.snapHeight = read(data, "snapHeight", 16);
             this.onlyGenerateMethods = read(data, "onlyGenerateMethods", false);
-            this.superClassName = read(data, "superClassName", "Phaser.Scene");
+            this.superClassName = read(data, "superClassName", "");
             this.preloadMethodName = read(data, "preloadMethodName", "preload");
             this.preloadPackFiles = read(data, "preloadPackFiles", []);
             this.createMethodName = read(data, "createMethodName", "create");
