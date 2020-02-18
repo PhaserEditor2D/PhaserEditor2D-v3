@@ -3270,6 +3270,7 @@ var colibri;
                     toSelectLabel.classList.add("selected");
                     const toSelectContentArea = TabPane.getContentAreaFromLabel(toSelectLabel);
                     toSelectContentArea.classList.add("selected");
+                    toSelectLabel.scrollIntoView();
                     this.dispatchEvent(new CustomEvent(controls.EVENT_TAB_SELECTED, {
                         detail: TabPane.getContentFromLabel(toSelectLabel)
                     }));

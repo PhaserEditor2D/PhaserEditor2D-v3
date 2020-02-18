@@ -408,6 +408,7 @@ namespace colibri.ui.controls {
             const label = this.getLabelFromContent(content);
 
             if (label) {
+
                 this.selectTab(label);
             }
         }
@@ -434,12 +435,14 @@ namespace colibri.ui.controls {
             toSelectLabel.classList.add("selected");
             const toSelectContentArea = TabPane.getContentAreaFromLabel(toSelectLabel);
             toSelectContentArea.classList.add("selected");
+            toSelectLabel.scrollIntoView();
 
             this.dispatchEvent(new CustomEvent(EVENT_TAB_SELECTED, {
                 detail: TabPane.getContentFromLabel(toSelectLabel)
             }));
 
             this.dispatchLayoutEvent();
+
         }
 
         getSelectedTabContent(): Control {
