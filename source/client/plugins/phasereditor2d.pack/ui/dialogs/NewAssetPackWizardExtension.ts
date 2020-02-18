@@ -2,7 +2,7 @@ namespace phasereditor2d.pack.ui.dialogs {
 
     import io = colibri.core.io;
 
-    export class NewAssetPackFileWizardExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
+    export class NewAssetPackFileWizardExtension extends files.ui.dialogs.NewFileContentExtension {
 
         constructor() {
             super({
@@ -13,8 +13,8 @@ namespace phasereditor2d.pack.ui.dialogs {
             });
         }
 
-        createFileContent(): string {
-            return JSON.stringify({
+        getCreateFileContentFunc() {
+            return (args: files.ui.dialogs.ICreateFileContentArgs) => JSON.stringify({
                 section1: {
                     files: []
                 },

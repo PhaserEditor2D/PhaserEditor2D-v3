@@ -680,7 +680,7 @@ var phasereditor2d;
                         const dlg = new files.ui.dialogs.NewFileDialog();
                         dlg.create();
                         dlg.setFileExtension(this._fileExtension);
-                        dlg.setFileContent(this.createFileContent());
+                        dlg.setCreateFileContent(this.getCreateFileContentFunc());
                         dlg.setFileCreatedCallback(async (file) => {
                             const wb = colibri.Platform.getWorkbench();
                             const reg = wb.getContentTypeRegistry();
@@ -711,7 +711,7 @@ var phasereditor2d;
                     constructor() {
                         super();
                         this._fileExtension = "";
-                        this._fileContent = "";
+                        this._createFileContentFunc = args => "";
                     }
                     normalizedFileName() {
                         const name = super.normalizedFileName();
@@ -723,14 +723,18 @@ var phasereditor2d;
                         }
                         return name + "." + this._fileExtension;
                     }
-                    setFileContent(fileContent) {
-                        this._fileContent = fileContent;
+                    setCreateFileContent(createFileContent) {
+                        this._createFileContentFunc = createFileContent;
                     }
                     setFileExtension(fileExtension) {
                         this._fileExtension = fileExtension;
                     }
                     createFile(folder, name) {
-                        return colibri.ui.ide.FileUtils.createFile_async(folder, name, this._fileContent);
+                        const content = this._createFileContentFunc({
+                            folder,
+                            fileName: name
+                        });
+                        return colibri.ui.ide.FileUtils.createFile_async(folder, name, content);
                     }
                 }
                 dialogs.NewFileDialog = NewFileDialog;
@@ -810,8 +814,8 @@ var phasereditor2d;
                             dialogName: "File"
                         });
                     }
-                    createFileContent() {
-                        return "";
+                    getCreateFileContentFunc() {
+                        return args => "";
                     }
                 }
                 dialogs.NewGenericFileExtension = NewGenericFileExtension;

@@ -20,7 +20,7 @@ namespace phasereditor2d.files.ui.dialogs {
             this._fileExtension = config.fileExtension;
         }
 
-        abstract createFileContent(): string;
+        abstract getCreateFileContentFunc(): (args: ICreateFileContentArgs) => string;
 
         createDialog(args: {
             initialFileLocation: io.FilePath
@@ -30,7 +30,7 @@ namespace phasereditor2d.files.ui.dialogs {
             dlg.create();
 
             dlg.setFileExtension(this._fileExtension);
-            dlg.setFileContent(this.createFileContent());
+            dlg.setCreateFileContent(this.getCreateFileContentFunc());
             dlg.setFileCreatedCallback(async (file) => {
 
                 const wb = colibri.Platform.getWorkbench();

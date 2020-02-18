@@ -2148,8 +2148,8 @@ var phasereditor2d;
                             fileExtension: "json"
                         });
                     }
-                    createFileContent() {
-                        return JSON.stringify({
+                    getCreateFileContentFunc() {
+                        return (args) => JSON.stringify({
                             section1: {
                                 files: []
                             },

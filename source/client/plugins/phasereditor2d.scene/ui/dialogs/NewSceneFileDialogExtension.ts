@@ -11,23 +11,36 @@ namespace phasereditor2d.scene.ui.dialogs {
             });
         }
 
-        createFileContent(): string {
+        getCreateFileContentFunc() {
 
-            const sceneData: core.json.ISceneData = {
-                id: Phaser.Utils.String.UUID(),
-                settings: {
-                    compilerOutputLanguage: ScenePlugin.getInstance().getDefaultSceneLanguage()
-                },
-                sceneType: core.json.SceneType.SCENE,
-                displayList: [],
-                meta: {
-                    app: "Phaser Editor 2D - Scene Editor",
-                    url: "https://phasereditor2d.com",
-                    contentType: scene.core.CONTENT_TYPE_SCENE
+            return (args: files.ui.dialogs.ICreateFileContentArgs) => {
+
+                let name = args.fileName;
+
+                const i = name.lastIndexOf(".");
+
+                if (i > 0) {
+
+                    name = name.substring(0, i);
                 }
-            };
 
-            return JSON.stringify(sceneData, null, 2);
+                const sceneData: core.json.ISceneData = {
+                    id: Phaser.Utils.String.UUID(),
+                    settings: {
+                        compilerOutputLanguage: ScenePlugin.getInstance().getDefaultSceneLanguage(),
+                        sceneKey: name
+                    },
+                    sceneType: core.json.SceneType.SCENE,
+                    displayList: [],
+                    meta: {
+                        app: "Phaser Editor 2D - Scene Editor",
+                        url: "https://phasereditor2d.com",
+                        contentType: scene.core.CONTENT_TYPE_SCENE
+                    }
+                };
+
+                return JSON.stringify(sceneData, null, 2);
+            };
         }
 
         getInitialFileLocation() {

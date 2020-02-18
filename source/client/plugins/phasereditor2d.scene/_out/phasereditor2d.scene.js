@@ -2620,23 +2620,25 @@ var phasereditor2d;
             var dialogs;
             (function (dialogs) {
                 class NewPrefabFileDialogExtension extends phasereditor2d.files.ui.dialogs.NewFileContentExtension {
-                    createFileContent() {
-                        const sceneData = {
-                            id: Phaser.Utils.String.UUID(),
-                            settings: {
-                                createMethodName: "",
-                                preloadMethodName: "",
-                                compilerOutputLanguage: scene.ScenePlugin.getInstance().getDefaultSceneLanguage()
-                            },
-                            sceneType: scene.core.json.SceneType.PREFAB,
-                            displayList: [],
-                            meta: {
-                                app: "Phaser Editor 2D - Scene Editor",
-                                url: "https://phasereditor2d.com",
-                                contentType: scene.core.CONTENT_TYPE_SCENE
-                            }
+                    getCreateFileContentFunc() {
+                        return (args) => {
+                            const sceneData = {
+                                id: Phaser.Utils.String.UUID(),
+                                settings: {
+                                    createMethodName: "",
+                                    preloadMethodName: "",
+                                    compilerOutputLanguage: scene.ScenePlugin.getInstance().getDefaultSceneLanguage()
+                                },
+                                sceneType: scene.core.json.SceneType.PREFAB,
+                                displayList: [],
+                                meta: {
+                                    app: "Phaser Editor 2D - Scene Editor",
+                                    url: "https://phasereditor2d.com",
+                                    contentType: scene.core.CONTENT_TYPE_SCENE
+                                }
+                            };
+                            return JSON.stringify(sceneData, null, 4);
                         };
-                        return JSON.stringify(sceneData, null, 4);
                     }
                     constructor() {
                         super({
@@ -2672,21 +2674,29 @@ var phasereditor2d;
                             initialFileName: "Scene"
                         });
                     }
-                    createFileContent() {
-                        const sceneData = {
-                            id: Phaser.Utils.String.UUID(),
-                            settings: {
-                                compilerOutputLanguage: scene.ScenePlugin.getInstance().getDefaultSceneLanguage()
-                            },
-                            sceneType: scene.core.json.SceneType.SCENE,
-                            displayList: [],
-                            meta: {
-                                app: "Phaser Editor 2D - Scene Editor",
-                                url: "https://phasereditor2d.com",
-                                contentType: scene.core.CONTENT_TYPE_SCENE
+                    getCreateFileContentFunc() {
+                        return (args) => {
+                            let name = args.fileName;
+                            const i = name.lastIndexOf(".");
+                            if (i > 0) {
+                                name = name.substring(0, i);
                             }
+                            const sceneData = {
+                                id: Phaser.Utils.String.UUID(),
+                                settings: {
+                                    compilerOutputLanguage: scene.ScenePlugin.getInstance().getDefaultSceneLanguage(),
+                                    sceneKey: name
+                                },
+                                sceneType: scene.core.json.SceneType.SCENE,
+                                displayList: [],
+                                meta: {
+                                    app: "Phaser Editor 2D - Scene Editor",
+                                    url: "https://phasereditor2d.com",
+                                    contentType: scene.core.CONTENT_TYPE_SCENE
+                                }
+                            };
+                            return JSON.stringify(sceneData, null, 2);
                         };
-                        return JSON.stringify(sceneData, null, 2);
                     }
                     getInitialFileLocation() {
                         return super.findInitialFileLocationBasedOnContentType(scene.core.CONTENT_TYPE_SCENE);

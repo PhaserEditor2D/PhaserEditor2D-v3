@@ -11,8 +11,8 @@ namespace phasereditor2d.files.ui.dialogs {
             });
         }
 
-        createFileContent() {
-            return "";
+        getCreateFileContentFunc() {
+            return args => "";
         }
     }
 }

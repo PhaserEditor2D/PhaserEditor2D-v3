@@ -2,20 +2,24 @@
 
 namespace phasereditor2d.files.ui.dialogs {
 
-    import controls = colibri.ui.controls;
-    import viewers = colibri.ui.controls.viewers;
     import io = colibri.core.io;
+
+    export interface ICreateFileContentArgs {
+
+        folder: io.FilePath;
+        fileName: string;
+    }
 
     export class NewFileDialog extends BaseNewFileDialog {
 
         private _fileExtension: string;
-        private _fileContent: string;
+        private _createFileContentFunc: (args: ICreateFileContentArgs) => string;
 
         constructor() {
             super();
 
             this._fileExtension = "";
-            this._fileContent = "";
+            this._createFileContentFunc = args => "";
         }
 
         protected normalizedFileName() {
@@ -33,8 +37,8 @@ namespace phasereditor2d.files.ui.dialogs {
             return name + "." + this._fileExtension;
         }
 
-        setFileContent(fileContent: string) {
-            this._fileContent = fileContent;
+        setCreateFileContent(createFileContent: (args: ICreateFileContentArgs) => string) {
+            this._createFileContentFunc = createFileContent;
         }
 
         setFileExtension(fileExtension: string) {
@@ -42,8 +46,13 @@ namespace phasereditor2d.files.ui.dialogs {
         }
 
         protected createFile(folder: io.FilePath, name: string) {
-            return colibri.ui.ide.FileUtils.createFile_async(folder, name, this._fileContent);
-        }
 
+            const content = this._createFileContentFunc({
+                folder,
+                fileName: name
+            });
+
+            return colibri.ui.ide.FileUtils.createFile_async(folder, name, content);
+        }
     }
 }

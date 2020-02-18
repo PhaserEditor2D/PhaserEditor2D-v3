@@ -556,7 +556,7 @@ declare namespace phasereditor2d.scene.ui.blocks {
 }
 declare namespace phasereditor2d.scene.ui.dialogs {
     class NewPrefabFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
-        createFileContent(): string;
+        getCreateFileContentFunc(): (args: files.ui.dialogs.ICreateFileContentArgs) => string;
         constructor();
         getInitialFileLocation(): colibri.core.io.FilePath;
     }
@@ -564,7 +564,7 @@ declare namespace phasereditor2d.scene.ui.dialogs {
 declare namespace phasereditor2d.scene.ui.dialogs {
     class NewSceneFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
         constructor();
-        createFileContent(): string;
+        getCreateFileContentFunc(): (args: files.ui.dialogs.ICreateFileContentArgs) => string;
         getInitialFileLocation(): colibri.core.io.FilePath;
     }
 }
