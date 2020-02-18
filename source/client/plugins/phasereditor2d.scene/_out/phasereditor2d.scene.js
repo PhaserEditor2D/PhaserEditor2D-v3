@@ -5212,24 +5212,25 @@ var phasereditor2d;
             (function (editor) {
                 var properties;
                 (function (properties) {
-                    var controls = colibri.ui.controls;
                     class CompilerSection extends properties.SceneSection {
                         constructor(page) {
-                            super(page, "id", "Compiler", false, true);
+                            super(page, "phasereditor2d.scene.ui.editor.properties.CompilerSection", "Compiler", false, true);
                         }
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
                             comp.style.gridTemplateColumns = "auto 1fr";
-                            this.createMenuField(comp, [
-                                {
-                                    name: "Scene",
-                                    value: scene.core.json.SceneType.SCENE,
-                                },
-                                {
-                                    name: "Prefab",
-                                    value: scene.core.json.SceneType.PREFAB,
-                                }
-                            ], "sceneType", "Scene Type", "If this is a regular scene or a prefab.");
+                            // this.createMenuField(
+                            //     comp, [
+                            //     {
+                            //         name: "Scene",
+                            //         value: core.json.SceneType.SCENE,
+                            //     },
+                            //     {
+                            //         name: "Prefab",
+                            //         value: core.json.SceneType.PREFAB,
+                            //     }],
+                            //     "sceneType", "Scene Type",
+                            //     "If this is a regular scene or a prefab.");
                             this.createMenuField(comp, [
                                 {
                                     name: "JavaScript",
@@ -5240,12 +5241,38 @@ var phasereditor2d;
                                     value: scene.core.json.SourceLang.TYPE_SCRIPT
                                 }
                             ], "compilerOutputLanguage", "Output Language", "The scene compiler output language.");
-                            this.createStringField(comp, "sceneKey", "Scene Key", "The key of the scene. Used when the scene is loaded with the Phaser loader.");
                             this.createStringField(comp, "superClassName", "Super Class", "The super class used for the scene. If it is blank (no-value) then use default value.");
+                            this.createStringField(comp, "createMethodName", "Create Method", "The name of the create method.");
+                        }
+                    }
+                    properties.CompilerSection = CompilerSection;
+                })(properties = editor.properties || (editor.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var properties;
+                (function (properties) {
+                    var controls = colibri.ui.controls;
+                    class SceneCompilerSection extends properties.SceneSection {
+                        constructor(page) {
+                            super(page, "phasereditor2d.scene.ui.editor.properties.SceneCompilerSection", "Scene Compiler", false, true);
+                        }
+                        createForm(parent) {
+                            const comp = this.createGridElement(parent, 3);
+                            comp.style.gridTemplateColumns = "auto 1fr";
+                            this.createStringField(comp, "sceneKey", "Scene Key", "The key of the scene. Used when the scene is loaded with the Phaser loader.");
                             this.createBooleanField(comp, "onlyGenerateMethods", this.createLabel(comp, "Only Generate Methods", "No class code is generated, only the \"create\" or \"preload\" methods."));
                             this.createPreloadPackFilesField(comp);
                             this.createStringField(comp, "preloadMethodName", "Preload Method", "The name of the preload method. It may be empty.");
-                            this.createStringField(comp, "createMethodName", "Create Method", "The name of the create method.");
                         }
                         createPreloadPackFilesField(parent) {
                             this.createLabel(parent, "Preload Pack Files", "The Pack files to be loaded in this scene.");
@@ -5297,8 +5324,11 @@ var phasereditor2d;
                                 btn.textContent = this.getSettings().preloadPackFiles.length + " selected";
                             });
                         }
+                        canEdit(obj, n) {
+                            return obj instanceof ui.Scene && obj.getSettings().sceneType === scene.core.json.SceneType.SCENE;
+                        }
                     }
-                    properties.CompilerSection = CompilerSection;
+                    properties.SceneCompilerSection = SceneCompilerSection;
                 })(properties = editor.properties || (editor.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -5324,7 +5354,7 @@ var phasereditor2d;
                             return this._editor.getScene();
                         }
                         addSections(page, sections) {
-                            sections.push(new properties.SnappingSection(page), new properties.BorderSection(page), new properties.CompilerSection(page));
+                            sections.push(new properties.SnappingSection(page), new properties.BorderSection(page), new properties.CompilerSection(page), new properties.SceneCompilerSection(page));
                             const exts = colibri.Platform
                                 .getExtensions(properties.SceneEditorPropertySectionExtension.POINT_ID);
                             for (const ext of exts) {

@@ -951,7 +951,15 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
     class CompilerSection extends SceneSection {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.properties {
+    import controls = colibri.ui.controls;
+    class SceneCompilerSection extends SceneSection {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
         private createPreloadPackFilesField;
+        canEdit(obj: any, n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {
