@@ -6772,12 +6772,6 @@ var phasereditor2d;
             (function (sceneobjects) {
                 function interactive_getAlpha_SharedTexture(hitArea, x, y, obj) {
                     const sprite = obj;
-                    if (sprite.flipX) {
-                        x = 2 * sprite.displayOriginX - x;
-                    }
-                    if (sprite.flipY) {
-                        y = 2 * sprite.displayOriginY - y;
-                    }
                     const textureManager = obj.getEditorSupport().getScene().textures;
                     const alpha = textureManager.getPixelAlpha(x, y, sprite.texture.key, sprite.frame.name);
                     return alpha;
@@ -6791,7 +6785,7 @@ var phasereditor2d;
                     //     return false;
                     // }
                     const scene = obj.getEditorSupport().getScene();
-                    const renderTexture = new Phaser.GameObjects.RenderTexture(scene, 0, 0, 500, 500);
+                    const renderTexture = new Phaser.GameObjects.RenderTexture(scene, 0, 0, 5, 5);
                     const scaleX = sprite.scaleX;
                     const scaleY = sprite.scaleY;
                     const originX = sprite.originX;
