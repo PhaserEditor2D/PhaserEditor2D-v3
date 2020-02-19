@@ -66,9 +66,35 @@ namespace phasereditor2d.pack.ui.properties {
 
                         btn.addEventListener("click", async (e) => {
 
-                            //const editor = ide.Workbench.getWorkbench().getActiveEditor() as AssetPackEditor;
+                            const packs = finder.getPacks();
 
-                            // await editor.importData_async(importData);
+                            const menu = new controls.Menu();
+
+                            for (const pack of packs) {
+
+                                menu.add(new controls.Action({
+                                    text: "Add To " + pack.getFile().getProjectRelativeName(),
+                                    callback: async () => {
+
+                                        const importer = importData.importer;
+
+                                        const packFile = pack.getFile();
+
+                                        for (const file of importData.files) {
+
+                                            importer.importFile(pack, file);
+                                        }
+
+                                        const newContent = JSON.stringify(pack.toJSON(), null, 4);
+
+                                        await colibri.ui.ide.FileUtils.setFileString_async(packFile, newContent);
+
+                                        this.updateWithSelection();
+                                    }
+                                }));
+                            }
+
+                            menu.createWithEvent(e);
                         });
 
                         comp.appendChild(btn);

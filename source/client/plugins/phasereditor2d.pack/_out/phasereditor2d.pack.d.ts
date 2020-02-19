@@ -526,6 +526,7 @@ declare namespace phasereditor2d.pack.ui.editor {
         updateAll(): void;
         repaintEditorAndOutline(): void;
         protected createViewer(): controls.viewers.TreeViewer;
+        createPart(): void;
         private updateContent;
         doSave(): Promise<void>;
         protected onEditorInputContentChanged(): void;

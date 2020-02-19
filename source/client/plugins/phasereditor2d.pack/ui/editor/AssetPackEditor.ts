@@ -126,9 +126,14 @@ namespace phasereditor2d.pack.ui.editor {
                 this._outlineProvider.repaint();
             });
 
-            this.updateContent();
-
             return viewer;
+        }
+
+        createPart() {
+
+            super.createPart();
+
+            this.updateContent();
         }
 
         private async updateContent() {
@@ -136,10 +141,17 @@ namespace phasereditor2d.pack.ui.editor {
             const file = this.getInput();
 
             if (!file) {
+
+                return;
+            }
+
+            if (!this.getViewer()) {
+
                 return;
             }
 
             const content = await ide.FileUtils.preloadAndGetFileString(file);
+
             this._pack = new core.AssetPack(file, content);
 
             this.getViewer().repaint();

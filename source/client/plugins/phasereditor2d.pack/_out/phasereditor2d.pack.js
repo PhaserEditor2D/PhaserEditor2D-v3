@@ -2270,12 +2270,18 @@ var phasereditor2d;
                             this._outlineProvider.setSelection(viewer.getSelection(), true, false);
                             this._outlineProvider.repaint();
                         });
-                        this.updateContent();
                         return viewer;
+                    }
+                    createPart() {
+                        super.createPart();
+                        this.updateContent();
                     }
                     async updateContent() {
                         const file = this.getInput();
                         if (!file) {
+                            return;
+                        }
+                        if (!this.getViewer()) {
                             return;
                         }
                         const content = await ide.FileUtils.preloadAndGetFileString(file);
@@ -4218,8 +4224,24 @@ var phasereditor2d;
                                     const btn = document.createElement("button");
                                     btn.innerText = `Import ${importData.importer.getType()} (${importData.files.length})`;
                                     btn.addEventListener("click", async (e) => {
-                                        //const editor = ide.Workbench.getWorkbench().getActiveEditor() as AssetPackEditor;
-                                        // await editor.importData_async(importData);
+                                        const packs = finder.getPacks();
+                                        const menu = new controls.Menu();
+                                        for (const pack of packs) {
+                                            menu.add(new controls.Action({
+                                                text: "Add To " + pack.getFile().getProjectRelativeName(),
+                                                callback: async () => {
+                                                    const importer = importData.importer;
+                                                    const packFile = pack.getFile();
+                                                    for (const file of importData.files) {
+                                                        importer.importFile(pack, file);
+                                                    }
+                                                    const newContent = JSON.stringify(pack.toJSON(), null, 4);
+                                                    await colibri.ui.ide.FileUtils.setFileString_async(packFile, newContent);
+                                                    this.updateWithSelection();
+                                                }
+                                            }));
+                                        }
+                                        menu.createWithEvent(e);
                                     });
                                     comp.appendChild(btn);
                                 }
