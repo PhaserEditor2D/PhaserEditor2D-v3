@@ -3088,6 +3088,16 @@ var phasereditor2d;
                     }
                     async onDragDrop_async(e) {
                         const dataArray = controls.Controls.getApplicationDragDataAndClean();
+                        for (const data of dataArray) {
+                            if (data instanceof io.FilePath) {
+                                if (data.getExtension() !== "scene") {
+                                    alert(`Only items shown in the Blocks view can be added to the scene.
+                        <br>The Blocks view shows Scene Prefabs and items defined in the Asset Pack files.
+                        <br>You can add files to a Pack File using the Inspector view or opening a pack file in the Asset Pack editor.`);
+                                    return;
+                                }
+                            }
+                        }
                         if (this.acceptDropDataArray(dataArray)) {
                             e.preventDefault();
                             await this._editor.getUndoManager()
@@ -3166,7 +3176,15 @@ var phasereditor2d;
                         return sprites;
                     }
                     onDragOver(e) {
-                        if (this.acceptDropDataArray(controls.Controls.getApplicationDragData())) {
+                        const dataArray = controls.Controls.getApplicationDragData();
+                        // accept any kind of file, so we can show a message when the drop is done.
+                        for (const data of dataArray) {
+                            if (data instanceof io.FilePath) {
+                                e.preventDefault();
+                                return;
+                            }
+                        }
+                        if (this.acceptDropDataArray(dataArray)) {
                             e.preventDefault();
                         }
                     }
