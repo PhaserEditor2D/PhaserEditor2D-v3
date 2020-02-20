@@ -988,6 +988,7 @@ declare namespace phasereditor2d.pack.ui.properties {
     class AddFileToPackFileSection extends controls.properties.PropertySection<io.FilePath> {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
+        private importWithImporter;
         private buildImportList;
         canEdit(obj: any, n: number): boolean;
         canEditNumber(n: number): boolean;

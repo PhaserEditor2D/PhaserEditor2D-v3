@@ -545,6 +545,9 @@ var phasereditor2d;
                     setFileCreatedCallback(callback) {
                         this._fileCreatedCallback = callback;
                     }
+                    getFileCreatedCallback() {
+                        return this._fileCreatedCallback;
+                    }
                     setInitialFileName(filename) {
                         this._fileNameText.value = filename;
                     }

@@ -114,6 +114,10 @@ namespace phasereditor2d.files.ui.dialogs {
             this._fileCreatedCallback = callback;
         }
 
+        getFileCreatedCallback() {
+            return this._fileCreatedCallback;
+        }
+
         setInitialFileName(filename: string) {
             this._fileNameText.value = filename;
         }

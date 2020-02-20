@@ -70,29 +70,45 @@ namespace phasereditor2d.pack.ui.properties {
 
                             const menu = new controls.Menu();
 
+
                             for (const pack of packs) {
 
                                 menu.add(new controls.Action({
                                     text: "Add To " + pack.getFile().getProjectRelativeName(),
-                                    callback: async () => {
+                                    callback: () => {
 
-                                        const importer = importData.importer;
-
-                                        const packFile = pack.getFile();
-
-                                        for (const file of importData.files) {
-
-                                            importer.importFile(pack, file);
-                                        }
-
-                                        const newContent = JSON.stringify(pack.toJSON(), null, 4);
-
-                                        await colibri.ui.ide.FileUtils.setFileString_async(packFile, newContent);
-
-                                        this.updateWithSelection();
+                                        this.importWithImporter(importData, pack);
                                     }
                                 }));
                             }
+
+                            menu.add(new controls.Action({
+                                text: "Add To New Pack File",
+                                callback: () => {
+
+                                    const ext = new pack.ui.dialogs.NewAssetPackFileWizardExtension();
+
+                                    const dlg = ext.createDialog({
+                                        initialFileLocation: this.getSelectionFirstElement().getParent()
+                                    });
+
+                                    dlg.setTitle("New " + ext.getDialogName());
+
+                                    const callback = dlg.getFileCreatedCallback();
+
+                                    dlg.setFileCreatedCallback(async (file) => {
+
+                                        await callback(file);
+
+                                        const content = colibri.ui.ide.FileUtils.getFileString(file);
+
+                                        const pack = new core.AssetPack(file, content);
+
+                                        this.importWithImporter(importData, pack);
+
+                                    });
+                                }
+                            }));
 
                             menu.createWithEvent(e);
                         });
@@ -101,6 +117,24 @@ namespace phasereditor2d.pack.ui.properties {
                     }
                 }
             });
+        }
+
+        private async importWithImporter(importData: editor.IImportData, pack: core.AssetPack) {
+
+            const packFile = pack.getFile();
+
+            const importer = importData.importer;
+
+            for (const file of importData.files) {
+
+                importer.importFile(pack, file);
+            }
+
+            const newContent = JSON.stringify(pack.toJSON(), null, 4);
+
+            await colibri.ui.ide.FileUtils.setFileString_async(packFile, newContent);
+
+            this.updateWithSelection();
         }
 
         private buildImportList() {

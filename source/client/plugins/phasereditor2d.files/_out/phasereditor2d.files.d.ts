@@ -81,6 +81,7 @@ declare namespace phasereditor2d.files.ui.dialogs {
         protected normalizedFileName(): string;
         validate(): void;
         setFileCreatedCallback(callback: (file: io.FilePath) => void): void;
+        getFileCreatedCallback(): (file: io.FilePath) => void;
         setInitialFileName(filename: string): void;
         setInitialLocation(folder: io.FilePath): void;
         create(): void;
