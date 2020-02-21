@@ -65,8 +65,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         const color = colorArray[0];
         const alpha = color ? color.alpha : 0;
 
-        console.log(color);
-
         return alpha > 0;
     }
 }

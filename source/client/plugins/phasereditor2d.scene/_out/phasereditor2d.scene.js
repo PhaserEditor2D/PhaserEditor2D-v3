@@ -6879,7 +6879,6 @@ var phasereditor2d;
                     renderTexture.destroy();
                     const color = colorArray[0];
                     const alpha = color ? color.alpha : 0;
-                    console.log(color);
                     return alpha > 0;
                 }
                 sceneobjects.interactive_getAlpha_RenderTexture = interactive_getAlpha_RenderTexture;

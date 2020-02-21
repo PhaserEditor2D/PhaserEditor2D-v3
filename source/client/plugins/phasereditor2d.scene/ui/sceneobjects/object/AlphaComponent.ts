@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static alpha: IProperty<IAlphaLikeObject> = {
             name: "alpha",
-            label: "alpha",
+            label: "Alpha",
             defValue: 1,
             getValue: obj => obj.alpha,
             setValue: (obj, value) => obj.alpha = value
