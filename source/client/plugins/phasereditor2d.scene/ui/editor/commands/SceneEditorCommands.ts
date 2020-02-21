@@ -142,7 +142,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_ADD_SCENE_OBJECT,
-                    icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
+                    icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
                     name: "Add Object",
                     tooltip: "Add a new object to the scene",
                     category: CAT_SCENE_EDITOR

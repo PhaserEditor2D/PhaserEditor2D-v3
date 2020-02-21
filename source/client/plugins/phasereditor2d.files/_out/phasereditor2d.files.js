@@ -781,7 +781,7 @@ var phasereditor2d;
                     constructor() {
                         super({
                             dialogName: "Folder",
-                            dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER),
+                            dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER),
                             initialFileName: "folder"
                         });
                     }
@@ -812,7 +812,7 @@ var phasereditor2d;
                     constructor() {
                         super({
                             fileExtension: "",
-                            dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FILE),
+                            dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_FILE),
                             initialFileName: "Untitled",
                             dialogName: "File"
                         });
@@ -956,7 +956,6 @@ var phasereditor2d;
             var viewers;
             (function (viewers_1) {
                 var viewers = colibri.ui.controls.viewers;
-                var controls = colibri.ui.controls;
                 var ide = colibri.ui.ide;
                 class FileCellRenderer extends viewers.IconImageCellRenderer {
                     constructor() {
@@ -973,11 +972,11 @@ var phasereditor2d;
                         }
                         else {
                             if (file.getParent()) {
-                                return controls.Controls.getIcon(ide.ICON_FOLDER);
+                                return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
                             }
                             return files.FilesPlugin.getInstance().getIcon(files.ICON_PROJECT);
                         }
-                        return controls.Controls.getIcon(ide.ICON_FILE);
+                        return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FILE);
                     }
                     preload(args) {
                         const obj = args.obj;
@@ -1103,7 +1102,7 @@ var phasereditor2d;
                 var controls = colibri.ui.controls;
                 class InputFileCellRendererProvider {
                     getCellRenderer(element) {
-                        return new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FILE));
+                        return new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_FILE));
                     }
                     preload(element) {
                         return controls.Controls.resolveNothingLoaded();
@@ -1306,7 +1305,7 @@ var phasereditor2d;
                         super(FilesView.ID);
                         this._propertyProvider = new views.FilePropertySectionProvider();
                         this.setTitle("Files");
-                        this.setIcon(ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FOLDER));
+                        this.setIcon(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
                     }
                     createViewer() {
                         return new controls.viewers.TreeViewer();
@@ -1376,7 +1375,7 @@ var phasereditor2d;
                         }
                     }
                     getIcon() {
-                        return controls.Controls.getIcon(ide.ICON_FOLDER);
+                        return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
                     }
                 }
                 FilesView.ID = "phasereditor2d.files.ui.views.FilesView";

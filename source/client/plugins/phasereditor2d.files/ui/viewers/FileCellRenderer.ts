@@ -28,13 +28,14 @@ namespace phasereditor2d.files.ui.viewers {
             } else {
 
                 if (file.getParent()) {
-                    return controls.Controls.getIcon(ide.ICON_FOLDER);
+
+                    return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
                 }
 
                 return FilesPlugin.getInstance().getIcon(ICON_PROJECT);
             }
 
-            return controls.Controls.getIcon(ide.ICON_FILE);
+            return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FILE);
         }
 
         preload(args: controls.viewers.PreloadCellArgs) {

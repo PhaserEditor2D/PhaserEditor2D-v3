@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 for (const list of notUsedLists) {
 
                     menu.add(new controls.Action({
-                        icon: controls.Controls.getIcon(colibri.ui.ide.ICON_PLUS),
+                        icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_PLUS),
                         text: list.getLabel(),
                         callback: () => {
 
@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 for (const list of usedLists) {
 
                     menu.add(new controls.Action({
-                        icon: controls.Controls.getIcon(colibri.ui.ide.ICON_MINUS),
+                        icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_MINUS),
                         text: list.getLabel(),
                         callback: () => {
 

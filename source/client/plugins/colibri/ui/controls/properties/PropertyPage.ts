@@ -89,8 +89,8 @@ namespace colibri.ui.controls.properties {
 
             this._expandIconContext.clearRect(0, 0, w, h);
 
-            const icon = this.isExpanded() ? controls.ICON_CONTROL_TREE_COLLAPSE : controls.ICON_CONTROL_TREE_EXPAND;
-            const image = controls.Controls.getIcon(icon);
+            const icon = this.isExpanded() ? colibri.ICON_CONTROL_TREE_COLLAPSE : colibri.ICON_CONTROL_TREE_EXPAND;
+            const image = ColibriPlugin.getInstance().getIcon(icon);
 
             image.paint(this._expandIconContext, 0, 0, w, h, false);
 

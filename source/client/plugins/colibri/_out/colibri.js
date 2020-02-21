@@ -17,7 +17,8 @@ var colibri;
             // nothing
         }
         getIcon(name) {
-            return colibri.ui.controls.Controls.getIcon(name, `plugins/${this.getId()}/icons`);
+            return colibri.ui.controls.Controls
+                .getImage(`static/plugins/${this.getId()}/icons/${colibri.ui.controls.ICON_SIZE}/${name}.png`, name);
         }
         async getJSON(pathInPlugin) {
             const result = await fetch(`static/plugins/${this.getId()}/` + pathInPlugin);
@@ -210,17 +211,7 @@ var colibri;
                 PreloadResult[PreloadResult["NOTHING_LOADED"] = 0] = "NOTHING_LOADED";
                 PreloadResult[PreloadResult["RESOURCES_LOADED"] = 1] = "RESOURCES_LOADED";
             })(PreloadResult = controls.PreloadResult || (controls.PreloadResult = {}));
-            controls.ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
-            controls.ICON_CONTROL_TREE_EXPAND = "tree-expand";
-            controls.ICON_CONTROL_CLOSE = "close";
-            controls.ICON_CONTROL_DIRTY = "dirty";
             controls.ICON_SIZE = 16;
-            const ICONS = [
-                controls.ICON_CONTROL_TREE_COLLAPSE,
-                controls.ICON_CONTROL_TREE_EXPAND,
-                controls.ICON_CONTROL_CLOSE,
-                controls.ICON_CONTROL_DIRTY
-            ];
             class Controls {
                 static setDragEventImage(e, render) {
                     let canvas = document.getElementById("__drag__canvas");
@@ -268,9 +259,6 @@ var colibri;
                 static resolveNothingLoaded() {
                     return Promise.resolve(PreloadResult.NOTHING_LOADED);
                 }
-                static async preload() {
-                    return Promise.all(ICONS.map(icon => this.getIcon(icon).preload()));
-                }
                 static getImage(url, id) {
                     if (Controls._images.has(id)) {
                         return Controls._images.get(id);
@@ -286,10 +274,6 @@ var colibri;
                     document.body.append(element);
                     element.click();
                     element.remove();
-                }
-                static getIcon(name, baseUrl = "plugins/colibri/ui/controls/images") {
-                    const url = `static/${baseUrl}/${controls.ICON_SIZE}/${name}.png`;
-                    return Controls.getImage(url, name);
                 }
                 static createIconElement(icon, size = controls.ICON_SIZE) {
                     const canvas = document.createElement("canvas");
@@ -372,12 +356,6 @@ var colibri;
             ide.EVENT_EDITOR_DEACTIVATED = "editorDeactivated";
             ide.EVENT_EDITOR_ACTIVATED = "editorActivated";
             ide.EVENT_PROJECT_OPENED = "projectOpened";
-            ide.ICON_FILE = "file";
-            ide.ICON_FOLDER = "folder";
-            ide.ICON_PLUS = "plus";
-            ide.ICON_MINUS = "minus";
-            ide.ICON_CHECKED = "checked";
-            ide.ICON_KEYMAP = "keymap";
             class Workbench extends EventTarget {
                 constructor() {
                     super();
@@ -421,7 +399,6 @@ var colibri;
                             await plugin.starting();
                         }
                     }
-                    await ui.controls.Controls.preload();
                     console.log("Workbench: fetching UI icons.");
                     await this.preloadIcons();
                     console.log("Workbench: registering content types.");
@@ -499,12 +476,12 @@ var colibri;
                     return null;
                 }
                 async preloadIcons() {
-                    await this.getWorkbenchIcon(ide.ICON_FILE).preload();
-                    await this.getWorkbenchIcon(ide.ICON_FOLDER).preload();
-                    await this.getWorkbenchIcon(ide.ICON_PLUS).preload();
-                    await this.getWorkbenchIcon(ide.ICON_MINUS).preload();
-                    await this.getWorkbenchIcon(ide.ICON_CHECKED).preload();
-                    await this.getWorkbenchIcon(ide.ICON_KEYMAP).preload();
+                    await this.getWorkbenchIcon(colibri.ICON_FILE).preload();
+                    await this.getWorkbenchIcon(colibri.ICON_FOLDER).preload();
+                    await this.getWorkbenchIcon(colibri.ICON_PLUS).preload();
+                    await this.getWorkbenchIcon(colibri.ICON_MINUS).preload();
+                    await this.getWorkbenchIcon(colibri.ICON_CHECKED).preload();
+                    await this.getWorkbenchIcon(colibri.ICON_KEYMAP).preload();
                     const extensions = colibri.Platform
                         .getExtensions(ide.IconLoaderExtension.POINT_ID);
                     for (const extension of extensions) {
@@ -685,7 +662,7 @@ var colibri;
                     return this._fileImageSizeCache;
                 }
                 getWorkbenchIcon(name) {
-                    return ui.controls.Controls.getIcon(name, "plugins/colibri/icons");
+                    return colibri.ColibriPlugin.getInstance().getIcon(name);
                 }
                 getEditorRegistry() {
                     return this._editorRegistry;
@@ -745,6 +722,16 @@ var colibri;
 /// <reference path="./ui/ide/Workbench.ts" />
 var colibri;
 (function (colibri) {
+    colibri.ICON_FILE = "file";
+    colibri.ICON_FOLDER = "folder";
+    colibri.ICON_PLUS = "plus";
+    colibri.ICON_MINUS = "minus";
+    colibri.ICON_CHECKED = "checked";
+    colibri.ICON_KEYMAP = "keymap";
+    colibri.ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
+    colibri.ICON_CONTROL_TREE_EXPAND = "tree-expand";
+    colibri.ICON_CONTROL_CLOSE = "close";
+    colibri.ICON_CONTROL_DIRTY = "dirty";
     class ColibriPlugin extends colibri.Plugin {
         constructor() {
             super("colibri");
@@ -755,6 +742,18 @@ var colibri;
             return _a = this._instance, (_a !== null && _a !== void 0 ? _a : (this._instance = new ColibriPlugin()));
         }
         registerExtensions(reg) {
+            reg.addExtension(colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                colibri.ICON_FILE,
+                colibri.ICON_FOLDER,
+                colibri.ICON_PLUS,
+                colibri.ICON_MINUS,
+                colibri.ICON_CHECKED,
+                colibri.ICON_KEYMAP,
+                colibri.ICON_CONTROL_TREE_COLLAPSE,
+                colibri.ICON_CONTROL_TREE_EXPAND,
+                colibri.ICON_CONTROL_CLOSE,
+                colibri.ICON_CONTROL_DIRTY
+            ]));
             // themes
             reg.addExtension(new colibri.ui.ide.themes.ThemeExtension(colibri.ui.controls.Controls.LIGHT_THEME), new colibri.ui.ide.themes.ThemeExtension(colibri.ui.controls.Controls.DARK_THEME));
             // keys
@@ -2417,7 +2416,7 @@ var colibri;
                         itemElement.classList.add("MenuItem");
                         if (item instanceof controls.Action) {
                             if (item.isSelected()) {
-                                const checkedElement = controls.Controls.createIconElement(colibri.Platform.getWorkbench().getWorkbenchIcon(ui.ide.ICON_CHECKED));
+                                const checkedElement = controls.Controls.createIconElement(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_CHECKED));
                                 checkedElement.classList.add("MenuItemCheckedIcon");
                                 itemElement.appendChild(checkedElement);
                             }
@@ -3147,7 +3146,7 @@ var colibri;
                     labelElement.appendChild(textElement);
                     if (closeable) {
                         const manager = new CloseIconManager();
-                        manager.setIcon(controls.Controls.getIcon(controls.ICON_CONTROL_CLOSE));
+                        manager.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE));
                         manager.repaint();
                         manager.getElement().addEventListener("click", e => {
                             e.stopImmediatePropagation();
@@ -3775,7 +3774,7 @@ var colibri;
                             }
                             return label;
                         }));
-                        viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(args => new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_KEYMAP))));
+                        viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(args => new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_KEYMAP))));
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
                         viewer.setInput(manager.getActiveCommands());
                         super.create();
@@ -3987,8 +3986,8 @@ var colibri;
                         const w = this._expandIconElement.width;
                         const h = this._expandIconElement.height;
                         this._expandIconContext.clearRect(0, 0, w, h);
-                        const icon = this.isExpanded() ? controls.ICON_CONTROL_TREE_COLLAPSE : controls.ICON_CONTROL_TREE_EXPAND;
-                        const image = controls.Controls.getIcon(icon);
+                        const icon = this.isExpanded() ? colibri.ICON_CONTROL_TREE_COLLAPSE : colibri.ICON_CONTROL_TREE_EXPAND;
+                        const image = colibri.ColibriPlugin.getInstance().getIcon(icon);
                         image.paint(this._expandIconContext, 0, 0, w, h, false);
                     }
                     getSection() {
@@ -4634,8 +4633,8 @@ var colibri;
                                     // render tree icon
                                     if (children.length > 0) {
                                         const iconY = y + (cellHeight - viewers.TREE_ICON_SIZE) / 2;
-                                        const icon = controls.Controls
-                                            .getIcon(expanded ? controls.ICON_CONTROL_TREE_COLLAPSE : controls.ICON_CONTROL_TREE_EXPAND);
+                                        const icon = colibri.ColibriPlugin.getInstance()
+                                            .getIcon(expanded ? colibri.ICON_CONTROL_TREE_COLLAPSE : colibri.ICON_CONTROL_TREE_EXPAND);
                                         icon.paint(context, x, iconY, controls.ICON_SIZE, controls.ICON_SIZE, false);
                                         treeIconList.push({
                                             rect: new controls.Rect(x, iconY, viewers.TREE_ICON_SIZE, viewers.TREE_ICON_SIZE),
@@ -4805,9 +4804,9 @@ var colibri;
                                     // render tree icon
                                     if (children.length > 0 && !this._flat) {
                                         const iconY = y + (cellSize - viewers.TREE_ICON_SIZE) / 2;
-                                        const icon = controls.Controls.getIcon(expanded ?
-                                            controls.ICON_CONTROL_TREE_COLLAPSE
-                                            : controls.ICON_CONTROL_TREE_EXPAND);
+                                        const icon = colibri.ColibriPlugin.getInstance().getIcon(expanded ?
+                                            colibri.ICON_CONTROL_TREE_COLLAPSE
+                                            : colibri.ICON_CONTROL_TREE_EXPAND);
                                         icon.paint(context, x + 5, iconY, controls.ICON_SIZE, controls.ICON_SIZE, false);
                                         treeIconList.push({
                                             rect: new controls.Rect(x, iconY, viewers.TREE_ICON_SIZE, viewers.TREE_ICON_SIZE),
@@ -5998,8 +5997,8 @@ var colibri;
                     this._dirty = dirty;
                     const folder = this.getPartFolder();
                     const label = folder.getLabelFromContent(this);
-                    const iconClose = ui.controls.Controls.getIcon(ui.controls.ICON_CONTROL_CLOSE);
-                    const iconDirty = dirty ? ui.controls.Controls.getIcon(ui.controls.ICON_CONTROL_DIRTY) : iconClose;
+                    const iconClose = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE);
+                    const iconDirty = dirty ? colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_DIRTY) : iconClose;
                     folder.setTabCloseIcons(label, iconDirty, iconClose);
                 }
                 isDirty() {
@@ -6587,7 +6586,7 @@ var colibri;
                 getIcon() {
                     const file = this.getInput();
                     if (!file) {
-                        return ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FILE);
+                        return ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FILE);
                     }
                     const wb = ide.Workbench.getWorkbench();
                     const ct = wb.getContentTypeRegistry().getCachedContentType(file);

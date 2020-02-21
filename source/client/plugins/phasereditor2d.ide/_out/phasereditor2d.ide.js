@@ -801,7 +801,7 @@ var phasereditor2d;
                 }
                 class TemplatesCellRendererProvider {
                     getCellRenderer(element) {
-                        return new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER));
+                        return new controls.viewers.IconImageCellRenderer(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
                     }
                     preload(element) {
                         return controls.Controls.resolveNothingLoaded();

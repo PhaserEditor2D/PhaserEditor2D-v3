@@ -110,7 +110,7 @@ namespace colibri.ui.controls {
                     if (item.isSelected()) {
 
                         const checkedElement = Controls.createIconElement(
-                            Platform.getWorkbench().getWorkbenchIcon(ide.ICON_CHECKED));
+                            Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_CHECKED));
                         checkedElement.classList.add("MenuItemCheckedIcon");
 
                         itemElement.appendChild(checkedElement);

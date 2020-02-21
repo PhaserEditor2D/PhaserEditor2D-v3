@@ -9,13 +9,6 @@ namespace colibri.ui.ide {
     export const EVENT_EDITOR_ACTIVATED = "editorActivated";
     export const EVENT_PROJECT_OPENED = "projectOpened";
 
-    export const ICON_FILE = "file";
-    export const ICON_FOLDER = "folder";
-    export const ICON_PLUS = "plus";
-    export const ICON_MINUS = "minus";
-    export const ICON_CHECKED = "checked";
-    export const ICON_KEYMAP = "keymap";
-
     export class Workbench extends EventTarget {
 
         private static _workbench: Workbench;
@@ -102,8 +95,6 @@ namespace colibri.ui.ide {
                     await plugin.starting();
                 }
             }
-
-            await ui.controls.Controls.preload();
 
             console.log("Workbench: fetching UI icons.");
 
@@ -506,7 +497,7 @@ namespace colibri.ui.ide {
         }
 
         getWorkbenchIcon(name: string) {
-            return controls.Controls.getIcon(name, "plugins/colibri/icons");
+            return ColibriPlugin.getInstance().getIcon(name);
         }
 
         getEditorRegistry() {

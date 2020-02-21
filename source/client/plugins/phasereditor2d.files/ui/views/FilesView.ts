@@ -17,7 +17,7 @@ namespace phasereditor2d.files.ui.views {
 
             this.setTitle("Files");
 
-            this.setIcon(ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FOLDER));
+            this.setIcon(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
         }
 
         protected createViewer() {
@@ -133,7 +133,7 @@ namespace phasereditor2d.files.ui.views {
         }
 
         getIcon() {
-            return controls.Controls.getIcon(ide.ICON_FOLDER);
+            return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
         }
     }
 }

@@ -234,7 +234,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             manager.add(new controls.Action({
                 text: "Add File",
-                icon: ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_PLUS),
+                icon: ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
                 callback: () => {
                     this.openAddFileDialog();
                 }

@@ -73,10 +73,6 @@ declare namespace colibri.ui.controls {
         NOTHING_LOADED = 0,
         RESOURCES_LOADED = 1
     }
-    const ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
-    const ICON_CONTROL_TREE_EXPAND = "tree-expand";
-    const ICON_CONTROL_CLOSE = "close";
-    const ICON_CONTROL_DIRTY = "dirty";
     const ICON_SIZE = 16;
     class Controls {
         private static _images;
@@ -88,10 +84,8 @@ declare namespace colibri.ui.controls {
         static resolveAll(list: Array<Promise<PreloadResult>>): Promise<PreloadResult>;
         static resolveResourceLoaded(): Promise<PreloadResult>;
         static resolveNothingLoaded(): Promise<PreloadResult>;
-        static preload(): Promise<PreloadResult[]>;
-        private static getImage;
+        static getImage(url: string, id: string): IImage;
         static openUrlInNewPage(url: string): void;
-        static getIcon(name: string, baseUrl?: string): IImage;
         static createIconElement(icon?: IImage, size?: number): HTMLCanvasElement;
         static LIGHT_THEME: ITheme;
         static DARK_THEME: ITheme;
@@ -108,12 +102,6 @@ declare namespace colibri.ui.ide {
     const EVENT_EDITOR_DEACTIVATED = "editorDeactivated";
     const EVENT_EDITOR_ACTIVATED = "editorActivated";
     const EVENT_PROJECT_OPENED = "projectOpened";
-    const ICON_FILE = "file";
-    const ICON_FOLDER = "folder";
-    const ICON_PLUS = "plus";
-    const ICON_MINUS = "minus";
-    const ICON_CHECKED = "checked";
-    const ICON_KEYMAP = "keymap";
     class Workbench extends EventTarget {
         private static _workbench;
         static getWorkbench(): Workbench;
@@ -171,7 +159,7 @@ declare namespace colibri.ui.ide {
         getContentTypeIcon(contentType: string): controls.IImage;
         getFileImage(file: core.io.FilePath): FileImage;
         getFileImageSizeCache(): ImageSizeFileCache;
-        getWorkbenchIcon(name: string): controls.IImage;
+        getWorkbenchIcon(name: string): any;
         getEditorRegistry(): EditorRegistry;
         getEditors(): EditorPart[];
         createEditor(input: IEditorInput): EditorPart;
@@ -181,6 +169,16 @@ declare namespace colibri.ui.ide {
     }
 }
 declare namespace colibri {
+    const ICON_FILE = "file";
+    const ICON_FOLDER = "folder";
+    const ICON_PLUS = "plus";
+    const ICON_MINUS = "minus";
+    const ICON_CHECKED = "checked";
+    const ICON_KEYMAP = "keymap";
+    const ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
+    const ICON_CONTROL_TREE_EXPAND = "tree-expand";
+    const ICON_CONTROL_CLOSE = "close";
+    const ICON_CONTROL_DIRTY = "dirty";
     class ColibriPlugin extends colibri.Plugin {
         private static _instance;
         static getInstance(): any;
@@ -1536,7 +1534,7 @@ declare namespace colibri.ui.ide {
         onPartClosed(): boolean;
         setInput(file: io.FilePath): void;
         getInput(): core.io.FilePath;
-        getIcon(): controls.IImage;
+        getIcon(): any;
     }
 }
 declare namespace colibri.core.io {

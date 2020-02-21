@@ -253,7 +253,7 @@ namespace phasereditor2d.ide.ui.dialogs {
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
             return new controls.viewers.IconImageCellRenderer(
-                colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_FOLDER)
+                colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER)
             );
         }
 

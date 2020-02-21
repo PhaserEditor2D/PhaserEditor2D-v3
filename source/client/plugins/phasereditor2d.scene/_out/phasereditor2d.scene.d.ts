@@ -743,7 +743,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         protected createPart(): void;
         private createGame;
         private updateTitleIcon;
-        getIcon(): controls.IImage;
+        getIcon(): any;
         private _toolActionMap;
         private createToolActions;
         getToolActionMap(): Map<string, controls.Action>;

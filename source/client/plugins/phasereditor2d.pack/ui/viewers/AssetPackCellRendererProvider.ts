@@ -16,7 +16,7 @@ namespace phasereditor2d.pack.ui.viewers {
             if (typeof (element) === "string") {
 
                 return new controls.viewers.IconImageCellRenderer(
-                    ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FOLDER));
+                    ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
 
             } else if (element instanceof core.AssetPackItem) {
 
@@ -80,7 +80,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
             }
 
-            return this.getIconRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FILE));
+            return this.getIconRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FILE));
         }
 
         private getIconRenderer(icon: controls.IImage) {

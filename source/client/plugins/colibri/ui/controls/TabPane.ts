@@ -243,7 +243,7 @@ namespace colibri.ui.controls {
 
                 const manager = new CloseIconManager();
 
-                manager.setIcon(Controls.getIcon(ICON_CONTROL_CLOSE));
+                manager.setIcon(ColibriPlugin.getInstance().getIcon(ICON_CONTROL_CLOSE));
                 manager.repaint();
                 manager.getElement().addEventListener("click", e => {
                     e.stopImmediatePropagation();

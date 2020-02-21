@@ -2336,7 +2336,7 @@ var phasereditor2d;
                         const manager = new controls.ToolbarManager(parent);
                         manager.add(new controls.Action({
                             text: "Add File",
-                            icon: ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_PLUS),
+                            icon: ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
                             callback: () => {
                                 this.openAddFileDialog();
                             }
@@ -4509,7 +4509,7 @@ var phasereditor2d;
                     }
                     getCellRenderer(element) {
                         if (typeof (element) === "string") {
-                            return new controls.viewers.IconImageCellRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FOLDER));
+                            return new controls.viewers.IconImageCellRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
                         }
                         else if (element instanceof pack.core.AssetPackItem) {
                             const type = element.getType();
@@ -4555,7 +4555,7 @@ var phasereditor2d;
                         else if (element instanceof controls.ImageFrame) {
                             return new controls.viewers.ImageCellRenderer();
                         }
-                        return this.getIconRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FILE));
+                        return this.getIconRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FILE));
                     }
                     getIconRenderer(icon) {
                         if (this._layout === "grid") {

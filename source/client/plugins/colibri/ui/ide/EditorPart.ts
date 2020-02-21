@@ -21,8 +21,8 @@ namespace colibri.ui.ide {
             const folder = this.getPartFolder();
             const label = folder.getLabelFromContent(this);
 
-            const iconClose = controls.Controls.getIcon(controls.ICON_CONTROL_CLOSE);
-            const iconDirty = dirty ? controls.Controls.getIcon(controls.ICON_CONTROL_DIRTY) : iconClose;
+            const iconClose = ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE);
+            const iconDirty = dirty ? ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_DIRTY) : iconClose;
 
             folder.setTabCloseIcons(label, iconDirty, iconClose);
         }

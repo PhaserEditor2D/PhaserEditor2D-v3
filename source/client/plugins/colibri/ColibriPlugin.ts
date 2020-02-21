@@ -4,6 +4,17 @@
 
 namespace colibri {
 
+    export const ICON_FILE = "file";
+    export const ICON_FOLDER = "folder";
+    export const ICON_PLUS = "plus";
+    export const ICON_MINUS = "minus";
+    export const ICON_CHECKED = "checked";
+    export const ICON_KEYMAP = "keymap";
+    export const ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
+    export const ICON_CONTROL_TREE_EXPAND = "tree-expand";
+    export const ICON_CONTROL_CLOSE = "close";
+    export const ICON_CONTROL_DIRTY = "dirty";
+
     export class ColibriPlugin extends colibri.Plugin {
 
         private static _instance;
@@ -21,6 +32,21 @@ namespace colibri {
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
+
+            reg.addExtension(
+                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                    ICON_FILE,
+                    ICON_FOLDER,
+                    ICON_PLUS,
+                    ICON_MINUS,
+                    ICON_CHECKED,
+                    ICON_KEYMAP,
+                    ICON_CONTROL_TREE_COLLAPSE,
+                    ICON_CONTROL_TREE_EXPAND,
+                    ICON_CONTROL_CLOSE,
+                    ICON_CONTROL_DIRTY
+                ])
+            );
 
             // themes
 

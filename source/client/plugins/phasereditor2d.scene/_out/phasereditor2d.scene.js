@@ -4267,7 +4267,7 @@ var phasereditor2d;
                             manager.add({
                                 command: {
                                     id: commands.CMD_ADD_SCENE_OBJECT,
-                                    icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_PLUS),
+                                    icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
                                     name: "Add Object",
                                     tooltip: "Add a new object to the scene",
                                     category: commands.CAT_SCENE_EDITOR
@@ -4911,7 +4911,6 @@ var phasereditor2d;
                 var outline;
                 (function (outline) {
                     var controls = colibri.ui.controls;
-                    var ide = colibri.ui.ide;
                     class SceneEditorOutlineRendererProvider {
                         getCellRenderer(element) {
                             if (element instanceof Phaser.GameObjects.GameObject) {
@@ -4920,7 +4919,7 @@ var phasereditor2d;
                             }
                             else if (element instanceof Phaser.GameObjects.DisplayList
                                 || element instanceof ui.sceneobjects.ObjectLists) {
-                                return new controls.viewers.IconImageCellRenderer(controls.Controls.getIcon(ide.ICON_FOLDER));
+                                return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
                             }
                             else if (element instanceof ui.sceneobjects.ObjectList) {
                                 return new controls.viewers.IconImageCellRenderer(scene.ScenePlugin.getInstance().getIcon(scene.ICON_LIST));
@@ -9171,7 +9170,7 @@ var phasereditor2d;
                             const notUsedLists = listsRoot.getLists().filter(list => !usedLists.has(list));
                             for (const list of notUsedLists) {
                                 menu.add(new controls.Action({
-                                    icon: controls.Controls.getIcon(colibri.ui.ide.ICON_PLUS),
+                                    icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_PLUS),
                                     text: list.getLabel(),
                                     callback: () => {
                                         this.getUndoManager().add(new sceneobjects.AddObjectsToListOperation(this.getEditor(), list, this.getEditor().getSelectedGameObjects()));
@@ -9181,7 +9180,7 @@ var phasereditor2d;
                             menu.addSeparator();
                             for (const list of usedLists) {
                                 menu.add(new controls.Action({
-                                    icon: controls.Controls.getIcon(colibri.ui.ide.ICON_MINUS),
+                                    icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_MINUS),
                                     text: list.getLabel(),
                                     callback: () => {
                                         this.getUndoManager().add(new sceneobjects.RemoveObjectsFromListOperation(this.getEditor(), list, this.getEditor().getSelectedGameObjects()));

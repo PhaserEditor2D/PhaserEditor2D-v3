@@ -172,7 +172,7 @@ namespace colibri.ui.controls.viewers {
 
                             const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
-                            const icon = Controls.getIcon(expanded ?
+                            const icon = ColibriPlugin.getInstance().getIcon(expanded ?
                                 ICON_CONTROL_TREE_COLLAPSE
                                 : ICON_CONTROL_TREE_EXPAND);
 

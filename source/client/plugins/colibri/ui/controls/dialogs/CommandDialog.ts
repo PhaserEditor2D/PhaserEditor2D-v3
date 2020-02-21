@@ -38,7 +38,7 @@ namespace colibri.ui.controls.dialogs {
             viewer.setCellRendererProvider(
                 new controls.viewers.EmptyCellRendererProvider(
                     args => new controls.viewers.IconImageCellRenderer(
-                        colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ui.ide.ICON_KEYMAP))));
+                        colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_KEYMAP))));
 
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
 
