@@ -16,7 +16,7 @@ class Level extends Phaser.Scene {
 		this.add.image(400, 245.50984430371858, "dino");
 		
 		// text_1
-		const text_1 = this.add.text(400, 400);
+		const text_1 = this.add.text(400, 400, "", {});
 		text_1.setOrigin(0.5, 0);
 		text_1.text = "Welcome to Phaser Editor 2D!";
 		text_1.setStyle({"fontSize":"24px","fontStyle":"bold"});
