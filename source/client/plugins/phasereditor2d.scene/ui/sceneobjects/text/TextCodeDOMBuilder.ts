@@ -11,6 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.argFloat(obj.x);
             call.argFloat(obj.y);
+            call.argLiteral("");
+            call.arg("{}");
 
             return call;
         }
@@ -32,6 +34,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.arg("x");
             call.arg("y");
+
+            if (!args.prefabObj.getEditorSupport().isPrefabInstance()) {
+
+                call.argLiteral("");
+                call.arg("{}");
+            }
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {

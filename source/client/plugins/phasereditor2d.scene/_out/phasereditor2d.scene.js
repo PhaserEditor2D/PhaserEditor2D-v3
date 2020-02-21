@@ -10345,6 +10345,8 @@ var phasereditor2d;
                         const call = new code.MethodCallCodeDOM("text", args.gameObjectFactoryExpr);
                         call.argFloat(obj.x);
                         call.argFloat(obj.y);
+                        call.argLiteral("");
+                        call.arg("{}");
                         return call;
                     }
                     buildCreatePrefabInstanceCodeDOM(args) {
@@ -10358,6 +10360,10 @@ var phasereditor2d;
                         const call = args.superMethodCallCodeDOM;
                         call.arg("x");
                         call.arg("y");
+                        if (!args.prefabObj.getEditorSupport().isPrefabInstance()) {
+                            call.argLiteral("");
+                            call.arg("{}");
+                        }
                     }
                     buildPrefabConstructorDeclarationCodeDOM(args) {
                         const ctr = args.ctrDeclCodeDOM;
