@@ -1,0 +1,8 @@
+{
+    "extends": "../../../tsconfig-base.json",
+    "compilerOptions": {
+        "outFile": "../_out/phasereditor2d.phaser.js"        
+    },
+    "references": [],
+    "exclude": ["../_out/"]
+}

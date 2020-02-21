@@ -1,6 +1,6 @@
-/// <reference path="./src/Plugin.ts" />
+/// <reference path="./Plugin.ts" />
 /// <reference path="./Platform.ts" />
-/// <reference path="./src/ui/ide/Workbench.ts" />
+/// <reference path="./ui/ide/Workbench.ts" />
 
 namespace colibri {
 

@@ -1,0 +1,18 @@
+{
+    "extends": "../../../tsconfig-base.json",
+    "compilerOptions": {
+        "outFile": "../_out/phasereditor2d.images.js"
+    },
+    "references": [
+        {
+            "path": "../../colibri/src"
+        },
+        {
+            "path": "../../phasereditor2d.files/src"
+        },
+        {
+            "path": "../../phasereditor2d.webContentTypes/src"
+        }
+    ],
+    "exclude": ["../_out/"]
+}

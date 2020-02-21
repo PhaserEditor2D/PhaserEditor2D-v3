@@ -1,0 +1,33 @@
+{
+    "extends": "../../../tsconfig-base.json",
+    "compilerOptions": {
+        "outFile": "../_out/phasereditor2d.pack.js"
+    },
+    "references": [
+        {
+            "path": "../../colibri/src"
+        },        
+        {
+            "path": "../../phasereditor2d.phaser/src",            
+        },
+        {
+            "path": "../../phasereditor2d.files/src",            
+        },
+        {
+            "path": "../../phasereditor2d.ide/src"
+        },
+        {
+            "path": "../../phasereditor2d.blocks/src"
+        },
+        {
+            "path": "../../phasereditor2d.outline/src"
+        },        
+        {
+            "path": "../../phasereditor2d.inspector/src"
+        },
+        {
+            "path": "../../phasereditor2d.webContentTypes/src"
+        }
+    ],
+    "exclude": ["../_out/"]
+}

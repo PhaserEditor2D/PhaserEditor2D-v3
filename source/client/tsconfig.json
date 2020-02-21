@@ -1,40 +1,40 @@
 {
     "references": [        
         {
-            "path": "./plugins/colibri"
+            "path": "./plugins/colibri/src"
         },
         {
-            "path": "./plugins/phasereditor2d.pack"
+            "path": "./plugins/phasereditor2d.pack/src"
         },
         {
-            "path": "./plugins/phasereditor2d.files"
+            "path": "./plugins/phasereditor2d.files/src"
         },
         {
-            "path": "./plugins/phasereditor2d.phaser"
+            "path": "./plugins/phasereditor2d.phaser/src"
         },
         {
-            "path": "./plugins/phasereditor2d.blocks"
+            "path": "./plugins/phasereditor2d.blocks/src"
         },       
         {
-            "path": "./plugins/phasereditor2d.ide"
+            "path": "./plugins/phasereditor2d.ide/src"
         },
         {
-            "path": "./plugins/phasereditor2d.images"
+            "path": "./plugins/phasereditor2d.images/src"
         },
         {
-            "path": "./plugins/phasereditor2d.inspector"
+            "path": "./plugins/phasereditor2d.inspector/src"
         },
         {
-            "path": "./plugins/phasereditor2d.outline"
+            "path": "./plugins/phasereditor2d.outline/src"
         },        
         {
-            "path": "./plugins/phasereditor2d.scene"
+            "path": "./plugins/phasereditor2d.scene/src"
         },
         {
-            "path": "./plugins/phasereditor2d.code"
+            "path": "./plugins/phasereditor2d.code/src"
         },
         {
-            "path": "./plugins/phasereditor2d.webContentTypes"
+            "path": "./plugins/phasereditor2d.webContentTypes/src"
         }
     ],
     "files": []

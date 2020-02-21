@@ -1,0 +1,7 @@
+{
+    "extends": "../../../tsconfig-base.json",
+    "compilerOptions": {
+        "outFile": "../_out/colibri.js"
+    },
+    "exclude": ["../_out/"]
+}
