@@ -8758,7 +8758,7 @@ var phasereditor2d;
                 }
                 AlphaComponent.alpha = {
                     name: "alpha",
-                    label: "alpha",
+                    label: "Alpha",
                     defValue: 1,
                     getValue: obj => obj.alpha,
                     setValue: (obj, value) => obj.alpha = value
@@ -9095,7 +9095,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class AlphaSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects.AlphaSection", "Alpha", false);
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.AlphaSection", "Alpha", false, true);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent);
@@ -9528,7 +9528,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class VisibleSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects.VisibleSection", "Visible", false);
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.VisibleSection", "Visible", false, true);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent);
