@@ -1545,6 +1545,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
         protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
         protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
+        protected createBooleanProperty(parent: HTMLElement, prop: IProperty<any>): void;
         protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
         protected createPropertyFloatRow(parent: HTMLElement, prop: IProperty<any>, lockIcon?: boolean): HTMLInputElement;
         protected createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon?: boolean): HTMLInputElement | HTMLTextAreaElement;
@@ -1978,6 +1979,16 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IVisibleLikeObject extends ISceneObject {
+        visible: boolean;
+    }
+    class VisibleComponent extends Component<IVisibleLikeObject> {
+        static visible: IProperty<IVisibleLikeObject>;
+        constructor(obj: IVisibleLikeObject);
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class FlipSection extends SceneObjectSection<IOriginLikeObject> {
         constructor(page: controls.properties.PropertyPage);
@@ -2050,6 +2061,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     class TransformSection extends SceneObjectSection<sceneobjects.ITransformLikeObject> {
+        constructor(page: colibri.ui.controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class VisibleSection extends SceneObjectSection<sceneobjects.ITransformLikeObject> {
         constructor(page: colibri.ui.controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;

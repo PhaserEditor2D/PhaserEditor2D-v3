@@ -62,7 +62,7 @@ var phasereditor2d;
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.TextExtension.getInstance(), scene_1.ui.sceneobjects.BitmapTextExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.BitmapTextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.VisibleSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.BitmapTextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
@@ -7060,6 +7060,10 @@ var phasereditor2d;
                         this.createFloatField(parent, prop)
                             .style.gridColumn = fullWidth ? "4 / span 3" : "4";
                     }
+                    createBooleanProperty(parent, prop) {
+                        this.createLock(parent, prop);
+                        this.createBooleanField(parent, prop);
+                    }
                     createPropertyBoolXYRow(parent, propXY, lockIcon = true) {
                         if (lockIcon) {
                             this.createLock(parent, propXY.x, propXY.y);
@@ -7404,7 +7408,7 @@ var phasereditor2d;
                 class BitmapTextEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj, scene) {
                         super(sceneobjects.BitmapTextExtension.getInstance(), obj, scene);
-                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.BitmapTextComponent(obj));
+                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.VisibleComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.BitmapTextComponent(obj));
                     }
                     computeContentHash() {
                         const obj = this.getObject();
@@ -8098,7 +8102,7 @@ var phasereditor2d;
                 class BaseImageEditorSupport extends sceneobjects.EditorSupport {
                     constructor(extension, obj, scene) {
                         super(extension, obj, scene);
-                        this.addComponent(new sceneobjects.TextureComponent(obj), new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj));
+                        this.addComponent(new sceneobjects.TextureComponent(obj), new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.VisibleComponent(obj));
                     }
                     getCellRenderer() {
                         return new sceneobjects.TextureCellRenderer();
@@ -9020,6 +9024,34 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class VisibleComponent extends sceneobjects.Component {
+                    constructor(obj) {
+                        super(obj, [VisibleComponent.visible]);
+                    }
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, VisibleComponent.visible);
+                    }
+                }
+                VisibleComponent.visible = {
+                    name: "visible",
+                    label: "Visible",
+                    defValue: true,
+                    getValue: obj => obj.visible,
+                    setValue: (obj, value) => obj.visible = value
+                };
+                sceneobjects.VisibleComponent = VisibleComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 /// <reference path="./SceneObjectSection.ts" />
 var phasereditor2d;
 (function (phasereditor2d) {
@@ -9420,6 +9452,35 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.TransformSection = TransformSection;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class VisibleSection extends sceneobjects.SceneObjectSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.VisibleSection", "Visible", false);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto 1fr";
+                        this.createBooleanProperty(comp, sceneobjects.VisibleComponent.visible);
+                    }
+                    canEdit(obj, n) {
+                        return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.VisibleComponent) && n > 0;
+                    }
+                    canEditNumber(n) {
+                        return n > 0;
+                    }
+                }
+                sceneobjects.VisibleSection = VisibleSection;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -10587,7 +10648,7 @@ var phasereditor2d;
                 class TextEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj, scene) {
                         super(sceneobjects.TextExtension.getInstance(), obj, scene);
-                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.TextComponent(obj));
+                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.VisibleComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.TextComponent(obj));
                     }
                     computeContentHash() {
                         const obj = this.getObject();

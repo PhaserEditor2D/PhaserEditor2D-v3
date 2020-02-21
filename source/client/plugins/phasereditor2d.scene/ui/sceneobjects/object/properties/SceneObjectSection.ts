@@ -95,6 +95,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .style.gridColumn = fullWidth ? "4 / span 3" : "4";
         }
 
+        protected createBooleanProperty(parent: HTMLElement, prop: IProperty<any>) {
+
+            this.createLock(parent, prop);
+
+            this.createBooleanField(parent, prop);
+        }
+
         protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
 
             if (lockIcon) {

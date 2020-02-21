@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 new TransformComponent(obj),
                 new OriginComponent(obj),
+                new VisibleComponent(obj),
                 new TextContentComponent(obj),
                 new BitmapTextComponent(obj)
             );
