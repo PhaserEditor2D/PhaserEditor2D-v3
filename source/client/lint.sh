@@ -1,9 +1,9 @@
 #!/bin/bash
 
-for project_file in `ls plugins/*/tsconfig.json`
+for project_file in `ls plugins/*/src/tsconfig.json`
 do
 	echo Linting project \"$project_file\"
-	tslint -c tslint.json -p $project_file
+	tslint -c tslint.json -p $project_file -e **/src/phaser/*.ts
 	if [ $? -gt 0 ]
 	then
 		echo

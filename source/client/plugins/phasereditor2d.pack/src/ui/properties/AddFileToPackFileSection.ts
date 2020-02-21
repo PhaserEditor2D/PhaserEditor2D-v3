@@ -70,7 +70,6 @@ namespace phasereditor2d.pack.ui.properties {
 
                             const menu = new controls.Menu();
 
-
                             for (const pack of packs) {
 
                                 menu.add(new controls.Action({
