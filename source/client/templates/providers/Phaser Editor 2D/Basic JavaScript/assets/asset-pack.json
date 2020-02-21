@@ -5,6 +5,11 @@
                 "url": "assets/dino.png",
                 "type": "image",
                 "key": "dino"
+            },
+            {
+                "url": "assets/Level.js",
+                "type": "sceneFile",
+                "key": "Level"
             }
         ]
     },

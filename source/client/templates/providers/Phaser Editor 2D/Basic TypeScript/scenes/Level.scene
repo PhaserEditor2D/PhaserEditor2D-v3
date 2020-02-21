@@ -1,0 +1,37 @@
+{
+    "id": "6f556dd4-77bf-4bb8-9b63-38dbb4625334",
+    "sceneType": "SCENE",
+    "settings": {
+        "preloadPackFiles": [],
+        "sceneKey": "Level",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Image",
+            "id": "dbf996fe-97a4-4a56-8978-ba3fb5d1e5ae",
+            "label": "dino",
+            "texture": {
+                "key": "dino"
+            },
+            "x": 400,
+            "y": 245.50984430371858
+        },
+        {
+            "type": "Text",
+            "id": "9a5ebf25-d774-4035-b779-608d99945bf3",
+            "label": "text_1",
+            "x": 400,
+            "y": 400,
+            "originY": 0,
+            "text": "Welcome to Phaser Editor 2D!",
+            "fontSize": "24px",
+            "fontStyle": "bold"
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

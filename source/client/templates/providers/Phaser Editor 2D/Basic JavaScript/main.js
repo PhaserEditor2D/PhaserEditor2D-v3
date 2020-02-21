@@ -5,6 +5,7 @@ window.addEventListener('load', function () {
 		width: 800,
 		height: 600,
 		type: Phaser.AUTO,
+        backgroundColor: "#242424",
 		scale: {
 			mode: Phaser.Scale.FIT,
 			autoCenter: Phaser.Scale.CENTER_BOTH
@@ -24,11 +25,7 @@ class Boot extends Phaser.Scene {
 
 	create() {
 		
-		const camera = this.cameras.main;
-		
-		camera.backgroundColor = Phaser.Display.Color.HexStringToColor("#aaf");
-
-		this.add.image(camera.centerX, camera.centerY, "dino");
+		this.scene.start("Level");
 	}
 
 }

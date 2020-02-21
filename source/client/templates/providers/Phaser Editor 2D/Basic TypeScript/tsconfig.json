@@ -1,7 +1,8 @@
 {
     "compileOnSave" : true,
     "compilerOptions": {
-        "target": "es5"                
+        "target": "es5",
+        "outFile": "game.js"                
     },
     "exclude": [
         "lib/**"
