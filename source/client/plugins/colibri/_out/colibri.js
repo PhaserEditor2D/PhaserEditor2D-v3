@@ -17,7 +17,7 @@ var colibri;
             // nothing
         }
         getIcon(name) {
-            return colibri.ui.controls.Controls.getIcon(name, `plugins/${this.getId()}/ui/icons`);
+            return colibri.ui.controls.Controls.getIcon(name, `plugins/${this.getId()}/icons`);
         }
         async getJSON(pathInPlugin) {
             const result = await fetch(`static/plugins/${this.getId()}/` + pathInPlugin);
@@ -685,7 +685,7 @@ var colibri;
                     return this._fileImageSizeCache;
                 }
                 getWorkbenchIcon(name) {
-                    return ui.controls.Controls.getIcon(name, "plugins/colibri/ui/icons");
+                    return ui.controls.Controls.getIcon(name, "plugins/colibri/icons");
                 }
                 getEditorRegistry() {
                     return this._editorRegistry;

@@ -506,7 +506,7 @@ namespace colibri.ui.ide {
         }
 
         getWorkbenchIcon(name: string) {
-            return controls.Controls.getIcon(name, "plugins/colibri/ui/icons");
+            return controls.Controls.getIcon(name, "plugins/colibri/icons");
         }
 
         getEditorRegistry() {
