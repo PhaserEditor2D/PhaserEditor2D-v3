@@ -62,7 +62,7 @@ var phasereditor2d;
                 // scene object extensions
                 reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.TextExtension.getInstance(), scene_1.ui.sceneobjects.BitmapTextExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
                 // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.VisibleSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.BitmapTextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
+                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.VisibleSection(page), page => new scene_1.ui.sceneobjects.AlphaSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.BitmapTextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
                 // scene tools
                 reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
             }
@@ -6838,7 +6838,7 @@ var phasereditor2d;
                     const sprite = obj;
                     const textureManager = obj.getEditorSupport().getScene().textures;
                     const alpha = textureManager.getPixelAlpha(x, y, sprite.texture.key, sprite.frame.name);
-                    return alpha;
+                    return alpha > 0;
                 }
                 sceneobjects.interactive_getAlpha_SharedTexture = interactive_getAlpha_SharedTexture;
                 function interactive_getAlpha_RenderTexture(hitArea, x, y, obj) {
@@ -6879,6 +6879,7 @@ var phasereditor2d;
                     renderTexture.destroy();
                     const color = colorArray[0];
                     const alpha = color ? color.alpha : 0;
+                    console.log(color);
                     return alpha > 0;
                 }
                 sceneobjects.interactive_getAlpha_RenderTexture = interactive_getAlpha_RenderTexture;
@@ -7059,6 +7060,11 @@ var phasereditor2d;
                             .style.gridColumn = "2/ span 2";
                         this.createFloatField(parent, prop)
                             .style.gridColumn = fullWidth ? "4 / span 3" : "4";
+                    }
+                    createNumberProperty(parent, prop) {
+                        this.createLock(parent, prop);
+                        this.createLabel(parent, prop.label);
+                        this.createFloatField(parent, prop);
                     }
                     createBooleanProperty(parent, prop) {
                         this.createLock(parent, prop);
@@ -7408,7 +7414,7 @@ var phasereditor2d;
                 class BitmapTextEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj, scene) {
                         super(sceneobjects.BitmapTextExtension.getInstance(), obj, scene);
-                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.VisibleComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.BitmapTextComponent(obj));
+                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.VisibleComponent(obj), new sceneobjects.AlphaComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.BitmapTextComponent(obj));
                     }
                     computeContentHash() {
                         const obj = this.getObject();
@@ -8102,7 +8108,7 @@ var phasereditor2d;
                 class BaseImageEditorSupport extends sceneobjects.EditorSupport {
                     constructor(extension, obj, scene) {
                         super(extension, obj, scene);
-                        this.addComponent(new sceneobjects.TextureComponent(obj), new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.VisibleComponent(obj));
+                        this.addComponent(new sceneobjects.TextureComponent(obj), new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.VisibleComponent(obj), new sceneobjects.AlphaComponent(obj));
                     }
                     getCellRenderer() {
                         return new sceneobjects.TextureCellRenderer();
@@ -8743,6 +8749,34 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                class AlphaComponent extends sceneobjects.Component {
+                    constructor(obj) {
+                        super(obj, [AlphaComponent.alpha]);
+                    }
+                    buildSetObjectPropertiesCodeDOM(args) {
+                        this.buildSetObjectPropertyCodeDOM_FloatProperty(args, AlphaComponent.alpha);
+                    }
+                }
+                AlphaComponent.alpha = {
+                    name: "alpha",
+                    label: "alpha",
+                    defValue: 1,
+                    getValue: obj => obj.alpha,
+                    setValue: (obj, value) => obj.alpha = value
+                };
+                sceneobjects.AlphaComponent = AlphaComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
                 class FlipComponent extends sceneobjects.Component {
                     constructor(obj) {
                         super(obj, [FlipComponent.flipX, FlipComponent.flipY]);
@@ -9048,6 +9082,35 @@ var phasereditor2d;
                     setValue: (obj, value) => obj.visible = value
                 };
                 sceneobjects.VisibleComponent = VisibleComponent;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class AlphaSection extends sceneobjects.SceneObjectSection {
+                    constructor(page) {
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.AlphaSection", "Alpha", false);
+                    }
+                    createForm(parent) {
+                        const comp = this.createGridElement(parent);
+                        comp.style.gridTemplateColumns = "auto auto 1fr";
+                        this.createNumberProperty(comp, sceneobjects.AlphaComponent.alpha);
+                    }
+                    canEdit(obj, n) {
+                        return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.AlphaComponent) && n > 0;
+                    }
+                    canEditNumber(n) {
+                        return n > 0;
+                    }
+                }
+                sceneobjects.AlphaSection = AlphaSection;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -10648,7 +10711,7 @@ var phasereditor2d;
                 class TextEditorSupport extends sceneobjects.EditorSupport {
                     constructor(obj, scene) {
                         super(sceneobjects.TextExtension.getInstance(), obj, scene);
-                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.VisibleComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.TextComponent(obj));
+                        this.addComponent(new sceneobjects.TransformComponent(obj), new sceneobjects.OriginComponent(obj), new sceneobjects.FlipComponent(obj), new sceneobjects.VisibleComponent(obj), new sceneobjects.AlphaComponent(obj), new sceneobjects.TextContentComponent(obj), new sceneobjects.TextComponent(obj));
                     }
                     computeContentHash() {
                         const obj = this.getObject();

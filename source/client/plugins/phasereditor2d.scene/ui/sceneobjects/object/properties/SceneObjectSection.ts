@@ -95,6 +95,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .style.gridColumn = fullWidth ? "4 / span 3" : "4";
         }
 
+        protected createNumberProperty(parent: HTMLElement, prop: IProperty<any>) {
+
+            this.createLock(parent, prop);
+
+            this.createLabel(parent, prop.label);
+
+            this.createFloatField(parent, prop);
+        }
+
         protected createBooleanProperty(parent: HTMLElement, prop: IProperty<any>) {
 
             this.createLock(parent, prop);

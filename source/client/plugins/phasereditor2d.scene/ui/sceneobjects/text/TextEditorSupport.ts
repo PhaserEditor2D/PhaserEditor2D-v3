@@ -13,6 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new OriginComponent(obj),
                 new FlipComponent(obj),
                 new VisibleComponent(obj),
+                new AlphaComponent(obj),
                 new TextContentComponent(obj),
                 new TextComponent(obj)
             );

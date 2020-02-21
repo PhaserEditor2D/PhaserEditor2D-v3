@@ -1364,7 +1364,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    function interactive_getAlpha_SharedTexture(hitArea: any, x: number, y: number, obj: ITransformLikeObject): number;
+    function interactive_getAlpha_SharedTexture(hitArea: any, x: number, y: number, obj: ITransformLikeObject): boolean;
     function interactive_getAlpha_RenderTexture(hitArea: any, x: number, y: number, obj: ITransformLikeObject): boolean;
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
@@ -1545,6 +1545,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>): void;
         protected isUnlocked(...properties: Array<IProperty<T>>): boolean;
         protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth?: boolean): void;
+        protected createNumberProperty(parent: HTMLElement, prop: IProperty<any>): void;
         protected createBooleanProperty(parent: HTMLElement, prop: IProperty<any>): void;
         protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
         protected createPropertyFloatRow(parent: HTMLElement, prop: IProperty<any>, lockIcon?: boolean): HTMLInputElement;
@@ -1893,6 +1894,16 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IAlphaLikeObject extends ISceneObject {
+        alpha: number;
+    }
+    class AlphaComponent extends Component<IAlphaLikeObject> {
+        static alpha: IProperty<IAlphaLikeObject>;
+        constructor(obj: IAlphaLikeObject);
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IFlipLikeObject extends ISceneObject {
         flipX: boolean;
         flipY: boolean;
@@ -1989,6 +2000,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class AlphaSection extends SceneObjectSection<sceneobjects.IAlphaLikeObject> {
+        constructor(page: colibri.ui.controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class FlipSection extends SceneObjectSection<IOriginLikeObject> {
         constructor(page: controls.properties.PropertyPage);
@@ -2068,7 +2087,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
-    class VisibleSection extends SceneObjectSection<sceneobjects.ITransformLikeObject> {
+    class VisibleSection extends SceneObjectSection<sceneobjects.IVisibleLikeObject> {
         constructor(page: colibri.ui.controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
         canEdit(obj: any, n: number): boolean;

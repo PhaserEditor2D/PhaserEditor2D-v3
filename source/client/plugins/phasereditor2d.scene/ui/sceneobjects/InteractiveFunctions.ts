@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         const alpha = textureManager.getPixelAlpha(x, y, sprite.texture.key, sprite.frame.name);
 
-        return alpha;
+        return alpha > 0;
     }
 
     export function interactive_getAlpha_RenderTexture(hitArea, x: number, y: number, obj: ITransformLikeObject) {
@@ -64,6 +64,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         const color = colorArray[0];
         const alpha = color ? color.alpha : 0;
+
+        console.log(color);
 
         return alpha > 0;
     }
