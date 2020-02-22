@@ -22,7 +22,7 @@ Important:
 
 /* input */
 
-.dark input {
+.dark input, .dark textarea {
     background: #2e2e2e;
     color: #f0f0f0;
     border-style: solid;
@@ -34,12 +34,13 @@ Important:
     display: none;
 }
 
-.dark input:focus {
+.dark input:focus, .dark textarea:focus {
     background: #2a2a2a;
     border-color: #f59c5c;
+    outline-style: none;
 }
 
-.dark input:read-only {
+.dark input:read-only, .dark textarea:read-only {
     background: #4a4a4a;
 }
 

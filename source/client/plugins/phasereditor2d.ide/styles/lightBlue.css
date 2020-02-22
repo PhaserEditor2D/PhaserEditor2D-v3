@@ -5,7 +5,7 @@
 
 /* input */
 
-.lightBlue input {
+.lightBlue input, .lightBlue textarea {
     background: #dee5f1;
     border: solid 1px #97aac2;
 }
@@ -15,12 +15,13 @@
 }
 
 
-.lightBlue input:focus {
+.lightBlue input:focus, .lightBlue textarea:focus {
     background: #f6f6f6;
     border-color: #4242ff;
+    outline-style: none;
 }
 
-.lightBlue input:read-only {
+.lightBlue input:read-only, .lightBlue textarea:read-only {
     background: #bec5e1;
 }
 
