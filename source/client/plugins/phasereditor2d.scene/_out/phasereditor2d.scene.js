@@ -8960,6 +8960,7 @@ var phasereditor2d;
                 OriginComponent.originX = {
                     name: "originX",
                     label: "X",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Origin.originX",
                     defValue: 0.5,
                     getValue: obj => obj.originX,
                     setValue: (obj, value) => obj.setOrigin(value, obj.originY)
@@ -8967,12 +8968,14 @@ var phasereditor2d;
                 OriginComponent.originY = {
                     name: "originY",
                     label: "Y",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Origin.originY",
                     defValue: 0.5,
                     getValue: obj => obj.originY,
                     setValue: (obj, value) => obj.setOrigin(obj.originX, value)
                 };
                 OriginComponent.origin = {
                     label: "Origin",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Origin.setOrigin",
                     x: OriginComponent.originX,
                     y: OriginComponent.originY
                 };

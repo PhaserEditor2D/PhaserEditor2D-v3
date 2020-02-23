@@ -84,6 +84,7 @@ utils.makeHelpFile([
     
     "Phaser.GameObjects.Components.Origin.originX",
     "Phaser.GameObjects.Components.Origin.originY",
+    "Phaser.GameObjects.Components.Origin.setOrigin",
 
     "Phaser.GameObjects.Components.Alpha.alpha",
     "Phaser.GameObjects.Components.Alpha.alphaTopLeft",
