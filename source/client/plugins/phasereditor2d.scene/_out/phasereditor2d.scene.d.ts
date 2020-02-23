@@ -1,4 +1,7 @@
 declare namespace phasereditor2d.scene {
+    function PhaserHelp(key: string): string;
+}
+declare namespace phasereditor2d.scene {
     const ICON_GROUP = "group";
     const ICON_TRANSLATE = "translate";
     const ICON_ANGLE = "angle";
@@ -10,11 +13,13 @@ declare namespace phasereditor2d.scene {
     const ICON_LIST = "list";
     class ScenePlugin extends colibri.Plugin {
         private static _instance;
-        private _sceneFinder;
         static DEFAULT_CANVAS_CONTEXT: number;
         static DEFAULT_EDITOR_CANVAS_CONTEXT: number;
+        private _sceneFinder;
+        private _docs;
         static getInstance(): ScenePlugin;
         private constructor();
+        getPhaserDocs(): phasereditor2d.ide.core.PhaserDocs;
         registerExtensions(reg: colibri.ExtensionRegistry): void;
         getDefaultSceneLanguage(): core.json.SourceLang;
         getSceneFinder(): core.json.SceneFinder;
@@ -1338,6 +1343,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IPropertyXY {
         label: string;
+        tooltip?: string;
         x: IProperty<any>;
         y: IProperty<any>;
     }
@@ -1896,9 +1902,19 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
 declare namespace phasereditor2d.scene.ui.sceneobjects {
     interface IAlphaLikeObject extends ISceneObject {
         alpha: number;
+        alphaTopLeft: number;
+        alphaTopRight: number;
+        alphaBottomLeft: number;
+        alphaBottomRight: number;
     }
     class AlphaComponent extends Component<IAlphaLikeObject> {
         static alpha: IProperty<IAlphaLikeObject>;
+        static alphaTopLeft: IProperty<IAlphaLikeObject>;
+        static alphaTopRight: IProperty<IAlphaLikeObject>;
+        static alphaBottomLeft: IProperty<IAlphaLikeObject>;
+        static alphaBottomRight: IProperty<IAlphaLikeObject>;
+        static alphaTop: IPropertyXY;
+        static alphaBottom: IPropertyXY;
         constructor(obj: IAlphaLikeObject);
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
     }

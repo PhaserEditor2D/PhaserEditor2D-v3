@@ -17,11 +17,13 @@ namespace phasereditor2d.scene {
 
         private static _instance = new ScenePlugin();
 
-        private _sceneFinder: core.json.SceneFinder;
-
         static DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
 
         static DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
+
+        private _sceneFinder: core.json.SceneFinder;
+
+        private _docs: phasereditor2d.ide.core.PhaserDocs;
 
         static getInstance() {
             return this._instance;
@@ -29,6 +31,12 @@ namespace phasereditor2d.scene {
 
         private constructor() {
             super("phasereditor2d.scene");
+
+            this._docs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json");
+        }
+
+        getPhaserDocs() {
+            return this._docs;
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -37,7 +45,20 @@ namespace phasereditor2d.scene {
 
             // preload project
 
-            reg.addExtension(this._sceneFinder.getProjectPreloader());
+            reg.addExtension(this._sceneFinder.getProjectPreloader(),
+
+                // tslint:disable-next-line:new-parens
+                new (class extends ide.PreloadProjectResourcesExtension {
+
+                    async computeTotal() {
+                        return 0;
+                    }
+
+                    async preload() {
+                        return ScenePlugin.getInstance().getPhaserDocs().preload();
+                    }
+                })
+            );
 
             // content type resolvers
 

@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             name,
             defValue,
             label,
-            tooltip,
+            tooltip: tooltip,
             local,
             getValue: obj => obj[name],
             setValue: (obj, value) => obj[name] = value

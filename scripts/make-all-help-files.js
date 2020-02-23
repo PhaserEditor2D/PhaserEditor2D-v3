@@ -73,4 +73,27 @@ utils.makeHelpFile([
 
 ], "../source/client/plugins/phasereditor2d.pack/data/phaser-docs.json");
 
+utils.makeHelpFile([
+    
+    "Phaser.GameObjects.Components.Transform.x",
+    "Phaser.GameObjects.Components.Transform.y",
+    "Phaser.GameObjects.Components.Transform.setPosition",
+    "Phaser.GameObjects.Components.Transform.scaleX",
+    "Phaser.GameObjects.Components.Transform.scaleY",
+    "Phaser.GameObjects.Components.Transform.angle",
+    
+    "Phaser.GameObjects.Components.Origin.originX",
+    "Phaser.GameObjects.Components.Origin.originY",
+
+    "Phaser.GameObjects.Components.Alpha.alpha",
+    "Phaser.GameObjects.Components.Alpha.alphaTopLeft",
+    "Phaser.GameObjects.Components.Alpha.alphaTopRight",
+    "Phaser.GameObjects.Components.Alpha.alphaBottomLeft",
+    "Phaser.GameObjects.Components.Alpha.alphaBottomRight",
+
+    "Phaser.GameObjects.Components.Flip.flipX",
+    "Phaser.GameObjects.Components.Flip.flipY"    
+
+], "../source/client/plugins/phasereditor2d.scene/data/phaser-docs.json");
+
 console.log("DONE!");

@@ -1,6 +1,23 @@
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
+    (function (scene) {
+        function PhaserHelp(key) {
+            if (key === undefined) {
+                return undefined;
+            }
+            const prefix = "phaser:";
+            if (key.startsWith(prefix)) {
+                return scene.ScenePlugin.getInstance().getPhaserDocs().getDoc(key.substring(prefix.length));
+            }
+            return key;
+        }
+        scene.PhaserHelp = PhaserHelp;
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
     (function (scene_1) {
         var ide = colibri.ui.ide;
         var controls = colibri.ui.controls;
@@ -16,14 +33,27 @@ var phasereditor2d;
         class ScenePlugin extends colibri.Plugin {
             constructor() {
                 super("phasereditor2d.scene");
+                this._docs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json");
             }
             static getInstance() {
                 return this._instance;
             }
+            getPhaserDocs() {
+                return this._docs;
+            }
             registerExtensions(reg) {
                 this._sceneFinder = new scene_1.core.json.SceneFinder();
                 // preload project
-                reg.addExtension(this._sceneFinder.getProjectPreloader());
+                reg.addExtension(this._sceneFinder.getProjectPreloader(), 
+                // tslint:disable-next-line:new-parens
+                new (class extends ide.PreloadProjectResourcesExtension {
+                    async computeTotal() {
+                        return 0;
+                    }
+                    async preload() {
+                        return ScenePlugin.getInstance().getPhaserDocs().preload();
+                    }
+                }));
                 // content type resolvers
                 reg.addExtension(new colibri.core.ContentTypeExtension([new scene_1.core.SceneContentTypeResolver()], 5));
                 // content type renderer
@@ -6962,7 +6992,7 @@ var phasereditor2d;
                         name,
                         defValue,
                         label,
-                        tooltip,
+                        tooltip: tooltip,
                         local,
                         getValue: obj => obj[name],
                         setValue: (obj, value) => obj[name] = value
@@ -7054,14 +7084,14 @@ var phasereditor2d;
                     }
                     createNumberPropertyRow(parent, prop, fullWidth = true) {
                         this.createLock(parent, prop);
-                        this.createLabel(parent, prop.label)
+                        this.createLabel(parent, prop.label, scene.PhaserHelp(prop.tooltip))
                             .style.gridColumn = "2/ span 2";
                         this.createFloatField(parent, prop)
                             .style.gridColumn = fullWidth ? "4 / span 3" : "4";
                     }
                     createNumberProperty(parent, prop) {
                         this.createLock(parent, prop);
-                        this.createLabel(parent, prop.label);
+                        this.createLabel(parent, prop.label, scene.PhaserHelp(prop.tooltip));
                         this.createFloatField(parent, prop);
                     }
                     createBooleanProperty(parent, prop) {
@@ -7071,10 +7101,10 @@ var phasereditor2d;
                     createPropertyBoolXYRow(parent, propXY, lockIcon = true) {
                         if (lockIcon) {
                             this.createLock(parent, propXY.x, propXY.y);
-                            this.createLabel(parent, propXY.label);
+                            this.createLabel(parent, propXY.label, scene.PhaserHelp(propXY.tooltip));
                         }
                         else {
-                            const label = this.createLabel(parent, propXY.label);
+                            const label = this.createLabel(parent, propXY.label, scene.PhaserHelp(propXY.tooltip));
                             label.style.gridColumn = "2";
                         }
                         for (const prop of [propXY.x, propXY.y]) {
@@ -7111,14 +7141,14 @@ var phasereditor2d;
                     createPropertyXYRow(parent, propXY, lockIcon = true) {
                         if (lockIcon) {
                             this.createLock(parent, propXY.x, propXY.y);
-                            this.createLabel(parent, propXY.label);
+                            this.createLabel(parent, propXY.label, scene.PhaserHelp(propXY.tooltip));
                         }
                         else {
-                            const label = this.createLabel(parent, propXY.label);
+                            const label = this.createLabel(parent, propXY.label, scene.PhaserHelp(propXY.tooltip));
                             label.style.gridColumn = "2";
                         }
                         for (const prop of [propXY.x, propXY.y]) {
-                            this.createLabel(parent, prop.label);
+                            this.createLabel(parent, prop.label, scene.PhaserHelp(prop.tooltip));
                             this.createFloatField(parent, prop);
                         }
                     }
@@ -7171,7 +7201,7 @@ var phasereditor2d;
                         return text;
                     }
                     createBooleanField(parent, property, checkUnlock = true) {
-                        const labelElement = this.createLabel(parent, property.label, property.tooltip);
+                        const labelElement = this.createLabel(parent, property.label, scene.PhaserHelp(property.tooltip));
                         const checkElement = this.createCheckbox(parent, labelElement);
                         checkElement.addEventListener("change", e => {
                             const value = checkElement.checked;
@@ -8749,18 +8779,69 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class AlphaComponent extends sceneobjects.Component {
                     constructor(obj) {
-                        super(obj, [AlphaComponent.alpha]);
+                        super(obj, [
+                            AlphaComponent.alpha,
+                            AlphaComponent.alphaTopLeft,
+                            AlphaComponent.alphaTopRight,
+                            AlphaComponent.alphaBottomLeft,
+                            AlphaComponent.alphaBottomRight
+                        ]);
                     }
                     buildSetObjectPropertiesCodeDOM(args) {
-                        this.buildSetObjectPropertyCodeDOM_FloatProperty(args, AlphaComponent.alpha);
+                        for (const prop of this.getProperties()) {
+                            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, prop);
+                        }
                     }
                 }
                 AlphaComponent.alpha = {
                     name: "alpha",
                     label: "Alpha",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alpha",
                     defValue: 1,
                     getValue: obj => obj.alpha,
                     setValue: (obj, value) => obj.alpha = value
+                };
+                AlphaComponent.alphaTopLeft = {
+                    name: "alphaTopLeft",
+                    label: "Left",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopLeft",
+                    defValue: 1,
+                    getValue: obj => obj.alphaTopLeft,
+                    setValue: (obj, value) => obj.alphaTopLeft = value
+                };
+                AlphaComponent.alphaTopRight = {
+                    name: "alphaTopRight",
+                    label: "Right",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopRight",
+                    defValue: 1,
+                    getValue: obj => obj.alphaTopRight,
+                    setValue: (obj, value) => obj.alphaTopRight = value
+                };
+                AlphaComponent.alphaBottomLeft = {
+                    name: "alphaBottomLeft",
+                    label: "Left",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomLeft",
+                    defValue: 1,
+                    getValue: obj => obj.alphaBottomLeft,
+                    setValue: (obj, value) => obj.alphaBottomLeft = value
+                };
+                AlphaComponent.alphaBottomRight = {
+                    name: "alphaBottomRight",
+                    label: "Right",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomRight",
+                    defValue: 1,
+                    getValue: obj => obj.alphaBottomRight,
+                    setValue: (obj, value) => obj.alphaBottomRight = value
+                };
+                AlphaComponent.alphaTop = {
+                    label: "Alpha Top",
+                    x: AlphaComponent.alphaTopLeft,
+                    y: AlphaComponent.alphaTopRight
+                };
+                AlphaComponent.alphaBottom = {
+                    label: "Alpha Bottom",
+                    x: AlphaComponent.alphaBottomLeft,
+                    y: AlphaComponent.alphaBottomRight
                 };
                 sceneobjects.AlphaComponent = AlphaComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
@@ -8783,8 +8864,8 @@ var phasereditor2d;
                         this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, ...this.getProperties());
                     }
                 }
-                FlipComponent.flipX = sceneobjects.SimpleProperty("flipX", false, "Flip X");
-                FlipComponent.flipY = sceneobjects.SimpleProperty("flipY", false, "Flip Y");
+                FlipComponent.flipX = sceneobjects.SimpleProperty("flipX", false, "Flip X", "phaser:Phaser.GameObjects.Components.Flip.flipX");
+                FlipComponent.flipY = sceneobjects.SimpleProperty("flipY", false, "Flip Y", "phaser:Phaser.GameObjects.Components.Flip.flipY");
                 sceneobjects.FlipComponent = FlipComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -8994,21 +9075,22 @@ var phasereditor2d;
                         this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
                     }
                 }
-                TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X", undefined, true);
-                TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y", undefined, true);
+                TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X", "phaser:Phaser.GameObjects.Components.Transform.x", true);
+                TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y", "phaser:Phaser.GameObjects.Components.Transform.y", true);
                 TransformComponent.position = {
                     label: "Position",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Transform.setPosition",
                     x: TransformComponent.x,
                     y: TransformComponent.y
                 };
-                TransformComponent.scaleX = sceneobjects.SimpleProperty("scaleX", 1, "X");
-                TransformComponent.scaleY = sceneobjects.SimpleProperty("scaleY", 1, "Y");
+                TransformComponent.scaleX = sceneobjects.SimpleProperty("scaleX", 1, "X", "phaser:Phaser.GameObjects.Components.Transform.scaleX");
+                TransformComponent.scaleY = sceneobjects.SimpleProperty("scaleY", 1, "Y", "phaser:Phaser.GameObjects.Components.Transform.scaleY");
                 TransformComponent.scale = {
                     label: "Scale",
                     x: TransformComponent.scaleX,
                     y: TransformComponent.scaleY
                 };
-                TransformComponent.angle = sceneobjects.SimpleProperty("angle", 0, "Angle");
+                TransformComponent.angle = sceneobjects.SimpleProperty("angle", 0, "Angle", "phaser:Phaser.GameObjects.Components.Transform.angle");
                 sceneobjects.TransformComponent = TransformComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -9097,9 +9179,10 @@ var phasereditor2d;
                         super(page, "phasereditor2d.scene.ui.sceneobjects.AlphaSection", "Alpha", false, true);
                     }
                     createForm(parent) {
-                        const comp = this.createGridElement(parent);
-                        comp.style.gridTemplateColumns = "auto auto 1fr";
-                        this.createNumberProperty(comp, sceneobjects.AlphaComponent.alpha);
+                        const comp = this.createGridElementWithPropertiesXY(parent);
+                        this.createNumberPropertyRow(comp, sceneobjects.AlphaComponent.alpha, true);
+                        this.createPropertyXYRow(comp, sceneobjects.AlphaComponent.alphaTop);
+                        this.createPropertyXYRow(comp, sceneobjects.AlphaComponent.alphaBottom);
                     }
                     canEdit(obj, n) {
                         return sceneobjects.EditorSupport.getObjectComponent(obj, sceneobjects.AlphaComponent) && n > 0;

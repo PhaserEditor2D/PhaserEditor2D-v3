@@ -88,7 +88,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLock(parent, prop);
 
-            this.createLabel(parent, prop.label)
+            this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip))
                 .style.gridColumn = "2/ span 2";
 
             this.createFloatField(parent, prop)
@@ -99,7 +99,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLock(parent, prop);
 
-            this.createLabel(parent, prop.label);
+            this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
 
             this.createFloatField(parent, prop);
         }
@@ -116,11 +116,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (lockIcon) {
 
                 this.createLock(parent, propXY.x, propXY.y);
-                this.createLabel(parent, propXY.label);
+                this.createLabel(parent, propXY.label, PhaserHelp(propXY.tooltip));
 
             } else {
 
-                const label = this.createLabel(parent, propXY.label);
+                const label = this.createLabel(parent, propXY.label, PhaserHelp(propXY.tooltip));
                 label.style.gridColumn = "2";
             }
 
@@ -180,17 +180,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (lockIcon) {
 
                 this.createLock(parent, propXY.x, propXY.y);
-                this.createLabel(parent, propXY.label);
+                this.createLabel(parent, propXY.label, PhaserHelp(propXY.tooltip));
 
             } else {
 
-                const label = this.createLabel(parent, propXY.label);
+                const label = this.createLabel(parent, propXY.label, PhaserHelp(propXY.tooltip));
                 label.style.gridColumn = "2";
             }
 
             for (const prop of [propXY.x, propXY.y]) {
 
-                this.createLabel(parent, prop.label);
+                this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
                 this.createFloatField(parent, prop);
             }
         }
@@ -291,7 +291,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {
 
-            const labelElement = this.createLabel(parent, property.label, property.tooltip);
+            const labelElement = this.createLabel(parent, property.label, PhaserHelp(property.tooltip));
 
             const checkElement = this.createCheckbox(parent, labelElement);
 
