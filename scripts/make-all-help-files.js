@@ -137,6 +137,11 @@ utils.makeHelpFile([
     "Phaser.GameObjects.TextStyle.baselineY",
     "Phaser.GameObjects.Text.setMaxLines",
 
+    "Phaser.GameObjects.BitmapText.setFont",
+    "Phaser.GameObjects.BitmapText.align",
+    "Phaser.GameObjects.BitmapText.setFontSize",
+    "Phaser.GameObjects.BitmapText.setLetterSpacing"
+
 
 ], "../source/client/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

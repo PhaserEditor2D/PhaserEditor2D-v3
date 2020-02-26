@@ -7389,6 +7389,7 @@ var phasereditor2d;
                 BitmapTextComponent.font = {
                     name: "font",
                     label: "Font",
+                    tooltip: "phaser:Phaser.GameObjects.BitmapText.setFont",
                     defValue: undefined,
                     getValue: obj => obj.font,
                     setValue: (obj, value) => obj.setFont(value)
@@ -7396,6 +7397,7 @@ var phasereditor2d;
                 BitmapTextComponent.align = {
                     name: "align",
                     label: "Align",
+                    tooltip: "phaser:Phaser.GameObjects.BitmapText.align",
                     defValue: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
                     getValue: obj => obj.align,
                     setValue: (obj, value) => obj.align = value,
@@ -7415,6 +7417,7 @@ var phasereditor2d;
                 BitmapTextComponent.fontSize = {
                     name: "fontSize",
                     label: "Font Size",
+                    tooltip: "phaser:Phaser.GameObjects.BitmapText.setFontSize",
                     defValue: 0,
                     getValue: obj => obj.fontSize,
                     setValue: (obj, value) => obj.setFontSize(value)
@@ -7422,6 +7425,7 @@ var phasereditor2d;
                 BitmapTextComponent.letterSpacing = {
                     name: "letterSpacing",
                     label: "Letter Spacing",
+                    tooltip: "phaser:Phaser.GameObjects.BitmapText.setLetterSpacing",
                     defValue: 0,
                     getValue: obj => obj.letterSpacing,
                     setValue: (obj, value) => obj.setLetterSpacing(value)
@@ -7566,7 +7570,7 @@ var phasereditor2d;
                         {
                             // font
                             this.createLock(comp, sceneobjects.BitmapTextComponent.font);
-                            this.createLabel(comp, sceneobjects.BitmapTextComponent.font.name);
+                            this.createLabel(comp, sceneobjects.BitmapTextComponent.font.label, scene.PhaserHelp(sceneobjects.BitmapTextComponent.font.tooltip));
                             const btn = this.createButton(comp, "", async () => {
                                 const input = this.getEditor().getPackFinder().getPacks()
                                     .flatMap(pack => pack.getItems())

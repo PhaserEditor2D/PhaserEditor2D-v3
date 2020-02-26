@@ -52,5 +52,9 @@
   "Phaser.GameObjects.Text.setShadowBlur": "Set the shadow blur radius.",
   "Phaser.GameObjects.TextStyle.baselineX": "The amount of horizontal padding added to the width of the text when calculating the font metrics.",
   "Phaser.GameObjects.TextStyle.baselineY": "The amount of vertical padding added to the height of the text when calculating the font metrics.",
-  "Phaser.GameObjects.Text.setMaxLines": "Set the maximum number of lines to draw."
+  "Phaser.GameObjects.Text.setMaxLines": "Set the maximum number of lines to draw.",
+  "Phaser.GameObjects.BitmapText.setFont": "Changes the font this BitmapText is using to render.\n\nThe new texture is loaded and applied to the BitmapText. The existing test, size and alignment are preserved,\nunless overridden via the arguments.",
+  "Phaser.GameObjects.BitmapText.align": "Controls the alignment of each line of text in this BitmapText object.\n\nOnly has any effect when this BitmapText contains multiple lines of text, split with carriage-returns.\nHas no effect with single-lines of text.\n\nSee the methods `setLeftAlign`, `setCenterAlign` and `setRightAlign`.\n\n0 = Left aligned (default)\n1 = Middle aligned\n2 = Right aligned\n\nThe alignment position is based on the longest line of text.",
+  "Phaser.GameObjects.BitmapText.setFontSize": "Set the font size of this Bitmap Text.",
+  "Phaser.GameObjects.BitmapText.setLetterSpacing": "Sets the letter spacing between each character of this Bitmap Text.\nCan be a positive value to increase the space, or negative to reduce it.\nSpacing is applied after the kerning values have been set."
 }

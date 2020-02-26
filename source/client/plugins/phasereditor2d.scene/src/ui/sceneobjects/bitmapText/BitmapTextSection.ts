@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 // font
                 this.createLock(comp, BitmapTextComponent.font);
 
-                this.createLabel(comp, BitmapTextComponent.font.name);
+                this.createLabel(comp, BitmapTextComponent.font.label, PhaserHelp(BitmapTextComponent.font.tooltip));
 
                 const btn = this.createButton(comp, "", async () => {
 

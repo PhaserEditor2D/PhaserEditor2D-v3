@@ -5,6 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static font: IProperty<BitmapText> = {
             name: "font",
             label: "Font",
+            tooltip: "phaser:Phaser.GameObjects.BitmapText.setFont",
             defValue: undefined,
             getValue: obj => obj.font,
             setValue: (obj, value) => obj.setFont(value)
@@ -13,6 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static align: IEnumProperty<BitmapText, number> = {
             name: "align",
             label: "Align",
+            tooltip: "phaser:Phaser.GameObjects.BitmapText.align",
             defValue: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
             getValue: obj => obj.align,
             setValue: (obj, value) => obj.align = value,
@@ -33,6 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static fontSize: IProperty<BitmapText> = {
             name: "fontSize",
             label: "Font Size",
+            tooltip: "phaser:Phaser.GameObjects.BitmapText.setFontSize",
             defValue: 0,
             getValue: obj => obj.fontSize,
             setValue: (obj, value) => obj.setFontSize(value)
@@ -41,6 +44,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static letterSpacing: IProperty<BitmapText> = {
             name: "letterSpacing",
             label: "Letter Spacing",
+            tooltip: "phaser:Phaser.GameObjects.BitmapText.setLetterSpacing",
             defValue: 0,
             getValue: obj => obj.letterSpacing,
             setValue: (obj, value) => obj.setLetterSpacing(value)
