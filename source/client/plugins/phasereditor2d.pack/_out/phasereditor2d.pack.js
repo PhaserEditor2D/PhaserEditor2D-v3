@@ -2504,6 +2504,9 @@ var phasereditor2d;
                         sections.push(new editor.ImportFileSection(page));
                         super.addSections(page, sections);
                     }
+                    acceptSection(section) {
+                        return !(section instanceof ui.properties.AddFileToPackFileSection);
+                    }
                 }
                 editor.AssetPackEditorBlocksPropertySectionProvider = AssetPackEditorBlocksPropertySectionProvider;
             })(editor = ui.editor || (ui.editor = {}));
@@ -4194,7 +4197,6 @@ var phasereditor2d;
                         super(page, "phasereditor2d.pack.ui.properties.AddFileToPackFileSection", "Asset Pack File", false);
                     }
                     createForm(parent) {
-                        console.log("addUpdater " + this.getId());
                         const comp = this.createGridElement(parent, 1);
                         this.addUpdater(async () => {
                             const finder = new pack_35.core.PackFinder();

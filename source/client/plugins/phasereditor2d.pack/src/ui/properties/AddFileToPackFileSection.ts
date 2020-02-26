@@ -12,8 +12,6 @@ namespace phasereditor2d.pack.ui.properties {
 
         protected createForm(parent: HTMLDivElement) {
 
-            console.log("addUpdater " + this.getId());
-
             const comp = this.createGridElement(parent, 1);
 
             this.addUpdater(async () => {

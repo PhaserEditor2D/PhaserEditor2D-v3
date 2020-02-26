@@ -14,7 +14,12 @@ namespace phasereditor2d.files.ui.views {
 
                 for (const provider of ext.getSectionProviders()) {
 
-                    sections.push(provider(page));
+                    const section = provider(page);
+
+                    if (this.acceptSection(section)) {
+
+                        sections.push(section);
+                    }
                 }
             }
 
@@ -25,6 +30,10 @@ namespace phasereditor2d.files.ui.views {
 
                 return aa - bb;
             });
+        }
+
+        protected acceptSection(section: controls.properties.PropertySection<any>) {
+            return true;
         }
     }
 }

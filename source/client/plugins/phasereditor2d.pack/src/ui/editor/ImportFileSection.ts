@@ -13,7 +13,7 @@ namespace phasereditor2d.pack.ui.editor {
         protected createForm(parent: HTMLDivElement) {
             const comp = this.createGridElement(parent, 1);
 
-            this.addUpdater( () => {
+            this.addUpdater(() => {
 
                 while (comp.children.length > 0) {
                     comp.children.item(0).remove();
@@ -52,6 +52,7 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         canEdit(obj: any, n: number): boolean {
+
             return obj instanceof io.FilePath && obj.isFile();
         }
 

@@ -559,6 +559,7 @@ declare namespace phasereditor2d.pack.ui.editor {
     import controls = colibri.ui.controls;
     class AssetPackEditorBlocksPropertySectionProvider extends files.ui.views.FilePropertySectionProvider {
         addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void;
+        protected acceptSection(section: controls.properties.PropertySection<any>): boolean;
     }
 }
 declare namespace phasereditor2d.pack.ui.editor {
