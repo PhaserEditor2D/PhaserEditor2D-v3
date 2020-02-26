@@ -107,7 +107,36 @@ utils.makeHelpFile([
     "Phaser.GameObjects.TileSprite.tileScaleY",
     "Phaser.GameObjects.TileSprite.setTileScale",
 
-    "Phaser.GameObjects.GameObject.parentContainer"
+    "Phaser.GameObjects.GameObject.parentContainer",
+
+    "Phaser.Types.GameObjects.Text.TextStyle.fixedWidth",
+    "Phaser.Types.GameObjects.Text.TextStyle.fixedHeight",
+    "Phaser.GameObjects.TextStyle.setFixedSize",
+    "Phaser.GameObjects.Text.setPadding",
+    "Phaser.Types.GameObjects.Text.TextPadding.left",
+    "Phaser.Types.GameObjects.Text.TextPadding.top",
+    "Phaser.Types.GameObjects.Text.TextPadding.right",
+    "Phaser.Types.GameObjects.Text.TextPadding.bottom",
+    "Phaser.GameObjects.Text.lineSpacing",
+    "Phaser.GameObjects.Text.setAlign",
+    "Phaser.GameObjects.Text.setFontFamily",
+    "Phaser.GameObjects.Text.setFontSize",
+    "Phaser.GameObjects.Text.setFontStyle",
+    "Phaser.GameObjects.Text.setColor",
+    "Phaser.GameObjects.Text.setStroke(color)",
+    "Phaser.GameObjects.Text.setStroke(thickness)",
+    "Phaser.GameObjects.Text.setBackgroundColor",
+    "Phaser.GameObjects.Text.setShadowOffset",
+    "Phaser.GameObjects.Text.setShadowOffset(x)",
+    "Phaser.GameObjects.Text.setShadowOffset(y)",
+    "Phaser.GameObjects.Text.setShadowStroke",
+    "Phaser.GameObjects.Text.setShadowFill",
+    "Phaser.GameObjects.Text.setShadowColor",
+    "Phaser.GameObjects.Text.setShadowBlur",
+    "Phaser.GameObjects.TextStyle.baselineX",
+    "Phaser.GameObjects.TextStyle.baselineY",
+    "Phaser.GameObjects.Text.setMaxLines",
+
 
 ], "../source/client/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLock(comp, TextContentComponent.text);
 
-            this.createLabel(comp, TextContentComponent.text.label);
+            this.createLabel(comp, TextContentComponent.text.label, PhaserHelp(TextContentComponent.text.tooltip));
 
             this.createStringField(comp, TextContentComponent.text, true, false, true);
         }

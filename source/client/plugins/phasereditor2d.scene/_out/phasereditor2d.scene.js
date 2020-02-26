@@ -7019,7 +7019,7 @@ var phasereditor2d;
                         this.buildSetObjectPropertyCodeDOM_StringProperty(args, TextContentComponent.text);
                     }
                 }
-                TextContentComponent.text = sceneobjects.SimpleProperty("text", "", "Text");
+                TextContentComponent.text = sceneobjects.SimpleProperty("text", "", "Text", "The text content.");
                 sceneobjects.TextContentComponent = TextContentComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -7115,7 +7115,7 @@ var phasereditor2d;
                         if (lockIcon) {
                             this.createLock(parent, prop);
                         }
-                        const label = this.createLabel(parent, prop.label);
+                        const label = this.createLabel(parent, prop.label, scene.PhaserHelp(prop.tooltip));
                         label.style.gridColumn = "2";
                         const text = this.createFloatField(parent, prop);
                         return text;
@@ -7124,7 +7124,7 @@ var phasereditor2d;
                         if (lockIcon) {
                             this.createLock(parent, prop);
                         }
-                        const label = this.createLabel(parent, prop.label);
+                        const label = this.createLabel(parent, prop.label, scene.PhaserHelp(prop.tooltip));
                         label.style.gridColumn = "2";
                         const text = this.createStringField(parent, prop);
                         return text;
@@ -7133,7 +7133,7 @@ var phasereditor2d;
                         if (lockIcon) {
                             this.createLock(parent, prop);
                         }
-                        const label = this.createLabel(parent, prop.label);
+                        const label = this.createLabel(parent, prop.label, scene.PhaserHelp(prop.tooltip));
                         label.style.gridColumn = "2";
                         const btn = this.createEnumField(parent, prop);
                         return btn;
@@ -7239,7 +7239,7 @@ var phasereditor2d;
                         const comp = this.createGridElement(parent);
                         comp.style.gridTemplateColumns = "auto auto 1fr";
                         this.createLock(comp, sceneobjects.TextContentComponent.text);
-                        this.createLabel(comp, sceneobjects.TextContentComponent.text.label);
+                        this.createLabel(comp, sceneobjects.TextContentComponent.text.label, scene.PhaserHelp(sceneobjects.TextContentComponent.text.tooltip));
                         this.createStringField(comp, sceneobjects.TextContentComponent.text, true, false, true);
                     }
                     canEdit(obj, n) {
@@ -10600,6 +10600,7 @@ var phasereditor2d;
                 TextComponent.fixedWidth = {
                     name: "fixedWidth",
                     label: "Width",
+                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedWidth",
                     defValue: 0,
                     getValue: obj => obj.style.fixedWidth,
                     setValue: (obj, value) => obj.setFixedSize(value, obj.style.fixedHeight)
@@ -10607,18 +10608,21 @@ var phasereditor2d;
                 TextComponent.fixedHeight = {
                     name: "fixedHeight",
                     label: "Height",
+                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedHeight",
                     defValue: 0,
                     getValue: obj => obj.style.fixedHeight,
                     setValue: (obj, value) => obj.setFixedSize(obj.style.fixedWidth, value)
                 };
                 TextComponent.fixedSize = {
                     label: "Fixed Size",
+                    tooltip: "phaser:Phaser.GameObjects.TextStyle.setFixedSize",
                     x: TextComponent.fixedWidth,
                     y: TextComponent.fixedHeight
                 };
                 TextComponent.paddingLeft = {
                     name: "paddingLeft",
                     label: "Padding Left",
+                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.left",
                     defValue: 0,
                     getValue: obj => obj.padding["left"],
                     setValue: (obj, value) => { obj.padding["left"] = value; obj.updateText(); }
@@ -10626,6 +10630,7 @@ var phasereditor2d;
                 TextComponent.paddingTop = {
                     name: "paddingTop",
                     label: "Padding Top",
+                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.top",
                     defValue: 0,
                     getValue: obj => obj.padding["top"],
                     setValue: (obj, value) => { obj.padding["top"] = value; obj.updateText(); }
@@ -10633,6 +10638,7 @@ var phasereditor2d;
                 TextComponent.paddingRight = {
                     name: "paddingRight",
                     label: "Padding Right",
+                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.right",
                     defValue: 0,
                     getValue: obj => obj.padding["right"],
                     setValue: (obj, value) => { obj.padding["right"] = value; obj.updateText(); }
@@ -10640,6 +10646,7 @@ var phasereditor2d;
                 TextComponent.paddingBottom = {
                     name: "paddingBottom",
                     label: "Padding Bottom",
+                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.bottom",
                     defValue: 0,
                     getValue: obj => obj.padding["bottom"],
                     setValue: (obj, value) => { obj.padding["bottom"] = value; obj.updateText(); }
@@ -10647,6 +10654,7 @@ var phasereditor2d;
                 TextComponent.lineSpacing = {
                     name: "lineSpacing",
                     label: "Line Spacing",
+                    tooltip: "phaser:Phaser.GameObjects.Text.lineSpacing",
                     defValue: 0,
                     getValue: obj => obj.lineSpacing,
                     setValue: (obj, value) => obj.setLineSpacing(value)
@@ -10654,6 +10662,7 @@ var phasereditor2d;
                 TextComponent.align = {
                     name: "align",
                     label: "Align",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setAlign",
                     defValue: "left",
                     getValue: obj => obj.style.align,
                     setValue: (obj, value) => obj.setAlign(value),
@@ -10663,6 +10672,7 @@ var phasereditor2d;
                 TextComponent.fontFamily = {
                     name: "fontFamily",
                     label: "Font Family",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setFontFamily",
                     defValue: "Courier",
                     getValue: obj => obj.style.fontFamily,
                     setValue: (obj, value) => obj.setFontFamily(value)
@@ -10670,6 +10680,7 @@ var phasereditor2d;
                 TextComponent.fontSize = {
                     name: "fontSize",
                     label: "Font Size",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setFontSize",
                     defValue: "16px",
                     getValue: obj => obj.style.fontSize,
                     setValue: (obj, value) => obj.setFontSize(value)
@@ -10677,6 +10688,7 @@ var phasereditor2d;
                 TextComponent.fontStyle = {
                     name: "fontStyle",
                     label: "Font Style",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setFontStyle",
                     defValue: "",
                     getValue: obj => obj.style.fontStyle,
                     setValue: (obj, value) => obj.setFontStyle(value),
@@ -10686,6 +10698,7 @@ var phasereditor2d;
                 TextComponent.color = {
                     name: "color",
                     label: "Color",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setColor",
                     defValue: "#fff",
                     getValue: obj => obj.style.color,
                     setValue: (obj, value) => obj.setColor(value)
@@ -10693,6 +10706,7 @@ var phasereditor2d;
                 TextComponent.stroke = {
                     name: "stroke",
                     label: "Stroke",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setStroke(color)",
                     defValue: "#fff",
                     getValue: obj => obj.style.stroke,
                     setValue: (obj, value) => obj.setStroke(value, obj.style.strokeThickness)
@@ -10700,6 +10714,7 @@ var phasereditor2d;
                 TextComponent.strokeThickness = {
                     name: "strokeThickness",
                     label: "Stroke Thickness",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setStroke(thickness)",
                     defValue: 0,
                     getValue: obj => obj.style.strokeThickness,
                     setValue: (obj, value) => obj.setStroke(obj.style.stroke, value)
@@ -10707,6 +10722,7 @@ var phasereditor2d;
                 TextComponent.backgroundColor = {
                     name: "backgroundColor",
                     label: "Background Color",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setBackgroundColor",
                     defValue: null,
                     getValue: obj => obj.style.backgroundColor,
                     setValue: (obj, value) => obj.setBackgroundColor(value)
@@ -10714,6 +10730,7 @@ var phasereditor2d;
                 TextComponent.shadowOffsetX = {
                     name: "shadow.offsetX",
                     label: "X",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(x)",
                     defValue: 0,
                     getValue: obj => obj.style.shadowOffsetX,
                     setValue: (obj, value) => obj.setShadowOffset(value, obj.style.shadowOffsetY)
@@ -10721,18 +10738,21 @@ var phasereditor2d;
                 TextComponent.shadowOffsetY = {
                     name: "shadow.offsetY",
                     label: "Y",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(y)",
                     defValue: 0,
                     getValue: obj => obj.style.shadowOffsetY,
                     setValue: (obj, value) => obj.setShadowOffset(obj.style.shadowOffsetX, value)
                 };
                 TextComponent.shadowOffset = {
                     label: "Shadow Offset",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset",
                     x: TextComponent.shadowOffsetX,
                     y: TextComponent.shadowOffsetY
                 };
                 TextComponent.shadowStroke = {
                     name: "shadow.stroke",
                     label: "Stroke",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowStroke",
                     defValue: false,
                     getValue: obj => obj.style.shadowStroke,
                     setValue: (obj, value) => obj.setShadowStroke(value)
@@ -10740,18 +10760,21 @@ var phasereditor2d;
                 TextComponent.shadowFill = {
                     name: "shadow.fill",
                     label: "Fill",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowFill",
                     defValue: false,
                     getValue: obj => obj.style.shadowFill,
                     setValue: (obj, value) => obj.setShadowFill(value)
                 };
                 TextComponent.shadow = {
                     label: "Shadow",
+                    tooltip: "Shadow stroke and fill.",
                     x: TextComponent.shadowStroke,
                     y: TextComponent.shadowFill
                 };
                 TextComponent.shadowColor = {
                     name: "shadow.color",
                     label: "Shadow Color",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowColor",
                     defValue: "#000",
                     getValue: obj => obj.style.shadowColor,
                     setValue: (obj, value) => obj.setShadowColor(value)
@@ -10759,6 +10782,7 @@ var phasereditor2d;
                 TextComponent.shadowBlur = {
                     name: "shadow.blur",
                     label: "Shadow Blur",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowBlur",
                     defValue: 0,
                     getValue: obj => obj.style.shadowBlur,
                     setValue: (obj, value) => obj.setShadowBlur(value)
@@ -10766,6 +10790,7 @@ var phasereditor2d;
                 TextComponent.baselineX = {
                     name: "baselineX",
                     label: "X",
+                    tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineX",
                     defValue: 1.2,
                     getValue: obj => obj.style.baselineX,
                     setValue: (obj, value) => obj.style.baselineX = value
@@ -10773,18 +10798,21 @@ var phasereditor2d;
                 TextComponent.baselineY = {
                     name: "baselineY",
                     label: "Y",
+                    tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineY",
                     defValue: 1.4,
                     getValue: obj => obj.style.baselineY,
                     setValue: (obj, value) => obj.style.baselineY = value
                 };
                 TextComponent.baseline = {
                     label: "Baseline",
+                    tooltip: "Baseline",
                     x: TextComponent.baselineX,
                     y: TextComponent.baselineY
                 };
                 TextComponent.maxLines = {
                     name: "maxLines",
                     label: "Max Lines",
+                    tooltip: "phaser:Phaser.GameObjects.Text.setMaxLines",
                     defValue: 0,
                     getValue: obj => obj.style.maxLines,
                     setValue: (obj, value) => obj.setMaxLines(value)
@@ -10928,7 +10956,7 @@ var phasereditor2d;
                             this.createLabel(comp2, "Right").style.justifySelf = "center";
                             this.createLabel(comp2, "Bottom").style.justifySelf = "center";
                             this.createLock(comp, sceneobjects.TextComponent.paddingLeft, sceneobjects.TextComponent.paddingTop, sceneobjects.TextComponent.paddingRight, sceneobjects.TextComponent.paddingBottom);
-                            this.createLabel(comp, "Padding");
+                            this.createLabel(comp, "Padding", scene.PhaserHelp("phaser:Phaser.GameObjects.Text.setPadding"));
                             const comp3 = this.createGridElement(comp);
                             comp3.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
                             comp3.style.gridColumn = "3 / span 4";

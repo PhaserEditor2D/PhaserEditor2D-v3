@@ -72,7 +72,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     TextComponent.paddingBottom,
                 );
 
-                this.createLabel(comp, "Padding");
+                this.createLabel(comp, "Padding", PhaserHelp("phaser:Phaser.GameObjects.Text.setPadding"));
 
                 const comp3 = this.createGridElement(comp);
                 comp3.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";

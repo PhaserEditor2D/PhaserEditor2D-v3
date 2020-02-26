@@ -7,6 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static fixedWidth: IProperty<Text> = {
             name: "fixedWidth",
             label: "Width",
+            tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedWidth",
             defValue: 0,
             getValue: obj => obj.style.fixedWidth,
             setValue: (obj, value) => obj.setFixedSize(value, obj.style.fixedHeight)
@@ -15,6 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static fixedHeight: IProperty<Text> = {
             name: "fixedHeight",
             label: "Height",
+            tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedHeight",
             defValue: 0,
             getValue: obj => obj.style.fixedHeight,
             setValue: (obj, value) => obj.setFixedSize(obj.style.fixedWidth, value)
@@ -22,6 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static fixedSize: IPropertyXY = {
             label: "Fixed Size",
+            tooltip: "phaser:Phaser.GameObjects.TextStyle.setFixedSize",
             x: TextComponent.fixedWidth,
             y: TextComponent.fixedHeight
         };
@@ -29,6 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static paddingLeft: IProperty<Text> = {
             name: "paddingLeft",
             label: "Padding Left",
+            tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.left",
             defValue: 0,
             getValue: obj => obj.padding["left"],
             setValue: (obj, value) => { obj.padding["left"] = value; obj.updateText(); }
@@ -37,6 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static paddingTop: IProperty<Text> = {
             name: "paddingTop",
             label: "Padding Top",
+            tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.top",
             defValue: 0,
             getValue: obj => obj.padding["top"],
             setValue: (obj, value) => { obj.padding["top"] = value; obj.updateText(); }
@@ -45,6 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static paddingRight: IProperty<Text> = {
             name: "paddingRight",
             label: "Padding Right",
+            tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.right",
             defValue: 0,
             getValue: obj => obj.padding["right"],
             setValue: (obj, value) => { obj.padding["right"] = value; obj.updateText(); }
@@ -53,6 +59,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static paddingBottom: IProperty<Text> = {
             name: "paddingBottom",
             label: "Padding Bottom",
+            tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.bottom",
             defValue: 0,
             getValue: obj => obj.padding["bottom"],
             setValue: (obj, value) => { obj.padding["bottom"] = value; obj.updateText(); }
@@ -61,6 +68,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static lineSpacing: IProperty<Text> = {
             name: "lineSpacing",
             label: "Line Spacing",
+            tooltip: "phaser:Phaser.GameObjects.Text.lineSpacing",
             defValue: 0,
             getValue: obj => obj.lineSpacing,
             setValue: (obj, value) => obj.setLineSpacing(value)
@@ -69,6 +77,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static align: IEnumProperty<Text, string> = {
             name: "align",
             label: "Align",
+            tooltip: "phaser:Phaser.GameObjects.Text.setAlign",
             defValue: "left",
             getValue: obj => obj.style.align,
             setValue: (obj, value) => obj.setAlign(value),
@@ -79,6 +88,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static fontFamily: IProperty<Text> = {
             name: "fontFamily",
             label: "Font Family",
+            tooltip: "phaser:Phaser.GameObjects.Text.setFontFamily",
             defValue: "Courier",
             getValue: obj => obj.style.fontFamily,
             setValue: (obj, value) => obj.setFontFamily(value)
@@ -87,6 +97,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static fontSize: IProperty<Text> = {
             name: "fontSize",
             label: "Font Size",
+            tooltip: "phaser:Phaser.GameObjects.Text.setFontSize",
             defValue: "16px",
             getValue: obj => obj.style.fontSize,
             setValue: (obj, value) => obj.setFontSize(value)
@@ -95,6 +106,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static fontStyle: IEnumProperty<Text, string> = {
             name: "fontStyle",
             label: "Font Style",
+            tooltip: "phaser:Phaser.GameObjects.Text.setFontStyle",
             defValue: "",
             getValue: obj => obj.style.fontStyle,
             setValue: (obj, value) => obj.setFontStyle(value),
@@ -105,6 +117,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static color: IProperty<Text> = {
             name: "color",
             label: "Color",
+            tooltip: "phaser:Phaser.GameObjects.Text.setColor",
             defValue: "#fff",
             getValue: obj => obj.style.color,
             setValue: (obj, value) => obj.setColor(value)
@@ -113,6 +126,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static stroke: IProperty<Text> = {
             name: "stroke",
             label: "Stroke",
+            tooltip: "phaser:Phaser.GameObjects.Text.setStroke(color)",
             defValue: "#fff",
             getValue: obj => obj.style.stroke,
             setValue: (obj, value) => obj.setStroke(value, obj.style.strokeThickness)
@@ -121,6 +135,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static strokeThickness: IProperty<Text> = {
             name: "strokeThickness",
             label: "Stroke Thickness",
+            tooltip: "phaser:Phaser.GameObjects.Text.setStroke(thickness)",
             defValue: 0,
             getValue: obj => obj.style.strokeThickness,
             setValue: (obj, value) => obj.setStroke(obj.style.stroke, value)
@@ -129,6 +144,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static backgroundColor: IProperty<Text> = {
             name: "backgroundColor",
             label: "Background Color",
+            tooltip: "phaser:Phaser.GameObjects.Text.setBackgroundColor",
             defValue: null,
             getValue: obj => obj.style.backgroundColor,
             setValue: (obj, value) => obj.setBackgroundColor(value)
@@ -137,6 +153,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static shadowOffsetX: IProperty<Text> = {
             name: "shadow.offsetX",
             label: "X",
+            tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(x)",
             defValue: 0,
             getValue: obj => obj.style.shadowOffsetX,
             setValue: (obj, value) => obj.setShadowOffset(value, obj.style.shadowOffsetY)
@@ -145,6 +162,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static shadowOffsetY: IProperty<Text> = {
             name: "shadow.offsetY",
             label: "Y",
+            tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(y)",
             defValue: 0,
             getValue: obj => obj.style.shadowOffsetY,
             setValue: (obj, value) => obj.setShadowOffset(obj.style.shadowOffsetX, value)
@@ -152,6 +170,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static shadowOffset: IPropertyXY = {
             label: "Shadow Offset",
+            tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset",
             x: TextComponent.shadowOffsetX,
             y: TextComponent.shadowOffsetY
         };
@@ -159,6 +178,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static shadowStroke: IProperty<Text> = {
             name: "shadow.stroke",
             label: "Stroke",
+            tooltip: "phaser:Phaser.GameObjects.Text.setShadowStroke",
             defValue: false,
             getValue: obj => obj.style.shadowStroke,
             setValue: (obj, value) => obj.setShadowStroke(value)
@@ -167,6 +187,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static shadowFill: IProperty<Text> = {
             name: "shadow.fill",
             label: "Fill",
+            tooltip: "phaser:Phaser.GameObjects.Text.setShadowFill",
             defValue: false,
             getValue: obj => obj.style.shadowFill,
             setValue: (obj, value) => obj.setShadowFill(value)
@@ -174,6 +195,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static shadow: IPropertyXY = {
             label: "Shadow",
+            tooltip: "Shadow stroke and fill.",
             x: TextComponent.shadowStroke,
             y: TextComponent.shadowFill
         };
@@ -181,6 +203,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static shadowColor: IProperty<Text> = {
             name: "shadow.color",
             label: "Shadow Color",
+            tooltip: "phaser:Phaser.GameObjects.Text.setShadowColor",
             defValue: "#000",
             getValue: obj => obj.style.shadowColor,
             setValue: (obj, value) => obj.setShadowColor(value)
@@ -189,6 +212,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static shadowBlur: IProperty<Text> = {
             name: "shadow.blur",
             label: "Shadow Blur",
+            tooltip: "phaser:Phaser.GameObjects.Text.setShadowBlur",
             defValue: 0,
             getValue: obj => obj.style.shadowBlur,
             setValue: (obj, value) => obj.setShadowBlur(value)
@@ -197,6 +221,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static baselineX: IProperty<Text> = {
             name: "baselineX",
             label: "X",
+            tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineX",
             defValue: 1.2,
             getValue: obj => obj.style.baselineX,
             setValue: (obj, value) => obj.style.baselineX = value
@@ -205,6 +230,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static baselineY: IProperty<Text> = {
             name: "baselineY",
             label: "Y",
+            tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineY",
             defValue: 1.4,
             getValue: obj => obj.style.baselineY,
             setValue: (obj, value) => obj.style.baselineY = value
@@ -212,6 +238,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static baseline: IPropertyXY = {
             label: "Baseline",
+            tooltip: "Baseline",
             x: TextComponent.baselineX,
             y: TextComponent.baselineY
         };
@@ -219,6 +246,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static maxLines: IProperty<Text> = {
             name: "maxLines",
             label: "Max Lines",
+            tooltip: "phaser:Phaser.GameObjects.Text.setMaxLines",
             defValue: 0,
             getValue: obj => obj.style.maxLines,
             setValue: (obj, value) => obj.setMaxLines(value)

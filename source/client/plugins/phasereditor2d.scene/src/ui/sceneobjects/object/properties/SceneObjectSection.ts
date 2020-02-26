@@ -137,7 +137,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createLock(parent, prop);
             }
 
-            const label = this.createLabel(parent, prop.label);
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
             const text = this.createFloatField(parent, prop);
@@ -152,7 +152,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createLock(parent, prop);
             }
 
-            const label = this.createLabel(parent, prop.label);
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
             const text = this.createStringField(parent, prop);
@@ -167,7 +167,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createLock(parent, prop);
             }
 
-            const label = this.createLabel(parent, prop.label);
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
             const btn = this.createEnumField(parent, prop);
