@@ -5,7 +5,7 @@
     ],
     "jsRules": {},
     "linterOptions": {
-        "exclude": ["plugins/phasereditor2d.phaser/phaser/*.ts"]
+        "exclude": ["plugins/phasereditor2d.phaser/src/phaser/*.ts"]
     },
     "rules": {
         "no-namespace": false,
