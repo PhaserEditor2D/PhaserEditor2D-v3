@@ -219,6 +219,12 @@ var phasereditor2d;
                 async preload() {
                     if (!this._data) {
                         this._data = await this._plugin.getJSON(this._filePath);
+                        const converter = new showdown.Converter();
+                        // tslint:disable-next-line:forin
+                        for (const k in this._data) {
+                            const help = this._data[k];
+                            this._data[k] = converter.makeHtml(help);
+                        }
                     }
                 }
                 getDoc(helpKey) {
