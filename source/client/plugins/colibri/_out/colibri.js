@@ -7452,7 +7452,7 @@ var colibri;
                             viewer.escape();
                         });
                         // escape menu
-                        manager.addHandlerHelper(actions.CMD_ESCAPE, args => args.activeMenu !== null, args => args.activeMenu.closeAll());
+                        manager.addHandlerHelper(actions.CMD_ESCAPE, args => args.activeMenu !== null && args.activeMenu != undefined, args => args.activeMenu.closeAll());
                     }
                     static initUndo(manager) {
                         // undo

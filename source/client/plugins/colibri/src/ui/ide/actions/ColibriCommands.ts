@@ -270,7 +270,7 @@ namespace colibri.ui.ide.actions {
             // escape menu
 
             manager.addHandlerHelper(CMD_ESCAPE,
-                args => args.activeMenu !== null,
+                args => args.activeMenu !== null && args.activeMenu !== undefined,
                 args => args.activeMenu.closeAll()
             );
         }
