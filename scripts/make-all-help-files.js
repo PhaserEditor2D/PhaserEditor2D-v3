@@ -93,7 +93,21 @@ utils.makeHelpFile([
     "Phaser.GameObjects.Components.Alpha.alphaBottomRight",
 
     "Phaser.GameObjects.Components.Flip.flipX",
-    "Phaser.GameObjects.Components.Flip.flipY"    
+    "Phaser.GameObjects.Components.Flip.flipY",
+
+    "Phaser.GameObjects.Components.Visible.visible",        
+
+    "Phaser.GameObjects.Components.ComputedSize.width",
+    "Phaser.GameObjects.Components.ComputedSize.height",
+    "Phaser.GameObjects.Components.ComputedSize.setSize",
+    "Phaser.GameObjects.TileSprite.tilePositionX",
+    "Phaser.GameObjects.TileSprite.tilePositionY",
+    "Phaser.GameObjects.TileSprite.setTilePosition",
+    "Phaser.GameObjects.TileSprite.tileScaleX",
+    "Phaser.GameObjects.TileSprite.tileScaleY",
+    "Phaser.GameObjects.TileSprite.setTileScale",
+
+    "Phaser.GameObjects.GameObject.parentContainer"
 
 ], "../source/client/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

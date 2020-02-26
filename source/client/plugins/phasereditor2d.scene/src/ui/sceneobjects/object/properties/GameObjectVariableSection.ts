@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 // Name
 
-                this.createLabel(comp, "Name");
+                this.createLabel(comp, "Name", "The name of the variable associated to this object. This name is used by the compiler.");
 
                 this.createStringField(comp, VariableComponent.label, false, true);
             }
@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 // Type
 
-                this.createLabel(comp, "Type");
+                this.createLabel(comp, "Type", "The type of the object.");
 
                 const text = this.createText(comp, true);
 
@@ -53,7 +53,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 // Scope
 
-                this.createLabel(comp, "Scope", "The lexical scope of the object.");
+                this.createLabel(comp, "Scope", "The lexical scope of this object's variable, in code.");
                 this.createEnumField(comp, VariableComponent.scope, false);
             }
         }

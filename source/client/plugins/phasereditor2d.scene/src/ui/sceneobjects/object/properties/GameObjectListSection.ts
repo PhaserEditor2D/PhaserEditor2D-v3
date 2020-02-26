@@ -62,6 +62,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 menu.createWithEvent(e);
             });
 
+            controls.Tooltip.tooltip(btn, "Change the lists containing this object.");
+
             this.addUpdater(() => {
 
                 const scene = this.getEditor().getScene();

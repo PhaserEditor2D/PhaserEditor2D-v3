@@ -9160,6 +9160,7 @@ var phasereditor2d;
                 VisibleComponent.visible = {
                     name: "visible",
                     label: "Visible",
+                    tooltip: "phaser:Phaser.GameObjects.Components.Visible.visible",
                     defValue: true,
                     getValue: obj => obj.visible,
                     setValue: (obj, value) => obj.visible = value
@@ -9275,6 +9276,7 @@ var phasereditor2d;
                             }
                             menu.createWithEvent(e);
                         });
+                        controls.Tooltip.tooltip(btn, "Change the lists containing this object.");
                         this.addUpdater(() => {
                             const scene = this.getEditor().getScene();
                             if (!scene) {
@@ -9317,12 +9319,12 @@ var phasereditor2d;
                         const comp = this.createGridElement(parent, 2);
                         {
                             // Name
-                            this.createLabel(comp, "Name");
+                            this.createLabel(comp, "Name", "The name of the variable associated to this object. This name is used by the compiler.");
                             this.createStringField(comp, sceneobjects.VariableComponent.label, false, true);
                         }
                         {
                             // Type
-                            this.createLabel(comp, "Type");
+                            this.createLabel(comp, "Type", "The type of the object.");
                             const text = this.createText(comp, true);
                             this.addUpdater(() => {
                                 text.value = this.flatValues_StringJoinDifferent(this.getSelection().map(obj => {
@@ -9337,7 +9339,7 @@ var phasereditor2d;
                         }
                         {
                             // Scope
-                            this.createLabel(comp, "Scope", "The lexical scope of the object.");
+                            this.createLabel(comp, "Scope", "The lexical scope of this object's variable, in code.");
                             this.createEnumField(comp, sceneobjects.VariableComponent.scope, false);
                         }
                     }
@@ -9486,17 +9488,19 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var controls = colibri.ui.controls;
                 class ParentSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
                         super(page, "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent Container", false, true);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent, 2);
-                        this.createLabel(comp, "Parent");
+                        this.createLabel(comp, "Parent", "The parent Container of the object or the Display List");
                         const btn = this.createButton(comp, "(Select)", e => {
                             const dlg = new sceneobjects.ParentDialog(this.getEditor());
                             dlg.create();
                         });
+                        controls.Tooltip.tooltip(btn, "Moves the objects for a new container or the Display List.");
                         this.addUpdater(() => {
                             const sel = this.getSelection();
                             const parents = sel
@@ -11151,10 +11155,12 @@ var phasereditor2d;
                             const changeBtn = this.createButton(comp, "Select", e => {
                                 sceneobjects.ChangeTextureOperation.runDialog(this.getEditor());
                             });
+                            controls.Tooltip.tooltip(changeBtn, "Click to select a new texture.");
                             const deleteBtn = this.createButton(comp, "Delete", e => {
                                 this.getEditor().getUndoManager()
                                     .add(new sceneobjects.ChangeTextureOperation(this.getEditor(), this.getSelection(), {}));
                             });
+                            controls.Tooltip.tooltip(deleteBtn, "Removes the texture of the object.");
                             this.addUpdater(() => {
                                 if (this.getSelection().length === 1) {
                                     const obj = this.getSelection()[0];
@@ -11397,24 +11403,27 @@ var phasereditor2d;
                         this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TileSpriteComponent.tilePositionX, TileSpriteComponent.tilePositionY, TileSpriteComponent.tileScaleX, TileSpriteComponent.tileScaleY);
                     }
                 }
-                TileSpriteComponent.width = sceneobjects.SimpleProperty("width", undefined, "Width");
-                TileSpriteComponent.height = sceneobjects.SimpleProperty("height", undefined, "Height");
-                TileSpriteComponent.tilePositionX = sceneobjects.SimpleProperty("tilePositionX", 0, "X");
-                TileSpriteComponent.tilePositionY = sceneobjects.SimpleProperty("tilePositionY", 0, "Y");
-                TileSpriteComponent.tileScaleX = sceneobjects.SimpleProperty("tileScaleX", 1, "X");
-                TileSpriteComponent.tileScaleY = sceneobjects.SimpleProperty("tileScaleY", 1, "Y");
+                TileSpriteComponent.width = sceneobjects.SimpleProperty("width", undefined, "Width", "The TileSprite width");
+                TileSpriteComponent.height = sceneobjects.SimpleProperty("height", undefined, "Height", "The TileSprite height");
+                TileSpriteComponent.tilePositionX = sceneobjects.SimpleProperty("tilePositionX", 0, "X", "phaser:Phaser.GameObjects.TileSprite.tilePositionX");
+                TileSpriteComponent.tilePositionY = sceneobjects.SimpleProperty("tilePositionY", 0, "Y", "phaser:Phaser.GameObjects.TileSprite.tilePositionY");
+                TileSpriteComponent.tileScaleX = sceneobjects.SimpleProperty("tileScaleX", 1, "X", "Phaser.GameObjects.TileSprite.tileScaleX");
+                TileSpriteComponent.tileScaleY = sceneobjects.SimpleProperty("tileScaleY", 1, "Y", "Phaser.GameObjects.TileSprite.tileScaleY");
                 TileSpriteComponent.size = {
                     label: "Size",
+                    tooltip: "The TileSprite size",
                     x: TileSpriteComponent.width,
                     y: TileSpriteComponent.height
                 };
                 TileSpriteComponent.tilePosition = {
                     label: "Tile Position",
+                    tooltip: "phaser:Phaser.GameObjects.TileSprite.setTilePosition",
                     x: TileSpriteComponent.tilePositionX,
                     y: TileSpriteComponent.tilePositionY
                 };
                 TileSpriteComponent.tileScale = {
                     label: "Tile Scale",
+                    tooltip: "phaser:Phaser.GameObjects.TileSprite.setTileScale",
                     x: TileSpriteComponent.tileScaleX,
                     y: TileSpriteComponent.tileScaleY
                 };

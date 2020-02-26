@@ -10,6 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static visible: IProperty<IVisibleLikeObject> = {
             name: "visible",
             label: "Visible",
+            tooltip: "phaser:Phaser.GameObjects.Components.Visible.visible",
             defValue: true,
             getValue: obj => obj.visible,
             setValue: (obj, value) => obj.visible = value

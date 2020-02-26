@@ -53,11 +53,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     ChangeTextureOperation.runDialog(this.getEditor());
                 });
 
+                controls.Tooltip.tooltip(changeBtn, "Click to select a new texture.");
+
                 const deleteBtn = this.createButton(comp, "Delete", e => {
 
                     this.getEditor().getUndoManager()
                         .add(new ChangeTextureOperation(this.getEditor(), this.getSelection(), {}));
                 });
+
+                controls.Tooltip.tooltip(deleteBtn, "Removes the texture of the object.");
 
                 this.addUpdater(() => {
 

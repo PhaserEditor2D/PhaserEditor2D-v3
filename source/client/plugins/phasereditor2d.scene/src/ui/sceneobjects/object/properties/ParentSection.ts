@@ -18,13 +18,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 2);
 
-            this.createLabel(comp, "Parent");
+            this.createLabel(comp, "Parent", "The parent Container of the object or the Display List");
 
             const btn = this.createButton(comp, "(Select)", e => {
 
                 const dlg = new ParentDialog(this.getEditor());
                 dlg.create();
             });
+
+            controls.Tooltip.tooltip(btn, "Moves the objects for a new container or the Display List.");
 
             this.addUpdater(() => {
 
