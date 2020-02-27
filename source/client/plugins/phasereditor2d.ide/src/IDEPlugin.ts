@@ -260,11 +260,11 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.0.0";
+    export const VER = "3.0.0-alpha";
 
     async function main() {
 
-        console.log(`%c %c Phaser Editor 2D Workbench %c v${VER} %c %c https://phasereditor2d.com `,
+        console.log(`%c %c Phaser Editor 2D %c v${VER} %c %c https://phasereditor2d.com `,
             "background-color:red",
             "background-color:#3f3f3f;color:whitesmoke",
             "background-color:orange;color:black",

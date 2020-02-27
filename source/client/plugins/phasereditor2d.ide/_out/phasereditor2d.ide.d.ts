@@ -19,7 +19,7 @@ declare namespace phasereditor2d.ide {
         setTheme(theme: controls.ITheme): void;
         restoreTheme(): void;
     }
-    const VER = "3.0.0";
+    const VER = "3.0.0-alpha";
 }
 declare namespace phasereditor2d.ide.core {
     import io = colibri.core.io;
