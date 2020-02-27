@@ -1,0 +1,417 @@
+{
+  "anims": [
+    {
+      "key": "Objects - bomb",
+      "frameRate": 6,
+      "repeat": -1,
+      "frames": [
+        {
+          "key": "Objects",
+          "frame": "bomb-1"
+        },
+        {
+          "key": "Objects",
+          "frame": "bomb-2"
+        },
+        {
+          "key": "Objects",
+          "frame": "bomb-3"
+        },
+        {
+          "key": "Objects",
+          "frame": "bomb-4"
+        },
+        {
+          "key": "Objects",
+          "frame": "bomb-5"
+        },
+        {
+          "key": "Objects",
+          "frame": "bomb-6"
+        },
+        {
+          "key": "Objects",
+          "frame": "bomb-7"
+        },
+        {
+          "key": "Objects",
+          "frame": "bomb-8"
+        }
+      ]
+    },
+    {
+      "key": "Objects - burning-watermelon",
+      "frameRate": 20,
+      "repeat": -1,
+      "hideOnComplete": true,
+      "frames": [
+        {
+          "key": "Objects",
+          "frame": "burning-watermelon-1"
+        },
+        {
+          "key": "Objects",
+          "frame": "burning-watermelon-2"
+        },
+        {
+          "key": "Objects",
+          "frame": "burning-watermelon-3"
+        },
+        {
+          "key": "Objects",
+          "frame": "burning-watermelon-4"
+        },
+        {
+          "key": "Objects",
+          "frame": "burning-watermelon-5"
+        },
+        {
+          "key": "Objects",
+          "frame": "burning-watermelon-6"
+        },
+        {
+          "key": "Objects",
+          "frame": "burning-watermelon-7"
+        },
+        {
+          "key": "Objects",
+          "frame": "burning-watermelon-8"
+        }
+      ]
+    },
+    {
+      "key": "Objects - watermelon",
+      "frameRate": 10,
+      "repeat": -1,
+      "frames": [
+        {
+          "key": "Objects",
+          "frame": "watermelon-1"
+        },
+        {
+          "key": "Objects",
+          "frame": "watermelon-2"
+        },
+        {
+          "key": "Objects",
+          "frame": "watermelon-3"
+        },
+        {
+          "key": "Objects",
+          "frame": "watermelon-4"
+        },
+        {
+          "key": "Objects",
+          "frame": "watermelon-5"
+        },
+        {
+          "key": "Objects",
+          "frame": "watermelon-6"
+        },
+        {
+          "key": "Objects",
+          "frame": "watermelon-7"
+        },
+        {
+          "key": "Objects",
+          "frame": "watermelon-8"
+        }
+      ]
+    },
+    {
+      "key": "dragon - dragon/Flaming",
+      "frameRate": 48,
+      "frames": [
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_000"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_001"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_002"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_003"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_004"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_005"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_006"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_007"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_008"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_009"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_010"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_011"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_012"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_013"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_014"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_015"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_016"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Flaming_017"
+        }
+      ]
+    },
+    {
+      "key": "dragon - dragon/Idle",
+      "frameRate": 48,
+      "repeat": -1,
+      "frames": [
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_000"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_001"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_002"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_003"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_004"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_005"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_006"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_007"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_008"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_009"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_010"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_011"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_012"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_013"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_014"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_015"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_016"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Idle_017"
+        }
+      ]
+    },
+    {
+      "key": "dragon - dragon/Moving Forward",
+      "frameRate": 24,
+      "repeat": -1,
+      "frames": [
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_000"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_001"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_002"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_003"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_004"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_005"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_006"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_007"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_008"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_009"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_010"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_011"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_012"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_013"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_014"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_015"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_016"
+        },
+        {
+          "key": "dragon",
+          "frame": "dragon/Moving Forward_017"
+        }
+      ]
+    },
+    {
+      "key": "explosion",
+      "frameRate": 24,
+      "hideOnComplete": true,
+      "frames": [
+        {
+          "key": "explosion",
+          "frame": 0
+        },
+        {
+          "key": "explosion",
+          "frame": 1
+        },
+        {
+          "key": "explosion",
+          "frame": 2
+        },
+        {
+          "key": "explosion",
+          "frame": 3
+        },
+        {
+          "key": "explosion",
+          "frame": 4
+        },
+        {
+          "key": "explosion",
+          "frame": 5
+        },
+        {
+          "key": "explosion",
+          "frame": 6
+        },
+        {
+          "key": "explosion",
+          "frame": 7
+        },
+        {
+          "key": "explosion",
+          "frame": 8
+        },
+        {
+          "key": "explosion",
+          "frame": 9
+        },
+        {
+          "key": "explosion",
+          "frame": 10
+        },
+        {
+          "key": "explosion",
+          "frame": 11
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "app": "Phaser Editor v2",
+    "contentType": "Phaser v3 Animations"
+  }
+}

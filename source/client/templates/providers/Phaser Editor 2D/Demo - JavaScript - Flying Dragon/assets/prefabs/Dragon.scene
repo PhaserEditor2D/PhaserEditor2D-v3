@@ -1,0 +1,27 @@
+{
+    "id": "b0fa54db-cf18-4fb9-820c-4c6ce82d9f71",
+    "sceneType": "PREFAB",
+    "settings": {
+        "sceneType": "PREFAB",
+        "preloadMethodName": "",
+        "preloadPackFiles": []
+    },
+    "displayList": [
+        {
+            "type": "Sprite",
+            "id": "c6f81796-aec2-4cc6-aff8-1122ef126432",
+            "label": "dragon_Flaming_000",
+            "texture": {
+                "key": "dragon",
+                "frame": "dragon/Flaming_000"
+            },
+            "x": 337.26063100137173,
+            "y": 188.94787379972564
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

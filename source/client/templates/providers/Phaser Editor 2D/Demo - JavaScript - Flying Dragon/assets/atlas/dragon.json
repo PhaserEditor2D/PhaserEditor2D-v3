@@ -1,0 +1,1145 @@
+{
+  "textures": [{
+    "image": "dragon.png",
+    "frames": [
+      {
+        "filename": "dragon/Flaming_000",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 232,
+          "w": 153,
+          "h": 108
+        },
+        "spriteSourceSize": {
+          "x": 27,
+          "y": 21,
+          "w": 153,
+          "h": 108
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_001",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 157,
+          "y": 229,
+          "w": 157,
+          "h": 108
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 21,
+          "w": 157,
+          "h": 108
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_002",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 316,
+          "y": 227,
+          "w": 160,
+          "h": 108
+        },
+        "spriteSourceSize": {
+          "x": 22,
+          "y": 21,
+          "w": 160,
+          "h": 108
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_003",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 478,
+          "y": 226,
+          "w": 162,
+          "h": 108
+        },
+        "spriteSourceSize": {
+          "x": 22,
+          "y": 21,
+          "w": 162,
+          "h": 108
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_004",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 337,
+          "y": 115,
+          "w": 165,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 22,
+          "y": 20,
+          "w": 165,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_005",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 504,
+          "y": 115,
+          "w": 166,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 22,
+          "y": 20,
+          "w": 166,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_006",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 642,
+          "y": 226,
+          "w": 166,
+          "h": 108
+        },
+        "spriteSourceSize": {
+          "x": 23,
+          "y": 20,
+          "w": 166,
+          "h": 108
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_007",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 810,
+          "y": 225,
+          "w": 167,
+          "h": 108
+        },
+        "spriteSourceSize": {
+          "x": 23,
+          "y": 20,
+          "w": 167,
+          "h": 108
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_008",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 672,
+          "y": 114,
+          "w": 167,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 19,
+          "w": 167,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_009",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 829,
+          "y": 2,
+          "w": 168,
+          "h": 110
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 18,
+          "w": 168,
+          "h": 110
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_010",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 166,
+          "y": 6,
+          "w": 169,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 23,
+          "y": 19,
+          "w": 169,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_011",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 337,
+          "y": 4,
+          "w": 169,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 23,
+          "y": 19,
+          "w": 169,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_012",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 841,
+          "y": 114,
+          "w": 167,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 19,
+          "w": 167,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_013",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 119,
+          "w": 166,
+          "h": 108
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 20,
+          "w": 166,
+          "h": 108
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_014",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 170,
+          "y": 117,
+          "w": 165,
+          "h": 108
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 20,
+          "w": 165,
+          "h": 108
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_015",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 8,
+          "w": 162,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 25,
+          "y": 20,
+          "w": 162,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_016",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 508,
+          "y": 4,
+          "w": 160,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 25,
+          "y": 20,
+          "w": 160,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Flaming_017",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 670,
+          "y": 3,
+          "w": 157,
+          "h": 109
+        },
+        "spriteSourceSize": {
+          "x": 26,
+          "y": 20,
+          "w": 157,
+          "h": 109
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_000",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 488,
+          "y": 336,
+          "w": 156,
+          "h": 107
+        },
+        "spriteSourceSize": {
+          "x": 25,
+          "y": 21,
+          "w": 156,
+          "h": 107
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_001",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 172,
+          "y": 339,
+          "w": 155,
+          "h": 106
+        },
+        "spriteSourceSize": {
+          "x": 25,
+          "y": 22,
+          "w": 155,
+          "h": 106
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_002",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 174,
+          "y": 447,
+          "w": 154,
+          "h": 105
+        },
+        "spriteSourceSize": {
+          "x": 25,
+          "y": 23,
+          "w": 154,
+          "h": 105
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_003",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 506,
+          "y": 656,
+          "w": 154,
+          "h": 103
+        },
+        "spriteSourceSize": {
+          "x": 25,
+          "y": 24,
+          "w": 154,
+          "h": 103
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_004",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 343,
+          "y": 552,
+          "w": 154,
+          "h": 103
+        },
+        "spriteSourceSize": {
+          "x": 25,
+          "y": 24,
+          "w": 154,
+          "h": 103
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_005",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 762,
+          "w": 156,
+          "h": 102
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 25,
+          "w": 156,
+          "h": 102
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_006",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 809,
+          "y": 862,
+          "w": 156,
+          "h": 100
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 26,
+          "w": 156,
+          "h": 100
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_007",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 486,
+          "y": 863,
+          "w": 158,
+          "h": 99
+        },
+        "spriteSourceSize": {
+          "x": 23,
+          "y": 27,
+          "w": 158,
+          "h": 99
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_008",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 164,
+          "y": 864,
+          "w": 158,
+          "h": 98
+        },
+        "spriteSourceSize": {
+          "x": 23,
+          "y": 28,
+          "w": 158,
+          "h": 98
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_009",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 866,
+          "w": 160,
+          "h": 96
+        },
+        "spriteSourceSize": {
+          "x": 22,
+          "y": 29,
+          "w": 160,
+          "h": 96
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_010",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 324,
+          "y": 864,
+          "w": 160,
+          "h": 98
+        },
+        "spriteSourceSize": {
+          "x": 22,
+          "y": 28,
+          "w": 160,
+          "h": 98
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_011",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 646,
+          "y": 863,
+          "w": 161,
+          "h": 99
+        },
+        "spriteSourceSize": {
+          "x": 21,
+          "y": 27,
+          "w": 161,
+          "h": 99
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_012",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 160,
+          "y": 762,
+          "w": 162,
+          "h": 100
+        },
+        "spriteSourceSize": {
+          "x": 21,
+          "y": 26,
+          "w": 162,
+          "h": 100
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_013",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 343,
+          "y": 657,
+          "w": 161,
+          "h": 102
+        },
+        "spriteSourceSize": {
+          "x": 22,
+          "y": 25,
+          "w": 161,
+          "h": 102
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_014",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 662,
+          "y": 656,
+          "w": 160,
+          "h": 102
+        },
+        "spriteSourceSize": {
+          "x": 22,
+          "y": 25,
+          "w": 160,
+          "h": 102
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_015",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 841,
+          "y": 551,
+          "w": 159,
+          "h": 103
+        },
+        "spriteSourceSize": {
+          "x": 23,
+          "y": 24,
+          "w": 159,
+          "h": 103
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_016",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 330,
+          "y": 445,
+          "w": 159,
+          "h": 105
+        },
+        "spriteSourceSize": {
+          "x": 23,
+          "y": 23,
+          "w": 159,
+          "h": 105
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Idle_017",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 329,
+          "y": 337,
+          "w": 157,
+          "h": 106
+        },
+        "spriteSourceSize": {
+          "x": 24,
+          "y": 22,
+          "w": 157,
+          "h": 106
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_000",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 646,
+          "y": 336,
+          "w": 168,
+          "h": 107
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 22,
+          "w": 168,
+          "h": 107
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_001",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 491,
+          "y": 445,
+          "w": 168,
+          "h": 105
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 24,
+          "w": 168,
+          "h": 105
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_002",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 824,
+          "y": 656,
+          "w": 168,
+          "h": 102
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 26,
+          "w": 168,
+          "h": 102
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_003",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 659,
+          "w": 168,
+          "h": 101
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 27,
+          "w": 168,
+          "h": 101
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_004",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 324,
+          "y": 761,
+          "w": 168,
+          "h": 100
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 28,
+          "w": 168,
+          "h": 100
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_005",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 494,
+          "y": 761,
+          "w": 168,
+          "h": 100
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 28,
+          "w": 168,
+          "h": 100
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_006",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 555,
+          "w": 168,
+          "h": 102
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 26,
+          "w": 168,
+          "h": 102
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_007",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 172,
+          "y": 554,
+          "w": 169,
+          "h": 102
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 25,
+          "w": 169,
+          "h": 102
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_008",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 661,
+          "y": 445,
+          "w": 169,
+          "h": 105
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 22,
+          "w": 169,
+          "h": 105
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_009",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 816,
+          "y": 335,
+          "w": 169,
+          "h": 107
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 20,
+          "w": 169,
+          "h": 107
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_010",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 832,
+          "y": 444,
+          "w": 170,
+          "h": 105
+        },
+        "spriteSourceSize": {
+          "x": 19,
+          "y": 22,
+          "w": 170,
+          "h": 105
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_011",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 449,
+          "w": 170,
+          "h": 103
+        },
+        "spriteSourceSize": {
+          "x": 19,
+          "y": 24,
+          "w": 170,
+          "h": 103
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_012",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 499,
+          "y": 552,
+          "w": 169,
+          "h": 102
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 26,
+          "w": 169,
+          "h": 102
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_013",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 664,
+          "y": 760,
+          "w": 169,
+          "h": 100
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 28,
+          "w": 169,
+          "h": 100
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_014",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 835,
+          "y": 760,
+          "w": 169,
+          "h": 100
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 28,
+          "w": 169,
+          "h": 100
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_015",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 172,
+          "y": 658,
+          "w": 169,
+          "h": 101
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 27,
+          "w": 169,
+          "h": 101
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_016",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 670,
+          "y": 552,
+          "w": 169,
+          "h": 102
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 26,
+          "w": 169,
+          "h": 102
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      },
+      {
+        "filename": "dragon/Moving Forward_017",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 342,
+          "w": 168,
+          "h": 105
+        },
+        "spriteSourceSize": {
+          "x": 20,
+          "y": 24,
+          "w": 168,
+          "h": 105
+        },
+        "sourceSize": {
+          "w": 193,
+          "h": 150
+        }
+      }
+    ]
+  }],
+  "meta": {
+    "app": "Phaser Editor - Atlas Generator",
+    "version": "2"
+  }
+}

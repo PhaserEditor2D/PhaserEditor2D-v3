@@ -1,0 +1,599 @@
+{
+  "textures": [{
+    "image": "Objects.png",
+    "frames": [
+      {
+        "filename": "Fire",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 513,
+          "y": 127,
+          "w": 50,
+          "h": 89
+        },
+        "spriteSourceSize": {
+          "x": 15,
+          "y": 6,
+          "w": 50,
+          "h": 89
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 100
+        }
+      },
+      {
+        "filename": "bomb-1",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 639,
+          "y": 79,
+          "w": 69,
+          "h": 67
+        },
+        "spriteSourceSize": {
+          "x": 10,
+          "y": 7,
+          "w": 69,
+          "h": 67
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 80
+        }
+      },
+      {
+        "filename": "bomb-2",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 574,
+          "y": 78,
+          "w": 63,
+          "h": 68
+        },
+        "spriteSourceSize": {
+          "x": 9,
+          "y": 7,
+          "w": 63,
+          "h": 68
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 80
+        }
+      },
+      {
+        "filename": "bomb-3",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 616,
+          "y": 8,
+          "w": 60,
+          "h": 68
+        },
+        "spriteSourceSize": {
+          "x": 12,
+          "y": 6,
+          "w": 60,
+          "h": 68
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 80
+        }
+      },
+      {
+        "filename": "bomb-4",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 636,
+          "y": 148,
+          "w": 61,
+          "h": 68
+        },
+        "spriteSourceSize": {
+          "x": 10,
+          "y": 6,
+          "w": 61,
+          "h": 68
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 80
+        }
+      },
+      {
+        "filename": "bomb-5",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 565,
+          "y": 148,
+          "w": 69,
+          "h": 68
+        },
+        "spriteSourceSize": {
+          "x": 3,
+          "y": 7,
+          "w": 69,
+          "h": 68
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 80
+        }
+      },
+      {
+        "filename": "bomb-6",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 678,
+          "y": 10,
+          "w": 61,
+          "h": 67
+        },
+        "spriteSourceSize": {
+          "x": 10,
+          "y": 7,
+          "w": 61,
+          "h": 67
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 80
+        }
+      },
+      {
+        "filename": "bomb-7",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 553,
+          "y": 2,
+          "w": 61,
+          "h": 69
+        },
+        "spriteSourceSize": {
+          "x": 11,
+          "y": 6,
+          "w": 61,
+          "h": 69
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 80
+        }
+      },
+      {
+        "filename": "bomb-8",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 699,
+          "y": 149,
+          "w": 62,
+          "h": 67
+        },
+        "spriteSourceSize": {
+          "x": 11,
+          "y": 7,
+          "w": 62,
+          "h": 67
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 80
+        }
+      },
+      {
+        "filename": "burning-watermelon-1",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 491,
+          "y": 10,
+          "w": 60,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 4,
+          "y": 4,
+          "w": 60,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "burning-watermelon-2",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 373,
+          "y": 9,
+          "w": 54,
+          "h": 53
+        },
+        "spriteSourceSize": {
+          "x": 9,
+          "y": 3,
+          "w": 54,
+          "h": 53
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "burning-watermelon-3",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 817,
+          "y": 2,
+          "w": 19,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 31,
+          "y": 4,
+          "w": 19,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "burning-watermelon-4",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 317,
+          "y": 9,
+          "w": 54,
+          "h": 53
+        },
+        "spriteSourceSize": {
+          "x": 18,
+          "y": 3,
+          "w": 54,
+          "h": 53
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "burning-watermelon-5",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 710,
+          "y": 95,
+          "w": 59,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 16,
+          "y": 4,
+          "w": 59,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "burning-watermelon-6",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 771,
+          "y": 110,
+          "w": 54,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 17,
+          "y": 4,
+          "w": 54,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "burning-watermelon-7",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 796,
+          "y": 2,
+          "w": 19,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 31,
+          "y": 4,
+          "w": 19,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "burning-watermelon-8",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 741,
+          "y": 2,
+          "w": 53,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 10,
+          "y": 4,
+          "w": 53,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "watermelon-1",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 429,
+          "y": 10,
+          "w": 60,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 4,
+          "y": 4,
+          "w": 60,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "watermelon-2",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 205,
+          "y": 9,
+          "w": 54,
+          "h": 53
+        },
+        "spriteSourceSize": {
+          "x": 9,
+          "y": 3,
+          "w": 54,
+          "h": 53
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "watermelon-3",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 819,
+          "y": 164,
+          "w": 19,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 31,
+          "y": 4,
+          "w": 19,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "watermelon-4",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 261,
+          "y": 9,
+          "w": 54,
+          "h": 53
+        },
+        "spriteSourceSize": {
+          "x": 18,
+          "y": 3,
+          "w": 54,
+          "h": 53
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "watermelon-5",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 513,
+          "y": 73,
+          "w": 59,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 16,
+          "y": 4,
+          "w": 59,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "watermelon-6",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 763,
+          "y": 164,
+          "w": 54,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 17,
+          "y": 4,
+          "w": 54,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "watermelon-7",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 827,
+          "y": 110,
+          "w": 19,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 31,
+          "y": 4,
+          "w": 19,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "watermelon-8",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 771,
+          "y": 56,
+          "w": 53,
+          "h": 52
+        },
+        "spriteSourceSize": {
+          "x": 10,
+          "y": 4,
+          "w": 53,
+          "h": 52
+        },
+        "sourceSize": {
+          "w": 80,
+          "h": 62
+        }
+      },
+      {
+        "filename": "Button Down",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 205,
+          "y": 64,
+          "w": 152,
+          "h": 152
+        },
+        "spriteSourceSize": {
+          "x": 4,
+          "y": 4,
+          "w": 152,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 160,
+          "h": 160
+        }
+      },
+      {
+        "filename": "Button Flame",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 2,
+          "y": 15,
+          "w": 201,
+          "h": 201
+        },
+        "spriteSourceSize": {
+          "x": 0,
+          "y": 0,
+          "w": 201,
+          "h": 201
+        },
+        "sourceSize": {
+          "w": 201,
+          "h": 201
+        }
+      },
+      {
+        "filename": "Button Up",
+        "trimmed": true,
+        "rotated": false,
+        "frame": {
+          "x": 359,
+          "y": 64,
+          "w": 152,
+          "h": 152
+        },
+        "spriteSourceSize": {
+          "x": 4,
+          "y": 4,
+          "w": 152,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 160,
+          "h": 160
+        }
+      }
+    ]
+  }],
+  "meta": {
+    "app": "Phaser Editor - Atlas Generator",
+    "version": "2"
+  }
+}

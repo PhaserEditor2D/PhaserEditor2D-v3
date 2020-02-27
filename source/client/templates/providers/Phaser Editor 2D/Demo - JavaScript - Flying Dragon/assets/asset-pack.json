@@ -1,0 +1,122 @@
+{
+    "section1": {
+        "files": [
+            {
+                "url": "assets/dino.png",
+                "type": "image",
+                "key": "dino"
+            },
+            {
+                "type": "multiatlas",
+                "url": "assets/atlas/dragon.json",
+                "path": "assets/atlas/",
+                "key": "dragon"
+            },
+            {
+                "type": "multiatlas",
+                "url": "assets/atlas/Objects.json",
+                "path": "assets/atlas/",
+                "key": "Objects"
+            },
+            {
+                "url": "assets/images/birds.png",
+                "type": "image",
+                "key": "birds"
+            },
+            {
+                "url": "assets/images/clouds_1.png",
+                "type": "image",
+                "key": "clouds_1"
+            },
+            {
+                "url": "assets/images/clouds_2.png",
+                "type": "image",
+                "key": "clouds_2"
+            },
+            {
+                "url": "assets/images/clouds_3.png",
+                "type": "image",
+                "key": "clouds_3"
+            },
+            {
+                "url": "assets/images/pines.png",
+                "type": "image",
+                "key": "pines"
+            },
+            {
+                "url": "assets/images/rocks_1.png",
+                "type": "image",
+                "key": "rocks_1"
+            },
+            {
+                "url": "assets/images/rocks_2.png",
+                "type": "image",
+                "key": "rocks_2"
+            },
+            {
+                "url": "assets/images/rocks_3.png",
+                "type": "image",
+                "key": "rocks_3"
+            },
+            {
+                "url": "assets/images/sky.png",
+                "type": "image",
+                "key": "sky"
+            },
+            {
+                "url": "assets/animations.json",
+                "type": "animation",
+                "key": "animations"
+            },
+            {
+                "url": "assets/spritesheets/explosion-4.png",
+                "frameConfig": {
+                    "frameWidth": 128,
+                    "frameHeight": 128,
+                    "startFrame": 0,
+                    "endFrame": -1,
+                    "spacing": 0,
+                    "margin": 0
+                },
+                "type": "spritesheet",
+                "key": "explosion"
+            },
+            {
+                "url": "assets/prefabs/Bomb.js",
+                "type": "script",
+                "key": "Bomb"
+            },
+            {
+                "url": "assets/prefabs/Dragon.js",
+                "type": "script",
+                "key": "Dragon"
+            },
+            {
+                "url": "assets/prefabs/Fire.js",
+                "type": "script",
+                "key": "Fire"
+            },
+            {
+                "url": "assets/prefabs/Melon.js",
+                "type": "script",
+                "key": "Melon"
+            },
+            {
+                "url": "assets/levels/Level.js",
+                "type": "sceneFile",
+                "key": "Level"
+            },
+            {
+                "url": "assets/prefabs/PlayerButton.js",
+                "type": "script",
+                "key": "PlayerButton"
+            }
+        ]
+    },
+    "meta": {
+        "app": "Phaser Editor 2D - Asset Pack Editor",
+        "contentType": "phasereditor2d.pack.core.AssetContentType",
+        "url": "https://phasereditor2d.com",
+        "version": 2
+    }
+}

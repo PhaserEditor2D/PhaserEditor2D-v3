@@ -1,0 +1,220 @@
+{
+    "id": "86007725-cef2-4ca8-bdc2-99775a895ffc",
+    "sceneType": "SCENE",
+    "settings": {
+        "snapEnabled": true,
+        "snapWidth": 10,
+        "snapHeight": 10,
+        "preloadPackFiles": [],
+        "createMethodName": "_create",
+        "sceneKey": "Level",
+        "borderHeight": 450
+    },
+    "displayList": [
+        {
+            "type": "Image",
+            "id": "e704f15c-1087-409d-bc00-e2f54eb3bf90",
+            "label": "sky",
+            "texture": {
+                "key": "sky"
+            },
+            "originX": 0,
+            "originY": 0
+        },
+        {
+            "type": "Image",
+            "id": "d4184ea9-b7f1-4eb1-8874-d8962f87211e",
+            "label": "clouds_3",
+            "texture": {
+                "key": "clouds_3"
+            },
+            "x": 100,
+            "y": 340,
+            "originX": 0
+        },
+        {
+            "type": "Image",
+            "id": "9f1208db-b5fa-4c9e-8c6c-20550e4309c7",
+            "label": "rocks_2",
+            "texture": {
+                "key": "rocks_2"
+            },
+            "y": 60,
+            "originX": 0,
+            "originY": 0
+        },
+        {
+            "type": "Image",
+            "id": "6b5f4cec-1a67-4bc6-9f5b-e7a53dd2fa68",
+            "label": "pines",
+            "texture": {
+                "key": "pines"
+            },
+            "originX": 0,
+            "originY": 0
+        },
+        {
+            "type": "Image",
+            "id": "b8f5700b-d363-483d-b3d8-426d9f45cb2d",
+            "label": "clouds_2",
+            "texture": {
+                "key": "clouds_2"
+            },
+            "originX": 0,
+            "originY": 0
+        },
+        {
+            "prefabId": "b0fa54db-cf18-4fb9-820c-4c6ce82d9f71",
+            "id": "c870ff70-3471-49af-bb2e-22038cfe540b",
+            "label": "dragon",
+            "scope": "CLASS",
+            "x": 151,
+            "y": 116
+        },
+        {
+            "prefabId": "9152e109-c183-4d60-a74a-35b77a7a8fdc",
+            "id": "40a84d82-fe9d-439f-b588-c65202ec2f63",
+            "label": "melon",
+            "x": 80,
+            "y": 600
+        },
+        {
+            "prefabId": "9152e109-c183-4d60-a74a-35b77a7a8fdc",
+            "id": "db844ecb-7a09-4ea1-96f1-6462abb8cc59",
+            "label": "melon_1",
+            "x": 160,
+            "y": 600
+        },
+        {
+            "prefabId": "9152e109-c183-4d60-a74a-35b77a7a8fdc",
+            "id": "437efd52-e730-4005-a35d-b162a74fc204",
+            "label": "melon_2",
+            "x": 240,
+            "y": 600
+        },
+        {
+            "prefabId": "71820528-f095-4b12-8475-169a1ad776d4",
+            "id": "c33a2d1c-ffcc-4533-808f-e8bf8d67db85",
+            "label": "bomb",
+            "x": 444,
+            "y": 600
+        },
+        {
+            "prefabId": "71820528-f095-4b12-8475-169a1ad776d4",
+            "id": "3a19155f-4c1d-4aff-9f84-4e04d8ab0998",
+            "label": "bomb_1",
+            "x": 545,
+            "y": 600
+        },
+        {
+            "prefabId": "71820528-f095-4b12-8475-169a1ad776d4",
+            "id": "c9484579-be6e-4729-be14-dabbc44c1255",
+            "label": "bomb_2",
+            "x": 640,
+            "y": 600
+        },
+        {
+            "prefabId": "f258c8d1-dedd-4717-ab13-9a1dc088ec08",
+            "id": "e82da820-b99b-4d8a-929a-39691c95e33a",
+            "label": "fire",
+            "x": 800,
+            "y": 600
+        },
+        {
+            "prefabId": "f258c8d1-dedd-4717-ab13-9a1dc088ec08",
+            "id": "1eed0213-b9b8-4698-aa94-f12b1249fe1c",
+            "label": "fire_1",
+            "x": 880,
+            "y": 600
+        },
+        {
+            "prefabId": "f258c8d1-dedd-4717-ab13-9a1dc088ec08",
+            "id": "509c6b9e-c334-4437-92fd-96a9d72c2dff",
+            "label": "fire_2",
+            "x": 960,
+            "y": 600
+        },
+        {
+            "prefabId": "5805f605-9d2c-4d4c-baaf-47b665634327",
+            "id": "7750cb9c-9cdd-4a6a-9067-a097bd4a6189",
+            "label": "flameButton",
+            "scope": "CLASS",
+            "x": 80,
+            "y": 380
+        },
+        {
+            "prefabId": "5805f605-9d2c-4d4c-baaf-47b665634327",
+            "id": "e308300c-76d8-4272-ba65-27299caf487e",
+            "unlock": [
+                "texture"
+            ],
+            "label": "upButton",
+            "scope": "CLASS",
+            "texture": {
+                "key": "Objects",
+                "frame": "Button Up"
+            },
+            "x": 640,
+            "y": 380
+        },
+        {
+            "prefabId": "5805f605-9d2c-4d4c-baaf-47b665634327",
+            "id": "31726229-a461-44f9-9633-f80c63cfabca",
+            "unlock": [
+                "texture"
+            ],
+            "label": "downButton",
+            "scope": "CLASS",
+            "texture": {
+                "key": "Objects",
+                "frame": "Button Down"
+            },
+            "x": 730,
+            "y": 380
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    },
+    "lists": [
+        {
+            "id": "f9395c14-a6bf-4510-ad1b-8bfa3070ce68",
+            "label": "parallax",
+            "objectIds": [
+                "6b5f4cec-1a67-4bc6-9f5b-e7a53dd2fa68",
+                "b8f5700b-d363-483d-b3d8-426d9f45cb2d",
+                "9f1208db-b5fa-4c9e-8c6c-20550e4309c7",
+                "d4184ea9-b7f1-4eb1-8874-d8962f87211e"
+            ]
+        },
+        {
+            "id": "314de0a5-3a58-4f77-beeb-659ed8e84a77",
+            "label": "flames",
+            "objectIds": [
+                "509c6b9e-c334-4437-92fd-96a9d72c2dff",
+                "1eed0213-b9b8-4698-aa94-f12b1249fe1c",
+                "e82da820-b99b-4d8a-929a-39691c95e33a"
+            ]
+        },
+        {
+            "id": "5907bbe0-d2a3-47d5-9a74-c38c10148c83",
+            "label": "bombs",
+            "objectIds": [
+                "c33a2d1c-ffcc-4533-808f-e8bf8d67db85",
+                "3a19155f-4c1d-4aff-9f84-4e04d8ab0998",
+                "c9484579-be6e-4729-be14-dabbc44c1255"
+            ]
+        },
+        {
+            "id": "a5bde6e4-779c-4e38-8915-e2c020615ecb",
+            "label": "melons",
+            "objectIds": [
+                "40a84d82-fe9d-439f-b588-c65202ec2f63",
+                "db844ecb-7a09-4ea1-96f1-6462abb8cc59",
+                "437efd52-e730-4005-a35d-b162a74fc204"
+            ]
+        }
+    ]
+}
