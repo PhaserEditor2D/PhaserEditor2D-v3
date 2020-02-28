@@ -534,9 +534,6 @@ var phasereditor2d;
                                 new ui.dialogs.AboutDialog().create();
                             }
                         }));
-                        menu.add(new controls.Action({
-                            text: "Unlock Phaser Editor 2D"
-                        }));
                         menu.createWithEvent(e);
                     }
                 }
