@@ -18,10 +18,10 @@ var colibri;
         }
         getIcon(name) {
             return colibri.ui.controls.Controls
-                .getImage(`static/plugins/${this.getId()}/icons/${colibri.ui.controls.ICON_SIZE}/${name}.png`, name);
+                .getImage(`app/plugins/${this.getId()}/icons/${colibri.ui.controls.ICON_SIZE}/${name}.png`, name);
         }
         async getJSON(pathInPlugin) {
-            const result = await fetch(`static/plugins/${this.getId()}/` + pathInPlugin);
+            const result = await fetch(`app/plugins/${this.getId()}/` + pathInPlugin);
             const data = await result.json();
             return data;
         }
