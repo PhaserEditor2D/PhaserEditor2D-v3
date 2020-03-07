@@ -1289,6 +1289,11 @@ var colibri;
                         })
                     });
                     const json = await resp.json();
+                    // This could happens in servers with session handling.
+                    // If the session expired, then the server send a redirect message.
+                    if (json.redirect) {
+                        document.location.href = json.redirect;
+                    }
                     return json;
                 }
                 catch (e) {
