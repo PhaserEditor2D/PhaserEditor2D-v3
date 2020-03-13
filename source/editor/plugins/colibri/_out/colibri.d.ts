@@ -371,6 +371,7 @@ declare namespace colibri.core.io {
         removeChangeListener(listener: ChangeListenerFunc): void;
         getRoot(): FilePath;
         openProject(projectName: string): Promise<FilePath>;
+        isValidAccount(): Promise<string>;
         getProjectTemplates(): Promise<ProjectTemplatesData>;
         createProject(templatePath: string, projectName: string): Promise<boolean>;
         reload(): Promise<void>;
@@ -408,6 +409,7 @@ declare namespace colibri.core.io {
         reload(): Promise<void>;
         getProjects(): Promise<string[]>;
         openProject(projectName: string): Promise<FilePath>;
+        isValidAccount(): Promise<string>;
         getProjectTemplates(): Promise<ProjectTemplatesData>;
         createProject(templatePath: string, projectName: string): Promise<boolean>;
         getRoot(): FilePath;

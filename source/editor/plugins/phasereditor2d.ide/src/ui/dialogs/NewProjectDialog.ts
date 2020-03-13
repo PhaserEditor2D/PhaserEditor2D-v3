@@ -155,6 +155,18 @@ namespace phasereditor2d.ide.ui.dialogs {
             }
 
             this.requestProjectsData();
+
+            const projectDlg = this;
+
+            colibri.Platform.getWorkbench().getFileStorage().isValidAccount().then(msg => {
+
+                if (msg) {
+
+                    projectDlg.close();
+
+                    alert(msg);
+                }
+            });
         }
 
         private async createProject(templatePath: string) {

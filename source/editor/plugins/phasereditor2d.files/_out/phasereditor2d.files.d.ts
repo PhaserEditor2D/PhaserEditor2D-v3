@@ -48,7 +48,7 @@ declare namespace phasereditor2d.files.ui.actions {
         private _initialLocation;
         constructor();
         static commandTest(args: colibri.ui.ide.commands.HandlerArgs): boolean;
-        run(): void;
+        run(): Promise<void>;
         private openDialog;
         setInitialLocation(folder: io.FilePath): void;
     }
@@ -184,7 +184,7 @@ declare namespace phasereditor2d.files.ui.dialogs {
     class UploadDialog extends controls.dialogs.ViewerDialog {
         private _uploadFolder;
         constructor(uploadFolder: io.FilePath);
-        create(): void;
+        create(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.files.ui.viewers {

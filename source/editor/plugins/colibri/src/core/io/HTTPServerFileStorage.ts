@@ -286,6 +286,13 @@ namespace colibri.core.io {
             return root;
         }
 
+        async isValidAccount(): Promise<string> {
+
+            const data = await apiRequest("GetIsValidAccount", {});
+
+            return data.message;
+        }
+
         async getProjectTemplates(): Promise<ProjectTemplatesData> {
 
             const data = await apiRequest("GetProjectTemplates", {});

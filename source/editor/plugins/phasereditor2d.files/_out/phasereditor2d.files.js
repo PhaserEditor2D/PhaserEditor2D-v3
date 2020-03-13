@@ -321,7 +321,12 @@ var phasereditor2d;
                         const root = colibri.ui.ide.FileUtils.getRoot();
                         return root !== null && !args.activeDialog;
                     }
-                    run() {
+                    async run() {
+                        const msg = await colibri.Platform.getWorkbench().getFileStorage().isValidAccount();
+                        if (msg) {
+                            alert(msg);
+                            return;
+                        }
                         const viewer = new controls.viewers.TreeViewer();
                         viewer.setLabelProvider(new WizardLabelProvider());
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
@@ -840,7 +845,14 @@ var phasereditor2d;
                         super(new controls.viewers.TreeViewer());
                         this._uploadFolder = uploadFolder;
                     }
-                    create() {
+                    async create() {
+                        const uploadDialog = this;
+                        colibri.Platform.getWorkbench().getFileStorage().isValidAccount().then(msg => {
+                            if (msg) {
+                                uploadDialog.close();
+                                alert(msg);
+                            }
+                        });
                         const filesViewer = this.getViewer();
                         filesViewer.setLabelProvider(new ui.viewers.InputFileLabelProvider());
                         filesViewer.setCellRendererProvider(new ui.viewers.InputFileCellRendererProvider());

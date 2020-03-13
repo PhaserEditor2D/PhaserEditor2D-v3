@@ -25,6 +25,8 @@ namespace colibri.core.io {
 
         openProject(projectName: string): Promise<FilePath>;
 
+        isValidAccount(): Promise<string>;
+
         getProjectTemplates(): Promise<ProjectTemplatesData>;
 
         createProject(templatePath: string, projectName: string): Promise<boolean>;

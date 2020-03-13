@@ -743,6 +743,13 @@ var phasereditor2d;
                             this.addButton("Cancel", () => this.close());
                         }
                         this.requestProjectsData();
+                        const projectDlg = this;
+                        colibri.Platform.getWorkbench().getFileStorage().isValidAccount().then(msg => {
+                            if (msg) {
+                                projectDlg.close();
+                                alert(msg);
+                            }
+                        });
                     }
                     async createProject(templatePath) {
                         const projectName = this._projectNameText.value;

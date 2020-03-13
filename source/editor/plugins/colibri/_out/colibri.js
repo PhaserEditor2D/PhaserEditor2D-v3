@@ -1449,6 +1449,10 @@ var colibri;
                     this.fireChange(change);
                     return root;
                 }
+                async isValidAccount() {
+                    const data = await apiRequest("GetIsValidAccount", {});
+                    return data.message;
+                }
                 async getProjectTemplates() {
                     const data = await apiRequest("GetProjectTemplates", {});
                     if (data.error) {
