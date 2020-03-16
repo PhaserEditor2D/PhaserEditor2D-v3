@@ -401,7 +401,7 @@ var phasereditor2d;
                             handler: {
                                 testFunc: isNotWelcomeWindowScope,
                                 executeFunc: args => {
-                                    const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                                    const url = colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
                                     controls.Controls.openUrlInNewPage(url);
                                 }
                             },
@@ -420,7 +420,7 @@ var phasereditor2d;
                             handler: {
                                 testFunc: isNotWelcomeWindowScope,
                                 executeFunc: args => {
-                                    const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                                    const url = colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
                                     const dlg = new ui.dialogs.PlayDialog(url);
                                     dlg.create();
                                 }

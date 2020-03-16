@@ -63,7 +63,7 @@ namespace phasereditor2d.ide.ui.actions {
 
                     executeFunc: args => {
 
-                        const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                        const url = colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
 
                         controls.Controls.openUrlInNewPage(url);
                     }
@@ -89,7 +89,7 @@ namespace phasereditor2d.ide.ui.actions {
 
                     executeFunc: args => {
 
-                        const url = colibri.ui.ide.FileUtils.getRoot().getUrl();
+                        const url = colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
                         const dlg = new dialogs.PlayDialog(url);
                         dlg.create();
                     }

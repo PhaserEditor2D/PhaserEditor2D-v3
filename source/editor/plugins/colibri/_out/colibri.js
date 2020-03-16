@@ -1087,6 +1087,13 @@ var colibri;
                     const projectName = this.getProject().getName();
                     return `./project/${projectName}`;
                 }
+                getExternalUrl() {
+                    if (this._parent) {
+                        return this._parent.getExternalUrl() + "/" + this._name;
+                    }
+                    const projectName = this.getProject().getName();
+                    return `./external/${projectName}`;
+                }
                 getProject() {
                     if (this._parent) {
                         return this._parent.getProject();

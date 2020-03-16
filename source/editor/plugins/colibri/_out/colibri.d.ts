@@ -301,6 +301,7 @@ declare namespace colibri.core.io {
         getFullName(): string;
         getProjectRelativeName(): any;
         getUrl(): any;
+        getExternalUrl(): any;
         getProject(): FilePath;
         getSibling(name: string): FilePath;
         getFile(name: string): FilePath;

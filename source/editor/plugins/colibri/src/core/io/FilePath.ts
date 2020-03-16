@@ -141,6 +141,16 @@ namespace colibri.core.io {
             return `./project/${projectName}`;
         }
 
+        getExternalUrl() {
+            if (this._parent) {
+                return this._parent.getExternalUrl() + "/" + this._name;
+            }
+
+            const projectName = this.getProject().getName();
+
+            return `./external/${projectName}`;
+        }
+
         getProject(): FilePath {
 
             if (this._parent) {
