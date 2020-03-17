@@ -226,24 +226,39 @@ namespace colibri.ui.ide {
 
         private async preloadIcons() {
 
-            await this.getWorkbenchIcon(ICON_FILE).preload();
-            await this.getWorkbenchIcon(ICON_FOLDER).preload();
-            await this.getWorkbenchIcon(ICON_PLUS).preload();
-            await this.getWorkbenchIcon(ICON_MINUS).preload();
-            await this.getWorkbenchIcon(ICON_CHECKED).preload();
-            await this.getWorkbenchIcon(ICON_KEYMAP).preload();
+            const icons: controls.IImage[] = [];
+
+            for (const name of [ICON_FILE, ICON_FOLDER, ICON_PLUS, ICON_MINUS, ICON_CHECKED, ICON_KEYMAP]) {
+
+                icons.push(this.getWorkbenchIcon(name));
+            }
 
             const extensions = Platform
                 .getExtensions<IconLoaderExtension>(IconLoaderExtension.POINT_ID);
 
             for (const extension of extensions) {
 
-                const icons = extension.getIcons();
-
-                for (const icon of icons) {
-                    await icon.preload();
-                }
+                icons.push(...extension.getIcons());
             }
+
+            const dlg = new controls.dialogs.ProgressDialog();
+            dlg.create();
+            dlg.setTitle("Loading Workbench");
+            dlg.setCloseWithEscapeKey(false);
+            dlg.setProgress(0);
+
+            let i = 0;
+
+            for (const icon of icons) {
+
+                await icon.preload();
+
+                i++;
+
+                dlg.setProgress(i / icons.length);
+            }
+
+            dlg.close();
         }
 
         private registerContentTypeIcons() {

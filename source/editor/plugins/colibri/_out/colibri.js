@@ -476,20 +476,27 @@ var colibri;
                     return null;
                 }
                 async preloadIcons() {
-                    await this.getWorkbenchIcon(colibri.ICON_FILE).preload();
-                    await this.getWorkbenchIcon(colibri.ICON_FOLDER).preload();
-                    await this.getWorkbenchIcon(colibri.ICON_PLUS).preload();
-                    await this.getWorkbenchIcon(colibri.ICON_MINUS).preload();
-                    await this.getWorkbenchIcon(colibri.ICON_CHECKED).preload();
-                    await this.getWorkbenchIcon(colibri.ICON_KEYMAP).preload();
+                    const icons = [];
+                    for (const name of [colibri.ICON_FILE, colibri.ICON_FOLDER, colibri.ICON_PLUS, colibri.ICON_MINUS, colibri.ICON_CHECKED, colibri.ICON_KEYMAP]) {
+                        icons.push(this.getWorkbenchIcon(name));
+                    }
                     const extensions = colibri.Platform
                         .getExtensions(ide.IconLoaderExtension.POINT_ID);
                     for (const extension of extensions) {
-                        const icons = extension.getIcons();
-                        for (const icon of icons) {
-                            await icon.preload();
-                        }
+                        icons.push(...extension.getIcons());
                     }
+                    const dlg = new ui.controls.dialogs.ProgressDialog();
+                    dlg.create();
+                    dlg.setTitle("Loading Workbench");
+                    dlg.setCloseWithEscapeKey(false);
+                    dlg.setProgress(0);
+                    let i = 0;
+                    for (const icon of icons) {
+                        await icon.preload();
+                        i++;
+                        dlg.setProgress(i / icons.length);
+                    }
+                    dlg.close();
                 }
                 registerContentTypeIcons() {
                     this._contentType_icon_Map = new Map();
