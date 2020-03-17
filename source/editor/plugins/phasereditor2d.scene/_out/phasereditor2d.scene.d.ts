@@ -445,6 +445,7 @@ declare namespace phasereditor2d.scene.ui {
     }
 }
 declare namespace phasereditor2d.scene.ui {
+    import controls = colibri.ui.controls;
     import io = colibri.core.io;
     import json = core.json;
     class SceneMaker {
@@ -460,8 +461,8 @@ declare namespace phasereditor2d.scene.ui {
         createPrefabInstanceWithFile(file: io.FilePath): Promise<sceneobjects.ISceneObject>;
         getSerializer(data: json.IObjectData): json.Serializer;
         createScene(sceneData: json.ISceneData): void;
-        updateSceneLoader(sceneData: json.ISceneData): Promise<void>;
-        updateSceneLoaderWithObjDataList(list: json.IObjectData[]): Promise<void>;
+        updateSceneLoader(sceneData: json.ISceneData, monitor?: controls.IProgressMonitor): Promise<void>;
+        updateSceneLoaderWithObjDataList(list: json.IObjectData[], monitor?: controls.IProgressMonitor): Promise<void>;
         getCanvasCenterPoint(): {
             x: number;
             y: number;
@@ -697,15 +698,21 @@ declare namespace phasereditor2d.scene.ui.editor {
     }
 }
 declare namespace phasereditor2d.scene.ui.editor {
+    import controls = colibri.ui.controls;
     class OverlayLayer {
         private _editor;
         private _canvas;
         private _ctx;
+        private _loading;
         constructor(editor: SceneEditor);
+        setLoading(loading: boolean): void;
+        isLoading(): boolean;
+        createLoadingMonitor(): controls.IProgressMonitor;
         getCanvas(): HTMLCanvasElement;
         private resetContext;
         resizeTo(): void;
         render(): void;
+        getContext(): CanvasRenderingContext2D;
         private renderTools;
         private renderSelection;
         private renderGrid;

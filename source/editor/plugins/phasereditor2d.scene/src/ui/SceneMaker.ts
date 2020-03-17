@@ -192,16 +192,18 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        async updateSceneLoader(sceneData: json.ISceneData) {
+        async updateSceneLoader(sceneData: json.ISceneData, monitor?: controls.IProgressMonitor) {
 
-            await this.updateSceneLoaderWithObjDataList(sceneData.displayList);
+            await this.updateSceneLoaderWithObjDataList(sceneData.displayList, monitor);
         }
 
-        async updateSceneLoaderWithObjDataList(list: json.IObjectData[]) {
+        async updateSceneLoaderWithObjDataList(list: json.IObjectData[], monitor?: controls.IProgressMonitor) {
 
             const finder = new pack.core.PackFinder();
 
             await finder.preload();
+
+            const assets = [];
 
             for (const objData of list) {
 
@@ -213,20 +215,32 @@ namespace phasereditor2d.scene.ui {
 
                 if (ext) {
 
-                    const assets = await ext.getAssetsFromObjectData({
+                    const objAssets = await ext.getAssetsFromObjectData({
                         serializer: ser,
                         finder: finder,
                         scene: this._scene
                     });
 
-                    for (const asset of assets) {
+                    assets.push(...objAssets);
+                }
+            }
 
-                        const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+            if (monitor) {
 
-                        if (updater) {
+                monitor.addTotal(assets.length);
+            }
 
-                            await updater.updateLoader(this._scene, asset);
-                        }
+            for (const asset of assets) {
+
+                const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+
+                if (updater) {
+
+                    await updater.updateLoader(this._scene, asset);
+
+                    if (monitor) {
+
+                        monitor.step();
                     }
                 }
             }

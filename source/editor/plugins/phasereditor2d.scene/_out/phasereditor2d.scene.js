@@ -2110,27 +2110,35 @@ var phasereditor2d;
                         this.createObject(objData);
                     }
                 }
-                async updateSceneLoader(sceneData) {
-                    await this.updateSceneLoaderWithObjDataList(sceneData.displayList);
+                async updateSceneLoader(sceneData, monitor) {
+                    await this.updateSceneLoaderWithObjDataList(sceneData.displayList, monitor);
                 }
-                async updateSceneLoaderWithObjDataList(list) {
+                async updateSceneLoaderWithObjDataList(list, monitor) {
                     const finder = new phasereditor2d.pack.core.PackFinder();
                     await finder.preload();
+                    const assets = [];
                     for (const objData of list) {
                         const ser = this.getSerializer(objData);
                         const type = ser.getType();
                         const ext = scene_6.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
                         if (ext) {
-                            const assets = await ext.getAssetsFromObjectData({
+                            const objAssets = await ext.getAssetsFromObjectData({
                                 serializer: ser,
                                 finder: finder,
                                 scene: this._scene
                             });
-                            for (const asset of assets) {
-                                const updater = scene_6.ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
-                                if (updater) {
-                                    await updater.updateLoader(this._scene, asset);
-                                }
+                            assets.push(...objAssets);
+                        }
+                    }
+                    if (monitor) {
+                        monitor.addTotal(assets.length);
+                    }
+                    for (const asset of assets) {
+                        const updater = scene_6.ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+                        if (updater) {
+                            await updater.updateLoader(this._scene, asset);
+                            if (monitor) {
+                                monitor.step();
                             }
                         }
                     }
@@ -3463,6 +3471,15 @@ var phasereditor2d;
                         this._canvas = document.createElement("canvas");
                         this._canvas.style.position = "absolute";
                     }
+                    setLoading(loading) {
+                        this._loading = loading;
+                    }
+                    isLoading() {
+                        return this._loading;
+                    }
+                    createLoadingMonitor() {
+                        return new controls.CanvasProgressMonitor(this.getCanvas());
+                    }
                     getCanvas() {
                         return this._canvas;
                     }
@@ -3483,9 +3500,14 @@ var phasereditor2d;
                         if (!this._ctx) {
                             this.resetContext();
                         }
-                        this.renderGrid();
-                        this.renderSelection();
-                        this.renderTools();
+                        if (!this._loading) {
+                            this.renderGrid();
+                            this.renderSelection();
+                            this.renderTools();
+                        }
+                    }
+                    getContext() {
+                        return this._ctx;
                     }
                     renderTools() {
                         const manager = this._editor.getToolsManager();
@@ -3916,9 +3938,13 @@ var phasereditor2d;
                             const content = FileUtils.getFileString(file);
                             const data = JSON.parse(content);
                             if (ui.SceneMaker.isValidSceneDataFormat(data)) {
+                                this._overlayLayer.setLoading(true);
+                                this._overlayLayer.render();
                                 await maker.preload();
-                                await maker.updateSceneLoader(data);
+                                await maker.updateSceneLoader(data, this._overlayLayer.createLoadingMonitor());
                                 maker.createScene(data);
+                                this._overlayLayer.setLoading(false);
+                                this._overlayLayer.render();
                             }
                             else {
                                 alert("Invalid file format.");

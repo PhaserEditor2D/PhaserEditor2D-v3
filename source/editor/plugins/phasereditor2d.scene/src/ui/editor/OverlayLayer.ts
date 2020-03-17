@@ -7,11 +7,25 @@ namespace phasereditor2d.scene.ui.editor {
         private _editor: SceneEditor;
         private _canvas: HTMLCanvasElement;
         private _ctx: CanvasRenderingContext2D;
+        private _loading: boolean;
 
         constructor(editor: SceneEditor) {
             this._editor = editor;
             this._canvas = document.createElement("canvas");
             this._canvas.style.position = "absolute";
+        }
+
+        setLoading(loading: boolean) {
+            this._loading = loading;
+        }
+
+        isLoading() {
+            return this._loading;
+        }
+
+        createLoadingMonitor(): controls.IProgressMonitor {
+
+            return new controls.CanvasProgressMonitor(this.getCanvas());
         }
 
         getCanvas(): HTMLCanvasElement {
@@ -41,9 +55,15 @@ namespace phasereditor2d.scene.ui.editor {
                 this.resetContext();
             }
 
-            this.renderGrid();
-            this.renderSelection();
-            this.renderTools();
+            if (!this._loading) {
+                this.renderGrid();
+                this.renderSelection();
+                this.renderTools();
+            }
+        }
+
+        getContext() {
+            return this._ctx;
         }
 
         private renderTools() {

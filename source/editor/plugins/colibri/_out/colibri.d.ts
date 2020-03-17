@@ -517,6 +517,18 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
+    class CanvasProgressMonitor implements controls.IProgressMonitor {
+        private _canvas;
+        private _total;
+        private _progress;
+        private _ctx;
+        constructor(canvas: HTMLCanvasElement);
+        addTotal(total: number): void;
+        step(): void;
+        private render;
+    }
+}
+declare namespace colibri.ui.controls {
     class DefaultImage implements IImage {
         private _ready;
         private _error;

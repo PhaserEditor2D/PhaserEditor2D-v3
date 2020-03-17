@@ -401,11 +401,17 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (SceneMaker.isValidSceneDataFormat(data)) {
 
+                    this._overlayLayer.setLoading(true);
+                    this._overlayLayer.render();
+
                     await maker.preload();
 
-                    await maker.updateSceneLoader(data);
+                    await maker.updateSceneLoader(data, this._overlayLayer.createLoadingMonitor());
 
                     maker.createScene(data);
+
+                    this._overlayLayer.setLoading(false);
+                    this._overlayLayer.render();
 
                 } else {
                     alert("Invalid file format.");
