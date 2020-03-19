@@ -84,7 +84,7 @@ declare namespace colibri.ui.controls {
         static resolveAll(list: Array<Promise<PreloadResult>>): Promise<PreloadResult>;
         static resolveResourceLoaded(): Promise<PreloadResult>;
         static resolveNothingLoaded(): Promise<PreloadResult>;
-        static getImage(url: string, id: string): IImage;
+        static getImage(url: string, id: string, appendVersion?: boolean): IImage;
         static openUrlInNewPage(url: string): void;
         static createIconElement(icon?: IImage, size?: number): HTMLCanvasElement;
         static LIGHT_THEME: ITheme;
@@ -103,6 +103,7 @@ declare namespace colibri.ui.ide {
     const EVENT_EDITOR_DEACTIVATED = "editorDeactivated";
     const EVENT_EDITOR_ACTIVATED = "editorActivated";
     const EVENT_PROJECT_OPENED = "projectOpened";
+    const CACHE_VERSION = 1;
     class Workbench extends EventTarget {
         private static _workbench;
         static getWorkbench(): Workbench;

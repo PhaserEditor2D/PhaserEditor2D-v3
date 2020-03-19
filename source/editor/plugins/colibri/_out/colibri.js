@@ -259,9 +259,12 @@ var colibri;
                 static resolveNothingLoaded() {
                     return Promise.resolve(PreloadResult.NOTHING_LOADED);
                 }
-                static getImage(url, id) {
+                static getImage(url, id, appendVersion = true) {
                     if (Controls._images.has(id)) {
                         return Controls._images.get(id);
+                    }
+                    if (appendVersion) {
+                        url += "?v=" + ui.ide.CACHE_VERSION;
                     }
                     const img = new controls.DefaultImage(new Image(), url);
                     Controls._images.set(id, img);
@@ -365,6 +368,7 @@ var colibri;
             ide.EVENT_EDITOR_DEACTIVATED = "editorDeactivated";
             ide.EVENT_EDITOR_ACTIVATED = "editorActivated";
             ide.EVENT_PROJECT_OPENED = "projectOpened";
+            ide.CACHE_VERSION = 1;
             class Workbench extends EventTarget {
                 constructor() {
                     super();

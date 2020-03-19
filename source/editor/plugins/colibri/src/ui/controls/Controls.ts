@@ -81,10 +81,15 @@ namespace colibri.ui.controls {
             return Promise.resolve(PreloadResult.NOTHING_LOADED);
         }
 
-        static getImage(url: string, id: string): IImage {
+        static getImage(url: string, id: string, appendVersion = true): IImage {
 
             if (Controls._images.has(id)) {
                 return Controls._images.get(id);
+            }
+
+            if (appendVersion) {
+
+                url += "?v=" + ide.CACHE_VERSION;
             }
 
             const img = new DefaultImage(new Image(), url);

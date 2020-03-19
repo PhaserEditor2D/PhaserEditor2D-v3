@@ -9,6 +9,8 @@ namespace colibri.ui.ide {
     export const EVENT_EDITOR_ACTIVATED = "editorActivated";
     export const EVENT_PROJECT_OPENED = "projectOpened";
 
+    export const CACHE_VERSION = 1;
+
     export class Workbench extends EventTarget {
 
         private static _workbench: Workbench;
