@@ -169,6 +169,20 @@ namespace colibri.ui.controls {
             this._theme = theme;
 
             window.dispatchEvent(new CustomEvent(EVENT_THEME_CHANGED, { detail: this._theme }));
+
+            localStorage.setItem("colibri.theme.id", theme.id);
+        }
+
+        static preloadTheme() {
+
+            let id = localStorage.getItem("colibri.theme.id");
+
+            if (!id) {
+                id = "light";
+            }
+
+            const classList = document.getElementsByTagName("html")[0].classList;
+            classList.add(id);
         }
 
         static getTheme() {

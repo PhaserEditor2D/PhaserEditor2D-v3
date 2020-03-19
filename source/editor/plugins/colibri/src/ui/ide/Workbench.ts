@@ -83,6 +83,8 @@ namespace colibri.ui.ide {
 
             console.log("Workbench: starting.");
 
+            controls.Controls.preloadTheme();
+
             {
                 const plugins = Platform.getPlugins();
 
@@ -99,6 +101,10 @@ namespace colibri.ui.ide {
             console.log("Workbench: fetching UI icons.");
 
             await this.preloadIcons();
+
+            console.log("Workbench: hide splash");
+
+            this.hideSplash();
 
             console.log("Workbench: registering content types.");
 
@@ -121,6 +127,16 @@ namespace colibri.ui.ide {
             for (const plugin of Platform.getPlugins()) {
 
                 await plugin.started();
+            }
+        }
+
+        private hideSplash() {
+
+            const splashElement = document.getElementById("splash-container");
+
+            if (splashElement) {
+
+                splashElement.remove();
             }
         }
 

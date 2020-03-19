@@ -298,6 +298,15 @@ var colibri;
                     classList.add(...theme.classList);
                     this._theme = theme;
                     window.dispatchEvent(new CustomEvent(controls.EVENT_THEME_CHANGED, { detail: this._theme }));
+                    localStorage.setItem("colibri.theme.id", theme.id);
+                }
+                static preloadTheme() {
+                    let id = localStorage.getItem("colibri.theme.id");
+                    if (!id) {
+                        id = "light";
+                    }
+                    const classList = document.getElementsByTagName("html")[0].classList;
+                    classList.add(id);
                 }
                 static getTheme() {
                     return this._theme;
@@ -389,6 +398,7 @@ var colibri;
                 }
                 async launch() {
                     console.log("Workbench: starting.");
+                    ui.controls.Controls.preloadTheme();
                     {
                         const plugins = colibri.Platform.getPlugins();
                         for (const plugin of plugins) {
@@ -401,6 +411,8 @@ var colibri;
                     }
                     console.log("Workbench: fetching UI icons.");
                     await this.preloadIcons();
+                    console.log("Workbench: hide splash");
+                    this.hideSplash();
                     console.log("Workbench: registering content types.");
                     this.registerContentTypes();
                     this.registerContentTypeIcons();
@@ -412,6 +424,12 @@ var colibri;
                     console.log("%cWorkbench: started.", "color:green");
                     for (const plugin of colibri.Platform.getPlugins()) {
                         await plugin.started();
+                    }
+                }
+                hideSplash() {
+                    const splashElement = document.getElementById("splash-container");
+                    if (splashElement) {
+                        splashElement.remove();
                     }
                 }
                 resetCache() {
@@ -2046,7 +2064,6 @@ var colibri;
                     const f = Math.min(1, this._progress / this._total);
                     const len = f * (w - margin * 2);
                     ctx.clearRect(0, 0, w, h);
-                    const theme = controls.Controls.getTheme();
                     ctx.save();
                     ctx.fillStyle = "#ffffff44";
                     ctx.fillRect(margin, y - 1, w - margin * 2, 2);

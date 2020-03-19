@@ -92,6 +92,7 @@ declare namespace colibri.ui.controls {
         static _theme: ITheme;
         static switchTheme(): ITheme;
         static setTheme(theme: ITheme): void;
+        static preloadTheme(): void;
         static getTheme(): ITheme;
         static drawRoundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, topLeft?: number, topRight?: number, bottomRight?: number, bottomLeft?: number): void;
     }
@@ -126,6 +127,7 @@ declare namespace colibri.ui.ide {
         getGlobalPreferences(): core.preferences.Preferences;
         getProjectPreferences(): core.preferences.Preferences;
         launch(): Promise<void>;
+        private hideSplash;
         private resetCache;
         openProject(projectName: string, monitor: controls.IProgressMonitor): Promise<void>;
         private preloadProjectResources;
