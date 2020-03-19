@@ -32,7 +32,7 @@ namespace colibri {
 
         async getJSON(pathInPlugin: string) {
 
-            const result = await fetch(`app/plugins/${this.getId()}/` + pathInPlugin);
+            const result = await fetch(`app/plugins/${this.getId()}/${pathInPlugin}?v=${ui.ide.CACHE_VERSION}`);
 
             const data = await result.json();
 

@@ -21,7 +21,7 @@ var colibri;
                 .getImage(`app/plugins/${this.getId()}/icons/${colibri.ui.controls.ICON_SIZE}/${name}.png`, name);
         }
         async getJSON(pathInPlugin) {
-            const result = await fetch(`app/plugins/${this.getId()}/` + pathInPlugin);
+            const result = await fetch(`app/plugins/${this.getId()}/${pathInPlugin}?v=${colibri.ui.ide.CACHE_VERSION}`);
             const data = await result.json();
             return data;
         }
@@ -1111,7 +1111,11 @@ var colibri;
                 }
                 getUrl() {
                     if (this._parent) {
-                        return this._parent.getUrl() + "/" + this._name;
+                        const url = this._parent.getUrl() + "/" + this._name;
+                        if (this.isFile()) {
+                            return url + "?m=" + this._modTime;
+                        }
+                        return url;
                     }
                     const projectName = this.getProject().getName();
                     return `./project/${projectName}`;

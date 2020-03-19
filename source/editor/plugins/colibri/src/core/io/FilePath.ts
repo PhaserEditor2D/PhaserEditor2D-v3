@@ -133,7 +133,15 @@ namespace colibri.core.io {
         getUrl() {
 
             if (this._parent) {
-                return this._parent.getUrl() + "/" + this._name;
+
+                const url = this._parent.getUrl() + "/" + this._name;
+
+                if (this.isFile()) {
+
+                    return url + "?m=" + this._modTime;
+                }
+
+                return url;
             }
 
             const projectName = this.getProject().getName();
@@ -142,6 +150,7 @@ namespace colibri.core.io {
         }
 
         getExternalUrl() {
+
             if (this._parent) {
                 return this._parent.getExternalUrl() + "/" + this._name;
             }
