@@ -150,7 +150,16 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 handler: {
                     testFunc: isSceneScope,
                     executeFunc: args => {
-                        const dlg = new editor.AddObjectDialog(args.activeEditor as SceneEditor);
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        if (editor.isLoading()) {
+
+                            alert("Cannot add objects while the editor is loading.");
+                            return;
+                        }
+
+                        const dlg = new ui.editor.AddObjectDialog(editor);
                         dlg.create();
                     }
                 },

@@ -330,13 +330,6 @@ namespace phasereditor2d.scene.ui.editor {
             creator.fillMenu(menu);
         }
 
-        openAddObjectDialog() {
-
-            const dlg = new AddObjectDialog(this);
-
-            dlg.create();
-        }
-
         toggleSnapping() {
 
             const enabled = !this.getScene().getSettings().snapEnabled;

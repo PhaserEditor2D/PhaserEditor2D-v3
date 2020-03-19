@@ -762,7 +762,6 @@ declare namespace phasereditor2d.scene.ui.editor {
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
         private onMenu;
         fillContextMenu(menu: controls.Menu): void;
-        openAddObjectDialog(): void;
         toggleSnapping(): void;
         setSnappingToObjectSize(): void;
         private readScene;

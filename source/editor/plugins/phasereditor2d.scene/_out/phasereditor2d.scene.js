@@ -3890,10 +3890,6 @@ var phasereditor2d;
                         const creator = new editor.MenuCreator(this);
                         creator.fillMenu(menu);
                     }
-                    openAddObjectDialog() {
-                        const dlg = new editor.AddObjectDialog(this);
-                        dlg.create();
-                    }
                     toggleSnapping() {
                         const enabled = !this.getScene().getSettings().snapEnabled;
                         this.getUndoManager().add(new editor.properties.ChangeSettingsPropertyOperation({
@@ -4337,7 +4333,12 @@ var phasereditor2d;
                                 handler: {
                                     testFunc: isSceneScope,
                                     executeFunc: args => {
-                                        const dlg = new editor.AddObjectDialog(args.activeEditor);
+                                        const editor = args.activeEditor;
+                                        if (editor.isLoading()) {
+                                            alert("Cannot add objects while the editor is loading.");
+                                            return;
+                                        }
+                                        const dlg = new ui.editor.AddObjectDialog(editor);
                                         dlg.create();
                                     }
                                 },
