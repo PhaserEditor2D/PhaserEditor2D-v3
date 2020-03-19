@@ -67,9 +67,30 @@ namespace colibri.core.io {
 
         private registerDocumentVisibilityListener() {
 
+            /*
+
+            This flag is needed by Firefox.
+            In Firefox the focus event is emitted when an object is drop into the window
+            so we should filter that case.
+
+            */
+            const flag = { drop: false };
+
+            window.addEventListener("drop", e => {
+
+                flag.drop = true;
+            });
+
             window.addEventListener("focus", e => {
 
-                this.updateWithServerChanges();
+                if (flag.drop) {
+
+                    flag.drop = false;
+
+                } else {
+
+                    this.updateWithServerChanges();
+                }
             });
         }
 
@@ -153,7 +174,7 @@ namespace colibri.core.io {
 
                         if (serverFile.getModTime() !== file.getModTime() || serverFile.getSize() !== file.getSize()) {
 
-                            console.log("Modified " + fileFullName);
+                            console.log("Modified - " + fileFullName);
 
                             file._setModTime(serverFile.getModTime());
                             file._setSize(serverFile.getSize());

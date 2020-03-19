@@ -1346,8 +1346,24 @@ var colibri;
                     this.registerDocumentVisibilityListener();
                 }
                 registerDocumentVisibilityListener() {
+                    /*
+        
+                    This flag is needed by Firefox.
+                    In Firefox the focus event is emitted when an object is drop into the window
+                    so we should filter that case.
+        
+                    */
+                    const flag = { drop: false };
+                    window.addEventListener("drop", e => {
+                        flag.drop = true;
+                    });
                     window.addEventListener("focus", e => {
-                        this.updateWithServerChanges();
+                        if (flag.drop) {
+                            flag.drop = false;
+                        }
+                        else {
+                            this.updateWithServerChanges();
+                        }
                     });
                 }
                 async updateWithServerChanges() {
@@ -1398,7 +1414,7 @@ var colibri;
                             const serverFile = serverFilesMap.get(fileFullName);
                             if (serverFile) {
                                 if (serverFile.getModTime() !== file.getModTime() || serverFile.getSize() !== file.getSize()) {
-                                    console.log("Modified " + fileFullName);
+                                    console.log("Modified - " + fileFullName);
                                     file._setModTime(serverFile.getModTime());
                                     file._setSize(serverFile.getSize());
                                     change.recordModify(fileFullName);
