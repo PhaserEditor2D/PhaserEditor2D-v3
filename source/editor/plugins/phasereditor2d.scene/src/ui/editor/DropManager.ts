@@ -200,7 +200,13 @@ namespace phasereditor2d.scene.ui.editor {
 
         private acceptDropDataArray(dataArray: any[]) {
 
+            if (this._editor.isLoading()) {
+
+                return false;
+            }
+
             if (!dataArray) {
+
                 return false;
             }
 

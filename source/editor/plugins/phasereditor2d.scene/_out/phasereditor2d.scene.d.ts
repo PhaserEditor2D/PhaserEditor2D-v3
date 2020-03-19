@@ -766,6 +766,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         toggleSnapping(): void;
         setSnappingToObjectSize(): void;
         private readScene;
+        isLoading(): boolean;
         getSelectedGameObjects(): sceneobjects.ISceneObject[];
         getSelectedLists(): sceneobjects.ObjectList[];
         getDropManager(): DropManager;

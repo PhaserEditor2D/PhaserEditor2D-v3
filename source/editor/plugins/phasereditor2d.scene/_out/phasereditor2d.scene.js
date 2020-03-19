@@ -3238,6 +3238,9 @@ var phasereditor2d;
                         return false;
                     }
                     acceptDropDataArray(dataArray) {
+                        if (this._editor.isLoading()) {
+                            return false;
+                        }
                         if (!dataArray) {
                             return false;
                         }
@@ -3954,6 +3957,9 @@ var phasereditor2d;
                             alert(e.message);
                             throw e;
                         }
+                    }
+                    isLoading() {
+                        return this._overlayLayer && this._overlayLayer.isLoading();
                     }
                     getSelectedGameObjects() {
                         return this.getSelection()

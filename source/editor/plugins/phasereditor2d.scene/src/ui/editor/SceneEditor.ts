@@ -423,6 +423,10 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
+        isLoading() {
+            return this._overlayLayer && this._overlayLayer.isLoading();
+        }
+
         getSelectedGameObjects(): sceneobjects.ISceneObject[] {
 
             return this.getSelection()
