@@ -1,5 +1,7 @@
 namespace colibri {
 
+    export let CACHE_VERSION = "1";
+
     export class Platform {
 
         private static _plugins: colibri.Plugin[] = [];

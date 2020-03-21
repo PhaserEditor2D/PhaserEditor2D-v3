@@ -11,6 +11,7 @@ declare namespace colibri {
     }
 }
 declare namespace colibri {
+    let CACHE_VERSION: string;
     class Platform {
         private static _plugins;
         private static _extensionRegistry;
@@ -103,7 +104,6 @@ declare namespace colibri.ui.ide {
     const EVENT_EDITOR_DEACTIVATED = "editorDeactivated";
     const EVENT_EDITOR_ACTIVATED = "editorActivated";
     const EVENT_PROJECT_OPENED = "projectOpened";
-    const CACHE_VERSION = 1;
     class Workbench extends EventTarget {
         private static _workbench;
         static getWorkbench(): Workbench;

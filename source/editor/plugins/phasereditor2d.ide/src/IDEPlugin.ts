@@ -260,9 +260,11 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.0.0-alpha";
+    export const VER = "3.0.0";
 
     async function main() {
+
+        colibri.CACHE_VERSION = VER;
 
         console.log(`%c %c Phaser Editor 2D %c v${VER} %c %c https://phasereditor2d.com `,
             "background-color:red",

@@ -89,7 +89,7 @@ namespace colibri.ui.controls {
 
             if (appendVersion) {
 
-                url += "?v=" + ide.CACHE_VERSION;
+                url += "?v=" + CACHE_VERSION;
             }
 
             const img = new DefaultImage(new Image(), url);

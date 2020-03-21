@@ -21,7 +21,7 @@ var colibri;
                 .getImage(`app/plugins/${this.getId()}/icons/${colibri.ui.controls.ICON_SIZE}/${name}.png`, name);
         }
         async getJSON(pathInPlugin) {
-            const result = await fetch(`app/plugins/${this.getId()}/${pathInPlugin}?v=${colibri.ui.ide.CACHE_VERSION}`);
+            const result = await fetch(`app/plugins/${this.getId()}/${pathInPlugin}?v=${colibri.CACHE_VERSION}`);
             const data = await result.json();
             return data;
         }
@@ -30,6 +30,7 @@ var colibri;
 })(colibri || (colibri = {}));
 var colibri;
 (function (colibri) {
+    colibri.CACHE_VERSION = "1";
     class Platform {
         static addPlugin(plugin) {
             this._plugins.push(plugin);
@@ -264,7 +265,7 @@ var colibri;
                         return Controls._images.get(id);
                     }
                     if (appendVersion) {
-                        url += "?v=" + ui.ide.CACHE_VERSION;
+                        url += "?v=" + colibri.CACHE_VERSION;
                     }
                     const img = new controls.DefaultImage(new Image(), url);
                     Controls._images.set(id, img);
@@ -368,7 +369,6 @@ var colibri;
             ide.EVENT_EDITOR_DEACTIVATED = "editorDeactivated";
             ide.EVENT_EDITOR_ACTIVATED = "editorActivated";
             ide.EVENT_PROJECT_OPENED = "projectOpened";
-            ide.CACHE_VERSION = 1;
             class Workbench extends EventTarget {
                 constructor() {
                     super();
@@ -6240,6 +6240,7 @@ var colibri;
             class EditorArea extends ide.PartFolder {
                 constructor() {
                     super("EditorArea");
+                    this.setTabIconSize(ui.controls.ICON_SIZE * 3);
                 }
                 activateEditor(editor) {
                     super.selectTabWithContent(editor);
