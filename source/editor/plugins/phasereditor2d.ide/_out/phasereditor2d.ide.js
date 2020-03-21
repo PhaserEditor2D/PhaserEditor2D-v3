@@ -431,18 +431,23 @@ var phasereditor2d;
                             }
                         });
                         // reload project
-                        manager.addCommandHelper({
-                            id: actions.CMD_RELOAD_PROJECT,
-                            name: "Reload Project",
-                            tooltip: "Reload the project files.",
-                            category: actions.CAT_PROJECT
+                        manager.add({
+                            command: {
+                                id: actions.CMD_RELOAD_PROJECT,
+                                name: "Reload Project",
+                                tooltip: "Reload the project files.",
+                                category: actions.CAT_PROJECT
+                            },
+                            handler: {
+                                testFunc: isNotWelcomeWindowScope,
+                                executeFunc: args => ide.IDEPlugin.getInstance().ideOpenProject(colibri.Platform.getWorkbench().getProjectRoot().getName())
+                            },
+                            keys: {
+                                control: true,
+                                alt: true,
+                                key: "R"
+                            }
                         });
-                        manager.addHandlerHelper(actions.CMD_RELOAD_PROJECT, isNotWelcomeWindowScope, args => ide.IDEPlugin.getInstance().ideOpenProject(colibri.Platform.getWorkbench().getProjectRoot().getName()));
-                        manager.addKeyBinding(actions.CMD_RELOAD_PROJECT, new commands.KeyMatcher({
-                            control: true,
-                            alt: true,
-                            key: "R"
-                        }));
                         if (ide.IDEPlugin.getInstance().isDesktopMode()) {
                             // locate file
                             manager.add({

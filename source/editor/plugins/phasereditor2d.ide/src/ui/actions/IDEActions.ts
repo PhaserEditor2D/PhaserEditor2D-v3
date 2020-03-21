@@ -101,25 +101,26 @@ namespace phasereditor2d.ide.ui.actions {
 
             // reload project
 
-            manager.addCommandHelper({
-                id: CMD_RELOAD_PROJECT,
-                name: "Reload Project",
-                tooltip: "Reload the project files.",
-                category: CAT_PROJECT
+            manager.add({
+                command: {
+                    id: CMD_RELOAD_PROJECT,
+                    name: "Reload Project",
+                    tooltip: "Reload the project files.",
+                    category: CAT_PROJECT
+                },
+                handler: {
+                    testFunc: isNotWelcomeWindowScope,
+                    executeFunc:
+                        args => IDEPlugin.getInstance().ideOpenProject(
+                            colibri.Platform.getWorkbench().getProjectRoot().getName()
+                        )
+                },
+                keys: {
+                    control: true,
+                    alt: true,
+                    key: "R"
+                }
             });
-
-            manager.addHandlerHelper(CMD_RELOAD_PROJECT,
-                isNotWelcomeWindowScope,
-                args => IDEPlugin.getInstance().ideOpenProject(
-                    colibri.Platform.getWorkbench().getProjectRoot().getName()
-                )
-            );
-
-            manager.addKeyBinding(CMD_RELOAD_PROJECT, new commands.KeyMatcher({
-                control: true,
-                alt: true,
-                key: "R"
-            }));
 
             if (IDEPlugin.getInstance().isDesktopMode()) {
 
