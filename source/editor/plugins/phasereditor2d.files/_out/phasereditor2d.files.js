@@ -924,8 +924,23 @@ var phasereditor2d;
                         filesInput.addEventListener("change", e => {
                             const files = filesInput.files;
                             const input = [];
+                            const skippedFiles = [];
                             for (let i = 0; i < files.length; i++) {
-                                input.push(files.item(i));
+                                const file = files.item(i);
+                                const sizeInMB = file.size / 1048576;
+                                if (sizeInMB > 10) {
+                                    skippedFiles.push(file);
+                                    continue;
+                                }
+                                input.push(file);
+                            }
+                            if (skippedFiles.length > 0) {
+                                alert("The following files are ignored. Only files with a size below <code>10MB</code> are allowed:"
+                                    + "<ul>"
+                                    + skippedFiles
+                                        .map(file => "<li><code>" + file.name + " (" + filesize(file.size) + ")</code></li>")
+                                        .join("")
+                                    + "</ul>");
                             }
                             filesViewer.setInput(input);
                             filesViewer.repaint();
