@@ -462,16 +462,31 @@ namespace colibri.core.io {
 
         async getFileString(file: FilePath): Promise<string> {
 
-            const data = await apiRequest("GetFileString", {
-                path: file.getFullName()
+            // const data = await apiRequest("GetFileString", {
+            //     path: file.getFullName()
+            // });
+            //
+            // if (data.error) {
+            //     alert(`Cannot get file content of '${file.getFullName()}'`);
+            //     return null;
+            // }
+            //
+            // const content = data["content"];
+            //
+            // return content;
+
+            const resp = await fetch(file.getUrl(), {
+                method: "GET"
             });
 
-            if (data.error) {
-                alert(`Cannot get file content of '${file.getFullName()}'`);
+            const content = await resp.text();
+
+            if (!resp.ok) {
+
+                alert(`Cannot get the content of file '${file.getFullName()}'.`);
+
                 return null;
             }
-
-            const content = data["content"];
 
             return content;
         }

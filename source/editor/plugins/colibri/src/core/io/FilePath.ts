@@ -130,7 +130,7 @@ namespace colibri.core.io {
             return "";
         }
 
-        getUrl() {
+        getUrl(): string {
 
             if (this._parent) {
 
