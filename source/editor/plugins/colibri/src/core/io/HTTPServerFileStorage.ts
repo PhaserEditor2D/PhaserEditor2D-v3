@@ -719,6 +719,15 @@ namespace colibri.core.io {
 
         async getImageSize(file: FilePath): Promise<ImageSize> {
 
+            const key = "GetImageSize_" + file.getFullName() + "@" + file.getModTime();
+
+            const cache = localStorage.getItem(key);
+
+            if (cache) {
+
+                return JSON.parse(cache);
+            }
+
             const data = await colibri.core.io.apiRequest("GetImageSize", {
                 path: file.getFullName()
             });
@@ -727,10 +736,14 @@ namespace colibri.core.io {
                 return null;
             }
 
-            return {
+            const size = {
                 width: data.width,
                 height: data.height
             };
+
+            window.localStorage.setItem(key, JSON.stringify(size));
+
+            return size;
         }
     }
 }

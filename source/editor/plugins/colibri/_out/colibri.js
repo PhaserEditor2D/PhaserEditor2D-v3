@@ -1779,16 +1779,23 @@ var colibri;
                     return file;
                 }
                 async getImageSize(file) {
+                    const key = "GetImageSize_" + file.getFullName() + "@" + file.getModTime();
+                    const cache = localStorage.getItem(key);
+                    if (cache) {
+                        return JSON.parse(cache);
+                    }
                     const data = await colibri.core.io.apiRequest("GetImageSize", {
                         path: file.getFullName()
                     });
                     if (data.error) {
                         return null;
                     }
-                    return {
+                    const size = {
                         width: data.width,
                         height: data.height
                     };
+                    window.localStorage.setItem(key, JSON.stringify(size));
+                    return size;
                 }
             }
             io.FileStorage_HTTPServer = FileStorage_HTTPServer;
