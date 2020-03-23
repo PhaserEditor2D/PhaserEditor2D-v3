@@ -6,9 +6,16 @@
     ],
     "scripts": [
         "_out/phasereditor2d.code.js",
-        "scripts/defineRequire.js",
+        "scripts/monaco-editor/defineRequire.js",
         "scripts/monaco-editor/min/vs/loader.js",
         "scripts/monaco-editor/min/vs/editor/editor.main.nls.js",
         "scripts/monaco-editor/min/vs/editor/editor.main.js"
+    ],
+    "scripts-dev": [
+        "scripts/dev-monaco-editor/defineRequire.js",
+        "scripts/dev-monaco-editor/dev/vs/loader.js",
+        "scripts/dev-monaco-editor/dev/vs/editor/editor.main.nls.js",
+        "scripts/dev-monaco-editor/dev/vs/editor/editor.main.js",
+        "_out/phasereditor2d.code.js"
     ]
 }
