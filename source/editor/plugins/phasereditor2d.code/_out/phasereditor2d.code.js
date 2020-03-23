@@ -24,8 +24,11 @@ var phasereditor2d;
                     new code.ui.editors.MonacoEditorFactory("xml", phasereditor2d.webContentTypes.core.CONTENT_TYPE_XML),
                     new code.ui.editors.MonacoEditorFactory("text", phasereditor2d.webContentTypes.core.CONTENT_TYPE_TEXT),
                 ]));
+                // extra libs loader
+                reg.addExtension(new code.ui.PreloadExtraLibsExtension());
             }
             async starting() {
+                // theme
                 monaco.editor.defineTheme("vs", {
                     inherit: true,
                     base: "vs",
@@ -63,6 +66,37 @@ var phasereditor2d;
         }
         code.CodePlugin = CodePlugin;
         colibri.Platform.addPlugin(CodePlugin.getInstance());
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            class PreloadExtraLibsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
+                async computeTotal() {
+                    return this.getFiles().length;
+                }
+                getFiles() {
+                    return colibri.ui.ide.FileUtils.getAllFiles()
+                        .filter(file => file.getName().endsWith(".d.ts"));
+                }
+                async preload(monitor) {
+                    const utils = colibri.ui.ide.FileUtils;
+                    const files = this.getFiles();
+                    for (const file of files) {
+                        const content = await utils.preloadAndGetFileString(file);
+                        if (content) {
+                            monaco.languages.typescript.javascriptDefaults.addExtraLib(content, file.getFullName());
+                            console.log("register: " + file.getFullName());
+                        }
+                        monitor.step();
+                    }
+                }
+            }
+            ui.PreloadExtraLibsExtension = PreloadExtraLibsExtension;
+        })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));
 })(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;

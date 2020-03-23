@@ -7,7 +7,9 @@ declare namespace colibri {
         started(): Promise<void>;
         registerExtensions(registry: ExtensionRegistry): void;
         getIcon(name: string): ui.controls.IImage;
+        getResourceURL(pathInPlugin: string): string;
         getJSON(pathInPlugin: string): Promise<any>;
+        getString(pathInPlugin: string): Promise<string>;
     }
 }
 declare namespace colibri {

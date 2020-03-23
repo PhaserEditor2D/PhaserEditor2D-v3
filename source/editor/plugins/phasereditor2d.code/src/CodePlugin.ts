@@ -35,9 +35,16 @@ namespace phasereditor2d.code {
                         new ui.editors.MonacoEditorFactory("text", webContentTypes.core.CONTENT_TYPE_TEXT),
                     ])
             );
+
+            // extra libs loader
+
+            reg.addExtension(new ui.PreloadExtraLibsExtension());
+
         }
 
         async starting() {
+
+            // theme
 
             monaco.editor.defineTheme("vs", {
                 inherit: true,
@@ -74,7 +81,6 @@ namespace phasereditor2d.code {
                 }
 
                 monaco.editor.setTheme(monacoTheme);
-
             });
         }
     }

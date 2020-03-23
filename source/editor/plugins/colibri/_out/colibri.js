@@ -20,9 +20,17 @@ var colibri;
             return colibri.ui.controls.Controls
                 .getImage(`app/plugins/${this.getId()}/icons/${colibri.ui.controls.ICON_SIZE}/${name}.png`, name);
         }
+        getResourceURL(pathInPlugin) {
+            return `app/plugins/${this.getId()}/${pathInPlugin}?v=${colibri.CACHE_VERSION}`;
+        }
         async getJSON(pathInPlugin) {
-            const result = await fetch(`app/plugins/${this.getId()}/${pathInPlugin}?v=${colibri.CACHE_VERSION}`);
+            const result = await fetch(this.getResourceURL(pathInPlugin));
             const data = await result.json();
+            return data;
+        }
+        async getString(pathInPlugin) {
+            const result = await fetch(this.getResourceURL(pathInPlugin));
+            const data = await result.text();
             return data;
         }
     }

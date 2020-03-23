@@ -7,6 +7,13 @@ declare namespace phasereditor2d.code {
         starting(): Promise<void>;
     }
 }
+declare namespace phasereditor2d.code.ui {
+    class PreloadExtraLibsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
+        computeTotal(): Promise<number>;
+        private getFiles;
+        preload(monitor: colibri.ui.controls.IProgressMonitor): Promise<void>;
+    }
+}
 declare namespace phasereditor2d.code.ui.editors {
     class MonacoEditorFactory extends colibri.ui.ide.EditorFactory {
         private _language;

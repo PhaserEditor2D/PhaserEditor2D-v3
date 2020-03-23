@@ -33,7 +33,10 @@
         },
         {
             "path": "../../phasereditor2d.webContentTypes/src"
-        }   
+        },
+        {
+            "path": "../../phasereditor2d.phaser/src"
+        }
     ],
     "exclude": [
         "_out/phasereditor2d.code.d.ts"

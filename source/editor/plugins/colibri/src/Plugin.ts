@@ -30,11 +30,24 @@ namespace colibri {
                 .getImage(`app/plugins/${this.getId()}/icons/${ui.controls.ICON_SIZE}/${name}.png`, name);
         }
 
+        getResourceURL(pathInPlugin: string) {
+            return `app/plugins/${this.getId()}/${pathInPlugin}?v=${CACHE_VERSION}`;
+        }
+
         async getJSON(pathInPlugin: string) {
 
-            const result = await fetch(`app/plugins/${this.getId()}/${pathInPlugin}?v=${CACHE_VERSION}`);
+            const result = await fetch(this.getResourceURL(pathInPlugin));
 
             const data = await result.json();
+
+            return data;
+        }
+
+        async getString(pathInPlugin: string) {
+
+            const result = await fetch(this.getResourceURL(pathInPlugin));
+
+            const data = await result.text();
 
             return data;
         }
