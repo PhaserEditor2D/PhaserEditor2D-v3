@@ -3,9 +3,17 @@ var phasereditor2d;
     var code;
     (function (code) {
         var controls = colibri.ui.controls;
+        code.ICON_SYMBOL_CLASS = "symbol-class";
+        code.ICON_SYMBOL_CONSTANT = "symbol-constant";
+        code.ICON_SYMBOL_FIELD = "symbol-field";
+        code.ICON_SYMBOL_INTERFACE = "symbol-interface";
+        code.ICON_SYMBOL_METHOD = "symbol-method";
+        code.ICON_SYMBOL_NAMESPACE = "symbol-namespace";
+        code.ICON_SYMBOL_PROPERTY = "symbol-property";
+        code.ICON_SYMBOL_VARIABLE = "symbol-variable";
         class CodePlugin extends colibri.Plugin {
             constructor() {
-                super("phasereditor2d.core");
+                super("phasereditor2d.code");
             }
             static getInstance() {
                 if (!this._instance) {
@@ -14,6 +22,17 @@ var phasereditor2d;
                 return this._instance;
             }
             registerExtensions(reg) {
+                // icons loader
+                reg.addExtension(colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                    code.ICON_SYMBOL_CLASS,
+                    code.ICON_SYMBOL_CONSTANT,
+                    code.ICON_SYMBOL_FIELD,
+                    code.ICON_SYMBOL_INTERFACE,
+                    code.ICON_SYMBOL_METHOD,
+                    code.ICON_SYMBOL_NAMESPACE,
+                    code.ICON_SYMBOL_PROPERTY,
+                    code.ICON_SYMBOL_VARIABLE
+                ]));
                 // editors
                 reg.addExtension(new colibri.ui.ide.EditorExtension([
                     new code.ui.editors.MonacoEditorFactory("javascript", phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT),
@@ -132,6 +151,7 @@ var phasereditor2d;
                         super("phasereditor2d.core.ui.editors.JavaScriptEditor");
                         this.addClass("MonacoEditor");
                         this._language = language;
+                        this._outlineProvider = new editors.outline.MonacoEditorOutlineProvider(this);
                     }
                     getMonacoEditor() {
                         return this._monacoEditor;
@@ -182,6 +202,7 @@ var phasereditor2d;
                         try {
                             await colibri.ui.ide.FileUtils.setFileString_async(this.getInput(), content);
                             this.setDirty(false);
+                            this.refreshOutline();
                         }
                         catch (e) {
                             console.error(e);
@@ -196,8 +217,33 @@ var phasereditor2d;
                             return;
                         }
                         const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
-                        this._monacoEditor.setValue(content);
+                        const model = monaco.editor.createModel(content, this._language, monaco.Uri.file(file.getFullName()));
+                        this._monacoEditor.setModel(model);
+                        this.registerModelListeners(model);
                         this.setDirty(false);
+                        this.refreshOutline();
+                    }
+                    registerModelListeners(model) {
+                        this._modelLines = model.getLineCount();
+                        model.onDidChangeContent(e => {
+                            const count = model.getLineCount();
+                            console.log("count " + count);
+                            if (count !== this._modelLines) {
+                                this.refreshOutline();
+                                this._modelLines = count;
+                            }
+                        });
+                    }
+                    getEditorViewerProvider(key) {
+                        switch (key) {
+                            case phasereditor2d.outline.ui.views.OutlineView.EDITOR_VIEWER_PROVIDER_KEY:
+                                return this._outlineProvider;
+                        }
+                        return null;
+                    }
+                    async refreshOutline() {
+                        await this._outlineProvider.requestOutlineElements();
+                        this._outlineProvider.repaint();
                     }
                     layout() {
                         super.layout();
@@ -210,6 +256,172 @@ var phasereditor2d;
                     }
                 }
                 editors.MonacoEditor = MonacoEditor;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+class MonacoEditorViewerProvider extends colibri.ui.ide.EditorViewerProvider {
+    getContentProvider() {
+        throw new Error("Method not implemented.");
+    }
+    getLabelProvider() {
+        throw new Error("Method not implemented.");
+    }
+    getCellRendererProvider() {
+        throw new Error("Method not implemented.");
+    }
+    getTreeViewerRenderer(viewer) {
+        throw new Error("Method not implemented.");
+    }
+    getPropertySectionProvider() {
+        throw new Error("Method not implemented.");
+    }
+    getInput() {
+        throw new Error("Method not implemented.");
+    }
+    preload() {
+        throw new Error("Method not implemented.");
+    }
+    getUndoManager() {
+        throw new Error("Method not implemented.");
+    }
+}
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                var outline;
+                (function (outline) {
+                    var controls = colibri.ui.controls;
+                    class MonacoEditorOutlineProvider extends colibri.ui.ide.EditorViewerProvider {
+                        constructor(editor) {
+                            super();
+                            this._editor = editor;
+                            this._items = [];
+                        }
+                        getContentProvider() {
+                            return new outline.MonacoOutlineContentProvider(this);
+                        }
+                        getLabelProvider() {
+                            // tslint:disable-next-line:new-parens
+                            return new class {
+                                getLabel(obj) {
+                                    return obj.text;
+                                }
+                            };
+                        }
+                        getCellRendererProvider() {
+                            return new outline.MonacoOutlineCellRendererProvider();
+                        }
+                        getTreeViewerRenderer(viewer) {
+                            return new controls.viewers.TreeViewerRenderer(viewer);
+                        }
+                        getPropertySectionProvider() {
+                            return null;
+                        }
+                        getInput() {
+                            return this._editor.getInput();
+                        }
+                        getItems() {
+                            return this._items;
+                        }
+                        async preload() {
+                            this.requestOutlineElements();
+                        }
+                        async requestOutlineElements() {
+                            if (!this._worker) {
+                                const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
+                                this._worker = await getWorker();
+                            }
+                            this._items = await this._worker
+                                .getNavigationBarItems(this._editor.getMonacoEditor().getModel().uri.toString());
+                            console.log(this._items);
+                        }
+                        getUndoManager() {
+                            return this._editor.getUndoManager();
+                        }
+                    }
+                    outline.MonacoEditorOutlineProvider = MonacoEditorOutlineProvider;
+                })(outline = editors.outline || (editors.outline = {}));
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                var outline;
+                (function (outline) {
+                    var controls = colibri.ui.controls;
+                    class MonacoOutlineCellRendererProvider {
+                        getCellRenderer(obj) {
+                            let name;
+                            if (typeof obj.kind === "string") {
+                                name = MonacoOutlineCellRendererProvider.map[obj.kind];
+                            }
+                            if (!name) {
+                                name = code.ICON_SYMBOL_VARIABLE;
+                            }
+                            const img = code.CodePlugin.getInstance().getIcon(name);
+                            return new controls.viewers.IconImageCellRenderer(img);
+                        }
+                        preload(args) {
+                            return controls.Controls.resolveNothingLoaded();
+                        }
+                    }
+                    MonacoOutlineCellRendererProvider.map = {
+                        class: code.ICON_SYMBOL_CLASS,
+                        const: code.ICON_SYMBOL_CONSTANT,
+                        field: code.ICON_SYMBOL_FIELD,
+                        interface: code.ICON_SYMBOL_INTERFACE,
+                        method: code.ICON_SYMBOL_METHOD,
+                        function: code.ICON_SYMBOL_METHOD,
+                        constructor: code.ICON_SYMBOL_METHOD,
+                        namespace: code.ICON_SYMBOL_NAMESPACE,
+                        property: code.ICON_SYMBOL_PROPERTY,
+                        variable: code.ICON_SYMBOL_VARIABLE,
+                    };
+                    outline.MonacoOutlineCellRendererProvider = MonacoOutlineCellRendererProvider;
+                })(outline = editors.outline || (editors.outline = {}));
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                var outline;
+                (function (outline) {
+                    class MonacoOutlineContentProvider {
+                        constructor(provider) {
+                            this._provider = provider;
+                        }
+                        getRoots(input) {
+                            return this._provider.getItems();
+                        }
+                        getChildren(parent) {
+                            if (parent.childItems) {
+                                return parent.childItems;
+                            }
+                            return [];
+                        }
+                    }
+                    outline.MonacoOutlineContentProvider = MonacoOutlineContentProvider;
+                })(outline = editors.outline || (editors.outline = {}));
             })(editors = ui.editors || (ui.editors = {}));
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));

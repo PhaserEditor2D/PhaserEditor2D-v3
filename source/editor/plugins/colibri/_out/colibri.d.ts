@@ -1649,16 +1649,6 @@ declare namespace colibri.ui.ide {
     }
 }
 declare namespace colibri.ui.ide {
-    abstract class OutlineProvider extends EventTarget {
-        private _editor;
-        constructor(editor: EditorPart);
-        abstract getContentProvider(): controls.viewers.ITreeContentProvider;
-        abstract getLabelProvider(): controls.viewers.ILabelProvider;
-        abstract getCellRendererProvider(): controls.viewers.ICellRendererProvider;
-        abstract getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer;
-    }
-}
-declare namespace colibri.ui.ide {
     abstract class PreloadProjectResourcesExtension extends Extension {
         static POINT_ID: string;
         constructor();

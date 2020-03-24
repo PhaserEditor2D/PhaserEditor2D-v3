@@ -2,6 +2,15 @@ namespace phasereditor2d.code {
 
     import controls = colibri.ui.controls;
 
+    export const ICON_SYMBOL_CLASS = "symbol-class";
+    export const ICON_SYMBOL_CONSTANT = "symbol-constant";
+    export const ICON_SYMBOL_FIELD = "symbol-field";
+    export const ICON_SYMBOL_INTERFACE = "symbol-interface";
+    export const ICON_SYMBOL_METHOD = "symbol-method";
+    export const ICON_SYMBOL_NAMESPACE = "symbol-namespace";
+    export const ICON_SYMBOL_PROPERTY = "symbol-property";
+    export const ICON_SYMBOL_VARIABLE = "symbol-variable";
+
     export class CodePlugin extends colibri.Plugin {
 
         private static _instance: CodePlugin;
@@ -16,10 +25,25 @@ namespace phasereditor2d.code {
         }
 
         constructor() {
-            super("phasereditor2d.core");
+            super("phasereditor2d.code");
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
+
+            // icons loader
+
+            reg.addExtension(
+                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                    ICON_SYMBOL_CLASS,
+                    ICON_SYMBOL_CONSTANT,
+                    ICON_SYMBOL_FIELD,
+                    ICON_SYMBOL_INTERFACE,
+                    ICON_SYMBOL_METHOD,
+                    ICON_SYMBOL_NAMESPACE,
+                    ICON_SYMBOL_PROPERTY,
+                    ICON_SYMBOL_VARIABLE
+                ])
+            );
 
             // editors
 
