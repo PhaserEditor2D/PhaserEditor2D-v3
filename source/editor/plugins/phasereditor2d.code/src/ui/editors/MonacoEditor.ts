@@ -64,7 +64,11 @@ namespace phasereditor2d.code.ui.editors {
 
                 if (this._monacoEditor) {
 
+                    const model = this._monacoEditor.getModel();
+
                     this._monacoEditor.dispose();
+
+                    model.dispose();
                 }
 
                 return true;

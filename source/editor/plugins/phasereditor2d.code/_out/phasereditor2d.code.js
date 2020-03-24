@@ -159,7 +159,9 @@ var phasereditor2d;
                     onPartClosed() {
                         if (super.onPartClosed()) {
                             if (this._monacoEditor) {
+                                const model = this._monacoEditor.getModel();
                                 this._monacoEditor.dispose();
+                                model.dispose();
                             }
                             return true;
                         }
