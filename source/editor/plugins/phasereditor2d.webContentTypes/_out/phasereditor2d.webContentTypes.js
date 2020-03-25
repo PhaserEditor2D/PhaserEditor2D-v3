@@ -150,7 +150,6 @@ var phasereditor2d;
                         ["ts", core.CONTENT_TYPE_TYPESCRIPT],
                         ["html", core.CONTENT_TYPE_HTML],
                         ["css", core.CONTENT_TYPE_CSS],
-                        ["ts", core.CONTENT_TYPE_SCRIPT],
                         ["json", core.CONTENT_TYPE_JSON],
                         ["xml", core.CONTENT_TYPE_XML],
                         ["glsl", core.CONTENT_TYPE_GLSL],

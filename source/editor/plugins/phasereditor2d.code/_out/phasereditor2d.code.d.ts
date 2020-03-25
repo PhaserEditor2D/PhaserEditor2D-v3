@@ -46,10 +46,59 @@ declare namespace phasereditor2d.code.ui.editors {
     }
 }
 declare namespace phasereditor2d.code.ui.editors {
+    class CSSEditor extends MonacoEditor {
+        static _factory: colibri.ui.ide.EditorFactory;
+        static getFactory(): colibri.ui.ide.EditorFactory;
+        constructor();
+        requestOutlineItems(): Promise<any[]>;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors {
+    class HTMLEditor extends MonacoEditor {
+        static _factory: colibri.ui.ide.EditorFactory;
+        static getFactory(): colibri.ui.ide.EditorFactory;
+        constructor();
+        requestOutlineItems(): Promise<any[]>;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors {
+    class JSONEditor extends MonacoEditor {
+        static _factory: colibri.ui.ide.EditorFactory;
+        static getFactory(): colibri.ui.ide.EditorFactory;
+        constructor();
+        requestOutlineItems(): Promise<any[]>;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors {
     class JavaScriptEditor extends MonacoEditor {
         static _factory: colibri.ui.ide.EditorFactory;
         static getFactory(): colibri.ui.ide.EditorFactory;
         private _worker;
+        constructor();
+        requestOutlineItems(): Promise<any[]>;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors {
+    class TextEditor extends MonacoEditor {
+        static _factory: colibri.ui.ide.EditorFactory;
+        static getFactory(): colibri.ui.ide.EditorFactory;
+        constructor();
+        requestOutlineItems(): Promise<any[]>;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors {
+    class TypeScriptEditor extends MonacoEditor {
+        static _factory: colibri.ui.ide.EditorFactory;
+        static getFactory(): colibri.ui.ide.EditorFactory;
+        private _worker;
+        constructor();
+        requestOutlineItems(): Promise<any[]>;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors {
+    class XMLEditor extends MonacoEditor {
+        static _factory: colibri.ui.ide.EditorFactory;
+        static getFactory(): colibri.ui.ide.EditorFactory;
         constructor();
         requestOutlineItems(): Promise<any[]>;
     }

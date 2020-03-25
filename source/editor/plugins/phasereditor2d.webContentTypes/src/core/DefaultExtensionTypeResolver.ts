@@ -41,7 +41,6 @@ namespace phasereditor2d.webContentTypes.core {
                 ["ts", CONTENT_TYPE_TYPESCRIPT],
                 ["html", CONTENT_TYPE_HTML],
                 ["css", CONTENT_TYPE_CSS],
-                ["ts", CONTENT_TYPE_SCRIPT],
                 ["json", CONTENT_TYPE_JSON],
                 ["xml", CONTENT_TYPE_XML],
                 ["glsl", CONTENT_TYPE_GLSL],

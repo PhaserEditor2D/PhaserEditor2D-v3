@@ -86,7 +86,6 @@ namespace phasereditor2d.code.ui.editors {
         protected createMonacoEditorOptions(): monaco.editor.IStandaloneEditorConstructionOptions {
 
             return {
-                language: this._language,
                 fontSize: 16,
                 scrollBeyondLastLine: false
             };

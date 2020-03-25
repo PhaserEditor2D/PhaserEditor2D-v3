@@ -1,7 +1,6 @@
-/// <reference path="./MonacoEditor.ts" />
 namespace phasereditor2d.code.ui.editors {
 
-    export class JavaScriptEditor extends MonacoEditor {
+    export class TypeScriptEditor extends MonacoEditor {
 
         static _factory: colibri.ui.ide.EditorFactory;
 
@@ -10,20 +9,20 @@ namespace phasereditor2d.code.ui.editors {
             return this._factory
 
                 || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
-                    webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor()));
+                    webContentTypes.core.CONTENT_TYPE_TYPESCRIPT, () => new TypeScriptEditor()));
         }
 
         private _worker: monaco.languages.typescript.TypeScriptWorker;
 
         constructor() {
-            super("phasereditor2d.core.ui.editors.JavaScriptEditor", "javascript");
+            super("phasereditor2d.core.ui.editors.TypeScriptEditor", "typescript");
         }
 
         async requestOutlineItems() {
 
             if (!this._worker) {
 
-                const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
+                const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
 
                 this._worker = await getWorker();
             }
@@ -33,5 +32,6 @@ namespace phasereditor2d.code.ui.editors {
 
             return items;
         }
+
     }
 }

@@ -36,6 +36,12 @@ var phasereditor2d;
                 // editors
                 reg.addExtension(new colibri.ui.ide.EditorExtension([
                     code.ui.editors.JavaScriptEditor.getFactory(),
+                    code.ui.editors.TypeScriptEditor.getFactory(),
+                    code.ui.editors.HTMLEditor.getFactory(),
+                    code.ui.editors.CSSEditor.getFactory(),
+                    code.ui.editors.JSONEditor.getFactory(),
+                    code.ui.editors.XMLEditor.getFactory(),
+                    code.ui.editors.TextEditor.getFactory(),
                 ]));
                 // extra libs loader
                 reg.addExtension(new code.ui.PreloadExtraLibsExtension());
@@ -75,6 +81,8 @@ var phasereditor2d;
                     }
                     monaco.editor.setTheme(monacoTheme);
                 });
+                // models
+                monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
             }
         }
         code.CodePlugin = CodePlugin;
@@ -168,7 +176,6 @@ var phasereditor2d;
                     }
                     createMonacoEditorOptions() {
                         return {
-                            language: this._language,
                             fontSize: 16,
                             scrollBeyondLastLine: false
                         };
@@ -243,9 +250,87 @@ var phasereditor2d;
         (function (ui) {
             var editors;
             (function (editors) {
+                class CSSEditor extends editors.MonacoEditor {
+                    constructor() {
+                        super("phasereditor2d.core.ui.editors.CSSEditor", "css");
+                    }
+                    static getFactory() {
+                        return this._factory
+                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_CSS, () => new CSSEditor()));
+                    }
+                    async requestOutlineItems() {
+                        return [];
+                    }
+                }
+                editors.CSSEditor = CSSEditor;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./MonacoEditor.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                class HTMLEditor extends editors.MonacoEditor {
+                    constructor() {
+                        super("phasereditor2d.core.ui.editors.HTMLEditor", "html");
+                    }
+                    static getFactory() {
+                        return this._factory
+                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_HTML, () => new HTMLEditor()));
+                    }
+                    async requestOutlineItems() {
+                        return [];
+                    }
+                }
+                editors.HTMLEditor = HTMLEditor;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./MonacoEditor.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                class JSONEditor extends editors.MonacoEditor {
+                    constructor() {
+                        super("phasereditor2d.core.ui.editors.JSONEditor", "json");
+                    }
+                    static getFactory() {
+                        return this._factory
+                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_JSON, () => new JSONEditor()));
+                    }
+                    async requestOutlineItems() {
+                        return [];
+                    }
+                }
+                editors.JSONEditor = JSONEditor;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./MonacoEditor.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
                 class JavaScriptEditor extends editors.MonacoEditor {
                     constructor() {
-                        super("phasereditor2d.core.ui.editors.JavaScriptScriptEditor", "javascript");
+                        super("phasereditor2d.core.ui.editors.JavaScriptEditor", "javascript");
                     }
                     static getFactory() {
                         return this._factory
@@ -262,6 +347,89 @@ var phasereditor2d;
                     }
                 }
                 editors.JavaScriptEditor = JavaScriptEditor;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./MonacoEditor.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                class TextEditor extends editors.MonacoEditor {
+                    constructor() {
+                        super("phasereditor2d.core.ui.editors.TextLEditor", "text");
+                    }
+                    static getFactory() {
+                        return this._factory
+                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_TEXT, () => new TextEditor()));
+                    }
+                    async requestOutlineItems() {
+                        return [];
+                    }
+                }
+                editors.TextEditor = TextEditor;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                class TypeScriptEditor extends editors.MonacoEditor {
+                    constructor() {
+                        super("phasereditor2d.core.ui.editors.TypeScriptEditor", "typescript");
+                    }
+                    static getFactory() {
+                        return this._factory
+                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_TYPESCRIPT, () => new TypeScriptEditor()));
+                    }
+                    async requestOutlineItems() {
+                        if (!this._worker) {
+                            const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
+                            this._worker = await getWorker();
+                        }
+                        const items = await this._worker
+                            .getNavigationBarItems(this.getMonacoEditor().getModel().uri.toString());
+                        return items;
+                    }
+                }
+                editors.TypeScriptEditor = TypeScriptEditor;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="./MonacoEditor.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                class XMLEditor extends editors.MonacoEditor {
+                    constructor() {
+                        super("phasereditor2d.core.ui.editors.XMLEditor", "xml");
+                    }
+                    static getFactory() {
+                        return this._factory
+                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_XML, () => new XMLEditor()));
+                    }
+                    async requestOutlineItems() {
+                        return [];
+                    }
+                }
+                editors.XMLEditor = XMLEditor;
             })(editors = ui.editors || (ui.editors = {}));
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));

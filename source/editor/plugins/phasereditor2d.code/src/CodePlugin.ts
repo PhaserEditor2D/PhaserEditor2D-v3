@@ -51,12 +51,12 @@ namespace phasereditor2d.code {
                 new colibri.ui.ide.EditorExtension(
                     [
                         ui.editors.JavaScriptEditor.getFactory(),
-                        // new ui.editors.MonacoEditorFactory("typescript", webContentTypes.core.CONTENT_TYPE_SCRIPT),
-                        // new ui.editors.MonacoEditorFactory("html", webContentTypes.core.CONTENT_TYPE_HTML),
-                        // new ui.editors.MonacoEditorFactory("css", webContentTypes.core.CONTENT_TYPE_CSS),
-                        // new ui.editors.MonacoEditorFactory("json", webContentTypes.core.CONTENT_TYPE_JSON),
-                        // new ui.editors.MonacoEditorFactory("xml", webContentTypes.core.CONTENT_TYPE_XML),
-                        // new ui.editors.MonacoEditorFactory("text", webContentTypes.core.CONTENT_TYPE_TEXT),
+                        ui.editors.TypeScriptEditor.getFactory(),
+                        ui.editors.HTMLEditor.getFactory(),
+                        ui.editors.CSSEditor.getFactory(),
+                        ui.editors.JSONEditor.getFactory(),
+                        ui.editors.XMLEditor.getFactory(),
+                        ui.editors.TextEditor.getFactory(),
                     ])
             );
 
@@ -106,6 +106,10 @@ namespace phasereditor2d.code {
 
                 monaco.editor.setTheme(monacoTheme);
             });
+
+            // models
+
+            monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
         }
     }
 
