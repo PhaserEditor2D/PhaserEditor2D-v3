@@ -7,11 +7,13 @@ declare namespace phasereditor2d.ide {
         private static _instance;
         private _openingProject;
         private _desktopMode;
+        private _advancedJSEditor;
         static getInstance(): IDEPlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
         requestServerMode(): Promise<void>;
         isDesktopMode(): boolean;
+        isAdvancedJSEditor(): boolean;
         openFirstWindow(): Promise<void>;
         ideOpenProject(projectName: string): Promise<void>;
         private validateIndexFile;

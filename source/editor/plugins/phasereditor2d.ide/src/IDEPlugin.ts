@@ -13,6 +13,7 @@ namespace phasereditor2d.ide {
 
         private _openingProject: boolean;
         private _desktopMode: boolean;
+        private _advancedJSEditor: boolean;
 
         static getInstance() {
             return this._instance;
@@ -108,10 +109,15 @@ namespace phasereditor2d.ide {
             const data = await colibri.core.io.apiRequest("GetServerMode");
 
             this._desktopMode = data.desktop === true;
+            this._advancedJSEditor = data.advancedJSEditor === true;
         }
 
         isDesktopMode() {
             return this._desktopMode;
+        }
+
+        isAdvancedJSEditor() {
+            return this._advancedJSEditor;
         }
 
         async openFirstWindow() {

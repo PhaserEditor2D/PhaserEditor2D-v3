@@ -66,9 +66,13 @@ var phasereditor2d;
             async requestServerMode() {
                 const data = await colibri.core.io.apiRequest("GetServerMode");
                 this._desktopMode = data.desktop === true;
+                this._advancedJSEditor = data.advancedJSEditor === true;
             }
             isDesktopMode() {
                 return this._desktopMode;
+            }
+            isAdvancedJSEditor() {
+                return this._advancedJSEditor;
             }
             async openFirstWindow() {
                 this.restoreTheme();
