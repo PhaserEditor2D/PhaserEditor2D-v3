@@ -4,43 +4,21 @@ namespace phasereditor2d.images.ui.editors {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    class ImageEditorFactory extends ide.EditorFactory {
-
-        constructor() {
-            super("phasereditor2d.ImageEditorFactory");
-        }
-
-        acceptInput(input: any): boolean {
-
-            if (input instanceof io.FilePath) {
-
-                const file = input as io.FilePath;
-                const contentType = ide.Workbench.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
-
-                if (contentType === webContentTypes.core.CONTENT_TYPE_IMAGE) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        createEditor(): ide.EditorPart {
-            return new ImageEditor();
-        }
-    }
-
     export class ImageEditor extends ide.FileEditor {
 
         private _imageControl: controls.ImageControl;
+        static _factory: ide.ContentTypeEditorFactory;
 
         constructor() {
             super("phasereditor2d.ImageEditor");
             this.addClass("ImageEditor");
         }
 
-        static getFactory(): ide.EditorFactory {
-            return new ImageEditorFactory();
+        static getFactory() {
+
+            return this._factory
+                || (this._factory = new ide.ContentTypeEditorFactory(
+                    webContentTypes.ICON_FILE_IMAGE, () => new ImageEditor()));
         }
 
         protected onEditorInputContentChanged() {

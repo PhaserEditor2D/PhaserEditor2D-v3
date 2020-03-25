@@ -1,51 +1,15 @@
 namespace phasereditor2d.code.ui.editors {
 
-    import controls = colibri.ui.controls;
-    import io = colibri.core.io;
-
-    export class MonacoEditorFactory extends colibri.ui.ide.EditorFactory {
-
-        private _language: string;
-        private _contentType: string;
-
-        constructor(language: string, contentType: string) {
-            super("phasereditor2d.core.ui.editors.MonacoEditorFactory#" + language);
-
-            this._language = language;
-            this._contentType = contentType;
-        }
-
-        acceptInput(input: any): boolean {
-
-            if (input instanceof io.FilePath) {
-
-                const contentType = colibri.Platform.getWorkbench()
-                    .getContentTypeRegistry().getCachedContentType(input);
-
-                return this._contentType === contentType;
-            }
-
-            return false;
-        }
-
-        createEditor(): colibri.ui.ide.EditorPart {
-            return new MonacoEditor(this._language);
-        }
-
-    }
-
-    export class MonacoEditor extends colibri.ui.ide.FileEditor {
-
-        private static _factory: colibri.ui.ide.EditorFactory;
+    export abstract class MonacoEditor extends colibri.ui.ide.FileEditor {
 
         private _monacoEditor: monaco.editor.IStandaloneCodeEditor;
         private _language: string;
         private _outlineProvider: outline.MonacoEditorOutlineProvider;
         private _modelLines: number;
 
-        constructor(language: string) {
+        constructor(id: string, language: string) {
 
-            super("phasereditor2d.core.ui.editors.JavaScriptEditor");
+            super(id);
 
             this.addClass("MonacoEditor");
 
@@ -179,8 +143,6 @@ namespace phasereditor2d.code.ui.editors {
 
                 const count = model.getLineCount();
 
-                console.log("count " + count);
-
                 if (count !== this._modelLines) {
 
                     this.refreshOutline();
@@ -204,10 +166,10 @@ namespace phasereditor2d.code.ui.editors {
 
         async refreshOutline() {
 
-            await this._outlineProvider.requestOutlineElements();
-
-            this._outlineProvider.repaint();
+            await this._outlineProvider.refresh();
         }
+
+        abstract async requestOutlineItems(): Promise<any[]>;
 
         layout() {
 
@@ -224,41 +186,4 @@ namespace phasereditor2d.code.ui.editors {
             this.updateContent();
         }
     }
-}
-
-class MonacoEditorViewerProvider extends colibri.ui.ide.EditorViewerProvider {
-
-    getContentProvider(): colibri.ui.controls.viewers.ITreeContentProvider {
-        throw new Error("Method not implemented.");
-    }
-
-    getLabelProvider(): colibri.ui.controls.viewers.ILabelProvider {
-        throw new Error("Method not implemented.");
-    }
-
-    getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider {
-        throw new Error("Method not implemented.");
-    }
-
-    getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer {
-        throw new Error("Method not implemented.");
-    }
-
-    getPropertySectionProvider(): colibri.ui.controls.properties.PropertySectionProvider {
-        throw new Error("Method not implemented.");
-    }
-
-    getInput() {
-        throw new Error("Method not implemented.");
-    }
-
-    preload(): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-
-    getUndoManager() {
-        throw new Error("Method not implemented.");
-    }
-
-
 }

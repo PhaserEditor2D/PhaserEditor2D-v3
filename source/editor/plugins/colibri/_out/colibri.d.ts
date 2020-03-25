@@ -1358,6 +1358,21 @@ declare namespace colibri.ui.controls.viewers {
     }
 }
 declare namespace colibri.ui.ide {
+    abstract class EditorFactory {
+        abstract acceptInput(input: any): boolean;
+        abstract createEditor(): EditorPart;
+    }
+}
+declare namespace colibri.ui.ide {
+    class ContentTypeEditorFactory extends EditorFactory {
+        private _contentType;
+        private _newEditor?;
+        constructor(contentType: string, newEditor: () => EditorPart);
+        acceptInput(input: any): boolean;
+        createEditor(): EditorPart;
+    }
+}
+declare namespace colibri.ui.ide {
     type ContentTypeIconExtensionConfig = Array<{
         icon: controls.IImage;
         contentType: string;
@@ -1457,15 +1472,6 @@ declare namespace colibri.ui.ide {
     }
 }
 declare namespace colibri.ui.ide {
-    abstract class EditorFactory {
-        private _id;
-        constructor(id: string);
-        getId(): string;
-        abstract acceptInput(input: any): boolean;
-        abstract createEditor(): EditorPart;
-    }
-}
-declare namespace colibri.ui.ide {
     abstract class EditorInputExtension extends Extension {
         static POINT_ID: string;
         private _id;
@@ -1478,7 +1484,7 @@ declare namespace colibri.ui.ide {
 }
 declare namespace colibri.ui.ide {
     class EditorRegistry {
-        private _map;
+        private _factories;
         constructor();
         registerFactory(factory: EditorFactory): void;
         getFactoryForInput(input: any): EditorFactory;

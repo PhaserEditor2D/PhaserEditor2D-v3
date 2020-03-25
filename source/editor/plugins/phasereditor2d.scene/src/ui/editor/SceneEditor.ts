@@ -6,30 +6,6 @@ namespace phasereditor2d.scene.ui.editor {
     import json = core.json;
     import FileUtils = colibri.ui.ide.FileUtils;
 
-    class SceneEditorFactory extends colibri.ui.ide.EditorFactory {
-
-        constructor() {
-            super("phasereditor2d.SceneEditorFactory");
-        }
-
-        acceptInput(input: any): boolean {
-
-            if (input instanceof io.FilePath) {
-
-                const contentType = colibri.Platform.getWorkbench()
-                    .getContentTypeRegistry().getCachedContentType(input);
-
-                return contentType === core.CONTENT_TYPE_SCENE;
-            }
-
-            return false;
-        }
-
-        createEditor(): colibri.ui.ide.EditorPart {
-            return new SceneEditor();
-        }
-    }
-
     interface IEditorState {
 
         cameraState: ICameraState;
@@ -37,6 +13,15 @@ namespace phasereditor2d.scene.ui.editor {
     }
 
     export class SceneEditor extends colibri.ui.ide.FileEditor {
+
+        static _factory: colibri.ui.ide.ContentTypeEditorFactory;
+
+        static getFactory() {
+
+            return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
+                core.CONTENT_TYPE_SCENE, () => new SceneEditor()
+            ));
+        }
 
         private _blocksProvider: blocks.SceneEditorBlocksProvider;
         private _outlineProvider: outline.SceneEditorOutlineProvider;
@@ -55,10 +40,6 @@ namespace phasereditor2d.scene.ui.editor {
         private _sceneRead: boolean;
         private _currentRefreshHash: string;
         private _editorState: IEditorState;
-
-        static getFactory(): colibri.ui.ide.EditorFactory {
-            return new SceneEditorFactory();
-        }
 
         constructor() {
             super("phasereditor2d.SceneEditor");

@@ -5983,6 +5983,48 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
+            class EditorFactory {
+            }
+            ide.EditorFactory = EditorFactory;
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+/// <reference path="./EditorFactory.ts" />
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            var io = colibri.core.io;
+            class ContentTypeEditorFactory extends ide.EditorFactory {
+                constructor(contentType, newEditor) {
+                    super();
+                    this._contentType = contentType;
+                    this._newEditor = newEditor;
+                }
+                acceptInput(input) {
+                    if (input instanceof io.FilePath) {
+                        const contentType = colibri.Platform.getWorkbench()
+                            .getContentTypeRegistry().getCachedContentType(input);
+                        return this._contentType === contentType;
+                    }
+                    return false;
+                }
+                createEditor() {
+                    return this._newEditor();
+                }
+            }
+            ide.ContentTypeEditorFactory = ContentTypeEditorFactory;
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
             class ContentTypeIconExtension extends colibri.Extension {
                 constructor(config) {
                     super(ContentTypeIconExtension.POINT_ID, 10);
@@ -6405,24 +6447,6 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            class EditorFactory {
-                constructor(id) {
-                    this._id = id;
-                }
-                getId() {
-                    return this._id;
-                }
-            }
-            ide.EditorFactory = EditorFactory;
-        })(ide = ui.ide || (ui.ide = {}));
-    })(ui = colibri.ui || (colibri.ui = {}));
-})(colibri || (colibri = {}));
-var colibri;
-(function (colibri) {
-    var ui;
-    (function (ui) {
-        var ide;
-        (function (ide) {
             class EditorInputExtension extends colibri.Extension {
                 constructor(id) {
                     super(EditorInputExtension.POINT_ID);
@@ -6445,13 +6469,13 @@ var colibri;
         (function (ide) {
             class EditorRegistry {
                 constructor() {
-                    this._map = new Map();
+                    this._factories = [];
                 }
                 registerFactory(factory) {
-                    this._map.set(factory.getId(), factory);
+                    this._factories.push(factory);
                 }
                 getFactoryForInput(input) {
-                    for (const factory of this._map.values()) {
+                    for (const factory of this._factories) {
                         if (factory.acceptInput(input)) {
                             return factory;
                         }
@@ -7033,19 +7057,6 @@ var colibri;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
 })(colibri || (colibri = {}));
-// namespace colibri.ui.ide {
-//     export abstract class OutlineProvider extends EventTarget {
-//         private _editor: EditorPart;
-//         constructor(editor: EditorPart) {
-//             super();
-//             this._editor = editor;
-//         }
-//         abstract getContentProvider(): controls.viewers.ITreeContentProvider;
-//         abstract getLabelProvider(): controls.viewers.ILabelProvider;
-//         abstract getCellRendererProvider(): controls.viewers.ICellRendererProvider;
-//         abstract getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer;
-//     }
-// }
 var colibri;
 (function (colibri) {
     var ui;

@@ -726,6 +726,8 @@ declare namespace phasereditor2d.scene.ui.editor {
         toolsState: tools.ISceneToolsState;
     }
     export class SceneEditor extends colibri.ui.ide.FileEditor {
+        static _factory: colibri.ui.ide.ContentTypeEditorFactory;
+        static getFactory(): colibri.ui.ide.ContentTypeEditorFactory;
         private _blocksProvider;
         private _outlineProvider;
         private _propertyProvider;
@@ -743,7 +745,6 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _sceneRead;
         private _currentRefreshHash;
         private _editorState;
-        static getFactory(): colibri.ui.ide.EditorFactory;
         constructor();
         openSourceFileInEditor(): void;
         doSave(): Promise<void>;

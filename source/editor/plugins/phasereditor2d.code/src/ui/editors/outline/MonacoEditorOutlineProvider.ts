@@ -55,23 +55,16 @@ namespace phasereditor2d.code.ui.editors.outline {
 
         async preload(): Promise<void> {
 
-            this.requestOutlineElements();
+            // nothing for now
         }
 
-        private _worker: monaco.languages.typescript.TypeScriptWorker;
+        async refresh() {
 
-        async requestOutlineElements() {
-
-            if (!this._worker) {
-                const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
-
-                this._worker = await getWorker();
-            }
-
-            this._items = await this._worker
-                .getNavigationBarItems(this._editor.getMonacoEditor().getModel().uri.toString());
+            this._items = await this._editor.requestOutlineItems();
 
             console.log(this._items);
+
+            this.repaint();
         }
 
         getUndoManager() {

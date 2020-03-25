@@ -2,19 +2,21 @@ namespace colibri.ui.ide {
 
     export class EditorRegistry {
 
-        private _map: Map<string, EditorFactory>;
+        private _factories: EditorFactory[];
 
         constructor() {
-            this._map = new Map();
+
+            this._factories = [];
         }
 
         registerFactory(factory: EditorFactory): void {
-            this._map.set(factory.getId(), factory);
+
+            this._factories.push(factory);
         }
 
         getFactoryForInput(input: any): EditorFactory {
 
-            for (const factory of this._map.values()) {
+            for (const factory of this._factories) {
 
                 if (factory.acceptInput(input)) {
                     return factory;

@@ -5,31 +5,15 @@ namespace phasereditor2d.pack.ui.editor {
     import dialogs = controls.dialogs;
     import io = colibri.core.io;
 
-    export class AssetPackEditorFactory extends ide.EditorFactory {
-
-        constructor() {
-            super("phasereditor2d.AssetPackEditorFactory");
-        }
-
-        acceptInput(input: any): boolean {
-
-            if (input instanceof io.FilePath) {
-
-                const contentType = ide.Workbench.getWorkbench().getContentTypeRegistry().getCachedContentType(input);
-
-                return contentType === pack.core.contentTypes.CONTENT_TYPE_ASSET_PACK;
-            }
-
-            return false;
-        }
-
-        createEditor(): ide.EditorPart {
-            return new AssetPackEditor();
-        }
-
-    }
-
     export class AssetPackEditor extends ide.ViewerFileEditor {
+        static _factory: ide.ContentTypeEditorFactory;
+
+        static getFactory() {
+
+            return this._factory
+                || (this._factory = new ide.ContentTypeEditorFactory(
+                    core.contentTypes.CONTENT_TYPE_ASSET_PACK, () => new AssetPackEditor()));
+        }
 
         private _pack: core.AssetPack;
         private _outlineProvider = new AssetPackEditorOutlineProvider(this);
@@ -37,13 +21,9 @@ namespace phasereditor2d.pack.ui.editor {
         private _propertyProvider = new properties.AssetPackEditorPropertyProvider();
 
         constructor() {
-            super("phasereditor2d.AssetPackEditor");
+            super("phasereditor2d.pack.ui.AssetPackEditor");
 
             this.addClass("AssetPackEditor");
-        }
-
-        static getFactory(): AssetPackEditorFactory {
-            return new AssetPackEditorFactory();
         }
 
         static registerCommands(manager: ide.commands.CommandManager) {

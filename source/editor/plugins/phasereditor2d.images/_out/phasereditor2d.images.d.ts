@@ -11,8 +11,9 @@ declare namespace phasereditor2d.images.ui.editors {
     import controls = colibri.ui.controls;
     class ImageEditor extends ide.FileEditor {
         private _imageControl;
+        static _factory: ide.ContentTypeEditorFactory;
         constructor();
-        static getFactory(): ide.EditorFactory;
+        static getFactory(): ide.ContentTypeEditorFactory;
         protected onEditorInputContentChanged(): void;
         createPart(): Promise<void>;
         private updateImage;

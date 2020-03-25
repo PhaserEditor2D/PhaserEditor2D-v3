@@ -2195,33 +2195,17 @@ var phasereditor2d;
                 var ide = colibri.ui.ide;
                 var controls = colibri.ui.controls;
                 var dialogs = controls.dialogs;
-                var io = colibri.core.io;
-                class AssetPackEditorFactory extends ide.EditorFactory {
-                    constructor() {
-                        super("phasereditor2d.AssetPackEditorFactory");
-                    }
-                    acceptInput(input) {
-                        if (input instanceof io.FilePath) {
-                            const contentType = ide.Workbench.getWorkbench().getContentTypeRegistry().getCachedContentType(input);
-                            return contentType === pack.core.contentTypes.CONTENT_TYPE_ASSET_PACK;
-                        }
-                        return false;
-                    }
-                    createEditor() {
-                        return new AssetPackEditor();
-                    }
-                }
-                editor_1.AssetPackEditorFactory = AssetPackEditorFactory;
                 class AssetPackEditor extends ide.ViewerFileEditor {
                     constructor() {
-                        super("phasereditor2d.AssetPackEditor");
+                        super("phasereditor2d.pack.ui.AssetPackEditor");
                         this._outlineProvider = new editor_1.AssetPackEditorOutlineProvider(this);
                         this._blocksProvider = new editor_1.AssetPackEditorBlocksProvider(this);
                         this._propertyProvider = new editor_1.properties.AssetPackEditorPropertyProvider();
                         this.addClass("AssetPackEditor");
                     }
                     static getFactory() {
-                        return new AssetPackEditorFactory();
+                        return this._factory
+                            || (this._factory = new ide.ContentTypeEditorFactory(pack.core.contentTypes.CONTENT_TYPE_ASSET_PACK, () => new AssetPackEditor()));
                     }
                     static registerCommands(manager) {
                         // delete

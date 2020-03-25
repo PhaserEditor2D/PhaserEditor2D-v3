@@ -508,18 +508,14 @@ declare namespace phasereditor2d.pack.ui.editor {
     import ide = colibri.ui.ide;
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
-    class AssetPackEditorFactory extends ide.EditorFactory {
-        constructor();
-        acceptInput(input: any): boolean;
-        createEditor(): ide.EditorPart;
-    }
     class AssetPackEditor extends ide.ViewerFileEditor {
+        static _factory: ide.ContentTypeEditorFactory;
+        static getFactory(): ide.ContentTypeEditorFactory;
         private _pack;
         private _outlineProvider;
         private _blocksProvider;
         private _propertyProvider;
         constructor();
-        static getFactory(): AssetPackEditorFactory;
         static registerCommands(manager: ide.commands.CommandManager): void;
         private static isEditorScope;
         deleteSelection(): void;

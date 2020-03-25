@@ -3698,25 +3698,8 @@ var phasereditor2d;
             var editor;
             (function (editor) {
                 var controls = colibri.ui.controls;
-                var io = colibri.core.io;
                 var json = scene.core.json;
                 var FileUtils = colibri.ui.ide.FileUtils;
-                class SceneEditorFactory extends colibri.ui.ide.EditorFactory {
-                    constructor() {
-                        super("phasereditor2d.SceneEditorFactory");
-                    }
-                    acceptInput(input) {
-                        if (input instanceof io.FilePath) {
-                            const contentType = colibri.Platform.getWorkbench()
-                                .getContentTypeRegistry().getCachedContentType(input);
-                            return contentType === scene.core.CONTENT_TYPE_SCENE;
-                        }
-                        return false;
-                    }
-                    createEditor() {
-                        return new SceneEditor();
-                    }
-                }
                 class SceneEditor extends colibri.ui.ide.FileEditor {
                     constructor() {
                         super("phasereditor2d.SceneEditor");
@@ -3726,7 +3709,7 @@ var phasereditor2d;
                         this._propertyProvider = new editor.properties.SceneEditorSectionProvider(this);
                     }
                     static getFactory() {
-                        return new SceneEditorFactory();
+                        return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(scene.core.CONTENT_TYPE_SCENE, () => new SceneEditor()));
                     }
                     openSourceFileInEditor() {
                         const lang = this._scene.getSettings().compilerOutputLanguage;

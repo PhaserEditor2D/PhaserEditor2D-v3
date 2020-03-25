@@ -23,20 +23,12 @@ declare namespace phasereditor2d.code.ui {
     }
 }
 declare namespace phasereditor2d.code.ui.editors {
-    class MonacoEditorFactory extends colibri.ui.ide.EditorFactory {
-        private _language;
-        private _contentType;
-        constructor(language: string, contentType: string);
-        acceptInput(input: any): boolean;
-        createEditor(): colibri.ui.ide.EditorPart;
-    }
-    class MonacoEditor extends colibri.ui.ide.FileEditor {
-        private static _factory;
+    abstract class MonacoEditor extends colibri.ui.ide.FileEditor {
         private _monacoEditor;
         private _language;
         private _outlineProvider;
         private _modelLines;
-        constructor(language: string);
+        constructor(id: string, language: string);
         getMonacoEditor(): monaco.editor.IStandaloneCodeEditor;
         onPartClosed(): boolean;
         protected createPart(): void;
@@ -48,19 +40,19 @@ declare namespace phasereditor2d.code.ui.editors {
         private registerModelListeners;
         getEditorViewerProvider(key: string): outline.MonacoEditorOutlineProvider;
         refreshOutline(): Promise<void>;
+        abstract requestOutlineItems(): Promise<any[]>;
         layout(): void;
         protected onEditorInputContentChanged(): void;
     }
 }
-declare class MonacoEditorViewerProvider extends colibri.ui.ide.EditorViewerProvider {
-    getContentProvider(): colibri.ui.controls.viewers.ITreeContentProvider;
-    getLabelProvider(): colibri.ui.controls.viewers.ILabelProvider;
-    getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider;
-    getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer;
-    getPropertySectionProvider(): colibri.ui.controls.properties.PropertySectionProvider;
-    getInput(): void;
-    preload(): Promise<void>;
-    getUndoManager(): void;
+declare namespace phasereditor2d.code.ui.editors {
+    class JavaScriptEditor extends MonacoEditor {
+        static _factory: colibri.ui.ide.EditorFactory;
+        static getFactory(): colibri.ui.ide.EditorFactory;
+        private _worker;
+        constructor();
+        requestOutlineItems(): Promise<any[]>;
+    }
 }
 declare namespace phasereditor2d.code.ui.editors.outline {
     import controls = colibri.ui.controls;
@@ -76,8 +68,7 @@ declare namespace phasereditor2d.code.ui.editors.outline {
         getInput(): colibri.core.io.FilePath;
         getItems(): any[];
         preload(): Promise<void>;
-        private _worker;
-        requestOutlineElements(): Promise<void>;
+        refresh(): Promise<void>;
         getUndoManager(): colibri.ui.ide.undo.UndoManager;
     }
 }

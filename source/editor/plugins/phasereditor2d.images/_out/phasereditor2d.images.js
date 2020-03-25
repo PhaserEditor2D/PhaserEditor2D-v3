@@ -35,32 +35,14 @@ var phasereditor2d;
             (function (editors) {
                 var ide = colibri.ui.ide;
                 var controls = colibri.ui.controls;
-                var io = colibri.core.io;
-                class ImageEditorFactory extends ide.EditorFactory {
-                    constructor() {
-                        super("phasereditor2d.ImageEditorFactory");
-                    }
-                    acceptInput(input) {
-                        if (input instanceof io.FilePath) {
-                            const file = input;
-                            const contentType = ide.Workbench.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
-                            if (contentType === phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    }
-                    createEditor() {
-                        return new ImageEditor();
-                    }
-                }
                 class ImageEditor extends ide.FileEditor {
                     constructor() {
                         super("phasereditor2d.ImageEditor");
                         this.addClass("ImageEditor");
                     }
                     static getFactory() {
-                        return new ImageEditorFactory();
+                        return this._factory
+                            || (this._factory = new ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.ICON_FILE_IMAGE, () => new ImageEditor()));
                     }
                     onEditorInputContentChanged() {
                         // empty

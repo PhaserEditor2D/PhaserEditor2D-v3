@@ -35,13 +35,7 @@ var phasereditor2d;
                 ]));
                 // editors
                 reg.addExtension(new colibri.ui.ide.EditorExtension([
-                    new code.ui.editors.MonacoEditorFactory("javascript", phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT),
-                    new code.ui.editors.MonacoEditorFactory("typescript", phasereditor2d.webContentTypes.core.CONTENT_TYPE_SCRIPT),
-                    new code.ui.editors.MonacoEditorFactory("html", phasereditor2d.webContentTypes.core.CONTENT_TYPE_HTML),
-                    new code.ui.editors.MonacoEditorFactory("css", phasereditor2d.webContentTypes.core.CONTENT_TYPE_CSS),
-                    new code.ui.editors.MonacoEditorFactory("json", phasereditor2d.webContentTypes.core.CONTENT_TYPE_JSON),
-                    new code.ui.editors.MonacoEditorFactory("xml", phasereditor2d.webContentTypes.core.CONTENT_TYPE_XML),
-                    new code.ui.editors.MonacoEditorFactory("text", phasereditor2d.webContentTypes.core.CONTENT_TYPE_TEXT),
+                    code.ui.editors.JavaScriptEditor.getFactory(),
                 ]));
                 // extra libs loader
                 reg.addExtension(new code.ui.PreloadExtraLibsExtension());
@@ -126,29 +120,9 @@ var phasereditor2d;
         (function (ui) {
             var editors;
             (function (editors) {
-                var io = colibri.core.io;
-                class MonacoEditorFactory extends colibri.ui.ide.EditorFactory {
-                    constructor(language, contentType) {
-                        super("phasereditor2d.core.ui.editors.MonacoEditorFactory#" + language);
-                        this._language = language;
-                        this._contentType = contentType;
-                    }
-                    acceptInput(input) {
-                        if (input instanceof io.FilePath) {
-                            const contentType = colibri.Platform.getWorkbench()
-                                .getContentTypeRegistry().getCachedContentType(input);
-                            return this._contentType === contentType;
-                        }
-                        return false;
-                    }
-                    createEditor() {
-                        return new MonacoEditor(this._language);
-                    }
-                }
-                editors.MonacoEditorFactory = MonacoEditorFactory;
                 class MonacoEditor extends colibri.ui.ide.FileEditor {
-                    constructor(language) {
-                        super("phasereditor2d.core.ui.editors.JavaScriptEditor");
+                    constructor(id, language) {
+                        super(id);
                         this.addClass("MonacoEditor");
                         this._language = language;
                         this._outlineProvider = new editors.outline.MonacoEditorOutlineProvider(this);
@@ -229,7 +203,6 @@ var phasereditor2d;
                         this._modelLines = model.getLineCount();
                         model.onDidChangeContent(e => {
                             const count = model.getLineCount();
-                            console.log("count " + count);
                             if (count !== this._modelLines) {
                                 this.refreshOutline();
                                 this._modelLines = count;
@@ -244,8 +217,7 @@ var phasereditor2d;
                         return null;
                     }
                     async refreshOutline() {
-                        await this._outlineProvider.requestOutlineElements();
-                        this._outlineProvider.repaint();
+                        await this._outlineProvider.refresh();
                     }
                     layout() {
                         super.layout();
@@ -262,32 +234,38 @@ var phasereditor2d;
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));
 })(phasereditor2d || (phasereditor2d = {}));
-class MonacoEditorViewerProvider extends colibri.ui.ide.EditorViewerProvider {
-    getContentProvider() {
-        throw new Error("Method not implemented.");
-    }
-    getLabelProvider() {
-        throw new Error("Method not implemented.");
-    }
-    getCellRendererProvider() {
-        throw new Error("Method not implemented.");
-    }
-    getTreeViewerRenderer(viewer) {
-        throw new Error("Method not implemented.");
-    }
-    getPropertySectionProvider() {
-        throw new Error("Method not implemented.");
-    }
-    getInput() {
-        throw new Error("Method not implemented.");
-    }
-    preload() {
-        throw new Error("Method not implemented.");
-    }
-    getUndoManager() {
-        throw new Error("Method not implemented.");
-    }
-}
+/// <reference path="./MonacoEditor.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                class JavaScriptEditor extends editors.MonacoEditor {
+                    constructor() {
+                        super("phasereditor2d.core.ui.editors.JavaScriptScriptEditor", "javascript");
+                    }
+                    static getFactory() {
+                        return this._factory
+                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor()));
+                    }
+                    async requestOutlineItems() {
+                        if (!this._worker) {
+                            const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
+                            this._worker = await getWorker();
+                        }
+                        const items = await this._worker
+                            .getNavigationBarItems(this.getMonacoEditor().getModel().uri.toString());
+                        return items;
+                    }
+                }
+                editors.JavaScriptEditor = JavaScriptEditor;
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var code;
@@ -332,16 +310,12 @@ var phasereditor2d;
                             return this._items;
                         }
                         async preload() {
-                            this.requestOutlineElements();
+                            // nothing for now
                         }
-                        async requestOutlineElements() {
-                            if (!this._worker) {
-                                const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
-                                this._worker = await getWorker();
-                            }
-                            this._items = await this._worker
-                                .getNavigationBarItems(this._editor.getMonacoEditor().getModel().uri.toString());
+                        async refresh() {
+                            this._items = await this._editor.requestOutlineItems();
                             console.log(this._items);
+                            this.repaint();
                         }
                         getUndoManager() {
                             return this._editor.getUndoManager();
