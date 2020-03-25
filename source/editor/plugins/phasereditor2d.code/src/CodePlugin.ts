@@ -62,6 +62,7 @@ namespace phasereditor2d.code {
 
             // extra libs loader
 
+            // TODO: just enable this if ServerMode.enableAdvancedJavaScriptEditor.
             reg.addExtension(new ui.PreloadExtraLibsExtension());
 
         }
@@ -106,10 +107,6 @@ namespace phasereditor2d.code {
 
                 monaco.editor.setTheme(monacoTheme);
             });
-
-            // models
-
-            monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
         }
     }
 

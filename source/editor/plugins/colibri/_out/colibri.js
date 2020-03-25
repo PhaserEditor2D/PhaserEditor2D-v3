@@ -605,6 +605,7 @@ var colibri;
                         this._activePart = part;
                         if (old) {
                             this.toggleActivePartClass(old);
+                            old.onPartDeactivated();
                             this.dispatchEvent(new CustomEvent(ide.EVENT_PART_DEACTIVATED, { detail: old }));
                         }
                         if (part) {
@@ -6146,6 +6147,9 @@ var colibri;
                     this.createPart();
                 }
                 onPartActivated() {
+                    // nothing
+                }
+                onPartDeactivated() {
                     // nothing
                 }
                 saveState(state) {

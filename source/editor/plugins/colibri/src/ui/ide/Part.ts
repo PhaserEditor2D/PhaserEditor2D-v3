@@ -146,6 +146,10 @@ namespace colibri.ui.ide {
             // nothing
         }
 
+        onPartDeactivated() {
+            // nothing
+        }
+
         saveState(state: any) {
             // nothing
         }

@@ -44,6 +44,7 @@ var phasereditor2d;
                     code.ui.editors.TextEditor.getFactory(),
                 ]));
                 // extra libs loader
+                // TODO: just enable this if ServerMode.enableAdvancedJavaScriptEditor.
                 reg.addExtension(new code.ui.PreloadExtraLibsExtension());
             }
             async starting() {
@@ -81,8 +82,6 @@ var phasereditor2d;
                     }
                     monaco.editor.setTheme(monacoTheme);
                 });
-                // models
-                monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
             }
         }
         code.CodePlugin = CodePlugin;
@@ -109,8 +108,8 @@ var phasereditor2d;
                     for (const file of files) {
                         const content = await utils.preloadAndGetFileString(file);
                         if (content) {
+                            monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
                             monaco.languages.typescript.javascriptDefaults.addExtraLib(content, file.getFullName());
-                            console.log("register: " + file.getFullName());
                         }
                         monitor.step();
                     }
@@ -136,31 +135,52 @@ var phasereditor2d;
                         this._outlineProvider = new editors.outline.MonacoEditorOutlineProvider(this);
                     }
                     getMonacoEditor() {
-                        return this._monacoEditor;
+                        return MonacoEditor._sharedEditor;
                     }
                     onPartClosed() {
                         if (super.onPartClosed()) {
-                            if (this._monacoEditor) {
-                                const model = this._monacoEditor.getModel();
-                                this._monacoEditor.dispose();
-                                model.dispose();
+                            if (this._model) {
+                                this._viewState = MonacoEditor._sharedEditor.saveViewState();
+                                this._model.dispose();
+                                this._model = null;
                             }
                             return true;
                         }
                         return false;
                     }
                     createPart() {
-                        const container = document.createElement("div");
-                        container.classList.add("MonacoEditorContainer");
-                        this.getElement().appendChild(container);
-                        this._monacoEditor = this.createMonacoEditor(container);
-                        this._monacoEditor.onDidChangeModelContent(e => {
-                            this.setDirty(true);
-                        });
+                        if (!MonacoEditor._sharedEditorContainer) {
+                            const container = document.createElement("div");
+                            container.classList.add("MonacoEditorContainer");
+                            MonacoEditor._sharedEditorContainer = container;
+                            MonacoEditor._sharedEditor = monaco.editor.create(container, {
+                                scrollBeyondLastLine: true,
+                                fontSize: 16
+                            });
+                        }
+                        this.getElement().appendChild(MonacoEditor._sharedEditorContainer);
                         this.updateContent();
                     }
+                    onPartDeactivated() {
+                        super.onPartDeactivated();
+                        this._viewState = MonacoEditor._sharedEditor.saveViewState();
+                    }
+                    onPartActivated() {
+                        super.onPartActivated();
+                        if (MonacoEditor._sharedEditorContainer) {
+                            this.getElement().appendChild(MonacoEditor._sharedEditorContainer);
+                            const editor = MonacoEditor._sharedEditor;
+                            editor.setModel(this._model);
+                            if (this._viewState) {
+                                editor.restoreViewState(this._viewState);
+                            }
+                            setTimeout(() => {
+                                editor.focus();
+                            }, 1);
+                        }
+                    }
                     getTokensAtLine(position) {
-                        const model = this._monacoEditor.getModel();
+                        const model = this._model;
                         const line = model.getLineContent(position.lineNumber);
                         const tokens = monaco.editor.tokenize(line, this._language);
                         let type = "unknown";
@@ -171,17 +191,8 @@ var phasereditor2d;
                         }
                         return type;
                     }
-                    createMonacoEditor(container) {
-                        return monaco.editor.create(container, this.createMonacoEditorOptions());
-                    }
-                    createMonacoEditorOptions() {
-                        return {
-                            fontSize: 16,
-                            scrollBeyondLastLine: false
-                        };
-                    }
                     async doSave() {
-                        const content = this._monacoEditor.getValue();
+                        const content = this._model.getValue();
                         try {
                             await colibri.ui.ide.FileUtils.setFileString_async(this.getInput(), content);
                             this.setDirty(false);
@@ -196,13 +207,16 @@ var phasereditor2d;
                         if (!file) {
                             return;
                         }
-                        if (!this._monacoEditor) {
+                        if (!MonacoEditor._sharedEditor) {
                             return;
                         }
                         const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
-                        const model = monaco.editor.createModel(content, this._language, monaco.Uri.file(file.getFullName()));
-                        this._monacoEditor.setModel(model);
-                        this.registerModelListeners(model);
+                        this._model = monaco.editor.createModel(content, this._language, monaco.Uri.file(file.getFullName()));
+                        this._model.onDidChangeContent(e => {
+                            this.setDirty(true);
+                        });
+                        MonacoEditor._sharedEditor.setModel(this._model);
+                        this.registerModelListeners(this._model);
                         this.setDirty(false);
                         this.refreshOutline();
                     }
@@ -228,8 +242,8 @@ var phasereditor2d;
                     }
                     layout() {
                         super.layout();
-                        if (this._monacoEditor) {
-                            this._monacoEditor.layout();
+                        if (MonacoEditor._sharedEditor) {
+                            MonacoEditor._sharedEditor.layout();
                         }
                     }
                     onEditorInputContentChanged() {

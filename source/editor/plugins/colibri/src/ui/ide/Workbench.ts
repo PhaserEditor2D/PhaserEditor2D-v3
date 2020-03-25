@@ -387,7 +387,11 @@ namespace colibri.ui.ide {
                 this._activePart = part;
 
                 if (old) {
+
                     this.toggleActivePartClass(old);
+
+                    old.onPartDeactivated();
+
                     this.dispatchEvent(new CustomEvent(EVENT_PART_DEACTIVATED, { detail: old }));
                 }
 

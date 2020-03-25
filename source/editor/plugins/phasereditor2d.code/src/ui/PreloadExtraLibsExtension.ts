@@ -26,8 +26,8 @@ namespace phasereditor2d.code.ui {
 
                 if (content) {
 
+                    monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
                     monaco.languages.typescript.javascriptDefaults.addExtraLib(content, file.getFullName());
-                    console.log("register: " + file.getFullName());
                 }
 
                 monitor.step();
