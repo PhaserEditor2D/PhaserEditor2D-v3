@@ -120,6 +120,26 @@ var phasereditor2d;
                             const str = await utils.preloadAndGetFileString(file);
                             monaco.editor.createModel(str, "javascript", monaco.Uri.file(fileName));
                         }
+                        for (const fileName of e.getDeleteRecords()) {
+                            if (!fileName.endsWith(".js")) {
+                                continue;
+                            }
+                            const model = monaco.editor.getModel(monaco.Uri.file(fileName));
+                            if (model) {
+                                model.dispose();
+                            }
+                        }
+                        for (const fileName of e.getModifiedRecords()) {
+                            if (!fileName.endsWith(".js")) {
+                                continue;
+                            }
+                            const file = fileMap.get(fileName);
+                            const content = await utils.preloadAndGetFileString(file);
+                            const model = monaco.editor.getModel(monaco.Uri.file(fileName));
+                            if (model.getValue() !== content) {
+                                model.setValue(content);
+                            }
+                        }
                     });
                 }
             }
@@ -279,10 +299,13 @@ var phasereditor2d;
                         if (!file) {
                             return;
                         }
-                        if (!MonacoEditor._sharedEditor) {
+                        const editor = MonacoEditor._sharedEditor;
+                        if (!editor) {
                             return;
                         }
+                        const before = editor.saveViewState();
                         this._model = await this.createModel(file);
+                        editor.restoreViewState(before);
                         this._model.onDidChangeContent(e => {
                             this.setDirty(true);
                         });
@@ -323,7 +346,7 @@ var phasereditor2d;
                         }
                     }
                     onEditorInputContentChanged() {
-                        this.updateContent();
+                        // this.updateContent();
                     }
                 }
                 editors.MonacoEditor = MonacoEditor;
@@ -428,8 +451,12 @@ var phasereditor2d;
                     }
                     async createModel(file) {
                         if (code.CodePlugin.getInstance().isAdvancedJSEditor()) {
+                            const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
                             const uri = monaco.Uri.file(file.getFullName());
                             const model = monaco.editor.getModel(uri);
+                            if (content !== model.getValue()) {
+                                model.setValue(content);
+                            }
                             return model;
                         }
                         else {

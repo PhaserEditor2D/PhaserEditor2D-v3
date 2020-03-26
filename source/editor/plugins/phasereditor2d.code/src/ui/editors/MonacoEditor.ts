@@ -149,11 +149,17 @@ namespace phasereditor2d.code.ui.editors {
                 return;
             }
 
-            if (!MonacoEditor._sharedEditor) {
+            const editor = MonacoEditor._sharedEditor;
+
+            if (!editor) {
                 return;
             }
 
+            const before = editor.saveViewState();
+
             this._model = await this.createModel(file);
+
+            editor.restoreViewState(before);
 
             this._model.onDidChangeContent(e => {
                 this.setDirty(true);
@@ -225,7 +231,7 @@ namespace phasereditor2d.code.ui.editors {
 
         protected onEditorInputContentChanged() {
 
-            this.updateContent();
+            // this.updateContent();
         }
     }
 }

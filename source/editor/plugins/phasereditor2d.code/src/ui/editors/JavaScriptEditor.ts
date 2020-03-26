@@ -25,9 +25,16 @@ namespace phasereditor2d.code.ui.editors {
 
             if (CodePlugin.getInstance().isAdvancedJSEditor()) {
 
+                const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+
                 const uri = monaco.Uri.file(file.getFullName());
 
                 const model = monaco.editor.getModel(uri);
+
+                if (content !== model.getValue()) {
+
+                    model.setValue(content);
+                }
 
                 return model;
 

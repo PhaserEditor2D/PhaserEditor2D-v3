@@ -34,6 +34,40 @@ namespace phasereditor2d.code.ui {
 
                     monaco.editor.createModel(str, "javascript", monaco.Uri.file(fileName));
                 }
+
+                for (const fileName of e.getDeleteRecords()) {
+
+                    if (!fileName.endsWith(".js")) {
+
+                        continue;
+                    }
+
+                    const model = monaco.editor.getModel(monaco.Uri.file(fileName));
+
+                    if (model) {
+
+                        model.dispose();
+                    }
+                }
+
+                for (const fileName of e.getModifiedRecords()) {
+
+                    if (!fileName.endsWith(".js")) {
+
+                        continue;
+                    }
+
+                    const file = fileMap.get(fileName);
+
+                    const content = await utils.preloadAndGetFileString(file);
+
+                    const model = monaco.editor.getModel(monaco.Uri.file(fileName));
+
+                    if (model.getValue() !== content) {
+
+                        model.setValue(content);
+                    }
+                }
             });
         }
     }
