@@ -62,8 +62,6 @@ namespace phasereditor2d.code.ui.editors.outline {
 
             this._items = await this._editor.requestOutlineItems();
 
-            console.log(this._items);
-
             this.repaint();
         }
 

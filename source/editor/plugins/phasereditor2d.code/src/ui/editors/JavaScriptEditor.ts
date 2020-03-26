@@ -44,11 +44,40 @@ namespace phasereditor2d.code.ui.editors {
             }
         }
 
+        protected onEditorFileNameChanged() {
+
+            const uri = monaco.Uri.file(this.getInput().getFullName());
+
+            this._model = monaco.editor.getModel(uri);
+
+            const editor = this.getMonacoEditor();
+
+            const state = editor.saveViewState();
+
+            editor.setModel(this._model);
+
+            editor.restoreViewState(state);
+        }
+
         protected disposeModel() {
 
             if (CodePlugin.getInstance().isAdvancedJSEditor()) {
 
                 // the model is disposed by the ModelsManager.
+                // but we should update it with the file content if the editor is dirty
+
+                if (this.isDirty()) {
+
+                    console.log("update the model with the file content");
+
+                    const content = colibri.ui.ide.FileUtils.getFileString(this.getInput());
+
+                    const model = this.getMonacoEditor().getModel();
+
+                    model.setValue(content);
+                }
+
+                this.removeModelListeners();
 
             } else {
 
@@ -65,10 +94,17 @@ namespace phasereditor2d.code.ui.editors {
                 this._worker = await getWorker();
             }
 
-            const items = await this._worker
-                .getNavigationBarItems(this.getMonacoEditor().getModel().uri.toString());
+            const model = this.getMonacoEditor().getModel();
 
-            return items;
+            if (model) {
+
+                const items = await this._worker
+                    .getNavigationBarItems(model.uri.toString());
+
+                return items;
+            }
+
+            return [];
         }
     }
 }

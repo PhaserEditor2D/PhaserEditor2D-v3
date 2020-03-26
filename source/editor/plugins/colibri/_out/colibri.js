@@ -6737,7 +6737,11 @@ var colibri;
                     }
                     else if (change.wasRenamed(editorFileFullName)) {
                         this.setTitle(editorFile.getName());
+                        this.onEditorFileNameChanged();
                     }
+                }
+                onEditorFileNameChanged() {
+                    // nothing
                 }
                 onPartClosed() {
                     const closeIt = super.onPartClosed();

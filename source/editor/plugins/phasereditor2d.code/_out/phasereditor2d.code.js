@@ -112,6 +112,7 @@ var phasereditor2d;
                         for (const file of files) {
                             fileMap.set(file.getFullName(), file);
                         }
+                        // handle additions
                         for (const fileName of e.getAddRecords()) {
                             if (!fileName.endsWith(".js")) {
                                 continue;
@@ -120,6 +121,7 @@ var phasereditor2d;
                             const str = await utils.preloadAndGetFileString(file);
                             monaco.editor.createModel(str, "javascript", monaco.Uri.file(fileName));
                         }
+                        // handle deletions
                         for (const fileName of e.getDeleteRecords()) {
                             if (!fileName.endsWith(".js")) {
                                 continue;
@@ -129,6 +131,7 @@ var phasereditor2d;
                                 model.dispose();
                             }
                         }
+                        // handle modifications
                         for (const fileName of e.getModifiedRecords()) {
                             if (!fileName.endsWith(".js")) {
                                 continue;
@@ -139,6 +142,16 @@ var phasereditor2d;
                             if (model.getValue() !== content) {
                                 model.setValue(content);
                             }
+                        }
+                        // handle renames
+                        for (const oldFileName of e.getRenameFromRecords()) {
+                            if (!oldFileName.endsWith(".js")) {
+                                continue;
+                            }
+                            const newFileName = e.getRenameTo(oldFileName);
+                            const oldModel = monaco.editor.getModel(monaco.Uri.file(oldFileName));
+                            monaco.editor.createModel(oldModel.getValue(), "javascript", monaco.Uri.file(newFileName));
+                            oldModel.dispose();
                         }
                     });
                 }
@@ -237,8 +250,14 @@ var phasereditor2d;
                         return false;
                     }
                     disposeModel() {
+                        this.removeModelListeners();
                         this._model.dispose();
                         this._model = null;
+                    }
+                    removeModelListeners() {
+                        if (this._modelDidChangeListener) {
+                            this._modelDidChangeListener.dispose();
+                        }
                     }
                     createPart() {
                         if (!MonacoEditor._sharedEditorContainer) {
@@ -306,7 +325,7 @@ var phasereditor2d;
                         const before = editor.saveViewState();
                         this._model = await this.createModel(file);
                         editor.restoreViewState(before);
-                        this._model.onDidChangeContent(e => {
+                        this._modelDidChangeListener = this._model.onDidChangeContent(e => {
                             this.setDirty(true);
                         });
                         MonacoEditor._sharedEditor.setModel(this._model);
@@ -346,7 +365,7 @@ var phasereditor2d;
                         }
                     }
                     onEditorInputContentChanged() {
-                        // this.updateContent();
+                        // handled by the ModelManager.
                     }
                 }
                 editors.MonacoEditor = MonacoEditor;
@@ -463,9 +482,25 @@ var phasereditor2d;
                             super.createModel(file);
                         }
                     }
+                    onEditorFileNameChanged() {
+                        const uri = monaco.Uri.file(this.getInput().getFullName());
+                        this._model = monaco.editor.getModel(uri);
+                        const editor = this.getMonacoEditor();
+                        const state = editor.saveViewState();
+                        editor.setModel(this._model);
+                        editor.restoreViewState(state);
+                    }
                     disposeModel() {
                         if (code.CodePlugin.getInstance().isAdvancedJSEditor()) {
                             // the model is disposed by the ModelsManager.
+                            // but we should update it with the file content if the editor is dirty
+                            if (this.isDirty()) {
+                                console.log("update the model with the file content");
+                                const content = colibri.ui.ide.FileUtils.getFileString(this.getInput());
+                                const model = this.getMonacoEditor().getModel();
+                                model.setValue(content);
+                            }
+                            this.removeModelListeners();
                         }
                         else {
                             super.disposeModel();
@@ -476,9 +511,13 @@ var phasereditor2d;
                             const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
                             this._worker = await getWorker();
                         }
-                        const items = await this._worker
-                            .getNavigationBarItems(this.getMonacoEditor().getModel().uri.toString());
-                        return items;
+                        const model = this.getMonacoEditor().getModel();
+                        if (model) {
+                            const items = await this._worker
+                                .getNavigationBarItems(model.uri.toString());
+                            return items;
+                        }
+                        return [];
                     }
                 }
                 editors.JavaScriptEditor = JavaScriptEditor;
@@ -617,7 +656,6 @@ var phasereditor2d;
                         }
                         async refresh() {
                             this._items = await this._editor.requestOutlineItems();
-                            console.log(this._items);
                             this.repaint();
                         }
                         getUndoManager() {

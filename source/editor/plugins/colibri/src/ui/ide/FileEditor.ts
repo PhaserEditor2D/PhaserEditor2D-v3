@@ -57,7 +57,13 @@ namespace colibri.ui.ide {
             } else if (change.wasRenamed(editorFileFullName)) {
 
                 this.setTitle(editorFile.getName());
+
+                this.onEditorFileNameChanged();
             }
+        }
+
+        protected onEditorFileNameChanged() {
+            // nothing
         }
 
         protected abstract onEditorInputContentChanged();

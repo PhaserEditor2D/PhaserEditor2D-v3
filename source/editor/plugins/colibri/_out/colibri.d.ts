@@ -1559,6 +1559,7 @@ declare namespace colibri.ui.ide {
         save(): Promise<void>;
         protected isSaving(): boolean;
         protected onFileStorageChanged(change: io.FileStorageChange): void;
+        protected onEditorFileNameChanged(): void;
         protected abstract onEditorInputContentChanged(): any;
         onPartClosed(): boolean;
         setInput(file: io.FilePath): void;

@@ -21,6 +21,8 @@ namespace phasereditor2d.code.ui {
                     fileMap.set(file.getFullName(), file);
                 }
 
+                // handle additions
+
                 for (const fileName of e.getAddRecords()) {
 
                     if (!fileName.endsWith(".js")) {
@@ -34,6 +36,8 @@ namespace phasereditor2d.code.ui {
 
                     monaco.editor.createModel(str, "javascript", monaco.Uri.file(fileName));
                 }
+
+                // handle deletions
 
                 for (const fileName of e.getDeleteRecords()) {
 
@@ -49,6 +53,8 @@ namespace phasereditor2d.code.ui {
                         model.dispose();
                     }
                 }
+
+                // handle modifications
 
                 for (const fileName of e.getModifiedRecords()) {
 
@@ -68,6 +74,26 @@ namespace phasereditor2d.code.ui {
                         model.setValue(content);
                     }
                 }
+
+                // handle renames
+
+                for (const oldFileName of e.getRenameFromRecords()) {
+
+                    if (!oldFileName.endsWith(".js")) {
+
+                        continue;
+                    }
+
+                    const newFileName = e.getRenameTo(oldFileName);
+
+                    const oldModel = monaco.editor.getModel(monaco.Uri.file(oldFileName));
+
+                    monaco.editor.createModel(
+                        oldModel.getValue(), "javascript", monaco.Uri.file(newFileName));
+
+                    oldModel.dispose();
+                }
+
             });
         }
     }

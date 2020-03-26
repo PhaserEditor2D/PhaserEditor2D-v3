@@ -5,11 +5,12 @@ namespace phasereditor2d.code.ui.editors {
         private static _sharedEditorContainer: HTMLElement;
         private static _sharedEditor: monaco.editor.IStandaloneCodeEditor;
 
-        private _model: monaco.editor.ITextModel;
+        protected _model: monaco.editor.ITextModel;
         private _language: string;
         private _outlineProvider: outline.MonacoEditorOutlineProvider;
         private _modelLines: number;
         private _viewState: monaco.editor.ICodeEditorViewState;
+        private _modelDidChangeListener: monaco.IDisposable;
 
         constructor(id: string, language: string) {
 
@@ -45,9 +46,19 @@ namespace phasereditor2d.code.ui.editors {
 
         protected disposeModel() {
 
+            this.removeModelListeners();
+
             this._model.dispose();
 
             this._model = null;
+        }
+
+        protected removeModelListeners() {
+
+            if (this._modelDidChangeListener) {
+
+                this._modelDidChangeListener.dispose();
+            }
         }
 
         protected createPart(): void {
@@ -161,7 +172,7 @@ namespace phasereditor2d.code.ui.editors {
 
             editor.restoreViewState(before);
 
-            this._model.onDidChangeContent(e => {
+            this._modelDidChangeListener = this._model.onDidChangeContent(e => {
                 this.setDirty(true);
             });
 
@@ -231,7 +242,7 @@ namespace phasereditor2d.code.ui.editors {
 
         protected onEditorInputContentChanged() {
 
-            // this.updateContent();
+            // handled by the ModelManager.
         }
     }
 }
