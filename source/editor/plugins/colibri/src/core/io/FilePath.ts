@@ -176,6 +176,7 @@ namespace colibri.core.io {
             if (parent) {
                 return parent.getFile(name);
             }
+
             return null;
         }
 
@@ -223,8 +224,6 @@ namespace colibri.core.io {
 
             file._parent = this;
 
-            const b = this._files === file._files;
-
             this._files.push(file);
 
             this._sort();
@@ -267,7 +266,9 @@ namespace colibri.core.io {
         }
 
         toString() {
+            
             if (this._parent) {
+
                 return this._parent.toString() + "/" + this._name;
             }
 
@@ -275,17 +276,25 @@ namespace colibri.core.io {
         }
 
         toStringTree() {
+
             return this.toStringTree2(0);
         }
 
         private toStringTree2(depth: number) {
+
             let s = " ".repeat(depth * 4);
+
             s += this.getName() + (this.isFolder() ? "/" : "") + "\n";
+
             if (this.isFolder()) {
+
                 for (const file of this._files) {
+
                     s += file.toStringTree2(depth + 1);
                 }
+
             }
+
             return s;
         }
     }

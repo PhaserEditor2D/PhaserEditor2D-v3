@@ -272,7 +272,13 @@ namespace colibri.core.io {
         }
 
         addChangeListener(listener: ChangeListenerFunc) {
+
             this._changeListeners.push(listener);
+        }
+
+        addFirstChangeListener(listener: ChangeListenerFunc) {
+
+            this._changeListeners.unshift(listener);
         }
 
         removeChangeListener(listener: ChangeListenerFunc) {
@@ -377,12 +383,20 @@ namespace colibri.core.io {
             this._root = newRoot;
         }
 
-        private fireChange(change: FileStorageChange) {
+        private async fireChange(change: FileStorageChange) {
 
             for (const listener of this._changeListeners) {
+
                 try {
-                    listener(change);
+
+                   const result = listener(change);
+
+                   if (result instanceof Promise) {
+                       await result;
+                   }
+
                 } catch (e) {
+
                     console.error(e);
                 }
             }
@@ -420,7 +434,7 @@ namespace colibri.core.io {
 
             change.recordAdd(file.getFullName());
 
-            this.fireChange(change);
+            await this.fireChange(change);
 
             return file;
         }

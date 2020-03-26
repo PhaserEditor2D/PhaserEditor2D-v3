@@ -1,6 +1,6 @@
 namespace phasereditor2d.code.ui {
 
-    export class PreloadExtraLibsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
+    export class PreloadModelsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
 
         async computeTotal(): Promise<number> {
 
@@ -11,10 +11,12 @@ namespace phasereditor2d.code.ui {
 
             return colibri.ui.ide.FileUtils.getAllFiles()
 
-                .filter(file => file.getName().endsWith(".d.ts"));
+                .filter(file => file.getName().endsWith(".js"));
         }
 
         async preload(monitor: colibri.ui.controls.IProgressMonitor) {
+
+            monaco.editor.getModels().forEach(model => model.dispose());
 
             const utils = colibri.ui.ide.FileUtils;
 
@@ -24,9 +26,9 @@ namespace phasereditor2d.code.ui {
 
                 const content = await utils.preloadAndGetFileString(file);
 
-                if (content) {
+                if (typeof content === "string") {
 
-                    monaco.languages.typescript.javascriptDefaults.addExtraLib(content, file.getFullName());
+                    monaco.editor.createModel(content, "javascript", monaco.Uri.file(file.getFullName()));
                 }
 
                 monitor.step();

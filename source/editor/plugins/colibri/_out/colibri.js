@@ -1179,7 +1179,6 @@ var colibri;
                 _add(file) {
                     file._remove();
                     file._parent = this;
-                    const b = this._files === file._files;
                     this._files.push(file);
                     this._sort();
                 }
@@ -1496,6 +1495,9 @@ var colibri;
                 addChangeListener(listener) {
                     this._changeListeners.push(listener);
                 }
+                addFirstChangeListener(listener) {
+                    this._changeListeners.unshift(listener);
+                }
                 removeChangeListener(listener) {
                     const i = this._changeListeners.indexOf(listener);
                     this._changeListeners.splice(i, 1);
@@ -1560,10 +1562,13 @@ var colibri;
                     this._hash = data.hash;
                     this._root = newRoot;
                 }
-                fireChange(change) {
+                async fireChange(change) {
                     for (const listener of this._changeListeners) {
                         try {
-                            listener(change);
+                            const result = listener(change);
+                            if (result instanceof Promise) {
+                                await result;
+                            }
                         }
                         catch (e) {
                             console.error(e);
@@ -1591,7 +1596,7 @@ var colibri;
                     this._hash = "";
                     const change = new io.FileStorageChange();
                     change.recordAdd(file.getFullName());
-                    this.fireChange(change);
+                    await this.fireChange(change);
                     return file;
                 }
                 async createFolder(container, folderName) {

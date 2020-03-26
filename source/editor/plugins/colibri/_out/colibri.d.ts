@@ -374,6 +374,7 @@ declare namespace colibri.core.io {
         private registerDocumentVisibilityListener;
         private updateWithServerChanges;
         addChangeListener(listener: ChangeListenerFunc): void;
+        addFirstChangeListener(listener: ChangeListenerFunc): void;
         removeChangeListener(listener: ChangeListenerFunc): void;
         getRoot(): FilePath;
         openProject(projectName: string): Promise<FilePath>;
@@ -397,7 +398,7 @@ declare namespace colibri.core.io {
     }
 }
 declare namespace colibri.core.io {
-    type ChangeListenerFunc = (change: FileStorageChange) => void;
+    type ChangeListenerFunc = (change: FileStorageChange) => any;
     type ProjectTemplatesData = {
         providers: Array<{
             name: string;
@@ -430,6 +431,7 @@ declare namespace colibri.core.io {
         uploadFile(uploadFolder: FilePath, file: File): Promise<FilePath>;
         getImageSize(file: FilePath): Promise<ImageSize>;
         addChangeListener(listener: ChangeListenerFunc): void;
+        addFirstChangeListener(listener: ChangeListenerFunc): void;
         removeChangeListener(listener: ChangeListenerFunc): void;
     }
 }

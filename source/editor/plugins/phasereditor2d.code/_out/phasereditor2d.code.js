@@ -44,10 +44,18 @@ var phasereditor2d;
                     code.ui.editors.TextEditor.getFactory(),
                 ]));
                 // extra libs loader
-                // TODO: just enable this if ServerMode.enableAdvancedJavaScriptEditor.
-                reg.addExtension(new code.ui.PreloadExtraLibsExtension());
+                if (this.isAdvancedJSEditor()) {
+                    console.log("CodePlugin: Enable advanced JavaScript coding tools.");
+                    monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+                    reg.addExtension(new code.ui.PreloadExtraLibsExtension());
+                    reg.addExtension(new code.ui.PreloadModelsExtension());
+                }
+            }
+            isAdvancedJSEditor() {
+                return phasereditor2d.ide.IDEPlugin.getInstance().isAdvancedJSEditor();
             }
             async starting() {
+                this._modelManager = new code.ui.ModelManager();
                 // theme
                 monaco.editor.defineTheme("vs", {
                     inherit: true,
@@ -94,6 +102,37 @@ var phasereditor2d;
     (function (code) {
         var ui;
         (function (ui) {
+            class ModelManager {
+                constructor() {
+                    const utils = colibri.ui.ide.FileUtils;
+                    const storage = colibri.ui.ide.Workbench.getWorkbench().getFileStorage();
+                    storage.addFirstChangeListener(async (e) => {
+                        const files = utils.getRoot().flatTree([], false);
+                        const fileMap = new Map();
+                        for (const file of files) {
+                            fileMap.set(file.getFullName(), file);
+                        }
+                        for (const fileName of e.getAddRecords()) {
+                            if (!fileName.endsWith(".js")) {
+                                continue;
+                            }
+                            const file = fileMap.get(fileName);
+                            const str = await utils.preloadAndGetFileString(file);
+                            monaco.editor.createModel(str, "javascript", monaco.Uri.file(fileName));
+                        }
+                    });
+                }
+            }
+            ui.ModelManager = ModelManager;
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
             class PreloadExtraLibsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
                 async computeTotal() {
                     return this.getFiles().length;
@@ -108,7 +147,6 @@ var phasereditor2d;
                     for (const file of files) {
                         const content = await utils.preloadAndGetFileString(file);
                         if (content) {
-                            monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
                             monaco.languages.typescript.javascriptDefaults.addExtraLib(content, file.getFullName());
                         }
                         monitor.step();
@@ -116,6 +154,37 @@ var phasereditor2d;
                 }
             }
             ui.PreloadExtraLibsExtension = PreloadExtraLibsExtension;
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            class PreloadModelsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
+                async computeTotal() {
+                    return this.getFiles().length;
+                }
+                getFiles() {
+                    return colibri.ui.ide.FileUtils.getAllFiles()
+                        .filter(file => file.getName().endsWith(".js"));
+                }
+                async preload(monitor) {
+                    monaco.editor.getModels().forEach(model => model.dispose());
+                    const utils = colibri.ui.ide.FileUtils;
+                    const files = this.getFiles();
+                    for (const file of files) {
+                        const content = await utils.preloadAndGetFileString(file);
+                        if (typeof content === "string") {
+                            monaco.editor.createModel(content, "javascript", monaco.Uri.file(file.getFullName()));
+                        }
+                        monitor.step();
+                    }
+                }
+            }
+            ui.PreloadModelsExtension = PreloadModelsExtension;
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));
 })(phasereditor2d || (phasereditor2d = {}));
@@ -141,12 +210,15 @@ var phasereditor2d;
                         if (super.onPartClosed()) {
                             if (this._model) {
                                 this._viewState = MonacoEditor._sharedEditor.saveViewState();
-                                this._model.dispose();
-                                this._model = null;
+                                this.disposeModel();
                             }
                             return true;
                         }
                         return false;
+                    }
+                    disposeModel() {
+                        this._model.dispose();
+                        this._model = null;
                     }
                     createPart() {
                         if (!MonacoEditor._sharedEditorContainer) {
@@ -210,8 +282,7 @@ var phasereditor2d;
                         if (!MonacoEditor._sharedEditor) {
                             return;
                         }
-                        const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
-                        this._model = monaco.editor.createModel(content, this._language, monaco.Uri.file(file.getFullName()));
+                        this._model = await this.createModel(file);
                         this._model.onDidChangeContent(e => {
                             this.setDirty(true);
                         });
@@ -219,6 +290,11 @@ var phasereditor2d;
                         this.registerModelListeners(this._model);
                         this.setDirty(false);
                         this.refreshOutline();
+                    }
+                    async createModel(file) {
+                        const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+                        const model = monaco.editor.createModel(content, this._language, monaco.Uri.file(file.getFullName()));
+                        return model;
                     }
                     registerModelListeners(model) {
                         this._modelLines = model.getLineCount();
@@ -349,6 +425,24 @@ var phasereditor2d;
                     static getFactory() {
                         return this._factory
                             || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor()));
+                    }
+                    async createModel(file) {
+                        if (code.CodePlugin.getInstance().isAdvancedJSEditor()) {
+                            const uri = monaco.Uri.file(file.getFullName());
+                            const model = monaco.editor.getModel(uri);
+                            return model;
+                        }
+                        else {
+                            super.createModel(file);
+                        }
+                    }
+                    disposeModel() {
+                        if (code.CodePlugin.getInstance().isAdvancedJSEditor()) {
+                            // the model is disposed by the ModelsManager.
+                        }
+                        else {
+                            super.disposeModel();
+                        }
                     }
                     async requestOutlineItems() {
                         if (!this._worker) {

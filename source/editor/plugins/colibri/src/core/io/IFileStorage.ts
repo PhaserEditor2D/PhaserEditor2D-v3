@@ -1,6 +1,6 @@
 namespace colibri.core.io {
 
-    export declare type ChangeListenerFunc = (change: FileStorageChange) => void;
+    export declare type ChangeListenerFunc = (change: FileStorageChange) => any;
 
     export declare type ProjectTemplatesData = {
         providers: Array<{
@@ -54,6 +54,8 @@ namespace colibri.core.io {
         getImageSize(file: FilePath): Promise<ImageSize>;
 
         addChangeListener(listener: ChangeListenerFunc): void;
+
+        addFirstChangeListener(listener: ChangeListenerFunc): void;
 
         removeChangeListener(listener: ChangeListenerFunc): void;
     }

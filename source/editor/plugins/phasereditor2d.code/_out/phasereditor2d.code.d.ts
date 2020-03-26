@@ -9,14 +9,28 @@ declare namespace phasereditor2d.code {
     const ICON_SYMBOL_VARIABLE = "symbol-variable";
     class CodePlugin extends colibri.Plugin {
         private static _instance;
+        private _modelManager;
         static getInstance(): CodePlugin;
         constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        isAdvancedJSEditor(): boolean;
         starting(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.code.ui {
+    class ModelManager {
+        constructor();
+    }
+}
+declare namespace phasereditor2d.code.ui {
     class PreloadExtraLibsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
+        computeTotal(): Promise<number>;
+        private getFiles;
+        preload(monitor: colibri.ui.controls.IProgressMonitor): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.code.ui {
+    class PreloadModelsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
         computeTotal(): Promise<number>;
         private getFiles;
         preload(monitor: colibri.ui.controls.IProgressMonitor): Promise<void>;
@@ -34,12 +48,14 @@ declare namespace phasereditor2d.code.ui.editors {
         constructor(id: string, language: string);
         getMonacoEditor(): monaco.editor.IStandaloneCodeEditor;
         onPartClosed(): boolean;
+        protected disposeModel(): void;
         protected createPart(): void;
         onPartDeactivated(): void;
         onPartActivated(): void;
         private getTokensAtLine;
         doSave(): Promise<void>;
         private updateContent;
+        protected createModel(file: colibri.core.io.FilePath): Promise<monaco.editor.ITextModel>;
         private registerModelListeners;
         getEditorViewerProvider(key: string): outline.MonacoEditorOutlineProvider;
         refreshOutline(): Promise<void>;
@@ -73,11 +89,14 @@ declare namespace phasereditor2d.code.ui.editors {
     }
 }
 declare namespace phasereditor2d.code.ui.editors {
+    import io = colibri.core.io;
     class JavaScriptEditor extends MonacoEditor {
         static _factory: colibri.ui.ide.EditorFactory;
         static getFactory(): colibri.ui.ide.EditorFactory;
         private _worker;
         constructor();
+        protected createModel(file: io.FilePath): Promise<monaco.editor.ITextModel>;
+        protected disposeModel(): void;
         requestOutlineItems(): Promise<any[]>;
     }
 }

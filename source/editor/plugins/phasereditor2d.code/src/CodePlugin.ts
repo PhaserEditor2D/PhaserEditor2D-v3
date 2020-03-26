@@ -14,6 +14,7 @@ namespace phasereditor2d.code {
     export class CodePlugin extends colibri.Plugin {
 
         private static _instance: CodePlugin;
+        private _modelManager: ui.ModelManager;
 
         static getInstance() {
 
@@ -62,12 +63,25 @@ namespace phasereditor2d.code {
 
             // extra libs loader
 
-            // TODO: just enable this if ServerMode.enableAdvancedJavaScriptEditor.
-            reg.addExtension(new ui.PreloadExtraLibsExtension());
+            if (this.isAdvancedJSEditor()) {
 
+                console.log("CodePlugin: Enable advanced JavaScript coding tools.");
+
+                monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+
+                reg.addExtension(new ui.PreloadExtraLibsExtension());
+                reg.addExtension(new ui.PreloadModelsExtension());
+            }
+        }
+
+        isAdvancedJSEditor() {
+
+            return phasereditor2d.ide.IDEPlugin.getInstance().isAdvancedJSEditor();
         }
 
         async starting() {
+
+            this._modelManager = new ui.ModelManager();
 
             // theme
 

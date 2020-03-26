@@ -34,14 +34,20 @@ namespace phasereditor2d.code.ui.editors {
 
                     this._viewState = MonacoEditor._sharedEditor.saveViewState();
 
-                    this._model.dispose();
-                    this._model = null;
+                    this.disposeModel();
                 }
 
                 return true;
             }
 
             return false;
+        }
+
+        protected disposeModel() {
+
+            this._model.dispose();
+
+            this._model = null;
         }
 
         protected createPart(): void {
@@ -147,9 +153,7 @@ namespace phasereditor2d.code.ui.editors {
                 return;
             }
 
-            const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
-
-            this._model = monaco.editor.createModel(content, this._language, monaco.Uri.file(file.getFullName()));
+            this._model = await this.createModel(file);
 
             this._model.onDidChangeContent(e => {
                 this.setDirty(true);
@@ -162,6 +166,15 @@ namespace phasereditor2d.code.ui.editors {
             this.setDirty(false);
 
             this.refreshOutline();
+        }
+
+        protected async createModel(file: colibri.core.io.FilePath) {
+
+            const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+
+            const model = monaco.editor.createModel(content, this._language, monaco.Uri.file(file.getFullName()));
+
+            return model;
         }
 
         private registerModelListeners(model: monaco.editor.ITextModel) {
