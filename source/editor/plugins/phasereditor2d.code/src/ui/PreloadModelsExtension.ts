@@ -28,7 +28,7 @@ namespace phasereditor2d.code.ui {
 
                 if (typeof content === "string") {
 
-                    monaco.editor.createModel(content, "javascript", monaco.Uri.file(file.getFullName()));
+                    monaco.editor.createModel(content, "javascript", CodePlugin.fileUri(file.getFullName()));
                 }
 
                 monitor.step();

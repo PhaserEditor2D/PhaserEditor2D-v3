@@ -1,6 +1,7 @@
 namespace phasereditor2d.code {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export const ICON_SYMBOL_CLASS = "symbol-class";
     export const ICON_SYMBOL_CONSTANT = "symbol-constant";
@@ -74,6 +75,16 @@ namespace phasereditor2d.code {
             }
         }
 
+        static fileUri(file: io.FilePath | string) {
+
+            if (file instanceof io.FilePath) {
+
+                return monaco.Uri.file(file.getFullName());
+            }
+
+            return monaco.Uri.file(file);
+        }
+
         isAdvancedJSEditor() {
 
             return phasereditor2d.ide.IDEPlugin.getInstance().isAdvancedJSEditor();
@@ -121,6 +132,64 @@ namespace phasereditor2d.code {
 
                 monaco.editor.setTheme(monacoTheme);
             });
+
+            this.customizeMonaco();
+        }
+
+        private customizeMonaco() {
+
+            const require = window["require"];
+
+            const module = require("vs/editor/standalone/browser/standaloneCodeServiceImpl");
+
+            const StandaloneCodeEditorServiceImpl = module.StandaloneCodeEditorServiceImpl;
+
+            StandaloneCodeEditorServiceImpl.prototype.openCodeEditor =
+                (input: any, editor: monaco.editor.IStandaloneCodeEditor, sideBySide: boolean) => {
+
+                    const uri = input.resource as monaco.Uri;
+
+                    const fileName = uri.path.substring(1);
+
+                    const file = colibri.ui.ide.FileUtils.getFileFromPath(fileName);
+
+                    if (file) {
+
+                        colibri.Platform.getWorkbench().openEditor(file);
+
+                        // TODO: for now, but the right way is to pass a "RevealElement" in the .openEditor() method
+                        setTimeout(() => {
+
+                            const selection = input.options ? input.options.selection : null;
+
+                            if (selection) {
+
+                                if (typeof selection.endLineNumber === "number"
+                                    && typeof selection.endColumn === "number") {
+
+                                    editor.setSelection(selection);
+                                    editor.revealRangeInCenter(selection, monaco.editor.ScrollType.Immediate);
+
+                                } else {
+
+                                    const pos = {
+                                        lineNumber: selection.startLineNumber,
+                                        column: selection.startColumn
+                                    };
+
+                                    editor.setPosition(pos);
+                                    editor.revealPositionInCenter(pos, monaco.editor.ScrollType.Immediate);
+                                }
+                            }
+                        }, 10);
+
+                    } else {
+
+                        alert("File not found '" + fileName + "'");
+                    }
+
+                    return Promise.resolve(editor);
+                };
         }
     }
 

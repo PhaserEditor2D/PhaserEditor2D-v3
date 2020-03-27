@@ -1,4 +1,5 @@
 declare namespace phasereditor2d.code {
+    import io = colibri.core.io;
     const ICON_SYMBOL_CLASS = "symbol-class";
     const ICON_SYMBOL_CONSTANT = "symbol-constant";
     const ICON_SYMBOL_FIELD = "symbol-field";
@@ -13,8 +14,10 @@ declare namespace phasereditor2d.code {
         static getInstance(): CodePlugin;
         constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        static fileUri(file: io.FilePath | string): monaco.Uri;
         isAdvancedJSEditor(): boolean;
         starting(): Promise<void>;
+        private customizeMonaco;
     }
 }
 declare namespace phasereditor2d.code.ui {

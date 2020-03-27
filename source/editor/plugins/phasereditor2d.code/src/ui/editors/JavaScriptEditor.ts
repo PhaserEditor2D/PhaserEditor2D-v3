@@ -27,7 +27,7 @@ namespace phasereditor2d.code.ui.editors {
 
                 const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
 
-                const uri = monaco.Uri.file(file.getFullName());
+                const uri = CodePlugin.fileUri(file.getFullName());
 
                 const model = monaco.editor.getModel(uri);
 
@@ -46,7 +46,7 @@ namespace phasereditor2d.code.ui.editors {
 
         protected onEditorFileNameChanged() {
 
-            const uri = monaco.Uri.file(this.getInput().getFullName());
+            const uri = CodePlugin.fileUri(this.getInput().getFullName());
 
             this._model = monaco.editor.getModel(uri);
 

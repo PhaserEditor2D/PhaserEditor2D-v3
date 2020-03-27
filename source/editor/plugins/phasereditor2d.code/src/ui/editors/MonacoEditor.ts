@@ -189,7 +189,7 @@ namespace phasereditor2d.code.ui.editors {
 
             const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
 
-            const model = monaco.editor.createModel(content, this._language, monaco.Uri.file(file.getFullName()));
+            const model = monaco.editor.createModel(content, this._language, CodePlugin.fileUri(file.getFullName()));
 
             return model;
         }

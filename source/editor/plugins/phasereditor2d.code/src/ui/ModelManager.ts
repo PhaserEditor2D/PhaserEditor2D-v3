@@ -34,7 +34,7 @@ namespace phasereditor2d.code.ui {
 
                     const str = await utils.preloadAndGetFileString(file);
 
-                    monaco.editor.createModel(str, "javascript", monaco.Uri.file(fileName));
+                    monaco.editor.createModel(str, "javascript", CodePlugin.fileUri(fileName));
                 }
 
                 // handle deletions
@@ -46,7 +46,7 @@ namespace phasereditor2d.code.ui {
                         continue;
                     }
 
-                    const model = monaco.editor.getModel(monaco.Uri.file(fileName));
+                    const model = monaco.editor.getModel(CodePlugin.fileUri(fileName));
 
                     if (model) {
 
@@ -67,7 +67,7 @@ namespace phasereditor2d.code.ui {
 
                     const content = await utils.preloadAndGetFileString(file);
 
-                    const model = monaco.editor.getModel(monaco.Uri.file(fileName));
+                    const model = monaco.editor.getModel(CodePlugin.fileUri(fileName));
 
                     if (model.getValue() !== content) {
 
@@ -86,10 +86,10 @@ namespace phasereditor2d.code.ui {
 
                     const newFileName = e.getRenameTo(oldFileName);
 
-                    const oldModel = monaco.editor.getModel(monaco.Uri.file(oldFileName));
+                    const oldModel = monaco.editor.getModel(CodePlugin.fileUri(oldFileName));
 
                     monaco.editor.createModel(
-                        oldModel.getValue(), "javascript", monaco.Uri.file(newFileName));
+                        oldModel.getValue(), "javascript", CodePlugin.fileUri(newFileName));
 
                     oldModel.dispose();
                 }
