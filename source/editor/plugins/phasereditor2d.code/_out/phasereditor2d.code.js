@@ -560,6 +560,25 @@ var phasereditor2d;
                         editor.setModel(this._model);
                         editor.restoreViewState(state);
                     }
+                    getPropertyProvider() {
+                        if (!this._propertyProvider) {
+                            this._propertyProvider = new editors.properties.JavaScriptSectionProvider();
+                        }
+                        return this._propertyProvider;
+                    }
+                    registerModelListeners(model) {
+                        super.registerModelListeners(model);
+                        const editor = this.getMonacoEditor();
+                        editor.getDomNode().addEventListener("click", async (e) => {
+                            const worker = code.CodePlugin.getInstance().getJavaScriptWorker();
+                            const pos = editor.getPosition();
+                            const offs = editor.getModel().getOffsetAt(pos);
+                            const info = await worker.getQuickInfoAtPosition(code.CodePlugin.fileUri(this.getInput()).toString(), offs);
+                            if (info) {
+                                this.setSelection([new editors.properties.DocumentationItem(info)]);
+                            }
+                        });
+                    }
                     disposeModel() {
                         if (code.CodePlugin.getInstance().isAdvancedJSEditor()) {
                             // the model is disposed by the ModelsManager.
@@ -872,6 +891,96 @@ var phasereditor2d;
                     }
                     outline.MonacoOutlineContentProvider = MonacoOutlineContentProvider;
                 })(outline = editors.outline || (editors.outline = {}));
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                var properties;
+                (function (properties) {
+                    class DocumentationItem {
+                        constructor(data) {
+                            this._data = data;
+                        }
+                        getData() {
+                            return this._data;
+                        }
+                        toHTML() {
+                            const docs = this._data.documentation.map(doc => doc.text).join("\n");
+                            return docs;
+                        }
+                    }
+                    properties.DocumentationItem = DocumentationItem;
+                })(properties = editors.properties || (editors.properties = {}));
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                var properties;
+                (function (properties) {
+                    var controls = colibri.ui.controls;
+                    class DocumentationSection extends controls.properties.PropertySection {
+                        constructor(page) {
+                            super(page, "phasereditor2d.code.ui.editors.properties.DocumentationSection", "Documentation", true, false);
+                        }
+                        createForm(parent) {
+                            const comp = this.createGridElement(parent, 1);
+                            comp.style.alignItems = "self-start";
+                            const preElement = document.createElement("pre");
+                            preElement.style.wordBreak = "break-word";
+                            preElement.style.whiteSpace = "pre-wrap";
+                            comp.appendChild(preElement);
+                            this.addUpdater(() => {
+                                const item = this.getSelectionFirstElement();
+                                preElement.innerHTML = item.toHTML();
+                            });
+                        }
+                        canEdit(obj, n) {
+                            return obj instanceof properties.DocumentationItem;
+                        }
+                        canEditNumber(n) {
+                            return n === 1;
+                        }
+                    }
+                    properties.DocumentationSection = DocumentationSection;
+                })(properties = editors.properties || (editors.properties = {}));
+            })(editors = ui.editors || (ui.editors = {}));
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            var editors;
+            (function (editors) {
+                var properties;
+                (function (properties) {
+                    var controls = colibri.ui.controls;
+                    class JavaScriptSectionProvider extends controls.properties.PropertySectionProvider {
+                        addSections(page, sections) {
+                            sections.push(new properties.DocumentationSection(page));
+                        }
+                    }
+                    properties.JavaScriptSectionProvider = JavaScriptSectionProvider;
+                })(properties = editors.properties || (editors.properties = {}));
             })(editors = ui.editors || (ui.editors = {}));
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));

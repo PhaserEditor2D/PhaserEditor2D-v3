@@ -6,6 +6,7 @@ namespace phasereditor2d.code.ui.editors {
     export class JavaScriptEditor extends MonacoEditor {
 
         static _factory: colibri.ui.ide.EditorFactory;
+        private _propertyProvider: properties.JavaScriptSectionProvider;
 
         static getFactory() {
 
@@ -55,6 +56,39 @@ namespace phasereditor2d.code.ui.editors {
             editor.setModel(this._model);
 
             editor.restoreViewState(state);
+        }
+
+        getPropertyProvider() {
+
+            if (!this._propertyProvider) {
+
+                this._propertyProvider = new properties.JavaScriptSectionProvider();
+            }
+
+            return this._propertyProvider;
+        }
+
+        registerModelListeners(model: monaco.editor.ITextModel) {
+
+            super.registerModelListeners(model);
+
+            const editor = this.getMonacoEditor();
+
+            editor.getDomNode().addEventListener("click", async (e) => {
+
+                const worker = CodePlugin.getInstance().getJavaScriptWorker();
+
+                const pos = editor.getPosition();
+
+                const offs = editor.getModel().getOffsetAt(pos);
+
+                const info = await worker.getQuickInfoAtPosition(CodePlugin.fileUri(this.getInput()).toString(), offs);
+
+                if (info) {
+
+                    this.setSelection([new properties.DocumentationItem(info)]);
+                }
+            });
         }
 
         protected disposeModel() {

@@ -104,10 +104,13 @@ declare namespace phasereditor2d.code.ui.editors {
     import io = colibri.core.io;
     class JavaScriptEditor extends MonacoEditor {
         static _factory: colibri.ui.ide.EditorFactory;
+        private _propertyProvider;
         static getFactory(): colibri.ui.ide.EditorFactory;
         constructor();
         protected createModel(file: io.FilePath): Promise<monaco.editor.ITextModel>;
         protected onEditorFileNameChanged(): void;
+        getPropertyProvider(): properties.JavaScriptSectionProvider;
+        registerModelListeners(model: monaco.editor.ITextModel): void;
         protected disposeModel(): void;
         requestOutlineItems(): Promise<any[]>;
     }
@@ -176,6 +179,29 @@ declare namespace phasereditor2d.code.ui.editors.outline {
         constructor(provider: MonacoEditorOutlineProvider);
         getRoots(input: any): any[];
         getChildren(parent: any): any[];
+    }
+}
+declare namespace phasereditor2d.code.ui.editors.properties {
+    class DocumentationItem {
+        private _data;
+        constructor(data: any);
+        getData(): any;
+        toHTML(): any;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors.properties {
+    import controls = colibri.ui.controls;
+    class DocumentationSection extends controls.properties.PropertySection<DocumentationItem> {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
+        canEditNumber(n: number): boolean;
+    }
+}
+declare namespace phasereditor2d.code.ui.editors.properties {
+    import controls = colibri.ui.controls;
+    class JavaScriptSectionProvider extends controls.properties.PropertySectionProvider {
+        addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void;
     }
 }
 //# sourceMappingURL=phasereditor2d.code.d.ts.map
