@@ -50,7 +50,14 @@ var phasereditor2d;
                     monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
                     reg.addExtension(new code.ui.PreloadExtraLibsExtension());
                     reg.addExtension(new code.ui.PreloadModelsExtension());
+                    reg.addExtension(new code.ui.PreloadJavaScriptWorkerExtension());
                 }
+            }
+            getJavaScriptWorker() {
+                return this._javaScriptWorker;
+            }
+            setJavaScriptWorker(worker) {
+                this._javaScriptWorker = worker;
             }
             static fileUri(file) {
                 if (file instanceof io.FilePath) {
@@ -237,6 +244,27 @@ var phasereditor2d;
                 }
             }
             ui.PreloadExtraLibsExtension = PreloadExtraLibsExtension;
+        })(ui = code.ui || (code.ui = {}));
+    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var code;
+    (function (code) {
+        var ui;
+        (function (ui) {
+            class PreloadJavaScriptWorkerExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
+                async computeTotal() {
+                    return 1;
+                }
+                async preload(monitor) {
+                    const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
+                    const worker = await getWorker();
+                    code.CodePlugin.getInstance().setJavaScriptWorker(worker);
+                    monitor.step();
+                }
+            }
+            ui.PreloadJavaScriptWorkerExtension = PreloadJavaScriptWorkerExtension;
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));
 })(phasereditor2d || (phasereditor2d = {}));
@@ -540,15 +568,13 @@ var phasereditor2d;
                         }
                     }
                     async requestOutlineItems() {
-                        if (!this._worker) {
-                            const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
-                            this._worker = await getWorker();
-                        }
-                        const model = this.getMonacoEditor().getModel();
-                        if (model) {
-                            const items = await this._worker
-                                .getNavigationBarItems(model.uri.toString());
-                            return items;
+                        if (code.CodePlugin.getInstance().isAdvancedJSEditor()) {
+                            const model = this.getMonacoEditor().getModel();
+                            if (model) {
+                                const items = await code.CodePlugin.getInstance().getJavaScriptWorker()
+                                    .getNavigationBarItems(model.uri.toString());
+                                return items;
+                            }
                         }
                         return [];
                     }

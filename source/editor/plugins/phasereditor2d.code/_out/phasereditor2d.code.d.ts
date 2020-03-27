@@ -11,9 +11,12 @@ declare namespace phasereditor2d.code {
     class CodePlugin extends colibri.Plugin {
         private static _instance;
         private _modelManager;
+        private _javaScriptWorker;
         static getInstance(): CodePlugin;
         constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        getJavaScriptWorker(): monaco.languages.typescript.TypeScriptWorker;
+        setJavaScriptWorker(worker: monaco.languages.typescript.TypeScriptWorker): void;
         static fileUri(file: io.FilePath | string): monaco.Uri;
         isAdvancedJSEditor(): boolean;
         starting(): Promise<void>;
@@ -29,6 +32,12 @@ declare namespace phasereditor2d.code.ui {
     class PreloadExtraLibsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
         computeTotal(): Promise<number>;
         private getFiles;
+        preload(monitor: colibri.ui.controls.IProgressMonitor): Promise<void>;
+    }
+}
+declare namespace phasereditor2d.code.ui {
+    class PreloadJavaScriptWorkerExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
+        computeTotal(): Promise<number>;
         preload(monitor: colibri.ui.controls.IProgressMonitor): Promise<void>;
     }
 }
@@ -96,7 +105,6 @@ declare namespace phasereditor2d.code.ui.editors {
     class JavaScriptEditor extends MonacoEditor {
         static _factory: colibri.ui.ide.EditorFactory;
         static getFactory(): colibri.ui.ide.EditorFactory;
-        private _worker;
         constructor();
         protected createModel(file: io.FilePath): Promise<monaco.editor.ITextModel>;
         protected onEditorFileNameChanged(): void;

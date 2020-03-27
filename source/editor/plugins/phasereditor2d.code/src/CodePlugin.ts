@@ -16,6 +16,8 @@ namespace phasereditor2d.code {
 
         private static _instance: CodePlugin;
         private _modelManager: ui.ModelManager;
+        private _javaScriptWorker: monaco.languages.typescript.TypeScriptWorker;
+
 
         static getInstance() {
 
@@ -72,7 +74,18 @@ namespace phasereditor2d.code {
 
                 reg.addExtension(new ui.PreloadExtraLibsExtension());
                 reg.addExtension(new ui.PreloadModelsExtension());
+                reg.addExtension(new ui.PreloadJavaScriptWorkerExtension());
             }
+        }
+
+        getJavaScriptWorker() {
+
+            return this._javaScriptWorker;
+        }
+
+        setJavaScriptWorker(worker: monaco.languages.typescript.TypeScriptWorker) {
+
+            this._javaScriptWorker = worker;
         }
 
         static fileUri(file: io.FilePath | string) {

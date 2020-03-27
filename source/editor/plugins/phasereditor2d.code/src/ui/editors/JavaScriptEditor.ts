@@ -15,8 +15,6 @@ namespace phasereditor2d.code.ui.editors {
                     webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor()));
         }
 
-        private _worker: monaco.languages.typescript.TypeScriptWorker;
-
         constructor() {
             super("phasereditor2d.core.ui.editors.JavaScriptEditor", "javascript");
         }
@@ -87,21 +85,17 @@ namespace phasereditor2d.code.ui.editors {
 
         async requestOutlineItems() {
 
-            if (!this._worker) {
+            if (CodePlugin.getInstance().isAdvancedJSEditor()) {
 
-                const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
+                const model = this.getMonacoEditor().getModel();
 
-                this._worker = await getWorker();
-            }
+                if (model) {
 
-            const model = this.getMonacoEditor().getModel();
+                    const items = await CodePlugin.getInstance().getJavaScriptWorker()
+                        .getNavigationBarItems(model.uri.toString());
 
-            if (model) {
-
-                const items = await this._worker
-                    .getNavigationBarItems(model.uri.toString());
-
-                return items;
+                    return items;
+                }
             }
 
             return [];
