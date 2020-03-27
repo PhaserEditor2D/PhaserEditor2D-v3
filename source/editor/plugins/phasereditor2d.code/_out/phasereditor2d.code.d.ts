@@ -142,8 +142,10 @@ declare namespace phasereditor2d.code.ui.editors.outline {
     class MonacoEditorOutlineProvider extends colibri.ui.ide.EditorViewerProvider {
         private _editor;
         private _items;
+        private _itemsMap;
         constructor(editor: MonacoEditor);
         setViewer(viewer: controls.viewers.TreeViewer): void;
+        prepareViewerState(state: controls.viewers.ViewerState): void;
         getContentProvider(): controls.viewers.ITreeContentProvider;
         getLabelProvider(): controls.viewers.ILabelProvider;
         getCellRendererProvider(): controls.viewers.ICellRendererProvider;
@@ -153,6 +155,7 @@ declare namespace phasereditor2d.code.ui.editors.outline {
         getItems(): any[];
         preload(): Promise<void>;
         refresh(): Promise<void>;
+        private buildItemsMap;
         getUndoManager(): colibri.ui.ide.undo.UndoManager;
     }
 }

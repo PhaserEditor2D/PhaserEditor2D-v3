@@ -6,12 +6,14 @@ namespace phasereditor2d.code.ui.editors.outline {
 
         private _editor: MonacoEditor;
         private _items: any[];
+        private _itemsMap: Map<string, any>;
 
         constructor(editor: MonacoEditor) {
             super();
 
             this._editor = editor;
             this._items = [];
+            this._itemsMap = new Map();
         }
 
         setViewer(viewer: controls.viewers.TreeViewer) {
@@ -45,6 +47,17 @@ namespace phasereditor2d.code.ui.editors.outline {
             });
 
             super.setViewer(viewer);
+        }
+
+        prepareViewerState(state: controls.viewers.ViewerState) {
+
+            state.selectedObjects = new Set(
+                [...state.selectedObjects]
+                    .map(obj => this._itemsMap.get(obj.id) || obj));
+
+            state.expandedObjects = new Set(
+                [...state.expandedObjects]
+                    .map(obj => this._itemsMap.get(obj.id) || obj));
         }
 
         getContentProvider(): controls.viewers.ITreeContentProvider {
@@ -95,7 +108,32 @@ namespace phasereditor2d.code.ui.editors.outline {
 
             this._items = await this._editor.requestOutlineItems();
 
+            this._itemsMap = new Map();
+            this.buildItemsMap(this._items, "");
+
+            console.log(this._items);
+
             this.repaint();
+        }
+
+        private buildItemsMap(items: any[], prefix: string) {
+
+            for (const item of items) {
+
+                item.id = prefix + "#" + item.text + "#" + item.kind;
+
+                this._itemsMap.set(item.id, item);
+
+                if (Array.isArray(item.childItems)) {
+
+                    this.buildItemsMap(item.childItems, item.id);
+
+                    item.childItems.sort((a, b) => {
+
+                        return a.spans[0].start - b.spans[0].start;
+                    });
+                }
+            }
         }
 
         getUndoManager() {

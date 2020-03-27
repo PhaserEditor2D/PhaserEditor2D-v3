@@ -683,6 +683,7 @@ var phasereditor2d;
                             super();
                             this._editor = editor;
                             this._items = [];
+                            this._itemsMap = new Map();
                         }
                         setViewer(viewer) {
                             viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, e => {
@@ -705,6 +706,12 @@ var phasereditor2d;
                                 }
                             });
                             super.setViewer(viewer);
+                        }
+                        prepareViewerState(state) {
+                            state.selectedObjects = new Set([...state.selectedObjects]
+                                .map(obj => this._itemsMap.get(obj.id) || obj));
+                            state.expandedObjects = new Set([...state.expandedObjects]
+                                .map(obj => this._itemsMap.get(obj.id) || obj));
                         }
                         getContentProvider() {
                             return new outline.MonacoOutlineContentProvider(this);
@@ -737,7 +744,22 @@ var phasereditor2d;
                         }
                         async refresh() {
                             this._items = await this._editor.requestOutlineItems();
+                            this._itemsMap = new Map();
+                            this.buildItemsMap(this._items, "");
+                            console.log(this._items);
                             this.repaint();
+                        }
+                        buildItemsMap(items, prefix) {
+                            for (const item of items) {
+                                item.id = prefix + "#" + item.text + "#" + item.kind;
+                                this._itemsMap.set(item.id, item);
+                                if (Array.isArray(item.childItems)) {
+                                    this.buildItemsMap(item.childItems, item.id);
+                                    item.childItems.sort((a, b) => {
+                                        return a.spans[0].start - b.spans[0].start;
+                                    });
+                                }
+                            }
                         }
                         getUndoManager() {
                             return this._editor.getUndoManager();
