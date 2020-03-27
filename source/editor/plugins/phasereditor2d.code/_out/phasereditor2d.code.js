@@ -339,11 +339,6 @@ var phasereditor2d;
                         this._model.dispose();
                         this._model = null;
                     }
-                    removeModelListeners() {
-                        if (this._modelDidChangeListener) {
-                            this._modelDidChangeListener.dispose();
-                        }
-                    }
                     createPart() {
                         const container = document.createElement("div");
                         container.classList.add("MonacoEditorContainer");
@@ -386,9 +381,6 @@ var phasereditor2d;
                             return;
                         }
                         this._model = await this.createModel(file);
-                        this._modelDidChangeListener = this._model.onDidChangeContent(e => {
-                            this.setDirty(true);
-                        });
                         this._editor.setModel(this._model);
                         this.registerModelListeners(this._model);
                         this.setDirty(false);
@@ -400,14 +392,30 @@ var phasereditor2d;
                         return model;
                     }
                     registerModelListeners(model) {
+                        // dirty
+                        this._onDidChangeContentListener = this._model.onDidChangeContent(e => {
+                            this.setDirty(true);
+                        });
+                        // refresh outline
                         this._modelLines = model.getLineCount();
-                        model.onDidChangeContent(e => {
+                        this._onDidChangeCountListener = model.onDidChangeContent(e => {
                             const count = model.getLineCount();
                             if (count !== this._modelLines) {
                                 this.refreshOutline();
                                 this._modelLines = count;
                             }
                         });
+                        // reveal in outline
+                        this._editor.onDidChangeCursorPosition(e => {
+                            const offset = this._model.getOffsetAt(e.position);
+                            this._outlineProvider.revealOffset(offset);
+                        });
+                    }
+                    removeModelListeners() {
+                        if (this._onDidChangeContentListener) {
+                            this._onDidChangeContentListener.dispose();
+                            this._onDidChangeCountListener.dispose();
+                        }
                     }
                     getEditorViewerProvider(key) {
                         switch (key) {
@@ -417,6 +425,7 @@ var phasereditor2d;
                         return null;
                     }
                     async refreshOutline() {
+                        console.log("refreshOutline");
                         await this._outlineProvider.refresh();
                     }
                     layout() {
@@ -691,8 +700,9 @@ var phasereditor2d;
                                 if (Array.isArray(obj.spans)) {
                                     const span = obj.spans[0];
                                     const editor = this._editor.getMonacoEditor();
-                                    const pos = editor.getModel().getPositionAt(span.start);
-                                    const end = editor.getModel().getPositionAt(span.start + span.length);
+                                    const model = this._editor.getMonacoEditor().getModel();
+                                    const pos = model.getPositionAt(span.start);
+                                    const end = model.getPositionAt(span.start + span.length);
                                     editor.setPosition(pos);
                                     editor.revealPosition(pos, monaco.editor.ScrollType.Immediate);
                                     const range = {
@@ -742,11 +752,31 @@ var phasereditor2d;
                         async preload() {
                             // nothing for now
                         }
+                        revealOffset(offset) {
+                            const item = this.findItemAtOffset(this._items, offset);
+                            if (item) {
+                                this.setSelection([item], true, false);
+                            }
+                        }
+                        findItemAtOffset(items, offset) {
+                            for (const item of items) {
+                                if (Array.isArray(item.childItems)) {
+                                    const found = this.findItemAtOffset(item.childItems, offset);
+                                    if (found) {
+                                        return found;
+                                    }
+                                }
+                                const span = item.spans[0];
+                                if (offset >= span.start && offset <= span.start + span.length) {
+                                    return item;
+                                }
+                            }
+                            return null;
+                        }
                         async refresh() {
                             this._items = await this._editor.requestOutlineItems();
                             this._itemsMap = new Map();
                             this.buildItemsMap(this._items, "");
-                            console.log(this._items);
                             this.repaint();
                         }
                         buildItemsMap(items, prefix) {

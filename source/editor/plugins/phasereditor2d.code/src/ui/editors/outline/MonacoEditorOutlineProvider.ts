@@ -27,9 +27,10 @@ namespace phasereditor2d.code.ui.editors.outline {
                     const span = obj.spans[0];
 
                     const editor = this._editor.getMonacoEditor();
+                    const model = this._editor.getMonacoEditor().getModel();
 
-                    const pos = editor.getModel().getPositionAt(span.start);
-                    const end = editor.getModel().getPositionAt(span.start + span.length);
+                    const pos = model.getPositionAt(span.start);
+                    const end = model.getPositionAt(span.start + span.length);
 
                     editor.setPosition(pos);
                     editor.revealPosition(pos, monaco.editor.ScrollType.Immediate);
@@ -104,14 +105,48 @@ namespace phasereditor2d.code.ui.editors.outline {
             // nothing for now
         }
 
+        revealOffset(offset: number) {
+
+            const item = this.findItemAtOffset(this._items, offset);
+
+            if (item) {
+
+                this.setSelection([item], true, false);
+            }
+        }
+
+        private findItemAtOffset(items: any[], offset: number) {
+
+            for (const item of items) {
+
+                if (Array.isArray(item.childItems)) {
+
+                    const found = this.findItemAtOffset(item.childItems, offset);
+
+                    if (found) {
+
+                        return found;
+                    }
+                }
+
+                const span = item.spans[0];
+
+                if (offset >= span.start && offset <= span.start + span.length) {
+
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
         async refresh() {
 
             this._items = await this._editor.requestOutlineItems();
 
             this._itemsMap = new Map();
-            this.buildItemsMap(this._items, "");
 
-            console.log(this._items);
+            this.buildItemsMap(this._items, "");
 
             this.repaint();
         }

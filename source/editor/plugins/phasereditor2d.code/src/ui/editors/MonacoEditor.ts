@@ -7,8 +7,8 @@ namespace phasereditor2d.code.ui.editors {
         private _language: string;
         private _outlineProvider: outline.MonacoEditorOutlineProvider;
         private _modelLines: number;
-        private _viewState: monaco.editor.ICodeEditorViewState;
-        private _modelDidChangeListener: monaco.IDisposable;
+        private _onDidChangeContentListener: monaco.IDisposable;
+        private _onDidChangeCountListener: monaco.IDisposable;
 
         constructor(id: string, language: string) {
 
@@ -61,14 +61,6 @@ namespace phasereditor2d.code.ui.editors {
             this._model.dispose();
 
             this._model = null;
-        }
-
-        protected removeModelListeners() {
-
-            if (this._modelDidChangeListener) {
-
-                this._modelDidChangeListener.dispose();
-            }
         }
 
         protected createPart(): void {
@@ -139,10 +131,6 @@ namespace phasereditor2d.code.ui.editors {
 
             this._model = await this.createModel(file);
 
-            this._modelDidChangeListener = this._model.onDidChangeContent(e => {
-                this.setDirty(true);
-            });
-
             this._editor.setModel(this._model);
 
             this.registerModelListeners(this._model);
@@ -161,11 +149,19 @@ namespace phasereditor2d.code.ui.editors {
             return model;
         }
 
-        private registerModelListeners(model: monaco.editor.ITextModel) {
+        protected registerModelListeners(model: monaco.editor.ITextModel) {
+
+            // dirty
+
+            this._onDidChangeContentListener = this._model.onDidChangeContent(e => {
+                this.setDirty(true);
+            });
+
+            // refresh outline
 
             this._modelLines = model.getLineCount();
 
-            model.onDidChangeContent(e => {
+            this._onDidChangeCountListener = model.onDidChangeContent(e => {
 
                 const count = model.getLineCount();
 
@@ -176,6 +172,24 @@ namespace phasereditor2d.code.ui.editors {
                     this._modelLines = count;
                 }
             });
+
+            // reveal in outline
+
+            this._editor.onDidChangeCursorPosition(e => {
+
+                const offset = this._model.getOffsetAt(e.position);
+
+                this._outlineProvider.revealOffset(offset);
+            });
+        }
+
+        protected removeModelListeners() {
+
+            if (this._onDidChangeContentListener) {
+
+                this._onDidChangeContentListener.dispose();
+                this._onDidChangeCountListener.dispose();
+            }
         }
 
         getEditorViewerProvider(key: string) {
@@ -191,6 +205,8 @@ namespace phasereditor2d.code.ui.editors {
         }
 
         async refreshOutline() {
+
+            console.log("refreshOutline");
 
             await this._outlineProvider.refresh();
         }
