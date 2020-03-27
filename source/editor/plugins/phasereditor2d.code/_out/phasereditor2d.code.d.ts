@@ -41,8 +41,7 @@ declare namespace phasereditor2d.code.ui {
 }
 declare namespace phasereditor2d.code.ui.editors {
     abstract class MonacoEditor extends colibri.ui.ide.FileEditor {
-        private static _sharedEditorContainer;
-        private static _sharedEditor;
+        private _editor;
         protected _model: monaco.editor.ITextModel;
         private _language;
         private _outlineProvider;
@@ -52,11 +51,10 @@ declare namespace phasereditor2d.code.ui.editors {
         constructor(id: string, language: string);
         getMonacoEditor(): monaco.editor.IStandaloneCodeEditor;
         onPartClosed(): boolean;
+        onPartActivated(): void;
         protected disposeModel(): void;
         protected removeModelListeners(): void;
         protected createPart(): void;
-        onPartDeactivated(): void;
-        onPartActivated(): void;
         private getTokensAtLine;
         doSave(): Promise<void>;
         private updateContent;

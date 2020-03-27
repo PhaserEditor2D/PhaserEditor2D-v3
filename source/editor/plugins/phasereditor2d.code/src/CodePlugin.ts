@@ -155,10 +155,18 @@ namespace phasereditor2d.code {
 
                     if (file) {
 
-                        colibri.Platform.getWorkbench().openEditor(file);
+                        const editorPart = colibri.Platform
+                            .getWorkbench().openEditor(file) as ui.editors.JavaScriptEditor;
+
+                        if (!editorPart) {
+
+                            return;
+                        }
 
                         // TODO: for now, but the right way is to pass a "RevealElement" in the .openEditor() method
                         setTimeout(() => {
+
+                            const newEditor = editorPart.getMonacoEditor();
 
                             const selection = input.options ? input.options.selection : null;
 
@@ -167,8 +175,8 @@ namespace phasereditor2d.code {
                                 if (typeof selection.endLineNumber === "number"
                                     && typeof selection.endColumn === "number") {
 
-                                    editor.setSelection(selection);
-                                    editor.revealRangeInCenter(selection, monaco.editor.ScrollType.Immediate);
+                                    newEditor.setSelection(selection);
+                                    newEditor.revealRangeInCenter(selection, monaco.editor.ScrollType.Immediate);
 
                                 } else {
 
@@ -177,8 +185,8 @@ namespace phasereditor2d.code {
                                         column: selection.startColumn
                                     };
 
-                                    editor.setPosition(pos);
-                                    editor.revealPositionInCenter(pos, monaco.editor.ScrollType.Immediate);
+                                    newEditor.setPosition(pos);
+                                    newEditor.revealPositionInCenter(pos, monaco.editor.ScrollType.Immediate);
                                 }
                             }
                         }, 10);

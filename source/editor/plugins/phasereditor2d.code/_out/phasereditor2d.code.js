@@ -109,23 +109,28 @@ var phasereditor2d;
                         const fileName = uri.path.substring(1);
                         const file = colibri.ui.ide.FileUtils.getFileFromPath(fileName);
                         if (file) {
-                            colibri.Platform.getWorkbench().openEditor(file);
+                            const editorPart = colibri.Platform
+                                .getWorkbench().openEditor(file);
+                            if (!editorPart) {
+                                return;
+                            }
                             // TODO: for now, but the right way is to pass a "RevealElement" in the .openEditor() method
                             setTimeout(() => {
+                                const newEditor = editorPart.getMonacoEditor();
                                 const selection = input.options ? input.options.selection : null;
                                 if (selection) {
                                     if (typeof selection.endLineNumber === "number"
                                         && typeof selection.endColumn === "number") {
-                                        editor.setSelection(selection);
-                                        editor.revealRangeInCenter(selection, monaco.editor.ScrollType.Immediate);
+                                        newEditor.setSelection(selection);
+                                        newEditor.revealRangeInCenter(selection, monaco.editor.ScrollType.Immediate);
                                     }
                                     else {
                                         const pos = {
                                             lineNumber: selection.startLineNumber,
                                             column: selection.startColumn
                                         };
-                                        editor.setPosition(pos);
-                                        editor.revealPositionInCenter(pos, monaco.editor.ScrollType.Immediate);
+                                        newEditor.setPosition(pos);
+                                        newEditor.revealPositionInCenter(pos, monaco.editor.ScrollType.Immediate);
                                     }
                                 }
                             }, 10);
@@ -282,17 +287,24 @@ var phasereditor2d;
                         this._outlineProvider = new editors.outline.MonacoEditorOutlineProvider(this);
                     }
                     getMonacoEditor() {
-                        return MonacoEditor._sharedEditor;
+                        return this._editor;
                     }
                     onPartClosed() {
                         if (super.onPartClosed()) {
                             if (this._model) {
-                                this._viewState = MonacoEditor._sharedEditor.saveViewState();
                                 this.disposeModel();
+                            }
+                            if (this._editor) {
+                                this._editor.dispose();
                             }
                             return true;
                         }
                         return false;
+                    }
+                    onPartActivated() {
+                        setTimeout(() => {
+                            this._editor.focus();
+                        }, 10);
                     }
                     disposeModel() {
                         this.removeModelListeners();
@@ -305,35 +317,14 @@ var phasereditor2d;
                         }
                     }
                     createPart() {
-                        if (!MonacoEditor._sharedEditorContainer) {
-                            const container = document.createElement("div");
-                            container.classList.add("MonacoEditorContainer");
-                            MonacoEditor._sharedEditorContainer = container;
-                            MonacoEditor._sharedEditor = monaco.editor.create(container, {
-                                scrollBeyondLastLine: true,
-                                fontSize: 16
-                            });
-                        }
-                        this.getElement().appendChild(MonacoEditor._sharedEditorContainer);
+                        const container = document.createElement("div");
+                        container.classList.add("MonacoEditorContainer");
+                        this._editor = monaco.editor.create(container, {
+                            scrollBeyondLastLine: true,
+                            fontSize: 16
+                        });
+                        this.getElement().appendChild(container);
                         this.updateContent();
-                    }
-                    onPartDeactivated() {
-                        super.onPartDeactivated();
-                        this._viewState = MonacoEditor._sharedEditor.saveViewState();
-                    }
-                    onPartActivated() {
-                        super.onPartActivated();
-                        if (MonacoEditor._sharedEditorContainer) {
-                            this.getElement().appendChild(MonacoEditor._sharedEditorContainer);
-                            const editor = MonacoEditor._sharedEditor;
-                            editor.setModel(this._model);
-                            if (this._viewState) {
-                                editor.restoreViewState(this._viewState);
-                            }
-                            setTimeout(() => {
-                                editor.focus();
-                            }, 1);
-                        }
                     }
                     getTokensAtLine(position) {
                         const model = this._model;
@@ -363,17 +354,14 @@ var phasereditor2d;
                         if (!file) {
                             return;
                         }
-                        const editor = MonacoEditor._sharedEditor;
-                        if (!editor) {
+                        if (!this._editor) {
                             return;
                         }
-                        const before = editor.saveViewState();
                         this._model = await this.createModel(file);
-                        editor.restoreViewState(before);
                         this._modelDidChangeListener = this._model.onDidChangeContent(e => {
                             this.setDirty(true);
                         });
-                        MonacoEditor._sharedEditor.setModel(this._model);
+                        this._editor.setModel(this._model);
                         this.registerModelListeners(this._model);
                         this.setDirty(false);
                         this.refreshOutline();
@@ -405,8 +393,8 @@ var phasereditor2d;
                     }
                     layout() {
                         super.layout();
-                        if (MonacoEditor._sharedEditor) {
-                            MonacoEditor._sharedEditor.layout();
+                        if (this._editor) {
+                            this._editor.layout();
                         }
                     }
                     onEditorInputContentChanged() {

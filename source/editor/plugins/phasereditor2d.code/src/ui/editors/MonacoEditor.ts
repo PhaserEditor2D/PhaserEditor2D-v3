@@ -2,9 +2,7 @@ namespace phasereditor2d.code.ui.editors {
 
     export abstract class MonacoEditor extends colibri.ui.ide.FileEditor {
 
-        private static _sharedEditorContainer: HTMLElement;
-        private static _sharedEditor: monaco.editor.IStandaloneCodeEditor;
-
+        private _editor: monaco.editor.IStandaloneCodeEditor;
         protected _model: monaco.editor.ITextModel;
         private _language: string;
         private _outlineProvider: outline.MonacoEditorOutlineProvider;
@@ -24,7 +22,7 @@ namespace phasereditor2d.code.ui.editors {
         }
 
         getMonacoEditor() {
-            return MonacoEditor._sharedEditor;
+            return this._editor;
         }
 
         onPartClosed() {
@@ -33,15 +31,27 @@ namespace phasereditor2d.code.ui.editors {
 
                 if (this._model) {
 
-                    this._viewState = MonacoEditor._sharedEditor.saveViewState();
-
                     this.disposeModel();
+                }
+
+                if (this._editor) {
+
+                    this._editor.dispose();
                 }
 
                 return true;
             }
 
             return false;
+        }
+
+        onPartActivated() {
+
+            setTimeout(() => {
+
+                this._editor.focus();
+
+            }, 10);
         }
 
         protected disposeModel() {
@@ -63,54 +73,17 @@ namespace phasereditor2d.code.ui.editors {
 
         protected createPart(): void {
 
-            if (!MonacoEditor._sharedEditorContainer) {
+            const container = document.createElement("div");
+            container.classList.add("MonacoEditorContainer");
 
-                const container = document.createElement("div");
-                container.classList.add("MonacoEditorContainer");
+            this._editor = monaco.editor.create(container, {
+                scrollBeyondLastLine: true,
+                fontSize: 16
+            });
 
-                MonacoEditor._sharedEditorContainer = container;
-
-                MonacoEditor._sharedEditor = monaco.editor.create(container, {
-                    scrollBeyondLastLine: true,
-                    fontSize: 16
-                });
-            }
-
-            this.getElement().appendChild(MonacoEditor._sharedEditorContainer);
+            this.getElement().appendChild(container);
 
             this.updateContent();
-        }
-
-        onPartDeactivated() {
-
-            super.onPartDeactivated();
-
-            this._viewState = MonacoEditor._sharedEditor.saveViewState();
-        }
-
-        onPartActivated() {
-
-            super.onPartActivated();
-
-            if (MonacoEditor._sharedEditorContainer) {
-
-                this.getElement().appendChild(MonacoEditor._sharedEditorContainer);
-
-                const editor = MonacoEditor._sharedEditor;
-
-                editor.setModel(this._model);
-
-                if (this._viewState) {
-
-                    editor.restoreViewState(this._viewState);
-                }
-
-                setTimeout(() => {
-
-                    editor.focus();
-
-                }, 1);
-            }
         }
 
         private getTokensAtLine(position: monaco.IPosition) {
@@ -160,23 +133,17 @@ namespace phasereditor2d.code.ui.editors {
                 return;
             }
 
-            const editor = MonacoEditor._sharedEditor;
-
-            if (!editor) {
+            if (!this._editor) {
                 return;
             }
 
-            const before = editor.saveViewState();
-
             this._model = await this.createModel(file);
-
-            editor.restoreViewState(before);
 
             this._modelDidChangeListener = this._model.onDidChangeContent(e => {
                 this.setDirty(true);
             });
 
-            MonacoEditor._sharedEditor.setModel(this._model);
+            this._editor.setModel(this._model);
 
             this.registerModelListeners(this._model);
 
@@ -234,9 +201,9 @@ namespace phasereditor2d.code.ui.editors {
 
             super.layout();
 
-            if (MonacoEditor._sharedEditor) {
+            if (this._editor) {
 
-                MonacoEditor._sharedEditor.layout();
+                this._editor.layout();
             }
         }
 
