@@ -94,7 +94,7 @@ namespace phasereditor2d.code.ui.editors {
                     const items = await CodePlugin.getInstance().getJavaScriptWorker()
                         .getNavigationBarItems(model.uri.toString());
 
-                    return items;
+                    return items.filter(i => i.text !== "<global>");
                 }
             }
 

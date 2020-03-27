@@ -14,6 +14,39 @@ namespace phasereditor2d.code.ui.editors.outline {
             this._items = [];
         }
 
+        setViewer(viewer: controls.viewers.TreeViewer) {
+
+            viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, e => {
+
+                const obj = viewer.getSelectionFirstElement();
+
+                if (Array.isArray(obj.spans)) {
+
+                    const span = obj.spans[0];
+
+                    const editor = this._editor.getMonacoEditor();
+
+                    const pos = editor.getModel().getPositionAt(span.start);
+                    const end = editor.getModel().getPositionAt(span.start + span.length);
+
+                    editor.setPosition(pos);
+                    editor.revealPosition(pos, monaco.editor.ScrollType.Immediate);
+
+                    const range: monaco.IRange = {
+                        endColumn: end.column,
+                        endLineNumber: end.lineNumber,
+                        startColumn: pos.column,
+                        startLineNumber: pos.lineNumber,
+                    };
+
+                    editor.setSelection(range);
+                    editor.focus();
+                }
+            });
+
+            super.setViewer(viewer);
+        }
+
         getContentProvider(): controls.viewers.ITreeContentProvider {
 
             return new MonacoOutlineContentProvider(this);

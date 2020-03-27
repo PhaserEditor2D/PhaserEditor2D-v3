@@ -17,10 +17,11 @@ namespace colibri.ui.ide {
             this._viewer = viewer;
 
             if (this._initialSelection) {
+
                 this.setSelection(this._initialSelection, true, true);
+
                 this._initialSelection = null;
             }
-
         }
 
         setSelection(selection: any[], reveal: boolean, notify: boolean) {
@@ -33,7 +34,6 @@ namespace colibri.ui.ide {
             } else {
                 this._initialSelection = selection;
             }
-
         }
 
         getSelection() {

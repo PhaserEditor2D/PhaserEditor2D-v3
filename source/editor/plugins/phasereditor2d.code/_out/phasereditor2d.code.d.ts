@@ -143,6 +143,7 @@ declare namespace phasereditor2d.code.ui.editors.outline {
         private _editor;
         private _items;
         constructor(editor: MonacoEditor);
+        setViewer(viewer: controls.viewers.TreeViewer): void;
         getContentProvider(): controls.viewers.ITreeContentProvider;
         getLabelProvider(): controls.viewers.ILabelProvider;
         getCellRendererProvider(): controls.viewers.ICellRendererProvider;
