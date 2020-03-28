@@ -13,18 +13,17 @@ namespace phasereditor2d.code.ui.editors.properties {
             const comp = this.createGridElement(parent, 1);
             comp.style.alignItems = "self-start";
 
-            const preElement = document.createElement("pre");
-            preElement.style.wordBreak = "break-word";
-            preElement.style.whiteSpace = "pre-wrap";
+            const docElement = document.createElement("div");
+            docElement.style.height = "100%";
+            docElement.classList.add("UserSelectText");
 
-            comp.appendChild(preElement);
+            comp.appendChild(docElement);
 
             this.addUpdater(() => {
 
                 const item = this.getSelectionFirstElement() as DocumentationItem;
 
-                preElement.innerHTML = item.toHTML();
-
+                docElement.innerHTML = item.toHTML();
             });
         }
 

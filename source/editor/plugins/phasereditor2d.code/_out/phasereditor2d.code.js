@@ -425,7 +425,6 @@ var phasereditor2d;
                         return null;
                     }
                     async refreshOutline() {
-                        console.log("refreshOutline");
                         await this._outlineProvider.refresh();
                     }
                     layout() {
@@ -568,6 +567,9 @@ var phasereditor2d;
                     }
                     registerModelListeners(model) {
                         super.registerModelListeners(model);
+                        if (!code.CodePlugin.getInstance().isAdvancedJSEditor()) {
+                            return;
+                        }
                         const editor = this.getMonacoEditor();
                         editor.getDomNode().addEventListener("click", async (e) => {
                             const worker = code.CodePlugin.getInstance().getJavaScriptWorker();
@@ -576,6 +578,9 @@ var phasereditor2d;
                             const info = await worker.getQuickInfoAtPosition(code.CodePlugin.fileUri(this.getInput()).toString(), offs);
                             if (info) {
                                 this.setSelection([new editors.properties.DocumentationItem(info)]);
+                            }
+                            else {
+                                this.setSelection([]);
                             }
                         });
                     }
@@ -908,13 +913,18 @@ var phasereditor2d;
                     class DocumentationItem {
                         constructor(data) {
                             this._data = data;
+                            this._converter = new window["showdown"].Converter();
                         }
                         getData() {
                             return this._data;
                         }
                         toHTML() {
-                            const docs = this._data.documentation.map(doc => doc.text).join("\n");
-                            return docs;
+                            if (this._data.documentation) {
+                                const docs = this._data.documentation.map(doc => doc.text).join("\n");
+                                const html = this._converter.makeHtml(docs);
+                                return html;
+                            }
+                            return "";
                         }
                     }
                     properties.DocumentationItem = DocumentationItem;
@@ -941,13 +951,13 @@ var phasereditor2d;
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 1);
                             comp.style.alignItems = "self-start";
-                            const preElement = document.createElement("pre");
-                            preElement.style.wordBreak = "break-word";
-                            preElement.style.whiteSpace = "pre-wrap";
-                            comp.appendChild(preElement);
+                            const docElement = document.createElement("div");
+                            docElement.style.height = "100%";
+                            docElement.classList.add("UserSelectText");
+                            comp.appendChild(docElement);
                             this.addUpdater(() => {
                                 const item = this.getSelectionFirstElement();
-                                preElement.innerHTML = item.toHTML();
+                                docElement.innerHTML = item.toHTML();
                             });
                         }
                         canEdit(obj, n) {

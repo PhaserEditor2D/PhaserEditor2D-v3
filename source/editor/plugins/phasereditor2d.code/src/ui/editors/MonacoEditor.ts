@@ -206,8 +206,6 @@ namespace phasereditor2d.code.ui.editors {
 
         async refreshOutline() {
 
-            console.log("refreshOutline");
-
             await this._outlineProvider.refresh();
         }
 

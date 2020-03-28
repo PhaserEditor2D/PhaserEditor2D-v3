@@ -184,6 +184,7 @@ declare namespace phasereditor2d.code.ui.editors.outline {
 declare namespace phasereditor2d.code.ui.editors.properties {
     class DocumentationItem {
         private _data;
+        private _converter;
         constructor(data: any);
         getData(): any;
         toHTML(): any;

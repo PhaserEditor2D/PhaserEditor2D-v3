@@ -72,6 +72,11 @@ namespace phasereditor2d.code.ui.editors {
 
             super.registerModelListeners(model);
 
+            if (!CodePlugin.getInstance().isAdvancedJSEditor()) {
+
+                return;
+            }
+
             const editor = this.getMonacoEditor();
 
             editor.getDomNode().addEventListener("click", async (e) => {
@@ -87,6 +92,10 @@ namespace phasereditor2d.code.ui.editors {
                 if (info) {
 
                     this.setSelection([new properties.DocumentationItem(info)]);
+
+                } else {
+
+                    this.setSelection([]);
                 }
             });
         }

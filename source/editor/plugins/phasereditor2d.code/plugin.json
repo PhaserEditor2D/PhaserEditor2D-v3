@@ -9,13 +9,15 @@
         "scripts/monaco-editor-0.20.0/defineRequire.js",
         "scripts/monaco-editor-0.20.0/min/vs/loader.js",
         "scripts/monaco-editor-0.20.0/min/vs/editor/editor.main.nls.js",
-        "scripts/monaco-editor-0.20.0/min/vs/editor/editor.main.js"
+        "scripts/monaco-editor-0.20.0/min/vs/editor/editor.main.js",
+        "scripts/showdown-1.9.0/showdown.min.js"
     ],
     "scripts-dev": [
+        "_out/phasereditor2d.code.js",
         "scripts/dev-monaco-editor-0.20.0/defineRequire.js",
         "scripts/dev-monaco-editor-0.20.0/dev/vs/loader.js",
         "scripts/dev-monaco-editor-0.20.0/dev/vs/editor/editor.main.nls.js",
         "scripts/dev-monaco-editor-0.20.0/dev/vs/editor/editor.main.js",
-        "_out/phasereditor2d.code.js"
+        "scripts/showdown-1.9.0/showdown.min.js"
     ]
 }
