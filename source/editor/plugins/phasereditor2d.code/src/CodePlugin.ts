@@ -54,8 +54,8 @@ namespace phasereditor2d.code {
             reg.addExtension(
                 new colibri.ui.ide.EditorExtension(
                     [
-                        ui.editors.JavaScriptEditor.getFactory(),
-                        ui.editors.TypeScriptEditor.getFactory(),
+                        ui.editors.JavaScriptEditor.getJavaScriptFactory(),
+                        ui.editors.JavaScriptEditor.getTypeScriptFactory(),
                         ui.editors.HTMLEditor.getFactory(),
                         ui.editors.CSSEditor.getFactory(),
                         ui.editors.JSONEditor.getFactory(),
@@ -72,7 +72,7 @@ namespace phasereditor2d.code {
 
                 monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
 
-                reg.addExtension(new ui.PreloadExtraLibsExtension());
+                // reg.addExtension(new ui.PreloadExtraLibsExtension());
                 reg.addExtension(new ui.PreloadModelsExtension());
                 reg.addExtension(new ui.PreloadJavaScriptWorkerExtension());
 

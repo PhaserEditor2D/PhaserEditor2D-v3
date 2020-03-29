@@ -28,13 +28,8 @@ declare namespace phasereditor2d.code {
 declare namespace phasereditor2d.code.ui {
     class ModelManager {
         constructor();
-    }
-}
-declare namespace phasereditor2d.code.ui {
-    class PreloadExtraLibsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
-        computeTotal(): Promise<number>;
-        private getFiles;
-        preload(monitor: colibri.ui.controls.IProgressMonitor): Promise<void>;
+        private getModeId;
+        private isValidFileName;
     }
 }
 declare namespace phasereditor2d.code.ui {
@@ -113,11 +108,13 @@ declare namespace phasereditor2d.code.ui.editors {
 declare namespace phasereditor2d.code.ui.editors {
     import io = colibri.core.io;
     class JavaScriptEditor extends MonacoEditor {
-        static _factory: colibri.ui.ide.EditorFactory;
+        static _jsFactory: colibri.ui.ide.EditorFactory;
+        static _tsFactory: colibri.ui.ide.EditorFactory;
         private _propertyProvider;
         private _finder;
-        static getFactory(): colibri.ui.ide.EditorFactory;
-        constructor();
+        static getJavaScriptFactory(): colibri.ui.ide.EditorFactory;
+        static getTypeScriptFactory(): colibri.ui.ide.EditorFactory;
+        constructor(lang: "javascript" | "typescript");
         protected createModel(file: io.FilePath): Promise<monaco.editor.ITextModel>;
         onPartActivated(): void;
         protected onEditorFileNameChanged(): void;
@@ -133,15 +130,6 @@ declare namespace phasereditor2d.code.ui.editors {
     class TextEditor extends MonacoEditor {
         static _factory: colibri.ui.ide.EditorFactory;
         static getFactory(): colibri.ui.ide.EditorFactory;
-        constructor();
-        requestOutlineItems(): Promise<any[]>;
-    }
-}
-declare namespace phasereditor2d.code.ui.editors {
-    class TypeScriptEditor extends MonacoEditor {
-        static _factory: colibri.ui.ide.EditorFactory;
-        static getFactory(): colibri.ui.ide.EditorFactory;
-        private _worker;
         constructor();
         requestOutlineItems(): Promise<any[]>;
     }

@@ -5,20 +5,29 @@ namespace phasereditor2d.code.ui.editors {
 
     export class JavaScriptEditor extends MonacoEditor {
 
-        static _factory: colibri.ui.ide.EditorFactory;
+        static _jsFactory: colibri.ui.ide.EditorFactory;
+        static _tsFactory: colibri.ui.ide.EditorFactory;
         private _propertyProvider: properties.JavaScriptSectionProvider;
         private _finder: pack.core.PackFinder;
 
-        static getFactory() {
+        static getJavaScriptFactory() {
 
-            return this._factory
+            return this._jsFactory
 
-                || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
-                    webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor()));
+                || (this._jsFactory = new colibri.ui.ide.ContentTypeEditorFactory(
+                    webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor("javascript")));
         }
 
-        constructor() {
-            super("phasereditor2d.core.ui.editors.JavaScriptEditor", "javascript");
+        static getTypeScriptFactory() {
+
+            return this._tsFactory
+
+                || (this._tsFactory = new colibri.ui.ide.ContentTypeEditorFactory(
+                    webContentTypes.core.CONTENT_TYPE_TYPESCRIPT, () => new JavaScriptEditor("typescript")));
+        }
+
+        constructor(lang: "javascript" | "typescript") {
+            super("phasereditor2d.core.ui.editors.JavaScriptEditor", lang);
 
             this._finder = new pack.core.PackFinder();
         }

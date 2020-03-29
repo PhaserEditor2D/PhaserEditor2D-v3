@@ -36,8 +36,8 @@ var phasereditor2d;
                 ]));
                 // editors
                 reg.addExtension(new colibri.ui.ide.EditorExtension([
-                    code.ui.editors.JavaScriptEditor.getFactory(),
-                    code.ui.editors.TypeScriptEditor.getFactory(),
+                    code.ui.editors.JavaScriptEditor.getJavaScriptFactory(),
+                    code.ui.editors.JavaScriptEditor.getTypeScriptFactory(),
                     code.ui.editors.HTMLEditor.getFactory(),
                     code.ui.editors.CSSEditor.getFactory(),
                     code.ui.editors.JSONEditor.getFactory(),
@@ -48,7 +48,7 @@ var phasereditor2d;
                 if (this.isAdvancedJSEditor()) {
                     console.log("CodePlugin: Enable advanced JavaScript coding tools.");
                     monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-                    reg.addExtension(new code.ui.PreloadExtraLibsExtension());
+                    // reg.addExtension(new ui.PreloadExtraLibsExtension());
                     reg.addExtension(new code.ui.PreloadModelsExtension());
                     reg.addExtension(new code.ui.PreloadJavaScriptWorkerExtension());
                     this.registerAssetPackCompletions();
@@ -221,16 +221,17 @@ var phasereditor2d;
                         }
                         // handle additions
                         for (const fileName of e.getAddRecords()) {
-                            if (!fileName.endsWith(".js")) {
+                            if (!this.isValidFileName(fileName)) {
                                 continue;
                             }
                             const file = fileMap.get(fileName);
                             const str = await utils.preloadAndGetFileString(file);
-                            monaco.editor.createModel(str, "javascript", code.CodePlugin.fileUri(fileName));
+                            const lang = this.getModeId(fileName);
+                            monaco.editor.createModel(str, lang, code.CodePlugin.fileUri(fileName));
                         }
                         // handle deletions
                         for (const fileName of e.getDeleteRecords()) {
-                            if (!fileName.endsWith(".js")) {
+                            if (!this.isValidFileName(fileName)) {
                                 continue;
                             }
                             const model = monaco.editor.getModel(code.CodePlugin.fileUri(fileName));
@@ -240,7 +241,7 @@ var phasereditor2d;
                         }
                         // handle modifications
                         for (const fileName of e.getModifiedRecords()) {
-                            if (!fileName.endsWith(".js")) {
+                            if (!this.isValidFileName(fileName)) {
                                 continue;
                             }
                             const file = fileMap.get(fileName);
@@ -252,48 +253,25 @@ var phasereditor2d;
                         }
                         // handle renames
                         for (const oldFileName of e.getRenameFromRecords()) {
-                            if (!oldFileName.endsWith(".js")) {
+                            if (!this.isValidFileName(oldFileName)) {
                                 continue;
                             }
                             const newFileName = e.getRenameTo(oldFileName);
                             const oldModel = monaco.editor.getModel(code.CodePlugin.fileUri(oldFileName));
-                            monaco.editor.createModel(oldModel.getValue(), "javascript", code.CodePlugin.fileUri(newFileName));
+                            const lang = this.getModeId(newFileName);
+                            monaco.editor.createModel(oldModel.getValue(), lang, code.CodePlugin.fileUri(newFileName));
                             oldModel.dispose();
                         }
                     });
                 }
+                getModeId(filename) {
+                    return filename.endsWith(".js") ? "javascript" : "typescript";
+                }
+                isValidFileName(filename) {
+                    return filename.endsWith(".js") || filename.endsWith(".ts");
+                }
             }
             ui.ModelManager = ModelManager;
-        })(ui = code.ui || (code.ui = {}));
-    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var code;
-    (function (code) {
-        var ui;
-        (function (ui) {
-            class PreloadExtraLibsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
-                async computeTotal() {
-                    return this.getFiles().length;
-                }
-                getFiles() {
-                    return colibri.ui.ide.FileUtils.getAllFiles()
-                        .filter(file => file.getName().endsWith(".d.ts"));
-                }
-                async preload(monitor) {
-                    const utils = colibri.ui.ide.FileUtils;
-                    const files = this.getFiles();
-                    for (const file of files) {
-                        const content = await utils.preloadAndGetFileString(file);
-                        if (content) {
-                            monaco.languages.typescript.javascriptDefaults.addExtraLib(content, file.getFullName());
-                        }
-                        monitor.step();
-                    }
-                }
-            }
-            ui.PreloadExtraLibsExtension = PreloadExtraLibsExtension;
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));
 })(phasereditor2d || (phasereditor2d = {}));
@@ -330,7 +308,9 @@ var phasereditor2d;
                 }
                 getFiles() {
                     return colibri.ui.ide.FileUtils.getAllFiles()
-                        .filter(file => file.getName().endsWith(".js"));
+                        .filter(file => file.getExtension() === "js" || file.getExtension() === "ts")
+                        .filter(file => file.getNameWithoutExtension() !== "phaser"
+                        && file.getNameWithoutExtension() !== "phaser.min");
                 }
                 async preload(monitor) {
                     monaco.editor.getModels().forEach(model => model.dispose());
@@ -608,13 +588,17 @@ var phasereditor2d;
             var editors;
             (function (editors) {
                 class JavaScriptEditor extends editors.MonacoEditor {
-                    constructor() {
-                        super("phasereditor2d.core.ui.editors.JavaScriptEditor", "javascript");
+                    constructor(lang) {
+                        super("phasereditor2d.core.ui.editors.JavaScriptEditor", lang);
                         this._finder = new phasereditor2d.pack.core.PackFinder();
                     }
-                    static getFactory() {
-                        return this._factory
-                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor()));
+                    static getJavaScriptFactory() {
+                        return this._jsFactory
+                            || (this._jsFactory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor("javascript")));
+                    }
+                    static getTypeScriptFactory() {
+                        return this._tsFactory
+                            || (this._tsFactory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_TYPESCRIPT, () => new JavaScriptEditor("typescript")));
                     }
                     async createModel(file) {
                         if (code.CodePlugin.getInstance().isAdvancedJSEditor()) {
@@ -743,37 +727,6 @@ var phasereditor2d;
                     }
                 }
                 editors.TextEditor = TextEditor;
-            })(editors = ui.editors || (ui.editors = {}));
-        })(ui = code.ui || (code.ui = {}));
-    })(code = phasereditor2d.code || (phasereditor2d.code = {}));
-})(phasereditor2d || (phasereditor2d = {}));
-var phasereditor2d;
-(function (phasereditor2d) {
-    var code;
-    (function (code) {
-        var ui;
-        (function (ui) {
-            var editors;
-            (function (editors) {
-                class TypeScriptEditor extends editors.MonacoEditor {
-                    constructor() {
-                        super("phasereditor2d.core.ui.editors.TypeScriptEditor", "typescript");
-                    }
-                    static getFactory() {
-                        return this._factory
-                            || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(phasereditor2d.webContentTypes.core.CONTENT_TYPE_TYPESCRIPT, () => new TypeScriptEditor()));
-                    }
-                    async requestOutlineItems() {
-                        if (!this._worker) {
-                            const getWorker = await monaco.languages.typescript.getTypeScriptWorker();
-                            this._worker = await getWorker();
-                        }
-                        const items = await this._worker
-                            .getNavigationBarItems(this.getMonacoEditor().getModel().uri.toString());
-                        return items;
-                    }
-                }
-                editors.TypeScriptEditor = TypeScriptEditor;
             })(editors = ui.editors || (ui.editors = {}));
         })(ui = code.ui || (code.ui = {}));
     })(code = phasereditor2d.code || (phasereditor2d.code = {}));

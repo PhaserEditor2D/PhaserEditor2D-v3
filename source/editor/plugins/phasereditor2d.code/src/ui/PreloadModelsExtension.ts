@@ -11,7 +11,9 @@ namespace phasereditor2d.code.ui {
 
             return colibri.ui.ide.FileUtils.getAllFiles()
 
-                .filter(file => file.getName().endsWith(".js"));
+                .filter(file => file.getExtension() === "js" || file.getExtension() === "ts")
+                .filter(file => file.getNameWithoutExtension() !== "phaser"
+                    && file.getNameWithoutExtension() !== "phaser.min");
         }
 
         async preload(monitor: colibri.ui.controls.IProgressMonitor) {

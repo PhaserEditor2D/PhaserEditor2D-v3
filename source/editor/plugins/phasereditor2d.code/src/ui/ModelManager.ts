@@ -25,7 +25,7 @@ namespace phasereditor2d.code.ui {
 
                 for (const fileName of e.getAddRecords()) {
 
-                    if (!fileName.endsWith(".js")) {
+                    if (!this.isValidFileName(fileName)) {
 
                         continue;
                     }
@@ -34,14 +34,16 @@ namespace phasereditor2d.code.ui {
 
                     const str = await utils.preloadAndGetFileString(file);
 
-                    monaco.editor.createModel(str, "javascript", CodePlugin.fileUri(fileName));
+                    const lang = this.getModeId(fileName);
+
+                    monaco.editor.createModel(str, lang, CodePlugin.fileUri(fileName));
                 }
 
                 // handle deletions
 
                 for (const fileName of e.getDeleteRecords()) {
 
-                    if (!fileName.endsWith(".js")) {
+                    if (!this.isValidFileName(fileName)) {
 
                         continue;
                     }
@@ -58,7 +60,7 @@ namespace phasereditor2d.code.ui {
 
                 for (const fileName of e.getModifiedRecords()) {
 
-                    if (!fileName.endsWith(".js")) {
+                    if (!this.isValidFileName(fileName)) {
 
                         continue;
                     }
@@ -79,7 +81,7 @@ namespace phasereditor2d.code.ui {
 
                 for (const oldFileName of e.getRenameFromRecords()) {
 
-                    if (!oldFileName.endsWith(".js")) {
+                    if (!this.isValidFileName(oldFileName)) {
 
                         continue;
                     }
@@ -88,13 +90,24 @@ namespace phasereditor2d.code.ui {
 
                     const oldModel = monaco.editor.getModel(CodePlugin.fileUri(oldFileName));
 
+                    const lang = this.getModeId(newFileName);
+
                     monaco.editor.createModel(
-                        oldModel.getValue(), "javascript", CodePlugin.fileUri(newFileName));
+                        oldModel.getValue(), lang, CodePlugin.fileUri(newFileName));
 
                     oldModel.dispose();
                 }
-
             });
+        }
+
+        private getModeId(filename: string) {
+
+            return filename.endsWith(".js") ? "javascript" : "typescript";
+        }
+
+        private isValidFileName(filename: string) {
+
+            return filename.endsWith(".js") || filename.endsWith(".ts");
         }
     }
 }
