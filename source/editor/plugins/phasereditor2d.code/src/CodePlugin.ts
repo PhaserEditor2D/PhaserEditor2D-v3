@@ -18,7 +18,6 @@ namespace phasereditor2d.code {
         private _modelManager: ui.ModelManager;
         private _javaScriptWorker: monaco.languages.typescript.TypeScriptWorker;
 
-
         static getInstance() {
 
             if (!this._instance) {
