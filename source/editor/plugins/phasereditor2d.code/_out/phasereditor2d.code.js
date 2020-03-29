@@ -919,12 +919,27 @@ var phasereditor2d;
                             return this._data;
                         }
                         toHTML() {
+                            console.log(this._data);
+                            let html = "";
+                            if (this._data.displayParts) {
+                                const line = this._data.displayParts.map(p => {
+                                    if (p.kind === "methodName" || p.kind === "parameterName" || p.kind === "className") {
+                                        return `<b>${p.text}</b>`;
+                                    }
+                                    return p.text;
+                                }).join("");
+                                html += `<code>${line}</code><br>`;
+                            }
                             if (this._data.documentation) {
                                 const docs = this._data.documentation.map(doc => doc.text).join("\n");
-                                const html = this._converter.makeHtml(docs);
-                                return html;
+                                html += this._converter.makeHtml(docs);
                             }
-                            return "";
+                            if (this._data.tags) {
+                                const tags = this._data.tags
+                                    .map(t => "<p><b><code>@" + t.name + "</code></b> " + t.text + "</p>").join("");
+                                html += tags;
+                            }
+                            return html;
                         }
                     }
                     properties.DocumentationItem = DocumentationItem;

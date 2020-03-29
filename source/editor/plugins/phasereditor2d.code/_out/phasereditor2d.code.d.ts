@@ -187,7 +187,7 @@ declare namespace phasereditor2d.code.ui.editors.properties {
         private _converter;
         constructor(data: any);
         getData(): any;
-        toHTML(): any;
+        toHTML(): string;
     }
 }
 declare namespace phasereditor2d.code.ui.editors.properties {
