@@ -1,5 +1,12 @@
 namespace phasereditor2d.code.ui.editors {
 
+    export interface IToken {
+        type: string;
+        value: string;
+        start: number;
+        end: number;
+    }
+
     export abstract class MonacoEditor extends colibri.ui.ide.FileEditor {
 
         private _editor: monaco.editor.IStandaloneCodeEditor;
@@ -22,7 +29,13 @@ namespace phasereditor2d.code.ui.editors {
         }
 
         getMonacoEditor() {
+
             return this._editor;
+        }
+
+        getModel() {
+
+            return this._model;
         }
 
         onPartClosed() {
@@ -78,25 +91,61 @@ namespace phasereditor2d.code.ui.editors {
             this.updateContent();
         }
 
-        private getTokensAtLine(position: monaco.IPosition) {
+        protected getTokenAt(pos: monaco.IPosition): IToken {
+
+            const tokens = this.getTokensAt(pos);
+
+            return tokens.find(t => pos.column >= t.start && pos.column <= t.end);
+        }
+
+        protected getTokensAt(pos: monaco.IPosition): IToken[] {
 
             const model = this._model;
 
-            const line = model.getLineContent(position.lineNumber);
+            const line = model.getLineContent(pos.lineNumber);
 
-            const tokens = monaco.editor.tokenize(line, this._language);
+            const result = monaco.editor.tokenize(line, this._language);
 
-            let type = "unknown";
+            if (result.length > 0) {
 
-            for (const token of tokens[0]) {
+                const tokens = result[0];
 
-                if (position.column >= token.offset) {
-                    type = token.type;
+                const tokens2: IToken[] = [];
+
+                let lastOffset = -1;
+                let lastType = null;
+
+                for (const token of tokens) {
+
+                    if (lastType) {
+
+                        tokens2.push({
+                            type: lastType,
+                            value: line.substring(lastOffset, token.offset),
+                            start: lastOffset,
+                            end: token.offset
+                        });
+
+                    }
+
+                    lastType = token.type;
+                    lastOffset = token.offset;
                 }
+
+                if (lastType) {
+
+                    tokens2.push({
+                        type: lastType,
+                        value: line.substring(lastOffset),
+                        start: lastOffset,
+                        end: line.length
+                    });
+                }
+
+                return tokens2;
             }
 
-            return type;
-
+            return [];
         }
 
         async doSave() {

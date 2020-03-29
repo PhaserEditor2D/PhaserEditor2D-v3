@@ -7,6 +7,7 @@ namespace phasereditor2d.code.ui.editors {
 
         static _factory: colibri.ui.ide.EditorFactory;
         private _propertyProvider: properties.JavaScriptSectionProvider;
+        private _finder: pack.core.PackFinder;
 
         static getFactory() {
 
@@ -18,6 +19,8 @@ namespace phasereditor2d.code.ui.editors {
 
         constructor() {
             super("phasereditor2d.core.ui.editors.JavaScriptEditor", "javascript");
+
+            this._finder = new pack.core.PackFinder();
         }
 
         protected async createModel(file: io.FilePath) {
@@ -41,6 +44,15 @@ namespace phasereditor2d.code.ui.editors {
 
                 super.createModel(file);
             }
+
+            this._finder.preload();
+        }
+
+        onPartActivated() {
+
+            super.onPartActivated();
+
+            this._finder.preload();
         }
 
         protected onEditorFileNameChanged() {
@@ -81,23 +93,63 @@ namespace phasereditor2d.code.ui.editors {
 
             editor.getDomNode().addEventListener("click", async (e) => {
 
-                const worker = CodePlugin.getInstance().getJavaScriptWorker();
-
                 const pos = editor.getPosition();
 
-                const offs = editor.getModel().getOffsetAt(pos);
+                const docItem = await this.getDocItemAtPosition(pos);
 
-                const info = await worker.getQuickInfoAtPosition(CodePlugin.fileUri(this.getInput()).toString(), offs);
+                if (docItem) {
 
-                if (info) {
+                    this.setSelection([docItem]);
 
-                    this.setSelection([new properties.DocumentationItem(info)]);
-
-                } else {
-
-                    this.setSelection([]);
+                    return;
                 }
+
+                const item = await this.getAssetItemAtPosition(pos);
+
+                if (item) {
+
+                    this.setSelection([item]);
+
+                    return;
+                }
+
+                this.setSelection([]);
+
             });
+        }
+
+        private async getAssetItemAtPosition(pos: monaco.IPosition) {
+
+            const token = this.getTokenAt(pos);
+
+            if (!token || token.type !== "string.js") {
+
+                return null;
+            }
+
+            let str = token.value;
+
+            // remove the ' or " or ` chars
+            str = str.substring(1, str.length - 1);
+
+            const obj = this._finder.findPackItemOrFrameWithKey(str);
+
+            return obj;
+        }
+
+        private async getDocItemAtPosition(pos: monaco.IPosition) {
+
+            const worker = CodePlugin.getInstance().getJavaScriptWorker();
+
+            const offs = this.getMonacoEditor().getModel().getOffsetAt(pos);
+
+            const info = await worker.getQuickInfoAtPosition(CodePlugin.fileUri(this.getInput()).toString(), offs);
+
+            if (info) {
+
+                return new properties.DocumentationItem(info);
+
+            }
         }
 
         protected disposeModel() {
@@ -108,8 +160,6 @@ namespace phasereditor2d.code.ui.editors {
                 // but we should update it with the file content if the editor is dirty
 
                 if (this.isDirty()) {
-
-                    console.log("update the model with the file content");
 
                     const content = colibri.ui.ide.FileUtils.getFileString(this.getInput());
 

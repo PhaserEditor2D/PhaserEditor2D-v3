@@ -18,8 +18,6 @@ namespace phasereditor2d.code.ui.editors.properties {
 
         toHTML() {
 
-            console.log(this._data);
-
             let html = "";
 
             if (this._data.displayParts) {

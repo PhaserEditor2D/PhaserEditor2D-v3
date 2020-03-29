@@ -15,6 +15,8 @@ declare namespace phasereditor2d.code {
         static getInstance(): CodePlugin;
         constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        private registerAssetPackCompletions;
+        private computeCompletions;
         getJavaScriptWorker(): monaco.languages.typescript.TypeScriptWorker;
         setJavaScriptWorker(worker: monaco.languages.typescript.TypeScriptWorker): void;
         static fileUri(file: io.FilePath | string): monaco.Uri;
@@ -49,6 +51,12 @@ declare namespace phasereditor2d.code.ui {
     }
 }
 declare namespace phasereditor2d.code.ui.editors {
+    interface IToken {
+        type: string;
+        value: string;
+        start: number;
+        end: number;
+    }
     abstract class MonacoEditor extends colibri.ui.ide.FileEditor {
         private _editor;
         protected _model: monaco.editor.ITextModel;
@@ -59,11 +67,13 @@ declare namespace phasereditor2d.code.ui.editors {
         private _onDidChangeCountListener;
         constructor(id: string, language: string);
         getMonacoEditor(): monaco.editor.IStandaloneCodeEditor;
+        getModel(): monaco.editor.ITextModel;
         onPartClosed(): boolean;
         onPartActivated(): void;
         protected disposeModel(): void;
         protected createPart(): void;
-        private getTokensAtLine;
+        protected getTokenAt(pos: monaco.IPosition): IToken;
+        protected getTokensAt(pos: monaco.IPosition): IToken[];
         doSave(): Promise<void>;
         private updateContent;
         protected createModel(file: colibri.core.io.FilePath): Promise<monaco.editor.ITextModel>;
@@ -105,12 +115,16 @@ declare namespace phasereditor2d.code.ui.editors {
     class JavaScriptEditor extends MonacoEditor {
         static _factory: colibri.ui.ide.EditorFactory;
         private _propertyProvider;
+        private _finder;
         static getFactory(): colibri.ui.ide.EditorFactory;
         constructor();
         protected createModel(file: io.FilePath): Promise<monaco.editor.ITextModel>;
+        onPartActivated(): void;
         protected onEditorFileNameChanged(): void;
         getPropertyProvider(): properties.JavaScriptSectionProvider;
         registerModelListeners(model: monaco.editor.ITextModel): void;
+        private getAssetItemAtPosition;
+        private getDocItemAtPosition;
         protected disposeModel(): void;
         requestOutlineItems(): Promise<any[]>;
     }

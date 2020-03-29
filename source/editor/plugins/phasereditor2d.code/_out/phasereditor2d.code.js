@@ -51,7 +51,57 @@ var phasereditor2d;
                     reg.addExtension(new code.ui.PreloadExtraLibsExtension());
                     reg.addExtension(new code.ui.PreloadModelsExtension());
                     reg.addExtension(new code.ui.PreloadJavaScriptWorkerExtension());
+                    this.registerAssetPackCompletions();
                 }
+            }
+            registerAssetPackCompletions() {
+                monaco.languages.registerCompletionItemProvider("javascript", {
+                    triggerCharacters: ['"', "'", "`"],
+                    provideCompletionItems: async (model, pos) => {
+                        return {
+                            suggestions: await this.computeCompletions()
+                        };
+                    }
+                });
+            }
+            async computeCompletions() {
+                const result = [];
+                // TODO: missing preload finder, but we need to compute the completions async,
+                // we should look in the monaco docs.
+                const finder = new phasereditor2d.pack.core.PackFinder();
+                await finder.preload();
+                const packs = finder.getPacks();
+                for (const pack2 of packs) {
+                    const packName = pack2.getFile().getName();
+                    for (const item of pack2.getItems()) {
+                        result.push({
+                            label: `${item.getKey()}`,
+                            kind: monaco.languages.CompletionItemKind.File,
+                            documentation: {
+                                value: `Asset Pack key of type \`${item.getType()}\`, defined in the pack file \`${packName}\`.` +
+                                    "\n```\n" + JSON.stringify(item.getData(), null, 2) + "\n```"
+                            },
+                            detail: item.getType(),
+                            insertText: item.getKey(),
+                        });
+                        if (item instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem
+                            && !(item instanceof phasereditor2d.pack.core.SpritesheetAssetPackItem)
+                            && !(item instanceof phasereditor2d.pack.core.ImageAssetPackItem)) {
+                            for (const frame of item.getFrames()) {
+                                result.push({
+                                    label: `${frame.getName()}`,
+                                    kind: monaco.languages.CompletionItemKind.Text,
+                                    detail: item.getType() + " frame",
+                                    documentation: {
+                                        value: `A frame of the \`${item.getType()}\` with key \`${item.getKey()}\`. Defined in pack file \`${packName}\`.`
+                                    },
+                                    insertText: frame.getName(),
+                                });
+                            }
+                        }
+                    }
+                }
+                return result;
             }
             getJavaScriptWorker() {
                 return this._javaScriptWorker;
@@ -317,6 +367,9 @@ var phasereditor2d;
                     getMonacoEditor() {
                         return this._editor;
                     }
+                    getModel() {
+                        return this._model;
+                    }
                     onPartClosed() {
                         if (super.onPartClosed()) {
                             if (this._model) {
@@ -349,17 +402,42 @@ var phasereditor2d;
                         this.getElement().appendChild(container);
                         this.updateContent();
                     }
-                    getTokensAtLine(position) {
+                    getTokenAt(pos) {
+                        const tokens = this.getTokensAt(pos);
+                        return tokens.find(t => pos.column >= t.start && pos.column <= t.end);
+                    }
+                    getTokensAt(pos) {
                         const model = this._model;
-                        const line = model.getLineContent(position.lineNumber);
-                        const tokens = monaco.editor.tokenize(line, this._language);
-                        let type = "unknown";
-                        for (const token of tokens[0]) {
-                            if (position.column >= token.offset) {
-                                type = token.type;
+                        const line = model.getLineContent(pos.lineNumber);
+                        const result = monaco.editor.tokenize(line, this._language);
+                        if (result.length > 0) {
+                            const tokens = result[0];
+                            const tokens2 = [];
+                            let lastOffset = -1;
+                            let lastType = null;
+                            for (const token of tokens) {
+                                if (lastType) {
+                                    tokens2.push({
+                                        type: lastType,
+                                        value: line.substring(lastOffset, token.offset),
+                                        start: lastOffset,
+                                        end: token.offset
+                                    });
+                                }
+                                lastType = token.type;
+                                lastOffset = token.offset;
                             }
+                            if (lastType) {
+                                tokens2.push({
+                                    type: lastType,
+                                    value: line.substring(lastOffset),
+                                    start: lastOffset,
+                                    end: line.length
+                                });
+                            }
+                            return tokens2;
                         }
-                        return type;
+                        return [];
                     }
                     async doSave() {
                         const content = this._model.getValue();
@@ -532,6 +610,7 @@ var phasereditor2d;
                 class JavaScriptEditor extends editors.MonacoEditor {
                     constructor() {
                         super("phasereditor2d.core.ui.editors.JavaScriptEditor", "javascript");
+                        this._finder = new phasereditor2d.pack.core.PackFinder();
                     }
                     static getFactory() {
                         return this._factory
@@ -550,6 +629,11 @@ var phasereditor2d;
                         else {
                             super.createModel(file);
                         }
+                        this._finder.preload();
+                    }
+                    onPartActivated() {
+                        super.onPartActivated();
+                        this._finder.preload();
                     }
                     onEditorFileNameChanged() {
                         const uri = code.CodePlugin.fileUri(this.getInput().getFullName());
@@ -572,24 +656,44 @@ var phasereditor2d;
                         }
                         const editor = this.getMonacoEditor();
                         editor.getDomNode().addEventListener("click", async (e) => {
-                            const worker = code.CodePlugin.getInstance().getJavaScriptWorker();
                             const pos = editor.getPosition();
-                            const offs = editor.getModel().getOffsetAt(pos);
-                            const info = await worker.getQuickInfoAtPosition(code.CodePlugin.fileUri(this.getInput()).toString(), offs);
-                            if (info) {
-                                this.setSelection([new editors.properties.DocumentationItem(info)]);
+                            const docItem = await this.getDocItemAtPosition(pos);
+                            if (docItem) {
+                                this.setSelection([docItem]);
+                                return;
                             }
-                            else {
-                                this.setSelection([]);
+                            const item = await this.getAssetItemAtPosition(pos);
+                            if (item) {
+                                this.setSelection([item]);
+                                return;
                             }
+                            this.setSelection([]);
                         });
+                    }
+                    async getAssetItemAtPosition(pos) {
+                        const token = this.getTokenAt(pos);
+                        if (!token || token.type !== "string.js") {
+                            return null;
+                        }
+                        let str = token.value;
+                        // remove the ' or " or ` chars
+                        str = str.substring(1, str.length - 1);
+                        const obj = this._finder.findPackItemOrFrameWithKey(str);
+                        return obj;
+                    }
+                    async getDocItemAtPosition(pos) {
+                        const worker = code.CodePlugin.getInstance().getJavaScriptWorker();
+                        const offs = this.getMonacoEditor().getModel().getOffsetAt(pos);
+                        const info = await worker.getQuickInfoAtPosition(code.CodePlugin.fileUri(this.getInput()).toString(), offs);
+                        if (info) {
+                            return new editors.properties.DocumentationItem(info);
+                        }
                     }
                     disposeModel() {
                         if (code.CodePlugin.getInstance().isAdvancedJSEditor()) {
                             // the model is disposed by the ModelsManager.
                             // but we should update it with the file content if the editor is dirty
                             if (this.isDirty()) {
-                                console.log("update the model with the file content");
                                 const content = colibri.ui.ide.FileUtils.getFileString(this.getInput());
                                 const model = this.getMonacoEditor().getModel();
                                 model.setValue(content);
@@ -919,7 +1023,6 @@ var phasereditor2d;
                             return this._data;
                         }
                         toHTML() {
-                            console.log(this._data);
                             let html = "";
                             if (this._data.displayParts) {
                                 const line = this._data.displayParts.map(p => {
@@ -1002,6 +1105,8 @@ var phasereditor2d;
                     class JavaScriptSectionProvider extends controls.properties.PropertySectionProvider {
                         addSections(page, sections) {
                             sections.push(new properties.DocumentationSection(page));
+                            new phasereditor2d.pack.ui.properties.AssetPackPreviewPropertyProvider()
+                                .addSections(page, sections);
                         }
                     }
                     properties.JavaScriptSectionProvider = JavaScriptSectionProvider;

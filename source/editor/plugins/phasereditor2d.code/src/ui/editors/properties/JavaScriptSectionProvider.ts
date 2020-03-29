@@ -9,6 +9,9 @@ namespace phasereditor2d.code.ui.editors.properties {
             sections: Array<controls.properties.PropertySection<any>>): void {
 
             sections.push(new DocumentationSection(page));
+
+            new pack.ui.properties.AssetPackPreviewPropertyProvider()
+                .addSections(page, sections);
         }
     }
 }
