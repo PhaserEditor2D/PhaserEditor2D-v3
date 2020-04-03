@@ -745,9 +745,9 @@ var phasereditor2d;
                         super.create();
                         this.setTitle("New Project");
                         this._createBtn = this.addButton("Create Project", () => {
-                            const template = this._filteredViewer.getViewer().getSelectionFirstElement();
+                            const templateInfo = this._filteredViewer.getViewer().getSelectionFirstElement();
                             this.closeAll();
-                            this.createProject(template.path);
+                            this.createProject(templateInfo);
                         });
                         if (this._cancellable) {
                             this.addButton("Cancel", () => this.close());
@@ -761,12 +761,17 @@ var phasereditor2d;
                             }
                         });
                     }
-                    async createProject(templatePath) {
+                    async createProject(templateInfo) {
                         const projectName = this._projectNameText.value;
-                        const ok = await colibri.ui.ide.FileUtils.createProject_async(templatePath, projectName);
+                        const ok = await colibri.ui.ide.FileUtils.createProject_async(templateInfo.path, projectName);
                         if (ok) {
                             this.closeAll();
-                            ide.IDEPlugin.getInstance().ideOpenProject(projectName);
+                            await ide.IDEPlugin.getInstance().ideOpenProject(projectName);
+                            const wb = colibri.Platform.getWorkbench();
+                            for (const openFile of templateInfo.info.openFiles) {
+                                const file = colibri.ui.ide.FileUtils.getFileFromPath(projectName + "/" + openFile);
+                                wb.openEditor(file);
+                            }
                         }
                     }
                     createCenterArea() {
@@ -784,6 +789,7 @@ var phasereditor2d;
                             providers: []
                         });
                         colibri.ui.ide.FileUtils.getProjectTemplates_async().then(data => {
+                            console.log(data);
                             viewer.setInput(data);
                             for (const provider of data.providers) {
                                 viewer.setExpanded(provider, true);

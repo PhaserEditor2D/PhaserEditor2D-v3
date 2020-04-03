@@ -19,5 +19,6 @@
         "varname",
         "webm",
         "webp"
-    ]
+    ],
+    "editor.wordWrapColumn": 180
 }

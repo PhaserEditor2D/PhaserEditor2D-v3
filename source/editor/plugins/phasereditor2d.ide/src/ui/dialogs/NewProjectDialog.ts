@@ -4,6 +4,14 @@ namespace phasereditor2d.ide.ui.dialogs {
     import viewers = colibri.ui.controls.viewers;
     import io = colibri.core.io;
 
+    interface ITemplateInfo {
+        name: string;
+        path: string;
+        info: {
+            openFiles: string[];
+        };
+    }
+
     export class NewProjectDialog extends controls.dialogs.Dialog {
 
         protected _filteredViewer: controls.viewers.FilteredViewerInElement<controls.viewers.TreeViewer>;
@@ -142,11 +150,11 @@ namespace phasereditor2d.ide.ui.dialogs {
 
             this._createBtn = this.addButton("Create Project", () => {
 
-                const template = this._filteredViewer.getViewer().getSelectionFirstElement();
+                const templateInfo = this._filteredViewer.getViewer().getSelectionFirstElement() as ITemplateInfo;
 
                 this.closeAll();
 
-                this.createProject(template.path);
+                this.createProject(templateInfo);
             });
 
             if (this._cancellable) {
@@ -169,17 +177,26 @@ namespace phasereditor2d.ide.ui.dialogs {
             });
         }
 
-        private async createProject(templatePath: string) {
+        private async createProject(templateInfo: ITemplateInfo) {
 
             const projectName = this._projectNameText.value;
 
-            const ok = await colibri.ui.ide.FileUtils.createProject_async(templatePath, projectName);
+            const ok = await colibri.ui.ide.FileUtils.createProject_async(templateInfo.path, projectName);
 
             if (ok) {
 
                 this.closeAll();
 
-                IDEPlugin.getInstance().ideOpenProject(projectName);
+                await IDEPlugin.getInstance().ideOpenProject(projectName);
+
+                const wb = colibri.Platform.getWorkbench();
+
+                for (const openFile of templateInfo.info.openFiles) {
+
+                    const file = colibri.ui.ide.FileUtils.getFileFromPath(projectName + "/" + openFile);
+
+                    wb.openEditor(file);
+                }
             }
         }
 
@@ -207,6 +224,8 @@ namespace phasereditor2d.ide.ui.dialogs {
             });
 
             colibri.ui.ide.FileUtils.getProjectTemplates_async().then(data => {
+
+                console.log(data);
 
                 viewer.setInput(data);
 
