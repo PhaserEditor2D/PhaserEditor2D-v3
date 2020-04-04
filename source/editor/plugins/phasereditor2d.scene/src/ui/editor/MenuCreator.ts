@@ -27,6 +27,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createContainerMenu());
 
+            menu.addMenu(this.createDepthMenu());
+
             menu.addSeparator();
 
             menu.addMenu(this.createSnappingMenu());
@@ -40,6 +42,20 @@ namespace phasereditor2d.scene.ui.editor {
             });
             menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
+        }
+
+        private createDepthMenu(): controls.Menu {
+
+            const menu = new controls.Menu("Depth");
+
+            for (const move of ["Up", "Down", "Top", "Bottom"]) {
+
+                const id = "phasereditor2d.scene.ui.editor.commands.Depth" + move;
+
+                menu.addCommand(id);
+            }
+
+            return menu;
         }
 
         private createEditMenu() {

@@ -3278,6 +3278,7 @@ var phasereditor2d;
                         menu.addMenu(this.createOriginMenu());
                         menu.addMenu(this.createTextureMenu());
                         menu.addMenu(this.createContainerMenu());
+                        menu.addMenu(this.createDepthMenu());
                         menu.addSeparator();
                         menu.addMenu(this.createSnappingMenu());
                         menu.addMenu(this.createEditMenu());
@@ -3287,6 +3288,14 @@ var phasereditor2d;
                         });
                         menu.addCommand(editor_6.commands.CMD_COMPILE_SCENE_EDITOR);
                         menu.addCommand(editor_6.commands.CMD_OPEN_COMPILED_FILE);
+                    }
+                    createDepthMenu() {
+                        const menu = new controls.Menu("Depth");
+                        for (const move of ["Up", "Down", "Top", "Bottom"]) {
+                            const id = "phasereditor2d.scene.ui.editor.commands.Depth" + move;
+                            menu.addCommand(id);
+                        }
+                        return menu;
                     }
                     createEditMenu() {
                         const menu = new controls.Menu("Edit");
