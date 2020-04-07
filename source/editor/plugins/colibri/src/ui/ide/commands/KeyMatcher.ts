@@ -50,7 +50,7 @@ namespace colibri.ui.ide.commands {
             }
 
             if (this._key) {
-                keys.push(this._key);
+                keys.push(this._key.replace(" ", "Space"));
             }
 
             return keys.join("+");

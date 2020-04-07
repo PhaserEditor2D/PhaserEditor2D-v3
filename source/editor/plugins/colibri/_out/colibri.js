@@ -7394,7 +7394,7 @@ var colibri;
                             keys.push("Alt");
                         }
                         if (this._key) {
-                            keys.push(this._key);
+                            keys.push(this._key.replace(" ", "Space"));
                         }
                         return keys.join("+");
                     }
@@ -7897,7 +7897,7 @@ var colibri;
         var ide;
         (function (ide) {
             var commands;
-            (function (commands) {
+            (function (commands_1) {
                 class CommandManager {
                     constructor() {
                         this._commands = [];
@@ -7907,6 +7907,34 @@ var colibri;
                         this._categoryMap = new Map();
                         this._categories = [];
                         window.addEventListener("keydown", e => { this.onKeyDown(e); });
+                    }
+                    printTable() {
+                        let str = [
+                            "Category",
+                            "Command",
+                            "Keys",
+                            "Description"
+                        ].join(",") + "\n";
+                        for (const cat of this._categories) {
+                            const catName = cat.name;
+                            const commands = this._commands.filter(c => c.getCategoryId() === cat.id);
+                            for (const cmd of commands) {
+                                const keys = this.getCommandKeyString(cmd.getId());
+                                str += [
+                                    '"' + catName + '"',
+                                    '"' + cmd.getName() + '"',
+                                    '"``' + keys + '``"',
+                                    '"' + cmd.getTooltip() + '"'
+                                ].join(",") + "\n";
+                            }
+                        }
+                        const elem = document.createElement("a");
+                        elem.download = "phasereditor2d-commands-palette.csv";
+                        elem.style.display = "none";
+                        elem.href = "data:text/plain;charset=utf-8," + encodeURIComponent(str);
+                        document.body.appendChild(elem);
+                        elem.click();
+                        document.body.removeChild(elem);
                     }
                     onKeyDown(event) {
                         if (event.isComposing) {
@@ -7971,7 +7999,7 @@ var colibri;
                         this._commandHandlerMap.set(cmd, []);
                     }
                     addCommandHelper(config) {
-                        this.addCommand(new commands.Command(config));
+                        this.addCommand(new commands_1.Command(config));
                     }
                     makeArgs() {
                         const wb = ide.Workbench.getWorkbench();
@@ -7984,7 +8012,7 @@ var colibri;
                         // because we can execute any command there!
                         const activeDialog = wb.getActiveDialog() instanceof ui.controls.dialogs.CommandDialog
                             ? null : wb.getActiveDialog();
-                        return new commands.HandlerArgs(wb.getActivePart(), wb.getActiveEditor(), activeElement, activeMenu, wb.getActiveWindow(), activeDialog);
+                        return new commands_1.HandlerArgs(wb.getActivePart(), wb.getActiveEditor(), activeElement, activeMenu, wb.getActiveWindow(), activeDialog);
                     }
                     getCommands() {
                         const list = [...this._commands];
@@ -8028,7 +8056,7 @@ var colibri;
                         }
                     }
                     addKeyBindingHelper(commandId, config) {
-                        this.addKeyBinding(commandId, new commands.KeyMatcher(config));
+                        this.addKeyBinding(commandId, new commands_1.KeyMatcher(config));
                     }
                     addHandler(commandId, handler) {
                         const command = this.getCommand(commandId);
@@ -8037,7 +8065,7 @@ var colibri;
                         }
                     }
                     addHandlerHelper(commandId, testFunc, executeFunc) {
-                        this.addHandler(commandId, new commands.CommandHandler({
+                        this.addHandler(commandId, new commands_1.CommandHandler({
                             testFunc: testFunc,
                             executeFunc: executeFunc
                         }));
@@ -8048,14 +8076,14 @@ var colibri;
                         }
                         const id = args.command ? args.command.id : commandId;
                         if (args.handler) {
-                            this.addHandler(id, new commands.CommandHandler(args.handler));
+                            this.addHandler(id, new commands_1.CommandHandler(args.handler));
                         }
                         if (args.keys) {
-                            this.addKeyBinding(id, new commands.KeyMatcher(args.keys));
+                            this.addKeyBinding(id, new commands_1.KeyMatcher(args.keys));
                         }
                     }
                 }
-                commands.CommandManager = CommandManager;
+                commands_1.CommandManager = CommandManager;
             })(commands = ide.commands || (ide.commands = {}));
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));

@@ -20,5 +20,6 @@
         "webm",
         "webp"
     ],
-    "editor.wordWrapColumn": 180
+    "editor.wordWrapColumn": 180,
+    "workbench.colorTheme": "Visual Studio Dark"
 }

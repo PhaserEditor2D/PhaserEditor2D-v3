@@ -21,6 +21,48 @@ namespace colibri.ui.ide.commands {
             window.addEventListener("keydown", e => { this.onKeyDown(e); });
         }
 
+        printTable() {
+
+            let str = [
+                "Category",
+                "Command",
+                "Keys",
+                "Description"
+
+            ].join(",") + "\n";
+
+            for (const cat of this._categories) {
+
+                const catName = cat.name;
+
+                const commands = this._commands.filter(c => c.getCategoryId() === cat.id);
+
+                for (const cmd of commands) {
+
+                    const keys = this.getCommandKeyString(cmd.getId());
+
+                    str += [
+                        '"' + catName + '"',
+                        '"' + cmd.getName() + '"',
+                        '"``' + keys + '``"',
+                        '"' + cmd.getTooltip() + '"'
+                    ].join(",") + "\n";
+                }
+            }
+
+            const elem = document.createElement("a");
+
+            elem.download = "phasereditor2d-commands-palette.csv";
+            elem.style.display = "none";
+            elem.href = "data:text/plain;charset=utf-8," + encodeURIComponent(str);
+
+            document.body.appendChild(elem);
+
+            elem.click();
+
+            document.body.removeChild(elem);
+        }
+
         private onKeyDown(event: KeyboardEvent): void {
 
             if (event.isComposing) {

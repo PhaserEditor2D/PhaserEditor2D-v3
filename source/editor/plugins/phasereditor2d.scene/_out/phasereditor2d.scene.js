@@ -4792,7 +4792,7 @@ var phasereditor2d;
                                     command: {
                                         id: data.command,
                                         name: data.name,
-                                        tooltip: `Set the origin of the object to (${data.x},${data.y}`,
+                                        tooltip: `Set the origin of the object to (${data.x},${data.y})`,
                                         category: commands.CAT_SCENE_EDITOR
                                     },
                                     keys: {

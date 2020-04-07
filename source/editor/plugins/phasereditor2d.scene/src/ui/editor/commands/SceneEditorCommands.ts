@@ -746,7 +746,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     command: {
                         id: data.command,
                         name: data.name,
-                        tooltip: `Set the origin of the object to (${data.x},${data.y}`,
+                        tooltip: `Set the origin of the object to (${data.x},${data.y})`,
                         category: CAT_SCENE_EDITOR
                     },
                     keys: {

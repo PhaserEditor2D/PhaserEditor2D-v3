@@ -1852,6 +1852,7 @@ declare namespace colibri.ui.ide.commands {
         private _categoryMap;
         private _categories;
         constructor();
+        printTable(): void;
         private onKeyDown;
         canRunCommand(commandId: string): boolean;
         private executeHandler;

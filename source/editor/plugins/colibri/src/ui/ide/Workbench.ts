@@ -613,7 +613,5 @@ namespace colibri.ui.ide {
 
             return editor;
         }
-
     }
-
 }
