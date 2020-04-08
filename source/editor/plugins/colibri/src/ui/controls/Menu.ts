@@ -75,6 +75,10 @@ namespace colibri.ui.controls {
 
         create(x: number, y: number, modal?: boolean) {
 
+            if (this._items.length === 0) {
+                return;
+            }
+
             Menu._activeMenu = this;
 
             let hasIcon = false;

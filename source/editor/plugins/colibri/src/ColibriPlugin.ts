@@ -19,7 +19,7 @@ namespace colibri {
 
         private static _instance;
 
-        static getInstance() {
+        static getInstance(): ColibriPlugin {
             return this._instance ?? (this._instance = new ColibriPlugin());
         }
 

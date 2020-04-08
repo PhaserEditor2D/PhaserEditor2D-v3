@@ -293,7 +293,7 @@ declare namespace phasereditor2d.files.ui.views {
         getPropertyProvider(): FilePropertySectionProvider;
         protected createPart(): void;
         private onFileStorageChange;
-        getIcon(): any;
+        getIcon(): controls.IImage;
     }
 }
 declare namespace phasereditor2d.files.ui.views {

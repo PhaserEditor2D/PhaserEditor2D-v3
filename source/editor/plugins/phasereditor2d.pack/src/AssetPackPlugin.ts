@@ -8,6 +8,9 @@ namespace phasereditor2d.pack {
     export const ICON_ASSET_PACK = "asset-pack";
     export const ICON_ANIMATIONS = "animations";
 
+    export const CAT_ASSET_PACK_EDITOR = "phasereditor2d.pack.ui.editor.category";
+    export const CMD_ASSET_PACK_EDITOR_ADD_FILE = "phasereditor2d.pack.ui.editor.AddFile";
+
     export class AssetPackPlugin extends colibri.Plugin {
 
         private static _instance = new AssetPackPlugin();
@@ -137,8 +140,47 @@ namespace phasereditor2d.pack {
                     ui.editor.AssetPackEditor.getFactory()
                 ]));
 
+            // commands
             reg.addExtension(
-                new ide.commands.CommandExtension(ui.editor.AssetPackEditor.registerCommands));
+                new ide.commands.CommandExtension(manager => {
+
+                    // category
+
+                    manager.addCategory({
+                        id: CAT_ASSET_PACK_EDITOR,
+                        name: "Asset Pack File"
+                    });
+
+                    // delete
+
+                    manager.addHandlerHelper(ide.actions.CMD_DELETE,
+
+                        args => ui.editor.AssetPackEditor.isEditorScope(args)
+                            && args.activeEditor.getSelection().length > 0,
+
+                        args => {
+                            const editor = args.activeEditor as ui.editor.AssetPackEditor;
+                            editor.deleteSelection();
+                        });
+
+                    // add file
+                    manager.add({
+                        command: {
+                            id: CMD_ASSET_PACK_EDITOR_ADD_FILE,
+                            icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
+                            name: "Add File",
+                            tooltip: "Add new file configuration",
+                            category: CAT_ASSET_PACK_EDITOR
+                        },
+                        handler: {
+                            testFunc: args => ui.editor.AssetPackEditor.isEditorScope(args),
+                            executeFunc: args => (args.activeEditor as ui.editor.AssetPackEditor).openAddFileDialog()
+                        },
+                        keys: {
+                            key: "A"
+                        }
+                    });
+                }));
 
             // new file dialog
 

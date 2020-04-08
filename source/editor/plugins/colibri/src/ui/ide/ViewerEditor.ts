@@ -25,6 +25,25 @@ namespace colibri.ui.ide {
             this._viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, (e: CustomEvent) => {
                 this.setSelection(e.detail);
             });
+
+            this._viewer.getElement().addEventListener("contextmenu", e => this.onMenu(e));
+        }
+
+        private onMenu(e: MouseEvent) {
+
+            e.preventDefault();
+
+            this._viewer.onMouseUp(e);
+
+            const menu = new controls.Menu();
+
+            this.fillContextMenu(menu);
+
+            menu.createWithEvent(e);
+        }
+
+        protected fillContextMenu(menu: controls.Menu) {
+            // nothing
         }
 
         getViewer() {

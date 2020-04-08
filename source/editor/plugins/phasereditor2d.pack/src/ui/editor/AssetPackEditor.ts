@@ -26,21 +26,13 @@ namespace phasereditor2d.pack.ui.editor {
             this.addClass("AssetPackEditor");
         }
 
-        static registerCommands(manager: ide.commands.CommandManager) {
+        protected fillContextMenu(menu: controls.Menu) {
 
-            // delete
-
-            manager.addHandlerHelper(ide.actions.CMD_DELETE,
-
-                args => AssetPackEditor.isEditorScope(args),
-
-                args => {
-                    const editor = args.activeEditor as AssetPackEditor;
-                    editor.deleteSelection();
-                });
+            menu.addCommand(CMD_ASSET_PACK_EDITOR_ADD_FILE);
+            menu.addCommand(ide.actions.CMD_DELETE);
         }
 
-        private static isEditorScope(args: ide.commands.HandlerArgs) {
+        static isEditorScope(args: ide.commands.HandlerArgs) {
 
             return args.activePart instanceof AssetPackEditor ||
 
@@ -212,18 +204,12 @@ namespace phasereditor2d.pack.ui.editor {
 
             const manager = new controls.ToolbarManager(parent);
 
-            manager.add(new controls.Action({
-                text: "Add File",
-                icon: ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
-                callback: () => {
-                    this.openAddFileDialog();
-                }
-            }));
+            manager.addCommand(CMD_ASSET_PACK_EDITOR_ADD_FILE);
 
             return manager;
         }
 
-        private openAddFileDialog() {
+        openAddFileDialog() {
 
             const viewer = new controls.viewers.TreeViewer();
 

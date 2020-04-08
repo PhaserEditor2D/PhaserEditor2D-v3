@@ -164,7 +164,7 @@ declare namespace colibri.ui.ide {
         getContentTypeIcon(contentType: string): controls.IImage;
         getFileImage(file: core.io.FilePath): FileImage;
         getFileImageSizeCache(): ImageSizeFileCache;
-        getWorkbenchIcon(name: string): any;
+        getWorkbenchIcon(name: string): controls.IImage;
         getEditorRegistry(): EditorRegistry;
         getEditors(): EditorPart[];
         createEditor(input: IEditorInput): EditorPart;
@@ -186,7 +186,7 @@ declare namespace colibri {
     const ICON_CONTROL_DIRTY = "dirty";
     class ColibriPlugin extends colibri.Plugin {
         private static _instance;
-        static getInstance(): any;
+        static getInstance(): ColibriPlugin;
         private _openingProject;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
@@ -1564,7 +1564,7 @@ declare namespace colibri.ui.ide {
         onPartClosed(): boolean;
         setInput(file: io.FilePath): void;
         getInput(): core.io.FilePath;
-        getIcon(): any;
+        getIcon(): controls.IImage;
     }
 }
 declare namespace colibri.core.io {
@@ -1678,6 +1678,8 @@ declare namespace colibri.ui.ide {
         constructor(id: string);
         protected abstract createViewer(): controls.viewers.TreeViewer;
         protected createPart(): void;
+        private onMenu;
+        protected fillContextMenu(menu: controls.Menu): void;
         getViewer(): controls.viewers.TreeViewer;
         layout(): void;
     }

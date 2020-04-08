@@ -2538,6 +2538,9 @@ var colibri;
                     return this._activeMenu;
                 }
                 create(x, y, modal) {
+                    if (this._items.length === 0) {
+                        return;
+                    }
                     Menu._activeMenu = this;
                     let hasIcon = false;
                     this._element = document.createElement("div");
@@ -7120,6 +7123,17 @@ var colibri;
                     this._viewer.addEventListener(ui.controls.EVENT_SELECTION_CHANGED, (e) => {
                         this.setSelection(e.detail);
                     });
+                    this._viewer.getElement().addEventListener("contextmenu", e => this.onMenu(e));
+                }
+                onMenu(e) {
+                    e.preventDefault();
+                    this._viewer.onMouseUp(e);
+                    const menu = new ui.controls.Menu();
+                    this.fillContextMenu(menu);
+                    menu.createWithEvent(e);
+                }
+                fillContextMenu(menu) {
+                    // nothing
                 }
                 getViewer() {
                     return this._viewer;

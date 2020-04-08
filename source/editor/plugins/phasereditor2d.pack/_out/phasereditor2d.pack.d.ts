@@ -9,6 +9,8 @@ declare namespace phasereditor2d.pack.core.contentTypes {
 declare namespace phasereditor2d.pack {
     const ICON_ASSET_PACK = "asset-pack";
     const ICON_ANIMATIONS = "animations";
+    const CAT_ASSET_PACK_EDITOR = "phasereditor2d.pack.ui.editor.category";
+    const CMD_ASSET_PACK_EDITOR_ADD_FILE = "phasereditor2d.pack.ui.editor.AddFile";
     class AssetPackPlugin extends colibri.Plugin {
         private static _instance;
         static getInstance(): AssetPackPlugin;
@@ -516,8 +518,8 @@ declare namespace phasereditor2d.pack.ui.editor {
         private _blocksProvider;
         private _propertyProvider;
         constructor();
-        static registerCommands(manager: ide.commands.CommandManager): void;
-        private static isEditorScope;
+        protected fillContextMenu(menu: controls.Menu): void;
+        static isEditorScope(args: ide.commands.HandlerArgs): boolean;
         deleteSelection(): void;
         updateAll(): void;
         repaintEditorAndOutline(): void;
@@ -532,7 +534,7 @@ declare namespace phasereditor2d.pack.ui.editor {
         getEditorViewerProvider(key: string): ide.EditorViewerProvider;
         getPropertyProvider(): properties.AssetPackEditorPropertyProvider;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
-        private openAddFileDialog;
+        openAddFileDialog(): void;
         createFilesViewer(filter: (file: io.FilePath) => boolean): Promise<controls.viewers.TreeViewer>;
         private openSelectFileDialog_async;
         importData_async(importData: IImportData): Promise<void>;
