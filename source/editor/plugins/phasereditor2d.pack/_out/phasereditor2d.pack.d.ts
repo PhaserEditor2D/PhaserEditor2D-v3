@@ -1084,4 +1084,16 @@ declare namespace phasereditor2d.pack.ui.viewers {
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
     }
 }
+declare namespace phasereditor2d.pack.ui.viewers {
+    import controls = colibri.ui.controls;
+    class SceneScriptCellRenderer implements controls.viewers.ICellRenderer {
+        private _layout;
+        constructor(layout: "grid" | "tree");
+        private getIconRenderer;
+        renderCell(args: controls.viewers.RenderCellArgs): void;
+        private getSceneFile;
+        preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult>;
+        cellHeight(args: controls.viewers.RenderCellArgs): number;
+    }
+}
 //# sourceMappingURL=phasereditor2d.pack.d.ts.map

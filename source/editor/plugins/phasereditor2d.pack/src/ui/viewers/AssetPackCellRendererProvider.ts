@@ -49,6 +49,22 @@ namespace phasereditor2d.pack.ui.viewers {
 
                     case core.SCRIPT_TYPE:
                     case core.SCENE_FILE_TYPE:
+
+                        const url = element.getData().url;
+                        const file = core.AssetPackUtils.getFileFromPackUrl(url);
+
+                        if (file) {
+
+                            const sceneFile = file.getParent().getFile(file.getNameWithoutExtension() + ".scene");
+
+                            if (sceneFile) {
+
+                                return new SceneScriptCellRenderer(this._layout);
+                            }
+                        }
+
+                        return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT));
+
                     case core.SCENE_PLUGIN_TYPE:
                     case core.PLUGIN_TYPE:
                     case core.CSS_TYPE:
