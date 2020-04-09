@@ -34,27 +34,29 @@ namespace phasereditor2d.code.ui.editors {
 
         protected async createModel(file: io.FilePath) {
 
+            let model: monaco.editor.ITextModel;
+
             if (CodePlugin.getInstance().isAdvancedJSEditor()) {
 
                 const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
 
                 const uri = CodePlugin.fileUri(file.getFullName());
 
-                const model = monaco.editor.getModel(uri);
+                model = monaco.editor.getModel(uri);
 
                 if (content !== model.getValue()) {
 
                     model.setValue(content);
                 }
 
-                return model;
-
             } else {
 
-                super.createModel(file);
+                model = await super.createModel(file);
             }
 
             this._finder.preload();
+
+            return model;
         }
 
         onPartActivated() {
