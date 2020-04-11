@@ -119,7 +119,9 @@ var phasereditor2d;
                 return phasereditor2d.ide.IDEPlugin.getInstance().isAdvancedJSEditor();
             }
             async starting() {
-                this._modelManager = new code.ui.ModelManager();
+                if (this.isAdvancedJSEditor()) {
+                    this._modelManager = new code.ui.ModelManager();
+                }
                 // theme
                 monaco.editor.defineTheme("vs", {
                     inherit: true,

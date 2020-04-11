@@ -15,8 +15,8 @@ namespace phasereditor2d.code {
     export class CodePlugin extends colibri.Plugin {
 
         private static _instance: CodePlugin;
-        private _modelManager: ui.ModelManager;
         private _javaScriptWorker: monaco.languages.typescript.TypeScriptWorker;
+        private _modelManager: ui.ModelManager;
 
         static getInstance() {
 
@@ -175,7 +175,10 @@ namespace phasereditor2d.code {
 
         async starting() {
 
-            this._modelManager = new ui.ModelManager();
+            if (this.isAdvancedJSEditor()) {
+
+                this._modelManager = new ui.ModelManager();
+            }
 
             // theme
 

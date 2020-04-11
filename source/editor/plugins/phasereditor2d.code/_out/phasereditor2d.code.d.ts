@@ -10,8 +10,8 @@ declare namespace phasereditor2d.code {
     const ICON_SYMBOL_VARIABLE = "symbol-variable";
     class CodePlugin extends colibri.Plugin {
         private static _instance;
-        private _modelManager;
         private _javaScriptWorker;
+        private _modelManager;
         static getInstance(): CodePlugin;
         constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
