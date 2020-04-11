@@ -6,7 +6,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
     export class CompilerSection extends SceneSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.editor.properties.CompilerSection", "Compiler", false, true);
+            super(page, "phasereditor2d.scene.ui.editor.properties.CompilerSection",
+                "Compiler General Settings", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {
@@ -27,6 +28,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
             //     }],
             //     "sceneType", "Scene Type",
             //     "If this is a regular scene or a prefab.");
+
+            this.createBooleanField(comp, "compilerEnabled",
+
+                this.createLabel(comp, "Generate Code",
+                    "Compiles the scene into code."));
 
             this.createMenuField(
                 comp, [

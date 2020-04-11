@@ -7,7 +7,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         constructor(page: controls.properties.PropertyPage) {
             super(
-                page, "phasereditor2d.scene.ui.editor.properties.SceneCompilerSection", "Scene Compiler", false, true);
+                page, "phasereditor2d.scene.ui.editor.properties.SceneCompilerSection",
+                "Compiler Scene Settings", false, true);
         }
 
         protected createForm(parent: HTMLDivElement) {

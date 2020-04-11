@@ -317,6 +317,7 @@ declare namespace phasereditor2d.scene.core.json {
     }
     class SceneSettings {
         sceneType: SceneType;
+        compilerEnabled: boolean;
         snapEnabled: boolean;
         snapWidth: number;
         snapHeight: number;
@@ -332,7 +333,7 @@ declare namespace phasereditor2d.scene.core.json {
         borderY: number;
         borderWidth: number;
         borderHeight: number;
-        constructor(sceneType?: SceneType, snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, preloadPackFiles?: string[], createMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
+        constructor(sceneType?: SceneType, compilerEnabled?: boolean, snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, preloadPackFiles?: string[], createMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
         toJSON(): {};
         readJSON(data: object): void;
     }

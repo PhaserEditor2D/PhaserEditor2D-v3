@@ -1216,8 +1216,11 @@ var phasereditor2d;
                         this._sceneFile = sceneFile;
                     }
                     async compile() {
-                        const compileToJS = this._scene.getSettings()
-                            .compilerOutputLanguage === core.json.SourceLang.JAVA_SCRIPT;
+                        const settings = this._scene.getSettings();
+                        if (!settings.compilerEnabled) {
+                            return;
+                        }
+                        const compileToJS = settings.compilerOutputLanguage === core.json.SourceLang.JAVA_SCRIPT;
                         const builder = new core.code.SceneCodeDOMBuilder(this._scene, this._sceneFile);
                         const unit = await builder.build();
                         if (!unit) {
@@ -1453,8 +1456,9 @@ var phasereditor2d;
                     SourceLang["TYPE_SCRIPT"] = "TYPE_SCRIPT";
                 })(SourceLang = json.SourceLang || (json.SourceLang = {}));
                 class SceneSettings {
-                    constructor(sceneType = json.SceneType.SCENE, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "", preloadMethodName = "preload", preloadPackFiles = [], createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                    constructor(sceneType = json.SceneType.SCENE, compilerEnabled = true, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "", preloadMethodName = "preload", preloadPackFiles = [], createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
                         this.sceneType = sceneType;
+                        this.compilerEnabled = compilerEnabled;
                         this.snapEnabled = snapEnabled;
                         this.snapWidth = snapWidth;
                         this.snapHeight = snapHeight;
@@ -1474,6 +1478,7 @@ var phasereditor2d;
                     toJSON() {
                         const data = {};
                         write(data, "sceneType", this.sceneType, json.SceneType.SCENE);
+                        write(data, "compilerEnabled", this.compilerEnabled, true);
                         write(data, "snapEnabled", this.snapEnabled, false);
                         write(data, "snapWidth", this.snapWidth, 16);
                         write(data, "snapHeight", this.snapHeight, 16);
@@ -1493,6 +1498,7 @@ var phasereditor2d;
                     }
                     readJSON(data) {
                         this.sceneType = read(data, "sceneType", json.SceneType.SCENE);
+                        this.compilerEnabled = read(data, "compilerEnabled", true);
                         this.snapEnabled = read(data, "snapEnabled", false);
                         this.snapWidth = read(data, "snapWidth", 16);
                         this.snapHeight = read(data, "snapHeight", 16);
@@ -5288,7 +5294,7 @@ var phasereditor2d;
                 (function (properties) {
                     class CompilerSection extends properties.SceneSection {
                         constructor(page) {
-                            super(page, "phasereditor2d.scene.ui.editor.properties.CompilerSection", "Compiler", false, true);
+                            super(page, "phasereditor2d.scene.ui.editor.properties.CompilerSection", "Compiler General Settings", false, true);
                         }
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
@@ -5305,6 +5311,7 @@ var phasereditor2d;
                             //     }],
                             //     "sceneType", "Scene Type",
                             //     "If this is a regular scene or a prefab.");
+                            this.createBooleanField(comp, "compilerEnabled", this.createLabel(comp, "Generate Code", "Compiles the scene into code."));
                             this.createMenuField(comp, [
                                 {
                                     name: "JavaScript",
@@ -5338,7 +5345,7 @@ var phasereditor2d;
                     var controls = colibri.ui.controls;
                     class SceneCompilerSection extends properties.SceneSection {
                         constructor(page) {
-                            super(page, "phasereditor2d.scene.ui.editor.properties.SceneCompilerSection", "Scene Compiler", false, true);
+                            super(page, "phasereditor2d.scene.ui.editor.properties.SceneCompilerSection", "Compiler Scene Settings", false, true);
                         }
                         createForm(parent) {
                             const comp = this.createGridElement(parent, 3);
