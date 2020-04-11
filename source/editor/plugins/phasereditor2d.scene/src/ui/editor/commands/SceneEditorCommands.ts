@@ -689,46 +689,27 @@ namespace phasereditor2d.scene.ui.editor.commands {
             y: number
         }> {
 
-            const names = [
-                "Top/Left",
-                "Top/Center",
-                "Top/Right",
-                "Middle/Left",
-                "Middle/Center",
-                "Middle/Right",
-                "Bottom/Left",
-                "Bottom/Center",
-                "Bottom/Right"
-            ];
-
             const values = [
-                [0, 1],
-                [0.5, 1],
-                [1, 1],
-                [0, 0.5],
-                [0.5, 0.5],
-                [1, 0.5],
-                [0, 0],
-                [0.5, 0],
-                [1, 0],
+                { x: 0, y: 0, k: 7, n: "Top/Left" },
+                { x: 0.5, y: 0, k: 8, n: "Top/Center" },
+                { x: 1, y: 0, k: 9, n: "Top/Right" },
+                { x: 0, y: 0.5, k: 4, n: "Middle/Left" },
+                { x: 0.5, y: 0.5, k: 5, n: "Middle/Center" },
+                { x: 1, y: 0.5, k: 6, n: "Middle/Right" },
+                { x: 0, y: 1, k: 1, n: "Bottom/Left" },
+                { x: 0.5, y: 1, k: 2, n: "Bottom/Center" },
+                { x: 1, y: 1, k: 3, n: "Bottom/Right" },
             ];
 
-            const list = [];
-
-            for (let i = 0; i < 9; i++) {
-
-                const id = "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + (i + 1) + "_ToObject";
-
-                list.push({
-                    command: id,
-                    name: "Set Origin To " + names[i],
-                    x: values[i][0],
-                    y: values[i][1],
-                    key: (i + 1).toString(),
-                });
-            }
-
-            return list;
+            return values.map(value => {
+                return {
+                    command: "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + value.n + "_ToObject",
+                    name: "Set Origin To " + value.n,
+                    x: value.x,
+                    y: value.y,
+                    key: value.k.toString()
+                };
+            });
         }
 
         private static registerOriginCommands(manager: colibri.ui.ide.commands.CommandManager) {
