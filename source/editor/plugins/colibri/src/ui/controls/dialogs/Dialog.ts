@@ -1,5 +1,7 @@
 namespace colibri.ui.controls.dialogs {
 
+    export const EVENT_DIALOG_CLOSE = "dialogClosed";
+
     export class Dialog extends Control {
 
         private _containerElement: HTMLElement;
@@ -168,6 +170,8 @@ namespace colibri.ui.controls.dialogs {
 
             this._containerElement.remove();
             this.getElement().remove();
+
+            this.dispatchEvent(new CustomEvent(EVENT_DIALOG_CLOSE));
 
             if (this._parentDialog) {
                 this._parentDialog._containerElement.style.display = "block";

@@ -3671,6 +3671,7 @@ var colibri;
         (function (controls) {
             var dialogs;
             (function (dialogs) {
+                dialogs.EVENT_DIALOG_CLOSE = "dialogClosed";
                 class Dialog extends controls.Control {
                     constructor(...classList) {
                         super("div", "Dialog", ...classList);
@@ -3778,6 +3779,7 @@ var colibri;
                         Dialog._dialogs = Dialog._dialogs.filter(d => d !== this);
                         this._containerElement.remove();
                         this.getElement().remove();
+                        this.dispatchEvent(new CustomEvent(dialogs.EVENT_DIALOG_CLOSE));
                         if (this._parentDialog) {
                             this._parentDialog._containerElement.style.display = "block";
                             this._parentDialog.style.display = "grid";

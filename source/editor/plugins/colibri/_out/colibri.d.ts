@@ -859,6 +859,7 @@ declare namespace colibri.ui.controls {
     function getElementBounds(elem: HTMLElement): IBounds;
 }
 declare namespace colibri.ui.controls.dialogs {
+    const EVENT_DIALOG_CLOSE = "dialogClosed";
     class Dialog extends Control {
         private _containerElement;
         private _buttonPaneElement;
