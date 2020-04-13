@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "lib": [
-            "es2019",
+            "esnext",
             "dom"
         ],
         "target": "es2019",

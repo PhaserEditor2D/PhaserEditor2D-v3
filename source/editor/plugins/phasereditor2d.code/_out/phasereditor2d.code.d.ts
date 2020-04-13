@@ -23,6 +23,7 @@ declare namespace phasereditor2d.code {
         isAdvancedJSEditor(): boolean;
         starting(): Promise<void>;
         private customizeMonaco;
+        private customizeCodeServiceImpl;
     }
 }
 declare namespace phasereditor2d.code.ui {

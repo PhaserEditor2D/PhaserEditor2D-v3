@@ -51,7 +51,6 @@ var phasereditor2d;
                     // reg.addExtension(new ui.PreloadExtraLibsExtension());
                     reg.addExtension(new code.ui.PreloadModelsExtension());
                     reg.addExtension(new code.ui.PreloadJavaScriptWorkerExtension());
-                    this.registerAssetPackCompletions();
                 }
             }
             registerAssetPackCompletions() {
@@ -156,9 +155,17 @@ var phasereditor2d;
                     }
                     monaco.editor.setTheme(monacoTheme);
                 });
-                this.customizeMonaco();
+                if (this.isAdvancedJSEditor()) {
+                    this.customizeMonaco();
+                }
             }
             customizeMonaco() {
+                const opts = monaco.languages.typescript.javascriptDefaults.getCompilerOptions();
+                opts.target = monaco.languages.typescript.ScriptTarget.ESNext;
+                this.registerAssetPackCompletions();
+                this.customizeCodeServiceImpl();
+            }
+            customizeCodeServiceImpl() {
                 const require = window["require"];
                 const module = require("vs/editor/standalone/browser/standaloneCodeServiceImpl");
                 const StandaloneCodeEditorServiceImpl = module.StandaloneCodeEditorServiceImpl;

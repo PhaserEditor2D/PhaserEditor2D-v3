@@ -74,8 +74,6 @@ namespace phasereditor2d.code {
                 // reg.addExtension(new ui.PreloadExtraLibsExtension());
                 reg.addExtension(new ui.PreloadModelsExtension());
                 reg.addExtension(new ui.PreloadJavaScriptWorkerExtension());
-
-                this.registerAssetPackCompletions();
             }
         }
 
@@ -219,10 +217,24 @@ namespace phasereditor2d.code {
                 monaco.editor.setTheme(monacoTheme);
             });
 
-            this.customizeMonaco();
+            if (this.isAdvancedJSEditor()) {
+
+                this.customizeMonaco();
+            }
         }
 
         private customizeMonaco() {
+
+            const opts = monaco.languages.typescript.javascriptDefaults.getCompilerOptions();
+
+            opts.target = monaco.languages.typescript.ScriptTarget.ESNext;
+
+            this.registerAssetPackCompletions();
+
+            this.customizeCodeServiceImpl();
+        }
+
+        private customizeCodeServiceImpl() {
 
             const require = window["require"];
 
