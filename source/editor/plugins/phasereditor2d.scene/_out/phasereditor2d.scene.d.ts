@@ -360,7 +360,7 @@ declare namespace phasereditor2d.scene.core.json {
         getSerializer(data: IObjectData): Serializer;
         getData(): IObjectData;
         getType(): any;
-        getPhaserType(): any;
+        getPhaserType(): string;
         private getDefaultValue;
         isUnlocked(name: string): boolean;
         setUnlocked(name: string, unlocked: boolean): void;
@@ -1327,7 +1327,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         getPrefabData(): json.IObjectData;
         getPrefabSerializer(): json.Serializer;
         getObjectType(): any;
-        getPhaserType(): any;
+        getPhaserType(): string;
         getSerializer(data: json.IObjectData): json.Serializer;
         writeJSON(data: json.IObjectData): void;
         readJSON(data: json.IObjectData): void;

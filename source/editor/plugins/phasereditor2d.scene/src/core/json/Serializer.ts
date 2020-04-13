@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.core.json {
             return this._data.type;
         }
 
-        getPhaserType() {
+        getPhaserType(): string {
 
             if (this._prefabSer) {
                 return this._prefabSer.getPhaserType();

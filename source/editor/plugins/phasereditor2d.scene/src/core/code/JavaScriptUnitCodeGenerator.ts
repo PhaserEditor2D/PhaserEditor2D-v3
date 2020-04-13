@@ -83,6 +83,9 @@ namespace phasereditor2d.scene.core.code {
 
         protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM) {
 
+            // this.line(`/** @type {${fieldDecl.getType()}} */`);
+            // this.line(fieldDecl.getName() + ";");
+
             this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
             this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);
         }

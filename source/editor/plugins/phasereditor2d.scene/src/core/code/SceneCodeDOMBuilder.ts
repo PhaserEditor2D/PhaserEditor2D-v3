@@ -119,13 +119,44 @@ namespace phasereditor2d.scene.core.code {
 
         private buildListClassFields(fields: MemberDeclCodeDOM[]) {
 
+            const objMap = this._scene.buildObjectIdMap();
+
             for (const list of this._scene.getObjectLists().getLists()) {
 
                 if (list.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
 
+                    const types = new Set(list.getObjectIds()
+
+                        .map(id => objMap.get(id))
+
+                        .filter(obj => obj !== undefined)
+
+                        .map(obj => {
+
+                            const support = obj.getEditorSupport();
+
+                            if (support.isPrefabInstance()) {
+
+                                return support.getPrefabName();
+                            }
+
+                            return support.getPhaserType();
+                        }));
+
+                    let typeUnion = [...types].join("|");
+
+                    if (types.size === 1) {
+
+                        typeUnion = typeUnion + "[]";
+
+                    } else {
+
+                        typeUnion = "Array<" + typeUnion + ">";
+                    }
+
                     const dom = new FieldDeclCodeDOM(
                         formatToValidVarName(list.getLabel()),
-                        "any[]",
+                        typeUnion,
                         list.getScope() === ui.sceneobjects.ObjectScope.PUBLIC);
 
                     fields.push(dom);

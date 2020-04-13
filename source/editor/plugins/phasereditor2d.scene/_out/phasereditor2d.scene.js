@@ -627,6 +627,8 @@ var phasereditor2d;
                         }
                     }
                     generateFieldDecl(fieldDecl) {
+                        // this.line(`/** @type {${fieldDecl.getType()}} */`);
+                        // this.line(fieldDecl.getName() + ";");
                         this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
                         this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);
                     }
@@ -943,9 +945,27 @@ var phasereditor2d;
                         return unit;
                     }
                     buildListClassFields(fields) {
+                        const objMap = this._scene.buildObjectIdMap();
                         for (const list of this._scene.getObjectLists().getLists()) {
                             if (list.getScope() !== scene_2.ui.sceneobjects.ObjectScope.METHOD) {
-                                const dom = new code.FieldDeclCodeDOM(code.formatToValidVarName(list.getLabel()), "any[]", list.getScope() === scene_2.ui.sceneobjects.ObjectScope.PUBLIC);
+                                const types = new Set(list.getObjectIds()
+                                    .map(id => objMap.get(id))
+                                    .filter(obj => obj !== undefined)
+                                    .map(obj => {
+                                    const support = obj.getEditorSupport();
+                                    if (support.isPrefabInstance()) {
+                                        return support.getPrefabName();
+                                    }
+                                    return support.getPhaserType();
+                                }));
+                                let typeUnion = [...types].join("|");
+                                if (types.size === 1) {
+                                    typeUnion = typeUnion + "[]";
+                                }
+                                else {
+                                    typeUnion = "Array<" + typeUnion + ">";
+                                }
+                                const dom = new code.FieldDeclCodeDOM(code.formatToValidVarName(list.getLabel()), typeUnion, list.getScope() === scene_2.ui.sceneobjects.ObjectScope.PUBLIC);
                                 fields.push(dom);
                             }
                         }
