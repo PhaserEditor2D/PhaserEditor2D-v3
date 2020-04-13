@@ -9399,7 +9399,8 @@ var phasereditor2d;
                             if (objSupport.getParentId() === this._parentId) {
                                 continue;
                             }
-                            const p = new Phaser.Math.Vector2(0, 0);
+                            const worldPoint = new Phaser.Math.Vector2(0, 0);
+                            sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
                             if (sprite.parentContainer) {
                                 sprite.parentContainer.remove(sprite);
                             }
@@ -9408,16 +9409,15 @@ var phasereditor2d;
                             }
                             if (this._parentId) {
                                 const container = map.get(this._parentId);
-                                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
-                                container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+                                const p = new Phaser.Math.Vector2(0, 0);
+                                container.getWorldTransformMatrix().applyInverse(worldPoint.x, worldPoint.y, p);
                                 sprite.x = p.x;
                                 sprite.y = p.y;
                                 container.add(sprite);
                             }
                             else {
-                                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
-                                sprite.x = p.x;
-                                sprite.y = p.y;
+                                sprite.x = worldPoint.x;
+                                sprite.y = worldPoint.y;
                                 displayList.add(sprite);
                             }
                         }

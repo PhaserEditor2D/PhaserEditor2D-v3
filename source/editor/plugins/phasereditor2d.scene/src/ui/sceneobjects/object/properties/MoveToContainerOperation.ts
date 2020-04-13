@@ -36,7 +36,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     continue;
                 }
 
-                const p = new Phaser.Math.Vector2(0, 0);
+                const worldPoint = new Phaser.Math.Vector2(0, 0);
+                sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
                 if (sprite.parentContainer) {
 
@@ -51,8 +52,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const container = map.get(this._parentId) as Container;
 
-                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
-                    container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+                    const p = new Phaser.Math.Vector2(0, 0);
+
+                    container.getWorldTransformMatrix().applyInverse(worldPoint.x, worldPoint.y, p);
 
                     sprite.x = p.x;
                     sprite.y = p.y;
@@ -61,10 +63,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 } else {
 
-                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
-
-                    sprite.x = p.x;
-                    sprite.y = p.y;
+                    sprite.x = worldPoint.x;
+                    sprite.y = worldPoint.y;
 
                     displayList.add(sprite);
                 }
