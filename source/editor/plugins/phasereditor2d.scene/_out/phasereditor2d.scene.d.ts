@@ -1828,6 +1828,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         setLabel(label: string): void;
         getScope(): ObjectScope;
         setScope(scope: ObjectScope): void;
+        inferType(objMap: Map<string, ISceneObject>): string;
         readJSON(data: json.IObjectListData): void;
         writeJSON(data: json.IObjectListData): void;
     }

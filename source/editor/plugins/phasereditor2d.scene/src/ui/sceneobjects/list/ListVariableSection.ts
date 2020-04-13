@@ -33,6 +33,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             {
+                // Type
+
+                this.createLabel(comp, "Type");
+
+                const text = this.createText(comp, true);
+
+                this.addUpdater(() => {
+
+                    const map = this.getEditor().getScene().buildObjectIdMap();
+
+                    text.value = this.getSelectionFirstElement().inferType(map);
+                });
+            }
+
+            {
                 // Scope
 
                 this.createLabel(comp, "Scope", "The lexical scope of the object.");

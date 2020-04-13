@@ -948,24 +948,8 @@ var phasereditor2d;
                         const objMap = this._scene.buildObjectIdMap();
                         for (const list of this._scene.getObjectLists().getLists()) {
                             if (list.getScope() !== scene_2.ui.sceneobjects.ObjectScope.METHOD) {
-                                const types = new Set(list.getObjectIds()
-                                    .map(id => objMap.get(id))
-                                    .filter(obj => obj !== undefined)
-                                    .map(obj => {
-                                    const support = obj.getEditorSupport();
-                                    if (support.isPrefabInstance()) {
-                                        return support.getPrefabName();
-                                    }
-                                    return support.getPhaserType();
-                                }));
-                                let typeUnion = [...types].join("|");
-                                if (types.size === 1) {
-                                    typeUnion = typeUnion + "[]";
-                                }
-                                else {
-                                    typeUnion = "Array<" + typeUnion + ">";
-                                }
-                                const dom = new code.FieldDeclCodeDOM(code.formatToValidVarName(list.getLabel()), typeUnion, list.getScope() === scene_2.ui.sceneobjects.ObjectScope.PUBLIC);
+                                const listType = list.inferType(objMap);
+                                const dom = new code.FieldDeclCodeDOM(code.formatToValidVarName(list.getLabel()), listType, list.getScope() === scene_2.ui.sceneobjects.ObjectScope.PUBLIC);
                                 fields.push(dom);
                             }
                         }
@@ -8434,6 +8418,15 @@ var phasereditor2d;
                             });
                         }
                         {
+                            // Type
+                            this.createLabel(comp, "Type");
+                            const text = this.createText(comp, true);
+                            this.addUpdater(() => {
+                                const map = this.getEditor().getScene().buildObjectIdMap();
+                                text.value = this.getSelectionFirstElement().inferType(map);
+                            });
+                        }
+                        {
                             // Scope
                             this.createLabel(comp, "Scope", "The lexical scope of the object.");
                             const items = [{
@@ -8511,6 +8504,26 @@ var phasereditor2d;
                     }
                     setScope(scope) {
                         this._scope = scope;
+                    }
+                    inferType(objMap) {
+                        const types = new Set(this.getObjectIds()
+                            .map(id => objMap.get(id))
+                            .filter(obj => obj !== undefined)
+                            .map(obj => {
+                            const support = obj.getEditorSupport();
+                            if (support.isPrefabInstance()) {
+                                return support.getPrefabName();
+                            }
+                            return support.getPhaserType();
+                        }));
+                        let listType = [...types].join("|");
+                        if (types.size === 1) {
+                            listType = listType + "[]";
+                        }
+                        else {
+                            listType = "Array<" + listType + ">";
+                        }
+                        return listType;
                     }
                     readJSON(data) {
                         this._id = data.id;

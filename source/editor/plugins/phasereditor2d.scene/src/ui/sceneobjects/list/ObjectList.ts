@@ -49,6 +49,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._scope = scope;
         }
 
+        inferType(objMap: Map<string, ISceneObject>) {
+
+            const types = new Set(this.getObjectIds()
+
+                .map(id => objMap.get(id))
+
+                .filter(obj => obj !== undefined)
+
+                .map(obj => {
+
+                    const support = obj.getEditorSupport();
+
+                    if (support.isPrefabInstance()) {
+
+                        return support.getPrefabName();
+                    }
+
+                    return support.getPhaserType();
+                }));
+
+            let listType = [...types].join("|");
+
+            if (types.size === 1) {
+
+                listType = listType + "[]";
+
+            } else {
+
+                listType = "Array<" + listType + ">";
+            }
+
+            return listType;
+        }
+
         readJSON(data: json.IObjectListData) {
 
             this._id = data.id;
