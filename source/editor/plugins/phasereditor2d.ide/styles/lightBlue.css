@@ -193,7 +193,7 @@
     background: #b0b0b0;
 }
 
-.lightBlue .MenuItem:hover {
+.lightBlue .MenuItem:hover, .lightBlue .MenuItemSelected {
     background: #4242ff;
     color: #f0f0f0;
 }

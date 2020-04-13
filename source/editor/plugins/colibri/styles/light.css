@@ -216,7 +216,7 @@ Important:
     background: #b0b0b0;
 }
 
-.light .MenuItem:hover {
+.light .MenuItem:hover, .light .MenuItemSelected {
     background: #4242ff;
     color: #f0f0f0;
 }

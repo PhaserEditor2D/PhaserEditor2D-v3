@@ -2605,12 +2605,17 @@ var colibri;
                             labelElement.innerText = subMenu.getText();
                             itemElement.appendChild(labelElement);
                             itemElement.addEventListener("mouseenter", e => {
+                                if (this._lastItemElementSelected) {
+                                    this._lastItemElementSelected.classList.remove("MenuItemSelected");
+                                }
                                 this.closeSubMenu();
+                                itemElement.classList.add("MenuItemSelected");
                                 const menuRect = this._element.getClientRects().item(0);
                                 const subMenuX = menuRect.right;
                                 const subMenuY = menuRect.top;
                                 subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
                                 this._subMenu = subMenu;
+                                this._lastItemElementSelected = itemElement;
                             });
                             const keyElement = document.createElement("span");
                             keyElement.innerHTML = "&RightTriangle;";

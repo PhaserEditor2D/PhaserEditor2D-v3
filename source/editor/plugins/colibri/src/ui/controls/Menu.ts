@@ -10,6 +10,7 @@ namespace colibri.ui.controls {
         private static _activeMenu: Menu = null;
         private _subMenu: Menu;
         private _parentMenu: Menu;
+        private _lastItemElementSelected: HTMLDivElement;
 
         constructor(text?: string) {
 
@@ -178,7 +179,14 @@ namespace colibri.ui.controls {
 
                     itemElement.addEventListener("mouseenter", e => {
 
+                        if (this._lastItemElementSelected) {
+
+                            this._lastItemElementSelected.classList.remove("MenuItemSelected");
+                        }
+
                         this.closeSubMenu();
+
+                        itemElement.classList.add("MenuItemSelected");
 
                         const menuRect = this._element.getClientRects().item(0);
                         const subMenuX = menuRect.right;
@@ -187,6 +195,7 @@ namespace colibri.ui.controls {
                         subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
 
                         this._subMenu = subMenu;
+                        this._lastItemElementSelected = itemElement;
                     });
 
                     const keyElement = document.createElement("span");

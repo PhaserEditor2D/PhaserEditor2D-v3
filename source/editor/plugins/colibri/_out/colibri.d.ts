@@ -648,6 +648,7 @@ declare namespace colibri.ui.controls {
         private static _activeMenu;
         private _subMenu;
         private _parentMenu;
+        private _lastItemElementSelected;
         constructor(text?: string);
         setMenuClosedCallback(callback: () => void): void;
         add(action: Action): void;

@@ -226,7 +226,7 @@ Important:
     background: #3f3f3f;
 }
 
-.dark .MenuItem:hover {
+.dark .MenuItem:hover, .dark .MenuItemSelected {
     background: #f0a050;
     color: #0e0e0e;
 }
