@@ -2605,9 +2605,6 @@ var colibri;
                             labelElement.innerText = subMenu.getText();
                             itemElement.appendChild(labelElement);
                             itemElement.addEventListener("mouseenter", e => {
-                                if (this._lastItemElementSelected) {
-                                    this._lastItemElementSelected.classList.remove("MenuItemSelected");
-                                }
                                 this.closeSubMenu();
                                 itemElement.classList.add("MenuItemSelected");
                                 const menuRect = this._element.getClientRects().item(0);
@@ -2649,6 +2646,9 @@ var colibri;
                     this._element.style.top = y + "px";
                 }
                 closeSubMenu() {
+                    if (this._lastItemElementSelected) {
+                        this._lastItemElementSelected.classList.remove("MenuItemSelected");
+                    }
                     if (this._subMenu) {
                         this._subMenu.close();
                         this._subMenu = null;

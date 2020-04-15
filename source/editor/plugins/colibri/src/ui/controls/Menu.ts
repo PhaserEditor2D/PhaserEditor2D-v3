@@ -179,11 +179,6 @@ namespace colibri.ui.controls {
 
                     itemElement.addEventListener("mouseenter", e => {
 
-                        if (this._lastItemElementSelected) {
-
-                            this._lastItemElementSelected.classList.remove("MenuItemSelected");
-                        }
-
                         this.closeSubMenu();
 
                         itemElement.classList.add("MenuItemSelected");
@@ -246,6 +241,11 @@ namespace colibri.ui.controls {
         }
 
         private closeSubMenu() {
+
+            if (this._lastItemElementSelected) {
+
+                this._lastItemElementSelected.classList.remove("MenuItemSelected");
+            }
 
             if (this._subMenu) {
 
