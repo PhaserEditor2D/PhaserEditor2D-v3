@@ -1861,6 +1861,33 @@ var phasereditor2d;
                     }
                     return nameMaker.makeName(baseName);
                 }
+                /**
+                 * Map an object with its pre-order index. This can be used to sort objects.
+                 */
+                buildObjectSortingMap() {
+                    const map = new Map();
+                    this.buildObjectSortingMap2(map, this.getDisplayListChildren());
+                    return map;
+                }
+                sortObjectsByRenderingOrder(list) {
+                    const map = this.buildObjectSortingMap();
+                    list.sort((a, b) => {
+                        const aa = map.get(a);
+                        const bb = map.get(b);
+                        return aa - bb;
+                    });
+                }
+                buildObjectSortingMap2(map, list) {
+                    let i = 0;
+                    for (const obj of list) {
+                        map.set(obj, i);
+                        if (obj instanceof ui.sceneobjects.Container) {
+                            i += this.buildObjectSortingMap2(map, obj.list);
+                        }
+                        i++;
+                    }
+                    return i;
+                }
                 buildObjectIdMap() {
                     const map = new Map();
                     this.visit(obj => {
@@ -8022,7 +8049,9 @@ var phasereditor2d;
                             y: 0
                         });
                         container.getEditorSupport().setLabel(this.getScene().makeNewName("container"));
-                        for (const obj of this._editor.getSelectedGameObjects()) {
+                        const list = [...this._editor.getSelectedGameObjects()];
+                        this._editor.getScene().sortObjectsByRenderingOrder(list);
+                        for (const obj of list) {
                             const sprite = obj;
                             const p = new Phaser.Math.Vector2(0, 0);
                             sprite.getWorldTransformMatrix().transformPoint(0, 0, p);

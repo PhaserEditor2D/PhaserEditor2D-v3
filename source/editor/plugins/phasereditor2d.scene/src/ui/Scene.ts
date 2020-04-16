@@ -187,6 +187,50 @@ namespace phasereditor2d.scene.ui {
             return nameMaker.makeName(baseName);
         }
 
+        /**
+         * Map an object with its pre-order index. This can be used to sort objects.
+         */
+        buildObjectSortingMap() {
+
+            const map = new Map<sceneobjects.ISceneObject, number>();
+
+            this.buildObjectSortingMap2(map, this.getDisplayListChildren());
+
+            return map;
+        }
+
+        sortObjectsByRenderingOrder(list: sceneobjects.ISceneObject[]) {
+
+            const map = this.buildObjectSortingMap();
+
+            list.sort((a, b) => {
+
+                const aa = map.get(a);
+                const bb = map.get(b);
+
+                return aa - bb;
+            });
+        }
+
+        private buildObjectSortingMap2(map: Map<sceneobjects.ISceneObject, number>, list: sceneobjects.ISceneObject[]) {
+
+            let i = 0;
+
+            for (const obj of list) {
+
+                map.set(obj, i);
+
+                if (obj instanceof sceneobjects.Container) {
+
+                    i += this.buildObjectSortingMap2(map, obj.list);
+                }
+
+                i++;
+            }
+
+            return i;
+        }
+
         buildObjectIdMap() {
 
             const map = new Map<string, sceneobjects.ISceneObject>();

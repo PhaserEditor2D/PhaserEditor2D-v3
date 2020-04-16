@@ -414,6 +414,12 @@ declare namespace phasereditor2d.scene.ui {
         visit(visitor: (obj: sceneobjects.ISceneObject) => void): void;
         visitAskChildren(visitor: (obj: sceneobjects.ISceneObject) => boolean): void;
         makeNewName(baseName: string): string;
+        /**
+         * Map an object with its pre-order index. This can be used to sort objects.
+         */
+        buildObjectSortingMap(): Map<sceneobjects.ISceneObject, number>;
+        sortObjectsByRenderingOrder(list: sceneobjects.ISceneObject[]): void;
+        private buildObjectSortingMap2;
         buildObjectIdMap(): Map<string, sceneobjects.ISceneObject>;
         snapPoint(x: number, y: number): {
             x: number;

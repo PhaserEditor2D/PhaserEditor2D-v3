@@ -14,7 +14,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             container.getEditorSupport().setLabel(this.getScene().makeNewName("container"));
 
-            for (const obj of this._editor.getSelectedGameObjects()) {
+            const list = [...this._editor.getSelectedGameObjects()];
+
+            this._editor.getScene().sortObjectsByRenderingOrder(list);
+
+            for (const obj of list) {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
