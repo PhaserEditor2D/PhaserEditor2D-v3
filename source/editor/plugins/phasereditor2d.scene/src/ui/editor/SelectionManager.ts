@@ -92,8 +92,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             const result = this.hitTestOfActivePointer();
 
-            console.log(result);
-
             let next = [];
 
             if (result && result.length > 0) {

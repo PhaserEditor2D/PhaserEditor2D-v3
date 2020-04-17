@@ -4219,7 +4219,6 @@ var phasereditor2d;
                     }
                     onMouseClick(e) {
                         const result = this.hitTestOfActivePointer();
-                        console.log(result);
                         let next = [];
                         if (result && result.length > 0) {
                             const current = this._editor.getSelection();
