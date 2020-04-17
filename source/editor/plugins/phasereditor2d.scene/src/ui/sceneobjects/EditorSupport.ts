@@ -307,6 +307,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._prefabId = prefabId;
         }
 
+        getAllParents() {
+
+            const list: Container[] = [];
+
+            this.getAllParents2(list);
+
+            return list;
+        }
+
+        private getAllParents2(list: Container[]) {
+
+            if (this._object.parentContainer) {
+
+                list.push(this._object.parentContainer as Container);
+            }
+
+            return list;
+        }
+
         getOwnerPrefabInstance(): ISceneObject {
 
             if (this._object.parentContainer) {

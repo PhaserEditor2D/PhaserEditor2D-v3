@@ -4563,6 +4563,10 @@ var phasereditor2d;
                                         const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor);
                                         dlg.create();
                                     }
+                                },
+                                keys: {
+                                    shift: true,
+                                    key: "P"
                                 }
                             });
                         }
@@ -6741,6 +6745,17 @@ var phasereditor2d;
                     }
                     _setPrefabId(prefabId) {
                         this._prefabId = prefabId;
+                    }
+                    getAllParents() {
+                        const list = [];
+                        this.getAllParents2(list);
+                        return list;
+                    }
+                    getAllParents2(list) {
+                        if (this._object.parentContainer) {
+                            list.push(this._object.parentContainer);
+                        }
+                        return list;
                     }
                     getOwnerPrefabInstance() {
                         if (this._object.parentContainer) {
@@ -9452,6 +9467,29 @@ var phasereditor2d;
                         super(editor);
                         this._parentId = parentId;
                     }
+                    static canMoveAllTo(objList, container) {
+                        for (const obj of objList) {
+                            if (!this.canMoveTo(obj, container)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    static canMoveTo(obj, container) {
+                        if (obj.parentContainer === container) {
+                            return false;
+                        }
+                        if (obj instanceof sceneobjects.Container) {
+                            if (obj === container) {
+                                return false;
+                            }
+                            const parents = new Set(container.getEditorSupport().getAllParents());
+                            if (parents.has(obj)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
                     performModification() {
                         const map = this.getScene().buildObjectIdMap();
                         const displayList = this.getScene().sys.displayList;
@@ -9539,11 +9577,16 @@ var phasereditor2d;
                         viewer.setCellRendererProvider(new ui.editor.outline.SceneEditorOutlineRendererProvider());
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
                         const input = [this._editor.getScene().sys.displayList];
-                        this._editor.getScene().visit(obj => {
-                            if (obj instanceof sceneobjects.Container) {
-                                input.push(obj);
-                            }
-                        });
+                        {
+                            const sel = this._editor.getSelectedGameObjects();
+                            this._editor.getScene().visit(obj => {
+                                if (obj instanceof sceneobjects.Container) {
+                                    if (sceneobjects.MoveToContainerOperation.canMoveAllTo(sel, obj)) {
+                                        input.push(obj);
+                                    }
+                                }
+                            });
+                        }
                         viewer.setInput(input);
                         super.create();
                         this.setTitle("Parent");

@@ -1326,6 +1326,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         setScene(scene: Scene): void;
         isPrefabInstance(): boolean;
         _setPrefabId(prefabId: string): void;
+        getAllParents(): Container[];
+        private getAllParents2;
         getOwnerPrefabInstance(): ISceneObject;
         getPrefabId(): string;
         getPrefabName(): string;
@@ -2071,6 +2073,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class MoveToContainerOperation extends editor.undo.SceneSnapshotOperation {
         private _parentId;
         constructor(editor: editor.SceneEditor, parentId?: string);
+        static canMoveAllTo(objList: ISceneObject[], container: Container): boolean;
+        static canMoveTo(obj: ISceneObject, container: Container): boolean;
         protected performModification(): void;
     }
 }

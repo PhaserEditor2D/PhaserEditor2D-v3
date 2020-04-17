@@ -414,6 +414,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const dlg = new ui.sceneobjects.ParentDialog(args.activeEditor as SceneEditor);
                         dlg.create();
                     }
+                },
+                keys: {
+                    shift: true,
+                    key: "P"
                 }
             });
 

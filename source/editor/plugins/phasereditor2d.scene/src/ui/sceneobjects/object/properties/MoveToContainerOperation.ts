@@ -19,6 +19,44 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._parentId = parentId;
         }
 
+        static canMoveAllTo(objList: ISceneObject[], container: Container) {
+
+            for (const obj of objList) {
+
+                if (!this.canMoveTo(obj, container)) {
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        static canMoveTo(obj: ISceneObject, container: Container) {
+
+            if (obj.parentContainer === container) {
+
+                return false;
+            }
+
+            if (obj instanceof Container) {
+
+                if (obj === container) {
+
+                    return false;
+                }
+
+                const parents = new Set(container.getEditorSupport().getAllParents());
+
+                if (parents.has(obj)) {
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         protected performModification() {
 
             const map = this.getScene().buildObjectIdMap();

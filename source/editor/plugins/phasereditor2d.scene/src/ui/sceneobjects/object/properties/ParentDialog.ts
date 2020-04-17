@@ -21,12 +21,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const input: any[] = [this._editor.getScene().sys.displayList];
 
-            this._editor.getScene().visit(obj => {
+            {
+                const sel = this._editor.getSelectedGameObjects();
 
-                if (obj instanceof Container) {
-                    input.push(obj);
-                }
-            });
+                this._editor.getScene().visit(obj => {
+
+                    if (obj instanceof Container) {
+
+                        if (MoveToContainerOperation.canMoveAllTo(sel, obj)) {
+
+                            input.push(obj);
+                        }
+                    }
+                });
+            }
 
             viewer.setInput(input);
 
