@@ -1810,18 +1810,18 @@ var phasereditor2d;
                     return this.sys.displayList.getChildren();
                 }
                 getInputSortedObjects() {
-                    const list = [];
-                    for (const child of this.children.list) {
-                        if (child instanceof ui.sceneobjects.Container) {
-                            for (const child2 of child.list) {
-                                list.push(child2);
-                            }
+                    return this.getInputSortedObjects2([], this.getDisplayListChildren());
+                }
+                getInputSortedObjects2(result, list) {
+                    for (const obj of list) {
+                        if (obj instanceof ui.sceneobjects.Container) {
+                            this.getInputSortedObjects2(result, obj.list);
                         }
                         else {
-                            list.push(child);
+                            result.push(obj);
                         }
                     }
-                    return list;
+                    return result;
                 }
                 visit(visitor) {
                     for (const obj of this.getDisplayListChildren()) {
@@ -4219,6 +4219,7 @@ var phasereditor2d;
                     }
                     onMouseClick(e) {
                         const result = this.hitTestOfActivePointer();
+                        console.log(result);
                         let next = [];
                         if (result && result.length > 0) {
                             const current = this._editor.getSelection();

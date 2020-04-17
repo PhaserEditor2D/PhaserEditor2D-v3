@@ -411,6 +411,7 @@ declare namespace phasereditor2d.scene.ui {
         getMaker(): SceneMaker;
         getDisplayListChildren(): sceneobjects.ISceneObject[];
         getInputSortedObjects(): Phaser.GameObjects.GameObject[];
+        private getInputSortedObjects2;
         visit(visitor: (obj: sceneobjects.ISceneObject) => void): void;
         visitAskChildren(visitor: (obj: sceneobjects.ISceneObject) => boolean): void;
         makeNewName(baseName: string): string;
