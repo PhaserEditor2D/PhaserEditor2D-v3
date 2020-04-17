@@ -9608,8 +9608,7 @@ var phasereditor2d;
                         });
                     }
                     canEdit(obj, n) {
-                        return obj instanceof Phaser.GameObjects.GameObject
-                            && !(obj instanceof sceneobjects.Container);
+                        return obj instanceof Phaser.GameObjects.GameObject;
                     }
                     canEditNumber(n) {
                         return n > 0;
