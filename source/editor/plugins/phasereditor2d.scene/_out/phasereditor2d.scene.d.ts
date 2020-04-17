@@ -1328,6 +1328,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         isPrefabInstance(): boolean;
         _setPrefabId(prefabId: string): void;
         getAllParents(): Container[];
+        isDescendentOf(container: Container): boolean;
         private getAllParents2;
         getOwnerPrefabInstance(): ISceneObject;
         getPrefabId(): string;

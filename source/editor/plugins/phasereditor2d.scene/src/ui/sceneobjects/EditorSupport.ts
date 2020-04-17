@@ -316,6 +316,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return list;
         }
 
+        isDescendentOf(container: Container) {
+
+            const set = new Set(this.getAllParents());
+
+            return set.has(container);
+        }
+
         private getAllParents2(list: Container[]) {
 
             if (this._object.parentContainer) {

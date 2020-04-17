@@ -18,13 +18,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._editor.getScene().sortObjectsByRenderingOrder(list);
 
+            let newParent: Container;
+
+            for (const obj of list) {
+
+                const objParent = obj.parentContainer as Container;
+
+                if (objParent) {
+
+                    if (newParent) {
+
+                        if (newParent.getEditorSupport().isDescendentOf(objParent)) {
+
+                            newParent = objParent;
+                        }
+
+                    } else {
+
+                        newParent = objParent;
+                    }
+                }
+            }
+
+            if (newParent) {
+
+                this.getScene().sys.displayList.remove(container);
+
+                newParent.add(container);
+            }
+
             for (const obj of list) {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-                const p = new Phaser.Math.Vector2(0, 0);
+                const worldPoint = new Phaser.Math.Vector2(0, 0);
 
-                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
                 if (sprite.parentContainer) {
 
@@ -33,8 +62,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 container.add(sprite);
 
-                sprite.x = p.x;
-                sprite.y = p.y;
+                const localPoint = new Phaser.Math.Vector2(0, 0);
+
+                container.getWorldTransformMatrix().applyInverse(worldPoint.x, worldPoint.y, localPoint);
+
+                sprite.x = localPoint.x;
+                sprite.y = localPoint.y;
             }
 
             container.getEditorSupport().trim();

@@ -6751,6 +6751,10 @@ var phasereditor2d;
                         this.getAllParents2(list);
                         return list;
                     }
+                    isDescendentOf(container) {
+                        const set = new Set(this.getAllParents());
+                        return set.has(container);
+                    }
                     getAllParents2(list) {
                         if (this._object.parentContainer) {
                             list.push(this._object.parentContainer);
@@ -8066,16 +8070,36 @@ var phasereditor2d;
                         container.getEditorSupport().setLabel(this.getScene().makeNewName("container"));
                         const list = [...this._editor.getSelectedGameObjects()];
                         this._editor.getScene().sortObjectsByRenderingOrder(list);
+                        let newParent;
+                        for (const obj of list) {
+                            const objParent = obj.parentContainer;
+                            if (objParent) {
+                                if (newParent) {
+                                    if (newParent.getEditorSupport().isDescendentOf(objParent)) {
+                                        newParent = objParent;
+                                    }
+                                }
+                                else {
+                                    newParent = objParent;
+                                }
+                            }
+                        }
+                        if (newParent) {
+                            this.getScene().sys.displayList.remove(container);
+                            newParent.add(container);
+                        }
                         for (const obj of list) {
                             const sprite = obj;
-                            const p = new Phaser.Math.Vector2(0, 0);
-                            sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                            const worldPoint = new Phaser.Math.Vector2(0, 0);
+                            sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
                             if (sprite.parentContainer) {
                                 sprite.parentContainer.remove(sprite);
                             }
                             container.add(sprite);
-                            sprite.x = p.x;
-                            sprite.y = p.y;
+                            const localPoint = new Phaser.Math.Vector2(0, 0);
+                            container.getWorldTransformMatrix().applyInverse(worldPoint.x, worldPoint.y, localPoint);
+                            sprite.x = localPoint.x;
+                            sprite.y = localPoint.y;
                         }
                         container.getEditorSupport().trim();
                         this.getEditor().setSelection([container]);
