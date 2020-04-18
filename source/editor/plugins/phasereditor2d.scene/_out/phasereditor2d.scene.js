@@ -10110,7 +10110,17 @@ var phasereditor2d;
                         this._y = y;
                     }
                     getPoint(args) {
-                        return this.getAvgScreenPointOfObjects(args, (sprite) => this._x - sprite.originX, (sprite) => this._y - sprite.originY);
+                        return this.getAvgScreenPointOfObjects(args, (sprite) => {
+                            if (sprite instanceof sceneobjects.Container) {
+                                return this._x;
+                            }
+                            return this._x - sprite.originX;
+                        }, (sprite) => {
+                            if (sprite instanceof sceneobjects.Container) {
+                                return this._y;
+                            }
+                            return this._y - sprite.originY;
+                        });
                     }
                     render(args) {
                         const point = this.getPoint(args);
@@ -10138,11 +10148,22 @@ var phasereditor2d;
                             const initLocalPos = new Phaser.Math.Vector2();
                             sprite.getWorldTransformMatrix(worldTx);
                             worldTx.applyInverse(point.x, point.y, initLocalPos);
+                            let width;
+                            let height;
+                            if (sprite instanceof sceneobjects.Container) {
+                                const b = sprite.getBounds();
+                                width = b.width;
+                                height = b.height;
+                            }
+                            else {
+                                width = sprite.width;
+                                height = sprite.height;
+                            }
                             sprite.setData("ScaleToolItem", {
                                 initScaleX: sprite.scaleX,
                                 initScaleY: sprite.scaleY,
-                                initWidth: sprite.width,
-                                initHeight: sprite.height,
+                                initWidth: width,
+                                initHeight: height,
                                 initLocalPos: initLocalPos,
                                 initWorldTx: worldTx
                             });
@@ -10171,8 +10192,31 @@ var phasereditor2d;
                             }
                             const dx = (localPos.x - initLocalPos.x) * flipX / args.camera.zoom;
                             const dy = (localPos.y - initLocalPos.y) * flipY / args.camera.zoom;
-                            let width = data.initWidth - sprite.displayOriginX;
-                            let height = data.initHeight - sprite.displayOriginY;
+                            let width;
+                            let height;
+                            if (sprite instanceof sceneobjects.Container) {
+                                let minX = Number.MAX_VALUE;
+                                let minY = Number.MAX_VALUE;
+                                for (const obj2 of sprite.list) {
+                                    const child = obj2;
+                                    minX = Math.min(child.x, minX);
+                                    minY = Math.min(child.y, minY);
+                                }
+                                let displayOriginX = 0;
+                                let displayOriginY = 0;
+                                if (minX < 0) {
+                                    displayOriginX = -minX;
+                                }
+                                if (minY < 0) {
+                                    displayOriginY = -minY;
+                                }
+                                width = data.initWidth - displayOriginX;
+                                height = data.initHeight - displayOriginY;
+                            }
+                            else {
+                                width = data.initWidth - sprite.displayOriginX;
+                                height = data.initHeight - sprite.displayOriginY;
+                            }
                             if (width === 0) {
                                 width = data.initWidth;
                             }
