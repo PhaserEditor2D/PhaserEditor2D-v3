@@ -3581,7 +3581,6 @@ var phasereditor2d;
                         ctx.restore();
                     }
                     renderSelection() {
-                        const theme = controls.Controls.getTheme();
                         const ctx = this._ctx;
                         ctx.save();
                         const camera = this._editor.getScene().getCamera();
@@ -7908,7 +7907,9 @@ var phasereditor2d;
                             const bounds = obj.getEditorSupport().getScreenBounds(camera);
                             points.push(...bounds);
                         }
-                        const p = camera.getScreenPoint(container.x, container.y);
+                        const worldPoint = new Phaser.Math.Vector2(0, 0);
+                        container.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
+                        const p = camera.getScreenPoint(worldPoint.x, worldPoint.y);
                         points.push(p);
                         for (const point of points) {
                             minPoint.x = Math.min(minPoint.x, point.x);

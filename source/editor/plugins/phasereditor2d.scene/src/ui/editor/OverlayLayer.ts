@@ -52,12 +52,16 @@ namespace phasereditor2d.scene.ui.editor {
         render() {
 
             if (!this._ctx) {
+
                 this.resetContext();
             }
 
             if (!this._loading) {
+
                 this.renderGrid();
+
                 this.renderSelection();
+
                 this.renderTools();
             }
         }
@@ -100,8 +104,6 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private renderSelection() {
-
-            const theme = controls.Controls.getTheme();
 
             const ctx = this._ctx;
 

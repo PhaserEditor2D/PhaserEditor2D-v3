@@ -134,10 +134,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const bounds = obj.getEditorSupport().getScreenBounds(camera);
 
                 points.push(...bounds);
-
             }
 
-            const p = camera.getScreenPoint(container.x, container.y);
+            const worldPoint = new Phaser.Math.Vector2(0, 0);
+
+            container.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
+
+            const p = camera.getScreenPoint(worldPoint.x, worldPoint.y);
 
             points.push(p);
 
