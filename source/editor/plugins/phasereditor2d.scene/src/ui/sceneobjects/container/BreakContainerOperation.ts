@@ -24,20 +24,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
 
-                    sprite.x = p.x;
-                    sprite.y = p.y;
-
                     sel.push(sprite);
 
                     container.remove(sprite);
+
+                    if (container.parentContainer) {
+
+                        container.parentContainer.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+
+                        container.parentContainer.add(sprite);
+
+                    } else {
+
+                        displayList.add(sprite);
+                    }
+
+                    sprite.x = p.x;
+                    sprite.y = p.y;
                 }
 
                 container.getEditorSupport().destroy();
-            }
-
-            for (const obj of sel) {
-
-                displayList.add(obj);
             }
 
             this.getEditor().setSelection(sel);
