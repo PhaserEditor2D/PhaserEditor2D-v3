@@ -7851,6 +7851,7 @@ var phasereditor2d;
                         super(sceneobjects.ContainerExtension.getInstance(), obj, scene);
                         this._allowPickChildren = true;
                         this.addComponent(new sceneobjects.TransformComponent(obj));
+                        this.addComponent(new sceneobjects.VisibleComponent(obj));
                         this.addComponent(new sceneobjects.ContainerComponent(obj));
                     }
                     isAllowPickChildren() {

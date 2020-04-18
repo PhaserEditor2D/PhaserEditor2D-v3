@@ -17,6 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._allowPickChildren = true;
 
             this.addComponent(new TransformComponent(obj));
+            this.addComponent(new VisibleComponent(obj));
             this.addComponent(new ContainerComponent(obj));
         }
 
