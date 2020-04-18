@@ -7942,8 +7942,11 @@ var phasereditor2d;
                         }
                         const p = new Phaser.Math.Vector2(0, 0);
                         container.getWorldTransformMatrix().transformPoint(minX, minY, p);
-                        container.x += p.x;
-                        container.y += p.y;
+                        if (container.parentContainer) {
+                            container.parentContainer.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+                        }
+                        container.x = p.x;
+                        container.y = p.y;
                     }
                 }
                 sceneobjects.ContainerEditorSupport = ContainerEditorSupport;

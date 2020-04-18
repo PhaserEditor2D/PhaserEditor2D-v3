@@ -189,8 +189,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             container.getWorldTransformMatrix().transformPoint(minX, minY, p);
 
-            container.x += p.x;
-            container.y += p.y;
+            if (container.parentContainer) {
+
+                container.parentContainer.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+            }
+
+            container.x = p.x;
+            container.y = p.y;
         }
     }
 }
