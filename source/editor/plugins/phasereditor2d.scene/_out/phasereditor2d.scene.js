@@ -5545,8 +5545,20 @@ var phasereditor2d;
                         getScreenPointOfObject(args, obj, fx, fy) {
                             const worldPoint = new Phaser.Geom.Point(0, 0);
                             const sprite = obj;
-                            const x = sprite.width * fx;
-                            const y = sprite.height * fy;
+                            let width;
+                            let height;
+                            if (sprite instanceof ui.sceneobjects.Container) {
+                                const b = sprite.getBounds();
+                                console.log(b);
+                                width = b.width;
+                                height = b.height;
+                            }
+                            else {
+                                width = sprite.width;
+                                height = sprite.height;
+                            }
+                            const x = width * fx;
+                            const y = height * fy;
                             sprite.getWorldTransformMatrix().transformPoint(x, y, worldPoint);
                             return args.camera.getScreenPoint(worldPoint.x, worldPoint.y);
                         }
