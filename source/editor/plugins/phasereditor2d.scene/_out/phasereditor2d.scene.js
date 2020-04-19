@@ -5549,7 +5549,6 @@ var phasereditor2d;
                             let height;
                             if (sprite instanceof ui.sceneobjects.Container) {
                                 const b = sprite.getBounds();
-                                console.log(b);
                                 width = b.width;
                                 height = b.height;
                             }

@@ -25,8 +25,6 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
                 const b = sprite.getBounds();
 
-                console.log(b);
-
                 width = b.width;
                 height = b.height;
 

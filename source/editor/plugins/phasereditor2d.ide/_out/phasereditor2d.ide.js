@@ -789,7 +789,6 @@ var phasereditor2d;
                             providers: []
                         });
                         colibri.ui.ide.FileUtils.getProjectTemplates_async().then(data => {
-                            console.log(data);
                             viewer.setInput(data);
                             for (const provider of data.providers) {
                                 viewer.setExpanded(provider, true);
