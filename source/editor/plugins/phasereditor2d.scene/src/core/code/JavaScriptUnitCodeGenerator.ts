@@ -58,8 +58,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const memberDecl of clsDecl.getBody()) {
 
-                this.generateMemberDecl(memberDecl);
-                this.line();
+                this.generateMemberDecl(memberDecl);                
             }
 
             this.section("/* START-USER-CODE */", "\t/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n");
@@ -75,6 +74,8 @@ namespace phasereditor2d.scene.core.code {
 
                 this.generateMethodDecl(memberDecl, false);
 
+                this.line();
+
             } else if (memberDecl instanceof FieldDeclCodeDOM) {
 
                 this.generateFieldDecl(memberDecl);
@@ -86,8 +87,8 @@ namespace phasereditor2d.scene.core.code {
             // this.line(`/** @type {${fieldDecl.getType()}} */`);
             // this.line(fieldDecl.getName() + ";");
 
-            this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
-            this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);
+            // this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
+            // this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);
         }
 
         private generateMethodDecl(methodDecl: MethodDeclCodeDOM, isFunction: boolean) {

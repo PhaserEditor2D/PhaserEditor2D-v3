@@ -612,7 +612,6 @@ var phasereditor2d;
                         this.line();
                         for (const memberDecl of clsDecl.getBody()) {
                             this.generateMemberDecl(memberDecl);
-                            this.line();
                         }
                         this.section("/* START-USER-CODE */", "\t/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n");
                         this.closeIndent("}");
@@ -621,6 +620,7 @@ var phasereditor2d;
                     generateMemberDecl(memberDecl) {
                         if (memberDecl instanceof code_1.MethodDeclCodeDOM) {
                             this.generateMethodDecl(memberDecl, false);
+                            this.line();
                         }
                         else if (memberDecl instanceof code_1.FieldDeclCodeDOM) {
                             this.generateFieldDecl(memberDecl);
@@ -629,8 +629,8 @@ var phasereditor2d;
                     generateFieldDecl(fieldDecl) {
                         // this.line(`/** @type {${fieldDecl.getType()}} */`);
                         // this.line(fieldDecl.getName() + ";");
-                        this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
-                        this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);
+                        // this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
+                        // this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);
                     }
                     generateMethodDecl(methodDecl, isFunction) {
                         if (isFunction) {
@@ -1266,6 +1266,7 @@ var phasereditor2d;
                     generateFieldDecl(fieldDecl) {
                         const mod = fieldDecl.isPublic() ? "public" : "private";
                         this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()};`);
+                        this.line();
                     }
                     generateTypeAnnotation(assign) {
                         // do nothing, in TypeScript uses the var declaration syntax
