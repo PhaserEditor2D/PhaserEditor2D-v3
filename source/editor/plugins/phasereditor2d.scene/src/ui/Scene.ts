@@ -130,22 +130,31 @@ namespace phasereditor2d.scene.ui {
 
         visit(visitor: (obj: sceneobjects.ISceneObject) => void) {
 
-            for (const obj of this.getDisplayListChildren()) {
+            this.visit2(visitor, this.getDisplayListChildren());
+        }
+
+        private visit2(visitor: (obj: sceneobjects.ISceneObject) => void, children: sceneobjects.ISceneObject[]) {
+
+            for (const obj of children) {
 
                 visitor(obj);
 
                 if (obj instanceof sceneobjects.Container) {
 
-                    for (const child of obj.list) {
-                        visitor(child);
-                    }
+                    this.visit2(visitor, obj.list);
                 }
             }
         }
 
         visitAskChildren(visitor: (obj: sceneobjects.ISceneObject) => boolean) {
 
-            for (const obj of this.getDisplayListChildren()) {
+            this.visitAskChildren2(visitor, this.getDisplayListChildren());
+        }
+
+        private visitAskChildren2(
+            visitor: (obj: sceneobjects.ISceneObject) => boolean, children: sceneobjects.ISceneObject[]) {
+
+            for (const obj of children) {
 
                 const visitChildren = visitor(obj);
 
@@ -153,9 +162,7 @@ namespace phasereditor2d.scene.ui {
 
                     if (obj instanceof sceneobjects.Container) {
 
-                        for (const child of obj.list) {
-                            visitor(child);
-                        }
+                        this.visitAskChildren2(visitor, obj.list);
                     }
                 }
             }

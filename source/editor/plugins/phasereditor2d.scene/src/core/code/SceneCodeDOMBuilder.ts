@@ -482,6 +482,7 @@ namespace phasereditor2d.scene.core.code {
 
                 args.createMethodDecl.getBody().push(new RawCodeDOM(""));
                 args.createMethodDecl.getBody().push(new RawCodeDOM("// " + child.getEditorSupport().getLabel()));
+
                 this.addCreateObjectCode(child, args.createMethodDecl);
             }
         }

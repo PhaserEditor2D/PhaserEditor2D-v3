@@ -413,7 +413,9 @@ declare namespace phasereditor2d.scene.ui {
         getInputSortedObjects(): Phaser.GameObjects.GameObject[];
         private getInputSortedObjects2;
         visit(visitor: (obj: sceneobjects.ISceneObject) => void): void;
+        private visit2;
         visitAskChildren(visitor: (obj: sceneobjects.ISceneObject) => boolean): void;
+        private visitAskChildren2;
         makeNewName(baseName: string): string;
         /**
          * Map an object with its pre-order index. This can be used to sort objects.

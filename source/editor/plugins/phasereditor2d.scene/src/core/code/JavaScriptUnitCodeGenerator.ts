@@ -58,7 +58,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const memberDecl of clsDecl.getBody()) {
 
-                this.generateMemberDecl(memberDecl);                
+                this.generateMemberDecl(memberDecl);
             }
 
             this.section("/* START-USER-CODE */", "\t/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n");

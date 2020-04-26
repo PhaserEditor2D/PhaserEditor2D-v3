@@ -1825,23 +1825,25 @@ var phasereditor2d;
                     return result;
                 }
                 visit(visitor) {
-                    for (const obj of this.getDisplayListChildren()) {
+                    this.visit2(visitor, this.getDisplayListChildren());
+                }
+                visit2(visitor, children) {
+                    for (const obj of children) {
                         visitor(obj);
                         if (obj instanceof ui.sceneobjects.Container) {
-                            for (const child of obj.list) {
-                                visitor(child);
-                            }
+                            this.visit2(visitor, obj.list);
                         }
                     }
                 }
                 visitAskChildren(visitor) {
-                    for (const obj of this.getDisplayListChildren()) {
+                    this.visitAskChildren2(visitor, this.getDisplayListChildren());
+                }
+                visitAskChildren2(visitor, children) {
+                    for (const obj of children) {
                         const visitChildren = visitor(obj);
                         if (visitChildren) {
                             if (obj instanceof ui.sceneobjects.Container) {
-                                for (const child of obj.list) {
-                                    visitor(child);
-                                }
+                                this.visitAskChildren2(visitor, obj.list);
                             }
                         }
                     }
