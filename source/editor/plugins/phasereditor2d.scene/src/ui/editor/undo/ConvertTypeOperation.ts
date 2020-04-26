@@ -17,13 +17,15 @@ namespace phasereditor2d.scene.ui.editor.undo {
     export class ConvertTypeOperation extends undo.ObjectSnapshotOperation {
 
         private _targetType: ITargetType;
+        private _extraData: any;
 
-        constructor(editor: SceneEditor, targetType: ITargetType) {
+        constructor(editor: SceneEditor, targetType: ITargetType, extraData: any) {
             super(editor,
                 ConvertTypeOperation.filterObjects(editor.getSelectedGameObjects(), targetType)
             );
 
             this._targetType = targetType;
+            this._extraData = extraData;
         }
 
         async execute() {
@@ -85,7 +87,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 const type = ser.getType();
                 const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
 
-                ext.adaptDataAfterTypeConversion(ser, obj);
+                ext.adaptDataAfterTypeConversion(ser, obj, this._extraData);
 
                 result.objects.push({
                     objData,

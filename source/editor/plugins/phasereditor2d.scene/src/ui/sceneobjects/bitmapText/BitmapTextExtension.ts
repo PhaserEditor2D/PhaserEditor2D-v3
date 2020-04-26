@@ -1,7 +1,5 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import controls = colibri.ui.controls;
-
     export class BitmapTextExtension extends SceneObjectExtension {
 
         private static _instance = new BitmapTextExtension();
@@ -27,6 +25,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const font = args.asset as pack.core.BitmapFontAssetPackItem;
 
             return new BitmapText(args.scene, args.x, args.y, font.getKey(), "New BitmapText");
+        }
+
+        adaptDataAfterTypeConversion(
+            serializer: core.json.Serializer, originalObject: ISceneObject, extraData: any) {
+
+            const bitmapFont = extraData as pack.core.BitmapFontAssetPackItem;
+
+            if (bitmapFont) {
+
+                let size = 64;
+
+                const newData = serializer.getData();
+
+                if ("height" in originalObject) {
+
+                    size = originalObject["height"];
+                }
+
+                if (typeof originalObject["text"] !== "string") {
+
+                    newData["text"] = "New Bitmap Text";
+                }
+
+                newData["fontSize"] = size;
+                newData["font"] = bitmapFont.getKey();
+            }
         }
 
         async collectExtraDataForCreateEmptyObject() {

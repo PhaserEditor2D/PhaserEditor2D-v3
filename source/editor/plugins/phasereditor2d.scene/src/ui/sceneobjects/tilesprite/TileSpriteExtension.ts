@@ -15,9 +15,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject) {
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject, extraData: any) {
 
-            super.adaptDataAfterTypeConversion(serializer, originalObject);
+            super.adaptDataAfterTypeConversion(serializer, originalObject, extraData);
 
             const obj = originalObject as unknown as Phaser.GameObjects.Components.ComputedSize;
 

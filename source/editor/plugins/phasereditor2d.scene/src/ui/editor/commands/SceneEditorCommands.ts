@@ -463,7 +463,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const editor = args.activeEditor as SceneEditor;
 
                         editor.getUndoManager().add(
-                            new undo.ConvertTypeOperation(editor, sceneobjects.TileSpriteExtension.getInstance()));
+                            new undo.ConvertTypeOperation(
+                                editor, sceneobjects.TileSpriteExtension.getInstance(), null));
                     }
                 },
                 keys: {

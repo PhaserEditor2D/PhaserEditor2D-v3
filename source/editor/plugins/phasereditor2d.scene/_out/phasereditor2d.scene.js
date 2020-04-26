@@ -3131,8 +3131,21 @@ var phasereditor2d;
                         const viewer = this.getViewer();
                         super.create();
                         this.setTitle("Replace Type");
-                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Replace", (sel) => {
-                            this._editor.getUndoManager().add(new editor_4.undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));
+                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Replace", async (sel) => {
+                            const targetType = viewer.getSelectionFirstElement();
+                            let extraData = null;
+                            if (targetType instanceof ui.sceneobjects.SceneObjectExtension) {
+                                const result = await targetType.collectExtraDataForCreateEmptyObject();
+                                if (result.abort) {
+                                    return;
+                                }
+                                if (result.dataNotFoundMessage) {
+                                    alert(result.dataNotFoundMessage);
+                                    return;
+                                }
+                                extraData = result.data;
+                            }
+                            this._editor.getUndoManager().add(new editor_4.undo.ConvertTypeOperation(this._editor, targetType, extraData));
                             this.close();
                         }));
                         viewer.selectFirst();
@@ -4601,7 +4614,7 @@ var phasereditor2d;
                                         && editor_10.ConvertTypeDialog.canConvert(args.activeEditor),
                                     executeFunc: args => {
                                         const editor = args.activeEditor;
-                                        editor.getUndoManager().add(new editor_10.undo.ConvertTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance()));
+                                        editor.getUndoManager().add(new editor_10.undo.ConvertTypeOperation(editor, ui.sceneobjects.TileSpriteExtension.getInstance(), null));
                                     }
                                 },
                                 keys: {
@@ -6156,9 +6169,10 @@ var phasereditor2d;
                 (function (undo) {
                     var io = colibri.core.io;
                     class ConvertTypeOperation extends undo.ObjectSnapshotOperation {
-                        constructor(editor, targetType) {
+                        constructor(editor, targetType, extraData) {
                             super(editor, ConvertTypeOperation.filterObjects(editor.getSelectedGameObjects(), targetType));
                             this._targetType = targetType;
+                            this._extraData = extraData;
                         }
                         async execute() {
                             if (this._targetType instanceof io.FilePath) {
@@ -6196,7 +6210,7 @@ var phasereditor2d;
                                 const ser = this._editor.getScene().getMaker().getSerializer(objData);
                                 const type = ser.getType();
                                 const ext = scene.ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
-                                ext.adaptDataAfterTypeConversion(ser, obj);
+                                ext.adaptDataAfterTypeConversion(ser, obj, this._extraData);
                                 result.objects.push({
                                     objData,
                                     parentId
@@ -7040,8 +7054,10 @@ var phasereditor2d;
                      *
                      * @param serializer Serializer of the data resulted by the type-conversion.
                      * @param originalObject The original object that was converted.
+                     * @param extraData Sometimes, to create the object, some extra data is needed.
+                     * For example, the bitmap font of a bitmap text.
                      */
-                    adaptDataAfterTypeConversion(serializer, originalObject) {
+                    adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
                         // nothing by default
                     }
                     /**
@@ -7532,7 +7548,7 @@ var phasereditor2d;
                         return JSON.stringify({
                             text: obj.text,
                             font: obj.font,
-                            tint: obj.tint
+                            fontSize: obj.fontSize
                         });
                     }
                     getCellRenderer() {
@@ -7571,6 +7587,21 @@ var phasereditor2d;
                     createSceneObjectWithAsset(args) {
                         const font = args.asset;
                         return new sceneobjects.BitmapText(args.scene, args.x, args.y, font.getKey(), "New BitmapText");
+                    }
+                    adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
+                        const bitmapFont = extraData;
+                        if (bitmapFont) {
+                            let size = 64;
+                            const newData = serializer.getData();
+                            if ("height" in originalObject) {
+                                size = originalObject["height"];
+                            }
+                            if (typeof originalObject["text"] !== "string") {
+                                newData["text"] = "New Bitmap Text";
+                            }
+                            newData["fontSize"] = size;
+                            newData["font"] = bitmapFont.getKey();
+                        }
                     }
                     async collectExtraDataForCreateEmptyObject() {
                         const finder = new phasereditor2d.pack.core.PackFinder();
@@ -8332,7 +8363,7 @@ var phasereditor2d;
                         const sprite = this.newObject(scene, x, y, key, frame);
                         return sprite;
                     }
-                    adaptDataAfterTypeConversion(serializer, originalObject) {
+                    adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
                         const support = originalObject.getEditorSupport();
                         if (support.isPrefabInstance()) {
                             const textureComponent = support.getComponent(sceneobjects.TextureComponent);
@@ -9027,34 +9058,44 @@ var phasereditor2d;
                 class ObjectCellRenderer {
                     renderCell(args) {
                         const obj = args.obj;
-                        const support = obj.getEditorSupport();
-                        const hash = support.computeContentHash();
-                        const key = "__renderer__image_" + hash;
-                        const cached = obj.getData(key);
+                        const cached = obj.getData("__renderer_image");
                         if (cached) {
                             cached.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
-                            return;
                         }
-                        // send image to garbage.
-                        obj.data.remove("__last_renderer_image");
-                        const angle = obj.angle;
-                        obj.setAngle(0);
-                        const render = new Phaser.GameObjects.RenderTexture(support.getScene(), 0, 0, obj.width, obj.height);
-                        render.draw(obj, 0, 0);
-                        render.snapshot(imgElement => {
-                            const img = new controls.ImageWrapper(imgElement);
-                            obj.setData("__last_renderer_image", img);
-                            obj.setData(key, img);
-                            img.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
-                        });
-                        obj.setAngle(angle);
-                        render.destroy();
                     }
                     cellHeight(args) {
                         return args.viewer.getCellSize();
                     }
                     preload(args) {
-                        return controls.Controls.resolveNothingLoaded();
+                        const obj = args.obj;
+                        const support = obj.getEditorSupport();
+                        const hash = support.computeContentHash();
+                        if (obj.getData("__last_render_hash") === hash) {
+                            return controls.Controls.resolveNothingLoaded();
+                        }
+                        obj.setData("__last_render_hash", hash);
+                        const currentPromise = obj.data.get("__renderer_promise");
+                        if (currentPromise) {
+                            return currentPromise;
+                        }
+                        const promise = new Promise((resolve, reject) => {
+                            const angle = obj.angle;
+                            obj.setAngle(0);
+                            const w = Math.floor(obj.width);
+                            const h = Math.floor(obj.height);
+                            const render = new Phaser.GameObjects.RenderTexture(support.getScene(), 0, 0, w, h);
+                            render.draw(obj, 0, 0);
+                            render.snapshot(imgElement => {
+                                const img = new controls.ImageWrapper(imgElement);
+                                obj.setData("__renderer_image", img);
+                                obj.setData("__renderer_promise", null);
+                                resolve(controls.PreloadResult.RESOURCES_LOADED);
+                            });
+                            obj.setAngle(angle);
+                            render.destroy();
+                        });
+                        obj.setData("__renderer_promise", promise);
+                        return promise;
                     }
                 }
                 sceneobjects.ObjectCellRenderer = ObjectCellRenderer;
@@ -11718,8 +11759,8 @@ var phasereditor2d;
                     static getInstance() {
                         return this._instance;
                     }
-                    adaptDataAfterTypeConversion(serializer, originalObject) {
-                        super.adaptDataAfterTypeConversion(serializer, originalObject);
+                    adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
+                        super.adaptDataAfterTypeConversion(serializer, originalObject, extraData);
                         const obj = originalObject;
                         const width = obj.width === undefined ? 20 : obj.width;
                         const height = obj.height === undefined ? 20 : obj.height;

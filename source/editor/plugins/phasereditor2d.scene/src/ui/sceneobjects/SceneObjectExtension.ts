@@ -100,8 +100,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param serializer Serializer of the data resulted by the type-conversion.
          * @param originalObject The original object that was converted.
+         * @param extraData Sometimes, to create the object, some extra data is needed.
+         * For example, the bitmap font of a bitmap text.
          */
-        adaptDataAfterTypeConversion(serializer: json.Serializer, originalObject: ISceneObject) {
+        adaptDataAfterTypeConversion(serializer: json.Serializer, originalObject: ISceneObject, extraData: any) {
             // nothing by default
         }
 

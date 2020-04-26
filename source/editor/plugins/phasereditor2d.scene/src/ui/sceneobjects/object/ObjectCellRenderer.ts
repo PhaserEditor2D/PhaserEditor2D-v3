@@ -8,45 +8,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = args.obj as Image;
 
-            const support = obj.getEditorSupport();
-
-            const hash = support.computeContentHash();
-
-            const key = "__renderer__image_" + hash;
-
-            const cached = obj.getData(key) as controls.IImage;
+            const cached = obj.getData("__renderer_image") as controls.IImage;
 
             if (cached) {
 
                 cached.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
-
-                return;
             }
-
-            // send image to garbage.
-            obj.data.remove("__last_renderer_image");
-
-            const angle = obj.angle;
-            obj.setAngle(0);
-
-            const render = new Phaser.GameObjects.RenderTexture(
-                support.getScene(), 0, 0, obj.width, obj.height);
-
-            render.draw(obj, 0, 0);
-
-            render.snapshot(imgElement => {
-
-                const img = new controls.ImageWrapper(imgElement as HTMLImageElement);
-
-                obj.setData("__last_renderer_image", img);
-                obj.setData(key, img);
-
-                img.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
-            });
-
-            obj.setAngle(angle);
-
-            render.destroy();
         }
 
         cellHeight(args: controls.viewers.RenderCellArgs): number {
@@ -56,7 +23,57 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
 
-            return controls.Controls.resolveNothingLoaded();
+            const obj = args.obj as Image;
+
+            const support = obj.getEditorSupport();
+
+            const hash = support.computeContentHash();
+
+            if (obj.getData("__last_render_hash") === hash) {
+
+                return controls.Controls.resolveNothingLoaded();
+            }
+
+            obj.setData("__last_render_hash", hash);
+
+            const currentPromise = obj.data.get("__renderer_promise") as Promise<controls.PreloadResult>;
+
+            if (currentPromise) {
+
+                return currentPromise;
+            }
+
+            const promise = new Promise<controls.PreloadResult>((resolve, reject) => {
+
+                const angle = obj.angle;
+                obj.setAngle(0);
+
+                const w = Math.floor(obj.width);
+                const h = Math.floor(obj.height);
+
+                const render = new Phaser.GameObjects.RenderTexture(
+                    support.getScene(), 0, 0, w, h);
+
+                render.draw(obj, 0, 0);
+
+                render.snapshot(imgElement => {
+
+                    const img = new controls.ImageWrapper(imgElement as HTMLImageElement);
+
+                    obj.setData("__renderer_image", img);
+                    obj.setData("__renderer_promise", null);
+
+                    resolve(controls.PreloadResult.RESOURCES_LOADED);
+                });
+
+                obj.setAngle(angle);
+
+                render.destroy();
+            });
+
+            obj.setData("__renderer_promise", promise);
+
+            return promise;
         }
     }
 }

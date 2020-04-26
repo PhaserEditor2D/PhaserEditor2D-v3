@@ -35,10 +35,33 @@ namespace phasereditor2d.scene.ui.editor {
             this.setTitle("Replace Type");
 
             this.enableButtonOnlyWhenOneElementIsSelected(
-                this.addOpenButton("Replace", (sel: any[]) => {
+                this.addOpenButton("Replace", async (sel: any[]) => {
+
+                    const targetType = viewer.getSelectionFirstElement();
+
+                    let extraData: any = null;
+
+                    if (targetType instanceof sceneobjects.SceneObjectExtension) {
+
+                        const result = await targetType.collectExtraDataForCreateEmptyObject();
+
+                        if (result.abort) {
+
+                            return;
+                        }
+
+                        if (result.dataNotFoundMessage) {
+
+                            alert(result.dataNotFoundMessage);
+
+                            return;
+                        }
+
+                        extraData = result.data;
+                    }
 
                     this._editor.getUndoManager().add(
-                        new undo.ConvertTypeOperation(this._editor, viewer.getSelectionFirstElement()));
+                        new undo.ConvertTypeOperation(this._editor, targetType, extraData));
 
                     this.close();
                 })

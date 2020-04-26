@@ -97,7 +97,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return sprite;
         }
 
-        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject) {
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject, extraData: any) {
 
             const support = originalObject.getEditorSupport();
 

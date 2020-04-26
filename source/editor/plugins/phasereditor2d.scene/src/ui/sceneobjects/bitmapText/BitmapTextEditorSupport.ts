@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return JSON.stringify({
                 text: obj.text,
                 font: obj.font,
-                tint: obj.tint
+                fontSize: obj.fontSize
             });
         }
 
