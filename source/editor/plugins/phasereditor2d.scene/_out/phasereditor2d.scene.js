@@ -1010,13 +1010,13 @@ var phasereditor2d;
                         }
                         this.addFieldInitCode(ctrDecl.getBody());
                         {
-                            const createName = settings.createMethodName;
-                            if (createName) {
+                            const initMethodName = settings.prefabInitMethodName;
+                            if (initMethodName) {
                                 const body = ctrDecl.getBody();
                                 if (body.length > 1) {
                                     body.push(new code.RawCodeDOM(""));
                                 }
-                                body.push(new code.MethodCallCodeDOM(createName, "this"));
+                                body.push(new code.MethodCallCodeDOM(initMethodName, "this"));
                             }
                         }
                         return ctrDecl;
@@ -1461,7 +1461,7 @@ var phasereditor2d;
                     SourceLang["TYPE_SCRIPT"] = "TYPE_SCRIPT";
                 })(SourceLang = json.SourceLang || (json.SourceLang = {}));
                 class SceneSettings {
-                    constructor(sceneType = json.SceneType.SCENE, compilerEnabled = true, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "", preloadMethodName = "preload", preloadPackFiles = [], createMethodName = "create", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
+                    constructor(sceneType = json.SceneType.SCENE, compilerEnabled = true, snapEnabled = false, snapWidth = 16, snapHeight = 16, onlyGenerateMethods = false, superClassName = "", preloadMethodName = "preload", preloadPackFiles = [], createMethodName = "create", prefabInitMethodName = "", sceneKey = "", compilerOutputLanguage = SourceLang.JAVA_SCRIPT, scopeBlocksToFolder = false, borderX = 0, borderY = 0, borderWidth = 800, borderHeight = 600) {
                         this.sceneType = sceneType;
                         this.compilerEnabled = compilerEnabled;
                         this.snapEnabled = snapEnabled;
@@ -1472,6 +1472,7 @@ var phasereditor2d;
                         this.preloadMethodName = preloadMethodName;
                         this.preloadPackFiles = preloadPackFiles;
                         this.createMethodName = createMethodName;
+                        this.prefabInitMethodName = prefabInitMethodName;
                         this.sceneKey = sceneKey;
                         this.compilerOutputLanguage = compilerOutputLanguage;
                         this.scopeBlocksToFolder = scopeBlocksToFolder;
@@ -1492,6 +1493,7 @@ var phasereditor2d;
                         write(data, "preloadMethodName", this.preloadMethodName, "preload");
                         write(data, "preloadPackFiles", this.preloadPackFiles, []);
                         write(data, "createMethodName", this.createMethodName, "create");
+                        write(data, "prefabInitMethodName", this.prefabInitMethodName, "");
                         write(data, "sceneKey", this.sceneKey, "");
                         write(data, "compilerOutputLanguage", this.compilerOutputLanguage, SourceLang.JAVA_SCRIPT);
                         write(data, "scopeBlocksToFolder", this.scopeBlocksToFolder, false);
@@ -1512,6 +1514,7 @@ var phasereditor2d;
                         this.preloadMethodName = read(data, "preloadMethodName", "preload");
                         this.preloadPackFiles = read(data, "preloadPackFiles", []);
                         this.createMethodName = read(data, "createMethodName", "create");
+                        this.prefabInitMethodName = read(data, "prefabInitMethodName", "");
                         this.sceneKey = read(data, "sceneKey", "");
                         this.compilerOutputLanguage = read(data, "compilerOutputLanguage", SourceLang.JAVA_SCRIPT);
                         this.scopeBlocksToFolder = read(data, "scopeBlocksToFolder", false);
@@ -5359,10 +5362,38 @@ var phasereditor2d;
                                 }
                             ], "compilerOutputLanguage", "Output Language", "The scene compiler output language.");
                             this.createStringField(comp, "superClassName", "Super Class", "The super class used for the scene. If it is blank (no-value) then use default value.");
-                            this.createStringField(comp, "createMethodName", "Create Method", "The name of the create method.");
                         }
                     }
                     properties.CompilerSection = CompilerSection;
+                })(properties = editor.properties || (editor.properties = {}));
+            })(editor = ui.editor || (ui.editor = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var editor;
+            (function (editor) {
+                var properties;
+                (function (properties) {
+                    class PrefabCompilerSection extends properties.SceneSection {
+                        constructor(page) {
+                            super(page, "phasereditor2d.scene.ui.editor.properties.PrefabCompilerSection", "Compiler Prefab Settings", false, true);
+                        }
+                        createForm(parent) {
+                            const comp = this.createGridElement(parent, 3);
+                            comp.style.gridTemplateColumns = "auto 1fr";
+                            this.createStringField(comp, "prefabInitMethodName", "User Init Method", "If provided, this method will be called at the end of the prefab constructor.");
+                        }
+                        canEdit(obj, n) {
+                            return obj instanceof ui.Scene && obj.getSettings().sceneType === scene.core.json.SceneType.PREFAB;
+                        }
+                    }
+                    properties.PrefabCompilerSection = PrefabCompilerSection;
                 })(properties = editor.properties || (editor.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -5388,6 +5419,7 @@ var phasereditor2d;
                             comp.style.gridTemplateColumns = "auto 1fr";
                             this.createStringField(comp, "sceneKey", "Scene Key", "The key of the scene. Used when the scene is loaded with the Phaser loader.");
                             this.createBooleanField(comp, "onlyGenerateMethods", this.createLabel(comp, "Only Generate Methods", "No class code is generated, only the \"create\" or \"preload\" methods."));
+                            this.createStringField(comp, "createMethodName", "Create Method", "The name of the create method.");
                             this.createPreloadPackFilesField(comp);
                             this.createStringField(comp, "preloadMethodName", "Preload Method", "The name of the preload method. It may be empty.");
                         }
@@ -5471,7 +5503,7 @@ var phasereditor2d;
                             return this._editor.getScene();
                         }
                         addSections(page, sections) {
-                            sections.push(new properties.SnappingSection(page), new properties.BorderSection(page), new properties.CompilerSection(page), new properties.SceneCompilerSection(page));
+                            sections.push(new properties.SnappingSection(page), new properties.BorderSection(page), new properties.CompilerSection(page), new properties.SceneCompilerSection(page), new properties.PrefabCompilerSection(page));
                             const exts = colibri.Platform
                                 .getExtensions(properties.SceneEditorPropertySectionExtension.POINT_ID);
                             for (const ext of exts) {

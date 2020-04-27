@@ -22,6 +22,7 @@ namespace phasereditor2d.scene.core.json {
             public preloadMethodName = "preload",
             public preloadPackFiles: string[] = [],
             public createMethodName = "create",
+            public prefabInitMethodName = "",
             public sceneKey = "",
             public compilerOutputLanguage = SourceLang.JAVA_SCRIPT,
             public scopeBlocksToFolder: boolean = false,
@@ -47,6 +48,7 @@ namespace phasereditor2d.scene.core.json {
             write(data, "preloadMethodName", this.preloadMethodName, "preload");
             write(data, "preloadPackFiles", this.preloadPackFiles, []);
             write(data, "createMethodName", this.createMethodName, "create");
+            write(data, "prefabInitMethodName", this.prefabInitMethodName, "");
             write(data, "sceneKey", this.sceneKey, "");
             write(data, "compilerOutputLanguage", this.compilerOutputLanguage, SourceLang.JAVA_SCRIPT);
             write(data, "scopeBlocksToFolder", this.scopeBlocksToFolder, false);
@@ -70,6 +72,7 @@ namespace phasereditor2d.scene.core.json {
             this.preloadMethodName = read(data, "preloadMethodName", "preload");
             this.preloadPackFiles = read(data, "preloadPackFiles", []);
             this.createMethodName = read(data, "createMethodName", "create");
+            this.prefabInitMethodName = read(data, "prefabInitMethodName", "");
             this.sceneKey = read(data, "sceneKey", "");
             this.compilerOutputLanguage = read(data, "compilerOutputLanguage", SourceLang.JAVA_SCRIPT);
             this.scopeBlocksToFolder = read(data, "scopeBlocksToFolder", false);

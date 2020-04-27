@@ -26,6 +26,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 this.createLabel(comp, "Only Generate Methods",
                     "No class code is generated, only the \"create\" or \"preload\" methods."));
 
+            this.createStringField(
+                comp, "createMethodName", "Create Method", "The name of the create method.");
+
             this.createPreloadPackFilesField(comp);
 
             this.createStringField(

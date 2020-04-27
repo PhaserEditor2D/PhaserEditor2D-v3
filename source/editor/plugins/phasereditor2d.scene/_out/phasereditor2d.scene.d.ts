@@ -326,6 +326,7 @@ declare namespace phasereditor2d.scene.core.json {
         preloadMethodName: string;
         preloadPackFiles: string[];
         createMethodName: string;
+        prefabInitMethodName: string;
         sceneKey: string;
         compilerOutputLanguage: SourceLang;
         scopeBlocksToFolder: boolean;
@@ -333,7 +334,7 @@ declare namespace phasereditor2d.scene.core.json {
         borderY: number;
         borderWidth: number;
         borderHeight: number;
-        constructor(sceneType?: SceneType, compilerEnabled?: boolean, snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, preloadPackFiles?: string[], createMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
+        constructor(sceneType?: SceneType, compilerEnabled?: boolean, snapEnabled?: boolean, snapWidth?: number, snapHeight?: number, onlyGenerateMethods?: boolean, superClassName?: string, preloadMethodName?: string, preloadPackFiles?: string[], createMethodName?: string, prefabInitMethodName?: string, sceneKey?: string, compilerOutputLanguage?: SourceLang, scopeBlocksToFolder?: boolean, borderX?: number, borderY?: number, borderWidth?: number, borderHeight?: number);
         toJSON(): {};
         readJSON(data: object): void;
     }
@@ -975,6 +976,14 @@ declare namespace phasereditor2d.scene.ui.editor.properties {
     class CompilerSection extends SceneSection {
         constructor(page: controls.properties.PropertyPage);
         protected createForm(parent: HTMLDivElement): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.editor.properties {
+    import controls = colibri.ui.controls;
+    class PrefabCompilerSection extends SceneSection {
+        constructor(page: controls.properties.PropertyPage);
+        protected createForm(parent: HTMLDivElement): void;
+        canEdit(obj: any, n: number): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.properties {

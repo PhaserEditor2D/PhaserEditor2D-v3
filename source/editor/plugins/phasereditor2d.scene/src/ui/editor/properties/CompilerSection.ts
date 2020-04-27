@@ -50,9 +50,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this.createStringField(
                 comp, "superClassName", "Super Class",
                 "The super class used for the scene. If it is blank (no-value) then use default value.");
-
-            this.createStringField(
-                comp, "createMethodName", "Create Method", "The name of the create method.");
         }
     }
 }

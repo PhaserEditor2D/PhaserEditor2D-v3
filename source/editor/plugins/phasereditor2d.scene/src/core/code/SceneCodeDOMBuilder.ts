@@ -224,9 +224,9 @@ namespace phasereditor2d.scene.core.code {
             this.addFieldInitCode(ctrDecl.getBody());
 
             {
-                const createName = settings.createMethodName;
+                const initMethodName = settings.prefabInitMethodName;
 
-                if (createName) {
+                if (initMethodName) {
 
                     const body = ctrDecl.getBody();
 
@@ -234,7 +234,7 @@ namespace phasereditor2d.scene.core.code {
                         body.push(new RawCodeDOM(""));
                     }
 
-                    body.push(new MethodCallCodeDOM(createName, "this"));
+                    body.push(new MethodCallCodeDOM(initMethodName, "this"));
                 }
             }
 
