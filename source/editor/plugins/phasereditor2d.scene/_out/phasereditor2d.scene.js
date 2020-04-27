@@ -884,15 +884,10 @@ var phasereditor2d;
                     async build() {
                         const settings = this._scene.getSettings();
                         const methods = [];
-                        if (!this._isPrefabScene) {
-                            if (settings.preloadPackFiles.length > 0) {
-                                const preloadDom = await this.buildPreloadMethod();
-                                methods.push(preloadDom);
-                            }
-                        }
                         const unit = new code.UnitCodeDOM([]);
                         if (settings.onlyGenerateMethods) {
                             const createMethodDecl = this.buildCreateMethod();
+                            await this.buildPreloadMethod(unit.getBody());
                             unit.getBody().push(createMethodDecl);
                         }
                         else {
@@ -931,6 +926,8 @@ var phasereditor2d;
                                     const ctrMethod = this.buildSceneConstructorMethod(key);
                                     methods.push(ctrMethod);
                                 }
+                                // scene preload method
+                                await this.buildPreloadMethod(methods);
                                 // scene create method
                                 const createMethodDecl = this.buildCreateMethod();
                                 methods.push(createMethodDecl);
@@ -1182,8 +1179,11 @@ var phasereditor2d;
                         methodDecl.getBody().push(superCall);
                         return methodDecl;
                     }
-                    async buildPreloadMethod() {
+                    async buildPreloadMethod(methods) {
                         const settings = this._scene.getSettings();
+                        if (settings.preloadPackFiles.length === 0) {
+                            return;
+                        }
                         const preloadDom = new code.MethodDeclCodeDOM(settings.preloadMethodName);
                         preloadDom.getBody().push(new code.RawCodeDOM(""));
                         const ctx = (this._isPrefabScene ? "scene" : "this");
@@ -1197,7 +1197,7 @@ var phasereditor2d;
                             call.argLiteral(relativeName);
                             preloadDom.getBody().push(call);
                         }
-                        return preloadDom;
+                        methods.push(preloadDom);
                     }
                 }
                 code.SceneCodeDOMBuilder = SceneCodeDOMBuilder;

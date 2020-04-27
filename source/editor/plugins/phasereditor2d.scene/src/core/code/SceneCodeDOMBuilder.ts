@@ -22,21 +22,13 @@ namespace phasereditor2d.scene.core.code {
 
             const methods: MemberDeclCodeDOM[] = [];
 
-            if (!this._isPrefabScene) {
-
-                if (settings.preloadPackFiles.length > 0) {
-
-                    const preloadDom = await this.buildPreloadMethod();
-
-                    methods.push(preloadDom);
-                }
-            }
-
             const unit = new UnitCodeDOM([]);
 
             if (settings.onlyGenerateMethods) {
 
                 const createMethodDecl = this.buildCreateMethod();
+
+                await this.buildPreloadMethod(unit.getBody() as any);
 
                 unit.getBody().push(createMethodDecl);
 
@@ -96,6 +88,10 @@ namespace phasereditor2d.scene.core.code {
                         const ctrMethod = this.buildSceneConstructorMethod(key);
                         methods.push(ctrMethod);
                     }
+
+                    // scene preload method
+
+                    await this.buildPreloadMethod(methods);
 
                     // scene create method
 
@@ -500,9 +496,14 @@ namespace phasereditor2d.scene.core.code {
             return methodDecl;
         }
 
-        private async buildPreloadMethod() {
+        private async buildPreloadMethod(methods: MemberDeclCodeDOM[]) {
 
             const settings = this._scene.getSettings();
+
+            if (settings.preloadPackFiles.length === 0) {
+
+                return;
+            }
 
             const preloadDom = new MethodDeclCodeDOM(settings.preloadMethodName);
 
@@ -528,7 +529,7 @@ namespace phasereditor2d.scene.core.code {
                 preloadDom.getBody().push(call);
             }
 
-            return preloadDom;
+            methods.push(preloadDom);
         }
     }
 }
