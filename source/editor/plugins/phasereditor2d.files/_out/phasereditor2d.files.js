@@ -914,6 +914,7 @@ var phasereditor2d;
                                 view.getViewer().repaint();
                             }
                             this.close();
+                            phasereditor2d.blocks.BlocksPlugin.getInstance().refreshBlocksView();
                         });
                         super.addButton("Browse", () => {
                             filesInput.click();

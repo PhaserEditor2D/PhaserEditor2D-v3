@@ -5,6 +5,7 @@ declare namespace phasereditor2d.blocks {
         static getInstance(): BlocksPlugin;
         private constructor();
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        refreshBlocksView(): Promise<void>;
     }
 }
 declare namespace phasereditor2d.blocks.ui.views {

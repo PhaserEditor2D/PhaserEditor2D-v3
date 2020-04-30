@@ -133,22 +133,7 @@ namespace phasereditor2d.pack.ui.properties {
 
             this.updateWithSelection();
 
-            // update Blocks view
-
-            const editor = colibri.Platform.getWorkbench().getActiveEditor();
-
-            if (editor) {
-
-                const blocksProvider = editor.getEditorViewerProvider(
-                    blocks.ui.views.BlocksView.EDITOR_VIEWER_PROVIDER_KEY);
-
-                if (blocksProvider) {
-
-                    await blocksProvider.preload(true);
-
-                    blocksProvider.repaint();
-                }
-            }
+            blocks.BlocksPlugin.getInstance().refreshBlocksView();
         }
 
         private buildImportList() {

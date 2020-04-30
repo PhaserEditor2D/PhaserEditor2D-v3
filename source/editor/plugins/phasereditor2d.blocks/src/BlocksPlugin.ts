@@ -24,6 +24,26 @@ namespace phasereditor2d.blocks {
                 ])
             );
         }
+
+        async refreshBlocksView() {
+
+            // refresh Blocks view
+
+            const editor = colibri.Platform.getWorkbench().getActiveEditor();
+
+            if (editor) {
+
+                const provider = editor.getEditorViewerProvider(
+                    blocks.ui.views.BlocksView.EDITOR_VIEWER_PROVIDER_KEY);
+
+                if (provider) {
+
+                    await provider.preload(true);
+
+                    provider.repaint();
+                }
+            }
+        }
     }
 
     colibri.Platform.addPlugin(BlocksPlugin.getInstance());

@@ -4276,15 +4276,7 @@ var phasereditor2d;
                         const newContent = JSON.stringify(pack.toJSON(), null, 4);
                         await colibri.ui.ide.FileUtils.setFileString_async(packFile, newContent);
                         this.updateWithSelection();
-                        // update Blocks view
-                        const editor = colibri.Platform.getWorkbench().getActiveEditor();
-                        if (editor) {
-                            const blocksProvider = editor.getEditorViewerProvider(phasereditor2d.blocks.ui.views.BlocksView.EDITOR_VIEWER_PROVIDER_KEY);
-                            if (blocksProvider) {
-                                await blocksProvider.preload(true);
-                                blocksProvider.repaint();
-                            }
-                        }
+                        phasereditor2d.blocks.BlocksPlugin.getInstance().refreshBlocksView();
                     }
                     buildImportList() {
                         const importList = [];

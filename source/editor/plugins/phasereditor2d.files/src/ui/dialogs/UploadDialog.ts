@@ -119,6 +119,8 @@ namespace phasereditor2d.files.ui.dialogs {
                 }
 
                 this.close();
+
+                blocks.BlocksPlugin.getInstance().refreshBlocksView();
             });
 
             super.addButton("Browse", () => {
