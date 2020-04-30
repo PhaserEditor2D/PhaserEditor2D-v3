@@ -20,4 +20,3 @@ var phasereditor2d;
 //                 David Asmuth <https://github.com/piranha771>,
 //                 Piotr Pietrzak <https://github.com/hasparus>,
 //                 Richard Davey <rich@photonstorm.com>
-/// <reference path="./matter.ts" />
