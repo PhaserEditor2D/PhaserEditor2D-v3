@@ -740,7 +740,25 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         shift: true,
                     },
                     handler: {
-                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                        testFunc: args => {
+
+                            if (!isSceneScope(args)) {
+                                return false;
+                            }
+
+                            const sel = args.activeEditor.getSelection();
+
+                            const len = sel
+
+                                .filter(obj =>
+                                    sceneobjects.EditorSupport.hasObjectComponent(
+                                        obj, sceneobjects.OriginComponent)
+                                    && (obj as sceneobjects.ISceneObject)
+                                        .getEditorSupport().isUnlockedProperty(sceneobjects.OriginComponent.originX))
+                                .length;
+
+                            return len > 0 && len === sel.length;
+                        },
                         executeFunc: args => {
 
                             const objects = args.activeEditor.getSelection()

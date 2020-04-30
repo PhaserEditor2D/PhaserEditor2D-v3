@@ -4845,7 +4845,18 @@ var phasereditor2d;
                                         shift: true,
                                     },
                                     handler: {
-                                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                                        testFunc: args => {
+                                            if (!isSceneScope(args)) {
+                                                return false;
+                                            }
+                                            const sel = args.activeEditor.getSelection();
+                                            const len = sel
+                                                .filter(obj => ui.sceneobjects.EditorSupport.hasObjectComponent(obj, ui.sceneobjects.OriginComponent)
+                                                && obj
+                                                    .getEditorSupport().isUnlockedProperty(ui.sceneobjects.OriginComponent.originX))
+                                                .length;
+                                            return len > 0 && len === sel.length;
+                                        },
                                         executeFunc: args => {
                                             const objects = args.activeEditor.getSelection()
                                                 .filter(obj => ui.sceneobjects.EditorSupport
