@@ -15,11 +15,11 @@ namespace phasereditor2d.scene.ui.blocks {
             this._packs = [];
         }
 
-        async preload() {
+        async preload(complete?: boolean) {
 
             let finder: pack.core.PackFinder;
 
-            if (this._editor.getScene()) {
+            if (this._editor.getScene() && !complete) {
 
                 finder = this._editor.getSceneMaker().getPackFinder();
 

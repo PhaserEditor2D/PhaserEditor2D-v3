@@ -1513,7 +1513,7 @@ declare namespace colibri.ui.ide {
         abstract getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): viewers.TreeViewerRenderer;
         abstract getPropertySectionProvider(): controls.properties.PropertySectionProvider;
         abstract getInput(): any;
-        abstract preload(): Promise<void>;
+        abstract preload(complete?: boolean): Promise<void>;
         abstract getUndoManager(): any;
         fillContextMenu(menu: controls.Menu): void;
     }

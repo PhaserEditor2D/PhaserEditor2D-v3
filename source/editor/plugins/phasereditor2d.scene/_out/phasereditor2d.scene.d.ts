@@ -543,7 +543,7 @@ declare namespace phasereditor2d.scene.ui.blocks {
         private _editor;
         private _packs;
         constructor(editor: editor.SceneEditor);
-        preload(): Promise<void>;
+        preload(complete?: boolean): Promise<void>;
         prepareViewerState(state: controls.viewers.ViewerState): void;
         private getFreshItems;
         private getFreshItem;

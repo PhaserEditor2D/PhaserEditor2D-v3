@@ -74,7 +74,7 @@ namespace colibri.ui.ide {
 
         abstract getInput(): any;
 
-        abstract preload(): Promise<void>;
+        abstract preload(complete?: boolean): Promise<void>;
 
         abstract getUndoManager();
 

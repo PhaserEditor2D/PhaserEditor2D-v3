@@ -2551,9 +2551,9 @@ var phasereditor2d;
                         this._editor = editor;
                         this._packs = [];
                     }
-                    async preload() {
+                    async preload(complete) {
                         let finder;
-                        if (this._editor.getScene()) {
+                        if (this._editor.getScene() && !complete) {
                             finder = this._editor.getSceneMaker().getPackFinder();
                         }
                         else {
