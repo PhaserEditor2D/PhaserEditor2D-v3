@@ -49,7 +49,10 @@ namespace phasereditor2d.files.ui.actions {
             });
 
             dlg.setResultCallback(result => {
+
                 colibri.ui.ide.FileUtils.renameFile_async(file, result);
+
+                blocks.BlocksPlugin.getInstance().refreshBlocksView();
             });
 
             dlg.validate();

@@ -77,6 +77,7 @@ var phasereditor2d;
                                 }
                                 this.getViewViewer().repaint();
                                 dlg.close();
+                                phasereditor2d.blocks.BlocksPlugin.getInstance().refreshBlocksView();
                             });
                             btn.disabled = true;
                             viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
@@ -134,11 +135,12 @@ var phasereditor2d;
                             enabled: DeleteFilesAction.isEnabled(view)
                         });
                     }
-                    run() {
+                    async run() {
                         const files = this.getViewViewerSelection();
                         if (confirm(`Do you want to delete ${files.length} files?\This operation cannot be undone.`)) {
                             if (files.length > 0) {
-                                colibri.ui.ide.FileUtils.deleteFiles_async(files);
+                                await colibri.ui.ide.FileUtils.deleteFiles_async(files);
+                                phasereditor2d.blocks.BlocksPlugin.getInstance().refreshBlocksView();
                             }
                         }
                     }
@@ -235,6 +237,7 @@ var phasereditor2d;
                                 await colibri.ui.ide.FileUtils.moveFiles_async(movingFiles, moveTo);
                                 this.getViewViewer().reveal(movingFiles[0]);
                                 this.getViewViewer().repaint();
+                                phasereditor2d.blocks.BlocksPlugin.getInstance().refreshBlocksView();
                                 dlg.close();
                             });
                             btn.disabled = true;
@@ -424,6 +427,7 @@ var phasereditor2d;
                         });
                         dlg.setResultCallback(result => {
                             colibri.ui.ide.FileUtils.renameFile_async(file, result);
+                            phasereditor2d.blocks.BlocksPlugin.getInstance().refreshBlocksView();
                         });
                         dlg.validate();
                     }

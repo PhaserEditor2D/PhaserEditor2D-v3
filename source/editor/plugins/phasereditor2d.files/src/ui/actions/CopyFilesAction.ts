@@ -64,6 +64,8 @@ namespace phasereditor2d.files.ui.actions {
                     this.getViewViewer().repaint();
 
                     dlg.close();
+
+                    blocks.BlocksPlugin.getInstance().refreshBlocksView();
                 });
 
                 btn.disabled = true;

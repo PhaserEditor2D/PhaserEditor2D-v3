@@ -33,7 +33,7 @@ namespace phasereditor2d.files.ui.actions {
             });
         }
 
-        run() {
+        async run() {
 
             const files = this.getViewViewerSelection();
 
@@ -41,7 +41,9 @@ namespace phasereditor2d.files.ui.actions {
 
                 if (files.length > 0) {
 
-                    colibri.ui.ide.FileUtils.deleteFiles_async(files);
+                    await colibri.ui.ide.FileUtils.deleteFiles_async(files);
+
+                    blocks.BlocksPlugin.getInstance().refreshBlocksView();
                 }
             }
         }

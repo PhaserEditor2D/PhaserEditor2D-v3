@@ -46,6 +46,8 @@ namespace phasereditor2d.files.ui.actions {
                     this.getViewViewer().reveal(movingFiles[0]);
                     this.getViewViewer().repaint();
 
+                    blocks.BlocksPlugin.getInstance().refreshBlocksView();
+
                     dlg.close();
                 });
 
