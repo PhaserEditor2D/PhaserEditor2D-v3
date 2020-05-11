@@ -7030,8 +7030,8 @@ var phasereditor2d;
                     let renderX = -x;
                     let renderY = -y;
                     if (sprite instanceof sceneobjects.TileSprite) {
-                        renderX = -x - sprite.width * originX;
-                        renderY = -y - sprite.height * originY;
+                        renderX = -x - sprite.width * 0 /*originX*/;
+                        renderY = -y - sprite.height * 0 /*originY*/;
                     }
                     renderTexture.draw([sprite], renderX, renderY);
                     sprite.scaleX = scaleX;

@@ -42,8 +42,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         if (sprite instanceof TileSprite) {
 
-            renderX = -x - sprite.width * originX;
-            renderY = -y - sprite.height * originY;
+            renderX = -x - sprite.width * 0 /*originX*/;
+            renderY = -y - sprite.height * 0 /*originY*/;
         }
 
         renderTexture.draw([sprite], renderX, renderY);
