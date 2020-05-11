@@ -33,7 +33,7 @@ namespace phasereditor2d.ide.ui.actions {
 
             menu.add(new controls.Action({
                 text: "Help",
-                callback: () => controls.Controls.openUrlInNewPage("https://phasereditor2d.com/docs/v3")
+                callback: () => controls.Controls.openUrlInNewPage("https://help.phasereditor2d.com")
             }));
 
             menu.add(new controls.Action({

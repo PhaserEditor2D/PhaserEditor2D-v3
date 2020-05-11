@@ -165,7 +165,7 @@ var phasereditor2d;
         ide_1.IDEPlugin = IDEPlugin;
         colibri.Platform.addPlugin(IDEPlugin.getInstance());
         /* program entry point */
-        ide_1.VER = "3.0.0.5";
+        ide_1.VER = "3.0.0";
         async function main() {
             colibri.CACHE_VERSION = ide_1.VER;
             console.log(`%c %c Phaser Editor 2D %c v${ide_1.VER} %c %c https://phasereditor2d.com `, "background-color:red", "background-color:#3f3f3f;color:whitesmoke", "background-color:orange;color:black", "background-color:red", "background-color:silver");
@@ -536,7 +536,7 @@ var phasereditor2d;
                         menu.addCommand(colibri.ui.ide.actions.CMD_SHOW_COMMAND_PALETTE);
                         menu.add(new controls.Action({
                             text: "Help",
-                            callback: () => controls.Controls.openUrlInNewPage("https://phasereditor2d.com/docs/v3")
+                            callback: () => controls.Controls.openUrlInNewPage("https://help.phasereditor2d.com")
                         }));
                         menu.add(new controls.Action({
                             text: "About",
