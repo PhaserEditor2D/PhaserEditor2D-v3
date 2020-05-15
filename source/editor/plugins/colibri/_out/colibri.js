@@ -4152,8 +4152,11 @@ var colibri;
                             this._titleArea.classList.add("PropertyTitleArea");
                             this._expandIconElement = document.createElement("canvas");
                             this._expandIconElement.classList.add("expanded");
-                            this._expandIconElement.style.width = (this._expandIconElement.width = controls.ICON_SIZE) + "px";
-                            this._expandIconElement.style.height = (this._expandIconElement.height = controls.ICON_SIZE) + "px";
+                            this._expandIconElement.style.width =
+                                (this._expandIconElement.width = controls.RENDER_ICON_SIZE) + "px";
+                            this._expandIconElement.style.height =
+                                (this._expandIconElement.height = controls.RENDER_ICON_SIZE) + "px";
+                            controls.Controls.adjustCanvasDPI(this._expandIconElement, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE);
                             this._expandIconElement.addEventListener("mouseup", () => this.toggleSection());
                             this._titleArea.appendChild(this._expandIconElement);
                             this._expandIconContext = this._expandIconElement.getContext("2d");
@@ -4190,12 +4193,12 @@ var colibri;
                         this.updateExpandIcon();
                     }
                     updateExpandIcon() {
-                        const w = this._expandIconElement.width;
-                        const h = this._expandIconElement.height;
-                        this._expandIconContext.clearRect(0, 0, w, h);
+                        const size = controls.RENDER_ICON_SIZE;
+                        this._expandIconContext.clearRect(0, 0, size, size);
                         const icon = this.isExpanded() ? colibri.ICON_CONTROL_TREE_COLLAPSE : colibri.ICON_CONTROL_TREE_EXPAND;
                         const image = colibri.ColibriPlugin.getInstance().getIcon(icon);
-                        image.paint(this._expandIconContext, 0, 0, w, h, false);
+                        //controls.Controls.adjustCanvasDPI(this._expandIconElement);
+                        image.paint(this._expandIconContext, 0, 0, size, size, false);
                     }
                     getSection() {
                         return this._section;
