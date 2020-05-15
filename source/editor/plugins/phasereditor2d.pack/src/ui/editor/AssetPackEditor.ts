@@ -88,7 +88,7 @@ namespace phasereditor2d.pack.ui.editor {
             viewer.setLabelProvider(new viewers.AssetPackLabelProvider());
             viewer.setCellRendererProvider(new viewers.AssetPackCellRendererProvider("grid"));
             viewer.setTreeRenderer(new viewers.AssetPackTreeViewerRenderer(viewer, true));
-            viewer.setCellSize(96);
+            viewer.setCellSize(96 * controls.DEVICE_PIXEL_RATIO);
             viewer.setInput(this);
 
             viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {

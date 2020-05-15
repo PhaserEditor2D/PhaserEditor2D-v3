@@ -241,6 +241,10 @@ var colibri;
                         ctx.scale(dpr, dpr);
                         return ctx;
                     }
+                    static measureTextWidth(context, label) {
+                        const measure = context.measureText(label);
+                        return measure.width * controls.DEVICE_PIXEL_RATIO;
+                    }
                     static setDragEventImage(e, render) {
                         let canvas = document.getElementById("__drag__canvas");
                         if (!canvas) {
@@ -3715,8 +3719,8 @@ var colibri;
                         constructor(...classList) {
                             super("div", "Dialog", ...classList);
                             this._closeWithEscapeKey = true;
-                            this._width = 400;
-                            this._height = 300;
+                            this._width = 400 * controls.DEVICE_PIXEL_RATIO;
+                            this._height = 300 * controls.DEVICE_PIXEL_RATIO;
                             this._parentDialog = Dialog._dialogs.length === 0 ?
                                 null : Dialog._dialogs[Dialog._dialogs.length - 1];
                             if (Dialog._firstTime) {
@@ -3807,9 +3811,16 @@ var colibri;
                                 height: this._height
                             });
                         }
-                        setSize(width, height) {
-                            this._width = Math.floor(width);
-                            this._height = Math.floor(height);
+                        setSize(width, height, adjustToDPR = false) {
+                            this._width = Math.floor(width * (adjustToDPR ? width * controls.DEVICE_PIXEL_RATIO : 1));
+                            this._height = Math.floor(height * (adjustToDPR ? height * controls.DEVICE_PIXEL_RATIO : 1));
+                            const margin = window.innerHeight * 0.2;
+                            if (this._width > window.innerWidth) {
+                                this._width = window.innerWidth - 10;
+                            }
+                            if (this._height > window.innerHeight - margin) {
+                                this._height = window.innerHeight - margin - 10;
+                            }
                         }
                         getSize() {
                             return { width: this._width, height: this._height };
@@ -4893,7 +4904,7 @@ var colibri;
                 class GridTreeViewerRenderer extends viewers.TreeViewerRenderer {
                     constructor(viewer, flat = false, center = false) {
                         super(viewer);
-                        viewer.setCellSize(128);
+                        viewer.setCellSize(128 * controls.DEVICE_PIXEL_RATIO);
                         this._center = center;
                         this._flat = flat;
                         this._sections = [];
@@ -4917,8 +4928,9 @@ var colibri;
                         const labelProvider = viewer.getLabelProvider();
                         let cellSize = viewer.getCellSize();
                         if (this._flat) {
-                            if (cellSize < 64) {
-                                cellSize = 64;
+                            const limit = 64 * controls.DEVICE_PIXEL_RATIO;
+                            if (cellSize < limit) {
+                                cellSize = limit;
                                 viewer.setCellSize(cellSize);
                             }
                         }
@@ -4954,8 +4966,8 @@ var colibri;
                                 ctx.fillStyle = "#ff000";
                                 ctx.fillRect(0, y2 - 18, b.width, 25);
                                 ctx.fillStyle = controls.Controls.getTheme().viewerForeground + "aa";
-                                const m = ctx.measureText(label);
-                                ctx.fillText(label, b.width / 2 - m.width / 2, y2);
+                                const textWidth = controls.Controls.measureTextWidth(ctx, label);
+                                ctx.fillText(label, b.width / 2 - textWidth / 2, y2);
                                 ctx.restore();
                                 y2 += sectionMargin;
                                 const result = this.paintItems2(objects2, treeIconList, paintItems, null, x2, y2, viewers.TREE_RENDERER_GRID_PADDING, 0);
@@ -4998,7 +5010,7 @@ var colibri;
                                         const icon = colibri.ColibriPlugin.getInstance().getIcon(expanded ?
                                             colibri.ICON_CONTROL_TREE_COLLAPSE
                                             : colibri.ICON_CONTROL_TREE_EXPAND);
-                                        icon.paint(context, x + 5, iconY, controls.ICON_SIZE, controls.ICON_SIZE, false);
+                                        icon.paint(context, x + 5, iconY, viewers.TREE_ICON_SIZE, viewers.TREE_ICON_SIZE, false);
                                         treeIconList.push({
                                             rect: new controls.Rect(x, iconY, viewers.TREE_ICON_SIZE, viewers.TREE_ICON_SIZE),
                                             obj: obj
@@ -5036,8 +5048,8 @@ var colibri;
                         let line = "";
                         for (const c of label) {
                             const test = line + c;
-                            const m = ctx.measureText(test);
-                            if (m.width > args.w) {
+                            const textWidth = controls.Controls.measureTextWidth(ctx, test);
+                            if (textWidth > args.w) {
                                 if (line.length > 2) {
                                     line = line.substring(0, line.length - 2) + "..";
                                 }
@@ -5659,9 +5671,9 @@ var colibri;
                             controls.DefaultImage.paintEmpty(args.canvasContext, args.x, args.y, args.w, args.h);
                         }
                         else {
-                            const x2 = (args.w - controls.ICON_SIZE) / 2;
-                            const y2 = (args.h - controls.ICON_SIZE) / 2;
-                            this._icon.paint(args.canvasContext, args.x + x2, args.y + y2, controls.ICON_SIZE, controls.ICON_SIZE, false);
+                            const x2 = (args.w - controls.RENDER_ICON_SIZE) / 2;
+                            const y2 = (args.h - controls.RENDER_ICON_SIZE) / 2;
+                            this._icon.paint(args.canvasContext, args.x + x2, args.y + y2, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE, false);
                         }
                         /*const ctx = args.canvasContext;
             
@@ -5798,7 +5810,7 @@ var colibri;
                 class ShadowGridTreeViewerRenderer extends controls.viewers.GridTreeViewerRenderer {
                     constructor(viewer, flat = false, center = false) {
                         super(viewer, flat, center);
-                        viewer.setCellSize(64);
+                        viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
                     }
                     renderCellBack(args, selected, isLastChild) {
                         super.renderCellBack(args, selected, isLastChild);

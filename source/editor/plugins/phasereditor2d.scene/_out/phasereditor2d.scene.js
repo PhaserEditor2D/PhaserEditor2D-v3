@@ -2839,7 +2839,7 @@ var phasereditor2d;
                             this.setContentProvider(new ObjectExtensionAndPrefabContentProvider());
                             this.setTreeRenderer(treeRenderer);
                             this.setInput(ObjectExtensionAndPrefabViewer.SECTIONS);
-                            this.setCellSize(78);
+                            this.setCellSize(78 * controls.DEVICE_PIXEL_RATIO);
                         }
                     }
                     ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION = "Built-In";
@@ -7687,7 +7687,7 @@ var phasereditor2d;
                             dlg.getViewer().setInput(finder.getPacks()
                                 .flatMap(pack => pack.getItems())
                                 .filter(item => item instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem));
-                            dlg.getViewer().setCellSize(128);
+                            dlg.getViewer().setCellSize(128 * colibri.ui.controls.DEVICE_PIXEL_RATIO);
                             dlg.setTitle("Select Bitmap Font");
                             const promise = new Promise((resolver, reject) => {
                                 dlg.setSelectionCallback(async (sel) => {
@@ -7748,6 +7748,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var controls = colibri.ui.controls;
                 class BitmapTextSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
                         super(page, "phasereditor.scene.ui.sceneobjects.BitmapTextSection", "Bitmap Text");
@@ -7766,7 +7767,7 @@ var phasereditor2d;
                                 const dlg = new phasereditor2d.pack.ui.dialogs.AssetSelectionDialog();
                                 dlg.create();
                                 dlg.setTitle("Select Bitmap Font");
-                                dlg.getViewer().setCellSize(128);
+                                dlg.getViewer().setCellSize(128 * controls.DEVICE_PIXEL_RATIO);
                                 dlg.getViewer().setInput(input);
                                 dlg.getViewer().repaint();
                                 dlg.setSelectionCallback(async (sel) => {
@@ -8551,7 +8552,7 @@ var phasereditor2d;
                         comp.style.gridTemplateColumns = "1fr";
                         comp.style.gridTemplateRows = "1fr auto";
                         const viewer = new controls.viewers.TreeViewer();
-                        viewer.setCellSize(64);
+                        viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
                         viewer.setLabelProvider(new ui.editor.outline.SceneEditorOutlineLabelProvider());
                         viewer.setCellRendererProvider(new ui.editor.outline.SceneEditorOutlineRendererProvider());
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
@@ -11662,7 +11663,7 @@ var phasereditor2d;
                         viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
                         viewer.setCellRendererProvider(new phasereditor2d.pack.ui.viewers.AssetPackCellRendererProvider("grid"));
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setCellSize(64);
+                        viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
                         viewer.setInput(this._finder.getPacks()
                             .flatMap(pack => pack.getItems())
                             .filter(item => item instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem)

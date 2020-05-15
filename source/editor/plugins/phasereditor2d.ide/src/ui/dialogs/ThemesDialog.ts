@@ -7,7 +7,7 @@ namespace phasereditor2d.ide.ui.dialogs {
         constructor() {
             super(new ThemeViewer());
 
-            this.setSize(200, 300);
+            this.setSize(200, 300, true);
         }
 
         create() {

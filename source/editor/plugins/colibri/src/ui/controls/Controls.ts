@@ -42,6 +42,13 @@ namespace colibri.ui.controls {
             return ctx;
         }
 
+        static measureTextWidth(context: CanvasRenderingContext2D, label: string) {
+
+            const measure = context.measureText(label);
+
+            return measure.width * DEVICE_PIXEL_RATIO;
+        }
+
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {
 
             let canvas = document.getElementById("__drag__canvas") as HTMLCanvasElement;

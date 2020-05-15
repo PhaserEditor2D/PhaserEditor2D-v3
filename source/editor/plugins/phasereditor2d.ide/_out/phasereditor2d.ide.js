@@ -1022,7 +1022,7 @@ var phasereditor2d;
                 class ThemesDialog extends controls.dialogs.ViewerDialog {
                     constructor() {
                         super(new ThemeViewer());
-                        this.setSize(200, 300);
+                        this.setSize(200, 300, true);
                     }
                     create() {
                         super.create();

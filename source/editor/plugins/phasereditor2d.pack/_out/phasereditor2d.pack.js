@@ -2158,7 +2158,7 @@ var phasereditor2d;
                         viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
                         viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setCellSize(64);
+                        viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
                         viewer.setInput([]);
                         super.create();
                         this.setTitle("Select Asset");
@@ -2280,7 +2280,7 @@ var phasereditor2d;
                         viewer.setLabelProvider(new ui.viewers.AssetPackLabelProvider());
                         viewer.setCellRendererProvider(new ui.viewers.AssetPackCellRendererProvider("grid"));
                         viewer.setTreeRenderer(new ui.viewers.AssetPackTreeViewerRenderer(viewer, true));
-                        viewer.setCellSize(96);
+                        viewer.setCellSize(96 * controls.DEVICE_PIXEL_RATIO);
                         viewer.setInput(this);
                         viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
                             this._outlineProvider.setSelection(viewer.getSelection(), true, false);

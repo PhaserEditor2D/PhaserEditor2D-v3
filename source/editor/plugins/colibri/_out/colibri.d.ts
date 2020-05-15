@@ -83,6 +83,7 @@ declare namespace colibri.ui.controls {
         private static _images;
         private static _applicationDragData;
         static adjustCanvasDPI(canvas: HTMLCanvasElement): CanvasRenderingContext2D;
+        static measureTextWidth(context: CanvasRenderingContext2D, label: string): number;
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void): void;
         static getApplicationDragData(): any[];
         static getApplicationDragDataAndClean(): any[];
@@ -887,7 +888,7 @@ declare namespace colibri.ui.controls.dialogs {
         addButton(text: string, callback: () => void): HTMLButtonElement;
         protected createDialogArea(): void;
         protected resize(): void;
-        setSize(width: number, height: number): void;
+        setSize(width: number, height: number, adjustToDPR?: boolean): void;
         getSize(): {
             width: number;
             height: number;

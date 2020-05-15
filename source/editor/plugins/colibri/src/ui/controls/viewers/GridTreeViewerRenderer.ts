@@ -12,7 +12,9 @@ namespace colibri.ui.controls.viewers {
 
         constructor(viewer: TreeViewer, flat: boolean = false, center: boolean = false) {
             super(viewer);
-            viewer.setCellSize(128);
+
+            viewer.setCellSize(128 * controls.DEVICE_PIXEL_RATIO);
+
             this._center = center;
             this._flat = flat;
             this._sections = [];
@@ -51,8 +53,10 @@ namespace colibri.ui.controls.viewers {
 
             if (this._flat) {
 
-                if (cellSize < 64) {
-                    cellSize = 64;
+                const limit = 64 * controls.DEVICE_PIXEL_RATIO;
+
+                if (cellSize < limit) {
+                    cellSize = limit;
                     viewer.setCellSize(cellSize);
                 }
 
@@ -104,9 +108,9 @@ namespace colibri.ui.controls.viewers {
 
                     ctx.fillStyle = controls.Controls.getTheme().viewerForeground + "aa";
 
-                    const m = ctx.measureText(label);
+                    const textWidth = controls.Controls.measureTextWidth(ctx, label);
 
-                    ctx.fillText(label, b.width / 2 - m.width / 2, y2);
+                    ctx.fillText(label, b.width / 2 - textWidth / 2, y2);
 
                     ctx.restore();
 
@@ -176,7 +180,7 @@ namespace colibri.ui.controls.viewers {
                                 ICON_CONTROL_TREE_COLLAPSE
                                 : ICON_CONTROL_TREE_EXPAND);
 
-                            icon.paint(context, x + 5, iconY, ICON_SIZE, ICON_SIZE, false);
+                            icon.paint(context, x + 5, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
 
                             treeIconList.push({
                                 rect: new Rect(x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE),
@@ -231,14 +235,22 @@ namespace colibri.ui.controls.viewers {
             let line = "";
 
             for (const c of label) {
+
                 const test = line + c;
-                const m = ctx.measureText(test);
-                if (m.width > args.w) {
+
+                const textWidth = controls.Controls.measureTextWidth(ctx, test);
+
+                if (textWidth > args.w) {
+
                     if (line.length > 2) {
+
                         line = line.substring(0, line.length - 2) + "..";
                     }
+
                     break;
+
                 } else {
+
                     line += c;
                 }
             }
