@@ -93,7 +93,6 @@ declare namespace colibri.ui.controls {
         static resolveNothingLoaded(): Promise<PreloadResult>;
         static getImage(url: string, id: string, appendVersion?: boolean): IImage;
         static openUrlInNewPage(url: string): void;
-        static createIconElement(icon?: IImage): HTMLCanvasElement;
         static LIGHT_THEME: ITheme;
         static DARK_THEME: ITheme;
         static _theme: ITheme;
@@ -608,7 +607,7 @@ declare namespace colibri.ui.controls {
         private _icon;
         _context: CanvasRenderingContext2D;
         private _canvas;
-        constructor(icon: IImage);
+        constructor(icon?: IImage);
         repaint(): void;
         getCanvas(): HTMLCanvasElement;
         getIcon(): IImage;

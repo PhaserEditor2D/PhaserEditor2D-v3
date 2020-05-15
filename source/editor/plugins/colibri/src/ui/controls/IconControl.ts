@@ -6,7 +6,7 @@ namespace colibri.ui.controls {
         _context: CanvasRenderingContext2D;
         private _canvas: HTMLCanvasElement;
 
-        constructor(icon: IImage) {
+        constructor(icon?: IImage) {
 
             const size = RENDER_ICON_SIZE;
 

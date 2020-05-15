@@ -311,20 +311,6 @@ var colibri;
                         element.click();
                         element.remove();
                     }
-                    static createIconElement(icon) {
-                        const size = controls.RENDER_ICON_SIZE;
-                        const canvas = document.createElement("canvas");
-                        canvas.width = canvas.height = size;
-                        canvas.style.width = canvas.style.height = size + "px";
-                        const context = canvas.getContext("2d");
-                        context.imageSmoothingEnabled = false;
-                        this.adjustCanvasDPI(canvas, size, size);
-                        context.clearRect(0, 0, size, size);
-                        if (icon) {
-                            icon.paint(context, 0, 0, size, size, true);
-                        }
-                        return canvas;
-                    }
                     static switchTheme() {
                         const newTheme = this._theme === this.LIGHT_THEME ? this.DARK_THEME : this.LIGHT_THEME;
                         this.setTheme(newTheme);
@@ -3228,18 +3214,12 @@ var colibri;
             controls.EVENT_TAB_LABEL_RESIZED = "tabResized";
             class CloseIconManager {
                 constructor() {
-                    this._element = document.createElement("canvas");
-                    this._element.classList.add("TabPaneLabelCloseIcon");
-                    this._element.width = controls.RENDER_ICON_SIZE;
-                    this._element.height = controls.RENDER_ICON_SIZE;
-                    this._element.style.width = controls.RENDER_ICON_SIZE + "px";
-                    this._element.style.height = controls.RENDER_ICON_SIZE + "px";
-                    this._context = this._element.getContext("2d");
-                    this._element.addEventListener("mouseenter", e => {
-                        this.paint(this._overIcon);
+                    this._iconControl = new controls.IconControl();
+                    this._iconControl.getCanvas().addEventListener("mouseenter", e => {
+                        this._iconControl.setIcon(this._overIcon);
                     });
-                    this._element.addEventListener("mouseleave", e => {
-                        this.paint(this._icon);
+                    this._iconControl.getCanvas().addEventListener("mouseleave", e => {
+                        this._iconControl.setIcon(this._icon);
                     });
                 }
                 static setManager(element, manager) {
@@ -3248,24 +3228,18 @@ var colibri;
                 static getManager(element) {
                     return element["__CloseIconManager"];
                 }
-                setIcon(icon) {
+                setDefaultIcon(icon) {
                     this._icon = icon;
+                    this._iconControl.setIcon(icon);
                 }
                 setOverIcon(icon) {
                     this._overIcon = icon;
                 }
-                getElement() {
-                    return this._element;
-                }
                 repaint() {
-                    this.paint(this._icon);
+                    this._iconControl.repaint();
                 }
-                paint(icon) {
-                    if (icon) {
-                        controls.Controls.adjustCanvasDPI(this._element, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE);
-                        this._context.clearRect(0, 0, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE);
-                        icon.paint(this._context, 0, 0, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE, true);
-                    }
+                getElement() {
+                    return this._iconControl.getCanvas();
                 }
             }
             class TabIconManager {
@@ -3382,7 +3356,7 @@ var colibri;
                         labelElement.appendChild(textElement);
                         if (closeable) {
                             const manager = new CloseIconManager();
-                            manager.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE));
+                            manager.setDefaultIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE));
                             manager.repaint();
                             manager.getElement().addEventListener("click", e => {
                                 e.stopImmediatePropagation();
@@ -3407,7 +3381,7 @@ var colibri;
                     setTabCloseIcons(labelElement, icon, overIcon) {
                         const manager = CloseIconManager.getManager(labelElement);
                         if (manager) {
-                            manager.setIcon(icon);
+                            manager.setDefaultIcon(icon);
                             manager.setOverIcon(overIcon);
                             manager.repaint();
                         }
