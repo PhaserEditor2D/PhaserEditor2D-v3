@@ -7045,23 +7045,13 @@ var phasereditor2d;
                     const originX = sprite.originX;
                     const originY = sprite.originY;
                     const angle = sprite.angle;
-                    sprite.scaleX = 1;
-                    sprite.scaleY = 1;
-                    sprite.originX = 0;
-                    sprite.originY = 0;
-                    sprite.angle = 0;
-                    let renderX = -x;
-                    let renderY = -y;
-                    if (sprite instanceof sceneobjects.TileSprite) {
-                        renderX = -x - sprite.width * 0 /*originX*/;
-                        renderY = -y - sprite.height * 0 /*originY*/;
-                    }
-                    renderTexture.draw([sprite], renderX, renderY);
-                    sprite.scaleX = scaleX;
-                    sprite.scaleY = scaleY;
-                    sprite.originX = originX;
-                    sprite.originY = originY;
-                    sprite.angle = angle;
+                    sprite.setScale(1, 1);
+                    sprite.setOrigin(0, 0);
+                    sprite.setAngle(0);
+                    renderTexture.draw([sprite], -x, -y);
+                    sprite.setScale(scaleX, scaleY);
+                    sprite.setOrigin(originX, originY);
+                    sprite.setAngle(angle);
                     const colorArray = [];
                     renderTexture.snapshotPixel(0, 0, (c) => {
                         colorArray[0] = c;
@@ -9172,7 +9162,13 @@ var phasereditor2d;
                         }
                         const promise = new Promise((resolve, reject) => {
                             const angle = obj.angle;
+                            const originX = obj.originX;
+                            const originY = obj.originY;
+                            const scaleX = obj.scaleX;
+                            const scaleY = obj.scaleY;
                             obj.setAngle(0);
+                            obj.setOrigin(0, 0);
+                            obj.setScale(1, 1);
                             const w = Math.floor(obj.width);
                             const h = Math.floor(obj.height);
                             const render = new Phaser.GameObjects.RenderTexture(support.getScene(), 0, 0, w, h);
@@ -9184,6 +9180,8 @@ var phasereditor2d;
                                 resolve(controls.PreloadResult.RESOURCES_LOADED);
                             });
                             obj.setAngle(angle);
+                            obj.setOrigin(originX, originY);
+                            obj.setScale(scaleX, scaleY);
                             render.destroy();
                         });
                         obj.setData("__renderer_promise", promise);
