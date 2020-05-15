@@ -46,7 +46,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const promise = new Promise<controls.PreloadResult>((resolve, reject) => {
 
                 const angle = obj.angle;
+                const originX = obj.originX;
+                const originY = obj.originY;
+                const scaleX = obj.scaleX;
+                const scaleY = obj.scaleY;
+
                 obj.setAngle(0);
+                obj.setOrigin(0, 0);
+                obj.setScale(1, 1);
 
                 const w = Math.floor(obj.width);
                 const h = Math.floor(obj.height);
@@ -67,6 +74,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 });
 
                 obj.setAngle(angle);
+                obj.setOrigin(originX, originY);
+                obj.setScale(scaleX, scaleY);
 
                 render.destroy();
             });
