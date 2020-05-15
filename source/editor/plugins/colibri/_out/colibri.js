@@ -2360,6 +2360,47 @@ var colibri;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
 })(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var controls;
+        (function (controls) {
+            class IconControl {
+                constructor(icon) {
+                    const size = controls.RENDER_ICON_SIZE;
+                    this._canvas = document.createElement("canvas");
+                    this._canvas.width = this._canvas.height = size;
+                    this._canvas.style.width = this._canvas.style.height = size + "px";
+                    this._context = this._canvas.getContext("2d");
+                    this._context.imageSmoothingEnabled = false;
+                    controls.Controls.adjustCanvasDPI(this._canvas, size, size);
+                    this.setIcon(icon);
+                }
+                repaint() {
+                    if (this._icon) {
+                        const size = controls.RENDER_ICON_SIZE;
+                        this._context.clearRect(0, 0, size, size);
+                        this._icon.paint(this._context, 0, 0, size, size, true);
+                    }
+                }
+                getCanvas() {
+                    return this._canvas;
+                }
+                getIcon() {
+                    return this._icon;
+                }
+                setIcon(icon, repaint = true) {
+                    this._icon = icon;
+                    if (repaint) {
+                        this.repaint();
+                    }
+                }
+            }
+            controls.IconControl = IconControl;
+        })(controls = ui.controls || (ui.controls = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
 /// <reference path="CanvasControl.ts" />
 var colibri;
 (function (colibri) {
@@ -2593,14 +2634,14 @@ var colibri;
                             itemElement.classList.add("MenuItem");
                             if (item instanceof controls.Action) {
                                 if (item.isSelected()) {
-                                    const checkedElement = controls.Controls.createIconElement(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_CHECKED));
-                                    checkedElement.classList.add("MenuItemCheckedIcon");
-                                    itemElement.appendChild(checkedElement);
+                                    const iconControl = new controls.IconControl(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_CHECKED));
+                                    iconControl.getCanvas().classList.add("MenuItemCheckedIcon");
+                                    itemElement.appendChild(iconControl.getCanvas());
                                 }
                                 if (item.getIcon()) {
-                                    const iconElement = controls.Controls.createIconElement(item.getIcon());
-                                    iconElement.classList.add("MenuItemIcon");
-                                    itemElement.appendChild(iconElement);
+                                    const iconControl = new controls.IconControl(item.getIcon());
+                                    iconControl.getCanvas().classList.add("MenuItemIcon");
+                                    itemElement.appendChild(iconControl.getCanvas());
                                     hasIcon = true;
                                 }
                                 const labelElement = document.createElement("label");

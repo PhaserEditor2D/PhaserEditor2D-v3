@@ -604,6 +604,18 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
+    class IconControl {
+        private _icon;
+        _context: CanvasRenderingContext2D;
+        private _canvas;
+        constructor(icon: IImage);
+        repaint(): void;
+        getCanvas(): HTMLCanvasElement;
+        getIcon(): IImage;
+        setIcon(icon: IImage, repaint?: boolean): void;
+    }
+}
+declare namespace colibri.ui.controls {
     class ImageControl extends CanvasControl {
         private _image;
         constructor(padding?: number, ...classList: string[]);
