@@ -3562,6 +3562,7 @@ var phasereditor2d;
                     }
                     resetContext() {
                         this._ctx = this._canvas.getContext("2d");
+                        controls.Controls.adjustCanvasDPI(this._canvas);
                         this._ctx.imageSmoothingEnabled = false;
                         this._ctx.font = "12px Monospace";
                     }
@@ -3869,6 +3870,7 @@ var phasereditor2d;
                             scale: {
                                 mode: Phaser.Scale.NONE
                             },
+                            // resolution: window.devicePixelRatio,
                             render: {
                                 pixelArt: true,
                                 transparent: true
