@@ -82,7 +82,7 @@ declare namespace colibri.ui.controls {
     class Controls {
         private static _images;
         private static _applicationDragData;
-        static adjustCanvasDPI(canvas: HTMLCanvasElement): CanvasRenderingContext2D;
+        static adjustCanvasDPI(canvas: HTMLCanvasElement, widthHint?: number, heightHint?: number): CanvasRenderingContext2D;
         static measureTextWidth(context: CanvasRenderingContext2D, label: string): number;
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void): void;
         static getApplicationDragData(): any[];

@@ -19,7 +19,7 @@ namespace colibri.ui.controls {
         private static _images: Map<string, IImage> = new Map();
         private static _applicationDragData: any[] = null;
 
-        static adjustCanvasDPI(canvas: HTMLCanvasElement) {
+        static adjustCanvasDPI(canvas: HTMLCanvasElement, widthHint = 1, heightHint = 1) {
 
             const dpr = window.devicePixelRatio || 1;
 
@@ -28,12 +28,13 @@ namespace colibri.ui.controls {
                 return;
             }
 
-            console.log("Detected DPR " + dpr);
-
             const rect = canvas.getBoundingClientRect();
 
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
+            const width = rect.width === 0 ? widthHint : rect.width;
+            const height = rect.height === 0 ? heightHint : rect.height;
+
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
 
             const ctx = canvas.getContext("2d");
 

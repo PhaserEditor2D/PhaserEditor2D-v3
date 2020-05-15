@@ -228,15 +228,16 @@ var colibri;
             controls.RENDER_ICON_SIZE = 16;
             let Controls = /** @class */ (() => {
                 class Controls {
-                    static adjustCanvasDPI(canvas) {
+                    static adjustCanvasDPI(canvas, widthHint = 1, heightHint = 1) {
                         const dpr = window.devicePixelRatio || 1;
                         if (dpr === 1) {
                             return;
                         }
-                        console.log("Detected DPR " + dpr);
                         const rect = canvas.getBoundingClientRect();
-                        canvas.width = rect.width * dpr;
-                        canvas.height = rect.height * dpr;
+                        const width = rect.width === 0 ? widthHint : rect.width;
+                        const height = rect.height === 0 ? heightHint : rect.height;
+                        canvas.width = width * dpr;
+                        canvas.height = height * dpr;
                         const ctx = canvas.getContext("2d");
                         ctx.scale(dpr, dpr);
                         return ctx;
@@ -3186,10 +3187,10 @@ var colibri;
                 constructor() {
                     this._element = document.createElement("canvas");
                     this._element.classList.add("TabPaneLabelCloseIcon");
-                    this._element.width = controls.ICON_SIZE;
-                    this._element.height = controls.ICON_SIZE;
-                    this._element.style.width = controls.ICON_SIZE + "px";
-                    this._element.style.height = controls.ICON_SIZE + "px";
+                    this._element.width = controls.RENDER_ICON_SIZE;
+                    this._element.height = controls.RENDER_ICON_SIZE;
+                    this._element.style.width = controls.RENDER_ICON_SIZE + "px";
+                    this._element.style.height = controls.RENDER_ICON_SIZE + "px";
                     this._context = this._element.getContext("2d");
                     this._element.addEventListener("mouseenter", e => {
                         this.paint(this._overIcon);
@@ -3218,8 +3219,9 @@ var colibri;
                 }
                 paint(icon) {
                     if (icon) {
-                        this._context.clearRect(0, 0, controls.ICON_SIZE, controls.ICON_SIZE);
-                        icon.paint(this._context, 0, 0, controls.ICON_SIZE, controls.ICON_SIZE, true);
+                        controls.Controls.adjustCanvasDPI(this._element, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE);
+                        this._context.clearRect(0, 0, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE);
+                        icon.paint(this._context, 0, 0, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE, true);
                     }
                 }
             }
@@ -3237,9 +3239,10 @@ var colibri;
                     return canvas;
                 }
                 resize(size) {
-                    size = Math.max(size, controls.ICON_SIZE);
-                    if (this._icon && this._icon.getWidth() === controls.ICON_SIZE && this._icon.getHeight() === controls.ICON_SIZE) {
-                        size = controls.ICON_SIZE;
+                    size = Math.max(size, controls.RENDER_ICON_SIZE);
+                    if (this._icon && this._icon.getWidth() === controls.ICON_SIZE
+                        && this._icon.getHeight() === controls.ICON_SIZE) {
+                        size = controls.RENDER_ICON_SIZE;
                     }
                     this._canvas.width = this._canvas.height = size;
                     this._canvas.style.width = this._canvas.style.height = size + "px";
@@ -3253,6 +3256,7 @@ var colibri;
                     this.repaint();
                 }
                 repaint() {
+                    controls.Controls.adjustCanvasDPI(this._canvas);
                     const ctx = this._canvas.getContext("2d");
                     ctx.imageSmoothingEnabled = false;
                     ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -3261,11 +3265,15 @@ var colibri;
                     }
                     const w = this._icon.getWidth();
                     const h = this._icon.getHeight();
+                    const canvasWidth = this._canvas.width / controls.DEVICE_PIXEL_RATIO;
+                    const canvasHeight = this._canvas.height / controls.DEVICE_PIXEL_RATIO;
                     if (w === controls.ICON_SIZE && h === controls.ICON_SIZE) {
-                        this._icon.paint(ctx, (this._canvas.width - w) / 2, (this._canvas.height - h) / 2, w, h, false);
+                        // is a real, fixed size icon image
+                        this._icon.paint(ctx, (canvasWidth - controls.RENDER_ICON_SIZE) / 2, (canvasHeight - controls.RENDER_ICON_SIZE) / 2, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE, false);
                     }
                     else {
-                        this._icon.paint(ctx, 0, 0, this._canvas.width, this._canvas.height, true);
+                        // is a scalable icon image
+                        this._icon.paint(ctx, 0, 0, canvasWidth, canvasHeight, true);
                     }
                 }
             }
@@ -3279,7 +3287,7 @@ var colibri;
                         this._contentAreaElement = document.createElement("div");
                         this._contentAreaElement.classList.add("TabPaneContentArea");
                         this.getElement().appendChild(this._contentAreaElement);
-                        this._iconSize = controls.ICON_SIZE;
+                        this._iconSize = controls.RENDER_ICON_SIZE;
                     }
                     addTab(label, icon, content, closeable = false, selectIt = true) {
                         const labelElement = this.makeLabel(label, icon, closeable);
@@ -3309,7 +3317,7 @@ var colibri;
                         return this._iconSize;
                     }
                     setTabIconSize(size) {
-                        this._iconSize = Math.max(controls.ICON_SIZE, size);
+                        this._iconSize = Math.max(controls.RENDER_ICON_SIZE, size);
                         for (let i = 0; i < this._titleBarElement.children.length; i++) {
                             const label = this._titleBarElement.children.item(i);
                             const iconCanvas = label.firstChild;
