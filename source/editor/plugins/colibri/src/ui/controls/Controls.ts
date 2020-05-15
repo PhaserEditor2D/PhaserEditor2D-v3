@@ -146,7 +146,9 @@ namespace colibri.ui.controls {
             element.remove();
         }
 
-        static createIconElement(icon?: IImage, size: number = ICON_SIZE) {
+        static createIconElement(icon?: IImage) {
+
+            const size = RENDER_ICON_SIZE;
 
             const canvas = document.createElement("canvas");
 
@@ -157,10 +159,12 @@ namespace colibri.ui.controls {
 
             context.imageSmoothingEnabled = false;
 
-            context.clearRect(0, 0, canvas.width, canvas.height);
+            this.adjustCanvasDPI(canvas, size, size);
+
+            context.clearRect(0, 0, size, size);
 
             if (icon) {
-                icon.paint(context, 0, 0, canvas.width, canvas.height, true);
+                icon.paint(context, 0, 0, size, size, true);
             }
 
             return canvas;

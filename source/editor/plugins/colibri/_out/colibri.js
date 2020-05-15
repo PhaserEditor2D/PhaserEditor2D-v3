@@ -311,15 +311,17 @@ var colibri;
                         element.click();
                         element.remove();
                     }
-                    static createIconElement(icon, size = controls.ICON_SIZE) {
+                    static createIconElement(icon) {
+                        const size = controls.RENDER_ICON_SIZE;
                         const canvas = document.createElement("canvas");
                         canvas.width = canvas.height = size;
                         canvas.style.width = canvas.style.height = size + "px";
                         const context = canvas.getContext("2d");
                         context.imageSmoothingEnabled = false;
-                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        this.adjustCanvasDPI(canvas, size, size);
+                        context.clearRect(0, 0, size, size);
                         if (icon) {
-                            icon.paint(context, 0, 0, canvas.width, canvas.height, true);
+                            icon.paint(context, 0, 0, size, size, true);
                         }
                         return canvas;
                     }

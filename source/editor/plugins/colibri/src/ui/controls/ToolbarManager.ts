@@ -30,6 +30,7 @@ namespace colibri.ui.controls {
             });
 
             if (action.getIcon()) {
+
                 const iconElement = controls.Controls.createIconElement(action.getIcon());
                 btnElement.appendChild(iconElement);
                 btnElement["__icon"] = iconElement;
