@@ -3,7 +3,7 @@
 
 namespace colibri.ui.controls.viewers {
 
-    export const TREE_ICON_SIZE = ICON_SIZE;
+    export const TREE_ICON_SIZE = RENDER_ICON_SIZE;
     export const LABEL_MARGIN = TREE_ICON_SIZE + 0;
 
     export declare type TreeIconInfo = {

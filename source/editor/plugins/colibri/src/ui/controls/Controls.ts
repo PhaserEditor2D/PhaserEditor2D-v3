@@ -10,12 +10,37 @@ namespace colibri.ui.controls {
         RESOURCES_LOADED
     }
 
-    export const ICON_SIZE = 16;
+    export const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
+    export const ICON_SIZE = DEVICE_PIXEL_RATIO > 1 ? 32 : 16;
+    export const RENDER_ICON_SIZE = 16;
 
     export class Controls {
 
         private static _images: Map<string, IImage> = new Map();
         private static _applicationDragData: any[] = null;
+
+        static adjustCanvasDPI(canvas: HTMLCanvasElement) {
+
+            const dpr = window.devicePixelRatio || 1;
+
+            if (dpr === 1) {
+
+                return;
+            }
+
+            console.log("Detected DPR " + dpr);
+
+            const rect = canvas.getBoundingClientRect();
+
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+
+            const ctx = canvas.getContext("2d");
+
+            ctx.scale(dpr, dpr);
+
+            return ctx;
+        }
 
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {
 

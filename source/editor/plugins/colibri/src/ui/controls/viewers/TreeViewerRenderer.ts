@@ -85,7 +85,7 @@ namespace colibri.ui.controls.viewers {
                             const icon = ColibriPlugin.getInstance()
                                 .getIcon(expanded ? ICON_CONTROL_TREE_COLLAPSE : ICON_CONTROL_TREE_EXPAND);
 
-                            icon.paint(context, x, iconY, ICON_SIZE, ICON_SIZE, false);
+                            icon.paint(context, x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
 
                             treeIconList.push({
                                 rect: new Rect(x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE),
@@ -133,7 +133,7 @@ namespace colibri.ui.controls.viewers {
             if (args.h <= ROW_HEIGHT) {
 
                 args2 = new RenderCellArgs(
-                    args.canvasContext, args.x, args.y, ICON_SIZE, args.h, args.obj, args.viewer);
+                    args.canvasContext, args.x, args.y, TREE_ICON_SIZE, args.h, args.obj, args.viewer);
 
                 x += 20;
                 y += 15;

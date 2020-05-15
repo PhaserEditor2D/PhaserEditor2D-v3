@@ -3,24 +3,27 @@ var phasereditor2d;
     var images;
     (function (images) {
         var ide = colibri.ui.ide;
-        class ImagesPlugin extends colibri.Plugin {
-            constructor() {
-                super("phasereditor2d.images");
+        let ImagesPlugin = /** @class */ (() => {
+            class ImagesPlugin extends colibri.Plugin {
+                constructor() {
+                    super("phasereditor2d.images");
+                }
+                static getInstance() {
+                    return this._instance;
+                }
+                registerExtensions(reg) {
+                    // file cell renderers
+                    reg
+                        .addExtension(new phasereditor2d.files.ui.viewers.SimpleContentTypeCellRendererExtension(phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, new images.ui.viewers.ImageFileCellRenderer()));
+                    reg
+                        .addExtension(new phasereditor2d.files.ui.viewers.SimpleContentTypeCellRendererExtension(phasereditor2d.webContentTypes.core.CONTENT_TYPE_SVG, new images.ui.viewers.ImageFileCellRenderer()));
+                    // editors
+                    reg.addExtension(new ide.EditorExtension([images.ui.editors.ImageEditor.getFactory()]));
+                }
             }
-            static getInstance() {
-                return this._instance;
-            }
-            registerExtensions(reg) {
-                // file cell renderers
-                reg
-                    .addExtension(new phasereditor2d.files.ui.viewers.SimpleContentTypeCellRendererExtension(phasereditor2d.webContentTypes.core.CONTENT_TYPE_IMAGE, new images.ui.viewers.ImageFileCellRenderer()));
-                reg
-                    .addExtension(new phasereditor2d.files.ui.viewers.SimpleContentTypeCellRendererExtension(phasereditor2d.webContentTypes.core.CONTENT_TYPE_SVG, new images.ui.viewers.ImageFileCellRenderer()));
-                // editors
-                reg.addExtension(new ide.EditorExtension([images.ui.editors.ImageEditor.getFactory()]));
-            }
-        }
-        ImagesPlugin._instance = new ImagesPlugin();
+            ImagesPlugin._instance = new ImagesPlugin();
+            return ImagesPlugin;
+        })();
         images.ImagesPlugin = ImagesPlugin;
         colibri.Platform.addPlugin(ImagesPlugin.getInstance());
     })(images = phasereditor2d.images || (phasereditor2d.images = {}));

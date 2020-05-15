@@ -39,33 +39,36 @@ var colibri;
 var colibri;
 (function (colibri) {
     colibri.CACHE_VERSION = "1";
-    class Platform {
-        static addPlugin(plugin) {
-            this._plugins.push(plugin);
-        }
-        static getPlugins() {
-            return this._plugins;
-        }
-        static getExtensionRegistry() {
-            if (!this._extensionRegistry) {
-                this._extensionRegistry = new colibri.ExtensionRegistry();
+    let Platform = /** @class */ (() => {
+        class Platform {
+            static addPlugin(plugin) {
+                this._plugins.push(plugin);
             }
-            return this._extensionRegistry;
+            static getPlugins() {
+                return this._plugins;
+            }
+            static getExtensionRegistry() {
+                if (!this._extensionRegistry) {
+                    this._extensionRegistry = new colibri.ExtensionRegistry();
+                }
+                return this._extensionRegistry;
+            }
+            static getExtensions(point) {
+                return this._extensionRegistry.getExtensions(point);
+            }
+            static addExtension(...extensions) {
+                this._extensionRegistry.addExtension(...extensions);
+            }
+            static getWorkbench() {
+                return colibri.ui.ide.Workbench.getWorkbench();
+            }
+            static start() {
+                return this.getWorkbench().launch();
+            }
         }
-        static getExtensions(point) {
-            return this._extensionRegistry.getExtensions(point);
-        }
-        static addExtension(...extensions) {
-            this._extensionRegistry.addExtension(...extensions);
-        }
-        static getWorkbench() {
-            return colibri.ui.ide.Workbench.getWorkbench();
-        }
-        static start() {
-            return this.getWorkbench().launch();
-        }
-    }
-    Platform._plugins = [];
+        Platform._plugins = [];
+        return Platform;
+    })();
     colibri.Platform = Platform;
 })(colibri || (colibri = {}));
 var colibri;
@@ -220,147 +223,165 @@ var colibri;
                 PreloadResult[PreloadResult["NOTHING_LOADED"] = 0] = "NOTHING_LOADED";
                 PreloadResult[PreloadResult["RESOURCES_LOADED"] = 1] = "RESOURCES_LOADED";
             })(PreloadResult = controls.PreloadResult || (controls.PreloadResult = {}));
-            controls.ICON_SIZE = 16;
-            class Controls {
-                static setDragEventImage(e, render) {
-                    let canvas = document.getElementById("__drag__canvas");
-                    if (!canvas) {
-                        canvas = document.createElement("canvas");
-                        canvas.setAttribute("id", "__drag__canvas");
-                        canvas.style.imageRendering = "crisp-edges";
-                        canvas.width = 64;
-                        canvas.height = 64;
-                        canvas.style.width = canvas.width + "px";
-                        canvas.style.height = canvas.height + "px";
-                        canvas.style.position = "fixed";
-                        canvas.style.left = -100 + "px";
-                        document.body.appendChild(canvas);
-                    }
-                    const ctx = canvas.getContext("2d");
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    render(ctx, canvas.width, canvas.height);
-                    e.dataTransfer.setDragImage(canvas, 10, 10);
-                }
-                static getApplicationDragData() {
-                    return this._applicationDragData;
-                }
-                static getApplicationDragDataAndClean() {
-                    const data = this._applicationDragData;
-                    this._applicationDragData = null;
-                    return data;
-                }
-                static setApplicationDragData(data) {
-                    this._applicationDragData = data;
-                }
-                static async resolveAll(list) {
-                    let result = PreloadResult.NOTHING_LOADED;
-                    for (const promise of list) {
-                        const result2 = await promise;
-                        if (result2 === PreloadResult.RESOURCES_LOADED) {
-                            result = PreloadResult.RESOURCES_LOADED;
+            controls.DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
+            controls.ICON_SIZE = controls.DEVICE_PIXEL_RATIO > 1 ? 32 : 16;
+            controls.RENDER_ICON_SIZE = 16;
+            let Controls = /** @class */ (() => {
+                class Controls {
+                    static adjustCanvasDPI(canvas) {
+                        const dpr = window.devicePixelRatio || 1;
+                        if (dpr === 1) {
+                            return;
                         }
+                        console.log("Detected DPR " + dpr);
+                        const rect = canvas.getBoundingClientRect();
+                        canvas.width = rect.width * dpr;
+                        canvas.height = rect.height * dpr;
+                        const ctx = canvas.getContext("2d");
+                        ctx.scale(dpr, dpr);
+                        return ctx;
                     }
-                    return Promise.resolve(result);
-                }
-                static resolveResourceLoaded() {
-                    return Promise.resolve(PreloadResult.RESOURCES_LOADED);
-                }
-                static resolveNothingLoaded() {
-                    return Promise.resolve(PreloadResult.NOTHING_LOADED);
-                }
-                static getImage(url, id, appendVersion = true) {
-                    if (Controls._images.has(id)) {
-                        return Controls._images.get(id);
+                    static setDragEventImage(e, render) {
+                        let canvas = document.getElementById("__drag__canvas");
+                        if (!canvas) {
+                            canvas = document.createElement("canvas");
+                            canvas.setAttribute("id", "__drag__canvas");
+                            canvas.style.imageRendering = "crisp-edges";
+                            canvas.width = 64;
+                            canvas.height = 64;
+                            canvas.style.width = canvas.width + "px";
+                            canvas.style.height = canvas.height + "px";
+                            canvas.style.position = "fixed";
+                            canvas.style.left = -100 + "px";
+                            document.body.appendChild(canvas);
+                        }
+                        const ctx = canvas.getContext("2d");
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        render(ctx, canvas.width, canvas.height);
+                        e.dataTransfer.setDragImage(canvas, 10, 10);
                     }
-                    if (appendVersion) {
-                        url += "?v=" + colibri.CACHE_VERSION;
+                    static getApplicationDragData() {
+                        return this._applicationDragData;
                     }
-                    const img = new controls.DefaultImage(new Image(), url);
-                    Controls._images.set(id, img);
-                    return img;
-                }
-                static openUrlInNewPage(url) {
-                    const element = document.createElement("a");
-                    element.href = url;
-                    element.target = "blank";
-                    document.body.append(element);
-                    element.click();
-                    element.remove();
-                }
-                static createIconElement(icon, size = controls.ICON_SIZE) {
-                    const canvas = document.createElement("canvas");
-                    canvas.width = canvas.height = size;
-                    canvas.style.width = canvas.style.height = size + "px";
-                    const context = canvas.getContext("2d");
-                    context.imageSmoothingEnabled = false;
-                    context.clearRect(0, 0, canvas.width, canvas.height);
-                    if (icon) {
-                        icon.paint(context, 0, 0, canvas.width, canvas.height, true);
+                    static getApplicationDragDataAndClean() {
+                        const data = this._applicationDragData;
+                        this._applicationDragData = null;
+                        return data;
                     }
-                    return canvas;
-                }
-                static switchTheme() {
-                    const newTheme = this._theme === this.LIGHT_THEME ? this.DARK_THEME : this.LIGHT_THEME;
-                    this.setTheme(newTheme);
-                    return newTheme;
-                }
-                static setTheme(theme) {
-                    const classList = document.getElementsByTagName("html")[0].classList;
-                    classList.remove(...this._theme.classList);
-                    classList.add(...theme.classList);
-                    this._theme = theme;
-                    window.dispatchEvent(new CustomEvent(controls.EVENT_THEME_CHANGED, { detail: this._theme }));
-                    localStorage.setItem("colibri.theme.id", theme.id);
-                }
-                static preloadTheme() {
-                    let id = localStorage.getItem("colibri.theme.id");
-                    if (!id) {
-                        id = "light";
+                    static setApplicationDragData(data) {
+                        this._applicationDragData = data;
                     }
-                    const classList = document.getElementsByTagName("html")[0].classList;
-                    classList.add(id);
+                    static async resolveAll(list) {
+                        let result = PreloadResult.NOTHING_LOADED;
+                        for (const promise of list) {
+                            const result2 = await promise;
+                            if (result2 === PreloadResult.RESOURCES_LOADED) {
+                                result = PreloadResult.RESOURCES_LOADED;
+                            }
+                        }
+                        return Promise.resolve(result);
+                    }
+                    static resolveResourceLoaded() {
+                        return Promise.resolve(PreloadResult.RESOURCES_LOADED);
+                    }
+                    static resolveNothingLoaded() {
+                        return Promise.resolve(PreloadResult.NOTHING_LOADED);
+                    }
+                    static getImage(url, id, appendVersion = true) {
+                        if (Controls._images.has(id)) {
+                            return Controls._images.get(id);
+                        }
+                        if (appendVersion) {
+                            url += "?v=" + colibri.CACHE_VERSION;
+                        }
+                        const img = new controls.DefaultImage(new Image(), url);
+                        Controls._images.set(id, img);
+                        return img;
+                    }
+                    static openUrlInNewPage(url) {
+                        const element = document.createElement("a");
+                        element.href = url;
+                        element.target = "blank";
+                        document.body.append(element);
+                        element.click();
+                        element.remove();
+                    }
+                    static createIconElement(icon, size = controls.ICON_SIZE) {
+                        const canvas = document.createElement("canvas");
+                        canvas.width = canvas.height = size;
+                        canvas.style.width = canvas.style.height = size + "px";
+                        const context = canvas.getContext("2d");
+                        context.imageSmoothingEnabled = false;
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        if (icon) {
+                            icon.paint(context, 0, 0, canvas.width, canvas.height, true);
+                        }
+                        return canvas;
+                    }
+                    static switchTheme() {
+                        const newTheme = this._theme === this.LIGHT_THEME ? this.DARK_THEME : this.LIGHT_THEME;
+                        this.setTheme(newTheme);
+                        return newTheme;
+                    }
+                    static setTheme(theme) {
+                        const classList = document.getElementsByTagName("html")[0].classList;
+                        classList.remove(...this._theme.classList);
+                        classList.add(...theme.classList);
+                        this._theme = theme;
+                        window.dispatchEvent(new CustomEvent(controls.EVENT_THEME_CHANGED, { detail: this._theme }));
+                        localStorage.setItem("colibri.theme.id", theme.id);
+                    }
+                    static preloadTheme() {
+                        let id = localStorage.getItem("colibri.theme.id");
+                        if (!id) {
+                            id = "light";
+                        }
+                        const classList = document.getElementsByTagName("html")[0].classList;
+                        classList.add(id);
+                    }
+                    static getTheme() {
+                        return this._theme;
+                    }
+                    static drawRoundedRect(ctx, x, y, w, h, topLeft = 5, topRight = 5, bottomRight = 5, bottomLeft = 5) {
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.moveTo(x + topLeft, y);
+                        ctx.lineTo(x + w - topRight, y);
+                        ctx.quadraticCurveTo(x + w, y, x + w, y + topRight);
+                        ctx.lineTo(x + w, y + h - bottomRight);
+                        ctx.quadraticCurveTo(x + w, y + h, x + w - bottomRight, y + h);
+                        ctx.lineTo(x + bottomLeft, y + h);
+                        ctx.quadraticCurveTo(x, y + h, x, y + h - bottomLeft);
+                        ctx.lineTo(x, y + topLeft);
+                        ctx.quadraticCurveTo(x, y, x + topLeft, y);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.restore();
+                    }
                 }
-                static getTheme() {
-                    return this._theme;
-                }
-                static drawRoundedRect(ctx, x, y, w, h, topLeft = 5, topRight = 5, bottomRight = 5, bottomLeft = 5) {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.moveTo(x + topLeft, y);
-                    ctx.lineTo(x + w - topRight, y);
-                    ctx.quadraticCurveTo(x + w, y, x + w, y + topRight);
-                    ctx.lineTo(x + w, y + h - bottomRight);
-                    ctx.quadraticCurveTo(x + w, y + h, x + w - bottomRight, y + h);
-                    ctx.lineTo(x + bottomLeft, y + h);
-                    ctx.quadraticCurveTo(x, y + h, x, y + h - bottomLeft);
-                    ctx.lineTo(x, y + topLeft);
-                    ctx.quadraticCurveTo(x, y, x + topLeft, y);
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-            Controls._images = new Map();
-            Controls._applicationDragData = null;
-            Controls.LIGHT_THEME = {
-                id: "light",
-                displayName: "Light",
-                classList: ["light"],
-                dark: false,
-                viewerSelectionBackground: "#4242ff",
-                viewerSelectionForeground: "#f0f0f0",
-                viewerForeground: "#000000",
-            };
-            Controls.DARK_THEME = {
-                id: "dark",
-                displayName: "Dark",
-                classList: ["dark"],
-                dark: true,
-                viewerSelectionBackground: "#f0a050",
-                viewerSelectionForeground: "#0e0e0e",
-                viewerForeground: "#f0f0f0",
-            };
-            Controls._theme = Controls.DARK_THEME;
+                Controls._images = new Map();
+                Controls._applicationDragData = null;
+                Controls.LIGHT_THEME = {
+                    id: "light",
+                    displayName: "Light",
+                    classList: ["light"],
+                    dark: false,
+                    viewerSelectionBackground: "#4242ff",
+                    viewerSelectionForeground: "#f0f0f0",
+                    viewerForeground: "#000000",
+                };
+                Controls.DARK_THEME = {
+                    id: "dark",
+                    displayName: "Dark",
+                    classList: ["dark"],
+                    dark: true,
+                    viewerSelectionBackground: "#f0a050",
+                    viewerSelectionForeground: "#0e0e0e",
+                    viewerForeground: "#f0f0f0",
+                };
+                Controls._theme = Controls.DARK_THEME;
+                return Controls;
+            })();
             controls.Controls = Controls;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -777,7 +798,7 @@ var colibri;
         }
         static getInstance() {
             var _a;
-            return _a = this._instance, (_a !== null && _a !== void 0 ? _a : (this._instance = new ColibriPlugin()));
+            return (_a = this._instance) !== null && _a !== void 0 ? _a : (this._instance = new ColibriPlugin());
         }
         registerExtensions(reg) {
             reg.addExtension(colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
@@ -859,16 +880,19 @@ var colibri;
 (function (colibri) {
     var core;
     (function (core) {
-        class ContentTypeExtension extends colibri.Extension {
-            constructor(resolvers, priority = 10) {
-                super(ContentTypeExtension.POINT_ID, priority);
-                this._resolvers = resolvers;
+        let ContentTypeExtension = /** @class */ (() => {
+            class ContentTypeExtension extends colibri.Extension {
+                constructor(resolvers, priority = 10) {
+                    super(ContentTypeExtension.POINT_ID, priority);
+                    this._resolvers = resolvers;
+                }
+                getResolvers() {
+                    return this._resolvers;
+                }
             }
-            getResolvers() {
-                return this._resolvers;
-            }
-        }
-        ContentTypeExtension.POINT_ID = "colibri.ContentTypeExtension";
+            ContentTypeExtension.POINT_ID = "colibri.ContentTypeExtension";
+            return ContentTypeExtension;
+        })();
         core.ContentTypeExtension = ContentTypeExtension;
     })(core = colibri.core || (colibri.core = {}));
 })(colibri || (colibri = {}));
@@ -1940,7 +1964,7 @@ var colibri;
                 getValue(key, defaultValue = null) {
                     var _a;
                     const data = this.readData();
-                    return _a = data[key], (_a !== null && _a !== void 0 ? _a : defaultValue);
+                    return (_a = data[key]) !== null && _a !== void 0 ? _a : defaultValue;
                 }
             }
             preferences.Preferences = Preferences;
@@ -1972,14 +1996,14 @@ var colibri;
                 constructor(config) {
                     var _a, _b, _c, _d, _e, _f;
                     super();
-                    this._text = (_a = config.text, (_a !== null && _a !== void 0 ? _a : ""));
-                    this._tooltip = (_b = config.tooltip, (_b !== null && _b !== void 0 ? _b : ""));
+                    this._text = (_a = config.text) !== null && _a !== void 0 ? _a : "";
+                    this._tooltip = (_b = config.tooltip) !== null && _b !== void 0 ? _b : "";
                     this._showText = config.showText !== false;
-                    this._icon = (_c = config.icon, (_c !== null && _c !== void 0 ? _c : null));
+                    this._icon = (_c = config.icon) !== null && _c !== void 0 ? _c : null;
                     this._enabled = config.enabled === undefined || config.enabled;
-                    this._callback = (_d = config.callback, (_d !== null && _d !== void 0 ? _d : null));
-                    this._commandId = (_e = config.commandId, (_e !== null && _e !== void 0 ? _e : null));
-                    this._selected = (_f = config.selected, (_f !== null && _f !== void 0 ? _f : false));
+                    this._callback = (_d = config.callback) !== null && _d !== void 0 ? _d : null;
+                    this._commandId = (_e = config.commandId) !== null && _e !== void 0 ? _e : null;
+                    this._selected = (_f = config.selected) !== null && _f !== void 0 ? _f : false;
                     if (this._commandId) {
                         const manager = colibri.Platform.getWorkbench().getCommandManager();
                         const command = manager.getCommand(this._commandId);
@@ -2495,192 +2519,195 @@ var colibri;
     (function (ui) {
         var controls;
         (function (controls) {
-            class Menu {
-                constructor(text) {
-                    this._items = [];
-                    this._text = text;
-                }
-                setMenuClosedCallback(callback) {
-                    this._menuCloseCallback = callback;
-                }
-                add(action) {
-                    this._items.push(action);
-                }
-                addMenu(subMenu) {
-                    subMenu._parentMenu = this;
-                    this._items.push(subMenu);
-                }
-                addCommand(commandId, config) {
-                    if (!config) {
-                        config = {};
+            let Menu = /** @class */ (() => {
+                class Menu {
+                    constructor(text) {
+                        this._items = [];
+                        this._text = text;
                     }
-                    config.commandId = commandId;
-                    this.add(new controls.Action(config));
-                }
-                addExtension(menuId) {
-                    const exts = colibri.Platform.getExtensions(controls.MenuExtension.POINT_ID);
-                    for (const ext of exts) {
-                        if (ext.getMenuId() === menuId) {
-                            ext.fillMenu(this);
+                    setMenuClosedCallback(callback) {
+                        this._menuCloseCallback = callback;
+                    }
+                    add(action) {
+                        this._items.push(action);
+                    }
+                    addMenu(subMenu) {
+                        subMenu._parentMenu = this;
+                        this._items.push(subMenu);
+                    }
+                    addCommand(commandId, config) {
+                        if (!config) {
+                            config = {};
+                        }
+                        config.commandId = commandId;
+                        this.add(new controls.Action(config));
+                    }
+                    addExtension(menuId) {
+                        const exts = colibri.Platform.getExtensions(controls.MenuExtension.POINT_ID);
+                        for (const ext of exts) {
+                            if (ext.getMenuId() === menuId) {
+                                ext.fillMenu(this);
+                            }
                         }
                     }
-                }
-                addSeparator() {
-                    this._items.push(null);
-                }
-                isEmpty() {
-                    return this._items.length === 0;
-                }
-                getElement() {
-                    return this._element;
-                }
-                static getActiveMenu() {
-                    return this._activeMenu;
-                }
-                create(x, y, modal) {
-                    if (this._items.length === 0) {
-                        return;
+                    addSeparator() {
+                        this._items.push(null);
                     }
-                    Menu._activeMenu = this;
-                    let hasIcon = false;
-                    this._element = document.createElement("div");
-                    this._element.classList.add("Menu");
-                    let lastIsSeparator = true;
-                    for (const item of this._items) {
-                        if (item === null) {
-                            if (!lastIsSeparator) {
-                                lastIsSeparator = true;
-                                const sepElement = document.createElement("div");
-                                sepElement.classList.add("MenuItemSeparator");
-                                this._element.appendChild(sepElement);
-                            }
-                            continue;
+                    isEmpty() {
+                        return this._items.length === 0;
+                    }
+                    getElement() {
+                        return this._element;
+                    }
+                    static getActiveMenu() {
+                        return this._activeMenu;
+                    }
+                    create(x, y, modal) {
+                        if (this._items.length === 0) {
+                            return;
                         }
-                        lastIsSeparator = false;
-                        const itemElement = document.createElement("div");
-                        itemElement.classList.add("MenuItem");
-                        if (item instanceof controls.Action) {
-                            if (item.isSelected()) {
-                                const checkedElement = controls.Controls.createIconElement(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_CHECKED));
-                                checkedElement.classList.add("MenuItemCheckedIcon");
-                                itemElement.appendChild(checkedElement);
+                        Menu._activeMenu = this;
+                        let hasIcon = false;
+                        this._element = document.createElement("div");
+                        this._element.classList.add("Menu");
+                        let lastIsSeparator = true;
+                        for (const item of this._items) {
+                            if (item === null) {
+                                if (!lastIsSeparator) {
+                                    lastIsSeparator = true;
+                                    const sepElement = document.createElement("div");
+                                    sepElement.classList.add("MenuItemSeparator");
+                                    this._element.appendChild(sepElement);
+                                }
+                                continue;
                             }
-                            if (item.getIcon()) {
-                                const iconElement = controls.Controls.createIconElement(item.getIcon());
-                                iconElement.classList.add("MenuItemIcon");
-                                itemElement.appendChild(iconElement);
-                                hasIcon = true;
-                            }
-                            const labelElement = document.createElement("label");
-                            labelElement.classList.add("MenuItemText");
-                            labelElement.innerText = item.getText();
-                            itemElement.appendChild(labelElement);
-                            const keyString = item.getCommandKeyString();
-                            if (keyString) {
-                                const keyElement = document.createElement("span");
-                                keyElement.innerText = keyString;
-                                keyElement.classList.add("MenuItemKeyString");
-                                itemElement.appendChild(keyElement);
-                            }
-                            if (item.isEnabled()) {
-                                itemElement.addEventListener("click", ev => {
-                                    if (this._parentMenu) {
-                                        this._parentMenu.close();
-                                    }
-                                    this.close();
-                                    item.run();
+                            lastIsSeparator = false;
+                            const itemElement = document.createElement("div");
+                            itemElement.classList.add("MenuItem");
+                            if (item instanceof controls.Action) {
+                                if (item.isSelected()) {
+                                    const checkedElement = controls.Controls.createIconElement(colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_CHECKED));
+                                    checkedElement.classList.add("MenuItemCheckedIcon");
+                                    itemElement.appendChild(checkedElement);
+                                }
+                                if (item.getIcon()) {
+                                    const iconElement = controls.Controls.createIconElement(item.getIcon());
+                                    iconElement.classList.add("MenuItemIcon");
+                                    itemElement.appendChild(iconElement);
+                                    hasIcon = true;
+                                }
+                                const labelElement = document.createElement("label");
+                                labelElement.classList.add("MenuItemText");
+                                labelElement.innerText = item.getText();
+                                itemElement.appendChild(labelElement);
+                                const keyString = item.getCommandKeyString();
+                                if (keyString) {
+                                    const keyElement = document.createElement("span");
+                                    keyElement.innerText = keyString;
+                                    keyElement.classList.add("MenuItemKeyString");
+                                    itemElement.appendChild(keyElement);
+                                }
+                                if (item.isEnabled()) {
+                                    itemElement.addEventListener("click", ev => {
+                                        if (this._parentMenu) {
+                                            this._parentMenu.close();
+                                        }
+                                        this.close();
+                                        item.run();
+                                    });
+                                }
+                                else {
+                                    itemElement.classList.add("MenuItemDisabled");
+                                }
+                                itemElement.addEventListener("mouseenter", e => {
+                                    this.closeSubMenu();
                                 });
                             }
                             else {
-                                itemElement.classList.add("MenuItemDisabled");
+                                const subMenu = item;
+                                const labelElement = document.createElement("label");
+                                labelElement.classList.add("MenuItemText");
+                                labelElement.innerText = subMenu.getText();
+                                itemElement.appendChild(labelElement);
+                                itemElement.addEventListener("mouseenter", e => {
+                                    this.closeSubMenu();
+                                    itemElement.classList.add("MenuItemSelected");
+                                    const menuRect = this._element.getClientRects().item(0);
+                                    const subMenuX = menuRect.right;
+                                    const subMenuY = menuRect.top;
+                                    subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
+                                    this._subMenu = subMenu;
+                                    this._lastItemElementSelected = itemElement;
+                                });
+                                const keyElement = document.createElement("span");
+                                keyElement.innerHTML = "&RightTriangle;";
+                                keyElement.classList.add("MenuItemKeyString");
+                                itemElement.appendChild(keyElement);
                             }
-                            itemElement.addEventListener("mouseenter", e => {
-                                this.closeSubMenu();
-                            });
+                            this._element.appendChild(itemElement);
                         }
-                        else {
-                            const subMenu = item;
-                            const labelElement = document.createElement("label");
-                            labelElement.classList.add("MenuItemText");
-                            labelElement.innerText = subMenu.getText();
-                            itemElement.appendChild(labelElement);
-                            itemElement.addEventListener("mouseenter", e => {
-                                this.closeSubMenu();
-                                itemElement.classList.add("MenuItemSelected");
-                                const menuRect = this._element.getClientRects().item(0);
-                                const subMenuX = menuRect.right;
-                                const subMenuY = menuRect.top;
-                                subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
-                                this._subMenu = subMenu;
-                                this._lastItemElementSelected = itemElement;
-                            });
-                            const keyElement = document.createElement("span");
-                            keyElement.innerHTML = "&RightTriangle;";
-                            keyElement.classList.add("MenuItemKeyString");
-                            itemElement.appendChild(keyElement);
+                        if (!hasIcon) {
+                            this._element.classList.add("MenuNoIcon");
                         }
-                        this._element.appendChild(itemElement);
+                        if (modal) {
+                            this._bgElement = document.createElement("div");
+                            this._bgElement.classList.add("MenuContainer");
+                            this._bgElement.addEventListener("mousedown", (ev) => {
+                                ev.preventDefault();
+                                ev.stopImmediatePropagation();
+                                this.close();
+                            });
+                            document.body.appendChild(this._bgElement);
+                        }
+                        document.body.appendChild(this._element);
+                        const rect = this._element.getClientRects()[0];
+                        if (y + rect.height > window.innerHeight) {
+                            y -= rect.height;
+                        }
+                        if (x + rect.width > window.innerWidth) {
+                            x -= rect.width;
+                        }
+                        this._element.style.left = x + "px";
+                        this._element.style.top = y + "px";
                     }
-                    if (!hasIcon) {
-                        this._element.classList.add("MenuNoIcon");
+                    closeSubMenu() {
+                        if (this._lastItemElementSelected) {
+                            this._lastItemElementSelected.classList.remove("MenuItemSelected");
+                        }
+                        if (this._subMenu) {
+                            this._subMenu.close();
+                            this._subMenu = null;
+                        }
                     }
-                    if (modal) {
-                        this._bgElement = document.createElement("div");
-                        this._bgElement.classList.add("MenuContainer");
-                        this._bgElement.addEventListener("mousedown", (ev) => {
-                            ev.preventDefault();
-                            ev.stopImmediatePropagation();
-                            this.close();
-                        });
-                        document.body.appendChild(this._bgElement);
+                    createWithEvent(e) {
+                        this.create(e.clientX, e.clientY, true);
                     }
-                    document.body.appendChild(this._element);
-                    const rect = this._element.getClientRects()[0];
-                    if (y + rect.height > window.innerHeight) {
-                        y -= rect.height;
+                    getText() {
+                        return this._text;
                     }
-                    if (x + rect.width > window.innerWidth) {
-                        x -= rect.width;
+                    close() {
+                        Menu._activeMenu = this._parentMenu;
+                        if (this._bgElement) {
+                            this._bgElement.remove();
+                        }
+                        this._element.remove();
+                        if (this._menuCloseCallback) {
+                            this._menuCloseCallback();
+                        }
+                        if (this._subMenu) {
+                            this._subMenu.close();
+                        }
                     }
-                    this._element.style.left = x + "px";
-                    this._element.style.top = y + "px";
+                    closeAll() {
+                        if (this._parentMenu) {
+                            this._parentMenu.closeAll();
+                        }
+                        this.close();
+                    }
                 }
-                closeSubMenu() {
-                    if (this._lastItemElementSelected) {
-                        this._lastItemElementSelected.classList.remove("MenuItemSelected");
-                    }
-                    if (this._subMenu) {
-                        this._subMenu.close();
-                        this._subMenu = null;
-                    }
-                }
-                createWithEvent(e) {
-                    this.create(e.clientX, e.clientY, true);
-                }
-                getText() {
-                    return this._text;
-                }
-                close() {
-                    Menu._activeMenu = this._parentMenu;
-                    if (this._bgElement) {
-                        this._bgElement.remove();
-                    }
-                    this._element.remove();
-                    if (this._menuCloseCallback) {
-                        this._menuCloseCallback();
-                    }
-                    if (this._subMenu) {
-                        this._subMenu.close();
-                    }
-                }
-                closeAll() {
-                    if (this._parentMenu) {
-                        this._parentMenu.closeAll();
-                    }
-                    this.close();
-                }
-            }
-            Menu._activeMenu = null;
+                Menu._activeMenu = null;
+                return Menu;
+            })();
             controls.Menu = Menu;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -2691,27 +2718,30 @@ var colibri;
     (function (ui) {
         var controls;
         (function (controls) {
-            class MenuExtension extends colibri.Extension {
-                constructor(menuId, ...configs) {
-                    super(MenuExtension.POINT_ID);
-                    this._menuId = menuId;
-                    this._configList = configs;
-                }
-                getMenuId() {
-                    return this._menuId;
-                }
-                fillMenu(menu) {
-                    for (const config of this._configList) {
-                        if (config.separator) {
-                            menu.addSeparator();
-                        }
-                        else if (config.command) {
-                            menu.addCommand(config.command);
+            let MenuExtension = /** @class */ (() => {
+                class MenuExtension extends colibri.Extension {
+                    constructor(menuId, ...configs) {
+                        super(MenuExtension.POINT_ID);
+                        this._menuId = menuId;
+                        this._configList = configs;
+                    }
+                    getMenuId() {
+                        return this._menuId;
+                    }
+                    fillMenu(menu) {
+                        for (const config of this._configList) {
+                            if (config.separator) {
+                                menu.addSeparator();
+                            }
+                            else if (config.command) {
+                                menu.addCommand(config.command);
+                            }
                         }
                     }
                 }
-            }
-            MenuExtension.POINT_ID = "colibri.ui.controls.menus";
+                MenuExtension.POINT_ID = "colibri.ui.controls.menus";
+                return MenuExtension;
+            })();
             controls.MenuExtension = MenuExtension;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -3235,233 +3265,236 @@ var colibri;
                     }
                 }
             }
-            class TabPane extends controls.Control {
-                constructor(...classList) {
-                    super("div", "TabPane", ...classList);
-                    this._titleBarElement = document.createElement("div");
-                    this._titleBarElement.classList.add("TabPaneTitleBar");
-                    this.getElement().appendChild(this._titleBarElement);
-                    this._contentAreaElement = document.createElement("div");
-                    this._contentAreaElement.classList.add("TabPaneContentArea");
-                    this.getElement().appendChild(this._contentAreaElement);
-                    this._iconSize = controls.ICON_SIZE;
-                }
-                addTab(label, icon, content, closeable = false, selectIt = true) {
-                    const labelElement = this.makeLabel(label, icon, closeable);
-                    this._titleBarElement.appendChild(labelElement);
-                    labelElement.addEventListener("mousedown", e => {
-                        if (e.button !== 0) {
-                            e.preventDefault();
-                            e.stopImmediatePropagation();
-                            return;
-                        }
-                        if (TabPane.isTabCloseIcon(e.target)) {
-                            return;
-                        }
-                        this.selectTab(labelElement);
-                    });
-                    const contentArea = new controls.Control("div", "ContentArea");
-                    contentArea.add(content);
-                    this._contentAreaElement.appendChild(contentArea.getElement());
-                    labelElement["__contentArea"] = contentArea.getElement();
-                    if (selectIt) {
-                        if (this._titleBarElement.childElementCount === 1) {
+            let TabPane = /** @class */ (() => {
+                class TabPane extends controls.Control {
+                    constructor(...classList) {
+                        super("div", "TabPane", ...classList);
+                        this._titleBarElement = document.createElement("div");
+                        this._titleBarElement.classList.add("TabPaneTitleBar");
+                        this.getElement().appendChild(this._titleBarElement);
+                        this._contentAreaElement = document.createElement("div");
+                        this._contentAreaElement.classList.add("TabPaneContentArea");
+                        this.getElement().appendChild(this._contentAreaElement);
+                        this._iconSize = controls.ICON_SIZE;
+                    }
+                    addTab(label, icon, content, closeable = false, selectIt = true) {
+                        const labelElement = this.makeLabel(label, icon, closeable);
+                        this._titleBarElement.appendChild(labelElement);
+                        labelElement.addEventListener("mousedown", e => {
+                            if (e.button !== 0) {
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+                                return;
+                            }
+                            if (TabPane.isTabCloseIcon(e.target)) {
+                                return;
+                            }
                             this.selectTab(labelElement);
-                        }
-                    }
-                }
-                getTabIconSize() {
-                    return this._iconSize;
-                }
-                setTabIconSize(size) {
-                    this._iconSize = Math.max(controls.ICON_SIZE, size);
-                    for (let i = 0; i < this._titleBarElement.children.length; i++) {
-                        const label = this._titleBarElement.children.item(i);
-                        const iconCanvas = label.firstChild;
-                        TabIconManager.getManager(iconCanvas).resize(this._iconSize);
-                        this.layout();
-                    }
-                    this.dispatchEvent(new CustomEvent(controls.EVENT_TAB_LABEL_RESIZED, {}));
-                }
-                incrementTabIconSize(amount) {
-                    this.setTabIconSize(this._iconSize + amount);
-                }
-                makeLabel(label, icon, closeable) {
-                    const labelElement = document.createElement("div");
-                    labelElement.classList.add("TabPaneLabel");
-                    const tabIconElement = TabIconManager.createElement(icon, this._iconSize);
-                    labelElement.appendChild(tabIconElement);
-                    const textElement = document.createElement("span");
-                    textElement.innerHTML = label;
-                    labelElement.appendChild(textElement);
-                    if (closeable) {
-                        const manager = new CloseIconManager();
-                        manager.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE));
-                        manager.repaint();
-                        manager.getElement().addEventListener("click", e => {
-                            e.stopImmediatePropagation();
-                            this.closeTabLabel(labelElement);
                         });
-                        labelElement.appendChild(manager.getElement());
-                        labelElement.classList.add("closeable");
-                        CloseIconManager.setManager(labelElement, manager);
-                    }
-                    labelElement.addEventListener("contextmenu", e => this.showTabLabelMenu(e, labelElement));
-                    return labelElement;
-                }
-                showTabLabelMenu(e, labelElement) {
-                    e.preventDefault();
-                    const menu = new controls.Menu();
-                    this.fillTabMenu(menu, labelElement);
-                    menu.createWithEvent(e);
-                }
-                fillTabMenu(menu, labelElement) {
-                    // nothing
-                }
-                setTabCloseIcons(labelElement, icon, overIcon) {
-                    const manager = CloseIconManager.getManager(labelElement);
-                    if (manager) {
-                        manager.setIcon(icon);
-                        manager.setOverIcon(overIcon);
-                        manager.repaint();
-                    }
-                }
-                closeTab(content) {
-                    const label = this.getLabelFromContent(content);
-                    if (label) {
-                        this.closeTabLabel(label);
-                    }
-                }
-                closeAll() {
-                    this._titleBarElement.innerHTML = "";
-                    this._contentAreaElement.innerHTML = "";
-                }
-                closeTabLabel(labelElement) {
-                    {
-                        const content = TabPane.getContentFromLabel(labelElement);
-                        const event = new CustomEvent(controls.EVENT_TAB_CLOSED, {
-                            detail: content,
-                            cancelable: true
-                        });
-                        if (!this.dispatchEvent(event)) {
-                            return;
-                        }
-                    }
-                    const selectedLabel = this.getSelectedLabelElement();
-                    this._titleBarElement.removeChild(labelElement);
-                    const contentArea = labelElement["__contentArea"];
-                    this._contentAreaElement.removeChild(contentArea);
-                    if (selectedLabel === labelElement) {
-                        let toSelectLabel = null;
-                        let maxTime = -1;
-                        for (let j = 0; j < this._titleBarElement.children.length; j++) {
-                            const label = this._titleBarElement.children.item(j);
-                            const time = label["__selected_time"] || 0;
-                            if (time > maxTime) {
-                                toSelectLabel = label;
-                                maxTime = time;
+                        const contentArea = new controls.Control("div", "ContentArea");
+                        contentArea.add(content);
+                        this._contentAreaElement.appendChild(contentArea.getElement());
+                        labelElement["__contentArea"] = contentArea.getElement();
+                        if (selectIt) {
+                            if (this._titleBarElement.childElementCount === 1) {
+                                this.selectTab(labelElement);
                             }
                         }
-                        if (toSelectLabel) {
-                            this.selectTab(toSelectLabel);
-                        }
                     }
-                }
-                setTabTitle(content, title, icon) {
-                    for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
-                        const label = this._titleBarElement.children.item(i);
-                        const content2 = TabPane.getContentFromLabel(label);
-                        if (content2 === content) {
-                            const iconElement = label.firstChild;
-                            const textElement = iconElement.nextSibling;
-                            const manager = TabIconManager.getManager(iconElement);
-                            manager.setIcon(icon);
+                    getTabIconSize() {
+                        return this._iconSize;
+                    }
+                    setTabIconSize(size) {
+                        this._iconSize = Math.max(controls.ICON_SIZE, size);
+                        for (let i = 0; i < this._titleBarElement.children.length; i++) {
+                            const label = this._titleBarElement.children.item(i);
+                            const iconCanvas = label.firstChild;
+                            TabIconManager.getManager(iconCanvas).resize(this._iconSize);
+                            this.layout();
+                        }
+                        this.dispatchEvent(new CustomEvent(controls.EVENT_TAB_LABEL_RESIZED, {}));
+                    }
+                    incrementTabIconSize(amount) {
+                        this.setTabIconSize(this._iconSize + amount);
+                    }
+                    makeLabel(label, icon, closeable) {
+                        const labelElement = document.createElement("div");
+                        labelElement.classList.add("TabPaneLabel");
+                        const tabIconElement = TabIconManager.createElement(icon, this._iconSize);
+                        labelElement.appendChild(tabIconElement);
+                        const textElement = document.createElement("span");
+                        textElement.innerHTML = label;
+                        labelElement.appendChild(textElement);
+                        if (closeable) {
+                            const manager = new CloseIconManager();
+                            manager.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE));
                             manager.repaint();
-                            textElement.innerHTML = title;
+                            manager.getElement().addEventListener("click", e => {
+                                e.stopImmediatePropagation();
+                                this.closeTabLabel(labelElement);
+                            });
+                            labelElement.appendChild(manager.getElement());
+                            labelElement.classList.add("closeable");
+                            CloseIconManager.setManager(labelElement, manager);
+                        }
+                        labelElement.addEventListener("contextmenu", e => this.showTabLabelMenu(e, labelElement));
+                        return labelElement;
+                    }
+                    showTabLabelMenu(e, labelElement) {
+                        e.preventDefault();
+                        const menu = new controls.Menu();
+                        this.fillTabMenu(menu, labelElement);
+                        menu.createWithEvent(e);
+                    }
+                    fillTabMenu(menu, labelElement) {
+                        // nothing
+                    }
+                    setTabCloseIcons(labelElement, icon, overIcon) {
+                        const manager = CloseIconManager.getManager(labelElement);
+                        if (manager) {
+                            manager.setIcon(icon);
+                            manager.setOverIcon(overIcon);
+                            manager.repaint();
                         }
                     }
-                }
-                static isTabCloseIcon(element) {
-                    return element.classList.contains("TabPaneLabelCloseIcon");
-                }
-                static isTabLabel(element) {
-                    return element.classList.contains("TabPaneLabel");
-                }
-                getLabelFromContent(content) {
-                    for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
-                        const label = this._titleBarElement.children.item(i);
-                        const content2 = TabPane.getContentFromLabel(label);
-                        if (content2 === content) {
-                            return label;
+                    closeTab(content) {
+                        const label = this.getLabelFromContent(content);
+                        if (label) {
+                            this.closeTabLabel(label);
                         }
                     }
-                    return null;
-                }
-                static getContentAreaFromLabel(labelElement) {
-                    return labelElement["__contentArea"];
-                }
-                static getContentFromLabel(labelElement) {
-                    return controls.Control.getControlOf(this.getContentAreaFromLabel(labelElement).firstChild);
-                }
-                selectTabWithContent(content) {
-                    const label = this.getLabelFromContent(content);
-                    if (label) {
-                        this.selectTab(label);
+                    closeAll() {
+                        this._titleBarElement.innerHTML = "";
+                        this._contentAreaElement.innerHTML = "";
                     }
-                }
-                selectTab(toSelectLabel) {
-                    if (toSelectLabel) {
-                        toSelectLabel["__selected_time"] = TabPane._selectedTimeCounter++;
-                    }
-                    const selectedLabelElement = this.getSelectedLabelElement();
-                    if (selectedLabelElement) {
-                        if (selectedLabelElement === toSelectLabel) {
-                            return;
+                    closeTabLabel(labelElement) {
+                        {
+                            const content = TabPane.getContentFromLabel(labelElement);
+                            const event = new CustomEvent(controls.EVENT_TAB_CLOSED, {
+                                detail: content,
+                                cancelable: true
+                            });
+                            if (!this.dispatchEvent(event)) {
+                                return;
+                            }
                         }
-                        selectedLabelElement.classList.remove("selected");
-                        const selectedContentArea = TabPane.getContentAreaFromLabel(selectedLabelElement);
-                        selectedContentArea.classList.remove("selected");
-                    }
-                    toSelectLabel.classList.add("selected");
-                    const toSelectContentArea = TabPane.getContentAreaFromLabel(toSelectLabel);
-                    toSelectContentArea.classList.add("selected");
-                    toSelectLabel.scrollIntoView();
-                    this.dispatchEvent(new CustomEvent(controls.EVENT_TAB_SELECTED, {
-                        detail: TabPane.getContentFromLabel(toSelectLabel)
-                    }));
-                    this.dispatchLayoutEvent();
-                }
-                getSelectedTabContent() {
-                    const label = this.getSelectedLabelElement();
-                    if (label) {
-                        const area = TabPane.getContentAreaFromLabel(label);
-                        return controls.Control.getControlOf(area.firstChild);
-                    }
-                    return null;
-                }
-                isSelectedLabel(labelElement) {
-                    return labelElement === this.getSelectedLabelElement();
-                }
-                getContentList() {
-                    const list = [];
-                    for (let i = 0; i < this._titleBarElement.children.length; i++) {
-                        const label = this._titleBarElement.children.item(i);
-                        const content = TabPane.getContentFromLabel(label);
-                        list.push(content);
-                    }
-                    return list;
-                }
-                getSelectedLabelElement() {
-                    for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
-                        const label = this._titleBarElement.children.item(i);
-                        if (label.classList.contains("selected")) {
-                            return label;
+                        const selectedLabel = this.getSelectedLabelElement();
+                        this._titleBarElement.removeChild(labelElement);
+                        const contentArea = labelElement["__contentArea"];
+                        this._contentAreaElement.removeChild(contentArea);
+                        if (selectedLabel === labelElement) {
+                            let toSelectLabel = null;
+                            let maxTime = -1;
+                            for (let j = 0; j < this._titleBarElement.children.length; j++) {
+                                const label = this._titleBarElement.children.item(j);
+                                const time = label["__selected_time"] || 0;
+                                if (time > maxTime) {
+                                    toSelectLabel = label;
+                                    maxTime = time;
+                                }
+                            }
+                            if (toSelectLabel) {
+                                this.selectTab(toSelectLabel);
+                            }
                         }
                     }
-                    return undefined;
+                    setTabTitle(content, title, icon) {
+                        for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
+                            const label = this._titleBarElement.children.item(i);
+                            const content2 = TabPane.getContentFromLabel(label);
+                            if (content2 === content) {
+                                const iconElement = label.firstChild;
+                                const textElement = iconElement.nextSibling;
+                                const manager = TabIconManager.getManager(iconElement);
+                                manager.setIcon(icon);
+                                manager.repaint();
+                                textElement.innerHTML = title;
+                            }
+                        }
+                    }
+                    static isTabCloseIcon(element) {
+                        return element.classList.contains("TabPaneLabelCloseIcon");
+                    }
+                    static isTabLabel(element) {
+                        return element.classList.contains("TabPaneLabel");
+                    }
+                    getLabelFromContent(content) {
+                        for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
+                            const label = this._titleBarElement.children.item(i);
+                            const content2 = TabPane.getContentFromLabel(label);
+                            if (content2 === content) {
+                                return label;
+                            }
+                        }
+                        return null;
+                    }
+                    static getContentAreaFromLabel(labelElement) {
+                        return labelElement["__contentArea"];
+                    }
+                    static getContentFromLabel(labelElement) {
+                        return controls.Control.getControlOf(this.getContentAreaFromLabel(labelElement).firstChild);
+                    }
+                    selectTabWithContent(content) {
+                        const label = this.getLabelFromContent(content);
+                        if (label) {
+                            this.selectTab(label);
+                        }
+                    }
+                    selectTab(toSelectLabel) {
+                        if (toSelectLabel) {
+                            toSelectLabel["__selected_time"] = TabPane._selectedTimeCounter++;
+                        }
+                        const selectedLabelElement = this.getSelectedLabelElement();
+                        if (selectedLabelElement) {
+                            if (selectedLabelElement === toSelectLabel) {
+                                return;
+                            }
+                            selectedLabelElement.classList.remove("selected");
+                            const selectedContentArea = TabPane.getContentAreaFromLabel(selectedLabelElement);
+                            selectedContentArea.classList.remove("selected");
+                        }
+                        toSelectLabel.classList.add("selected");
+                        const toSelectContentArea = TabPane.getContentAreaFromLabel(toSelectLabel);
+                        toSelectContentArea.classList.add("selected");
+                        toSelectLabel.scrollIntoView();
+                        this.dispatchEvent(new CustomEvent(controls.EVENT_TAB_SELECTED, {
+                            detail: TabPane.getContentFromLabel(toSelectLabel)
+                        }));
+                        this.dispatchLayoutEvent();
+                    }
+                    getSelectedTabContent() {
+                        const label = this.getSelectedLabelElement();
+                        if (label) {
+                            const area = TabPane.getContentAreaFromLabel(label);
+                            return controls.Control.getControlOf(area.firstChild);
+                        }
+                        return null;
+                    }
+                    isSelectedLabel(labelElement) {
+                        return labelElement === this.getSelectedLabelElement();
+                    }
+                    getContentList() {
+                        const list = [];
+                        for (let i = 0; i < this._titleBarElement.children.length; i++) {
+                            const label = this._titleBarElement.children.item(i);
+                            const content = TabPane.getContentFromLabel(label);
+                            list.push(content);
+                        }
+                        return list;
+                    }
+                    getSelectedLabelElement() {
+                        for (let i = 0; i < this._titleBarElement.childElementCount; i++) {
+                            const label = this._titleBarElement.children.item(i);
+                            if (label.classList.contains("selected")) {
+                                return label;
+                            }
+                        }
+                        return undefined;
+                    }
                 }
-            }
-            TabPane._selectedTimeCounter = 0;
+                TabPane._selectedTimeCounter = 0;
+                return TabPane;
+            })();
             controls.TabPane = TabPane;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -3677,132 +3710,135 @@ var colibri;
             var dialogs;
             (function (dialogs) {
                 dialogs.EVENT_DIALOG_CLOSE = "dialogClosed";
-                class Dialog extends controls.Control {
-                    constructor(...classList) {
-                        super("div", "Dialog", ...classList);
-                        this._closeWithEscapeKey = true;
-                        this._width = 400;
-                        this._height = 300;
-                        this._parentDialog = Dialog._dialogs.length === 0 ?
-                            null : Dialog._dialogs[Dialog._dialogs.length - 1];
-                        if (Dialog._firstTime) {
-                            Dialog._firstTime = false;
-                            window.addEventListener("keydown", e => {
-                                if (e.code === "Escape") {
-                                    if (Dialog._dialogs.length > 0) {
-                                        const dlg = Dialog._dialogs[Dialog._dialogs.length - 1];
-                                        if (dlg.isCloseWithEscapeKey()) {
-                                            dlg.close();
+                let Dialog = /** @class */ (() => {
+                    class Dialog extends controls.Control {
+                        constructor(...classList) {
+                            super("div", "Dialog", ...classList);
+                            this._closeWithEscapeKey = true;
+                            this._width = 400;
+                            this._height = 300;
+                            this._parentDialog = Dialog._dialogs.length === 0 ?
+                                null : Dialog._dialogs[Dialog._dialogs.length - 1];
+                            if (Dialog._firstTime) {
+                                Dialog._firstTime = false;
+                                window.addEventListener("keydown", e => {
+                                    if (e.code === "Escape") {
+                                        if (Dialog._dialogs.length > 0) {
+                                            const dlg = Dialog._dialogs[Dialog._dialogs.length - 1];
+                                            if (dlg.isCloseWithEscapeKey()) {
+                                                dlg.close();
+                                            }
                                         }
                                     }
-                                }
+                                });
+                                window.addEventListener(controls.EVENT_THEME_CHANGED, e => {
+                                    for (const dlg of Dialog._dialogs) {
+                                        dlg.layout();
+                                    }
+                                });
+                                window.addEventListener("resize", e => {
+                                    for (const dlg of Dialog._dialogs) {
+                                        dlg.layout();
+                                    }
+                                });
+                            }
+                            Dialog._dialogs.push(this);
+                        }
+                        static closeAllDialogs() {
+                            for (const dlg of this._dialogs) {
+                                dlg.close();
+                            }
+                        }
+                        static getActiveDialog() {
+                            return Dialog._dialogs[Dialog._dialogs.length - 1];
+                        }
+                        getDialogBackgroundElement() {
+                            return this._containerElement;
+                        }
+                        setCloseWithEscapeKey(closeWithEscapeKey) {
+                            this._closeWithEscapeKey = closeWithEscapeKey;
+                        }
+                        isCloseWithEscapeKey() {
+                            return this._closeWithEscapeKey;
+                        }
+                        getParentDialog() {
+                            return this._parentDialog;
+                        }
+                        create() {
+                            this._containerElement = document.createElement("div");
+                            this._containerElement.classList.add("DialogContainer");
+                            document.body.appendChild(this._containerElement);
+                            document.body.appendChild(this.getElement());
+                            window.addEventListener("resize", () => this.resize());
+                            this._titlePaneElement = document.createElement("div");
+                            this._titlePaneElement.classList.add("DialogTitlePane");
+                            this.getElement().appendChild(this._titlePaneElement);
+                            this.createDialogArea();
+                            this._buttonPaneElement = document.createElement("div");
+                            this._buttonPaneElement.classList.add("DialogButtonPane");
+                            this.getElement().appendChild(this._buttonPaneElement);
+                            this.resize();
+                            if (this._parentDialog) {
+                                this._parentDialog._containerElement.style.display = "none";
+                                this._parentDialog.style.display = "none";
+                            }
+                        }
+                        setTitle(title) {
+                            this._titlePaneElement.innerText = title;
+                        }
+                        addCancelButton() {
+                            this.addButton("Cancel", () => this.close());
+                        }
+                        addButton(text, callback) {
+                            const btn = document.createElement("button");
+                            btn.innerText = text;
+                            btn.addEventListener("click", e => callback());
+                            this._buttonPaneElement.appendChild(btn);
+                            return btn;
+                        }
+                        createDialogArea() {
+                            // nothing
+                        }
+                        resize() {
+                            this.setBounds({
+                                x: window.innerWidth / 2 - this._width / 2,
+                                y: window.innerHeight * 0.2,
+                                width: this._width,
+                                height: this._height
                             });
-                            window.addEventListener(controls.EVENT_THEME_CHANGED, e => {
-                                for (const dlg of Dialog._dialogs) {
-                                    dlg.layout();
-                                }
-                            });
-                            window.addEventListener("resize", e => {
-                                for (const dlg of Dialog._dialogs) {
-                                    dlg.layout();
-                                }
-                            });
                         }
-                        Dialog._dialogs.push(this);
-                    }
-                    static closeAllDialogs() {
-                        for (const dlg of this._dialogs) {
-                            dlg.close();
+                        setSize(width, height) {
+                            this._width = Math.floor(width);
+                            this._height = Math.floor(height);
                         }
-                    }
-                    static getActiveDialog() {
-                        return Dialog._dialogs[Dialog._dialogs.length - 1];
-                    }
-                    getDialogBackgroundElement() {
-                        return this._containerElement;
-                    }
-                    setCloseWithEscapeKey(closeWithEscapeKey) {
-                        this._closeWithEscapeKey = closeWithEscapeKey;
-                    }
-                    isCloseWithEscapeKey() {
-                        return this._closeWithEscapeKey;
-                    }
-                    getParentDialog() {
-                        return this._parentDialog;
-                    }
-                    create() {
-                        this._containerElement = document.createElement("div");
-                        this._containerElement.classList.add("DialogContainer");
-                        document.body.appendChild(this._containerElement);
-                        document.body.appendChild(this.getElement());
-                        window.addEventListener("resize", () => this.resize());
-                        this._titlePaneElement = document.createElement("div");
-                        this._titlePaneElement.classList.add("DialogTitlePane");
-                        this.getElement().appendChild(this._titlePaneElement);
-                        this.createDialogArea();
-                        this._buttonPaneElement = document.createElement("div");
-                        this._buttonPaneElement.classList.add("DialogButtonPane");
-                        this.getElement().appendChild(this._buttonPaneElement);
-                        this.resize();
-                        if (this._parentDialog) {
-                            this._parentDialog._containerElement.style.display = "none";
-                            this._parentDialog.style.display = "none";
+                        getSize() {
+                            return { width: this._width, height: this._height };
+                        }
+                        close() {
+                            Dialog._dialogs = Dialog._dialogs.filter(d => d !== this);
+                            this._containerElement.remove();
+                            this.getElement().remove();
+                            this.dispatchEvent(new CustomEvent(dialogs.EVENT_DIALOG_CLOSE));
+                            if (this._parentDialog) {
+                                this._parentDialog._containerElement.style.display = "block";
+                                this._parentDialog.style.display = "grid";
+                                this._parentDialog.goFront();
+                            }
+                        }
+                        goFront() {
+                            // nothing
+                        }
+                        closeAll() {
+                            this.close();
+                            if (this._parentDialog) {
+                                this._parentDialog.closeAll();
+                            }
                         }
                     }
-                    setTitle(title) {
-                        this._titlePaneElement.innerText = title;
-                    }
-                    addCancelButton() {
-                        this.addButton("Cancel", () => this.close());
-                    }
-                    addButton(text, callback) {
-                        const btn = document.createElement("button");
-                        btn.innerText = text;
-                        btn.addEventListener("click", e => callback());
-                        this._buttonPaneElement.appendChild(btn);
-                        return btn;
-                    }
-                    createDialogArea() {
-                        // nothing
-                    }
-                    resize() {
-                        this.setBounds({
-                            x: window.innerWidth / 2 - this._width / 2,
-                            y: window.innerHeight * 0.2,
-                            width: this._width,
-                            height: this._height
-                        });
-                    }
-                    setSize(width, height) {
-                        this._width = Math.floor(width);
-                        this._height = Math.floor(height);
-                    }
-                    getSize() {
-                        return { width: this._width, height: this._height };
-                    }
-                    close() {
-                        Dialog._dialogs = Dialog._dialogs.filter(d => d !== this);
-                        this._containerElement.remove();
-                        this.getElement().remove();
-                        this.dispatchEvent(new CustomEvent(dialogs.EVENT_DIALOG_CLOSE));
-                        if (this._parentDialog) {
-                            this._parentDialog._containerElement.style.display = "block";
-                            this._parentDialog.style.display = "grid";
-                            this._parentDialog.goFront();
-                        }
-                    }
-                    goFront() {
-                        // nothing
-                    }
-                    closeAll() {
-                        this.close();
-                        if (this._parentDialog) {
-                            this._parentDialog.closeAll();
-                        }
-                    }
-                }
-                Dialog._dialogs = [];
-                Dialog._firstTime = true;
+                    Dialog._dialogs = [];
+                    Dialog._firstTime = true;
+                    return Dialog;
+                })();
                 dialogs.Dialog = Dialog;
             })(dialogs = controls.dialogs || (controls.dialogs = {}));
         })(controls = ui.controls || (ui.controls = {}));
@@ -4275,139 +4311,142 @@ var colibri;
         (function (controls) {
             var properties;
             (function (properties) {
-                class PropertySection {
-                    constructor(page, id, title, fillSpace = false, collapsedByDefault = false) {
-                        this._page = page;
-                        this._id = id;
-                        this._title = title;
-                        this._fillSpace = fillSpace;
-                        this._collapsedByDefault = collapsedByDefault;
-                        this._updaters = [];
-                    }
-                    updateWithSelection() {
-                        for (const updater of this._updaters) {
-                            updater();
+                let PropertySection = /** @class */ (() => {
+                    class PropertySection {
+                        constructor(page, id, title, fillSpace = false, collapsedByDefault = false) {
+                            this._page = page;
+                            this._id = id;
+                            this._title = title;
+                            this._fillSpace = fillSpace;
+                            this._collapsedByDefault = collapsedByDefault;
+                            this._updaters = [];
                         }
-                    }
-                    addUpdater(updater) {
-                        this._updaters.push(updater);
-                    }
-                    isFillSpace() {
-                        return this._fillSpace;
-                    }
-                    isCollapsedByDefault() {
-                        return this._collapsedByDefault;
-                    }
-                    getPage() {
-                        return this._page;
-                    }
-                    getSelection() {
-                        return this._page.getSelection();
-                    }
-                    getSelectionFirstElement() {
-                        return this.getSelection()[0];
-                    }
-                    getId() {
-                        return this._id;
-                    }
-                    getTitle() {
-                        return this._title;
-                    }
-                    create(parent) {
-                        this.createForm(parent);
-                    }
-                    flatValues_Number(values) {
-                        const set = new Set(values);
-                        if (set.size === 1) {
-                            const value = set.values().next().value;
-                            return value.toString();
-                        }
-                        return "";
-                    }
-                    flatValues_StringJoin(values) {
-                        return values.join(",");
-                    }
-                    flatValues_StringJoinDifferent(values) {
-                        const set = new Set(values);
-                        return [...set].join(",");
-                    }
-                    flatValues_StringOneOrNothing(values) {
-                        const set = new Set(values);
-                        return set.size === 1 ? values[0] : `(${values.length} selected)`;
-                    }
-                    createGridElement(parent, cols = 0, simpleProps = true) {
-                        const div = document.createElement("div");
-                        div.classList.add("formGrid");
-                        if (cols > 0) {
-                            div.classList.add("formGrid-cols-" + cols);
-                        }
-                        if (simpleProps) {
-                            div.classList.add("formSimpleProps");
-                        }
-                        parent.appendChild(div);
-                        return div;
-                    }
-                    createLabel(parent, text = "", tooltip = "") {
-                        const label = document.createElement("label");
-                        label.classList.add("formLabel");
-                        label.innerText = text;
-                        if (tooltip) {
-                            controls.Tooltip.tooltip(label, tooltip);
-                        }
-                        parent.appendChild(label);
-                        return label;
-                    }
-                    createButton(parent, text, callback) {
-                        const btn = document.createElement("button");
-                        btn.innerText = text;
-                        btn.addEventListener("click", e => callback(e));
-                        parent.appendChild(btn);
-                        return btn;
-                    }
-                    createMenuButton(parent, text, items, callback) {
-                        const btn = this.createButton(parent, text, e => {
-                            const menu = new controls.Menu();
-                            for (const item of items) {
-                                menu.add(new controls.Action({
-                                    text: item.name,
-                                    callback: () => {
-                                        callback(item.value);
-                                    }
-                                }));
+                        updateWithSelection() {
+                            for (const updater of this._updaters) {
+                                updater();
                             }
-                            menu.createWithEvent(e);
-                        });
-                        return btn;
-                    }
-                    createText(parent, readOnly = false) {
-                        const text = document.createElement("input");
-                        text.type = "text";
-                        text.classList.add("formText");
-                        text.readOnly = readOnly;
-                        parent.appendChild(text);
-                        return text;
-                    }
-                    createTextArea(parent, readOnly = false) {
-                        const text = document.createElement("textarea");
-                        text.classList.add("formText");
-                        text.readOnly = readOnly;
-                        parent.appendChild(text);
-                        return text;
-                    }
-                    createCheckbox(parent, label) {
-                        const check = document.createElement("input");
-                        if (label) {
-                            const id = (PropertySection.NEXT_ID++).toString();
-                            label.htmlFor = id;
-                            check.setAttribute("id", id);
                         }
-                        check.type = "checkbox";
-                        check.classList.add("formCheckbox");
-                        parent.appendChild(check);
-                        return check;
+                        addUpdater(updater) {
+                            this._updaters.push(updater);
+                        }
+                        isFillSpace() {
+                            return this._fillSpace;
+                        }
+                        isCollapsedByDefault() {
+                            return this._collapsedByDefault;
+                        }
+                        getPage() {
+                            return this._page;
+                        }
+                        getSelection() {
+                            return this._page.getSelection();
+                        }
+                        getSelectionFirstElement() {
+                            return this.getSelection()[0];
+                        }
+                        getId() {
+                            return this._id;
+                        }
+                        getTitle() {
+                            return this._title;
+                        }
+                        create(parent) {
+                            this.createForm(parent);
+                        }
+                        flatValues_Number(values) {
+                            const set = new Set(values);
+                            if (set.size === 1) {
+                                const value = set.values().next().value;
+                                return value.toString();
+                            }
+                            return "";
+                        }
+                        flatValues_StringJoin(values) {
+                            return values.join(",");
+                        }
+                        flatValues_StringJoinDifferent(values) {
+                            const set = new Set(values);
+                            return [...set].join(",");
+                        }
+                        flatValues_StringOneOrNothing(values) {
+                            const set = new Set(values);
+                            return set.size === 1 ? values[0] : `(${values.length} selected)`;
+                        }
+                        createGridElement(parent, cols = 0, simpleProps = true) {
+                            const div = document.createElement("div");
+                            div.classList.add("formGrid");
+                            if (cols > 0) {
+                                div.classList.add("formGrid-cols-" + cols);
+                            }
+                            if (simpleProps) {
+                                div.classList.add("formSimpleProps");
+                            }
+                            parent.appendChild(div);
+                            return div;
+                        }
+                        createLabel(parent, text = "", tooltip = "") {
+                            const label = document.createElement("label");
+                            label.classList.add("formLabel");
+                            label.innerText = text;
+                            if (tooltip) {
+                                controls.Tooltip.tooltip(label, tooltip);
+                            }
+                            parent.appendChild(label);
+                            return label;
+                        }
+                        createButton(parent, text, callback) {
+                            const btn = document.createElement("button");
+                            btn.innerText = text;
+                            btn.addEventListener("click", e => callback(e));
+                            parent.appendChild(btn);
+                            return btn;
+                        }
+                        createMenuButton(parent, text, items, callback) {
+                            const btn = this.createButton(parent, text, e => {
+                                const menu = new controls.Menu();
+                                for (const item of items) {
+                                    menu.add(new controls.Action({
+                                        text: item.name,
+                                        callback: () => {
+                                            callback(item.value);
+                                        }
+                                    }));
+                                }
+                                menu.createWithEvent(e);
+                            });
+                            return btn;
+                        }
+                        createText(parent, readOnly = false) {
+                            const text = document.createElement("input");
+                            text.type = "text";
+                            text.classList.add("formText");
+                            text.readOnly = readOnly;
+                            parent.appendChild(text);
+                            return text;
+                        }
+                        createTextArea(parent, readOnly = false) {
+                            const text = document.createElement("textarea");
+                            text.classList.add("formText");
+                            text.readOnly = readOnly;
+                            parent.appendChild(text);
+                            return text;
+                        }
+                        createCheckbox(parent, label) {
+                            const check = document.createElement("input");
+                            if (label) {
+                                const id = (PropertySection.NEXT_ID++).toString();
+                                label.htmlFor = id;
+                                check.setAttribute("id", id);
+                            }
+                            check.type = "checkbox";
+                            check.classList.add("formCheckbox");
+                            parent.appendChild(check);
+                            return check;
+                        }
                     }
-                }
-                PropertySection.NEXT_ID = 0;
+                    PropertySection.NEXT_ID = 0;
+                    return PropertySection;
+                })();
                 properties.PropertySection = PropertySection;
             })(properties = controls.properties || (controls.properties = {}));
         })(controls = ui.controls || (ui.controls = {}));
@@ -4491,7 +4530,7 @@ var colibri;
             (function (viewers) {
                 class EmptyCellRendererProvider {
                     constructor(getRenderer) {
-                        this._getRenderer = (getRenderer !== null && getRenderer !== void 0 ? getRenderer : ((e) => new viewers.EmptyCellRenderer()));
+                        this._getRenderer = getRenderer !== null && getRenderer !== void 0 ? getRenderer : ((e) => new viewers.EmptyCellRenderer());
                     }
                     getCellRenderer(element) {
                         return this._getRenderer(element);
@@ -4787,7 +4826,7 @@ var colibri;
                                         const iconY = y + (cellHeight - viewers.TREE_ICON_SIZE) / 2;
                                         const icon = colibri.ColibriPlugin.getInstance()
                                             .getIcon(expanded ? colibri.ICON_CONTROL_TREE_COLLAPSE : colibri.ICON_CONTROL_TREE_EXPAND);
-                                        icon.paint(context, x, iconY, controls.ICON_SIZE, controls.ICON_SIZE, false);
+                                        icon.paint(context, x, iconY, viewers.TREE_ICON_SIZE, viewers.TREE_ICON_SIZE, false);
                                         treeIconList.push({
                                             rect: new controls.Rect(x, iconY, viewers.TREE_ICON_SIZE, viewers.TREE_ICON_SIZE),
                                             obj: obj
@@ -4816,7 +4855,7 @@ var colibri;
                         ctx.fillStyle = controls.Controls.getTheme().viewerForeground;
                         let args2;
                         if (args.h <= controls.ROW_HEIGHT) {
-                            args2 = new viewers.RenderCellArgs(args.canvasContext, args.x, args.y, controls.ICON_SIZE, args.h, args.obj, args.viewer);
+                            args2 = new viewers.RenderCellArgs(args.canvasContext, args.x, args.y, viewers.TREE_ICON_SIZE, args.h, args.obj, args.viewer);
                             x += 20;
                             y += 15;
                         }
@@ -5383,6 +5422,7 @@ var colibri;
                         this._context = this.getCanvas().getContext("2d");
                         this._context.imageSmoothingEnabled = false;
                         this._context.font = `${controls.FONT_HEIGHT}px sans-serif`;
+                        controls.Controls.adjustCanvasDPI(this.getCanvas());
                     }
                     setExpanded(obj, expanded) {
                         if (expanded) {
@@ -5584,9 +5624,9 @@ var colibri;
                             controls.DefaultImage.paintEmpty(args.canvasContext, args.x, args.y, args.w, args.h);
                         }
                         else {
-                            const x = args.x + (args.w - controls.ICON_SIZE) / 2;
-                            const y = args.y + (args.h - controls.ICON_SIZE) / 2;
-                            icon.paint(args.canvasContext, x, y, controls.ICON_SIZE, controls.ICON_SIZE, false);
+                            const x = args.x + (args.w - controls.RENDER_ICON_SIZE) / 2;
+                            const y = args.y + (args.h - controls.RENDER_ICON_SIZE) / 2;
+                            icon.paint(args.canvasContext, x, y, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE, false);
                         }
                     }
                     cellHeight(args) {
@@ -5809,7 +5849,7 @@ var colibri;
         (function (controls) {
             var viewers;
             (function (viewers) {
-                viewers.TREE_ICON_SIZE = controls.ICON_SIZE;
+                viewers.TREE_ICON_SIZE = controls.RENDER_ICON_SIZE;
                 viewers.LABEL_MARGIN = viewers.TREE_ICON_SIZE + 0;
                 class TreeViewer extends viewers.Viewer {
                     constructor(...classList) {
@@ -6041,25 +6081,28 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            class ContentTypeIconExtension extends colibri.Extension {
-                constructor(config) {
-                    super(ContentTypeIconExtension.POINT_ID, 10);
-                    this._config = config;
+            let ContentTypeIconExtension = /** @class */ (() => {
+                class ContentTypeIconExtension extends colibri.Extension {
+                    constructor(config) {
+                        super(ContentTypeIconExtension.POINT_ID, 10);
+                        this._config = config;
+                    }
+                    static withPluginIcons(plugin, config) {
+                        return new ContentTypeIconExtension(config.map(item => {
+                            var _a;
+                            return {
+                                icon: ((_a = item.plugin) !== null && _a !== void 0 ? _a : plugin).getIcon(item.iconName),
+                                contentType: item.contentType
+                            };
+                        }));
+                    }
+                    getConfig() {
+                        return this._config;
+                    }
                 }
-                static withPluginIcons(plugin, config) {
-                    return new ContentTypeIconExtension(config.map(item => {
-                        var _a;
-                        return {
-                            icon: (_a = item.plugin, (_a !== null && _a !== void 0 ? _a : plugin)).getIcon(item.iconName),
-                            contentType: item.contentType
-                        };
-                    }));
-                }
-                getConfig() {
-                    return this._config;
-                }
-            }
-            ContentTypeIconExtension.POINT_ID = "colibri.ui.ide.ContentTypeIconExtension";
+                ContentTypeIconExtension.POINT_ID = "colibri.ui.ide.ContentTypeIconExtension";
+                return ContentTypeIconExtension;
+            })();
             ide.ContentTypeIconExtension = ContentTypeIconExtension;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -6446,16 +6489,19 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            class EditorExtension extends colibri.Extension {
-                constructor(factories) {
-                    super(EditorExtension.POINT_ID);
-                    this._factories = factories;
+            let EditorExtension = /** @class */ (() => {
+                class EditorExtension extends colibri.Extension {
+                    constructor(factories) {
+                        super(EditorExtension.POINT_ID);
+                        this._factories = factories;
+                    }
+                    getFactories() {
+                        return this._factories;
+                    }
                 }
-                getFactories() {
-                    return this._factories;
-                }
-            }
-            EditorExtension.POINT_ID = "colibri.ui.ide.EditorExtension";
+                EditorExtension.POINT_ID = "colibri.ui.ide.EditorExtension";
+                return EditorExtension;
+            })();
             ide.EditorExtension = EditorExtension;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -6466,16 +6512,19 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            class EditorInputExtension extends colibri.Extension {
-                constructor(id) {
-                    super(EditorInputExtension.POINT_ID);
-                    this._id = id;
+            let EditorInputExtension = /** @class */ (() => {
+                class EditorInputExtension extends colibri.Extension {
+                    constructor(id) {
+                        super(EditorInputExtension.POINT_ID);
+                        this._id = id;
+                    }
+                    getId() {
+                        return this._id;
+                    }
                 }
-                getId() {
-                    return this._id;
-                }
-            }
-            EditorInputExtension.POINT_ID = "colibri.ui.ide.EditorInputExtension";
+                EditorInputExtension.POINT_ID = "colibri.ui.ide.EditorInputExtension";
+                return EditorInputExtension;
+            })();
             ide.EditorInputExtension = EditorInputExtension;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -6799,23 +6848,26 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            class FileEditorInputExtension extends ide.EditorInputExtension {
-                constructor() {
-                    super(FileEditorInputExtension.ID);
+            let FileEditorInputExtension = /** @class */ (() => {
+                class FileEditorInputExtension extends ide.EditorInputExtension {
+                    constructor() {
+                        super(FileEditorInputExtension.ID);
+                    }
+                    getEditorInputState(input) {
+                        return {
+                            filePath: input.getFullName()
+                        };
+                    }
+                    createEditorInput(state) {
+                        return colibri.ui.ide.FileUtils.getFileFromPath(state.filePath);
+                    }
+                    getEditorInputId(input) {
+                        return input.getFullName();
+                    }
                 }
-                getEditorInputState(input) {
-                    return {
-                        filePath: input.getFullName()
-                    };
-                }
-                createEditorInput(state) {
-                    return colibri.ui.ide.FileUtils.getFileFromPath(state.filePath);
-                }
-                getEditorInputId(input) {
-                    return input.getFullName();
-                }
-            }
-            FileEditorInputExtension.ID = "colibri.ui.ide.FileEditorInputExtension";
+                FileEditorInputExtension.ID = "colibri.ui.ide.FileEditorInputExtension";
+                return FileEditorInputExtension;
+            })();
             ide.FileEditorInputExtension = FileEditorInputExtension;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -6983,20 +7035,23 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            class IconLoaderExtension extends colibri.Extension {
-                constructor(icons) {
-                    super(IconLoaderExtension.POINT_ID);
-                    this._icons = icons;
+            let IconLoaderExtension = /** @class */ (() => {
+                class IconLoaderExtension extends colibri.Extension {
+                    constructor(icons) {
+                        super(IconLoaderExtension.POINT_ID);
+                        this._icons = icons;
+                    }
+                    static withPluginFiles(plugin, iconNames) {
+                        const icons = iconNames.map(name => plugin.getIcon(name));
+                        return new IconLoaderExtension(icons);
+                    }
+                    getIcons() {
+                        return this._icons;
+                    }
                 }
-                static withPluginFiles(plugin, iconNames) {
-                    const icons = iconNames.map(name => plugin.getIcon(name));
-                    return new IconLoaderExtension(icons);
-                }
-                getIcons() {
-                    return this._icons;
-                }
-            }
-            IconLoaderExtension.POINT_ID = "colibri.ui.ide.IconLoaderExtension";
+                IconLoaderExtension.POINT_ID = "colibri.ui.ide.IconLoaderExtension";
+                return IconLoaderExtension;
+            })();
             ide.IconLoaderExtension = IconLoaderExtension;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -7086,12 +7141,15 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            class PreloadProjectResourcesExtension extends colibri.Extension {
-                constructor() {
-                    super(PreloadProjectResourcesExtension.POINT_ID);
+            let PreloadProjectResourcesExtension = /** @class */ (() => {
+                class PreloadProjectResourcesExtension extends colibri.Extension {
+                    constructor() {
+                        super(PreloadProjectResourcesExtension.POINT_ID);
+                    }
                 }
-            }
-            PreloadProjectResourcesExtension.POINT_ID = "colibri.ui.ide.PreloadProjectResourcesExtension";
+                PreloadProjectResourcesExtension.POINT_ID = "colibri.ui.ide.PreloadProjectResourcesExtension";
+                return PreloadProjectResourcesExtension;
+            })();
             ide.PreloadProjectResourcesExtension = PreloadProjectResourcesExtension;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -7161,16 +7219,19 @@ var colibri;
     (function (ui) {
         var ide;
         (function (ide) {
-            class WindowExtension extends colibri.Extension {
-                constructor(createWindowFunc) {
-                    super(WindowExtension.POINT_ID, 10);
-                    this._createWindowFunc = createWindowFunc;
+            let WindowExtension = /** @class */ (() => {
+                class WindowExtension extends colibri.Extension {
+                    constructor(createWindowFunc) {
+                        super(WindowExtension.POINT_ID, 10);
+                        this._createWindowFunc = createWindowFunc;
+                    }
+                    createWindow() {
+                        return this._createWindowFunc();
+                    }
                 }
-                createWindow() {
-                    return this._createWindowFunc();
-                }
-            }
-            WindowExtension.POINT_ID = "colibri.ui.ide.WindowExtension";
+                WindowExtension.POINT_ID = "colibri.ui.ide.WindowExtension";
+                return WindowExtension;
+            })();
             ide.WindowExtension = WindowExtension;
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
@@ -7814,7 +7875,7 @@ var colibri;
                         this._id = config.id;
                         this._name = config.name;
                         this._tooltip = config.tooltip;
-                        this._icon = (_a = config.icon, (_a !== null && _a !== void 0 ? _a : null));
+                        this._icon = (_a = config.icon) !== null && _a !== void 0 ? _a : null;
                         this._categoryId = config.category;
                     }
                     getCategoryId() {
@@ -7869,16 +7930,19 @@ var colibri;
         (function (ide) {
             var commands;
             (function (commands) {
-                class CommandExtension extends colibri.Extension {
-                    constructor(configurer) {
-                        super(CommandExtension.POINT_ID);
-                        this._configurer = configurer;
+                let CommandExtension = /** @class */ (() => {
+                    class CommandExtension extends colibri.Extension {
+                        constructor(configurer) {
+                            super(CommandExtension.POINT_ID);
+                            this._configurer = configurer;
+                        }
+                        getConfigurer() {
+                            return this._configurer;
+                        }
                     }
-                    getConfigurer() {
-                        return this._configurer;
-                    }
-                }
-                CommandExtension.POINT_ID = "colibri.ui.ide.commands";
+                    CommandExtension.POINT_ID = "colibri.ui.ide.commands";
+                    return CommandExtension;
+                })();
                 commands.CommandExtension = CommandExtension;
             })(commands = ide.commands || (ide.commands = {}));
         })(ide = ui.ide || (ui.ide = {}));
@@ -8223,16 +8287,19 @@ var colibri;
         (function (ide) {
             var themes;
             (function (themes) {
-                class ThemeExtension extends colibri.Extension {
-                    constructor(theme) {
-                        super(ThemeExtension.POINT_ID);
-                        this._theme = theme;
+                let ThemeExtension = /** @class */ (() => {
+                    class ThemeExtension extends colibri.Extension {
+                        constructor(theme) {
+                            super(ThemeExtension.POINT_ID);
+                            this._theme = theme;
+                        }
+                        getTheme() {
+                            return this._theme;
+                        }
                     }
-                    getTheme() {
-                        return this._theme;
-                    }
-                }
-                ThemeExtension.POINT_ID = "colibri.ui.ide.ThemeExtension";
+                    ThemeExtension.POINT_ID = "colibri.ui.ide.ThemeExtension";
+                    return ThemeExtension;
+                })();
                 themes.ThemeExtension = ThemeExtension;
             })(themes = ide.themes || (ide.themes = {}));
         })(ide = ui.ide || (ui.ide = {}));

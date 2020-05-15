@@ -22,11 +22,10 @@ namespace colibri.ui.controls.viewers {
 
             } else {
 
-                const x = args.x + (args.w - ICON_SIZE) / 2;
-                const y = args.y + (args.h - ICON_SIZE) / 2;
+                const x = args.x + (args.w - RENDER_ICON_SIZE) / 2;
+                const y = args.y + (args.h - RENDER_ICON_SIZE) / 2;
 
-                icon.paint(args.canvasContext, x, y, ICON_SIZE, ICON_SIZE, false);
-
+                icon.paint(args.canvasContext, x, y, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
             }
         }
 

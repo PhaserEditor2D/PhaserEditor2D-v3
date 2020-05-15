@@ -6,162 +6,165 @@ var phasereditor2d;
         ide_1.ICON_PLAY = "play";
         ide_1.ICON_MENU = "menu";
         ide_1.ICON_THEME = "theme";
-        class IDEPlugin extends colibri.Plugin {
-            constructor() {
-                super("phasereditor2d.ide");
-                this._openingProject = false;
-            }
-            static getInstance() {
-                return this._instance;
-            }
-            registerExtensions(reg) {
-                // windows
-                reg.addExtension(new colibri.ui.ide.WindowExtension(() => new ide_1.ui.DesignWindow()));
-                reg.addExtension(new colibri.ui.ide.WindowExtension(() => new ide_1.ui.WelcomeWindow()));
-                // icons
-                reg.addExtension(new colibri.ui.ide.IconLoaderExtension([
-                    this.getIcon(ide_1.ICON_PLAY),
-                    this.getIcon(ide_1.ICON_MENU),
-                    this.getIcon(ide_1.ICON_THEME)
-                ]));
-                // keys
-                reg.addExtension(new colibri.ui.ide.commands.CommandExtension(ide_1.ui.actions.IDEActions.registerCommands));
-                // themes
-                reg.addExtension(new colibri.ui.ide.themes.ThemeExtension({
-                    dark: false,
-                    id: "lightBlue",
-                    classList: ["lightBlue"],
-                    displayName: "Light Blue",
-                    viewerForeground: controls.Controls.LIGHT_THEME.viewerForeground,
-                    viewerSelectionForeground: controls.Controls.LIGHT_THEME.viewerSelectionForeground,
-                    viewerSelectionBackground: controls.Controls.LIGHT_THEME.viewerSelectionBackground,
-                }));
-                reg.addExtension(new colibri.ui.ide.themes.ThemeExtension({
-                    dark: false,
-                    id: "lightGray",
-                    classList: ["light", "lightGray"],
-                    displayName: "Light Gray",
-                    viewerForeground: controls.Controls.LIGHT_THEME.viewerForeground,
-                    viewerSelectionForeground: controls.Controls.LIGHT_THEME.viewerSelectionForeground,
-                    viewerSelectionBackground: controls.Controls.LIGHT_THEME.viewerSelectionBackground,
-                }));
-                reg.addExtension(new colibri.ui.ide.themes.ThemeExtension({
-                    dark: true,
-                    id: "darkPlus",
-                    classList: ["darkPlus"],
-                    displayName: "Dark Plus",
-                    viewerForeground: controls.Controls.DARK_THEME.viewerForeground,
-                    viewerSelectionForeground: controls.Controls.DARK_THEME.viewerSelectionForeground,
-                    viewerSelectionBackground: controls.Controls.DARK_THEME.viewerSelectionBackground,
-                }));
-                // new dialogs
-                reg.addExtension(new ide_1.ui.dialogs.NewProjectDialogExtension());
-                // files view menu
-                if (IDEPlugin.getInstance().isDesktopMode()) {
-                    reg.addExtension(new controls.MenuExtension(phasereditor2d.files.ui.views.FilesView.MENU_ID, {
-                        command: ide_1.ui.actions.CMD_LOCATE_FILE
-                    }));
+        let IDEPlugin = /** @class */ (() => {
+            class IDEPlugin extends colibri.Plugin {
+                constructor() {
+                    super("phasereditor2d.ide");
+                    this._openingProject = false;
                 }
-            }
-            async requestServerMode() {
-                const data = await colibri.core.io.apiRequest("GetServerMode");
-                this._desktopMode = data.desktop === true;
-                this._advancedJSEditor = data.advancedJSEditor === true;
-            }
-            isDesktopMode() {
-                return this._desktopMode;
-            }
-            isAdvancedJSEditor() {
-                return this._advancedJSEditor;
-            }
-            async openFirstWindow() {
-                this.restoreTheme();
-                const wb = colibri.Platform.getWorkbench();
-                wb.addEventListener(colibri.ui.ide.EVENT_PROJECT_OPENED, e => {
-                    wb.getGlobalPreferences().setValue("defaultProjectData", {
-                        projectName: wb.getFileStorage().getRoot().getName()
-                    });
-                });
-                const prefs = wb.getGlobalPreferences();
-                const defaultProjectData = prefs.getValue("defaultProjectData");
-                let win = null;
-                if (defaultProjectData) {
-                    const projectName = defaultProjectData["projectName"];
-                    const projects = await wb.getFileStorage().getProjects();
-                    if (projects.indexOf(projectName) >= 0) {
-                        await this.ideOpenProject(projectName);
-                        return;
+                static getInstance() {
+                    return this._instance;
+                }
+                registerExtensions(reg) {
+                    // windows
+                    reg.addExtension(new colibri.ui.ide.WindowExtension(() => new ide_1.ui.DesignWindow()));
+                    reg.addExtension(new colibri.ui.ide.WindowExtension(() => new ide_1.ui.WelcomeWindow()));
+                    // icons
+                    reg.addExtension(new colibri.ui.ide.IconLoaderExtension([
+                        this.getIcon(ide_1.ICON_PLAY),
+                        this.getIcon(ide_1.ICON_MENU),
+                        this.getIcon(ide_1.ICON_THEME)
+                    ]));
+                    // keys
+                    reg.addExtension(new colibri.ui.ide.commands.CommandExtension(ide_1.ui.actions.IDEActions.registerCommands));
+                    // themes
+                    reg.addExtension(new colibri.ui.ide.themes.ThemeExtension({
+                        dark: false,
+                        id: "lightBlue",
+                        classList: ["lightBlue"],
+                        displayName: "Light Blue",
+                        viewerForeground: controls.Controls.LIGHT_THEME.viewerForeground,
+                        viewerSelectionForeground: controls.Controls.LIGHT_THEME.viewerSelectionForeground,
+                        viewerSelectionBackground: controls.Controls.LIGHT_THEME.viewerSelectionBackground,
+                    }));
+                    reg.addExtension(new colibri.ui.ide.themes.ThemeExtension({
+                        dark: false,
+                        id: "lightGray",
+                        classList: ["light", "lightGray"],
+                        displayName: "Light Gray",
+                        viewerForeground: controls.Controls.LIGHT_THEME.viewerForeground,
+                        viewerSelectionForeground: controls.Controls.LIGHT_THEME.viewerSelectionForeground,
+                        viewerSelectionBackground: controls.Controls.LIGHT_THEME.viewerSelectionBackground,
+                    }));
+                    reg.addExtension(new colibri.ui.ide.themes.ThemeExtension({
+                        dark: true,
+                        id: "darkPlus",
+                        classList: ["darkPlus"],
+                        displayName: "Dark Plus",
+                        viewerForeground: controls.Controls.DARK_THEME.viewerForeground,
+                        viewerSelectionForeground: controls.Controls.DARK_THEME.viewerSelectionForeground,
+                        viewerSelectionBackground: controls.Controls.DARK_THEME.viewerSelectionBackground,
+                    }));
+                    // new dialogs
+                    reg.addExtension(new ide_1.ui.dialogs.NewProjectDialogExtension());
+                    // files view menu
+                    if (IDEPlugin.getInstance().isDesktopMode()) {
+                        reg.addExtension(new controls.MenuExtension(phasereditor2d.files.ui.views.FilesView.MENU_ID, {
+                            command: ide_1.ui.actions.CMD_LOCATE_FILE
+                        }));
                     }
                 }
-                win = wb.activateWindow(ide_1.ui.WelcomeWindow.ID);
-                if (win) {
-                    win.restoreState(wb.getProjectPreferences());
+                async requestServerMode() {
+                    const data = await colibri.core.io.apiRequest("GetServerMode");
+                    this._desktopMode = data.desktop === true;
+                    this._advancedJSEditor = data.advancedJSEditor === true;
                 }
-            }
-            async ideOpenProject(projectName) {
-                this._openingProject = true;
-                controls.dialogs.Dialog.closeAllDialogs();
-                const dlg = new ide_1.ui.dialogs.OpeningProjectDialog();
-                dlg.create();
-                dlg.setTitle("Opening " + projectName);
-                dlg.setProgress(0);
-                const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
-                try {
+                isDesktopMode() {
+                    return this._desktopMode;
+                }
+                isAdvancedJSEditor() {
+                    return this._advancedJSEditor;
+                }
+                async openFirstWindow() {
+                    this.restoreTheme();
                     const wb = colibri.Platform.getWorkbench();
-                    {
-                        const win = wb.getActiveWindow();
-                        if (win instanceof ide_1.ui.DesignWindow) {
-                            win.saveState(wb.getProjectPreferences());
+                    wb.addEventListener(colibri.ui.ide.EVENT_PROJECT_OPENED, e => {
+                        wb.getGlobalPreferences().setValue("defaultProjectData", {
+                            projectName: wb.getFileStorage().getRoot().getName()
+                        });
+                    });
+                    const prefs = wb.getGlobalPreferences();
+                    const defaultProjectData = prefs.getValue("defaultProjectData");
+                    let win = null;
+                    if (defaultProjectData) {
+                        const projectName = defaultProjectData["projectName"];
+                        const projects = await wb.getFileStorage().getProjects();
+                        if (projects.indexOf(projectName) >= 0) {
+                            await this.ideOpenProject(projectName);
+                            return;
                         }
                     }
-                    console.log(`IDEPlugin: opening project ${projectName}`);
-                    const designWindow = wb.activateWindow(ide_1.ui.DesignWindow.ID);
-                    const editorArea = designWindow.getEditorArea();
-                    editorArea.closeAllEditors();
-                    await wb.openProject(projectName, monitor);
-                    dlg.setProgress(1);
-                    this.validateIndexFile();
-                    if (designWindow) {
-                        designWindow.restoreState(wb.getProjectPreferences());
+                    win = wb.activateWindow(ide_1.ui.WelcomeWindow.ID);
+                    if (win) {
+                        win.restoreState(wb.getProjectPreferences());
                     }
                 }
-                finally {
-                    this._openingProject = false;
-                    dlg.close();
+                async ideOpenProject(projectName) {
+                    this._openingProject = true;
+                    controls.dialogs.Dialog.closeAllDialogs();
+                    const dlg = new ide_1.ui.dialogs.OpeningProjectDialog();
+                    dlg.create();
+                    dlg.setTitle("Opening " + projectName);
+                    dlg.setProgress(0);
+                    const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
+                    try {
+                        const wb = colibri.Platform.getWorkbench();
+                        {
+                            const win = wb.getActiveWindow();
+                            if (win instanceof ide_1.ui.DesignWindow) {
+                                win.saveState(wb.getProjectPreferences());
+                            }
+                        }
+                        console.log(`IDEPlugin: opening project ${projectName}`);
+                        const designWindow = wb.activateWindow(ide_1.ui.DesignWindow.ID);
+                        const editorArea = designWindow.getEditorArea();
+                        editorArea.closeAllEditors();
+                        await wb.openProject(projectName, monitor);
+                        dlg.setProgress(1);
+                        this.validateIndexFile();
+                        if (designWindow) {
+                            designWindow.restoreState(wb.getProjectPreferences());
+                        }
+                    }
+                    finally {
+                        this._openingProject = false;
+                        dlg.close();
+                    }
+                }
+                validateIndexFile() {
+                    const root = colibri.Platform.getWorkbench().getFileStorage().getRoot();
+                    const indexFile = root.getFile("index.html");
+                    if (!indexFile || indexFile.isFolder()) {
+                        alert("Missing 'index.html' file at the root folder.");
+                    }
+                }
+                isOpeningProject() {
+                    return this._openingProject;
+                }
+                setTheme(theme) {
+                    controls.Controls.setTheme(theme);
+                    const prefs = colibri.Platform.getWorkbench().getGlobalPreferences();
+                    prefs.setValue("phasereditor2d.ide.theme", {
+                        theme: theme.id
+                    });
+                }
+                restoreTheme() {
+                    const prefs = colibri.Platform.getWorkbench().getGlobalPreferences();
+                    const themeData = prefs.getValue("phasereditor2d.ide.theme");
+                    let theme = null;
+                    if (themeData) {
+                        const id = themeData.theme;
+                        theme = colibri.Platform
+                            .getExtensions(colibri.ui.ide.themes.ThemeExtension.POINT_ID)
+                            .map(e => e.getTheme())
+                            .find(t => t.id === id);
+                    }
+                    controls.Controls.setTheme(theme !== null && theme !== void 0 ? theme : controls.Controls.LIGHT_THEME);
                 }
             }
-            validateIndexFile() {
-                const root = colibri.Platform.getWorkbench().getFileStorage().getRoot();
-                const indexFile = root.getFile("index.html");
-                if (!indexFile || indexFile.isFolder()) {
-                    alert("Missing 'index.html' file at the root folder.");
-                }
-            }
-            isOpeningProject() {
-                return this._openingProject;
-            }
-            setTheme(theme) {
-                controls.Controls.setTheme(theme);
-                const prefs = colibri.Platform.getWorkbench().getGlobalPreferences();
-                prefs.setValue("phasereditor2d.ide.theme", {
-                    theme: theme.id
-                });
-            }
-            restoreTheme() {
-                const prefs = colibri.Platform.getWorkbench().getGlobalPreferences();
-                const themeData = prefs.getValue("phasereditor2d.ide.theme");
-                let theme = null;
-                if (themeData) {
-                    const id = themeData.theme;
-                    theme = colibri.Platform
-                        .getExtensions(colibri.ui.ide.themes.ThemeExtension.POINT_ID)
-                        .map(e => e.getTheme())
-                        .find(t => t.id === id);
-                }
-                controls.Controls.setTheme((theme !== null && theme !== void 0 ? theme : controls.Controls.LIGHT_THEME));
-            }
-        }
-        IDEPlugin._instance = new IDEPlugin();
+            IDEPlugin._instance = new IDEPlugin();
+            return IDEPlugin;
+        })();
         ide_1.IDEPlugin = IDEPlugin;
         colibri.Platform.addPlugin(IDEPlugin.getInstance());
         /* program entry point */
@@ -251,72 +254,75 @@ var phasereditor2d;
         (function (ui) {
             var controls = colibri.ui.controls;
             var ide = colibri.ui.ide;
-            class DesignWindow extends ide.WorkbenchWindow {
-                constructor() {
-                    super(DesignWindow.ID);
-                    ide.Workbench.getWorkbench().addEventListener(ide.EVENT_PART_ACTIVATED, e => {
-                        this.saveWindowState();
-                    });
-                    window.addEventListener("beforeunload", e => {
-                        this.saveWindowState();
-                    });
-                }
-                saveWindowState() {
-                    if (ide_2.IDEPlugin.getInstance().isOpeningProject()) {
-                        return;
+            let DesignWindow = /** @class */ (() => {
+                class DesignWindow extends ide.WorkbenchWindow {
+                    constructor() {
+                        super(DesignWindow.ID);
+                        ide.Workbench.getWorkbench().addEventListener(ide.EVENT_PART_ACTIVATED, e => {
+                            this.saveWindowState();
+                        });
+                        window.addEventListener("beforeunload", e => {
+                            this.saveWindowState();
+                        });
                     }
-                    this.saveState(colibri.Platform.getWorkbench().getProjectPreferences());
-                }
-                saveState(prefs) {
-                    this.saveEditorsState(prefs);
-                }
-                restoreState(prefs) {
-                    this.restoreEditors(prefs);
-                }
-                createParts() {
-                    this._outlineView = new phasereditor2d.outline.ui.views.OutlineView();
-                    this._filesView = new phasereditor2d.files.ui.views.FilesView();
-                    this._inspectorView = new phasereditor2d.inspector.ui.views.InspectorView();
-                    this._blocksView = new phasereditor2d.blocks.ui.views.BlocksView();
-                    this._editorArea = new ide.EditorArea();
-                    this._split_Files_Blocks = new controls.SplitPanel(this.createViewFolder(this._filesView), this.createViewFolder(this._blocksView));
-                    this._split_Editor_FilesBlocks = new controls.SplitPanel(this._editorArea, this._split_Files_Blocks, false);
-                    this._split_Outline_EditorFilesBlocks = new controls.SplitPanel(this.createViewFolder(this._outlineView), this._split_Editor_FilesBlocks);
-                    this._split_OutlineEditorFilesBlocks_Inspector = new controls.SplitPanel(this._split_Outline_EditorFilesBlocks, this.createViewFolder(this._inspectorView));
-                    this.getClientArea().add(this._split_OutlineEditorFilesBlocks_Inspector);
-                    this.initToolbar();
-                    this.initialLayout();
-                }
-                initToolbar() {
-                    const toolbar = this.getToolbar();
-                    {
-                        // left area
-                        const area = toolbar.getLeftArea();
-                        const manager = new controls.ToolbarManager(area);
-                        manager.add(new phasereditor2d.files.ui.actions.OpenNewFileDialogAction());
-                        // manager.add(new ui.actions.OpenProjectsDialogAction());
-                        manager.addCommand(ui.actions.CMD_PLAY_PROJECT, { showText: false });
+                    saveWindowState() {
+                        if (ide_2.IDEPlugin.getInstance().isOpeningProject()) {
+                            return;
+                        }
+                        this.saveState(colibri.Platform.getWorkbench().getProjectPreferences());
                     }
-                    {
-                        // right area
-                        const area = toolbar.getRightArea();
-                        const manager = new controls.ToolbarManager(area);
-                        manager.add(new ui.actions.OpenMainMenuAction());
+                    saveState(prefs) {
+                        this.saveEditorsState(prefs);
+                    }
+                    restoreState(prefs) {
+                        this.restoreEditors(prefs);
+                    }
+                    createParts() {
+                        this._outlineView = new phasereditor2d.outline.ui.views.OutlineView();
+                        this._filesView = new phasereditor2d.files.ui.views.FilesView();
+                        this._inspectorView = new phasereditor2d.inspector.ui.views.InspectorView();
+                        this._blocksView = new phasereditor2d.blocks.ui.views.BlocksView();
+                        this._editorArea = new ide.EditorArea();
+                        this._split_Files_Blocks = new controls.SplitPanel(this.createViewFolder(this._filesView), this.createViewFolder(this._blocksView));
+                        this._split_Editor_FilesBlocks = new controls.SplitPanel(this._editorArea, this._split_Files_Blocks, false);
+                        this._split_Outline_EditorFilesBlocks = new controls.SplitPanel(this.createViewFolder(this._outlineView), this._split_Editor_FilesBlocks);
+                        this._split_OutlineEditorFilesBlocks_Inspector = new controls.SplitPanel(this._split_Outline_EditorFilesBlocks, this.createViewFolder(this._inspectorView));
+                        this.getClientArea().add(this._split_OutlineEditorFilesBlocks_Inspector);
+                        this.initToolbar();
+                        this.initialLayout();
+                    }
+                    initToolbar() {
+                        const toolbar = this.getToolbar();
+                        {
+                            // left area
+                            const area = toolbar.getLeftArea();
+                            const manager = new controls.ToolbarManager(area);
+                            manager.add(new phasereditor2d.files.ui.actions.OpenNewFileDialogAction());
+                            // manager.add(new ui.actions.OpenProjectsDialogAction());
+                            manager.addCommand(ui.actions.CMD_PLAY_PROJECT, { showText: false });
+                        }
+                        {
+                            // right area
+                            const area = toolbar.getRightArea();
+                            const manager = new controls.ToolbarManager(area);
+                            manager.add(new ui.actions.OpenMainMenuAction());
+                        }
+                    }
+                    getEditorArea() {
+                        return this._editorArea;
+                    }
+                    initialLayout() {
+                        this._split_Files_Blocks.setSplitFactor(0.2);
+                        this._split_Editor_FilesBlocks.setSplitFactor(0.6);
+                        this._split_Outline_EditorFilesBlocks.setSplitFactor(0.15);
+                        this._split_OutlineEditorFilesBlocks_Inspector.setSplitFactor(0.8);
+                        this.layout();
                     }
                 }
-                getEditorArea() {
-                    return this._editorArea;
-                }
-                initialLayout() {
-                    this._split_Files_Blocks.setSplitFactor(0.2);
-                    this._split_Editor_FilesBlocks.setSplitFactor(0.6);
-                    this._split_Outline_EditorFilesBlocks.setSplitFactor(0.15);
-                    this._split_OutlineEditorFilesBlocks_Inspector.setSplitFactor(0.8);
-                    this.layout();
-                }
-            }
-            DesignWindow.ID = "phasereditor2d.ide.ui.DesignWindow";
-            DesignWindow.MENU_MAIN = "phasereditor2d.ide.ui.MainMenu";
+                DesignWindow.ID = "phasereditor2d.ide.ui.DesignWindow";
+                DesignWindow.MENU_MAIN = "phasereditor2d.ide.ui.MainMenu";
+                return DesignWindow;
+            })();
             ui.DesignWindow = DesignWindow;
         })(ui = ide_2.ui || (ide_2.ui = {}));
     })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));
@@ -327,29 +333,32 @@ var phasereditor2d;
     (function (ide) {
         var ui;
         (function (ui) {
-            class WelcomeWindow extends colibri.ui.ide.WorkbenchWindow {
-                constructor() {
-                    super(WelcomeWindow.ID);
-                }
-                getEditorArea() {
-                    return new colibri.ui.ide.EditorArea();
-                }
-                async createParts() {
-                    const projects = await colibri.ui.ide.FileUtils.getProjects_async();
-                    if (projects.length === 0) {
-                        const dlg = new ui.dialogs.NewProjectDialog();
-                        dlg.setCancellable(false);
-                        dlg.setCloseWithEscapeKey(false);
-                        dlg.create();
+            let WelcomeWindow = /** @class */ (() => {
+                class WelcomeWindow extends colibri.ui.ide.WorkbenchWindow {
+                    constructor() {
+                        super(WelcomeWindow.ID);
                     }
-                    else {
-                        const dlg = new ui.dialogs.ProjectsDialog();
-                        dlg.setCloseWithEscapeKey(false);
-                        dlg.create();
+                    getEditorArea() {
+                        return new colibri.ui.ide.EditorArea();
+                    }
+                    async createParts() {
+                        const projects = await colibri.ui.ide.FileUtils.getProjects_async();
+                        if (projects.length === 0) {
+                            const dlg = new ui.dialogs.NewProjectDialog();
+                            dlg.setCancellable(false);
+                            dlg.setCloseWithEscapeKey(false);
+                            dlg.create();
+                        }
+                        else {
+                            const dlg = new ui.dialogs.ProjectsDialog();
+                            dlg.setCloseWithEscapeKey(false);
+                            dlg.create();
+                        }
                     }
                 }
-            }
-            WelcomeWindow.ID = "phasereditor2d.welcome.ui.WelcomeWindow";
+                WelcomeWindow.ID = "phasereditor2d.welcome.ui.WelcomeWindow";
+                return WelcomeWindow;
+            })();
             ui.WelcomeWindow = WelcomeWindow;
         })(ui = ide.ui || (ide.ui = {}));
     })(ide = phasereditor2d.ide || (phasereditor2d.ide = {}));

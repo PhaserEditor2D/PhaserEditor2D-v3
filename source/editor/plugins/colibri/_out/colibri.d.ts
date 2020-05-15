@@ -76,10 +76,13 @@ declare namespace colibri.ui.controls {
         NOTHING_LOADED = 0,
         RESOURCES_LOADED = 1
     }
-    const ICON_SIZE = 16;
+    const DEVICE_PIXEL_RATIO: number;
+    const ICON_SIZE: number;
+    const RENDER_ICON_SIZE = 16;
     class Controls {
         private static _images;
         private static _applicationDragData;
+        static adjustCanvasDPI(canvas: HTMLCanvasElement): CanvasRenderingContext2D;
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void): void;
         static getApplicationDragData(): any[];
         static getApplicationDragDataAndClean(): any[];
