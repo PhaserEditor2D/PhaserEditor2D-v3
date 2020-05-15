@@ -19,8 +19,7 @@ namespace colibri.ui.controls.dialogs {
 
             this._closeWithEscapeKey = true;
 
-            this._width = 400 * controls.DEVICE_PIXEL_RATIO;
-            this._height = 300 * controls.DEVICE_PIXEL_RATIO;
+            this.setSize(400 * controls.DEVICE_PIXEL_RATIO, 300 * controls.DEVICE_PIXEL_RATIO);
 
             this._parentDialog = Dialog._dialogs.length === 0 ?
                 null : Dialog._dialogs[Dialog._dialogs.length - 1];
