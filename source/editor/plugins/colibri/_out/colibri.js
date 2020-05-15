@@ -3576,9 +3576,8 @@ var colibri;
                         action.run(e);
                     });
                     if (action.getIcon()) {
-                        const iconElement = controls.Controls.createIconElement(action.getIcon());
-                        btnElement.appendChild(iconElement);
-                        btnElement["__icon"] = iconElement;
+                        const iconControl = new controls.IconControl(action.getIcon());
+                        btnElement.appendChild(iconControl.getCanvas());
                     }
                     const textElement = document.createElement("div");
                     textElement.classList.add("ToolbarItemText");
