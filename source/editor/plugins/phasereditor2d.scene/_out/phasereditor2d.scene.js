@@ -7215,8 +7215,8 @@ var phasereditor2d;
                         return comp;
                     }
                     createLock(parent, ...properties) {
-                        const mutableIcon = new controls.MutableIcon();
-                        const element = mutableIcon.getElement();
+                        const mutableIcon = new controls.IconControl();
+                        const element = mutableIcon.getCanvas();
                         element.classList.add("PropertyLockIcon");
                         parent.appendChild(element);
                         const lockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_LOCKED);
@@ -7230,10 +7230,9 @@ var phasereditor2d;
                                 .map(obj => obj.getEditorSupport().isPrefabInstance())
                                 .find(b => b);
                             if (thereIsPrefabInstances) {
-                                element.style.width = controls.ICON_SIZE + "px";
+                                element.style.width = controls.RENDER_ICON_SIZE + "px";
                                 const unlocked = this.isUnlocked(...properties);
                                 mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
-                                mutableIcon.repaint();
                             }
                             else {
                                 element.style.width = "0px";
