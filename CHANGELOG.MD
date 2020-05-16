@@ -5,7 +5,7 @@
 
 ### Bug fixes
 
-* #15: Blurry text in HiDPI screens.
+* [#15](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/15): Blurry text in HiDPI screens.
 * Scene Editor: improves picking of objects.
 * SceneEditor: improves Outline view rendering of BitmapText objects.
 * Inspector view: hides overflow text in the sections title.
