@@ -4,20 +4,23 @@ var phasereditor2d;
     (function (inspector) {
         var ide = colibri.ui.ide;
         inspector.ICON_INSPECTOR = "inspector";
-        class InspectorPlugin extends colibri.Plugin {
-            constructor() {
-                super("phasereditor2d.inspector");
+        let InspectorPlugin = /** @class */ (() => {
+            class InspectorPlugin extends colibri.Plugin {
+                constructor() {
+                    super("phasereditor2d.inspector");
+                }
+                static getInstance() {
+                    return this._instance;
+                }
+                registerExtensions(reg) {
+                    reg.addExtension(ide.IconLoaderExtension.withPluginFiles(this, [
+                        inspector.ICON_INSPECTOR
+                    ]));
+                }
             }
-            static getInstance() {
-                return this._instance;
-            }
-            registerExtensions(reg) {
-                reg.addExtension(ide.IconLoaderExtension.withPluginFiles(this, [
-                    inspector.ICON_INSPECTOR
-                ]));
-            }
-        }
-        InspectorPlugin._instance = new InspectorPlugin();
+            InspectorPlugin._instance = new InspectorPlugin();
+            return InspectorPlugin;
+        })();
         inspector.InspectorPlugin = InspectorPlugin;
         colibri.Platform.addPlugin(InspectorPlugin.getInstance());
     })(inspector = phasereditor2d.inspector || (phasereditor2d.inspector = {}));

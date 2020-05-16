@@ -31,7 +31,7 @@ namespace phasereditor2d.pack.ui.dialogs {
             viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-            viewer.setCellSize(64);
+            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
             viewer.setInput([]);
 
             super.create();

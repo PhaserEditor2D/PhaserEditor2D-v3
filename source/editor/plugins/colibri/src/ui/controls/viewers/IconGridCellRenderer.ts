@@ -18,12 +18,13 @@ namespace colibri.ui.controls.viewers {
 
             } else {
 
-                const x2 = (args.w - controls.ICON_SIZE) / 2;
+                const x2 = (args.w - controls.RENDER_ICON_SIZE) / 2;
 
-                const y2 = (args.h - controls.ICON_SIZE) / 2;
+                const y2 = (args.h - controls.RENDER_ICON_SIZE) / 2;
 
                 this._icon.paint(
-                    args.canvasContext, args.x + x2, args.y + y2, controls.ICON_SIZE, controls.ICON_SIZE, false);
+                    args.canvasContext, args.x + x2, args.y + y2,
+                    controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE, false);
             }
 
             /*const ctx = args.canvasContext;

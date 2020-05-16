@@ -19,8 +19,7 @@ namespace colibri.ui.controls.dialogs {
 
             this._closeWithEscapeKey = true;
 
-            this._width = 400;
-            this._height = 300;
+            this.setSize(400 * controls.DEVICE_PIXEL_RATIO, 300 * controls.DEVICE_PIXEL_RATIO);
 
             this._parentDialog = Dialog._dialogs.length === 0 ?
                 null : Dialog._dialogs[Dialog._dialogs.length - 1];
@@ -153,10 +152,22 @@ namespace colibri.ui.controls.dialogs {
             });
         }
 
-        setSize(width: number, height: number) {
+        setSize(width: number, height: number, adjustToDPR = false) {
 
-            this._width = Math.floor(width);
-            this._height = Math.floor(height);
+            this._width = Math.floor(width * (adjustToDPR ? controls.DEVICE_PIXEL_RATIO : 1));
+            this._height = Math.floor(height * (adjustToDPR ? controls.DEVICE_PIXEL_RATIO : 1));
+
+            const margin = window.innerHeight * 0.2;
+
+            if (this._width > window.innerWidth) {
+
+                this._width = window.innerWidth - 10;
+            }
+
+            if (this._height > window.innerHeight - margin) {
+
+                this._height = window.innerHeight - margin - 10;
+            }
         }
 
         getSize() {

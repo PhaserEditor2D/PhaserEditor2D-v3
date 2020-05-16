@@ -76,10 +76,14 @@ declare namespace colibri.ui.controls {
         NOTHING_LOADED = 0,
         RESOURCES_LOADED = 1
     }
-    const ICON_SIZE = 16;
+    const DEVICE_PIXEL_RATIO: number;
+    const ICON_SIZE: number;
+    const RENDER_ICON_SIZE = 16;
     class Controls {
         private static _images;
         private static _applicationDragData;
+        static adjustCanvasDPI(canvas: HTMLCanvasElement, widthHint?: number, heightHint?: number): CanvasRenderingContext2D;
+        static measureTextWidth(context: CanvasRenderingContext2D, label: string): number;
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void): void;
         static getApplicationDragData(): any[];
         static getApplicationDragDataAndClean(): any[];
@@ -89,7 +93,6 @@ declare namespace colibri.ui.controls {
         static resolveNothingLoaded(): Promise<PreloadResult>;
         static getImage(url: string, id: string, appendVersion?: boolean): IImage;
         static openUrlInNewPage(url: string): void;
-        static createIconElement(icon?: IImage, size?: number): HTMLCanvasElement;
         static LIGHT_THEME: ITheme;
         static DARK_THEME: ITheme;
         static _theme: ITheme;
@@ -600,6 +603,18 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
+    class IconControl {
+        private _icon;
+        _context: CanvasRenderingContext2D;
+        private _canvas;
+        constructor(icon?: IImage);
+        repaint(): void;
+        getCanvas(): HTMLCanvasElement;
+        getIcon(): IImage;
+        setIcon(icon: IImage, repaint?: boolean): void;
+    }
+}
+declare namespace colibri.ui.controls {
     class ImageControl extends CanvasControl {
         private _image;
         constructor(padding?: number, ...classList: string[]);
@@ -694,18 +709,6 @@ declare namespace colibri.ui.controls {
         getWidth(): number;
         getHeight(): number;
         preloadSize(): Promise<PreloadResult>;
-    }
-}
-declare namespace colibri.ui.controls {
-    class MutableIcon {
-        private _element;
-        private _context;
-        private _icon;
-        constructor();
-        getElement(): HTMLCanvasElement;
-        setIcon(icon: IImage): void;
-        getIcon(): IImage;
-        repaint(): void;
     }
 }
 declare namespace colibri.ui.controls {
@@ -884,7 +887,7 @@ declare namespace colibri.ui.controls.dialogs {
         addButton(text: string, callback: () => void): HTMLButtonElement;
         protected createDialogArea(): void;
         protected resize(): void;
-        setSize(width: number, height: number): void;
+        setSize(width: number, height: number, adjustToDPR?: boolean): void;
         getSize(): {
             width: number;
             height: number;

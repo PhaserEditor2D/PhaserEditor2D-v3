@@ -191,6 +191,7 @@ namespace phasereditor2d.scene.ui.editor {
                 scale: {
                     mode: Phaser.Scale.NONE
                 },
+                // resolution: window.devicePixelRatio,
                 render: {
                     pixelArt: true,
                     transparent: true

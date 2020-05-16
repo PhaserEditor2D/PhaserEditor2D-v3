@@ -114,18 +114,19 @@ namespace colibri.ui.controls {
 
                     if (item.isSelected()) {
 
-                        const checkedElement = Controls.createIconElement(
+                        const iconControl = new controls.IconControl(
                             Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_CHECKED));
-                        checkedElement.classList.add("MenuItemCheckedIcon");
 
-                        itemElement.appendChild(checkedElement);
+                        iconControl.getCanvas().classList.add("MenuItemCheckedIcon");
+
+                        itemElement.appendChild(iconControl.getCanvas());
                     }
 
                     if (item.getIcon()) {
 
-                        const iconElement = Controls.createIconElement(item.getIcon());
-                        iconElement.classList.add("MenuItemIcon");
-                        itemElement.appendChild(iconElement);
+                        const iconControl = new controls.IconControl(item.getIcon());
+                        iconControl.getCanvas().classList.add("MenuItemIcon");
+                        itemElement.appendChild(iconControl.getCanvas());
 
                         hasIcon = true;
                     }

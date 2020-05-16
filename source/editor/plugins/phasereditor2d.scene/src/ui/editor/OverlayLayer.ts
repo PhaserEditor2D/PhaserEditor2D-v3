@@ -33,7 +33,11 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private resetContext() {
+
             this._ctx = this._canvas.getContext("2d");
+
+            controls.Controls.adjustCanvasDPI(this._canvas);
+
             this._ctx.imageSmoothingEnabled = false;
             this._ctx.font = "12px Monospace";
         }

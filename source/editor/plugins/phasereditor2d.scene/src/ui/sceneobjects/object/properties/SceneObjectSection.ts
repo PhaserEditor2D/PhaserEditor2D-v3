@@ -24,9 +24,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>) {
 
-            const mutableIcon = new controls.MutableIcon();
+            const mutableIcon = new controls.IconControl();
 
-            const element = mutableIcon.getElement();
+            const element = mutableIcon.getCanvas();
             element.classList.add("PropertyLockIcon");
             parent.appendChild(element);
 
@@ -51,13 +51,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (thereIsPrefabInstances) {
 
-                    element.style.width = controls.ICON_SIZE + "px";
+                    element.style.width = controls.RENDER_ICON_SIZE + "px";
 
                     const unlocked = this.isUnlocked(...properties);
 
                     mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
-
-                    mutableIcon.repaint();
 
                 } else {
 

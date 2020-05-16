@@ -216,6 +216,13 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     border-radius: 3px 3px 0 0;
 }
 
+.PropertyTitleArea label {
+    overflow: hidden;
+    white-space: nowrap;
+    word-break: break-all;
+    text-overflow: ellipsis;
+}
+
 .PropertyFormArea {
     display: grid;
     padding: 10px 0px 10px 0px;

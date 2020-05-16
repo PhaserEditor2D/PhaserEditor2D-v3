@@ -903,34 +903,37 @@ var phasereditor2d;
                 var outline;
                 (function (outline) {
                     var controls = colibri.ui.controls;
-                    class MonacoOutlineCellRendererProvider {
-                        getCellRenderer(obj) {
-                            let name;
-                            if (typeof obj.kind === "string") {
-                                name = MonacoOutlineCellRendererProvider.map[obj.kind];
+                    let MonacoOutlineCellRendererProvider = /** @class */ (() => {
+                        class MonacoOutlineCellRendererProvider {
+                            getCellRenderer(obj) {
+                                let name;
+                                if (typeof obj.kind === "string") {
+                                    name = MonacoOutlineCellRendererProvider.map[obj.kind];
+                                }
+                                if (!name) {
+                                    name = code.ICON_SYMBOL_VARIABLE;
+                                }
+                                const img = code.CodePlugin.getInstance().getIcon(name);
+                                return new controls.viewers.IconImageCellRenderer(img);
                             }
-                            if (!name) {
-                                name = code.ICON_SYMBOL_VARIABLE;
+                            preload(args) {
+                                return controls.Controls.resolveNothingLoaded();
                             }
-                            const img = code.CodePlugin.getInstance().getIcon(name);
-                            return new controls.viewers.IconImageCellRenderer(img);
                         }
-                        preload(args) {
-                            return controls.Controls.resolveNothingLoaded();
-                        }
-                    }
-                    MonacoOutlineCellRendererProvider.map = {
-                        class: code.ICON_SYMBOL_CLASS,
-                        const: code.ICON_SYMBOL_CONSTANT,
-                        field: code.ICON_SYMBOL_FIELD,
-                        interface: code.ICON_SYMBOL_INTERFACE,
-                        method: code.ICON_SYMBOL_METHOD,
-                        function: code.ICON_SYMBOL_METHOD,
-                        constructor: code.ICON_SYMBOL_METHOD,
-                        namespace: code.ICON_SYMBOL_NAMESPACE,
-                        property: code.ICON_SYMBOL_PROPERTY,
-                        variable: code.ICON_SYMBOL_VARIABLE,
-                    };
+                        MonacoOutlineCellRendererProvider.map = {
+                            class: code.ICON_SYMBOL_CLASS,
+                            const: code.ICON_SYMBOL_CONSTANT,
+                            field: code.ICON_SYMBOL_FIELD,
+                            interface: code.ICON_SYMBOL_INTERFACE,
+                            method: code.ICON_SYMBOL_METHOD,
+                            function: code.ICON_SYMBOL_METHOD,
+                            constructor: code.ICON_SYMBOL_METHOD,
+                            namespace: code.ICON_SYMBOL_NAMESPACE,
+                            property: code.ICON_SYMBOL_PROPERTY,
+                            variable: code.ICON_SYMBOL_VARIABLE,
+                        };
+                        return MonacoOutlineCellRendererProvider;
+                    })();
                     outline.MonacoOutlineCellRendererProvider = MonacoOutlineCellRendererProvider;
                 })(outline = editors.outline || (editors.outline = {}));
             })(editors = ui.editors || (ui.editors = {}));

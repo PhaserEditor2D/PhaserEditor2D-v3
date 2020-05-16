@@ -10,12 +10,45 @@ namespace colibri.ui.controls {
         RESOURCES_LOADED
     }
 
-    export const ICON_SIZE = 16;
+    export const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
+    export const ICON_SIZE = DEVICE_PIXEL_RATIO > 1 ? 32 : 16;
+    export const RENDER_ICON_SIZE = 16;
 
     export class Controls {
 
         private static _images: Map<string, IImage> = new Map();
         private static _applicationDragData: any[] = null;
+
+        static adjustCanvasDPI(canvas: HTMLCanvasElement, widthHint = 1, heightHint = 1) {
+
+            const dpr = window.devicePixelRatio || 1;
+
+            if (dpr === 1) {
+
+                return;
+            }
+
+            const rect = canvas.getBoundingClientRect();
+
+            const width = rect.width === 0 ? widthHint : rect.width;
+            const height = rect.height === 0 ? heightHint : rect.height;
+
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+
+            const ctx = canvas.getContext("2d");
+
+            ctx.scale(dpr, dpr);
+
+            return ctx;
+        }
+
+        static measureTextWidth(context: CanvasRenderingContext2D, label: string) {
+
+            const measure = context.measureText(label);
+
+            return measure.width * DEVICE_PIXEL_RATIO;
+        }
 
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {
 
@@ -111,26 +144,6 @@ namespace colibri.ui.controls {
             element.click();
 
             element.remove();
-        }
-
-        static createIconElement(icon?: IImage, size: number = ICON_SIZE) {
-
-            const canvas = document.createElement("canvas");
-
-            canvas.width = canvas.height = size;
-            canvas.style.width = canvas.style.height = size + "px";
-
-            const context = canvas.getContext("2d");
-
-            context.imageSmoothingEnabled = false;
-
-            context.clearRect(0, 0, canvas.width, canvas.height);
-
-            if (icon) {
-                icon.paint(context, 0, 0, canvas.width, canvas.height, true);
-            }
-
-            return canvas;
         }
 
         static LIGHT_THEME: ITheme = {

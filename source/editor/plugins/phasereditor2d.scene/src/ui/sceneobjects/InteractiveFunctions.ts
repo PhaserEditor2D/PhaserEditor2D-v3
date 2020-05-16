@@ -31,28 +31,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         const originY = sprite.originY;
         const angle = sprite.angle;
 
-        sprite.scaleX = 1;
-        sprite.scaleY = 1;
-        sprite.originX = 0;
-        sprite.originY = 0;
-        sprite.angle = 0;
+        sprite.setScale(1, 1);
+        sprite.setOrigin(0, 0);
+        sprite.setAngle(0);
 
-        let renderX = -x;
-        let renderY = -y;
+        renderTexture.draw([sprite], -x, -y);
 
-        if (sprite instanceof TileSprite) {
-
-            renderX = -x - sprite.width * 0 /*originX*/;
-            renderY = -y - sprite.height * 0 /*originY*/;
-        }
-
-        renderTexture.draw([sprite], renderX, renderY);
-
-        sprite.scaleX = scaleX;
-        sprite.scaleY = scaleY;
-        sprite.originX = originX;
-        sprite.originY = originY;
-        sprite.angle = angle;
+        sprite.setScale(scaleX, scaleY);
+        sprite.setOrigin(originX, originY);
+        sprite.setAngle(angle);
 
         const colorArray: Phaser.Display.Color[] = [];
 

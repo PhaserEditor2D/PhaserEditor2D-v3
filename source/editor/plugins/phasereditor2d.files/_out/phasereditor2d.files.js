@@ -5,28 +5,31 @@ var phasereditor2d;
         var ide = colibri.ui.ide;
         files.ICON_NEW_FILE = "file-new";
         files.ICON_PROJECT = "project";
-        class FilesPlugin extends colibri.Plugin {
-            constructor() {
-                super("phasereditor2d.files");
+        let FilesPlugin = /** @class */ (() => {
+            class FilesPlugin extends colibri.Plugin {
+                constructor() {
+                    super("phasereditor2d.files");
+                }
+                static getInstance() {
+                    return this._instance;
+                }
+                registerExtensions(reg) {
+                    // icons loader
+                    reg.addExtension(colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                        files.ICON_NEW_FILE,
+                        files.ICON_PROJECT
+                    ]));
+                    // new files
+                    reg.addExtension(new files.ui.dialogs.NewFolderExtension(), new files.ui.dialogs.NewGenericFileExtension());
+                    // commands
+                    reg.addExtension(new ide.commands.CommandExtension(files.ui.actions.FilesViewCommands.registerCommands));
+                    // properties
+                    reg.addExtension(new files.ui.views.FilePropertySectionExtension(page => new files.ui.views.FileSection(page), page => new files.ui.views.ImageFileSection(page), page => new files.ui.views.ManyImageFileSection(page), page => new files.ui.views.UploadSection(page)));
+                }
             }
-            static getInstance() {
-                return this._instance;
-            }
-            registerExtensions(reg) {
-                // icons loader
-                reg.addExtension(colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-                    files.ICON_NEW_FILE,
-                    files.ICON_PROJECT
-                ]));
-                // new files
-                reg.addExtension(new files.ui.dialogs.NewFolderExtension(), new files.ui.dialogs.NewGenericFileExtension());
-                // commands
-                reg.addExtension(new ide.commands.CommandExtension(files.ui.actions.FilesViewCommands.registerCommands));
-                // properties
-                reg.addExtension(new files.ui.views.FilePropertySectionExtension(page => new files.ui.views.FileSection(page), page => new files.ui.views.ImageFileSection(page), page => new files.ui.views.ManyImageFileSection(page), page => new files.ui.views.UploadSection(page)));
-            }
-        }
-        FilesPlugin._instance = new FilesPlugin();
+            FilesPlugin._instance = new FilesPlugin();
+            return FilesPlugin;
+        })();
         files.FilesPlugin = FilesPlugin;
         colibri.Platform.addPlugin(FilesPlugin.getInstance());
     })(files = phasereditor2d.files || (phasereditor2d.files = {}));
@@ -420,7 +423,7 @@ var phasereditor2d;
                                 return false;
                             }
                             if (parent) {
-                                const file2 = (_a = parent.getFile(value), (_a !== null && _a !== void 0 ? _a : null));
+                                const file2 = (_a = parent.getFile(value)) !== null && _a !== void 0 ? _a : null;
                                 return file2 === null;
                             }
                             return false;
@@ -614,20 +617,23 @@ var phasereditor2d;
         (function (ui) {
             var dialogs;
             (function (dialogs) {
-                class NewDialogExtension extends colibri.Extension {
-                    constructor(config) {
-                        super(NewDialogExtension.POINT_ID);
-                        this._dialogName = config.dialogName;
-                        this._dialogIcon = config.dialogIcon;
+                let NewDialogExtension = /** @class */ (() => {
+                    class NewDialogExtension extends colibri.Extension {
+                        constructor(config) {
+                            super(NewDialogExtension.POINT_ID);
+                            this._dialogName = config.dialogName;
+                            this._dialogIcon = config.dialogIcon;
+                        }
+                        getDialogName() {
+                            return this._dialogName;
+                        }
+                        getDialogIcon() {
+                            return this._dialogIcon;
+                        }
                     }
-                    getDialogName() {
-                        return this._dialogName;
-                    }
-                    getDialogIcon() {
-                        return this._dialogIcon;
-                    }
-                }
-                NewDialogExtension.POINT_ID = "phasereditor2d.files.ui.dialogs.NewDialogExtension";
+                    NewDialogExtension.POINT_ID = "phasereditor2d.files.ui.dialogs.NewDialogExtension";
+                    return NewDialogExtension;
+                })();
                 dialogs.NewDialogExtension = NewDialogExtension;
             })(dialogs = ui.dialogs || (ui.dialogs = {}));
         })(ui = files.ui || (files.ui = {}));
@@ -700,7 +706,7 @@ var phasereditor2d;
                             wb.openEditor(file);
                         });
                         dlg.setInitialFileName(this.getInitialFileName());
-                        dlg.setInitialLocation((_a = args.initialFileLocation, (_a !== null && _a !== void 0 ? _a : this.getInitialFileLocation())));
+                        dlg.setInitialLocation((_a = args.initialFileLocation) !== null && _a !== void 0 ? _a : this.getInitialFileLocation());
                         dlg.validate();
                         return dlg;
                     }
@@ -799,7 +805,7 @@ var phasereditor2d;
                         const dlg = new dialogs.NewFolderDialog();
                         dlg.create();
                         dlg.setInitialFileName(this.getInitialFileName());
-                        dlg.setInitialLocation((_a = args.initialFileLocation, (_a !== null && _a !== void 0 ? _a : this.getInitialFileLocation())));
+                        dlg.setInitialLocation((_a = args.initialFileLocation) !== null && _a !== void 0 ? _a : this.getInitialFileLocation());
                         dlg.validate();
                         return dlg;
                     }
@@ -968,12 +974,15 @@ var phasereditor2d;
         (function (ui) {
             var viewers;
             (function (viewers) {
-                class ContentTypeCellRendererExtension extends colibri.Extension {
-                    constructor() {
-                        super(ContentTypeCellRendererExtension.POINT_ID);
+                let ContentTypeCellRendererExtension = /** @class */ (() => {
+                    class ContentTypeCellRendererExtension extends colibri.Extension {
+                        constructor() {
+                            super(ContentTypeCellRendererExtension.POINT_ID);
+                        }
                     }
-                }
-                ContentTypeCellRendererExtension.POINT_ID = "phasereditor2d.files.ui.viewers.ContentTypeCellRendererExtension";
+                    ContentTypeCellRendererExtension.POINT_ID = "phasereditor2d.files.ui.viewers.ContentTypeCellRendererExtension";
+                    return ContentTypeCellRendererExtension;
+                })();
                 viewers.ContentTypeCellRendererExtension = ContentTypeCellRendererExtension;
             })(viewers = ui.viewers || (ui.viewers = {}));
         })(ui = files.ui || (files.ui = {}));
@@ -1209,16 +1218,19 @@ var phasereditor2d;
         (function (ui) {
             var views;
             (function (views) {
-                class FilePropertySectionExtension extends colibri.Extension {
-                    constructor(...sectionProviders) {
-                        super(FilePropertySectionExtension.POINT_ID);
-                        this._sectionProviders = sectionProviders;
+                let FilePropertySectionExtension = /** @class */ (() => {
+                    class FilePropertySectionExtension extends colibri.Extension {
+                        constructor(...sectionProviders) {
+                            super(FilePropertySectionExtension.POINT_ID);
+                            this._sectionProviders = sectionProviders;
+                        }
+                        getSectionProviders() {
+                            return this._sectionProviders;
+                        }
                     }
-                    getSectionProviders() {
-                        return this._sectionProviders;
-                    }
-                }
-                FilePropertySectionExtension.POINT_ID = "phasereditor2d.files.ui.views.FilePropertySectionExtension";
+                    FilePropertySectionExtension.POINT_ID = "phasereditor2d.files.ui.views.FilePropertySectionExtension";
+                    return FilePropertySectionExtension;
+                })();
                 views.FilePropertySectionExtension = FilePropertySectionExtension;
             })(views = ui.views || (ui.views = {}));
         })(ui = files.ui || (files.ui = {}));
@@ -1338,86 +1350,89 @@ var phasereditor2d;
                 var controls = colibri.ui.controls;
                 var ide = colibri.ui.ide;
                 var io = colibri.core.io;
-                class FilesView extends ide.ViewerView {
-                    constructor() {
-                        super(FilesView.ID);
-                        this._propertyProvider = new views.FilePropertySectionProvider();
-                        this.setTitle("Files");
-                        this.setIcon(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
-                    }
-                    createViewer() {
-                        return new controls.viewers.TreeViewer();
-                    }
-                    fillContextMenu(menu) {
-                        const sel = this._viewer.getSelection();
-                        menu.add(new ui.actions.NewFileAction(this));
-                        menu.addSeparator();
-                        menu.add(new ui.actions.RenameFileAction(this));
-                        menu.add(new ui.actions.MoveFilesAction(this));
-                        menu.add(new ui.actions.CopyFilesAction(this));
-                        menu.add(new ui.actions.DeleteFilesAction(this));
-                        menu.addSeparator();
-                        menu.addExtension(FilesView.MENU_ID);
-                        menu.addSeparator();
-                        menu.add(new ui.actions.UploadFilesAction(this));
-                    }
-                    getPropertyProvider() {
-                        return this._propertyProvider;
-                    }
-                    createPart() {
-                        super.createPart();
-                        const wb = ide.Workbench.getWorkbench();
-                        const root = wb.getProjectRoot();
-                        const viewer = this._viewer;
-                        viewer.setLabelProvider(new ui.viewers.FileLabelProvider());
-                        viewer.setContentProvider(new ui.viewers.FileTreeContentProvider());
-                        viewer.setCellRendererProvider(new ui.viewers.FileCellRendererProvider());
-                        viewer.setInput(root);
-                        viewer.repaint();
-                        viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, (e) => {
-                            const file = e.detail;
-                            if (file.isFolder()) {
-                                return;
-                            }
-                            wb.openEditor(file);
-                        });
-                        wb.getFileStorage().addChangeListener(change => this.onFileStorageChange(change));
-                        wb.addEventListener(ide.EVENT_EDITOR_ACTIVATED, e => {
-                            const editor = wb.getActiveEditor();
-                            if (editor) {
-                                const input = editor.getInput();
-                                if (input instanceof io.FilePath) {
-                                    // gives it a time because other listeners need to do their job.
-                                    viewer.setSelection([input]);
-                                    viewer.reveal(input);
+                let FilesView = /** @class */ (() => {
+                    class FilesView extends ide.ViewerView {
+                        constructor() {
+                            super(FilesView.ID);
+                            this._propertyProvider = new views.FilePropertySectionProvider();
+                            this.setTitle("Files");
+                            this.setIcon(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
+                        }
+                        createViewer() {
+                            return new controls.viewers.TreeViewer();
+                        }
+                        fillContextMenu(menu) {
+                            const sel = this._viewer.getSelection();
+                            menu.add(new ui.actions.NewFileAction(this));
+                            menu.addSeparator();
+                            menu.add(new ui.actions.RenameFileAction(this));
+                            menu.add(new ui.actions.MoveFilesAction(this));
+                            menu.add(new ui.actions.CopyFilesAction(this));
+                            menu.add(new ui.actions.DeleteFilesAction(this));
+                            menu.addSeparator();
+                            menu.addExtension(FilesView.MENU_ID);
+                            menu.addSeparator();
+                            menu.add(new ui.actions.UploadFilesAction(this));
+                        }
+                        getPropertyProvider() {
+                            return this._propertyProvider;
+                        }
+                        createPart() {
+                            super.createPart();
+                            const wb = ide.Workbench.getWorkbench();
+                            const root = wb.getProjectRoot();
+                            const viewer = this._viewer;
+                            viewer.setLabelProvider(new ui.viewers.FileLabelProvider());
+                            viewer.setContentProvider(new ui.viewers.FileTreeContentProvider());
+                            viewer.setCellRendererProvider(new ui.viewers.FileCellRendererProvider());
+                            viewer.setInput(root);
+                            viewer.repaint();
+                            viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, (e) => {
+                                const file = e.detail;
+                                if (file.isFolder()) {
+                                    return;
+                                }
+                                wb.openEditor(file);
+                            });
+                            wb.getFileStorage().addChangeListener(change => this.onFileStorageChange(change));
+                            wb.addEventListener(ide.EVENT_EDITOR_ACTIVATED, e => {
+                                const editor = wb.getActiveEditor();
+                                if (editor) {
+                                    const input = editor.getInput();
+                                    if (input instanceof io.FilePath) {
+                                        // gives it a time because other listeners need to do their job.
+                                        viewer.setSelection([input]);
+                                        viewer.reveal(input);
+                                    }
+                                }
+                            });
+                        }
+                        async onFileStorageChange(change) {
+                            const viewer = this.getViewer();
+                            const oldSelection = this.getViewer().getSelection();
+                            viewer.setInput(ide.FileUtils.getRoot());
+                            await viewer.repaint();
+                            if (oldSelection.length > 0) {
+                                const newSelection = oldSelection
+                                    .map(obj => obj)
+                                    .filter(file => {
+                                    const file2 = colibri.ui.ide.FileUtils.getFileFromPath(file.getFullName());
+                                    return file2 !== null;
+                                });
+                                if (newSelection.length !== oldSelection.length) {
+                                    this.getViewer().setSelection(newSelection);
+                                    this.getViewer().repaint();
                                 }
                             }
-                        });
-                    }
-                    async onFileStorageChange(change) {
-                        const viewer = this.getViewer();
-                        const oldSelection = this.getViewer().getSelection();
-                        viewer.setInput(ide.FileUtils.getRoot());
-                        await viewer.repaint();
-                        if (oldSelection.length > 0) {
-                            const newSelection = oldSelection
-                                .map(obj => obj)
-                                .filter(file => {
-                                const file2 = colibri.ui.ide.FileUtils.getFileFromPath(file.getFullName());
-                                return file2 !== null;
-                            });
-                            if (newSelection.length !== oldSelection.length) {
-                                this.getViewer().setSelection(newSelection);
-                                this.getViewer().repaint();
-                            }
+                        }
+                        getIcon() {
+                            return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
                         }
                     }
-                    getIcon() {
-                        return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
-                    }
-                }
-                FilesView.ID = "phasereditor2d.files.ui.views.FilesView";
-                FilesView.MENU_ID = "phasereditor2d.files.ui.views.FilesView#ContextMenu";
+                    FilesView.ID = "phasereditor2d.files.ui.views.FilesView";
+                    FilesView.MENU_ID = "phasereditor2d.files.ui.views.FilesView#ContextMenu";
+                    return FilesView;
+                })();
                 views.FilesView = FilesView;
             })(views = ui.views || (ui.views = {}));
         })(ui = files.ui || (files.ui = {}));

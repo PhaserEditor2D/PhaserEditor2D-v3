@@ -348,9 +348,12 @@ namespace colibri.ui.controls.viewers {
         }
 
         private initContext(): void {
+
             this._context = this.getCanvas().getContext("2d");
             this._context.imageSmoothingEnabled = false;
             this._context.font = `${controls.FONT_HEIGHT}px sans-serif`;
+
+            Controls.adjustCanvasDPI(this.getCanvas());
         }
 
         setExpanded(obj: any, expanded: boolean): void {

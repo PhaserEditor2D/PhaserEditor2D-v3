@@ -45,103 +45,106 @@ var phasereditor2d;
         pack.ICON_ANIMATIONS = "animations";
         pack.CAT_ASSET_PACK_EDITOR = "phasereditor2d.pack.ui.editor.category";
         pack.CMD_ASSET_PACK_EDITOR_ADD_FILE = "phasereditor2d.pack.ui.editor.AddFile";
-        class AssetPackPlugin extends colibri.Plugin {
-            constructor() {
-                super("phasereditor2d.pack");
-            }
-            static getInstance() {
-                return this._instance;
-            }
-            registerExtensions(reg) {
-                // icons loader
-                reg.addExtension(ide.IconLoaderExtension.withPluginFiles(this, [
-                    pack.ICON_ASSET_PACK,
-                    pack.ICON_ANIMATIONS
-                ]));
-                // content type resolvers
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AssetPackContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AtlasContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.MultiatlasContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AtlasXMLContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.UnityAtlasContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AnimationsContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.BitmapFontContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.TilemapImpactContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.TilemapTiledJSONContentTypeResolver()], 5));
-                reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AudioSpriteContentTypeResolver()], 5));
-                // content type icons
-                reg.addExtension(ide.ContentTypeIconExtension.withPluginIcons(this, [
-                    {
-                        iconName: pack.ICON_ASSET_PACK,
-                        contentType: pack.core.contentTypes.CONTENT_TYPE_ASSET_PACK
-                    },
-                    {
-                        iconName: pack.ICON_ANIMATIONS,
-                        contentType: pack.core.contentTypes.CONTENT_TYPE_ANIMATIONS
-                    },
-                    {
-                        plugin: phasereditor2d.webContentTypes.WebContentTypesPlugin.getInstance(),
-                        iconName: phasereditor2d.webContentTypes.ICON_FILE_FONT,
-                        contentType: pack.core.contentTypes.CONTENT_TYPE_BITMAP_FONT
-                    }
-                ]));
-                // project resources preloader
-                reg.addExtension(new pack.core.AssetPackPreloadProjectExtension(), 
-                // tslint:disable-next-line:new-parens
-                new (class extends ide.PreloadProjectResourcesExtension {
-                    async computeTotal() {
-                        return 0;
-                    }
-                    async preload() {
-                        return AssetPackPlugin.getInstance().getPhaserDocs().preload();
-                    }
-                }));
-                // editors
-                reg.addExtension(new ide.EditorExtension([
-                    pack.ui.editor.AssetPackEditor.getFactory()
-                ]));
-                // commands
-                reg.addExtension(new ide.commands.CommandExtension(manager => {
-                    // category
-                    manager.addCategory({
-                        id: pack.CAT_ASSET_PACK_EDITOR,
-                        name: "Asset Pack File"
-                    });
-                    // delete
-                    manager.addHandlerHelper(ide.actions.CMD_DELETE, args => pack.ui.editor.AssetPackEditor.isEditorScope(args)
-                        && args.activeEditor.getSelection().length > 0, args => {
-                        const editor = args.activeEditor;
-                        editor.deleteSelection();
-                    });
-                    // add file
-                    manager.add({
-                        command: {
-                            id: pack.CMD_ASSET_PACK_EDITOR_ADD_FILE,
-                            icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
-                            name: "Add File",
-                            tooltip: "Add new file configuration",
-                            category: pack.CAT_ASSET_PACK_EDITOR
+        let AssetPackPlugin = /** @class */ (() => {
+            class AssetPackPlugin extends colibri.Plugin {
+                constructor() {
+                    super("phasereditor2d.pack");
+                }
+                static getInstance() {
+                    return this._instance;
+                }
+                registerExtensions(reg) {
+                    // icons loader
+                    reg.addExtension(ide.IconLoaderExtension.withPluginFiles(this, [
+                        pack.ICON_ASSET_PACK,
+                        pack.ICON_ANIMATIONS
+                    ]));
+                    // content type resolvers
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AssetPackContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AtlasContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.MultiatlasContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AtlasXMLContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.UnityAtlasContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AnimationsContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.BitmapFontContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.TilemapImpactContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.TilemapTiledJSONContentTypeResolver()], 5));
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new pack.core.contentTypes.AudioSpriteContentTypeResolver()], 5));
+                    // content type icons
+                    reg.addExtension(ide.ContentTypeIconExtension.withPluginIcons(this, [
+                        {
+                            iconName: pack.ICON_ASSET_PACK,
+                            contentType: pack.core.contentTypes.CONTENT_TYPE_ASSET_PACK
                         },
-                        handler: {
-                            testFunc: args => pack.ui.editor.AssetPackEditor.isEditorScope(args),
-                            executeFunc: args => args.activeEditor.openAddFileDialog()
+                        {
+                            iconName: pack.ICON_ANIMATIONS,
+                            contentType: pack.core.contentTypes.CONTENT_TYPE_ANIMATIONS
                         },
-                        keys: {
-                            key: "A"
+                        {
+                            plugin: phasereditor2d.webContentTypes.WebContentTypesPlugin.getInstance(),
+                            iconName: phasereditor2d.webContentTypes.ICON_FILE_FONT,
+                            contentType: pack.core.contentTypes.CONTENT_TYPE_BITMAP_FONT
                         }
-                    });
-                }));
-                // new file dialog
-                reg.addExtension(new pack.ui.dialogs.NewAssetPackFileWizardExtension());
-                reg.addExtension(new phasereditor2d.files.ui.views.FilePropertySectionExtension(page => new pack.ui.properties.AddFileToPackFileSection(page)));
+                    ]));
+                    // project resources preloader
+                    reg.addExtension(new pack.core.AssetPackPreloadProjectExtension(), 
+                    // tslint:disable-next-line:new-parens
+                    new (class extends ide.PreloadProjectResourcesExtension {
+                        async computeTotal() {
+                            return 0;
+                        }
+                        async preload() {
+                            return AssetPackPlugin.getInstance().getPhaserDocs().preload();
+                        }
+                    }));
+                    // editors
+                    reg.addExtension(new ide.EditorExtension([
+                        pack.ui.editor.AssetPackEditor.getFactory()
+                    ]));
+                    // commands
+                    reg.addExtension(new ide.commands.CommandExtension(manager => {
+                        // category
+                        manager.addCategory({
+                            id: pack.CAT_ASSET_PACK_EDITOR,
+                            name: "Asset Pack File"
+                        });
+                        // delete
+                        manager.addHandlerHelper(ide.actions.CMD_DELETE, args => pack.ui.editor.AssetPackEditor.isEditorScope(args)
+                            && args.activeEditor.getSelection().length > 0, args => {
+                            const editor = args.activeEditor;
+                            editor.deleteSelection();
+                        });
+                        // add file
+                        manager.add({
+                            command: {
+                                id: pack.CMD_ASSET_PACK_EDITOR_ADD_FILE,
+                                icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
+                                name: "Add File",
+                                tooltip: "Add new file configuration",
+                                category: pack.CAT_ASSET_PACK_EDITOR
+                            },
+                            handler: {
+                                testFunc: args => pack.ui.editor.AssetPackEditor.isEditorScope(args),
+                                executeFunc: args => args.activeEditor.openAddFileDialog()
+                            },
+                            keys: {
+                                key: "A"
+                            }
+                        });
+                    }));
+                    // new file dialog
+                    reg.addExtension(new pack.ui.dialogs.NewAssetPackFileWizardExtension());
+                    reg.addExtension(new phasereditor2d.files.ui.views.FilePropertySectionExtension(page => new pack.ui.properties.AddFileToPackFileSection(page)));
+                }
+                getPhaserDocs() {
+                    return this._phaserDocs ?
+                        this._phaserDocs :
+                        (this._phaserDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json"));
+                }
             }
-            getPhaserDocs() {
-                return this._phaserDocs ?
-                    this._phaserDocs :
-                    (this._phaserDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json"));
-            }
-        }
-        AssetPackPlugin._instance = new AssetPackPlugin();
+            AssetPackPlugin._instance = new AssetPackPlugin();
+            return AssetPackPlugin;
+        })();
         pack.AssetPackPlugin = AssetPackPlugin;
         colibri.Platform.addPlugin(AssetPackPlugin.getInstance());
     })(pack = phasereditor2d.pack || (phasereditor2d.pack = {}));
@@ -2155,7 +2158,7 @@ var phasereditor2d;
                         viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
                         viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setCellSize(64);
+                        viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
                         viewer.setInput([]);
                         super.create();
                         this.setTitle("Select Asset");
@@ -2277,7 +2280,7 @@ var phasereditor2d;
                         viewer.setLabelProvider(new ui.viewers.AssetPackLabelProvider());
                         viewer.setCellRendererProvider(new ui.viewers.AssetPackCellRendererProvider("grid"));
                         viewer.setTreeRenderer(new ui.viewers.AssetPackTreeViewerRenderer(viewer, true));
-                        viewer.setCellSize(96);
+                        viewer.setCellSize(96 * controls.DEVICE_PIXEL_RATIO);
                         viewer.setInput(this);
                         viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
                             this._outlineProvider.setSelection(viewer.getSelection(), true, false);

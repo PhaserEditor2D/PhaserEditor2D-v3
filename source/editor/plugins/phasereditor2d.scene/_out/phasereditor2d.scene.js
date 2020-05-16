@@ -30,137 +30,140 @@ var phasereditor2d;
         scene_1.ICON_LOCKED = "locked";
         scene_1.ICON_UNLOCKED = "unlocked";
         scene_1.ICON_LIST = "list";
-        class ScenePlugin extends colibri.Plugin {
-            constructor() {
-                super("phasereditor2d.scene");
-                this._docs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json");
-            }
-            static getInstance() {
-                return this._instance;
-            }
-            getPhaserDocs() {
-                return this._docs;
-            }
-            registerExtensions(reg) {
-                this._sceneFinder = new scene_1.core.json.SceneFinder();
-                // preload project
-                reg.addExtension(this._sceneFinder.getProjectPreloader(), 
-                // tslint:disable-next-line:new-parens
-                new (class extends ide.PreloadProjectResourcesExtension {
-                    async computeTotal() {
-                        return 0;
-                    }
-                    async preload() {
-                        return ScenePlugin.getInstance().getPhaserDocs().preload();
-                    }
-                }));
-                // content type resolvers
-                reg.addExtension(new colibri.core.ContentTypeExtension([new scene_1.core.SceneContentTypeResolver()], 5));
-                // content type renderer
-                reg.addExtension(new phasereditor2d.files.ui.viewers.SimpleContentTypeCellRendererExtension(scene_1.core.CONTENT_TYPE_SCENE, new scene_1.ui.viewers.SceneFileCellRenderer()));
-                // icons loader
-                reg.addExtension(ide.IconLoaderExtension.withPluginFiles(this, [
-                    scene_1.ICON_GROUP,
-                    scene_1.ICON_ANGLE,
-                    scene_1.ICON_ORIGIN,
-                    scene_1.ICON_SCALE,
-                    scene_1.ICON_TRANSLATE,
-                    scene_1.ICON_BUILD,
-                    scene_1.ICON_LOCKED,
-                    scene_1.ICON_UNLOCKED,
-                    scene_1.ICON_LIST
-                ]));
-                // loader updates
-                reg.addExtension(new scene_1.ui.sceneobjects.ImageLoaderUpdater(), new scene_1.ui.sceneobjects.BitmapFontLoaderUpdater());
-                // commands
-                reg.addExtension(new ide.commands.CommandExtension(scene_1.ui.editor.commands.SceneEditorCommands.registerCommands));
-                // main menu
-                reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN, {
-                    command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
-                }));
-                reg.addExtension(new controls.MenuExtension(phasereditor2d.files.ui.views.FilesView.MENU_ID, {
-                    command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
-                }));
-                // editors
-                reg.addExtension(new ide.EditorExtension([
-                    scene_1.ui.editor.SceneEditor.getFactory()
-                ]));
-                // new file wizards
-                reg.addExtension(new scene_1.ui.dialogs.NewSceneFileDialogExtension(), new scene_1.ui.dialogs.NewPrefabFileDialogExtension());
-                // file properties
-                reg.addExtension(new phasereditor2d.files.ui.views.FilePropertySectionExtension(page => new scene_1.ui.SceneFileSection(page), page => new scene_1.ui.ManySceneFileSection(page)));
-                // scene object extensions
-                reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.TextExtension.getInstance(), scene_1.ui.sceneobjects.BitmapTextExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
-                // property sections
-                reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.VisibleSection(page), page => new scene_1.ui.sceneobjects.AlphaSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.BitmapTextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
-                // scene tools
-                reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
-            }
-            getDefaultSceneLanguage() {
-                let typeScript = false;
-                try {
-                    const finder = ScenePlugin.getInstance().getSceneFinder();
-                    const files = [...finder.getFiles()];
-                    files.sort((a, b) => b.getModTime() - a.getModTime());
-                    if (files.length > 0) {
-                        const file = files[0];
-                        const s = new scene_1.core.json.SceneSettings();
-                        s.readJSON(finder.getSceneData(file).settings);
-                        typeScript = s.compilerOutputLanguage === scene_1.core.json.SourceLang.TYPE_SCRIPT;
-                    }
+        let ScenePlugin = /** @class */ (() => {
+            class ScenePlugin extends colibri.Plugin {
+                constructor() {
+                    super("phasereditor2d.scene");
+                    this._docs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json");
                 }
-                catch (e) {
-                    console.error(e);
+                static getInstance() {
+                    return this._instance;
                 }
-                return typeScript ?
-                    scene_1.core.json.SourceLang.TYPE_SCRIPT : scene_1.core.json.SourceLang.JAVA_SCRIPT;
-            }
-            getSceneFinder() {
-                return this._sceneFinder;
-            }
-            getObjectExtensions() {
-                return colibri.Platform
-                    .getExtensions(scene_1.ui.sceneobjects.SceneObjectExtension.POINT_ID);
-            }
-            getObjectExtensionByObjectType(type) {
-                return this.getObjectExtensions().find(ext => ext.getTypeName() === type);
-            }
-            getLoaderUpdaterForAsset(asset) {
-                const exts = colibri.Platform
-                    .getExtensions(scene_1.ui.sceneobjects.LoaderUpdaterExtension.POINT_ID);
-                for (const ext of exts) {
-                    if (ext.acceptAsset(asset)) {
-                        return ext;
+                getPhaserDocs() {
+                    return this._docs;
+                }
+                registerExtensions(reg) {
+                    this._sceneFinder = new scene_1.core.json.SceneFinder();
+                    // preload project
+                    reg.addExtension(this._sceneFinder.getProjectPreloader(), 
+                    // tslint:disable-next-line:new-parens
+                    new (class extends ide.PreloadProjectResourcesExtension {
+                        async computeTotal() {
+                            return 0;
+                        }
+                        async preload() {
+                            return ScenePlugin.getInstance().getPhaserDocs().preload();
+                        }
+                    }));
+                    // content type resolvers
+                    reg.addExtension(new colibri.core.ContentTypeExtension([new scene_1.core.SceneContentTypeResolver()], 5));
+                    // content type renderer
+                    reg.addExtension(new phasereditor2d.files.ui.viewers.SimpleContentTypeCellRendererExtension(scene_1.core.CONTENT_TYPE_SCENE, new scene_1.ui.viewers.SceneFileCellRenderer()));
+                    // icons loader
+                    reg.addExtension(ide.IconLoaderExtension.withPluginFiles(this, [
+                        scene_1.ICON_GROUP,
+                        scene_1.ICON_ANGLE,
+                        scene_1.ICON_ORIGIN,
+                        scene_1.ICON_SCALE,
+                        scene_1.ICON_TRANSLATE,
+                        scene_1.ICON_BUILD,
+                        scene_1.ICON_LOCKED,
+                        scene_1.ICON_UNLOCKED,
+                        scene_1.ICON_LIST
+                    ]));
+                    // loader updates
+                    reg.addExtension(new scene_1.ui.sceneobjects.ImageLoaderUpdater(), new scene_1.ui.sceneobjects.BitmapFontLoaderUpdater());
+                    // commands
+                    reg.addExtension(new ide.commands.CommandExtension(scene_1.ui.editor.commands.SceneEditorCommands.registerCommands));
+                    // main menu
+                    reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN, {
+                        command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
+                    }));
+                    reg.addExtension(new controls.MenuExtension(phasereditor2d.files.ui.views.FilesView.MENU_ID, {
+                        command: scene_1.ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
+                    }));
+                    // editors
+                    reg.addExtension(new ide.EditorExtension([
+                        scene_1.ui.editor.SceneEditor.getFactory()
+                    ]));
+                    // new file wizards
+                    reg.addExtension(new scene_1.ui.dialogs.NewSceneFileDialogExtension(), new scene_1.ui.dialogs.NewPrefabFileDialogExtension());
+                    // file properties
+                    reg.addExtension(new phasereditor2d.files.ui.views.FilePropertySectionExtension(page => new scene_1.ui.SceneFileSection(page), page => new scene_1.ui.ManySceneFileSection(page)));
+                    // scene object extensions
+                    reg.addExtension(scene_1.ui.sceneobjects.ImageExtension.getInstance(), scene_1.ui.sceneobjects.SpriteExtension.getInstance(), scene_1.ui.sceneobjects.TileSpriteExtension.getInstance(), scene_1.ui.sceneobjects.TextExtension.getInstance(), scene_1.ui.sceneobjects.BitmapTextExtension.getInstance(), scene_1.ui.sceneobjects.ContainerExtension.getInstance());
+                    // property sections
+                    reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.VisibleSection(page), page => new scene_1.ui.sceneobjects.AlphaSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.BitmapTextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
+                    // scene tools
+                    reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
+                }
+                getDefaultSceneLanguage() {
+                    let typeScript = false;
+                    try {
+                        const finder = ScenePlugin.getInstance().getSceneFinder();
+                        const files = [...finder.getFiles()];
+                        files.sort((a, b) => b.getModTime() - a.getModTime());
+                        if (files.length > 0) {
+                            const file = files[0];
+                            const s = new scene_1.core.json.SceneSettings();
+                            s.readJSON(finder.getSceneData(file).settings);
+                            typeScript = s.compilerOutputLanguage === scene_1.core.json.SourceLang.TYPE_SCRIPT;
+                        }
                     }
+                    catch (e) {
+                        console.error(e);
+                    }
+                    return typeScript ?
+                        scene_1.core.json.SourceLang.TYPE_SCRIPT : scene_1.core.json.SourceLang.JAVA_SCRIPT;
                 }
-                return null;
-            }
-            getLoaderUpdaters() {
-                const exts = colibri.Platform
-                    .getExtensions(scene_1.ui.sceneobjects.LoaderUpdaterExtension.POINT_ID);
-                return exts;
-            }
-            async compileAll() {
-                const files = this._sceneFinder.getFiles();
-                const dlg = new controls.dialogs.ProgressDialog();
-                dlg.create();
-                dlg.setTitle("Compiling Scene Files");
-                const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
-                monitor.addTotal(files.length);
-                for (const file of files) {
-                    const data = this.getSceneFinder().getSceneData(file);
-                    const scene = await scene_1.ui.OfflineScene.createScene(data);
-                    const compiler = new scene_1.core.code.SceneCompiler(scene, file);
-                    await compiler.compile();
-                    scene.destroyGame();
-                    monitor.step();
+                getSceneFinder() {
+                    return this._sceneFinder;
                 }
-                dlg.close();
+                getObjectExtensions() {
+                    return colibri.Platform
+                        .getExtensions(scene_1.ui.sceneobjects.SceneObjectExtension.POINT_ID);
+                }
+                getObjectExtensionByObjectType(type) {
+                    return this.getObjectExtensions().find(ext => ext.getTypeName() === type);
+                }
+                getLoaderUpdaterForAsset(asset) {
+                    const exts = colibri.Platform
+                        .getExtensions(scene_1.ui.sceneobjects.LoaderUpdaterExtension.POINT_ID);
+                    for (const ext of exts) {
+                        if (ext.acceptAsset(asset)) {
+                            return ext;
+                        }
+                    }
+                    return null;
+                }
+                getLoaderUpdaters() {
+                    const exts = colibri.Platform
+                        .getExtensions(scene_1.ui.sceneobjects.LoaderUpdaterExtension.POINT_ID);
+                    return exts;
+                }
+                async compileAll() {
+                    const files = this._sceneFinder.getFiles();
+                    const dlg = new controls.dialogs.ProgressDialog();
+                    dlg.create();
+                    dlg.setTitle("Compiling Scene Files");
+                    const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
+                    monitor.addTotal(files.length);
+                    for (const file of files) {
+                        const data = this.getSceneFinder().getSceneData(file);
+                        const scene = await scene_1.ui.OfflineScene.createScene(data);
+                        const compiler = new scene_1.core.code.SceneCompiler(scene, file);
+                        await compiler.compile();
+                        scene.destroyGame();
+                        monitor.step();
+                    }
+                    dlg.close();
+                }
             }
-        }
-        ScenePlugin._instance = new ScenePlugin();
-        ScenePlugin.DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
-        ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
+            ScenePlugin._instance = new ScenePlugin();
+            ScenePlugin.DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
+            ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
+            return ScenePlugin;
+        })();
         scene_1.ScenePlugin = ScenePlugin;
         colibri.Platform.addPlugin(ScenePlugin.getInstance());
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -347,7 +350,7 @@ var phasereditor2d;
                         return this._text.length;
                     }
                     generate(replace) {
-                        this._replace = (replace !== null && replace !== void 0 ? replace : "");
+                        this._replace = replace !== null && replace !== void 0 ? replace : "";
                         this.internalGenerate();
                         return this._text;
                     }
@@ -2825,25 +2828,28 @@ var phasereditor2d;
             var viewers;
             (function (viewers) {
                 var controls = colibri.ui.controls;
-                class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
-                    constructor() {
-                        super();
-                        const treeRenderer = new controls.viewers.ShadowGridTreeViewerRenderer(this);
-                        treeRenderer.setSections(ObjectExtensionAndPrefabViewer.SECTIONS);
-                        this.setLabelProvider(new viewers.ObjectExtensionAndPrefabLabelProvider());
-                        this.setCellRendererProvider(new viewers.ObjectExtensionAndPrefabCellRendererProvider());
-                        this.setContentProvider(new ObjectExtensionAndPrefabContentProvider());
-                        this.setTreeRenderer(treeRenderer);
-                        this.setInput(ObjectExtensionAndPrefabViewer.SECTIONS);
-                        this.setCellSize(78);
+                let ObjectExtensionAndPrefabViewer = /** @class */ (() => {
+                    class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
+                        constructor() {
+                            super();
+                            const treeRenderer = new controls.viewers.ShadowGridTreeViewerRenderer(this);
+                            treeRenderer.setSections(ObjectExtensionAndPrefabViewer.SECTIONS);
+                            this.setLabelProvider(new viewers.ObjectExtensionAndPrefabLabelProvider());
+                            this.setCellRendererProvider(new viewers.ObjectExtensionAndPrefabCellRendererProvider());
+                            this.setContentProvider(new ObjectExtensionAndPrefabContentProvider());
+                            this.setTreeRenderer(treeRenderer);
+                            this.setInput(ObjectExtensionAndPrefabViewer.SECTIONS);
+                            this.setCellSize(78 * controls.DEVICE_PIXEL_RATIO);
+                        }
                     }
-                }
-                ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION = "Built-In";
-                ObjectExtensionAndPrefabViewer.PREFAB_SECTION = "User Prefab";
-                ObjectExtensionAndPrefabViewer.SECTIONS = [
-                    ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION,
-                    ObjectExtensionAndPrefabViewer.PREFAB_SECTION,
-                ];
+                    ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION = "Built-In";
+                    ObjectExtensionAndPrefabViewer.PREFAB_SECTION = "User Prefab";
+                    ObjectExtensionAndPrefabViewer.SECTIONS = [
+                        ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION,
+                        ObjectExtensionAndPrefabViewer.PREFAB_SECTION,
+                    ];
+                    return ObjectExtensionAndPrefabViewer;
+                })();
                 viewers.ObjectExtensionAndPrefabViewer = ObjectExtensionAndPrefabViewer;
                 class ObjectExtensionAndPrefabContentProvider {
                     getRoots(input) {
@@ -2876,42 +2882,45 @@ var phasereditor2d;
             var editor;
             (function (editor_1) {
                 var controls = colibri.ui.controls;
-                class AddObjectDialog extends controls.dialogs.ViewerDialog {
-                    constructor(editor) {
-                        super(new AddObjectDialogViewer());
-                        this._editor = editor;
-                        const size = this.getSize();
-                        this.setSize(size.width, size.height * 1.5);
-                    }
-                    create() {
-                        super.create();
-                        this.setTitle("Add Object");
-                        this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Create", async (sel) => {
-                            const type = sel[0];
-                            if (type === AddObjectDialog.OBJECT_LIST_TYPE) {
-                                this._editor.getUndoManager().add(new ui.sceneobjects.NewListOperation(this._editor));
-                            }
-                            else {
-                                let extraData;
-                                if (type instanceof ui.sceneobjects.SceneObjectExtension) {
-                                    const result = await type.collectExtraDataForCreateEmptyObject();
-                                    if (result.abort) {
-                                        return;
-                                    }
-                                    if (result.dataNotFoundMessage) {
-                                        alert(result.dataNotFoundMessage);
-                                        return;
-                                    }
-                                    extraData = result.data;
+                let AddObjectDialog = /** @class */ (() => {
+                    class AddObjectDialog extends controls.dialogs.ViewerDialog {
+                        constructor(editor) {
+                            super(new AddObjectDialogViewer());
+                            this._editor = editor;
+                            const size = this.getSize();
+                            this.setSize(size.width, size.height * 1.5);
+                        }
+                        create() {
+                            super.create();
+                            this.setTitle("Add Object");
+                            this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Create", async (sel) => {
+                                const type = sel[0];
+                                if (type === AddObjectDialog.OBJECT_LIST_TYPE) {
+                                    this._editor.getUndoManager().add(new ui.sceneobjects.NewListOperation(this._editor));
                                 }
-                                this._editor.getUndoManager().add(new editor_1.undo.AddObjectOperation(this._editor, type, extraData));
-                            }
-                        }));
-                        this.addCancelButton();
-                        this.getViewer().setSelection([]);
+                                else {
+                                    let extraData;
+                                    if (type instanceof ui.sceneobjects.SceneObjectExtension) {
+                                        const result = await type.collectExtraDataForCreateEmptyObject();
+                                        if (result.abort) {
+                                            return;
+                                        }
+                                        if (result.dataNotFoundMessage) {
+                                            alert(result.dataNotFoundMessage);
+                                            return;
+                                        }
+                                        extraData = result.data;
+                                    }
+                                    this._editor.getUndoManager().add(new editor_1.undo.AddObjectOperation(this._editor, type, extraData));
+                                }
+                            }));
+                            this.addCancelButton();
+                            this.getViewer().setSelection([]);
+                        }
                     }
-                }
-                AddObjectDialog.OBJECT_LIST_TYPE = "ObjectListType";
+                    AddObjectDialog.OBJECT_LIST_TYPE = "ObjectListType";
+                    return AddObjectDialog;
+                })();
                 editor_1.AddObjectDialog = AddObjectDialog;
                 class AddObjectDialogViewer extends ui.viewers.ObjectExtensionAndPrefabViewer {
                     constructor() {
@@ -3553,6 +3562,7 @@ var phasereditor2d;
                     }
                     resetContext() {
                         this._ctx = this._canvas.getContext("2d");
+                        controls.Controls.adjustCanvasDPI(this._canvas);
                         this._ctx.imageSmoothingEnabled = false;
                         this._ctx.font = "12px Monospace";
                     }
@@ -3860,6 +3870,7 @@ var phasereditor2d;
                             scale: {
                                 mode: Phaser.Scale.NONE
                             },
+                            // resolution: window.devicePixelRatio,
                             render: {
                                 pixelArt: true,
                                 transparent: true
@@ -4244,7 +4255,7 @@ var phasereditor2d;
                             if (selected) {
                                 const obj = selected;
                                 const owner = obj.getEditorSupport().getOwnerPrefabInstance();
-                                selected = (owner !== null && owner !== void 0 ? owner : selected);
+                                selected = owner !== null && owner !== void 0 ? owner : selected;
                             }
                             if (selected) {
                                 const container = selected.parentContainer;
@@ -5540,16 +5551,19 @@ var phasereditor2d;
             (function (editor) {
                 var properties;
                 (function (properties) {
-                    class SceneEditorPropertySectionExtension extends colibri.Extension {
-                        constructor(...sectionProviders) {
-                            super(SceneEditorPropertySectionExtension.POINT_ID);
-                            this._sectionProviders = sectionProviders;
+                    let SceneEditorPropertySectionExtension = /** @class */ (() => {
+                        class SceneEditorPropertySectionExtension extends colibri.Extension {
+                            constructor(...sectionProviders) {
+                                super(SceneEditorPropertySectionExtension.POINT_ID);
+                                this._sectionProviders = sectionProviders;
+                            }
+                            getSectionProviders() {
+                                return this._sectionProviders;
+                            }
                         }
-                        getSectionProviders() {
-                            return this._sectionProviders;
-                        }
-                    }
-                    SceneEditorPropertySectionExtension.POINT_ID = "phasereditor2d.scene.ui.editor.properties.SceneEditorPropertySectionExtension";
+                        SceneEditorPropertySectionExtension.POINT_ID = "phasereditor2d.scene.ui.editor.properties.SceneEditorPropertySectionExtension";
+                        return SceneEditorPropertySectionExtension;
+                    })();
                     properties.SceneEditorPropertySectionExtension = SceneEditorPropertySectionExtension;
                 })(properties = editor.properties || (editor.properties = {}));
             })(editor = ui.editor || (ui.editor = {}));
@@ -5830,53 +5844,56 @@ var phasereditor2d;
             (function (editor) {
                 var tools;
                 (function (tools) {
-                    class SceneTool {
-                        constructor(config) {
-                            this._config = config;
-                            this._items = [];
-                        }
-                        getId() {
-                            return this._config.id;
-                        }
-                        getCommandId() {
-                            return this._config.command;
-                        }
-                        getItems() {
-                            return this._items;
-                        }
-                        addItems(...items) {
-                            this._items.push(...items);
-                        }
-                        render(args) {
-                            for (const item of this._items) {
-                                item.render(args);
+                    let SceneTool = /** @class */ (() => {
+                        class SceneTool {
+                            constructor(config) {
+                                this._config = config;
+                                this._items = [];
                             }
-                        }
-                        containsPoint(args) {
-                            for (const item of this._items) {
-                                if (item.containsPoint(args)) {
-                                    return true;
+                            getId() {
+                                return this._config.id;
+                            }
+                            getCommandId() {
+                                return this._config.command;
+                            }
+                            getItems() {
+                                return this._items;
+                            }
+                            addItems(...items) {
+                                this._items.push(...items);
+                            }
+                            render(args) {
+                                for (const item of this._items) {
+                                    item.render(args);
                                 }
                             }
-                            return false;
-                        }
-                        onStartDrag(args) {
-                            for (const item of this._items) {
-                                item.onStartDrag(args);
+                            containsPoint(args) {
+                                for (const item of this._items) {
+                                    if (item.containsPoint(args)) {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
+                            onStartDrag(args) {
+                                for (const item of this._items) {
+                                    item.onStartDrag(args);
+                                }
+                            }
+                            onDrag(args) {
+                                for (const item of this._items) {
+                                    item.onDrag(args);
+                                }
+                            }
+                            onStopDrag(args) {
+                                for (const item of this._items) {
+                                    item.onStopDrag(args);
+                                }
                             }
                         }
-                        onDrag(args) {
-                            for (const item of this._items) {
-                                item.onDrag(args);
-                            }
-                        }
-                        onStopDrag(args) {
-                            for (const item of this._items) {
-                                item.onStopDrag(args);
-                            }
-                        }
-                    }
-                    SceneTool.COLOR_CANNOT_EDIT = "#808080";
+                        SceneTool.COLOR_CANNOT_EDIT = "#808080";
+                        return SceneTool;
+                    })();
                     tools.SceneTool = SceneTool;
                 })(tools = editor.tools || (editor.tools = {}));
             })(editor = ui.editor || (ui.editor = {}));
@@ -5893,16 +5910,19 @@ var phasereditor2d;
             (function (editor) {
                 var tools;
                 (function (tools_2) {
-                    class SceneToolExtension extends colibri.Extension {
-                        constructor(...tools) {
-                            super(SceneToolExtension.POINT_ID);
-                            this._tools = tools;
+                    let SceneToolExtension = /** @class */ (() => {
+                        class SceneToolExtension extends colibri.Extension {
+                            constructor(...tools) {
+                                super(SceneToolExtension.POINT_ID);
+                                this._tools = tools;
+                            }
+                            getTools() {
+                                return this._tools;
+                            }
                         }
-                        getTools() {
-                            return this._tools;
-                        }
-                    }
-                    SceneToolExtension.POINT_ID = "phasereditor2d.scene.ui.editor.tools.SceneToolExtension";
+                        SceneToolExtension.POINT_ID = "phasereditor2d.scene.ui.editor.tools.SceneToolExtension";
+                        return SceneToolExtension;
+                    })();
                     tools_2.SceneToolExtension = SceneToolExtension;
                 })(tools = editor.tools || (editor.tools = {}));
             })(editor = ui.editor || (ui.editor = {}));
@@ -6756,7 +6776,7 @@ var phasereditor2d;
                         var _a;
                         if (obj && typeof obj["getEditorSupport"] === "function") {
                             const support = obj["getEditorSupport"]();
-                            return _a = support.getComponent(ctr), (_a !== null && _a !== void 0 ? _a : null);
+                            return (_a = support.getComponent(ctr)) !== null && _a !== void 0 ? _a : null;
                         }
                         return null;
                     }
@@ -6916,7 +6936,7 @@ var phasereditor2d;
                         const ser = this.getSerializer(data);
                         this.setId(data.id);
                         this._prefabId = data.prefabId;
-                        this._unlockedProperties = new Set((_a = data["unlock"], (_a !== null && _a !== void 0 ? _a : [])));
+                        this._unlockedProperties = new Set((_a = data["unlock"]) !== null && _a !== void 0 ? _a : []);
                         for (const s of this._serializables) {
                             s.readJSON(ser);
                         }
@@ -6935,12 +6955,15 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class LoaderUpdaterExtension extends colibri.Extension {
-                    constructor() {
-                        super(LoaderUpdaterExtension.POINT_ID);
+                let LoaderUpdaterExtension = /** @class */ (() => {
+                    class LoaderUpdaterExtension extends colibri.Extension {
+                        constructor() {
+                            super(LoaderUpdaterExtension.POINT_ID);
+                        }
                     }
-                }
-                LoaderUpdaterExtension.POINT_ID = "phasereditor2d.scene.ui.sceneobjects.AssetLoaderExtension";
+                    LoaderUpdaterExtension.POINT_ID = "phasereditor2d.scene.ui.sceneobjects.AssetLoaderExtension";
+                    return LoaderUpdaterExtension;
+                })();
                 sceneobjects.LoaderUpdaterExtension = LoaderUpdaterExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene_14.ui || (scene_14.ui = {}));
@@ -7022,23 +7045,13 @@ var phasereditor2d;
                     const originX = sprite.originX;
                     const originY = sprite.originY;
                     const angle = sprite.angle;
-                    sprite.scaleX = 1;
-                    sprite.scaleY = 1;
-                    sprite.originX = 0;
-                    sprite.originY = 0;
-                    sprite.angle = 0;
-                    let renderX = -x;
-                    let renderY = -y;
-                    if (sprite instanceof sceneobjects.TileSprite) {
-                        renderX = -x - sprite.width * 0 /*originX*/;
-                        renderY = -y - sprite.height * 0 /*originY*/;
-                    }
-                    renderTexture.draw([sprite], renderX, renderY);
-                    sprite.scaleX = scaleX;
-                    sprite.scaleY = scaleY;
-                    sprite.originX = originX;
-                    sprite.originY = originY;
-                    sprite.angle = angle;
+                    sprite.setScale(1, 1);
+                    sprite.setOrigin(0, 0);
+                    sprite.setAngle(0);
+                    renderTexture.draw([sprite], -x, -y);
+                    sprite.setScale(scaleX, scaleY);
+                    sprite.setOrigin(originX, originY);
+                    sprite.setAngle(angle);
                     const colorArray = [];
                     renderTexture.snapshotPixel(0, 0, (c) => {
                         colorArray[0] = c;
@@ -7082,38 +7095,41 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class SceneObjectExtension extends colibri.Extension {
-                    constructor(config) {
-                        super(SceneObjectExtension.POINT_ID);
-                        this._typeName = config.typeName;
-                        this._phaserTypeName = config.phaserTypeName;
+                let SceneObjectExtension = /** @class */ (() => {
+                    class SceneObjectExtension extends colibri.Extension {
+                        constructor(config) {
+                            super(SceneObjectExtension.POINT_ID);
+                            this._typeName = config.typeName;
+                            this._phaserTypeName = config.phaserTypeName;
+                        }
+                        getTypeName() {
+                            return this._typeName;
+                        }
+                        getPhaserTypeName() {
+                            return this._phaserTypeName;
+                        }
+                        /**
+                         * Adapt the data taken from a type conversion.
+                         *
+                         * @param serializer Serializer of the data resulted by the type-conversion.
+                         * @param originalObject The original object that was converted.
+                         * @param extraData Sometimes, to create the object, some extra data is needed.
+                         * For example, the bitmap font of a bitmap text.
+                         */
+                        adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
+                            // nothing by default
+                        }
+                        /**
+                         * Collect the data used to create a new, empty object. For example, a BitmapText requires
+                         * a BitmapFont key to be created, so this method opens a dialog to select the font.
+                         */
+                        async collectExtraDataForCreateEmptyObject() {
+                            return {};
+                        }
                     }
-                    getTypeName() {
-                        return this._typeName;
-                    }
-                    getPhaserTypeName() {
-                        return this._phaserTypeName;
-                    }
-                    /**
-                     * Adapt the data taken from a type conversion.
-                     *
-                     * @param serializer Serializer of the data resulted by the type-conversion.
-                     * @param originalObject The original object that was converted.
-                     * @param extraData Sometimes, to create the object, some extra data is needed.
-                     * For example, the bitmap font of a bitmap text.
-                     */
-                    adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
-                        // nothing by default
-                    }
-                    /**
-                     * Collect the data used to create a new, empty object. For example, a BitmapText requires
-                     * a BitmapFont key to be created, so this method opens a dialog to select the font.
-                     */
-                    async collectExtraDataForCreateEmptyObject() {
-                        return {};
-                    }
-                }
-                SceneObjectExtension.POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
+                    SceneObjectExtension.POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
+                    return SceneObjectExtension;
+                })();
                 sceneobjects.SceneObjectExtension = SceneObjectExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -7151,15 +7167,18 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TextContentComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [TextContentComponent.text]);
+                let TextContentComponent = /** @class */ (() => {
+                    class TextContentComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [TextContentComponent.text]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            this.buildSetObjectPropertyCodeDOM_StringProperty(args, TextContentComponent.text);
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        this.buildSetObjectPropertyCodeDOM_StringProperty(args, TextContentComponent.text);
-                    }
-                }
-                TextContentComponent.text = sceneobjects.SimpleProperty("text", "", "Text", "The text content.");
+                    TextContentComponent.text = sceneobjects.SimpleProperty("text", "", "Text", "The text content.");
+                    return TextContentComponent;
+                })();
                 sceneobjects.TextContentComponent = TextContentComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -7186,8 +7205,8 @@ var phasereditor2d;
                         return comp;
                     }
                     createLock(parent, ...properties) {
-                        const mutableIcon = new controls.MutableIcon();
-                        const element = mutableIcon.getElement();
+                        const mutableIcon = new controls.IconControl();
+                        const element = mutableIcon.getCanvas();
                         element.classList.add("PropertyLockIcon");
                         parent.appendChild(element);
                         const lockedIcon = scene.ScenePlugin.getInstance().getIcon(scene.ICON_LOCKED);
@@ -7201,10 +7220,9 @@ var phasereditor2d;
                                 .map(obj => obj.getEditorSupport().isPrefabInstance())
                                 .find(b => b);
                             if (thereIsPrefabInstances) {
-                                element.style.width = controls.ICON_SIZE + "px";
+                                element.style.width = controls.RENDER_ICON_SIZE + "px";
                                 const unlocked = this.isUnlocked(...properties);
                                 mutableIcon.setIcon(unlocked ? unlockedIcon : lockedIcon);
-                                mutableIcon.repaint();
                             }
                             else {
                                 element.style.width = "0px";
@@ -7513,63 +7531,66 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class BitmapTextComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [
-                            BitmapTextComponent.font,
-                            BitmapTextComponent.align,
-                            BitmapTextComponent.fontSize,
-                            BitmapTextComponent.letterSpacing
-                        ]);
+                let BitmapTextComponent = /** @class */ (() => {
+                    class BitmapTextComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [
+                                BitmapTextComponent.font,
+                                BitmapTextComponent.align,
+                                BitmapTextComponent.fontSize,
+                                BitmapTextComponent.letterSpacing
+                            ]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, BitmapTextComponent.fontSize, BitmapTextComponent.align, BitmapTextComponent.letterSpacing);
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        this.buildSetObjectPropertyCodeDOM_FloatProperty(args, BitmapTextComponent.fontSize, BitmapTextComponent.align, BitmapTextComponent.letterSpacing);
-                    }
-                }
-                BitmapTextComponent.font = {
-                    name: "font",
-                    label: "Font",
-                    tooltip: "phaser:Phaser.GameObjects.BitmapText.setFont",
-                    defValue: undefined,
-                    getValue: obj => obj.font,
-                    setValue: (obj, value) => obj.setFont(value)
-                };
-                BitmapTextComponent.align = {
-                    name: "align",
-                    label: "Align",
-                    tooltip: "phaser:Phaser.GameObjects.BitmapText.align",
-                    defValue: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
-                    getValue: obj => obj.align,
-                    setValue: (obj, value) => obj.align = value,
-                    getValueLabel: value => {
-                        return {
-                            [Phaser.GameObjects.BitmapText.ALIGN_LEFT]: "LEFT",
-                            [Phaser.GameObjects.BitmapText.ALIGN_CENTER]: "CENTER",
-                            [Phaser.GameObjects.BitmapText.ALIGN_RIGHT]: "RIGHT"
-                        }[value];
-                    },
-                    values: [
-                        Phaser.GameObjects.BitmapText.ALIGN_LEFT,
-                        Phaser.GameObjects.BitmapText.ALIGN_CENTER,
-                        Phaser.GameObjects.BitmapText.ALIGN_RIGHT
-                    ]
-                };
-                BitmapTextComponent.fontSize = {
-                    name: "fontSize",
-                    label: "Font Size",
-                    tooltip: "phaser:Phaser.GameObjects.BitmapText.setFontSize",
-                    defValue: 0,
-                    getValue: obj => obj.fontSize,
-                    setValue: (obj, value) => obj.setFontSize(value)
-                };
-                BitmapTextComponent.letterSpacing = {
-                    name: "letterSpacing",
-                    label: "Letter Spacing",
-                    tooltip: "phaser:Phaser.GameObjects.BitmapText.setLetterSpacing",
-                    defValue: 0,
-                    getValue: obj => obj.letterSpacing,
-                    setValue: (obj, value) => obj.setLetterSpacing(value)
-                };
+                    BitmapTextComponent.font = {
+                        name: "font",
+                        label: "Font",
+                        tooltip: "phaser:Phaser.GameObjects.BitmapText.setFont",
+                        defValue: undefined,
+                        getValue: obj => obj.font,
+                        setValue: (obj, value) => obj.setFont(value)
+                    };
+                    BitmapTextComponent.align = {
+                        name: "align",
+                        label: "Align",
+                        tooltip: "phaser:Phaser.GameObjects.BitmapText.align",
+                        defValue: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
+                        getValue: obj => obj.align,
+                        setValue: (obj, value) => obj.align = value,
+                        getValueLabel: value => {
+                            return {
+                                [Phaser.GameObjects.BitmapText.ALIGN_LEFT]: "LEFT",
+                                [Phaser.GameObjects.BitmapText.ALIGN_CENTER]: "CENTER",
+                                [Phaser.GameObjects.BitmapText.ALIGN_RIGHT]: "RIGHT"
+                            }[value];
+                        },
+                        values: [
+                            Phaser.GameObjects.BitmapText.ALIGN_LEFT,
+                            Phaser.GameObjects.BitmapText.ALIGN_CENTER,
+                            Phaser.GameObjects.BitmapText.ALIGN_RIGHT
+                        ]
+                    };
+                    BitmapTextComponent.fontSize = {
+                        name: "fontSize",
+                        label: "Font Size",
+                        tooltip: "phaser:Phaser.GameObjects.BitmapText.setFontSize",
+                        defValue: 0,
+                        getValue: obj => obj.fontSize,
+                        setValue: (obj, value) => obj.setFontSize(value)
+                    };
+                    BitmapTextComponent.letterSpacing = {
+                        name: "letterSpacing",
+                        label: "Letter Spacing",
+                        tooltip: "phaser:Phaser.GameObjects.BitmapText.setLetterSpacing",
+                        defValue: 0,
+                        getValue: obj => obj.letterSpacing,
+                        setValue: (obj, value) => obj.setLetterSpacing(value)
+                    };
+                    return BitmapTextComponent;
+                })();
                 sceneobjects.BitmapTextComponent = BitmapTextComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -7616,92 +7637,95 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class BitmapTextExtension extends sceneobjects.SceneObjectExtension {
-                    constructor() {
-                        super({
-                            phaserTypeName: "Phaser.GameObjects.BitmapText",
-                            typeName: "BitmapText"
-                        });
-                    }
-                    static getInstance() {
-                        return this._instance;
-                    }
-                    acceptsDropData(data) {
-                        return data instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem;
-                    }
-                    createSceneObjectWithAsset(args) {
-                        const font = args.asset;
-                        return new sceneobjects.BitmapText(args.scene, args.x, args.y, font.getKey(), "New BitmapText");
-                    }
-                    adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
-                        const bitmapFont = extraData;
-                        if (bitmapFont) {
-                            let size = 64;
-                            const newData = serializer.getData();
-                            if ("height" in originalObject) {
-                                size = originalObject["height"];
+                let BitmapTextExtension = /** @class */ (() => {
+                    class BitmapTextExtension extends sceneobjects.SceneObjectExtension {
+                        constructor() {
+                            super({
+                                phaserTypeName: "Phaser.GameObjects.BitmapText",
+                                typeName: "BitmapText"
+                            });
+                        }
+                        static getInstance() {
+                            return this._instance;
+                        }
+                        acceptsDropData(data) {
+                            return data instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem;
+                        }
+                        createSceneObjectWithAsset(args) {
+                            const font = args.asset;
+                            return new sceneobjects.BitmapText(args.scene, args.x, args.y, font.getKey(), "New BitmapText");
+                        }
+                        adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
+                            const bitmapFont = extraData;
+                            if (bitmapFont) {
+                                let size = 64;
+                                const newData = serializer.getData();
+                                if ("height" in originalObject) {
+                                    size = originalObject["height"];
+                                }
+                                if (typeof originalObject["text"] !== "string") {
+                                    newData["text"] = "New Bitmap Text";
+                                }
+                                newData["fontSize"] = size;
+                                newData["font"] = bitmapFont.getKey();
                             }
-                            if (typeof originalObject["text"] !== "string") {
-                                newData["text"] = "New Bitmap Text";
+                        }
+                        async collectExtraDataForCreateEmptyObject() {
+                            const finder = new phasereditor2d.pack.core.PackFinder();
+                            await finder.preload();
+                            const dlg = new phasereditor2d.pack.ui.dialogs.AssetSelectionDialog();
+                            dlg.create();
+                            dlg.getViewer().setInput(finder.getPacks()
+                                .flatMap(pack => pack.getItems())
+                                .filter(item => item instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem));
+                            dlg.getViewer().setCellSize(128 * colibri.ui.controls.DEVICE_PIXEL_RATIO);
+                            dlg.setTitle("Select Bitmap Font");
+                            const promise = new Promise((resolver, reject) => {
+                                dlg.setSelectionCallback(async (sel) => {
+                                    const item = sel[0];
+                                    await item.preload();
+                                    await item.preloadImages();
+                                    const result = {
+                                        data: item
+                                    };
+                                    resolver(result);
+                                });
+                                dlg.setCancelCallback(() => {
+                                    const result = {
+                                        abort: true
+                                    };
+                                    resolver(result);
+                                });
+                            });
+                            return promise;
+                        }
+                        createEmptySceneObject(args) {
+                            const fontAsset = args.extraData;
+                            fontAsset.addToPhaserCache(args.scene.game, args.scene.getPackCache());
+                            return new sceneobjects.BitmapText(args.scene, args.x, args.y, fontAsset.getKey(), "New BitmapText");
+                        }
+                        createSceneObjectWithData(args) {
+                            const serializer = new scene.core.json.Serializer(args.data);
+                            const font = serializer.read(sceneobjects.BitmapTextComponent.font.name);
+                            const obj = new sceneobjects.BitmapText(args.scene, 0, 0, font, "");
+                            obj.getEditorSupport().readJSON(args.data);
+                            return obj;
+                        }
+                        async getAssetsFromObjectData(args) {
+                            const font = args.serializer.read(sceneobjects.BitmapTextComponent.font.name);
+                            const asset = args.finder.findAssetPackItem(font);
+                            if (asset instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem) {
+                                return [asset];
                             }
-                            newData["fontSize"] = size;
-                            newData["font"] = bitmapFont.getKey();
+                            return [];
+                        }
+                        getCodeDOMBuilder() {
+                            return new sceneobjects.BitmapTextCodeDOMBuilder();
                         }
                     }
-                    async collectExtraDataForCreateEmptyObject() {
-                        const finder = new phasereditor2d.pack.core.PackFinder();
-                        await finder.preload();
-                        const dlg = new phasereditor2d.pack.ui.dialogs.AssetSelectionDialog();
-                        dlg.create();
-                        dlg.getViewer().setInput(finder.getPacks()
-                            .flatMap(pack => pack.getItems())
-                            .filter(item => item instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem));
-                        dlg.getViewer().setCellSize(128);
-                        dlg.setTitle("Select Bitmap Font");
-                        const promise = new Promise((resolver, reject) => {
-                            dlg.setSelectionCallback(async (sel) => {
-                                const item = sel[0];
-                                await item.preload();
-                                await item.preloadImages();
-                                const result = {
-                                    data: item
-                                };
-                                resolver(result);
-                            });
-                            dlg.setCancelCallback(() => {
-                                const result = {
-                                    abort: true
-                                };
-                                resolver(result);
-                            });
-                        });
-                        return promise;
-                    }
-                    createEmptySceneObject(args) {
-                        const fontAsset = args.extraData;
-                        fontAsset.addToPhaserCache(args.scene.game, args.scene.getPackCache());
-                        return new sceneobjects.BitmapText(args.scene, args.x, args.y, fontAsset.getKey(), "New BitmapText");
-                    }
-                    createSceneObjectWithData(args) {
-                        const serializer = new scene.core.json.Serializer(args.data);
-                        const font = serializer.read(sceneobjects.BitmapTextComponent.font.name);
-                        const obj = new sceneobjects.BitmapText(args.scene, 0, 0, font, "");
-                        obj.getEditorSupport().readJSON(args.data);
-                        return obj;
-                    }
-                    async getAssetsFromObjectData(args) {
-                        const font = args.serializer.read(sceneobjects.BitmapTextComponent.font.name);
-                        const asset = args.finder.findAssetPackItem(font);
-                        if (asset instanceof phasereditor2d.pack.core.BitmapFontAssetPackItem) {
-                            return [asset];
-                        }
-                        return [];
-                    }
-                    getCodeDOMBuilder() {
-                        return new sceneobjects.BitmapTextCodeDOMBuilder();
-                    }
-                }
-                BitmapTextExtension._instance = new BitmapTextExtension();
+                    BitmapTextExtension._instance = new BitmapTextExtension();
+                    return BitmapTextExtension;
+                })();
                 sceneobjects.BitmapTextExtension = BitmapTextExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -7715,6 +7739,7 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                var controls = colibri.ui.controls;
                 class BitmapTextSection extends sceneobjects.SceneObjectSection {
                     constructor(page) {
                         super(page, "phasereditor.scene.ui.sceneobjects.BitmapTextSection", "Bitmap Text");
@@ -7733,7 +7758,7 @@ var phasereditor2d;
                                 const dlg = new phasereditor2d.pack.ui.dialogs.AssetSelectionDialog();
                                 dlg.create();
                                 dlg.setTitle("Select Bitmap Font");
-                                dlg.getViewer().setCellSize(128);
+                                dlg.getViewer().setCellSize(128 * controls.DEVICE_PIXEL_RATIO);
                                 dlg.getViewer().setInput(input);
                                 dlg.getViewer().repaint();
                                 dlg.setSelectionCallback(async (sel) => {
@@ -7848,36 +7873,39 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 var code = scene.core.code;
-                class ContainerCodeDOMBuilder extends sceneobjects.ObjectCodeDOMBuilder {
-                    static getInstance() {
-                        return this._instance;
+                let ContainerCodeDOMBuilder = /** @class */ (() => {
+                    class ContainerCodeDOMBuilder extends sceneobjects.ObjectCodeDOMBuilder {
+                        static getInstance() {
+                            return this._instance;
+                        }
+                        buildPrefabConstructorDeclarationSupperCallCodeDOM(args) {
+                            const call = args.superMethodCallCodeDOM;
+                            call.arg("x");
+                            call.arg("y");
+                        }
+                        buildPrefabConstructorDeclarationCodeDOM(args) {
+                            const ctr = args.ctrDeclCodeDOM;
+                            ctr.arg("x", "number");
+                            ctr.arg("y", "number");
+                        }
+                        buildCreatePrefabInstanceCodeDOM(args) {
+                            const obj = args.obj;
+                            const call = args.methodCallDOM;
+                            call.arg(args.sceneExpr);
+                            call.argFloat(obj.x);
+                            call.argFloat(obj.y);
+                        }
+                        buildCreateObjectWithFactoryCodeDOM(args) {
+                            const obj = args.obj;
+                            const call = new code.MethodCallCodeDOM("container", args.gameObjectFactoryExpr);
+                            call.argFloat(obj.x);
+                            call.argFloat(obj.y);
+                            return call;
+                        }
                     }
-                    buildPrefabConstructorDeclarationSupperCallCodeDOM(args) {
-                        const call = args.superMethodCallCodeDOM;
-                        call.arg("x");
-                        call.arg("y");
-                    }
-                    buildPrefabConstructorDeclarationCodeDOM(args) {
-                        const ctr = args.ctrDeclCodeDOM;
-                        ctr.arg("x", "number");
-                        ctr.arg("y", "number");
-                    }
-                    buildCreatePrefabInstanceCodeDOM(args) {
-                        const obj = args.obj;
-                        const call = args.methodCallDOM;
-                        call.arg(args.sceneExpr);
-                        call.argFloat(obj.x);
-                        call.argFloat(obj.y);
-                    }
-                    buildCreateObjectWithFactoryCodeDOM(args) {
-                        const obj = args.obj;
-                        const call = new code.MethodCallCodeDOM("container", args.gameObjectFactoryExpr);
-                        call.argFloat(obj.x);
-                        call.argFloat(obj.y);
-                        return call;
-                    }
-                }
-                ContainerCodeDOMBuilder._instance = new ContainerCodeDOMBuilder();
+                    ContainerCodeDOMBuilder._instance = new ContainerCodeDOMBuilder();
+                    return ContainerCodeDOMBuilder;
+                })();
                 sceneobjects.ContainerCodeDOMBuilder = ContainerCodeDOMBuilder;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -7891,23 +7919,26 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class ContainerComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [ContainerComponent.allowPickChildren]);
+                let ContainerComponent = /** @class */ (() => {
+                    class ContainerComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [ContainerComponent.allowPickChildren]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            // nothing
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        // nothing
-                    }
-                }
-                ContainerComponent.allowPickChildren = {
-                    name: "allowPickChildren",
-                    label: "Allow Pick Children",
-                    tooltip: "If the container children can be pickable in the scene.",
-                    defValue: true,
-                    local: true,
-                    getValue: obj => obj.getEditorSupport().isAllowPickChildren(),
-                    setValue: (obj, value) => obj.getEditorSupport().setAllowPickChildren(value)
-                };
+                    ContainerComponent.allowPickChildren = {
+                        name: "allowPickChildren",
+                        label: "Allow Pick Children",
+                        tooltip: "If the container children can be pickable in the scene.",
+                        defValue: true,
+                        local: true,
+                        getValue: obj => obj.getEditorSupport().isAllowPickChildren(),
+                        setValue: (obj, value) => obj.getEditorSupport().setAllowPickChildren(value)
+                    };
+                    return ContainerComponent;
+                })();
                 sceneobjects.ContainerComponent = ContainerComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -8480,7 +8511,7 @@ var phasereditor2d;
                     }
                     static getInstance() {
                         var _a;
-                        return _a = this._instance, (_a !== null && _a !== void 0 ? _a : (this._instance = new ImageExtension()));
+                        return (_a = this._instance) !== null && _a !== void 0 ? _a : (this._instance = new ImageExtension());
                     }
                     getCodeDOMBuilder() {
                         return new sceneobjects.BaseImageCodeDOMBuilder("image");
@@ -8512,7 +8543,7 @@ var phasereditor2d;
                         comp.style.gridTemplateColumns = "1fr";
                         comp.style.gridTemplateRows = "1fr auto";
                         const viewer = new controls.viewers.TreeViewer();
-                        viewer.setCellSize(64);
+                        viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
                         viewer.setLabelProvider(new ui.editor.outline.SceneEditorOutlineLabelProvider());
                         viewer.setCellRendererProvider(new ui.editor.outline.SceneEditorOutlineRendererProvider());
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
@@ -8997,72 +9028,75 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class AlphaComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [
-                            AlphaComponent.alpha,
-                            AlphaComponent.alphaTopLeft,
-                            AlphaComponent.alphaTopRight,
-                            AlphaComponent.alphaBottomLeft,
-                            AlphaComponent.alphaBottomRight
-                        ]);
-                    }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        for (const prop of this.getProperties()) {
-                            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, prop);
+                let AlphaComponent = /** @class */ (() => {
+                    class AlphaComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [
+                                AlphaComponent.alpha,
+                                AlphaComponent.alphaTopLeft,
+                                AlphaComponent.alphaTopRight,
+                                AlphaComponent.alphaBottomLeft,
+                                AlphaComponent.alphaBottomRight
+                            ]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            for (const prop of this.getProperties()) {
+                                this.buildSetObjectPropertyCodeDOM_FloatProperty(args, prop);
+                            }
                         }
                     }
-                }
-                AlphaComponent.alpha = {
-                    name: "alpha",
-                    label: "Alpha",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alpha",
-                    defValue: 1,
-                    getValue: obj => obj.alpha,
-                    setValue: (obj, value) => obj.alpha = value
-                };
-                AlphaComponent.alphaTopLeft = {
-                    name: "alphaTopLeft",
-                    label: "Left",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopLeft",
-                    defValue: 1,
-                    getValue: obj => obj.alphaTopLeft,
-                    setValue: (obj, value) => obj.alphaTopLeft = value
-                };
-                AlphaComponent.alphaTopRight = {
-                    name: "alphaTopRight",
-                    label: "Right",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopRight",
-                    defValue: 1,
-                    getValue: obj => obj.alphaTopRight,
-                    setValue: (obj, value) => obj.alphaTopRight = value
-                };
-                AlphaComponent.alphaBottomLeft = {
-                    name: "alphaBottomLeft",
-                    label: "Left",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomLeft",
-                    defValue: 1,
-                    getValue: obj => obj.alphaBottomLeft,
-                    setValue: (obj, value) => obj.alphaBottomLeft = value
-                };
-                AlphaComponent.alphaBottomRight = {
-                    name: "alphaBottomRight",
-                    label: "Right",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomRight",
-                    defValue: 1,
-                    getValue: obj => obj.alphaBottomRight,
-                    setValue: (obj, value) => obj.alphaBottomRight = value
-                };
-                AlphaComponent.alphaTop = {
-                    label: "Alpha Top",
-                    x: AlphaComponent.alphaTopLeft,
-                    y: AlphaComponent.alphaTopRight
-                };
-                AlphaComponent.alphaBottom = {
-                    label: "Alpha Bottom",
-                    x: AlphaComponent.alphaBottomLeft,
-                    y: AlphaComponent.alphaBottomRight
-                };
+                    AlphaComponent.alpha = {
+                        name: "alpha",
+                        label: "Alpha",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alpha",
+                        defValue: 1,
+                        getValue: obj => obj.alpha,
+                        setValue: (obj, value) => obj.alpha = value
+                    };
+                    AlphaComponent.alphaTopLeft = {
+                        name: "alphaTopLeft",
+                        label: "Left",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopLeft",
+                        defValue: 1,
+                        getValue: obj => obj.alphaTopLeft,
+                        setValue: (obj, value) => obj.alphaTopLeft = value
+                    };
+                    AlphaComponent.alphaTopRight = {
+                        name: "alphaTopRight",
+                        label: "Right",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopRight",
+                        defValue: 1,
+                        getValue: obj => obj.alphaTopRight,
+                        setValue: (obj, value) => obj.alphaTopRight = value
+                    };
+                    AlphaComponent.alphaBottomLeft = {
+                        name: "alphaBottomLeft",
+                        label: "Left",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomLeft",
+                        defValue: 1,
+                        getValue: obj => obj.alphaBottomLeft,
+                        setValue: (obj, value) => obj.alphaBottomLeft = value
+                    };
+                    AlphaComponent.alphaBottomRight = {
+                        name: "alphaBottomRight",
+                        label: "Right",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomRight",
+                        defValue: 1,
+                        getValue: obj => obj.alphaBottomRight,
+                        setValue: (obj, value) => obj.alphaBottomRight = value
+                    };
+                    AlphaComponent.alphaTop = {
+                        label: "Alpha Top",
+                        x: AlphaComponent.alphaTopLeft,
+                        y: AlphaComponent.alphaTopRight
+                    };
+                    AlphaComponent.alphaBottom = {
+                        label: "Alpha Bottom",
+                        x: AlphaComponent.alphaBottomLeft,
+                        y: AlphaComponent.alphaBottomRight
+                    };
+                    return AlphaComponent;
+                })();
                 sceneobjects.AlphaComponent = AlphaComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -9076,16 +9110,19 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class FlipComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [FlipComponent.flipX, FlipComponent.flipY]);
+                let FlipComponent = /** @class */ (() => {
+                    class FlipComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [FlipComponent.flipX, FlipComponent.flipY]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, ...this.getProperties());
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, ...this.getProperties());
-                    }
-                }
-                FlipComponent.flipX = sceneobjects.SimpleProperty("flipX", false, "Flip X", "phaser:Phaser.GameObjects.Components.Flip.flipX");
-                FlipComponent.flipY = sceneobjects.SimpleProperty("flipY", false, "Flip Y", "phaser:Phaser.GameObjects.Components.Flip.flipY");
+                    FlipComponent.flipX = sceneobjects.SimpleProperty("flipX", false, "Flip X", "phaser:Phaser.GameObjects.Components.Flip.flipX");
+                    FlipComponent.flipY = sceneobjects.SimpleProperty("flipY", false, "Flip Y", "phaser:Phaser.GameObjects.Components.Flip.flipY");
+                    return FlipComponent;
+                })();
                 sceneobjects.FlipComponent = FlipComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -9125,7 +9162,13 @@ var phasereditor2d;
                         }
                         const promise = new Promise((resolve, reject) => {
                             const angle = obj.angle;
+                            const originX = obj.originX;
+                            const originY = obj.originY;
+                            const scaleX = obj.scaleX;
+                            const scaleY = obj.scaleY;
                             obj.setAngle(0);
+                            obj.setOrigin(0, 0);
+                            obj.setScale(1, 1);
                             const w = Math.floor(obj.width);
                             const h = Math.floor(obj.height);
                             const render = new Phaser.GameObjects.RenderTexture(support.getScene(), 0, 0, w, h);
@@ -9137,6 +9180,8 @@ var phasereditor2d;
                                 resolve(controls.PreloadResult.RESOURCES_LOADED);
                             });
                             obj.setAngle(angle);
+                            obj.setOrigin(originX, originY);
+                            obj.setScale(scaleX, scaleY);
                             render.destroy();
                         });
                         obj.setData("__renderer_promise", promise);
@@ -9158,57 +9203,60 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 var code = scene.core.code;
-                class OriginComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [
-                            OriginComponent.originX,
-                            OriginComponent.originY
-                        ]);
+                let OriginComponent = /** @class */ (() => {
+                    class OriginComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [
+                                OriginComponent.originX,
+                                OriginComponent.originY
+                            ]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            const obj = this.getObject();
+                            let add = false;
+                            let defaultValue = 0.5;
+                            if (obj instanceof sceneobjects.Text) {
+                                defaultValue = 0;
+                            }
+                            if (args.prefabSerializer) {
+                                add = obj.originX !== args.prefabSerializer.read("originX", defaultValue)
+                                    || obj.originY !== args.prefabSerializer.read("originY", defaultValue);
+                            }
+                            else {
+                                add = obj.originX !== defaultValue || obj.originY !== defaultValue;
+                            }
+                            if (add) {
+                                const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
+                                dom.argFloat(obj.originX);
+                                dom.argFloat(obj.originY);
+                                args.result.push(dom);
+                            }
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        const obj = this.getObject();
-                        let add = false;
-                        let defaultValue = 0.5;
-                        if (obj instanceof sceneobjects.Text) {
-                            defaultValue = 0;
-                        }
-                        if (args.prefabSerializer) {
-                            add = obj.originX !== args.prefabSerializer.read("originX", defaultValue)
-                                || obj.originY !== args.prefabSerializer.read("originY", defaultValue);
-                        }
-                        else {
-                            add = obj.originX !== defaultValue || obj.originY !== defaultValue;
-                        }
-                        if (add) {
-                            const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
-                            dom.argFloat(obj.originX);
-                            dom.argFloat(obj.originY);
-                            args.result.push(dom);
-                        }
-                    }
-                }
-                OriginComponent.originX = {
-                    name: "originX",
-                    label: "X",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Origin.originX",
-                    defValue: 0.5,
-                    getValue: obj => obj.originX,
-                    setValue: (obj, value) => obj.setOrigin(value, obj.originY)
-                };
-                OriginComponent.originY = {
-                    name: "originY",
-                    label: "Y",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Origin.originY",
-                    defValue: 0.5,
-                    getValue: obj => obj.originY,
-                    setValue: (obj, value) => obj.setOrigin(obj.originX, value)
-                };
-                OriginComponent.origin = {
-                    label: "Origin",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Origin.setOrigin",
-                    x: OriginComponent.originX,
-                    y: OriginComponent.originY
-                };
+                    OriginComponent.originX = {
+                        name: "originX",
+                        label: "X",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Origin.originX",
+                        defValue: 0.5,
+                        getValue: obj => obj.originX,
+                        setValue: (obj, value) => obj.setOrigin(value, obj.originY)
+                    };
+                    OriginComponent.originY = {
+                        name: "originY",
+                        label: "Y",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Origin.originY",
+                        defValue: 0.5,
+                        getValue: obj => obj.originY,
+                        setValue: (obj, value) => obj.setOrigin(obj.originX, value)
+                    };
+                    OriginComponent.origin = {
+                        label: "Origin",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Origin.setOrigin",
+                        x: OriginComponent.originX,
+                        y: OriginComponent.originY
+                    };
+                    return OriginComponent;
+                })();
                 sceneobjects.OriginComponent = OriginComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -9294,36 +9342,39 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TransformComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [
-                            TransformComponent.x,
-                            TransformComponent.y,
-                            TransformComponent.scaleX,
-                            TransformComponent.scaleY,
-                            TransformComponent.angle
-                        ]);
+                let TransformComponent = /** @class */ (() => {
+                    class TransformComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [
+                                TransformComponent.x,
+                                TransformComponent.y,
+                                TransformComponent.scaleX,
+                                TransformComponent.scaleY,
+                                TransformComponent.angle
+                            ]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TransformComponent.scaleX, TransformComponent.scaleY, TransformComponent.angle);
-                    }
-                }
-                TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X", "phaser:Phaser.GameObjects.Components.Transform.x", true);
-                TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y", "phaser:Phaser.GameObjects.Components.Transform.y", true);
-                TransformComponent.position = {
-                    label: "Position",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Transform.setPosition",
-                    x: TransformComponent.x,
-                    y: TransformComponent.y
-                };
-                TransformComponent.scaleX = sceneobjects.SimpleProperty("scaleX", 1, "X", "phaser:Phaser.GameObjects.Components.Transform.scaleX");
-                TransformComponent.scaleY = sceneobjects.SimpleProperty("scaleY", 1, "Y", "phaser:Phaser.GameObjects.Components.Transform.scaleY");
-                TransformComponent.scale = {
-                    label: "Scale",
-                    x: TransformComponent.scaleX,
-                    y: TransformComponent.scaleY
-                };
-                TransformComponent.angle = sceneobjects.SimpleProperty("angle", 0, "Angle", "phaser:Phaser.GameObjects.Components.Transform.angle");
+                    TransformComponent.x = sceneobjects.SimpleProperty("x", 0, "X", "phaser:Phaser.GameObjects.Components.Transform.x", true);
+                    TransformComponent.y = sceneobjects.SimpleProperty("y", 0, "Y", "phaser:Phaser.GameObjects.Components.Transform.y", true);
+                    TransformComponent.position = {
+                        label: "Position",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Transform.setPosition",
+                        x: TransformComponent.x,
+                        y: TransformComponent.y
+                    };
+                    TransformComponent.scaleX = sceneobjects.SimpleProperty("scaleX", 1, "X", "phaser:Phaser.GameObjects.Components.Transform.scaleX");
+                    TransformComponent.scaleY = sceneobjects.SimpleProperty("scaleY", 1, "Y", "phaser:Phaser.GameObjects.Components.Transform.scaleY");
+                    TransformComponent.scale = {
+                        label: "Scale",
+                        x: TransformComponent.scaleX,
+                        y: TransformComponent.scaleY
+                    };
+                    TransformComponent.angle = sceneobjects.SimpleProperty("angle", 0, "Angle", "phaser:Phaser.GameObjects.Components.Transform.angle");
+                    return TransformComponent;
+                })();
                 sceneobjects.TransformComponent = TransformComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -9337,35 +9388,38 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class VariableComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [
-                            VariableComponent.label,
-                            VariableComponent.scope
-                        ]);
+                let VariableComponent = /** @class */ (() => {
+                    class VariableComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [
+                                VariableComponent.label,
+                                VariableComponent.scope
+                            ]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            // nothing
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        // nothing
-                    }
-                }
-                VariableComponent.label = {
-                    name: "label",
-                    tooltip: "The variable name of the object.",
-                    defValue: undefined,
-                    local: true,
-                    getValue: obj => obj.getEditorSupport().getLabel(),
-                    setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
-                };
-                VariableComponent.scope = {
-                    name: "scope",
-                    tooltip: "The variable lexical scope.",
-                    defValue: sceneobjects.ObjectScope.METHOD,
-                    local: true,
-                    getValue: obj => obj.getEditorSupport().getScope(),
-                    setValue: (obj, value) => obj.getEditorSupport().setScope(value),
-                    values: [sceneobjects.ObjectScope.METHOD, sceneobjects.ObjectScope.CLASS, sceneobjects.ObjectScope.PUBLIC],
-                    getValueLabel: value => value[0] + value.toLowerCase().substring(1)
-                };
+                    VariableComponent.label = {
+                        name: "label",
+                        tooltip: "The variable name of the object.",
+                        defValue: undefined,
+                        local: true,
+                        getValue: obj => obj.getEditorSupport().getLabel(),
+                        setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
+                    };
+                    VariableComponent.scope = {
+                        name: "scope",
+                        tooltip: "The variable lexical scope.",
+                        defValue: sceneobjects.ObjectScope.METHOD,
+                        local: true,
+                        getValue: obj => obj.getEditorSupport().getScope(),
+                        setValue: (obj, value) => obj.getEditorSupport().setScope(value),
+                        values: [sceneobjects.ObjectScope.METHOD, sceneobjects.ObjectScope.CLASS, sceneobjects.ObjectScope.PUBLIC],
+                        getValueLabel: value => value[0] + value.toLowerCase().substring(1)
+                    };
+                    return VariableComponent;
+                })();
                 sceneobjects.VariableComponent = VariableComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -9379,22 +9433,25 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class VisibleComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [VisibleComponent.visible]);
+                let VisibleComponent = /** @class */ (() => {
+                    class VisibleComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [VisibleComponent.visible]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, VisibleComponent.visible);
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, VisibleComponent.visible);
-                    }
-                }
-                VisibleComponent.visible = {
-                    name: "visible",
-                    label: "Visible",
-                    tooltip: "phaser:Phaser.GameObjects.Components.Visible.visible",
-                    defValue: true,
-                    getValue: obj => obj.visible,
-                    setValue: (obj, value) => obj.visible = value
-                };
+                    VisibleComponent.visible = {
+                        name: "visible",
+                        label: "Visible",
+                        tooltip: "phaser:Phaser.GameObjects.Components.Visible.visible",
+                        defValue: true,
+                        getValue: obj => obj.visible,
+                        setValue: (obj, value) => obj.visible = value
+                    };
+                    return VisibleComponent;
+                })();
                 sceneobjects.VisibleComponent = VisibleComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -10035,16 +10092,19 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class RotateTool extends sceneobjects.BaseObjectTool {
-                    constructor() {
-                        super({
-                            id: RotateTool.ID,
-                            command: ui.editor.commands.CMD_ROTATE_SCENE_OBJECT,
-                        }, sceneobjects.TransformComponent.angle);
-                        this.addItems(new sceneobjects.RotateLineToolItem(true), new sceneobjects.RotateLineToolItem(false), new ui.editor.tools.CenterPointToolItem(sceneobjects.RotateToolItem.COLOR), new sceneobjects.RotateToolItem());
+                let RotateTool = /** @class */ (() => {
+                    class RotateTool extends sceneobjects.BaseObjectTool {
+                        constructor() {
+                            super({
+                                id: RotateTool.ID,
+                                command: ui.editor.commands.CMD_ROTATE_SCENE_OBJECT,
+                            }, sceneobjects.TransformComponent.angle);
+                            this.addItems(new sceneobjects.RotateLineToolItem(true), new sceneobjects.RotateLineToolItem(false), new ui.editor.tools.CenterPointToolItem(sceneobjects.RotateToolItem.COLOR), new sceneobjects.RotateToolItem());
+                        }
                     }
-                }
-                RotateTool.ID = "phasereditor2d.scene.ui.sceneobjects.RotateTool";
+                    RotateTool.ID = "phasereditor2d.scene.ui.sceneobjects.RotateTool";
+                    return RotateTool;
+                })();
                 sceneobjects.RotateTool = RotateTool;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -10058,70 +10118,73 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class RotateToolItem extends ui.editor.tools.SceneToolItem {
-                    constructor() {
-                        super();
-                    }
-                    getPoint(args) {
-                        return this.getAvgScreenPointOfObjects(args);
-                    }
-                    render(args) {
-                        const point = this.getPoint(args);
-                        const ctx = args.canvasContext;
-                        ctx.beginPath();
-                        ctx.arc(point.x, point.y, 100, 0, Math.PI * 2);
-                        ctx.lineWidth = 4;
-                        ctx.strokeStyle = "#000";
-                        ctx.stroke();
-                        ctx.lineWidth = 2;
-                        ctx.strokeStyle = args.canEdit ? RotateToolItem.COLOR : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT;
-                        ctx.stroke();
-                    }
-                    containsPoint(args) {
-                        const point = this.getPoint(args);
-                        const d = Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y);
-                        return Math.abs(d - 100) < 10;
-                    }
-                    onStartDrag(args) {
-                        if (!this.containsPoint(args)) {
-                            return;
+                let RotateToolItem = /** @class */ (() => {
+                    class RotateToolItem extends ui.editor.tools.SceneToolItem {
+                        constructor() {
+                            super();
                         }
-                        this._initCursorPos = { x: args.x, y: args.y };
-                        for (const obj of args.objects) {
-                            obj.setData("AngleToolItem.initAngle", obj.angle);
+                        getPoint(args) {
+                            return this.getAvgScreenPointOfObjects(args);
+                        }
+                        render(args) {
+                            const point = this.getPoint(args);
+                            const ctx = args.canvasContext;
+                            ctx.beginPath();
+                            ctx.arc(point.x, point.y, 100, 0, Math.PI * 2);
+                            ctx.lineWidth = 4;
+                            ctx.strokeStyle = "#000";
+                            ctx.stroke();
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = args.canEdit ? RotateToolItem.COLOR : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT;
+                            ctx.stroke();
+                        }
+                        containsPoint(args) {
+                            const point = this.getPoint(args);
+                            const d = Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y);
+                            return Math.abs(d - 100) < 10;
+                        }
+                        onStartDrag(args) {
+                            if (!this.containsPoint(args)) {
+                                return;
+                            }
+                            this._initCursorPos = { x: args.x, y: args.y };
+                            for (const obj of args.objects) {
+                                obj.setData("AngleToolItem.initAngle", obj.angle);
+                            }
+                        }
+                        onDrag(args) {
+                            if (!this._initCursorPos) {
+                                return;
+                            }
+                            const dx = this._initCursorPos.x - args.x;
+                            const dy = this._initCursorPos.y - args.y;
+                            if (Math.abs(dx) < 1 || Math.abs(dy) < 1) {
+                                return;
+                            }
+                            const point = this.getPoint(args);
+                            for (const obj of args.objects) {
+                                const sprite = obj;
+                                const deltaRadians = angleBetweenTwoPointsWithFixedPoint(args.x, args.y, this._initCursorPos.x, this._initCursorPos.y, point.x, point.y);
+                                const initAngle = sprite.getData("AngleToolItem.initAngle");
+                                const deltaAngle = Phaser.Math.RadToDeg(deltaRadians);
+                                sprite.angle = initAngle + deltaAngle;
+                            }
+                            args.editor.dispatchSelectionChanged();
+                        }
+                        static getInitialAngle(obj) {
+                            return obj.getData("AngleToolItem.initAngle");
+                        }
+                        onStopDrag(args) {
+                            if (!this._initCursorPos) {
+                                return;
+                            }
+                            args.editor.getUndoManager().add(new sceneobjects.RotateOperation(args));
+                            this._initCursorPos = null;
                         }
                     }
-                    onDrag(args) {
-                        if (!this._initCursorPos) {
-                            return;
-                        }
-                        const dx = this._initCursorPos.x - args.x;
-                        const dy = this._initCursorPos.y - args.y;
-                        if (Math.abs(dx) < 1 || Math.abs(dy) < 1) {
-                            return;
-                        }
-                        const point = this.getPoint(args);
-                        for (const obj of args.objects) {
-                            const sprite = obj;
-                            const deltaRadians = angleBetweenTwoPointsWithFixedPoint(args.x, args.y, this._initCursorPos.x, this._initCursorPos.y, point.x, point.y);
-                            const initAngle = sprite.getData("AngleToolItem.initAngle");
-                            const deltaAngle = Phaser.Math.RadToDeg(deltaRadians);
-                            sprite.angle = initAngle + deltaAngle;
-                        }
-                        args.editor.dispatchSelectionChanged();
-                    }
-                    static getInitialAngle(obj) {
-                        return obj.getData("AngleToolItem.initAngle");
-                    }
-                    onStopDrag(args) {
-                        if (!this._initCursorPos) {
-                            return;
-                        }
-                        args.editor.getUndoManager().add(new sceneobjects.RotateOperation(args));
-                        this._initCursorPos = null;
-                    }
-                }
-                RotateToolItem.COLOR = "#aaf";
+                    RotateToolItem.COLOR = "#aaf";
+                    return RotateToolItem;
+                })();
                 sceneobjects.RotateToolItem = RotateToolItem;
                 function angleBetweenTwoPointsWithFixedPoint(point1X, point1Y, point2X, point2Y, fixedX, fixedY) {
                     const angle1 = Math.atan2(point1Y - fixedY, point1X - fixedX);
@@ -10167,16 +10230,19 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class ScaleTool extends sceneobjects.BaseObjectTool {
-                    constructor() {
-                        super({
-                            id: ScaleTool.ID,
-                            command: ui.editor.commands.CMD_SCALE_SCENE_OBJECT,
-                        }, sceneobjects.TransformComponent.scaleX, sceneobjects.TransformComponent.scaleY);
-                        this.addItems(new sceneobjects.ScaleToolItem(1, 0.5), new sceneobjects.ScaleToolItem(1, 1), new sceneobjects.ScaleToolItem(0.5, 1));
+                let ScaleTool = /** @class */ (() => {
+                    class ScaleTool extends sceneobjects.BaseObjectTool {
+                        constructor() {
+                            super({
+                                id: ScaleTool.ID,
+                                command: ui.editor.commands.CMD_SCALE_SCENE_OBJECT,
+                            }, sceneobjects.TransformComponent.scaleX, sceneobjects.TransformComponent.scaleY);
+                            this.addItems(new sceneobjects.ScaleToolItem(1, 0.5), new sceneobjects.ScaleToolItem(1, 1), new sceneobjects.ScaleToolItem(0.5, 1));
+                        }
                     }
-                }
-                ScaleTool.ID = "phasereditor2d.scene.ui.sceneobjects.ScaleTool";
+                    ScaleTool.ID = "phasereditor2d.scene.ui.sceneobjects.ScaleTool";
+                    return ScaleTool;
+                })();
                 sceneobjects.ScaleTool = ScaleTool;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -10372,19 +10438,22 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TileSpriteSizeTool extends sceneobjects.BaseObjectTool {
-                    constructor() {
-                        super({
-                            id: TileSpriteSizeTool.ID,
-                            command: ui.editor.commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
-                        }, sceneobjects.TileSpriteComponent.width, sceneobjects.TileSpriteComponent.height);
-                        this.addItems(new sceneobjects.TileSpriteSizeToolItem(1, 0.5), new sceneobjects.TileSpriteSizeToolItem(1, 1), new sceneobjects.TileSpriteSizeToolItem(0.5, 1));
+                let TileSpriteSizeTool = /** @class */ (() => {
+                    class TileSpriteSizeTool extends sceneobjects.BaseObjectTool {
+                        constructor() {
+                            super({
+                                id: TileSpriteSizeTool.ID,
+                                command: ui.editor.commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
+                            }, sceneobjects.TileSpriteComponent.width, sceneobjects.TileSpriteComponent.height);
+                            this.addItems(new sceneobjects.TileSpriteSizeToolItem(1, 0.5), new sceneobjects.TileSpriteSizeToolItem(1, 1), new sceneobjects.TileSpriteSizeToolItem(0.5, 1));
+                        }
+                        canEdit(obj) {
+                            return obj instanceof sceneobjects.TileSprite;
+                        }
                     }
-                    canEdit(obj) {
-                        return obj instanceof sceneobjects.TileSprite;
-                    }
-                }
-                TileSpriteSizeTool.ID = "phasereditor2d.scene.ui.sceneobjects.TileSpriteResizeTool";
+                    TileSpriteSizeTool.ID = "phasereditor2d.scene.ui.sceneobjects.TileSpriteResizeTool";
+                    return TileSpriteSizeTool;
+                })();
                 sceneobjects.TileSpriteSizeTool = TileSpriteSizeTool;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -10522,19 +10591,22 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TranslateTool extends sceneobjects.BaseObjectTool {
-                    constructor() {
-                        super({
-                            id: TranslateTool.ID,
-                            command: ui.editor.commands.CMD_TRANSLATE_SCENE_OBJECT,
-                        }, sceneobjects.TransformComponent.x, sceneobjects.TransformComponent.y);
-                        const x = new sceneobjects.TranslateToolItem("x");
-                        const y = new sceneobjects.TranslateToolItem("y");
-                        const xy = new sceneobjects.TranslateToolItem("xy");
-                        this.addItems(new ui.editor.tools.LineToolItem("#f00", xy, x), new ui.editor.tools.LineToolItem("#0f0", xy, y), xy, x, y);
+                let TranslateTool = /** @class */ (() => {
+                    class TranslateTool extends sceneobjects.BaseObjectTool {
+                        constructor() {
+                            super({
+                                id: TranslateTool.ID,
+                                command: ui.editor.commands.CMD_TRANSLATE_SCENE_OBJECT,
+                            }, sceneobjects.TransformComponent.x, sceneobjects.TransformComponent.y);
+                            const x = new sceneobjects.TranslateToolItem("x");
+                            const y = new sceneobjects.TranslateToolItem("y");
+                            const xy = new sceneobjects.TranslateToolItem("xy");
+                            this.addItems(new ui.editor.tools.LineToolItem("#f00", xy, x), new ui.editor.tools.LineToolItem("#0f0", xy, y), xy, x, y);
+                        }
                     }
-                }
-                TranslateTool.ID = "phasereditor2d.scene.ui.sceneobjects.TranslateTool";
+                    TranslateTool.ID = "phasereditor2d.scene.ui.sceneobjects.TranslateTool";
+                    return TranslateTool;
+                })();
                 sceneobjects.TranslateTool = TranslateTool;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -10678,24 +10750,27 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class SpriteExtension extends sceneobjects.BaseImageExtension {
-                    constructor() {
-                        super({
-                            phaserTypeName: "Phaser.GameObjects.Sprite",
-                            typeName: "Sprite"
-                        });
+                let SpriteExtension = /** @class */ (() => {
+                    class SpriteExtension extends sceneobjects.BaseImageExtension {
+                        constructor() {
+                            super({
+                                phaserTypeName: "Phaser.GameObjects.Sprite",
+                                typeName: "Sprite"
+                            });
+                        }
+                        static getInstance() {
+                            return this._instance;
+                        }
+                        getCodeDOMBuilder() {
+                            return new sceneobjects.BaseImageCodeDOMBuilder("sprite");
+                        }
+                        newObject(scene, x, y, key, frame) {
+                            return new sceneobjects.Sprite(scene, x, y, key, frame);
+                        }
                     }
-                    static getInstance() {
-                        return this._instance;
-                    }
-                    getCodeDOMBuilder() {
-                        return new sceneobjects.BaseImageCodeDOMBuilder("sprite");
-                    }
-                    newObject(scene, x, y, key, frame) {
-                        return new sceneobjects.Sprite(scene, x, y, key, frame);
-                    }
-                }
-                SpriteExtension._instance = new SpriteExtension();
+                    SpriteExtension._instance = new SpriteExtension();
+                    return SpriteExtension;
+                })();
                 sceneobjects.SpriteExtension = SpriteExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene_31.ui || (scene_31.ui = {}));
@@ -10778,349 +10853,352 @@ var phasereditor2d;
             var sceneobjects;
             (function (sceneobjects) {
                 var code = scene.core.code;
-                class TextComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [
-                            TextComponent.fixedWidth,
-                            TextComponent.fixedHeight,
-                            TextComponent.paddingLeft,
-                            TextComponent.paddingTop,
-                            TextComponent.paddingRight,
-                            TextComponent.paddingBottom,
-                            TextComponent.lineSpacing,
-                            TextComponent.align,
-                            TextComponent.fontFamily,
-                            TextComponent.fontSize,
-                            TextComponent.fontStyle,
-                            TextComponent.color,
-                            TextComponent.stroke,
-                            TextComponent.strokeThickness,
-                            TextComponent.backgroundColor,
-                            TextComponent.shadowOffsetX,
-                            TextComponent.shadowOffsetY,
-                            TextComponent.shadowStroke,
-                            TextComponent.shadowFill,
-                            TextComponent.shadowColor,
-                            TextComponent.shadowBlur,
-                            TextComponent.baselineX,
-                            TextComponent.baselineY,
-                            TextComponent.maxLines
-                        ]);
-                    }
-                    styleToJson() {
-                        const comp = TextComponent;
-                        const obj = this.getObject();
-                        const support = obj.getEditorSupport();
-                        const data = {};
-                        const simpleProps = [
-                            comp.align,
-                            comp.backgroundColor,
-                            comp.baselineX,
-                            comp.baselineY,
-                            comp.color,
-                            comp.fixedWidth,
-                            comp.fixedHeight,
-                            comp.fontFamily,
-                            comp.fontSize,
-                            comp.fontStyle,
-                            comp.maxLines,
-                            comp.stroke,
-                            comp.strokeThickness,
-                            comp.shadowOffsetX,
-                            comp.shadowOffsetY,
-                            comp.shadowColor,
-                            comp.shadowBlur,
-                            comp.shadowStroke,
-                            comp.shadowFill
-                        ];
-                        if (support.isPrefabInstance()) {
-                            for (const prop of simpleProps) {
-                                if (support.isUnlockedProperty(prop)) {
-                                    data[prop.name] = prop.getValue(obj);
-                                }
-                            }
+                let TextComponent = /** @class */ (() => {
+                    class TextComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [
+                                TextComponent.fixedWidth,
+                                TextComponent.fixedHeight,
+                                TextComponent.paddingLeft,
+                                TextComponent.paddingTop,
+                                TextComponent.paddingRight,
+                                TextComponent.paddingBottom,
+                                TextComponent.lineSpacing,
+                                TextComponent.align,
+                                TextComponent.fontFamily,
+                                TextComponent.fontSize,
+                                TextComponent.fontStyle,
+                                TextComponent.color,
+                                TextComponent.stroke,
+                                TextComponent.strokeThickness,
+                                TextComponent.backgroundColor,
+                                TextComponent.shadowOffsetX,
+                                TextComponent.shadowOffsetY,
+                                TextComponent.shadowStroke,
+                                TextComponent.shadowFill,
+                                TextComponent.shadowColor,
+                                TextComponent.shadowBlur,
+                                TextComponent.baselineX,
+                                TextComponent.baselineY,
+                                TextComponent.maxLines
+                            ]);
                         }
-                        else {
-                            for (const prop of simpleProps) {
-                                const value = prop.getValue(obj);
-                                if (value !== prop.defValue) {
-                                    data[prop.name] = value;
-                                }
-                            }
-                        }
-                        return data;
-                    }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        const obj = this.getObject();
-                        const support = obj.getEditorSupport();
-                        {
-                            // style
-                            const style = this.styleToJson();
-                            const literal = JSON.stringify(style);
-                            if (literal !== "{}") {
-                                const dom = new code.MethodCallCodeDOM("setStyle", args.objectVarName);
-                                dom.arg(literal);
-                                args.result.push(dom);
-                            }
-                        }
-                        {
-                            // padding
+                        styleToJson() {
                             const comp = TextComponent;
-                            const padding = {};
-                            const map = {
-                                left: comp.paddingLeft,
-                                top: comp.paddingTop,
-                                right: comp.paddingRight,
-                                bottom: comp.paddingBottom
-                            };
+                            const obj = this.getObject();
+                            const support = obj.getEditorSupport();
+                            const data = {};
+                            const simpleProps = [
+                                comp.align,
+                                comp.backgroundColor,
+                                comp.baselineX,
+                                comp.baselineY,
+                                comp.color,
+                                comp.fixedWidth,
+                                comp.fixedHeight,
+                                comp.fontFamily,
+                                comp.fontSize,
+                                comp.fontStyle,
+                                comp.maxLines,
+                                comp.stroke,
+                                comp.strokeThickness,
+                                comp.shadowOffsetX,
+                                comp.shadowOffsetY,
+                                comp.shadowColor,
+                                comp.shadowBlur,
+                                comp.shadowStroke,
+                                comp.shadowFill
+                            ];
                             if (support.isPrefabInstance()) {
-                                // tslint:disable-next-line:forin
-                                for (const key in map) {
-                                    const prop = map[key];
+                                for (const prop of simpleProps) {
                                     if (support.isUnlockedProperty(prop)) {
-                                        padding[key] = prop.getValue(obj);
+                                        data[prop.name] = prop.getValue(obj);
                                     }
                                 }
                             }
                             else {
-                                // tslint:disable-next-line:forin
-                                for (const key in map) {
-                                    const prop = map[key];
+                                for (const prop of simpleProps) {
                                     const value = prop.getValue(obj);
                                     if (value !== prop.defValue) {
-                                        padding[key] = value;
+                                        data[prop.name] = value;
                                     }
                                 }
                             }
-                            const literal = JSON.stringify(padding);
-                            if (literal !== "{}") {
-                                const dom = new code.MethodCallCodeDOM("setPadding", args.objectVarName);
-                                dom.arg(literal);
-                                args.result.push(dom);
+                            return data;
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            const obj = this.getObject();
+                            const support = obj.getEditorSupport();
+                            {
+                                // style
+                                const style = this.styleToJson();
+                                const literal = JSON.stringify(style);
+                                if (literal !== "{}") {
+                                    const dom = new code.MethodCallCodeDOM("setStyle", args.objectVarName);
+                                    dom.arg(literal);
+                                    args.result.push(dom);
+                                }
+                            }
+                            {
+                                // padding
+                                const comp = TextComponent;
+                                const padding = {};
+                                const map = {
+                                    left: comp.paddingLeft,
+                                    top: comp.paddingTop,
+                                    right: comp.paddingRight,
+                                    bottom: comp.paddingBottom
+                                };
+                                if (support.isPrefabInstance()) {
+                                    // tslint:disable-next-line:forin
+                                    for (const key in map) {
+                                        const prop = map[key];
+                                        if (support.isUnlockedProperty(prop)) {
+                                            padding[key] = prop.getValue(obj);
+                                        }
+                                    }
+                                }
+                                else {
+                                    // tslint:disable-next-line:forin
+                                    for (const key in map) {
+                                        const prop = map[key];
+                                        const value = prop.getValue(obj);
+                                        if (value !== prop.defValue) {
+                                            padding[key] = value;
+                                        }
+                                    }
+                                }
+                                const literal = JSON.stringify(padding);
+                                if (literal !== "{}") {
+                                    const dom = new code.MethodCallCodeDOM("setPadding", args.objectVarName);
+                                    dom.arg(literal);
+                                    args.result.push(dom);
+                                }
                             }
                         }
                     }
-                }
-                TextComponent.fixedWidth = {
-                    name: "fixedWidth",
-                    label: "Width",
-                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedWidth",
-                    defValue: 0,
-                    getValue: obj => obj.style.fixedWidth,
-                    setValue: (obj, value) => obj.setFixedSize(value, obj.style.fixedHeight)
-                };
-                TextComponent.fixedHeight = {
-                    name: "fixedHeight",
-                    label: "Height",
-                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedHeight",
-                    defValue: 0,
-                    getValue: obj => obj.style.fixedHeight,
-                    setValue: (obj, value) => obj.setFixedSize(obj.style.fixedWidth, value)
-                };
-                TextComponent.fixedSize = {
-                    label: "Fixed Size",
-                    tooltip: "phaser:Phaser.GameObjects.TextStyle.setFixedSize",
-                    x: TextComponent.fixedWidth,
-                    y: TextComponent.fixedHeight
-                };
-                TextComponent.paddingLeft = {
-                    name: "paddingLeft",
-                    label: "Padding Left",
-                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.left",
-                    defValue: 0,
-                    getValue: obj => obj.padding["left"],
-                    setValue: (obj, value) => { obj.padding["left"] = value; obj.updateText(); }
-                };
-                TextComponent.paddingTop = {
-                    name: "paddingTop",
-                    label: "Padding Top",
-                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.top",
-                    defValue: 0,
-                    getValue: obj => obj.padding["top"],
-                    setValue: (obj, value) => { obj.padding["top"] = value; obj.updateText(); }
-                };
-                TextComponent.paddingRight = {
-                    name: "paddingRight",
-                    label: "Padding Right",
-                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.right",
-                    defValue: 0,
-                    getValue: obj => obj.padding["right"],
-                    setValue: (obj, value) => { obj.padding["right"] = value; obj.updateText(); }
-                };
-                TextComponent.paddingBottom = {
-                    name: "paddingBottom",
-                    label: "Padding Bottom",
-                    tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.bottom",
-                    defValue: 0,
-                    getValue: obj => obj.padding["bottom"],
-                    setValue: (obj, value) => { obj.padding["bottom"] = value; obj.updateText(); }
-                };
-                TextComponent.lineSpacing = {
-                    name: "lineSpacing",
-                    label: "Line Spacing",
-                    tooltip: "phaser:Phaser.GameObjects.Text.lineSpacing",
-                    defValue: 0,
-                    getValue: obj => obj.lineSpacing,
-                    setValue: (obj, value) => obj.setLineSpacing(value)
-                };
-                TextComponent.align = {
-                    name: "align",
-                    label: "Align",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setAlign",
-                    defValue: "left",
-                    getValue: obj => obj.style.align,
-                    setValue: (obj, value) => obj.setAlign(value),
-                    values: ["left", "right", "center", "justify"],
-                    getValueLabel: value => value.toUpperCase()
-                };
-                TextComponent.fontFamily = {
-                    name: "fontFamily",
-                    label: "Font Family",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setFontFamily",
-                    defValue: "Courier",
-                    getValue: obj => obj.style.fontFamily,
-                    setValue: (obj, value) => obj.setFontFamily(value)
-                };
-                TextComponent.fontSize = {
-                    name: "fontSize",
-                    label: "Font Size",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setFontSize",
-                    defValue: "16px",
-                    getValue: obj => obj.style.fontSize,
-                    setValue: (obj, value) => obj.setFontSize(value)
-                };
-                TextComponent.fontStyle = {
-                    name: "fontStyle",
-                    label: "Font Style",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setFontStyle",
-                    defValue: "",
-                    getValue: obj => obj.style.fontStyle,
-                    setValue: (obj, value) => obj.setFontStyle(value),
-                    values: ["", "italic", "bold", "bold italic"],
-                    getValueLabel: value => value === "" ? "(Default)" : value.toUpperCase()
-                };
-                TextComponent.color = {
-                    name: "color",
-                    label: "Color",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setColor",
-                    defValue: "#fff",
-                    getValue: obj => obj.style.color,
-                    setValue: (obj, value) => obj.setColor(value)
-                };
-                TextComponent.stroke = {
-                    name: "stroke",
-                    label: "Stroke",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setStroke(color)",
-                    defValue: "#fff",
-                    getValue: obj => obj.style.stroke,
-                    setValue: (obj, value) => obj.setStroke(value, obj.style.strokeThickness)
-                };
-                TextComponent.strokeThickness = {
-                    name: "strokeThickness",
-                    label: "Stroke Thickness",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setStroke(thickness)",
-                    defValue: 0,
-                    getValue: obj => obj.style.strokeThickness,
-                    setValue: (obj, value) => obj.setStroke(obj.style.stroke, value)
-                };
-                TextComponent.backgroundColor = {
-                    name: "backgroundColor",
-                    label: "Background Color",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setBackgroundColor",
-                    defValue: null,
-                    getValue: obj => obj.style.backgroundColor,
-                    setValue: (obj, value) => obj.setBackgroundColor(value)
-                };
-                TextComponent.shadowOffsetX = {
-                    name: "shadow.offsetX",
-                    label: "X",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(x)",
-                    defValue: 0,
-                    getValue: obj => obj.style.shadowOffsetX,
-                    setValue: (obj, value) => obj.setShadowOffset(value, obj.style.shadowOffsetY)
-                };
-                TextComponent.shadowOffsetY = {
-                    name: "shadow.offsetY",
-                    label: "Y",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(y)",
-                    defValue: 0,
-                    getValue: obj => obj.style.shadowOffsetY,
-                    setValue: (obj, value) => obj.setShadowOffset(obj.style.shadowOffsetX, value)
-                };
-                TextComponent.shadowOffset = {
-                    label: "Shadow Offset",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset",
-                    x: TextComponent.shadowOffsetX,
-                    y: TextComponent.shadowOffsetY
-                };
-                TextComponent.shadowStroke = {
-                    name: "shadow.stroke",
-                    label: "Stroke",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowStroke",
-                    defValue: false,
-                    getValue: obj => obj.style.shadowStroke,
-                    setValue: (obj, value) => obj.setShadowStroke(value)
-                };
-                TextComponent.shadowFill = {
-                    name: "shadow.fill",
-                    label: "Fill",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowFill",
-                    defValue: false,
-                    getValue: obj => obj.style.shadowFill,
-                    setValue: (obj, value) => obj.setShadowFill(value)
-                };
-                TextComponent.shadow = {
-                    label: "Shadow",
-                    tooltip: "Shadow stroke and fill.",
-                    x: TextComponent.shadowStroke,
-                    y: TextComponent.shadowFill
-                };
-                TextComponent.shadowColor = {
-                    name: "shadow.color",
-                    label: "Shadow Color",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowColor",
-                    defValue: "#000",
-                    getValue: obj => obj.style.shadowColor,
-                    setValue: (obj, value) => obj.setShadowColor(value)
-                };
-                TextComponent.shadowBlur = {
-                    name: "shadow.blur",
-                    label: "Shadow Blur",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setShadowBlur",
-                    defValue: 0,
-                    getValue: obj => obj.style.shadowBlur,
-                    setValue: (obj, value) => obj.setShadowBlur(value)
-                };
-                TextComponent.baselineX = {
-                    name: "baselineX",
-                    label: "X",
-                    tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineX",
-                    defValue: 1.2,
-                    getValue: obj => obj.style.baselineX,
-                    setValue: (obj, value) => obj.style.baselineX = value
-                };
-                TextComponent.baselineY = {
-                    name: "baselineY",
-                    label: "Y",
-                    tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineY",
-                    defValue: 1.4,
-                    getValue: obj => obj.style.baselineY,
-                    setValue: (obj, value) => obj.style.baselineY = value
-                };
-                TextComponent.baseline = {
-                    label: "Baseline",
-                    tooltip: "Baseline",
-                    x: TextComponent.baselineX,
-                    y: TextComponent.baselineY
-                };
-                TextComponent.maxLines = {
-                    name: "maxLines",
-                    label: "Max Lines",
-                    tooltip: "phaser:Phaser.GameObjects.Text.setMaxLines",
-                    defValue: 0,
-                    getValue: obj => obj.style.maxLines,
-                    setValue: (obj, value) => obj.setMaxLines(value)
-                };
+                    TextComponent.fixedWidth = {
+                        name: "fixedWidth",
+                        label: "Width",
+                        tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedWidth",
+                        defValue: 0,
+                        getValue: obj => obj.style.fixedWidth,
+                        setValue: (obj, value) => obj.setFixedSize(value, obj.style.fixedHeight)
+                    };
+                    TextComponent.fixedHeight = {
+                        name: "fixedHeight",
+                        label: "Height",
+                        tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedHeight",
+                        defValue: 0,
+                        getValue: obj => obj.style.fixedHeight,
+                        setValue: (obj, value) => obj.setFixedSize(obj.style.fixedWidth, value)
+                    };
+                    TextComponent.fixedSize = {
+                        label: "Fixed Size",
+                        tooltip: "phaser:Phaser.GameObjects.TextStyle.setFixedSize",
+                        x: TextComponent.fixedWidth,
+                        y: TextComponent.fixedHeight
+                    };
+                    TextComponent.paddingLeft = {
+                        name: "paddingLeft",
+                        label: "Padding Left",
+                        tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.left",
+                        defValue: 0,
+                        getValue: obj => obj.padding["left"],
+                        setValue: (obj, value) => { obj.padding["left"] = value; obj.updateText(); }
+                    };
+                    TextComponent.paddingTop = {
+                        name: "paddingTop",
+                        label: "Padding Top",
+                        tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.top",
+                        defValue: 0,
+                        getValue: obj => obj.padding["top"],
+                        setValue: (obj, value) => { obj.padding["top"] = value; obj.updateText(); }
+                    };
+                    TextComponent.paddingRight = {
+                        name: "paddingRight",
+                        label: "Padding Right",
+                        tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.right",
+                        defValue: 0,
+                        getValue: obj => obj.padding["right"],
+                        setValue: (obj, value) => { obj.padding["right"] = value; obj.updateText(); }
+                    };
+                    TextComponent.paddingBottom = {
+                        name: "paddingBottom",
+                        label: "Padding Bottom",
+                        tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.bottom",
+                        defValue: 0,
+                        getValue: obj => obj.padding["bottom"],
+                        setValue: (obj, value) => { obj.padding["bottom"] = value; obj.updateText(); }
+                    };
+                    TextComponent.lineSpacing = {
+                        name: "lineSpacing",
+                        label: "Line Spacing",
+                        tooltip: "phaser:Phaser.GameObjects.Text.lineSpacing",
+                        defValue: 0,
+                        getValue: obj => obj.lineSpacing,
+                        setValue: (obj, value) => obj.setLineSpacing(value)
+                    };
+                    TextComponent.align = {
+                        name: "align",
+                        label: "Align",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setAlign",
+                        defValue: "left",
+                        getValue: obj => obj.style.align,
+                        setValue: (obj, value) => obj.setAlign(value),
+                        values: ["left", "right", "center", "justify"],
+                        getValueLabel: value => value.toUpperCase()
+                    };
+                    TextComponent.fontFamily = {
+                        name: "fontFamily",
+                        label: "Font Family",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setFontFamily",
+                        defValue: "Courier",
+                        getValue: obj => obj.style.fontFamily,
+                        setValue: (obj, value) => obj.setFontFamily(value)
+                    };
+                    TextComponent.fontSize = {
+                        name: "fontSize",
+                        label: "Font Size",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setFontSize",
+                        defValue: "16px",
+                        getValue: obj => obj.style.fontSize,
+                        setValue: (obj, value) => obj.setFontSize(value)
+                    };
+                    TextComponent.fontStyle = {
+                        name: "fontStyle",
+                        label: "Font Style",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setFontStyle",
+                        defValue: "",
+                        getValue: obj => obj.style.fontStyle,
+                        setValue: (obj, value) => obj.setFontStyle(value),
+                        values: ["", "italic", "bold", "bold italic"],
+                        getValueLabel: value => value === "" ? "(Default)" : value.toUpperCase()
+                    };
+                    TextComponent.color = {
+                        name: "color",
+                        label: "Color",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setColor",
+                        defValue: "#fff",
+                        getValue: obj => obj.style.color,
+                        setValue: (obj, value) => obj.setColor(value)
+                    };
+                    TextComponent.stroke = {
+                        name: "stroke",
+                        label: "Stroke",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setStroke(color)",
+                        defValue: "#fff",
+                        getValue: obj => obj.style.stroke,
+                        setValue: (obj, value) => obj.setStroke(value, obj.style.strokeThickness)
+                    };
+                    TextComponent.strokeThickness = {
+                        name: "strokeThickness",
+                        label: "Stroke Thickness",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setStroke(thickness)",
+                        defValue: 0,
+                        getValue: obj => obj.style.strokeThickness,
+                        setValue: (obj, value) => obj.setStroke(obj.style.stroke, value)
+                    };
+                    TextComponent.backgroundColor = {
+                        name: "backgroundColor",
+                        label: "Background Color",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setBackgroundColor",
+                        defValue: null,
+                        getValue: obj => obj.style.backgroundColor,
+                        setValue: (obj, value) => obj.setBackgroundColor(value)
+                    };
+                    TextComponent.shadowOffsetX = {
+                        name: "shadow.offsetX",
+                        label: "X",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(x)",
+                        defValue: 0,
+                        getValue: obj => obj.style.shadowOffsetX,
+                        setValue: (obj, value) => obj.setShadowOffset(value, obj.style.shadowOffsetY)
+                    };
+                    TextComponent.shadowOffsetY = {
+                        name: "shadow.offsetY",
+                        label: "Y",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(y)",
+                        defValue: 0,
+                        getValue: obj => obj.style.shadowOffsetY,
+                        setValue: (obj, value) => obj.setShadowOffset(obj.style.shadowOffsetX, value)
+                    };
+                    TextComponent.shadowOffset = {
+                        label: "Shadow Offset",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset",
+                        x: TextComponent.shadowOffsetX,
+                        y: TextComponent.shadowOffsetY
+                    };
+                    TextComponent.shadowStroke = {
+                        name: "shadow.stroke",
+                        label: "Stroke",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setShadowStroke",
+                        defValue: false,
+                        getValue: obj => obj.style.shadowStroke,
+                        setValue: (obj, value) => obj.setShadowStroke(value)
+                    };
+                    TextComponent.shadowFill = {
+                        name: "shadow.fill",
+                        label: "Fill",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setShadowFill",
+                        defValue: false,
+                        getValue: obj => obj.style.shadowFill,
+                        setValue: (obj, value) => obj.setShadowFill(value)
+                    };
+                    TextComponent.shadow = {
+                        label: "Shadow",
+                        tooltip: "Shadow stroke and fill.",
+                        x: TextComponent.shadowStroke,
+                        y: TextComponent.shadowFill
+                    };
+                    TextComponent.shadowColor = {
+                        name: "shadow.color",
+                        label: "Shadow Color",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setShadowColor",
+                        defValue: "#000",
+                        getValue: obj => obj.style.shadowColor,
+                        setValue: (obj, value) => obj.setShadowColor(value)
+                    };
+                    TextComponent.shadowBlur = {
+                        name: "shadow.blur",
+                        label: "Shadow Blur",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setShadowBlur",
+                        defValue: 0,
+                        getValue: obj => obj.style.shadowBlur,
+                        setValue: (obj, value) => obj.setShadowBlur(value)
+                    };
+                    TextComponent.baselineX = {
+                        name: "baselineX",
+                        label: "X",
+                        tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineX",
+                        defValue: 1.2,
+                        getValue: obj => obj.style.baselineX,
+                        setValue: (obj, value) => obj.style.baselineX = value
+                    };
+                    TextComponent.baselineY = {
+                        name: "baselineY",
+                        label: "Y",
+                        tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineY",
+                        defValue: 1.4,
+                        getValue: obj => obj.style.baselineY,
+                        setValue: (obj, value) => obj.style.baselineY = value
+                    };
+                    TextComponent.baseline = {
+                        label: "Baseline",
+                        tooltip: "Baseline",
+                        x: TextComponent.baselineX,
+                        y: TextComponent.baselineY
+                    };
+                    TextComponent.maxLines = {
+                        name: "maxLines",
+                        label: "Max Lines",
+                        tooltip: "phaser:Phaser.GameObjects.Text.setMaxLines",
+                        defValue: 0,
+                        getValue: obj => obj.style.maxLines,
+                        setValue: (obj, value) => obj.setMaxLines(value)
+                    };
+                    return TextComponent;
+                })();
                 sceneobjects.TextComponent = TextComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -11170,39 +11248,42 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TextExtension extends sceneobjects.SceneObjectExtension {
-                    constructor() {
-                        super({
-                            phaserTypeName: "Phaser.GameObjects.Text",
-                            typeName: "Text"
-                        });
+                let TextExtension = /** @class */ (() => {
+                    class TextExtension extends sceneobjects.SceneObjectExtension {
+                        constructor() {
+                            super({
+                                phaserTypeName: "Phaser.GameObjects.Text",
+                                typeName: "Text"
+                            });
+                        }
+                        static getInstance() {
+                            return this._instance;
+                        }
+                        acceptsDropData(data) {
+                            return false;
+                        }
+                        createSceneObjectWithAsset(args) {
+                            return null;
+                        }
+                        createEmptySceneObject(args) {
+                            const text = new sceneobjects.Text(args.scene, args.x, args.y, "New text", {});
+                            return text;
+                        }
+                        createSceneObjectWithData(args) {
+                            const text = new sceneobjects.Text(args.scene, 0, 0, "", {});
+                            text.getEditorSupport().readJSON(args.data);
+                            return text;
+                        }
+                        async getAssetsFromObjectData(args) {
+                            return [];
+                        }
+                        getCodeDOMBuilder() {
+                            return new sceneobjects.TextCodeDOMBuilder();
+                        }
                     }
-                    static getInstance() {
-                        return this._instance;
-                    }
-                    acceptsDropData(data) {
-                        return false;
-                    }
-                    createSceneObjectWithAsset(args) {
-                        return null;
-                    }
-                    createEmptySceneObject(args) {
-                        const text = new sceneobjects.Text(args.scene, args.x, args.y, "New text", {});
-                        return text;
-                    }
-                    createSceneObjectWithData(args) {
-                        const text = new sceneobjects.Text(args.scene, 0, 0, "", {});
-                        text.getEditorSupport().readJSON(args.data);
-                        return text;
-                    }
-                    async getAssetsFromObjectData(args) {
-                        return [];
-                    }
-                    getCodeDOMBuilder() {
-                        return new sceneobjects.TextCodeDOMBuilder();
-                    }
-                }
-                TextExtension._instance = new TextExtension();
+                    TextExtension._instance = new TextExtension();
+                    return TextExtension;
+                })();
                 sceneobjects.TextExtension = TextExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -11405,43 +11486,46 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TextureComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [
-                            TextureComponent.texture
-                        ]);
-                        this._textureKeys = {};
-                    }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        // nothing, the properties are set when the object is created.
-                    }
-                    getTextureKeys() {
-                        return this._textureKeys;
-                    }
-                    setTextureKeys(keys) {
-                        this._textureKeys = keys;
-                        if (this._textureKeys.frame === null) {
-                            this._textureKeys.frame = undefined;
+                let TextureComponent = /** @class */ (() => {
+                    class TextureComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [
+                                TextureComponent.texture
+                            ]);
+                            this._textureKeys = {};
                         }
-                        const obj = this.getObject();
-                        obj.setTexture(keys.key || null, keys.frame);
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            // nothing, the properties are set when the object is created.
+                        }
+                        getTextureKeys() {
+                            return this._textureKeys;
+                        }
+                        setTextureKeys(keys) {
+                            this._textureKeys = keys;
+                            if (this._textureKeys.frame === null) {
+                                this._textureKeys.frame = undefined;
+                            }
+                            const obj = this.getObject();
+                            obj.setTexture(keys.key || null, keys.frame);
+                        }
+                        removeTexture() {
+                            this.setTextureKeys({});
+                        }
                     }
-                    removeTexture() {
-                        this.setTextureKeys({});
-                    }
-                }
-                TextureComponent.texture = {
-                    name: "texture",
-                    defValue: {},
-                    getValue: obj => {
-                        const textureComponent = obj.getEditorSupport().getComponent(TextureComponent);
-                        return textureComponent.getTextureKeys();
-                    },
-                    setValue: (obj, value) => {
-                        const textureComponent = obj.getEditorSupport().getComponent(TextureComponent);
-                        textureComponent.setTextureKeys(value);
-                    }
-                };
+                    TextureComponent.texture = {
+                        name: "texture",
+                        defValue: {},
+                        getValue: obj => {
+                            const textureComponent = obj.getEditorSupport().getComponent(TextureComponent);
+                            return textureComponent.getTextureKeys();
+                        },
+                        setValue: (obj, value) => {
+                            const textureComponent = obj.getEditorSupport().getComponent(TextureComponent);
+                            textureComponent.setTextureKeys(value);
+                        }
+                    };
+                    return TextureComponent;
+                })();
                 sceneobjects.TextureComponent = TextureComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -11578,7 +11662,7 @@ var phasereditor2d;
                         viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
                         viewer.setCellRendererProvider(new phasereditor2d.pack.ui.viewers.AssetPackCellRendererProvider("grid"));
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setCellSize(64);
+                        viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
                         viewer.setInput(this._finder.getPacks()
                             .flatMap(pack => pack.getItems())
                             .filter(item => item instanceof phasereditor2d.pack.core.ImageFrameContainerAssetPackItem)
@@ -11720,45 +11804,48 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TileSpriteComponent extends sceneobjects.Component {
-                    constructor(obj) {
-                        super(obj, [
-                            TileSpriteComponent.width,
-                            TileSpriteComponent.height,
-                            TileSpriteComponent.tilePositionX,
-                            TileSpriteComponent.tilePositionY,
-                            TileSpriteComponent.tileScaleX,
-                            TileSpriteComponent.tileScaleY
-                        ]);
+                let TileSpriteComponent = /** @class */ (() => {
+                    class TileSpriteComponent extends sceneobjects.Component {
+                        constructor(obj) {
+                            super(obj, [
+                                TileSpriteComponent.width,
+                                TileSpriteComponent.height,
+                                TileSpriteComponent.tilePositionX,
+                                TileSpriteComponent.tilePositionY,
+                                TileSpriteComponent.tileScaleX,
+                                TileSpriteComponent.tileScaleY
+                            ]);
+                        }
+                        buildSetObjectPropertiesCodeDOM(args) {
+                            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TileSpriteComponent.tilePositionX, TileSpriteComponent.tilePositionY, TileSpriteComponent.tileScaleX, TileSpriteComponent.tileScaleY);
+                        }
                     }
-                    buildSetObjectPropertiesCodeDOM(args) {
-                        this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TileSpriteComponent.tilePositionX, TileSpriteComponent.tilePositionY, TileSpriteComponent.tileScaleX, TileSpriteComponent.tileScaleY);
-                    }
-                }
-                TileSpriteComponent.width = sceneobjects.SimpleProperty("width", undefined, "Width", "The TileSprite width");
-                TileSpriteComponent.height = sceneobjects.SimpleProperty("height", undefined, "Height", "The TileSprite height");
-                TileSpriteComponent.tilePositionX = sceneobjects.SimpleProperty("tilePositionX", 0, "X", "phaser:Phaser.GameObjects.TileSprite.tilePositionX");
-                TileSpriteComponent.tilePositionY = sceneobjects.SimpleProperty("tilePositionY", 0, "Y", "phaser:Phaser.GameObjects.TileSprite.tilePositionY");
-                TileSpriteComponent.tileScaleX = sceneobjects.SimpleProperty("tileScaleX", 1, "X", "Phaser.GameObjects.TileSprite.tileScaleX");
-                TileSpriteComponent.tileScaleY = sceneobjects.SimpleProperty("tileScaleY", 1, "Y", "Phaser.GameObjects.TileSprite.tileScaleY");
-                TileSpriteComponent.size = {
-                    label: "Size",
-                    tooltip: "The TileSprite size",
-                    x: TileSpriteComponent.width,
-                    y: TileSpriteComponent.height
-                };
-                TileSpriteComponent.tilePosition = {
-                    label: "Tile Position",
-                    tooltip: "phaser:Phaser.GameObjects.TileSprite.setTilePosition",
-                    x: TileSpriteComponent.tilePositionX,
-                    y: TileSpriteComponent.tilePositionY
-                };
-                TileSpriteComponent.tileScale = {
-                    label: "Tile Scale",
-                    tooltip: "phaser:Phaser.GameObjects.TileSprite.setTileScale",
-                    x: TileSpriteComponent.tileScaleX,
-                    y: TileSpriteComponent.tileScaleY
-                };
+                    TileSpriteComponent.width = sceneobjects.SimpleProperty("width", undefined, "Width", "The TileSprite width");
+                    TileSpriteComponent.height = sceneobjects.SimpleProperty("height", undefined, "Height", "The TileSprite height");
+                    TileSpriteComponent.tilePositionX = sceneobjects.SimpleProperty("tilePositionX", 0, "X", "phaser:Phaser.GameObjects.TileSprite.tilePositionX");
+                    TileSpriteComponent.tilePositionY = sceneobjects.SimpleProperty("tilePositionY", 0, "Y", "phaser:Phaser.GameObjects.TileSprite.tilePositionY");
+                    TileSpriteComponent.tileScaleX = sceneobjects.SimpleProperty("tileScaleX", 1, "X", "Phaser.GameObjects.TileSprite.tileScaleX");
+                    TileSpriteComponent.tileScaleY = sceneobjects.SimpleProperty("tileScaleY", 1, "Y", "Phaser.GameObjects.TileSprite.tileScaleY");
+                    TileSpriteComponent.size = {
+                        label: "Size",
+                        tooltip: "The TileSprite size",
+                        x: TileSpriteComponent.width,
+                        y: TileSpriteComponent.height
+                    };
+                    TileSpriteComponent.tilePosition = {
+                        label: "Tile Position",
+                        tooltip: "phaser:Phaser.GameObjects.TileSprite.setTilePosition",
+                        x: TileSpriteComponent.tilePositionX,
+                        y: TileSpriteComponent.tilePositionY
+                    };
+                    TileSpriteComponent.tileScale = {
+                        label: "Tile Scale",
+                        tooltip: "phaser:Phaser.GameObjects.TileSprite.setTileScale",
+                        x: TileSpriteComponent.tileScaleX,
+                        y: TileSpriteComponent.tileScaleY
+                    };
+                    return TileSpriteComponent;
+                })();
                 sceneobjects.TileSpriteComponent = TileSpriteComponent;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
@@ -11794,35 +11881,38 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
-                class TileSpriteExtension extends sceneobjects.BaseImageExtension {
-                    constructor() {
-                        super({
-                            phaserTypeName: "Phaser.GameObjects.TileSprite",
-                            typeName: "TileSprite"
-                        });
-                    }
-                    static getInstance() {
-                        return this._instance;
-                    }
-                    adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
-                        super.adaptDataAfterTypeConversion(serializer, originalObject, extraData);
-                        const obj = originalObject;
-                        const width = obj.width === undefined ? 20 : obj.width;
-                        const height = obj.height === undefined ? 20 : obj.height;
-                        serializer.getData()[sceneobjects.TileSpriteComponent.width.name] = width;
-                        serializer.getData()[sceneobjects.TileSpriteComponent.height.name] = height;
-                    }
-                    getCodeDOMBuilder() {
-                        return new sceneobjects.TileSpriteCodeDOMBuilder();
-                    }
-                    newObject(scene, x, y, key, frame) {
-                        if (key) {
-                            return new sceneobjects.TileSprite(scene, x, y, 0, 0, key, frame);
+                let TileSpriteExtension = /** @class */ (() => {
+                    class TileSpriteExtension extends sceneobjects.BaseImageExtension {
+                        constructor() {
+                            super({
+                                phaserTypeName: "Phaser.GameObjects.TileSprite",
+                                typeName: "TileSprite"
+                            });
                         }
-                        return new sceneobjects.TileSprite(scene, x, y, 64, 64, null, null);
+                        static getInstance() {
+                            return this._instance;
+                        }
+                        adaptDataAfterTypeConversion(serializer, originalObject, extraData) {
+                            super.adaptDataAfterTypeConversion(serializer, originalObject, extraData);
+                            const obj = originalObject;
+                            const width = obj.width === undefined ? 20 : obj.width;
+                            const height = obj.height === undefined ? 20 : obj.height;
+                            serializer.getData()[sceneobjects.TileSpriteComponent.width.name] = width;
+                            serializer.getData()[sceneobjects.TileSpriteComponent.height.name] = height;
+                        }
+                        getCodeDOMBuilder() {
+                            return new sceneobjects.TileSpriteCodeDOMBuilder();
+                        }
+                        newObject(scene, x, y, key, frame) {
+                            if (key) {
+                                return new sceneobjects.TileSprite(scene, x, y, 0, 0, key, frame);
+                            }
+                            return new sceneobjects.TileSprite(scene, x, y, 64, 64, null, null);
+                        }
                     }
-                }
-                TileSpriteExtension._instance = new TileSpriteExtension();
+                    TileSpriteExtension._instance = new TileSpriteExtension();
+                    return TileSpriteExtension;
+                })();
                 sceneobjects.TileSpriteExtension = TileSpriteExtension;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene_36.ui || (scene_36.ui = {}));
