@@ -154,8 +154,8 @@ namespace colibri.ui.controls.dialogs {
 
         setSize(width: number, height: number, adjustToDPR = false) {
 
-            this._width = Math.floor(width * (adjustToDPR ? width * controls.DEVICE_PIXEL_RATIO : 1));
-            this._height = Math.floor(height * (adjustToDPR ? height * controls.DEVICE_PIXEL_RATIO : 1));
+            this._width = Math.floor(width * (adjustToDPR ? controls.DEVICE_PIXEL_RATIO : 1));
+            this._height = Math.floor(height * (adjustToDPR ? controls.DEVICE_PIXEL_RATIO : 1));
 
             const margin = window.innerHeight * 0.2;
 

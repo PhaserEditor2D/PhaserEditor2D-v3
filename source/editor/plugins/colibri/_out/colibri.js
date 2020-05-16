@@ -2847,43 +2847,6 @@ var colibri;
     (function (ui) {
         var controls;
         (function (controls) {
-            class MutableIcon {
-                constructor() {
-                    this._element = document.createElement("canvas");
-                    this._element.classList.add("MutableIcon");
-                    this._element.width = controls.ICON_SIZE;
-                    this._element.height = controls.ICON_SIZE;
-                    this._element.style.width = controls.ICON_SIZE + "px";
-                    this._element.style.height = controls.ICON_SIZE + "px";
-                    this._context = this._element.getContext("2d");
-                    this._context.imageSmoothingEnabled = false;
-                }
-                getElement() {
-                    return this._element;
-                }
-                setIcon(icon) {
-                    this._icon = icon;
-                }
-                getIcon() {
-                    return this._icon;
-                }
-                repaint() {
-                    this._context.clearRect(0, 0, controls.ICON_SIZE, controls.ICON_SIZE);
-                    if (this._icon) {
-                        this._icon.paint(this._context, 0, 0, controls.ICON_SIZE, controls.ICON_SIZE, true);
-                    }
-                }
-            }
-            controls.MutableIcon = MutableIcon;
-        })(controls = ui.controls || (ui.controls = {}));
-    })(ui = colibri.ui || (colibri.ui = {}));
-})(colibri || (colibri = {}));
-var colibri;
-(function (colibri) {
-    var ui;
-    (function (ui) {
-        var controls;
-        (function (controls) {
             class Point {
                 constructor(x, y) {
                     this.x = x;
@@ -3835,8 +3798,8 @@ var colibri;
                             });
                         }
                         setSize(width, height, adjustToDPR = false) {
-                            this._width = Math.floor(width * (adjustToDPR ? width * controls.DEVICE_PIXEL_RATIO : 1));
-                            this._height = Math.floor(height * (adjustToDPR ? height * controls.DEVICE_PIXEL_RATIO : 1));
+                            this._width = Math.floor(width * (adjustToDPR ? controls.DEVICE_PIXEL_RATIO : 1));
+                            this._height = Math.floor(height * (adjustToDPR ? controls.DEVICE_PIXEL_RATIO : 1));
                             const margin = window.innerHeight * 0.2;
                             if (this._width > window.innerWidth) {
                                 this._width = window.innerWidth - 10;
