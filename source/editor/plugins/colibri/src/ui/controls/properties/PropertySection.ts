@@ -278,6 +278,8 @@ namespace colibri.ui.controls.properties {
 
                 pickerElement.style.top = top + "px";
                 pickerElement.style.left = left + "px";
+
+                pickerClass.currentPicker = picker;
             });
 
             return {

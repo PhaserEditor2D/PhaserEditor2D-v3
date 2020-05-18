@@ -4486,6 +4486,7 @@ var colibri;
                                 }
                                 pickerElement.style.top = top + "px";
                                 pickerElement.style.left = left + "px";
+                                pickerClass.currentPicker = picker;
                             });
                             return {
                                 element: colorElement,
