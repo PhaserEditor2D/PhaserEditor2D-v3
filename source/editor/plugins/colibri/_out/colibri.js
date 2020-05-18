@@ -780,6 +780,7 @@ var colibri;
     colibri.ICON_MINUS = "minus";
     colibri.ICON_CHECKED = "checked";
     colibri.ICON_KEYMAP = "keymap";
+    colibri.ICON_COLOR = "color";
     colibri.ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
     colibri.ICON_CONTROL_TREE_EXPAND = "tree-expand";
     colibri.ICON_CONTROL_CLOSE = "close";
@@ -801,6 +802,7 @@ var colibri;
                 colibri.ICON_MINUS,
                 colibri.ICON_CHECKED,
                 colibri.ICON_KEYMAP,
+                colibri.ICON_COLOR,
                 colibri.ICON_CONTROL_TREE_COLLAPSE,
                 colibri.ICON_CONTROL_TREE_EXPAND,
                 colibri.ICON_CONTROL_CLOSE,
@@ -4430,7 +4432,8 @@ var colibri;
                             text.classList.add("formText");
                             text.readOnly = readOnly;
                             const btn = document.createElement("button");
-                            btn.textContent = "...";
+                            // btn.textContent = "...";
+                            btn.appendChild(new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_COLOR)).getCanvas());
                             const colorElement = document.createElement("div");
                             colorElement.style.display = "grid";
                             colorElement.style.gridTemplateColumns = "1fr auto";
@@ -4439,6 +4442,9 @@ var colibri;
                             colorElement.appendChild(btn);
                             parent.appendChild(colorElement);
                             btn.addEventListener("mousedown", e => {
+                                if (text.readOnly) {
+                                    return;
+                                }
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
                                 if (btn["__picker"]) {
@@ -4462,7 +4468,6 @@ var colibri;
                                         text.dispatchEvent(new CustomEvent("change"));
                                     }
                                 });
-                                picker.setColour(text.value, true);
                                 picker.show();
                                 const pickerElement = picker.domElement;
                                 const pickerBounds = pickerElement.getBoundingClientRect();
@@ -4473,9 +4478,9 @@ var colibri;
                                     top = window.innerHeight - pickerBounds.height - 10;
                                 }
                                 if (top < 0) {
-                                    top = textBounds.bottom + textBounds.height + 5;
+                                    top = textBounds.bottom - 10;
                                 }
-                                let left = textBounds.left;
+                                let left = textBounds.left - 15;
                                 if (left + pickerBounds.width > window.innerWidth) {
                                     left = window.innerWidth - pickerBounds.width - 20;
                                 }

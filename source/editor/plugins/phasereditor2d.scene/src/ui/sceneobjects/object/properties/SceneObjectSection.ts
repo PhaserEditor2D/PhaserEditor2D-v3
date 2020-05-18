@@ -306,8 +306,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             parent: HTMLElement, property: IProperty<T>,
             checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
 
-            const colorElement = this.createColor(parent, false);;
+            const colorElement = this.createColor(parent, false);
             const text = colorElement.text;
+            const btn = colorElement.btn;
 
             text.addEventListener("change", e => {
 
@@ -325,6 +326,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
                 }
+
+                btn.disabled = text.readOnly;
 
                 text.value = this.flatValues_StringOneOrNothing(
 

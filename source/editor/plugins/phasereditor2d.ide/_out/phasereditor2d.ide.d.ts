@@ -2,7 +2,6 @@ declare namespace phasereditor2d.ide {
     import controls = colibri.ui.controls;
     const ICON_PLAY = "play";
     const ICON_MENU = "menu";
-    const ICON_THEME = "theme";
     class IDEPlugin extends colibri.Plugin {
         private static _instance;
         private _openingProject;

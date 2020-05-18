@@ -183,6 +183,7 @@ declare namespace colibri {
     const ICON_MINUS = "minus";
     const ICON_CHECKED = "checked";
     const ICON_KEYMAP = "keymap";
+    const ICON_COLOR = "color";
     const ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
     const ICON_CONTROL_TREE_EXPAND = "tree-expand";
     const ICON_CONTROL_CLOSE = "close";

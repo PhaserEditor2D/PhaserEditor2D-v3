@@ -199,7 +199,9 @@ namespace colibri.ui.controls.properties {
             text.readOnly = readOnly;
 
             const btn = document.createElement("button");
-            btn.textContent = "...";
+            // btn.textContent = "...";
+            btn.appendChild(
+                new IconControl(ColibriPlugin.getInstance().getIcon(colibri.ICON_COLOR)).getCanvas());
 
             const colorElement = document.createElement("div");
             colorElement.style.display = "grid";
@@ -211,6 +213,11 @@ namespace colibri.ui.controls.properties {
             parent.appendChild(colorElement);
 
             btn.addEventListener("mousedown", e => {
+
+                if (text.readOnly) {
+
+                    return;
+                }
 
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -259,10 +266,10 @@ namespace colibri.ui.controls.properties {
 
                 if (top < 0) {
 
-                    top = textBounds.bottom + textBounds.height + 5;
+                    top = textBounds.bottom - 10;
                 }
 
-                let left = textBounds.left;
+                let left = textBounds.left - 15;
 
                 if (left + pickerBounds.width > window.innerWidth) {
 

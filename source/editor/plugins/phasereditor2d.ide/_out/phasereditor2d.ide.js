@@ -5,7 +5,6 @@ var phasereditor2d;
         var controls = colibri.ui.controls;
         ide_1.ICON_PLAY = "play";
         ide_1.ICON_MENU = "menu";
-        ide_1.ICON_THEME = "theme";
         let IDEPlugin = /** @class */ (() => {
             class IDEPlugin extends colibri.Plugin {
                 constructor() {
@@ -23,7 +22,6 @@ var phasereditor2d;
                     reg.addExtension(new colibri.ui.ide.IconLoaderExtension([
                         this.getIcon(ide_1.ICON_PLAY),
                         this.getIcon(ide_1.ICON_MENU),
-                        this.getIcon(ide_1.ICON_THEME)
                     ]));
                     // keys
                     reg.addExtension(new colibri.ui.ide.commands.CommandExtension(ide_1.ui.actions.IDEActions.registerCommands));
@@ -1036,7 +1034,7 @@ var phasereditor2d;
                         super("ThemeViewer");
                         this.setLabelProvider(new ThemeLabelProvider());
                         this.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        this.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(e => new controls.viewers.IconImageCellRenderer(ide.IDEPlugin.getInstance().getIcon(ide.ICON_THEME))));
+                        this.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(e => new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_COLOR))));
                         this.setInput(colibri.Platform
                             .getExtensions(colibri.ui.ide.themes.ThemeExtension.POINT_ID)
                             .map(ext => ext.getTheme())

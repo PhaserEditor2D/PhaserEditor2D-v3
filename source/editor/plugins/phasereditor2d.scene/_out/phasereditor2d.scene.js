@@ -7369,8 +7369,8 @@ var phasereditor2d;
                     }
                     createColorField(parent, property, checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
                         const colorElement = this.createColor(parent, false);
-                        ;
                         const text = colorElement.text;
+                        const btn = colorElement.btn;
                         text.addEventListener("change", e => {
                             const value = text.value;
                             this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
@@ -7380,6 +7380,7 @@ var phasereditor2d;
                             if (readOnlyOnMultiple) {
                                 text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
                             }
+                            btn.disabled = text.readOnly;
                             text.value = this.flatValues_StringOneOrNothing(this.getSelection()
                                 .map(obj => property.getValue(obj)));
                         });
