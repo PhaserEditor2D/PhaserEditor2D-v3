@@ -2160,6 +2160,61 @@ var colibri;
     (function (ui) {
         var controls;
         (function (controls) {
+            let ColorPickerManager = /** @class */ (() => {
+                class ColorPickerManager {
+                    static createPicker() {
+                        this.setupPicker();
+                        const pickerClass = window["Picker"];
+                        const picker = new pickerClass(document.body);
+                        this._currentPicker = picker;
+                        return picker;
+                    }
+                    static isActivePicker() {
+                        const picker = ColorPickerManager._currentPicker;
+                        if (picker) {
+                            const elem = picker.domElement;
+                            return elem.isConnected;
+                        }
+                        return false;
+                    }
+                    static closeActive() {
+                        const picker = ColorPickerManager._currentPicker;
+                        if (picker) {
+                            picker.destroy();
+                            this._currentPicker = null;
+                        }
+                    }
+                    static setupPicker() {
+                        if (this._set) {
+                            return;
+                        }
+                        window.addEventListener("keydown", e => {
+                            if (e.code === "Escape") {
+                                const picker = ColorPickerManager._currentPicker;
+                                if (picker) {
+                                    if (ColorPickerManager.isActivePicker()) {
+                                        e.preventDefault();
+                                        e.stopImmediatePropagation();
+                                        ColorPickerManager.closeActive();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+                ColorPickerManager._set = false;
+                return ColorPickerManager;
+            })();
+            controls.ColorPickerManager = ColorPickerManager;
+        })(controls = ui.controls || (ui.controls = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var controls;
+        (function (controls) {
             class DefaultImage {
                 constructor(img, url) {
                     this._imageElement = img;
@@ -4447,21 +4502,18 @@ var colibri;
                                 }
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
-                                if (btn["__picker"]) {
-                                    btn["__picker"].destroy();
-                                    delete btn["__picker"];
+                                if (controls.ColorPickerManager.isActivePicker()) {
+                                    controls.ColorPickerManager.closeActive();
                                     return;
                                 }
-                                const pickerClass = window["Picker"];
-                                const picker = new pickerClass(document.body);
+                                const picker = controls.ColorPickerManager.createPicker();
                                 btn["__picker"] = picker;
                                 picker.setOptions({
                                     popup: "left",
                                     editor: false,
                                     color: text.value,
                                     onClose: () => {
-                                        picker.destroy();
-                                        delete btn["__picker"];
+                                        controls.ColorPickerManager.closeActive();
                                     },
                                     onDone: (color) => {
                                         text.value = color.hex;
@@ -4481,12 +4533,11 @@ var colibri;
                                     top = textBounds.bottom - 10;
                                 }
                                 let left = textBounds.left - 15;
-                                if (left + pickerBounds.width > window.innerWidth) {
+                                if (left + pickerBounds.width > window.innerWidth - 20) {
                                     left = window.innerWidth - pickerBounds.width - 20;
                                 }
                                 pickerElement.style.top = top + "px";
                                 pickerElement.style.left = left + "px";
-                                pickerClass.currentPicker = picker;
                             });
                             return {
                                 element: colorElement,

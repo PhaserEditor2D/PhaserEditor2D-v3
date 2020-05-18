@@ -4304,6 +4304,7 @@ var phasereditor2d;
             (function (editor_10) {
                 var commands;
                 (function (commands) {
+                    var controls = colibri.ui.controls;
                     commands.CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
                     commands.CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
                     commands.CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
@@ -4366,7 +4367,13 @@ var phasereditor2d;
                                 editor.getSelectionManager().selectAll();
                             });
                             // clear selection
-                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE, isSceneScope, args => {
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE, args => {
+                                if (controls.dialogs.Dialog.getActiveDialog()
+                                    || controls.ColorPickerManager.isActivePicker()) {
+                                    return false;
+                                }
+                                return isSceneScope(args);
+                            }, args => {
                                 const editor = args.activeEditor;
                                 editor.getSelectionManager().clearSelection();
                             });

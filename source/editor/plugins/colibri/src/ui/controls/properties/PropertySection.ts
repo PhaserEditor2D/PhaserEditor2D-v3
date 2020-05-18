@@ -222,16 +222,14 @@ namespace colibri.ui.controls.properties {
                 e.preventDefault();
                 e.stopImmediatePropagation();
 
-                if (btn["__picker"]) {
+                if (ColorPickerManager.isActivePicker()) {
 
-                    btn["__picker"].destroy();
-                    delete btn["__picker"];
+                    ColorPickerManager.closeActive();
 
                     return;
                 }
 
-                const pickerClass = window["Picker"];
-                const picker = new pickerClass(document.body);
+                const picker = ColorPickerManager.createPicker();
 
                 btn["__picker"] = picker;
 
@@ -240,10 +238,11 @@ namespace colibri.ui.controls.properties {
                     editor: false,
                     color: text.value,
                     onClose: () => {
-                        picker.destroy();
-                        delete btn["__picker"];
+
+                        ColorPickerManager.closeActive();
                     },
                     onDone: (color) => {
+
                         text.value = color.hex;
                         text.dispatchEvent(new CustomEvent("change"));
                     }
@@ -271,7 +270,7 @@ namespace colibri.ui.controls.properties {
 
                 let left = textBounds.left - 15;
 
-                if (left + pickerBounds.width > window.innerWidth) {
+                if (left + pickerBounds.width > window.innerWidth - 20) {
 
                     left = window.innerWidth - pickerBounds.width - 20;
                 }
@@ -279,7 +278,6 @@ namespace colibri.ui.controls.properties {
                 pickerElement.style.top = top + "px";
                 pickerElement.style.left = left + "px";
 
-                pickerClass.currentPicker = picker;
             });
 
             return {

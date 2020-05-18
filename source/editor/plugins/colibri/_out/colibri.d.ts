@@ -540,6 +540,16 @@ declare namespace colibri.ui.controls {
     }
 }
 declare namespace colibri.ui.controls {
+    class ColorPickerManager {
+        private static _currentPicker;
+        private static _set;
+        static createPicker(): any;
+        static isActivePicker(): boolean;
+        static closeActive(): void;
+        private static setupPicker;
+    }
+}
+declare namespace colibri.ui.controls {
     class DefaultImage implements IImage {
         private _ready;
         private _error;
