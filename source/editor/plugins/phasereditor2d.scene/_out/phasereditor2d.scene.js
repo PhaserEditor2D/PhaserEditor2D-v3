@@ -7287,6 +7287,15 @@ var phasereditor2d;
                         const text = this.createStringField(parent, prop);
                         return text;
                     }
+                    createPropertyColorRow(parent, prop, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, prop);
+                        }
+                        const label = this.createLabel(parent, prop.label, scene.PhaserHelp(prop.tooltip));
+                        label.style.gridColumn = "2";
+                        const text = this.createColorField(parent, prop);
+                        return text;
+                    }
                     createPropertyEnumRow(parent, prop, lockIcon = true) {
                         if (lockIcon) {
                             this.createLock(parent, prop);
@@ -7357,6 +7366,24 @@ var phasereditor2d;
                                 .map(obj => property.getValue(obj)));
                         });
                         return text;
+                    }
+                    createColorField(parent, property, checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
+                        const colorElement = this.createColor(parent, false);
+                        ;
+                        const text = colorElement.text;
+                        text.addEventListener("change", e => {
+                            const value = text.value;
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            text.readOnly = checkUnlock && !this.isUnlocked(property);
+                            if (readOnlyOnMultiple) {
+                                text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                            }
+                            text.value = this.flatValues_StringOneOrNothing(this.getSelection()
+                                .map(obj => property.getValue(obj)));
+                        });
+                        return colorElement;
                     }
                     createBooleanField(parent, property, checkUnlock = true) {
                         const labelElement = this.createLabel(parent, property.label, scene.PhaserHelp(property.tooltip));
@@ -11312,7 +11339,7 @@ var phasereditor2d;
                         // align
                         this.createPropertyEnumRow(comp, sceneobjects.TextComponent.align).style.gridColumn = "3 / span 4";
                         // color
-                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.color).style.gridColumn = "3 / span 4";
+                        this.createPropertyColorRow(comp, sceneobjects.TextComponent.color).element.style.gridColumn = "3 / span 4";
                         // stroke
                         this.createPropertyStringRow(comp, sceneobjects.TextComponent.stroke).style.gridColumn = "3 / span 4";
                         // strokeThickness

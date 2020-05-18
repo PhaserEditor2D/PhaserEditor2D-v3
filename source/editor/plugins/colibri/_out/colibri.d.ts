@@ -1015,6 +1015,11 @@ declare namespace colibri.ui.controls.properties {
             value: any;
         }>, callback: (value: any) => void): HTMLButtonElement;
         protected createText(parent: HTMLElement, readOnly?: boolean): HTMLInputElement;
+        protected createColor(parent: HTMLElement, readOnly?: boolean): {
+            element: HTMLDivElement;
+            text: HTMLInputElement;
+            btn: HTMLButtonElement;
+        };
         protected createTextArea(parent: HTMLElement, readOnly?: boolean): HTMLTextAreaElement;
         private static NEXT_ID;
         protected createCheckbox(parent: HTMLElement, label?: HTMLLabelElement): HTMLInputElement;

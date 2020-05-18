@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createPropertyEnumRow(comp, TextComponent.align).style.gridColumn = "3 / span 4";
 
             // color
-            this.createPropertyStringRow(comp, TextComponent.color).style.gridColumn = "3 / span 4";
+            this.createPropertyColorRow(comp, TextComponent.color).element.style.gridColumn = "3 / span 4";
 
             // stroke
             this.createPropertyStringRow(comp, TextComponent.stroke).style.gridColumn = "3 / span 4";

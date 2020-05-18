@@ -1,0 +1,7 @@
+{
+    "id": "phasereditor2d.colorpicker",
+    "styles": [],
+    "scripts": [
+        "scripts/vanilla-picker.js"
+    ]
+}

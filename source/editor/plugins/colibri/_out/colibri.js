@@ -4424,6 +4424,70 @@ var colibri;
                             parent.appendChild(text);
                             return text;
                         }
+                        createColor(parent, readOnly = false) {
+                            const text = document.createElement("input");
+                            text.type = "text";
+                            text.classList.add("formText");
+                            text.readOnly = readOnly;
+                            const btn = document.createElement("button");
+                            btn.textContent = "...";
+                            const colorElement = document.createElement("div");
+                            colorElement.style.display = "grid";
+                            colorElement.style.gridTemplateColumns = "1fr auto";
+                            colorElement.style.gridGap = "5px";
+                            colorElement.appendChild(text);
+                            colorElement.appendChild(btn);
+                            parent.appendChild(colorElement);
+                            btn.addEventListener("mousedown", e => {
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+                                if (btn["__picker"]) {
+                                    btn["__picker"].destroy();
+                                    delete btn["__picker"];
+                                    return;
+                                }
+                                const pickerClass = window["Picker"];
+                                const picker = new pickerClass(document.body);
+                                btn["__picker"] = picker;
+                                picker.setOptions({
+                                    popup: "left",
+                                    editor: false,
+                                    color: text.value,
+                                    onClose: () => {
+                                        picker.destroy();
+                                        delete btn["__picker"];
+                                    },
+                                    onDone: (color) => {
+                                        text.value = color.hex;
+                                        text.dispatchEvent(new CustomEvent("change"));
+                                    }
+                                });
+                                picker.setColour(text.value, true);
+                                picker.show();
+                                const pickerElement = picker.domElement;
+                                const pickerBounds = pickerElement.getBoundingClientRect();
+                                const textBounds = text.getBoundingClientRect();
+                                pickerElement.getElementsByClassName("picker_arrow")[0].remove();
+                                let top = textBounds.top - pickerBounds.height - 20;
+                                if (top + pickerBounds.height > window.innerHeight) {
+                                    top = window.innerHeight - pickerBounds.height - 10;
+                                }
+                                if (top < 0) {
+                                    top = textBounds.bottom + textBounds.height + 5;
+                                }
+                                let left = textBounds.left;
+                                if (left + pickerBounds.width > window.innerWidth) {
+                                    left = window.innerWidth - pickerBounds.width - 20;
+                                }
+                                pickerElement.style.top = top + "px";
+                                pickerElement.style.left = left + "px";
+                            });
+                            return {
+                                element: colorElement,
+                                text: text,
+                                btn: btn
+                            };
+                        }
                         createTextArea(parent, readOnly = false) {
                             const text = document.createElement("textarea");
                             text.classList.add("formText");

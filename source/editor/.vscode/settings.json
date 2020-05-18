@@ -8,6 +8,7 @@
         "Serializable",
         "TILEMAP",
         "colibri",
+        "colorpicker",
         "esnext",
         "multiatlas",
         "prefs",
