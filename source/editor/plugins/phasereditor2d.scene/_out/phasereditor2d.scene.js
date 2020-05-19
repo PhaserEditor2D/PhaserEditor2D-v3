@@ -9891,7 +9891,7 @@ var phasereditor2d;
                         const btn = this.createButton(comp, "(Select)", e => {
                             const dlg = new sceneobjects.ParentDialog(this.getEditor());
                             dlg.create();
-                            dlg.addEventListener(controls.dialogs.EVENT_DIALOG_CLOSE, e => {
+                            dlg.addEventListener(controls.dialogs.EVENT_DIALOG_CLOSE, e2 => {
                                 this.updateWithSelection();
                             });
                         });

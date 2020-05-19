@@ -688,7 +688,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 }
             });
 
-
             manager.add({
                 command: {
                     id: CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
