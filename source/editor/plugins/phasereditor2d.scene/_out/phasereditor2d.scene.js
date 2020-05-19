@@ -7390,6 +7390,7 @@ var phasereditor2d;
                             btn.disabled = text.readOnly;
                             text.value = this.flatValues_StringOneOrNothing(this.getSelection()
                                 .map(obj => property.getValue(obj)));
+                            btn.style.background = text.value.endsWith("selected)") ? "transparent" : text.value;
                         });
                         return colorElement;
                     }

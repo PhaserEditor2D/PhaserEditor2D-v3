@@ -4511,15 +4511,21 @@ var colibri;
                                 picker.setOptions({
                                     popup: "left",
                                     editor: false,
-                                    color: text.value,
                                     onClose: () => {
                                         controls.ColorPickerManager.closeActive();
                                     },
                                     onDone: (color) => {
                                         text.value = color.hex;
+                                        btn.style.background = color.hex;
                                         text.dispatchEvent(new CustomEvent("change"));
                                     }
                                 });
+                                try {
+                                    picker.setColour(text.value, false);
+                                }
+                                catch (e) {
+                                    picker.setColour("#fff", false);
+                                }
                                 picker.show();
                                 const pickerElement = picker.domElement;
                                 const pickerBounds = pickerElement.getBoundingClientRect();

@@ -236,7 +236,6 @@ namespace colibri.ui.controls.properties {
                 picker.setOptions({
                     popup: "left",
                     editor: false,
-                    color: text.value,
                     onClose: () => {
 
                         ColorPickerManager.closeActive();
@@ -244,9 +243,19 @@ namespace colibri.ui.controls.properties {
                     onDone: (color) => {
 
                         text.value = color.hex;
+                        btn.style.background = color.hex;
                         text.dispatchEvent(new CustomEvent("change"));
                     }
                 });
+
+                try {
+
+                    picker.setColour(text.value, false);
+
+                } catch (e) {
+
+                    picker.setColour("#fff", false);
+                }
 
                 picker.show();
 

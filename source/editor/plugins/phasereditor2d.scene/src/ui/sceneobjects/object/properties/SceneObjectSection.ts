@@ -335,6 +335,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         .map(obj => property.getValue(obj))
                 );
+
+                btn.style.background = text.value.endsWith("selected)") ? "transparent" : text.value;
             });
 
             return colorElement;
