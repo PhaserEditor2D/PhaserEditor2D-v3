@@ -7,7 +7,9 @@
 * Scene Editor: use a color picker for the color properties in the Inspector view.
 * Scene Editor: the Origin manipulator. To select it press `O` or select it in the context menu or toolbar.
 
-### Bug fixes
+### Modified
+
+### Fixed
 
 * Scene Editor: fixes the Translate manipulator when the objects are children of a transformed container.
 
