@@ -14,9 +14,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
         constructor(editor: SceneEditor) {
             this._editor = editor;
 
-            const exts = colibri.Platform.getExtensions<SceneToolExtension>(SceneToolExtension.POINT_ID);
-
-            this._tools = exts.flatMap(ext => ext.getTools());
+            this._tools = ScenePlugin.getInstance().getTools();
 
             this.setActiveTool(this.findTool(sceneobjects.TranslateTool.ID));
         }
@@ -66,7 +64,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             if (tool) {
 
-                const action = this._editor.getToolActionMap().get(tool.getId());
+                const action = this._editor.getToolbarActionMap().get(tool.getId());
 
                 if (action) {
 

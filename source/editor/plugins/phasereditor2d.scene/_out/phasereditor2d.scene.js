@@ -95,7 +95,14 @@ var phasereditor2d;
                     // property sections
                     reg.addExtension(new scene_1.ui.editor.properties.SceneEditorPropertySectionExtension(page => new scene_1.ui.sceneobjects.GameObjectVariableSection(page), page => new scene_1.ui.sceneobjects.ListVariableSection(page), page => new scene_1.ui.sceneobjects.GameObjectListSection(page), page => new scene_1.ui.sceneobjects.ParentSection(page), page => new scene_1.ui.sceneobjects.ContainerSection(page), page => new scene_1.ui.sceneobjects.TransformSection(page), page => new scene_1.ui.sceneobjects.OriginSection(page), page => new scene_1.ui.sceneobjects.FlipSection(page), page => new scene_1.ui.sceneobjects.VisibleSection(page), page => new scene_1.ui.sceneobjects.AlphaSection(page), page => new scene_1.ui.sceneobjects.TileSpriteSection(page), page => new scene_1.ui.sceneobjects.TextureSection(page), page => new scene_1.ui.sceneobjects.TextContentSection(page), page => new scene_1.ui.sceneobjects.TextSection(page), page => new scene_1.ui.sceneobjects.BitmapTextSection(page), page => new scene_1.ui.sceneobjects.ListSection(page)));
                     // scene tools
-                    reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
+                    reg.addExtension(new scene_1.ui.editor.tools.SceneToolExtension(new scene_1.ui.sceneobjects.TranslateTool(), new scene_1.ui.sceneobjects.RotateTool(), new scene_1.ui.sceneobjects.ScaleTool(), new scene_1.ui.sceneobjects.OriginTool(), new scene_1.ui.sceneobjects.TileSpriteSizeTool()));
+                }
+                getTools() {
+                    return colibri.Platform.getExtensions(scene_1.ui.editor.tools.SceneToolExtension.POINT_ID)
+                        .flatMap(ext => ext.getTools());
+                }
+                getTool(toolId) {
+                    return this.getTools().find(tool => tool.getId() === toolId);
                 }
                 getDefaultSceneLanguage() {
                     let typeScript = false;
@@ -3909,33 +3916,35 @@ var phasereditor2d;
                         }
                         return super.getIcon();
                     }
-                    createToolActions() {
-                        if (this._toolActionMap) {
+                    createToolbarActions() {
+                        if (this._toolbarActionMap) {
                             return;
                         }
-                        this._toolActionMap = new Map();
-                        const tuples = [
-                            [ui.sceneobjects.TranslateTool.ID, editor.commands.CMD_TRANSLATE_SCENE_OBJECT],
-                            [ui.sceneobjects.ScaleTool.ID, editor.commands.CMD_SCALE_SCENE_OBJECT],
-                            [ui.sceneobjects.RotateTool.ID, editor.commands.CMD_ROTATE_SCENE_OBJECT]
+                        this._toolbarActionMap = new Map();
+                        this._toolsInToolbar = [
+                            ui.sceneobjects.TranslateTool.ID,
+                            ui.sceneobjects.ScaleTool.ID,
+                            ui.sceneobjects.RotateTool.ID,
+                            ui.sceneobjects.OriginTool.ID
                         ];
-                        for (const info of tuples) {
-                            const [toolId, cmd] = info;
-                            this._toolActionMap.set(toolId, new controls.Action({
-                                commandId: cmd,
+                        for (const toolId of this._toolsInToolbar) {
+                            const tool = scene.ScenePlugin.getInstance().getTool(toolId);
+                            this._toolbarActionMap.set(toolId, new controls.Action({
+                                commandId: tool.getCommandId(),
                                 showText: false
                             }));
                         }
                     }
-                    getToolActionMap() {
-                        return this._toolActionMap;
+                    getToolbarActionMap() {
+                        return this._toolbarActionMap;
                     }
                     createEditorToolbar(parent) {
-                        this.createToolActions();
+                        this.createToolbarActions();
                         const manager = new controls.ToolbarManager(parent);
-                        manager.add(this._toolActionMap.get(ui.sceneobjects.TranslateTool.ID));
-                        manager.add(this._toolActionMap.get(ui.sceneobjects.ScaleTool.ID));
-                        manager.add(this._toolActionMap.get(ui.sceneobjects.RotateTool.ID));
+                        for (const toolID of this._toolsInToolbar) {
+                            const action = this._toolbarActionMap.get(toolID);
+                            manager.add(action);
+                        }
                         return manager;
                     }
                     onMenu(e) {
@@ -4315,6 +4324,7 @@ var phasereditor2d;
                     commands.CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
                     commands.CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
                     commands.CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+                    commands.CMD_SET_ORIGIN_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.SetOriginSceneObject";
                     commands.CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
                     commands.CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
                     commands.CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
@@ -4781,6 +4791,34 @@ var phasereditor2d;
                                 },
                                 keys: {
                                     key: "S"
+                                }
+                            });
+                            manager.add({
+                                command: {
+                                    id: commands.CMD_SET_ORIGIN_SCENE_OBJECT,
+                                    name: "Origin Tool",
+                                    icon: scene.ScenePlugin.getInstance().getIcon(scene.ICON_ORIGIN),
+                                    tooltip: "Change the origin of the selected scene object",
+                                    category: commands.CAT_SCENE_EDITOR
+                                },
+                                handler: {
+                                    testFunc: args => {
+                                        if (isSceneScope(args)) {
+                                            const sel = args.activeEditor.getSelection();
+                                            if (sel.length === 1) {
+                                                const obj = sel[0];
+                                                if (obj.getEditorSupport().hasComponent(ui.sceneobjects.OriginComponent)) {
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                        return false;
+                                    },
+                                    executeFunc: args => args.activeEditor
+                                        .getToolsManager().swapTool(ui.sceneobjects.OriginTool.ID)
+                                },
+                                keys: {
+                                    key: "O"
                                 }
                             });
                             manager.add({
@@ -6000,8 +6038,7 @@ var phasereditor2d;
                     class SceneToolsManager {
                         constructor(editor) {
                             this._editor = editor;
-                            const exts = colibri.Platform.getExtensions(tools.SceneToolExtension.POINT_ID);
-                            this._tools = exts.flatMap(ext => ext.getTools());
+                            this._tools = scene.ScenePlugin.getInstance().getTools();
                             this.setActiveTool(this.findTool(ui.sceneobjects.TranslateTool.ID));
                         }
                         setState(state) {
@@ -6032,7 +6069,7 @@ var phasereditor2d;
                         }
                         updateAction(tool, selected) {
                             if (tool) {
-                                const action = this._editor.getToolActionMap().get(tool.getId());
+                                const action = this._editor.getToolbarActionMap().get(tool.getId());
                                 if (action) {
                                     action.setSelected(selected);
                                 }
@@ -10030,6 +10067,41 @@ var phasereditor2d;
                     }
                 }
                 sceneobjects.BaseObjectTool = BaseObjectTool;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                let OriginTool = /** @class */ (() => {
+                    class OriginTool extends sceneobjects.BaseObjectTool {
+                        constructor() {
+                            super({
+                                id: OriginTool.ID,
+                                command: ui.editor.commands.CMD_SET_ORIGIN_SCENE_OBJECT,
+                            }, sceneobjects.OriginComponent.originX, sceneobjects.OriginComponent.originY);
+                            // const x = new TranslateToolItem("x");
+                            // const y = new TranslateToolItem("y");
+                            // const xy = new TranslateToolItem("xy");
+                            // this.addItems(
+                            //     new editor.tools.LineToolItem("#f00", xy, x),
+                            //     new editor.tools.LineToolItem("#0f0", xy, y),
+                            //     xy,
+                            //     x,
+                            //     y
+                            // );
+                        }
+                    }
+                    OriginTool.ID = "phasereditor2d.scene.ui.sceneobjects.OriginTool";
+                    return OriginTool;
+                })();
+                sceneobjects.OriginTool = OriginTool;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));

@@ -12,6 +12,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     export const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+    export const CMD_SET_ORIGIN_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.SetOriginSceneObject";
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
@@ -650,6 +651,43 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "S"
                 }
             });
+
+            manager.add({
+                command: {
+                    id: CMD_SET_ORIGIN_SCENE_OBJECT,
+                    name: "Origin Tool",
+                    icon: ScenePlugin.getInstance().getIcon(ICON_ORIGIN),
+                    tooltip: "Change the origin of the selected scene object",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => {
+
+                        if (isSceneScope(args)) {
+
+                            const sel = args.activeEditor.getSelection();
+
+                            if (sel.length === 1) {
+
+                                const obj = sel[0] as sceneobjects.ISceneObject;
+
+                                if (obj.getEditorSupport().hasComponent(sceneobjects.OriginComponent)) {
+
+                                    return true;
+                                }
+                            }
+                        }
+
+                        return false;
+                    },
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.OriginTool.ID)
+                },
+                keys: {
+                    key: "O"
+                }
+            });
+
 
             manager.add({
                 command: {

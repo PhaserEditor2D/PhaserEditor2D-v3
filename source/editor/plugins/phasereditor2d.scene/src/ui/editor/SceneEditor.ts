@@ -248,48 +248,51 @@ namespace phasereditor2d.scene.ui.editor {
             return super.getIcon();
         }
 
-        private _toolActionMap: Map<string, controls.Action>;
+        private _toolbarActionMap: Map<string, controls.Action>;
+        private _toolsInToolbar: string[];
 
-        private createToolActions() {
+        private createToolbarActions() {
 
-            if (this._toolActionMap) {
+            if (this._toolbarActionMap) {
                 return;
             }
 
-            this._toolActionMap = new Map();
+            this._toolbarActionMap = new Map();
 
-            const tuples = [
-                [sceneobjects.TranslateTool.ID, commands.CMD_TRANSLATE_SCENE_OBJECT],
-                [sceneobjects.ScaleTool.ID, commands.CMD_SCALE_SCENE_OBJECT],
-                [sceneobjects.RotateTool.ID, commands.CMD_ROTATE_SCENE_OBJECT]
+            this._toolsInToolbar = [
+                sceneobjects.TranslateTool.ID,
+                sceneobjects.ScaleTool.ID,
+                sceneobjects.RotateTool.ID,
+                sceneobjects.OriginTool.ID
             ];
 
-            for (const info of tuples) {
+            for (const toolId of this._toolsInToolbar) {
 
-                const [toolId, cmd] = info;
+                const tool = ScenePlugin.getInstance().getTool(toolId);
 
-                this._toolActionMap.set(toolId, new controls.Action({
-                    commandId: cmd,
+                this._toolbarActionMap.set(toolId, new controls.Action({
+                    commandId: tool.getCommandId(),
                     showText: false
                 }));
             }
         }
 
-        getToolActionMap() {
-            return this._toolActionMap;
+        getToolbarActionMap() {
+            return this._toolbarActionMap;
         }
 
         createEditorToolbar(parent: HTMLElement) {
 
-            this.createToolActions();
+            this.createToolbarActions();
 
             const manager = new controls.ToolbarManager(parent);
 
-            manager.add(this._toolActionMap.get(sceneobjects.TranslateTool.ID));
+            for (const toolID of this._toolsInToolbar) {
 
-            manager.add(this._toolActionMap.get(sceneobjects.ScaleTool.ID));
+                const action = this._toolbarActionMap.get(toolID);
 
-            manager.add(this._toolActionMap.get(sceneobjects.RotateTool.ID));
+                manager.add(action);
+            }
 
             return manager;
         }

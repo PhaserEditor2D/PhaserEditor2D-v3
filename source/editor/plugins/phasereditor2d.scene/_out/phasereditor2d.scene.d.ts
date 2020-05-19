@@ -21,6 +21,8 @@ declare namespace phasereditor2d.scene {
         private constructor();
         getPhaserDocs(): phasereditor2d.ide.core.PhaserDocs;
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        getTools(): ui.editor.tools.SceneTool[];
+        getTool(toolId: string): ui.editor.tools.SceneTool;
         getDefaultSceneLanguage(): core.json.SourceLang;
         getSceneFinder(): core.json.SceneFinder;
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[];
@@ -769,9 +771,10 @@ declare namespace phasereditor2d.scene.ui.editor {
         private createGame;
         private updateTitleIcon;
         getIcon(): controls.IImage;
-        private _toolActionMap;
-        private createToolActions;
-        getToolActionMap(): Map<string, controls.Action>;
+        private _toolbarActionMap;
+        private _toolsInToolbar;
+        private createToolbarActions;
+        getToolbarActionMap(): Map<string, controls.Action>;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
         private onMenu;
         fillContextMenu(menu: controls.Menu): void;
@@ -833,6 +836,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+    const CMD_SET_ORIGIN_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.SetOriginSceneObject";
     const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
@@ -2164,6 +2168,12 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(config: editor.tools.ISceneToolConfig, ...properties: Array<IProperty<any>>);
         canEdit(obj: unknown): boolean;
         canRender(obj: unknown): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class OriginTool extends BaseObjectTool {
+        static ID: string;
+        constructor();
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
