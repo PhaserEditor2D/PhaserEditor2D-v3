@@ -1,10 +1,23 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export interface IOriginToolSpriteData {
+        x: number;
+        y: number;
+        originX: number;
+        originY: number;
+    }
+
     export class OriginToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
         private _axis: "x" | "y" | "xy";
         private _initCursorPos: { x: number, y: number };
+        private _displayOrigin_1: Phaser.Math.Vector2;
+        private _worldPosition_1: Phaser.Math.Vector2;
+        private _worldTx_1: Phaser.GameObjects.Components.TransformMatrix;
+        private _position_1: Phaser.Math.Vector2;
+        private _localTx_1: Phaser.GameObjects.Components.TransformMatrix;
+        private _origin_1: Phaser.Math.Vector2;
 
         constructor(axis: "x" | "y" | "xy") {
             super();
@@ -27,10 +40,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._initCursorPos = { x: args.x, y: args.y };
 
-                const sprite = args.objects[0] as unknown as Phaser.GameObjects.Sprite;
+                const sprite = this.getSprite(args);
 
-                sprite.setData("OriginTool.initPosition", { x: sprite.x, y: sprite.y });
+                const worldPoint = new Phaser.Math.Vector2();
+                const tx = sprite.getWorldTransformMatrix();
+                tx.transformPoint(0, 0, worldPoint);
+
+                this._worldPosition_1 = worldPoint;
+                this._worldTx_1 = tx;
+                this._localTx_1 = sprite.getLocalTransformMatrix();
+                this._displayOrigin_1 = new Phaser.Math.Vector2(sprite.displayOriginX, sprite.displayOriginY);
+                this._origin_1 = new Phaser.Math.Vector2(sprite.originX, sprite.originY);
+                this._position_1 = new Phaser.Math.Vector2(sprite.x, sprite.y);
             }
+        }
+
+        private getSprite(args: editor.tools.ISceneToolDragEventArgs) {
+
+            return args.objects[0] as unknown as Phaser.GameObjects.Sprite;
         }
 
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
@@ -39,30 +66,63 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
-            const dx = args.x - this._initCursorPos.x;
-            const dy = args.y - this._initCursorPos.y;
-
-            const sprite = args.objects[0] as unknown as Phaser.GameObjects.Sprite;
-
-            const scale = this.getScreenToObjectScale(args, sprite);
-            const dx2 = dx / scale.x;
-            const dy2 = dy / scale.y;
-
-            const { x, y } = sprite.getData("OriginTool.initPosition");
+            const cursorDx = args.x - this._initCursorPos.x;
+            const cursorDy = args.y - this._initCursorPos.y;
 
             const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
             const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
 
-            const x2 = x + dx2 * xAxis;
-            const y2 = y + dy2 * yAxis;
+            const worldDx = cursorDx / args.camera.zoom * xAxis;
+            const worldDy = cursorDy / args.camera.zoom * yAxis;
 
-            sprite.setPosition(x2, y2);
+            const sprite = this.getSprite(args);
+
+            const worldPoint2 = this._worldPosition_1.clone();
+            worldPoint2.x += worldDx;
+            worldPoint2.y += worldDy;
+
+            const displayOriginPoint_2 = new Phaser.Math.Vector2();
+            this._worldTx_1.applyInverse(worldPoint2.x, worldPoint2.y, displayOriginPoint_2);
+
+            // when get the display point, it uses the initial origin,
+            // so we have to add it to the result, to get a 0,0 based display origin.
+            const originX_2 = (this._displayOrigin_1.x + displayOriginPoint_2.x) / sprite.width;
+            const originY_2 = (this._displayOrigin_1.y + displayOriginPoint_2.y) / sprite.height;
+
+            sprite.setOrigin(originX_2, originY_2);
+
+            const displayOriginDx = sprite.displayOriginX - this._displayOrigin_1.x;
+            const displayOriginDy = sprite.displayOriginY - this._displayOrigin_1.y;
+
+            const displayOriginDelta = new Phaser.Math.Vector2(
+                displayOriginDx,
+                displayOriginDy
+            );
+
+            this._localTx_1.transformPoint(displayOriginDelta.x, displayOriginDelta.y, displayOriginDelta);
+
+            displayOriginDelta.add(this._position_1.clone().negate());
+
+            sprite.setPosition(
+                this._position_1.x + displayOriginDelta.x,
+                this._position_1.y + displayOriginDelta.y);
 
             args.editor.dispatchSelectionChanged();
         }
 
-        static getInitObjectPosition(obj: any): { x: number, y: number } {
-            return (obj as Phaser.GameObjects.Sprite).getData("OriginTool.initPosition");
+        static getInitObjectOriginAndPosition(obj: Phaser.GameObjects.Sprite) {
+
+            return obj.getData("OriginTool.initData") as IOriginToolSpriteData;
+        }
+
+        static createFinalData(sprite: Phaser.GameObjects.Sprite) {
+
+            return {
+                x: sprite.x,
+                y: sprite.y,
+                originX: sprite.originX,
+                originY: sprite.originY
+            };
         }
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
@@ -71,7 +131,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const editor = args.editor;
 
-                editor.getUndoManager().add(new TranslateOperation(args));
+                const sprite = this.getSprite(args);
+
+                const data: IOriginToolSpriteData = {
+                    x: this._position_1.x,
+                    y: this._position_1.y,
+                    originX: this._origin_1.x,
+                    originY: this._origin_1.y
+                };
+
+                sprite.setData("OriginTool.initData", data);
+
+                editor.getUndoManager().add(new OriginOperation(args));
             }
 
             this._initCursorPos = null;
@@ -102,7 +173,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ctx.translate(x, y);
 
                 this.drawCircle(ctx,
-                    args.canEdit ? "#fff" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                    args.canEdit ? "#ff0" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
                 ctx.restore();
 

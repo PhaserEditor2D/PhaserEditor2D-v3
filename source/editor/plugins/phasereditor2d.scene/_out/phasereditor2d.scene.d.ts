@@ -2172,22 +2172,48 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class OriginOperation extends editor.tools.SceneToolOperation<{
+        x: number;
+        y: number;
+    }> {
+        getInitialValue(obj: any): IOriginToolSpriteData;
+        getFinalValue(obj: any): IOriginToolSpriteData;
+        setValue(obj: any, value: IOriginToolSpriteData): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class OriginTool extends BaseObjectTool {
         static ID: string;
         constructor();
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IOriginToolSpriteData {
+        x: number;
+        y: number;
+        originX: number;
+        originY: number;
+    }
     class OriginToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
         private _axis;
         private _initCursorPos;
+        private _displayOrigin_1;
+        private _worldPosition_1;
+        private _worldTx_1;
+        private _position_1;
+        private _localTx_1;
+        private _origin_1;
         constructor(axis: "x" | "y" | "xy");
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        private getSprite;
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
-        static getInitObjectPosition(obj: any): {
+        static getInitObjectOriginAndPosition(obj: Phaser.GameObjects.Sprite): IOriginToolSpriteData;
+        static createFinalData(sprite: Phaser.GameObjects.Sprite): {
             x: number;
             y: number;
+            originX: number;
+            originY: number;
         };
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
         getPoint(args: editor.tools.ISceneToolContextArgs): {

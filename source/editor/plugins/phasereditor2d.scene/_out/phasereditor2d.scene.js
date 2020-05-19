@@ -10075,6 +10075,34 @@ var phasereditor2d;
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
 })(phasereditor2d || (phasereditor2d = {}));
+/// <reference path="../../../editor/tools/SceneToolOperation.ts" />
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class OriginOperation extends ui.editor.tools.SceneToolOperation {
+                    getInitialValue(obj) {
+                        return sceneobjects.OriginToolItem.getInitObjectOriginAndPosition(obj);
+                    }
+                    getFinalValue(obj) {
+                        return sceneobjects.OriginToolItem.createFinalData(obj);
+                    }
+                    setValue(obj, value) {
+                        const sprite = obj;
+                        sprite.x = value.x;
+                        sprite.y = value.y;
+                        sprite.setOrigin(value.originX, value.originY);
+                    }
+                }
+                sceneobjects.OriginOperation = OriginOperation;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
 var phasereditor2d;
 (function (phasereditor2d) {
     var scene;
@@ -10125,35 +10153,73 @@ var phasereditor2d;
                     onStartDrag(args) {
                         if (this.containsPoint(args)) {
                             this._initCursorPos = { x: args.x, y: args.y };
-                            const sprite = args.objects[0];
-                            sprite.setData("OriginTool.initPosition", { x: sprite.x, y: sprite.y });
+                            const sprite = this.getSprite(args);
+                            const worldPoint = new Phaser.Math.Vector2();
+                            const tx = sprite.getWorldTransformMatrix();
+                            tx.transformPoint(0, 0, worldPoint);
+                            this._worldPosition_1 = worldPoint;
+                            this._worldTx_1 = tx;
+                            this._localTx_1 = sprite.getLocalTransformMatrix();
+                            this._displayOrigin_1 = new Phaser.Math.Vector2(sprite.displayOriginX, sprite.displayOriginY);
+                            this._origin_1 = new Phaser.Math.Vector2(sprite.originX, sprite.originY);
+                            this._position_1 = new Phaser.Math.Vector2(sprite.x, sprite.y);
                         }
+                    }
+                    getSprite(args) {
+                        return args.objects[0];
                     }
                     onDrag(args) {
                         if (!this._initCursorPos) {
                             return;
                         }
-                        const dx = args.x - this._initCursorPos.x;
-                        const dy = args.y - this._initCursorPos.y;
-                        const sprite = args.objects[0];
-                        const scale = this.getScreenToObjectScale(args, sprite);
-                        const dx2 = dx / scale.x;
-                        const dy2 = dy / scale.y;
-                        const { x, y } = sprite.getData("OriginTool.initPosition");
+                        const cursorDx = args.x - this._initCursorPos.x;
+                        const cursorDy = args.y - this._initCursorPos.y;
                         const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
                         const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
-                        const x2 = x + dx2 * xAxis;
-                        const y2 = y + dy2 * yAxis;
-                        sprite.setPosition(x2, y2);
+                        const worldDx = cursorDx / args.camera.zoom * xAxis;
+                        const worldDy = cursorDy / args.camera.zoom * yAxis;
+                        const sprite = this.getSprite(args);
+                        const worldPoint2 = this._worldPosition_1.clone();
+                        worldPoint2.x += worldDx;
+                        worldPoint2.y += worldDy;
+                        const displayOriginPoint_2 = new Phaser.Math.Vector2();
+                        this._worldTx_1.applyInverse(worldPoint2.x, worldPoint2.y, displayOriginPoint_2);
+                        // when get the display point, it uses the initial origin,
+                        // so we have to add it to the result, to get a 0,0 based display origin.
+                        const originX_2 = (this._displayOrigin_1.x + displayOriginPoint_2.x) / sprite.width;
+                        const originY_2 = (this._displayOrigin_1.y + displayOriginPoint_2.y) / sprite.height;
+                        sprite.setOrigin(originX_2, originY_2);
+                        const displayOriginDx = sprite.displayOriginX - this._displayOrigin_1.x;
+                        const displayOriginDy = sprite.displayOriginY - this._displayOrigin_1.y;
+                        const displayOriginDelta = new Phaser.Math.Vector2(displayOriginDx, displayOriginDy);
+                        this._localTx_1.transformPoint(displayOriginDelta.x, displayOriginDelta.y, displayOriginDelta);
+                        displayOriginDelta.add(this._position_1.clone().negate());
+                        sprite.setPosition(this._position_1.x + displayOriginDelta.x, this._position_1.y + displayOriginDelta.y);
                         args.editor.dispatchSelectionChanged();
                     }
-                    static getInitObjectPosition(obj) {
-                        return obj.getData("OriginTool.initPosition");
+                    static getInitObjectOriginAndPosition(obj) {
+                        return obj.getData("OriginTool.initData");
+                    }
+                    static createFinalData(sprite) {
+                        return {
+                            x: sprite.x,
+                            y: sprite.y,
+                            originX: sprite.originX,
+                            originY: sprite.originY
+                        };
                     }
                     onStopDrag(args) {
                         if (this._initCursorPos) {
                             const editor = args.editor;
-                            editor.getUndoManager().add(new sceneobjects.TranslateOperation(args));
+                            const sprite = this.getSprite(args);
+                            const data = {
+                                x: this._position_1.x,
+                                y: this._position_1.y,
+                                originX: this._origin_1.x,
+                                originY: this._origin_1.y
+                            };
+                            sprite.setData("OriginTool.initData", data);
+                            editor.getUndoManager().add(new sceneobjects.OriginOperation(args));
                         }
                         this._initCursorPos = null;
                     }
@@ -10171,7 +10237,7 @@ var phasereditor2d;
                         if (this._axis === "xy") {
                             ctx.save();
                             ctx.translate(x, y);
-                            this.drawCircle(ctx, args.canEdit ? "#fff" : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                            this.drawCircle(ctx, args.canEdit ? "#ff0" : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
                             ctx.restore();
                         }
                         else {
