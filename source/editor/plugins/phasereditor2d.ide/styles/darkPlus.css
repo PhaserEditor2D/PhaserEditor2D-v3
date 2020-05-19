@@ -10,7 +10,7 @@ Important:
 */
 
 .darkPlus body {
-    background: #202020;
+    background: #202020 !important;
     color: #e0e0e0;
 }
 

@@ -256,23 +256,23 @@ namespace colibri.ui.controls.properties {
 
                 pickerElement.getElementsByClassName("picker_arrow")[0].remove();
 
-                let top = textBounds.top - pickerBounds.height - 20;
+                let top = textBounds.top - pickerBounds.height;
 
                 if (top + pickerBounds.height > window.innerHeight) {
 
-                    top = window.innerHeight - pickerBounds.height - 10;
+                    top = window.innerHeight - pickerBounds.height;
                 }
 
                 if (top < 0) {
 
-                    top = textBounds.bottom - 10;
+                    top = textBounds.bottom;
                 }
 
-                let left = textBounds.left - 15;
+                let left = textBounds.left;
 
-                if (left + pickerBounds.width > window.innerWidth - 20) {
+                if (left + pickerBounds.width > window.innerWidth) {
 
-                    left = window.innerWidth - pickerBounds.width - 20;
+                    left = window.innerWidth - pickerBounds.width;
                 }
 
                 pickerElement.style.top = top + "px";
