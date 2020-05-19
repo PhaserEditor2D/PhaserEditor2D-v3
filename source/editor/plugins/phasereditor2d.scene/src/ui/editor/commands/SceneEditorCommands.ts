@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.editor.commands {
 
+    import controls = colibri.ui.controls;
+
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
@@ -23,6 +25,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
+
         return args.activePart instanceof SceneEditor
 
             || (args.activeEditor instanceof SceneEditor &&
@@ -108,7 +111,17 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
 
-                isSceneScope,
+                args => {
+
+                    if (controls.dialogs.Dialog.getActiveDialog()
+
+                        || controls.ColorPickerManager.isActivePicker()) {
+
+                        return false;
+                    }
+
+                    return isSceneScope(args);
+                },
 
                 args => {
                     const editor = args.activeEditor as SceneEditor;

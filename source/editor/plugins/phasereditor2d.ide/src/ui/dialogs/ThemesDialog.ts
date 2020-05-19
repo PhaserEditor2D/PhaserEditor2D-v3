@@ -31,7 +31,7 @@ namespace phasereditor2d.ide.ui.dialogs {
             this.setCellRendererProvider(
                 new controls.viewers.EmptyCellRendererProvider(
                     e => new controls.viewers.IconImageCellRenderer(
-                        IDEPlugin.getInstance().getIcon(ICON_THEME)
+                        colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_COLOR)
                     )
                 )
             );

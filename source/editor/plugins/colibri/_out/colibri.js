@@ -780,6 +780,7 @@ var colibri;
     colibri.ICON_MINUS = "minus";
     colibri.ICON_CHECKED = "checked";
     colibri.ICON_KEYMAP = "keymap";
+    colibri.ICON_COLOR = "color";
     colibri.ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
     colibri.ICON_CONTROL_TREE_EXPAND = "tree-expand";
     colibri.ICON_CONTROL_CLOSE = "close";
@@ -801,6 +802,7 @@ var colibri;
                 colibri.ICON_MINUS,
                 colibri.ICON_CHECKED,
                 colibri.ICON_KEYMAP,
+                colibri.ICON_COLOR,
                 colibri.ICON_CONTROL_TREE_COLLAPSE,
                 colibri.ICON_CONTROL_TREE_EXPAND,
                 colibri.ICON_CONTROL_CLOSE,
@@ -2149,6 +2151,61 @@ var colibri;
                 }
             }
             controls.CanvasProgressMonitor = CanvasProgressMonitor;
+        })(controls = ui.controls || (ui.controls = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var controls;
+        (function (controls) {
+            let ColorPickerManager = /** @class */ (() => {
+                class ColorPickerManager {
+                    static createPicker() {
+                        this.setupPicker();
+                        const pickerClass = window["Picker"];
+                        const picker = new pickerClass(document.body);
+                        this._currentPicker = picker;
+                        return picker;
+                    }
+                    static isActivePicker() {
+                        const picker = ColorPickerManager._currentPicker;
+                        if (picker) {
+                            const elem = picker.domElement;
+                            return elem.isConnected;
+                        }
+                        return false;
+                    }
+                    static closeActive() {
+                        const picker = ColorPickerManager._currentPicker;
+                        if (picker) {
+                            picker.destroy();
+                            this._currentPicker = null;
+                        }
+                    }
+                    static setupPicker() {
+                        if (this._set) {
+                            return;
+                        }
+                        window.addEventListener("keydown", e => {
+                            if (e.code === "Escape") {
+                                const picker = ColorPickerManager._currentPicker;
+                                if (picker) {
+                                    if (ColorPickerManager.isActivePicker()) {
+                                        e.preventDefault();
+                                        e.stopImmediatePropagation();
+                                        ColorPickerManager.closeActive();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+                ColorPickerManager._set = false;
+                return ColorPickerManager;
+            })();
+            controls.ColorPickerManager = ColorPickerManager;
         })(controls = ui.controls || (ui.controls = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
 })(colibri || (colibri = {}));
@@ -4423,6 +4480,76 @@ var colibri;
                             text.readOnly = readOnly;
                             parent.appendChild(text);
                             return text;
+                        }
+                        createColor(parent, readOnly = false) {
+                            const text = document.createElement("input");
+                            text.type = "text";
+                            text.classList.add("formText");
+                            text.readOnly = readOnly;
+                            const btn = document.createElement("button");
+                            // btn.textContent = "...";
+                            btn.appendChild(new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_COLOR)).getCanvas());
+                            const colorElement = document.createElement("div");
+                            colorElement.style.display = "grid";
+                            colorElement.style.gridTemplateColumns = "1fr auto";
+                            colorElement.style.gridGap = "5px";
+                            colorElement.appendChild(text);
+                            colorElement.appendChild(btn);
+                            parent.appendChild(colorElement);
+                            btn.addEventListener("mousedown", e => {
+                                if (text.readOnly) {
+                                    return;
+                                }
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+                                if (controls.ColorPickerManager.isActivePicker()) {
+                                    controls.ColorPickerManager.closeActive();
+                                    return;
+                                }
+                                const picker = controls.ColorPickerManager.createPicker();
+                                btn["__picker"] = picker;
+                                picker.setOptions({
+                                    popup: "left",
+                                    editor: false,
+                                    onClose: () => {
+                                        controls.ColorPickerManager.closeActive();
+                                    },
+                                    onDone: (color) => {
+                                        text.value = color.hex;
+                                        btn.style.background = color.hex;
+                                        text.dispatchEvent(new CustomEvent("change"));
+                                    }
+                                });
+                                try {
+                                    picker.setColour(text.value, false);
+                                }
+                                catch (e) {
+                                    picker.setColour("#fff", false);
+                                }
+                                picker.show();
+                                const pickerElement = picker.domElement;
+                                const pickerBounds = pickerElement.getBoundingClientRect();
+                                const textBounds = text.getBoundingClientRect();
+                                pickerElement.getElementsByClassName("picker_arrow")[0].remove();
+                                let top = textBounds.top - pickerBounds.height;
+                                if (top + pickerBounds.height > window.innerHeight) {
+                                    top = window.innerHeight - pickerBounds.height;
+                                }
+                                if (top < 0) {
+                                    top = textBounds.bottom;
+                                }
+                                let left = textBounds.left;
+                                if (left + pickerBounds.width > window.innerWidth) {
+                                    left = window.innerWidth - pickerBounds.width;
+                                }
+                                pickerElement.style.top = top + "px";
+                                pickerElement.style.left = left + "px";
+                            });
+                            return {
+                                element: colorElement,
+                                text: text,
+                                btn: btn
+                            };
                         }
                         createTextArea(parent, readOnly = false) {
                             const text = document.createElement("textarea");

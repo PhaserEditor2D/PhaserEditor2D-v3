@@ -1590,11 +1590,21 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
         protected createPropertyFloatRow(parent: HTMLElement, prop: IProperty<any>, lockIcon?: boolean): HTMLInputElement;
         protected createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon?: boolean): HTMLInputElement | HTMLTextAreaElement;
+        protected createPropertyColorRow(parent: HTMLElement, prop: IProperty<any>, lockIcon?: boolean): {
+            element: HTMLDivElement;
+            text: HTMLInputElement;
+            btn: HTMLButtonElement;
+        };
         protected createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon?: boolean): HTMLButtonElement;
         protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon?: boolean): void;
         createEnumField<TValue>(parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked?: boolean): HTMLButtonElement;
         createFloatField(parent: HTMLElement, property: IProperty<T>): HTMLInputElement;
         createStringField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean, readOnlyOnMultiple?: boolean, multiLine?: boolean): HTMLInputElement | HTMLTextAreaElement;
+        createColorField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean, readOnlyOnMultiple?: boolean, multiLine?: boolean): {
+            element: HTMLDivElement;
+            text: HTMLInputElement;
+            btn: HTMLButtonElement;
+        };
         createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock?: boolean): HTMLInputElement;
     }
 }

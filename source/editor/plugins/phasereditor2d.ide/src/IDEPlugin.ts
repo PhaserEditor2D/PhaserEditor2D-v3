@@ -5,7 +5,6 @@ namespace phasereditor2d.ide {
 
     export const ICON_PLAY = "play";
     export const ICON_MENU = "menu";
-    export const ICON_THEME = "theme";
 
     export class IDEPlugin extends colibri.Plugin {
 
@@ -47,7 +46,6 @@ namespace phasereditor2d.ide {
                 new colibri.ui.ide.IconLoaderExtension([
                     this.getIcon(ICON_PLAY),
                     this.getIcon(ICON_MENU),
-                    this.getIcon(ICON_THEME)
                 ]));
 
             // keys

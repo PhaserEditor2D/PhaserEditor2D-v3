@@ -183,6 +183,7 @@ declare namespace colibri {
     const ICON_MINUS = "minus";
     const ICON_CHECKED = "checked";
     const ICON_KEYMAP = "keymap";
+    const ICON_COLOR = "color";
     const ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
     const ICON_CONTROL_TREE_EXPAND = "tree-expand";
     const ICON_CONTROL_CLOSE = "close";
@@ -536,6 +537,16 @@ declare namespace colibri.ui.controls {
         addTotal(total: number): void;
         step(): void;
         private render;
+    }
+}
+declare namespace colibri.ui.controls {
+    class ColorPickerManager {
+        private static _currentPicker;
+        private static _set;
+        static createPicker(): any;
+        static isActivePicker(): boolean;
+        static closeActive(): void;
+        private static setupPicker;
     }
 }
 declare namespace colibri.ui.controls {
@@ -1015,6 +1026,11 @@ declare namespace colibri.ui.controls.properties {
             value: any;
         }>, callback: (value: any) => void): HTMLButtonElement;
         protected createText(parent: HTMLElement, readOnly?: boolean): HTMLInputElement;
+        protected createColor(parent: HTMLElement, readOnly?: boolean): {
+            element: HTMLDivElement;
+            text: HTMLInputElement;
+            btn: HTMLButtonElement;
+        };
         protected createTextArea(parent: HTMLElement, readOnly?: boolean): HTMLTextAreaElement;
         private static NEXT_ID;
         protected createCheckbox(parent: HTMLElement, label?: HTMLLabelElement): HTMLInputElement;

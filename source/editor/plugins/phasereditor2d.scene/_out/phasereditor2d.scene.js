@@ -4304,6 +4304,7 @@ var phasereditor2d;
             (function (editor_10) {
                 var commands;
                 (function (commands) {
+                    var controls = colibri.ui.controls;
                     commands.CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
                     commands.CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
                     commands.CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
@@ -4366,7 +4367,13 @@ var phasereditor2d;
                                 editor.getSelectionManager().selectAll();
                             });
                             // clear selection
-                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE, isSceneScope, args => {
+                            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE, args => {
+                                if (controls.dialogs.Dialog.getActiveDialog()
+                                    || controls.ColorPickerManager.isActivePicker()) {
+                                    return false;
+                                }
+                                return isSceneScope(args);
+                            }, args => {
                                 const editor = args.activeEditor;
                                 editor.getSelectionManager().clearSelection();
                             });
@@ -7287,6 +7294,15 @@ var phasereditor2d;
                         const text = this.createStringField(parent, prop);
                         return text;
                     }
+                    createPropertyColorRow(parent, prop, lockIcon = true) {
+                        if (lockIcon) {
+                            this.createLock(parent, prop);
+                        }
+                        const label = this.createLabel(parent, prop.label, scene.PhaserHelp(prop.tooltip));
+                        label.style.gridColumn = "2";
+                        const text = this.createColorField(parent, prop);
+                        return text;
+                    }
                     createPropertyEnumRow(parent, prop, lockIcon = true) {
                         if (lockIcon) {
                             this.createLock(parent, prop);
@@ -7357,6 +7373,26 @@ var phasereditor2d;
                                 .map(obj => property.getValue(obj)));
                         });
                         return text;
+                    }
+                    createColorField(parent, property, checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
+                        const colorElement = this.createColor(parent, false);
+                        const text = colorElement.text;
+                        const btn = colorElement.btn;
+                        text.addEventListener("change", e => {
+                            const value = text.value;
+                            this.getEditor().getUndoManager().add(new sceneobjects.SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        });
+                        this.addUpdater(() => {
+                            text.readOnly = checkUnlock && !this.isUnlocked(property);
+                            if (readOnlyOnMultiple) {
+                                text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                            }
+                            btn.disabled = text.readOnly;
+                            text.value = this.flatValues_StringOneOrNothing(this.getSelection()
+                                .map(obj => property.getValue(obj)));
+                            btn.style.background = text.value.endsWith("selected)") ? "transparent" : text.value;
+                        });
+                        return colorElement;
                     }
                     createBooleanField(parent, property, checkUnlock = true) {
                         const labelElement = this.createLabel(parent, property.label, scene.PhaserHelp(property.tooltip));
@@ -11312,19 +11348,19 @@ var phasereditor2d;
                         // align
                         this.createPropertyEnumRow(comp, sceneobjects.TextComponent.align).style.gridColumn = "3 / span 4";
                         // color
-                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.color).style.gridColumn = "3 / span 4";
+                        this.createPropertyColorRow(comp, sceneobjects.TextComponent.color).element.style.gridColumn = "3 / span 4";
                         // stroke
-                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.stroke).style.gridColumn = "3 / span 4";
+                        this.createPropertyColorRow(comp, sceneobjects.TextComponent.stroke).element.style.gridColumn = "3 / span 4";
                         // strokeThickness
                         this.createPropertyFloatRow(comp, sceneobjects.TextComponent.strokeThickness).style.gridColumn = "3 / span 4";
                         // backgroundColor
-                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.backgroundColor).style.gridColumn = "3 / span 4";
+                        this.createPropertyColorRow(comp, sceneobjects.TextComponent.backgroundColor).element.style.gridColumn = "3 / span 4";
                         // shadow
                         this.createPropertyBoolXYRow(comp, sceneobjects.TextComponent.shadow);
                         // shadowOffset
                         this.createPropertyXYRow(comp, sceneobjects.TextComponent.shadowOffset);
                         // shadowColor
-                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.shadowColor).style.gridColumn = "3 / span 4";
+                        this.createPropertyColorRow(comp, sceneobjects.TextComponent.shadowColor).element.style.gridColumn = "3 / span 4";
                         // shadowBlur
                         this.createPropertyFloatRow(comp, sceneobjects.TextComponent.shadowBlur).style.gridColumn = "3 / span 4";
                         // fixedSize

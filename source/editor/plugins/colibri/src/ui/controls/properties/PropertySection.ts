@@ -190,6 +190,112 @@ namespace colibri.ui.controls.properties {
             return text;
         }
 
+        protected createColor(parent: HTMLElement, readOnly = false) {
+
+            const text = document.createElement("input");
+
+            text.type = "text";
+            text.classList.add("formText");
+            text.readOnly = readOnly;
+
+            const btn = document.createElement("button");
+            // btn.textContent = "...";
+            btn.appendChild(
+                new IconControl(ColibriPlugin.getInstance().getIcon(colibri.ICON_COLOR)).getCanvas());
+
+            const colorElement = document.createElement("div");
+            colorElement.style.display = "grid";
+            colorElement.style.gridTemplateColumns = "1fr auto";
+            colorElement.style.gridGap = "5px";
+            colorElement.appendChild(text);
+            colorElement.appendChild(btn);
+
+            parent.appendChild(colorElement);
+
+            btn.addEventListener("mousedown", e => {
+
+                if (text.readOnly) {
+
+                    return;
+                }
+
+                e.preventDefault();
+                e.stopImmediatePropagation();
+
+                if (ColorPickerManager.isActivePicker()) {
+
+                    ColorPickerManager.closeActive();
+
+                    return;
+                }
+
+                const picker = ColorPickerManager.createPicker();
+
+                btn["__picker"] = picker;
+
+                picker.setOptions({
+                    popup: "left",
+                    editor: false,
+                    onClose: () => {
+
+                        ColorPickerManager.closeActive();
+                    },
+                    onDone: (color) => {
+
+                        text.value = color.hex;
+                        btn.style.background = color.hex;
+                        text.dispatchEvent(new CustomEvent("change"));
+                    }
+                });
+
+                try {
+
+                    picker.setColour(text.value, false);
+
+                } catch (e) {
+
+                    picker.setColour("#fff", false);
+                }
+
+                picker.show();
+
+                const pickerElement = picker.domElement as HTMLElement;
+                const pickerBounds = pickerElement.getBoundingClientRect();
+                const textBounds = text.getBoundingClientRect();
+
+                pickerElement.getElementsByClassName("picker_arrow")[0].remove();
+
+                let top = textBounds.top - pickerBounds.height;
+
+                if (top + pickerBounds.height > window.innerHeight) {
+
+                    top = window.innerHeight - pickerBounds.height;
+                }
+
+                if (top < 0) {
+
+                    top = textBounds.bottom;
+                }
+
+                let left = textBounds.left;
+
+                if (left + pickerBounds.width > window.innerWidth) {
+
+                    left = window.innerWidth - pickerBounds.width;
+                }
+
+                pickerElement.style.top = top + "px";
+                pickerElement.style.left = left + "px";
+
+            });
+
+            return {
+                element: colorElement,
+                text: text,
+                btn: btn
+            };
+        }
+
         protected createTextArea(parent: HTMLElement, readOnly = false) {
 
             const text = document.createElement("textarea");
