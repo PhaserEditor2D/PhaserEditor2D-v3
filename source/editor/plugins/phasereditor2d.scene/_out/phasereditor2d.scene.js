@@ -11349,17 +11349,17 @@ var phasereditor2d;
                         // color
                         this.createPropertyColorRow(comp, sceneobjects.TextComponent.color).element.style.gridColumn = "3 / span 4";
                         // stroke
-                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.stroke).style.gridColumn = "3 / span 4";
+                        this.createPropertyColorRow(comp, sceneobjects.TextComponent.stroke).element.style.gridColumn = "3 / span 4";
                         // strokeThickness
                         this.createPropertyFloatRow(comp, sceneobjects.TextComponent.strokeThickness).style.gridColumn = "3 / span 4";
                         // backgroundColor
-                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.backgroundColor).style.gridColumn = "3 / span 4";
+                        this.createPropertyColorRow(comp, sceneobjects.TextComponent.backgroundColor).element.style.gridColumn = "3 / span 4";
                         // shadow
                         this.createPropertyBoolXYRow(comp, sceneobjects.TextComponent.shadow);
                         // shadowOffset
                         this.createPropertyXYRow(comp, sceneobjects.TextComponent.shadowOffset);
                         // shadowColor
-                        this.createPropertyStringRow(comp, sceneobjects.TextComponent.shadowColor).style.gridColumn = "3 / span 4";
+                        this.createPropertyColorRow(comp, sceneobjects.TextComponent.shadowColor).element.style.gridColumn = "3 / span 4";
                         // shadowBlur
                         this.createPropertyFloatRow(comp, sceneobjects.TextComponent.shadowBlur).style.gridColumn = "3 / span 4";
                         // fixedSize
