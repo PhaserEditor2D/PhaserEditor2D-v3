@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TranslateToolItem
+    export class OriginToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
         private _axis: "x" | "y" | "xy";
@@ -27,16 +27,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._initCursorPos = { x: args.x, y: args.y };
 
-                for (const obj of args.objects) {
+                const sprite = args.objects[0] as unknown as Phaser.GameObjects.Sprite;
 
-                    const sprite = obj as unknown as Phaser.GameObjects.Sprite;
-
-                    const worldPoint = new Phaser.Math.Vector2();
-                    sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
-
-                    sprite.setData("TranslateTool.localInitPosition", { x: sprite.x, y: sprite.y });
-                    sprite.setData("TranslateTool.worldInitPosition", worldPoint);
-                }
+                sprite.setData("OriginTool.initPosition", { x: sprite.x, y: sprite.y });
             }
         }
 
@@ -49,43 +42,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const dx = args.x - this._initCursorPos.x;
             const dy = args.y - this._initCursorPos.y;
 
-            const dx2 = dx / args.camera.zoom;
-            const dy2 = dy / args.camera.zoom;
+            const sprite = args.objects[0] as unknown as Phaser.GameObjects.Sprite;
 
-            for (const obj of args.objects) {
+            const scale = this.getScreenToObjectScale(args, sprite);
+            const dx2 = dx / scale.x;
+            const dy2 = dy / scale.y;
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+            const { x, y } = sprite.getData("OriginTool.initPosition");
 
-                const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
-                const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
+            const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
+            const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
 
-                const worldPoint1 = sprite.getData("TranslateTool.worldInitPosition") as Phaser.Math.Vector2;
-                const worldPoint2 = worldPoint1.clone();
-                worldPoint2.x += dx2 * xAxis;
-                worldPoint2.y += dy2 * yAxis;
+            const x2 = x + dx2 * xAxis;
+            const y2 = y + dy2 * yAxis;
 
-                args.editor.getScene().snapVector(worldPoint2);
-
-                let spritePos = new Phaser.Math.Vector2();
-
-                if (sprite.parentContainer) {
-
-                    sprite.parentContainer.getWorldTransformMatrix()
-                        .applyInverse(worldPoint2.x, worldPoint2.y, spritePos);
-
-                } else {
-
-                    spritePos = worldPoint2;
-                }
-
-                sprite.setPosition(spritePos.x, spritePos.y);
-            }
+            sprite.setPosition(x2, y2);
 
             args.editor.dispatchSelectionChanged();
         }
 
         static getInitObjectPosition(obj: any): { x: number, y: number } {
-            return (obj as Phaser.GameObjects.Sprite).getData("TranslateTool.localInitPosition");
+            return (obj as Phaser.GameObjects.Sprite).getData("OriginTool.initPosition");
         }
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
@@ -125,7 +102,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ctx.translate(x, y);
 
                 this.drawCircle(ctx,
-                    args.canEdit ? "#ff0" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                    args.canEdit ? "#fff" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
                 ctx.restore();
 

@@ -431,6 +431,7 @@ declare namespace phasereditor2d.scene.ui {
             x: number;
             y: number;
         };
+        snapVector(vector: Phaser.Math.Vector2): void;
         getByEditorId(id: string): any;
         static findByEditorId(list: sceneobjects.ISceneObject[], id: string): any;
         getCamera(): Phaser.Cameras.Scene2D.Camera;
@@ -2174,6 +2175,26 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class OriginTool extends BaseObjectTool {
         static ID: string;
         constructor();
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class OriginToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        private _axis;
+        private _initCursorPos;
+        constructor(axis: "x" | "y" | "xy");
+        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
+        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        static getInitObjectPosition(obj: any): {
+            x: number;
+            y: number;
+        };
+        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        getPoint(args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        render(args: editor.tools.ISceneToolRenderArgs): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

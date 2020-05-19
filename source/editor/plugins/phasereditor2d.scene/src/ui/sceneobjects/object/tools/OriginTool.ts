@@ -10,17 +10,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 command: editor.commands.CMD_SET_ORIGIN_SCENE_OBJECT,
             }, OriginComponent.originX, OriginComponent.originY);
 
-            // const x = new TranslateToolItem("x");
-            // const y = new TranslateToolItem("y");
-            // const xy = new TranslateToolItem("xy");
+            const x = new OriginToolItem("x");
+            const y = new OriginToolItem("y");
+            const xy = new OriginToolItem("xy");
 
-            // this.addItems(
-            //     new editor.tools.LineToolItem("#f00", xy, x),
-            //     new editor.tools.LineToolItem("#0f0", xy, y),
-            //     xy,
-            //     x,
-            //     y
-            // );
+            this.addItems(
+                new editor.tools.LineToolItem("#f00", xy, x),
+                new editor.tools.LineToolItem("#0f0", xy, y),
+                xy,
+                x,
+                y
+            );
         }
     }
 }

@@ -1920,6 +1920,10 @@ var phasereditor2d;
                     }
                     return { x, y };
                 }
+                snapVector(vector) {
+                    const result = this.snapPoint(vector.x, vector.y);
+                    vector.set(result.x, result.y);
+                }
                 getByEditorId(id) {
                     const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
                     if (!obj) {
@@ -10086,22 +10090,102 @@ var phasereditor2d;
                                 id: OriginTool.ID,
                                 command: ui.editor.commands.CMD_SET_ORIGIN_SCENE_OBJECT,
                             }, sceneobjects.OriginComponent.originX, sceneobjects.OriginComponent.originY);
-                            // const x = new TranslateToolItem("x");
-                            // const y = new TranslateToolItem("y");
-                            // const xy = new TranslateToolItem("xy");
-                            // this.addItems(
-                            //     new editor.tools.LineToolItem("#f00", xy, x),
-                            //     new editor.tools.LineToolItem("#0f0", xy, y),
-                            //     xy,
-                            //     x,
-                            //     y
-                            // );
+                            const x = new sceneobjects.OriginToolItem("x");
+                            const y = new sceneobjects.OriginToolItem("y");
+                            const xy = new sceneobjects.OriginToolItem("xy");
+                            this.addItems(new ui.editor.tools.LineToolItem("#f00", xy, x), new ui.editor.tools.LineToolItem("#0f0", xy, y), xy, x, y);
                         }
                     }
                     OriginTool.ID = "phasereditor2d.scene.ui.sceneobjects.OriginTool";
                     return OriginTool;
                 })();
                 sceneobjects.OriginTool = OriginTool;
+            })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
+        })(ui = scene.ui || (scene.ui = {}));
+    })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
+})(phasereditor2d || (phasereditor2d = {}));
+var phasereditor2d;
+(function (phasereditor2d) {
+    var scene;
+    (function (scene) {
+        var ui;
+        (function (ui) {
+            var sceneobjects;
+            (function (sceneobjects) {
+                class OriginToolItem extends ui.editor.tools.SceneToolItem {
+                    constructor(axis) {
+                        super();
+                        this._axis = axis;
+                    }
+                    containsPoint(args) {
+                        const point = this.getPoint(args);
+                        const d = Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y);
+                        return d < 20;
+                    }
+                    onStartDrag(args) {
+                        if (this.containsPoint(args)) {
+                            this._initCursorPos = { x: args.x, y: args.y };
+                            const sprite = args.objects[0];
+                            sprite.setData("OriginTool.initPosition", { x: sprite.x, y: sprite.y });
+                        }
+                    }
+                    onDrag(args) {
+                        if (!this._initCursorPos) {
+                            return;
+                        }
+                        const dx = args.x - this._initCursorPos.x;
+                        const dy = args.y - this._initCursorPos.y;
+                        const sprite = args.objects[0];
+                        const scale = this.getScreenToObjectScale(args, sprite);
+                        const dx2 = dx / scale.x;
+                        const dy2 = dy / scale.y;
+                        const { x, y } = sprite.getData("OriginTool.initPosition");
+                        const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
+                        const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
+                        const x2 = x + dx2 * xAxis;
+                        const y2 = y + dy2 * yAxis;
+                        sprite.setPosition(x2, y2);
+                        args.editor.dispatchSelectionChanged();
+                    }
+                    static getInitObjectPosition(obj) {
+                        return obj.getData("OriginTool.initPosition");
+                    }
+                    onStopDrag(args) {
+                        if (this._initCursorPos) {
+                            const editor = args.editor;
+                            editor.getUndoManager().add(new sceneobjects.TranslateOperation(args));
+                        }
+                        this._initCursorPos = null;
+                    }
+                    getPoint(args) {
+                        const { x, y } = this.getAvgScreenPointOfObjects(args);
+                        return {
+                            x: this._axis === "x" ? x + 100 : x,
+                            y: this._axis === "y" ? y + 100 : y
+                        };
+                    }
+                    render(args) {
+                        const { x, y } = this.getPoint(args);
+                        const ctx = args.canvasContext;
+                        ctx.strokeStyle = "#000";
+                        if (this._axis === "xy") {
+                            ctx.save();
+                            ctx.translate(x, y);
+                            this.drawCircle(ctx, args.canEdit ? "#fff" : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                            ctx.restore();
+                        }
+                        else {
+                            ctx.save();
+                            ctx.translate(x, y);
+                            if (this._axis === "y") {
+                                ctx.rotate(Math.PI / 2);
+                            }
+                            this.drawArrowPath(ctx, args.canEdit ? (this._axis === "x" ? "#f00" : "#0f0") : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                            ctx.restore();
+                        }
+                    }
+                }
+                sceneobjects.OriginToolItem = OriginToolItem;
             })(sceneobjects = ui.sceneobjects || (ui.sceneobjects = {}));
         })(ui = scene.ui || (scene.ui = {}));
     })(scene = phasereditor2d.scene || (phasereditor2d.scene = {}));
@@ -10743,7 +10827,10 @@ var phasereditor2d;
                             this._initCursorPos = { x: args.x, y: args.y };
                             for (const obj of args.objects) {
                                 const sprite = obj;
-                                sprite.setData("TranslateTool.initPosition", { x: sprite.x, y: sprite.y });
+                                const worldPoint = new Phaser.Math.Vector2();
+                                sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
+                                sprite.setData("TranslateTool.localInitPosition", { x: sprite.x, y: sprite.y });
+                                sprite.setData("TranslateTool.worldInitPosition", worldPoint);
                             }
                         }
                     }
@@ -10753,21 +10840,31 @@ var phasereditor2d;
                         }
                         const dx = args.x - this._initCursorPos.x;
                         const dy = args.y - this._initCursorPos.y;
+                        const dx2 = dx / args.camera.zoom;
+                        const dy2 = dy / args.camera.zoom;
                         for (const obj of args.objects) {
                             const sprite = obj;
-                            const scale = this.getScreenToObjectScale(args, obj);
-                            const dx2 = dx / scale.x;
-                            const dy2 = dy / scale.y;
-                            const { x, y } = sprite.getData("TranslateTool.initPosition");
                             const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
                             const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
-                            const { x: x2, y: y2 } = args.editor.getScene().snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
-                            sprite.setPosition(x2, y2);
+                            const worldPoint1 = sprite.getData("TranslateTool.worldInitPosition");
+                            const worldPoint2 = worldPoint1.clone();
+                            worldPoint2.x += dx2 * xAxis;
+                            worldPoint2.y += dy2 * yAxis;
+                            args.editor.getScene().snapVector(worldPoint2);
+                            let spritePos = new Phaser.Math.Vector2();
+                            if (sprite.parentContainer) {
+                                sprite.parentContainer.getWorldTransformMatrix()
+                                    .applyInverse(worldPoint2.x, worldPoint2.y, spritePos);
+                            }
+                            else {
+                                spritePos = worldPoint2;
+                            }
+                            sprite.setPosition(spritePos.x, spritePos.y);
                         }
                         args.editor.dispatchSelectionChanged();
                     }
                     static getInitObjectPosition(obj) {
-                        return obj.getData("TranslateTool.initPosition");
+                        return obj.getData("TranslateTool.localInitPosition");
                     }
                     onStopDrag(args) {
                         if (this._initCursorPos) {
