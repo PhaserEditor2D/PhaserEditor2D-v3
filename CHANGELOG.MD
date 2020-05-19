@@ -9,6 +9,8 @@
 
 ### Bug fixes
 
+* Scene Editor: fixes the Translate manipulator when the objects are children or a transformed container.
+
 ## Version 3.0.1 - May 16, 2020
 
 ### Bug fixes
