@@ -1,5 +1,8 @@
 # Change Log
 
+## Fixed
+
+* Deep nested menus are closed well.
 
 ## Version 3.0.1 - May 16, 2020
 
