@@ -2703,7 +2703,7 @@ var colibri;
                                         if (this._parentMenu) {
                                             this._parentMenu.close();
                                         }
-                                        this.close();
+                                        this.closeAll();
                                         item.run();
                                     });
                                 }

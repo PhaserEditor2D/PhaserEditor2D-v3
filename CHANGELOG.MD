@@ -14,6 +14,7 @@
 ### Fixed
 
 * Scene Editor: fixes the Translate manipulator when the objects are children of a transformed container.
+* Deep nested menus are closed well.
 
 ## Version 3.0.1 - May 16, 2020
 

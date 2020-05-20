@@ -156,7 +156,7 @@ namespace colibri.ui.controls {
                                 this._parentMenu.close();
                             }
 
-                            this.close();
+                            this.closeAll();
 
                             item.run();
                         });
