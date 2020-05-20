@@ -19,10 +19,12 @@ namespace colibri.ui.controls {
         }
 
         setMenuClosedCallback(callback: () => void) {
+
             this._menuCloseCallback = callback;
         }
 
         add(action: Action) {
+
             this._items.push(action);
         }
 
@@ -154,7 +156,7 @@ namespace colibri.ui.controls {
                                 this._parentMenu.close();
                             }
 
-                            this.close();
+                            this.closeAll();
 
                             item.run();
                         });
