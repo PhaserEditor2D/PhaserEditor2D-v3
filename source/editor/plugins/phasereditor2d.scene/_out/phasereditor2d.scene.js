@@ -3390,8 +3390,23 @@ var phasereditor2d;
                         }
                         return menu;
                     }
+                    createCoordsMenu() {
+                        const menu = new controls.Menu("Coords");
+                        menu.add(new controls.Action({
+                            callback: () => this._editor.setLocalCoords(true),
+                            text: "Local",
+                            selected: this._editor.isLocalCoords()
+                        }));
+                        menu.add(new controls.Action({
+                            callback: () => this._editor.setLocalCoords(false),
+                            text: "Global",
+                            selected: !this._editor.isLocalCoords()
+                        }));
+                        return menu;
+                    }
                     createToolsMenu() {
                         const menu = new controls.Menu("Tools");
+                        menu.addMenu(this.createCoordsMenu());
                         const activeTool = this._editor.getToolsManager().getActiveTool();
                         const exts = colibri.Platform.getExtensions(editor_6.tools.SceneToolExtension.POINT_ID);
                         for (const ext of exts) {
@@ -3792,9 +3807,16 @@ var phasereditor2d;
                         this._blocksProvider = new ui.blocks.SceneEditorBlocksProvider(this);
                         this._outlineProvider = new editor.outline.SceneEditorOutlineProvider(this);
                         this._propertyProvider = new editor.properties.SceneEditorSectionProvider(this);
+                        this._localCoords = true;
                     }
                     static getFactory() {
                         return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(scene.core.CONTENT_TYPE_SCENE, () => new SceneEditor()));
+                    }
+                    isLocalCoords() {
+                        return this._localCoords;
+                    }
+                    setLocalCoords(local) {
+                        this._localCoords = local;
                     }
                     openSourceFileInEditor() {
                         const lang = this._scene.getSettings().compilerOutputLanguage;

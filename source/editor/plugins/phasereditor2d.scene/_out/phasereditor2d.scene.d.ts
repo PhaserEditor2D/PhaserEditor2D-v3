@@ -684,6 +684,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private createDepthMenu;
         private createEditMenu;
         private createOriginMenu;
+        private createCoordsMenu;
         private createToolsMenu;
         private createTypeMenu;
         private createContainerMenu;
@@ -760,7 +761,10 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _sceneRead;
         private _currentRefreshHash;
         private _editorState;
+        private _localCoords;
         constructor();
+        isLocalCoords(): boolean;
+        setLocalCoords(local: boolean): void;
         openSourceFileInEditor(): void;
         doSave(): Promise<void>;
         compile(): Promise<void>;

@@ -40,6 +40,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _sceneRead: boolean;
         private _currentRefreshHash: string;
         private _editorState: IEditorState;
+        private _localCoords: boolean;
 
         constructor() {
             super("phasereditor2d.SceneEditor");
@@ -49,6 +50,17 @@ namespace phasereditor2d.scene.ui.editor {
             this._blocksProvider = new blocks.SceneEditorBlocksProvider(this);
             this._outlineProvider = new outline.SceneEditorOutlineProvider(this);
             this._propertyProvider = new properties.SceneEditorSectionProvider(this);
+            this._localCoords = true;
+        }
+
+        isLocalCoords() {
+
+            return this._localCoords;
+        }
+
+        setLocalCoords(local: boolean) {
+
+            this._localCoords = local;
         }
 
         openSourceFileInEditor(): void {

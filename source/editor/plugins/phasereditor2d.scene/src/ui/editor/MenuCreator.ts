@@ -86,9 +86,30 @@ namespace phasereditor2d.scene.ui.editor {
             return menu;
         }
 
+        private createCoordsMenu() {
+
+            const menu = new controls.Menu("Coords");
+
+            menu.add(new controls.Action({
+                callback: () => this._editor.setLocalCoords(true),
+                text: "Local",
+                selected: this._editor.isLocalCoords()
+            }));
+
+            menu.add(new controls.Action({
+                callback: () => this._editor.setLocalCoords(false),
+                text: "Global",
+                selected: !this._editor.isLocalCoords()
+            }));
+
+            return menu;
+        }
+
         private createToolsMenu(): controls.Menu {
 
             const menu = new controls.Menu("Tools");
+
+            menu.addMenu(this.createCoordsMenu());
 
             const activeTool = this._editor.getToolsManager().getActiveTool();
 
