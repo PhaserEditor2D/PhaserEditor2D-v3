@@ -80,6 +80,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
                 if (item.isValidFor(args.objects)) {
 
                     if (item.containsPoint(args)) {
+
                         return true;
                     }
                 }

@@ -661,25 +661,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
-                    testFunc: args => {
-
-                        if (isSceneScope(args)) {
-
-                            const sel = args.activeEditor.getSelection();
-
-                            if (sel.length === 1) {
-
-                                const obj = sel[0] as sceneobjects.ISceneObject;
-
-                                if (obj.getEditorSupport().hasComponent(sceneobjects.OriginComponent)) {
-
-                                    return true;
-                                }
-                            }
-                        }
-
-                        return false;
-                    },
+                    testFunc: isSceneScope,
                     executeFunc: args => (args.activeEditor as SceneEditor)
                         .getToolsManager().swapTool(ui.sceneobjects.OriginTool.ID)
                 },

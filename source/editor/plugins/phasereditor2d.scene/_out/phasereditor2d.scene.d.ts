@@ -1076,6 +1076,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
             x: number;
             y: number;
         };
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.tools {
@@ -1083,6 +1084,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         private _tools;
         private _color;
         constructor(color: string, ...tools: ISceneToolItemXY[]);
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
         render(args: ISceneToolRenderArgs): void;
         containsPoint(args: ISceneToolDragEventArgs): boolean;
         onStartDrag(args: ISceneToolDragEventArgs): void;
@@ -2181,6 +2183,35 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class ContainerOriginToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        private _axis;
+        private _initCursorPos;
+        private _worldPosition_1;
+        private _position_1;
+        private _localTx;
+        private _worldTx;
+        constructor(axis: "x" | "y" | "xy");
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
+        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
+        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        private getContainer;
+        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        static getInitObjectOriginAndPosition(obj: Phaser.GameObjects.Container): IOriginToolSpriteData;
+        static createFinalData(sprite: Phaser.GameObjects.Container): {
+            x: number;
+            y: number;
+            originX: number;
+            originY: number;
+        };
+        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        getPoint(args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        render(args: editor.tools.ISceneToolRenderArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     class OriginOperation extends editor.tools.SceneToolOperation<{
         x: number;
         y: number;
@@ -2194,6 +2225,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     class OriginTool extends BaseObjectTool {
         static ID: string;
         constructor();
+        canEdit(obj: ISceneObject): boolean;
+        canRender(obj: ISceneObject): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
