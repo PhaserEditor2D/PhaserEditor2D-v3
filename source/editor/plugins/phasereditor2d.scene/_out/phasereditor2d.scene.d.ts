@@ -1983,6 +1983,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IOriginAndPositionLikeObject {
+        x: number;
+        y: number;
+        originX: number;
+        originY: number;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class ObjectCellRenderer implements controls.viewers.ICellRenderer {
         renderCell(args: controls.viewers.RenderCellArgs): void;
@@ -2208,6 +2216,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
         private getSprite;
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        static simpleChangeOriginKeepPosition(sprite: Phaser.GameObjects.Sprite, newOriginX: number, newOriginY: number): void;
+        static changeOriginKeepPosition(sprite: Phaser.GameObjects.Sprite, displayOriginX_1: number, displayOriginY_1: number, originX_2: number, originY_2: number, localTx_1: Phaser.GameObjects.Components.TransformMatrix, x_1: number, y_1: number): void;
         static getInitObjectOriginAndPosition(obj: Phaser.GameObjects.Sprite): IOriginToolSpriteData;
         static createFinalData(sprite: Phaser.GameObjects.Sprite): {
             x: number;

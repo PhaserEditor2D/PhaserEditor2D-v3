@@ -9,6 +9,8 @@
 
 ### Modified
 
+* Scene Editor: the **Set Origin To** commands modify the origin of the object but keep it's global position.
+
 ### Fixed
 
 * Scene Editor: fixes the Translate manipulator when the objects are children of a transformed container.

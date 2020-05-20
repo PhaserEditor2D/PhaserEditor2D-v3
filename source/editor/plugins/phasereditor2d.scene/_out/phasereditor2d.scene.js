@@ -4890,7 +4890,11 @@ var phasereditor2d;
                                 name: "origin",
                                 defValue: undefined,
                                 getValue: obj => ({ x: obj.originX, y: obj.originY }),
-                                setValue: (obj, value) => obj.setOrigin(value.x, value.y)
+                                setValue: (obj, value) => {
+                                    // obj.setOrigin(value.x, value.y);
+                                    ui.sceneobjects.OriginToolItem
+                                        .simpleChangeOriginKeepPosition(obj, value.x, value.y);
+                                }
                             };
                             for (const data of this.computeOriginCommandData()) {
                                 manager.add({
@@ -10188,14 +10192,32 @@ var phasereditor2d;
                         // so we have to add it to the result, to get a 0,0 based display origin.
                         const originX_2 = (this._displayOrigin_1.x + displayOriginPoint_2.x) / sprite.width;
                         const originY_2 = (this._displayOrigin_1.y + displayOriginPoint_2.y) / sprite.height;
-                        sprite.setOrigin(originX_2, originY_2);
-                        const displayOriginDx = sprite.displayOriginX - this._displayOrigin_1.x;
-                        const displayOriginDy = sprite.displayOriginY - this._displayOrigin_1.y;
-                        const displayOriginDelta = new Phaser.Math.Vector2(displayOriginDx, displayOriginDy);
-                        this._localTx_1.transformPoint(displayOriginDelta.x, displayOriginDelta.y, displayOriginDelta);
-                        displayOriginDelta.add(this._position_1.clone().negate());
-                        sprite.setPosition(this._position_1.x + displayOriginDelta.x, this._position_1.y + displayOriginDelta.y);
+                        OriginToolItem.changeOriginKeepPosition(sprite, this._displayOrigin_1.x, this._displayOrigin_1.y, originX_2, originY_2, this._localTx_1, this._position_1.x, this._position_1.y);
+                        // sprite.setOrigin(originX_2, originY_2);
+                        // const displayOriginDx = sprite.displayOriginX - this._displayOrigin_1.x;
+                        // const displayOriginDy = sprite.displayOriginY - this._displayOrigin_1.y;
+                        // const displayOriginDelta = new Phaser.Math.Vector2(
+                        //     displayOriginDx,
+                        //     displayOriginDy
+                        // );
+                        // this._localTx_1.transformPoint(displayOriginDelta.x, displayOriginDelta.y, displayOriginDelta);
+                        // displayOriginDelta.add(this._position_1.clone().negate());
+                        // sprite.setPosition(
+                        //     this._position_1.x + displayOriginDelta.x,
+                        //     this._position_1.y + displayOriginDelta.y);
                         args.editor.dispatchSelectionChanged();
+                    }
+                    static simpleChangeOriginKeepPosition(sprite, newOriginX, newOriginY) {
+                        this.changeOriginKeepPosition(sprite, sprite.displayOriginX, sprite.displayOriginY, newOriginX, newOriginY, sprite.getLocalTransformMatrix(), sprite.x, sprite.y);
+                    }
+                    static changeOriginKeepPosition(sprite, displayOriginX_1, displayOriginY_1, originX_2, originY_2, localTx_1, x_1, y_1) {
+                        sprite.setOrigin(originX_2, originY_2);
+                        const displayOriginDx = sprite.displayOriginX - displayOriginX_1;
+                        const displayOriginDy = sprite.displayOriginY - displayOriginY_1;
+                        const displayOriginDelta = new Phaser.Math.Vector2(displayOriginDx, displayOriginDy);
+                        localTx_1.transformPoint(displayOriginDelta.x, displayOriginDelta.y, displayOriginDelta);
+                        displayOriginDelta.add(new Phaser.Math.Vector2(-x_1, -y_1));
+                        sprite.setPosition(x_1 + displayOriginDelta.x, y_1 + displayOriginDelta.y);
                     }
                     static getInitObjectOriginAndPosition(obj) {
                         return obj.getData("OriginTool.initData");
@@ -10237,7 +10259,7 @@ var phasereditor2d;
                         if (this._axis === "xy") {
                             ctx.save();
                             ctx.translate(x, y);
-                            this.drawCircle(ctx, args.canEdit ? "#ff0" : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                            this.drawCircle(ctx, args.canEdit ? "#fff" : ui.editor.tools.SceneTool.COLOR_CANNOT_EDIT);
                             ctx.restore();
                         }
                         else {

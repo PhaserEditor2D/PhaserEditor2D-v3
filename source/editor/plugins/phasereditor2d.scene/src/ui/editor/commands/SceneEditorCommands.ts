@@ -773,7 +773,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 name: "origin",
                 defValue: undefined,
                 getValue: obj => ({ x: obj.originX, y: obj.originY }),
-                setValue: (obj, value) => obj.setOrigin(value.x, value.y)
+                setValue: (obj, value) => {
+                    // obj.setOrigin(value.x, value.y);
+                    sceneobjects.OriginToolItem
+                        .simpleChangeOriginKeepPosition(obj as any, value.x, value.y);
+                }
             };
 
             for (const data of this.computeOriginCommandData()) {
@@ -814,6 +818,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             const objects = args.activeEditor.getSelection()
                                 .filter(obj => sceneobjects.EditorSupport
                                     .hasObjectComponent(obj, sceneobjects.TransformComponent));
+
 
                             args.activeEditor.getUndoManager().add(
                                 new sceneobjects.SimpleOperation(
