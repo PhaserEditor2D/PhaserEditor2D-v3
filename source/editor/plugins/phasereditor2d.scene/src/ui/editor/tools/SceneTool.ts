@@ -66,7 +66,10 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             for (const item of this._items) {
 
-                item.render(args);
+                if (item.isValidFor(args.objects)) {
+
+                    item.render(args);
+                }
             }
         }
 
@@ -74,8 +77,11 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             for (const item of this._items) {
 
-                if (item.containsPoint(args)) {
-                    return true;
+                if (item.isValidFor(args.objects)) {
+
+                    if (item.containsPoint(args)) {
+                        return true;
+                    }
                 }
             }
 
@@ -86,7 +92,10 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             for (const item of this._items) {
 
-                item.onStartDrag(args);
+                if (item.isValidFor(args.objects)) {
+
+                    item.onStartDrag(args);
+                }
             }
         }
 
@@ -94,7 +103,10 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             for (const item of this._items) {
 
-                item.onDrag(args);
+                if (item.isValidFor(args.objects)) {
+
+                    item.onDrag(args);
+                }
             }
         }
 
@@ -102,7 +114,10 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             for (const item of this._items) {
 
-                item.onStopDrag(args);
+                if (item.isValidFor(args.objects)) {
+
+                    item.onStopDrag(args);
+                }
             }
         }
     }

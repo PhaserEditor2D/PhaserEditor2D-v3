@@ -5668,6 +5668,9 @@ var phasereditor2d;
                 var tools;
                 (function (tools) {
                     class SceneToolItem {
+                        isValidFor(objects) {
+                            return true;
+                        }
                         getScreenPointOfObject(args, obj, fx, fy) {
                             const worldPoint = new Phaser.Geom.Point(0, 0);
                             const sprite = obj;
@@ -5917,30 +5920,40 @@ var phasereditor2d;
                             }
                             render(args) {
                                 for (const item of this._items) {
-                                    item.render(args);
+                                    if (item.isValidFor(args.objects)) {
+                                        item.render(args);
+                                    }
                                 }
                             }
                             containsPoint(args) {
                                 for (const item of this._items) {
-                                    if (item.containsPoint(args)) {
-                                        return true;
+                                    if (item.isValidFor(args.objects)) {
+                                        if (item.containsPoint(args)) {
+                                            return true;
+                                        }
                                     }
                                 }
                                 return false;
                             }
                             onStartDrag(args) {
                                 for (const item of this._items) {
-                                    item.onStartDrag(args);
+                                    if (item.isValidFor(args.objects)) {
+                                        item.onStartDrag(args);
+                                    }
                                 }
                             }
                             onDrag(args) {
                                 for (const item of this._items) {
-                                    item.onDrag(args);
+                                    if (item.isValidFor(args.objects)) {
+                                        item.onDrag(args);
+                                    }
                                 }
                             }
                             onStopDrag(args) {
                                 for (const item of this._items) {
-                                    item.onStopDrag(args);
+                                    if (item.isValidFor(args.objects)) {
+                                        item.onStopDrag(args);
+                                    }
                                 }
                             }
                         }
@@ -10148,6 +10161,9 @@ var phasereditor2d;
                     constructor(axis) {
                         super();
                         this._axis = axis;
+                    }
+                    isValidFor(objects) {
+                        return objects.length === 1 && objects[0].getEditorSupport().hasComponent(sceneobjects.OriginComponent);
                     }
                     containsPoint(args) {
                         const point = this.getPoint(args);

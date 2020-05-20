@@ -25,6 +25,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._axis = axis;
         }
 
+        isValidFor(objects: sceneobjects.ISceneObject[]) {
+
+            return objects.length === 1 && objects[0].getEditorSupport().hasComponent(OriginComponent);
+        }
+
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean {
 
             const point = this.getPoint(args);

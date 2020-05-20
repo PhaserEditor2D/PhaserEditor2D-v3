@@ -1033,6 +1033,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         abstract onStartDrag(args: ISceneToolDragEventArgs): void;
         abstract onDrag(args: ISceneToolDragEventArgs): void;
         abstract onStopDrag(args: ISceneToolDragEventArgs): void;
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
         protected getScreenPointOfObject(args: ISceneToolContextArgs, obj: any, fx: number, fy: number): Phaser.Math.Vector2;
         protected getScreenToObjectScale(args: ISceneToolContextArgs, obj: any): {
             x: number;
@@ -2212,6 +2213,7 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _localTx_1;
         private _origin_1;
         constructor(axis: "x" | "y" | "xy");
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
         private getSprite;

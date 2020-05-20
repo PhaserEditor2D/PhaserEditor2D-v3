@@ -12,6 +12,10 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         abstract onStopDrag(args: ISceneToolDragEventArgs): void;
 
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean {
+            return true;
+        }
+
         protected getScreenPointOfObject(args: ISceneToolContextArgs, obj: any, fx: number, fy: number) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
