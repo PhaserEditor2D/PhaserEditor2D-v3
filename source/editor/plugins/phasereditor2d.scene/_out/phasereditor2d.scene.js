@@ -10097,6 +10097,28 @@ var phasereditor2d;
         (function (ui) {
             var sceneobjects;
             (function (sceneobjects) {
+                const containerOriginProperty = {
+                    defValue: undefined,
+                    setValue: (obj, value) => {
+                        obj.setPosition(value.x, value.y);
+                        let i = 0;
+                        for (const child of obj.list) {
+                            child.setPosition(value.children[i].x, value.children[i].y);
+                            i++;
+                        }
+                    },
+                    getValue: obj => {
+                        return {
+                            x: obj.x,
+                            y: obj.y,
+                            children: obj.list.map((child) => ({
+                                x: child.x,
+                                y: child.y
+                            }))
+                        };
+                    },
+                    name: "containerOrigin"
+                };
                 class ContainerOriginToolItem extends ui.editor.tools.SceneToolItem {
                     constructor(axis) {
                         super();
@@ -10123,6 +10145,7 @@ var phasereditor2d;
                                 const sprite = obj;
                                 sprite.setData("ContainerOriginTool.position", { x: sprite.x, y: sprite.y });
                             }
+                            this._initValue = containerOriginProperty.getValue(container);
                         }
                     }
                     getContainer(args) {
@@ -10155,30 +10178,13 @@ var phasereditor2d;
                         container.setPosition(this._position_1.x + delta.x, this._position_1.y + delta.y);
                         args.editor.dispatchSelectionChanged();
                     }
-                    static getInitObjectOriginAndPosition(obj) {
-                        return obj.getData("OriginTool.initData");
-                    }
-                    static createFinalData(sprite) {
-                        return {
-                            x: sprite.x,
-                            y: sprite.y,
-                            originX: sprite.originX,
-                            originY: sprite.originY
-                        };
-                    }
                     onStopDrag(args) {
                         if (this._initCursorPos) {
                             const editor = args.editor;
-                            const sprite = this.getContainer(args);
-                            //TODO: missing execute operation!
-                            // const data: IOriginToolSpriteData = {
-                            //     x: this._position_1.x,
-                            //     y: this._position_1.y,
-                            //     originX: this._origin_1.x,
-                            //     originY: this._origin_1.y
-                            // };
-                            // sprite.setData("OriginTool.initData", data);
-                            // editor.getUndoManager().add(new OriginOperation(args));
+                            const container = this.getContainer(args);
+                            const value = containerOriginProperty.getValue(container);
+                            containerOriginProperty.setValue(container, this._initValue);
+                            editor.getUndoManager().add(new sceneobjects.SimpleOperation(editor, [container], containerOriginProperty, value));
                         }
                         this._initCursorPos = null;
                     }

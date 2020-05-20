@@ -2190,19 +2190,13 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _position_1;
         private _localTx;
         private _worldTx;
+        private _initValue;
         constructor(axis: "x" | "y" | "xy");
         isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
         private getContainer;
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
-        static getInitObjectOriginAndPosition(obj: Phaser.GameObjects.Container): IOriginToolSpriteData;
-        static createFinalData(sprite: Phaser.GameObjects.Container): {
-            x: number;
-            y: number;
-            originX: number;
-            originY: number;
-        };
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
         getPoint(args: editor.tools.ISceneToolContextArgs): {
             x: number;

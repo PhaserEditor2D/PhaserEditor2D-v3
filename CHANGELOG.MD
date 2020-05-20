@@ -5,7 +5,7 @@
 ### Added
 
 * Scene Editor: use a color picker for the color properties in the Inspector view.
-* Scene Editor: the Origin manipulator. To select it press `O` or select it in the context menu or toolbar.
+* Scene Editor: the origin manipulator. To select it press `O` or select it in the context menu or toolbar. It also support containers.
 
 ### Modified
 

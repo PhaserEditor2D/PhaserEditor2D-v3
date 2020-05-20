@@ -1,5 +1,41 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    interface IContainerOriginData {
+
+        x: number;
+        y: number;
+        children: Array<{ x: number, y: number }>;
+    }
+
+    const containerOriginProperty: IProperty<Container> = {
+        defValue: undefined,
+        setValue: (obj, value: IContainerOriginData) => {
+
+            obj.setPosition(value.x, value.y);
+
+            let i = 0;
+
+            for (const child of obj.list) {
+
+                (child as Sprite).setPosition(value.children[i].x, value.children[i].y);
+
+                i++;
+            }
+        },
+        getValue: obj => {
+
+            return {
+                x: obj.x,
+                y: obj.y,
+                children: obj.list.map((child: Sprite) => ({
+                    x: child.x,
+                    y: child.y
+                }))
+            };
+        },
+        name: "containerOrigin"
+    };
+
     export class ContainerOriginToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
@@ -9,6 +45,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _position_1: Phaser.Math.Vector2;
         private _localTx: Phaser.GameObjects.Components.TransformMatrix;
         private _worldTx: Phaser.GameObjects.Components.TransformMatrix;
+        private _initValue: any;
 
         constructor(axis: "x" | "y" | "xy") {
             super();
@@ -53,6 +90,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     sprite.setData("ContainerOriginTool.position", { x: sprite.x, y: sprite.y });
                 }
+
+                this._initValue = containerOriginProperty.getValue(container);
             }
         }
 
@@ -112,41 +151,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             args.editor.dispatchSelectionChanged();
         }
 
-        static getInitObjectOriginAndPosition(obj: Phaser.GameObjects.Container) {
-
-            return obj.getData("OriginTool.initData") as IOriginToolSpriteData;
-        }
-
-        static createFinalData(sprite: Phaser.GameObjects.Container) {
-
-            return {
-                x: sprite.x,
-                y: sprite.y,
-                originX: sprite.originX,
-                originY: sprite.originY
-            };
-        }
-
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
             if (this._initCursorPos) {
 
                 const editor = args.editor;
 
-                const sprite = this.getContainer(args);
+                const container = this.getContainer(args);
 
-                //TODO: missing execute operation!
-                
-                // const data: IOriginToolSpriteData = {
-                //     x: this._position_1.x,
-                //     y: this._position_1.y,
-                //     originX: this._origin_1.x,
-                //     originY: this._origin_1.y
-                // };
+                const value = containerOriginProperty.getValue(container);
 
-                // sprite.setData("OriginTool.initData", data);
+                containerOriginProperty.setValue(container, this._initValue);
 
-                // editor.getUndoManager().add(new OriginOperation(args));
+                editor.getUndoManager().add(
+                    new SimpleOperation(editor, [container], containerOriginProperty, value));
             }
 
             this._initCursorPos = null;
