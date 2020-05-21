@@ -21,6 +21,8 @@ declare namespace phasereditor2d.scene {
         private constructor();
         getPhaserDocs(): phasereditor2d.ide.core.PhaserDocs;
         registerExtensions(reg: colibri.ExtensionRegistry): void;
+        getTools(): ui.editor.tools.SceneTool[];
+        getTool(toolId: string): ui.editor.tools.SceneTool;
         getDefaultSceneLanguage(): core.json.SourceLang;
         getSceneFinder(): core.json.SceneFinder;
         getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[];
@@ -429,6 +431,7 @@ declare namespace phasereditor2d.scene.ui {
             x: number;
             y: number;
         };
+        snapVector(vector: Phaser.Math.Vector2): void;
         getByEditorId(id: string): any;
         static findByEditorId(list: sceneobjects.ISceneObject[], id: string): any;
         getCamera(): Phaser.Cameras.Scene2D.Camera;
@@ -681,6 +684,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private createDepthMenu;
         private createEditMenu;
         private createOriginMenu;
+        private createCoordsMenu;
         private createToolsMenu;
         private createTypeMenu;
         private createContainerMenu;
@@ -757,7 +761,10 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _sceneRead;
         private _currentRefreshHash;
         private _editorState;
+        private _localCoords;
         constructor();
+        isLocalCoords(): boolean;
+        setLocalCoords(local: boolean, repaint?: boolean): void;
         openSourceFileInEditor(): void;
         doSave(): Promise<void>;
         compile(): Promise<void>;
@@ -769,9 +776,10 @@ declare namespace phasereditor2d.scene.ui.editor {
         private createGame;
         private updateTitleIcon;
         getIcon(): controls.IImage;
-        private _toolActionMap;
-        private createToolActions;
-        getToolActionMap(): Map<string, controls.Action>;
+        private _toolbarActionMap;
+        private _toolsInToolbar;
+        private createToolbarActions;
+        getToolbarActionMap(): Map<string, controls.Action>;
         createEditorToolbar(parent: HTMLElement): controls.ToolbarManager;
         private onMenu;
         fillContextMenu(menu: controls.Menu): void;
@@ -833,6 +841,7 @@ declare namespace phasereditor2d.scene.ui.editor.commands {
     const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+    const CMD_SET_ORIGIN_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.SetOriginSceneObject";
     const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
@@ -1028,6 +1037,13 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         abstract onStartDrag(args: ISceneToolDragEventArgs): void;
         abstract onDrag(args: ISceneToolDragEventArgs): void;
         abstract onStopDrag(args: ISceneToolDragEventArgs): void;
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
+        getTranslationInAxisWorldDelta(axis: "x" | "y" | "xy", initCursorX: number, initCursorY: number, args: ISceneToolDragEventArgs): Phaser.Math.Vector2;
+        getSimpleTranslationPoint(axis: "x" | "y" | "xy", args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        renderSimpleAxis(axis: "x" | "y" | "xy", centerX: number, centerY: number, dotColor: string, args: editor.tools.ISceneToolRenderArgs): void;
         protected getScreenPointOfObject(args: ISceneToolContextArgs, obj: any, fx: number, fy: number): Phaser.Math.Vector2;
         protected getScreenToObjectScale(args: ISceneToolContextArgs, obj: any): {
             x: number;
@@ -1037,6 +1053,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         protected drawArrowPath(ctx: CanvasRenderingContext2D, color: string): void;
         protected drawCircle(ctx: CanvasRenderingContext2D, color: string): void;
         protected drawRect(ctx: CanvasRenderingContext2D, color: string): void;
+        protected getAvgGlobalAngle(args: ISceneToolContextArgs): number;
         protected getAvgScreenPointOfObjects(args: ISceneToolContextArgs, fx?: (ob: Phaser.GameObjects.Sprite) => number, fy?: (ob: Phaser.GameObjects.Sprite) => number): Phaser.Math.Vector2;
     }
 }
@@ -1070,6 +1087,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
             x: number;
             y: number;
         };
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
     }
 }
 declare namespace phasereditor2d.scene.ui.editor.tools {
@@ -1077,6 +1095,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         private _tools;
         private _color;
         constructor(color: string, ...tools: ISceneToolItemXY[]);
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
         render(args: ISceneToolRenderArgs): void;
         containsPoint(args: ISceneToolDragEventArgs): boolean;
         onStartDrag(args: ISceneToolDragEventArgs): void;
@@ -1088,6 +1107,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
     import ISceneObject = ui.sceneobjects.ISceneObject;
     interface ISceneToolContextArgs {
         editor: SceneEditor;
+        localCoords: boolean;
         camera: Phaser.Cameras.Scene2D.Camera;
         objects: ISceneObject[];
     }
@@ -1147,6 +1167,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
 declare namespace phasereditor2d.scene.ui.editor.tools {
     interface ISceneToolsState {
         selectedId: string;
+        localCoords: boolean;
     }
     class SceneToolsManager {
         private _editor;
@@ -1978,6 +1999,14 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IOriginAndPositionLikeObject {
+        x: number;
+        y: number;
+        originX: number;
+        originY: number;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     class ObjectCellRenderer implements controls.viewers.ICellRenderer {
         renderCell(args: controls.viewers.RenderCellArgs): void;
@@ -2164,6 +2193,86 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(config: editor.tools.ISceneToolConfig, ...properties: Array<IProperty<any>>);
         canEdit(obj: unknown): boolean;
         canRender(obj: unknown): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class ContainerOriginToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        private _axis;
+        private _initCursorPos;
+        private _worldPosition_1;
+        private _position_1;
+        private _localTx;
+        private _worldTx;
+        private _initValue;
+        constructor(axis: "x" | "y" | "xy");
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
+        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
+        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        private getContainer;
+        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        getPoint(args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        render(args: editor.tools.ISceneToolRenderArgs): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class OriginOperation extends editor.tools.SceneToolOperation<{
+        x: number;
+        y: number;
+    }> {
+        getInitialValue(obj: any): IOriginToolSpriteData;
+        getFinalValue(obj: any): IOriginToolSpriteData;
+        setValue(obj: any, value: IOriginToolSpriteData): void;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    class OriginTool extends BaseObjectTool {
+        static ID: string;
+        constructor();
+        canEdit(obj: ISceneObject): boolean;
+        canRender(obj: ISceneObject): boolean;
+    }
+}
+declare namespace phasereditor2d.scene.ui.sceneobjects {
+    interface IOriginToolSpriteData {
+        x: number;
+        y: number;
+        originX: number;
+        originY: number;
+    }
+    class OriginToolItem extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        private _axis;
+        private _initCursorPos;
+        private _displayOrigin_1;
+        private _spriteWorldPosition_1;
+        private _spriteWorldTx_1;
+        private _position_1;
+        private _localTx_1;
+        private _origin_1;
+        constructor(axis: "x" | "y" | "xy");
+        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
+        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean;
+        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        private getSprite;
+        onDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        static simpleChangeOriginKeepPosition(sprite: Phaser.GameObjects.Sprite, newOriginX: number, newOriginY: number): void;
+        static changeOriginKeepPosition(sprite: Phaser.GameObjects.Sprite, displayOriginX_1: number, displayOriginY_1: number, originX_2: number, originY_2: number, localTx_1: Phaser.GameObjects.Components.TransformMatrix, x_1: number, y_1: number): void;
+        static getInitObjectOriginAndPosition(obj: Phaser.GameObjects.Sprite): IOriginToolSpriteData;
+        static createFinalData(sprite: Phaser.GameObjects.Sprite): {
+            x: number;
+            y: number;
+            originX: number;
+            originY: number;
+        };
+        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void;
+        getPoint(args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        render(args: editor.tools.ISceneToolRenderArgs): void;
     }
 }
 declare namespace phasereditor2d.scene.ui.sceneobjects {

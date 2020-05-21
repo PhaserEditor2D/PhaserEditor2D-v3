@@ -4232,7 +4232,7 @@ var colibri;
                         this._expandIconContext.clearRect(0, 0, size, size);
                         const icon = this.isExpanded() ? colibri.ICON_CONTROL_TREE_COLLAPSE : colibri.ICON_CONTROL_TREE_EXPAND;
                         const image = colibri.ColibriPlugin.getInstance().getIcon(icon);
-                        //controls.Controls.adjustCanvasDPI(this._expandIconElement);
+                        // controls.Controls.adjustCanvasDPI(this._expandIconElement);
                         image.paint(this._expandIconContext, 0, 0, size, size, false);
                     }
                     getSection() {

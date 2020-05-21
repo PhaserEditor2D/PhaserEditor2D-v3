@@ -178,8 +178,19 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.TranslateTool(),
                 new ui.sceneobjects.RotateTool(),
                 new ui.sceneobjects.ScaleTool(),
+                new ui.sceneobjects.OriginTool(),
                 new ui.sceneobjects.TileSpriteSizeTool()
             ));
+        }
+
+        getTools() {
+            return colibri.Platform.getExtensions<ui.editor.tools.SceneToolExtension>
+                (ui.editor.tools.SceneToolExtension.POINT_ID)
+                .flatMap(ext => ext.getTools());
+        }
+
+        getTool(toolId: string) {
+            return this.getTools().find(tool => tool.getId() === toolId);
         }
 
         getDefaultSceneLanguage() {

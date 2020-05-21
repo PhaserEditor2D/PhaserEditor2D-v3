@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
     export interface ISceneToolsState {
 
         selectedId: string;
+        localCoords: boolean;
     }
 
     export class SceneToolsManager {
@@ -14,9 +15,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
         constructor(editor: SceneEditor) {
             this._editor = editor;
 
-            const exts = colibri.Platform.getExtensions<SceneToolExtension>(SceneToolExtension.POINT_ID);
-
-            this._tools = exts.flatMap(ext => ext.getTools());
+            this._tools = ScenePlugin.getInstance().getTools();
 
             this.setActiveTool(this.findTool(sceneobjects.TranslateTool.ID));
         }
@@ -33,13 +32,16 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
                     this.setActiveTool(tool);
                 }
+
+                this._editor.setLocalCoords(state.localCoords || state.localCoords === undefined, false);
             }
         }
 
         getState(): ISceneToolsState {
 
             return {
-                selectedId: this._activeTool ? this._activeTool.getId() : undefined
+                selectedId: this._activeTool ? this._activeTool.getId() : undefined,
+                localCoords: this._editor.isLocalCoords()
             };
         }
 
@@ -66,7 +68,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             if (tool) {
 
-                const action = this._editor.getToolActionMap().get(tool.getId());
+                const action = this._editor.getToolbarActionMap().get(tool.getId());
 
                 if (action) {
 
