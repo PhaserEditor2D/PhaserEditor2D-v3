@@ -13,8 +13,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _axis: "x" | "y" | "xy";
         private _initCursorPos: { x: number, y: number };
         private _displayOrigin_1: Phaser.Math.Vector2;
-        private _worldPosition_1: Phaser.Math.Vector2;
-        private _worldTx_1: Phaser.GameObjects.Components.TransformMatrix;
+        private _spriteWorldPosition_1: Phaser.Math.Vector2;
+        private _spriteWorldTx_1: Phaser.GameObjects.Components.TransformMatrix;
         private _position_1: Phaser.Math.Vector2;
         private _localTx_1: Phaser.GameObjects.Components.TransformMatrix;
         private _origin_1: Phaser.Math.Vector2;
@@ -51,8 +51,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const tx = sprite.getWorldTransformMatrix();
                 tx.transformPoint(0, 0, worldPoint);
 
-                this._worldPosition_1 = worldPoint;
-                this._worldTx_1 = tx;
+                this._spriteWorldPosition_1 = worldPoint;
+                this._spriteWorldTx_1 = tx;
                 this._localTx_1 = sprite.getLocalTransformMatrix();
                 this._displayOrigin_1 = new Phaser.Math.Vector2(sprite.displayOriginX, sprite.displayOriginY);
                 this._origin_1 = new Phaser.Math.Vector2(sprite.originX, sprite.originY);
@@ -71,23 +71,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
-            const cursorDx = args.x - this._initCursorPos.x;
-            const cursorDy = args.y - this._initCursorPos.y;
-
-            const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
-            const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
-
-            const worldDx = cursorDx / args.camera.zoom * xAxis;
-            const worldDy = cursorDy / args.camera.zoom * yAxis;
-
             const sprite = this.getSprite(args);
 
-            const worldPoint2 = this._worldPosition_1.clone();
-            worldPoint2.x += worldDx;
-            worldPoint2.y += worldDy;
+            const worldDelta = this.getTranslationInAxisWorldDelta(
+                this._axis, this._initCursorPos.x, this._initCursorPos.y, args);
+
+            const worldPoint2 = this._spriteWorldPosition_1.clone().add(worldDelta);
 
             const displayOriginPoint_2 = new Phaser.Math.Vector2();
-            this._worldTx_1.applyInverse(worldPoint2.x, worldPoint2.y, displayOriginPoint_2);
+            this._spriteWorldTx_1.applyInverse(worldPoint2.x, worldPoint2.y, displayOriginPoint_2);
 
             // when get the display point, it uses the initial origin,
             // so we have to add it to the result, to get a 0,0 based display origin.
@@ -104,24 +96,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._position_1.x,
                 this._position_1.y
             );
-
-            // sprite.setOrigin(originX_2, originY_2);
-
-            // const displayOriginDx = sprite.displayOriginX - this._displayOrigin_1.x;
-            // const displayOriginDy = sprite.displayOriginY - this._displayOrigin_1.y;
-
-            // const displayOriginDelta = new Phaser.Math.Vector2(
-            //     displayOriginDx,
-            //     displayOriginDy
-            // );
-
-            // this._localTx_1.transformPoint(displayOriginDelta.x, displayOriginDelta.y, displayOriginDelta);
-
-            // displayOriginDelta.add(this._position_1.clone().negate());
-
-            // sprite.setPosition(
-            //     this._position_1.x + displayOriginDelta.x,
-            //     this._position_1.y + displayOriginDelta.y);
 
             args.editor.dispatchSelectionChanged();
         }
@@ -213,49 +187,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getPoint(args: editor.tools.ISceneToolContextArgs) {
 
-            const { x, y } = this.getAvgScreenPointOfObjects(args);
-
-            return {
-                x: this._axis === "x" ? x + 100 : x,
-                y: this._axis === "y" ? y + 100 : y
-            };
+            return this.getSimpleTranslationPoint(this._axis, args);
         }
 
         render(args: editor.tools.ISceneToolRenderArgs) {
 
             const { x, y } = this.getPoint(args);
 
-            const ctx = args.canvasContext;
-
-            ctx.strokeStyle = "#000";
-
-            if (this._axis === "xy") {
-
-                ctx.save();
-
-                ctx.translate(x, y);
-
-                this.drawCircle(ctx,
-                    args.canEdit ? "#fff" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
-
-                ctx.restore();
-
-            } else {
-
-                ctx.save();
-
-                ctx.translate(x, y);
-
-                if (this._axis === "y") {
-
-                    ctx.rotate(Math.PI / 2);
-                }
-
-                this.drawArrowPath(ctx,
-                    args.canEdit ? (this._axis === "x" ? "#f00" : "#0f0") : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
-
-                ctx.restore();
-            }
+            this.renderSimpleAxis(this._axis, x, y, "#fff", args);
         }
     }
 }

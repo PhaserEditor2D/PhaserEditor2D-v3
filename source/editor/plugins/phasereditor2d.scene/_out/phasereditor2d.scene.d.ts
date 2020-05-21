@@ -1038,6 +1038,12 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         abstract onDrag(args: ISceneToolDragEventArgs): void;
         abstract onStopDrag(args: ISceneToolDragEventArgs): void;
         isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
+        getTranslationInAxisWorldDelta(axis: "x" | "y" | "xy", initCursorX: number, initCursorY: number, args: ISceneToolDragEventArgs): Phaser.Math.Vector2;
+        getSimpleTranslationPoint(axis: "x" | "y" | "xy", args: editor.tools.ISceneToolContextArgs): {
+            x: number;
+            y: number;
+        };
+        renderSimpleAxis(axis: "x" | "y" | "xy", centerX: number, centerY: number, dotColor: string, args: editor.tools.ISceneToolRenderArgs): void;
         protected getScreenPointOfObject(args: ISceneToolContextArgs, obj: any, fx: number, fy: number): Phaser.Math.Vector2;
         protected getScreenToObjectScale(args: ISceneToolContextArgs, obj: any): {
             x: number;
@@ -2241,8 +2247,8 @@ declare namespace phasereditor2d.scene.ui.sceneobjects {
         private _axis;
         private _initCursorPos;
         private _displayOrigin_1;
-        private _worldPosition_1;
-        private _worldTx_1;
+        private _spriteWorldPosition_1;
+        private _spriteWorldTx_1;
         private _position_1;
         private _localTx_1;
         private _origin_1;

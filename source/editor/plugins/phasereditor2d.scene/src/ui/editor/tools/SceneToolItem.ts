@@ -16,6 +16,121 @@ namespace phasereditor2d.scene.ui.editor.tools {
             return true;
         }
 
+        getTranslationInAxisWorldDelta(
+            axis: "x" | "y" | "xy",
+            initCursorX: number,
+            initCursorY: number,
+            args: ISceneToolDragEventArgs) {
+
+            const dx = args.x - initCursorX;
+            const dy = args.y - initCursorY;
+
+            let worldDx = dx / args.camera.zoom;
+            let worldDy = dy / args.camera.zoom;
+
+            const rot = Phaser.Math.DegToRad(this.getAvgGlobalAngle(args));
+
+            const worldDelta = new Phaser.Math.Vector2();
+
+            const xAxis = axis === "x" || axis === "xy" ? 1 : 0;
+            const yAxis = axis === "y" || axis === "xy" ? 1 : 0;
+
+            if (args.localCoords && axis !== "xy") {
+
+                const axisVector = new Phaser.Math.Vector2(xAxis, yAxis);
+
+                axisVector.rotate(rot);
+
+                let worldDeltaVector = new Phaser.Math.Vector2(worldDx, worldDy);
+
+                const projectionLength = worldDeltaVector.dot(axisVector);
+
+                worldDeltaVector = axisVector.clone().scale(projectionLength);
+
+                worldDx = worldDeltaVector.x;
+                worldDy = worldDeltaVector.y;
+
+                worldDelta.add(worldDeltaVector);
+
+                return worldDeltaVector;
+
+            }
+
+            return new Phaser.Math.Vector2(worldDx * xAxis, worldDy * yAxis);
+        }
+
+        getSimpleTranslationPoint(axis: "x" | "y" | "xy", args: editor.tools.ISceneToolContextArgs) {
+
+            const { x, y } = this.getAvgScreenPointOfObjects(args);
+
+            const xAxis = axis === "x" || axis === "xy" ? 1 : 0;
+            const yAxis = axis === "y" || axis === "xy" ? 1 : 0;
+
+            const axisVector = new Phaser.Math.Vector2(xAxis, yAxis);
+
+            if (args.localCoords) {
+
+                const angle = this.getAvgGlobalAngle(args);
+
+                axisVector.rotate(Phaser.Math.DegToRad(angle));
+            }
+
+            axisVector.scale(100);
+
+            if (axis === "xy") {
+                return { x, y };
+            }
+
+            return {
+                x: x + axisVector.x,
+                y: y + axisVector.y
+            };
+        }
+
+        renderSimpleAxis(
+            axis: "x" | "y" | "xy", centerX: number, centerY: number, dotColor: string,
+            args: editor.tools.ISceneToolRenderArgs) {
+
+            const ctx = args.canvasContext;
+
+            ctx.strokeStyle = "#000";
+
+            if (axis === "xy") {
+
+                ctx.save();
+
+                ctx.translate(centerX, centerY);
+
+                this.drawCircle(ctx,
+                    args.canEdit ? dotColor : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+
+                ctx.restore();
+
+            } else {
+
+                ctx.save();
+
+                ctx.translate(centerX, centerY);
+
+                if (args.localCoords) {
+
+                    const angle = this.getAvgGlobalAngle(args);
+
+                    ctx.rotate(Phaser.Math.DegToRad(angle));
+                }
+
+                if (axis === "y") {
+
+                    ctx.rotate(Math.PI / 2);
+                }
+
+                this.drawArrowPath(ctx,
+                    args.canEdit ? (axis === "x" ? "#f00" : "#0f0") : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+
+                ctx.restore();
+            }
+        }
+
         protected getScreenPointOfObject(args: ISceneToolContextArgs, obj: any, fx: number, fy: number) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
