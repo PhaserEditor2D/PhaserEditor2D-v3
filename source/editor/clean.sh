@@ -1,2 +1,2 @@
 #!/bin/bash
-tsc -b -clean
+./node_modules/.bin/tsc -b -clean

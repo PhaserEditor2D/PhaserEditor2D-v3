@@ -1,2 +1,2 @@
 #!/bin/bash
-tsc -b -w
+./node_modules/.bin/tsc -b -w
