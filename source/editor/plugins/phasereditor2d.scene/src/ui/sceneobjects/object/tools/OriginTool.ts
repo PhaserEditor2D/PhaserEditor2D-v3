@@ -34,18 +34,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: ISceneObject) {
 
-            return obj.getEditorSupport().hasComponent(OriginComponent)
-                || obj instanceof Container;
+            if (obj instanceof Container) {
+
+                if (obj.getEditorSupport().isPrefabInstance()) {
+
+                    return false;
+                }
+
+                return true;
+            }
+
+            return super.canEdit(obj);
         }
 
         canRender(obj: ISceneObject) {
 
             if (obj instanceof Container) {
 
-                return !obj.getEditorSupport().isPrefabInstance();
+                return true;
             }
 
-            return super.canEdit(obj);
+            return super.canRender(obj);
         }
     }
 }

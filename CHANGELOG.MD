@@ -6,6 +6,7 @@
 
 * Scene Editor: use a color picker for the color properties in the Inspector view.
 * Scene Editor: the origin manipulator. To select it press `O` or select it in the context menu or toolbar. It also support containers.
+* Scene Editor: two scopes for transformations: local and global. You can select it in the context menu (Coords -> Global). Default is local.
 
 ### Modified
 
@@ -24,7 +25,6 @@
 * Scene Editor: improves picking of objects.
 * SceneEditor: improves Outline view rendering of BitmapText objects.
 * Inspector view: hides overflow text in the sections title.
-
 
 ## Version 3.0.0 - May 5, 2020
 

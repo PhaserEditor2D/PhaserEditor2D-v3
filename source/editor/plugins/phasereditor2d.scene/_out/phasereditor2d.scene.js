@@ -10377,14 +10377,19 @@ var phasereditor2d;
                             this.addItems(new ui.editor.tools.LineToolItem("#f00", xy, x), new ui.editor.tools.LineToolItem("#0f0", xy, y), xy, x, y, new ui.editor.tools.LineToolItem("#f00", containerXY, containerX), new ui.editor.tools.LineToolItem("#0f0", containerXY, containerY), containerXY, containerX, containerY);
                         }
                         canEdit(obj) {
-                            return obj.getEditorSupport().hasComponent(sceneobjects.OriginComponent)
-                                || obj instanceof sceneobjects.Container;
+                            if (obj instanceof sceneobjects.Container) {
+                                if (obj.getEditorSupport().isPrefabInstance()) {
+                                    return false;
+                                }
+                                return true;
+                            }
+                            return super.canEdit(obj);
                         }
                         canRender(obj) {
                             if (obj instanceof sceneobjects.Container) {
-                                return !obj.getEditorSupport().isPrefabInstance();
+                                return true;
                             }
-                            return super.canEdit(obj);
+                            return super.canRender(obj);
                         }
                     }
                     OriginTool.ID = "phasereditor2d.scene.ui.sceneobjects.OriginTool";
