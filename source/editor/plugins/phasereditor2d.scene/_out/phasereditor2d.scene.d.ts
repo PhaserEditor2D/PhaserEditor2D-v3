@@ -1161,6 +1161,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
 declare namespace phasereditor2d.scene.ui.editor.tools {
     interface ISceneToolsState {
         selectedId: string;
+        localCoords: boolean;
     }
     class SceneToolsManager {
         private _editor;

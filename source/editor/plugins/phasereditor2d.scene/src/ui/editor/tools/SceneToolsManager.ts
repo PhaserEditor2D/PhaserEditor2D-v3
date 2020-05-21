@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
     export interface ISceneToolsState {
 
         selectedId: string;
+        localCoords: boolean;
     }
 
     export class SceneToolsManager {
@@ -31,13 +32,16 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
                     this.setActiveTool(tool);
                 }
+
+                this._editor.setLocalCoords(state.localCoords || state.localCoords === undefined, false);
             }
         }
 
         getState(): ISceneToolsState {
 
             return {
-                selectedId: this._activeTool ? this._activeTool.getId() : undefined
+                selectedId: this._activeTool ? this._activeTool.getId() : undefined,
+                localCoords: this._editor.isLocalCoords()
             };
         }
 

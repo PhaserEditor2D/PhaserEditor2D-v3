@@ -6102,11 +6102,13 @@ var phasereditor2d;
                                 if (tool) {
                                     this.setActiveTool(tool);
                                 }
+                                this._editor.setLocalCoords(state.localCoords || state.localCoords === undefined, false);
                             }
                         }
                         getState() {
                             return {
-                                selectedId: this._activeTool ? this._activeTool.getId() : undefined
+                                selectedId: this._activeTool ? this._activeTool.getId() : undefined,
+                                localCoords: this._editor.isLocalCoords()
                             };
                         }
                         findTool(toolId) {
