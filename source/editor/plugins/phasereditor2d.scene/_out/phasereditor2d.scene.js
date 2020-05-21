@@ -3349,6 +3349,7 @@ var phasereditor2d;
                     fillMenu(menu) {
                         menu.addCommand(editor_6.commands.CMD_ADD_SCENE_OBJECT);
                         menu.addMenu(this.createToolsMenu());
+                        menu.addMenu(this.createCoordsMenu());
                         menu.addSeparator();
                         menu.addMenu(this.createTypeMenu());
                         menu.addMenu(this.createOriginMenu());
@@ -3406,7 +3407,6 @@ var phasereditor2d;
                     }
                     createToolsMenu() {
                         const menu = new controls.Menu("Tools");
-                        menu.addMenu(this.createCoordsMenu());
                         const activeTool = this._editor.getToolsManager().getActiveTool();
                         const exts = colibri.Platform.getExtensions(editor_6.tools.SceneToolExtension.POINT_ID);
                         for (const ext of exts) {

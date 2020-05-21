@@ -17,6 +17,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createToolsMenu());
 
+            menu.addMenu(this.createCoordsMenu());
+
             menu.addSeparator();
 
             menu.addMenu(this.createTypeMenu());
@@ -108,8 +110,6 @@ namespace phasereditor2d.scene.ui.editor {
         private createToolsMenu(): controls.Menu {
 
             const menu = new controls.Menu("Tools");
-
-            menu.addMenu(this.createCoordsMenu());
 
             const activeTool = this._editor.getToolsManager().getActiveTool();
 
