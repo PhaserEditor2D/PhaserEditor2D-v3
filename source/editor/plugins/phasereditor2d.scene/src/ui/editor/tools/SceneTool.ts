@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
     export interface ISceneToolContextArgs {
 
         editor: SceneEditor;
+        localCoords: boolean;
         camera: Phaser.Cameras.Scene2D.Camera;
         objects: ISceneObject[];
     }

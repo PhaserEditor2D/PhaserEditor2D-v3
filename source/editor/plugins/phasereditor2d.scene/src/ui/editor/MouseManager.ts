@@ -26,6 +26,7 @@ namespace phasereditor2d.scene.ui.editor {
             return {
                 camera: this._editor.getScene().getCamera(),
                 editor: this._editor,
+                localCoords: this._editor.isLocalCoords(),
                 objects: this._editor.getSelection(),
                 x: e.offsetX,
                 y: e.offsetY

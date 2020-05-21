@@ -764,7 +764,7 @@ declare namespace phasereditor2d.scene.ui.editor {
         private _localCoords;
         constructor();
         isLocalCoords(): boolean;
-        setLocalCoords(local: boolean): void;
+        setLocalCoords(local: boolean, repaint?: boolean): void;
         openSourceFileInEditor(): void;
         doSave(): Promise<void>;
         compile(): Promise<void>;
@@ -1047,6 +1047,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
         protected drawArrowPath(ctx: CanvasRenderingContext2D, color: string): void;
         protected drawCircle(ctx: CanvasRenderingContext2D, color: string): void;
         protected drawRect(ctx: CanvasRenderingContext2D, color: string): void;
+        protected getAvgGlobalAngle(args: ISceneToolContextArgs): number;
         protected getAvgScreenPointOfObjects(args: ISceneToolContextArgs, fx?: (ob: Phaser.GameObjects.Sprite) => number, fy?: (ob: Phaser.GameObjects.Sprite) => number): Phaser.Math.Vector2;
     }
 }
@@ -1100,6 +1101,7 @@ declare namespace phasereditor2d.scene.ui.editor.tools {
     import ISceneObject = ui.sceneobjects.ISceneObject;
     interface ISceneToolContextArgs {
         editor: SceneEditor;
+        localCoords: boolean;
         camera: Phaser.Cameras.Scene2D.Camera;
         objects: ISceneObject[];
     }

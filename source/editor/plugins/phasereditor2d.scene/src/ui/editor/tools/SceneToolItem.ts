@@ -128,6 +128,20 @@ namespace phasereditor2d.scene.ui.editor.tools {
             ctx.restore();
         }
 
+        protected getAvgGlobalAngle(args: ISceneToolContextArgs) {
+
+            let total = 0;
+            let count = 0;
+
+            for (const obj of args.objects) {
+
+                total += this.globalAngle(obj as any);
+                count++;
+            }
+
+            return total / count;
+        }
+
         protected getAvgScreenPointOfObjects(
             args: ISceneToolContextArgs,
             fx: (ob: Phaser.GameObjects.Sprite) => number = obj => 0,

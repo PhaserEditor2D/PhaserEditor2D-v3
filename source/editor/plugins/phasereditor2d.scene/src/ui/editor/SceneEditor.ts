@@ -58,9 +58,14 @@ namespace phasereditor2d.scene.ui.editor {
             return this._localCoords;
         }
 
-        setLocalCoords(local: boolean) {
+        setLocalCoords(local: boolean, repaint = true) {
 
             this._localCoords = local;
+
+            if (repaint) {
+
+                this.repaint();
+            }
         }
 
         openSourceFileInEditor(): void {

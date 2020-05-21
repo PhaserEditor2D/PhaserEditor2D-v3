@@ -3475,6 +3475,7 @@ var phasereditor2d;
                         return {
                             camera: this._editor.getScene().getCamera(),
                             editor: this._editor,
+                            localCoords: this._editor.isLocalCoords(),
                             objects: this._editor.getSelection(),
                             x: e.offsetX,
                             y: e.offsetY
@@ -3628,6 +3629,7 @@ var phasereditor2d;
                         ctx.save();
                         tool.render({
                             editor: this._editor,
+                            localCoords: this._editor.isLocalCoords(),
                             canvasContext: ctx,
                             objects: renderSel,
                             canEdit: editSel.length === renderSel.length,
@@ -3815,8 +3817,11 @@ var phasereditor2d;
                     isLocalCoords() {
                         return this._localCoords;
                     }
-                    setLocalCoords(local) {
+                    setLocalCoords(local, repaint = true) {
                         this._localCoords = local;
+                        if (repaint) {
+                            this.repaint();
+                        }
                     }
                     openSourceFileInEditor() {
                         const lang = this._scene.getSettings().compilerOutputLanguage;
@@ -5752,6 +5757,15 @@ var phasereditor2d;
                             ctx.fill();
                             ctx.stroke();
                             ctx.restore();
+                        }
+                        getAvgGlobalAngle(args) {
+                            let total = 0;
+                            let count = 0;
+                            for (const obj of args.objects) {
+                                total += this.globalAngle(obj);
+                                count++;
+                            }
+                            return total / count;
                         }
                         getAvgScreenPointOfObjects(args, fx = obj => 0, fy = obj => 0) {
                             let avgY = 0;
@@ -11111,16 +11125,29 @@ var phasereditor2d;
                         }
                         const dx = args.x - this._initCursorPos.x;
                         const dy = args.y - this._initCursorPos.y;
-                        const dx2 = dx / args.camera.zoom;
-                        const dy2 = dy / args.camera.zoom;
+                        let worldDx = dx / args.camera.zoom;
+                        let worldDy = dy / args.camera.zoom;
+                        const rot = Phaser.Math.DegToRad(this.getAvgGlobalAngle(args));
                         for (const obj of args.objects) {
                             const sprite = obj;
                             const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
                             const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
                             const worldPoint1 = sprite.getData("TranslateTool.worldInitPosition");
                             const worldPoint2 = worldPoint1.clone();
-                            worldPoint2.x += dx2 * xAxis;
-                            worldPoint2.y += dy2 * yAxis;
+                            if (args.localCoords && this._axis !== "xy") {
+                                const axisVector = new Phaser.Math.Vector2(xAxis, yAxis);
+                                axisVector.rotate(rot);
+                                let worldDeltaVector = new Phaser.Math.Vector2(worldDx, worldDy);
+                                const projectionLength = worldDeltaVector.dot(axisVector);
+                                worldDeltaVector = axisVector.clone().scale(projectionLength);
+                                worldDx = worldDeltaVector.x;
+                                worldDy = worldDeltaVector.y;
+                                worldPoint2.add(worldDeltaVector);
+                            }
+                            else {
+                                worldPoint2.x += worldDx * xAxis;
+                                worldPoint2.y += worldDy * yAxis;
+                            }
                             args.editor.getScene().snapVector(worldPoint2);
                             let spritePos = new Phaser.Math.Vector2();
                             if (sprite.parentContainer) {
@@ -11146,9 +11173,20 @@ var phasereditor2d;
                     }
                     getPoint(args) {
                         const { x, y } = this.getAvgScreenPointOfObjects(args);
+                        const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
+                        const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
+                        const axisVector = new Phaser.Math.Vector2(xAxis, yAxis);
+                        if (args.localCoords) {
+                            const angle = this.getAvgGlobalAngle(args);
+                            axisVector.rotate(Phaser.Math.DegToRad(angle));
+                        }
+                        axisVector.scale(100);
+                        if (this._axis === "xy") {
+                            return { x, y };
+                        }
                         return {
-                            x: this._axis === "x" ? x + 100 : x,
-                            y: this._axis === "y" ? y + 100 : y
+                            x: x + axisVector.x,
+                            y: y + axisVector.y
                         };
                     }
                     render(args) {
@@ -11164,6 +11202,10 @@ var phasereditor2d;
                         else {
                             ctx.save();
                             ctx.translate(x, y);
+                            if (args.localCoords) {
+                                const angle = this.getAvgGlobalAngle(args);
+                                ctx.rotate(Phaser.Math.DegToRad(angle));
+                            }
                             if (this._axis === "y") {
                                 ctx.rotate(Math.PI / 2);
                             }
