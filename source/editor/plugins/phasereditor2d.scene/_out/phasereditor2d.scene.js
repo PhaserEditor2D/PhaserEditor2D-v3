@@ -10522,9 +10522,15 @@ var phasereditor2d;
                     render(args) {
                         let globalStartAngle = 0;
                         let globalEndAngle = 0;
-                        for (const sprite of args.objects) {
+                        for (const obj of args.objects) {
+                            const sprite = obj;
                             const endAngle = this.globalAngle(sprite);
-                            const startAngle = 0;
+                            let startAngle = 0;
+                            if (args.localCoords) {
+                                if (sprite.parentContainer) {
+                                    startAngle = this.globalAngle(sprite.parentContainer);
+                                }
+                            }
                             globalStartAngle += startAngle;
                             globalEndAngle += endAngle;
                         }
