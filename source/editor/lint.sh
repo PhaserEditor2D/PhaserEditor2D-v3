@@ -3,7 +3,7 @@
 for project_file in `ls plugins/*/src/tsconfig.json`
 do
 	echo Linting project \"$project_file\"
-	tslint -c tslint.json -p $project_file
+	./node_modules/.bin/tslint -c tslint.json -p $project_file
 	if [ $? -gt 0 ]
 	then
 		echo
