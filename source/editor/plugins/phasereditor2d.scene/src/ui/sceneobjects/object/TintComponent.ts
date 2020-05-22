@@ -1,7 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
-    import code = phasereditor2d.scene.core.code;
 
     function TintProperty(
         name: string, label?: string): IProperty<any> {
@@ -93,11 +92,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(obj: ISceneObject) {
             super(obj, [
-                TintComponent.tintFill,
                 TintComponent.tintTopLeft,
                 TintComponent.tintTopRight,
                 TintComponent.tintBottomLeft,
-                TintComponent.tintBottomRight
+                TintComponent.tintBottomRight,
+                TintComponent.tintFill
             ]);
         }
 
@@ -109,6 +108,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintPropertyCodeDomAdapter(TintComponent.tintBottomLeft));
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintPropertyCodeDomAdapter(TintComponent.tintBottomRight));
         }
-
     }
 }
