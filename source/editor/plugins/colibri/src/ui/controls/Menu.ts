@@ -192,6 +192,13 @@ namespace colibri.ui.controls {
 
                         subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
 
+                        const subMenuRect = subMenu._element.getClientRects()[0];
+
+                        if (subMenuRect.left < menuRect.right - 5) {
+
+                            subMenu._element.style.left = menuRect.left - subMenuRect.width + 5 + "px";
+                        }
+
                         this._subMenu = subMenu;
                         this._lastItemElementSelected = itemElement;
                     });
