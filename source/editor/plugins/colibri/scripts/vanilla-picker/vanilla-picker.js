@@ -364,6 +364,8 @@
         return Color;
     }();
 
+    globalThis.VanillaColor = Color;
+
     var EventBucket = function () {
         function EventBucket() {
             classCallCheck(this, EventBucket);

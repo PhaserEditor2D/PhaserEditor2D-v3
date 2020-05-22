@@ -1,25 +1,13 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    function GetColor(value) {
-        // tslint:disable-next-line:no-bitwise
-        return (value >> 16) + (value & 0xff00) + ((value & 0xff) << 16);
-    };
-
-    export interface ITintLikeObject extends ISceneObject {
-
-        tintFill: boolean;
-        tintTopLeft: number;
-        tintTopRight: number;
-        tintBottomLeft: number;
-        tintBottomRight: number;
-    }
+    import controls = colibri.ui.controls;
 
     function TintProperty(
         name: string, label?: string): IProperty<any> {
 
         return {
             name,
-            defValue: 0xffffff,
+            defValue: "#ffffff",
             label,
             tooltip: "phaser:Phaser.GameObjects.Components.Tint." + name,
             local: false,
@@ -27,18 +15,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const val = obj["tint_" + name];
 
-                return val === undefined ? 0xffffff : val;
+                return val === undefined ? "#ffffff" : val;
             },
             setValue: (obj, value) => {
 
-                obj[name] = value;
                 obj["tint_" + name] = value;
+
+                // update the real object tint property
+
+                const rgba = controls.Colors.parseColor(value);
+
+                const color = Phaser.Display.Color.GetColor(rgba.r, rgba.g, rgba.b);
+
+                obj[name] = color;
             }
         };
     }
 
 
-    export class TintComponent extends Component<ITintLikeObject> {
+    export class TintComponent extends Component<ISceneObject> {
 
         static tintFill = SimpleProperty("tintFill", false, "Tint Fill", "phaser:Phaser.GameObjects.Components.Tint.tintFill");
         static tintTopLeft = TintProperty("tintTopLeft", "Tint Top Left");
@@ -46,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static tintBottomLeft = TintProperty("tintBottomLeft", "Tint Bottom Left");
         static tintBottomRight = TintProperty("tintBottomRight", "Tint Bottom Right");
 
-        constructor(obj: ITintLikeObject) {
+        constructor(obj: ISceneObject) {
             super(obj, [
                 TintComponent.tintFill,
                 TintComponent.tintTopLeft,
