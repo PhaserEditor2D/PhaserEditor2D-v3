@@ -4,6 +4,11 @@ namespace colibri.ui.controls {
 
         static parseColor(htmlColor: string) {
 
+            if (htmlColor.startsWith("0x")) {
+
+                htmlColor = "#" + htmlColor.substring(2);
+            }
+
             const vanillaColor = window["VanillaColor"];
 
             const rgba = new vanillaColor(htmlColor).rgba;
