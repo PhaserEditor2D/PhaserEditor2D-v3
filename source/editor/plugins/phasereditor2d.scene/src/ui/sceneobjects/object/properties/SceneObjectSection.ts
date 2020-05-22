@@ -158,7 +158,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        protected createPropertyColorRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
+        protected createPropertyColorRow(parent: HTMLElement, prop: IProperty<any>, allowAlpha = true, lockIcon: boolean = true) {
 
             if (lockIcon) {
 
@@ -168,7 +168,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
-            const text = this.createColorField(parent, prop);
+            const text = this.createColorField(parent, prop, allowAlpha);
 
             return text;
         }
@@ -303,10 +303,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createColorField(
-            parent: HTMLElement, property: IProperty<T>,
-            checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
+            parent: HTMLElement, property: IProperty<T>, allowAlpha = true,
+            checkUnlock = true, readOnlyOnMultiple = false) {
 
-            const colorElement = this.createColor(parent, false);
+            const colorElement = this.createColor(parent, false, allowAlpha);
             const text = colorElement.text;
             const btn = colorElement.btn;
 

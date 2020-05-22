@@ -190,7 +190,7 @@ namespace colibri.ui.controls.properties {
             return text;
         }
 
-        protected createColor(parent: HTMLElement, readOnly = false) {
+        protected createColor(parent: HTMLElement, readOnly = false, allowAlpha = true) {
 
             const text = document.createElement("input");
 
@@ -236,14 +236,15 @@ namespace colibri.ui.controls.properties {
                 picker.setOptions({
                     popup: "left",
                     editor: false,
+                    alpha: false,
                     onClose: () => {
 
                         ColorPickerManager.closeActive();
                     },
                     onDone: (color) => {
 
-                        text.value = color.hex;
-                        btn.style.background = color.hex;
+                        text.value = allowAlpha? color.hex : color.hex.substring(0, 7);
+                        btn.style.background = text.value;
                         text.dispatchEvent(new CustomEvent("change"));
                     }
                 });
