@@ -8,6 +8,10 @@
 * Scene Editor: the origin manipulator. To select it press `O` or select it in the context menu or toolbar. It also support containers.
 * Scene Editor: two scopes for transformations: local and global. You can select it in the context menu (Coords -> Global). Default is local.
 
+### Removed
+
+* The TypeScript template does not include the compiler output files (`game.js`). The user should compile the project before play it.
+
 ### Modified
 
 * Scene Editor: the **Set Origin To** commands modify the origin of the object but keep it's global position.
