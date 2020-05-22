@@ -11,6 +11,7 @@
         ]
     },
     "rules": {
+        "array-type": [true, "array-simple"],
         "no-namespace": false,
         "variable-name": {
             "options": [
