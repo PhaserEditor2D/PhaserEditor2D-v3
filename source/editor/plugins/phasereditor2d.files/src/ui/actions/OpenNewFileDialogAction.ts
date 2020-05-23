@@ -66,7 +66,7 @@ namespace phasereditor2d.files.ui.actions {
                     btn.disabled = viewer.getSelection().length !== 1;
                 });
 
-                viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, e => selectCallback());
+                viewer.eventOpenItem.addListener(() => selectCallback());
             }
 
             dlg.addButton("Cancel", () => dlg.close());

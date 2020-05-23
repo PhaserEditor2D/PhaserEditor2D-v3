@@ -70,9 +70,7 @@ namespace phasereditor2d.files.ui.views {
 
             viewer.repaint();
 
-            viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, (e: CustomEvent) => {
-
-                const file = e.detail as io.FilePath;
+            viewer.eventOpenItem.addListener((file: io.FilePath) => {
 
                 if (file.isFolder()) {
 

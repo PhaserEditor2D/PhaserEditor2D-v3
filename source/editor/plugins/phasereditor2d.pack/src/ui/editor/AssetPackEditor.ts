@@ -247,7 +247,7 @@ namespace phasereditor2d.pack.ui.editor {
                 dlg.close();
             });
 
-            viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, e => selectCallback());
+            viewer.eventOpenItem.addListener(() => selectCallback());
         }
 
         async createFilesViewer(filter: (file: io.FilePath) => boolean) {
@@ -318,7 +318,8 @@ namespace phasereditor2d.pack.ui.editor {
                 dlg.close();
             });
 
-            viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, async (e) => {
+            viewer.eventOpenItem.addListener(async () => {
+
                 importFilesCallback([viewer.getSelection()[0]]);
             });
         }

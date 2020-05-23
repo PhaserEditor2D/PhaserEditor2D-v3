@@ -52,7 +52,7 @@ namespace colibri.ui.controls.dialogs {
                 this.close();
             };
 
-            this.getViewer().addEventListener(controls.viewers.EVENT_OPEN_ITEM, callback2);
+            this.getViewer().eventOpenItem.addListener(callback2);
 
             return this.addButton(text, callback2);
         }

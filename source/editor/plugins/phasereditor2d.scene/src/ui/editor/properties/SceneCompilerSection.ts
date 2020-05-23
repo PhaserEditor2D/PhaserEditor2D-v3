@@ -108,7 +108,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     dlg.close();
                 });
 
-                viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, _ => {
+                viewer.eventOpenItem.addListener(() => {
 
                     selectionCallback([viewer.getSelection()[0]]);
                 });

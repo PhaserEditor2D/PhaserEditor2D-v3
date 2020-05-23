@@ -5,10 +5,9 @@
 
 namespace colibri.ui.controls.viewers {
 
-    export const EVENT_OPEN_ITEM = "itemOpened";
-
     export abstract class Viewer extends Control {
 
+        public eventOpenItem = new ListenerList();
         private _contentProvider: IContentProvider;
         private _cellRendererProvider: ICellRendererProvider;
         private _labelProvider: ILabelProvider = null;
@@ -261,10 +260,7 @@ namespace colibri.ui.controls.viewers {
 
             if (item) {
 
-                this.dispatchEvent(new CustomEvent(EVENT_OPEN_ITEM, {
-                    detail: item.data
-                }));
-
+                this.eventOpenItem.fire(item.data);
             }
         }
 

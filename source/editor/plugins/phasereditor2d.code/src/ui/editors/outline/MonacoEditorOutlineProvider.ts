@@ -18,7 +18,7 @@ namespace phasereditor2d.code.ui.editors.outline {
 
         setViewer(viewer: controls.viewers.TreeViewer) {
 
-            viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, e => {
+            viewer.eventOpenItem.addListener(() => {
 
                 const obj = viewer.getSelectionFirstElement();
 
