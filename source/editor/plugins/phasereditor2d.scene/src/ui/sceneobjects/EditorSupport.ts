@@ -339,7 +339,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const parent = this._object.parentContainer as unknown as ISceneObject;
 
-                return parent.getEditorSupport().getOwnerPrefabInstance();
+                const owner = parent.getEditorSupport().getOwnerPrefabInstance();
+
+                if (owner) {
+
+                    return owner;
+                }
             }
 
             if (this._object.getEditorSupport().isPrefabInstance()) {

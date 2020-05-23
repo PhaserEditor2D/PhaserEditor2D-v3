@@ -29,6 +29,7 @@ namespace colibri.ui.ide {
             if (this._viewer) {
 
                 this._viewer.setSelection(selection, notify);
+
                 this._viewer.reveal(...selection);
 
             } else {
