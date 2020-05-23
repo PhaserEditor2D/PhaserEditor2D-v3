@@ -1,8 +1,10 @@
+/// <reference path="./EventTargetAdapter.ts" />
+
 namespace colibri.ui.controls {
 
     export const EVENT_CONTROL_LAYOUT = "controlLayout";
 
-    export class Control extends EventTarget {
+    export class Control extends EventTargetAdapter {
         private _bounds: IBounds = { x: 0, y: 0, width: 0, height: 0 };
         private _element: HTMLElement;
         private _children: Control[];
@@ -14,10 +16,16 @@ namespace colibri.ui.controls {
 
         constructor(tagName: string = "div", ...classList: string[]) {
             super();
+
             this._children = [];
+
             this._element = document.createElement(tagName);
             this._element["__control"] = this;
+
+            this.setEventTarget(this._element);
+
             this.addClass("Control", ...classList);
+
             this._layout = null;
             this._container = null;
             this._scrollY = 0;

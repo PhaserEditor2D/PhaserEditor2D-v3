@@ -1,4 +1,5 @@
 /// <reference path="../controls/Controls.ts"/>
+/// <reference path="../controls/EventTargetAdapter.ts"/>
 
 namespace colibri.ui.ide {
 
@@ -9,7 +10,7 @@ namespace colibri.ui.ide {
     export const EVENT_EDITOR_ACTIVATED = "editorActivated";
     export const EVENT_PROJECT_OPENED = "projectOpened";
 
-    export class Workbench extends EventTarget {
+    export class Workbench extends controls.EventTargetAdapter {
 
         private static _workbench: Workbench;
 
@@ -42,7 +43,7 @@ namespace colibri.ui.ide {
 
         private constructor() {
 
-            super();
+            super(window.document.body);
 
             this._editorRegistry = new EditorRegistry();
 

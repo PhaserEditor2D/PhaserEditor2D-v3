@@ -63,7 +63,7 @@ namespace colibri.ui.controls {
 
             const listener = e => this.updateButtonWithAction(btnElement, action);
 
-            action.addEventListener(EVENT_ACTION_CHANGED, listener);
+            action.onActionChanged().addListener(listener);
 
             this.updateButtonWithAction(btnElement, action);
 
@@ -71,13 +71,14 @@ namespace colibri.ui.controls {
                 btnElement: btnElement,
                 listener: listener
             });
-
         }
 
         dispose() {
 
             for (const [action, data] of this._actionDataMap.entries()) {
-                action.removeEventListener(EVENT_ACTION_CHANGED, data.listener);
+
+                action.onActionChanged().removeListener(data.listener);
+
                 data.btnElement.remove();
             }
         }

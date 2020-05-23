@@ -1,7 +1,5 @@
 namespace colibri.ui.controls {
 
-    export const EVENT_ACTION_CHANGED = "actionChanged";
-
     export interface IActionConfig {
 
         text?: string;
@@ -14,7 +12,7 @@ namespace colibri.ui.controls {
         callback?(): void;
     }
 
-    export class Action extends EventTarget {
+    export class Action {
 
         private _text: string;
         private _tooltip: string;
@@ -24,9 +22,11 @@ namespace colibri.ui.controls {
         private _showText: boolean;
         private _selected: boolean;
         private _callback: () => void;
+        private _actionChangedEvent: ListenerList;
 
         constructor(config: IActionConfig) {
-            super();
+
+            this._actionChangedEvent = new ListenerList();
 
             this._text = config.text ?? "";
             this._tooltip = config.tooltip ?? "";
@@ -55,6 +55,11 @@ namespace colibri.ui.controls {
             }
         }
 
+        onActionChanged() {
+
+            return this._actionChangedEvent;
+        }
+
         isSelected() {
             return this._selected;
         }
@@ -63,7 +68,7 @@ namespace colibri.ui.controls {
 
             this._selected = selected;
 
-            this.dispatchEvent(new CustomEvent(EVENT_ACTION_CHANGED));
+            this.onActionChanged().dispatch();
         }
 
         getCommandId() {
