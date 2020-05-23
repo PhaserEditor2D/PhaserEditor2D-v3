@@ -1,5 +1,4 @@
 /// <reference path="../controls/Controls.ts"/>
-/// <reference path="../controls/EventTargetAdapter.ts"/>
 
 namespace colibri.ui.ide {
 

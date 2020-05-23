@@ -1,8 +1,6 @@
-/// <reference path="./EventTargetAdapter.ts" />
-
 namespace colibri.ui.controls {
 
-    export class Control extends EventTargetAdapter {
+    export class Control {
 
         public eventControlLayout = new ListenerList();
         public eventSelectionChanged = new ListenerList();
@@ -17,14 +15,11 @@ namespace colibri.ui.controls {
         private _handlePosition = true;
 
         constructor(tagName: string = "div", ...classList: string[]) {
-            super();
 
             this._children = [];
 
             this._element = document.createElement(tagName);
             this._element["__control"] = this;
-
-            this.setEventTarget(this._element);
 
             this.addClass("Control", ...classList);
 
