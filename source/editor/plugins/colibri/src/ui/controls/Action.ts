@@ -22,11 +22,9 @@ namespace colibri.ui.controls {
         private _showText: boolean;
         private _selected: boolean;
         private _callback: () => void;
-        private _actionChangedEvent: ListenerList;
+        public eventActionChanged = new  ListenerList();
 
         constructor(config: IActionConfig) {
-
-            this._actionChangedEvent = new ListenerList();
 
             this._text = config.text ?? "";
             this._tooltip = config.tooltip ?? "";
@@ -55,11 +53,6 @@ namespace colibri.ui.controls {
             }
         }
 
-        onActionChanged() {
-
-            return this._actionChangedEvent;
-        }
-
         isSelected() {
             return this._selected;
         }
@@ -68,7 +61,7 @@ namespace colibri.ui.controls {
 
             this._selected = selected;
 
-            this.onActionChanged().dispatch();
+            this.eventActionChanged.fire();
         }
 
         getCommandId() {

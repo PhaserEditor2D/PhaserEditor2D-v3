@@ -26,7 +26,7 @@ namespace colibri.ui.ide {
             this._rightArea.classList.add("MainToolbarRightArea");
             element.appendChild(this._rightArea);
 
-            ide.Workbench.getWorkbench().addEventListener(ide.EVENT_EDITOR_ACTIVATED, e => this.onEditorActivated());
+            ide.Workbench.getWorkbench().eventEditorActivated.addListener(() => this.handleEditorActivated());
         }
 
         getLeftArea() {
@@ -41,7 +41,7 @@ namespace colibri.ui.ide {
             return this._rightArea;
         }
 
-        private onEditorActivated() {
+        private handleEditorActivated() {
 
             const editor = ide.Workbench.getWorkbench().getActiveEditor();
 

@@ -84,7 +84,7 @@ namespace phasereditor2d.files.ui.views {
 
             wb.getFileStorage().addChangeListener(change => this.onFileStorageChange(change));
 
-            wb.addEventListener(ide.EVENT_EDITOR_ACTIVATED, e => {
+            wb.eventEditorActivated.addListener(() => {
 
                 const editor = wb.getActiveEditor();
 

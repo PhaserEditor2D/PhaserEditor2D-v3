@@ -1,17 +1,17 @@
 namespace colibri.ui.controls {
 
-    export declare type IEventEmitterListener = (args) => void;
+    export declare type IListener<TArg> = (arg: TArg) => void;
 
-    export class ListenerList {
+    export class ListenerList<TArg> {
 
-        private _listeners: IEventEmitterListener[];
+        private _listeners: Array<IListener<TArg>>;
 
         constructor() {
 
             this._listeners = [];
         }
 
-        addListener(listener: IEventEmitterListener) {
+        addListener(listener: IListener<TArg>) {
 
             const list = [...this._listeners];
 
@@ -20,14 +20,14 @@ namespace colibri.ui.controls {
             this._listeners = list;
         }
 
-        removeListener(listener: IEventEmitterListener) {
+        removeListener(listener: IListener<TArg>) {
 
             const list = this._listeners.filter(l => l !== listener);
 
             this._listeners = list;
         }
 
-        dispatch(listenerArgs?: any) {
+        fire(listenerArgs?: TArg) {
 
             for (const l of this._listeners) {
 

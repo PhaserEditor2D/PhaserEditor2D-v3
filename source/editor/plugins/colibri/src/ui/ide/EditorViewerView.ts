@@ -33,7 +33,7 @@ namespace colibri.ui.ide {
 
             super.createPart();
 
-            Workbench.getWorkbench().addEventListener(EVENT_EDITOR_ACTIVATED, e => this.onWorkbenchEditorActivated());
+            Workbench.getWorkbench().eventEditorActivated.addListener(() => this.onWorkbenchEditorActivated());
         }
 
         fillContextMenu(menu: controls.Menu) {
