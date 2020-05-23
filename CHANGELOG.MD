@@ -22,6 +22,7 @@
 * Scene Editor: fixes the Translate manipulator when the objects are children of a transformed container.
 * Deep nested menus are closed well.
 * Sub-menus do not overlap with the parent menu.
+* [#26](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/26): File upload in Windows.
 
 ### Compatibility
 
