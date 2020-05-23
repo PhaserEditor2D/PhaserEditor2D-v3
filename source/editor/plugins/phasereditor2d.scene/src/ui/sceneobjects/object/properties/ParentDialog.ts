@@ -28,9 +28,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (obj instanceof Container) {
 
-                        if (MoveToContainerOperation.canMoveAllTo(sel, obj)) {
+                        const owner = obj.getEditorSupport().getOwnerPrefabInstance();
 
-                            input.push(obj);
+                        if (!owner) {
+
+                            if (MoveToContainerOperation.canMoveAllTo(sel, obj)) {
+
+                                input.push(obj);
+                            }
                         }
                     }
                 });
