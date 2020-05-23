@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
             imgControl.getElement().style.position = "relative";
 
-            this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
+            this.getPage().eventControlLayout.addListener(() => {
 
                 setTimeout(() => imgControl.resizeTo(), 1);
             });

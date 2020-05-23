@@ -8,7 +8,8 @@ namespace colibri.ui.ide.properties {
 
             const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
 
-            this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
+            this.getPage().eventControlLayout.addListener(() => {
+
                 imgControl.resizeTo();
             });
 

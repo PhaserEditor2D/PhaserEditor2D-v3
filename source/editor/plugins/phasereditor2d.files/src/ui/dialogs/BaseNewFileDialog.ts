@@ -57,8 +57,10 @@ namespace phasereditor2d.files.ui.dialogs {
                 text.readOnly = true;
                 bottomArea.appendChild(text);
 
-                this._filteredViewer.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                this._filteredViewer.getViewer().eventSelectionChanged.addListener(() => {
+
                     const file = this._filteredViewer.getViewer().getSelectionFirstElement() as io.FilePath;
+
                     text.value = file === null ? "" : `${file.getFullName()}/`;
                 });
             }
@@ -176,7 +178,8 @@ namespace phasereditor2d.files.ui.dialogs {
             viewer.setCellRendererProvider(new files.ui.viewers.FileCellRendererProvider());
             viewer.setInput(colibri.Platform.getWorkbench().getProjectRoot());
 
-            viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+            viewer.eventSelectionChanged.addListener(() => {
+
                 this.validate();
             });
 
@@ -184,6 +187,7 @@ namespace phasereditor2d.files.ui.dialogs {
         }
 
         layout() {
+
             super.layout();
 
             this._filteredViewer.resizeTo();

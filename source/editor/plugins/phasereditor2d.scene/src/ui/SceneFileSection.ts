@@ -13,7 +13,8 @@ namespace phasereditor2d.scene.ui {
 
             const imgControl = new controls.ImageControl();
 
-            this.getPage().addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
+            this.getPage().eventControlLayout.addListener(() => {
+
                 imgControl.resizeTo();
             });
 

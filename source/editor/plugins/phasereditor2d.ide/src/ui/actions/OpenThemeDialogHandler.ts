@@ -11,7 +11,7 @@ namespace phasereditor2d.ide.ui.actions {
 
         dlg.getViewer().setSelection([controls.Controls.getTheme()]);
 
-        dlg.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+        dlg.getViewer().eventSelectionChanged.addListener(() => {
 
             const theme = dlg.getViewer().getSelectionFirstElement() as controls.ITheme;
 

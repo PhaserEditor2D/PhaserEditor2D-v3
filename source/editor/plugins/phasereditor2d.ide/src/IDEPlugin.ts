@@ -124,7 +124,7 @@ namespace phasereditor2d.ide {
 
             const wb = colibri.Platform.getWorkbench();
 
-            wb.addEventListener(colibri.ui.ide.EVENT_PROJECT_OPENED, e => {
+            wb.eventProjectOpened.addListener(() => {
 
                 wb.getGlobalPreferences().setValue("defaultProjectData", {
                     projectName: wb.getFileStorage().getRoot().getName()

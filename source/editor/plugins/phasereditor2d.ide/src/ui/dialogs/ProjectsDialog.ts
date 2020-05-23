@@ -19,7 +19,7 @@ namespace phasereditor2d.ide.ui.dialogs {
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setInput([]);
 
-            viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, e => this.openProject());
+            viewer.eventOpenItem.addListener(() => this.openProject());
 
             const activeWindow = colibri.Platform.getWorkbench().getActiveWindow();
 
@@ -34,7 +34,7 @@ namespace phasereditor2d.ide.ui.dialogs {
 
                 btn.disabled = true;
 
-                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                viewer.eventSelectionChanged.addListener(() => {
 
                     let disabled = false;
 

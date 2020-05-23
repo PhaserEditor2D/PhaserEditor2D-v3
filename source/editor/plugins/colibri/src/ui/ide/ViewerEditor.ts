@@ -22,8 +22,9 @@ namespace colibri.ui.ide {
             this._filteredViewer = new controls.viewers.FilteredViewer(this._viewer);
             this.add(this._filteredViewer);
 
-            this._viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, (e: CustomEvent) => {
-                this.setSelection(e.detail);
+            this._viewer.eventSelectionChanged.addListener(sel => {
+
+                this.setSelection(sel as any);
             });
 
             this._viewer.getElement().addEventListener("contextmenu", e => this.onMenu(e));

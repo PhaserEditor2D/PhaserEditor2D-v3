@@ -15,12 +15,17 @@
 ### Modified
 
 * Scene Editor: the **Set Origin To** commands modify the origin of the object but keep it's global position.
+* Replace usage of EventTarget with a custom event emitter.
 
 ### Fixed
 
 * Scene Editor: fixes the Translate manipulator when the objects are children of a transformed container.
 * Deep nested menus are closed well.
 * Sub-menus do not overlap with the parent menu.
+
+### Compatibility
+
+* Safari browser: EventTarget is not supported as constructor. We replaced it by a custom event emitter (colibri.ui.controls.ListenerList).
 
 ## Version 3.0.1 - May 16, 2020
 

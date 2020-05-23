@@ -1,8 +1,8 @@
 namespace colibri.ui.controls.dialogs {
 
-    export const EVENT_DIALOG_CLOSE = "dialogClosed";
-
     export class Dialog extends Control {
+
+        public eventDialogClose = new ListenerList();
 
         private _containerElement: HTMLElement;
         private _buttonPaneElement: HTMLElement;
@@ -43,9 +43,10 @@ namespace colibri.ui.controls.dialogs {
                     }
                 });
 
-                window.addEventListener(controls.EVENT_THEME_CHANGED, e => {
+                colibri.Platform.getWorkbench().eventThemeChanged.addListener(() => {
 
                     for (const dlg of Dialog._dialogs) {
+
                         dlg.layout();
                     }
                 });
@@ -182,7 +183,7 @@ namespace colibri.ui.controls.dialogs {
             this._containerElement.remove();
             this.getElement().remove();
 
-            this.dispatchEvent(new CustomEvent(EVENT_DIALOG_CLOSE));
+            this.eventDialogClose.fire();
 
             if (this._parentDialog) {
                 this._parentDialog._containerElement.style.display = "block";
