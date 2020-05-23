@@ -43,9 +43,10 @@ namespace colibri.ui.controls.dialogs {
                     }
                 });
 
-                window.addEventListener(controls.EVENT_THEME_CHANGED, e => {
+                colibri.Platform.getWorkbench().eventThemeChanged.addListener(() => {
 
                     for (const dlg of Dialog._dialogs) {
+
                         dlg.layout();
                     }
                 });

@@ -184,11 +184,9 @@ namespace colibri.ui.ide {
 
             this._created = true;
 
-            window.addEventListener("resize", e => {
-                this.layout();
-            });
+            window.addEventListener("resize", () => this.layout());
 
-            window.addEventListener(controls.EVENT_THEME_CHANGED, e => this.layout());
+            Platform.getWorkbench().eventThemeChanged.addListener(() => this.layout());
 
             FileUtils.getFileStorage().addChangeListener(e => {
 

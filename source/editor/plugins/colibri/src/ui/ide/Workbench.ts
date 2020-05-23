@@ -23,6 +23,7 @@ namespace colibri.ui.ide {
         public eventEditorDeactivated = new controls.ListenerList<EditorPart>();
         public eventEditorActivated = new controls.ListenerList<EditorPart>();
         public eventProjectOpened = new controls.ListenerList();
+        public eventThemeChanged = new controls.ListenerList<ui.controls.ITheme>();
 
         private _fileStringCache: core.io.FileStringCache;
         private _fileImageCache: ImageFileCache;

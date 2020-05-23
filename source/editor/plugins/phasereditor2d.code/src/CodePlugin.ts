@@ -206,11 +206,12 @@ namespace phasereditor2d.code {
                 }
             });
 
-            window.addEventListener(controls.EVENT_THEME_CHANGED, e => {
+            colibri.Platform.getWorkbench().eventThemeChanged.addListener(() => {
 
                 let monacoTheme = "vs";
 
                 if (controls.Controls.getTheme().dark) {
+
                     monacoTheme = "vs-dark";
                 }
 
