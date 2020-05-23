@@ -17,32 +17,34 @@ namespace colibri.ui.ide {
                 }
             });
 
-            this.addEventListener(controls.EVENT_TAB_CLOSED, (e: CustomEvent) => {
-
-                const part = e.detail as Part;
+            this.eventTabClosed.addListener((part: Part) => {
 
                 if (part.onPartClosed()) {
+
                     if (this.getContentList().length === 1) {
+
                         Workbench.getWorkbench().setActivePart(null);
+
                         if (this instanceof EditorArea) {
+
                             Workbench.getWorkbench().setActiveEditor(null);
                         }
                     }
+
                 } else {
-                    e.preventDefault();
+
+                    return controls.CANCEL_EVENT;
                 }
             });
 
-            this.addEventListener(controls.EVENT_TAB_SELECTED, (e: CustomEvent) => {
-
-                const part = e.detail as Part;
+            this.eventTabSelected.addListener((part: Part) => {
 
                 Workbench.getWorkbench().setActivePart(part);
 
                 part.onPartShown();
             });
 
-            this.addEventListener(controls.EVENT_TAB_LABEL_RESIZED, (e: CustomEvent) => {
+            this.eventTabLabelResized.addListener(() => {
 
                 for (const part of this.getParts()) {
 

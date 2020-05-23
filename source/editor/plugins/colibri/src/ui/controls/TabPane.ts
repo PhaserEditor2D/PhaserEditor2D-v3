@@ -1,9 +1,5 @@
 namespace colibri.ui.controls {
 
-    export const EVENT_TAB_CLOSED = "tabClosed";
-    export const EVENT_TAB_SELECTED = "tabSelected";
-    export const EVENT_TAB_LABEL_RESIZED = "tabResized";
-
     class CloseIconManager {
 
         private _iconControl: controls.IconControl;
@@ -149,7 +145,15 @@ namespace colibri.ui.controls {
         }
     }
 
+    // export const EVENT_TAB_CLOSED = "tabClosed";
+    // export const EVENT_TAB_SELECTED = "tabSelected";
+    // export const EVENT_TAB_LABEL_RESIZED = "tabResized";
+
     export class TabPane extends Control {
+
+        public eventTabClosed = new ListenerList();
+        public eventTabSelected = new ListenerList();
+        public eventTabLabelResized = new ListenerList();
 
         private _titleBarElement: HTMLElement;
         private _contentAreaElement: HTMLElement;
@@ -224,7 +228,7 @@ namespace colibri.ui.controls {
                 this.layout();
             }
 
-            this.dispatchEvent(new CustomEvent(EVENT_TAB_LABEL_RESIZED, {}));
+            this.eventTabLabelResized.fire();
         }
 
         incrementTabIconSize(amount: number) {
@@ -315,12 +319,8 @@ namespace colibri.ui.controls {
             {
                 const content = TabPane.getContentFromLabel(labelElement);
 
-                const event = new CustomEvent(EVENT_TAB_CLOSED, {
-                    detail: content,
-                    cancelable: true
-                });
+                if (!this.eventTabClosed.fire(content)) {
 
-                if (!this.dispatchEvent(event)) {
                     return;
                 }
             }
@@ -444,9 +444,7 @@ namespace colibri.ui.controls {
             toSelectContentArea.classList.add("selected");
             toSelectLabel.scrollIntoView();
 
-            this.dispatchEvent(new CustomEvent(EVENT_TAB_SELECTED, {
-                detail: TabPane.getContentFromLabel(toSelectLabel)
-            }));
+            this.eventTabSelected.fire(TabPane.getContentFromLabel(toSelectLabel));
 
             this.dispatchLayoutEvent();
 

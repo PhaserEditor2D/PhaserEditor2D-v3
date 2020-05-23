@@ -1,6 +1,8 @@
 namespace colibri.ui.controls {
 
-    export declare type IListener<TArg> = (arg: TArg) => void;
+    export declare type IListener<TArg> = (arg: TArg) => any;
+
+    export const CANCEL_EVENT = "colibri.ui.controls.CANCEL_EVENT";
 
     export class ListenerList<TArg> {
 
@@ -31,8 +33,15 @@ namespace colibri.ui.controls {
 
             for (const l of this._listeners) {
 
-                l(listenerArgs);
+                const result = l(listenerArgs);
+
+                if (result === CANCEL_EVENT) {
+
+                    return false;
+                }
             }
+
+            return true;
         }
     }
 }
