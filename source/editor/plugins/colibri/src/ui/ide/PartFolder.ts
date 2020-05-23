@@ -55,13 +55,14 @@ namespace colibri.ui.ide {
 
         addPart(part: Part, closeable = false, selectIt = true): void {
 
-            part.addEventListener(EVENT_PART_TITLE_UPDATED, (e: CustomEvent) => {
+            part.eventPartTitleChanged.addListener(() => {
 
                 const icon = part.getIcon();
 
                 if (icon) {
 
                     icon.preload().then(() => {
+
                         this.setTabTitle(part, part.getTitle(), icon);
                     });
 
