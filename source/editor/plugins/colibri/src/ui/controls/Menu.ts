@@ -152,10 +152,6 @@ namespace colibri.ui.controls {
 
                         itemElement.addEventListener("click", ev => {
 
-                            if (this._parentMenu) {
-                                this._parentMenu.close();
-                            }
-
                             this.closeAll();
 
                             item.run();
@@ -228,7 +224,7 @@ namespace colibri.ui.controls {
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
 
-                    this.close();
+                    this.closeAll();
                 });
 
                 document.body.appendChild(this._bgElement);
