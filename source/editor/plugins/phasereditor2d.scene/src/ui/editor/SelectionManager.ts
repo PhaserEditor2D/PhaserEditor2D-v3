@@ -85,6 +85,7 @@ namespace phasereditor2d.scene.ui.editor {
             const provider = this._editor.getOutlineProvider();
 
             provider.setSelection(this._editor.getSelection(), true, true);
+
             provider.repaint();
         }
 
