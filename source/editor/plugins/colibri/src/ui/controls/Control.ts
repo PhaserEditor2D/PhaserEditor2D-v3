@@ -2,8 +2,6 @@
 
 namespace colibri.ui.controls {
 
-    export const EVENT_CONTROL_LAYOUT = "controlLayout";
-
     export class Control extends EventTargetAdapter {
         private _bounds: IBounds = { x: 0, y: 0, width: 0, height: 0 };
         private _element: HTMLElement;
@@ -13,6 +11,7 @@ namespace colibri.ui.controls {
         private _scrollY: number;
         private _layoutChildren: boolean;
         private _handlePosition = true;
+        public eventControlLayout = new ListenerList();
 
         constructor(tagName: string = "div", ...classList: string[]) {
             super();
@@ -161,7 +160,8 @@ namespace colibri.ui.controls {
         }
 
         dispatchLayoutEvent() {
-            this.dispatchEvent(new CustomEvent(EVENT_CONTROL_LAYOUT));
+
+            this.eventControlLayout.fire();
         }
 
         add(control: Control): void {

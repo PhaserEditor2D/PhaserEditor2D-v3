@@ -7,9 +7,12 @@ namespace colibri.ui.ide {
         constructor(...classList: string[]) {
             super("PartsTabPane", ...classList);
 
-            this.addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
+            this.eventControlLayout.addListener(() => {
+
                 const content = this.getSelectedTabContent();
+
                 if (content) {
+
                     content.layout();
                 }
             });
