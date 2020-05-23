@@ -3,6 +3,10 @@
 namespace colibri.ui.controls {
 
     export class Control extends EventTargetAdapter {
+
+        public eventControlLayout = new ListenerList();
+        public eventSelectionChanged = new ListenerList();
+
         private _bounds: IBounds = { x: 0, y: 0, width: 0, height: 0 };
         private _element: HTMLElement;
         private _children: Control[];
@@ -11,7 +15,6 @@ namespace colibri.ui.controls {
         private _scrollY: number;
         private _layoutChildren: boolean;
         private _handlePosition = true;
-        public eventControlLayout = new ListenerList();
 
         constructor(tagName: string = "div", ...classList: string[]) {
             super();

@@ -63,7 +63,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
                 btn.disabled = true;
 
-                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                viewer.eventSelectionChanged.addListener(() => {
+
                     btn.disabled = viewer.getSelection().length === 0;
                 });
             }

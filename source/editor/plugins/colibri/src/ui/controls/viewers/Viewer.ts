@@ -227,9 +227,8 @@ namespace colibri.ui.controls.viewers {
         abstract reveal(...objects: any[]): void;
 
         private fireSelectionChanged() {
-            this.dispatchEvent(new CustomEvent(EVENT_SELECTION_CHANGED, {
-                detail: this.getSelection()
-            }));
+
+            this.eventSelectionChanged.fire(this.getSelection());
         }
 
         escape(): void {

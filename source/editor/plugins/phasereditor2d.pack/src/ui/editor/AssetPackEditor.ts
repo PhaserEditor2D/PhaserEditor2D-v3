@@ -91,7 +91,7 @@ namespace phasereditor2d.pack.ui.editor {
             viewer.setCellSize(96 * controls.DEVICE_PIXEL_RATIO);
             viewer.setInput(this);
 
-            viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+            viewer.eventSelectionChanged.addListener(() => {
 
                 this._outlineProvider.setSelection(viewer.getSelection(), true, false);
 
@@ -236,7 +236,7 @@ namespace phasereditor2d.pack.ui.editor {
 
                 btn.disabled = true;
 
-                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                viewer.eventSelectionChanged.addListener(() => {
 
                     btn.disabled = viewer.getSelection().length === 0;
                 });
@@ -304,7 +304,8 @@ namespace phasereditor2d.pack.ui.editor {
 
                 btn.disabled = true;
 
-                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                viewer.eventSelectionChanged.addListener(() => {
+
                     btn.disabled = viewer.getSelection().length === 0;
                 });
             }

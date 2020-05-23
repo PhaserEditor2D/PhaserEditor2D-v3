@@ -20,8 +20,10 @@ namespace colibri.ui.ide {
 
             const viewer = new viewers.TreeViewer();
 
-            viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+            viewer.eventSelectionChanged.addListener(() => {
+
                 if (this._currentViewerProvider) {
+
                     this._currentViewerProvider.onViewerSelectionChanged(this._viewer.getSelection());
                 }
             });

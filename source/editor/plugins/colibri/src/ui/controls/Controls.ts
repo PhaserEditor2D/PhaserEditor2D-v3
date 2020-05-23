@@ -2,8 +2,6 @@
 
 namespace colibri.ui.controls {
 
-    export const EVENT_SELECTION_CHANGED = "selectionChanged";
-
     export enum PreloadResult {
         NOTHING_LOADED,
         RESOURCES_LOADED

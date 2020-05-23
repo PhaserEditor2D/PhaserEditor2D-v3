@@ -34,7 +34,7 @@ namespace phasereditor2d.ide.ui.dialogs {
 
                 btn.disabled = true;
 
-                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                viewer.eventSelectionChanged.addListener(() => {
 
                     let disabled = false;
 

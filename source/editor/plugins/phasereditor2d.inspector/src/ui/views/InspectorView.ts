@@ -40,19 +40,22 @@ namespace phasereditor2d.inspector.ui.views {
         }
 
         private onWorkbenchPartActivate() {
+
             const part = ide.Workbench.getWorkbench().getActivePart();
 
             if (part !== this && part !== this._currentPart) {
 
                 if (this._currentPart) {
-                    this._currentPart.removeEventListener(controls.EVENT_SELECTION_CHANGED, this._selectionListener);
+
+                    this._currentPart.eventSelectionChanged.removeListener(this._selectionListener);
                 }
 
                 this._currentPart = part;
 
                 if (part) {
 
-                    part.addEventListener(controls.EVENT_SELECTION_CHANGED, this._selectionListener);
+                    part.eventSelectionChanged.addListener(this._selectionListener);
+
                     this.onPartSelection();
 
                 } else {

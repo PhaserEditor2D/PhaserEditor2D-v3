@@ -95,9 +95,7 @@ namespace colibri.ui.ide {
 
         dispatchSelectionChanged() {
 
-            this.dispatchEvent(new CustomEvent(controls.EVENT_SELECTION_CHANGED, {
-                detail: this._selection
-            }));
+            this.eventSelectionChanged.fire(this._selection);
         }
 
         getPropertyProvider(): controls.properties.PropertySectionProvider {

@@ -94,7 +94,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 selectBtn.textContent = "Select " + viewer.getSelection().length + " Files";
 
-                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, () => {
+                viewer.eventSelectionChanged.addListener(() => {
 
                     selectBtn.textContent = "Select " + viewer.getSelection().length + " Files";
                 });

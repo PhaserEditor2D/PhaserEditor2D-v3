@@ -236,7 +236,8 @@ namespace phasereditor2d.ide.ui.dialogs {
                 viewer.repaint();
             });
 
-            viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+            viewer.eventSelectionChanged.addListener(() => {
+
                 this.validate();
             });
 
