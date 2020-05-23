@@ -23,6 +23,7 @@
 * Deep nested menus are closed well.
 * Sub-menus do not overlap with the parent menu.
 * [#26](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/26): File upload in Windows.
+* Scene Editor: fixes picking of a container prefab instance.
 
 ### Compatibility
 
