@@ -116,8 +116,6 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
                     const angle = this.getAvgGlobalAngle(args);
 
-                    console.log("angle " + angle);
-
                     ctx.rotate(Phaser.Math.DegToRad(angle));
                 }
 
