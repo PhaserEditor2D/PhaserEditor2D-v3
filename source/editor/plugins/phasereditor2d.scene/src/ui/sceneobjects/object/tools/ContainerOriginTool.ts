@@ -172,55 +172,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getPoint(args: editor.tools.ISceneToolContextArgs) {
 
-            const container = args.objects[0] as Container;
-
-            const point = new Phaser.Math.Vector2();
-
-            container.getWorldTransformMatrix().transformPoint(0, 0, point);
-
-            const { x, y } = args.camera.getScreenPoint(point.x, point.y);
-
-            return {
-                x: this._axis === "x" ? x + 100 : x,
-                y: this._axis === "y" ? y + 100 : y
-            };
+            return this.getSimpleTranslationPoint(this._axis, args);
         }
 
         render(args: editor.tools.ISceneToolRenderArgs) {
 
             const { x, y } = this.getPoint(args);
 
-            const ctx = args.canvasContext;
-
-            ctx.strokeStyle = "#000";
-
-            if (this._axis === "xy") {
-
-                ctx.save();
-
-                ctx.translate(x, y);
-
-                this.drawCircle(ctx,
-                    args.canEdit ? "#fff" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
-
-                ctx.restore();
-
-            } else {
-
-                ctx.save();
-
-                ctx.translate(x, y);
-
-                if (this._axis === "y") {
-
-                    ctx.rotate(Math.PI / 2);
-                }
-
-                this.drawArrowPath(ctx,
-                    args.canEdit ? (this._axis === "x" ? "#f00" : "#0f0") : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
-
-                ctx.restore();
-            }
+            this.renderSimpleAxis(this._axis, x, y, "#fff", args);
         }
     }
 }

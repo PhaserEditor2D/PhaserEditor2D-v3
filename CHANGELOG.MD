@@ -1,12 +1,14 @@
 # Change Log
 
-## Version 3.1.0 - today
+## Version 3.1.0 - May 24, 2020
 
 ### Added
 
 * Scene Editor: use a color picker for the color properties in the Inspector view.
 * Scene Editor: the origin manipulator. To select it press `O` or select it in the context menu or toolbar. It also support containers.
+* Scene Editor: the Tint properties.
 * Scene Editor: two scopes for transformations: local and global. You can select it in the context menu (Coords -> Global). Default is local.
+* Server: shows helpful welcome messages.
 
 ### Removed
 
