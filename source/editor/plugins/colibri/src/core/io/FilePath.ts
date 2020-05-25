@@ -266,7 +266,7 @@ namespace colibri.core.io {
         }
 
         toString() {
-            
+
             if (this._parent) {
 
                 return this._parent.toString() + "/" + this._name;

@@ -19,10 +19,12 @@ namespace colibri.ui.controls {
         }
 
         setMenuClosedCallback(callback: () => void) {
+
             this._menuCloseCallback = callback;
         }
 
         add(action: Action) {
+
             this._items.push(action);
         }
 
@@ -150,11 +152,7 @@ namespace colibri.ui.controls {
 
                         itemElement.addEventListener("click", ev => {
 
-                            if (this._parentMenu) {
-                                this._parentMenu.close();
-                            }
-
-                            this.close();
+                            this.closeAll();
 
                             item.run();
                         });
@@ -190,6 +188,13 @@ namespace colibri.ui.controls {
 
                         subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
 
+                        const subMenuRect = subMenu._element.getClientRects()[0];
+
+                        if (subMenuRect.left < menuRect.right - 5) {
+
+                            subMenu._element.style.left = menuRect.left - subMenuRect.width + 5 + "px";
+                        }
+
                         this._subMenu = subMenu;
                         this._lastItemElementSelected = itemElement;
                     });
@@ -219,7 +224,7 @@ namespace colibri.ui.controls {
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
 
-                    this.close();
+                    this.closeAll();
                 });
 
                 document.body.appendChild(this._bgElement);

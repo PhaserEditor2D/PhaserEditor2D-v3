@@ -46,7 +46,9 @@ namespace colibri.ui.controls.viewers {
         reveal(...objects: any[]): void {
 
             for (const obj of objects) {
+
                 const path = this.getObjectPath(obj);
+
                 this.revealPath(path);
             }
 
@@ -123,12 +125,16 @@ namespace colibri.ui.controls.viewers {
                 path.push(child);
 
                 if (obj === child) {
+
                     return true;
                 }
 
-                const found = this.getObjectPath2(obj, path, contentProvider.getChildren(child));
+                const newChildren =  contentProvider.getChildren(child);
+
+                const found = this.getObjectPath2(obj, path, newChildren);
 
                 if (found) {
+
                     return true;
                 }
 

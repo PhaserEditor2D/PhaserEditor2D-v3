@@ -31,7 +31,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-                    sprite.setData("TranslateTool.initPosition", { x: sprite.x, y: sprite.y });
+                    const worldPoint = new Phaser.Math.Vector2();
+                    sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
+
+                    sprite.setData("TranslateTool.localInitPosition", { x: sprite.x, y: sprite.y });
+                    sprite.setData("TranslateTool.objInitWorldPosition", worldPoint);
                 }
             }
         }
@@ -42,32 +46,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
-            const dx = args.x - this._initCursorPos.x;
-            const dy = args.y - this._initCursorPos.y;
+            const rot = Phaser.Math.DegToRad(this.getAvgGlobalAngle(args));
 
             for (const obj of args.objects) {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-                const scale = this.getScreenToObjectScale(args, obj);
-                const dx2 = dx / scale.x;
-                const dy2 = dy / scale.y;
+                const worldDelta = this.getTranslationInAxisWorldDelta(
+                    this._axis, this._initCursorPos.x, this._initCursorPos.y, args);
 
-                const { x, y } = sprite.getData("TranslateTool.initPosition");
+                const spriteWorldPosition1 =
+                    sprite.getData("TranslateTool.objInitWorldPosition") as Phaser.Math.Vector2;
 
-                const xAxis = this._axis === "x" || this._axis === "xy" ? 1 : 0;
-                const yAxis = this._axis === "y" || this._axis === "xy" ? 1 : 0;
+                const spriteWorldPosition2 = worldDelta.add(spriteWorldPosition1);
 
-                const { x: x2, y: y2 } = args.editor.getScene().snapPoint(x + dx2 * xAxis, y + dy2 * yAxis);
+                args.editor.getScene().snapVector(spriteWorldPosition2);
 
-                sprite.setPosition(x2, y2);
+                let spriteLocalPosition2 = new Phaser.Math.Vector2();
+
+                if (sprite.parentContainer) {
+
+                    sprite.parentContainer.getWorldTransformMatrix()
+                        .applyInverse(spriteWorldPosition2.x, spriteWorldPosition2.y, spriteLocalPosition2);
+
+                } else {
+
+                    spriteLocalPosition2 = spriteWorldPosition2;
+                }
+
+                sprite.setPosition(spriteLocalPosition2.x, spriteLocalPosition2.y);
             }
 
             args.editor.dispatchSelectionChanged();
         }
 
         static getInitObjectPosition(obj: any): { x: number, y: number } {
-            return (obj as Phaser.GameObjects.Sprite).getData("TranslateTool.initPosition");
+            return (obj as Phaser.GameObjects.Sprite).getData("TranslateTool.localInitPosition");
         }
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
@@ -84,49 +98,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getPoint(args: editor.tools.ISceneToolContextArgs) {
 
-            const { x, y } = this.getAvgScreenPointOfObjects(args);
-
-            return {
-                x: this._axis === "x" ? x + 100 : x,
-                y: this._axis === "y" ? y + 100 : y
-            };
+            return this.getSimpleTranslationPoint(this._axis, args);
         }
 
         render(args: editor.tools.ISceneToolRenderArgs) {
 
             const { x, y } = this.getPoint(args);
 
-            const ctx = args.canvasContext;
-
-            ctx.strokeStyle = "#000";
-
-            if (this._axis === "xy") {
-
-                ctx.save();
-
-                ctx.translate(x, y);
-
-                this.drawCircle(ctx,
-                    args.canEdit ? "#ff0" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
-
-                ctx.restore();
-
-            } else {
-
-                ctx.save();
-
-                ctx.translate(x, y);
-
-                if (this._axis === "y") {
-
-                    ctx.rotate(Math.PI / 2);
-                }
-
-                this.drawArrowPath(ctx,
-                    args.canEdit ? (this._axis === "x" ? "#f00" : "#0f0") : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
-
-                ctx.restore();
-            }
+            this.renderSimpleAxis(this._axis, x, y, "#ff0", args);
         }
     }
 }

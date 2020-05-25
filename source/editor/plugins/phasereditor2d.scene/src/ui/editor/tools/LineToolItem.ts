@@ -14,6 +14,18 @@ namespace phasereditor2d.scene.ui.editor.tools {
             this._tools = tools;
         }
 
+        isValidFor(objects: sceneobjects.ISceneObject[]) {
+
+            for (const tool of this._tools) {
+
+                if (!tool.isValidFor(objects)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         render(args: ISceneToolRenderArgs) {
 
             const ctx = args.canvasContext;

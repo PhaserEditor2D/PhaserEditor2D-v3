@@ -264,6 +264,13 @@ namespace phasereditor2d.scene.ui {
             return { x, y };
         }
 
+        snapVector(vector: Phaser.Math.Vector2) {
+
+            const result = this.snapPoint(vector.x, vector.y);
+
+            vector.set(result.x, result.y);
+        }
+
         getByEditorId(id: string) {
 
             const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);

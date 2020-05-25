@@ -23,7 +23,7 @@ namespace phasereditor2d.ide.ui {
         constructor() {
             super(DesignWindow.ID);
 
-            ide.Workbench.getWorkbench().addEventListener(ide.EVENT_PART_ACTIVATED, e => {
+            ide.Workbench.getWorkbench().eventPartActivated.addListener(() => {
 
                 this.saveWindowState();
             });

@@ -77,7 +77,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             btn.disabled = true;
 
-            this.getViewer().addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+            this.getViewer().eventSelectionChanged.addListener(() => {
 
                 btn.disabled = this.getViewer().getSelection().length === 0;
             });

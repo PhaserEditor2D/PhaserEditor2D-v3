@@ -5,7 +5,6 @@ namespace phasereditor2d.ide {
 
     export const ICON_PLAY = "play";
     export const ICON_MENU = "menu";
-    export const ICON_THEME = "theme";
 
     export class IDEPlugin extends colibri.Plugin {
 
@@ -47,7 +46,6 @@ namespace phasereditor2d.ide {
                 new colibri.ui.ide.IconLoaderExtension([
                     this.getIcon(ICON_PLAY),
                     this.getIcon(ICON_MENU),
-                    this.getIcon(ICON_THEME)
                 ]));
 
             // keys
@@ -126,7 +124,7 @@ namespace phasereditor2d.ide {
 
             const wb = colibri.Platform.getWorkbench();
 
-            wb.addEventListener(colibri.ui.ide.EVENT_PROJECT_OPENED, e => {
+            wb.eventProjectOpened.addListener(() => {
 
                 wb.getGlobalPreferences().setValue("defaultProjectData", {
                     projectName: wb.getFileStorage().getRoot().getName()
@@ -266,7 +264,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.0.1";
+    export const VER = "3.1.0";
 
     async function main() {
 

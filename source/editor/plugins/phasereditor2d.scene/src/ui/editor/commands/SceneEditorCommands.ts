@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.editor.commands {
 
+    import controls = colibri.ui.controls;
+
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
@@ -10,6 +12,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     export const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
+    export const CMD_SET_ORIGIN_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.SetOriginSceneObject";
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
@@ -23,6 +26,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
+
         return args.activePart instanceof SceneEditor
 
             || (args.activeEditor instanceof SceneEditor &&
@@ -108,7 +112,17 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
 
-                isSceneScope,
+                args => {
+
+                    if (controls.dialogs.Dialog.getActiveDialog()
+
+                        || controls.ColorPickerManager.isActivePicker()) {
+
+                        return false;
+                    }
+
+                    return isSceneScope(args);
+                },
 
                 args => {
                     const editor = args.activeEditor as SceneEditor;
@@ -640,6 +654,24 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.add({
                 command: {
+                    id: CMD_SET_ORIGIN_SCENE_OBJECT,
+                    name: "Origin Tool",
+                    icon: ScenePlugin.getInstance().getIcon(ICON_ORIGIN),
+                    tooltip: "Change the origin of the selected scene object",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.OriginTool.ID)
+                },
+                keys: {
+                    key: "O"
+                }
+            });
+
+            manager.add({
+                command: {
                     id: CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
                     name: "Resize TileSprite Tool",
                     tooltip: "Resize selected TileSprite objects.",
@@ -723,7 +755,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 name: "origin",
                 defValue: undefined,
                 getValue: obj => ({ x: obj.originX, y: obj.originY }),
-                setValue: (obj, value) => obj.setOrigin(value.x, value.y)
+                setValue: (obj, value) => {
+                    // obj.setOrigin(value.x, value.y);
+                    sceneobjects.OriginToolItem
+                        .simpleChangeOriginKeepPosition(obj as any, value.x, value.y);
+                }
             };
 
             for (const data of this.computeOriginCommandData()) {
@@ -764,6 +800,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             const objects = args.activeEditor.getSelection()
                                 .filter(obj => sceneobjects.EditorSupport
                                     .hasObjectComponent(obj, sceneobjects.TransformComponent));
+
 
                             args.activeEditor.getUndoManager().add(
                                 new sceneobjects.SimpleOperation(

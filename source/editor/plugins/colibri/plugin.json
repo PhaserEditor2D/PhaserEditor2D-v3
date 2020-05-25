@@ -7,6 +7,7 @@
         "styles/workbench.css"
     ],
     "scripts": [
+        "scripts/vanilla-picker/vanilla-picker.js",
         "_out/colibri.js"
     ]
 }

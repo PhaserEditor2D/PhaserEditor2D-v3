@@ -98,6 +98,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             tool.render({
                 editor: this._editor,
+                localCoords: this._editor.isLocalCoords(),
                 canvasContext: ctx,
                 objects: renderSel,
                 canEdit: editSel.length === renderSel.length,

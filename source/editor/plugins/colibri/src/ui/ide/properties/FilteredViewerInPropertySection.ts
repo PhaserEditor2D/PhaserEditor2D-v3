@@ -12,7 +12,8 @@ namespace colibri.ui.ide.properties {
 
             this.resizeTo();
 
-            page.addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
+            page.eventControlLayout.addListener(() => {
+
                 this.resizeTo();
             });
         }

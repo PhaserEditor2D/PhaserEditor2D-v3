@@ -62,7 +62,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             removeBtn.style.float = "right";
             removeBtn.style.marginRight = "5px";
 
-            viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+            viewer.eventSelectionChanged.addListener(() => {
 
                 selectBtn.disabled = removeBtn.disabled = viewer.getSelection().length === 0;
             });

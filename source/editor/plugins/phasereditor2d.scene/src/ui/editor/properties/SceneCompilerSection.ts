@@ -94,7 +94,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 selectBtn.textContent = "Select " + viewer.getSelection().length + " Files";
 
-                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, () => {
+                viewer.eventSelectionChanged.addListener(() => {
 
                     selectBtn.textContent = "Select " + viewer.getSelection().length + " Files";
                 });
@@ -108,7 +108,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     dlg.close();
                 });
 
-                viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, _ => {
+                viewer.eventOpenItem.addListener(() => {
 
                     selectionCallback([viewer.getSelection()[0]]);
                 });

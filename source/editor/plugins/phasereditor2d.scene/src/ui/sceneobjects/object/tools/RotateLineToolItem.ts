@@ -15,10 +15,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             let globalStartAngle = 0;
             let globalEndAngle = 0;
 
-            for (const sprite of args.objects) {
+            for (const obj of args.objects) {
+
+                const sprite = obj as any as Phaser.GameObjects.Sprite;
 
                 const endAngle = this.globalAngle(sprite as unknown as Phaser.GameObjects.Sprite);
-                const startAngle = 0;
+                let startAngle = 0;
+
+                if (args.localCoords) {
+
+                    if (sprite.parentContainer) {
+
+                        startAngle = this.globalAngle(sprite.parentContainer as any);
+                    }
+                }
 
                 globalStartAngle += startAngle;
                 globalEndAngle += endAngle;

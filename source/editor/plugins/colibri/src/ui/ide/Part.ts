@@ -2,10 +2,9 @@
 
 namespace colibri.ui.ide {
 
-    export const EVENT_PART_TITLE_UPDATED = "partTitledUpdated";
-
     export abstract class Part extends controls.Control {
 
+        public eventPartTitleChanged = new controls.ListenerList();
         private _id: string;
         private _title: string;
         private _selection: any[];
@@ -68,7 +67,8 @@ namespace colibri.ui.ide {
         }
 
         dispatchTitleUpdatedEvent() {
-            this.dispatchEvent(new CustomEvent(EVENT_PART_TITLE_UPDATED, { detail: this }));
+
+            this.eventPartTitleChanged.fire(this);
         }
 
         getIcon(): controls.IImage {
@@ -95,9 +95,7 @@ namespace colibri.ui.ide {
 
         dispatchSelectionChanged() {
 
-            this.dispatchEvent(new CustomEvent(controls.EVENT_SELECTION_CHANGED, {
-                detail: this._selection
-            }));
+            this.eventSelectionChanged.fire(this._selection);
         }
 
         getPropertyProvider(): controls.properties.PropertySectionProvider {

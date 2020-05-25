@@ -71,7 +71,7 @@ utils.makeHelpFile([
 
     "Phaser.Loader.LoaderPlugin.video(urls)",
 
-], "../source/client/plugins/phasereditor2d.pack/data/phaser-docs.json");
+], "../source/editor/plugins/phasereditor2d.pack/data/phaser-docs.json");
 
 utils.makeHelpFile([
     
@@ -95,7 +95,14 @@ utils.makeHelpFile([
     "Phaser.GameObjects.Components.Flip.flipX",
     "Phaser.GameObjects.Components.Flip.flipY",
 
-    "Phaser.GameObjects.Components.Visible.visible",        
+    "Phaser.GameObjects.Components.Visible.visible",
+
+    "Phaser.GameObjects.Components.Tint.tint",        
+    "Phaser.GameObjects.Components.Tint.tintFill",        
+    "Phaser.GameObjects.Components.Tint.tintTopLeft",        
+    "Phaser.GameObjects.Components.Tint.tintTopRight",        
+    "Phaser.GameObjects.Components.Tint.tintBottomLeft",        
+    "Phaser.GameObjects.Components.Tint.tintBottomRight",        
 
     "Phaser.GameObjects.Components.ComputedSize.width",
     "Phaser.GameObjects.Components.ComputedSize.height",
@@ -143,6 +150,6 @@ utils.makeHelpFile([
     "Phaser.GameObjects.BitmapText.setLetterSpacing"
 
 
-], "../source/client/plugins/phasereditor2d.scene/data/phaser-docs.json");
+], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 
 console.log("DONE!");

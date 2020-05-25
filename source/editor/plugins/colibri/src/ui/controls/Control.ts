@@ -1,8 +1,10 @@
 namespace colibri.ui.controls {
 
-    export const EVENT_CONTROL_LAYOUT = "controlLayout";
+    export class Control {
 
-    export class Control extends EventTarget {
+        public eventControlLayout = new ListenerList();
+        public eventSelectionChanged = new ListenerList();
+
         private _bounds: IBounds = { x: 0, y: 0, width: 0, height: 0 };
         private _element: HTMLElement;
         private _children: Control[];
@@ -13,11 +15,14 @@ namespace colibri.ui.controls {
         private _handlePosition = true;
 
         constructor(tagName: string = "div", ...classList: string[]) {
-            super();
+
             this._children = [];
+
             this._element = document.createElement(tagName);
             this._element["__control"] = this;
+
             this.addClass("Control", ...classList);
+
             this._layout = null;
             this._container = null;
             this._scrollY = 0;
@@ -153,7 +158,8 @@ namespace colibri.ui.controls {
         }
 
         dispatchLayoutEvent() {
-            this.dispatchEvent(new CustomEvent(EVENT_CONTROL_LAYOUT));
+
+            this.eventControlLayout.fire();
         }
 
         add(control: Control): void {

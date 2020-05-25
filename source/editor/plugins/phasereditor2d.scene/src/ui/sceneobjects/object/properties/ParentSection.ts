@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const dlg = new ParentDialog(this.getEditor());
                 dlg.create();
-                dlg.addEventListener(controls.dialogs.EVENT_DIALOG_CLOSE, e => {
+                dlg.eventDialogClose.addListener(() => {
 
                     this.updateWithSelection();
                 });

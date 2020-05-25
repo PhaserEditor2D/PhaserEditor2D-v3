@@ -45,7 +45,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
         }
 
         async browseFile(title: string, fileFilter: (file: io.FilePath) => boolean,
-                         selectionCallback: (files: io.FilePath[]) => void) {
+            selectionCallback: (files: io.FilePath[]) => void) {
 
             const viewer = await this.getEditor().createFilesViewer(fileFilter);
 
@@ -63,7 +63,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
                 btn.disabled = true;
 
-                viewer.addEventListener(controls.EVENT_SELECTION_CHANGED, e => {
+                viewer.eventSelectionChanged.addListener(() => {
+
                     btn.disabled = viewer.getSelection().length === 0;
                 });
             }
@@ -77,7 +78,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
                 dlg.close();
             });
 
-            viewer.addEventListener(controls.viewers.EVENT_OPEN_ITEM, async (e) => {
+            viewer.eventOpenItem.addListener(async () => {
+
                 selectionCallback([viewer.getSelection()[0]]);
                 dlg.close();
             });

@@ -158,6 +158,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
+        protected createPropertyColorRow(parent: HTMLElement, prop: IProperty<any>, allowAlpha = true, lockIcon: boolean = true) {
+
+            if (lockIcon) {
+
+                this.createLock(parent, prop);
+            }
+
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
+            label.style.gridColumn = "2";
+
+            const text = this.createColorField(parent, prop, allowAlpha);
+
+            return text;
+        }
+
         protected createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon: boolean = true) {
 
             if (lockIcon) {
@@ -285,6 +300,46 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
 
             return text;
+        }
+
+        createColorField(
+            parent: HTMLElement, property: IProperty<T>, allowAlpha = true,
+            checkUnlock = true, readOnlyOnMultiple = false) {
+
+            const colorElement = this.createColor(parent, false, allowAlpha);
+            const text = colorElement.text;
+            const btn = colorElement.btn;
+
+            text.addEventListener("change", e => {
+
+                const value = text.value;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                text.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                if (readOnlyOnMultiple) {
+
+                    text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                }
+
+                btn.disabled = text.readOnly;
+
+                text.value = this.flatValues_StringOneOrNothing(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValue(obj))
+                );
+
+                btn.style.background = text.value.endsWith("selected)") ? "transparent" : text.value;
+            });
+
+            return colorElement;
         }
 
         createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {

@@ -2,9 +2,6 @@
 
 namespace colibri.ui.controls {
 
-    export const EVENT_SELECTION_CHANGED = "selectionChanged";
-    export const EVENT_THEME_CHANGED = "themeChanged";
-
     export enum PreloadResult {
         NOTHING_LOADED,
         RESOURCES_LOADED
@@ -186,7 +183,7 @@ namespace colibri.ui.controls {
 
             this._theme = theme;
 
-            window.dispatchEvent(new CustomEvent(EVENT_THEME_CHANGED, { detail: this._theme }));
+            Platform.getWorkbench().eventThemeChanged.fire(this._theme);
 
             localStorage.setItem("colibri.theme.id", theme.id);
         }

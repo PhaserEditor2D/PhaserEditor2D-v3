@@ -2,14 +2,7 @@
 
 namespace colibri.ui.ide {
 
-    export const EVENT_PART_DEACTIVATED = "partDeactivated";
-    export const EVENT_PART_ACTIVATED = "partActivated";
-
-    export const EVENT_EDITOR_DEACTIVATED = "editorDeactivated";
-    export const EVENT_EDITOR_ACTIVATED = "editorActivated";
-    export const EVENT_PROJECT_OPENED = "projectOpened";
-
-    export class Workbench extends EventTarget {
+    export class Workbench {
 
         private static _workbench: Workbench;
 
@@ -22,6 +15,14 @@ namespace colibri.ui.ide {
 
             return this._workbench;
         }
+
+
+        public eventPartDeactivated = new controls.ListenerList<Part>();
+        public eventPartActivated = new controls.ListenerList<Part>();
+        public eventEditorDeactivated = new controls.ListenerList<EditorPart>();
+        public eventEditorActivated = new controls.ListenerList<EditorPart>();
+        public eventProjectOpened = new controls.ListenerList();
+        public eventThemeChanged = new controls.ListenerList<ui.controls.ITheme>();
 
         private _fileStringCache: core.io.FileStringCache;
         private _fileImageCache: ImageFileCache;
@@ -41,8 +42,6 @@ namespace colibri.ui.ide {
         private _editorSessionStateRegistry: Map<string, any>;
 
         private constructor() {
-
-            super();
 
             this._editorRegistry = new EditorRegistry();
 
@@ -164,9 +163,7 @@ namespace colibri.ui.ide {
 
             await this.preloadProjectResources(monitor);
 
-            this.dispatchEvent(new CustomEvent(EVENT_PROJECT_OPENED, {
-                detail: projectName
-            }));
+            this.eventProjectOpened.fire(projectName);
         }
 
         private async preloadProjectResources(monitor: controls.IProgressMonitor) {
@@ -372,7 +369,7 @@ namespace colibri.ui.ide {
 
             this._activeEditor = editor;
 
-            this.dispatchEvent(new CustomEvent(EVENT_EDITOR_ACTIVATED, { detail: editor }));
+            this.eventEditorActivated.fire(editor);
         }
 
         /**
@@ -392,7 +389,7 @@ namespace colibri.ui.ide {
 
                     old.onPartDeactivated();
 
-                    this.dispatchEvent(new CustomEvent(EVENT_PART_DEACTIVATED, { detail: old }));
+                    this.eventPartDeactivated.fire(old);
                 }
 
                 if (part) {
@@ -402,7 +399,7 @@ namespace colibri.ui.ide {
                     part.onPartActivated();
                 }
 
-                this.dispatchEvent(new CustomEvent(EVENT_PART_ACTIVATED, { detail: part }));
+                this.eventPartActivated.fire(part);
             }
 
             if (part instanceof EditorPart) {

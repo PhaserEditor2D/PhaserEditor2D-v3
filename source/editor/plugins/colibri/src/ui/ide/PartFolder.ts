@@ -7,39 +7,44 @@ namespace colibri.ui.ide {
         constructor(...classList: string[]) {
             super("PartsTabPane", ...classList);
 
-            this.addEventListener(controls.EVENT_CONTROL_LAYOUT, (e: CustomEvent) => {
+            this.eventControlLayout.addListener(() => {
+
                 const content = this.getSelectedTabContent();
+
                 if (content) {
+
                     content.layout();
                 }
             });
 
-            this.addEventListener(controls.EVENT_TAB_CLOSED, (e: CustomEvent) => {
-
-                const part = e.detail as Part;
+            this.eventTabClosed.addListener((part: Part) => {
 
                 if (part.onPartClosed()) {
+
                     if (this.getContentList().length === 1) {
+
                         Workbench.getWorkbench().setActivePart(null);
+
                         if (this instanceof EditorArea) {
+
                             Workbench.getWorkbench().setActiveEditor(null);
                         }
                     }
+
                 } else {
-                    e.preventDefault();
+
+                    return controls.CANCEL_EVENT;
                 }
             });
 
-            this.addEventListener(controls.EVENT_TAB_SELECTED, (e: CustomEvent) => {
-
-                const part = e.detail as Part;
+            this.eventTabSelected.addListener((part: Part) => {
 
                 Workbench.getWorkbench().setActivePart(part);
 
                 part.onPartShown();
             });
 
-            this.addEventListener(controls.EVENT_TAB_LABEL_RESIZED, (e: CustomEvent) => {
+            this.eventTabLabelResized.addListener(() => {
 
                 for (const part of this.getParts()) {
 
@@ -50,13 +55,14 @@ namespace colibri.ui.ide {
 
         addPart(part: Part, closeable = false, selectIt = true): void {
 
-            part.addEventListener(EVENT_PART_TITLE_UPDATED, (e: CustomEvent) => {
+            part.eventPartTitleChanged.addListener(() => {
 
                 const icon = part.getIcon();
 
                 if (icon) {
 
                     icon.preload().then(() => {
+
                         this.setTabTitle(part, part.getTitle(), icon);
                     });
 

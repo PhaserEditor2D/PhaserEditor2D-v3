@@ -1,0 +1,12 @@
+{
+  "name": "phasereditor2d.ide",
+  "version": "3.1.0",
+  "description": "Phaser Editor 2D IDE.",
+  "dependencies": {
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.3"
+  },
+  "devDependencies": {},
+  "author": "Arian Fornaris <developers@phasereditor2d.com> (https://phasereditor2d.com)",
+  "license": "MIT"
+}
