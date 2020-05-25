@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 3.1.0 - today
+## Version 3.1.0 - May 24, 2020
 
 ### Added
 
