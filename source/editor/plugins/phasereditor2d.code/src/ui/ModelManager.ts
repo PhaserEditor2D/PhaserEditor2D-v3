@@ -25,7 +25,7 @@ namespace phasereditor2d.code.ui {
 
                 for (const fileName of e.getAddRecords()) {
 
-                    if (!this.isValidFileName(fileName)) {
+                    if (!ModelManager.handleFileName(fileName)) {
 
                         continue;
                     }
@@ -43,7 +43,7 @@ namespace phasereditor2d.code.ui {
 
                 for (const fileName of e.getDeleteRecords()) {
 
-                    if (!this.isValidFileName(fileName)) {
+                    if (!ModelManager.handleFileName(fileName)) {
 
                         continue;
                     }
@@ -60,7 +60,7 @@ namespace phasereditor2d.code.ui {
 
                 for (const fileName of e.getModifiedRecords()) {
 
-                    if (!this.isValidFileName(fileName)) {
+                    if (!ModelManager.handleFileName(fileName)) {
 
                         continue;
                     }
@@ -81,7 +81,7 @@ namespace phasereditor2d.code.ui {
 
                 for (const oldFileName of e.getRenameFromRecords()) {
 
-                    if (!this.isValidFileName(oldFileName)) {
+                    if (!ModelManager.handleFileName(oldFileName)) {
 
                         continue;
                     }
@@ -105,7 +105,7 @@ namespace phasereditor2d.code.ui {
             return filename.endsWith(".js") ? "javascript" : "typescript";
         }
 
-        private isValidFileName(filename: string) {
+        public static handleFileName(filename: string) {
 
             return filename.endsWith(".js") || filename.endsWith(".ts");
         }
