@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 3.1.1 - May 25, 2020
+
+### Fixed
+
+[#33](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/33) Wrong BitmapText default origin.
+
 ## Version 3.1.0 - May 24, 2020
 
 ### Added
