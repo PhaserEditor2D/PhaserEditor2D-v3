@@ -53,7 +53,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             let defaultValue = 0.5;
 
-            if (obj instanceof Text) {
+            if (obj instanceof Text || obj instanceof BitmapText) {
 
                 defaultValue = 0;
             }

@@ -270,9 +270,19 @@ namespace phasereditor2d.code.ui.editors {
             }
         }
 
-        protected onEditorInputContentChanged() {
+        protected async onEditorInputContentChanged() {
 
-            // handled by the ModelManager.
+            if (CodePlugin.getInstance().isAdvancedJSEditor()) {
+
+                if (ModelManager.handleFileName(this.getInput().getName())) {
+                    // do nothing, the model manager will handle this!
+                    return;
+                }
+            }
+
+            const str = await colibri.ui.ide.FileUtils.preloadAndGetFileString(this.getInput());
+
+            this.getModel().setValue(str);
         }
     }
 }
