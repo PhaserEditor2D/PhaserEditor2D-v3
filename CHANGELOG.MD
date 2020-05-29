@@ -2,6 +2,8 @@
 
 ## Version 3.1.1-next
 
+[#32](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/32) In-App update. With `PhaserEditor2D -update` the server downloads the latest version and replace the old files with the new files. With `PhaserEditor2D -download`, the server downloads the latest version zip, and you can install it manually.
+
 ## Version 3.1.1 - May 25, 2020
 
 ### Fixed
