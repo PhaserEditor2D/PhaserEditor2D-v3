@@ -7,6 +7,7 @@ namespace phasereditor2d.scene.ui {
         private _inEditor: boolean;
         private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
+        private _prefabProperties: sceneobjects.UserProperties;
         private _objectLists: sceneobjects.ObjectLists;
         private _packCache: pack.core.parsers.AssetPackCache;
 
@@ -24,6 +25,8 @@ namespace phasereditor2d.scene.ui {
             this._packCache = new pack.core.parsers.AssetPackCache();
 
             this._objectLists = new sceneobjects.ObjectLists();
+
+            this._prefabProperties = new sceneobjects.UserProperties();
         }
 
         protected registerDestroyListener(name: string) {
@@ -75,6 +78,11 @@ namespace phasereditor2d.scene.ui {
 
         getSettings() {
             return this._settings;
+        }
+
+        getUserProperties() {
+
+            return this._prefabProperties;
         }
 
         getId() {

@@ -22,13 +22,28 @@ namespace phasereditor2d.scene.core.json {
                 }
             };
 
+            // object lists
+
             this._scene.getObjectLists().writeJSON(sceneData);
+
+            // display list
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
                 const objData = {} as IObjectData;
                 obj.getEditorSupport().writeJSON(objData);
                 sceneData.displayList.push(objData);
+            }
+
+            // prefab properties
+
+            const prefabProperties = [];
+
+            this._scene.getUserProperties().writeJSON(prefabProperties);
+
+            if (prefabProperties.length > 0) {
+
+                sceneData.prefabProperties = prefabProperties;
             }
 
             return sceneData;

@@ -181,6 +181,11 @@ namespace phasereditor2d.scene.ui {
                 this._scene.getObjectLists().readJSON(sceneData);
             }
 
+            if (sceneData.prefabProperties) {
+
+                this._scene.getUserProperties().readJSON(sceneData.prefabProperties);
+            }
+
             this._scene.setSceneType(sceneData.sceneType);
 
             // removes this condition, it is used temporal for compatibility
