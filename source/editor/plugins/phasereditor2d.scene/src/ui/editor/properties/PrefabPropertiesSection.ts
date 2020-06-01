@@ -62,8 +62,22 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     {
                         this.createLabel(this._propArea, "Default", "The property default value.");
-                        const text = this.createText(this._propArea);
-                        text.value = info.type.renderValue(info.defValue);
+
+                        const propEditor = info.type.createEditorElement(
+                            () => {
+                                return prop.getInfo().defValue;
+                            },
+                            value => {
+
+                                this.runOperation(() => {
+
+                                    prop.getInfo().defValue = value;
+                                });
+                            });
+
+                        this._propArea.appendChild(propEditor.element);
+
+                        propEditor.update();
                     }
 
                     {

@@ -1,5 +1,12 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export interface IPropertyEditor {
+
+        element: HTMLElement;
+
+        update(): void;
+    }
+
     export abstract class UserPropertyType<TValue> {
 
         private _id: string;
@@ -33,5 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         abstract renderValue(value: any): string;
+
+        abstract createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor;
     }
 }

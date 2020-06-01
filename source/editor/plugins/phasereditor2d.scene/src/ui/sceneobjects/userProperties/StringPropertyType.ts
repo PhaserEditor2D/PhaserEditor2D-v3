@@ -16,5 +16,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return value;
         }
 
+        createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor {
+
+            const element = document.createElement("input");
+            element.type = "text";
+            element.classList.add("formText");
+
+            element.addEventListener("change", e => {
+
+                setValue(element.value);
+            });
+
+            const update = () => {
+
+                element.value = getValue();
+            };
+
+            return {
+                element,
+                update
+            };
+        }
     }
 }
