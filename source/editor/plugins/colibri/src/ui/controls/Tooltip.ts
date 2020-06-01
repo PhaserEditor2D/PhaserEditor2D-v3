@@ -56,7 +56,10 @@ namespace colibri.ui.controls {
                     return;
                 }
 
-                TooltipManager.showTooltip(this._mousePosition.x, this._mousePosition.y, this._tooltip);
+                if (this._mousePosition) {
+
+                    TooltipManager.showTooltip(this._mousePosition.x, this._mousePosition.y, this._tooltip);
+                }
 
             }, 1000);
         }
