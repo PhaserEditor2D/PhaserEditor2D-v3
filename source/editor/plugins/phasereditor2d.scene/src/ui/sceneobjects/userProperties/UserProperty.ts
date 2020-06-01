@@ -20,6 +20,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._info = info;
         }
 
+        getType() {
+            
+            return this._info.type;
+        }
+
         getInfo() {
             return this._info;
         }
@@ -30,8 +35,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             data.label = this._info.label;
             data.tooltip = this._info.tooltip;
             data.defValue = this._info.defValue;
-            const typeData = {};
-            this._info.type.writeJSON(typeData);
+            data.type = {};
+            this._info.type.writeJSON(data.type);
         }
 
         readJSON(data: any) {

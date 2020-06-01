@@ -22,21 +22,83 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this._propArea = this.createGridElement(comp, 2);
             comp.appendChild(this._propArea);
 
-            const btn = this.createButton(comp, "Add Property", e => {
-                // TODO
+            const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
+
+            const btn = this.createMenuButton(comp, "Add Property", propTypes.map(t => ({
+                name: t.getName() + " Property",
+                value: t
+            })), value => {
+
+                const userProps = this.getScene().getUserProperties();
+
+                userProps.add(userProps.createProperty(value));
+
+                this.updateWithSelection();
             });
+
             btn.style.gridColumn = "1 / span 2";
             btn.style.justifySelf = "center";
 
-            this.addUpdater(()=> {
+            this.addUpdater(() => {
 
-                // delete all property UI
                 this._propArea.innerHTML = "";
 
-                // add the properties here
-                this.createLabel(this._propArea, "Property 1", "The property 1");
-                this.createText(this._propArea);
+                const properties = this.getScene().getUserProperties().getProperties();
 
+                for (const prop of properties) {
+
+                    const info = prop.getInfo();
+
+                    {
+                        this.createLabel(this._propArea, "Name", "The property name. Like in 'speedMin'.");
+                        const text = this.createText(this._propArea);
+                        text.value = info.name;
+                    }
+
+                    {
+                        this.createLabel(this._propArea, "Label", "The property display label. Like in 'Speed Min'.");
+                        const text = this.createText(this._propArea);
+                        text.value = info.label;
+                    }
+
+                    {
+                        this.createLabel(this._propArea, "Tooltip", "The property tooltip.");
+                        const text = this.createText(this._propArea);
+                        text.value = info.tooltip;
+                    }
+
+                    {
+                        this.createLabel(this._propArea, "Type", "The property type.");
+                        const text = this.createText(this._propArea, true);
+                        text.value = prop.getType().getName();
+                    }
+
+                    {
+                        this.createLabel(this._propArea, "Default", "The property default value.");
+                        const text = this.createText(this._propArea);
+                        text.value = info.type.renderValue(info.defValue);
+                    }
+
+                    {
+                        // tslint:disable-next-line:no-shadowed-variable
+                        const btn = this.createButton(this._propArea, "Delete", e => {
+
+                            const i = properties.indexOf(prop);
+                            properties.splice(i, 1);
+                            this.updateWithSelection();
+                        });
+                        btn.style.gridColumn = "1 / span 2";
+                        btn.style.justifySelf = "right";
+                    }
+
+                    {
+                        const sep = document.createElement("hr");
+                        sep.style.width = "100%";
+                        sep.style.gridColumn = "1 / span 2";
+                        sep.style.opacity = "0.5";
+                        this._propArea.appendChild(sep);
+                    }
+                }
             });
         }
 
