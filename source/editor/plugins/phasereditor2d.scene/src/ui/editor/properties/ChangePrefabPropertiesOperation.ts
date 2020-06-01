@@ -11,8 +11,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this._before = before;
             this._after = after;
-
-            this.load(this._after);
         }
 
         static snapshot(editor: SceneEditor) {
@@ -22,18 +20,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
             editor.getScene().getPrefabUserProperties().writeJSON(data);
 
             return data;
-        }
-
-        static run(editor: SceneEditor, action: () => void) {
-
-            const before = this.snapshot(editor);
-
-            action();
-
-            const after = this.snapshot(editor);
-
-            editor.getUndoManager()
-                .add(new ChangePrefabPropertiesOperation(editor, before, after));
         }
 
         private load(data: any) {

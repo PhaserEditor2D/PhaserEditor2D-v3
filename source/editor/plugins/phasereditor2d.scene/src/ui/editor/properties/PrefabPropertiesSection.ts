@@ -29,14 +29,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 value: t
             })), value => {
 
-                editor.properties.ChangePrefabPropertiesOperation
-                    .run(this.getEditor(), () => {
+                this.runOperation(userProps => {
 
-                        const userProps = this.getScene().getPrefabUserProperties();
-
-                        userProps.add(userProps.createProperty(value));
-
-                    });
+                    userProps.add(userProps.createProperty(value));
+                });
             });
 
             btn.style.gridColumn = "1 / span 2";
@@ -52,23 +48,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     const info = prop.getInfo();
 
-                    {
-                        this.createLabel(this._propArea, "Name", "The property name. Like in 'speedMin'.");
-                        const text = this.createText(this._propArea);
-                        text.value = info.name;
-                    }
+                    this.simpleField(info, "name", "Name", "The property name. Like in 'speedMin'.");
 
-                    {
-                        this.createLabel(this._propArea, "Label", "The property display label. Like in 'Speed Min'.");
-                        const text = this.createText(this._propArea);
-                        text.value = info.label;
-                    }
+                    this.simpleField(info, "label", "Label", "The property display label. Like in 'Speed Min'.");
 
-                    {
-                        this.createLabel(this._propArea, "Tooltip", "The property tooltip.");
-                        const text = this.createText(this._propArea);
-                        text.value = info.tooltip;
-                    }
+                    this.simpleField(info, "tooltip", "Tooltip", "The property tooltip.");
 
                     {
                         this.createLabel(this._propArea, "Type", "The property type.");
@@ -86,13 +70,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         // tslint:disable-next-line:no-shadowed-variable
                         const btn = this.createButton(this._propArea, "Delete", e => {
 
-                            editor.properties.ChangePrefabPropertiesOperation
-                                .run(this.getEditor(), () => {
+                            this.runOperation(userProps => {
 
-                                    const i = properties.indexOf(prop);
+                                const i = userProps.getProperties().indexOf(prop);
 
-                                    properties.splice(i, 1);
-                                });
+                                properties.splice(i, 1);
+                            });
                         });
 
                         btn.style.gridColumn = "1 / span 2";
@@ -108,6 +91,44 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     }
                 }
             });
+        }
+
+        private simpleField(propInfo: any, infoProp: string, fieldLabel: string, fieldTooltip: string) {
+
+            this.createLabel(this._propArea, fieldLabel, fieldTooltip);
+
+            const text = this.createText(this._propArea);
+            text.value = propInfo[infoProp];
+
+            text.addEventListener("change", e => {
+
+                this.runOperation(() => {
+
+                    propInfo[infoProp] = text.value;
+
+                }, false);
+            });
+        }
+
+        runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection = true) {
+
+            const theEditor = this.getEditor();
+
+            const before = editor.properties.ChangePrefabPropertiesOperation.snapshot(theEditor);
+
+            action(this.getScene().getPrefabUserProperties());
+
+            const after = editor.properties.ChangePrefabPropertiesOperation.snapshot(this.getEditor());
+
+            this.getEditor().getUndoManager()
+                .add(new ChangePrefabPropertiesOperation(this.getEditor(), before, after));
+
+            theEditor.setDirty(true);
+
+            if (updateSelection) {
+
+                this.updateWithSelection();
+            }
         }
 
         canEdit(obj: any, n: number): boolean {
