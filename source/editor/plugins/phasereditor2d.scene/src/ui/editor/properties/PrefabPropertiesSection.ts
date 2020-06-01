@@ -29,11 +29,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 value: t
             })), value => {
 
-                const userProps = this.getScene().getUserProperties();
+                editor.properties.ChangePrefabPropertiesOperation
+                    .run(this.getEditor(), () => {
 
-                userProps.add(userProps.createProperty(value));
+                        const userProps = this.getScene().getPrefabUserProperties();
 
-                this.updateWithSelection();
+                        userProps.add(userProps.createProperty(value));
+
+                    });
             });
 
             btn.style.gridColumn = "1 / span 2";
@@ -43,7 +46,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 this._propArea.innerHTML = "";
 
-                const properties = this.getScene().getUserProperties().getProperties();
+                const properties = this.getScene().getPrefabUserProperties().getProperties();
 
                 for (const prop of properties) {
 
@@ -83,10 +86,15 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         // tslint:disable-next-line:no-shadowed-variable
                         const btn = this.createButton(this._propArea, "Delete", e => {
 
-                            const i = properties.indexOf(prop);
-                            properties.splice(i, 1);
-                            this.updateWithSelection();
+                            editor.properties.ChangePrefabPropertiesOperation
+                                .run(this.getEditor(), () => {
+
+                                    const i = properties.indexOf(prop);
+
+                                    properties.splice(i, 1);
+                                });
                         });
+
                         btn.style.gridColumn = "1 / span 2";
                         btn.style.justifySelf = "right";
                     }

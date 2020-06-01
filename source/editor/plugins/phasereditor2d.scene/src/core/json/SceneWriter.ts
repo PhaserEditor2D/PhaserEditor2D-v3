@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.core.json {
 
             const prefabProperties = [];
 
-            this._scene.getUserProperties().writeJSON(prefabProperties);
+            this._scene.getPrefabUserProperties().writeJSON(prefabProperties);
 
             if (prefabProperties.length > 0) {
 

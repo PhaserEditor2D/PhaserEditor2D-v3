@@ -80,7 +80,7 @@ namespace phasereditor2d.scene.ui {
             return this._settings;
         }
 
-        getUserProperties() {
+        getPrefabUserProperties() {
 
             return this._prefabProperties;
         }
