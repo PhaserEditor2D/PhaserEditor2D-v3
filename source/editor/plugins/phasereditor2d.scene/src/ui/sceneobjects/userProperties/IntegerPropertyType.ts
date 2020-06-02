@@ -22,7 +22,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             element.addEventListener("change", e => {
 
-                const value = Number.parseInt(element.value, 10);
+                let value = Number.parseInt(element.value, 10);
+
+                if (Number.isNaN(value)) {
+
+                    value = getValue();
+                }
 
                 setValue(value);
             });

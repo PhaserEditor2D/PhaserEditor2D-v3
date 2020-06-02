@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this._propArea = this.createGridElement(comp, 2);
             comp.appendChild(this._propArea);
 
-            const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
+            const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
 
             const btn = this.createMenuButton(comp, "Add Property", propTypes.map(t => ({
                 name: t.getName() + " Property",
@@ -58,6 +58,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         this.createLabel(this._propArea, "Type", "The property type.");
                         const text = this.createText(this._propArea, true);
                         text.value = prop.getType().getName();
+                    }
+
+                    if (prop.getType() instanceof sceneobjects.OptionPropertyType) {
+
+                        this.createOptionsField(prop);
                     }
 
                     {
@@ -104,6 +109,34 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         this._propArea.appendChild(sep);
                     }
                 }
+            });
+        }
+
+        private createOptionsField(prop: sceneobjects.UserProperty) {
+
+            const type = prop.getType() as sceneobjects.OptionPropertyType;
+
+            this.createLabel(
+                this._propArea, "Options", "An array of possible string values, like in <code>['good', 'bad', 'ugly']</code>.");
+
+            const text = this.createTextArea(this._propArea);
+
+            text.value = JSON.stringify(type.getOptions());
+
+            text.addEventListener("change", e => {
+
+                this.runOperation(() => {
+
+                    const array = JSON.parse(text.value);
+
+                    if (Array.isArray(array)) {
+
+                        const array2 = array.filter(v => typeof v === "string" || typeof v === "number")
+                            .map(v => v.toString());
+
+                        type.setOptions(array2);
+                    }
+                }, true);
             });
         }
 

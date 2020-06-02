@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const typeData = data.type;
             const typeId = typeData.id;
-            const propType = ScenePlugin.getInstance().getUserPropertyType(typeId);
+            const propType = ScenePlugin.getInstance().createUserPropertyType(typeId);
             propType.readJSON(typeData);
 
             this._info = {

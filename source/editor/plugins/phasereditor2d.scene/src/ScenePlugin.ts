@@ -227,23 +227,24 @@ namespace phasereditor2d.scene {
 
         private _userPropertyTypeList: Array<ui.sceneobjects.UserPropertyType<any>>;
 
-        getUserPropertyTypes() {
+        createUserPropertyTypes() {
 
             if (!this._userPropertyTypeList) {
 
                 // TODO: we should do this via extension point.
                 this._userPropertyTypeList = [
                     new ui.sceneobjects.NumberPropertyType(),
-                    new ui.sceneobjects.StringPropertyType()
+                    new ui.sceneobjects.StringPropertyType(),
+                    new ui.sceneobjects.OptionPropertyType()
                 ];
             }
 
             return this._userPropertyTypeList;
         }
 
-        getUserPropertyType(typeId: string) {
+        createUserPropertyType(typeId: string) {
 
-            return this.getUserPropertyTypes().find(t => t.getId() === typeId);
+            return this.createUserPropertyTypes().find(t => t.getId() === typeId);
         }
 
         getSceneFinder() {
