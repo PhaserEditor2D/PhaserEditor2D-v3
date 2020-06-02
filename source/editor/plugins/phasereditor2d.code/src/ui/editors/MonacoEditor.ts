@@ -280,9 +280,14 @@ namespace phasereditor2d.code.ui.editors {
                 }
             }
 
-            const str = await colibri.ui.ide.FileUtils.preloadAndGetFileString(this.getInput());
+            const model = this.getModel();
 
-            this.getModel().setValue(str);
+            if (model) {
+
+                const str = await colibri.ui.ide.FileUtils.preloadAndGetFileString(this.getInput());
+
+                model.setValue(str);
+            }
         }
     }
 }
