@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
+    import code = core.code;
 
     export class OptionPropertyType extends UserPropertyType<string> {
 
@@ -10,6 +11,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super("option", "");
 
             this._options = [];
+        }
+
+        buildCode(prop: UserProperty, value: string): code.MemberDeclCodeDOM[] {
+
+            const decl = this.buildStringFieldCode(prop, value);
+
+            const typeName = this._options.map(opt => code.CodeDOM.quote(opt)).join("|");
+
+            decl.setType(typeName);
+
+            return [decl];
         }
 
         getOptions() {

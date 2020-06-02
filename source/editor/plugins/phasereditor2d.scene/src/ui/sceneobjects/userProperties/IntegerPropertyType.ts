@@ -2,6 +2,8 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import code = core.code;
+
     export class IntegerPropertyType extends NumberPropertyType {
 
         getName() {
@@ -12,6 +14,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         renderValue(value: number) {
 
             return Math.floor(value).toString();
+        }
+
+        buildCode(prop: UserProperty, value: number): code.MemberDeclCodeDOM[] {
+
+            return [this.buildNumberFieldCode(prop, value)];
         }
 
         createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor {

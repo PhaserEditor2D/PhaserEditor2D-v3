@@ -1,9 +1,16 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import code = core.code;
+
     export class StringPropertyType extends UserPropertyType<string> {
 
         constructor() {
             super("string", "");
+        }
+
+        buildCode(prop: UserProperty, value: string): code.MemberDeclCodeDOM[] {
+
+            return [this.buildStringFieldCode(prop, value)];
         }
 
         getName() {
@@ -37,5 +44,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 update
             };
         }
+
     }
 }

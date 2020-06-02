@@ -61,6 +61,8 @@ namespace phasereditor2d.scene.core.code {
                 this.generateMemberDecl(memberDecl);
             }
 
+            this.line();
+
             this.section("/* START-USER-CODE */", "\t/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n");
 
             this.closeIndent("}");
@@ -84,8 +86,16 @@ namespace phasereditor2d.scene.core.code {
 
         protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM) {
 
-            // this.line(`/** @type {${fieldDecl.getType()}} */`);
-            // this.line(fieldDecl.getName() + ";");
+            this.line(`/** @type {${fieldDecl.getType()}} */`);
+
+            if (fieldDecl.isInitialized()) {
+
+                this.line(fieldDecl.getName() + " = " + fieldDecl.getInitialValueExpr() + ";");
+
+            } else {
+
+                this.line(fieldDecl.getName() + ";");
+            }
 
             // this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
             // this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);

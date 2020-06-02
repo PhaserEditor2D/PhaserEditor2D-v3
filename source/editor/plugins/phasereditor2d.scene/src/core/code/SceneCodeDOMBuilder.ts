@@ -104,6 +104,11 @@ namespace phasereditor2d.scene.core.code {
                 this.buildObjectClassFields(fields, this._scene.getDisplayListChildren());
                 this.buildListClassFields(fields);
 
+                if (this._isPrefabScene) {
+
+                    this.buildPrefabPropertiesFields(fields);
+                }
+
                 clsDecl.getBody().push(...methods);
                 clsDecl.getBody().push(...fields);
 
@@ -111,6 +116,17 @@ namespace phasereditor2d.scene.core.code {
             }
 
             return unit;
+        }
+
+        buildPrefabPropertiesFields(fields: MemberDeclCodeDOM[]) {
+
+            const decls = this._scene.getPrefabUserProperties()
+
+                .getProperties()
+
+                .flatMap(prop => prop.buildDeclarationsCode());
+
+            fields.push(...decls);
         }
 
         private buildListClassFields(fields: MemberDeclCodeDOM[]) {

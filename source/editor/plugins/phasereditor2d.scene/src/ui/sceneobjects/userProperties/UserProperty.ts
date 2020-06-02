@@ -21,12 +21,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getType() {
-            
+
             return this._info.type;
         }
 
         getInfo() {
             return this._info;
+        }
+
+        getName() {
+            return
         }
 
         writeJSON(data: any) {
@@ -36,6 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             data.tooltip = this._info.tooltip;
             data.defValue = this._info.defValue;
             data.type = {};
+
             this._info.type.writeJSON(data.type);
         }
 
@@ -53,6 +58,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 defValue: data.defValue,
                 type: propType
             };
+        }
+
+        buildDeclarationsCode() {
+
+            return this.getType().buildCode(this, this._info.defValue);
         }
     }
 }

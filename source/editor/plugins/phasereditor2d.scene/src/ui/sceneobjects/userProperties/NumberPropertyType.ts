@@ -2,6 +2,8 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import code = core.code;
+
     export class NumberPropertyType extends UserPropertyType<number> {
 
         constructor() {
@@ -11,6 +13,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getName() {
 
             return "Number";
+        }
+
+        buildCode(prop: UserProperty, value: number): code.MemberDeclCodeDOM[] {
+
+            return [this.buildNumberFieldCode(prop, value)];
         }
 
         renderValue(value: number): string {
