@@ -47,6 +47,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract buildCode(prop: UserProperty, value: TValue): code.MemberDeclCodeDOM[];
 
+        abstract createInspectorPropertyEditor(
+            section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void;
+
         protected buildStringFieldCode(prop: UserProperty, value: string) {
 
             const decl = new code.FieldDeclCodeDOM(prop.getInfo().name, "string", true);

@@ -13,6 +13,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._options = [];
         }
 
+        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void {
+
+            const prop = userProp.asComponentProperty() as OptionUserPropertyWrapper;
+
+            section.createPropertyEnumRow(parent, prop as IEnumProperty<any, any>);
+        }
+
         buildCode(prop: UserProperty, value: string): code.MemberDeclCodeDOM[] {
 
             const decl = this.buildStringFieldCode(prop, value);

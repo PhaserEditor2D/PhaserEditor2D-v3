@@ -10,6 +10,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super("number", 0);
         }
 
+        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void {
+
+            section.createPropertyFloatRow(parent, userProp.asComponentProperty());
+        }
+
         getName() {
 
             return "Number";

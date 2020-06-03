@@ -185,7 +185,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: core.json.Serializer) {
 
-            for (const prop of this._properties) {
+            for (const prop of this.getProperties()) {
 
                 if (prop.local) {
 
@@ -200,7 +200,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(ser: core.json.Serializer) {
 
-            for (const prop of this._properties) {
+            for (const prop of this.getProperties()) {
 
                 if (prop.local) {
 

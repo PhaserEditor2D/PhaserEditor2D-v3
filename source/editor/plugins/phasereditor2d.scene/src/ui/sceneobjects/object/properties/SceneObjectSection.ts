@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
 
-        protected createGridElementWithPropertiesXY(parent: HTMLElement) {
+        createGridElementWithPropertiesXY(parent: HTMLElement) {
 
             const comp = this.createGridElement(parent);
 
@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-        protected createGridElementWithPropertiesBoolXY(parent: HTMLElement) {
+        createGridElementWithPropertiesBoolXY(parent: HTMLElement) {
 
             const comp = this.createGridElement(parent);
 
@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-        protected createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>) {
+        createLock(parent: HTMLElement, ...properties: Array<IProperty<T>>) {
 
             const mutableIcon = new controls.IconControl();
 
@@ -64,7 +64,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        protected isUnlocked(...properties: Array<IProperty<T>>) {
+        isUnlocked(...properties: Array<IProperty<T>>) {
 
             for (const obj of this.getSelection()) {
 
@@ -82,7 +82,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return true;
         }
 
-        protected createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth = true) {
+        createNumberPropertyRow(parent: HTMLElement, prop: IProperty<any>, fullWidth = true) {
 
             this.createLock(parent, prop);
 
@@ -93,7 +93,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .style.gridColumn = fullWidth ? "4 / span 3" : "4";
         }
 
-        protected createNumberProperty(parent: HTMLElement, prop: IProperty<any>) {
+        createNumberProperty(parent: HTMLElement, prop: IProperty<any>) {
 
             this.createLock(parent, prop);
 
@@ -102,14 +102,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createFloatField(parent, prop);
         }
 
-        protected createBooleanProperty(parent: HTMLElement, prop: IProperty<any>) {
+        createBooleanProperty(parent: HTMLElement, prop: IProperty<any>) {
 
             this.createLock(parent, prop);
 
             this.createBooleanField(parent, prop);
         }
 
-        protected createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
+        createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
 
             if (lockIcon) {
 
@@ -128,7 +128,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected createPropertyFloatRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
+        createPropertyFloatRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
 
             if (lockIcon) {
 
@@ -143,7 +143,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        protected createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
+        createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
 
             if (lockIcon) {
 
@@ -158,7 +158,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        protected createPropertyColorRow(parent: HTMLElement, prop: IProperty<any>, allowAlpha = true, lockIcon: boolean = true) {
+        createPropertyColorRow(parent: HTMLElement, prop: IProperty<any>, allowAlpha = true, lockIcon: boolean = true) {
 
             if (lockIcon) {
 
@@ -173,7 +173,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        protected createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon: boolean = true) {
+        createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon: boolean = true) {
 
             if (lockIcon) {
 
@@ -188,7 +188,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return btn;
         }
 
-        protected createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
+        createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
 
             if (lockIcon) {
 

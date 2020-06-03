@@ -39,6 +39,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(Phaser.Utils.String.UUID());
 
             this.addComponent(new VariableComponent(this._object));
+            this.addComponent(new UserPropertyComponent(this._object));
 
             this.setInteractive();
 
@@ -223,6 +224,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const support = obj["getEditorSupport"]() as EditorSupport<any>;
 
                 return support.getComponent(ctr) ?? null;
+            }
+
+            return null;
+        }
+
+        static hasEditorSupport(obj: any) {
+
+            return obj && typeof obj["getEditorSupport"] === "function";
+        }
+
+        static getEditorSupport(obj: any) {
+
+            if (this.hasEditorSupport(obj)) {
+
+                return obj["getEditorSupport"]() as EditorSupport<any>;
             }
 
             return null;

@@ -14,10 +14,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class UserProperty {
 
         private _info: IUserPropertyInfo;
+        private _componentProperty: UserPropertyWrapper;
 
         constructor(info?: IUserPropertyInfo) {
 
             this._info = info;
+        }
+
+        asComponentProperty(): UserPropertyWrapper {
+
+            if (!this._componentProperty) {
+
+                if (this.getType() instanceof OptionPropertyType) {
+
+                    this._componentProperty = new OptionUserPropertyWrapper(this);
+
+                } else {
+
+                    this._componentProperty = new UserPropertyWrapper(this);
+                }
+            }
+
+            return this._componentProperty;
         }
 
         getType() {
@@ -26,11 +44,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getInfo() {
+
             return this._info;
         }
 
         getName() {
-            return
+
+            return this._info.name;
+        }
+
+        getLabel() {
+
+            return this._info.label;
+        }
+
+        getTooltip() {
+
+            return this._info.tooltip;
+        }
+
+        getDefaultValue() {
+
+            return this._info.defValue;
         }
 
         writeJSON(data: any) {
