@@ -155,6 +155,7 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.GameObjectVariableSection(page),
+                page => new ui.sceneobjects.PrefabInstanceUserPropertySection(page),
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ParentSection(page),
@@ -170,7 +171,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TextContentSection(page),
                 page => new ui.sceneobjects.TextSection(page),
                 page => new ui.sceneobjects.BitmapTextSection(page),
-                page => new ui.sceneobjects.ListSection(page),
+                page => new ui.sceneobjects.ListSection(page)
             ));
 
             // scene tools
@@ -225,21 +226,14 @@ namespace phasereditor2d.scene {
                 core.json.SourceLang.TYPE_SCRIPT : core.json.SourceLang.JAVA_SCRIPT;
         }
 
-        private _userPropertyTypeList: Array<ui.sceneobjects.UserPropertyType<any>>;
-
         createUserPropertyTypes() {
 
-            if (!this._userPropertyTypeList) {
-
-                // TODO: we should do this via extension point.
-                this._userPropertyTypeList = [
-                    new ui.sceneobjects.NumberPropertyType(),
-                    new ui.sceneobjects.StringPropertyType(),
-                    new ui.sceneobjects.OptionPropertyType()
-                ];
-            }
-
-            return this._userPropertyTypeList;
+            // TODO: we should do this via extension
+            return [
+                new ui.sceneobjects.NumberPropertyType(),
+                new ui.sceneobjects.StringPropertyType(),
+                new ui.sceneobjects.OptionPropertyType()
+            ];
         }
 
         createUserPropertyType(typeId: string) {

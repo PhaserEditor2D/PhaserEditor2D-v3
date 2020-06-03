@@ -16,7 +16,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
-
             comp.style.gridTemplateColumns = "1fr";
 
             this._propArea = this.createGridElement(comp, 2);
@@ -26,12 +25,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const btn = this.createMenuButton(comp, "Add Property", propTypes.map(t => ({
                 name: t.getName() + " Property",
-                value: t
-            })), value => {
+                value: t.getId()
+            })), (typeId: string) => {
+
+                const newType = ScenePlugin.getInstance().createUserPropertyType(typeId);
 
                 this.runOperation(userProps => {
 
-                    userProps.add(userProps.createProperty(value));
+                    userProps.add(userProps.createProperty(newType));
                 });
             });
 
