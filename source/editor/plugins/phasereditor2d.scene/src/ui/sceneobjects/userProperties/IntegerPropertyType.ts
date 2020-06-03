@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return Math.floor(value).toString();
         }
 
-        buildCode(prop: UserProperty, value: number): code.MemberDeclCodeDOM[] {
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: number): code.MemberDeclCodeDOM[] {
 
             return [this.buildNumberFieldCode(prop, value)];
         }

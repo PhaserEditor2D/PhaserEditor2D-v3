@@ -73,13 +73,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 .flatMap(data => data.properties)
 
-                .map(userProp => userProp.asComponentProperty())
+                .map(userProp => userProp.getComponentProperty())
 
             return new Set(properties);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
-            // TODO
+
+            for (const prop of this.getProperties()) {
+
+                const userProp = prop.getUserProperty();
+
+                userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
+            }
         }
     }
 }

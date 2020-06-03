@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._info = info;
         }
 
-        asComponentProperty(): UserPropertyWrapper {
+        getComponentProperty(): UserPropertyWrapper {
 
             if (!this._componentProperty) {
 
@@ -97,7 +97,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildDeclarationsCode() {
 
-            return this.getType().buildCode(this, this._info.defValue);
+            return this.getType().buildDeclarePropertyCodeDOM(this, this._info.defValue);
         }
     }
 }

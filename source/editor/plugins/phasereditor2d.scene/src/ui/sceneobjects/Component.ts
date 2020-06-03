@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected buildSetObjectPropertyCodeDOM_String(
+        buildSetObjectPropertyCodeDOM_String(
             fieldName: string, value: string, defValue: string, args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
@@ -87,7 +87,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected buildSetObjectPropertyCodeDOM_StringProperty(
+        buildSetObjectPropertyCodeDOM_StringProperty(
 
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
 
@@ -102,7 +102,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected buildSetObjectPropertyCodeDOM_BooleanProperty(
+        buildSetObjectPropertyCodeDOM_BooleanProperty(
 
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
 
@@ -117,7 +117,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected buildSetObjectPropertyCodeDOM_Boolean(
+        buildSetObjectPropertyCodeDOM_Boolean(
             fieldName: string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
@@ -139,7 +139,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected buildSetObjectPropertyCodeDOM_FloatProperty(
+        buildSetObjectPropertyCodeDOM_FloatProperty(
 
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
 
@@ -154,7 +154,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected buildSetObjectPropertyCodeDOM_Float(
+        buildSetObjectPropertyCodeDOM_Float(
             fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);

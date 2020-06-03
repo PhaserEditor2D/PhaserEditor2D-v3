@@ -16,7 +16,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getValue(obj: ISceneObject) {
 
-            return this.getComponent(obj).getPropertyValue(this._userProp);
+            const comp = this.getComponent(obj);
+
+            if (comp.isPropertySet(this._userProp)) {
+
+                return this.getComponent(obj).getPropertyValue(this._userProp);
+            }
+
+            return this._userProp.getDefaultValue();
         }
 
         setValue(obj: ISceneObject, value: any): void {

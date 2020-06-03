@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void {
 
-            section.createPropertyFloatRow(parent, userProp.asComponentProperty());
+            section.createPropertyFloatRow(parent, userProp.getComponentProperty());
         }
 
         getName() {
@@ -20,7 +20,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "Number";
         }
 
-        buildCode(prop: UserProperty, value: number): code.MemberDeclCodeDOM[] {
+        buildSetObjectPropertyCodeDOM(
+            comp: UserPropertyComponent, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
+
+            comp.buildSetObjectPropertyCodeDOM_FloatProperty(args, userProp.getComponentProperty());
+        }
+
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: number): code.MemberDeclCodeDOM[] {
 
             return [this.buildNumberFieldCode(prop, value)];
         }
