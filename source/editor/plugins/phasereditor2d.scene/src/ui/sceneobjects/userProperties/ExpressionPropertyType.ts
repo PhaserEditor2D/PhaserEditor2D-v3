@@ -19,6 +19,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._expressionType;
         }
 
+        setExpressionType(expressionType: string) {
+
+            this._expressionType = expressionType;
+        }
+
+        writeJSON(data: any) {
+
+            super.writeJSON(data);
+
+            data.expressionType = this._expressionType;
+        }
+
+        readJSON(data: any) {
+
+            super.readJSON(data);
+
+            this._expressionType = data.expressionType || "any";
+        }
+
         getName() {
 
             return "Expression";

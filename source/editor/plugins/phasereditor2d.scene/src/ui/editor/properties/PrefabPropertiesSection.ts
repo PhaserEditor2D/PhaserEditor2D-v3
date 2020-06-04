@@ -66,6 +66,15 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         this.createOptionsField(prop);
                     }
 
+                    if (prop.getType() instanceof sceneobjects.OptionPropertyType) {
+
+                        this.createOptionsField(prop);
+
+                    } else if (prop.getType() instanceof sceneobjects.ExpressionPropertyType) {
+
+                        this.createExpressionTypeField(prop);
+                    }
+
                     {
                         this.createLabel(this._propArea, "Default", "The property default value.");
 
@@ -110,6 +119,27 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         this._propArea.appendChild(sep);
                     }
                 }
+            });
+        }
+
+        private createExpressionTypeField(prop: sceneobjects.UserProperty) {
+
+            const type = prop.getType() as sceneobjects.ExpressionPropertyType;
+
+            this.createLabel(
+                this._propArea, "Expression Type", "The type of the expression. Like <code>'ICustomType'</code> or <code>'() => void'</code>.");
+
+            const text = this.createText(this._propArea);
+
+            text.value = type.getExpressionType();
+
+            text.addEventListener("change", e => {
+
+                this.runOperation(() => {
+
+                    type.setExpressionType(text.value);
+
+                }, true);
             });
         }
 
