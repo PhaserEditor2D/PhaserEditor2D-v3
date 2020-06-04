@@ -54,6 +54,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 update
             };
         }
-
     }
 }

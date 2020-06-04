@@ -232,7 +232,8 @@ namespace phasereditor2d.scene {
             return [
                 new ui.sceneobjects.NumberPropertyType(),
                 new ui.sceneobjects.StringPropertyType(),
-                new ui.sceneobjects.OptionPropertyType()
+                new ui.sceneobjects.ExpressionPropertyType(),
+                new ui.sceneobjects.OptionPropertyType(),
             ];
         }
 

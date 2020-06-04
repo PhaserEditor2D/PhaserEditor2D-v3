@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertyCodeDOM_String(
-            fieldName: string, value: string, defValue: string, args: ISetObjectPropertiesCodeDOMArgs): void {
+            fieldName: string, value: string, defValue: string, args: ISetObjectPropertiesCodeDOMArgs, verbatim = false): void {
 
             const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
             let add = false;
@@ -82,7 +82,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (add) {
 
-                dom.valueLiteral(value);
+                if (verbatim) {
+
+                    dom.value(value);
+
+                } else {
+
+                    dom.valueLiteral(value);
+                }
+
                 args.result.push(dom);
             }
         }
@@ -98,6 +106,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args
+                );
+            }
+        }
+
+        buildSetObjectPropertyCodeDOM_StringVerbatimProperty(
+
+            args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
+
+            for (const prop of properties) {
+
+                this.buildSetObjectPropertyCodeDOM_String(
+                    prop.name,
+                    prop.getValue(this.getObject()),
+                    prop.defValue,
+                    args,
+                    true
                 );
             }
         }
