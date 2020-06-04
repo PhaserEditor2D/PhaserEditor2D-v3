@@ -32,13 +32,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const propsByPrefabList = userPropsComponent.getPropertiesByPrefab();
 
-                for (const propsByPrefab of propsByPrefabList) { 
+                for (const propsByPrefab of propsByPrefabList) {
 
                     const prefabName = propsByPrefab.prefabFile.getNameWithoutExtension();
 
-                    const label = this.createLabel(this._propArea, prefabName);
-                    label.style.gridColumn = "1 / span 3";
-                    label.style.justifySelf = "self-start";
+                    const prefabBtn = document.createElement("a");
+                    prefabBtn.classList.add("PrefabLink");
+                    prefabBtn.href = "#";
+                    prefabBtn.innerHTML = prefabName;
+                    prefabBtn.style.gridColumn = "1 / span 3";
+                    prefabBtn.style.justifySelf = "self-start";
+                    prefabBtn.addEventListener("click", e => {
+
+                        colibri.Platform.getWorkbench().openEditor(propsByPrefab.prefabFile);
+                    });
+
+                    this._propArea.appendChild(prefabBtn);
 
                     for (const prop of propsByPrefab.properties) {
 

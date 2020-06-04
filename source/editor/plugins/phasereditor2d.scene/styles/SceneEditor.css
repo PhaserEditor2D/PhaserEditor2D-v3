@@ -15,17 +15,29 @@
     cursor: pointer;
 }
 
+#InspectorView .PrefabLink {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
 
-/* light */ 
+#InspectorView .PrefabLink:nth-child(1) {
+    margin-top: 0px;
+}
+
+/* light */
 
 .light .SceneEditor .SceneEditorContainer {
     background: #8e8e8e;
 }
 
+.light #InspectorView .PrefabLink {
+    color: #3f3f3f;
+}
+
 /* light blue */
 
-.lightBlue .SceneEditor .SceneEditorContainer {
-    background: slategray;
+.lightBlue #InspectorView .PrefabLink {
+    color: #3f3f3f;
 }
 
 /* dark */
@@ -40,4 +52,3 @@
 .darkPlus .SceneEditor {
     padding: 0px !important;
 }
-
