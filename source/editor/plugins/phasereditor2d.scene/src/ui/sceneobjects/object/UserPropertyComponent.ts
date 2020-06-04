@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import io = colibri.core.io;
+
     export interface IUserPropertiesInObject {
 
         prefabFile: colibri.core.io.FilePath;
@@ -48,23 +50,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const prefabFile = this.getObject().getEditorSupport().getPrefabFile();
 
-                const finder = ScenePlugin.getInstance().getSceneFinder();
+                if (prefabFile) {
 
-                const sceneData = finder.getSceneData(prefabFile);
-
-                const userProps = new UserProperties();
-
-                userProps.readJSON(sceneData.prefabProperties || []);
-
-                const properties = userProps.getProperties();
-
-                propertiesInObject.push({
-                    prefabFile,
-                    properties
-                });
+                    this.getPrefabProperties(propertiesInObject, prefabFile);
+                }
             }
 
             return propertiesInObject;
+        }
+
+        private getPrefabProperties(propertiesInObject: IUserPropertiesInObject[], prefabFile: io.FilePath) {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const sceneData = finder.getSceneData(prefabFile);
+
+            if (sceneData.sceneType === core.json.SceneType.PREFAB) {
+
+                if (sceneData.displayList.length > 0) {
+
+                    const objData = sceneData.displayList[sceneData.displayList.length - 1] as core.json.IObjectData;
+
+                    if (objData.prefabId) {
+
+                        const prefabFile2 = finder.getPrefabFile(objData.prefabId);
+
+                        if (prefabFile2) {
+
+                            this.getPrefabProperties(propertiesInObject, prefabFile2);
+                        }
+                    }
+                }
+            }
+
+            const userProps = new UserProperties();
+
+            userProps.readJSON(sceneData.prefabProperties || []);
+
+            const properties = userProps.getProperties();
+
+            propertiesInObject.push({
+                prefabFile,
+                properties
+            });
         }
 
         getProperties() {

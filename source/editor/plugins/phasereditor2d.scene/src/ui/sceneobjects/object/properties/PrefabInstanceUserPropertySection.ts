@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const propsByPrefabList = userPropsComponent.getPropertiesByPrefab();
 
-                for (const propsByPrefab of propsByPrefabList) {
+                for (const propsByPrefab of propsByPrefabList) { 
 
                     const prefabName = propsByPrefab.prefabFile.getNameWithoutExtension();
 
