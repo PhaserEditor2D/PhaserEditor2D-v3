@@ -10,7 +10,14 @@ namespace phasereditor2d.scene.core.code {
 
             const mod = fieldDecl.isPublic() ? "public" : "private";
 
-            this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()};`);
+            if (fieldDecl.isInitialized()) {
+
+                this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()} = ${fieldDecl.getInitialValueExpr()};`);
+
+            } else {
+
+                this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()};`);
+            }
 
             this.line();
         }
