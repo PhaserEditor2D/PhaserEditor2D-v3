@@ -9,6 +9,7 @@ namespace colibri.ui.controls {
         constructor() {
 
             this._iconControl = new controls.IconControl();
+            this._iconControl.getCanvas().classList.add("TabPaneLabelCloseIcon");
 
             this._iconControl.getCanvas().addEventListener("mouseenter", e => {
 
