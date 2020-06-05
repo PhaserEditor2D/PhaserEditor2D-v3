@@ -2,13 +2,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class PrefabInstanceUserPropertySection extends SceneObjectSection<ISceneObject> {
+    export class PrefabInstanceSection extends SceneObjectSection<ISceneObject> {
 
         private _propArea: HTMLDivElement;
 
         constructor(page: controls.properties.PropertyPage) {
             super(page,
-                "phasereditor2d.scene.ui.sceneobjects.PrefabInstanceUserPropertySection", "Prefab Instance User Properties");
+                "phasereditor2d.scene.ui.sceneobjects.PrefabInstanceUserPropertySection", "Prefab Instance");
         }
 
         protected createForm(parent: HTMLDivElement) {
@@ -78,13 +78,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 if (support.isPrefabInstance()) {
 
                     const prefabFile = support.getPrefabFile();
-
-                    const sceneData = ScenePlugin.getInstance().getSceneFinder().getSceneData(prefabFile);
-
-                    if (!sceneData.prefabProperties || sceneData.prefabProperties.length === 0) {
-                        // don't accept prefab instances without any user property.
-                        return false;
-                    }
 
                     for (const obj2 of this.getSelection()) {
 
