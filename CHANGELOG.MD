@@ -26,6 +26,7 @@
 * [#32](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/32) The server checks if there is a new version available. 
 * Monaco (code) editor updates content with external changes only if the flag `-enable-advanced-js-editor` is set. Now it updates always.
 * [#37](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/37) TypeScript project template opens the README file the first time, with the instructions to run the project. 
+* Scene Editor: does not compile a scene if the output file is open in a dirty (unsaved) editor.
 
 ## Version 3.1.0 - May 24, 2020
 
