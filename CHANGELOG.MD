@@ -16,6 +16,7 @@
 * Don't activate the editor when clicking on the close button.
 * Image Editor: registers the right content type association.
 * Monaco editor: on a model change, if the model content is the same of the file content then the editor is not marked as dirty (unsaved).
+* Scene Editor: fixes the type inference of an empty Object List.
 
 ## Version 3.1.1 - May 25, 2020
 
