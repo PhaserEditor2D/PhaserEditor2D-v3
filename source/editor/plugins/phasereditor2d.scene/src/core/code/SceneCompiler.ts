@@ -14,6 +14,20 @@ namespace phasereditor2d.scene.core.code {
             this._sceneFile = sceneFile;
         }
 
+        getOutputFile() {
+
+            const settings = this._scene.getSettings();
+
+            const compileToJS = settings.compilerOutputLanguage === json.SourceLang.JAVA_SCRIPT;
+
+            const fileExt = compileToJS ? "js" : "ts";
+            const fileName = this._sceneFile.getNameWithoutExtension() + "." + fileExt;
+
+            const outputFile = this._sceneFile.getSibling(fileName);
+
+            return outputFile;
+        }
+
         async compile() {
 
             const settings = this._scene.getSettings();

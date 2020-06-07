@@ -540,6 +540,11 @@ namespace colibri.ui.ide {
             return this.getActiveWindow().getEditorArea().getEditors();
         }
 
+        getOpenEditorsWithInput(input: ui.ide.IEditorInput) {
+
+            return this.getEditors().filter(editor => editor.getInput() === input);
+        }
+
         createEditor(input: IEditorInput): EditorPart {
 
             const editorArea = this.getActiveWindow().getEditorArea();

@@ -116,6 +116,22 @@ namespace phasereditor2d.scene.ui.editor {
 
             const compiler = new core.code.SceneCompiler(this._scene, this.getInput());
 
+            const outputFile = compiler.getOutputFile();
+
+            const dirtyEditors = colibri.Platform.getWorkbench()
+
+                .getOpenEditorsWithInput(outputFile)
+
+                .filter(editor => editor.isDirty());
+
+            if (dirtyEditors.length > 0) {
+
+                alert("Cannot overwrite the '" + outputFile.getName() + "' file, it is open in a dirty editor.");
+
+                return;
+            }
+
+
             await compiler.compile();
         }
 
