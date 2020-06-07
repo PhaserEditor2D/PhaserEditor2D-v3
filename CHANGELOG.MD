@@ -7,6 +7,10 @@
 * [#32](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/32) In-App update. With `PhaserEditor2D -update` the server downloads the latest version and replace the old files with the new files. With `PhaserEditor2D -download`, the server downloads the latest version zip, and you can install it manually.
 * Prefab user properties. You can add user properties to prefabs and change the values in the prefab instances.
 
+## Modified
+
+* Files view: the context menu **New** option does not open the **New File** dialog. Now it is a sub-menu with the shortcuts to create a new file of any supported content type.
+
 ## Fixed
 
 * Don't activate the editor when clicking on the close button.
