@@ -28,7 +28,9 @@ namespace phasereditor2d.files.ui.views {
 
             const sel = this._viewer.getSelection();
 
-            menu.add(new actions.NewFileAction(this));
+            //  menu.add(new actions.NewFileAction(this));
+
+            menu.addMenu(this.createNewFileMenu());
 
             menu.addSeparator();
 
@@ -47,6 +49,40 @@ namespace phasereditor2d.files.ui.views {
             menu.addSeparator();
 
             menu.add(new actions.UploadFilesAction(this));
+        }
+
+        private createNewFileMenu() {
+
+            const menu = new controls.Menu("New...");
+
+            const extensions = colibri.Platform.getExtensionRegistry()
+                .getExtensions<dialogs.NewDialogExtension>(files.ui.dialogs.NewDialogExtension.POINT_ID);
+
+            for (const ext of extensions) {
+
+                menu.add(new controls.Action({
+                    text: ext.getDialogName(),
+                    icon: ext.getDialogIcon(),
+                    callback: () => {
+
+                        const sel = this.getViewer().getSelectionFirstElement();
+                        let loc = sel ? sel as io.FilePath : colibri.Platform.getWorkbench().getProjectRoot();
+
+                        if (loc.isFile()) {
+
+                            loc = loc.getParent();
+                        }
+
+                        const dlg = ext.createDialog({
+                            initialFileLocation: loc
+                        });
+
+                        dlg.setTitle(`New ${ext.getDialogName()}`);
+                    }
+                }));
+            }
+
+            return menu;
         }
 
         getPropertyProvider() {
