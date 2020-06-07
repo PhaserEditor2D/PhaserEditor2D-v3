@@ -202,8 +202,11 @@ namespace phasereditor2d.code.ui.editors {
 
             // dirty
 
-            this._onDidChangeContentListener = this._model.onDidChangeContent(e => {
-                this.setDirty(true);
+            this._onDidChangeContentListener = this._model.onDidChangeContent(async(e) => {
+
+                const content = await colibri.ui.ide.FileUtils.getFileString(this.getInput());
+
+                this.setDirty(content !== this._model.getValue());
             });
 
             // refresh outline
