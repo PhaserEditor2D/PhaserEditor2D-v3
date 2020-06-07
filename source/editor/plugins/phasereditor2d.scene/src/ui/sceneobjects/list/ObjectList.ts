@@ -71,7 +71,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             let listType = [...types].join("|");
 
-            if (types.size === 1) {
+            if (types.size === 0) {
+
+                listType = "Array";
+
+            } else if (types.size === 1) {
 
                 listType = listType + "[]";
 
