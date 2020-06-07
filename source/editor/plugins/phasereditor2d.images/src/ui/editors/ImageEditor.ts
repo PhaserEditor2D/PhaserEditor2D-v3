@@ -18,7 +18,7 @@ namespace phasereditor2d.images.ui.editors {
 
             return this._factory
                 || (this._factory = new ide.ContentTypeEditorFactory(
-                    webContentTypes.ICON_FILE_IMAGE, () => new ImageEditor()));
+                    webContentTypes.core.CONTENT_TYPE_IMAGE, () => new ImageEditor()));
         }
 
         protected onEditorInputContentChanged() {
