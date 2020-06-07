@@ -64,11 +64,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     if (prop.getType() instanceof sceneobjects.OptionPropertyType) {
 
                         this.createOptionsField(prop);
-                    }
-
-                    if (prop.getType() instanceof sceneobjects.OptionPropertyType) {
-
-                        this.createOptionsField(prop);
 
                     } else if (prop.getType() instanceof sceneobjects.ExpressionPropertyType) {
 
