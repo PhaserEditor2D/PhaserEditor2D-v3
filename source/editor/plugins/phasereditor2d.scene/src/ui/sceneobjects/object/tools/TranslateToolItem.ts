@@ -74,7 +74,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     spriteLocalPosition2 = spriteWorldPosition2;
                 }
 
-                sprite.setPosition(spriteLocalPosition2.x, spriteLocalPosition2.y);
+                sprite.setPosition(Math.round(spriteLocalPosition2.x), Math.round(spriteLocalPosition2.y));
             }
 
             args.editor.dispatchSelectionChanged();
