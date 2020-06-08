@@ -83,7 +83,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const initAngle = sprite.getData("AngleToolItem.initAngle") as number;
                 const deltaAngle = Phaser.Math.RadToDeg(deltaRadians);
-                sprite.angle = initAngle + deltaAngle;
+                sprite.angle = Math.round(initAngle + deltaAngle);
             }
 
             args.editor.dispatchSelectionChanged();
