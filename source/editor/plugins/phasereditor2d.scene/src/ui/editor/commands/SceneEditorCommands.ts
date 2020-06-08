@@ -594,9 +594,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         });
 
-                        ext.createDialog({
+                        const dlg = ext.createDialog({
                             initialFileLocation: (args.activeEditor.getInput() as io.FilePath).getParent()
                         });
+
+                        dlg.setTitle("New Prefab File");
                     }
                 }
             });
