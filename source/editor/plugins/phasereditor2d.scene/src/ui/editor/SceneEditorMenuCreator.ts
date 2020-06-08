@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.editor {
 
     import controls = colibri.ui.controls;
 
-    export class MenuCreator {
+    export class SceneEditorMenuCreator {
 
         private _editor: SceneEditor;
 
@@ -20,6 +20,8 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createCoordsMenu());
 
             menu.addSeparator();
+
+            menu.addMenu(this.createPrefabMenu());
 
             menu.addMenu(this.createTypeMenu());
 
@@ -128,11 +130,20 @@ namespace phasereditor2d.scene.ui.editor {
             return menu;
         }
 
+        private createPrefabMenu() {
+
+            const menu = new controls.Menu("Prefab");
+
+            menu.addCommand(commands.CMD_OPEN_PREFAB);
+            menu.addCommand(commands.CMD_CREATE_PREFAB_WITH_OBJECT);
+
+            return menu;
+        }
+
         private createTypeMenu(): controls.Menu {
 
             const menu = new controls.Menu("Type");
 
-            menu.addCommand(commands.CMD_OPEN_PREFAB);
             menu.addCommand(commands.CMD_CONVERT_OBJECTS);
             menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
 

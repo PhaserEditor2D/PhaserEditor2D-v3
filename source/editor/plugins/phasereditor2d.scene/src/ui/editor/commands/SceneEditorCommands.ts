@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.editor.commands {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
@@ -24,6 +25,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
     export const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
     export const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
+    export const CMD_CREATE_PREFAB_WITH_OBJECT = "phasereditor2d.scene.ui.editor.commands.CreatePrefabWithObject";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -536,6 +538,66 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "F"
+                }
+            });
+
+            // create prefab
+
+            manager.add({
+                command: {
+                    id: CMD_CREATE_PREFAB_WITH_OBJECT,
+                    name: "Create Prefab With Object",
+                    tooltip: "Create a new prefab file with the selected object.",
+                    category: CAT_SCENE_EDITOR,
+                },
+                handler: {
+                    testFunc: args => {
+
+                        if (!isSceneScope(args)) {
+
+                            return false;
+                        }
+
+                        const sel = args.activeEditor.getSelection();
+
+                        if (sel.length !== 1) {
+
+                            return false;
+                        }
+
+                        const obj = sel[0];
+
+                        return obj instanceof Phaser.GameObjects.GameObject;
+                    },
+                    executeFunc: args => {
+
+                        const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneObject;
+
+                        const objData: core.json.IObjectData = {} as any;
+
+                        obj.getEditorSupport().writeJSON(objData);
+
+                        objData.id = Phaser.Utils.String.UUID();
+
+                        const ext = new dialogs.NewPrefabFileFromObjectDialogExtension(objData);
+
+                        ext.setOpenInEditor(false);
+                        ext.setCreatedCallback(newFile => {
+
+                            const editor = args.activeEditor as SceneEditor;
+
+                            editor.getUndoManager().add(
+                                new undo.ConvertTypeOperation(
+                                    editor, newFile, null));
+
+                            editor.refreshBlocks();
+
+                        });
+
+                        ext.createDialog({
+                            initialFileLocation: (args.activeEditor.getInput() as io.FilePath).getParent()
+                        });
+                    }
                 }
             });
         }

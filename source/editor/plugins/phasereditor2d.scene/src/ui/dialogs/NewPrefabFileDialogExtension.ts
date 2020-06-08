@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
     export class NewPrefabFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
 
-        getCreateFileContentFunc() {
+        protected getCreatePrefabFileContentFunc(displayList: core.json.IObjectData[]) {
 
             return (args: files.ui.dialogs.ICreateFileContentArgs) => {
 
@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.dialogs {
                         compilerOutputLanguage: ScenePlugin.getInstance().getDefaultSceneLanguage()
                     },
                     sceneType: core.json.SceneType.PREFAB,
-                    displayList: [],
+                    displayList,
                     meta: {
                         app: "Phaser Editor 2D - Scene Editor",
                         url: "https://phasereditor2d.com",
@@ -24,6 +24,11 @@ namespace phasereditor2d.scene.ui.dialogs {
 
                 return JSON.stringify(sceneData, null, 4);
             };
+        }
+
+        getCreateFileContentFunc() {
+
+            return this.getCreatePrefabFileContentFunc([]);
         }
 
         constructor() {

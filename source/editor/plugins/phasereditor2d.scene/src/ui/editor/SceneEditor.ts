@@ -343,7 +343,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         fillContextMenu(menu: controls.Menu) {
 
-            const creator = new MenuCreator(this);
+            const creator = new SceneEditorMenuCreator(this);
 
             creator.fillMenu(menu);
         }
@@ -623,6 +623,11 @@ namespace phasereditor2d.scene.ui.editor {
                     }
                 }
             }
+
+            await this.refreshBlocks();
+        }
+
+        async refreshBlocks() {
 
             if (this._blocksProvider) {
 
