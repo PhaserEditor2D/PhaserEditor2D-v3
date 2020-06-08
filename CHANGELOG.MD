@@ -11,6 +11,7 @@
 ## Modified
 
 * Files view: the context menu **New** option does not open the **New File** dialog. Now it is a sub-menu with the shortcuts to create a new file of any supported content type.
+* Scene Editor: the translate and rotate manipulators set integer values to objects.
 
 ## Fixed
 
