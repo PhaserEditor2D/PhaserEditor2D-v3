@@ -146,15 +146,20 @@ namespace colibri.ui.controls {
 
             } else {
 
-                if (this._layoutChildren) {
-
-                    for (const child of this._children) {
-                        child.layout();
-                    }
-                }
+                this.layoutChildren();
             }
 
             this.dispatchLayoutEvent();
+        }
+
+        protected layoutChildren() {
+
+            if (this._layoutChildren) {
+
+                for (const child of this._children) {
+                    child.layout();
+                }
+            }
         }
 
         dispatchLayoutEvent() {

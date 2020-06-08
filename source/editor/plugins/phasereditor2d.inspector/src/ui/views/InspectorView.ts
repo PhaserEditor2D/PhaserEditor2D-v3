@@ -43,6 +43,11 @@ namespace phasereditor2d.inspector.ui.views {
 
             const part = ide.Workbench.getWorkbench().getActivePart();
 
+            if (part instanceof ide.EditorPart && part.isEmbeddedMode()) {
+                // we don't want to link with embedded editors!
+                return;
+            }
+
             if (part !== this && part !== this._currentPart) {
 
                 if (this._currentPart) {

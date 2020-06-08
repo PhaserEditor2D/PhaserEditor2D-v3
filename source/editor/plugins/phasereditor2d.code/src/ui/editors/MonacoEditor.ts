@@ -202,37 +202,40 @@ namespace phasereditor2d.code.ui.editors {
 
             // dirty
 
-            this._onDidChangeContentListener = this._model.onDidChangeContent(async(e) => {
+            this._onDidChangeContentListener = this._model.onDidChangeContent(async (e) => {
 
                 const content = await colibri.ui.ide.FileUtils.getFileString(this.getInput());
 
                 this.setDirty(content !== this._model.getValue());
             });
 
-            // refresh outline
+            if (this.isInEditorArea()) {
 
-            this._modelLines = model.getLineCount();
+                // refresh outline
 
-            this._onDidChangeCountListener = model.onDidChangeContent(e => {
+                this._modelLines = model.getLineCount();
 
-                const count = model.getLineCount();
+                this._onDidChangeCountListener = model.onDidChangeContent(e => {
 
-                if (count !== this._modelLines) {
+                    const count = model.getLineCount();
 
-                    this.refreshOutline();
+                    if (count !== this._modelLines) {
 
-                    this._modelLines = count;
-                }
-            });
+                        this.refreshOutline();
 
-            // reveal in outline
+                        this._modelLines = count;
+                    }
+                });
 
-            this._editor.onDidChangeCursorPosition(e => {
+                // reveal in outline
 
-                const offset = this._model.getOffsetAt(e.position);
+                this._editor.onDidChangeCursorPosition(e => {
 
-                this._outlineProvider.revealOffset(offset);
-            });
+                    const offset = this._model.getOffsetAt(e.position);
+
+                    this._outlineProvider.revealOffset(offset);
+                });
+            }
         }
 
         protected removeModelListeners() {
@@ -240,6 +243,10 @@ namespace phasereditor2d.code.ui.editors {
             if (this._onDidChangeContentListener) {
 
                 this._onDidChangeContentListener.dispose();
+            }
+
+            if (this._onDidChangeCountListener) {
+
                 this._onDidChangeCountListener.dispose();
             }
         }
@@ -250,7 +257,12 @@ namespace phasereditor2d.code.ui.editors {
 
                 case phasereditor2d.outline.ui.views.OutlineView.EDITOR_VIEWER_PROVIDER_KEY:
 
-                    return this._outlineProvider;
+                    if (this.isInEditorArea()) {
+
+                        return this._outlineProvider;
+                    }
+
+                    break;
             }
 
             return null;
@@ -258,7 +270,10 @@ namespace phasereditor2d.code.ui.editors {
 
         async refreshOutline() {
 
-            await this._outlineProvider.refresh();
+            if (this.isInEditorArea()) {
+
+                await this._outlineProvider.refresh();
+            }
         }
 
         abstract async requestOutlineItems(): Promise<any[]>;

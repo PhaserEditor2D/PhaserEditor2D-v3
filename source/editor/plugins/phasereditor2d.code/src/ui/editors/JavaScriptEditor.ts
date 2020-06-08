@@ -81,11 +81,36 @@ namespace phasereditor2d.code.ui.editors {
             editor.restoreViewState(state);
         }
 
+        getEmbeddedEditorState() {
+
+            const editor = this.getMonacoEditor();
+
+            if (editor) {
+
+                return this.getMonacoEditor().saveViewState();
+            }
+
+            return null;
+        }
+
+        restoreEmbeddedEditorState(state: any) {
+
+            const editor = this.getMonacoEditor();
+
+            if (editor && state) {
+
+                editor.restoreViewState(state);
+            }
+        }
+
         getPropertyProvider() {
 
-            if (!this._propertyProvider) {
+            if (this.isInEditorArea()) {
 
-                this._propertyProvider = new properties.JavaScriptSectionProvider();
+                if (!this._propertyProvider) {
+
+                    this._propertyProvider = new properties.JavaScriptSectionProvider();
+                }
             }
 
             return this._propertyProvider;
@@ -102,31 +127,34 @@ namespace phasereditor2d.code.ui.editors {
 
             const editor = this.getMonacoEditor();
 
-            editor.getDomNode().addEventListener("click", async (e) => {
+            if (this.isInEditorArea()) {
 
-                const pos = editor.getPosition();
+                editor.getDomNode().addEventListener("click", async (e) => {
 
-                const docItem = await this.getDocItemAtPosition(pos);
+                    const pos = editor.getPosition();
 
-                if (docItem) {
+                    const docItem = await this.getDocItemAtPosition(pos);
 
-                    this.setSelection([docItem]);
+                    if (docItem) {
 
-                    return;
-                }
+                        this.setSelection([docItem]);
 
-                const item = await this.getAssetItemAtPosition(pos);
+                        return;
+                    }
 
-                if (item) {
+                    const item = await this.getAssetItemAtPosition(pos);
 
-                    this.setSelection([item]);
+                    if (item) {
 
-                    return;
-                }
+                        this.setSelection([item]);
 
-                this.setSelection([]);
+                        return;
+                    }
 
-            });
+                    this.setSelection([]);
+
+                });
+            }
         }
 
         private async getAssetItemAtPosition(pos: monaco.IPosition) {

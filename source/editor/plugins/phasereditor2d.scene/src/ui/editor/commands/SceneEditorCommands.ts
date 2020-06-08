@@ -26,6 +26,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
     export const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
     export const CMD_CREATE_PREFAB_WITH_OBJECT = "phasereditor2d.scene.ui.editor.commands.CreatePrefabWithObject";
+    export const CMD_QUICK_EDIT_OUTPUT_FILE = "phasereditor2d.scene.ui.editor.commands.QuickEditOutputFile";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -600,6 +601,29 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         dlg.setTitle("New Prefab File");
                     }
+                }
+            });
+
+            // quick sort edit
+
+            manager.add({
+                command: {
+                    id: CMD_QUICK_EDIT_OUTPUT_FILE,
+                    name: "Quick Edit Output File",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Shortcut to edit the compiled code in a popup editor."
+                },
+                handler: {
+                    testFunc: args => args.activeEditor instanceof SceneEditor,
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        editor.openOutputFileQuickEditorDialog();
+                    }
+                },
+                keys: {
+                    key: "Q"
                 }
             });
         }

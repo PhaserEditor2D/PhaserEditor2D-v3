@@ -15,6 +15,7 @@ namespace colibri.ui.ide {
         }
 
         activateEditor(editor: EditorPart): void {
+
             super.selectTabWithContent(editor);
         }
 

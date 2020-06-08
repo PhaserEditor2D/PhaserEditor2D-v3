@@ -45,6 +45,11 @@ namespace colibri.ui.ide {
 
             const editor = ide.Workbench.getWorkbench().getActiveEditor();
 
+            if (editor && editor.isEmbeddedMode()) {
+
+                return;
+            }
+
             if (this._currentManager) {
 
                 this._currentManager.dispose();

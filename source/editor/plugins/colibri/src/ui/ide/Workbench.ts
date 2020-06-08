@@ -403,6 +403,7 @@ namespace colibri.ui.ide {
             }
 
             if (part instanceof EditorPart) {
+
                 this.setActiveEditor(part as EditorPart);
             }
         }
@@ -545,9 +546,7 @@ namespace colibri.ui.ide {
             return this.getEditors().filter(editor => editor.getInput() === input);
         }
 
-        createEditor(input: IEditorInput): EditorPart {
-
-            const editorArea = this.getActiveWindow().getEditorArea();
+        makeEditor(input: IEditorInput): EditorPart {
 
             const factory = this._editorRegistry.getFactoryForInput(input);
 
@@ -556,8 +555,6 @@ namespace colibri.ui.ide {
                 const editor = factory.createEditor();
 
                 editor.setInput(input);
-
-                editorArea.addPart(editor, true, false);
 
                 return editor;
 
@@ -569,6 +566,22 @@ namespace colibri.ui.ide {
             }
 
             return null;
+        }
+
+        createEditor(input: IEditorInput): EditorPart {
+
+            const editorArea = this.getActiveWindow().getEditorArea();
+
+            const factory = this._editorRegistry.getFactoryForInput(input);
+
+            const editor = this.makeEditor(input);
+
+            if (editor) {
+
+                editorArea.addPart(editor, true, false);
+            }
+
+            return editor;
         }
 
         getEditorInputExtension(input: IEditorInput) {

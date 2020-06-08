@@ -46,6 +46,7 @@ namespace phasereditor2d.scene.ui.editor {
             });
             menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
+            menu.addCommand(commands.CMD_QUICK_EDIT_OUTPUT_FILE);
         }
 
         private createDepthMenu(): controls.Menu {

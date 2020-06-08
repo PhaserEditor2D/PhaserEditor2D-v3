@@ -58,13 +58,22 @@ namespace colibri.ui.ide {
 
             const editor = Workbench.getWorkbench().getActiveEditor();
 
+            if (editor && editor.isEmbeddedMode()) {
+
+                // we don't want an embedded editor to be connected with the editor viewers.
+                return;
+            }
+
             let provider: EditorViewerProvider = null;
 
             if (editor) {
 
                 if (editor === this._currentEditor) {
+
                     provider = this._currentViewerProvider;
+
                 } else {
+
                     provider = this.getViewerProvider(editor);
                 }
             }

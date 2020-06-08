@@ -112,6 +112,34 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
+        private _outputFileEditorState: any;
+
+        openOutputFileQuickEditorDialog() {
+
+            const file = this.getOutputFile();
+
+            const dlg = new colibri.ui.ide.QuickEditorDialog(file, this._outputFileEditorState);
+
+            dlg.create();
+
+            dlg.eventDialogClose.addListener(() => {
+
+                this._outputFileEditorState = dlg.getEditorState();
+
+                console.log("save state");
+                console.log(this._outputFileEditorState);
+            });
+        }
+
+        getOutputFile() {
+
+            const compiler = new core.code.SceneCompiler(this._scene, this.getInput());
+
+            const outputFile = compiler.getOutputFile();
+
+            return outputFile;
+        }
+
         async compile() {
 
             const compiler = new core.code.SceneCompiler(this._scene, this.getInput());
