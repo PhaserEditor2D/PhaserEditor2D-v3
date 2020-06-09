@@ -43,6 +43,7 @@ namespace colibri.ui.controls.properties {
         }
 
         isCollapsedByDefault() {
+
             return this._collapsedByDefault;
         }
 
@@ -243,7 +244,7 @@ namespace colibri.ui.controls.properties {
                     },
                     onDone: (color) => {
 
-                        text.value = allowAlpha? color.hex : color.hex.substring(0, 7);
+                        text.value = allowAlpha ? color.hex : color.hex.substring(0, 7);
                         btn.style.background = text.value;
                         text.dispatchEvent(new CustomEvent("change"));
                     }

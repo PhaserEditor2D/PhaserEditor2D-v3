@@ -59,12 +59,37 @@ namespace colibri.ui.controls.properties {
 
                 this.updateExpandIcon();
 
-                if (this._section.isCollapsedByDefault()) {
+                let collapsed = this.getCollapsedStateInStorage();
+
+                if (collapsed === undefined) {
+
+                    this.setCollapsedStateInStorage(this._section.isCollapsedByDefault());
+
+                    collapsed = this.getCollapsedStateInStorage();
+                }
+
+                if (collapsed === "true") {
 
                     this.toggleSection();
                 }
             }
         }
+
+        private getCollapsedStateInStorage() {
+
+            return window.localStorage[this.getLocalStorageKey() + ".collapsed"];
+        }
+
+        private setCollapsedStateInStorage(collapsed: boolean) {
+
+            return window.localStorage[this.getLocalStorageKey() + ".collapsed"] = collapsed ? "true" : "false";
+        }
+
+        private getLocalStorageKey() {
+
+            return `colibri.ui.controls.properties.PropertySection[${this._section.getId()}]`;
+        }
+
 
         isExpanded() {
             return this._expandIconElement.classList.contains("expanded");
@@ -88,6 +113,8 @@ namespace colibri.ui.controls.properties {
             this.getContainer().dispatchLayoutEvent();
 
             this.updateExpandIcon();
+
+            this.setCollapsedStateInStorage(!this.isExpanded());
         }
 
         private updateExpandIcon() {
