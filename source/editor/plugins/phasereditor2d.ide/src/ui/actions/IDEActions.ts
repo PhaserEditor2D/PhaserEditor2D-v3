@@ -183,7 +183,7 @@ namespace phasereditor2d.ide.ui.actions {
                     command: {
                         id: CMD_OPEN_VSCODE,
                         category: CAT_PROJECT,
-                        name: "Visual Studio Code",
+                        name: "Open Visual Studio Code",
                         tooltip: "Open the project in Visual Studio Code."
                     },
                     keys: {
@@ -192,18 +192,7 @@ namespace phasereditor2d.ide.ui.actions {
                         key: "U"
                     },
                     handler: {
-
-                        executeFunc: async (args) => {
-
-                            const root = colibri.ui.ide.FileUtils.getRoot();
-
-                            const resp = await colibri.core.io.apiRequest("OpenVSCode", { location: root.getFullName() });
-
-                            if (resp.error) {
-
-                                alert(resp.error);
-                            }
-                        }
+                        executeFunc: args => IDEPlugin.getInstance().openProjectInVSCode()
                     }
                 });
             }

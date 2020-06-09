@@ -1,7 +1,7 @@
 namespace phasereditor2d.ide {
 
-    import ide = colibri.ui.ide;
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export const ICON_PLAY = "play";
     export const ICON_MENU = "menu";
@@ -257,6 +257,21 @@ namespace phasereditor2d.ide {
             }
 
             controls.Controls.setTheme(theme ?? controls.Controls.LIGHT_THEME);
+        }
+
+        openProjectInVSCode() {
+
+            this.openFileInVSCode(colibri.ui.ide.FileUtils.getRoot());
+        }
+
+        async openFileInVSCode(file: io.FilePath) {
+
+            const resp = await colibri.core.io.apiRequest("OpenVSCode", { location: file.getFullName() });
+
+            if (resp.error) {
+
+                alert(resp.error);
+            }
         }
     }
 

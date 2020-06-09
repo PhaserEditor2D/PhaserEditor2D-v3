@@ -27,6 +27,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
     export const CMD_CREATE_PREFAB_WITH_OBJECT = "phasereditor2d.scene.ui.editor.commands.CreatePrefabWithObject";
     export const CMD_QUICK_EDIT_OUTPUT_FILE = "phasereditor2d.scene.ui.editor.commands.QuickEditOutputFile";
+    export const CMD_OPEN_OUTPUT_FILE_IN_VSCODE = "phasereditor2d.scene.ui.editor.commands.OpenOutputFileInVSCode";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -626,6 +627,36 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "Q"
                 }
             });
+
+            if (ide.IDEPlugin.getInstance().isDesktopMode()) {
+
+                manager.add({
+                    command: {
+                        id: CMD_OPEN_OUTPUT_FILE_IN_VSCODE,
+                        name: "Open Output File in VS Code",
+                        category: CAT_SCENE_EDITOR,
+                        tooltip: "Open the compiler output file in Visual Studio Code"
+                    },
+                    handler: {
+                        testFunc: args => args.activeEditor instanceof SceneEditor,
+                        executeFunc: args => {
+
+                            const editor = args.activeEditor as SceneEditor;
+
+                            const file = editor.getOutputFile();
+
+                            if (file) {
+
+                                ide.IDEPlugin.getInstance().openFileInVSCode(file);
+
+                            } else {
+
+                                alert(`Output file "${file.getProjectRelativeName()}" not found.`);
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         private static registerCompilerCommands(manager: colibri.ui.ide.commands.CommandManager) {

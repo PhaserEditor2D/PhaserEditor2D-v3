@@ -44,8 +44,18 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addCommand(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, {
                 text: "Refresh Scene"
             });
+
             menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
+
+            menu.addSeparator();
+
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
+
+            if (ide.IDEPlugin.getInstance().isDesktopMode()) {
+
+                menu.addCommand(commands.CMD_OPEN_OUTPUT_FILE_IN_VSCODE);
+            }
+
             menu.addCommand(commands.CMD_QUICK_EDIT_OUTPUT_FILE);
         }
 

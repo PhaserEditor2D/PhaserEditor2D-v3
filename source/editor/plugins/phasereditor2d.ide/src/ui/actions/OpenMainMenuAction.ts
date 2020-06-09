@@ -23,6 +23,8 @@ namespace phasereditor2d.ide.ui.actions {
 
             if (IDEPlugin.getInstance().isDesktopMode()) {
 
+                menu.addSeparator();
+
                 menu.addCommand(actions.CMD_OPEN_VSCODE);
             }
 
