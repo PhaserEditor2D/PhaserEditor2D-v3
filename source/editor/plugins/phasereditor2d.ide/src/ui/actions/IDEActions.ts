@@ -7,6 +7,7 @@ namespace phasereditor2d.ide.ui.actions {
     export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
     export const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
     export const CMD_QUICK_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.QuickPlayProject";
+    export const CMD_OPEN_VSCODE = "phasereditor2d.ide.ui.actions.OpenVSCode";
 
     import controls = colibri.ui.controls;
     import commands = colibri.ui.ide.commands;
@@ -140,7 +141,7 @@ namespace phasereditor2d.ide.ui.actions {
                     },
                     handler: {
 
-                        executeFunc: args => {
+                        executeFunc: async (args) => {
 
                             let file = colibri.ui.ide.FileUtils.getRoot();
 
@@ -166,7 +167,42 @@ namespace phasereditor2d.ide.ui.actions {
                                 file = file.getParent();
                             }
 
-                            colibri.core.io.apiRequest("OpenFileManager", { file: file.getFullName() });
+                            const resp = await colibri.core.io.apiRequest("OpenFileManager", { file: file.getFullName() });
+
+                            if (resp.error) {
+
+                                alert(resp.error);
+                            }
+                        }
+                    }
+                });
+
+                // open vscode
+
+                manager.add({
+                    command: {
+                        id: CMD_OPEN_VSCODE,
+                        category: CAT_PROJECT,
+                        name: "Visual Studio Code",
+                        tooltip: "Open the project in Visual Studio Code."
+                    },
+                    keys: {
+                        control: true,
+                        alt: true,
+                        key: "U"
+                    },
+                    handler: {
+
+                        executeFunc: async (args) => {
+
+                            const root = colibri.ui.ide.FileUtils.getRoot();
+
+                            const resp = await colibri.core.io.apiRequest("OpenVSCode", { location: root.getFullName() });
+
+                            if (resp.error) {
+
+                                alert(resp.error);
+                            }
                         }
                     }
                 });

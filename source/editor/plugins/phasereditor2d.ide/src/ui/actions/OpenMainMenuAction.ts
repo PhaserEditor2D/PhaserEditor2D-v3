@@ -21,6 +21,11 @@ namespace phasereditor2d.ide.ui.actions {
 
             menu.addCommand(actions.CMD_RELOAD_PROJECT);
 
+            if (IDEPlugin.getInstance().isDesktopMode()) {
+
+                menu.addCommand(actions.CMD_OPEN_VSCODE);
+            }
+
             menu.addSeparator();
 
             menu.addCommand(actions.CMD_CHANGE_THEME);
