@@ -8,6 +8,8 @@
 * Prefab user properties. You can add user properties to prefabs and change the values in the prefab instances.
 * Scene Editor: create a prefab file with the selected object.
 * Scene Editor: new command (with key `Q`) to open a Quick Editor Dialog to edit the compiler output file.
+* Scene Editor: open compiler output file in VS Code. Enabled when the IDE runs in Desktop mode.
+* Open Visual Studio Code command in main menu. Bound to the `Ctrl+Alt+U` key.
 
 ## Modified
 
