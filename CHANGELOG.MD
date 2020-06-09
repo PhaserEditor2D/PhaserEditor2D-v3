@@ -42,6 +42,7 @@
 * Scene Editor: the Tint properties.
 * Scene Editor: two scopes for transformations: local and global. You can select it in the context menu (Coords -> Global). Default is local.
 * Server: shows helpful welcome messages.
+* Persist the collapsing state of the Inspector view sections.
 
 ### Removed
 
