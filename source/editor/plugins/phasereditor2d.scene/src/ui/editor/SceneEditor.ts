@@ -122,12 +122,17 @@ namespace phasereditor2d.scene.ui.editor {
 
             dlg.create();
 
+            dlg.addButton("Play", () => {
+
+                colibri.Platform.getWorkbench().getCommandManager()
+                    .executeCommand(ide.ui.actions.CMD_PLAY_PROJECT);
+            });
+
             dlg.eventDialogClose.addListener(() => {
 
                 this._outputFileEditorState = dlg.getEditorState();
 
-                console.log("save state");
-                console.log(this._outputFileEditorState);
+                colibri.Platform.getWorkbench().setActiveEditor(this);
             });
         }
 
