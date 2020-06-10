@@ -9,6 +9,8 @@
 * Scene Editor: create a prefab file with the selected object.
 * Scene Editor: new command (with key `Q`) to open a Quick Editor Dialog to edit the compiler output file.
 * Scene Editor: open compiler output file in VS Code. Enabled when the IDE runs in Desktop mode.
+* Scene Editor: the Replace Type dialog provides the option "Keep the original texture", used when you are morphing an object to a prefab type.
+* Scene Editor: removes extra blank lines in generated code.
 * Open Visual Studio Code command in main menu. Bound to the `Ctrl+Alt+U` key.
 
 ## Modified
@@ -41,7 +43,6 @@
 * Scene Editor: the origin manipulator. To select it press `O` or select it in the context menu or toolbar. It also support containers.
 * Scene Editor: the Tint properties.
 * Scene Editor: two scopes for transformations: local and global. You can select it in the context menu (Coords -> Global). Default is local.
-* Scene Editor: the Replace Type dialog provides the option "Keep the original texture", used when you are morphing an object to a prefab type.
 * Server: shows helpful welcome messages.
 * Persist the collapsing state of the Inspector view sections.
 
