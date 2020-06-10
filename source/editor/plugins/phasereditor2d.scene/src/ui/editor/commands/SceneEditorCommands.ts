@@ -482,7 +482,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         editor.getUndoManager().add(
                             new undo.ConvertTypeOperation(
-                                editor, sceneobjects.TileSpriteExtension.getInstance(), null));
+                                editor, sceneobjects.TileSpriteExtension.getInstance()));
                     }
                 },
                 keys: {
@@ -590,7 +590,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             editor.getUndoManager().add(
                                 new undo.ConvertTypeOperation(
-                                    editor, newFile, null));
+                                    editor, newFile));
 
                             editor.refreshBlocks();
 

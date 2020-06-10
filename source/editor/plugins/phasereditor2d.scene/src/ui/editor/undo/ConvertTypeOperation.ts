@@ -19,13 +19,13 @@ namespace phasereditor2d.scene.ui.editor.undo {
         private _targetType: ITargetType;
         private _extraData: any;
 
-        constructor(editor: SceneEditor, targetType: ITargetType, extraData: any) {
+        constructor(editor: SceneEditor, targetType: ITargetType, extraData?: any) {
             super(editor,
                 ConvertTypeOperation.filterObjects(editor.getSelectedGameObjects(), targetType)
             );
 
             this._targetType = targetType;
-            this._extraData = extraData;
+            this._extraData = extraData || {};
         }
 
         async execute() {
