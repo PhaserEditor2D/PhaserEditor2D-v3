@@ -81,14 +81,16 @@ namespace phasereditor2d.code {
 
             monaco.languages.registerCompletionItemProvider("javascript", {
 
-                triggerCharacters: ['"', "'", "`"],
+                // disable this, it breaks the literal completions,
+                // for example, of types like "one"|"two"|"three".
+                /*triggerCharacters: ['"', "'", "`"],*/
 
                 provideCompletionItems: async (model, pos) => {
 
                     return {
-                        suggestions: await this.computeCompletions()
+                        suggestions: await this.computeCompletions(),
                     };
-                }
+                },
             });
         }
 
