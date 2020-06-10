@@ -1,60 +1,22 @@
+/// <reference path="./AbstractViewerDialog.ts" />
+
 namespace colibri.ui.controls.dialogs {
 
-    export class ViewerDialog extends Dialog {
-
-        private _viewer: viewers.TreeViewer;
-        private _filteredViewer: viewers.FilteredViewer<viewers.TreeViewer>;
+    export class ViewerDialog extends AbstractViewerDialog {
 
         constructor(viewer: viewers.TreeViewer) {
-            super("ViewerDialog");
-
-            this._viewer = viewer;
+            super(viewer);
         }
 
         createDialogArea() {
 
-            this._filteredViewer = new viewers.FilteredViewer(this._viewer, "DialogClientArea");
+            this.createFilteredViewer();
 
-            this.add(this._filteredViewer);
+            this.getFilteredViewer().addClass("DialogClientArea");
 
-            this._filteredViewer.getFilterControl().getFilterElement().focus();
-        }
+            this.add(this.getFilteredViewer());
 
-        getViewer() {
-            return this._viewer;
-        }
-
-        goFront() {
-
-            this.resize();
-
-            if (this._viewer) {
-                this._viewer.repaint();
-            }
-        }
-
-        enableButtonOnlyWhenOneElementIsSelected(btn: HTMLButtonElement) {
-
-            this.getViewer().eventSelectionChanged.addListener(() => {
-
-                btn.disabled = this.getViewer().getSelection().length !== 1;
-            });
-
-            btn.disabled = this.getViewer().getSelection().length !== 1;
-        }
-
-        addOpenButton(text: string, callback: (selection: any[]) => void) {
-
-            const callback2 = () => {
-
-                callback(this.getViewer().getSelection());
-
-                this.close();
-            };
-
-            this.getViewer().eventOpenItem.addListener(callback2);
-
-            return this.addButton(text, callback2);
+            this.getFilteredViewer().getFilterControl().getFilterElement().focus();
         }
     }
 }

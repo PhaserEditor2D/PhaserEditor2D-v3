@@ -139,6 +139,11 @@ namespace colibri.ui.controls.dialogs {
             return btn;
         }
 
+        addElementToButtonPanel(element: HTMLElement) {
+
+            this._buttonPaneElement.appendChild(element);
+        }
+
         protected createDialogArea() {
             // nothing
         }

@@ -105,9 +105,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const textureComponent = support.getComponent(TextureComponent) as TextureComponent;
 
-                const keys = textureComponent.getTextureKeys();
+                if (extraData.keepOriginalTexture) {
 
-                serializer.write(TextureComponent.texture.name, keys, {});
+                    // create a new serializer with the original prefab
+                    // so we can find the real texture, and keep it.
+
+                    const data2 = JSON.parse(JSON.stringify(serializer.getData())) as core.json.IObjectData;
+                    data2.prefabId = support.getPrefabId();
+                    const serializer2 = serializer.getSerializer(data2);
+                    const keys = serializer2.read(TextureComponent.texture.name, {});
+
+                    // we write the texture directly into the data, bypassing unlocking validation of the serializer
+                    colibri.core.json.write(serializer.getData(), TextureComponent.texture.name, keys);
+
+                } else {
+
+                    const keys = textureComponent.getTextureKeys();
+                    serializer.write(TextureComponent.texture.name, keys, {});
+                }
+            }
+
+            if (extraData.keepOriginalTexture) {
+
+                serializer.setUnlocked(TextureComponent.texture.name, true);
             }
         }
     }
