@@ -17,10 +17,11 @@ namespace phasereditor2d.scene.core.code {
             this.line();
             this.line();
 
-            for (const elem of this._unit.getBody()) {
+            const body = CodeDOM.removeBlankLines(this._unit.getBody());
+
+            for (const elem of body) {
 
                 this.generateUnitElement(elem);
-
             }
 
             this.sectionEnd("/* END OF COMPILED CODE */", "\n\n// You can write more code here\n");
@@ -56,7 +57,9 @@ namespace phasereditor2d.scene.core.code {
 
             this.line();
 
-            for (const memberDecl of clsDecl.getBody()) {
+            const body = CodeDOM.removeBlankLines(clsDecl.getBody());
+
+            for (const memberDecl of body) {
 
                 this.generateMemberDecl(memberDecl);
             }
@@ -97,6 +100,8 @@ namespace phasereditor2d.scene.core.code {
                 this.line(fieldDecl.getName() + ";");
             }
 
+            this.line();
+
             // this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
             // this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);
         }
@@ -113,9 +118,30 @@ namespace phasereditor2d.scene.core.code {
 
             this.openIndent(") {");
 
-            for (const instr of methodDecl.getBody()) {
+            const body = CodeDOM.removeBlankLines(methodDecl.getBody());
 
-                this.generateInstr(instr);
+            // never add a blank line at the end of a method body
+
+            if (body.length > 0) {
+
+                const last = body.pop();
+
+                if (last instanceof RawCodeDOM) {
+
+                    if (!CodeDOM.isBlankLine(last)) {
+
+                        body.push(last);
+                    }
+
+                } else {
+
+                    body.push(last);
+                }
+
+                for (const instr of body) {
+
+                    this.generateInstr(instr);
+                }
             }
 
             this.closeIndent("}");

@@ -2,9 +2,9 @@ namespace phasereditor2d.scene.core.code {
 
     export class UnitCodeDOM {
 
-        private _body: object[];
+        private _body: CodeDOM[];
 
-        constructor(elements: object[]) {
+        constructor(elements: CodeDOM[]) {
             this._body = elements;
         }
 
@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.core.code {
             return this._body;
         }
 
-        setBody(body: object[]) {
+        setBody(body: CodeDOM[]) {
             this._body = body;
         }
     }

@@ -12,6 +12,45 @@ namespace phasereditor2d.scene.core.code {
             this._offset = offset;
         }
 
+        static isBlankLine(codeDom: CodeDOM) {
+            if (codeDom instanceof RawCodeDOM) {
+
+                const code = codeDom.getCode();
+
+                return code === "";
+            }
+
+            return false;
+        }
+
+        static removeBlankLines<T extends CodeDOM>(list: T[]) {
+
+            const list2 = [];
+
+            let lastIsBlankLine = false;
+
+            for (const item of list) {
+
+                if (this.isBlankLine(item)) {
+
+                    if (lastIsBlankLine) {
+
+                        continue;
+                    }
+
+                    lastIsBlankLine = true;
+
+                } else {
+
+                    lastIsBlankLine = false;
+                }
+
+                list2.push(item);
+            }
+
+            return list2;
+        }
+
         static toHex(n: number) {
 
             const hex = n.toString(16);

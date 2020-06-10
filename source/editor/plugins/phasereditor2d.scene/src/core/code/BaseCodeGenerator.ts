@@ -164,9 +164,36 @@ namespace phasereditor2d.scene.core.code {
             this.line(line);
         }
 
+        lastIsEmptyLine() {
+
+            const i = this._text.lastIndexOf("\n");
+
+            if (i >= 0) {
+
+                const last = this._text.substring(i);
+
+                return last.trim() === "";
+            }
+
+            return false;
+        }
+
         closeIndent(str = "") {
 
             this._indent--;
+
+            const i = this._text.lastIndexOf("\n");
+
+            if (i >= 0) {
+
+                const last = this._text.substring(i);
+
+                if (last.trim() === "") {
+                    // removes the extra blank line
+                    this._text = this._text.substring(0, i);
+                }
+            }
+
             this.line();
             this.line(str);
         }
