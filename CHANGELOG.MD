@@ -41,6 +41,7 @@
 * Scene Editor: the origin manipulator. To select it press `O` or select it in the context menu or toolbar. It also support containers.
 * Scene Editor: the Tint properties.
 * Scene Editor: two scopes for transformations: local and global. You can select it in the context menu (Coords -> Global). Default is local.
+* Scene Editor: the Replace Type dialog provides the option "Keep the original texture", used when you are morphing an object to a prefab type.
 * Server: shows helpful welcome messages.
 * Persist the collapsing state of the Inspector view sections.
 
