@@ -231,7 +231,6 @@ namespace phasereditor2d.scene {
             // TODO: we should do this via extension
             return [
                 new ui.sceneobjects.NumberPropertyType(),
-                new ui.sceneobjects.IntegerPropertyType(),
                 new ui.sceneobjects.StringPropertyType(),
                 new ui.sceneobjects.ExpressionPropertyType(),
                 new ui.sceneobjects.OptionPropertyType(),
