@@ -47,8 +47,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 for (const prop of properties) {
 
-                    const expanderControl = new controls.IconControl(
-                        colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE));
+                    const collapsedIcon = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE);
+                    const expandedIcon = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_EXPAND);
+
+                    const expanderControl = new controls.IconControl();
 
                     this._propArea.appendChild(expanderControl.getCanvas());
 
@@ -58,16 +60,21 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     const propPane = this.createGridElement(this._propArea, 2);
                     propPane.style.gridColumn = "1 / span 2";
 
+                    const expandStorageKey = `PrefabPropertiesSection[${prop.getName()}].expanded`;
+
+                    const expanded = window.localStorage[expandStorageKey] === "true";
+                    propPane.style.display = expanded ? "grid" : "none";
+                    expanderControl.setIcon(expanded ? collapsedIcon : expandedIcon);
+
                     const expandListener = () => {
 
-                        if (propPane.style.display === "none") {
+                        const expandIt = propPane.style.display === "none";
 
-                            propPane.style.display = "grid";
+                        propPane.style.display = expandIt ? "grid" : "none";
 
-                        } else {
+                        window.localStorage[expandStorageKey] = expandIt;
 
-                            propPane.style.display = "none";
-                        }
+                        expanderControl.setIcon(expandIt ? collapsedIcon : expandedIcon);
                     };
 
                     expanderControl.getCanvas().addEventListener("click", expandListener);
