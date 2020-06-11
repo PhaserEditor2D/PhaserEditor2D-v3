@@ -47,31 +47,63 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 for (const prop of properties) {
 
+                    const expanderControl = new controls.IconControl(
+                        colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE));
+
+                    this._propArea.appendChild(expanderControl.getCanvas());
+
+                    const titleLabel = this.createLabel(this._propArea, prop.getLabel());
+                    titleLabel.classList.add("PropertySubTitleLabel");
+
+                    const propPane = this.createGridElement(this._propArea, 2);
+                    propPane.style.gridColumn = "1 / span 2";
+
+                    const expandListener = () => {
+
+                        if (propPane.style.display === "none") {
+
+                            propPane.style.display = "grid";
+
+                        } else {
+
+                            propPane.style.display = "none";
+                        }
+                    };
+
+                    expanderControl.getCanvas().addEventListener("click", expandListener);
+                    titleLabel.addEventListener("click", expandListener);
+
+                    this._propArea.appendChild(propPane);
+
                     const info = prop.getInfo();
 
-                    this.simpleField(info, "name", "Name", "The property name. Like in 'speedMin'.");
+                    this.simpleField(propPane, info, "name", "Name", "The property name. Like in 'speedMin'.");
 
-                    this.simpleField(info, "label", "Label", "The property display label. Like in 'Speed Min'.");
+                    this.simpleField(
+                        propPane, info, "label", "Label", "The property display label. Like in 'Speed Min'.", () => {
 
-                    this.simpleField(info, "tooltip", "Tooltip", "The property tooltip.");
+                            titleLabel.innerHTML = prop.getInfo().label;
+                        });
+
+                    this.simpleField(propPane, info, "tooltip", "Tooltip", "The property tooltip.");
 
                     {
-                        this.createLabel(this._propArea, "Type", "The property type.");
-                        const text = this.createText(this._propArea, true);
+                        this.createLabel(propPane, "Type", "The property type.");
+                        const text = this.createText(propPane, true);
                         text.value = prop.getType().getName();
                     }
 
                     if (prop.getType() instanceof sceneobjects.OptionPropertyType) {
 
-                        this.createOptionsField(prop);
+                        this.createOptionsField(propPane, prop);
 
                     } else if (prop.getType() instanceof sceneobjects.ExpressionPropertyType) {
 
-                        this.createExpressionTypeField(prop);
+                        this.createExpressionTypeField(propPane, prop);
                     }
 
                     {
-                        this.createLabel(this._propArea, "Default", "The property default value.");
+                        this.createLabel(propPane, "Default", "The property default value.");
 
                         const propEditor = info.type.createEditorElement(
                             () => {
@@ -85,14 +117,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
                                 });
                             });
 
-                        this._propArea.appendChild(propEditor.element);
+                        propPane.appendChild(propEditor.element);
 
                         propEditor.update();
                     }
 
                     {
                         // tslint:disable-next-line:no-shadowed-variable
-                        const btn = this.createButton(this._propArea, "Delete", e => {
+                        const btn = this.createButton(propPane, "Delete", e => {
 
                             this.runOperation(userProps => {
 
@@ -105,26 +137,18 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         btn.style.gridColumn = "1 / span 2";
                         btn.style.justifySelf = "right";
                     }
-
-                    {
-                        const sep = document.createElement("hr");
-                        sep.style.width = "100%";
-                        sep.style.gridColumn = "1 / span 2";
-                        sep.style.opacity = "0.5";
-                        this._propArea.appendChild(sep);
-                    }
                 }
             });
         }
 
-        private createExpressionTypeField(prop: sceneobjects.UserProperty) {
+        private createExpressionTypeField(parent: HTMLDivElement, prop: sceneobjects.UserProperty) {
 
             const type = prop.getType() as sceneobjects.ExpressionPropertyType;
 
             this.createLabel(
-                this._propArea, "Expression Type", "The type of the expression. Like <code>'ICustomType'</code> or <code>'() => void'</code>.");
+                parent, "Expression Type", "The type of the expression. Like <code>'ICustomType'</code> or <code>'() => void'</code>.");
 
-            const text = this.createText(this._propArea);
+            const text = this.createText(parent);
 
             text.value = type.getExpressionType();
 
@@ -138,14 +162,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
             });
         }
 
-        private createOptionsField(prop: sceneobjects.UserProperty) {
+        private createOptionsField(parent: HTMLDivElement, prop: sceneobjects.UserProperty) {
 
             const type = prop.getType() as sceneobjects.OptionPropertyType;
 
             this.createLabel(
-                this._propArea, "Options", "An array of possible string values, like in <code>['good', 'bad', 'ugly']</code>.");
+                parent, "Options", "An array of possible string values, like in <code>['good', 'bad', 'ugly']</code>.");
 
-            const text = this.createTextArea(this._propArea);
+            const text = this.createTextArea(parent);
 
             text.value = JSON.stringify(type.getOptions());
 
@@ -166,11 +190,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
             });
         }
 
-        private simpleField(propInfo: any, infoProp: string, fieldLabel: string, fieldTooltip: string) {
+        private simpleField(
+            parent: HTMLDivElement, propInfo: any, infoProp: string, fieldLabel: string, fieldTooltip: string, updateCallback?: () => void) {
 
-            this.createLabel(this._propArea, fieldLabel, fieldTooltip);
+            this.createLabel(parent, fieldLabel, fieldTooltip);
 
-            const text = this.createText(this._propArea);
+            const text = this.createText(parent);
             text.value = propInfo[infoProp];
 
             text.addEventListener("change", e => {
@@ -178,6 +203,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 this.runOperation(() => {
 
                     propInfo[infoProp] = text.value;
+
+                    if (updateCallback) {
+
+                        updateCallback();
+                    }
 
                 }, false);
             });

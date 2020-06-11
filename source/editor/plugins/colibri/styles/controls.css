@@ -238,6 +238,11 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     padding: 10px 0px 10px 0px;
 }
 
+.PropertySubTitleLabel {
+    width: 100%;
+    font-weight: bold;
+}
+
 .formSimpleProps {
     padding: 5px;
 }
