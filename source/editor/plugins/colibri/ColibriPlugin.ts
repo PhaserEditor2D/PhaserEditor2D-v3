@@ -1,5 +1,4 @@
 /// <reference path="./src/Plugin.ts" />
-/// <reference path="./Platform.ts" />
 /// <reference path="./src/ui/ide/Workbench.ts" />
 
 namespace colibri {
@@ -9,6 +8,8 @@ namespace colibri {
     export const ICON_PLUS = "plus";
     export const ICON_MINUS = "minus";
     export const ICON_CHECKED = "checked";
+    export const ICON_MENU = "menu";
+    export const ICON_SMALL_MENU = "small-menu";
     export const ICON_KEYMAP = "keymap";
     export const ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
     export const ICON_CONTROL_TREE_EXPAND = "tree-expand";
@@ -40,6 +41,8 @@ namespace colibri {
                     ICON_PLUS,
                     ICON_MINUS,
                     ICON_CHECKED,
+                    ICON_MENU,
+                    ICON_SMALL_MENU,
                     ICON_KEYMAP,
                     ICON_CONTROL_TREE_COLLAPSE,
                     ICON_CONTROL_TREE_EXPAND,

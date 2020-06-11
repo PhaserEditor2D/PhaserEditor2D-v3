@@ -169,7 +169,8 @@ Important:
     text-shadow: 1px 1px #0e0e0e;
 }
 
-.dark .ToolbarItem:hover {
+.dark .ToolbarItem:hover,
+.dark .IconButton:hover {
     background: #656565;
     border-color: #757575;
 }
@@ -178,7 +179,8 @@ Important:
     background: rgba(255, 255, 255, 0.3);
 }
 
-.dark .ToolbarItem.ActionSelected {
+.dark .ToolbarItem.ActionSelected,
+.dark .IconButton:hover {
     background: rgba(255, 255, 255, 0.5);
     border-color: darkgray;
 }

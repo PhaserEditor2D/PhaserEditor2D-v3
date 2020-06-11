@@ -28,6 +28,11 @@ namespace colibri.ui.controls {
             this._items.push(action);
         }
 
+        addAction(actionConfig: IActionConfig) {
+
+            this.add(new Action(actionConfig));
+        }
+
         addMenu(subMenu: Menu) {
 
             subMenu._parentMenu = this;

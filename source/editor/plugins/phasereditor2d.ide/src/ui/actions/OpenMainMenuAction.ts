@@ -9,7 +9,7 @@ namespace phasereditor2d.ide.ui.actions {
                 text: "Open Menu",
                 tooltip: "Main menu",
                 showText: false,
-                icon: IDEPlugin.getInstance().getIcon(ICON_MENU)
+                icon: IDEPlugin.getInstance().getIcon(colibri.ICON_MENU)
             });
         }
 

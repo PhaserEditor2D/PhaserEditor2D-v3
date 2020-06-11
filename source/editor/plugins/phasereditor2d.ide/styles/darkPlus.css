@@ -167,19 +167,22 @@ Important:
     text-shadow: 1px 1px #0e0e0e;
 }
 
-.darkPlus .ToolbarItem:hover {
+.darkPlus .ToolbarItem:hover,
+.darkPlus .IconButton:hover {
     background: #424242;
     border-color: #757575;
 }
 
 .darkPlus .ToolbarItem:active,
-.darkPlus .ToolbarItem.ActionSelected {
+.darkPlus .ToolbarItem.ActionSelected,
+.darkPlus .IconButton:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
 .darkPlus .ToolbarItem.ActionSelected {
     border-color: #858585;
 }
+
 
 /* ProgressBar */
 

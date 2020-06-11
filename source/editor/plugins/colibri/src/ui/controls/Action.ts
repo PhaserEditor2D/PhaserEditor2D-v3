@@ -9,7 +9,7 @@ namespace colibri.ui.controls {
         showText?: boolean;
         commandId?: string;
         selected?: boolean;
-        callback?(): void;
+        callback?(e?: MouseEvent): void;
     }
 
     export class Action {
@@ -21,7 +21,7 @@ namespace colibri.ui.controls {
         private _enabled: boolean;
         private _showText: boolean;
         private _selected: boolean;
-        private _callback: () => void;
+        private _callback: (e?: MouseEvent) => void;
         public eventActionChanged = new  ListenerList();
 
         constructor(config: IActionConfig) {
@@ -103,7 +103,7 @@ namespace colibri.ui.controls {
 
             if (this._callback) {
 
-                this._callback();
+                this._callback(e);
 
                 return;
             }

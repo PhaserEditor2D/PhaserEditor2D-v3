@@ -8,6 +8,8 @@ namespace colibri {
     export const ICON_FOLDER = "folder";
     export const ICON_PLUS = "plus";
     export const ICON_MINUS = "minus";
+    export const ICON_MENU = "menu";
+    export const ICON_SMALL_MENU = "small-menu";
     export const ICON_CHECKED = "checked";
     export const ICON_KEYMAP = "keymap";
     export const ICON_COLOR = "color";
@@ -40,6 +42,8 @@ namespace colibri {
                     ICON_FOLDER,
                     ICON_PLUS,
                     ICON_MINUS,
+                    ICON_MENU,
+                    ICON_SMALL_MENU,
                     ICON_CHECKED,
                     ICON_KEYMAP,
                     ICON_COLOR,

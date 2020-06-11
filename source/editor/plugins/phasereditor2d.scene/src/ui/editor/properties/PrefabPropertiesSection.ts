@@ -32,7 +32,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 this.runOperation(userProps => {
 
-                    userProps.add(userProps.createProperty(newType));
+                    const prop = userProps.createProperty(newType);
+                    userProps.add(prop);
+                    this.setExpandedStateInStorage(prop, true);
                 });
             });
 
@@ -47,38 +49,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 for (const prop of properties) {
 
-                    const collapsedIcon = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE);
-                    const expandedIcon = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_EXPAND);
-
-                    const expanderControl = new controls.IconControl();
-
-                    this._propArea.appendChild(expanderControl.getCanvas());
-
-                    const titleLabel = this.createLabel(this._propArea, prop.getLabel());
-                    titleLabel.classList.add("PropertySubTitleLabel");
-
                     const propPane = this.createGridElement(this._propArea, 2);
                     propPane.style.gridColumn = "1 / span 2";
 
-                    const expandStorageKey = `PrefabPropertiesSection[${prop.getName()}].expanded`;
-
-                    const expanded = window.localStorage[expandStorageKey] === "true";
-                    propPane.style.display = expanded ? "grid" : "none";
-                    expanderControl.setIcon(expanded ? collapsedIcon : expandedIcon);
-
-                    const expandListener = () => {
-
-                        const expandIt = propPane.style.display === "none";
-
-                        propPane.style.display = expandIt ? "grid" : "none";
-
-                        window.localStorage[expandStorageKey] = expandIt;
-
-                        expanderControl.setIcon(expandIt ? collapsedIcon : expandedIcon);
-                    };
-
-                    expanderControl.getCanvas().addEventListener("click", expandListener);
-                    titleLabel.addEventListener("click", expandListener);
+                    const titleLabel = this.createTitlePanel(propPane, prop);
 
                     this._propArea.appendChild(propPane);
 
@@ -128,23 +102,120 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                         propEditor.update();
                     }
-
-                    {
-                        // tslint:disable-next-line:no-shadowed-variable
-                        const btn = this.createButton(propPane, "Delete", e => {
-
-                            this.runOperation(userProps => {
-
-                                const i = userProps.getProperties().indexOf(prop);
-
-                                properties.splice(i, 1);
-                            });
-                        });
-
-                        btn.style.gridColumn = "1 / span 2";
-                        btn.style.justifySelf = "right";
-                    }
                 }
+            });
+        }
+
+        private setExpandedStateInStorage(prop: sceneobjects.UserProperty, value: boolean) {
+
+            window.localStorage[`PrefabPropertiesSection[${prop.getName()}].expanded`] = value;
+        }
+
+        private getExpandedStateInStorage(prop: sceneobjects.UserProperty) {
+
+            return window.localStorage[`PrefabPropertiesSection[${prop.getName()}].expanded`];
+        }
+
+        createTitlePanel(propPane: HTMLDivElement, prop: sceneobjects.UserProperty) {
+
+            const titlePanel = document.createElement("div");
+            titlePanel.classList.add("PropertySubTitlePanel");
+            this._propArea.insertBefore(titlePanel, propPane);
+
+            const collapsedIcon = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE);
+            const expandedIcon = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_EXPAND);
+
+            const expanderControl = new controls.IconControl();
+
+            titlePanel.appendChild(expanderControl.getCanvas());
+
+            const titleLabel = this.createLabel(titlePanel, prop.getLabel());
+            titleLabel.classList.add("PropertySubTitleLabel");
+
+            const expanded = this.getExpandedStateInStorage(prop) === "true";
+            propPane.style.display = expanded ? "grid" : "none";
+            expanderControl.setIcon(expanded ? collapsedIcon : expandedIcon);
+
+            const expandListener = () => {
+
+                const expandIt = propPane.style.display === "none";
+
+                propPane.style.display = expandIt ? "grid" : "none";
+
+                this.setExpandedStateInStorage(prop, expandIt);
+
+                expanderControl.setIcon(expandIt ? collapsedIcon : expandedIcon);
+            };
+
+            expanderControl.getCanvas().addEventListener("click", expandListener);
+            titleLabel.addEventListener("click", expandListener);
+
+            this.createPropertiesMenu(titlePanel, prop);
+
+            return titleLabel;
+        }
+
+        private createPropertiesMenu(titlePanel: HTMLElement, prop: sceneobjects.UserProperty) {
+
+            const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_SMALL_MENU));
+            icon.getCanvas().classList.add("IconButton");
+            titlePanel.appendChild(icon.getCanvas());
+            icon.getCanvas().addEventListener("click", e => {
+
+                const menu = new controls.Menu();
+
+                menu.addAction({
+                    text: "Move Up",
+                    callback: () => {
+                        this.runOperation(userProps => {
+
+                            const list = userProps.getProperties();
+
+                            const i = list.indexOf(prop);
+
+                            if (i > 0) {
+
+                                const temp = list[i - 1];
+                                list[i - 1] = prop;
+                                list[i] = temp;
+                            }
+                        });
+                    }
+                });
+
+                menu.addAction({
+                    text: "Move Down",
+                    callback: () => {
+                        this.runOperation(userProps => {
+
+                            const list = userProps.getProperties();
+
+                            const i = list.indexOf(prop);
+
+                            if (i < list.length - 1) {
+
+                                const temp = list[i + 1];
+                                list[i + 1] = prop;
+                                list[i] = temp;
+                            }
+                        });
+                    }
+                });
+
+                menu.addAction({
+                    text: "Delete",
+                    callback: () => {
+                        this.runOperation(userProps => {
+
+                            const list = userProps.getProperties();
+
+                            const i = list.indexOf(prop);
+
+                            list.splice(i, 1);
+                        });
+                    }
+                });
+                menu.createWithEvent(e);
             });
         }
 
