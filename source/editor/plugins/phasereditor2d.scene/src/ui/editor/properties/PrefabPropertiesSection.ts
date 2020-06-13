@@ -95,6 +95,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
                                 this.runOperation(() => {
 
                                     prop.getInfo().defValue = value;
+
+                                    this.setExpandedStateInStorage(prop, true);
                                 });
                             });
 
@@ -236,6 +238,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     type.setExpressionType(text.value);
 
+                    this.setExpandedStateInStorage(prop, true);
+
                 }, true);
             });
         }
@@ -264,6 +268,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                         type.setOptions(array2);
                     }
+
+                    this.setExpandedStateInStorage(prop, true);
+
                 }, true);
             });
         }
