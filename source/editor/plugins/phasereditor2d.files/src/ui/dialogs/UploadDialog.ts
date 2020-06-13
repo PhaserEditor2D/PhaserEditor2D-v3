@@ -108,9 +108,14 @@ namespace phasereditor2d.files.ui.dialogs {
 
                 if (ioFiles.length > 0) {
 
-                    const view = colibri.ui.ide.Workbench
-                        .getWorkbench()
-                        .getActiveWindow()
+                    const wb = colibri.ui.ide.Workbench.getWorkbench();
+
+                    for (const file of ioFiles) {
+
+                        await wb.getContentTypeRegistry().preload(file);
+                    }
+
+                    const view = wb.getActiveWindow()
                         .getView(views.FilesView.ID) as views.FilesView;
 
                     view.getViewer().setSelection(ioFiles);
