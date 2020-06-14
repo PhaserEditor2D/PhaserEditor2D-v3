@@ -24,6 +24,7 @@ namespace colibri.ui.ide.actions {
     export const CMD_COPY = "colibri.ui.ide.actions.Copy";
     export const CMD_CUT = "colibri.ui.ide.actions.Cut";
     export const CMD_PASTE = "colibri.ui.ide.actions.Paste";
+    export const CMD_SHOW_COMMENT_DIALOG = "colibri.ui.ide.actions.ShowCommentDialog";
 
     function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -62,6 +63,31 @@ namespace colibri.ui.ide.actions {
             ColibriCommands.initViewer(manager);
 
             ColibriCommands.initPalette(manager);
+
+            ColibriCommands.initCommentDialog(manager);
+        }
+
+        private static initCommentDialog(manager: commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_SHOW_COMMENT_DIALOG,
+                    name: "Open Comment Dialog",
+                    category: CAT_GENERAL,
+                    tooltip: "Open a comment dialog to write texts in presentations or screen-recording videos."
+                },
+                handler: {
+                    executeFunc: () => {
+                        const dlg = new controls.dialogs.CommentDialog();
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    control: true,
+                    alt: true,
+                    key: " "
+                }
+            });
         }
 
         private static initPalette(manager: commands.CommandManager) {

@@ -12,6 +12,7 @@
 * Scene Editor: the Replace Type dialog provides the option "Keep the original texture", used when you are morphing an object to a prefab type.
 * Scene Editor: removes extra blank lines in generated code.
 * Open Visual Studio Code command in main menu. Bound to the `Ctrl+Alt+U` key.
+* A Comment Dialog (`Ctrl+Alt+Space`), to write messages in presentations or video-recording.
 
 ## Modified
 
