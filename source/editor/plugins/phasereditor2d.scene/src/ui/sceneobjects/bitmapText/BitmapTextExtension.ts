@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const bitmapFont = extraData as pack.core.BitmapFontAssetPackItem;
 
-            if (bitmapFont) {
+            if (bitmapFont && bitmapFont instanceof pack.core.BitmapFontAssetPackItem) {
 
                 let size = 64;
 
