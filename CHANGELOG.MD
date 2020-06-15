@@ -4,6 +4,8 @@
 
 ## Added
 
+* Asset Pack Editor: allows to import SVG files as HTML Image.
+
 ## Modified
 
 ## Fixed
