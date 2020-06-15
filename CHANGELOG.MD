@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 3.2.0-next
+
+## Added
+
+## Modified
+
+## Fixed
+
 ## Version 3.2.0 - June 14, 2020
 
 ## Added
