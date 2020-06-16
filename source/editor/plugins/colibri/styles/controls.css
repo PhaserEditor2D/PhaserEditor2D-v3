@@ -419,6 +419,12 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     border-radius: 3px;
 }
 
+/* Upload Dialog */
+
+.FilesDragEnter {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
 /* Menu */
 
 .Menu {

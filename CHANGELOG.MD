@@ -9,6 +9,7 @@
 * **Go To File** command `Ctrl+P`.
 * Viewer dialog selects visible (or selected) item with the ENTER key.
 * Filtered Viewer: allows pressing the Up/Down keys to focus the filter text or the viewer.
+* Upload dialog: allows to drop files.
 
 ## Modified
 
