@@ -38,7 +38,6 @@ namespace colibri.ui.controls.viewers {
             const b = this.getElement().getBoundingClientRect();
             this._viewer.setBoundsValues(b.left, b.top, b.width, b.height);
         }
-
     }
 
     export class FilteredViewer<T extends Viewer> extends Control {
@@ -53,7 +52,6 @@ namespace colibri.ui.controls.viewers {
             this._viewer = viewer;
 
             this._filterControl = new FilterControl();
-            this._filterControl.getFilterElement().addEventListener("input", e => this.onFilterInput(e));
             this.add(this._filterControl);
 
             this._viewerContainer = new ViewerContainer(this._viewer);
@@ -61,6 +59,40 @@ namespace colibri.ui.controls.viewers {
             this.add(this._scrollPane);
 
             this.setLayoutChildren(false);
+
+            this.registerListeners();
+        }
+
+        private registerListeners() {
+
+            this._filterControl.getFilterElement().addEventListener("input", e => this.onFilterInput(e));
+
+            this._filterControl.getFilterElement().addEventListener("keyup", e => {
+
+                if (e.key === "ArrowDown") {
+
+                    e.preventDefault();
+
+                    const viewer = this.getViewer();
+
+                    viewer.getElement().focus();
+
+
+                    if (viewer.getSelection().length === 0) {
+                        if (viewer instanceof viewers.TreeViewer) {
+
+                            const obj = viewer.getFirstVisibleElement();
+
+                            if (obj) {
+
+                                viewer.setSelection([obj]);
+                            }
+                        }
+                    }
+
+                    viewer.reveal(viewer.getSelection());
+                }
+            })
         }
 
         private onFilterInput(e?: Event) {
