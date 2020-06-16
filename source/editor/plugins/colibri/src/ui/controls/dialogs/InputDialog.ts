@@ -71,6 +71,7 @@ namespace colibri.ui.controls.dialogs {
             this._acceptButton = this.addButton("Accept", () => {
 
                 if (this._resultCallback) {
+
                     this._resultCallback(this._textElement.value);
                 }
 
@@ -80,6 +81,8 @@ namespace colibri.ui.controls.dialogs {
             this.addButton("Cancel", () => this.close());
 
             setTimeout(() => this._textElement.focus(), 100);
+
+            this.connectInputWithButton(this._textElement, this._acceptButton);
         }
     }
 }
