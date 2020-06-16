@@ -51,7 +51,7 @@ namespace colibri.ui.controls.dialogs {
             btn.disabled = this.getViewer().getSelection().length !== 1;
         }
 
-        addOpenButton(text: string, callback: (selection: any[]) => void) {
+        addOpenButton(text: string, callback: (selection: any[]) => void, allowSelectEmpty = false) {
 
             const callback2 = () => {
 
@@ -62,7 +62,39 @@ namespace colibri.ui.controls.dialogs {
 
             this.getViewer().eventOpenItem.addListener(callback2);
 
-            return this.addButton(text, callback2);
+            const btn = this.addButton(text, callback2);
+
+            const inputElement = this.getFilteredViewer().getFilterControl().getElement();
+
+            inputElement.addEventListener("keyup", e => {
+
+                if (e.keyCode === 13) {
+
+                    e.preventDefault();
+
+                    const sel = this.getViewer().getSelection();
+
+                    if (sel.length === 0) {
+
+                        if (!allowSelectEmpty) {
+
+                            const elements = this.getViewer().getVisibleElements();
+
+                            if (elements.length === 1) {
+
+                                this.getViewer().setSelection(elements);
+
+                                btn.click();
+                            }
+                        }
+                    } else {
+
+                        btn.click();
+                    }
+                }
+            });
+
+            return btn;
         }
     }
 }

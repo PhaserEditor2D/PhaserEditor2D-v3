@@ -129,7 +129,7 @@ namespace colibri.ui.controls.viewers {
                     return true;
                 }
 
-                const newChildren =  contentProvider.getChildren(child);
+                const newChildren = contentProvider.getChildren(child);
 
                 const found = this.getObjectPath2(obj, path, newChildren);
 
@@ -214,6 +214,24 @@ namespace colibri.ui.controls.viewers {
             this._contentHeight = result.contentHeight;
             this._paintItems = result.paintItems;
             this._treeIconList = result.treeIconList;
+        }
+
+        getFirstVisibleElement() {
+
+            if (this._paintItems && this._paintItems.length > 0) {
+
+                return this._paintItems[0].data;
+            }
+        }
+
+        getVisibleElements() {
+
+            if (this._paintItems) {
+
+                return this._paintItems.map(item => item.data);
+            }
+
+            return [];
         }
 
         setFilterText(filter: string) {
