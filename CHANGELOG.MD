@@ -6,6 +6,7 @@
 
 * Asset Pack Editor: allows to import SVG files as HTML Image.
 * Closes a couple of Input dialogs (New File, New Project, Rename File) when press ENTER in the input field.
+* **Go To File** command `Ctrl+P`.
 
 ## Modified
 
