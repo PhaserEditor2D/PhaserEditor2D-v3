@@ -240,10 +240,12 @@ namespace colibri.ui.controls {
             const rect = this._element.getClientRects()[0];
 
             if (y + rect.height > window.innerHeight) {
-                y -= rect.height;
+
+                y = window.innerHeight - rect.height - 10;
             }
 
             if (x + rect.width > window.innerWidth) {
+
                 x -= rect.width;
             }
 
