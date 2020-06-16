@@ -73,31 +73,53 @@ namespace colibri.ui.controls.viewers {
 
                     e.preventDefault();
 
-                    const viewer = this.getViewer();
+                    const viewer = this.getViewer() as any as viewers.TreeViewer;
 
                     viewer.getElement().focus();
 
+                    const sel = viewer.getSelection();
 
-                    if (viewer.getSelection().length === 0) {
-                        if (viewer instanceof viewers.TreeViewer) {
+                    const selVisible = viewer.getVisibleElements().filter(elem => sel.indexOf(elem)> 0).length > 0;
 
-                            const obj = viewer.getFirstVisibleElement();
+                    if (!selVisible) {
 
-                            if (obj) {
+                        const obj = viewer.getFirstVisibleElement();
 
-                                viewer.setSelection([obj]);
-                            }
+                        if (obj) {
+
+                            viewer.setSelection([obj]);
                         }
                     }
 
                     viewer.reveal(viewer.getSelection());
                 }
-            })
+            });
+
+            this.getViewer().getElement().addEventListener("keyup", e => {
+
+                if (e.key === "ArrowUp") {
+
+                    if (this.getViewer().getSelection().length === 1) {
+
+                        const elem = this.getViewer().getSelectionFirstElement();
+
+                        const visibleElem = (this.getViewer() as any as viewers.TreeViewer).getFirstVisibleElement();
+
+                        if (visibleElem === elem) {
+
+                            this._filterControl.getFilterElement().focus();
+                        }
+                    }
+                }
+            });
         }
 
         private onFilterInput(e?: Event) {
+
             const value = this._filterControl.getFilterElement().value;
+
             this._viewer.setFilterText(value);
+
             this._viewer.repaint();
         }
 

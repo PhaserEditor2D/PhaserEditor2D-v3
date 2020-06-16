@@ -241,6 +241,7 @@ namespace colibri.ui.controls.viewers {
             if (filter !== "") {
 
                 this.expandFilteredParents(this.getContentProvider().getRoots(this.getInput()));
+
                 this.repaint();
             }
         }
