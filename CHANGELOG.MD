@@ -8,6 +8,7 @@
 * Closes a couple of Input dialogs (New File, New Project, Rename File) when press ENTER in the input field.
 * **Go To File** command `Ctrl+P`.
 * Viewer dialog selects visible (or selected) item with the ENTER key.
+* Filtered Viewer: pressing the Down key in the filter text moves the cursor to the viewer.
 
 ## Modified
 
