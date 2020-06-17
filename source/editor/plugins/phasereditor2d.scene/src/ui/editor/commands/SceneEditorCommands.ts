@@ -813,6 +813,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     name: "Select Region",
                     category: CAT_SCENE_EDITOR,
                     tooltip: "Select all objects inside a region",
+                    icon: ScenePlugin.getInstance().getIcon(ICON_SELECT_REGION)
                 },
                 handler: {
                     testFunc: isSceneScope,

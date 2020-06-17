@@ -8,6 +8,7 @@ namespace phasereditor2d.scene {
     export const ICON_ANGLE = "angle";
     export const ICON_SCALE = "scale";
     export const ICON_ORIGIN = "origin";
+    export const ICON_SELECT_REGION = "select-region";
     export const ICON_BUILD = "build";
     export const ICON_LOCKED = "locked";
     export const ICON_UNLOCKED = "unlocked";
@@ -84,6 +85,7 @@ namespace phasereditor2d.scene {
                     ICON_GROUP,
                     ICON_ANGLE,
                     ICON_ORIGIN,
+                    ICON_SELECT_REGION,
                     ICON_SCALE,
                     ICON_TRANSLATE,
                     ICON_BUILD,

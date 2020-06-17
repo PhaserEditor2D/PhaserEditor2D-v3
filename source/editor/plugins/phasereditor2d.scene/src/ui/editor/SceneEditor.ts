@@ -329,7 +329,8 @@ namespace phasereditor2d.scene.ui.editor {
                 sceneobjects.TranslateTool.ID,
                 sceneobjects.ScaleTool.ID,
                 sceneobjects.RotateTool.ID,
-                sceneobjects.OriginTool.ID
+                sceneobjects.OriginTool.ID,
+                sceneobjects.SelectionRegionTool.ID
             ];
 
             for (const toolId of this._toolsInToolbar) {
