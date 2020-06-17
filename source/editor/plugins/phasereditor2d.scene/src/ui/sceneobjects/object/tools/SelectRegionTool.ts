@@ -24,6 +24,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs) {
 
             this._cursorStartPoint = new Phaser.Math.Vector2(args.x, args.y);
+
+            args.editor.setSelection([]);
         }
 
         onDrag(args: editor.tools.ISceneToolDragEventArgs) {
@@ -38,10 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs) {
 
-            if (this._cursorStartPoint) {
-
-                const start = this._cursorStartPoint;
-                const end = this._cursorCurrentPoint;
+            if (this._cursorStartPoint && this._cursorCurrentPoint) {
 
                 const result = this.getRegionResult(args.editor);
 
@@ -51,9 +50,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     .map(item => item.obj);
 
+
                 this._cursorStartPoint = null;
+                this._cursorCurrentPoint = null;
 
                 args.editor.setSelection(newSel);
+
+            } else {
+
+                args.editor.repaint();
             }
         }
 
@@ -82,11 +87,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const result: IResultItem[] = [];
 
             // TODO: don't enter in prefab objects
-            scene.visit(obj => {
+            scene.visitAskChildren(obj => {
 
                 if (EditorSupport.hasObjectComponent(obj, TransformComponent)) {
 
-                    const sprite = obj as any as Phaser.GameObjects.Sprite;
                     const points = obj.getEditorSupport().getScreenBounds(scene.getCamera());
 
                     const x1 = Math.min(start.x, end.x);
@@ -116,6 +120,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         points: pointsData
                     });
                 }
+
+                if (obj.getEditorSupport().isPrefabInstance()) {
+
+                    return false;
+                }
+
+                if (obj instanceof Container) {
+
+                    if (!obj.getEditorSupport().isAllowPickChildren()) {
+
+                        return false;
+                    }
+                }
+
+                return true;
             });
 
             return result;
@@ -123,7 +142,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         render(args: editor.tools.ISceneToolRenderArgs) {
 
-            if (!this._cursorStartPoint) {
+            if (!this._cursorStartPoint || !this._cursorCurrentPoint) {
 
                 return;
             }
