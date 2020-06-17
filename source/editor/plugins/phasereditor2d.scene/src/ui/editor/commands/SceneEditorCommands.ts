@@ -17,6 +17,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
+    export const CMD_SELECT_REGION = "phasereditor2d.scene.ui.editor.commands.SelectRegion";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
     export const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
@@ -805,6 +806,24 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "Z"
                 }
             });
+
+            manager.add({
+                command: {
+                    id: CMD_SELECT_REGION,
+                    name: "Select Region",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Select all objects inside a region",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.SelectionRegionTool.ID)
+                },
+                keys: {
+                    shift: true,
+                    key: "S"
+                }
+            })
         }
 
         private static registerDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {

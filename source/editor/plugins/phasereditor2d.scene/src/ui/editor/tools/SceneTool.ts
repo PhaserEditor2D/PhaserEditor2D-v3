@@ -63,6 +63,11 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         abstract canRender(obj: unknown): boolean;
 
+        isObjectTool() {
+
+            return true;
+        }
+
         render(args: ISceneToolRenderArgs): void {
 
             for (const item of this._items) {

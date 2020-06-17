@@ -47,14 +47,22 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const args = this.createArgs(e);
 
-                for (const obj of args.objects) {
+                if (tool.isObjectTool()) {
 
-                    if (!tool.canEdit(obj)) {
-                        return;
+                    for (const obj of args.objects) {
+
+                        if (!tool.canEdit(obj)) {
+                            return;
+                        }
                     }
-                }
 
-                if (tool.containsPoint(args)) {
+                    if (tool.containsPoint(args)) {
+
+                        this._toolInAction = true;
+
+                        tool.onStartDrag(args);
+                    }
+                } else {
 
                     this._toolInAction = true;
 
@@ -102,10 +110,13 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const args = this.createArgs(e);
 
-                for (const obj of args.objects) {
+                if (tool.isObjectTool()) {
 
-                    if (!tool.canEdit(obj)) {
-                        return;
+                    for (const obj of args.objects) {
+
+                        if (!tool.canEdit(obj)) {
+                            return;
+                        }
                     }
                 }
 
