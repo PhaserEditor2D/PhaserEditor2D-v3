@@ -11,6 +11,7 @@
 * Filtered Viewer: allows pressing the Up/Down keys to focus the filter text or the viewer.
 * Upload dialog: allows to drop files.
 * Scene Editor: the Select Region tool.
+* Scene Editor: scale proportionally if the `Shift` key is pressed when using the Scale tool.
 
 ## Modified
 
