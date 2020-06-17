@@ -21,6 +21,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         x: number;
         y: number;
+        event: MouseEvent;
     }
 
     export interface ISceneToolConfig {

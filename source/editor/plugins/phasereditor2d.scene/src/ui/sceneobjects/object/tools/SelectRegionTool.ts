@@ -25,7 +25,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._cursorStartPoint = new Phaser.Math.Vector2(args.x, args.y);
 
-            args.editor.setSelection([]);
+            if (!args.event.ctrlKey) {
+
+                args.editor.setSelection([]);
+            }
         }
 
         onDrag(args: editor.tools.ISceneToolDragEventArgs) {
@@ -54,8 +57,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._cursorStartPoint = null;
                 this._cursorCurrentPoint = null;
 
-                args.editor.setSelection(newSel);
+                if (args.event.ctrlKey) {
 
+                    const sel = [...args.editor.getSelection()];
+
+                    for (const obj of newSel) {
+
+                        if (sel.indexOf(obj) < 0) {
+
+                            sel.push(obj);
+                        }
+                    }
+
+                    args.editor.setSelection(sel);
+
+                } else {
+
+                    args.editor.setSelection(newSel);
+                }
             } else {
 
                 args.editor.repaint();

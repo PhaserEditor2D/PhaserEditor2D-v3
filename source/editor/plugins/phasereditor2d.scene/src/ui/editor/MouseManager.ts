@@ -22,14 +22,15 @@ namespace phasereditor2d.scene.ui.editor {
             canvas.addEventListener("mousemove", e => this.onMouseMove(e));
         }
 
-        private createArgs(e: MouseEvent) {
+        private createArgs(e: MouseEvent): tools.ISceneToolDragEventArgs {
             return {
                 camera: this._editor.getScene().getCamera(),
                 editor: this._editor,
                 localCoords: this._editor.isLocalCoords(),
                 objects: this._editor.getSelection(),
                 x: e.offsetX,
-                y: e.offsetY
+                y: e.offsetY,
+                event: e
             };
         }
 
