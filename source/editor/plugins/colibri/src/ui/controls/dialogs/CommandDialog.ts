@@ -8,7 +8,7 @@ namespace colibri.ui.controls.dialogs {
             super(new controls.viewers.TreeViewer());
 
             const size = this.getSize();
-            this.setSize(size.width, size.height * 1.5);
+            this.setSize(size.width * 1.5, size.height * 1.5);
         }
 
         create() {

@@ -29,6 +29,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_CREATE_PREFAB_WITH_OBJECT = "phasereditor2d.scene.ui.editor.commands.CreatePrefabWithObject";
     export const CMD_QUICK_EDIT_OUTPUT_FILE = "phasereditor2d.scene.ui.editor.commands.QuickEditOutputFile";
     export const CMD_OPEN_OUTPUT_FILE_IN_VSCODE = "phasereditor2d.scene.ui.editor.commands.OpenOutputFileInVSCode";
+    export const CMD_MOVE_OBJECT_LEFT = "phasereditor2d.scene.ui.editor.commands.MoveObjectLeft";
+    export const CMD_MOVE_OBJECT_RIGHT = "phasereditor2d.scene.ui.editor.commands.MoveObjectRight";
+    export const CMD_MOVE_OBJECT_UP = "phasereditor2d.scene.ui.editor.commands.MoveObjectUp";
+    export const CMD_MOVE_OBJECT_DOWN = "phasereditor2d.scene.ui.editor.commands.MoveObjectDown";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -155,6 +159,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             SceneEditorCommands.registerDepthCommands(manager);
 
             SceneEditorCommands.registerTypeCommands(manager);
+
+            SceneEditorCommands.registerMoveObjectCommands(manager);
 
             // add object dialog
 
@@ -312,6 +318,106 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "W"
                 }
             });
+        }
+
+        private static registerMoveObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            class Operation extends undo.SceneSnapshotOperation {
+
+                private _dx: number;
+                private _dy: number;
+
+                constructor(editor: SceneEditor, dx: number, dy: number) {
+                    super(editor);
+
+                    this._dx = dx;
+                    this._dy = dy;
+                }
+
+                protected performModification() {
+
+                    for (const obj of this._editor.getSelection()) {
+
+                        const sprite = obj as Phaser.GameObjects.Sprite;
+
+                        sprite.x += this._dx;
+                        sprite.y += this._dy;
+                    }
+                }
+            }
+
+            const dxMap: any = {}
+            const dyMap: any = {}
+            const nameMap: any = {};
+
+            dxMap[CMD_MOVE_OBJECT_LEFT] = -1;
+            dxMap[CMD_MOVE_OBJECT_RIGHT] = 1;
+            dxMap[CMD_MOVE_OBJECT_UP] = 0;
+            dxMap[CMD_MOVE_OBJECT_DOWN] = 0;
+
+            dyMap[CMD_MOVE_OBJECT_LEFT] = 0;
+            dyMap[CMD_MOVE_OBJECT_RIGHT] = 0;
+            dyMap[CMD_MOVE_OBJECT_UP] = -1;
+            dyMap[CMD_MOVE_OBJECT_DOWN] = 1;
+
+            nameMap[CMD_MOVE_OBJECT_LEFT] = "Left";
+            nameMap[CMD_MOVE_OBJECT_RIGHT] = "Right";
+            nameMap[CMD_MOVE_OBJECT_UP] = "Up";
+            nameMap[CMD_MOVE_OBJECT_DOWN] = "Down";
+
+            for (const cmd of [CMD_MOVE_OBJECT_LEFT, CMD_MOVE_OBJECT_RIGHT, CMD_MOVE_OBJECT_UP, CMD_MOVE_OBJECT_DOWN]) {
+
+                for (const large of [true, false]) {
+
+                    manager.add({
+                        command: {
+                            id: cmd + (large ? "Large" : ""),
+                            category: CAT_SCENE_EDITOR,
+                            name: "Move Object Position " + (large ? "10x " : "") + nameMap[cmd],
+                            tooltip: (large ? "10x " : "") + "Move selected objects position in the '" + nameMap[cmd] + "' direction"
+                        },
+                        handler: {
+                            testFunc: args => {
+
+                                if (!isSceneScope(args)) {
+
+                                    return false;
+                                }
+
+                                if (args.activeEditor.getSelection().length === 0) {
+
+                                    return false;
+                                }
+
+                                for (const obj of args.activeEditor.getSelection()) {
+
+                                    if (!sceneobjects.EditorSupport.hasObjectComponent(obj, sceneobjects.TransformComponent)) {
+
+                                        return false;
+                                    }
+                                }
+
+                                return true;
+                            },
+                            executeFunc: args => {
+
+                                const editor = args.activeEditor as SceneEditor;
+                                const settings = editor.getScene().getSettings();
+
+
+                                const dx = dxMap[cmd] * (large ? 10 : 1) * (settings.snapEnabled ? settings.snapWidth : 1);
+                                const dy = dyMap[cmd] * (large ? 10 : 1) * (settings.snapEnabled ? settings.snapHeight : 1);
+
+                                editor.getUndoManager().add(new Operation(editor, dx, dy));
+                            }
+                        },
+                        keys: {
+                            key: "Arrow" + nameMap[cmd],
+                            shift: large ? true : undefined
+                        }
+                    });
+                }
+            }
         }
 
         private static registerContainerCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -838,7 +944,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                     command: {
                         id: "phasereditor2d.scene.ui.editor.commands.Depth" + move,
-                        name: "Move Object " + move,
+                        name: "Move Object Depth " + move,
                         category: CAT_SCENE_EDITOR,
                         tooltip: "Move the object in its container to " + move + "."
                     },

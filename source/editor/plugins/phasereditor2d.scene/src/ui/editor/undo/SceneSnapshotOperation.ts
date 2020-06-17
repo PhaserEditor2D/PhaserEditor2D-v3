@@ -28,6 +28,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             this._editor.setDirty(true);
             this._editor.refreshOutline();
+            this._editor.repaint();
         }
 
         protected async abstract performModification();
