@@ -6,7 +6,9 @@ namespace phasereditor2d.pack.ui.editor {
     import io = colibri.core.io;
 
     export class AssetPackEditor extends ide.ViewerFileEditor {
+
         static _factory: ide.ContentTypeEditorFactory;
+        private _revealKey: string;
 
         static getFactory() {
 
@@ -129,6 +131,13 @@ namespace phasereditor2d.pack.ui.editor {
             this.getViewer().repaint();
 
             await this.updateBlocks();
+
+            if (this._revealKey) {
+
+                this.revealKeyNow(this._revealKey);
+
+                this._revealKey = null;
+            }
         }
 
         async doSave() {
@@ -143,6 +152,29 @@ namespace phasereditor2d.pack.ui.editor {
 
             } catch (e) {
                 console.error(e);
+            }
+        }
+
+        revealKey(key: string) {
+
+            if (!this._pack) {
+
+                this._revealKey = key;
+
+            } else {
+
+                this.revealKeyNow(key);
+            }
+        }
+
+        private revealKeyNow(key: string) {
+
+            const item = this._pack.getItems().find(i => i.getKey() === key);
+
+            if (item) {
+
+                this.getViewer().setSelection([item]);
+                this.getViewer().reveal(item);
             }
         }
 
