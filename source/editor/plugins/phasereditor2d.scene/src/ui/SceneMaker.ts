@@ -169,7 +169,7 @@ namespace phasereditor2d.scene.ui {
             return new json.Serializer(data);
         }
 
-        createScene(sceneData: json.ISceneData) {
+        createScene(sceneData: json.ISceneData, errors?: string[]) {
 
             if (sceneData.settings) {
 
@@ -193,7 +193,7 @@ namespace phasereditor2d.scene.ui {
 
             for (const objData of sceneData.displayList) {
 
-                this.createObject(objData);
+                this.createObject(objData, errors);
             }
         }
 
@@ -212,21 +212,26 @@ namespace phasereditor2d.scene.ui {
 
             for (const objData of list) {
 
-                const ser = this.getSerializer(objData);
+                try {
+                    const ser = this.getSerializer(objData);
 
-                const type = ser.getType();
+                    const type = ser.getType();
 
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                    const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
 
-                if (ext) {
+                    if (ext) {
 
-                    const objAssets = await ext.getAssetsFromObjectData({
-                        serializer: ser,
-                        finder: finder,
-                        scene: this._scene
-                    });
+                        const objAssets = await ext.getAssetsFromObjectData({
+                            serializer: ser,
+                            finder: finder,
+                            scene: this._scene
+                        });
 
-                    assets.push(...objAssets);
+                        assets.push(...objAssets);
+                    }
+                } catch (e) {
+
+                    console.error(e);
                 }
             }
 
@@ -288,29 +293,46 @@ namespace phasereditor2d.scene.ui {
             return newObject;
         }
 
-        createObject(data: json.IObjectData) {
+        createObject(data: json.IObjectData, errors?: string[]) {
 
-            const ser = this.getSerializer(data);
+            try {
 
-            const type = ser.getType();
+                const ser = this.getSerializer(data);
 
-            const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const type = ser.getType();
 
-            if (ext) {
+                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
 
-                const sprite = ext.createSceneObjectWithData({
-                    data: data,
-                    scene: this._scene
-                });
+                if (ext) {
 
-                return sprite;
+                    const sprite = ext.createSceneObjectWithData({
+                        data: data,
+                        scene: this._scene
+                    });
 
-            } else {
+                    return sprite;
 
-                console.error(`SceneMaker: no extension is registered for type "${type}".`);
+                } else {
+
+                    const msg = `SceneMaker: no extension is registered for type "${type}".`;
+
+                    errors.push(msg);
+
+                    console.error(msg);
+                }
+
+                return null;
+
+            } catch (e) {
+
+                const msg = (e as Error).message;
+
+                errors.push(msg);
+
+                console.error(msg);
+
+                return null;
             }
-
-            return null;
         }
     }
 }

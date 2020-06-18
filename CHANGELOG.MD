@@ -19,6 +19,7 @@
 ## Fixed
 
 * Fixes menu vertical positioning when there is few space at the top.
+* Scene Editor: shows message when a prefab is not found.
 
 ## Version 3.2.0 - June 14, 2020
 

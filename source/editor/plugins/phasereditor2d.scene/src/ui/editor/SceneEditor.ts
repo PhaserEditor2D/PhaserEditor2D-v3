@@ -453,12 +453,19 @@ namespace phasereditor2d.scene.ui.editor {
 
                     await maker.updateSceneLoader(data, this._overlayLayer.createLoadingMonitor());
 
-                    maker.createScene(data);
+                    const errors = [];
+                    maker.createScene(data, errors);
 
                     this._overlayLayer.setLoading(false);
                     this._overlayLayer.render();
 
+                    if (errors.length > 0) {
+
+                        alert(errors.join("<br>"));
+                    }
+
                 } else {
+
                     alert("Invalid file format.");
                 }
 
