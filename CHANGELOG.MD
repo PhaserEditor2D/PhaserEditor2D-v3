@@ -13,6 +13,7 @@
 * Scene Editor: the Select Region tool.
 * Scene Editor: scale proportionally if the `Shift` key is pressed when using the Scale tool.
 * Scene Editor: arrow keys commands to change the position of the objects. Press `Shift` for 10x. It respects snap values.
+* Scene Editor: enables copy/paste objects across scenes.
 
 ## Modified
 

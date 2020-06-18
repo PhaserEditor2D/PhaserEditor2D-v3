@@ -10,9 +10,16 @@ namespace phasereditor2d.scene.ui.editor.undo {
             super(editor);
         }
 
+        async execute() {
+
+            await super.execute();
+
+            await this.getEditor().refreshScene();
+        }
+
         protected async performModification() {
 
-            const items = this.getEditor().getClipboardManager().getClipboardCopy();
+            const items = ClipboardManager.getClipboardCopy();
 
             const maker = this._editor.getSceneMaker();
 
