@@ -238,11 +238,6 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     padding: 10px 0px 10px 0px;
 }
 
-.PropertySubTitleLabel {
-    width: 100%;
-    font-weight: bold;
-}
-
 .PropertyButtonPanel {
     width: 100%;
     display: block;
@@ -261,6 +256,10 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     align-items: center;
     background: rgba(0, 0, 0, 0.1);
     padding: 3px;
+}
+
+.PropertySubTitleLabel {
+    width: 100%;    
 }
 
 .formSimpleProps {
