@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.core.code {
 
         isInitialized() {
 
-            return this._initialValueExpr !== null;
+            return this._initialValueExpr !== null && this._initialValueExpr !== undefined && this._initialValueExpr.length > 0;
         }
 
         getInitialValueExpr() {

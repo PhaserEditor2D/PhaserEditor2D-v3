@@ -21,6 +21,7 @@
 
 * Fixes menu vertical positioning when there is few space at the top.
 * Scene Editor: shows message when a prefab is not found.
+* Scene Editor: fixes user property declaration when no initial value is provided.
 
 ## Version 3.2.0 - June 14, 2020
 
