@@ -180,6 +180,15 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_TOGGLE_SNAPPING);
             menu.addCommand(commands.CMD_SET_SNAPPING_TO_OBJECT_SIZE);
+            menu.addSeparator();
+            menu.addCommand(commands.CMD_MOVE_OBJECT_LEFT);
+            menu.addCommand(commands.CMD_MOVE_OBJECT_RIGHT);
+            menu.addCommand(commands.CMD_MOVE_OBJECT_UP);
+            menu.addCommand(commands.CMD_MOVE_OBJECT_DOWN);
+            menu.addCommand(commands.CMD_MOVE_OBJECT_LEFT + "Large");
+            menu.addCommand(commands.CMD_MOVE_OBJECT_RIGHT + "Large");
+            menu.addCommand(commands.CMD_MOVE_OBJECT_UP + "Large");
+            menu.addCommand(commands.CMD_MOVE_OBJECT_DOWN + "Large");
 
             return menu;
         }
