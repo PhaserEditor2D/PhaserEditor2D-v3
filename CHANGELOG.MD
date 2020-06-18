@@ -18,6 +18,8 @@
 
 ## Modified
 
+* Improved Asset Pack File section in Inspector view.
+
 ## Fixed
 
 * Fixes menu vertical positioning when there is few space at the top.

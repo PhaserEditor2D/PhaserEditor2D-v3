@@ -20,39 +20,36 @@ namespace phasereditor2d.pack.ui.properties {
 
                 await finder.preload();
 
-                const packFiles = new Set<io.FilePath>();
+                const packItems: core.AssetPackItem[] = [];
 
                 for (const file of this.getSelection()) {
 
-                    const parentPacks = await finder.findPacksFor(file);
+                    const items = await finder.findPackItemsFor(file);
 
-                    for (const pack of parentPacks) {
-
-                        packFiles.add(pack.getFile());
-                    }
+                    packItems.push(...items);
                 }
 
-                while (comp.children.length > 0) {
+               comp.innerHTML = "";
 
-                    comp.children.item(0).remove();
-                }
-
-                for (const file of packFiles) {
+                for (const item of packItems) {
 
                     const btn = document.createElement("button");
 
                     btn.innerHTML =
-                        `Open "${file.getProjectRelativeName()}"`;
+                        `${item.getKey()} at ${item.getPack().getFile().getProjectRelativeName()}`;
 
                     btn.addEventListener("click", async (e) => {
 
-                        colibri.Platform.getWorkbench().openEditor(file);
+                        const editor = colibri.Platform.getWorkbench()
+                            .openEditor(item.getPack().getFile()) as editor.AssetPackEditor;
+
+                        editor.revealKey(item.getKey());
                     });
 
                     comp.appendChild(btn);
                 }
 
-                if (packFiles.size === 0) {
+                if (packItems.length === 0) {
 
                     const importList = this.buildImportList();
 
