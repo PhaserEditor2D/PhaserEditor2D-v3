@@ -44,22 +44,14 @@ namespace phasereditor2d.scene {
 
             this._sceneFinder = new core.json.SceneFinder();
 
+            // preload docs
+
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () =>{
+                await ScenePlugin.getInstance().getPhaserDocs().preload();
+            }));
+
             // preload project
-
-            reg.addExtension(this._sceneFinder.getProjectPreloader(),
-
-                // tslint:disable-next-line:new-parens
-                new (class extends ide.PreloadProjectResourcesExtension {
-
-                    async computeTotal() {
-                        return 0;
-                    }
-
-                    async preload() {
-                        return ScenePlugin.getInstance().getPhaserDocs().preload();
-                    }
-                })
-            );
+            reg.addExtension(this._sceneFinder.getProjectPreloader());
 
             // content type resolvers
 
