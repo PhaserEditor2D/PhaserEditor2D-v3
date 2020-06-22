@@ -16,6 +16,7 @@
 * Scene Editor: enables copy/paste objects across scenes.
 * Scene Editor: Inspector view sections show a menu with a Help item.
 * Asset Pack: adds an Open button to the File Key section.
+* Asset Pack: shows a Help link in the menu of the Inspector sections.
 
 ## Modified
 
