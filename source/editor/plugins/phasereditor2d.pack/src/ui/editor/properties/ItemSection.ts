@@ -10,6 +10,11 @@ namespace phasereditor2d.pack.ui.editor.properties {
             super(page, "phasereditor2d.pack.ui.editor.properties.ItemSection", "Key");
         }
 
+        getAssetType() {
+
+            return this.getSelectionFirstElement().getType();
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);

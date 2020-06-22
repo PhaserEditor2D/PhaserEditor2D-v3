@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class ScenePluginSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.ScenePluginSection", "Scene Plugin");
+            super(page, "phasereditor2d.pack.ui.editor.properties.ScenePluginSection", "Scene Plugin", core.SCENE_PLUGIN_TYPE);
         }
 
         canEdit(obj: any, n: number) {

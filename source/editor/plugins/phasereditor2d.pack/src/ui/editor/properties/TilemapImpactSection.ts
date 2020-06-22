@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class TilemapImpactSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.TilemapImpactSection", "Tilemap Impact");
+            super(page, "phasereditor2d.pack.ui.editor.properties.TilemapImpactSection", "Tilemap Impact", core.TILEMAP_IMPACT_TYPE);
         }
 
         canEdit(obj: any, n: number) {

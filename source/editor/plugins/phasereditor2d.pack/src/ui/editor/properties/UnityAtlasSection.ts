@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class UnityAtlasSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.UnityAtlasSection", "Unity Atlas");
+            super(page, "phasereditor2d.pack.ui.editor.properties.UnityAtlasSection", "Unity Atlas", core.UNITY_ATLAS_TYPE);
         }
 
         canEdit(obj: any, n: number) {

@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class AtlasSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.AtlasSection", "Atlas");
+            super(page, "phasereditor2d.pack.ui.editor.properties.AtlasSection", "Atlas", core.ATLAS_TYPE);
         }
 
         canEdit(obj: any, n: number) {

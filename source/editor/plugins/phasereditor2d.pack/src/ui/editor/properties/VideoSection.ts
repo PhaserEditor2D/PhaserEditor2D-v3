@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class VideoSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.VideoSection", "Video");
+            super(page, "phasereditor2d.pack.ui.editor.properties.VideoSection", "Video", core.VIDEO_TYPE);
         }
 
         canEdit(obj: any, n: number) {

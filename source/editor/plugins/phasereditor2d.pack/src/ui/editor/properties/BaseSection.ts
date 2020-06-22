@@ -6,6 +6,39 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
     export abstract class BaseSection extends controls.properties.PropertySection<core.AssetPackItem> {
 
+        private _assetType: string;
+
+        constructor(page: controls.properties.PropertyPage, id: string, title: string, assetType?: string, fillSpace?: boolean) {
+            super(page, id, title, fillSpace);
+
+            this._assetType = assetType;
+        }
+
+        getAssetType() {
+            return null;
+        }
+
+        createMenu(menu: controls.Menu) {
+
+            let type = this.getAssetType();
+
+            if (!type) {
+
+                type = this._assetType;
+            }
+
+            if (type) {
+
+                menu.addAction({
+                    text: "Help",
+                    callback: () => {
+                        controls.Controls.openUrlInNewPage(
+                            "http://photonstorm.github.io/phaser3-docs/Phaser.Loader.LoaderPlugin.html#" + type + "__anchor");
+                    }
+                });
+            }
+        }
+
         getEditor() {
             return ide.Workbench.getWorkbench().getActiveEditor() as AssetPackEditor;
         }
