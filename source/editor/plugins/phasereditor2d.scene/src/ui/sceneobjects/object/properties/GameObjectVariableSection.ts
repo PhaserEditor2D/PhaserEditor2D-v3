@@ -10,6 +10,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectVariableSection", "Variable", false);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/variable-properties.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);

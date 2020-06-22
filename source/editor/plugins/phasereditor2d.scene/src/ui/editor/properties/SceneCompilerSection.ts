@@ -11,6 +11,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 "Compiler Scene Settings", false, true);
         }
 
+        getSectionHelpPath() {
+            return "scene-editor/scene-compiler-scene-settings.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);

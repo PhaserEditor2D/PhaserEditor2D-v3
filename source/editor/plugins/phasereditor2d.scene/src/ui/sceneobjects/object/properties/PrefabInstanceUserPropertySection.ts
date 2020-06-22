@@ -11,6 +11,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 "phasereditor2d.scene.ui.sceneobjects.PrefabInstanceUserPropertySection", "Prefab Instance");
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/prefab-user-properties.html#user-properties-in-a-prefab-instance";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);

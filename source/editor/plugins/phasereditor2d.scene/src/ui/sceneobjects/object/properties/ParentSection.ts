@@ -14,6 +14,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent Container", false, true);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/parent-container-properties.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);

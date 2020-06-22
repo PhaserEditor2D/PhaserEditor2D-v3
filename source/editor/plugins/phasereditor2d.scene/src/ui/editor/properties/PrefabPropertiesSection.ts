@@ -13,6 +13,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 "Prefab Properties", false, true);
         }
 
+        getSectionHelpPath() {
+            return "scene-editor/prefab-user-properties.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);

@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TileSprite", "Tile Sprite", false, true);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/tile-sprite-object.html#tile-sprite-properties";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);

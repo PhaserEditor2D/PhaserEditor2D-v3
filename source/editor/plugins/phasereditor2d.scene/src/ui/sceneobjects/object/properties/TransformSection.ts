@@ -9,6 +9,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TransformSection", "Transform", false);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/transform-properties.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);

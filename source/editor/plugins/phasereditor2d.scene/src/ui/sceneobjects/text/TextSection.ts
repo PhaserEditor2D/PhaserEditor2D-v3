@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor.scene.ui.sceneobjects.TextSection", "Text");
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/text-object.html#text-type-properties";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
