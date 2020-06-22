@@ -8,6 +8,8 @@ namespace colibri.ui.controls.properties {
         private _expandIconContext: CanvasRenderingContext2D;
         private _formArea: HTMLDivElement;
         private _page: PropertyPage;
+        private _menuIcon: IconControl;
+        private _menu: Menu;
 
         constructor(page: PropertyPage, section: PropertySection<any>) {
             super();
@@ -17,6 +19,13 @@ namespace colibri.ui.controls.properties {
             this._section = section;
 
             this.addClass("PropertySectionPane");
+        }
+
+        setMenu(menu: Menu) {
+
+            this._menu = menu;
+
+            this._menuIcon.getCanvas().style.visibility = menu.isEmpty() ? "hidden" : "visible";
         }
 
         createSection() {
@@ -49,6 +58,18 @@ namespace colibri.ui.controls.properties {
                 label.innerText = this._section.getTitle();
                 label.addEventListener("mouseup", () => this.toggleSection());
                 this._titleArea.appendChild(label);
+
+                this._menuIcon = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_SMALL_MENU));
+                this._menuIcon.getCanvas().classList.add("IconButton");
+                this._menuIcon.getCanvas().style.visibility = "hidden";
+                this._menuIcon.getCanvas().addEventListener("mousedown", e => {
+
+                    if (this._menu) {
+
+                        this._menu.createWithEvent(e);
+                    }
+                });
+                this._titleArea.appendChild(this._menuIcon.getCanvas());
 
                 this._formArea = document.createElement("div");
                 this._formArea.classList.add("PropertyFormArea");
@@ -255,6 +276,12 @@ namespace colibri.ui.controls.properties {
                     pane.getElement().style.display = "grid";
                     pane.createSection();
                     section.updateWithSelection();
+
+                    const menu = new Menu();
+
+                    section.createMenu(menu);
+
+                    pane.setMenu(menu);
 
                 } else {
 

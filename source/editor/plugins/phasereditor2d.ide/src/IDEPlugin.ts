@@ -114,6 +114,17 @@ namespace phasereditor2d.ide {
 
         isAdvancedJSEditor() {
             return this._advancedJSEditor;
+        }      
+        
+        createHelpMenuItem(menu: controls.Menu, helpPath: string) {
+
+            menu.addAction({
+                text: "Help",
+                callback: () => {
+
+                    controls.Controls.openUrlInNewPage("https://help.phasereditor2d.com/v3/" + helpPath);
+                }
+            });
         }
 
         async openFirstWindow() {

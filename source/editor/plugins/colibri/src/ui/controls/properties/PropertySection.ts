@@ -27,6 +27,10 @@ namespace colibri.ui.controls.properties {
 
         abstract canEditNumber(n: number): boolean;
 
+        createMenu(menu: controls.Menu) {
+            // nothing by default
+        }
+
         updateWithSelection(): void {
 
             for (const updater of this._updaters) {

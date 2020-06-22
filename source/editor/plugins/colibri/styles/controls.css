@@ -220,8 +220,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .PropertyTitleArea {
     display: inline-grid;
-    grid-template-columns: 20px 1fr;
-    height: 1em;
+    grid-template-columns: 20px 1fr auto;
     padding: 5px;
     border-radius: 3px 3px 0 0;
 }
@@ -230,7 +229,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     overflow: hidden;
     white-space: nowrap;
     word-break: break-all;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis;    
 }
 
 .PropertyFormArea {
