@@ -19,6 +19,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/parent-container-properties.html";
         }
 
+        createMenu(menu: controls.Menu) {
+
+            menu.addCommand(editor.commands.CMD_JOIN_IN_CONTAINER);
+            menu.addCommand(editor.commands.CMD_MOVE_TO_PARENT);
+            menu.addCommand(editor.commands.CMD_SELECT_PARENT);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);

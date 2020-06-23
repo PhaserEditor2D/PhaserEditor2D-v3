@@ -18,6 +18,11 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return null;
         }
 
+        hasMenu() {
+
+            return true;
+        }
+
         createMenu(menu: controls.Menu) {
 
             let type = this.getAssetType();

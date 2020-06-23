@@ -15,6 +15,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/container-object.html#container-properties";
         }
 
+        createMenu(menu: controls.Menu) {
+
+            menu.addCommand(editor.commands.CMD_TRIM_CONTAINER);
+            menu.addCommand(editor.commands.CMD_BREAK_CONTAINER);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);

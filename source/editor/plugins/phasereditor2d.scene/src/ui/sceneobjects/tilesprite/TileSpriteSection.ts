@@ -13,6 +13,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/tile-sprite-object.html#tile-sprite-properties";
         }
 
+        createMenu(menu: controls.Menu) {
+
+            this.createToolMenuItem(menu, TileSpriteSizeTool.ID);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);

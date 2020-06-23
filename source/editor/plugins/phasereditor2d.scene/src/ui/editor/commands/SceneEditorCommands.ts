@@ -898,23 +898,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.add({
                 command: {
-                    id: CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
-                    name: "Resize TileSprite Tool",
-                    tooltip: "Resize selected TileSprite objects.",
-                    category: CAT_SCENE_EDITOR
-                },
-                handler: {
-                    testFunc: isSceneScope,
-                    executeFunc: args => (args.activeEditor as SceneEditor)
-                        .getToolsManager().swapTool(ui.sceneobjects.TileSpriteSizeTool.ID)
-                },
-                keys: {
-                    key: "Z"
-                }
-            });
-
-            manager.add({
-                command: {
                     id: CMD_SELECT_REGION,
                     name: "Select Region",
                     category: CAT_SCENE_EDITOR,
@@ -930,7 +913,24 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     shift: true,
                     key: "S"
                 }
-            })
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
+                    name: "Resize TileSprite Tool",
+                    tooltip: "Resize selected TileSprite objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.TileSpriteSizeTool.ID)
+                },
+                keys: {
+                    key: "Z"
+                }
+            });
         }
 
         private static registerDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {

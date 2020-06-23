@@ -15,6 +15,7 @@ namespace phasereditor2d.scene.ui.editor {
     export class SceneEditor extends colibri.ui.ide.FileEditor {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
+        private _menuCreator: SceneEditorMenuCreator;
 
         static getFactory() {
 
@@ -50,7 +51,13 @@ namespace phasereditor2d.scene.ui.editor {
             this._blocksProvider = new blocks.SceneEditorBlocksProvider(this);
             this._outlineProvider = new outline.SceneEditorOutlineProvider(this);
             this._propertyProvider = new properties.SceneEditorSectionProvider(this);
+            this._menuCreator = new SceneEditorMenuCreator(this);
             this._localCoords = true;
+        }
+
+        getMenuCreator() {
+            
+            return this._menuCreator;
         }
 
         isLocalCoords() {
@@ -377,9 +384,9 @@ namespace phasereditor2d.scene.ui.editor {
 
         fillContextMenu(menu: controls.Menu) {
 
-            const creator = new SceneEditorMenuCreator(this);
+            
 
-            creator.fillMenu(menu);
+            this._menuCreator.fillMenu(menu);
         }
 
         toggleSnapping() {

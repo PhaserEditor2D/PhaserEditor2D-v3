@@ -31,6 +31,11 @@ namespace colibri.ui.controls.properties {
             // nothing by default
         }
 
+        hasMenu() {
+
+            return false;
+        }
+
         updateWithSelection(): void {
 
             for (const updater of this._updaters) {

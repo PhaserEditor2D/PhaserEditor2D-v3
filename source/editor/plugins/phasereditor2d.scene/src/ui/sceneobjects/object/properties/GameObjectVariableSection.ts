@@ -15,6 +15,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/variable-properties.html";
         }
 
+        createMenu(menu: controls.Menu) {
+
+            const creator = this.getEditor().getMenuCreator();
+
+            creator.createTypeMenuItems(menu);
+
+            menu.addSeparator();
+
+            menu.addCommand(editor.commands.CMD_CREATE_PREFAB_WITH_OBJECT);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);

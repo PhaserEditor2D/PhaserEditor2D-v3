@@ -46,7 +46,7 @@ namespace phasereditor2d.scene {
 
             // preload docs
 
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () =>{
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
                 await ScenePlugin.getInstance().getPhaserDocs().preload();
             }));
 
@@ -175,8 +175,8 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.RotateTool(),
                 new ui.sceneobjects.ScaleTool(),
                 new ui.sceneobjects.OriginTool(),
-                new ui.sceneobjects.TileSpriteSizeTool(),
-                new ui.sceneobjects.SelectionRegionTool()
+                new ui.sceneobjects.SelectionRegionTool(),
+                new ui.sceneobjects.TileSpriteSizeTool()
             ));
         }
 

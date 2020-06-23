@@ -16,6 +16,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/prefab-user-properties.html#user-properties-in-a-prefab-instance";
         }
 
+        createMenu(menu: controls.Menu) {
+
+            menu.addCommand(editor.commands.CMD_OPEN_PREFAB);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);

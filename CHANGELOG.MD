@@ -14,7 +14,7 @@
 * Scene Editor: scale proportionally if the `Shift` key is pressed when using the Scale tool.
 * Scene Editor: arrow keys commands to change the position of the objects. Press `Shift` for 10x. It respects snap values.
 * Scene Editor: enables copy/paste objects across scenes.
-* Scene Editor: Inspector view sections show a menu with a Help item.
+* Scene Editor: Inspector view sections show a menu with a Help item and related commands.
 * Asset Pack: adds an Open button to the File Key section.
 * Asset Pack: shows a Help link in the menu of the Inspector sections.
 

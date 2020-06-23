@@ -22,6 +22,22 @@ namespace phasereditor2d.scene.ui.editor.properties {
             }
         }
 
+        hasMenu() {
+
+            return true;
+        }
+
+        createToolMenuItem(menu: controls.Menu, toolId: string) {
+
+            const manager = this.getEditor().getToolsManager();
+
+            const tool = manager.findTool(toolId);
+
+            menu.addCommand(tool.getCommandId(), {
+                selected: tool === manager.getActiveTool()
+            });
+        }
+
         getEditor(): SceneEditor {
 
             return colibri.Platform.getWorkbench()

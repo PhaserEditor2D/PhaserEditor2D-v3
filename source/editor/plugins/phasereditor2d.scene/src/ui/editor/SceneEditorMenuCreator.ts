@@ -41,6 +41,20 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addSeparator();
 
+            menu.addMenu(this.createSceneMenu());
+        }
+
+        private createSceneMenu() {
+
+            const menu = new controls.Menu("Scene");
+
+            this.createSceneMenuItems(menu);
+
+            return menu;
+        }
+
+        createSceneMenuItems(menu: controls.Menu) {
+
             menu.addCommand(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, {
                 text: "Refresh Scene"
             });
@@ -93,17 +107,20 @@ namespace phasereditor2d.scene.ui.editor {
 
             const menu = new controls.Menu("Origin");
 
-            for (const data of commands.SceneEditorCommands.computeOriginCommandData()) {
-
-                menu.addCommand(data.command);
-            }
+            this.createOriginMenuItems(menu);
 
             return menu;
         }
 
-        private createCoordsMenu() {
+        createOriginMenuItems(menu: controls.Menu) {
 
-            const menu = new controls.Menu("Coords");
+            for (const data of commands.SceneEditorCommands.computeOriginCommandData()) {
+
+                menu.addCommand(data.command);
+            }
+        }
+
+        createCoordsMenuItems(menu: controls.Menu) {
 
             menu.add(new controls.Action({
                 callback: () => this._editor.setLocalCoords(true),
@@ -116,6 +133,13 @@ namespace phasereditor2d.scene.ui.editor {
                 text: "Global",
                 selected: !this._editor.isLocalCoords()
             }));
+        }
+
+        private createCoordsMenu() {
+
+            const menu = new controls.Menu("Coords");
+
+            this.createCoordsMenuItems(menu);
 
             return menu;
         }
@@ -151,12 +175,17 @@ namespace phasereditor2d.scene.ui.editor {
             return menu;
         }
 
+        createTypeMenuItems(menu: controls.Menu) {
+
+            menu.addCommand(commands.CMD_CONVERT_OBJECTS);
+            menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
+        }
+
         private createTypeMenu(): controls.Menu {
 
             const menu = new controls.Menu("Type");
 
-            menu.addCommand(commands.CMD_CONVERT_OBJECTS);
-            menu.addCommand(commands.CMD_CONVERT_TO_TILE_SPRITE_OBJECTS);
+            this.createTypeMenuItems(menu);
 
             return menu;
         }
@@ -197,10 +226,15 @@ namespace phasereditor2d.scene.ui.editor {
 
             const menu = new controls.Menu("Texture");
 
-            menu.addCommand(commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
-            menu.addCommand(commands.CMD_REPLACE_TEXTURE);
+            this.createTextureMenuItems(menu);
 
             return menu;
+        }
+
+        createTextureMenuItems(menu: controls.Menu) {
+
+            menu.addCommand(commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
+            menu.addCommand(commands.CMD_REPLACE_TEXTURE);
         }
     }
 }
