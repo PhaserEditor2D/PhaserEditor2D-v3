@@ -153,6 +153,26 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     display: none;
 }
 
+/* Zoom */
+
+.ZoomControl {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    padding: 2px;
+    border-radius: 3px;
+    background: black;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    column-gap: 2px;
+    opacity: 0.1;
+}
+
+.ZoomControl:hover {
+    opacity: 0.9;
+    background: rgba(0, 0, 0, 0.5);
+}
+
 /* Viewer */
 
 .FilteredViewer {

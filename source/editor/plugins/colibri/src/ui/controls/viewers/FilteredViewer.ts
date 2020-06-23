@@ -19,15 +19,42 @@ namespace colibri.ui.controls.viewers {
 
     export class ViewerContainer extends controls.Control {
         private _viewer: Viewer;
+        private _zoomControl: ZoomControl;
+        private _filteredViewer: FilteredViewer<any>;
 
-        constructor(viewer: Viewer) {
+        constructor(filteredViewer: FilteredViewer<any>, zoom = true) {
             super("div", "ViewerContainer");
 
-            this._viewer = viewer;
+            this._viewer = filteredViewer.getViewer();
+            this._filteredViewer = filteredViewer;
 
-            this.add(viewer);
+            this.add(this._viewer);
+
+            if (zoom) {
+
+                this.addZoomControl();
+            }
 
             setTimeout(() => this.layout(), 1);
+        }
+
+        private addZoomControl() {
+
+            this._zoomControl = new ZoomControl({
+                showReset: false
+            });
+
+            this.getElement().appendChild(this._zoomControl.getElement());
+
+            this._zoomControl.setCallback(z => {
+
+                const viewer = this.getViewer();
+
+                viewer.setCellSize(viewer.getCellSize() + ICON_SIZE * z);
+
+                viewer.repaint();
+            });
+
         }
 
         getViewer() {
@@ -35,8 +62,22 @@ namespace colibri.ui.controls.viewers {
         }
 
         layout() {
+
             const b = this.getElement().getBoundingClientRect();
+
             this._viewer.setBoundsValues(b.left, b.top, b.width, b.height);
+
+            if (this._zoomControl) {
+
+                if (this._filteredViewer.getScrollPane().containsClass("hideScrollBar")) {
+
+                    this._zoomControl.getElement().style.right = "5px";
+
+                } else {
+
+                    this._zoomControl.getElement().style.right =  "20px";
+                }
+            }
         }
     }
 
@@ -54,13 +95,18 @@ namespace colibri.ui.controls.viewers {
             this._filterControl = new FilterControl();
             this.add(this._filterControl);
 
-            this._viewerContainer = new ViewerContainer(this._viewer);
+            this._viewerContainer = new ViewerContainer(this);
             this._scrollPane = new ScrollPane(this._viewerContainer);
             this.add(this._scrollPane);
 
             this.setLayoutChildren(false);
 
             this.registerListeners();
+        }
+
+        getScrollPane() {
+
+            return this._scrollPane;
         }
 
         private registerListeners() {
@@ -79,7 +125,7 @@ namespace colibri.ui.controls.viewers {
 
                     const sel = viewer.getSelection();
 
-                    const selVisible = viewer.getVisibleElements().filter(elem => sel.indexOf(elem)> 0).length > 0;
+                    const selVisible = viewer.getVisibleElements().filter(elem => sel.indexOf(elem) > 0).length > 0;
 
                     if (!selVisible) {
 
