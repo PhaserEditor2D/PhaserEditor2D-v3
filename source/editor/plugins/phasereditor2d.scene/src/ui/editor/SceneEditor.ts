@@ -16,6 +16,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
         private _menuCreator: SceneEditorMenuCreator;
+        private _canvasContainer: HTMLDivElement;
 
         static getFactory() {
 
@@ -56,7 +57,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getMenuCreator() {
-            
+
             return this._menuCreator;
         }
 
@@ -239,6 +240,8 @@ namespace phasereditor2d.scene.ui.editor {
             this._overlayLayer = new OverlayLayer(this);
             container.appendChild(this._overlayLayer.getCanvas());
 
+            this._canvasContainer = container;
+
             this.createGame();
 
             // init managers and factories
@@ -251,6 +254,11 @@ namespace phasereditor2d.scene.ui.editor {
             this._clipboardManager = new ClipboardManager(this);
 
             this._overlayLayer.getCanvas().addEventListener("contextmenu", e => this.onMenu(e));
+        }
+
+        getCanvasContainer() {
+
+            return this._canvasContainer;
         }
 
         private createGame() {
@@ -384,7 +392,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         fillContextMenu(menu: controls.Menu) {
 
-            
+
 
             this._menuCreator.fillMenu(menu);
         }

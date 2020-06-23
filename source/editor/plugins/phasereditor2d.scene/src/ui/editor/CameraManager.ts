@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.editor {
 
+    import controls = colibri.ui.controls;
+
     export interface ICameraState {
         scrollX: number;
         scrollY: number;
@@ -29,6 +31,12 @@ namespace phasereditor2d.scene.ui.editor {
                 scrollY: 0,
                 zoom: 1
             };
+
+            const zoomIcon = new controls.ZoomControl({ showReset: true });
+
+            zoomIcon.setCallback(z => this.controlZoom(z));
+
+            this._editor.getCanvasContainer().appendChild(zoomIcon.getElement());
         }
 
         private getCamera() {
@@ -80,24 +88,34 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onWheel(e: WheelEvent): void {
 
+            const delta: number = e.deltaY;
+
+            this.zoom(delta, e.offsetX, e.offsetY);
+        }
+
+        private zoom(delta: number, offsetX: number, offsetY: number) {
+
+            const zoomDelta = (delta > 0 ? 0.9 : 1.1);
+
             const scene = this._editor.getScene();
 
             const camera = scene.getCamera();
 
-            const delta: number = e.deltaY;
+            const point1 = camera.getWorldPoint(offsetX, offsetY);
 
-            const zoomDelta = (delta > 0 ? 0.9 : 1.1);
+            if (delta === 0) {
 
-            // const pointer = scene.input.activePointer;
+                camera.zoom = 1;
 
-            const point1 = camera.getWorldPoint(e.offsetX, e.offsetY);
+            } else {
 
-            camera.zoom *= zoomDelta;
+                camera.zoom *= zoomDelta;
+            }
 
             // update the camera matrix
             (camera as any).preRender(scene.scale.resolution);
 
-            const point2 = camera.getWorldPoint(e.offsetX, e.offsetY);
+            const point2 = camera.getWorldPoint(offsetX, offsetY);
 
             const dx = point2.x - point1.x;
             const dy = point2.y - point1.y;
@@ -108,6 +126,13 @@ namespace phasereditor2d.scene.ui.editor {
             this.updateState();
 
             this._editor.repaint();
+        }
+
+        private controlZoom(z: number) {
+
+            const b = this._editor.getCanvasContainer().getBoundingClientRect();
+
+            this.zoom(-z, b.width / 2, b.height / 2);
         }
 
         getState() {
