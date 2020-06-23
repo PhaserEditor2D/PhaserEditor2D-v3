@@ -21,6 +21,7 @@ namespace colibri.ui.controls.viewers {
         private _viewer: Viewer;
         private _zoomControl: ZoomControl;
         private _filteredViewer: FilteredViewer<any>;
+        private _mouseOverZoomControl: boolean;
 
         constructor(filteredViewer: FilteredViewer<any>, zoom = true) {
             super("div", "ViewerContainer");
@@ -55,9 +56,21 @@ namespace colibri.ui.controls.viewers {
                 viewer.repaint();
             });
 
+            this._zoomControl.getElement().addEventListener("mouseenter", e => {
+
+                this._mouseOverZoomControl = true;
+            });
+
+            this._zoomControl.getElement().addEventListener("mouseleave", e => {
+
+                this._mouseOverZoomControl = false;
+
+                this.layoutZoomControl();
+            });
         }
 
         getViewer() {
+
             return this._viewer;
         }
 
@@ -67,15 +80,23 @@ namespace colibri.ui.controls.viewers {
 
             this._viewer.setBoundsValues(b.left, b.top, b.width, b.height);
 
+            this.layoutZoomControl();
+        }
+
+        private layoutZoomControl() {
+
             if (this._zoomControl) {
 
-                if (this._filteredViewer.getScrollPane().containsClass("hideScrollBar")) {
+                if (!this._mouseOverZoomControl) {
 
-                    this._zoomControl.getElement().style.right = "5px";
+                    if (this._filteredViewer.getScrollPane().containsClass("hideScrollBar")) {
 
-                } else {
+                        this._zoomControl.getElement().style.right = "5px";
 
-                    this._zoomControl.getElement().style.right =  "20px";
+                    } else {
+
+                        this._zoomControl.getElement().style.right = "20px";
+                    }
                 }
             }
         }

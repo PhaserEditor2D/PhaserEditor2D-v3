@@ -166,6 +166,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     grid-template-columns: auto auto auto;
     column-gap: 2px;
     opacity: 0.1;
+    z-index: 3;
 }
 
 .ZoomControl:hover {
