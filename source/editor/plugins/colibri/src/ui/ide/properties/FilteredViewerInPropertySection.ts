@@ -3,8 +3,8 @@ namespace colibri.ui.ide.properties {
     export class FilteredViewerInPropertySection<T extends controls.viewers.Viewer>
         extends controls.viewers.FilteredViewer<T> {
 
-        constructor(page: controls.properties.PropertyPage, viewer: T, ...classList: string[]) {
-            super(viewer, ...classList);
+        constructor(page: controls.properties.PropertyPage, viewer: T, showZoomControls: boolean, ...classList: string[]) {
+            super(viewer, showZoomControls, ...classList);
 
             this.setHandlePosition(false);
             this.style.position = "relative";

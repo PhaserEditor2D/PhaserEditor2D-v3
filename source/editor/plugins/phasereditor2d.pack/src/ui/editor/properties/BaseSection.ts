@@ -87,7 +87,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             const viewer = await this.getEditor().createFilesViewer(fileFilter);
 
-            const dlg = new controls.dialogs.ViewerDialog(viewer);
+            const dlg = new controls.dialogs.ViewerDialog(viewer, true);
 
             dlg.create();
 

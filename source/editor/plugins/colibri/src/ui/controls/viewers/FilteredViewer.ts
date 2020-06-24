@@ -109,14 +109,15 @@ namespace colibri.ui.controls.viewers {
         private _filterControl: FilterControl;
         private _scrollPane: ScrollPane;
 
-        constructor(viewer: T, ...classList: string[]) {
+        constructor(viewer: T, showZoomControls:boolean, ...classList: string[]) {
             super("div", "FilteredViewer", ...classList);
+            
             this._viewer = viewer;
 
             this._filterControl = new FilterControl();
             this.add(this._filterControl);
 
-            this._viewerContainer = new ViewerContainer(this);
+            this._viewerContainer = new ViewerContainer(this, showZoomControls);
             this._scrollPane = new ScrollPane(this._viewerContainer);
             this.add(this._scrollPane);
 

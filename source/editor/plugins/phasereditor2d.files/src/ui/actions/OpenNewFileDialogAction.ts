@@ -44,7 +44,7 @@ namespace phasereditor2d.files.ui.actions {
 
             viewer.setInput(extensions);
 
-            const dlg = new controls.dialogs.ViewerDialog(viewer);
+            const dlg = new controls.dialogs.ViewerDialog(viewer, false);
 
             dlg.create();
 

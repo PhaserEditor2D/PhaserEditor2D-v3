@@ -2,8 +2,8 @@ namespace colibri.ui.controls.viewers {
 
     export class FilteredViewerInElement<T extends Viewer> extends FilteredViewer<T> {
 
-        constructor(viewer: T, ...classList: string[]) {
-            super(viewer, ...classList);
+        constructor(viewer: T, showZoomControls:boolean, ...classList: string[]) {
+            super(viewer, showZoomControls, ...classList);
 
             this.setHandlePosition(false);
             this.style.position = "relative";

@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
 
             const filteredViewer = new colibri.ui.ide.properties
-                .FilteredViewerInPropertySection(this.getPage(), viewer);
+                .FilteredViewerInPropertySection(this.getPage(), viewer, true);
             comp.appendChild(filteredViewer.getElement());
 
             this.addUpdater(() => {

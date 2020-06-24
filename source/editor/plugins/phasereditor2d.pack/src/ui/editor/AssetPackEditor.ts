@@ -250,7 +250,7 @@ namespace phasereditor2d.pack.ui.editor {
             viewer.setCellRendererProvider(new viewers.AssetPackCellRendererProvider("tree"));
             viewer.setInput(core.TYPES);
 
-            const dlg = new dialogs.ViewerDialog(viewer);
+            const dlg = new dialogs.ViewerDialog(viewer, false);
 
             const selectCallback = async () => {
 
@@ -313,7 +313,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             const viewer = await this.createFilesViewer(file => importer.acceptFile(file));
 
-            const dlg = new dialogs.ViewerDialog(viewer);
+            const dlg = new dialogs.ViewerDialog(viewer, true);
 
             dlg.create();
 

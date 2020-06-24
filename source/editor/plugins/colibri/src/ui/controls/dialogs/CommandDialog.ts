@@ -5,7 +5,7 @@ namespace colibri.ui.controls.dialogs {
     export class CommandDialog extends controls.dialogs.ViewerDialog {
 
         constructor() {
-            super(new controls.viewers.TreeViewer());
+            super(new controls.viewers.TreeViewer(), false);
 
             const size = this.getSize();
             this.setSize(size.width * 1.5, size.height * 1.5);

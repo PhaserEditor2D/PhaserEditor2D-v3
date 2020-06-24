@@ -6,11 +6,13 @@ namespace colibri.ui.controls.dialogs {
 
         private _viewer: viewers.TreeViewer;
         private _filteredViewer: viewers.FilteredViewer<viewers.TreeViewer>;
+        protected _showZoomControls: boolean;
 
-        constructor(viewer: viewers.TreeViewer) {
+        constructor(viewer: viewers.TreeViewer, showZoomControls: boolean) {
             super("AbstractViewerDialog");
 
             this._viewer = viewer;
+            this._showZoomControls = showZoomControls;
         }
 
         protected createFilteredViewer() {
@@ -20,7 +22,7 @@ namespace colibri.ui.controls.dialogs {
 
         protected newFilteredViewer() {
 
-            return new viewers.FilteredViewer(this._viewer);
+            return new viewers.FilteredViewer(this._viewer, this._showZoomControls);
         }
 
         getViewer() {

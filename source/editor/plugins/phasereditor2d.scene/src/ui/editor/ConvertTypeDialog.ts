@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _keepOriginalTexture: boolean;
 
         constructor(editor: SceneEditor) {
-            super(new viewers.ObjectExtensionAndPrefabViewer());
+            super(new viewers.ObjectExtensionAndPrefabViewer(), true);
 
             this._editor = editor;
 

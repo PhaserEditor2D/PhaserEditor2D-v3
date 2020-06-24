@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
-            super(new AddObjectDialogViewer());
+            super(new AddObjectDialogViewer(), true);
 
             this._editor = editor;
 

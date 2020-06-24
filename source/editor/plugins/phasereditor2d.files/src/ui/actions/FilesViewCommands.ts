@@ -88,7 +88,7 @@ namespace phasereditor2d.files.ui.actions {
 
                             .sort((a, b) => -(a.getModTime() - b.getModTime())));
 
-                        const dlg = new controls.dialogs.ViewerDialog(viewer);
+                        const dlg = new controls.dialogs.ViewerDialog(viewer, true);
 
                         dlg.create();
 

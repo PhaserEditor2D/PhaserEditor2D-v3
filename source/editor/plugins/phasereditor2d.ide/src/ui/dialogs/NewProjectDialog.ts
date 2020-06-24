@@ -243,7 +243,7 @@ namespace phasereditor2d.ide.ui.dialogs {
                 this.validate();
             });
 
-            this._filteredViewer = new viewers.FilteredViewerInElement(viewer);
+            this._filteredViewer = new viewers.FilteredViewerInElement(viewer, false);
         }
 
         layout() {

@@ -185,7 +185,7 @@ namespace phasereditor2d.files.ui.dialogs {
                 this.validate();
             });
 
-            this._filteredViewer = new viewers.FilteredViewerInElement(viewer);
+            this._filteredViewer = new viewers.FilteredViewerInElement(viewer, false);
         }
 
         layout() {

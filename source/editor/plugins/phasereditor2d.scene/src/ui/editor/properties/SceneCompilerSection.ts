@@ -52,10 +52,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 const finder = this.getEditor().getPackFinder();
 
-                const packs =
-
-                    viewer.setInput(finder.getPacks().map(pack => pack.getFile()));
-
                 viewer.setSelection(
 
                     this.getSettings().preloadPackFiles
@@ -67,7 +63,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         .map(pack => pack.getFile())
                 );
 
-                const dlg = new controls.dialogs.ViewerDialog(viewer);
+                const dlg = new controls.dialogs.ViewerDialog(viewer, false);
 
                 const selectionCallback = (files: io.FilePath[]) => {
 

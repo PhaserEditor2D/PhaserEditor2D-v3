@@ -9,7 +9,7 @@ namespace phasereditor2d.files.ui.dialogs {
         private _uploadBtnElement: HTMLButtonElement;
 
         constructor(uploadFolder: io.FilePath) {
-            super(new controls.viewers.TreeViewer());
+            super(new controls.viewers.TreeViewer(), false);
 
             this._uploadFolder = uploadFolder;
         }

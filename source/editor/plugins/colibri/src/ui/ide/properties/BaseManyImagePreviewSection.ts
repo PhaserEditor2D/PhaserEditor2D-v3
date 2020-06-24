@@ -15,7 +15,7 @@ namespace colibri.ui.ide.properties {
 
             this.prepareViewer(viewer);
 
-            const filteredViewer = new ide.properties.FilteredViewerInPropertySection(this.getPage(), viewer);
+            const filteredViewer = new ide.properties.FilteredViewerInPropertySection(this.getPage(), viewer, true);
             parent.appendChild(filteredViewer.getElement());
 
             this.addUpdater(async () => {
