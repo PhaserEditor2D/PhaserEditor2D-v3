@@ -13,6 +13,7 @@ namespace phasereditor2d.scene {
     export const ICON_LOCKED = "locked";
     export const ICON_UNLOCKED = "unlocked";
     export const ICON_LIST = "list";
+    export const ICON_OBJECT_SCRIPT = "object-script";
 
     export class ScenePlugin extends colibri.Plugin {
 
@@ -61,6 +62,12 @@ namespace phasereditor2d.scene {
                     5
                 ));
 
+            reg.addExtension(
+                new colibri.core.ContentTypeExtension(
+                    [new colibri.core.ContentTypeResolverByExtension(
+                        "script", [["scripts", core.CONTENT_TYPE_OBJECT_SCRIPT]])])
+            )
+
             // content type renderer
 
             reg.addExtension(
@@ -69,6 +76,14 @@ namespace phasereditor2d.scene {
                     new ui.viewers.SceneFileCellRenderer()
                 )
             );
+
+            reg.addExtension(
+                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(this, [
+                    {
+                        iconName: ICON_OBJECT_SCRIPT,
+                        contentType: core.CONTENT_TYPE_OBJECT_SCRIPT
+                    }
+                ]));
 
             // icons loader
 
@@ -83,7 +98,8 @@ namespace phasereditor2d.scene {
                     ICON_BUILD,
                     ICON_LOCKED,
                     ICON_UNLOCKED,
-                    ICON_LIST
+                    ICON_LIST,
+                    ICON_OBJECT_SCRIPT
                 ])
             );
 
@@ -98,6 +114,10 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(
                 new ide.commands.CommandExtension(ui.editor.commands.SceneEditorCommands.registerCommands));
+
+            reg.addExtension(
+                new ide.commands.CommandExtension(ui.editor.scripts.ObjectScriptEditor.registerCommands));
+
 
             // main menu
 
@@ -117,14 +137,16 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(
                 new ide.EditorExtension([
-                    ui.editor.SceneEditor.getFactory()
+                    ui.editor.SceneEditor.getFactory(),
+                    ui.editor.scripts.ObjectScriptEditor.getFactory()
                 ]));
 
             // new file wizards
 
             reg.addExtension(
                 new ui.dialogs.NewSceneFileDialogExtension(),
-                new ui.dialogs.NewPrefabFileDialogExtension()
+                new ui.dialogs.NewPrefabFileDialogExtension(),
+                new ui.dialogs.NewObjectScriptFileDialogExtension()
             );
 
             // file properties
