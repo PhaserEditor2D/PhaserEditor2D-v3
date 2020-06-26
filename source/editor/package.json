@@ -1,6 +1,6 @@
 {
   "name": "phasereditor2d.ide",
-  "version": "3.2.0",
+  "version": "1.0.0",
   "description": "Phaser Editor 2D IDE.",
   "repository": "github:PhaserEditor2D/PhaserEditor2D-v3",
   "dependencies": {
