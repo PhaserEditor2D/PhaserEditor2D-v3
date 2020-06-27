@@ -50,7 +50,7 @@ The [Play Phaser Editor 2D](https://play.phasereditor2d.com) is a service hosted
 
 ### Build and run
 
-At this moment you cannot build and run Phaser Editor v3. The server is not part of this repository. As soon as the editor is released we are going to publish the instructions to build and run it.
+[Follow these steps](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/blob/develop/BUILD.md)
 
 ### Licensing
 
