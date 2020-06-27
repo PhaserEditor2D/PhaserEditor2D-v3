@@ -72,6 +72,34 @@ namespace phasereditor2d.scene.ui {
             return list[list.length - 1];
         }
 
+        isNonTopPrefabObject(obj: any) {
+
+            const support = sceneobjects.EditorSupport.getEditorSupport(obj);
+
+            if (support) {
+
+                const scene = support.getScene();
+
+                if (scene.isPrefabSceneType()) {
+
+                    if (scene.getPrefabObject() !== obj) {
+
+                        const container = (obj as Phaser.GameObjects.GameObject).parentContainer;
+
+
+                        if (container) {
+
+                            return this.isNonTopPrefabObject(container);
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         getObjectLists() {
             return this._objectLists;
         }
