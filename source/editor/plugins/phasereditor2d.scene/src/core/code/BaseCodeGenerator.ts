@@ -147,6 +147,14 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
+        lineIfNeeded() {
+
+            if (!this.lastIsEmptyLine()) {
+
+                this.line();
+            }
+        }
+
         line(line = "") {
 
             this.append(line);
