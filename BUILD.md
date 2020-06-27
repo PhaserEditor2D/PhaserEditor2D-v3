@@ -52,7 +52,7 @@ It is available in the [Phaser Editor 2D downloads page](https://phasereditor2d.
 
 It is distributed as a ZIP file. Unzip it.
 
-## 4) Run the server with the new client
+## 5) Run the server with the new client
 
 Now you can run the server but configure a new client. Look in the binaries you downloaded, there is a `PhaserEditor2D` executable file. Run it this way:
 
@@ -62,7 +62,7 @@ $ ./PhaserEditor2D -editor /path/to/PhaserEditor2D-v3/source/editor
 
 The `-editor` option configures a new location of the client code. So, you have to write the full path to the `source/editor` folder of the repository you cloned.
 
-## 5) Open the browser and run the IDE
+## 6) Open the browser and run the IDE
 
 Open this address in a browser:
 
