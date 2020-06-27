@@ -22,6 +22,7 @@
 ## Modified
 
 * Improved Asset Pack File section in Inspector view.
+* [#44](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/44) Workbench: does not validate if there is an `index.html` file in the root folder.
 
 ## Fixed
 
