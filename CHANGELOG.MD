@@ -51,6 +51,7 @@
 * Scene Editor: the translate and rotate manipulators set integer values to objects.
 * Scene Editor: in a prefab scene, the non-prefab objects are rendered with transparency, in the Outline view.
 * Scene Editor: in a prefab scene, does not show the Inspector view's Variable section if the selected object is the prefab object of a prefab scene.
+* Scene Editor: auto creates a container when add new objects to a prefab scene.
 
 ## Fixed
 
