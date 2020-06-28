@@ -80,9 +80,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            if (obj instanceof Phaser.GameObjects.GameObject) {
+            const scene = this.getEditor().getScene();
 
-                const scene = this.getEditor().getScene();
+            // Fixes #50
+            if (!scene) {
+
+                return false;
+            }
+
+            if (obj instanceof Phaser.GameObjects.GameObject) {
 
                 if (scene.isPrefabSceneType()) {
 
