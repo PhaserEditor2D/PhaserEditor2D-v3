@@ -12,7 +12,9 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 if (support.getScene().isPrefabSceneType() && obj === support.getScene().getPrefabObject()) {
 
-                    return `[Prefab Object: ${support.isPrefabInstance() ? support.getPrefabName() : support.getObjectType()}]`;
+                    const file = support.getScene().getEditor().getInput();
+
+                    return `${file.getNameWithoutExtension()} (Prefab Object: ${support.isPrefabInstance() ? support.getPrefabName() : support.getObjectType()})`;
                 }
 
                 return support.getLabel();

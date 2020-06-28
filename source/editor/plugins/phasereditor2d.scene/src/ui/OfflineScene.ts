@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui {
         private _callback: () => void;
 
         private constructor(data: core.json.ISceneData) {
-            super(false);
+            super();
 
             this._data = data;
         }
