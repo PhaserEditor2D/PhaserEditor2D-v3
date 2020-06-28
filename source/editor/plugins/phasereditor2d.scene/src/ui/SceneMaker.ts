@@ -17,6 +17,66 @@ namespace phasereditor2d.scene.ui {
             this._packFinder = new pack.core.PackFinder();
         }
 
+        afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
+
+            if (!prefabObj) {
+                return;
+            }
+
+            const scene = prefabObj.getEditorSupport().getScene();
+
+            if (!scene.isPrefabSceneType()) {
+
+                return;
+            }
+
+            let container: sceneobjects.Container;
+
+            if (scene.isPrefabSceneType()) {
+
+                if (sprites.length > 0) {
+
+                    if (prefabObj instanceof sceneobjects.Container) {
+
+                        container = prefabObj;
+
+                    } else {
+
+                        container = sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
+                            scene: scene,
+                            x: 0,
+                            y: 0
+                        });
+
+                        container.getEditorSupport().setLabel(scene.makeNewName("container"));
+
+                        scene.sys.displayList.remove(prefabObj);
+                        container.add(prefabObj);
+                    }
+
+                    if (container) {
+
+                        for (const sprite of sprites) {
+
+                            if (sprite.getEditorSupport().hasComponent(sceneobjects.TransformComponent)) {
+
+                                (sprite as sceneobjects.Sprite).x -= container.x;
+                                (sprite as sceneobjects.Sprite).y -= container.y;
+                            }
+
+                            scene.sys.displayList.remove(sprite);
+                            container.add(sprite);
+                        }
+
+                        if (container !== prefabObj) {
+
+                            container.getEditorSupport().trim();
+                        }
+                    }
+                }
+            }
+        }
+
         static acceptDropFile(dropFile: io.FilePath, editorFile: io.FilePath) {
 
             if (dropFile.getFullName() === editorFile.getFullName()) {

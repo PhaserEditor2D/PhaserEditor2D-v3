@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.core.json {
             return this._data;
         }
 
-        getType() {
+        getType(): string {
 
             if (this._prefabSer) {
 
