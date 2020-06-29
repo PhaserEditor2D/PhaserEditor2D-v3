@@ -30,6 +30,7 @@
 * Scene Editor: shows message when a prefab is not found.
 * Scene Editor: fixes user property declaration when no initial value is provided.
 * [#45](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/45) Scene Editor: compiler skips using field declarations in JavaScript output. It is not supported in Safari.
+* Scene Editor: fixes scene compiler code merging when the output file was modified by formatters that replace tab chars with spaces.
 
 ## Version 3.2.0 - June 14, 2020
 
