@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.core.code {
 
             this.lineIfNeeded();
 
-            this.section("/* START-USER-CODE */", "\t/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n");
+            this.section("/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t");
 
             this.closeIndent("}");
 
