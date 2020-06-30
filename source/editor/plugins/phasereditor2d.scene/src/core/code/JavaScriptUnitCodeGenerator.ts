@@ -142,7 +142,10 @@ namespace phasereditor2d.scene.core.code {
                     this.generateInstr(instr);
                 }
 
-                this.generateFieldInitInConstructor(classDecl);
+                if (methodDecl.getName() === "constructor") {
+
+                    this.generateFieldInitInConstructor(classDecl);
+                }
             }
 
             this.closeIndent("}");
