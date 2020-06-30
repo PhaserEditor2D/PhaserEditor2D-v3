@@ -18,10 +18,10 @@
 * Scene Editor: arrow keys commands to change the position of the objects. Press `Shift` for 10x. It respects snap values.
 * Scene Editor: enables copy/paste objects across scenes.
 * Scene Editor: Inspector view sections show a menu with a Help item and related commands.
-
 * Scene Editor: automatic creation of root container in a prefab scene.
 * Scene Editor: in a prefab scene, non-prefab objects are renderer with transparency.
 * [#41](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/41) Scene Editor: zoom in/out buttons.
+
 
 ## Modified
 
