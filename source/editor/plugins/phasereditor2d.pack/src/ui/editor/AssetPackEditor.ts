@@ -388,6 +388,11 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         private async updateBlocks() {
+
+            if (!this._pack) {
+                return;
+            }
+
             await this._blocksProvider.updateBlocks_async();
         }
     }

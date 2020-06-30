@@ -4,7 +4,9 @@
 
 ## Added
 
-* Asset Pack Editor: allows to import SVG files as HTML Image.
+* Asset Pack: allows to import SVG files as HTML Image.
+* Asset Pack: adds an Open button to the File Key section.
+* Asset Pack: shows a Help link in the menu of the Inspector sections.
 * Closes a couple of Input dialogs (New File, New Project, Rename File) when press ENTER in the input field.
 * **Go To File** command `Ctrl+P`.
 * Viewer dialog selects visible (or selected) item with the ENTER key.
@@ -16,8 +18,10 @@
 * Scene Editor: arrow keys commands to change the position of the objects. Press `Shift` for 10x. It respects snap values.
 * Scene Editor: enables copy/paste objects across scenes.
 * Scene Editor: Inspector view sections show a menu with a Help item and related commands.
-* Asset Pack: adds an Open button to the File Key section.
-* Asset Pack: shows a Help link in the menu of the Inspector sections.
+
+* Scene Editor: automatic creation of root container in a prefab scene.
+* Scene Editor: in a prefab scene, non-prefab objects are renderer with transparency.
+* [#41](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/41) Scene Editor: zoom in/out buttons.
 
 ## Modified
 
