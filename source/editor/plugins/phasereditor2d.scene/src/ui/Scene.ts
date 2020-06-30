@@ -4,6 +4,7 @@ namespace phasereditor2d.scene.ui {
     export class Scene extends Phaser.Scene {
 
         private _id: string;
+        private _sceneType: core.json.SceneType;
         private _editor: editor.SceneEditor;
         private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
@@ -119,30 +120,37 @@ namespace phasereditor2d.scene.ui {
         }
 
         getId() {
+
             return this._id;
         }
 
         setId(id: string) {
+
             this._id = id;
         }
 
         getSceneType() {
-            return this._settings.sceneType;
+
+            return this._sceneType;
         }
 
         isPrefabSceneType() {
+
             return this.getSceneType() === core.json.SceneType.PREFAB;
         }
 
         setSceneType(sceneType: core.json.SceneType) {
-            this._settings.sceneType = sceneType;
+
+            this._sceneType = sceneType;
         }
 
         getMaker() {
+
             return this._maker;
         }
 
         getDisplayListChildren(): sceneobjects.ISceneObject[] {
+
             return this.sys.displayList.getChildren() as any;
         }
 

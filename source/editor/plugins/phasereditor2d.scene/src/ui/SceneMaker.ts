@@ -246,7 +246,7 @@ namespace phasereditor2d.scene.ui {
                 this._scene.getPrefabUserProperties().readJSON(sceneData.prefabProperties);
             }
 
-            this._scene.setSceneType(sceneData.sceneType);
+            this._scene.setSceneType(sceneData.sceneType || core.json.SceneType.SCENE);
 
             // removes this condition, it is used temporal for compatibility
             this._scene.setId(sceneData.id);
