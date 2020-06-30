@@ -73,9 +73,14 @@ namespace phasereditor2d.scene.ui {
 
         getPrefabObject(): sceneobjects.ISceneObject {
 
-            const list = this.getDisplayListChildren();
+            if (this.sys.displayList) {
 
-            return list[list.length - 1];
+                const list = this.getDisplayListChildren();
+
+                return list[list.length - 1];
+            }
+
+            return undefined;
         }
 
         isNonTopPrefabObject(obj: any) {
