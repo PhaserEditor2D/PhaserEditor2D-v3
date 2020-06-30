@@ -10,6 +10,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectListSection", "Lists", false, true);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/lists-properties.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);
@@ -87,7 +92,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEdit(obj: any, n: number): boolean {
-            return obj instanceof Phaser.GameObjects.GameObject;
+
+            return obj instanceof Phaser.GameObjects.GameObject && !this.isPrefabSceneObject(obj);
         }
 
         canEditNumber(n: number): boolean {

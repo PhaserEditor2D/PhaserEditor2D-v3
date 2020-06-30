@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor.scene.ui.sceneobjects.BitmapTextSection", "Bitmap Text");
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/bitmap-text-object.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);

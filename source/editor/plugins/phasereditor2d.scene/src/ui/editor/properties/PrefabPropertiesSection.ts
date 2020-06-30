@@ -13,6 +13,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 "Prefab Properties", false, true);
         }
 
+        getSectionHelpPath() {
+            return "scene-editor/prefab-user-properties.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
@@ -321,7 +325,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof Scene && obj.getSettings().sceneType === core.json.SceneType.PREFAB;
+            return obj instanceof Scene && obj.isPrefabSceneType();
         }
     }
 }

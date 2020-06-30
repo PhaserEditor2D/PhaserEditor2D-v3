@@ -19,7 +19,7 @@ namespace colibri.ui.ide {
 
             this.addClass("ViewerPart");
 
-            this._filteredViewer = new controls.viewers.FilteredViewer(this._viewer);
+            this._filteredViewer = new controls.viewers.FilteredViewer(this._viewer, true);
             this.add(this._filteredViewer);
 
             this._viewer.eventSelectionChanged.addListener(sel => {

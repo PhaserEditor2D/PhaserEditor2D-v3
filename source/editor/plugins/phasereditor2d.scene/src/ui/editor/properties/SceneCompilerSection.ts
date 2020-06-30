@@ -11,6 +11,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 "Compiler Scene Settings", false, true);
         }
 
+        getSectionHelpPath() {
+            return "scene-editor/scene-compiler-scene-settings.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);
@@ -48,10 +52,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 const finder = this.getEditor().getPackFinder();
 
-                const packs =
-
-                    viewer.setInput(finder.getPacks().map(pack => pack.getFile()));
-
                 viewer.setSelection(
 
                     this.getSettings().preloadPackFiles
@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         .map(pack => pack.getFile())
                 );
 
-                const dlg = new controls.dialogs.ViewerDialog(viewer);
+                const dlg = new controls.dialogs.ViewerDialog(viewer, false);
 
                 const selectionCallback = (files: io.FilePath[]) => {
 
@@ -122,7 +122,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof Scene && obj.getSettings().sceneType === core.json.SceneType.SCENE;
+            return obj instanceof Scene && obj.getSceneType() === core.json.SceneType.SCENE;
         }
     }
 }

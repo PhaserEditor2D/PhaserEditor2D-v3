@@ -10,27 +10,26 @@ namespace phasereditor2d.scene.ui.editor {
 
     export class ClipboardManager {
 
-        private _clipboard: IClipboardItem[];
+        private static _clipboard: IClipboardItem[] = [];
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
-            this._editor = editor;
 
-            this._clipboard = [];
+            this._editor = editor;
         }
 
-        getClipboard() {
+        static getClipboard() {
             return this._clipboard;
         }
 
-        getClipboardCopy(): IClipboardItem[] {
+        static getClipboardCopy(): IClipboardItem[] {
 
             return this._clipboard.map(obj => JSON.parse(JSON.stringify(obj)));
         }
 
         copy() {
 
-            this._clipboard = [];
+            ClipboardManager._clipboard = [];
 
             let minX = Number.MAX_VALUE;
             let minY = Number.MAX_VALUE;
@@ -63,7 +62,7 @@ namespace phasereditor2d.scene.ui.editor {
                 objData["x"] = p.x;
                 objData["y"] = p.y;
 
-                this._clipboard.push({
+                ClipboardManager._clipboard.push({
                     type: "ISceneObject",
                     data: objData
                 });
@@ -74,7 +73,7 @@ namespace phasereditor2d.scene.ui.editor {
                 const listData = {} as any;
                 list.writeJSON(listData);
 
-                this._clipboard.push({
+                ClipboardManager._clipboard.push({
                     type: "ObjectList",
                     data: listData
                 });
@@ -83,7 +82,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         paste() {
 
-            if (this._clipboard.length > 0) {
+            if (ClipboardManager._clipboard.length > 0) {
 
                 this._editor.getUndoManager().add(new undo.PasteOperation(this._editor));
             }

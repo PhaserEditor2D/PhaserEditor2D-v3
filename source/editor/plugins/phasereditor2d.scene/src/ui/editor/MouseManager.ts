@@ -22,14 +22,15 @@ namespace phasereditor2d.scene.ui.editor {
             canvas.addEventListener("mousemove", e => this.onMouseMove(e));
         }
 
-        private createArgs(e: MouseEvent) {
+        private createArgs(e: MouseEvent): tools.ISceneToolDragEventArgs {
             return {
                 camera: this._editor.getScene().getCamera(),
                 editor: this._editor,
                 localCoords: this._editor.isLocalCoords(),
                 objects: this._editor.getSelection(),
                 x: e.offsetX,
-                y: e.offsetY
+                y: e.offsetY,
+                event: e
             };
         }
 
@@ -47,14 +48,22 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const args = this.createArgs(e);
 
-                for (const obj of args.objects) {
+                if (tool.isObjectTool()) {
 
-                    if (!tool.canEdit(obj)) {
-                        return;
+                    for (const obj of args.objects) {
+
+                        if (!tool.canEdit(obj)) {
+                            return;
+                        }
                     }
-                }
 
-                if (tool.containsPoint(args)) {
+                    if (tool.containsPoint(args)) {
+
+                        this._toolInAction = true;
+
+                        tool.onStartDrag(args);
+                    }
+                } else {
 
                     this._toolInAction = true;
 
@@ -102,10 +111,13 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const args = this.createArgs(e);
 
-                for (const obj of args.objects) {
+                if (tool.isObjectTool()) {
 
-                    if (!tool.canEdit(obj)) {
-                        return;
+                    for (const obj of args.objects) {
+
+                        if (!tool.canEdit(obj)) {
+                            return;
+                        }
                     }
                 }
 
@@ -114,6 +126,11 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private onClick(e: MouseEvent) {
+
+            if (e.button !== 0) {
+
+                return;
+            }
 
             if (this._toolInAction) {
 

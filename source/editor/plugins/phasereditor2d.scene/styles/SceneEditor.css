@@ -30,16 +30,6 @@
     background: #8e8e8e;
 }
 
-.light #InspectorView .PrefabLink {
-    color: #3f3f3f;
-}
-
-/* light blue */
-
-.lightBlue #InspectorView .PrefabLink {
-    color: #3f3f3f;
-}
-
 /* dark */
 
 .dark .SceneEditor .SceneEditorContainer {

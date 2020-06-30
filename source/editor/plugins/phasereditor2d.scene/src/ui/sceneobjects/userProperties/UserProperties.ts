@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             while (true) {
                 i++;
 
-                const p = this._properties.find(p => p.getInfo().name === "property" + i)
+                const p = this._properties.find(p2 => p2.getInfo().name === "property" + i)
 
                 if (!p) {
                     break;

@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui {
             const viewer = new files.ui.views.GridImageFileViewer();
 
             const filteredViewer = new colibri.ui.ide.properties.FilteredViewerInPropertySection(
-                this.getPage(), viewer);
+                this.getPage(), viewer, true);
 
             parent.appendChild(filteredViewer.getElement());
 

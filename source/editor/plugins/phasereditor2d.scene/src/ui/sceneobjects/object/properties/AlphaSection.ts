@@ -6,6 +6,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.AlphaSection", "Alpha", false, true);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/alpha-properties.html";
+;        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);

@@ -10,6 +10,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor.scene.ui.sceneobjects.TextContentSection", "Text Content", false, false);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/text-property.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);

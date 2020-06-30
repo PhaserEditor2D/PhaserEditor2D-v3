@@ -115,23 +115,16 @@ namespace phasereditor2d.pack {
                     }
                 ]));
 
+            // plugin resources loader
+
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
+
+                await AssetPackPlugin.getInstance().getPhaserDocs().preload();
+            }));
+
             // project resources preloader
 
-            reg.addExtension(
-                new core.AssetPackPreloadProjectExtension(),
-
-                // tslint:disable-next-line:new-parens
-                new (class extends ide.PreloadProjectResourcesExtension {
-
-                    async computeTotal() {
-                        return 0;
-                    }
-
-                    async preload() {
-                        return AssetPackPlugin.getInstance().getPhaserDocs().preload();
-                    }
-                })
-            );
+            reg.addExtension(new core.AssetPackPreloadProjectExtension())
 
             // editors
 

@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class AudioSpriteSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.AudioSpriteSection", "Audio Sprite");
+            super(page, "phasereditor2d.pack.ui.editor.properties.AudioSpriteSection", "Audio Sprite", core.AUDIO_SPRITE_TYPE);
         }
 
         canEdit(obj: any, n: number) {

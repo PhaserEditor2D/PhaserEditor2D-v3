@@ -97,6 +97,8 @@ namespace phasereditor2d.scene.ui.editor {
                 }
             }
 
+            const prefabObj = scene.getPrefabObject();
+
             const sprites: sceneobjects.ISceneObject[] = [];
 
             for (const data of dropAssetArray) {
@@ -156,6 +158,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                 support.setLabel(label);
             }
+
+            scene.getMaker().afterDropObjectsInPrefabScene(prefabObj, sprites);
 
             return sprites;
         }

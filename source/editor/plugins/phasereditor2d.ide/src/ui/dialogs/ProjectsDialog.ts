@@ -5,7 +5,7 @@ namespace phasereditor2d.ide.ui.dialogs {
     export class ProjectsDialog extends controls.dialogs.ViewerDialog {
 
         constructor() {
-            super(new controls.viewers.TreeViewer());
+            super(new controls.viewers.TreeViewer(), false);
         }
 
         async create() {

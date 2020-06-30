@@ -153,7 +153,8 @@ Important:
     background: linear-gradient(#343434, #323232);
 }
 
-.dark .PropertyTitleArea label {
+.dark .PropertyTitleArea label,
+.dark .PropertySubTitleLabel {
     font-weight: bold;
 }
 

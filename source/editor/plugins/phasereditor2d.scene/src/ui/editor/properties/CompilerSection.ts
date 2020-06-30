@@ -10,6 +10,20 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 "Compiler General Settings", false, true);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/scene-compiler-general-settings.html";
+        }
+
+        createMenu(menu: controls.Menu) {
+
+            this.getEditor().getMenuCreator().createSceneMenuItems(menu);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);

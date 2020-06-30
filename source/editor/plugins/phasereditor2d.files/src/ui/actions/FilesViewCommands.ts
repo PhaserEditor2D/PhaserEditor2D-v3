@@ -1,10 +1,10 @@
 namespace phasereditor2d.files.ui.actions {
 
-    import io = colibri.core.io;
+    import controls = colibri.ui.controls;
 
     export const CMD_NEW_FILE = "phasereditor2d.files.ui.actions.NewFile";
-
-    export const CAT_NEW_FILE = "phasereditor2d.fines.ui.actions.NewFileCategory";
+    export const CMD_GO_TO_FILE = "phasereditor2d.files.ui.actions.GoToFile";
+    export const CAT_FILES = "phasereditor2d.fines.ui.actions.FilesCategory";
 
     function isFilesViewScope(args: colibri.ui.ide.commands.HandlerArgs) {
         return args.activePart instanceof views.FilesView;
@@ -15,8 +15,8 @@ namespace phasereditor2d.files.ui.actions {
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
             manager.addCategory({
-                id: CAT_NEW_FILE,
-                name: "New File"
+                id: CAT_FILES,
+                name: "Files"
             });
 
             // new file
@@ -25,7 +25,7 @@ namespace phasereditor2d.files.ui.actions {
                 id: CMD_NEW_FILE,
                 name: "New File",
                 tooltip: "Create new content.",
-                category: CAT_NEW_FILE
+                category: CAT_FILES
             });
 
             manager.addHandlerHelper(CMD_NEW_FILE,
@@ -61,6 +61,51 @@ namespace phasereditor2d.files.ui.actions {
                     new RenameFileAction(args.activePart as views.FilesView).run();
                 });
 
+            // go to file
+
+            manager.add({
+                command: {
+                    id: CMD_GO_TO_FILE,
+                    name: "Go To File",
+                    tooltip: "Search for a file and open it in the default editor",
+                    category: CAT_FILES
+                },
+                keys: {
+                    control: true,
+                    key: "P"
+                },
+                handler: {
+                    executeFunc: args => {
+
+                        const viewer = new controls.viewers.TreeViewer();
+                        viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                        viewer.setLabelProvider(new viewers.FileLabelProvider());
+                        viewer.setCellRendererProvider(new viewers.FileCellRendererProvider());
+
+                        viewer.setInput(colibri.ui.ide.FileUtils.getAllFiles()
+
+                            .filter(f => f.isFile())
+
+                            .sort((a, b) => -(a.getModTime() - b.getModTime())));
+
+                        const dlg = new controls.dialogs.ViewerDialog(viewer, true);
+
+                        dlg.create();
+
+                        dlg.setTitle("Go To File");
+
+                        dlg.addOpenButton("Open", sel => {
+
+                            if (sel.length > 0) {
+
+                                const file = sel[0] as colibri.core.io.FilePath;
+
+                                colibri.Platform.getWorkbench().openEditor(file);
+                            }
+                        });
+                    }
+                }
+            })
         }
     }
 }

@@ -23,7 +23,7 @@ namespace phasereditor2d.files.ui.actions {
             viewer.setInput(rootFolder);
             viewer.setExpanded(rootFolder, true);
 
-            const dlg = new controls.dialogs.ViewerDialog(viewer);
+            const dlg = new controls.dialogs.ViewerDialog(viewer, false);
 
             dlg.create();
 

@@ -10,6 +10,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture", false, true);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/texture-property.html";
+        }
+
+        createMenu(menu: controls.Menu) {
+
+            this.getEditor().getMenuCreator().createTextureMenuItems(menu);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);

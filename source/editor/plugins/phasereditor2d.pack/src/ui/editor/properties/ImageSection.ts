@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class ImageSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.ImageSection", "Image");
+            super(page, "phasereditor2d.pack.ui.editor.properties.ImageSection", "Image", core.IMAGE_TYPE);
         }
 
         canEdit(obj: any, n: number) {

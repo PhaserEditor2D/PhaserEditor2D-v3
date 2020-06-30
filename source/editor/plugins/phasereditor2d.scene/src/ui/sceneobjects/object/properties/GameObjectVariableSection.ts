@@ -10,6 +10,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectVariableSection", "Variable", false);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/variable-properties.html";
+        }
+
+        createMenu(menu: controls.Menu) {
+
+            const creator = this.getEditor().getMenuCreator();
+
+            creator.createTypeMenuItems(menu);
+
+            menu.addSeparator();
+
+            menu.addCommand(editor.commands.CMD_CREATE_PREFAB_WITH_OBJECT);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);
@@ -59,7 +79,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEdit(obj: any, n: number): boolean {
-            return obj instanceof Phaser.GameObjects.GameObject;
+
+            return obj instanceof Phaser.GameObjects.GameObject && !this.isPrefabSceneObject(obj);
         }
 
         canEditNumber(n: number): boolean {

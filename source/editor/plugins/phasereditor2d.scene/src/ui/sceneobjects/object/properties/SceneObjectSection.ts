@@ -4,6 +4,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
 
+        isPrefabSceneObject(obj: any) {
+
+            const support = EditorSupport.getEditorSupport(obj);
+
+            if (support) {
+
+                const scene = support.getScene();
+
+                if (scene.isPrefabSceneType()) {
+
+                    if (scene.getPrefabObject() === obj) {
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         createGridElementWithPropertiesXY(parent: HTMLElement) {
 
             const comp = this.createGridElement(parent);

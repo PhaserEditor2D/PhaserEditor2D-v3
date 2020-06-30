@@ -157,6 +157,8 @@ namespace phasereditor2d.ide.ui.dialogs {
                 this.createProject(templateInfo);
             });
 
+            this.connectInputWithButton(this._projectNameText, this._createBtn);
+
             if (this._cancellable) {
 
                 this.addButton("Cancel", () => this.close());
@@ -241,7 +243,7 @@ namespace phasereditor2d.ide.ui.dialogs {
                 this.validate();
             });
 
-            this._filteredViewer = new viewers.FilteredViewerInElement(viewer);
+            this._filteredViewer = new viewers.FilteredViewerInElement(viewer, false);
         }
 
         layout() {

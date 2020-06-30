@@ -6,7 +6,7 @@ namespace colibri.ui.controls {
         _context: CanvasRenderingContext2D;
         private _canvas: HTMLCanvasElement;
 
-        constructor(icon?: IImage) {
+        constructor(icon?: IImage, isButtonStyle=false) {
 
             const size = RENDER_ICON_SIZE;
 
@@ -22,6 +22,11 @@ namespace colibri.ui.controls {
             Controls.adjustCanvasDPI(this._canvas, size, size);
 
             this.setIcon(icon);
+
+            if (isButtonStyle) {
+
+                this._canvas.classList.add("IconButton");
+            }
         }
 
         repaint() {
