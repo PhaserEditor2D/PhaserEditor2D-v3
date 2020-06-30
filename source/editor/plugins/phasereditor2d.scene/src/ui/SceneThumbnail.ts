@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui {
         private _callback: (element: HTMLImageElement) => void;
 
         constructor(data: core.json.ISceneData, callback: (element: HTMLImageElement) => void) {
-            super(false);
+            super();
 
             if (data.sceneType === core.json.SceneType.PREFAB) {
 

@@ -145,7 +145,13 @@ namespace colibri.ui.controls.viewers {
                 y += args2.h + 15;
             }
 
+            ctx.save();
+
+            this.prepareContextForRenderCell(args2);
+
             renderer.renderCell(args2);
+
+            ctx.restore();
 
             ctx.save();
 
@@ -154,6 +160,10 @@ namespace colibri.ui.controls.viewers {
             ctx.fillText(label, x, y);
 
             ctx.restore();
+        }
+
+        protected prepareContextForRenderCell(args: RenderCellArgs) {
+            // nothing by default
         }
 
         protected prepareContextForText(args: RenderCellArgs) {

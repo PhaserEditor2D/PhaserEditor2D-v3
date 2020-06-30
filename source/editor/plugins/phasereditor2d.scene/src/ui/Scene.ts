@@ -4,19 +4,19 @@ namespace phasereditor2d.scene.ui {
     export class Scene extends Phaser.Scene {
 
         private _id: string;
-        private _inEditor: boolean;
+        private _editor: editor.SceneEditor;
         private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
         private _prefabProperties: sceneobjects.UserProperties;
         private _objectLists: sceneobjects.ObjectLists;
         private _packCache: pack.core.parsers.AssetPackCache;
 
-        constructor(inEditor = true) {
+        constructor(editor?: editor.SceneEditor) {
             super("ObjectScene");
 
             this._id = Phaser.Utils.String.UUID();
 
-            this._inEditor = inEditor;
+            this._editor = editor;
 
             this._maker = new SceneMaker(this);
 
@@ -27,6 +27,11 @@ namespace phasereditor2d.scene.ui {
             this._objectLists = new sceneobjects.ObjectLists();
 
             this._prefabProperties = new sceneobjects.UserProperties();
+        }
+
+        getEditor() {
+
+            return this._editor;
         }
 
         protected registerDestroyListener(name: string) {
@@ -70,6 +75,34 @@ namespace phasereditor2d.scene.ui {
             const list = this.getDisplayListChildren();
 
             return list[list.length - 1];
+        }
+
+        isNonTopPrefabObject(obj: any) {
+
+            const support = sceneobjects.EditorSupport.getEditorSupport(obj);
+
+            if (support) {
+
+                const scene = support.getScene();
+
+                if (scene.isPrefabSceneType()) {
+
+                    if (scene.getPrefabObject() !== obj) {
+
+                        const container = (obj as Phaser.GameObjects.GameObject).parentContainer;
+
+
+                        if (container) {
+
+                            return this.isNonTopPrefabObject(container);
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         getObjectLists() {
@@ -319,7 +352,7 @@ namespace phasereditor2d.scene.ui {
 
             this.registerDestroyListener("Scene");
 
-            if (this._inEditor) {
+            if (this._editor) {
 
                 const camera = this.getCamera();
                 camera.setOrigin(0, 0);

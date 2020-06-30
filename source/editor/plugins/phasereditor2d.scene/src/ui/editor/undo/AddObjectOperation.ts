@@ -18,6 +18,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         protected async performModification() {
 
+            const prefabObj = this._editor.getScene().getPrefabObject();
+
             const maker = this._editor.getSceneMaker();
 
             let obj: sceneobjects.ISceneObject;
@@ -30,6 +32,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 obj = maker.createEmptyObject(this._type, this._extraData);
             }
+
+            this._editor.getSceneMaker().afterDropObjectsInPrefabScene(prefabObj, [obj]);
 
             this.getEditor().setSelection([obj]);
         }
