@@ -53,6 +53,7 @@
 * Scene Editor: in a prefab scene, the non-prefab objects are rendered with transparency, in the Outline view.
 * Scene Editor: in a prefab scene, does not show the Inspector view's Variable and Lists sections if the selected object is the prefab object.
 * Scene Editor: auto creates a container when add new objects to a prefab scene.
+* Scene Editor: removes redundant `sceneType` attribute in scene file serialization.
 
 ## Fixed
 
