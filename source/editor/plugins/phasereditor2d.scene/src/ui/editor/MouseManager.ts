@@ -127,6 +127,11 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onClick(e: MouseEvent) {
 
+            if (e.button !== 0) {
+
+                return;
+            }
+
             if (this._toolInAction) {
 
                 this._toolInAction = false;
