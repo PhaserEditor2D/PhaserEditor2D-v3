@@ -122,7 +122,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof Scene && obj.getSettings().sceneType === core.json.SceneType.SCENE;
+            return obj instanceof Scene && obj.getSceneType() === core.json.SceneType.SCENE;
         }
     }
 }

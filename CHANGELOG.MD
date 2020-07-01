@@ -1,10 +1,19 @@
 # Change Log
 
-## Version 3.2.0-next
+## Version 3.3.0-next.
+
+## Added
+## Modified
+## Fixed
+
+
+## Version 3.3.0 - July 1, 2020.
 
 ## Added
 
-* Asset Pack Editor: allows to import SVG files as HTML Image.
+* Asset Pack: allows to import SVG files as HTML Image.
+* Asset Pack: adds an Open button to the File Key section.
+* Asset Pack: shows a Help link in the menu of the Inspector sections.
 * Closes a couple of Input dialogs (New File, New Project, Rename File) when press ENTER in the input field.
 * **Go To File** command `Ctrl+P`.
 * Viewer dialog selects visible (or selected) item with the ENTER key.
@@ -16,18 +25,24 @@
 * Scene Editor: arrow keys commands to change the position of the objects. Press `Shift` for 10x. It respects snap values.
 * Scene Editor: enables copy/paste objects across scenes.
 * Scene Editor: Inspector view sections show a menu with a Help item and related commands.
-* Asset Pack: adds an Open button to the File Key section.
-* Asset Pack: shows a Help link in the menu of the Inspector sections.
+* Scene Editor: automatic creation of root container in a prefab scene.
+* Scene Editor: in a prefab scene, non-prefab objects are renderer with transparency.
+* [#41](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/41) Scene Editor: zoom in/out buttons.
+
 
 ## Modified
 
 * Improved Asset Pack File section in Inspector view.
+* [#44](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/44) Workbench: does not validate if there is an `index.html` file in the root folder.
 
 ## Fixed
 
 * Fixes menu vertical positioning when there is few space at the top.
 * Scene Editor: shows message when a prefab is not found.
 * Scene Editor: fixes user property declaration when no initial value is provided.
+* [#45](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/45) Scene Editor: compiler skips using field declarations in JavaScript output. It is not supported in Safari.
+* Scene Editor: fixes scene compiler code merging when the output file was modified by formatters that replace tab chars with spaces.
+* Scene Editor: fixes mouse wheel click on Safari.
 
 ## Version 3.2.0 - June 14, 2020
 
@@ -47,6 +62,10 @@
 
 * Files view: the context menu **New** option does not open the **New File** dialog. Now it is a sub-menu with the shortcuts to create a new file of any supported content type.
 * Scene Editor: the translate and rotate manipulators set integer values to objects.
+* Scene Editor: in a prefab scene, the non-prefab objects are rendered with transparency, in the Outline view.
+* Scene Editor: in a prefab scene, does not show the Inspector view's Variable and Lists sections if the selected object is the prefab object.
+* Scene Editor: auto creates a container when add new objects to a prefab scene.
+* Scene Editor: removes redundant `sceneType` attribute in scene file serialization.
 
 ## Fixed
 

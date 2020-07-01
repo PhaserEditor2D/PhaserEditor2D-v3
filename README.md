@@ -12,9 +12,7 @@ Previous versions of the editor are based on the [Eclipse IDE](https://eclipse.o
 
 *We are an independent developer. Phaser Editor is not part of the Phaser project. Contact them at [phaser.io](https://phaser.io)*
 
-
 ### Main features
-
 
 * The IDE runs in the browser. It has a small backend that can be run in the cloud or locally.
 
@@ -26,7 +24,6 @@ Previous versions of the editor are based on the [Eclipse IDE](https://eclipse.o
 
 * It follows the Phaser standards and API. Extra plugins or runtimes are not required.
 
-
 ### Documentation
 
 Phaser Editor 2D v3 is [fully documented](https://help.phasereditor2d.com).
@@ -35,11 +32,13 @@ Phaser Editor 2D v3 is [fully documented](https://help.phasereditor2d.com).
 
 Eventually, we share videos, screenshots, and thoughts about the editor's development progress.
 
-* Check this [YouTube playlist](https://www.youtube.com/playlist?list=PLB8gI_5U0MvARFuAFCRQkQNR1tgLN7MMM) dedicated to the Phaser Editor 2D v3 development.
+* Check this [YouTube channel](https://www.youtube.com/c/PhaserEditor2D) dedicated to the Phaser Editor 2D v3.
 
 * Follow us on [Twitter @PhaserEditor2D](https://twitter.com/PhaserEditor2D) and [Facebook @PhaserEditor2D](https://facebook.com/PhaserEditor2D).
 
-* Check the latest posts in the [Phaser Editor website](https://phasereditor2d.com).
+* Check the latest tutorials in the [Phaser Editor website](https://phasereditor2d.com/blog/category/tutorials).
+
+* Check the [#PhaserEditor2DTips](https://twitter.com/hashtag/PhaserEditor2DTips)
 
 ### Download
 
@@ -51,7 +50,7 @@ The [Play Phaser Editor 2D](https://play.phasereditor2d.com) is a service hosted
 
 ### Build and run
 
-At this moment you cannot build and run Phaser Editor v3. The server is not part of this repository. As soon as the editor is released we are going to publish the instructions to build and run it.
+[Follow these steps](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/blob/develop/BUILD.md)
 
 ### Licensing
 
@@ -59,6 +58,9 @@ The code provided in this repository is under the MIT license.
 
 The editor code is divided into two parts: the front-end (the HTML5-based IDE, or client) and the back-end (the HTTP server). This repository contains the full code of the client, that is the bigger part. The server code is closed.
 
+### Contact
+
+If you find any issue or have an idea, please, open an issue in this repository. Or contact us at `developers@phasereditor2d.com` or say hi in our [Discord server](https://discord.com/invite/4DdpMMD).
 
 ### Author
 

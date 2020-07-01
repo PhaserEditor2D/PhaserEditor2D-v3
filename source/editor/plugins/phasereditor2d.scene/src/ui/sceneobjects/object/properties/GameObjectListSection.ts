@@ -92,7 +92,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEdit(obj: any, n: number): boolean {
-            return obj instanceof Phaser.GameObjects.GameObject;
+
+            return obj instanceof Phaser.GameObjects.GameObject && !this.isPrefabSceneObject(obj);
         }
 
         canEditNumber(n: number): boolean {

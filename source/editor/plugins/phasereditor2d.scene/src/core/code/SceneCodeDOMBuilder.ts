@@ -259,7 +259,7 @@ namespace phasereditor2d.scene.core.code {
 
             const createMethodDecl = new MethodDeclCodeDOM(settings.createMethodName);
 
-            if (settings.onlyGenerateMethods && settings.sceneType === json.SceneType.PREFAB) {
+            if (settings.onlyGenerateMethods && this._scene.isPrefabSceneType()) {
 
                 createMethodDecl.arg("scene", "Phaser.Scene");
             }

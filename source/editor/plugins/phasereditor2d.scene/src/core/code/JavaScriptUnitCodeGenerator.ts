@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.core.code {
 
                 this.line();
 
-                this.generateMethodDecl(elem as MethodDeclCodeDOM, true);
+                this.generateMethodDecl(null, elem as MethodDeclCodeDOM, true);
 
                 this.line();
             }
@@ -61,23 +61,23 @@ namespace phasereditor2d.scene.core.code {
 
             for (const memberDecl of body) {
 
-                this.generateMemberDecl(memberDecl);
+                this.generateMemberDecl(clsDecl, memberDecl);
             }
 
-            this.line();
+            this.lineIfNeeded();
 
-            this.section("/* START-USER-CODE */", "\t/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n");
+            this.section("/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t");
 
             this.closeIndent("}");
 
             this.line();
         }
 
-        protected generateMemberDecl(memberDecl: MemberDeclCodeDOM) {
+        protected generateMemberDecl(classDecl: ClassDeclCodeDOM, memberDecl: MemberDeclCodeDOM) {
 
             if (memberDecl instanceof MethodDeclCodeDOM) {
 
-                this.generateMethodDecl(memberDecl, false);
+                this.generateMethodDecl(classDecl, memberDecl, false);
 
                 this.line();
 
@@ -89,24 +89,23 @@ namespace phasereditor2d.scene.core.code {
 
         protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM) {
 
-            this.line(`/** @type {${fieldDecl.getType()}} */`);
+            // We comment this off because Safari does not support field declarations (issue #45)
 
-            if (fieldDecl.isInitialized()) {
+            // this.line(`/** @type {${fieldDecl.getType()}} */`);
 
-                this.line(fieldDecl.getName() + " = " + fieldDecl.getInitialValueExpr() + ";");
+            // if (fieldDecl.isInitialized()) {
 
-            } else {
+            //     this.line(fieldDecl.getName() + " = " + fieldDecl.getInitialValueExpr() + ";");
 
-                this.line(fieldDecl.getName() + ";");
-            }
+            // } else {
 
-            this.line();
+            //     this.line(fieldDecl.getName() + ";");
+            // }
 
-            // this.append(`// ${fieldDecl.isPublic() ? "public" : "private"} `);
-            // this.line(`${fieldDecl.getName()}: ${fieldDecl.getType()}`);
+            // this.line();
         }
 
-        private generateMethodDecl(methodDecl: MethodDeclCodeDOM, isFunction: boolean) {
+        private generateMethodDecl(classDecl: ClassDeclCodeDOM, methodDecl: MethodDeclCodeDOM, isFunction: boolean) {
 
             if (isFunction) {
                 this.append("function ");
@@ -142,9 +141,37 @@ namespace phasereditor2d.scene.core.code {
 
                     this.generateInstr(instr);
                 }
+
+                if (methodDecl.getName() === "constructor") {
+
+                    this.generateFieldInitInConstructor(classDecl);
+                }
             }
 
             this.closeIndent("}");
+        }
+
+        protected generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM) {
+
+            const fields = classDecl.getBody()
+
+                .filter(obj => obj instanceof FieldDeclCodeDOM)
+
+                .map(obj => obj as FieldDeclCodeDOM);
+
+            if (fields.length > 0) {
+
+                this.line();
+
+                for (const field of fields) {
+
+                    const assign = new AssignPropertyCodeDOM(field.getName(), "this");
+                    assign.setPropertyType(field.getType());
+                    assign.value(field.getInitialValueExpr());
+
+                    this.generateAssignProperty(assign);
+                }
+            }
         }
 
         protected generateMethodDeclArgs(methodDecl: MethodDeclCodeDOM) {
@@ -179,13 +206,19 @@ namespace phasereditor2d.scene.core.code {
             this.generateTypeAnnotation(assign);
 
             if (assign.getContextExpr()) {
+
                 this.append(assign.getContextExpr());
                 this.append(".");
             }
 
             this.append(assign.getPropertyName());
-            this.append(" = ");
-            this.append(assign.getPropertyValueExpr());
+
+            if (assign.getPropertyValueExpr()) {
+
+                this.append(" = ");
+                this.append(assign.getPropertyValueExpr());
+            }
+
             this.append(";");
             this.line();
         }

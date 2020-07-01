@@ -263,7 +263,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private createGame() {
 
-            this._scene = new Scene();
+            this._scene = new Scene(this);
 
             this._game = new Phaser.Game({
                 type: ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,

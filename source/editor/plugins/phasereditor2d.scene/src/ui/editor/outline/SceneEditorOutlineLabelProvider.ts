@@ -8,7 +8,16 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             if (obj instanceof Phaser.GameObjects.GameObject) {
 
-                return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
+                const support = (obj as sceneobjects.ISceneObject).getEditorSupport();
+
+                if (support.getScene().isPrefabSceneType() && obj === support.getScene().getPrefabObject()) {
+
+                    const file = support.getScene().getEditor().getInput();
+
+                    return `${file.getNameWithoutExtension()} (Prefab Object: ${support.isPrefabInstance() ? support.getPrefabName() : support.getObjectType()})`;
+                }
+
+                return support.getLabel();
 
             } else if (obj instanceof Phaser.GameObjects.DisplayList) {
 
