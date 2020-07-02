@@ -10,7 +10,7 @@ namespace phasereditor2d.pack.ui.editor {
             super(page, "phasereditor2d.pack.ui.editor.ImportFileSection", "Import File", false);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
             const comp = this.createGridElement(parent, 1);
 
             this.addUpdater(() => {

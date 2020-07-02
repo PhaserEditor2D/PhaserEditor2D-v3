@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/alpha-properties.html";
 ;        }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
 

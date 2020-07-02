@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.editor.scripts {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
         static ID: "phasereditor2d.scene.ui.editor.ObjectScriptEditor";
-
+        
         static getFactory() {
 
             return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
@@ -52,11 +52,15 @@ namespace phasereditor2d.scene.ui.editor.scripts {
         }
 
         private _model: ObjectScriptEditorModel;
+        private _outlineProvider: ObjectScriptsEditorOutlineProvider;
+        private _propertyProvider: ObjectScriptEditorPropertySectionProvider;
 
         constructor() {
             super(ObjectScriptEditor.ID);
 
             this._model = new ObjectScriptEditorModel();
+            this._outlineProvider = new ObjectScriptsEditorOutlineProvider(this);
+            this._propertyProvider = new ObjectScriptEditorPropertySectionProvider();
         }
 
         protected onEditorInputContentChanged() {
@@ -97,7 +101,32 @@ namespace phasereditor2d.scene.ui.editor.scripts {
             viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
             viewer.setInput(this._model.getScripts());
 
+            viewer.eventSelectionChanged.addListener(() => {
+
+                this._outlineProvider.setSelection(viewer.getSelection(), true, false);
+
+                this._outlineProvider.repaint();
+            });
+
             return viewer;
+        }
+
+        getEditorViewerProvider(key: string) {
+
+            switch (key) {
+
+                case phasereditor2d.outline.ui.views.OutlineView.EDITOR_VIEWER_PROVIDER_KEY:
+
+                    return this._outlineProvider;
+
+                default:
+                    break;
+            }
+        }
+
+        getPropertyProvider() {
+
+            return this._propertyProvider;
         }
 
         createEditorToolbar(parent: HTMLElement) {

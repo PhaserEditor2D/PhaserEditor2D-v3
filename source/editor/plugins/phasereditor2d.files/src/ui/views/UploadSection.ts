@@ -10,7 +10,7 @@ namespace phasereditor2d.files.ui.views {
             super(page, "phasereditor2d.files.ui.views", "Upload");
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 1);
             comp.classList.add("UploadSection");

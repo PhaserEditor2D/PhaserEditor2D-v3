@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/text-object.html#text-type-properties";
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
 

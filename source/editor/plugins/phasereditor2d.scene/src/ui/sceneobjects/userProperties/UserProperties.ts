@@ -1,8 +1,5 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import write = colibri.core.json.write;
-    import read = colibri.core.json.read;
-
     export class UserProperties {
 
         private _properties: UserProperty[];

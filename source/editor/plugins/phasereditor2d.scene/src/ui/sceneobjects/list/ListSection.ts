@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.ListSection", "List", true);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
             comp.style.gridTemplateColumns = "1fr";

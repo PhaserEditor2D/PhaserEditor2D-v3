@@ -8,7 +8,7 @@ namespace phasereditor2d.pack.ui.properties {
             super(page, "AssetPackItemPropertySection", "File Key", false);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
             const comp = this.createGridElement(parent, 3);
             comp.style.gridTemplateColumns = "auto 1fr auto";
 

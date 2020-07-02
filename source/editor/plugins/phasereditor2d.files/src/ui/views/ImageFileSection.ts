@@ -10,7 +10,7 @@ namespace phasereditor2d.files.ui.views {
             super(page, "files.ImagePreviewSection", "Image", true);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             parent.classList.add("ImagePreviewFormArea");
 

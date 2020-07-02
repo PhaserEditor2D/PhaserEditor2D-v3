@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui {
             super(page, "phasereditor2d.scene.ui.ManySceneFileSection", "Scene", true, false);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const viewer = new files.ui.views.GridImageFileViewer();
 

@@ -23,7 +23,7 @@ namespace phasereditor2d.files.ui.views {
             super(page, "files.ManyImageFileSection", "Images", true);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
             parent.classList.add("ManyImagePreviewFormArea");
 
             const viewer = new GridImageFileViewer();
