@@ -6,6 +6,8 @@
 ## Modified
 ## Fixed
 
+* [#52](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/52) Moving objects with arrow keys is not updating the properties in the Inspector view.
+
 
 ## Version 3.3.0 - July 1, 2020.
 
