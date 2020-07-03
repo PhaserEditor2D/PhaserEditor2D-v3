@@ -3,6 +3,9 @@
 ## Version 3.3.0-next.
 
 ## Added
+
+* User Component Editor.
+
 ## Modified
 ## Fixed
 
