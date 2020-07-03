@@ -47,5 +47,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             return this._components;
         }
+
+        setComponents(components: UserComponent[]) {
+
+            this._components = components;
+        }
     }
 }

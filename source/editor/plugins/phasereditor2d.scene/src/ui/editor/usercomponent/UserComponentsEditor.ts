@@ -46,8 +46,20 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     executeFunc: args => {
                         (args.activeEditor as UserComponentsEditor).addComponent();
                     }
+                },
+                keys: {
+                    key: "A"
                 }
-            })
+            });
+
+            manager.add({
+                handler: {
+                    testFunc: editorScope,
+                    executeFunc: args => {
+                        (args.activeEditor as UserComponentsEditor).deleteSelection();
+                    }
+                }
+            }, colibri.ui.ide.actions.CMD_DELETE);
         }
 
         private _model: UserComponentsEditorModel;
@@ -108,6 +120,23 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 this.getViewer().setInput(this._model.getComponents());
                 this.getViewer().repaint();
             }
+        }
+
+        deleteSelection() {
+
+            const before = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
+
+            this._model.setComponents(
+                this._model.getComponents().filter(comp => this.getSelection().indexOf(comp) === -1)
+            );
+
+            this.getViewer().setInput(this._model.getComponents());
+            this.getViewer().setSelection([]);
+            this.setDirty(true);
+
+            const after = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
+
+            this.getUndoManager().add(new UserComponentsEditorSnapshotOperation(this, before, after));
         }
 
         addComponent() {
@@ -175,7 +204,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const manager = new controls.ToolbarManager(parent);
 
             manager.addCommand(CMD_ADD_USER_COMPONENT, {
-                showText: true
+                showText: true,
+                text: "Component"
             });
 
             return manager;
