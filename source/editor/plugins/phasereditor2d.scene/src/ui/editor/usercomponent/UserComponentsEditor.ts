@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             manager.add({
                 handler: {
-                    testFunc: editorScope,
+                    testFunc: args => editorScope(args) && args.activeEditor.getSelection().length > 0,
                     executeFunc: args => {
                         (args.activeEditor as UserComponentsEditor).deleteSelection();
                     }
@@ -89,6 +89,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             super.createPart();
 
             this.updateContent();
+        }
+
+        fillContextMenu(menu: controls.Menu) {
+
+            menu.addCommand(CMD_ADD_USER_COMPONENT, {
+                text: "Add Component"
+            });
+            menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
         }
 
         async doSave() {
@@ -205,7 +213,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             manager.addCommand(CMD_ADD_USER_COMPONENT, {
                 showText: true,
-                text: "Component"
+                text: "Add Component"
             });
 
             return manager;
