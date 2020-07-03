@@ -44,7 +44,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 handler: {
                     testFunc: editorScope,
                     executeFunc: args => {
-                        (args.activeEditor as UserComponentsEditor).addScriptObject();
+                        (args.activeEditor as UserComponentsEditor).addComponent();
                     }
                 }
             })
@@ -105,21 +105,29 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             if (this.getViewer()) {
 
-                this.getViewer().setInput(this._model.getScripts());
+                this.getViewer().setInput(this._model.getComponents());
                 this.getViewer().repaint();
             }
         }
 
-        addScriptObject() {
+        addComponent() {
 
-            const script = new UserComponent("Component");
+            const before = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
 
-            this._model.getScripts().push(script);
+            const maker = new colibri.ui.ide.utils.NameMaker((comp: UserComponent) => comp.getName());
+            maker.update(this._model.getComponents());
+            const name = maker.makeName("Component");
 
-            this.getViewer().setSelection([script]);
-            this.getViewer().reveal(script);
+            const userComp = new UserComponent(name);
 
+            this._model.getComponents().push(userComp);
+            this.getViewer().setSelection([userComp]);
+            this.getViewer().reveal(userComp);
             this.setDirty(true);
+
+            const after = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
+
+            this.getUndoManager().add(new UserComponentsEditorSnapshotOperation(this, before, after));
         }
 
         protected createViewer(): controls.viewers.TreeViewer {

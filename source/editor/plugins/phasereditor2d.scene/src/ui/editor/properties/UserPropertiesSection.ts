@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     const prop = userProps.createProperty(newType);
                     userProps.add(prop);
                     this.setExpandedStateInStorage(prop, true);
-                });
+                }, true);
             });
 
             btn.style.gridColumn = "1 / span 2";

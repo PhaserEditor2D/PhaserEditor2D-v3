@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export class UserComponentPropertiesSection extends editor.properties.UserPropertiesSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.editor.usercomponent.ObjectScriptPropertiesSection", "Arguments", false, false);
+            super(page, "phasereditor2d.scene.ui.editor.usercomponent.ObjectScriptPropertiesSection", "Properties", false, false);
         }
 
         protected getSectionHelpPath(): string {
@@ -20,11 +20,26 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return (this.getSelectionFirstElement() as UserComponent).getProperties();
         }
 
+        getEditor() {
+
+            return colibri.Platform.getWorkbench()
+                .getActiveWindow().getEditorArea()
+                .getSelectedEditor() as UserComponentsEditor;
+        }
+
         protected runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
+
+            const editor = this.getEditor();
+
+            const before = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
 
             action(this.getUserProperties());
 
-            if (updateSelection || true) {
+            const after = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
+
+            editor.getUndoManager().add(new UserComponentsEditorSnapshotOperation(editor, before, after));
+
+            if (updateSelection) {
 
                 this.updateWithSelection();
             }

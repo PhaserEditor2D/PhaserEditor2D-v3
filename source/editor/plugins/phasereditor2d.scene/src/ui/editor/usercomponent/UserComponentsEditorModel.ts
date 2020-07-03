@@ -1,18 +1,27 @@
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
+    export interface IUserComponentsEditorModelData {
+        components: any[],
+        meta: {
+            app: string,
+            url: string,
+            contentType: string
+        }
+    }
+
     export class UserComponentsEditorModel {
 
-        private _scripts: UserComponent[];
+        private _components: UserComponent[];
 
         constructor() {
 
-            this._scripts = [];
+            this._components = [];
         }
 
-        toJSON() {
+        toJSON(): IUserComponentsEditorModelData {
 
             return {
-                scripts: this._scripts.map(script => script.toJSON()),
+                components: this._components.map(script => script.toJSON()),
                 meta: {
                     app: "Phaser Editor 2D - Object Script Editor",
                     url: "https://phasereditor2d.com",
@@ -21,22 +30,22 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             }
         }
 
-        readJSON(data: any) {
+        readJSON(data: IUserComponentsEditorModelData) {
 
-            this._scripts = data.scripts.map(
-                scriptData => {
+            this._components = data.components.map(
+                userCompData => {
 
-                    const script = new UserComponent(scriptData.name);
-                    script.readJSON(scriptData);
+                    const userComp = new UserComponent(userCompData.name);
+                    userComp.readJSON(userCompData);
 
-                    return script;
+                    return userComp;
                 }
             );
         }
 
-        getScripts() {
+        getComponents() {
 
-            return this._scripts;
+            return this._components;
         }
     }
 }
