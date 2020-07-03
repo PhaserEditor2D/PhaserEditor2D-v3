@@ -1,12 +1,12 @@
 namespace phasereditor2d.scene.ui.dialogs {
 
-    export class NewObjectScriptFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
+    export class NewUserComponentsFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
 
         constructor() {
             super({
-                dialogName: "Object Scripts File",
-                dialogIcon: ScenePlugin.getInstance().getIcon(ICON_OBJECT_SCRIPT),
-                fileExtension: "scripts",
+                dialogName: "User Components File",
+                dialogIcon: ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT),
+                fileExtension: "components",
                 initialFileName: "Object"
             });
         }
@@ -24,13 +24,9 @@ namespace phasereditor2d.scene.ui.dialogs {
                     name = name.substring(0, i);
                 }
 
-                const data = {
-                    meta: {
-                        app: "Phaser Editor 2D - Object Script Editor",
-                        url: "https://phasereditor2d.com",
-                        contentType: scene.core.CONTENT_TYPE_SCENE
-                    }
-                };
+                const model = new editor.usercomponent.UserComponentsEditorModel();
+
+                const data = model.toJSON();
 
                 return JSON.stringify(data, null, 2);
             };
@@ -38,7 +34,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
         getInitialFileLocation() {
 
-            return super.findInitialFileLocationBasedOnContentType(scene.core.CONTENT_TYPE_OBJECT_SCRIPT);
+            return super.findInitialFileLocationBasedOnContentType(scene.core.CONTENT_TYPE_USER_COMPONENTS);
         }
     }
 }

@@ -1,13 +1,13 @@
 /// <reference path="../properties/UserPropertiesSection.ts" />
 
-namespace phasereditor2d.scene.ui.editor.scripts {
+namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     import controls = colibri.ui.controls;
 
-    export class ObjectScriptPropertiesSection extends editor.properties.UserPropertiesSection {
+    export class UserComponentPropertiesSection extends editor.properties.UserPropertiesSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.editor.scripts.ObjectScriptPropertiesSection", "Arguments", false, false);
+            super(page, "phasereditor2d.scene.ui.editor.usercomponent.ObjectScriptPropertiesSection", "Arguments", false, false);
         }
 
         protected getSectionHelpPath(): string {
@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.editor.scripts {
 
         protected getUserProperties(): sceneobjects.UserProperties {
 
-            return (this.getSelectionFirstElement() as ObjectScript).getProperties();
+            return (this.getSelectionFirstElement() as UserComponent).getProperties();
         }
 
         protected runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.editor.scripts {
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof ObjectScript;
+            return obj instanceof UserComponent;
         }
 
         canEditNumber(n: number): boolean {

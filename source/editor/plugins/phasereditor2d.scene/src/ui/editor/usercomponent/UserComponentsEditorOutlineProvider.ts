@@ -1,12 +1,12 @@
-namespace phasereditor2d.scene.ui.editor.scripts {
+namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     import controls = colibri.ui.controls;
 
-    export class ObjectScriptsEditorOutlineProvider extends colibri.ui.ide.EditorViewerProvider {
+    export class UserComponentsEditorOutlineProvider extends colibri.ui.ide.EditorViewerProvider {
 
-        private _editor: ObjectScriptEditor;
+        private _editor: UserComponentsEditor;
 
-        constructor(editor: ObjectScriptEditor) {
+        constructor(editor: UserComponentsEditor) {
             super();
 
             this._editor = editor;
@@ -19,13 +19,13 @@ namespace phasereditor2d.scene.ui.editor.scripts {
 
         getLabelProvider(): colibri.ui.controls.viewers.ILabelProvider {
 
-            return new controls.viewers.LabelProvider((obj: ObjectScript) => obj.getName());
+            return new controls.viewers.LabelProvider((obj: UserComponent) => obj.getName());
         }
 
         getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider {
 
             return new controls.viewers.EmptyCellRendererProvider(
-                obj => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_OBJECT_SCRIPT))
+                obj => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT))
             );
         }
 

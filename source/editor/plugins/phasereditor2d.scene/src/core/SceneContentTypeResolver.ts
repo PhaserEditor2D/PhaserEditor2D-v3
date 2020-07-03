@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.core {
     import core = colibri.core;
 
     export const CONTENT_TYPE_SCENE = "phasereditor2d.core.scene.SceneContentType";
-    export const CONTENT_TYPE_OBJECT_SCRIPT = "phasereditor2d.core.scene.ObjectScriptContentType";
+    export const CONTENT_TYPE_USER_COMPONENTS = "phasereditor2d.core.scene.UserComponents";
 
     export class SceneContentTypeResolver extends core.ContentTypeResolver {
 

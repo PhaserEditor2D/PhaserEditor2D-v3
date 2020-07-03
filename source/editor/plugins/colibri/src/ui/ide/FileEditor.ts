@@ -51,6 +51,9 @@ namespace colibri.ui.ide {
 
                 if (!this._isSaving) {
 
+                    // TODO: this is not working, we should see why!
+                    // this.getUndoManager().clear();
+
                     this.onEditorInputContentChanged();
                 }
 

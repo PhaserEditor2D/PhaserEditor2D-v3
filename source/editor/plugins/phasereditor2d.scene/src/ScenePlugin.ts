@@ -13,7 +13,7 @@ namespace phasereditor2d.scene {
     export const ICON_LOCKED = "locked";
     export const ICON_UNLOCKED = "unlocked";
     export const ICON_LIST = "list";
-    export const ICON_OBJECT_SCRIPT = "object-script";
+    export const ICON_USER_COMPONENT = "user-component";
 
     export class ScenePlugin extends colibri.Plugin {
 
@@ -65,7 +65,11 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 new colibri.core.ContentTypeExtension(
                     [new colibri.core.ContentTypeResolverByExtension(
-                        "script", [["scripts", core.CONTENT_TYPE_OBJECT_SCRIPT]])])
+                        core.CONTENT_TYPE_USER_COMPONENTS + "Resolver",
+                        [
+                            ["components", core.CONTENT_TYPE_USER_COMPONENTS]
+                        ])
+                    ])
             )
 
             // content type renderer
@@ -80,8 +84,8 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(this, [
                     {
-                        iconName: ICON_OBJECT_SCRIPT,
-                        contentType: core.CONTENT_TYPE_OBJECT_SCRIPT
+                        iconName: ICON_USER_COMPONENT,
+                        contentType: core.CONTENT_TYPE_USER_COMPONENTS
                     }
                 ]));
 
@@ -99,7 +103,7 @@ namespace phasereditor2d.scene {
                     ICON_LOCKED,
                     ICON_UNLOCKED,
                     ICON_LIST,
-                    ICON_OBJECT_SCRIPT
+                    ICON_USER_COMPONENT
                 ])
             );
 
@@ -116,7 +120,7 @@ namespace phasereditor2d.scene {
                 new ide.commands.CommandExtension(ui.editor.commands.SceneEditorCommands.registerCommands));
 
             reg.addExtension(
-                new ide.commands.CommandExtension(ui.editor.scripts.ObjectScriptEditor.registerCommands));
+                new ide.commands.CommandExtension(ui.editor.usercomponent.UserComponentsEditor.registerCommands));
 
 
             // main menu
@@ -138,7 +142,7 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 new ide.EditorExtension([
                     ui.editor.SceneEditor.getFactory(),
-                    ui.editor.scripts.ObjectScriptEditor.getFactory()
+                    ui.editor.usercomponent.UserComponentsEditor.getFactory()
                 ]));
 
             // new file wizards
@@ -146,7 +150,7 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 new ui.dialogs.NewSceneFileDialogExtension(),
                 new ui.dialogs.NewPrefabFileDialogExtension(),
-                new ui.dialogs.NewObjectScriptFileDialogExtension()
+                new ui.dialogs.NewUserComponentsFileDialogExtension()
             );
 
             // file properties
