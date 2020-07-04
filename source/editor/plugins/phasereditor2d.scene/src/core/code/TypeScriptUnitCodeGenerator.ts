@@ -10,16 +10,15 @@ namespace phasereditor2d.scene.core.code {
 
             const mod = fieldDecl.isPublic() ? "public" : "private";
 
-            if (fieldDecl.isInitialized()) {
+            // if (fieldDecl.isInitialized()) {
 
-                this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()} = ${fieldDecl.getInitialValueExpr()};`);
+            //     this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()} = ${fieldDecl.getInitialValueExpr()};`);
 
-            } else {
+            // } else 
+            {
 
                 this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()};`);
             }
-
-            this.line();
         }
 
         generateMethodReturnTypeDecl(methodDecl: MethodDeclCodeDOM) {
@@ -32,9 +31,9 @@ namespace phasereditor2d.scene.core.code {
             return " ";
         }
 
-        generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM) {
-            // nothing, in TypeScript fields are initialized in the declaration
-        }
+        // generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM) {
+        //     // nothing, in TypeScript fields are initialized in the declaration
+        // }
 
         protected generateTypeAnnotation(assign: AssignPropertyCodeDOM) {
             // do nothing, in TypeScript uses the var declaration syntax
