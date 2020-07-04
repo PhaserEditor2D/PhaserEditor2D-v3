@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>): void {
 
+            sections.push(new UserComponentSection(page));
             sections.push(new UserComponentPropertiesSection(page));
         }
     }
