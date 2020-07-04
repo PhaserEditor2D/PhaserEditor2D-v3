@@ -84,6 +84,8 @@ namespace phasereditor2d.scene.core.code {
             } else if (memberDecl instanceof FieldDeclCodeDOM) {
 
                 this.generateFieldDecl(memberDecl);
+
+                this.line();
             }
         }
 
@@ -152,7 +154,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (methodDecl.getName() === "constructor") {
 
-                this.generateFieldInitInConstructor(classDecl);
+                this.generateFieldInitInConstructor(classDecl, methodDecl);
             }
 
             this.closeIndent("}");
@@ -163,13 +165,31 @@ namespace phasereditor2d.scene.core.code {
             return " ";
         }
 
-        protected generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM) {
+        protected generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM, ctrDecl: MethodDeclCodeDOM) {
 
             const fields = classDecl.getBody()
 
                 .filter(obj => obj instanceof FieldDeclCodeDOM)
 
-                .map(obj => obj as FieldDeclCodeDOM);
+                .map(obj => obj as FieldDeclCodeDOM)
+
+                .filter(field => {
+
+                    // skip fields already initialized
+
+                    for (const instr of ctrDecl.getBody()) {
+
+                        if (instr instanceof AssignPropertyCodeDOM) {
+
+                            if (instr.getPropertyName() === field.getName()) {
+
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                });
 
             if (fields.length > 0) {
 
