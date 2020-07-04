@@ -79,9 +79,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return this._model;
         }
 
-        protected onEditorInputContentChanged() {
+        protected async onEditorInputContentChanged() {
 
-            this.updateContent();
+            const sel = new Set(this.getViewer().getSelection().map(c => c.getName()));
+
+            await this.updateContent();
+
+            this.getViewer().setSelection(this._model.getComponents().filter(c => sel.has(c.getName())));
+            this.getViewer().repaint();
         }
 
         createPart() {
