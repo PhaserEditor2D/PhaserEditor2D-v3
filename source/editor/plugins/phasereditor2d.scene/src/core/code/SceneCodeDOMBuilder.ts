@@ -331,7 +331,6 @@ namespace phasereditor2d.scene.core.code {
             if (fields.length > 0) {
 
                 body.push(new RawCodeDOM(""));
-                body.push(new RawCodeDOM("// fields"));
                 body.push(...fields);
             }
         }
