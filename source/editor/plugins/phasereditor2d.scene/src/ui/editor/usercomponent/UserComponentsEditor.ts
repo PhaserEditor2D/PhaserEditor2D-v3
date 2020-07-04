@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     import controls = colibri.ui.controls;
 
     export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.usercomponent.AddUserComponent";
+    export const CMD_COMPILE_FILE = "phasereditor2d.scene.ui.editor.usercomponent.CompileFile";
     export const CAT_USER_COMPONENTS_EDITOR = "phasereditor2d.scene.ui.editor.usercomponent.UserComponentsCategory";
 
     export class UserComponentsEditor extends colibri.ui.ide.ViewerFileEditor {
@@ -49,6 +50,19 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 },
                 keys: {
                     key: "A"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_COMPILE_FILE,
+                    name: "Compile",
+                    tooltip: "Compile User Components file.",
+                    category: CAT_USER_COMPONENTS_EDITOR
+                },
+                handler: {
+                    testFunc: editorScope,
+                    executeFunc: args => (args.activeEditor as UserComponentsEditor).compile()
                 }
             });
 
@@ -101,7 +115,12 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             menu.addCommand(CMD_ADD_USER_COMPONENT, {
                 text: "Add Component"
             });
+
             menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
+
+            menu.addSeparator();
+
+            menu.addCommand(CMD_COMPILE_FILE);
         }
 
         async doSave() {
@@ -114,10 +133,19 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 this.setDirty(false);
 
+                this.compile();
+
             } catch (e) {
 
                 console.error(e);
             }
+        }
+
+        async compile() {
+
+            const compiler = new UserComponentCompiler(this.getInput(), this._model);
+
+            await compiler.compile();
         }
 
         private async updateContent() {

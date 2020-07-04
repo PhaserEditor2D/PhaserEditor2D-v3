@@ -107,6 +107,11 @@ namespace phasereditor2d.scene.core.code {
 
         private generateMethodDecl(classDecl: ClassDeclCodeDOM, methodDecl: MethodDeclCodeDOM, isFunction: boolean) {
 
+            for (const modifier of methodDecl.getModifiers()) {
+
+                this.append(modifier + " ");
+            }
+
             if (isFunction) {
                 this.append("function ");
             }
@@ -115,7 +120,9 @@ namespace phasereditor2d.scene.core.code {
 
             this.generateMethodDeclArgs(methodDecl);
 
-            this.openIndent(") {");
+            const methodReturnTypeDecl = this.generateMethodReturnTypeDecl(methodDecl);
+
+            this.openIndent(")" + methodReturnTypeDecl + "{");
 
             const body = CodeDOM.removeBlankLines(methodDecl.getBody());
 
@@ -141,14 +148,19 @@ namespace phasereditor2d.scene.core.code {
 
                     this.generateInstr(instr);
                 }
+            }
 
-                if (methodDecl.getName() === "constructor") {
+            if (methodDecl.getName() === "constructor") {
 
-                    this.generateFieldInitInConstructor(classDecl);
-                }
+                this.generateFieldInitInConstructor(classDecl);
             }
 
             this.closeIndent("}");
+        }
+
+        generateMethodReturnTypeDecl(methodDecl: MethodDeclCodeDOM) {
+
+            return " ";
         }
 
         protected generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM) {

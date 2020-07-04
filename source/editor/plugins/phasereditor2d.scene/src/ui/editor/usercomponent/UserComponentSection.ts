@@ -53,6 +53,27 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     text.value = this.getSelectionFirstElement().getSuperClass();
                 });
             }
+
+            {
+                // Game Object Type
+
+                this.createLabel(comp, "Game Object Type", "Name of the type of the Game Object that this component can be added on.");
+
+                const text = this.createText(comp);
+
+                text.addEventListener("change", e => {
+
+                    this.runOperation(() => {
+
+                        this.getSelectionFirstElement().setGameObjectType(text.value);
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    text.value = this.getSelectionFirstElement().getGameObjectType();
+                });
+            }
         }
 
         getEditor() {
@@ -68,7 +89,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const before = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
 
-            action(this.getSelectionFirstElement().getProperties());
+            action(this.getSelectionFirstElement().getUserProperties());
 
             const after = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
 

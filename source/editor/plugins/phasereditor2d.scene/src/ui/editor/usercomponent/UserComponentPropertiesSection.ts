@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         protected getUserProperties(): sceneobjects.UserProperties {
 
-            return (this.getSelectionFirstElement() as UserComponent).getProperties();
+            return (this.getSelectionFirstElement() as UserComponent).getUserProperties();
         }
 
         getEditor() {

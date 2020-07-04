@@ -4,12 +4,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         private _name: string;
         private _superClass: string;
+        private _gameObjectType: string;
         private _properties: sceneobjects.UserProperties;
 
         constructor(name: string) {
 
             this._name = name;
             this._superClass = "";
+            this._gameObjectType = "Phaser.GameObjects.Image";
             this._properties = new sceneobjects.UserProperties();
         }
 
@@ -21,6 +23,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return {
                 name: this._name,
                 superClass: this._superClass,
+                gameObject: "Phaser.GameObjects.Image",
                 properties: propsData
             }
         }
@@ -29,6 +32,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             this._name = data.name;
             this._superClass = data.superClass || "";
+            this._gameObjectType = data.gameObjectType || "Phaser.GameObjects.Image";
             this._properties.readJSON(data.properties);
         }
 
@@ -52,7 +56,17 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._superClass = baseClass;
         }
 
-        getProperties() {
+        getGameObjectType() {
+
+            return this._gameObjectType;
+        }
+
+        setGameObjectType(gameObjectType: string) {
+
+            this._gameObjectType = gameObjectType;
+        }
+
+        getUserProperties() {
 
             return this._properties;
         }

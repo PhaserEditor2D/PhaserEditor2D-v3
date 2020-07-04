@@ -22,6 +22,16 @@ namespace phasereditor2d.scene.core.code {
             this.line();
         }
 
+        generateMethodReturnTypeDecl(methodDecl: MethodDeclCodeDOM) {
+
+            if (methodDecl.getReturnType()) {
+
+                return ": " + methodDecl.getReturnType() + " ";
+            }
+
+            return " ";
+        }
+
         generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM) {
             // nothing, in TypeScript fields are initialized in the declaration
         }
