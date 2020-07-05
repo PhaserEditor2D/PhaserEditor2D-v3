@@ -5,7 +5,11 @@ namespace colibri.ui.controls.viewers {
     export class ArrayTreeContentProvider implements ITreeContentProvider {
 
         getRoots(input: any): any[] {
-            // ok, we assume the input is an array
+
+            if (!Array.isArray(input)) {
+                return [];
+            }
+
             return input;
         }
 
