@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             viewer.setSelection(sel);
             viewer.reveal(...sel);
 
-            viewer.repaint();
+            this._editor.refreshViewers();
 
             this._editor.setDirty(true);
         }

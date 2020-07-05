@@ -70,8 +70,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 const decls = prop.buildDeclarationsCode();
 
-                console.log(decls);
-
                 clsDom.getBody().push(...decls);
             }
         }

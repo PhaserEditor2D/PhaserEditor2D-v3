@@ -36,6 +36,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const before = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
 
             action(this.getUserProperties());
+            editor.getViewer().repaint();
 
             const after = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
 

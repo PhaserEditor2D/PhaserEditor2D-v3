@@ -159,8 +159,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             if (this.getViewer()) {
 
                 this.getViewer().setInput(this._model.getComponents());
-                this.getViewer().repaint();
+                this.refreshViewers();
             }
+        }
+
+        refreshViewers() {
+
+            this.getViewer().repaint();
+            this._outlineProvider.repaint();
         }
 
         deleteSelection() {
@@ -204,12 +210,25 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const viewer = new controls.viewers.TreeViewer();
 
-            viewer.setLabelProvider(new controls.viewers.LabelProvider((obj: UserComponent) => obj.getName()));
+            viewer.setLabelProvider(new UserComponentSignatureLabelProvider());
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
+                // tslint:disable-next-line:new-parens
                 obj => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT))
             ));
-            viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
+            // tslint:disable-next-line:new-parens
+            viewer.setTreeRenderer(new class extends controls.viewers.TreeViewerRenderer {
+                constructor() {
+                    super(viewer);
+                }
+
+                prepareContextForText(args: controls.viewers.RenderCellArgs) {
+
+                    super.prepareContextForText(args)
+
+                    args.canvasContext.font = controls.FONT_HEIGHT + "px Monospace";
+                }
+            });
             viewer.setInput([]);
 
             viewer.eventSelectionChanged.addListener(() => {
@@ -251,5 +270,23 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             return manager;
         }
+    }
+
+    class UserComponentSignatureLabelProvider implements controls.viewers.ILabelProvider {
+
+        getLabel(obj: any): string {
+
+            const comp = obj as UserComponent;
+
+            const body = comp.getUserProperties().getProperties()
+                .map(p => p.getName() + ":" +
+                    (p.getType() instanceof ui.sceneobjects.ExpressionPropertyType ?
+                        (p.getType() as ui.sceneobjects.ExpressionPropertyType).getExpressionType()
+                        : p.getType().getName()))
+                .join(", ")
+
+            return comp.getName() + " (gameObject) { " + body + " }";
+        }
+
     }
 }

@@ -14,7 +14,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         getContentProvider(): colibri.ui.controls.viewers.ITreeContentProvider {
 
-            return new controls.viewers.ArrayTreeContentProvider();
+            // tslint:disable-next-line:new-parens
+            return new class extends controls.viewers.ArrayTreeContentProvider {
+
+                getRoots(input: UserComponentsEditorModel) {
+
+                    return input.getComponents();
+                }
+            };
         }
 
         getLabelProvider(): colibri.ui.controls.viewers.ILabelProvider {
@@ -40,8 +47,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         }
 
         getInput() {
-
-            return this._editor.getViewer().getInput();
+            return this._editor.getModel();
         }
 
         preload(complete?: boolean): Promise<void> {
