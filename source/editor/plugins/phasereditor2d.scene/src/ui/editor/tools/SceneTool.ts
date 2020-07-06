@@ -21,6 +21,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         x: number;
         y: number;
+        event: MouseEvent;
     }
 
     export interface ISceneToolConfig {
@@ -62,6 +63,11 @@ namespace phasereditor2d.scene.ui.editor.tools {
         abstract canEdit(obj: unknown): boolean;
 
         abstract canRender(obj: unknown): boolean;
+
+        isObjectTool() {
+
+            return true;
+        }
 
         render(args: ISceneToolRenderArgs): void {
 

@@ -4,8 +4,8 @@ namespace colibri.ui.controls.dialogs {
 
     export class ViewerDialog extends AbstractViewerDialog {
 
-        constructor(viewer: viewers.TreeViewer) {
-            super(viewer);
+        constructor(viewer: viewers.TreeViewer, showZoomControls: boolean) {
+            super(viewer, showZoomControls);
         }
 
         createDialogArea() {

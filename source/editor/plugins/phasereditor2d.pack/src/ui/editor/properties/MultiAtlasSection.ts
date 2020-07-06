@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class MultiatlasSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.MultiatlasSection", "Multiatlas");
+            super(page, "phasereditor2d.pack.ui.editor.properties.MultiatlasSection", "Multiatlas", core.MULTI_ATLAS_TYPE);
         }
 
         canEdit(obj: any, n: number) {

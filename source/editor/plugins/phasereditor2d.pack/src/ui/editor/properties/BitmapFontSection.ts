@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class BitmapFontSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.BitmapFontSection", "Bitmap Font");
+            super(page, "phasereditor2d.pack.ui.editor.properties.BitmapFontSection", "Bitmap Font", core.BITMAP_FONT_TYPE);
         }
 
         canEdit(obj: any, n: number) {

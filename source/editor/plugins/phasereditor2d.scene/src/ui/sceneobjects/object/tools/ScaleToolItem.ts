@@ -213,14 +213,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const changeX = this._x === 1 && this._y === 0.5 || changeAll;
                 const changeY = this._x === 0.5 && this._y === 1 || changeAll;
 
-                if (changeX) {
+                if (args.event.shiftKey) {
 
-                    sprite.scaleX = newScaleX;
-                }
+                    if (changeX && changeY) {
 
-                if (changeY) {
+                        const scale = Math.max(newScaleX, newScaleY);
+                        sprite.setScale(scale);
 
-                    sprite.scaleY = newScaleY;
+                    } else {
+
+                        sprite.setScale(changeX ? newScaleX : newScaleY);
+                    }
+
+                } else {
+
+                    if (changeX) {
+
+                        sprite.scaleX = newScaleX;
+                    }
+
+                    if (changeY) {
+
+                        sprite.scaleY = newScaleY;
+                    }
                 }
 
                 args.editor.dispatchSelectionChanged();

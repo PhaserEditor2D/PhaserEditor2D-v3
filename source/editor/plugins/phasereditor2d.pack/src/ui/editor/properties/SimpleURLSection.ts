@@ -12,7 +12,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
         constructor(page: controls.properties.PropertyPage, id: string, title: string,
                     fieldLabel: string, dataKey: string, contentType: string, assetPackType: string) {
 
-            super(page, id, title, false);
+            super(page, id, title, assetPackType, false);
 
             this._label = fieldLabel;
             this._dataKey = dataKey;

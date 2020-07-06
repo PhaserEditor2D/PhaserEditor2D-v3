@@ -6,9 +6,10 @@ namespace phasereditor2d.files.ui.dialogs {
     export class UploadDialog extends controls.dialogs.ViewerDialog {
 
         private _uploadFolder: io.FilePath;
+        private _uploadBtnElement: HTMLButtonElement;
 
         constructor(uploadFolder: io.FilePath) {
-            super(new controls.viewers.TreeViewer());
+            super(new controls.viewers.TreeViewer(), false);
 
             this._uploadFolder = uploadFolder;
         }
@@ -33,19 +34,45 @@ namespace phasereditor2d.files.ui.dialogs {
             filesViewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             filesViewer.setInput([]);
 
+            const dropArea = filesViewer.getElement();
+
+            const preventDefaults = (e: Event) => {
+
+                e.preventDefault();
+                e.stopPropagation();
+            };
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            dropArea.addEventListener("dragenter", e => {
+
+                dropArea.classList.add("FilesDragEnter");
+            });
+
+            dropArea.addEventListener("dragleave", e => {
+
+                dropArea.classList.remove("FilesDragEnter");
+            });
+
+            filesViewer.getElement().addEventListener("drop", e => {
+
+                dropArea.classList.remove("FilesDragEnter");
+                this.prepareFilesForUpload(e.dataTransfer.files);
+            });
+
             super.create();
 
-            const filesInput = document.createElement("input");
+            const filesInputElement = document.createElement("input");
 
             this.setTitle("Upload Files");
 
-            const uploadBtn = super.addButton("Upload", () => { /* nothing */ });
-
-            uploadBtn.disabled = true;
-
-            uploadBtn.disabled = true;
-            uploadBtn.innerText = "Upload";
-            uploadBtn.addEventListener("click", async (e) => {
+            this._uploadBtnElement = super.addButton("Upload", () => { /* nothing */ });
+            this._uploadBtnElement.disabled = true;
+            this._uploadBtnElement.innerText = "Upload";
+            this._uploadBtnElement.addEventListener("click", async (e) => {
 
                 const input = filesViewer.getInput() as File[];
 
@@ -130,58 +157,62 @@ namespace phasereditor2d.files.ui.dialogs {
 
             super.addButton("Browse", () => {
 
-                filesInput.click();
+                filesInputElement.click();
             });
 
-            filesInput.type = "file";
-            filesInput.name = "files";
-            filesInput.multiple = true;
-            filesInput.addEventListener("change", e => {
+            filesInputElement.type = "file";
+            filesInputElement.name = "files";
+            filesInputElement.multiple = true;
+            filesInputElement.addEventListener("change", e => {
 
-                const files = filesInput.files;
+                const files = filesInputElement.files;
 
-                const input = [];
-                const skippedFiles = [];
-
-                for (let i = 0; i < files.length; i++) {
-
-                    const file = files.item(i);
-
-                    const sizeInMB = file.size / 1048576;
-
-                    if (sizeInMB > 10) {
-
-                        skippedFiles.push(file);
-                        continue;
-                    }
-
-                    input.push(file);
-                }
-
-                if (skippedFiles.length > 0) {
-
-                    alert("The following files are ignored. Only files with a size below <code>10MB</code> are allowed:"
-
-                        + "<ul>"
-
-                        + skippedFiles
-                            .map(file => "<li><code>" + file.name + " (" + filesize(file.size) + ")</code></li>")
-                            .join("")
-
-                        + "</ul>"
-                    );
-                }
-
-                filesViewer.setInput(input);
-
-                filesViewer.repaint();
-
-                uploadBtn.disabled = input.length === 0;
-
-                uploadBtn.textContent = input.length === 0 ? "Upload" : "Upload " + input.length + " Files";
+                this.prepareFilesForUpload(files);
             });
 
             super.addButton("Cancel", () => this.close());
+        }
+
+        private prepareFilesForUpload(files: FileList) {
+            const input = [];
+            const skippedFiles = [];
+
+            for (let i = 0; i < files.length; i++) {
+
+                const file = files.item(i);
+
+                const sizeInMB = file.size / 1048576;
+
+                if (sizeInMB > 10) {
+
+                    skippedFiles.push(file);
+                    continue;
+                }
+
+                input.push(file);
+            }
+
+            if (skippedFiles.length > 0) {
+
+                alert("The following files are ignored. Only files with a size below <code>10MB</code> are allowed:"
+
+                    + "<ul>"
+
+                    + skippedFiles
+                        .map(file => "<li><code>" + file.name + " (" + filesize(file.size) + ")</code></li>")
+                        .join("")
+
+                    + "</ul>"
+                );
+            }
+
+            this.getViewer().setInput(input);
+
+            this.getViewer().repaint();
+
+            this._uploadBtnElement.disabled = input.length === 0;
+
+            this._uploadBtnElement.textContent = input.length === 0 ? "Upload" : "Upload " + input.length + " Files";
         }
     }
 }

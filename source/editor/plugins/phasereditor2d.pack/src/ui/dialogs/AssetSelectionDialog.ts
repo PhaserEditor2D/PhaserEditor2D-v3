@@ -8,7 +8,7 @@ namespace phasereditor2d.pack.ui.dialogs {
         private _cancelCallback: () => void;
 
         constructor() {
-            super(new controls.viewers.TreeViewer());
+            super(new controls.viewers.TreeViewer(), true);
 
             const size = this.getSize();
 

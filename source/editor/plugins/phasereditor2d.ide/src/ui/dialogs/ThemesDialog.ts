@@ -5,7 +5,7 @@ namespace phasereditor2d.ide.ui.dialogs {
     export class ThemesDialog extends controls.dialogs.ViewerDialog {
 
         constructor() {
-            super(new ThemeViewer());
+            super(new ThemeViewer(), false);
 
             this.setSize(200, 300, true);
         }

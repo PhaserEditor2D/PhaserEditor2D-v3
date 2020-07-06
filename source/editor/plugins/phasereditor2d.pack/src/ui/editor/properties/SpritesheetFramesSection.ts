@@ -8,7 +8,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class SpritesheetFrameSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.SpritesheetFrameSection", "Spritesheet Frame");
+            super(page, "phasereditor2d.pack.ui.editor.properties.SpritesheetFrameSection", "Spritesheet Frame", core.SPRITESHEET_TYPE);
         }
 
         canEdit(obj: any, n: number) {

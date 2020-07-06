@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.core.json {
 
                 } else {
 
-                    console.error(`Cannot find scene prefab with id "${this._data.prefabId}".`);
+                    throw new Error(`[${this._data.label}] Cannot find scene prefab with id "${this._data.prefabId}".`);
                 }
             }
         }
@@ -34,9 +34,10 @@ namespace phasereditor2d.scene.core.json {
             return this._data;
         }
 
-        getType() {
+        getType(): string {
 
             if (this._prefabSer) {
+
                 return this._prefabSer.getType();
             }
 

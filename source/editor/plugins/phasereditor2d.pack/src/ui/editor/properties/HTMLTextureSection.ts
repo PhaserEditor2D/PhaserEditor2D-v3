@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class HTMLTextureSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.HTMLTextureSection", "HTML Texture");
+            super(page, "phasereditor2d.pack.ui.editor.properties.HTMLTextureSection", "HTML Texture", core.HTML_TEXTURE_TYPE);
         }
 
         canEdit(obj: any, n: number) {

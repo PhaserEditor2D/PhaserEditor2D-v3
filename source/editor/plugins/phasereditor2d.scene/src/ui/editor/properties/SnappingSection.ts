@@ -27,5 +27,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this.createIntegerField(comp, "snapWidth", "Width", "Scene snapping width.");
             this.createIntegerField(comp, "snapHeight", "Height", "Scene snapping height.");
         }
+
+        protected getSectionHelpPath() {
+            return "scene-editor/snapping-properties.html";
+        }
     }
 }

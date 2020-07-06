@@ -99,7 +99,7 @@ namespace colibri.ui.ide {
 
             console.log("Workbench: fetching UI icons.");
 
-            await this.preloadIcons();
+            await this.preloadPluginResources();
 
             console.log("Workbench: hide splash");
 
@@ -237,28 +237,41 @@ namespace colibri.ui.ide {
             return null;
         }
 
-        private async preloadIcons() {
-
-            const icons: controls.IImage[] = [];
-
-            for (const name of [ICON_FILE, ICON_FOLDER, ICON_PLUS, ICON_MINUS, ICON_CHECKED, ICON_KEYMAP]) {
-
-                icons.push(this.getWorkbenchIcon(name));
-            }
-
-            const extensions = Platform
-                .getExtensions<IconLoaderExtension>(IconLoaderExtension.POINT_ID);
-
-            for (const extension of extensions) {
-
-                icons.push(...extension.getIcons());
-            }
+        private async preloadPluginResources() {
 
             const dlg = new controls.dialogs.ProgressDialog();
             dlg.create();
             dlg.setTitle("Loading Workbench");
             dlg.setCloseWithEscapeKey(false);
             dlg.setProgress(0);
+
+            let resCount = 0;
+
+            // count icon extensions
+            const icons: controls.IImage[] = [];
+            {
+                for (const name of [ICON_FILE, ICON_FOLDER, ICON_PLUS, ICON_MINUS, ICON_CHECKED, ICON_KEYMAP]) {
+
+                    icons.push(this.getWorkbenchIcon(name));
+                }
+
+                const extensions = Platform
+                    .getExtensions<IconLoaderExtension>(IconLoaderExtension.POINT_ID);
+
+                for (const extension of extensions) {
+
+                    icons.push(...extension.getIcons());
+                }
+
+                resCount = icons.length;
+            }
+
+            // count resource extensions
+            const resExtensions = Platform
+                .getExtensions<PluginResourceLoaderExtension>(PluginResourceLoaderExtension.POINT_ID);
+
+            resCount += resExtensions.length;
+
 
             let i = 0;
 
@@ -268,8 +281,17 @@ namespace colibri.ui.ide {
 
                 i++;
 
-                dlg.setProgress(i / icons.length);
+                dlg.setProgress(i / resCount);
             }
+
+            for (const resExt of resExtensions) {
+
+                await resExt.preload();
+
+                i++;
+            }
+
+            // resources
 
             dlg.close();
         }

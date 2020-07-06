@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class TilemapCSVSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.TilemapCSVSection", "Tilemap CSV");
+            super(page, "phasereditor2d.pack.ui.editor.properties.TilemapCSVSection", "Tilemap CSV", core.TILEMAP_CSV_TYPE);
         }
 
         canEdit(obj: any, n: number) {

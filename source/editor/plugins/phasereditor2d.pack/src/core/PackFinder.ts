@@ -3,6 +3,7 @@ namespace phasereditor2d.pack.core {
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
     import core = colibri.core;
+    import io = colibri.core.io;
 
     export class PackFinder {
 
@@ -118,9 +119,10 @@ namespace phasereditor2d.pack.core {
             return null;
         }
 
-        async findPacksFor(file: core.io.FilePath) {
+        async findPackItemsFor(file: core.io.FilePath): Promise<AssetPackItem[]> {
 
-            const packs = new Set<AssetPack>();
+            const items = [];
+
 
             for (const pack of this.getPacks()) {
 
@@ -129,15 +131,20 @@ namespace phasereditor2d.pack.core {
                     await item.preload();
                 }
 
-                const files = pack.computeUsedFiles();
+                for (const item of pack.getItems()) {
 
-                if (files.has(file)) {
+                    const files = new Set<io.FilePath>();
 
-                    packs.add(pack);
+                    item.computeUsedFiles(files);
+
+                    if (files.has(file)) {
+
+                        items.push(item);
+                    }
                 }
             }
 
-            return packs;
+            return items;
         }
     }
 }

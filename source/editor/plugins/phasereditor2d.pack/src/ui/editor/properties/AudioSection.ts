@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class AudioSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.AudioSection", "Audio");
+            super(page, "phasereditor2d.pack.ui.editor.properties.AudioSection", "Audio", core.AUDIO_TYPE);
         }
 
         canEdit(obj: any, n: number) {

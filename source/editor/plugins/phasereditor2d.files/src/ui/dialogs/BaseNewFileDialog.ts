@@ -136,6 +136,8 @@ namespace phasereditor2d.files.ui.dialogs {
 
             this._createBtn = this.addButton("Create", () => this.createFile_priv());
 
+            this.connectInputWithButton(this._fileNameText, this._createBtn);
+
             this.addButton("Cancel", () => this.close());
 
             this.validate();
@@ -183,7 +185,7 @@ namespace phasereditor2d.files.ui.dialogs {
                 this.validate();
             });
 
-            this._filteredViewer = new viewers.FilteredViewerInElement(viewer);
+            this._filteredViewer = new viewers.FilteredViewerInElement(viewer, false);
         }
 
         layout() {

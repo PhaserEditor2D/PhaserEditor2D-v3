@@ -38,13 +38,13 @@ namespace colibri.ui.controls.viewers {
             this._expandedObjects = new Set();
             this._selectedObjects = new Set();
 
-            (window as any).cc = this;
-
             this.initListeners();
         }
 
         private initListeners() {
+
             const canvas = this.getCanvas();
+
             canvas.addEventListener("mouseup", e => this.onMouseUp(e));
             canvas.addEventListener("wheel", e => this.onWheel(e));
             canvas.addEventListener("keydown", e => this.onKeyDown(e));
@@ -241,13 +241,17 @@ namespace colibri.ui.controls.viewers {
         }
 
         private onWheel(e: WheelEvent): void {
+
             if (!e.shiftKey) {
                 return;
             }
 
             if (e.deltaY < 0) {
+
                 this.setCellSize(this.getCellSize() + ROW_HEIGHT);
+
             } else if (this._cellSize > ICON_SIZE) {
+
                 this.setCellSize(this.getCellSize() - ROW_HEIGHT);
             }
 

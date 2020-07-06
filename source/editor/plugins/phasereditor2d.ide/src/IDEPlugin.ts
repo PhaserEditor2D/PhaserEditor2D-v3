@@ -116,6 +116,17 @@ namespace phasereditor2d.ide {
             return this._advancedJSEditor;
         }
 
+        createHelpMenuItem(menu: controls.Menu, helpPath: string) {
+
+            menu.addAction({
+                text: "Help",
+                callback: () => {
+
+                    controls.Controls.openUrlInNewPage("https://help.phasereditor2d.com/v3/" + helpPath);
+                }
+            });
+        }
+
         async openFirstWindow() {
 
             this.restoreTheme();
@@ -194,8 +205,6 @@ namespace phasereditor2d.ide {
 
                 dlg.setProgress(1);
 
-                this.validateIndexFile();
-
                 if (designWindow) {
 
                     designWindow.restoreState(wb.getProjectPreferences());
@@ -206,18 +215,6 @@ namespace phasereditor2d.ide {
                 this._openingProject = false;
 
                 dlg.close();
-            }
-        }
-
-        private validateIndexFile() {
-
-            const root = colibri.Platform.getWorkbench().getFileStorage().getRoot();
-
-            const indexFile = root.getFile("index.html");
-
-            if (!indexFile || indexFile.isFolder()) {
-
-                alert("Missing 'index.html' file at the root folder.");
             }
         }
 
@@ -277,7 +274,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.2.0";
+    export const VER = "3.3.0";
 
     async function main() {
 

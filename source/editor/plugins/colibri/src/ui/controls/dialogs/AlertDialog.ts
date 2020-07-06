@@ -15,7 +15,6 @@ namespace colibri.ui.controls.dialogs {
         createDialogArea() {
 
             this._messageElement = document.createElement("div");
-
             this._messageElement.classList.add("DialogClientArea", "DialogSection");
 
             this.getElement().appendChild(this._messageElement);
@@ -49,7 +48,11 @@ namespace colibri.ui.controls.dialogs {
                     this._currentDialog = dlg;
                 }
 
-                this._currentDialog._messageElement.innerHTML += `<pre>${msg}</pre>`;
+                const preElement = document.createElement("pre");
+                preElement.innerText = msg;
+                preElement.style.userSelect = "all";
+
+                this._currentDialog._messageElement.appendChild(preElement);
             };
         }
     }

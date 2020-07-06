@@ -155,7 +155,8 @@ Important:
     border-radius: 0px;
 }
 
-.darkPlus .PropertyTitleArea label {
+.darkPlus .PropertyTitleArea label,
+.darkPlus .PropertySubTitleLabel {
     font-weight: bold;
 }
 

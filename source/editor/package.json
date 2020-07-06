@@ -1,7 +1,8 @@
 {
   "name": "phasereditor2d.ide",
-  "version": "3.1.0",
+  "version": "1.0.0",
   "description": "Phaser Editor 2D IDE.",
+  "repository": "github:PhaserEditor2D/PhaserEditor2D-v3",
   "dependencies": {
     "tslint": "^6.1.2",
     "typescript": "^3.9.3"

@@ -8,6 +8,7 @@ namespace phasereditor2d.scene {
     export const ICON_ANGLE = "angle";
     export const ICON_SCALE = "scale";
     export const ICON_ORIGIN = "origin";
+    export const ICON_SELECT_REGION = "select-region";
     export const ICON_BUILD = "build";
     export const ICON_LOCKED = "locked";
     export const ICON_UNLOCKED = "unlocked";
@@ -43,22 +44,14 @@ namespace phasereditor2d.scene {
 
             this._sceneFinder = new core.json.SceneFinder();
 
+            // preload docs
+
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
+                await ScenePlugin.getInstance().getPhaserDocs().preload();
+            }));
+
             // preload project
-
-            reg.addExtension(this._sceneFinder.getProjectPreloader(),
-
-                // tslint:disable-next-line:new-parens
-                new (class extends ide.PreloadProjectResourcesExtension {
-
-                    async computeTotal() {
-                        return 0;
-                    }
-
-                    async preload() {
-                        return ScenePlugin.getInstance().getPhaserDocs().preload();
-                    }
-                })
-            );
+            reg.addExtension(this._sceneFinder.getProjectPreloader());
 
             // content type resolvers
 
@@ -84,6 +77,7 @@ namespace phasereditor2d.scene {
                     ICON_GROUP,
                     ICON_ANGLE,
                     ICON_ORIGIN,
+                    ICON_SELECT_REGION,
                     ICON_SCALE,
                     ICON_TRANSLATE,
                     ICON_BUILD,
@@ -181,6 +175,7 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.RotateTool(),
                 new ui.sceneobjects.ScaleTool(),
                 new ui.sceneobjects.OriginTool(),
+                new ui.sceneobjects.SelectionRegionTool(),
                 new ui.sceneobjects.TileSpriteSizeTool()
             ));
         }

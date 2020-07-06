@@ -17,6 +17,66 @@ namespace phasereditor2d.scene.ui {
             this._packFinder = new pack.core.PackFinder();
         }
 
+        afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
+
+            if (!prefabObj) {
+                return;
+            }
+
+            const scene = prefabObj.getEditorSupport().getScene();
+
+            if (!scene.isPrefabSceneType()) {
+
+                return;
+            }
+
+            let container: sceneobjects.Container;
+
+            if (scene.isPrefabSceneType()) {
+
+                if (sprites.length > 0) {
+
+                    if (prefabObj instanceof sceneobjects.Container) {
+
+                        container = prefabObj;
+
+                    } else {
+
+                        container = sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
+                            scene: scene,
+                            x: 0,
+                            y: 0
+                        });
+
+                        container.getEditorSupport().setLabel(scene.makeNewName("container"));
+
+                        scene.sys.displayList.remove(prefabObj);
+                        container.add(prefabObj);
+                    }
+
+                    if (container) {
+
+                        for (const sprite of sprites) {
+
+                            if (sprite.getEditorSupport().hasComponent(sceneobjects.TransformComponent)) {
+
+                                (sprite as sceneobjects.Sprite).x -= container.x;
+                                (sprite as sceneobjects.Sprite).y -= container.y;
+                            }
+
+                            scene.sys.displayList.remove(sprite);
+                            container.add(sprite);
+                        }
+
+                        if (container !== prefabObj) {
+
+                            container.getEditorSupport().trim();
+                        }
+                    }
+                }
+            }
+        }
+
         static acceptDropFile(dropFile: io.FilePath, editorFile: io.FilePath) {
 
             if (dropFile.getFullName() === editorFile.getFullName()) {
@@ -169,7 +229,7 @@ namespace phasereditor2d.scene.ui {
             return new json.Serializer(data);
         }
 
-        createScene(sceneData: json.ISceneData) {
+        createScene(sceneData: json.ISceneData, errors?: string[]) {
 
             if (sceneData.settings) {
 
@@ -186,14 +246,14 @@ namespace phasereditor2d.scene.ui {
                 this._scene.getPrefabUserProperties().readJSON(sceneData.prefabProperties);
             }
 
-            this._scene.setSceneType(sceneData.sceneType);
+            this._scene.setSceneType(sceneData.sceneType || core.json.SceneType.SCENE);
 
             // removes this condition, it is used temporal for compatibility
             this._scene.setId(sceneData.id);
 
             for (const objData of sceneData.displayList) {
 
-                this.createObject(objData);
+                this.createObject(objData, errors);
             }
         }
 
@@ -212,21 +272,26 @@ namespace phasereditor2d.scene.ui {
 
             for (const objData of list) {
 
-                const ser = this.getSerializer(objData);
+                try {
+                    const ser = this.getSerializer(objData);
 
-                const type = ser.getType();
+                    const type = ser.getType();
 
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                    const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
 
-                if (ext) {
+                    if (ext) {
 
-                    const objAssets = await ext.getAssetsFromObjectData({
-                        serializer: ser,
-                        finder: finder,
-                        scene: this._scene
-                    });
+                        const objAssets = await ext.getAssetsFromObjectData({
+                            serializer: ser,
+                            finder: finder,
+                            scene: this._scene
+                        });
 
-                    assets.push(...objAssets);
+                        assets.push(...objAssets);
+                    }
+                } catch (e) {
+
+                    console.error(e);
                 }
             }
 
@@ -288,29 +353,46 @@ namespace phasereditor2d.scene.ui {
             return newObject;
         }
 
-        createObject(data: json.IObjectData) {
+        createObject(data: json.IObjectData, errors?: string[]) {
 
-            const ser = this.getSerializer(data);
+            try {
 
-            const type = ser.getType();
+                const ser = this.getSerializer(data);
 
-            const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const type = ser.getType();
 
-            if (ext) {
+                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
 
-                const sprite = ext.createSceneObjectWithData({
-                    data: data,
-                    scene: this._scene
-                });
+                if (ext) {
 
-                return sprite;
+                    const sprite = ext.createSceneObjectWithData({
+                        data: data,
+                        scene: this._scene
+                    });
 
-            } else {
+                    return sprite;
 
-                console.error(`SceneMaker: no extension is registered for type "${type}".`);
+                } else {
+
+                    const msg = `SceneMaker: no extension is registered for type "${type}".`;
+
+                    errors.push(msg);
+
+                    console.error(msg);
+                }
+
+                return null;
+
+            } catch (e) {
+
+                const msg = (e as Error).message;
+
+                errors.push(msg);
+
+                console.error(msg);
+
+                return null;
             }
-
-            return null;
         }
     }
 }

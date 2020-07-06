@@ -5,7 +5,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
     export class TilemapTiledJSONSection extends BaseSection {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.properties.TilemapTiledJSONSection", "Tilemap Tiled JSON");
+            super(page, "phasereditor2d.pack.ui.editor.properties.TilemapTiledJSONSection", "Tilemap Tiled JSON", core.TILEMAP_TILED_JSON_TYPE);
         }
 
         canEdit(obj: any, n: number) {

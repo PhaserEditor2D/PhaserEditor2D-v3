@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
     import json = core.json;
 
-    interface ISceneSnapshot {
+    export interface ISceneSnapshot {
 
         selection: string[];
         displayList: json.IObjectData[];
@@ -28,6 +28,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             this._editor.setDirty(true);
             this._editor.refreshOutline();
+            this._editor.repaint();
         }
 
         protected async abstract performModification();
@@ -61,7 +62,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
             };
         }
 
-        private loadSnapshot(snapshot: ISceneSnapshot) {
+        protected loadSnapshot(snapshot: ISceneSnapshot) {
 
             const editor = this.getEditor();
             const scene = this.getScene();

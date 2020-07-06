@@ -153,6 +153,27 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     display: none;
 }
 
+/* Zoom */
+
+.ZoomControl {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    padding: 2px;
+    border-radius: 3px;
+    background: black;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    column-gap: 2px;
+    opacity: 0.1;
+    z-index: 3;
+}
+
+.ZoomControl:hover {
+    opacity: 0.9;
+    background: rgba(0, 0, 0, 0.5);
+}
+
 /* Viewer */
 
 .FilteredViewer {
@@ -220,8 +241,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .PropertyTitleArea {
     display: inline-grid;
-    grid-template-columns: 20px 1fr;
-    height: 1em;
+    grid-template-columns: 20px 1fr auto;
     padding: 5px;
     border-radius: 3px 3px 0 0;
 }
@@ -230,17 +250,12 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     overflow: hidden;
     white-space: nowrap;
     word-break: break-all;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis;    
 }
 
 .PropertyFormArea {
     display: grid;
     padding: 10px 0px 10px 0px;
-}
-
-.PropertySubTitleLabel {
-    width: 100%;
-    font-weight: bold;
 }
 
 .PropertyButtonPanel {
@@ -261,6 +276,10 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     align-items: center;
     background: rgba(0, 0, 0, 0.1);
     padding: 3px;
+}
+
+.PropertySubTitleLabel {
+    width: 100%;    
 }
 
 .formSimpleProps {
@@ -417,6 +436,12 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .ProgressDialog .ProgressBar {
     border-radius: 3px;
+}
+
+/* Upload Dialog */
+
+.FilesDragEnter {
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 /* Menu */

@@ -144,6 +144,19 @@ namespace colibri.ui.controls.dialogs {
             this._buttonPaneElement.appendChild(element);
         }
 
+        connectInputWithButton(inputElement: HTMLInputElement, btnElement: HTMLButtonElement) {
+
+            inputElement.addEventListener("keyup", e => {
+
+                if (e.keyCode === 13) {
+
+                    e.preventDefault();
+
+                    btnElement.click();
+                }
+            });
+        }
+
         protected createDialogArea() {
             // nothing
         }

@@ -44,6 +44,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TintSection", "Tint", false, true);
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/tint-properties.html";
+        }
+
         protected createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);

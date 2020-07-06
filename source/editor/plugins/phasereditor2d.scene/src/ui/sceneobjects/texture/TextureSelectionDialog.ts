@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             finder: pack.core.PackFinder,
             callback: (selection: pack.core.AssetPackImageFrame[]) => void
         ) {
-            super(new controls.viewers.TreeViewer());
+            super(new controls.viewers.TreeViewer(), true);
 
             this._finder = finder;
             this._callback = callback;

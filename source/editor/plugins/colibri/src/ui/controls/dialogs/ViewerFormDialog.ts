@@ -2,8 +2,8 @@ namespace colibri.ui.controls.dialogs {
 
     export class ViewerFormDialog extends AbstractViewerDialog {
 
-        constructor(viewer: viewers.TreeViewer) {
-            super(viewer);
+        constructor(viewer: viewers.TreeViewer, showZoomControls: boolean) {
+            super(viewer, showZoomControls);
         }
 
         protected createDialogArea() {
@@ -37,7 +37,7 @@ namespace colibri.ui.controls.dialogs {
 
         newFilteredViewer() {
 
-            return new viewers.FilteredViewerInElement(this.getViewer());
+            return new viewers.FilteredViewerInElement(this.getViewer(), this._showZoomControls);
         }
 
         getFilteredViewer() {

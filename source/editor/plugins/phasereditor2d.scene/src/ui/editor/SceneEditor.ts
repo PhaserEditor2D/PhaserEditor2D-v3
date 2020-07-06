@@ -15,6 +15,8 @@ namespace phasereditor2d.scene.ui.editor {
     export class SceneEditor extends colibri.ui.ide.FileEditor {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
+        private _menuCreator: SceneEditorMenuCreator;
+        private _canvasContainer: HTMLDivElement;
 
         static getFactory() {
 
@@ -50,7 +52,13 @@ namespace phasereditor2d.scene.ui.editor {
             this._blocksProvider = new blocks.SceneEditorBlocksProvider(this);
             this._outlineProvider = new outline.SceneEditorOutlineProvider(this);
             this._propertyProvider = new properties.SceneEditorSectionProvider(this);
+            this._menuCreator = new SceneEditorMenuCreator(this);
             this._localCoords = true;
+        }
+
+        getMenuCreator() {
+
+            return this._menuCreator;
         }
 
         isLocalCoords() {
@@ -232,6 +240,8 @@ namespace phasereditor2d.scene.ui.editor {
             this._overlayLayer = new OverlayLayer(this);
             container.appendChild(this._overlayLayer.getCanvas());
 
+            this._canvasContainer = container;
+
             this.createGame();
 
             // init managers and factories
@@ -246,9 +256,14 @@ namespace phasereditor2d.scene.ui.editor {
             this._overlayLayer.getCanvas().addEventListener("contextmenu", e => this.onMenu(e));
         }
 
+        getCanvasContainer() {
+
+            return this._canvasContainer;
+        }
+
         private createGame() {
 
-            this._scene = new Scene();
+            this._scene = new Scene(this);
 
             this._game = new Phaser.Game({
                 type: ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
@@ -329,7 +344,8 @@ namespace phasereditor2d.scene.ui.editor {
                 sceneobjects.TranslateTool.ID,
                 sceneobjects.ScaleTool.ID,
                 sceneobjects.RotateTool.ID,
-                sceneobjects.OriginTool.ID
+                sceneobjects.OriginTool.ID,
+                sceneobjects.SelectionRegionTool.ID
             ];
 
             for (const toolId of this._toolsInToolbar) {
@@ -376,9 +392,9 @@ namespace phasereditor2d.scene.ui.editor {
 
         fillContextMenu(menu: controls.Menu) {
 
-            const creator = new SceneEditorMenuCreator(this);
 
-            creator.fillMenu(menu);
+
+            this._menuCreator.fillMenu(menu);
         }
 
         toggleSnapping() {
@@ -452,12 +468,19 @@ namespace phasereditor2d.scene.ui.editor {
 
                     await maker.updateSceneLoader(data, this._overlayLayer.createLoadingMonitor());
 
-                    maker.createScene(data);
+                    const errors = [];
+                    maker.createScene(data, errors);
 
                     this._overlayLayer.setLoading(false);
                     this._overlayLayer.render();
 
+                    if (errors.length > 0) {
+
+                        alert(errors.join("<br>"));
+                    }
+
                 } else {
+
                     alert("Invalid file format.");
                 }
 

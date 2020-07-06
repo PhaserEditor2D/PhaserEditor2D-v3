@@ -22,6 +22,10 @@ namespace phasereditor2d.scene.core.code {
             this.line();
         }
 
+        generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM) {
+            // nothing, in TypeScript fields are initialized in the declaration
+        }
+
         protected generateTypeAnnotation(assign: AssignPropertyCodeDOM) {
             // do nothing, in TypeScript uses the var declaration syntax
         }

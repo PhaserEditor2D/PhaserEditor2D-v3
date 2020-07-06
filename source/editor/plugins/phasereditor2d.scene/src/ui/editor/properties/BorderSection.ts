@@ -9,6 +9,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.editor.properties.DisplaySection", "Border", false, true);
         }
+        protected getSectionHelpPath() {
+            return "scene-editor/border-properties.html";
+        }
 
         protected createForm(parent: HTMLDivElement) {
 

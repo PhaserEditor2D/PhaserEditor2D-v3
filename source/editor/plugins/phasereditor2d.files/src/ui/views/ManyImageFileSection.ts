@@ -28,7 +28,7 @@ namespace phasereditor2d.files.ui.views {
 
             const viewer = new GridImageFileViewer();
 
-            const filteredViewer = new ide.properties.FilteredViewerInPropertySection(this.getPage(), viewer);
+            const filteredViewer = new ide.properties.FilteredViewerInPropertySection(this.getPage(), viewer, true);
             parent.appendChild(filteredViewer.getElement());
 
             this.addUpdater(() => {

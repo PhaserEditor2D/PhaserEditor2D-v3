@@ -86,7 +86,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const renderSel = this._editor.getSelection().filter(obj => tool.canRender(obj));
 
-            if (renderSel.length === 0) {
+            if (renderSel.length === 0 && tool.isObjectTool()) {
                 return;
             }
 
