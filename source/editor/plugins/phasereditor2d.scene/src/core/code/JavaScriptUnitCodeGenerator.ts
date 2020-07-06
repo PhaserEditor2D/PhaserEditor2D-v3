@@ -83,9 +83,14 @@ namespace phasereditor2d.scene.core.code {
 
             } else if (memberDecl instanceof FieldDeclCodeDOM) {
 
+                const o = this.getOffset();
+
                 this.generateFieldDecl(memberDecl);
 
-                this.line();
+                if (o !== this.getOffset()) {
+
+                    this.line();
+                }
             }
         }
 
