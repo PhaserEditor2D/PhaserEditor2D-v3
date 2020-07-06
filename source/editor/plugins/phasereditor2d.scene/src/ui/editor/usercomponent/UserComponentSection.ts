@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 text.addEventListener("change", e => {
 
-                    this.runOperation(() => {
+                    this.getEditor().runOperation(() => {
 
                         this.getSelectionFirstElement().setName(text.value);
                     });
@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 text.addEventListener("change", e => {
 
-                    this.runOperation(() => {
+                    this.getEditor().runOperation(() => {
 
                         this.getSelectionFirstElement().setSuperClass(text.value);
                     });
@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 text.addEventListener("change", e => {
 
-                    this.runOperation(() => {
+                    this.getEditor().runOperation(() => {
 
                         this.getSelectionFirstElement().setGameObjectType(text.value);
                     });
@@ -81,27 +81,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return colibri.Platform.getWorkbench()
                 .getActiveWindow().getEditorArea()
                 .getSelectedEditor() as UserComponentsEditor;
-        }
-
-        runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
-
-            const editor = this.getEditor();
-
-            const before = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
-
-            action(this.getSelectionFirstElement().getUserProperties());
-
-            const after = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
-
-            editor.getUndoManager().add(new UserComponentsEditorSnapshotOperation(editor, before, after));
-
-            editor.setDirty(true);
-            editor.getViewer().repaint();
-
-            if (updateSelection) {
-
-                this.updateWithSelection();
-            }
         }
 
         canEdit(obj: any, n: number): boolean {

@@ -279,6 +279,20 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             return manager;
         }
+
+        runOperation(action: (model?: UserComponentsEditorModel) => void) {
+
+            const before = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
+
+            action(this._model);
+
+            const after = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
+
+            this.getUndoManager().add(new UserComponentsEditorSnapshotOperation(this, before, after));
+
+            this.setDirty(true);
+            this.refreshViewers();
+        }
     }
 
     class UserComponentSignatureLabelProvider implements controls.viewers.ILabelProvider {

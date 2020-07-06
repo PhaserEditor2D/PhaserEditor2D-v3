@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.editor.usercomponent.ObjectScriptPropertiesSection", "Component Properties", false, false);
+            super(page, "phasereditor2d.scene.ui.editor.usercomponent.UserComponentPropertiesSection", "Component Properties", false, false);
 
         }
 
@@ -31,17 +31,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
 
-            const editor = this.getEditor();
-
-            const before = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
-
-            action(this.getUserProperties());
-            editor.getViewer().repaint();
-
-            const after = UserComponentsEditorSnapshotOperation.takeSnapshot(editor);
-
-            editor.getUndoManager().add(new UserComponentsEditorSnapshotOperation(editor, before, after));
-            editor.setDirty(true);
+            this.getEditor().runOperation(() => action(this.getUserProperties()));
 
             if (updateSelection) {
 
