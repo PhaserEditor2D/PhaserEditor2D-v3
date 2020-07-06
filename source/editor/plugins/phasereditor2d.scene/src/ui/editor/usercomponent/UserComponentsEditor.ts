@@ -238,6 +238,15 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 this._outlineProvider.repaint();
             });
 
+            viewer.eventOpenItem.addListener((elem: UserComponent) => {
+
+                const compiler = new UserComponentCompiler(this.getInput(), this._model);
+
+                const file = compiler.getOutputFile(elem.getName());
+
+                colibri.Platform.getWorkbench().openEditor(file);
+            });
+
             return viewer;
         }
 
