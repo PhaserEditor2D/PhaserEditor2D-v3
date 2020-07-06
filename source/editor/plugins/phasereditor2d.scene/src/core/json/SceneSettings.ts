@@ -3,12 +3,6 @@ namespace phasereditor2d.scene.core.json {
     import read = colibri.core.json.read;
     import write = colibri.core.json.write;
 
-    export enum SourceLang {
-
-        JAVA_SCRIPT = "JAVA_SCRIPT",
-        TYPE_SCRIPT = "TYPE_SCRIPT"
-    }
-
     export class SceneSettings {
 
         constructor(

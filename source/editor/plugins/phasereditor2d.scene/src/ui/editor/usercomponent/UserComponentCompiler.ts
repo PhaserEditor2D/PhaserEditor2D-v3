@@ -6,9 +6,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export class UserComponentCompiler {
 
         private _componentsFile: io.FilePath;
-        private _model: UserComponentsEditorModel;
+        private _model: UserComponentsModel;
 
-        constructor(componentsFile: io.FilePath, model: UserComponentsEditorModel) {
+        constructor(componentsFile: io.FilePath, model: UserComponentsModel) {
 
             this._componentsFile = componentsFile;
             this._model = model;
@@ -44,7 +44,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         isJavaScriptOutput() {
 
-            return false;
+            return this._model.getOutputLang() === core.json.SourceLang.JAVA_SCRIPT;
         }
 
         getOutputFile(userCompName: string) {

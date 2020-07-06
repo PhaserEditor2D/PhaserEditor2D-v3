@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.dialogs {
                     name = name.substring(0, i);
                 }
 
-                const model = new editor.usercomponent.UserComponentsEditorModel();
+                const model = new editor.usercomponent.UserComponentsModel();
 
                 const data = model.toJSON();
 

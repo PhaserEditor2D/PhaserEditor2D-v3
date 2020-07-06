@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             // tslint:disable-next-line:new-parens
             return new class extends controls.viewers.ArrayTreeContentProvider {
 
-                getRoots(input: UserComponentsEditorModel) {
+                getRoots(input: UserComponentsModel) {
 
                     return input.getComponents();
                 }

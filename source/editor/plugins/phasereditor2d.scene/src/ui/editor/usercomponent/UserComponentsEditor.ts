@@ -76,16 +76,16 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             }, colibri.ui.ide.actions.CMD_DELETE);
         }
 
-        private _model: UserComponentsEditorModel;
+        private _model: UserComponentsModel;
         private _outlineProvider: UserComponentsEditorOutlineProvider;
         private _propertyProvider: UserComponentsEditorPropertySectionProvider;
 
         constructor() {
             super(UserComponentsEditor.ID);
 
-            this._model = new UserComponentsEditorModel();
+            this._model = new UserComponentsModel();
             this._outlineProvider = new UserComponentsEditorOutlineProvider(this);
-            this._propertyProvider = new UserComponentsEditorPropertySectionProvider();
+            this._propertyProvider = new UserComponentsEditorPropertySectionProvider(this);
         }
 
         getModel() {
@@ -280,7 +280,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return manager;
         }
 
-        runOperation(action: (model?: UserComponentsEditorModel) => void) {
+        runOperation(action: (model?: UserComponentsModel) => void) {
 
             const before = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
 

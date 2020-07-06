@@ -2,6 +2,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     export interface IUserComponentsEditorModelData {
         components: any[],
+        outputLang: core.json.SourceLang,
         meta: {
             app: string,
             url: string,
@@ -9,19 +10,22 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         }
     }
 
-    export class UserComponentsEditorModel {
+    export class UserComponentsModel {
 
         private _components: UserComponent[];
+        private _outputLang: core.json.SourceLang;
 
         constructor() {
 
             this._components = [];
+            this._outputLang = core.json.SourceLang.JAVA_SCRIPT;
         }
 
         toJSON(): IUserComponentsEditorModelData {
 
             return {
                 components: this._components.map(script => script.toJSON()),
+                outputLang: this._outputLang,
                 meta: {
                     app: "Phaser Editor 2D - Object Script Editor",
                     url: "https://phasereditor2d.com",
@@ -32,6 +36,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         readJSON(data: IUserComponentsEditorModelData) {
 
+            this._outputLang = data.outputLang || core.json.SourceLang.JAVA_SCRIPT;
+
             this._components = data.components.map(
                 userCompData => {
 
@@ -41,6 +47,16 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     return userComp;
                 }
             );
+        }
+
+        getOutputLang() {
+
+            return this._outputLang;
+        }
+
+        setOutputLang(outputLang: core.json.SourceLang) {
+
+            this._outputLang = outputLang;
         }
 
         getComponents() {
