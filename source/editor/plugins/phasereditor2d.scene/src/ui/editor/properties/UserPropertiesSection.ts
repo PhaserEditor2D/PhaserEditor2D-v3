@@ -96,7 +96,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                                     prop.getInfo().defValue = value;
 
                                     this.setExpandedStateInStorage(prop, true);
-                                });
+                                }, true);
                             });
 
                         propPane.appendChild(propEditor.element);
@@ -180,7 +180,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                                 list[i - 1] = prop;
                                 list[i] = temp;
                             }
-                        });
+                        }, true);
                     }
                 });
 
@@ -199,7 +199,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                                 list[i + 1] = prop;
                                 list[i] = temp;
                             }
-                        });
+                        }, true);
                     }
                 });
 
@@ -213,7 +213,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                             const i = list.indexOf(prop);
 
                             list.splice(i, 1);
-                        });
+                        }, true);
                     }
                 });
                 menu.createWithEvent(e);

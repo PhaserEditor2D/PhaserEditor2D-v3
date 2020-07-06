@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         toJSON(): IUserComponentsEditorModelData {
 
             return {
-                components: this._components.map(script => script.toJSON()),
+                components: this._components.map(comp => comp.toJSON()),
                 outputLang: this._outputLang,
                 meta: {
                     app: "Phaser Editor 2D - Object Script Editor",

@@ -2,6 +2,26 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     import controls = colibri.ui.controls;
 
+    class OutlineContentProvider implements controls.viewers.ITreeContentProvider {
+
+        private _editor: UserComponentsEditor;
+
+        constructor(editor: UserComponentsEditor) {
+
+            this._editor = editor;
+        }
+
+        getRoots(input: UserComponentsModel): any[] {
+
+            return [...new Set(input.getComponents().map(c => c.getGameObjectType()))];
+        }
+
+        getChildren(parent: any): any[] {
+
+            return this._editor.getModel().getComponents().filter(c => c.getGameObjectType() === parent);
+        }
+    }
+
     export class UserComponentsEditorOutlineProvider extends colibri.ui.ide.EditorViewerProvider {
 
         private _editor: UserComponentsEditor;
@@ -14,25 +34,33 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         getContentProvider(): colibri.ui.controls.viewers.ITreeContentProvider {
 
-            // tslint:disable-next-line:new-parens
-            return new class extends controls.viewers.ArrayTreeContentProvider {
+            // // tslint:disable-next-line:new-parens
+            // return new class extends controls.viewers.ArrayTreeContentProvider {
 
-                getRoots(input: UserComponentsModel) {
+            //     getRoots(input: UserComponentsModel) {
 
-                    return input.getComponents();
-                }
-            };
+            //         return input.getComponents();
+            //     }
+            // };
+
+            return new OutlineContentProvider(this._editor);
         }
 
         getLabelProvider(): colibri.ui.controls.viewers.ILabelProvider {
 
-            return new controls.viewers.LabelProvider((obj: UserComponent) => obj.getName());
+            return new controls.viewers.LabelProvider(obj => {
+
+                return obj instanceof UserComponent ? obj.getName() : obj as string;
+            });
         }
 
         getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider {
 
             return new controls.viewers.EmptyCellRendererProvider(
-                obj => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT))
+                obj => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(
+                    obj instanceof UserComponent ?
+                        ICON_USER_COMPONENT : ICON_GROUP
+                ))
             );
         }
 
@@ -64,7 +92,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const viewer = this._editor.getViewer();
 
-            viewer.setSelection(selection, false);
+            viewer.setSelection(selection);
             viewer.reveal(...selection);
             viewer.repaint();
         }

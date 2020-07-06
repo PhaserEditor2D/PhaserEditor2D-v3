@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return {
                 name: this._name,
                 superClass: this._superClass,
-                gameObject: "Phaser.GameObjects.Image",
+                gameObjectType: this._gameObjectType,
                 properties: propsData
             }
         }

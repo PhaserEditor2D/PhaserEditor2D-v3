@@ -88,6 +88,11 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._propertyProvider = new UserComponentsEditorPropertySectionProvider(this);
         }
 
+        getSelectedComponents(): UserComponent[] {
+
+            return this.getViewer().getSelection().filter(o => o instanceof UserComponent);
+        }
+
         getModel() {
 
             return this._model;
@@ -173,8 +178,28 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const before = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
 
+            const deleteSet = new Set();
+
+            for (const obj of this.getViewer().getSelection()) {
+
+                if (obj instanceof UserComponent) {
+
+                    deleteSet.add(obj);
+
+                } else {
+
+                    for (const obj2 of this._model.getComponents()) {
+
+                        if (obj2.getGameObjectType() === obj) {
+
+                            deleteSet.add(obj2);
+                        }
+                    }
+                }
+            }
+
             this._model.setComponents(
-                this._model.getComponents().filter(comp => this.getSelection().indexOf(comp) === -1)
+                this._model.getComponents().filter(comp => !deleteSet.has(comp))
             );
 
             this.getViewer().setInput(this._model.getComponents());

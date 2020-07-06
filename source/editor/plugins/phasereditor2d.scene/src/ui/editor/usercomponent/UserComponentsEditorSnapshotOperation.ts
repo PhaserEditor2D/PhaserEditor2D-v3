@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         static takeSnapshot(editor: UserComponentsEditor): ISnapshotData {
 
             return {
-                selection: editor.getSelection().map((userComp: UserComponent) => userComp.getName()),
+                selection: editor.getSelectedComponents().map((userComp: UserComponent) => userComp.getName()),
                 model: editor.getModel().toJSON()
             };
         }
