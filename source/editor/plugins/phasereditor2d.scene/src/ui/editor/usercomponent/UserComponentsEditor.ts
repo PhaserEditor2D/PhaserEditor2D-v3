@@ -231,6 +231,11 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this.getUndoManager().add(new UserComponentsEditorSnapshotOperation(this, before, after));
         }
 
+        protected createFilteredViewer(viewer: controls.viewers.TreeViewer): controls.viewers.FilteredViewer<any> {
+
+            return new controls.viewers.FilteredViewer(viewer, false);
+        }
+
         protected createViewer(): controls.viewers.TreeViewer {
 
             const viewer = new controls.viewers.TreeViewer();
