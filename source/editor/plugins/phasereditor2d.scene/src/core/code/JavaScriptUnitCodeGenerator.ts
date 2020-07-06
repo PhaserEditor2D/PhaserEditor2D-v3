@@ -114,6 +114,11 @@ namespace phasereditor2d.scene.core.code {
 
         private generateMethodDecl(classDecl: ClassDeclCodeDOM, methodDecl: MethodDeclCodeDOM, isFunction: boolean) {
 
+            if (methodDecl.getReturnType()) {
+
+                this.generateMethodReturnTypeJSDoc(methodDecl);
+            }
+
             for (const modifier of methodDecl.getModifiers()) {
 
                 this.append(modifier + " ");
@@ -127,9 +132,9 @@ namespace phasereditor2d.scene.core.code {
 
             this.generateMethodDeclArgs(methodDecl);
 
-            const methodReturnTypeDecl = this.generateMethodReturnTypeDecl(methodDecl);
+            const methodReturnDeclText = this.getMethodReturnDeclText(methodDecl);
 
-            this.openIndent(")" + methodReturnTypeDecl + "{");
+            this.openIndent(")" + methodReturnDeclText + "{");
 
             const body = CodeDOM.removeBlankLines(methodDecl.getBody());
 
@@ -160,12 +165,20 @@ namespace phasereditor2d.scene.core.code {
             if (methodDecl.getName() === "constructor") {
 
                 this.generateFieldInitInConstructor(classDecl, methodDecl);
+
+                this.line();
+                this.section("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t");
             }
 
             this.closeIndent("}");
         }
 
-        generateMethodReturnTypeDecl(methodDecl: MethodDeclCodeDOM) {
+        generateMethodReturnTypeJSDoc(methodDecl: MethodDeclCodeDOM) {
+
+            this.line(`/** @returns {${methodDecl.getReturnType()}} */`);
+        }
+
+        getMethodReturnDeclText(methodDecl: MethodDeclCodeDOM) {
 
             return " ";
         }

@@ -6,6 +6,10 @@ namespace phasereditor2d.scene.core.code {
             super(unit);
         }
 
+        generateMethodReturnTypeJSDoc(methodDecl: MethodDeclCodeDOM) {
+            // nothing, it is made in signature
+        }
+
         protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM) {
 
             const mod = fieldDecl.isPublic() ? "public" : "private";
@@ -21,7 +25,7 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
-        generateMethodReturnTypeDecl(methodDecl: MethodDeclCodeDOM) {
+        getMethodReturnDeclText(methodDecl: MethodDeclCodeDOM) {
 
             if (methodDecl.getReturnType()) {
 

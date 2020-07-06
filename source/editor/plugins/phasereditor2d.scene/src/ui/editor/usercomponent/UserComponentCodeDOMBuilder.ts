@@ -86,7 +86,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 const returnDom = new code.RawCodeDOM(`return gameObject["__${clsDom.getName()}"];`)
 
                 declDom.getBody().push(returnDom);
-
                 clsDom.getBody().push(declDom);
             }
 
