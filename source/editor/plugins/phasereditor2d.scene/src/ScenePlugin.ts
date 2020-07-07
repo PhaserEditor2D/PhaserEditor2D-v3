@@ -176,6 +176,7 @@ namespace phasereditor2d.scene {
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.GameObjectVariableSection(page),
                 page => new ui.sceneobjects.PrefabInstanceSection(page),
+                page => new ui.sceneobjects.UserComponentInstancePropertySection(page),
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ParentSection(page),
@@ -223,7 +224,7 @@ namespace phasereditor2d.scene {
             try {
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                const files = [...finder.getFiles()];
+                const files = [...finder.getSceneFiles()];
 
                 files.sort((a, b) => b.getModTime() - a.getModTime());
 
@@ -302,7 +303,7 @@ namespace phasereditor2d.scene {
 
         async compileAll() {
 
-            const files = this._sceneFinder.getFiles();
+            const files = this._sceneFinder.getSceneFiles();
 
             const dlg = new controls.dialogs.ProgressDialog();
 

@@ -40,6 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(new VariableComponent(this._object));
             this.addComponent(new UserPropertyComponent(this._object));
+            this.addComponent(new UserComponentsEditorComponent(this._object));
 
             this.setInteractive();
 

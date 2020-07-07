@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     interface ISnapshotData {
         selection: string[],
-        model: IUserComponentsEditorModelData
+        model: IUserComponentsModelData
     }
 
     export class UserComponentsEditorSnapshotOperation extends colibri.ui.ide.undo.Operation {

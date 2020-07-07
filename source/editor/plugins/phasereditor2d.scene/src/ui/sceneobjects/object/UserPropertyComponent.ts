@@ -18,11 +18,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._data = {};
         }
 
-        writeJSON(ser: core.json.Serializer) {
-
-            super.writeJSON(ser);
-        }
-
         setPropertyValue(prop: UserProperty, value: any) {
 
             this._data[prop.getName()] = value;

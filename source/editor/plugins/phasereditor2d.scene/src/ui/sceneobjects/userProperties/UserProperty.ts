@@ -1,8 +1,5 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import write = colibri.core.json.write;
-    import read = colibri.core.json.read;
-
     export interface IUserPropertyInfo {
         name: string;
         defValue: any;
@@ -16,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _info: IUserPropertyInfo;
         private _componentProperty: UserPropertyWrapper;
 
-        constructor(info?: IUserPropertyInfo) {
+        constructor(componentPropertyFactory info?: IUserPropertyInfo) {
 
             this._info = info;
         }
