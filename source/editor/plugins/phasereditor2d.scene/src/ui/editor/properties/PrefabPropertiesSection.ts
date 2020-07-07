@@ -57,7 +57,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this.addUpdater(() => {
 
-                this._sectionHelper.updateWithSelection();
+                if (this.getEditor().getScene()) {
+
+                    this._sectionHelper.updateWithSelection();
+                }
             });
         }
 
