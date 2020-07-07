@@ -44,6 +44,8 @@ namespace colibri.ui.ide {
 
                 } else {
 
+                    this.getUndoManager().clear();
+
                     this.onEditorInputContentChangedByExternalEditor();
                 }
 

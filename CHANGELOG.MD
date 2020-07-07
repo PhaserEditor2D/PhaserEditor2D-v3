@@ -9,6 +9,7 @@
 * [#52](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/52) Moving objects with arrow keys is not updating the properties in the Inspector view.
 * [#54](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/54) Asset Pack Editor: fixes delete items with context menu Delete option.
 * Fixes Asset Pack file selection dialog in **Compiler Scene Settings**.
+* FileEditor clears undo history when a file is modified in an external editor.
 
 ## Version 3.3.0 - July 1, 2020.
 
