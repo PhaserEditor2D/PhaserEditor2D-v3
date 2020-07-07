@@ -5,15 +5,15 @@ namespace colibri.ui.ide {
     export abstract class FileEditor extends EditorPart {
 
         private _onFileStorageListener: io.ChangeListenerFunc;
-        private _isSaving: boolean;
+        private _savingThisEditor: boolean;
 
         constructor(id: string) {
             super(id);
 
-            this._isSaving = false;
-
             this._onFileStorageListener = change => {
+
                 this.onFileStorageChanged(change);
+
             };
 
             Workbench.getWorkbench().getFileStorage().addChangeListener(this._onFileStorageListener);
@@ -21,23 +21,12 @@ namespace colibri.ui.ide {
 
         async save() {
 
-            this._isSaving = true;
+            this._savingThisEditor = true;
 
-            try {
-
-                await super.save();
-
-            } finally {
-
-                this._isSaving = false;
-            }
+            await super.save();
         }
 
-        protected isSaving() {
-            return this._isSaving;
-        }
-
-        protected onFileStorageChanged(change: io.FileStorageChange) {
+        private onFileStorageChanged(change: io.FileStorageChange) {
 
             const editorFile = this.getInput();
 
@@ -49,12 +38,13 @@ namespace colibri.ui.ide {
 
             } else if (change.isModified(editorFileFullName)) {
 
-                if (!this._isSaving) {
+                if (this._savingThisEditor) {
 
-                    // TODO: this is not working, we should see why!
-                    // this.getUndoManager().clear();
+                    this._savingThisEditor = false;
 
-                    this.onEditorInputContentChanged();
+                } else {
+
+                    this.onEditorInputContentChangedByExternalEditor();
                 }
 
             } else if (change.wasRenamed(editorFileFullName)) {
@@ -69,7 +59,7 @@ namespace colibri.ui.ide {
             // nothing
         }
 
-        protected abstract onEditorInputContentChanged();
+        protected abstract onEditorInputContentChangedByExternalEditor();
 
         onPartClosed() {
 

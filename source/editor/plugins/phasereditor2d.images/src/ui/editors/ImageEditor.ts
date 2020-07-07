@@ -21,7 +21,7 @@ namespace phasereditor2d.images.ui.editors {
                     webContentTypes.core.CONTENT_TYPE_IMAGE, () => new ImageEditor()));
         }
 
-        protected onEditorInputContentChanged() {
+        protected onEditorInputContentChangedByExternalEditor() {
             // empty
         }
 

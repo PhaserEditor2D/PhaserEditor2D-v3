@@ -288,7 +288,7 @@ namespace phasereditor2d.code.ui.editors {
             }
         }
 
-        protected async onEditorInputContentChanged() {
+        protected async onEditorInputContentChangedByExternalEditor() {
 
             if (CodePlugin.getInstance().isAdvancedJSEditor()) {
 
