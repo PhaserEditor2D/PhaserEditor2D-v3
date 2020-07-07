@@ -194,7 +194,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._toolsManager.setState(state.toolsState);
         }
 
-        protected async onEditorInputContentChanged() {
+        protected async onEditorInputContentChangedByExternalEditor() {
 
             const file = this.getInput();
 
