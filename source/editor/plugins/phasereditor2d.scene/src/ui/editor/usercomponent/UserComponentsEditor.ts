@@ -10,6 +10,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
         static ID: "phasereditor2d.scene.ui.editor.UserComponentsEditor";
+        private _createdPart: boolean;
+        private _revealCompName: string;
 
         static getFactory() {
 
@@ -98,6 +100,29 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return this._model;
         }
 
+        revealComponent(compName: string) {
+
+            if (!this._createdPart) {
+
+                this._revealCompName = compName;
+
+            } else {
+
+                this.revealComponentNow(compName);
+            }
+        }
+
+        private revealComponentNow(compName: string) {
+
+            const comp = this._model.getComponents().find(c => c.getName() === compName);
+
+            if (comp) {
+
+                this.getViewer().setSelection([comp]);
+                this.getViewer().reveal(comp);
+            }
+        }
+
         protected async onEditorInputContentChangedByExternalEditor() {
 
             const sel = new Set(this.getViewer().getSelection().map(c => c.getName()));
@@ -108,11 +133,18 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this.getViewer().repaint();
         }
 
-        createPart() {
+        async createPart() {
 
             super.createPart();
 
-            this.updateContent();
+            await this.updateContent();
+
+            this._createdPart = true;
+
+            if (this._revealCompName) {
+
+                this.revealComponentNow(this._revealCompName);
+            }
         }
 
         fillContextMenu(menu: controls.Menu) {

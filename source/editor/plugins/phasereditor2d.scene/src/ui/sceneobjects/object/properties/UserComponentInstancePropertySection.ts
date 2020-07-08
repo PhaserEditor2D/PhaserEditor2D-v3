@@ -87,20 +87,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     for (const userComp of compInfo.components) {
 
+                        const headerDiv = document.createElement("div");
+                        headerDiv.classList.add("PrefabLink");
+                        headerDiv.style.gridColumn = "1 / span 3";
+                        headerDiv.style.width = "100%";
+
+                        this._propArea.appendChild(headerDiv);
+
+                        // open prefab file
+                        const prefabBtn = document.createElement("a");
+                        headerDiv.appendChild(prefabBtn);
+                        prefabBtn.href = "#";
+                        prefabBtn.innerHTML = compInfo.prefabFile.getNameWithoutExtension();
+                        prefabBtn.addEventListener("click", e => {
+
+                            colibri.Platform.getWorkbench().openEditor(compInfo.prefabFile);
+                        });
+
+                        const elem = document.createElement("label");
+                        elem.innerHTML = " &rsaquo; ";
+                        headerDiv.appendChild(elem);
+
+                        // open components file
                         const compBtn = document.createElement("a");
-                        compBtn.classList.add("PrefabLink");
+                        headerDiv.appendChild(compBtn);
                         compBtn.href = "#";
-                        compBtn.innerHTML = `${userComp.getName()} (${compInfo.prefabFile.getNameWithoutExtension()})`;
-                        compBtn.style.gridColumn = "1 / span 3";
-                        compBtn.style.justifySelf = "self-start";
+                        compBtn.innerHTML = userComp.getName();
                         compBtn.addEventListener("click", e => {
 
                             const info = finder.getUserComponentByName(userComp.getName());
 
-                            colibri.Platform.getWorkbench().openEditor(info.file);
-                        });
+                            const editor = colibri.Platform.getWorkbench().openEditor(info.file) as ui.editor.usercomponent.UserComponentsEditor;
 
-                        this._propArea.appendChild(compBtn);
+                            editor.revealComponent(userComp.getName());
+                        });
 
                         for (const prop of userComp.getUserProperties().getProperties()) {
 
