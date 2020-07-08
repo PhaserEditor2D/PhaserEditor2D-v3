@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(Phaser.Utils.String.UUID());
 
             this.addComponent(new VariableComponent(this._object));
-            this.addComponent(new UserPropertyComponent(this._object));
+            this.addComponent(new PrefabUserPropertyComponent(this._object));
             this.addComponent(new UserComponentsEditorComponent(this._object));
 
             this.setInteractive();

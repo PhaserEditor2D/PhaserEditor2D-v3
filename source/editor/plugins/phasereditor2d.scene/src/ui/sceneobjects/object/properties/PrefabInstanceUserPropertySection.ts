@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const obj = this.getSelectionFirstElement() as ISceneObject;
 
                 const userPropsComponent = EditorSupport
-                    .getObjectComponent(obj, UserPropertyComponent) as UserPropertyComponent;
+                    .getObjectComponent(obj, PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
 
                 const propsByPrefabList = userPropsComponent.getPropertiesByPrefab();
 

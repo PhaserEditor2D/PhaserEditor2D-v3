@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         properties: UserProperty[];
     }
 
-    export class UserPropertyComponent extends Component<ISceneObject> {
+    export class PrefabUserPropertyComponent extends Component<ISceneObject> {
 
         private _data: any;
 

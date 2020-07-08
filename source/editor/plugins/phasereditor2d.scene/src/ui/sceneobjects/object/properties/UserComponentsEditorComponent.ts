@@ -49,6 +49,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return `${compName}.${prop.getName()}` in this._propData;
         }
 
+        private hasUserComponent(compName: string) {
+
+            return this._compNames.indexOf(compName) >= 0;
+        }
+
+        private isPrefabInstance() {
+
+            return this.getObject().getEditorSupport().isPrefabInstance();
+        }
+
         addUserComponent(compName: string) {
 
             this._compNames.push(compName);
@@ -183,16 +193,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const userProp of comp.getUserProperties().getProperties()) {
 
-                if (support.isUnlockedProperty(userProp.getComponentProperty())) {
+                const originalVarName = args.objectVarName;
 
-                    const originalVarName = args.objectVarName;
+                args.objectVarName = compVarName;
 
-                    args.objectVarName = compVarName;
+                userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
 
-                    userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
-
-                    args.objectVarName = originalVarName;
-                }
+                args.objectVarName = originalVarName;
             }
         }
     }

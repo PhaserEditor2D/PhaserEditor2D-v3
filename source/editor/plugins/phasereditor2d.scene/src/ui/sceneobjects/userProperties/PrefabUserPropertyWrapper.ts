@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private getComponent(obj: ISceneObject) {
 
-            return EditorSupport.getObjectComponent(obj, UserPropertyComponent) as UserPropertyComponent;
+            return EditorSupport.getObjectComponent(obj, PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
         }
 
         get name(): string {

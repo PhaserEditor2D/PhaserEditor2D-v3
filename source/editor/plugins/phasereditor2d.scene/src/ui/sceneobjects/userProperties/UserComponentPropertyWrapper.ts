@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (comp.isPropertySet(this._userComp.getName(), this._userProp)) {
 
-                return this.getComponent(obj).getPropertyValue(this._userComp.getName(), this._userProp);
+                return comp.getPropertyValue(this._userComp.getName(), this._userProp);
             }
 
             return this._userProp.getDefaultValue();
