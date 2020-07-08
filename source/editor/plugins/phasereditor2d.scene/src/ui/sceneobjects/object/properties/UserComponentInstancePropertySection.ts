@@ -67,7 +67,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     iconElement.style.float = "right";
                     iconElement.addEventListener("click", e => {
 
-                        this.runOperation(()=> {
+                        this.runOperation(() => {
 
                             editorComponent.removeUserComponent(compName);
                         });
@@ -117,11 +117,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     .flatMap(info => info.model.getComponents())
 
+                    .filter(c => !editorComponent.hasUserComponent(c.getName()))
+
                     .map(c => ({
                         name: c.getName(),
                         value: c.getName()
                     }));
-
 
                 const btn = this.createMenuButton(this._propArea, "Add Component", items, (value: string) => {
 
@@ -140,6 +141,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 btn.style.gridColumn = "1 / span 3";
                 btn.style.justifySelf = "self-center";
                 btn.style.marginTop = "10px";
+                btn.disabled = items.length === 0;
             });
         }
 

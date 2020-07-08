@@ -54,6 +54,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._compNames.indexOf(compName) >= 0;
         }
 
+        hasUserComponent(compName: string) {
+
+            if (this.hasLocalUserComponent(compName)) {
+
+                return true;
+            }
+
+            const find = this.getPrefabUserComponents()
+
+                .flatMap(info => info.components)
+
+                .find(c => c.getName() === compName);
+
+            return find !== undefined;
+        }
+
         addUserComponent(compName: string) {
 
             this._compNames.push(compName);
