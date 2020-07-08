@@ -100,10 +100,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         isUnlockedProperty(property: IProperty<any>) {
 
             if (property === TransformComponent.x || property === TransformComponent.y) {
+
                 return true;
             }
 
             if (this.isPrefabInstance()) {
+
+                if (property instanceof UserComponentPropertyWrapper) {
+
+                    const userComp = property.getUserComponent();
+
+                    const editorUserComp = this.getComponent(UserComponentsEditorComponent) as UserComponentsEditorComponent;
+
+                    if (editorUserComp.hasLocalUserComponent(userComp.getName())) {
+
+                        return true;
+                    }
+                }
 
                 return this._unlockedProperties.has(property.name);
             }

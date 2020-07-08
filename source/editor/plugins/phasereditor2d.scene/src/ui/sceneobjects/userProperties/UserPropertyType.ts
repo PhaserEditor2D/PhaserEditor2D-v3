@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void;
 
         abstract createInspectorPropertyEditor(
-            section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void;
+            section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void;
 
         protected buildStringFieldCode(prop: UserProperty, value: string) {
 

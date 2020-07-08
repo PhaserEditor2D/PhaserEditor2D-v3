@@ -58,7 +58,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     for (const prop of compInfo.comp.getUserProperties().getProperties()) {
 
-                        prop.getType().createInspectorPropertyEditor(this, this._propArea, prop);
+                        prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, false);
                     }
                 }
 
@@ -85,7 +85,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         for (const prop of userComp.getUserProperties().getProperties()) {
 
-                            prop.getType().createInspectorPropertyEditor(this, this._propArea, prop);
+                            prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, true);
                         }
                     }
                 }

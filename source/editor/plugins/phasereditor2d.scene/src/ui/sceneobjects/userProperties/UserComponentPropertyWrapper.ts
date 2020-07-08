@@ -13,6 +13,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._userProp = userProp;
         }
 
+        getUserComponent() {
+
+            return this._userComp;
+        }
+
         getUserProperty() {
 
             return this._userProp;

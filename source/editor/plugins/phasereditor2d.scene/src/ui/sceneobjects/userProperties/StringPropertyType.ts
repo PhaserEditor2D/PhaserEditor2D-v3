@@ -8,9 +8,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super("string", "");
         }
 
-        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void {
+        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 
-            section.createPropertyStringRow(parent, userProp.getComponentProperty());
+            section.createPropertyStringRow(parent, userProp.getComponentProperty(), lockIcon);
         }
 
         buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): code.MemberDeclCodeDOM[] {
