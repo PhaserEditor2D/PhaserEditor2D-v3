@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const editorComponent = EditorSupport
                     .getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
 
-                // object local components
+                // local components
 
                 const compInfoList = editorComponent.getUserComponents();
 
@@ -43,18 +43,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const compName = compInfo.comp.getName();
 
+                    const headerDiv = document.createElement("div");
+                    headerDiv.classList.add("PrefabLink");
+                    headerDiv.style.gridColumn = "1 / span 3";
+                    headerDiv.style.width = "100%";
+
+                    this._propArea.appendChild(headerDiv);
+
                     const compBtn = document.createElement("a");
-                    compBtn.classList.add("PrefabLink");
+                    headerDiv.appendChild(compBtn);
                     compBtn.href = "#";
                     compBtn.innerHTML = compName;
-                    compBtn.style.gridColumn = "1 / span 3";
-                    compBtn.style.justifySelf = "self-start";
                     compBtn.addEventListener("click", e => {
 
                         colibri.Platform.getWorkbench().openEditor(compInfo.file);
                     });
 
-                    this._propArea.appendChild(compBtn);
+                    const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_DELETE));
+                    const iconElement = icon.getCanvas();
+                    controls.Tooltip.tooltip(iconElement, "Remove this component.");
+                    iconElement.classList.add("IconButton");
+                    headerDiv.appendChild(iconElement);
+                    iconElement.style.float = "right";
+                    iconElement.addEventListener("click", e => {
+
+                        this.runOperation(()=> {
+
+                            editorComponent.removeUserComponent(compName);
+                        });
+
+                        this.updateWithSelection();
+                    });
 
                     for (const prop of compInfo.comp.getUserProperties().getProperties()) {
 
@@ -110,14 +129,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (compInfo) {
 
-                        editorComponent.addUserComponent(value);
+                        this.runOperation(() => {
+
+                            editorComponent.addUserComponent(value);
+                        });
 
                         this.updateWithSelection();
                     }
                 });
                 btn.style.gridColumn = "1 / span 3";
                 btn.style.justifySelf = "self-center";
+                btn.style.marginTop = "10px";
             });
+        }
+
+        private runOperation(action: () => void) {
+
+            const editor = this.getEditor();
+
+            editor.getUndoManager().add(new ui.editor.undo.SimpleSceneSnapshotOperation(editor, action));
         }
 
         canEdit(obj: any, n: number): boolean {

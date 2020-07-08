@@ -46,6 +46,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isPropertySet(compName: string, prop: UserProperty) {
 
+            if (this._compNames.indexOf(compName) < 0) {
+
+                return false;
+            }
+
             return `${compName}.${prop.getName()}` in this._propData;
         }
 
@@ -57,6 +62,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         addUserComponent(compName: string) {
 
             this._compNames.push(compName);
+        }
+
+        removeUserComponent(compName: string) {
+
+            this._compNames = this._compNames.filter(name => name !== compName);
         }
 
         getUserComponents() {
