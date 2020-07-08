@@ -36,17 +36,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setPropertyValue(compName: string, prop: UserProperty, value: any) {
 
-            this._propData[`${compName}.${prop.getName()}`] = value;
+            this._propData[this.getPropertyKey(compName, prop.getName())] = value;
         }
 
         getPropertyValue(compName: string, prop: UserProperty) {
 
-            return this._propData[`${compName}.${prop.getName()}`];
+            return this.getPropertyKey(compName, prop.getName());
         }
 
         isPropertySet(compName: string, prop: UserProperty) {
 
-            return `${compName}.${prop.getName()}` in this._propData;
+            return this.getPropertyKey(compName, prop.getName()) in this._propData;
         }
 
         hasLocalUserComponent(compName: string) {
@@ -62,6 +62,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         removeUserComponent(compName: string) {
 
             this._compNames = this._compNames.filter(name => name !== compName);
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const compInfo = finder.getUserComponentByName(compName);
+
+            if (compInfo) {
+
+                for (const prop of compInfo.comp.getUserProperties().getProperties()) {
+
+                    delete this._propData[this.getPropertyKey(compName, prop.getName())];
+                }
+            }
+        }
+
+        private getPropertyKey(compName: string, propName: string) {
+
+            return `${compName}.${propName}`;
         }
 
         getUserComponents() {
