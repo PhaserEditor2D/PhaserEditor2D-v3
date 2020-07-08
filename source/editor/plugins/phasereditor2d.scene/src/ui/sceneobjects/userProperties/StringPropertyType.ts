@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return [this.buildStringFieldCode(prop, value)];
         }
 
-        buildSetObjectPropertyCodeDOM(comp: UserPropertyComponent, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
+        buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
 
             comp.buildSetObjectPropertyCodeDOM_StringProperty(args, userProp.getComponentProperty());
         }

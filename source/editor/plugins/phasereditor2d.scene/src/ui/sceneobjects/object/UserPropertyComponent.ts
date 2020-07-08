@@ -41,8 +41,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (editorSupport.isPrefabInstance()) {
 
-                // TODO: missing get properties of nested prefabs
-
                 const prefabFile = this.getObject().getEditorSupport().getPrefabFile();
 
                 if (prefabFile) {
@@ -78,7 +76,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            const userProps = new UserProperties();
+            const userProps = new PrefabUserProperties();
 
             userProps.readJSON(sceneData.prefabProperties || []);
 
@@ -105,7 +103,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of this.getProperties()) {
 
-                const userProp = prop.getUserProperty();
+                const userProp = (prop as PrefabUserPropertyWrapper).getUserProperty();
 
                 userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
             }

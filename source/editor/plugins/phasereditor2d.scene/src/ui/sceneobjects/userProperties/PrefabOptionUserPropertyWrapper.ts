@@ -1,9 +1,9 @@
-/// <reference path="./UserPropertyWrapper.ts" />
+/// <reference path="./PrefabUserPropertyWrapper.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class OptionUserPropertyWrapper
-        extends UserPropertyWrapper implements IEnumProperty<ISceneObject, string> {
+    export class PrefabOptionUserPropertyWrapper
+        extends PrefabUserPropertyWrapper implements IEnumProperty<ISceneObject, string> {
 
         constructor(userProp: UserProperty) {
             super(userProp);

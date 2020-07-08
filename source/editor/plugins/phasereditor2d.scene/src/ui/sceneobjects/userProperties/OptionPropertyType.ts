@@ -15,12 +15,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void {
 
-            const prop = userProp.getComponentProperty() as OptionUserPropertyWrapper;
+            const prop = userProp.getComponentProperty() as PrefabOptionUserPropertyWrapper;
 
             section.createPropertyEnumRow(parent, prop as IEnumProperty<any, any>);
         }
 
-        buildSetObjectPropertyCodeDOM(comp: UserPropertyComponent, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
+        buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
 
             comp.buildSetObjectPropertyCodeDOM_StringProperty(args, userProp.getComponentProperty());
         }

@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertyCodeDOM(
-            comp: UserPropertyComponent, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
+            comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
 
             comp.buildSetObjectPropertyCodeDOM_FloatProperty(args, userProp.getComponentProperty());
         }

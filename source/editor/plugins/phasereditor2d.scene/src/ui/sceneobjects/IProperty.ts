@@ -8,6 +8,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         name: string;
 
+        codeName?: string;
+
         defValue: any;
 
         local?: boolean;

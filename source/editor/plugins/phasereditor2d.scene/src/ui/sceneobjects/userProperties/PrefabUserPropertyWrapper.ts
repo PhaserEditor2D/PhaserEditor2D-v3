@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class UserPropertyWrapper implements IProperty<ISceneObject> {
+    export class PrefabUserPropertyWrapper implements IProperty<ISceneObject> {
 
         private _userProp: UserProperty;
 

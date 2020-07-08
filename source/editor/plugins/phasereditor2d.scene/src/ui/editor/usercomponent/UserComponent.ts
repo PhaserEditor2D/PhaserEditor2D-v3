@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._name = name;
             this._superClass = "";
             this._gameObjectType = "Phaser.GameObjects.Image";
-            this._properties = new sceneobjects.UserProperties();
+            this._properties = new UserComponentProperties(this);
         }
 
         toJSON(): any {

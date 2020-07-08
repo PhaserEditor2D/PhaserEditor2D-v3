@@ -90,59 +90,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            return true;
+            return EditorSupport.hasEditorSupport(obj);
         }
 
         canEditNumber(n: number): boolean {
 
-            if (n === 0) {
-
-                return false;
-            }
-
-            const obj = this.getSelectionFirstElement();
-
-            if (EditorSupport.hasEditorSupport(obj)) {
-
-                const support = EditorSupport.getEditorSupport(obj);
-
-                if (support.isPrefabInstance()) {
-
-                    const prefabFile = support.getPrefabFile();
-
-                    for (const obj2 of this.getSelection()) {
-
-                        if (EditorSupport.hasEditorSupport(obj2)) {
-
-                            const support2 = EditorSupport.getEditorSupport(obj2);
-
-                            if (support2.isPrefabInstance()) {
-
-                                const prefabFile2 = support2.getPrefabFile();
-
-                                if (prefabFile !== prefabFile2) {
-
-                                    return false;
-                                }
-
-                            } else {
-
-                                return false;
-                            }
-
-                        } else {
-
-                            return false;
-                        }
-                    }
-
-                    return true;
-                }
-            }
-
-
-            return false;
+            return n === 1;
         }
     }
-
 }

@@ -102,7 +102,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const prop of properties) {
 
                 this.buildSetObjectPropertyCodeDOM_String(
-                    prop.name,
+                    prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args
@@ -117,7 +117,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const prop of properties) {
 
                 this.buildSetObjectPropertyCodeDOM_String(
-                    prop.name,
+                    prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args,
@@ -133,7 +133,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const prop of properties) {
 
                 this.buildSetObjectPropertyCodeDOM_Boolean(
-                    prop.name,
+                    prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args
@@ -170,7 +170,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const prop of properties) {
 
                 this.buildSetObjectPropertyCodeDOM_Float(
-                    prop.name,
+                    prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args
