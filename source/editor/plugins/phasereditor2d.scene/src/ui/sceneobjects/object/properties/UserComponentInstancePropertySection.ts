@@ -35,6 +35,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const editorComponent = EditorSupport
                     .getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
 
+                // object local components
+
                 const compInfoList = editorComponent.getUserComponents();
 
                 for (const compInfo of compInfoList) {
@@ -59,6 +61,36 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         prop.getType().createInspectorPropertyEditor(this, this._propArea, prop);
                     }
                 }
+
+                // prefab components
+
+                for (const compInfo of editorComponent.getPrefabUserComponents()) {
+
+                    for (const userComp of compInfo.components) {
+
+                        const compBtn = document.createElement("a");
+                        compBtn.classList.add("PrefabLink");
+                        compBtn.href = "#";
+                        compBtn.innerHTML = `${userComp.getName()} (${compInfo.prefabFile.getNameWithoutExtension()})`;
+                        compBtn.style.gridColumn = "1 / span 3";
+                        compBtn.style.justifySelf = "self-start";
+                        compBtn.addEventListener("click", e => {
+
+                            const info = finder.getUserComponentByName(userComp.getName());
+
+                            colibri.Platform.getWorkbench().openEditor(info.file);
+                        });
+
+                        this._propArea.appendChild(compBtn);
+
+                        for (const prop of userComp.getUserProperties().getProperties()) {
+
+                            prop.getType().createInspectorPropertyEditor(this, this._propArea, prop);
+                        }
+                    }
+                }
+
+                // Add Components button
 
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 

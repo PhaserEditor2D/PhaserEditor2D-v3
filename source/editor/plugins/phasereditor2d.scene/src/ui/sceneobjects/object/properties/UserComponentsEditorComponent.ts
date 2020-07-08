@@ -1,6 +1,12 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
+    import io = colibri.core.io;
+
+    export interface IUserComponentAndPrefab {
+        prefabFile: io.FilePath;
+        components: editor.usercomponent.UserComponent[];
+    }
 
     export class UserComponentsEditorComponent extends Component<ISceneObject> {
 
@@ -59,11 +65,69 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .filter(c => c !== undefined);
         }
 
+        getPrefabUserComponents() {
+
+            const result: IUserComponentAndPrefab[] = [];
+
+            const support = this.getObject().getEditorSupport();
+
+            if (support.isPrefabInstance()) {
+
+                const objData = support.getPrefabData();
+
+                if (objData) {
+
+                    if (objData.components) {
+
+                        this.getUserComponentsOfPrefab(support.getPrefabId(), result);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private getUserComponentsOfPrefab(prefabId: string, result: IUserComponentAndPrefab[]) {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const prefabFile = finder.getPrefabFile(prefabId);
+
+            const objData = finder.getPrefabData(prefabId);
+
+            if (objData) {
+
+                if (objData.components) {
+
+                    const components = objData.components
+
+                        .map(compName => finder.getUserComponentByName(compName))
+
+                        .filter(info => info !== undefined)
+
+                        .map(info => info.comp);
+
+                    if (components.length > 0) {
+
+                        result.push({ prefabFile, components })
+                    }
+                }
+            }
+        }
+
         getProperties() {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            const properties = this._compNames
+            const compNames = [...this._compNames];
+
+            compNames.push(...this.getPrefabUserComponents()
+
+                .flatMap(info => info.components)
+
+                .map(c => c.getName()));
+
+            const properties = compNames
 
                 .map(compName => finder.getUserComponentByName(compName))
 
@@ -92,16 +156,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     args.result.push(newCompDom);
 
-                    for (const userProp of info.comp.getUserProperties().getProperties()) {
+                    this.buildSetObjectPropertiesCodeDOM2(info.comp, compVarName, args);
+                }
+            }
 
-                        const originalVarName = args.objectVarName;
+            for (const info of this.getPrefabUserComponents()) {
 
-                        args.objectVarName = compVarName;
+                for (const comp of info.components) {
 
-                        userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
+                    const compName = comp.getName();
 
-                        args.objectVarName = originalVarName;
-                    }
+                    const compVarName = args.objectVarName + compName;
+
+                    const newCompDom = new code.RawCodeDOM(`const ${compVarName} = ${compName}.getComponent(${args.objectVarName});`);
+
+                    args.result.push(newCompDom);
+
+                    this.buildSetObjectPropertiesCodeDOM2(comp, compVarName, args);
+                }
+            }
+        }
+
+        private buildSetObjectPropertiesCodeDOM2(comp: editor.usercomponent.UserComponent, compVarName: string, args: ISetObjectPropertiesCodeDOMArgs) {
+
+            const support = this.getObject().getEditorSupport();
+
+            for (const userProp of comp.getUserProperties().getProperties()) {
+
+                if (support.isUnlockedProperty(userProp.getComponentProperty())) {
+
+                    const originalVarName = args.objectVarName;
+
+                    args.objectVarName = compVarName;
+
+                    userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
+
+                    args.objectVarName = originalVarName;
                 }
             }
         }
