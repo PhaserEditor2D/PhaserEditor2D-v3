@@ -26,11 +26,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const clsDom = new code.ClassDeclCodeDOM(this._component.getName());
 
-            if (this._component.getSuperClass().trim().length > 0) {
-
-                clsDom.setSuperClass(this._component.getSuperClass());
-            }
-
             this.buildConstructor(clsDom);
 
             this.buildFields(clsDom);

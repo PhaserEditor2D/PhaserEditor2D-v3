@@ -34,27 +34,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             }
 
             {
-                // Base Class
-
-                this.createLabel(comp, "Super Class", "Name of the super class of the component. It is optional.");
-
-                const text = this.createText(comp);
-
-                text.addEventListener("change", e => {
-
-                    this.getEditor().runOperation(() => {
-
-                        this.getSelectionFirstElement().setSuperClass(text.value);
-                    });
-                });
-
-                this.addUpdater(() => {
-
-                    text.value = this.getSelectionFirstElement().getSuperClass();
-                });
-            }
-
-            {
                 // Game Object Type
 
                 this.createLabel(comp, "Game Object Type", "Name of the type of the Game Object that this component can be added on.");
