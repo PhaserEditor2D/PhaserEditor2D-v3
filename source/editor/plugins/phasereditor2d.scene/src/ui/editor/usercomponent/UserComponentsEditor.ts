@@ -277,6 +277,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const viewer = new controls.viewers.TreeViewer();
 
             viewer.setLabelProvider(new UserComponentSignatureLabelProvider());
+            viewer.setStyledLabelProvider(new UserComponentSignatureStyledLabelProvider());
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
                 // tslint:disable-next-line:new-parens
@@ -368,14 +369,91 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const comp = obj as UserComponent;
 
             const body = comp.getUserProperties().getProperties()
-                .map(p => p.getName() + ":" +
+                .map(p => p.getName() + ": " +
                     (p.getType() instanceof ui.sceneobjects.ExpressionPropertyType ?
                         (p.getType() as ui.sceneobjects.ExpressionPropertyType).getExpressionType()
                         : p.getType().getName()))
                 .join(", ")
 
-            return comp.getName() + " (gameObject) { " + body + " }";
+            return `class ${comp.getName()} (gameObject: ${comp.getGameObjectType()}) { ${body} }`;
+        }
+    }
+
+    class UserComponentSignatureStyledLabelProvider implements controls.viewers.IStyledLabelProvider {
+
+        private static colorMap = {
+            light: {
+                keyword: "blue",
+                typeName: "#28809A",
+                default: "black"
+            },
+            dark: {
+                keyword: "#569CD6",
+                typeName: "#4BC1A9",
+                default: "white"
+            }
         }
 
+        getStyledTexts(obj: any, dark: boolean): controls.viewers.IStyledText[] {
+
+            const colorMap = UserComponentSignatureStyledLabelProvider.colorMap;
+
+            const colors = dark ? colorMap.dark : colorMap.light;
+
+            const comp = obj as UserComponent;
+
+            const result = [{
+                text: "class ",
+                color: colors.keyword
+            }, {
+                text: comp.getName(),
+                color: colors.typeName,
+            }, {
+                text: " (gameObject: ",
+                color: colors.default
+            }, {
+                text: comp.getGameObjectType(),
+                color: colors.typeName
+            }, {
+                text: ") { ",
+                color: colors.default
+            }];
+
+            const props = comp.getUserProperties().getProperties();
+
+            for (let i = 0; i < props.length; i++) {
+
+                const prop = props[i];
+
+                const typeName = prop.getType() instanceof ui.sceneobjects.ExpressionPropertyType ?
+
+                    (prop.getType() as ui.sceneobjects.ExpressionPropertyType).getExpressionType()
+
+                    : prop.getType().getName();
+
+                if (i > 0) {
+
+                    result.push({
+                        text: ", ",
+                        color: colors.default
+                    })
+                }
+
+                result.push({
+                    text: prop.getName() + ": ",
+                    color: colors.default
+                }, {
+                    text: typeName,
+                    color: colors.typeName
+                });
+            }
+
+            result.push({
+                text: " }",
+                color: colors.default
+            });
+
+            return result;
+        }
     }
 }
