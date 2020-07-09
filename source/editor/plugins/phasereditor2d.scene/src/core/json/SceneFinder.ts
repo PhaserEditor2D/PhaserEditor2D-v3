@@ -197,6 +197,16 @@ namespace phasereditor2d.scene.core.json {
             this._prefabFiles = prefabFiles;
         }
 
+        getUserComponentsFiles() {
+
+            return this._compFiles;
+        }
+
+        getUserComponentsByFile(file: io.FilePath) {
+
+            return this._compFilename_Data_Map.get(file.getFullName());
+        }
+
         getUserComponentsModels() {
 
             return this._compModelsInfo;

@@ -144,6 +144,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             if (this._revealCompName) {
 
                 this.revealComponentNow(this._revealCompName);
+
+            } else {
+
+                this.getViewer().setSelection([]);
             }
         }
 

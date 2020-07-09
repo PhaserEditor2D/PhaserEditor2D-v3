@@ -26,6 +26,19 @@ namespace phasereditor2d.scene.ui.dialogs {
 
                 const model = new editor.usercomponent.UserComponentsModel();
 
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                const models = [...finder.getUserComponentsModels()];
+
+                if (models.length > 0) {
+
+                    models.sort((a, b) => a.file.getModTime() - b.file.getModTime());
+
+                    const lastModel = models[models.length - 1];
+
+                    model.setOutputLang(lastModel.model.getOutputLang());
+                }
+
                 const data = model.toJSON();
 
                 return JSON.stringify(data, null, 2);
