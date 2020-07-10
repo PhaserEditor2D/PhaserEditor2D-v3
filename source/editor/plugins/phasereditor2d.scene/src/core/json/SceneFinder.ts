@@ -18,9 +18,11 @@ namespace phasereditor2d.scene.core.json {
 
         async computeTotal(): Promise<number> {
 
-            const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+            const total = (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE)).length
 
-            return files.length;
+                + (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS)).length;
+
+            return total;
         }
 
         preload(monitor: controls.IProgressMonitor) {
