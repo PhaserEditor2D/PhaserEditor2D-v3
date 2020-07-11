@@ -84,6 +84,17 @@ namespace phasereditor2d.scene.core.json {
 
             if (this.isPrefabInstance()) {
 
+                // check if it is a local component property
+                if (this._data.components) {
+
+                    for(const compName of this._data.components) {
+
+                        if (name.startsWith(compName + ".")) {
+                            return true;
+                        }
+                    }
+                }
+
                 if (this._data.unlock) {
 
                     const i = this._data.unlock.indexOf(name);
