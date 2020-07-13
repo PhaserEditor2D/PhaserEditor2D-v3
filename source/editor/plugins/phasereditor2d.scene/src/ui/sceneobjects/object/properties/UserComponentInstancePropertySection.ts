@@ -16,6 +16,39 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/user-component.html";
         }
 
+        private getCommonComponents(getComponents: (c: UserComponentsEditorComponent) => string[]) {
+
+            const nameCountMap = new Map<string, number>();
+
+            for (const obj of this.getSelection()) {
+
+                const editorComp = EditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
+
+                const result = getComponents(editorComp);
+
+                for (const name of result) {
+
+                    if (nameCountMap.has(name)) {
+
+                        const count = nameCountMap.get(name);
+                        nameCountMap.set(name, count + 1);
+
+                    } else {
+
+                        nameCountMap.set(name, 1);
+                    }
+                }
+            }
+
+            const total = this.getSelection().length;
+
+            const names = [...nameCountMap.keys()];
+
+            return names
+
+                .filter(name => nameCountMap.get(name) === total);
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
@@ -30,18 +63,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._propArea.innerHTML = "";
 
-                const obj = this.getSelectionFirstElement() as ISceneObject;
+                const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                const editorComponent = EditorSupport
-                    .getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
+                const editorCompList = this.getSelection()
+                    .map(obj => EditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent);
 
-                // local components
+                const commonLocalComponents = this.getCommonComponents(c => c.getUserComponents().map(info => info.component.getName()));
 
-                const compInfoList = editorComponent.getUserComponents();
+                for (const compName of commonLocalComponents) {
 
-                for (const compInfo of compInfoList) {
-
-                    const compName = compInfo.comp.getName();
+                    const compInfo = finder.getUserComponentByName(compName);
 
                     const headerDiv = document.createElement("div");
                     headerDiv.classList.add("PrefabLink");
@@ -69,13 +100,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         this.runOperation(() => {
 
-                            editorComponent.removeUserComponent(compName);
+                            for (const editorComp of editorCompList) {
+
+                                editorComp.removeUserComponent(compName);
+                            }
                         });
 
                         this.updateWithSelection();
                     });
 
-                    for (const prop of compInfo.comp.getUserProperties().getProperties()) {
+                    for (const prop of compInfo.component.getUserProperties().getProperties()) {
 
                         prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, false);
                     }
@@ -83,61 +117,92 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 // prefab components
 
-                for (const compInfo of editorComponent.getPrefabUserComponents()) {
+                const commonPrefabComponents = new Set(this.getCommonComponents(
+                    c => c.getPrefabUserComponents()
 
-                    for (const userComp of compInfo.components) {
+                        .flatMap(info => info.components)
 
-                        const headerDiv = document.createElement("div");
-                        headerDiv.classList.add("PrefabLink");
-                        headerDiv.style.gridColumn = "1 / span 3";
-                        headerDiv.style.width = "100%";
+                        .flatMap(comp2 => comp2.getName())));
 
-                        this._propArea.appendChild(headerDiv);
 
-                        // open prefab file
-                        const prefabBtn = document.createElement("a");
-                        headerDiv.appendChild(prefabBtn);
-                        prefabBtn.href = "#";
-                        prefabBtn.innerHTML = compInfo.prefabFile.getNameWithoutExtension();
-                        prefabBtn.addEventListener("click", e => {
+                for (const editorComp of editorCompList) {
 
-                            colibri.Platform.getWorkbench().openEditor(compInfo.prefabFile);
-                        });
+                    const result = editorComp.getPrefabUserComponents();
 
-                        const elem = document.createElement("label");
-                        elem.innerHTML = " &rsaquo; ";
-                        headerDiv.appendChild(elem);
+                    for (const compInfo of result) {
 
-                        // open components file
-                        const compBtn = document.createElement("a");
-                        headerDiv.appendChild(compBtn);
-                        compBtn.href = "#";
-                        compBtn.innerHTML = userComp.getName();
-                        compBtn.addEventListener("click", e => {
+                        for (const userComp of compInfo.components) {
 
-                            const info = finder.getUserComponentByName(userComp.getName());
+                            if (commonPrefabComponents.has(userComp.getName())) {
 
-                            const editor = colibri.Platform.getWorkbench().openEditor(info.file) as ui.editor.usercomponent.UserComponentsEditor;
+                                commonPrefabComponents.delete(userComp.getName());
 
-                            editor.revealComponent(userComp.getName());
-                        });
+                            } else {
 
-                        for (const prop of userComp.getUserProperties().getProperties()) {
+                                continue;
+                            }
 
-                            prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, true);
+                            const headerDiv = document.createElement("div");
+                            headerDiv.classList.add("PrefabLink");
+                            headerDiv.style.gridColumn = "1 / span 3";
+                            headerDiv.style.width = "100%";
+
+                            this._propArea.appendChild(headerDiv);
+
+                            // open prefab file
+                            const prefabBtn = document.createElement("a");
+                            headerDiv.appendChild(prefabBtn);
+                            prefabBtn.href = "#";
+                            prefabBtn.innerHTML = compInfo.prefabFile.getNameWithoutExtension();
+                            prefabBtn.addEventListener("click", e => {
+
+                                colibri.Platform.getWorkbench().openEditor(compInfo.prefabFile);
+                            });
+
+                            const elem = document.createElement("label");
+                            elem.innerHTML = " &rsaquo; ";
+                            headerDiv.appendChild(elem);
+
+                            // open components file
+                            const compBtn = document.createElement("a");
+                            headerDiv.appendChild(compBtn);
+                            compBtn.href = "#";
+                            compBtn.innerHTML = userComp.getName();
+                            compBtn.addEventListener("click", e => {
+
+                                const info = finder.getUserComponentByName(userComp.getName());
+
+                                const editor = colibri.Platform.getWorkbench().openEditor(info.file) as ui.editor.usercomponent.UserComponentsEditor;
+
+                                editor.revealComponent(userComp.getName());
+                            });
+
+                            for (const prop of userComp.getUserProperties().getProperties()) {
+
+                                prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, true);
+                            }
                         }
                     }
                 }
 
                 // Add Components button
 
-                const finder = ScenePlugin.getInstance().getSceneFinder();
+                const used = new Set(
+                    [...editorCompList
+                        .flatMap(editorComp => editorComp.getUserComponents())
+                        .map(info => info.component.getName()),
+
+                    ...editorCompList.flatMap(editorComp => editorComp.getPrefabUserComponents())
+                        .flatMap(info => info.components)
+                        .map(c => c.getName())
+                    ]
+                );
 
                 const items = finder.getUserComponentsModels()
 
                     .flatMap(info => info.model.getComponents())
 
-                    .filter(c => !editorComponent.hasUserComponent(c.getName()))
+                    .filter(c => !used.has(c.getName()))
 
                     .map(c => ({
                         name: c.getName(),
@@ -152,7 +217,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         this.runOperation(() => {
 
-                            editorComponent.addUserComponent(value);
+                            for (const editorComp of editorCompList) {
+
+                                editorComp.addUserComponent(value);
+                            }
                         });
 
                         this.updateWithSelection();
@@ -179,7 +247,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEditNumber(n: number): boolean {
 
-            return n === 1;
+            return n > 0;
         }
     }
 }

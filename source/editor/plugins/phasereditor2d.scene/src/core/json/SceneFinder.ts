@@ -37,6 +37,12 @@ namespace phasereditor2d.scene.core.json {
         model: usercomponent.UserComponentsModel;
     }
 
+    export interface IFindComponentResult {
+        file: io.FilePath,
+        model: usercomponent.UserComponentsModel,
+        component: usercomponent.UserComponent
+    }
+
     export class SceneFinder {
 
         private _prefabObjectId_ObjectData_Map: Map<string, IObjectData>;
@@ -214,7 +220,7 @@ namespace phasereditor2d.scene.core.json {
             return this._compModelsInfo;
         }
 
-        getUserComponentByName(name: string) {
+        getUserComponentByName(name: string): IFindComponentResult {
 
             for (const info of this._compModelsInfo) {
 
@@ -225,7 +231,7 @@ namespace phasereditor2d.scene.core.json {
                         return {
                             file: info.file,
                             model: info.model,
-                            comp: comp
+                            component: comp
                         };
                     }
                 }

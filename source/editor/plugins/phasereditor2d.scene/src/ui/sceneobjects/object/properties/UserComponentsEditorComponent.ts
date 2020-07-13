@@ -85,7 +85,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (compInfo) {
 
-                for (const prop of compInfo.comp.getUserProperties().getProperties()) {
+                for (const prop of compInfo.component.getUserProperties().getProperties()) {
 
                     delete this._propData[this.getPropertyKey(compName, prop.getName())];
                 }
@@ -148,7 +148,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         .filter(info => info !== undefined)
 
-                        .map(info => info.comp);
+                        .map(info => info.component);
 
                     if (components.length > 0) {
 
@@ -176,7 +176,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 .filter(c => c !== undefined)
 
-                .flatMap(c => c.comp.getUserProperties().getProperties())
+                .flatMap(c => c.component.getUserProperties().getProperties())
 
                 .flatMap(p => p.getComponentProperty());
 
@@ -199,7 +199,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     args.result.push(newCompDom);
 
-                    this.buildSetObjectPropertiesCodeDOM2(info.comp, compVarName, args);
+                    this.buildSetObjectPropertiesCodeDOM2(info.component, compVarName, args);
                 }
             }
 
