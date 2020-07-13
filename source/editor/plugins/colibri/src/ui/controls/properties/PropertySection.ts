@@ -341,5 +341,23 @@ namespace colibri.ui.controls.properties {
 
             return check;
         }
+
+        createMenuIcon(parent: HTMLElement, menuProvider: () => Menu) {
+
+            const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_SMALL_MENU));
+
+            icon.getCanvas().classList.add("IconButton");
+
+            parent.appendChild(icon.getCanvas());
+
+            icon.getCanvas().addEventListener("click", e => {
+
+                const menu = menuProvider();
+
+                menu.createWithEvent(e);
+            });
+
+            return icon;
+        }
     }
 }

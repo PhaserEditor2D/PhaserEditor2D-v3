@@ -90,24 +90,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         colibri.Platform.getWorkbench().openEditor(compInfo.file);
                     });
 
-                    const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_DELETE));
-                    const iconElement = icon.getCanvas();
-                    controls.Tooltip.tooltip(iconElement, "Remove this component.");
-                    iconElement.classList.add("IconButton");
-                    headerDiv.appendChild(iconElement);
-                    iconElement.style.float = "right";
-                    iconElement.addEventListener("click", e => {
-
-                        this.runOperation(() => {
-
-                            for (const editorComp of editorCompList) {
-
-                                editorComp.removeUserComponent(compName);
-                            }
-                        });
-
-                        this.updateWithSelection();
-                    });
+                    this.createComponentMenuIcon(headerDiv, editorCompList, compName, true);
 
                     for (const prop of compInfo.component.getUserProperties().getProperties()) {
 
@@ -177,6 +160,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 editor.revealComponent(userComp.getName());
                             });
 
+                            this.createComponentMenuIcon(headerDiv, editorCompList, userComp.getName(), false);
+
                             for (const prop of userComp.getUserProperties().getProperties()) {
 
                                 prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, true);
@@ -231,6 +216,63 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 btn.style.marginTop = "10px";
                 btn.disabled = items.length === 0;
             });
+        }
+
+        private createComponentMenuIcon(
+            headerDiv: HTMLElement, editorCompList: UserComponentsEditorComponent[], compName: string, localComponent: boolean) {
+
+            const icon = this.createMenuIcon(headerDiv, () => {
+
+                const menu = new controls.Menu();
+
+                menu.addAction({
+                    text: `Select All With ${compName}`,
+                    callback: () => {
+
+                        const sel = [];
+
+                        this.getEditor().getScene().visit(obj => {
+
+
+                            if (EditorSupport.hasObjectComponent(obj, UserComponentsEditorComponent)) {
+
+                                const userComp = EditorSupport
+                                    .getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
+
+                                if (userComp.hasUserComponent(compName)) {
+
+                                    sel.push(obj);
+                                }
+                            }
+                        });
+
+                        this.getEditor().setSelection(sel);
+                    }
+                });
+
+                if (localComponent) {
+
+                    menu.addAction({
+                        text: "Delete",
+                        callback: () => {
+
+                            this.runOperation(() => {
+
+                                for (const editorComp of editorCompList) {
+
+                                    editorComp.removeUserComponent(compName);
+                                }
+                            });
+
+                            this.updateWithSelection();
+                        }
+                    });
+                }
+
+                return menu;
+            });
+
+            icon.getCanvas().style.float = "right";
         }
 
         private runOperation(action: () => void) {
