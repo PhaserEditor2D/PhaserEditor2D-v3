@@ -48,20 +48,65 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 for (const propsByPrefab of propsByPrefabList) {
 
-                    const prefabName = propsByPrefab.prefabFile.getNameWithoutExtension();
+                    const prefabFile = propsByPrefab.prefabFile;
+                    const prefabName = prefabFile.getNameWithoutExtension();
+
+                    const headerDiv = document.createElement("div");
+                    headerDiv.classList.add("PrefabLink");
+                    headerDiv.style.gridColumn = "1 / span 3";
+                    headerDiv.style.width = "100%";
+                    this._propArea.appendChild(headerDiv);
 
                     const prefabBtn = document.createElement("a");
-                    prefabBtn.classList.add("PrefabLink");
                     prefabBtn.href = "#";
                     prefabBtn.innerHTML = prefabName;
-                    prefabBtn.style.gridColumn = "1 / span 3";
-                    prefabBtn.style.justifySelf = "self-start";
-                    prefabBtn.addEventListener("click", e => {
+                    headerDiv.appendChild(prefabBtn);
 
-                        colibri.Platform.getWorkbench().openEditor(propsByPrefab.prefabFile);
+                    const openFileCallback = () => colibri.Platform.getWorkbench().openEditor(propsByPrefab.prefabFile);
+
+                    prefabBtn.addEventListener("click", openFileCallback);
+
+                    this.createMenuIcon(headerDiv, () => {
+
+                        const menu = new controls.Menu();
+
+                        menu.addAction({
+                            text: `Select All ${prefabName}`,
+                            callback: () => {
+
+                                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                                const sel = [];
+
+                                this.getEditor().getScene().visit(obj2 => {
+
+                                    if (EditorSupport.hasEditorSupport(obj2)) {
+
+                                        const editorSupport = EditorSupport.getEditorSupport(obj2);
+
+                                        if (editorSupport.isPrefabInstance()) {
+
+                                            const prefabFiles = finder.getPrefabHierarchy(editorSupport.getPrefabId());
+
+                                            if (prefabFiles.indexOf(prefabFile) >= 0) {
+
+                                                sel.push(obj2);
+                                            }
+                                        }
+                                    }
+                                });
+
+                                this.getEditor().setSelection(sel);
+                            }
+                        });
+
+                        menu.addAction({
+                            text: `Open ${prefabName} File`,
+                            callback: openFileCallback
+                        })
+
+                        return menu;
                     });
-
-                    this._propArea.appendChild(prefabBtn);
 
                     for (const prop of propsByPrefab.properties) {
 

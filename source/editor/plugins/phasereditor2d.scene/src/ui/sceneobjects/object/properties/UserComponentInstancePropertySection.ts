@@ -221,7 +221,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private createComponentMenuIcon(
             headerDiv: HTMLElement, editorCompList: UserComponentsEditorComponent[], compName: string, localComponent: boolean) {
 
-            const icon = this.createMenuIcon(headerDiv, () => {
+            this.createMenuIcon(headerDiv, () => {
 
                 const menu = new controls.Menu();
 
@@ -271,8 +271,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 return menu;
             });
-
-            icon.getCanvas().style.float = "right";
         }
 
         private runOperation(action: () => void) {

@@ -342,7 +342,7 @@ namespace colibri.ui.controls.properties {
             return check;
         }
 
-        createMenuIcon(parent: HTMLElement, menuProvider: () => Menu) {
+        createMenuIcon(parent: HTMLElement, menuProvider: () => Menu, alignRight=true) {
 
             const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_SMALL_MENU));
 
@@ -356,6 +356,11 @@ namespace colibri.ui.controls.properties {
 
                 menu.createWithEvent(e);
             });
+
+            if (alignRight) {
+                
+                icon.getCanvas().style.float = "right";
+            }
 
             return icon;
         }
