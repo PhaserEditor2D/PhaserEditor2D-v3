@@ -178,7 +178,7 @@ namespace phasereditor2d.pack.ui.editor {
             }
         }
 
-        protected onEditorInputContentChanged() {
+        protected onEditorInputContentChangedByExternalEditor() {
 
             this.updateContent();
         }

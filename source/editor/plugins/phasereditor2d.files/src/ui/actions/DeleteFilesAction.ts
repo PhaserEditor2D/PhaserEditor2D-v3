@@ -1,6 +1,5 @@
 namespace phasereditor2d.files.ui.actions {
 
-    import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
     export class DeleteFilesAction extends colibri.ui.ide.actions.ViewerViewAction<views.FilesView> {

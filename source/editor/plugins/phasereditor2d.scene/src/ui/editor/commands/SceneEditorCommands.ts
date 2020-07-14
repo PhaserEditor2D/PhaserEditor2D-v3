@@ -343,6 +343,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         sprite.x += this._dx;
                         sprite.y += this._dy;
                     }
+
+                    this.getEditor().dispatchSelectionChanged();
                 }
             }
 

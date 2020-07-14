@@ -1,8 +1,21 @@
 # Change Log
 
-## Version 3.3.0 - July 1, 2020.
+## Version 3.3.1 - July 15, 2020
 
-## Added
+### Added
+
+* Phaser 3.24.1 support.
+
+### Fixed
+
+* [#52](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/52) Moving objects with arrow keys is not updating the properties in the Inspector view.
+* [#54](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/54) Asset Pack Editor: fixes delete items with context menu Delete option.
+* Fixes Asset Pack file selection dialog in **Compiler Scene Settings**.
+* FileEditor clears undo history when a file is modified in an external editor.
+
+### Version 3.3.0 - July 1, 2020.
+
+### Added
 
 * Asset Pack: allows to import SVG files as HTML Image.
 * Asset Pack: adds an Open button to the File Key section.
@@ -23,12 +36,12 @@
 * [#41](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/41) Scene Editor: zoom in/out buttons.
 
 
-## Modified
+### Modified
 
 * Improved Asset Pack File section in Inspector view.
 * [#44](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/44) Workbench: does not validate if there is an `index.html` file in the root folder.
 
-## Fixed
+### Fixed
 
 * Fixes menu vertical positioning when there is few space at the top.
 * Scene Editor: shows message when a prefab is not found.
@@ -39,7 +52,7 @@
 
 ## Version 3.2.0 - June 14, 2020
 
-## Added
+### Added
 
 * [#32](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/32) In-App update. With `PhaserEditor2D -update` the server downloads the latest version and replace the old files with the new files. With `PhaserEditor2D -download`, the server downloads the latest version zip, and you can install it manually.
 * Prefab user properties. You can add user properties to prefabs and change the values in the prefab instances.
@@ -51,7 +64,7 @@
 * Open Visual Studio Code command in main menu. Bound to the `Ctrl+Alt+U` key.
 * A Comment Dialog (`Ctrl+Alt+Space`), to write messages in presentations or video-recording.
 
-## Modified
+### Modified
 
 * Files view: the context menu **New** option does not open the **New File** dialog. Now it is a sub-menu with the shortcuts to create a new file of any supported content type.
 * Scene Editor: the translate and rotate manipulators set integer values to objects.
@@ -60,7 +73,7 @@
 * Scene Editor: auto creates a container when add new objects to a prefab scene.
 * Scene Editor: removes redundant `sceneType` attribute in scene file serialization.
 
-## Fixed
+### Fixed
 
 * Don't activate the editor when clicking on the close button.
 * Image Editor: registers the right content type association.

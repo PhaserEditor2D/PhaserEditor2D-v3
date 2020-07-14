@@ -18,6 +18,12 @@ namespace colibri.ui.ide.undo {
             await op.execute();
         }
 
+        clear() {
+
+            this._undoList = [];
+            this._redoList = [];
+        }
+
         undo() {
 
             if (this._undoList.length > 0) {

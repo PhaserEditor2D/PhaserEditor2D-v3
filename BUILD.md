@@ -10,6 +10,8 @@ This repository contains all the client code. This means that you can modify it 
 
 The main two reasons you may find to build the client code are: you are contributing to the code or you want to try the in-development version.
 
+([In this repo](https://github.com/PhaserEditor2D/PhaserEditor2D-v3-build-develop) we provide a script to perform the following steps automatically)
+
 ## 1) Download the source code
 
 First, you have to clone this repo to get the source code (you need a [Git client](https://git-scm.com/) installed).
