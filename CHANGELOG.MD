@@ -8,7 +8,10 @@
 * Scene Editor: in Prefab Instance section shows a menu next to each prefab, to select all prefab instances.
 
 ### Modified
+
 ### Fixed
+
+* Scene Editor: fixes command to create a prefab with the selected object. The new prefab is positioned at `0,0`.
 
 ## Version 3.3.1 - July 15, 2020
 
