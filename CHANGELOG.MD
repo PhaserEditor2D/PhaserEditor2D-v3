@@ -6,6 +6,7 @@
 
 * User Component Editor.
 * Scene Editor: in Prefab Instance section shows a menu next to each prefab, to select all prefab instances.
+* Scene Editor: adds user property of boolean type.
 
 ### Modified
 
