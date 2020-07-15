@@ -101,11 +101,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
+            const mark = args.lazyStatements.length;
+
+            const temp = args.statements;
+            args.statements = args.lazyStatements;
+
             for (const prop of this.getProperties()) {
 
                 const userProp = (prop as PrefabUserPropertyWrapper).getUserProperty();
 
                 userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
+            }
+
+            args.statements = temp;
+
+            if (args.lazyStatements.length > mark) {
+
+                args.lazyStatements.splice(mark, 0,
+                    new core.code.RawCodeDOM(""),
+                    new core.code.RawCodeDOM(`// ${args.objectVarName} (prefab fields)`));
             }
         }
     }

@@ -185,6 +185,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
+            const allPropsStart = args.lazyStatements.length;
+
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
             for (const compName of this._compNames) {
@@ -195,11 +197,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const compVarName = args.objectVarName + compName;
 
-                    const newCompDom = new code.RawCodeDOM(`const ${compVarName} = new ${compName}(${args.objectVarName});`);
+                    const compPropsStart = args.lazyStatements.length;
 
-                    args.result.push(newCompDom);
+                    this.buildSetObjectPropertiesCodeDOM2(info.component, compName, compVarName, args);
 
-                    this.buildSetObjectPropertiesCodeDOM2(info.component, compVarName, args);
+                    args.lazyStatements.splice(compPropsStart, 0,
+
+                        new code.RawCodeDOM(
+
+                            compPropsStart === args.lazyStatements.length ?
+
+                                `new ${compName}(${args.objectVarName});`
+
+                                : `const ${compVarName} = new ${compName}(${args.objectVarName});`
+                        ));
                 }
             }
 
@@ -211,29 +222,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const compVarName = args.objectVarName + compName;
 
-                    const newCompDom = new code.RawCodeDOM(`const ${compVarName} = ${compName}.getComponent(${args.objectVarName});`);
+                    const prefabPropsStart = args.lazyStatements.length;
 
-                    args.result.push(newCompDom);
+                    this.buildSetObjectPropertiesCodeDOM2(comp, compName, compVarName, args);
 
-                    this.buildSetObjectPropertiesCodeDOM2(comp, compVarName, args);
+                    if (prefabPropsStart !== args.lazyStatements.length) {
+
+                        args.lazyStatements.splice(prefabPropsStart, 0,
+                            new code.RawCodeDOM(
+                                `const ${compVarName} = ${compName}.getComponent(${args.objectVarName});`));
+                    }
                 }
+            }
+
+            if (allPropsStart !== args.lazyStatements.length) {
+
+                args.lazyStatements.splice(allPropsStart, 0,
+                    new code.RawCodeDOM(""),
+                    new code.RawCodeDOM(`// ${args.objectVarName} (components)`));
             }
         }
 
-        private buildSetObjectPropertiesCodeDOM2(comp: editor.usercomponent.UserComponent, compVarName: string, args: ISetObjectPropertiesCodeDOMArgs) {
+        private buildSetObjectPropertiesCodeDOM2(comp: editor.usercomponent.UserComponent, compName: string, compVarName: string, args: ISetObjectPropertiesCodeDOMArgs) {
 
-            const support = this.getObject().getEditorSupport();
+            const temp = args.statements;
+            args.statements = args.lazyStatements;
 
-            for (const userProp of comp.getUserProperties().getProperties()) {
+            const props = comp.getUserProperties().getProperties();
 
-                const originalVarName = args.objectVarName;
+            if (props.length > 0) {
 
-                args.objectVarName = compVarName;
+                const objVarName = args.objectVarName;
 
-                userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
+                for (const userProp of props) {
 
-                args.objectVarName = originalVarName;
+                    args.objectVarName = compVarName;
+
+                    userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
+                }
+
+                args.objectVarName = objVarName;
             }
+
+            args.statements = temp;
         }
     }
 }

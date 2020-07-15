@@ -5,7 +5,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import write = colibri.core.json.write;
 
     export interface ISetObjectPropertiesCodeDOMArgs {
-        result: core.code.CodeDOM[];
+        statements: core.code.CodeDOM[];
+        lazyStatements: core.code.CodeDOM[];
         objectVarName: string;
         prefabSerializer: core.json.Serializer;
     }
@@ -91,7 +92,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     dom.valueLiteral(value);
                 }
 
-                args.result.push(dom);
+                args.statements.push(dom);
             }
         }
 
@@ -145,7 +146,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertyCodeDOM_Boolean(
-            fieldName: string, fieldCodeName:string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void {
+            fieldName: string, fieldCodeName: string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
             let add = false;
@@ -162,7 +163,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (add) {
 
                 dom.valueBool(value);
-                args.result.push(dom);
+                args.statements.push(dom);
             }
         }
 
@@ -202,7 +203,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (add) {
 
                 dom.valueFloat(value);
-                args.result.push(dom);
+                args.statements.push(dom);
             }
         }
 
