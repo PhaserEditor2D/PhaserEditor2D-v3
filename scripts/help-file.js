@@ -42,6 +42,7 @@ function makeHelpFile(members, outputPath) {
         if (name in docsMap) {
             outputMap[name] = docsMap[name];
         } else {
+        	console.log("Cannot find name " + name);
             throw new Error("Cannot find name: " + name);
         }
     }
