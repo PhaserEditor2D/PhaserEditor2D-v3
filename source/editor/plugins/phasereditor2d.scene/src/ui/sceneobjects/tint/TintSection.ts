@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const comp = this.createGridElement(parent);
             comp.style.gridTemplateColumns = "auto auto 1fr";
 
-            this.createBooleanProperty(comp, TintComponent.tintFill);
+            this.createPropertyBoolean(comp, TintComponent.tintFill);
 
             this.createPropertyColorRow(comp, TintComponent.tintTopLeft, false);
 

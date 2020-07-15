@@ -70,5 +70,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return decl;
         }
+
+        protected buildBooleanFieldCode(prop: UserProperty, value: boolean) {
+
+            const decl = new code.FieldDeclCodeDOM(prop.getInfo().name, "boolean", true);
+
+            decl.setInitialValueExpr(value.toString());
+
+            return decl;
+        }
     }
 }
