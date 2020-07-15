@@ -689,6 +689,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         obj.getEditorSupport().writeJSON(objData);
 
                         objData.id = Phaser.Utils.String.UUID();
+                        objData["x"] = 0;
+                        objData["y"] = 0;
 
                         const ext = new dialogs.NewPrefabFileFromObjectDialogExtension(objData);
 
