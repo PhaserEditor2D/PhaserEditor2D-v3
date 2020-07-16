@@ -10,6 +10,8 @@
 
 ### Modified
 
+* Scene Editor: Object Lists are created first as temporal variables, and, if the scope is CLASS or PUBLIC, a field is generated.
+
 ### Fixed
 
 * Scene Editor: fixes command to create a prefab with the selected object. The new prefab is positioned at `0,0`.

@@ -185,6 +185,8 @@ namespace phasereditor2d.scene.core.code {
 
             const ctrDecl = new code.MethodDeclCodeDOM("constructor");
 
+            const body = ctrDecl.getBody();
+
             const prefabObj = this._scene.getPrefabObject();
 
             if (!prefabObj) {
@@ -214,8 +216,8 @@ namespace phasereditor2d.scene.core.code {
                     prefabObj: prefabObj
                 });
 
-                ctrDecl.getBody().push(superCall);
-                ctrDecl.getBody().push(new RawCodeDOM(""));
+                body.push(superCall);
+                body.push(new RawCodeDOM(""));
             }
 
             const lazyStatements: CodeDOM[] = [];
@@ -227,7 +229,7 @@ namespace phasereditor2d.scene.core.code {
 
             lazyStatements.push(...result.lazyStatements);
 
-            ctrDecl.getBody().push(...result.statements);
+            body.push(...result.statements);
 
             if (prefabObj instanceof ui.sceneobjects.Container && !prefabObj.getEditorSupport().isPrefabInstance()) {
 
@@ -238,16 +240,16 @@ namespace phasereditor2d.scene.core.code {
                 });
             }
 
-            ctrDecl.getBody().push(...lazyStatements);
+            this.addCreateListsCode(body);
 
-            this.addFieldInitCode(ctrDecl.getBody());
+            body.push(...lazyStatements);
+
+            this.addFieldInitCode(body);
 
             {
                 const initMethodName = settings.prefabInitMethodName;
 
                 if (initMethodName) {
-
-                    const body = ctrDecl.getBody();
 
                     if (body.length > 1) {
                         body.push(new RawCodeDOM(""));
@@ -283,11 +285,47 @@ namespace phasereditor2d.scene.core.code {
                 this.addCreateObjectCode(obj, createMethodDecl, lazyStatements);
             }
 
+            this.addCreateListsCode(body);
+
             body.push(...lazyStatements);
 
             this.addFieldInitCode(body);
 
             return createMethodDecl;
+        }
+
+        private addCreateListsCode(body: CodeDOM[]) {
+
+            const lists = this._scene.getObjectLists().getLists();
+
+            if (lists.length > 0) {
+
+                body.push(
+                    new RawCodeDOM(""),
+                    new RawCodeDOM("// lists"));
+            }
+
+            for (const list of lists) {
+
+                const map = this._scene.buildObjectIdMap();
+                const objectVarnames: string[] = [];
+
+                for (const objId of list.getObjectIds()) {
+
+                    const obj = map.get(objId);
+
+                    if (obj) {
+
+                        objectVarnames.push(formatToValidVarName(obj.getEditorSupport().getLabel()));
+                    }
+                }
+
+                const varname = formatToValidVarName(list.getLabel());
+
+                const dom = new RawCodeDOM(`const ${varname} = [${objectVarnames.join(", ")}]`);
+
+                body.push(dom);
+            }
         }
 
         private addFieldInitCode(body: CodeDOM[]) {
@@ -317,24 +355,12 @@ namespace phasereditor2d.scene.core.code {
 
                 if (list.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
 
-                    const map = this._scene.buildObjectIdMap();
-                    const objectVarnames: string[] = [];
-
-                    for (const objId of list.getObjectIds()) {
-
-                        const obj = map.get(objId);
-
-                        if (obj) {
-
-                            objectVarnames.push(formatToValidVarName(obj.getEditorSupport().getLabel()));
-                        }
-                    }
-
                     const varname = formatToValidVarName(list.getLabel());
 
                     const dom = new AssignPropertyCodeDOM(varname, "this");
 
-                    dom.value("[" + objectVarnames.join(", ") + "]");
+                    dom.value(varname);
+
                     fields.push(dom);
                 }
             }
