@@ -716,7 +716,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 }
             });
 
-            // quick sort edit
+            // quick source edit
 
             manager.add({
                 command: {

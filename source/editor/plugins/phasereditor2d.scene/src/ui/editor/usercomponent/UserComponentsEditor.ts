@@ -4,6 +4,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.usercomponent.AddUserComponent";
     export const CMD_COMPILE_FILE = "phasereditor2d.scene.ui.editor.usercomponent.CompileFile";
+    export const CMD_QUICK_EDIT_COMPONENT_FILE = "phasereditor2d.scene.ui.editor.usercomponent.QuickEditComponentFile";
     export const CAT_USER_COMPONENTS_EDITOR = "phasereditor2d.scene.ui.editor.usercomponent.UserComponentsCategory";
 
     export class UserComponentsEditor extends colibri.ui.ide.ViewerFileEditor {
@@ -12,6 +13,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         static ID: "phasereditor2d.scene.ui.editor.UserComponentsEditor";
         private _createdPart: boolean;
         private _revealCompName: string;
+        private _outputFileEditorStateMap: any = {};
 
         static getFactory() {
 
@@ -76,6 +78,25 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     }
                 }
             }, colibri.ui.ide.actions.CMD_DELETE);
+
+            manager.add({
+                command: {
+                    id: CMD_QUICK_EDIT_COMPONENT_FILE,
+                    name: "Quick Edit Component Source File",
+                    category: CAT_USER_COMPONENTS_EDITOR,
+                    tooltip: "Open output component file in a popup editor."
+                },
+                handler: {
+                    testFunc: args => editorScope(args) && (args.activeEditor as UserComponentsEditor).getSelectedComponents().length === 1,
+                    executeFunc: args => {
+
+                        (args.activeEditor as UserComponentsEditor).openOutputFileQuickEditorDialog();
+                    }
+                },
+                keys: {
+                    key: "Q"
+                }
+            });
         }
 
         private _model: UserComponentsModel;
@@ -162,6 +183,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             menu.addSeparator();
 
             menu.addCommand(CMD_COMPILE_FILE);
+
+            menu.addCommand(CMD_QUICK_EDIT_COMPONENT_FILE);
         }
 
         async doSave() {
@@ -180,6 +203,39 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 console.error(e);
             }
+        }
+
+        openOutputFileQuickEditorDialog() {
+
+            const component = this.getSelectedComponents()[0];
+
+            const fileName = component.getName() + "." + (this._model.getOutputLang() === core.json.SourceLang.JAVA_SCRIPT ? "js" : "ts");
+
+            const file = this.getInput().getSibling(fileName);
+
+            if (!file) {
+
+                return;
+            }
+
+            const state = this._outputFileEditorStateMap[fileName] || {};
+
+            const dlg = new colibri.ui.ide.QuickEditorDialog(file, state);
+
+            dlg.create();
+
+            dlg.addButton("Play", () => {
+
+                colibri.Platform.getWorkbench().getCommandManager()
+                    .executeCommand(ide.ui.actions.CMD_PLAY_PROJECT);
+            });
+
+            dlg.eventDialogClose.addListener(() => {
+
+                this._outputFileEditorStateMap[fileName] = dlg.getEditorState();
+
+                colibri.Platform.getWorkbench().setActiveEditor(this);
+            });
         }
 
         async compile() {
