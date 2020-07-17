@@ -8,6 +8,10 @@
 * Scene Editor: in Prefab Instance section shows a menu next to each prefab, to select all prefab instances.
 * Scene Editor: adds user property of boolean type.
 
+## Removed
+
+* **User Init Method** parameter and **Compiler Prefab Settings** section. Now you can insert code directly in the constructor of the prefab.
+
 ### Modified
 
 * Scene Editor: Object Lists are created first as temporal variables, and, if the scope is CLASS or PUBLIC, a field is generated.
