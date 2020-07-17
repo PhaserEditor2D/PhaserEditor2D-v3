@@ -1,6 +1,5 @@
 namespace phasereditor2d.scene.ui.editor.properties {
 
-    import io = colibri.core.io;
     import controls = colibri.ui.controls;
 
     export class CompilerSection extends SceneSection {

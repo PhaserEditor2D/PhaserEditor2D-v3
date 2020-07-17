@@ -181,8 +181,6 @@ namespace phasereditor2d.scene.core.code {
 
         private buildPrefabConstructorMethod() {
 
-            const settings = this._scene.getSettings();
-
             const ctrDecl = new code.MethodDeclCodeDOM("constructor");
 
             const body = ctrDecl.getBody();
@@ -245,19 +243,6 @@ namespace phasereditor2d.scene.core.code {
             body.push(...lazyStatements);
 
             this.addFieldInitCode(body);
-
-            {
-                const initMethodName = settings.prefabInitMethodName;
-
-                if (initMethodName) {
-
-                    if (body.length > 1) {
-                        body.push(new RawCodeDOM(""));
-                    }
-
-                    body.push(new MethodCallCodeDOM(initMethodName, "this"));
-                }
-            }
 
             return ctrDecl;
         }
