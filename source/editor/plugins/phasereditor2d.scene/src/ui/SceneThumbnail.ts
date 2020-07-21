@@ -51,8 +51,6 @@ namespace phasereditor2d.scene.ui {
                 };
             }
 
-            console.log(bounds);
-
             this.sys.renderer.snapshotArea(bounds.x, bounds.y, bounds.width, bounds.height, (img: HTMLImageElement) => {
 
                 this._callback(img);
