@@ -217,7 +217,5 @@ namespace phasereditor2d.scene.ui {
                 game.scene.add("scene", scene, true);
             });
         }
-
     }
-
 }
