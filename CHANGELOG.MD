@@ -19,6 +19,7 @@
 ### Fixed
 
 * Scene Editor: fixes command to create a prefab with the selected object. The new prefab is positioned at `0,0`.
+* Scene Editor: scene thumbnail generator.
 
 ## Version 3.3.1 - July 15, 2020
 

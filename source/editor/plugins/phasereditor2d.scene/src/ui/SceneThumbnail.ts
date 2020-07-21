@@ -41,7 +41,8 @@ namespace phasereditor2d.scene.ui {
 
             const s = this.getSettings();
 
-            if (bounds.height > s.borderWidth && bounds.height > s.borderHeight) {
+            if (bounds.width > s.borderWidth && bounds.height > s.borderHeight) {
+
                 bounds = {
                     x: s.borderX,
                     y: s.borderY,
@@ -49,6 +50,8 @@ namespace phasereditor2d.scene.ui {
                     height: s.borderHeight
                 };
             }
+
+            console.log(bounds);
 
             this.sys.renderer.snapshotArea(bounds.x, bounds.y, bounds.width, bounds.height, (img: HTMLImageElement) => {
 
@@ -63,12 +66,11 @@ namespace phasereditor2d.scene.ui {
             const children = this.getDisplayListChildren();
 
             if (children.length === 0) {
+
                 return { x: 0, y: 0, width: 10, height: 10 };
             }
 
             const camera = this.getCamera();
-
-            const s = this.getSettings();
 
             let minX = Number.MAX_VALUE;
             let minY = Number.MAX_VALUE;
@@ -215,7 +217,5 @@ namespace phasereditor2d.scene.ui {
                 game.scene.add("scene", scene, true);
             });
         }
-
     }
-
 }
