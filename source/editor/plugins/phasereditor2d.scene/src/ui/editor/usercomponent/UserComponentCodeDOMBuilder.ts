@@ -41,10 +41,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             ctrDeclDom.arg("gameObject", this._component.getGameObjectType());
 
-            const setCompCallDom = new code.MethodCallCodeDOM("setComponent", clsDom.getName());
-            setCompCallDom.arg("gameObject");
-            setCompCallDom.arg("this");
-            ctrDeclDom.getBody().push(setCompCallDom);
+            const setCompDom = new code.RawCodeDOM(`gameObject["__${clsDom.getName()}"] = this;`);
+            ctrDeclDom.getBody().push(setCompDom);
 
             clsDom.getBody().push(ctrDeclDom);
         }
