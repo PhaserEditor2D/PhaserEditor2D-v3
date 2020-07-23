@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             this.buildFields(clsDom);
 
-            this.buildGetSetCompMethods(clsDom);
+            this.buildAccessorMethods(clsDom);
 
             return clsDom;
         }
@@ -69,7 +69,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             }
         }
 
-        private buildGetSetCompMethods(clsDom: code.ClassDeclCodeDOM) {
+        private buildAccessorMethods(clsDom: code.ClassDeclCodeDOM) {
             {
                 // getComponent()
 
@@ -81,37 +81,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 const returnDom = new code.RawCodeDOM(`return gameObject["__${clsDom.getName()}"];`)
 
                 declDom.getBody().push(returnDom);
-                clsDom.getBody().push(declDom);
-            }
-
-            {
-                // setComponent()
-
-                const compVarName = clsDom.getName().substring(0, 1).toLowerCase() + clsDom.getName().substring(1)
-
-                const declDom = new code.MethodDeclCodeDOM("setComponent");
-                declDom.getModifiers().push("static");
-                declDom.arg("gameObject", this._component.getGameObjectType());
-                declDom.arg(compVarName, this._component.getName());
-
-                const setInstrDom = new code.RawCodeDOM(`gameObject["__${clsDom.getName()}"] = ${compVarName};`)
-
-                declDom.getBody().push(setInstrDom);
-
-                clsDom.getBody().push(declDom);
-            }
-
-            {
-                // hasComponent()
-
-                const declDom = new code.MethodDeclCodeDOM("hasComponent");
-                declDom.getModifiers().push("static");
-                declDom.arg("gameObject", this._component.getGameObjectType());
-
-                const returnDom = new code.RawCodeDOM(`return "__${clsDom.getName()}" in gameObject;`)
-
-                declDom.getBody().push(returnDom);
-
                 clsDom.getBody().push(declDom);
             }
         }
