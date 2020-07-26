@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.core.json {
 
         id: string;
         sceneType: SceneType;
-        settings: object;
+        settings: any;
         lists?: IObjectListData[];
         displayList: IObjectData[];
         prefabProperties?: any[];
