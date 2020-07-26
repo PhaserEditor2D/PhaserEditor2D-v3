@@ -171,8 +171,11 @@ namespace phasereditor2d.scene.ui {
 
                 const data: core.json.ISceneData = JSON.parse(content);
 
-                const width = 1200;
-                const height = 800;
+                // const width = 1200;
+                // const height = 800;
+
+                const width = data.settings.borderWidth || 800;
+                const height = data.settings.borderHeight || 600;
 
                 const canvas = document.createElement("canvas");
                 canvas.style.width = (canvas.width = width) + "px";
