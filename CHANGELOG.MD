@@ -6,6 +6,8 @@
 
 ### Modified
 
+* Scene Editor: a new object is added to a container if the container is selected or a child of it.
+
 ### Fixed
 
 * Scene Editor: fixes command to create a prefab with the selected object. The new prefab is positioned at `0,0`.
