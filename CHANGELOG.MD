@@ -15,6 +15,7 @@
 ### Modified
 
 * Scene Editor: Object Lists are created first as temporal variables, and, if the scope is CLASS or PUBLIC, a field is generated.
+* Scene Editor: a new object is added to a container if the container is selected or a child of it.
 
 ### Fixed
 
