@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 obj = maker.createEmptyObject(this._type, this._extraData);
             }
 
-            this._editor.getSceneMaker().afterDropObjectsInPrefabScene(prefabObj, [obj]);
+            this._editor.getSceneMaker().afterDropObjects(prefabObj, [obj]);
 
             this.getEditor().setSelection([obj]);
         }

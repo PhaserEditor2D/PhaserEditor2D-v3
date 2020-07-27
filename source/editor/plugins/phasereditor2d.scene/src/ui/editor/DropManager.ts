@@ -159,7 +159,8 @@ namespace phasereditor2d.scene.ui.editor {
                 support.setLabel(label);
             }
 
-            scene.getMaker().afterDropObjectsInPrefabScene(prefabObj, sprites);
+
+            scene.getMaker().afterDropObjects(prefabObj, sprites);
 
             return sprites;
         }
