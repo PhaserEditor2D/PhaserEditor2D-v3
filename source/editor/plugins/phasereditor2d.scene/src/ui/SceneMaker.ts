@@ -23,13 +23,23 @@ namespace phasereditor2d.scene.ui {
 
             for (const sprite of this._scene.getEditor().getSelectedGameObjects()) {
 
-                if (sprite instanceof sceneobjects.Container) {
+                let sprite2 = sprite;
 
-                    container = sprite;
+                if (sprite2.getEditorSupport().isPrefabInstance()) {
 
-                } else if (sprite.parentContainer) {
+                    sprite2 = sprite2.getEditorSupport().getOwnerPrefabInstance().parentContainer as sceneobjects.Container;
+                }
 
-                    container = sprite.parentContainer as sceneobjects.Container;
+                if (sprite2) {
+
+                    if (sprite2 instanceof sceneobjects.Container) {
+
+                        container = sprite2;
+
+                    } else if (sprite2.parentContainer) {
+
+                        container = sprite2.parentContainer as sceneobjects.Container;
+                    }
                 }
             }
 
