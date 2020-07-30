@@ -191,7 +191,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     .map(c => ({
                         name: c.getName(),
-                        value: c.getName()
+                        value: c.getName(),
+                        icon: ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT)
                     }));
 
                 const btn = this.createMenuButton(this._propArea, "Add Component", items, (value: string) => {

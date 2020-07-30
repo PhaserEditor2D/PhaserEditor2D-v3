@@ -164,7 +164,7 @@ namespace colibri.ui.controls.properties {
 
         createMenuButton(
             parent: HTMLElement, text: string,
-            items: Array<{ name: string, value: any }>,
+            items: Array<{ name: string, value: any, icon?: controls.IImage }>,
             callback: (value: any) => void) {
 
             const btn = this.createButton(parent, text, e => {
@@ -175,6 +175,7 @@ namespace colibri.ui.controls.properties {
 
                     menu.add(new Action({
                         text: item.name,
+                        icon: item.icon,
                         callback: () => {
                             callback(item.value);
                         }
