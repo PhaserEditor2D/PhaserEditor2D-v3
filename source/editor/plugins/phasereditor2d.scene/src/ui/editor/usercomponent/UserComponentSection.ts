@@ -23,13 +23,19 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     this.getEditor().runOperation(() => {
 
-                        this.getSelectionFirstElement().setName(text.value);
+                        for (const comp1 of this.getSelection()) {
+
+                            comp1.setName(text.value);
+                        }
                     });
                 });
 
                 this.addUpdater(() => {
 
-                    text.value = this.getSelectionFirstElement().getName();
+                    text.value = this.flatValues_StringOneOrNothing(
+                        this.getSelection().map(c => c.getName()));
+
+                    text.readOnly = this.getSelection().length > 1;
                 });
             }
 
@@ -44,13 +50,42 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     this.getEditor().runOperation(() => {
 
-                        this.getSelectionFirstElement().setGameObjectType(text.value);
+                        for (const comp1 of this.getSelection()) {
+
+                            comp1.setGameObjectType(text.value);
+                        }
                     });
                 });
 
                 this.addUpdater(() => {
 
-                    text.value = this.getSelectionFirstElement().getGameObjectType();
+                    text.value = this.flatValues_StringOneOrNothing(
+                        this.getSelection().map(c => c.getGameObjectType()));
+                });
+            }
+
+            {
+                // Super Class
+
+                this.createLabel(comp, "Super Class", "Name of the super class of the component. It is optional.");
+
+                const text = this.createText(comp);
+
+                text.addEventListener("change", e => {
+
+                    this.getEditor().runOperation(() => {
+
+                        for (const comp1 of this.getSelection()) {
+
+                            comp1.setBaseClass(text.value);
+                        }
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    text.value = this.flatValues_StringOneOrNothing(
+                        this.getSelection().map(c => c.getBaseClass()));
                 });
             }
         }
@@ -69,7 +104,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         canEditNumber(n: number): boolean {
 
-            return n === 1;
+            return n > 0;
         }
     }
 }

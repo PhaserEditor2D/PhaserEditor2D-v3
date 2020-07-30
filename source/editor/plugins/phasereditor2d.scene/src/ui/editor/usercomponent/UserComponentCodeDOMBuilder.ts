@@ -26,6 +26,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const clsDom = new code.ClassDeclCodeDOM(this._component.getName());
 
+            clsDom.setSuperClass(this._component.getBaseClass());
+
             this.buildConstructor(clsDom);
 
             this.buildFields(clsDom);
@@ -41,8 +43,18 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             ctrDeclDom.arg("gameObject", this._component.getGameObjectType());
 
+            const body = ctrDeclDom.getBody();
+
+            const superClass = this._component.getBaseClass();
+
+            if (superClass && superClass.trim() !== "") {
+
+                body.push(new code.RawCodeDOM("super(gameObject);"));
+                body.push(new code.RawCodeDOM(""));
+            }
+
             const setCompDom = new code.RawCodeDOM(`gameObject["__${clsDom.getName()}"] = this;`);
-            ctrDeclDom.getBody().push(setCompDom);
+            body.push(setCompDom);
 
             clsDom.getBody().push(ctrDeclDom);
         }
