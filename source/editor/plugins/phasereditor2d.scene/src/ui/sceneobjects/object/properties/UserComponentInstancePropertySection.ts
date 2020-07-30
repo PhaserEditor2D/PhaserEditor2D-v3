@@ -87,6 +87,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     compBtn.innerHTML = compName;
                     compBtn.addEventListener("click", e => {
 
+                        const info = finder.getUserComponentByName(compName);
+
+                        const editor = colibri.Platform.getWorkbench().openEditor(info.file) as ui.editor.usercomponent.UserComponentsEditor;
+
+                        editor.revealComponent(compName);
+
                         colibri.Platform.getWorkbench().openEditor(compInfo.file);
                     });
 
