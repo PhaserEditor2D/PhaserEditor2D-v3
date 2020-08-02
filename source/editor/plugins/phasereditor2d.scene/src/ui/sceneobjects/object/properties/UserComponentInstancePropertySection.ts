@@ -12,8 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getSectionHelpPath() {
-            // TODO
-            return "scene-editor/user-component.html";
+            return "scene-editor/user-components-instancing.html";
         }
 
         private getCommonComponents(getComponents: (c: UserComponentsEditorComponent) => string[]) {
