@@ -10,6 +10,16 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 "Compiler Settings", false, false);
         }
 
+        hasMenu() {
+
+            return true;
+        }
+
+        createMenu(menu: controls.Menu) {
+
+            ide.IDEPlugin.getInstance().createHelpMenuItem(menu, "scene-editor/user-components-compiler.html");
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);

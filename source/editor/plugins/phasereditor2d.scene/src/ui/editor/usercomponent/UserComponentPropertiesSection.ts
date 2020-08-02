@@ -13,8 +13,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         }
 
         protected getSectionHelpPath(): string {
-            // TODO: missing to write this documentation
-            return "scene-editor/";
+
+            return "scene-editor/user-components-editor-edit-component.html";
         }
 
         protected getUserProperties(): sceneobjects.UserProperties {

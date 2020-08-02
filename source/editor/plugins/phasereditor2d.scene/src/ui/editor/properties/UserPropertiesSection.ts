@@ -12,6 +12,16 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         protected abstract runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean);
 
+        hasMenu() {
+
+            return true;
+        }
+
+        createMenu(menu: controls.Menu) {
+
+            ide.IDEPlugin.getInstance().createHelpMenuItem(menu, this.getSectionHelpPath());
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);

@@ -8,6 +8,16 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             super(page, "phasereditor2d.scene.ui.editor.usercomponent.UserComponentSection", "Component", false, false);
         }
 
+        hasMenu() {
+
+            return true;
+        }
+
+        createMenu(menu: controls.Menu) {
+
+            ide.IDEPlugin.getInstance().createHelpMenuItem(menu, "scene-editor/user-components-editor-edit-component.html");
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);
