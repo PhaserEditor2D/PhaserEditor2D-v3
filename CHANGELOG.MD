@@ -4,6 +4,8 @@
 
 ### Added
 
+* Show size info of images, atlas frames and spritesheet frames in the Inspector view.
+
 ### Modified
 
 * Scene Editor: a new object is added to a container if the container is selected or a child of it.
