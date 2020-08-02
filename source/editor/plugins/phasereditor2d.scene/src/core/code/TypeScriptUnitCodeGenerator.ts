@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.core.code {
 
             //     this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()} = ${fieldDecl.getInitialValueExpr()};`);
 
-            // } else 
+            // } else
             {
 
                 this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()};`);

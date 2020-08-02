@@ -122,10 +122,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createFloatField(parent, prop);
         }
 
-        createPropertyBoolean(parent: HTMLElement, prop: IProperty<any>, lockIcon=true) {
+        createPropertyBoolean(parent: HTMLElement, prop: IProperty<any>, lockIcon = true) {
 
             if (lockIcon) {
-                
+
                 this.createLock(parent, prop);
             }
 
