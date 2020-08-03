@@ -8,7 +8,7 @@ namespace phasereditor2d.pack.ui.properties {
             super(page, "phasereditor2d.pack.ui.properties.AtlasFrameInfoSection", "Frame Info", false);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);
 
