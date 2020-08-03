@@ -123,19 +123,11 @@ namespace phasereditor2d.scene {
                 new ide.commands.CommandExtension(ui.editor.usercomponent.UserComponentsEditor.registerCommands));
 
 
-            // main menu
+            // compile project
 
-            reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN,
-                {
-                    command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
-                }
-            ));
-
-            reg.addExtension(new controls.MenuExtension(files.ui.views.FilesView.MENU_ID,
-                {
-                    command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
-                }
-            ));
+            reg.addExtension(
+                new ui.editor.usercomponent.UserComponentCompileAllExtension(),
+                new core.code.SceneCompileAllExtension());
 
             // editors
 

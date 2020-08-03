@@ -100,6 +100,30 @@ namespace phasereditor2d.ide {
             }
         }
 
+        async compileProject() {
+
+            const exts = colibri.Platform.getExtensions<core.CompileProjectExtension>(core.CompileProjectExtension.POINT_ID);
+
+            const dlg = new controls.dialogs.ProgressDialog();
+
+            dlg.create();
+            dlg.setTitle("Compiling Project");
+
+            const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
+
+            for (const ext of exts) {
+
+                monitor.addTotal(ext.getTotal());
+            }
+
+            for (const ext of exts) {
+
+                await ext.preload(monitor);
+            }
+
+            dlg.close();
+        }
+
         async requestServerMode() {
 
             const data = await colibri.core.io.apiRequest("GetServerMode");
