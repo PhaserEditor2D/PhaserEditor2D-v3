@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         properties: UserProperty[];
     }
 
-    export class UserPropertyComponent extends Component<ISceneObject> {
+    export class PrefabUserPropertyComponent extends Component<ISceneObject> {
 
         private _data: any;
 
@@ -16,11 +16,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(obj, []);
 
             this._data = {};
-        }
-
-        writeJSON(ser: core.json.Serializer) {
-
-            super.writeJSON(ser);
         }
 
         setPropertyValue(prop: UserProperty, value: any) {
@@ -45,8 +40,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const editorSupport = this.getObject().getEditorSupport();
 
             if (editorSupport.isPrefabInstance()) {
-
-                // TODO: missing get properties of nested prefabs
 
                 const prefabFile = this.getObject().getEditorSupport().getPrefabFile();
 
@@ -83,7 +76,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            const userProps = new UserProperties();
+            const userProps = new PrefabUserProperties();
 
             userProps.readJSON(sceneData.prefabProperties || []);
 
@@ -108,11 +101,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
+            const mark = args.lazyStatements.length;
+
+            const temp = args.statements;
+            args.statements = args.lazyStatements;
+
             for (const prop of this.getProperties()) {
 
-                const userProp = prop.getUserProperty();
+                const userProp = (prop as PrefabUserPropertyWrapper).getUserProperty();
 
                 userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
+            }
+
+            args.statements = temp;
+
+            if (args.lazyStatements.length > mark) {
+
+                args.lazyStatements.splice(mark, 0,
+                    new core.code.RawCodeDOM(""),
+                    new core.code.RawCodeDOM(`// ${args.objectVarName} (prefab fields)`));
             }
         }
     }

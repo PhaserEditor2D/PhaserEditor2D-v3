@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             super(page, "phasereditor2d.scene.ui.editor.properties.SnappingSection", "Snapping");
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);
 

@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/lists-properties.html";
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);
 

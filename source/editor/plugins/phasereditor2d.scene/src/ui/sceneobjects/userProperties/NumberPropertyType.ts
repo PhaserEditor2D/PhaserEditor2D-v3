@@ -10,9 +10,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super("number", 0);
         }
 
-        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void {
+        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 
-            section.createPropertyFloatRow(parent, userProp.getComponentProperty());
+            section.createPropertyFloatRow(parent, userProp.getComponentProperty(), lockIcon);
         }
 
         getName() {
@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertyCodeDOM(
-            comp: UserPropertyComponent, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
+            comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
 
             comp.buildSetObjectPropertyCodeDOM_FloatProperty(args, userProp.getComponentProperty());
         }

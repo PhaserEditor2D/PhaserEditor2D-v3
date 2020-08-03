@@ -11,6 +11,7 @@ namespace colibri.ui.controls.viewers {
         private _contentProvider: IContentProvider;
         private _cellRendererProvider: ICellRendererProvider;
         private _labelProvider: ILabelProvider = null;
+        private _styledLabelProvider: IStyledLabelProvider;
         private _input: any;
         private _cellSize: number;
         protected _expandedObjects: Set<any>;
@@ -113,6 +114,7 @@ namespace colibri.ui.controls.viewers {
                 }
 
                 Controls.setDragEventImage(e, (ctx, w, h) => {
+
                     for (const obj of dragObjects) {
                         const renderer = this.getCellRendererProvider().getCellRenderer(obj);
                         renderer.renderCell(new RenderCellArgs(ctx, 0, 0, w, h, obj, this, true));
@@ -126,32 +128,49 @@ namespace colibri.ui.controls.viewers {
                 Controls.setApplicationDragData(dragObjects);
 
             } else {
+
                 e.preventDefault();
             }
         }
 
         getLabelProvider() {
+
             return this._labelProvider;
         }
 
         setLabelProvider(labelProvider: ILabelProvider) {
+
             this._labelProvider = labelProvider;
         }
 
+        getStyledLabelProvider() {
+
+            return this._styledLabelProvider;
+        }
+
+        setStyledLabelProvider(styledLabelProvider: IStyledLabelProvider) {
+
+            this._styledLabelProvider = styledLabelProvider;
+        }
+
         setFilterText(filterText: string) {
+
             this._filterText = filterText.toLowerCase();
         }
 
         getFilterText() {
+
             return this._filterText;
         }
 
         private prepareFiltering() {
+
             this._filterIncludeSet = new Set();
             this.buildFilterIncludeMap();
         }
 
         isFilterIncluded(obj: any) {
+
             return this._filterIncludeSet.has(obj);
         }
 
@@ -204,6 +223,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         getSelectionFirstElement() {
+
             const sel = this.getSelection();
 
             if (sel.length > 0) {
@@ -259,6 +279,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         private onDoubleClick(e: MouseEvent) {
+
             const item = this.getPaintItemAt(e);
 
             if (item) {
@@ -365,18 +386,22 @@ namespace colibri.ui.controls.viewers {
         }
 
         isExpanded(obj: any) {
+
             return this._expandedObjects.has(obj);
         }
 
         getExpandedObjects() {
+
             return this._expandedObjects;
         }
 
         isCollapsed(obj: any) {
+
             return !this.isExpanded(obj);
         }
 
         collapseAll() {
+
             this._expandedObjects = new Set();
         }
 
@@ -395,14 +420,19 @@ namespace colibri.ui.controls.viewers {
         }
 
         isSelected(obj: any) {
+
             return this._selectedObjects.has(obj);
         }
 
         protected paintTreeHandler(x: number, y: number, collapsed: boolean): void {
+
             if (collapsed) {
+
                 this._context.strokeStyle = "#000";
                 this._context.strokeRect(x, y, ICON_SIZE, ICON_SIZE);
+
             } else {
+
                 this._context.fillStyle = "#000";
                 this._context.fillRect(x, y, ICON_SIZE, ICON_SIZE);
             }
@@ -417,6 +447,7 @@ namespace colibri.ui.controls.viewers {
             const result = await this.preload();
 
             if (result === PreloadResult.RESOURCES_LOADED) {
+
                 this.repaint2();
             }
 
@@ -424,13 +455,17 @@ namespace colibri.ui.controls.viewers {
         }
 
         updateScrollPane() {
+
             const pane = this.getContainer().getContainer();
+
             if (pane instanceof ScrollPane) {
+
                 pane.updateScroll(this._contentHeight);
             }
         }
 
         private repaint2(): void {
+
             this._paintItems = [];
 
             const canvas = this.getCanvas();
@@ -438,8 +473,11 @@ namespace colibri.ui.controls.viewers {
             this._context.clearRect(0, 0, canvas.width, canvas.height);
 
             if (this._cellRendererProvider && this._contentProvider && this._input !== null) {
+
                 this.paint();
+
             } else {
+
                 this._contentHeight = 0;
             }
         }
@@ -447,24 +485,30 @@ namespace colibri.ui.controls.viewers {
         protected abstract preload(): Promise<PreloadResult>;
 
         paintItemBackground(obj: any, x: number, y: number, w: number, h: number, radius: number = 0): void {
+
             let fillStyle = null;
 
             if (this.isSelected(obj)) {
+
                 fillStyle = Controls.getTheme().viewerSelectionBackground;
             }
 
             if (fillStyle != null) {
+
                 this._context.save();
 
                 this._context.fillStyle = fillStyle;
                 this._context.strokeStyle = fillStyle;
 
                 if (radius > 0) {
+
                     this._context.lineJoin = "round";
                     this._context.lineWidth = radius;
                     this._context.strokeRect(x + (radius / 2), y + (radius / 2), w - radius, h - radius);
                     this._context.fillRect(x + (radius / 2), y + (radius / 2), w - radius, h - radius);
+
                 } else {
+
                     this._context.fillRect(x, y, w, h);
                 }
 
@@ -473,6 +517,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         setScrollY(scrollY: number) {
+
             const b = this.getBounds();
 
             scrollY = Math.max(-this._contentHeight + b.height, scrollY);
@@ -484,16 +529,20 @@ namespace colibri.ui.controls.viewers {
         }
 
         layout(): void {
+
             const b = this.getBounds();
 
             if (this.isHandlePosition()) {
+
                 ui.controls.setElementBounds(this.getElement(), {
                     x: b.x,
                     y: b.y,
                     width: Math.floor(b.width),
                     height: Math.floor(b.height)
                 });
+
             } else {
+
                 ui.controls.setElementBounds(this.getElement(), {
                     width: Math.floor(b.width),
                     height: Math.floor(b.height)
@@ -513,42 +562,52 @@ namespace colibri.ui.controls.viewers {
         protected abstract paint(): void;
 
         getCanvas(): HTMLCanvasElement {
+
             return this.getElement() as HTMLCanvasElement;
         }
 
         getContext() {
+
             return this._context;
         }
 
         getCellSize() {
+
             return this._cellSize;
         }
 
         setCellSize(cellSize: number): void {
+
             this._cellSize = Math.max(ROW_HEIGHT, cellSize);
         }
 
         getContentProvider() {
+
             return this._contentProvider;
         }
 
         setContentProvider(contentProvider: IContentProvider): void {
+
             this._contentProvider = contentProvider;
         }
 
         getCellRendererProvider() {
+
             return this._cellRendererProvider;
         }
 
         setCellRendererProvider(cellRendererProvider: ICellRendererProvider): void {
+
             this._cellRendererProvider = cellRendererProvider;
         }
 
         getInput() {
+
             return this._input;
         }
 
         setInput(input: any): void {
+
             this._input = input;
         }
 
@@ -563,6 +622,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         getState(): ViewerState {
+
             return {
                 filterText: this._filterText,
                 expandedObjects: this._expandedObjects,
@@ -587,6 +647,7 @@ namespace colibri.ui.controls.viewers {
     }
 
     export declare type ViewerState = {
+
         expandedObjects: Set<any>,
         selectedObjects: Set<any>,
         filterText: string,

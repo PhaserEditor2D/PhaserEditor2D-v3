@@ -19,7 +19,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return n > 0;
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);
 

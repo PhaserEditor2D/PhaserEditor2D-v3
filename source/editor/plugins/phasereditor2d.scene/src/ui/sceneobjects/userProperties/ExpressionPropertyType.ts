@@ -79,14 +79,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return [decl];
         }
 
-        buildSetObjectPropertyCodeDOM(comp: UserPropertyComponent, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
+        buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
 
             comp.buildSetObjectPropertyCodeDOM_StringVerbatimProperty(args, userProp.getComponentProperty());
         }
 
-        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void {
+        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 
-            section.createPropertyStringRow(parent, userProp.getComponentProperty());
+            section.createPropertyStringRow(parent, userProp.getComponentProperty(), lockIcon);
         }
     }
 }

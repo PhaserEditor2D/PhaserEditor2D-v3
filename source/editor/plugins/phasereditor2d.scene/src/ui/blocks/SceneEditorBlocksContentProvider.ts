@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            return finder.getFiles()
+            return finder.getSceneFiles()
 
                 .filter(file => SceneMaker.acceptDropFile(file, this._editor.getInput()));
         }

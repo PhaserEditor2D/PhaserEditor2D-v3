@@ -174,6 +174,7 @@ namespace colibri.core.io {
             const parent = this.getParent();
 
             if (parent) {
+
                 return parent.getFile(name);
             }
 

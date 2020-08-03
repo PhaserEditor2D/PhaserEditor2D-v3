@@ -2,7 +2,7 @@ namespace colibri.ui.ide.properties {
 
     export abstract class BaseImagePreviewSection<T> extends controls.properties.PropertySection<T> {
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             parent.classList.add("ImagePreviewFormArea");
 

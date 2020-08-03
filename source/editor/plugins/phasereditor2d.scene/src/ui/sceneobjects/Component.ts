@@ -5,7 +5,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import write = colibri.core.json.write;
 
     export interface ISetObjectPropertiesCodeDOMArgs {
-        result: core.code.CodeDOM[];
+        statements: core.code.CodeDOM[];
+        lazyStatements: core.code.CodeDOM[];
         objectVarName: string;
         prefabSerializer: core.json.Serializer;
     }
@@ -66,9 +67,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertyCodeDOM_String(
-            fieldName: string, value: string, defValue: string, args: ISetObjectPropertiesCodeDOMArgs, verbatim = false): void {
+            fieldName: string, fieldCodeName: string, value: string, defValue: string, args: ISetObjectPropertiesCodeDOMArgs, verbatim = false): void {
 
-            const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
+            const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
             let add = false;
 
             if (args.prefabSerializer) {
@@ -91,7 +92,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     dom.valueLiteral(value);
                 }
 
-                args.result.push(dom);
+                args.statements.push(dom);
             }
         }
 
@@ -103,6 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.buildSetObjectPropertyCodeDOM_String(
                     prop.name,
+                    prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args
@@ -118,6 +120,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.buildSetObjectPropertyCodeDOM_String(
                     prop.name,
+                    prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args,
@@ -134,6 +137,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.buildSetObjectPropertyCodeDOM_Boolean(
                     prop.name,
+                    prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args
@@ -142,9 +146,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertyCodeDOM_Boolean(
-            fieldName: string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void {
+            fieldName: string, fieldCodeName: string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void {
 
-            const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
+            const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
             let add = false;
 
             if (args.prefabSerializer) {
@@ -159,7 +163,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (add) {
 
                 dom.valueBool(value);
-                args.result.push(dom);
+                args.statements.push(dom);
             }
         }
 
@@ -171,6 +175,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.buildSetObjectPropertyCodeDOM_Float(
                     prop.name,
+                    prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
                     args
@@ -179,14 +184,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertyCodeDOM_Float(
-            fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void {
+            fieldName: string, fieldCodeName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void {
 
-            const dom = new code.AssignPropertyCodeDOM(fieldName, args.objectVarName);
+            const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
             let add = false;
 
             if (args.prefabSerializer) {
 
-                add = value !== args.prefabSerializer.read(fieldName, defValue);
+                const prefabValue = args.prefabSerializer.read(fieldName, defValue);
+
+                add = value !== prefabValue;
 
             } else {
 
@@ -196,7 +203,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (add) {
 
                 dom.valueFloat(value);
-                args.result.push(dom);
+                args.statements.push(dom);
             }
         }
 

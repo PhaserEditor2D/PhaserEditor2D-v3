@@ -5,7 +5,7 @@ namespace colibri.ui.ide.properties {
 
     export abstract class BaseManyImagePreviewSection<T> extends controls.properties.PropertySection<T> {
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
             parent.classList.add("ManyImagePreviewFormArea");
 
             const viewer = new controls.viewers.TreeViewer();

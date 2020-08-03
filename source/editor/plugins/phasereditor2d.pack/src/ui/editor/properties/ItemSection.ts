@@ -15,7 +15,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return this.getSelectionFirstElement().getType();
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);
 

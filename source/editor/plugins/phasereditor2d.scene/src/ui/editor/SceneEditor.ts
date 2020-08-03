@@ -578,6 +578,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getPropertyProvider() {
+
             return this._propertyProvider;
         }
 

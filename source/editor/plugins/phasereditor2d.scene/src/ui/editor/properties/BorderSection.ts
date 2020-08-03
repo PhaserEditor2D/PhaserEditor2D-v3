@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             return "scene-editor/border-properties.html";
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);
 

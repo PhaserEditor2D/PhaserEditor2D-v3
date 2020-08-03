@@ -1,8 +1,5 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import write = colibri.core.json.write;
-    import read = colibri.core.json.read;
-
     export interface IUserPropertyInfo {
         name: string;
         defValue: any;
@@ -11,28 +8,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         type: UserPropertyType<any>;
     }
 
+    export declare type TComponentPropertyBuilder = (userProp: UserProperty) => IProperty<any>;
+
     export class UserProperty {
 
         private _info: IUserPropertyInfo;
-        private _componentProperty: UserPropertyWrapper;
+        private _componentProperty: IProperty<any>;
+        private _componentPropertyBuilder: TComponentPropertyBuilder;
 
-        constructor(info?: IUserPropertyInfo) {
+        constructor(componentPropertyBuilder: TComponentPropertyBuilder, info?: IUserPropertyInfo) {
 
+            this._componentPropertyBuilder = componentPropertyBuilder;
             this._info = info;
         }
 
-        getComponentProperty(): UserPropertyWrapper {
+        getComponentProperty(): IProperty<any> {
 
             if (!this._componentProperty) {
 
-                if (this.getType() instanceof OptionPropertyType) {
-
-                    this._componentProperty = new OptionUserPropertyWrapper(this);
-
-                } else {
-
-                    this._componentProperty = new UserPropertyWrapper(this);
-                }
+                this._componentProperty = this._componentPropertyBuilder(this);
             }
 
             return this._componentProperty;

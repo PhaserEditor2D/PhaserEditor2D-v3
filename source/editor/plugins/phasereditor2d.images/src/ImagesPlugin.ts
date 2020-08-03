@@ -2,7 +2,6 @@
 namespace phasereditor2d.images {
 
     import ide = colibri.ui.ide;
-    import controls = colibri.ui.controls;
 
     export class ImagesPlugin extends colibri.Plugin {
 

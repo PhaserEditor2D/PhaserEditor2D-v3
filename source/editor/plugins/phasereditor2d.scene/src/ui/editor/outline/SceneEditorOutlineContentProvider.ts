@@ -8,6 +8,13 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             const editor: SceneEditor = input;
 
+            const scene = editor.getScene();
+
+            if (!scene) {
+
+                return [];
+            }
+
             const displayList = editor.getScene().sys.displayList;
 
             const roots = [];

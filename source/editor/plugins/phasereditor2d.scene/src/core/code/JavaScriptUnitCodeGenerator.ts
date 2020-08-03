@@ -83,7 +83,14 @@ namespace phasereditor2d.scene.core.code {
 
             } else if (memberDecl instanceof FieldDeclCodeDOM) {
 
+                const o = this.getOffset();
+
                 this.generateFieldDecl(memberDecl);
+
+                if (o !== this.getOffset()) {
+
+                    this.line();
+                }
             }
         }
 
@@ -107,6 +114,16 @@ namespace phasereditor2d.scene.core.code {
 
         private generateMethodDecl(classDecl: ClassDeclCodeDOM, methodDecl: MethodDeclCodeDOM, isFunction: boolean) {
 
+            if (methodDecl.getReturnType()) {
+
+                this.generateMethodReturnTypeJSDoc(methodDecl);
+            }
+
+            for (const modifier of methodDecl.getModifiers()) {
+
+                this.append(modifier + " ");
+            }
+
             if (isFunction) {
                 this.append("function ");
             }
@@ -115,7 +132,9 @@ namespace phasereditor2d.scene.core.code {
 
             this.generateMethodDeclArgs(methodDecl);
 
-            this.openIndent(") {");
+            const methodReturnDeclText = this.getMethodReturnDeclText(methodDecl);
+
+            this.openIndent(")" + methodReturnDeclText + "{");
 
             const body = CodeDOM.removeBlankLines(methodDecl.getBody());
 
@@ -141,23 +160,54 @@ namespace phasereditor2d.scene.core.code {
 
                     this.generateInstr(instr);
                 }
+            }
 
-                if (methodDecl.getName() === "constructor") {
+            if (methodDecl.getName() === "constructor") {
 
-                    this.generateFieldInitInConstructor(classDecl);
-                }
+                this.generateFieldInitInConstructor(classDecl, methodDecl);
+
+                this.line();
+                this.section("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t");
             }
 
             this.closeIndent("}");
         }
 
-        protected generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM) {
+        generateMethodReturnTypeJSDoc(methodDecl: MethodDeclCodeDOM) {
+
+            this.line(`/** @returns {${methodDecl.getReturnType()}} */`);
+        }
+
+        getMethodReturnDeclText(methodDecl: MethodDeclCodeDOM) {
+
+            return " ";
+        }
+
+        protected generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM, ctrDecl: MethodDeclCodeDOM) {
 
             const fields = classDecl.getBody()
 
                 .filter(obj => obj instanceof FieldDeclCodeDOM)
 
-                .map(obj => obj as FieldDeclCodeDOM);
+                .map(obj => obj as FieldDeclCodeDOM)
+
+                .filter(field => {
+
+                    // skip fields already initialized
+
+                    for (const instr of ctrDecl.getBody()) {
+
+                        if (instr instanceof AssignPropertyCodeDOM) {
+
+                            if (instr.getPropertyName() === field.getName()) {
+
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                });
 
             if (fields.length > 0) {
 

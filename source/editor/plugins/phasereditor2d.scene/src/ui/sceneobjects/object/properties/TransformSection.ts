@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.createMenu(menu);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
 

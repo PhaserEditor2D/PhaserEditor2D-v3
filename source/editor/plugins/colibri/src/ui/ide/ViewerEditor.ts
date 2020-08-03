@@ -19,7 +19,7 @@ namespace colibri.ui.ide {
 
             this.addClass("ViewerPart");
 
-            this._filteredViewer = new controls.viewers.FilteredViewer(this._viewer, true);
+            this._filteredViewer = this.createFilteredViewer(this._viewer);
             this.add(this._filteredViewer);
 
             this._viewer.eventSelectionChanged.addListener(sel => {
@@ -28,6 +28,11 @@ namespace colibri.ui.ide {
             });
 
             this._viewer.getElement().addEventListener("contextmenu", e => this.onMenu(e));
+        }
+
+        protected createFilteredViewer(viewer: controls.viewers.TreeViewer) {
+
+            return new controls.viewers.FilteredViewer(viewer, true);
         }
 
         private onMenu(e: MouseEvent) {

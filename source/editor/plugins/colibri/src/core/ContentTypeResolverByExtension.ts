@@ -1,8 +1,8 @@
-namespace phasereditor2d.webContentTypes.core {
+namespace colibri.core {
 
     import io = colibri.core.io;
 
-    export class ExtensionContentTypeResolver extends colibri.core.ContentTypeResolver {
+    export class ContentTypeResolverByExtension extends colibri.core.ContentTypeResolver {
 
         private _map: Map<string, string>;
 
@@ -28,5 +28,4 @@ namespace phasereditor2d.webContentTypes.core {
         }
 
     }
-
 }

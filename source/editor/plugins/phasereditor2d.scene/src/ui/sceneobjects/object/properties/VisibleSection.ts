@@ -11,12 +11,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/visible-property.html";
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
             comp.style.gridTemplateColumns = "auto auto 1fr";
 
-            this.createBooleanProperty(comp, VisibleComponent.visible);
+            this.createPropertyBoolean(comp, VisibleComponent.visible);
         }
 
         canEdit(obj: any, n: number): boolean {

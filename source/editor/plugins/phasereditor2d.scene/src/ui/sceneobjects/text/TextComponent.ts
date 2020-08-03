@@ -356,7 +356,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     dom.arg(literal);
 
-                    args.result.push(dom);
+                    args.statements.push(dom);
                 }
             }
 
@@ -408,7 +408,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     dom.arg(literal);
 
-                    args.result.push(dom);
+                    args.statements.push(dom);
                 }
             }
         }

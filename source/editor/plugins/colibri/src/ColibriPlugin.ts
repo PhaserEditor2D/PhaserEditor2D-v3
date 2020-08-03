@@ -8,6 +8,7 @@ namespace colibri {
     export const ICON_FOLDER = "folder";
     export const ICON_PLUS = "plus";
     export const ICON_MINUS = "minus";
+    export const ICON_DELETE = "delete";
     export const ICON_ZOOM_RESET = "zoom-reset";
     export const ICON_MENU = "menu";
     export const ICON_SMALL_MENU = "small-menu";
@@ -43,6 +44,7 @@ namespace colibri {
                     ICON_FOLDER,
                     ICON_PLUS,
                     ICON_MINUS,
+                    ICON_DELETE,
                     ICON_ZOOM_RESET,
                     ICON_MENU,
                     ICON_SMALL_MENU,

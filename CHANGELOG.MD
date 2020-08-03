@@ -2,13 +2,22 @@
 
 ## Version 3.3.1-next
 
-### Added
+## Added
+
+* User Component Editor.
+* Scene Editor: in Prefab Instance section shows a menu next to each prefab, to select all prefab instances.
+* Scene Editor: adds user property of boolean type.
+
+## Removed
+
+* **User Init Method** parameter and **Compiler Prefab Settings** section. Now you can insert code directly in the constructor of the prefab.
 
 * Show size info of images, atlas frames and spritesheet frames in the Inspector view.
 * Scene Editor: the Texture section shows the image size.
 
 ### Modified
 
+* Scene Editor: Object Lists are created first as temporal variables, and, if the scope is CLASS or PUBLIC, a field is generated.
 * Scene Editor: a new object is added to a container if the container is selected or a child of it.
 
 ### Fixed

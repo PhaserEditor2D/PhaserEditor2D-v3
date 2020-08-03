@@ -1,0 +1,62 @@
+namespace phasereditor2d.scene.ui.editor.usercomponent {
+
+    import io = colibri.core.io;
+    import code = core.code;
+
+    export class UserComponentCompiler {
+
+        private _componentsFile: io.FilePath;
+        private _model: UserComponentsModel;
+
+        constructor(componentsFile: io.FilePath, model: UserComponentsModel) {
+
+            this._componentsFile = componentsFile;
+            this._model = model;
+        }
+
+        async compile() {
+
+            for (const userComp of this._model.getComponents()) {
+
+                const builder = new UserComponentCodeDOMBuilder(userComp);
+                const unitDom = builder.build();
+                const generator = this.isJavaScriptOutput() ?
+                    new code.JavaScriptUnitCodeGenerator(unitDom) :
+                    new code.TypeScriptUnitCodeGenerator(unitDom);
+
+                let replace = "";
+
+                const outFile = this.getOutputFile(userComp.getName());
+
+                if (outFile) {
+
+                    replace = await colibri.ui.ide.FileUtils.preloadAndGetFileString(outFile);
+                }
+
+                const output = generator.generate(replace);
+
+                const folder = this._componentsFile.getParent();
+                const fileName = this.getOutputFileName(userComp.getName());
+
+                await colibri.ui.ide.FileUtils.createFile_async(folder, fileName, output);
+            }
+        }
+
+        isJavaScriptOutput() {
+
+            return this._model.getOutputLang() === core.json.SourceLang.JAVA_SCRIPT;
+        }
+
+        getOutputFile(userCompName: string) {
+
+            const file = this._componentsFile.getSibling(this.getOutputFileName(userCompName));
+
+            return file;
+        }
+
+        getOutputFileName(userCompName: string) {
+
+            return userCompName + "." + (this.isJavaScriptOutput() ? "js" : "ts")
+        }
+    }
+}
