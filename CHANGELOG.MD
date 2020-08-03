@@ -5,6 +5,7 @@
 ### Added
 
 * Show size info of images, atlas frames and spritesheet frames in the Inspector view.
+* Scene Editor: the Texture section shows the image size.
 
 ### Modified
 
