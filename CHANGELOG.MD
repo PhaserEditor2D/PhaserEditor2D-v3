@@ -8,6 +8,7 @@
 * Scene Editor: in Prefab Instance section shows a menu next to each prefab, to select all prefab instances.
 * Scene Editor: adds user property of boolean type.
 * Scene Editor: added a Compile Project command. It compiles all compilable files of the project (scenes, components).
+* Volcano project template.
 
 ## Removed
 
@@ -15,6 +16,7 @@
 * Show size info of images, atlas frames and spritesheet frames in the Inspector view.
 * Scene Editor: the Texture section shows the image size.
 * Scene Editor: removed the Compile Scenes command. The Compile Project command compiles all files including the scenes.
+* Flying Dragon project template.
 
 ### Modified
 
