@@ -4,6 +4,7 @@ namespace phasereditor2d.ide.ui.actions {
     export const CMD_LOCATE_FILE = "phasereditor2d.ide.ui.actions.LocateFile";
     export const CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
     export const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
+    export const CMD_COMPILE_PROJECT = "phasereditor2d.ide.ui.actions.CompileProject";
     export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
     export const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
     export const CMD_QUICK_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.QuickPlayProject";
@@ -120,6 +121,27 @@ namespace phasereditor2d.ide.ui.actions {
                     control: true,
                     alt: true,
                     key: "R"
+                }
+            });
+
+            // compile project
+
+            manager.add({
+                command: {
+                    id: CMD_COMPILE_PROJECT,
+                    name: "Compile Project",
+                    tooltip: "Compile all files.",
+                    category: CAT_PROJECT
+                },
+                handler: {
+                    testFunc: isNotWelcomeWindowScope,
+                    executeFunc:
+                        args => IDEPlugin.getInstance().compileProject()
+                },
+                keys: {
+                    control: true,
+                    alt: true,
+                    key: "B"
                 }
             });
 

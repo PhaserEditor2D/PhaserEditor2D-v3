@@ -11,7 +11,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
-    export const CMD_COMPILE_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.CompileAllSceneFiles";
     export const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
     export const CMD_SET_ORIGIN_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.SetOriginSceneObject";
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
@@ -801,27 +800,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 handler: {
                     testFunc: args => args.activeEditor instanceof SceneEditor,
                     executeFunc: args => (args.activeEditor as SceneEditor).compile(),
-                }
-            });
-
-            // compile all scene files
-
-            manager.add({
-                command: {
-                    id: CMD_COMPILE_ALL_SCENE_FILES,
-                    icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
-                    name: "Compile Scenes",
-                    tooltip: "Compile all the Scene files of the project.",
-                    category: CAT_SCENE_EDITOR
-                },
-                handler: {
-                    testFunc: args => args.activeWindow instanceof ide.ui.DesignWindow,
-                    executeFunc: args => ScenePlugin.getInstance().compileAll(),
-                },
-                keys: {
-                    control: true,
-                    alt: true,
-                    key: "B"
                 }
             });
         }
