@@ -39,7 +39,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(Phaser.Utils.String.UUID());
 
             this.addComponent(new VariableComponent(this._object));
-            this.addComponent(new UserPropertyComponent(this._object));
+            this.addComponent(new PrefabUserPropertyComponent(this._object));
+            this.addComponent(new UserComponentsEditorComponent(this._object));
 
             this.setInteractive();
 
@@ -99,10 +100,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         isUnlockedProperty(property: IProperty<any>) {
 
             if (property === TransformComponent.x || property === TransformComponent.y) {
+
                 return true;
             }
 
             if (this.isPrefabInstance()) {
+
+                if (property instanceof UserComponentPropertyWrapper) {
+
+                    const userComp = property.getUserComponent();
+
+                    const editorUserComp = this.getComponent(UserComponentsEditorComponent) as UserComponentsEditorComponent;
+
+                    if (editorUserComp.hasLocalUserComponent(userComp.getName())) {
+
+                        return true;
+                    }
+                }
 
                 return this._unlockedProperties.has(property.name);
             }
@@ -347,6 +361,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return list;
+        }
+
+        isPrefabInstanceElement() {
+
+            return this.isPrefabInstance() && this.getOwnerPrefabInstance() !== this._object;
         }
 
         getOwnerPrefabInstance(): ISceneObject {

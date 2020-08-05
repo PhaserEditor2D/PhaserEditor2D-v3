@@ -17,7 +17,55 @@ namespace phasereditor2d.scene.ui {
             this._packFinder = new pack.core.PackFinder();
         }
 
-        afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
+        afterDropObjects(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
+
+            let container: sceneobjects.Container;
+
+            for (const sprite of this._scene.getEditor().getSelectedGameObjects()) {
+
+                let sprite2 = sprite;
+
+                if (sprite2.getEditorSupport().isPrefabInstance()) {
+
+                    sprite2 = sprite2.getEditorSupport().getOwnerPrefabInstance().parentContainer as sceneobjects.Container;
+                }
+
+                if (sprite2) {
+
+                    if (sprite2 instanceof sceneobjects.Container) {
+
+                        container = sprite2;
+
+                    } else if (sprite2.parentContainer) {
+
+                        container = sprite2.parentContainer as sceneobjects.Container;
+                    }
+                }
+            }
+
+            if (container) {
+
+                for (const obj of sprites) {
+
+                    const sprite = obj as sceneobjects.Sprite;
+                    const p = new Phaser.Math.Vector2();
+                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+
+                    this._scene.sys.displayList.remove(sprite);
+                    container.add(sprite);
+
+                    container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+                    sprite.x = p.x;
+                    sprite.y = p.y;
+                }
+
+            } else {
+
+                this.afterDropObjectsInPrefabScene(prefabObj, sprites);
+            }
+        }
+
+        private afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
 
             if (!prefabObj) {
                 return;

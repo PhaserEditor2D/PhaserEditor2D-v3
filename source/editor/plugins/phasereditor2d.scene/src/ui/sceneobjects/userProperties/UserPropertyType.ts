@@ -48,10 +48,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         abstract buildDeclarePropertyCodeDOM(prop: UserProperty, value: TValue): code.MemberDeclCodeDOM[];
 
         abstract buildSetObjectPropertyCodeDOM(
-            comp: UserPropertyComponent, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void;
+            comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void;
 
         abstract createInspectorPropertyEditor(
-            section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty): void;
+            section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void;
 
         protected buildStringFieldCode(prop: UserProperty, value: string) {
 
@@ -65,6 +65,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         protected buildNumberFieldCode(prop: UserProperty, value: number) {
 
             const decl = new code.FieldDeclCodeDOM(prop.getInfo().name, "number", true);
+
+            decl.setInitialValueExpr(value.toString());
+
+            return decl;
+        }
+
+        protected buildBooleanFieldCode(prop: UserProperty, value: boolean) {
+
+            const decl = new code.FieldDeclCodeDOM(prop.getInfo().name, "boolean", true);
 
             decl.setInitialValueExpr(value.toString());
 

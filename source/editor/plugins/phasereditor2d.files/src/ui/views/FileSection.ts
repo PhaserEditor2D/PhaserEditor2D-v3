@@ -9,7 +9,7 @@ namespace phasereditor2d.files.ui.views {
             super(page, "files.FileSection", "File");
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
             const comp = this.createGridElement(parent, 2);
             {
                 // Name

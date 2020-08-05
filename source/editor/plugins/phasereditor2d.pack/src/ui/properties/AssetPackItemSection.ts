@@ -2,13 +2,13 @@ namespace phasereditor2d.pack.ui.properties {
 
     import controls = colibri.ui.controls;
 
-    export class AssetPackItemSection extends controls.properties.PropertySection<core.AssetPackItem> {
+    export class AssetPackItemSection extends controls.properties.PropertySection<core.AssetPackItem | core.AssetPackImageFrame> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "AssetPackItemPropertySection", "File Key", false);
+            super(page, "phasereditor2d.pack.ui.properties.AssetPackItemPropertySection", "File Key", false);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
             const comp = this.createGridElement(parent, 3);
             comp.style.gridTemplateColumns = "auto 1fr auto";
 
@@ -21,12 +21,12 @@ namespace phasereditor2d.pack.ui.properties {
 
                 this.addUpdater(() => {
 
-                    text.value = this.getSelectionFirstElement().getKey();
+                    text.value = this.getPackItem().getKey();
                 });
 
                 this.createButton(comp, "Open", () => {
 
-                    const item = this.getSelectionFirstElement();
+                    const item = this.getPackItem();
 
                     const file = item.getPack().getFile();
 
@@ -37,11 +37,25 @@ namespace phasereditor2d.pack.ui.properties {
             }
         }
 
+        private getPackItem() {
+
+            const obj = this.getSelectionFirstElement();
+
+            if (obj instanceof core.AssetPackImageFrame) {
+
+                return obj.getPackItem();
+            }
+
+            return obj;
+        }
+
         canEdit(obj: any): boolean {
-            return obj instanceof core.AssetPackItem;
+
+            return obj instanceof core.AssetPackItem || obj instanceof core.AssetPackImageFrame;
         }
 
         canEditNumber(n: number): boolean {
+
             return n === 1;
         }
 

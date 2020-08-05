@@ -242,8 +242,8 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 .PropertyTitleArea {
     display: inline-grid;
     grid-template-columns: 20px 1fr auto;
-    padding: 5px;
-    border-radius: 3px 3px 0 0;
+    padding: 5px;    
+    border-radius: 3px;
 }
 
 .PropertyTitleArea label {
@@ -276,6 +276,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     align-items: center;
     background: rgba(0, 0, 0, 0.1);
     padding: 3px;
+    border-radius: 3px;
 }
 
 .PropertySubTitleLabel {

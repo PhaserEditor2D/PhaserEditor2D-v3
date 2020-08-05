@@ -19,6 +19,7 @@ namespace colibri.ui.controls {
         }
 
         protected async paint() {
+
             if (this._image) {
 
                 this.paint2();
@@ -26,19 +27,23 @@ namespace colibri.ui.controls {
                 const result = await this._image.preload();
 
                 if (result === PreloadResult.RESOURCES_LOADED) {
+
                     this.paint2();
                 }
 
             } else {
+
                 this.clear();
             }
         }
 
         private paint2() {
+
             this.ensureCanvasSize();
+
             this.clear();
+
             this._image.paint(this._context, 0, 0, this._canvas.width, this._canvas.height, true);
         }
-
     }
 }

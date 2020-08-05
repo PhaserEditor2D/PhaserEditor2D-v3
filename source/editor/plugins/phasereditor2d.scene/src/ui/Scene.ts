@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui {
         private _editor: editor.SceneEditor;
         private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
-        private _prefabProperties: sceneobjects.UserProperties;
+        private _prefabProperties: sceneobjects.PrefabUserProperties;
         private _objectLists: sceneobjects.ObjectLists;
         private _packCache: pack.core.parsers.AssetPackCache;
 
@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui {
 
             this._objectLists = new sceneobjects.ObjectLists();
 
-            this._prefabProperties = new sceneobjects.UserProperties();
+            this._prefabProperties = new sceneobjects.PrefabUserProperties();
         }
 
         getEditor() {

@@ -35,6 +35,10 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 return !obj.getEditorSupport().isPrefabInstance();
             });
 
+            const prefabObj = this._editor.getScene().getPrefabObject();
+
+            const sprites: sceneobjects.ISceneObject[] = [];
+
             for (const item of items) {
 
                 if (item.type === "ISceneObject") {
@@ -50,10 +54,13 @@ namespace phasereditor2d.scene.ui.editor.undo {
                     data["y"] = data["y"] + y;
 
                     const obj = maker.createObject(data);
+                    sprites.push(obj);
 
                     sel.push(obj);
                 }
             }
+
+            maker.afterDropObjects(prefabObj, sprites);
 
             this._editor.setSelection(sel);
         }

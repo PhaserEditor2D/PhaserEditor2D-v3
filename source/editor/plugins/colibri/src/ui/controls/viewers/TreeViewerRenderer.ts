@@ -120,8 +120,6 @@ namespace colibri.ui.controls.viewers {
 
         private renderTreeCell(args: RenderCellArgs, renderer: ICellRenderer): void {
 
-            const label = args.viewer.getLabelProvider().getLabel(args.obj);
-
             let x = args.x;
             let y = args.y;
 
@@ -157,7 +155,58 @@ namespace colibri.ui.controls.viewers {
 
             this.prepareContextForText(args);
 
-            ctx.fillText(label, x, y);
+            this.renderLabel(args, x, y);
+
+            ctx.restore();
+        }
+
+        protected renderLabel(args: RenderCellArgs, x: number, y: number) {
+
+            const styledProvider = this._viewer.getStyledLabelProvider();
+
+            const selected = this._viewer.isSelected(args.obj);
+
+            if (!selected && styledProvider) {
+
+                this.renderStyledLabel(args, x, y, styledProvider);
+
+            } else {
+
+                this.renderPlainLabel(args, x, y);
+            }
+        }
+
+        protected renderPlainLabel(args: RenderCellArgs, x: number, y: number) {
+
+            const label = args.viewer.getLabelProvider().getLabel(args.obj);
+
+            args.canvasContext.fillText(label, x, y);
+        }
+
+        protected renderStyledLabel(args: RenderCellArgs, x: number, y: number, styledProvider: IStyledLabelProvider) {
+
+            const selected = this._viewer.isSelected(args.obj);
+
+            const dark = controls.Controls.getTheme().dark;
+
+            const parts = styledProvider.getStyledTexts(args.obj, dark);
+
+            let cursor = x;
+
+            const ctx = args.canvasContext;
+
+            ctx.save();
+
+            for (const part of parts) {
+
+                ctx.fillStyle = part.color;
+
+                ctx.fillText(part.text, cursor, y);
+
+                const metrics = ctx.measureText(part.text);
+
+                cursor += metrics.width;
+            }
 
             ctx.restore();
         }

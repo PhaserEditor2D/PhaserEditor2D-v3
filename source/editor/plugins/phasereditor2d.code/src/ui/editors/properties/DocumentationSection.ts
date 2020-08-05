@@ -8,7 +8,7 @@ namespace phasereditor2d.code.ui.editors.properties {
             super(page, "phasereditor2d.code.ui.editors.properties.DocumentationSection", "Documentation", true, false);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 1);
             comp.style.alignItems = "self-start";

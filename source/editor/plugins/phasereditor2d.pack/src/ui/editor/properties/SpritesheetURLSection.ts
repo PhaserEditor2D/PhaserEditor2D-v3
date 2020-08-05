@@ -15,7 +15,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return super.canEdit(obj, n) && obj instanceof core.SpritesheetAssetPackItem;
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);
 

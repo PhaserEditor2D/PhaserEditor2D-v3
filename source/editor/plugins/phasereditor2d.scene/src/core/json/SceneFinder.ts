@@ -1,8 +1,10 @@
+/// <reference path="../../ui/editor/usercomponent/UserComponent.ts" />
 namespace phasereditor2d.scene.core.json {
 
     import FileUtils = colibri.ui.ide.FileUtils;
     import io = colibri.core.io;
     import controls = colibri.ui.controls;
+    import usercomponent = ui.editor.usercomponent;
 
     class SceneFinderPreloader extends colibri.ui.ide.PreloadProjectResourcesExtension {
 
@@ -16,9 +18,11 @@ namespace phasereditor2d.scene.core.json {
 
         async computeTotal(): Promise<number> {
 
-            const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+            const total = (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE)).length
 
-            return files.length;
+                + (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS)).length;
+
+            return total;
         }
 
         preload(monitor: controls.IProgressMonitor) {
@@ -27,21 +31,40 @@ namespace phasereditor2d.scene.core.json {
         }
     }
 
+
+    export interface IUserComponentsModelInfo {
+        file: io.FilePath;
+        model: usercomponent.UserComponentsModel;
+    }
+
+    export interface IFindComponentResult {
+        file: io.FilePath,
+        model: usercomponent.UserComponentsModel,
+        component: usercomponent.UserComponent
+    }
+
     export class SceneFinder {
 
-        private _dataMap: Map<string, IObjectData>;
-        private _sceneDataMap: Map<string, ISceneData>;
-        private _fileMap: Map<string, io.FilePath>;
-        private _files: io.FilePath[];
+        private _prefabObjectId_ObjectData_Map: Map<string, IObjectData>;
+        private _sceneFilename_Data_Map: Map<string, ISceneData>;
+        private _prefabId_File_Map: Map<string, io.FilePath>;
+        private _sceneFiles: io.FilePath[];
         private _prefabFiles: io.FilePath[];
+        private _compFiles: io.FilePath[];
+        private _compFilename_Data_Map: Map<string, usercomponent.UserComponentsModel>;
+        private _compModelsInfo: IUserComponentsModelInfo[];
 
         constructor() {
 
-            this._dataMap = new Map();
-            this._sceneDataMap = new Map();
-            this._fileMap = new Map();
-            this._files = [];
+            this._prefabObjectId_ObjectData_Map = new Map();
+            this._sceneFilename_Data_Map = new Map();
+            this._prefabId_File_Map = new Map();
+            this._sceneFiles = [];
             this._prefabFiles = [];
+
+            this._compFiles = [];
+            this._compFilename_Data_Map = new Map();
+            this._compModelsInfo = [];
 
             colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(async (e) => {
 
@@ -56,7 +79,7 @@ namespace phasereditor2d.scene.core.json {
 
                 for (const name of names) {
 
-                    if (name.endsWith(".scene")) {
+                    if (name.endsWith(".scene") || name.endsWith(".components")) {
 
                         return true;
                     }
@@ -87,9 +110,54 @@ namespace phasereditor2d.scene.core.json {
 
         async preload(monitor: controls.IProgressMonitor): Promise<void> {
 
-            const dataMap = new Map<string, IObjectData>();
-            const sceneDataMap = new Map<string, ISceneData>();
-            const fileMap = new Map<string, io.FilePath>();
+            await this.preloadSceneFiles(monitor);
+
+            await this.preloadComponentsFiles(monitor);
+        }
+
+        private async preloadComponentsFiles(monitor: controls.IProgressMonitor): Promise<void> {
+
+            const compFiles = [];
+            const compFilename_Data_Map = new Map();
+            const compModels: IUserComponentsModelInfo[] = [];
+
+            const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS);
+
+            for (const file of files) {
+
+                const content = await FileUtils.preloadAndGetFileString(file);
+
+                try {
+
+                    const data = JSON.parse(content) as usercomponent.IUserComponentsModelData;
+
+                    const model = new usercomponent.UserComponentsModel();
+
+                    model.readJSON(data);
+
+                    compModels.push({ file, model });
+
+                    compFilename_Data_Map.set(file.getFullName(), model);
+
+                    compFiles.push(file);
+
+                } catch (e) {
+                    console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
+                }
+
+                monitor.step();
+            }
+
+            this._compFiles = compFiles;
+            this._compFilename_Data_Map = compFilename_Data_Map;
+            this._compModelsInfo = compModels;
+        }
+
+        private async preloadSceneFiles(monitor: controls.IProgressMonitor): Promise<void> {
+
+            const prefabObjectId_ObjectData_Map = new Map<string, IObjectData>();
+            const sceneFilename_Data_Map = new Map<string, ISceneData>();
+            const prefabId_File_Map = new Map<string, io.FilePath>();
             const sceneFiles = [];
             const prefabFiles = [];
 
@@ -103,7 +171,7 @@ namespace phasereditor2d.scene.core.json {
 
                     const data = JSON.parse(content) as ISceneData;
 
-                    sceneDataMap.set(file.getFullName(), data);
+                    sceneFilename_Data_Map.set(file.getFullName(), data);
 
                     if (data.id) {
 
@@ -111,8 +179,8 @@ namespace phasereditor2d.scene.core.json {
 
                             const objData = data.displayList[data.displayList.length - 1];
 
-                            dataMap.set(data.id, objData);
-                            fileMap.set(data.id, file);
+                            prefabObjectId_ObjectData_Map.set(data.id, objData);
+                            prefabId_File_Map.set(data.id, file);
                         }
 
                         if (data.sceneType === SceneType.PREFAB) {
@@ -130,11 +198,46 @@ namespace phasereditor2d.scene.core.json {
                 monitor.step();
             }
 
-            this._dataMap = dataMap;
-            this._sceneDataMap = sceneDataMap;
-            this._fileMap = fileMap;
-            this._files = sceneFiles;
+            this._prefabObjectId_ObjectData_Map = prefabObjectId_ObjectData_Map;
+            this._sceneFilename_Data_Map = sceneFilename_Data_Map;
+            this._prefabId_File_Map = prefabId_File_Map;
+            this._sceneFiles = sceneFiles;
             this._prefabFiles = prefabFiles;
+        }
+
+        getUserComponentsFiles() {
+
+            return this._compFiles;
+        }
+
+        getUserComponentsByFile(file: io.FilePath) {
+
+            return this._compFilename_Data_Map.get(file.getFullName());
+        }
+
+        getUserComponentsModels() {
+
+            return this._compModelsInfo;
+        }
+
+        getUserComponentByName(name: string): IFindComponentResult {
+
+            for (const info of this._compModelsInfo) {
+
+                for (const comp of info.model.getComponents()) {
+
+                    if (comp.getName() === name) {
+
+                        return {
+                            file: info.file,
+                            model: info.model,
+                            component: comp
+                        };
+                    }
+                }
+            }
+
+            return undefined;
         }
 
         getPrefabId(file: io.FilePath) {
@@ -152,8 +255,8 @@ namespace phasereditor2d.scene.core.json {
             return null;
         }
 
-        getFiles() {
-            return this._files;
+        getSceneFiles() {
+            return this._sceneFiles;
         }
 
         getPrefabFiles() {
@@ -162,22 +265,46 @@ namespace phasereditor2d.scene.core.json {
 
         getPrefabData(prefabId: string): IObjectData {
 
-            return this._dataMap.get(prefabId);
+            return this._prefabObjectId_ObjectData_Map.get(prefabId);
         }
 
         getPrefabFile(prefabId: string): io.FilePath {
 
-            return this._fileMap.get(prefabId);
+            return this._prefabId_File_Map.get(prefabId);
+        }
+
+        getPrefabHierarchy(prefabId: string) {
+
+            return this.getPrefabHierarchy2(prefabId, []);
+        }
+
+        private getPrefabHierarchy2(prefabId: string, result: io.FilePath[]) {
+
+            const file = this.getPrefabFile(prefabId);
+
+            if (file) {
+
+                result.push(file);
+
+                const objData = this.getPrefabData(prefabId);
+
+                if (objData && objData.prefabId) {
+
+                    this.getPrefabHierarchy2(objData.prefabId, result);
+                }
+            }
+
+            return result;
         }
 
         getSceneData(file: io.FilePath) {
 
-            return this._sceneDataMap.get(file.getFullName());
+            return this._sceneFilename_Data_Map.get(file.getFullName());
         }
 
         getAllSceneData() {
 
-            return this.getFiles().map(file => this.getSceneData(file));
+            return this.getSceneFiles().map(file => this.getSceneData(file));
         }
     }
 }

@@ -1,5 +1,37 @@
 # Change Log
 
+## Version 3.4.0 - Aug 4, 2020
+
+## Added
+
+* User Component Editor.
+* Scene Editor: in Prefab Instance section shows a menu next to each prefab, to select all prefab instances.
+* Scene Editor: adds user property of boolean type.
+* Scene Editor: added a Compile Project command. It compiles all compilable files of the project (scenes, components).
+* Volcano project template.
+
+## Removed
+
+* **User Init Method** parameter and **Compiler Prefab Settings** section. Now you can insert code directly in the constructor of the prefab.
+* Show size info of images, atlas frames and spritesheet frames in the Inspector view.
+* Scene Editor: the Texture section shows the image size.
+* Scene Editor: removed the Compile Scenes command. The Compile Project command compiles all files including the scenes.
+* Flying Dragon project template.
+
+### Modified
+
+* Scene Editor: Object Lists are created first as temporal variables, and, if the scope is CLASS or PUBLIC, a field is generated.
+* Scene Editor: in prefab scenes, the Outline view displays the non-prefab objects with transparency.
+* Scene Editor: in prefab scenes, when the prefab object is selected, the Variable section is not shown in the Inspector view.
+* Scene Editor: a new object is added to a container if the container is selected or a child of it.
+* Scene Editor: in prefab scenes, when add an object it is added to the root object if it is a container, else, a new container is created, to wrap the root object and the newly added.
+* Inspector view: use rounded background for title and sub-titles of the sections.
+
+### Fixed
+
+* Scene Editor: fixes command to create a prefab with the selected object. The new prefab is positioned at `0,0`.
+* Scene Editor: fixes scene thumbnail generator when the scene is a prefab with a container that wraps an object.
+
 ## Version 3.3.1 - July 15, 2020
 
 ### Added

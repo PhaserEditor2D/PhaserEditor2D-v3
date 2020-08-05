@@ -12,7 +12,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
             return obj instanceof core.ImageAssetPackItem && super.canEdit(obj, n);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
             const comp = this.createGridElement(parent, 3);
 
             comp.style.gridTemplateColumns = "auto 1fr auto";

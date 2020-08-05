@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "scene-editor/bitmap-text-object.html";
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
             comp.style.gridTemplateColumns = "auto auto 1fr";

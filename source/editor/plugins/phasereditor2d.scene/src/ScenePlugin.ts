@@ -13,6 +13,7 @@ namespace phasereditor2d.scene {
     export const ICON_LOCKED = "locked";
     export const ICON_UNLOCKED = "unlocked";
     export const ICON_LIST = "list";
+    export const ICON_USER_COMPONENT = "user-component";
 
     export class ScenePlugin extends colibri.Plugin {
 
@@ -61,6 +62,16 @@ namespace phasereditor2d.scene {
                     5
                 ));
 
+            reg.addExtension(
+                new colibri.core.ContentTypeExtension(
+                    [new colibri.core.ContentTypeResolverByExtension(
+                        core.CONTENT_TYPE_USER_COMPONENTS + "Resolver",
+                        [
+                            ["components", core.CONTENT_TYPE_USER_COMPONENTS]
+                        ])
+                    ])
+            )
+
             // content type renderer
 
             reg.addExtension(
@@ -69,6 +80,14 @@ namespace phasereditor2d.scene {
                     new ui.viewers.SceneFileCellRenderer()
                 )
             );
+
+            reg.addExtension(
+                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(this, [
+                    {
+                        iconName: ICON_USER_COMPONENT,
+                        contentType: core.CONTENT_TYPE_USER_COMPONENTS
+                    }
+                ]));
 
             // icons loader
 
@@ -83,7 +102,8 @@ namespace phasereditor2d.scene {
                     ICON_BUILD,
                     ICON_LOCKED,
                     ICON_UNLOCKED,
-                    ICON_LIST
+                    ICON_LIST,
+                    ICON_USER_COMPONENT
                 ])
             );
 
@@ -99,32 +119,30 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 new ide.commands.CommandExtension(ui.editor.commands.SceneEditorCommands.registerCommands));
 
-            // main menu
+            reg.addExtension(
+                new ide.commands.CommandExtension(ui.editor.usercomponent.UserComponentsEditor.registerCommands));
 
-            reg.addExtension(new controls.MenuExtension(phasereditor2d.ide.ui.DesignWindow.MENU_MAIN,
-                {
-                    command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
-                }
-            ));
 
-            reg.addExtension(new controls.MenuExtension(files.ui.views.FilesView.MENU_ID,
-                {
-                    command: ui.editor.commands.CMD_COMPILE_ALL_SCENE_FILES
-                }
-            ));
+            // compile project
+
+            reg.addExtension(
+                new ui.editor.usercomponent.UserComponentCompileAllExtension(),
+                new core.code.SceneCompileAllExtension());
 
             // editors
 
             reg.addExtension(
                 new ide.EditorExtension([
-                    ui.editor.SceneEditor.getFactory()
+                    ui.editor.SceneEditor.getFactory(),
+                    ui.editor.usercomponent.UserComponentsEditor.getFactory()
                 ]));
 
             // new file wizards
 
             reg.addExtension(
                 new ui.dialogs.NewSceneFileDialogExtension(),
-                new ui.dialogs.NewPrefabFileDialogExtension()
+                new ui.dialogs.NewPrefabFileDialogExtension(),
+                new ui.dialogs.NewUserComponentsFileDialogExtension()
             );
 
             // file properties
@@ -150,6 +168,7 @@ namespace phasereditor2d.scene {
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.GameObjectVariableSection(page),
                 page => new ui.sceneobjects.PrefabInstanceSection(page),
+                page => new ui.sceneobjects.UserComponentInstancePropertySection(page),
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ParentSection(page),
@@ -197,7 +216,7 @@ namespace phasereditor2d.scene {
             try {
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                const files = [...finder.getFiles()];
+                const files = [...finder.getSceneFiles()];
 
                 files.sort((a, b) => b.getModTime() - a.getModTime());
 
@@ -227,6 +246,7 @@ namespace phasereditor2d.scene {
             return [
                 new ui.sceneobjects.NumberPropertyType(),
                 new ui.sceneobjects.StringPropertyType(),
+                new ui.sceneobjects.BooleanPropertyType(),
                 new ui.sceneobjects.ExpressionPropertyType(),
                 new ui.sceneobjects.OptionPropertyType(),
             ];
@@ -276,7 +296,7 @@ namespace phasereditor2d.scene {
 
         async compileAll() {
 
-            const files = this._sceneFinder.getFiles();
+            const files = this._sceneFinder.getSceneFiles();
 
             const dlg = new controls.dialogs.ProgressDialog();
 

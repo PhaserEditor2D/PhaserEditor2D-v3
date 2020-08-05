@@ -75,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 dom.argFloat(obj.originX);
                 dom.argFloat(obj.originY);
 
-                args.result.push(dom);
+                args.statements.push(dom);
             }
         }
     }

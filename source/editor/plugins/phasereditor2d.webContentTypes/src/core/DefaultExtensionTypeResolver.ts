@@ -1,4 +1,3 @@
-/// <reference path="./ExtensionContentTypeResolver.ts" />
 
 namespace phasereditor2d.webContentTypes.core {
 
@@ -17,7 +16,7 @@ namespace phasereditor2d.webContentTypes.core {
     export const CONTENT_TYPE_XML = "xml";
     export const CONTENT_TYPE_GLSL = "glsl";
 
-    export class DefaultExtensionTypeResolver extends ExtensionContentTypeResolver {
+    export class DefaultExtensionTypeResolver extends colibri.core.ContentTypeResolverByExtension {
         constructor() {
             super("phasereditor2d.files.core.DefaultExtensionTypeResolver", [
                 ["png", CONTENT_TYPE_IMAGE],

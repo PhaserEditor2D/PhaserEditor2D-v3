@@ -21,7 +21,7 @@ namespace colibri.ui.controls.properties {
             this._updaters = [];
         }
 
-        protected abstract createForm(parent: HTMLDivElement);
+        abstract createForm(parent: HTMLDivElement);
 
         abstract canEdit(obj: any, n: number): boolean;
 
@@ -114,7 +114,7 @@ namespace colibri.ui.controls.properties {
             return set.size === 1 ? values[0] : `(${values.length} selected)`;
         }
 
-        protected createGridElement(parent: HTMLElement, cols = 0, simpleProps = true) {
+        createGridElement(parent: HTMLElement, cols = 0, simpleProps = true) {
 
             const div = document.createElement("div");
 
@@ -133,7 +133,7 @@ namespace colibri.ui.controls.properties {
             return div;
         }
 
-        protected createLabel(parent: HTMLElement, text = "", tooltip = "") {
+        createLabel(parent: HTMLElement, text = "", tooltip = "") {
 
             const label = document.createElement("label");
 
@@ -149,7 +149,7 @@ namespace colibri.ui.controls.properties {
             return label;
         }
 
-        protected createButton(parent: HTMLElement, text: string, callback: (e?: MouseEvent) => void) {
+        createButton(parent: HTMLElement, text: string, callback: (e?: MouseEvent) => void) {
 
             const btn = document.createElement("button");
 
@@ -162,9 +162,9 @@ namespace colibri.ui.controls.properties {
             return btn;
         }
 
-        protected createMenuButton(
+        createMenuButton(
             parent: HTMLElement, text: string,
-            items: Array<{ name: string, value: any }>,
+            items: Array<{ name: string, value: any, icon?: controls.IImage }>,
             callback: (value: any) => void) {
 
             const btn = this.createButton(parent, text, e => {
@@ -175,6 +175,7 @@ namespace colibri.ui.controls.properties {
 
                     menu.add(new Action({
                         text: item.name,
+                        icon: item.icon,
                         callback: () => {
                             callback(item.value);
                         }
@@ -187,7 +188,7 @@ namespace colibri.ui.controls.properties {
             return btn;
         }
 
-        protected createText(parent: HTMLElement, readOnly = false) {
+        createText(parent: HTMLElement, readOnly = false) {
 
             const text = document.createElement("input");
 
@@ -200,7 +201,7 @@ namespace colibri.ui.controls.properties {
             return text;
         }
 
-        protected createColor(parent: HTMLElement, readOnly = false, allowAlpha = true) {
+        createColor(parent: HTMLElement, readOnly = false, allowAlpha = true) {
 
             const text = document.createElement("input");
 
@@ -307,7 +308,7 @@ namespace colibri.ui.controls.properties {
             };
         }
 
-        protected createTextArea(parent: HTMLElement, readOnly = false) {
+        createTextArea(parent: HTMLElement, readOnly = false) {
 
             const text = document.createElement("textarea");
 
@@ -321,7 +322,7 @@ namespace colibri.ui.controls.properties {
 
         private static NEXT_ID = 0;
 
-        protected createCheckbox(parent: HTMLElement, label?: HTMLLabelElement) {
+        createCheckbox(parent: HTMLElement, label?: HTMLLabelElement) {
 
             const check = document.createElement("input");
 
@@ -340,6 +341,29 @@ namespace colibri.ui.controls.properties {
             parent.appendChild(check);
 
             return check;
+        }
+
+        createMenuIcon(parent: HTMLElement, menuProvider: () => Menu, alignRight = true) {
+
+            const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_SMALL_MENU));
+
+            icon.getCanvas().classList.add("IconButton");
+
+            parent.appendChild(icon.getCanvas());
+
+            icon.getCanvas().addEventListener("click", e => {
+
+                const menu = menuProvider();
+
+                menu.createWithEvent(e);
+            });
+
+            if (alignRight) {
+
+                icon.getCanvas().style.float = "right";
+            }
+
+            return icon;
         }
     }
 }

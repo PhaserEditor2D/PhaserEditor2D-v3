@@ -21,6 +21,8 @@ namespace phasereditor2d.ide.ui.actions {
 
             menu.addCommand(actions.CMD_RELOAD_PROJECT);
 
+            menu.addCommand(actions.CMD_COMPILE_PROJECT);
+
             if (IDEPlugin.getInstance().isDesktopMode()) {
 
                 menu.addSeparator();

@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.createMenu(menu);
         }
 
-        protected createForm(parent: HTMLDivElement) {
+        createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
             comp.style.gridTemplateColumns = "auto 1fr auto";
@@ -55,13 +55,38 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 setTimeout(() => imgControl.resizeTo(), 1);
             });
 
-            // Lock
+            {
+                // Size
 
-            this.createLock(comp, TextureComponent.texture);
+                const label = this.createLabel(comp);
+                label.style.gridColumn = "1 / span 3";
+                label.style.justifySelf = "center";
 
-            // Buttons
+                this.addUpdater(() => {
+
+                    const frames = this.getSelectedFrames();
+
+                    if (frames.length === 1) {
+
+                        const frame = frames[0];
+                        label.innerHTML = frame.getWidth() + "x" + frame.getHeight();
+
+                    } else {
+
+                        label.innerHTML = "";
+                    }
+                });
+            }
 
             {
+                // Lock
+
+                this.createLock(comp, TextureComponent.texture);
+            }
+
+            {
+                // Buttons
+
                 const changeBtn = this.createButton(comp, "Select", e => {
 
                     ChangeTextureOperation.runDialog(this.getEditor());
@@ -111,7 +136,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     deleteBtn.disabled = !unlocked;
                 });
             }
-
         }
 
         private getSelectedFrames() {

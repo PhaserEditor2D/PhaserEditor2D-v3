@@ -41,7 +41,8 @@ namespace phasereditor2d.scene.ui {
 
             const s = this.getSettings();
 
-            if (bounds.height > s.borderWidth && bounds.height > s.borderHeight) {
+            if (bounds.width > s.borderWidth && bounds.height > s.borderHeight) {
+
                 bounds = {
                     x: s.borderX,
                     y: s.borderY,
@@ -63,12 +64,11 @@ namespace phasereditor2d.scene.ui {
             const children = this.getDisplayListChildren();
 
             if (children.length === 0) {
+
                 return { x: 0, y: 0, width: 10, height: 10 };
             }
 
             const camera = this.getCamera();
-
-            const s = this.getSettings();
 
             let minX = Number.MAX_VALUE;
             let minY = Number.MAX_VALUE;
@@ -171,8 +171,11 @@ namespace phasereditor2d.scene.ui {
 
                 const data: core.json.ISceneData = JSON.parse(content);
 
-                const width = 1200;
-                const height = 800;
+                // const width = 1200;
+                // const height = 800;
+
+                const width = data.settings.borderWidth || 800;
+                const height = data.settings.borderHeight || 600;
 
                 const canvas = document.createElement("canvas");
                 canvas.style.width = (canvas.width = width) + "px";
@@ -215,7 +218,5 @@ namespace phasereditor2d.scene.ui {
                 game.scene.add("scene", scene, true);
             });
         }
-
     }
-
 }

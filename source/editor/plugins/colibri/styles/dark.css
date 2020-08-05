@@ -151,6 +151,7 @@ Important:
 
 .dark .PropertyTitleArea {
     background: linear-gradient(#343434, #323232);
+    border-radius: 3px 3px 0 0;
 }
 
 .dark .PropertyTitleArea label,

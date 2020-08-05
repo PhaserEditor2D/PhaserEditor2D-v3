@@ -125,6 +125,10 @@ namespace phasereditor2d.pack.ui.editor.properties {
                 webContentTypes.core.CONTENT_TYPE_XML,
                 core.XML_TYPE));
 
+            // info sections
+
+            sections.push(new ui.properties.AtlasFrameInfoSection(page));
+
             // preview sections
 
             sections.push(new ui.properties.ImagePreviewSection(page));
