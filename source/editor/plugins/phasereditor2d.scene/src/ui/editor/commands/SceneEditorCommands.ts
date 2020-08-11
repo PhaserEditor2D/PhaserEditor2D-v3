@@ -33,6 +33,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_MOVE_OBJECT_UP = "phasereditor2d.scene.ui.editor.commands.MoveObjectUp";
     export const CMD_MOVE_OBJECT_DOWN = "phasereditor2d.scene.ui.editor.commands.MoveObjectDown";
     export const CMD_FIX_SCENE_FILES_ID = "phasereditor2d.scene.ui.editor.commands.FixSceneFilesID";
+    export const CMD_DUPLICATE_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.DuplicateSceneFile";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -355,6 +356,38 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR,
                 args => args.activeEditor instanceof SceneEditor,
                 args => (args.activeEditor as SceneEditor).refreshScene());
+
+            manager.add({
+                command: {
+                    id: CMD_DUPLICATE_SCENE_FILE,
+                    name: "Duplicate Scene File",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Duplicate the scene file, with a new ID.",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: async args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const file = editor.getInput();
+
+                        const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+
+                        const data = JSON.parse(content);
+
+                        data.id = Phaser.Utils.String.UUID();
+
+                        const newContent = JSON.stringify(data, null, 4);
+
+                        const newName = colibri.ui.ide.FileUtils.getFileCopyName(file);
+
+                        const newFile = await colibri.ui.ide.FileUtils.createFile_async(file.getParent(), newName, newContent);
+
+                        colibri.Platform.getWorkbench().openEditor(newFile);
+                    }
+                }
+            })
         }
 
         static registerSelectionCommands(manager: colibri.ui.ide.commands.CommandManager) {

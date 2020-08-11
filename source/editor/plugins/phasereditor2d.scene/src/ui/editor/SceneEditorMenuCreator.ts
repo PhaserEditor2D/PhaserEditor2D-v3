@@ -63,6 +63,10 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addSeparator();
 
+            menu.addCommand(commands.CMD_DUPLICATE_SCENE_FILE);
+
+            menu.addSeparator();
+
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);
 
             if (ide.IDEPlugin.getInstance().isDesktopMode()) {
