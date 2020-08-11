@@ -2,9 +2,14 @@
 
 ## Version 3.4.0-next
 
+### Added
+
+* Scene Editor: shows error dialog when multiple files share the same scene id.
+* Scene Editor: the **Fix Duplicated Scenes ID** command assign new IDs to the newer scene files.
+
 ## Version 3.4.0 - Aug 4, 2020
 
-## Added
+### Added
 
 * User Component Editor.
 * Scene Editor: in Prefab Instance section shows a menu next to each prefab, to select all prefab instances.
@@ -12,7 +17,7 @@
 * Scene Editor: added a Compile Project command. It compiles all compilable files of the project (scenes, components).
 * Volcano project template.
 
-## Removed
+### Removed
 
 * **User Init Method** parameter and **Compiler Prefab Settings** section. Now you can insert code directly in the constructor of the prefab.
 * Show size info of images, atlas frames and spritesheet frames in the Inspector view.
