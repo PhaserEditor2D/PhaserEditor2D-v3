@@ -4,6 +4,20 @@ namespace colibri.ui.ide {
 
     export class FileUtils {
 
+        static getFileCopyName(file: io.FilePath) {
+
+            const parent = file.getParent();
+
+            let name = file.getNameWithoutExtension();
+
+            while (parent.getFile(name + ".scene")) {
+
+                name = name + "_copy";
+            }
+
+            return name + ".scene";
+        }
+
         static preloadImageSize(file: io.FilePath): Promise<controls.PreloadResult> {
             return Workbench.getWorkbench().getFileImageSizeCache().preload(file);
         }
