@@ -52,6 +52,7 @@ namespace phasereditor2d.scene {
             }));
 
             // preload project
+
             reg.addExtension(this._sceneFinder.getProjectPreloader());
 
             // content type resolvers

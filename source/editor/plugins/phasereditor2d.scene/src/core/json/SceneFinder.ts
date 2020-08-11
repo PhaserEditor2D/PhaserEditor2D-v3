@@ -18,11 +18,7 @@ namespace phasereditor2d.scene.core.json {
 
         async computeTotal(): Promise<number> {
 
-            const total = (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE)).length
-
-                + (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS)).length;
-
-            return total;
+            return 0;
         }
 
         preload(monitor: controls.IProgressMonitor) {
@@ -53,6 +49,7 @@ namespace phasereditor2d.scene.core.json {
         private _compFiles: io.FilePath[];
         private _compFilename_Data_Map: Map<string, usercomponent.UserComponentsModel>;
         private _compModelsInfo: IUserComponentsModelInfo[];
+        private _enabled: boolean;
 
         constructor() {
 
@@ -65,6 +62,8 @@ namespace phasereditor2d.scene.core.json {
             this._compFiles = [];
             this._compFilename_Data_Map = new Map();
             this._compModelsInfo = [];
+
+            this._enabled = true;
 
             colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(async (e) => {
 
@@ -110,6 +109,17 @@ namespace phasereditor2d.scene.core.json {
 
         async preload(monitor: controls.IProgressMonitor): Promise<void> {
 
+            if (!this.isEnabled()) {
+
+                return;
+            }
+
+            const total = (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE)).length
+
+                + (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS)).length;
+
+            monitor.addTotal(total);
+
             await this.preloadSceneFiles(monitor);
 
             await this.preloadComponentsFiles(monitor);
@@ -153,8 +163,18 @@ namespace phasereditor2d.scene.core.json {
             this._compModelsInfo = compModels;
         }
 
-        private async preloadSceneFiles(monitor: controls.IProgressMonitor): Promise<void> {
+        setEnabled(enabled: boolean) {
 
+            this._enabled = enabled;
+        }
+
+        isEnabled() {
+
+            return this._enabled;
+        }
+
+        private async preloadSceneFiles(monitor: controls.IProgressMonitor): Promise<void> {
+            const sceneIdSet = new Set<string>();
             const prefabObjectId_ObjectData_Map = new Map<string, IObjectData>();
             const sceneFilename_Data_Map = new Map<string, ISceneData>();
             const prefabId_File_Map = new Map<string, io.FilePath>();
@@ -162,6 +182,8 @@ namespace phasereditor2d.scene.core.json {
             const prefabFiles = [];
 
             const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+
+            files.sort((a, b) => b.getModTime() - a.getModTime());
 
             for (const file of files) {
 
@@ -174,6 +196,18 @@ namespace phasereditor2d.scene.core.json {
                     sceneFilename_Data_Map.set(file.getFullName(), data);
 
                     if (data.id) {
+
+
+                        if (sceneIdSet.has(data.id)) {
+
+                            const mappedFile = prefabId_File_Map.get(data.id);
+
+                            alert(`ERROR! File ${mappedFile.getFullName()} has a duplicated ID ${data.id}. Run the command Fix Duplicated Scenes ID.`);
+
+                        } else {
+
+                            sceneIdSet.add(data.id);
+                        }
 
                         if (data.displayList.length > 0) {
 

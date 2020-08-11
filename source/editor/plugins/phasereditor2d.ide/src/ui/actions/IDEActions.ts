@@ -14,7 +14,7 @@ namespace phasereditor2d.ide.ui.actions {
     import commands = colibri.ui.ide.commands;
     import io = colibri.core.io;
 
-    function isNotWelcomeWindowScope(args: commands.HandlerArgs): boolean {
+    export function isNotWelcomeWindowScope(args: commands.HandlerArgs): boolean {
         return !(args.activeWindow instanceof ui.WelcomeWindow);
     }
 
