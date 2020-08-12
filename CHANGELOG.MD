@@ -9,6 +9,7 @@
 * Scene Editor: the **Duplicate Scene File** command, available in Scene Editor > context menu > Scene.
 * Scene Editor: the **Insert Spaces** and **Tab Size** parameters. To convert tabs to spaces in the compiler output.
 * Scene Editor: the new created scenes will get the following parameters value from the latest modified scene: **compilerOutputLanguage**,**compilerInsertSpaces**, **compilerTabSize**, **borderWidth**, **borderHeight**, **borderX**, **borderY**.
+* User Components Editor: the **Insert Spaces** and **Tab Size** parameters.
 
 ### Fixes
 
