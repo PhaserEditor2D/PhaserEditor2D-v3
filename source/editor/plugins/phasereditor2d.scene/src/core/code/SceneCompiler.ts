@@ -66,7 +66,14 @@ namespace phasereditor2d.scene.core.code {
                 }
             }
 
-            const output = generator.generate(replaceContent);
+            let output = generator.generate(replaceContent);
+
+            if (settings.compilerInsertSpaces) {
+
+                const tabs = " ".repeat(Math.max(1, settings.compilerTabSize));
+
+                output = output.replace(/\t/g, tabs);
+            }
 
             await ide.FileUtils.createFile_async(this._sceneFile.getParent(), fileName, output);
         }

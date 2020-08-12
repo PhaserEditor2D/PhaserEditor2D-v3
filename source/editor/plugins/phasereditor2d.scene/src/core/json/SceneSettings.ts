@@ -7,6 +7,8 @@ namespace phasereditor2d.scene.core.json {
 
         constructor(
             public compilerEnabled = true,
+            public compilerInsertSpaces = false,
+            public compilerTabSize = 4,
             public snapEnabled = false,
             public snapWidth = 16,
             public snapHeight = 16,
@@ -31,6 +33,8 @@ namespace phasereditor2d.scene.core.json {
             const data = {};
 
             write(data, "compilerEnabled", this.compilerEnabled, true);
+            write(data, "compilerInsertSpaces", this.compilerInsertSpaces, false);
+            write(data, "compilerTabSize", this.compilerTabSize, 4);
             write(data, "snapEnabled", this.snapEnabled, false);
             write(data, "snapWidth", this.snapWidth, 16);
             write(data, "snapHeight", this.snapHeight, 16);
@@ -53,6 +57,8 @@ namespace phasereditor2d.scene.core.json {
         readJSON(data: object) {
 
             this.compilerEnabled = read(data, "compilerEnabled", true);
+            this.compilerInsertSpaces = read(data, "compilerInsertSpaces", false);
+            this.compilerTabSize = read(data, "compilerTabSize", 4);
             this.snapEnabled = read(data, "snapEnabled", false);
             this.snapWidth = read(data, "snapWidth", 16);
             this.snapHeight = read(data, "snapHeight", 16);
