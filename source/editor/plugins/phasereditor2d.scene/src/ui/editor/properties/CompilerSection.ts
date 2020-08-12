@@ -63,6 +63,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this.createStringField(
                 comp, "superClassName", "Super Class",
                 "The super class used for the scene. If it is blank (no-value) then use default value.");
+
+            this.createBooleanField(comp, "compilerInsertSpaces",
+
+                this.createLabel(comp, "Insert Spaces", "Insert convert tabs to spaces"));
+
+            this.createIntegerField(comp, "compilerTabSize", "Tab Size", "The size of tabs, in spaces.");
         }
     }
 }
