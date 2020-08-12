@@ -24,10 +24,18 @@ namespace phasereditor2d.scene.ui.dialogs {
                     name = name.substring(0, i);
                 }
 
+                const settings = ScenePlugin.getInstance().getDefaultSceneSettings();
+
                 const sceneData: core.json.ISceneData = {
                     id: Phaser.Utils.String.UUID(),
                     settings: {
-                        compilerOutputLanguage: ScenePlugin.getInstance().getDefaultSceneLanguage(),
+                        compilerOutputLanguage: settings.compilerOutputLanguage,
+                        compilerInsertSpaces: settings.compilerInsertSpaces,
+                        compilerTabSize: settings.compilerTabSize,
+                        borderWidth: settings.borderWidth,
+                        borderHeight: settings.borderHeight,
+                        borderX: settings.borderX,
+                        borderY: settings.borderY,
                         sceneKey: name
                     },
                     sceneType: core.json.SceneType.SCENE,
