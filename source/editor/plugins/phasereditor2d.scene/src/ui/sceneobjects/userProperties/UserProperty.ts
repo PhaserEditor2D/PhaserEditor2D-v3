@@ -87,6 +87,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 defValue: data.defValue,
                 type: propType
             };
+
+            if (this._info.defValue === null || this._info.defValue === undefined) {
+
+                this._info.defValue = propType.getDefaultValue();
+            }
         }
 
         buildDeclarationsCode() {
