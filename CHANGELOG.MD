@@ -8,6 +8,10 @@
 * Scene Editor: the **Fix Duplicated Scenes ID** command assign new IDs to the newer scene files.
 * Scene Editor: the **Duplicate Scene File** command, available in Scene Editor > context menu > Scene.
 
+### Fixes
+
+* Scene Editor: fixes serialization of user number properties with `null` as default value.
+
 ## Version 3.4.0 - Aug 4, 2020
 
 ### Added
