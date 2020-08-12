@@ -33,7 +33,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     replace = await colibri.ui.ide.FileUtils.preloadAndGetFileString(outFile);
                 }
 
-                const output = generator.generate(replace);
+                let output = generator.generate(replace);
+
+                if (this._model.isInsertSpaces()) {
+
+                    const tabs = " ".repeat(Math.max(1, this._model.getTabSize()));
+
+                    output = output.replace(/\t/g, tabs);
+                }
 
                 const folder = this._componentsFile.getParent();
                 const fileName = this.getOutputFileName(userComp.getName());

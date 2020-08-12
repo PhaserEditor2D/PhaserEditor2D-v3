@@ -28,6 +28,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 // Output Lang
 
                 this.createLabel(comp, "Output Language", "The components code output language.");
+
                 const btn = this.createMenuButton(comp, "", [{
                     name: "JavaScript",
                     value: core.json.SourceLang.JAVA_SCRIPT
@@ -50,6 +51,55 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     btn.textContent = lang === core.json.SourceLang.JAVA_SCRIPT ?
                         "JavaScript" : "TypeScript";
+                });
+            }
+
+            {
+                // Insert Spaces
+
+                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Insert Spaces", "Use spaces for indentation."));
+
+                checkbox.addEventListener("change", e => {
+
+                    this.getEditor().runOperation(model => {
+
+                        model.setInsetSpaces(checkbox.checked);
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    checkbox.checked = this.getSelectionFirstElement().isInsertSpaces();
+                });
+            }
+
+            {
+                // Tab Size
+
+                this.createLabel(comp, "Tab Size", "The number of spaces if the Insert Spaces option is checked.");
+
+                const text = this.createText(comp);
+
+                text.addEventListener("change", e => {
+
+                    const n = Number.parseInt(text.value, 10);
+
+                    if (isNaN(n)) {
+
+                        this.updateWithSelection();
+
+                    } else {
+
+                        this.getEditor().runOperation(model => {
+
+                            model.setTabSize(n);
+                        });
+                    }
+                });
+
+                this.addUpdater(() => {
+
+                    text.value = this.getSelectionFirstElement().getTabSize().toString();
                 });
             }
         }
