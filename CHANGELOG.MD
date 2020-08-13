@@ -12,6 +12,10 @@
 * SceneEditor: the Pan scene tool.
 * User Components Editor: the **Insert Spaces** and **Tab Size** parameters.
 
+### Modified
+
+* Alphabetic sorting of viewer content.
+
 ### Fixes
 
 * Scene Editor: fixes serialization of user number properties with `null` as default value.
