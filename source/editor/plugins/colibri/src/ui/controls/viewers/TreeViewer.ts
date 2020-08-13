@@ -16,8 +16,8 @@ namespace colibri.ui.controls.viewers {
         private _treeRenderer: TreeViewerRenderer;
         private _treeIconList: TreeIconInfo[];
 
-        constructor(...classList: string[]) {
-            super("TreeViewer", ...classList);
+        constructor(id: string, ...classList: string[]) {
+            super(id, "TreeViewer", ...classList);
 
             this.getCanvas().addEventListener("click", e => this.onClick(e));
 

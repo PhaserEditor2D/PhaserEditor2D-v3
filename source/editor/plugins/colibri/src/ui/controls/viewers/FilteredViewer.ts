@@ -52,6 +52,7 @@ namespace colibri.ui.controls.viewers {
                 const viewer = this.getViewer();
 
                 viewer.setCellSize(viewer.getCellSize() + ICON_SIZE * z);
+                viewer.saveCellSize();
 
                 viewer.repaint();
             });

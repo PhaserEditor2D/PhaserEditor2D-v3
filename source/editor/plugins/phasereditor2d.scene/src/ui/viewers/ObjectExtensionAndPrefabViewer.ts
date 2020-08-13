@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.viewers {
         ];
 
         constructor() {
-            super();
+            super("phasereditor2d.scene.ui.viewers.ObjectExtensionAndPrefabViewer");
 
             const treeRenderer = new controls.viewers.ShadowGridTreeViewerRenderer(this);
 
@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.viewers {
             this.setTreeRenderer(treeRenderer);
             this.setInput(ObjectExtensionAndPrefabViewer.SECTIONS);
 
-            this.setCellSize(78 * controls.DEVICE_PIXEL_RATIO);
+            this.setCellSize(78 * controls.DEVICE_PIXEL_RATIO, true);
         }
     }
 

@@ -8,7 +8,7 @@ namespace phasereditor2d.files.ui.views {
     export class GridImageFileViewer extends controls.viewers.TreeViewer {
 
         constructor(...classList: string[]) {
-            super(...classList);
+            super("phasereditor2d.files.ui.views.GridImageFileViewer", ...classList);
 
             this.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             this.setLabelProvider(new viewers.FileLabelProvider());

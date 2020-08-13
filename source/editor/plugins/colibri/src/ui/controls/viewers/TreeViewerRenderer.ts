@@ -7,7 +7,10 @@ namespace colibri.ui.controls.viewers {
         constructor(viewer: TreeViewer, cellSize: number = ROW_HEIGHT) {
 
             this._viewer = viewer;
+
             this._viewer.setCellSize(cellSize);
+
+            this._viewer.restoreCellSize();
         }
 
         getViewer() {

@@ -15,6 +15,8 @@ namespace colibri.ui.controls.viewers {
 
             viewer.setCellSize(128 * controls.DEVICE_PIXEL_RATIO);
 
+            viewer.restoreCellSize();
+
             this._center = center;
             this._flat = flat;
             this._sections = [];

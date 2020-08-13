@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             finder: pack.core.PackFinder,
             callback: (selection: pack.core.AssetPackImageFrame[]) => void
         ) {
-            super(new controls.viewers.TreeViewer(), true);
+            super(new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog"), true);
 
             this._finder = finder;
             this._callback = callback;
@@ -44,7 +44,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
+            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
             viewer.setInput(
                 this._finder.getPacks()
                     .flatMap(pack => pack.getItems())
