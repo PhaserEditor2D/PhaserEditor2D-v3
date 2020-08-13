@@ -11,6 +11,7 @@
 * Scene Editor: the new created scenes will get the following parameters value from the latest modified scene: **compilerOutputLanguage**,**compilerInsertSpaces**, **compilerTabSize**, **borderWidth**, **borderHeight**, **borderX**, **borderY**.
 * SceneEditor: the Pan scene tool.
 * User Components Editor: the **Insert Spaces** and **Tab Size** parameters.
+* Saves the zooming state of all viewers in views, editors, dialogs, etc...
 
 ### Modified
 

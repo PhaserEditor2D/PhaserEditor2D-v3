@@ -8,7 +8,7 @@ namespace colibri.ui.ide.properties {
         createForm(parent: HTMLDivElement) {
             parent.classList.add("ManyImagePreviewFormArea");
 
-            const viewer = new controls.viewers.TreeViewer();
+            const viewer = new controls.viewers.TreeViewer("colibri.ui.ide.properties.ManyImagePreviewFormArea");
 
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer, false, true));

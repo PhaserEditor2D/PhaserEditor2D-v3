@@ -330,7 +330,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         protected createViewer(): controls.viewers.TreeViewer {
 
-            const viewer = new controls.viewers.TreeViewer();
+            const viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.editor.usercomponent.UserComponentsEditor");
 
             viewer.setLabelProvider(new UserComponentSignatureLabelProvider());
             viewer.setStyledLabelProvider(new UserComponentSignatureStyledLabelProvider());

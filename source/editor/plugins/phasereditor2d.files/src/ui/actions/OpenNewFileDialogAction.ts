@@ -33,7 +33,7 @@ namespace phasereditor2d.files.ui.actions {
                 return;
             }
 
-            const viewer = new controls.viewers.TreeViewer();
+            const viewer = new controls.viewers.TreeViewer("phasereditor2d.files.ui.actions.OpenNewFileDialogAction");
 
             viewer.setLabelProvider(new WizardLabelProvider());
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());

@@ -84,7 +84,7 @@ namespace phasereditor2d.pack.ui.editor {
 
         protected createViewer(): controls.viewers.TreeViewer {
 
-            const viewer = new controls.viewers.TreeViewer();
+            const viewer = new controls.viewers.TreeViewer("phasereditor2d.pack.ui.editor.AssetPackEditor");
 
             viewer.setContentProvider(new AssetPackEditorContentProvider(this, true));
             viewer.setLabelProvider(new viewers.AssetPackLabelProvider());
@@ -243,7 +243,7 @@ namespace phasereditor2d.pack.ui.editor {
 
         openAddFileDialog() {
 
-            const viewer = new controls.viewers.TreeViewer();
+            const viewer = new controls.viewers.TreeViewer("phasereditor2d.pack.ui.editor.AssetPackEditor.AddFileDialog");
 
             viewer.setLabelProvider(new viewers.AssetPackLabelProvider());
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
@@ -284,7 +284,7 @@ namespace phasereditor2d.pack.ui.editor {
 
         async createFilesViewer(filter: (file: io.FilePath) => boolean) {
 
-            const viewer = new controls.viewers.TreeViewer();
+            const viewer = new controls.viewers.TreeViewer(this.getId() + ".AssetPackEditor");
 
             viewer.setLabelProvider(new files.ui.viewers.FileLabelProvider());
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());

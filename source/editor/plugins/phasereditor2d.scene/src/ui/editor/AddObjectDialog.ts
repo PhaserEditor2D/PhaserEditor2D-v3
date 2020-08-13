@@ -18,6 +18,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor = editor;
 
             const size = this.getSize();
+
             this.setSize(size.width, size.height * 1.5);
         }
 

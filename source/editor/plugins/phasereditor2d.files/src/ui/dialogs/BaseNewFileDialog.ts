@@ -1,4 +1,3 @@
-
 namespace phasereditor2d.files.ui.dialogs {
 
     import controls = colibri.ui.controls;
@@ -173,7 +172,7 @@ namespace phasereditor2d.files.ui.dialogs {
 
         private createFilteredViewer() {
 
-            const viewer = new viewers.TreeViewer();
+            const viewer = new viewers.TreeViewer("phasereditor2d.files.ui.dialogs.BaseNewFileDialog");
 
             viewer.setLabelProvider(new files.ui.viewers.FileLabelProvider());
             viewer.setContentProvider(new files.ui.viewers.FileTreeContentProvider(true));
