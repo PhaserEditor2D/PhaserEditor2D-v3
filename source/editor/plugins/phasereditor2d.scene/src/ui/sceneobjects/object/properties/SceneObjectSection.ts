@@ -270,10 +270,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             text.addEventListener("change", e => {
 
-                const value = Number.parseFloat(text.value);
+                const textValue = text.value;
 
-                this.getEditor().getUndoManager().add(
-                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                let value: number;
+
+                if (textValue.trim() === "") {
+
+                    value = property.defValue;
+
+                } else {
+
+                    value = Number.parseFloat(textValue);
+                }
+
+                if (isNaN(value)) {
+
+                    this.updateWithSelection();
+
+                } else {
+
+                    this.getEditor().getUndoManager().add(
+                        new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                }
             });
 
             this.addUpdater(() => {
