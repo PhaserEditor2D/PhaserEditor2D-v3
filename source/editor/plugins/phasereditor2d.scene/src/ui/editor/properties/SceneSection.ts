@@ -73,14 +73,23 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 const editor = this.getEditor();
 
-                editor.getUndoManager().add(new ChangeSettingsPropertyOperation({
-                    editor: editor,
-                    props: [{
-                        name: name,
-                        value: Number.parseInt(textElement.value, 10),
-                    }],
-                    repaint: true
-                }));
+                const value = Number.parseInt(textElement.value, 10);
+
+                if (isNaN(value)) {
+
+                    this.updateWithSelection();
+
+                } else {
+
+                    editor.getUndoManager().add(new ChangeSettingsPropertyOperation({
+                        editor: editor,
+                        props: [{
+                            name: name,
+                            value: value,
+                        }],
+                        repaint: true
+                    }));
+                }
             });
 
             return {

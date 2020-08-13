@@ -214,11 +214,23 @@ namespace phasereditor2d.pack.ui.editor.properties {
             text.style.gridColumn = "2 / span 2";
 
             text.addEventListener("change", e => {
-                this.changeItemField(field, Number.parseInt(text.value, 10), true);
+
+                const value = Number.parseInt(text.value, 10);
+
+                if (isNaN(value)) {
+
+                    this.updateWithSelection();
+
+                } else {
+
+                    this.changeItemField(field, value, true);
+                }
             });
 
             this.addUpdater(() => {
+
                 const data = this.getSelection()[0].getData();
+
                 text.value = colibri.core.json.getDataValue(data, field);
             });
 
