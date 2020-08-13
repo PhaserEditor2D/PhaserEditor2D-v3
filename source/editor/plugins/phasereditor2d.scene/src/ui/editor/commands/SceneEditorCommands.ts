@@ -17,6 +17,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
     export const CMD_SELECT_REGION = "phasereditor2d.scene.ui.editor.commands.SelectRegion";
+    export const CMD_PAN_SCENE = "phasereditor2d.scene.ui.editor.commands.PanScene";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
     export const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
@@ -1030,7 +1031,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_SELECT_REGION,
-                    name: "Select Region",
+                    name: "Select Region Tool",
                     category: CAT_SCENE_EDITOR,
                     tooltip: "Select all objects inside a region",
                     icon: ScenePlugin.getInstance().getIcon(ICON_SELECT_REGION)
@@ -1043,6 +1044,27 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 keys: {
                     shift: true,
                     key: "S"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_PAN_SCENE,
+                    name: "Pan Tool",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Pan the scene viewport"
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const editor = (args.activeEditor as SceneEditor);
+
+                        editor.getToolsManager().swapTool(ui.sceneobjects.PanTool.ID);
+                    }
+                },
+                keys: {
+                    key: " "
                 }
             });
 

@@ -44,13 +44,16 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private onMouseDown(e: MouseEvent): void {
+
             if (e.button === 1) {
+
                 const camera = this.getCamera();
+
                 this._dragStartPoint = new Phaser.Math.Vector2(e.offsetX, e.offsetY);
                 this._dragStartCameraScroll = new Phaser.Math.Vector2(camera.scrollX, camera.scrollY);
+
                 e.preventDefault();
             }
-
         }
 
         private onMouseMove(e: MouseEvent): void {
