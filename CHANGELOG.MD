@@ -15,6 +15,7 @@
 ### Modified
 
 * Alphabetic sorting of viewer content.
+* [#47](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/47) Inspector view: clearing content of a number field resets it to the default value.
 
 ### Fixes
 
