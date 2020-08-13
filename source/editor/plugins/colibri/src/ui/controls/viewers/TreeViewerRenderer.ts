@@ -48,11 +48,38 @@ namespace colibri.ui.controls.viewers {
 
         }
 
+        protected sortObjects(objects: any[]) {
+
+            const labelMap = new Map<any, string>();
+
+            for (const obj of objects) {
+
+                const label = this._viewer.getLabelProvider().getLabel(obj);
+
+                labelMap.set(obj, label);
+            }
+
+            const sorted = [...objects];
+
+            sorted.sort((obj1, obj2) => {
+
+                const label1 = labelMap.get(obj1);
+
+                const label2 = labelMap.get(obj2);
+
+                return label1.localeCompare(label2);
+            });
+
+            return sorted;
+        }
+
         protected paintItems(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number) {
 
             const viewer = this._viewer;
+
+            objects = this.sortObjects(objects);
 
             const context = viewer.getContext();
 

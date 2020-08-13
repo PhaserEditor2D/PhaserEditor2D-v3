@@ -45,6 +45,8 @@ namespace colibri.ui.controls.viewers {
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number) {
 
+            objects = this.sortObjects(objects);
+
             const viewer = this.getViewer();
 
             const labelProvider = viewer.getLabelProvider();
@@ -146,6 +148,8 @@ namespace colibri.ui.controls.viewers {
         private paintItems2(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number) {
+
+            objects = this.sortObjects(objects);
 
             const viewer = this.getViewer();
             const cellSize = Math.max(ROW_HEIGHT, viewer.getCellSize());
