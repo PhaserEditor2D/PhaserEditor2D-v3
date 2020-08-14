@@ -24,6 +24,7 @@ namespace colibri.ui.controls.viewers {
         protected _filterIncludeSet: Set<any>;
         private _menu: controls.Menu;
         private _viewerId: string;
+        private _sorted: boolean;
 
         constructor(id: string, ...classList: string[]) {
             super("canvas", "Viewer");
@@ -31,6 +32,7 @@ namespace colibri.ui.controls.viewers {
             this._viewerId = id;
             this._filterText = "";
             this._cellSize = 48;
+            this._sorted = true;
 
             this.getElement().tabIndex = 1;
             this.getElement().draggable = true;
@@ -44,6 +46,16 @@ namespace colibri.ui.controls.viewers {
             this.initListeners();
 
             this.restoreCellSize();
+        }
+
+        isSorted() {
+
+            return this._sorted;
+        }
+
+        setSorted(sorted: boolean) {
+
+            this._sorted = sorted;
         }
 
         restoreCellSize() {
