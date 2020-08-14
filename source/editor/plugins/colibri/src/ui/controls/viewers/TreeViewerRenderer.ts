@@ -51,8 +51,13 @@ namespace colibri.ui.controls.viewers {
 
         }
 
-        protected sortObjects(objects: any[]) {
+        protected sortObjects(objects: any[]): any[] {
 
+            if (!this._viewer.isSorted()) {
+
+                return objects;
+            }
+ 
             const labelMap = new Map<any, string>();
 
             for (const obj of objects) {
