@@ -66,7 +66,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 );
 
                 const dlg = new controls.dialogs.ViewerDialog(viewer, false);
-                dlg.setTitle("Select Asset Pack File");
 
                 const selectionCallback = (files: io.FilePath[]) => {
 
