@@ -92,6 +92,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        moveUpUserComponent(compName: string) {
+
+            const i = this._compNames.indexOf(compName);
+
+            if (i > 0) {
+
+                const temp = this._compNames[i - 1];
+                this._compNames[i - 1] = compName;
+                this._compNames[i] = temp;
+            }
+        }
+
+        moveDownUserComponent(compName: string) {
+
+            const i = this._compNames.indexOf(compName);
+
+            const lastIndex = this._compNames.length - 1;
+
+            if (i >= 0 && i < lastIndex) {
+
+                const temp = this._compNames[i + 1];
+                this._compNames[i + 1] = compName;
+                this._compNames[i] = temp;
+            }
+        }
+
         private getPropertyKey(compName: string, propName: string) {
 
             return `${compName}.${propName}`;

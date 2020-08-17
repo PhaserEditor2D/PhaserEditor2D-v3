@@ -278,6 +278,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (localComponent) {
 
+                    if (editorCompList.length === 1) {
+
+                        menu.addAction({
+                            text: "Move Up",
+                            callback: () => {
+
+                                this.runOperation(() => {
+
+                                    const editorComp = editorCompList[0];
+                                    editorComp.moveUpUserComponent(compName)
+                                });
+
+                                this.updateWithSelection();
+                            }
+                        });
+
+                        menu.addAction({
+                            text: "Move Down",
+                            callback: () => {
+
+                                this.runOperation(() => {
+
+                                    const editorComp = editorCompList[0];
+                                    editorComp.moveDownUserComponent(compName)
+                                });
+
+                                this.updateWithSelection();
+                            }
+                        });
+                    }
+
                     menu.addAction({
                         text: "Delete",
                         callback: () => {
