@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: core.json.Serializer) {
 
-            ser.getData()["components"] = this._compNames;
+            ser.getData()["components"] = [...this._compNames];
 
             super.writeJSON(ser);
         }
