@@ -129,7 +129,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createLock(parent, prop);
             }
 
-            this.createBooleanField(parent, prop);
+            const elements = this.createBooleanField(parent, prop);
+            elements.labelElement.style.gridColumn = "2 / auto";
         }
 
         createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
@@ -410,7 +411,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 checkElement.checked = list.length === 0;
             });
 
-            return checkElement;
+            return {
+                labelElement,
+                checkElement
+            };
         }
 
     }
