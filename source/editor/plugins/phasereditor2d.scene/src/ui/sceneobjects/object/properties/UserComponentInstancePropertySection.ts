@@ -96,13 +96,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this.createComponentMenuIcon(headerDiv, editorCompList, compName, true);
 
-                    const compPropArea = this.createGridElement(this._propArea);
-                    compPropArea.style.gridTemplateColumns = "auto auto 1fr";
-                    compPropArea.style.width = "100%";
+                    {
+                        const props = compInfo.component.getUserProperties().getProperties();
 
-                    for (const prop of compInfo.component.getUserProperties().getProperties()) {
+                        if (props.length > 0) {
 
-                        prop.getType().createInspectorPropertyEditor(this, compPropArea, prop, false);
+                            const compPropArea = this.createGridElement(this._propArea);
+                            compPropArea.style.gridTemplateColumns = "auto auto 1fr";
+                            compPropArea.style.width = "100%";
+
+                            for (const prop of props) {
+
+                                prop.getType().createInspectorPropertyEditor(this, compPropArea, prop, false);
+                            }
+                        }
                     }
                 }
 
@@ -169,13 +176,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                             this.createComponentMenuIcon(headerDiv, editorCompList, userComp.getName(), false);
 
-                            const compPropArea = this.createGridElement(this._propArea);
-                            compPropArea.style.gridTemplateColumns = "auto auto 1fr";
-                            compPropArea.style.width = "100%";
+                            {
+                                const props = userComp.getUserProperties().getProperties();
 
-                            for (const prop of userComp.getUserProperties().getProperties()) {
+                                if (props.length > 0) {
 
-                                prop.getType().createInspectorPropertyEditor(this, compPropArea, prop, true);
+                                    const compPropArea = this.createGridElement(this._propArea);
+                                    compPropArea.style.gridTemplateColumns = "auto auto 1fr";
+                                    compPropArea.style.width = "100%";
+
+                                    for (const prop of props) {
+
+                                        prop.getType().createInspectorPropertyEditor(this, compPropArea, prop, true);
+                                    }
+                                }
                             }
                         }
                     }
