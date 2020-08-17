@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: core.json.Serializer) {
 
-            ser.getData()["components"] = this._compNames;
+            ser.getData()["components"] = [...this._compNames];
 
             super.writeJSON(ser);
         }
@@ -89,6 +89,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     delete this._propData[this.getPropertyKey(compName, prop.getName())];
                 }
+            }
+        }
+
+        moveUpUserComponent(compName: string) {
+
+            const i = this._compNames.indexOf(compName);
+
+            if (i > 0) {
+
+                const temp = this._compNames[i - 1];
+                this._compNames[i - 1] = compName;
+                this._compNames[i] = temp;
+            }
+        }
+
+        moveDownUserComponent(compName: string) {
+
+            const i = this._compNames.indexOf(compName);
+
+            const lastIndex = this._compNames.length - 1;
+
+            if (i >= 0 && i < lastIndex) {
+
+                const temp = this._compNames[i + 1];
+                this._compNames[i + 1] = compName;
+                this._compNames[i] = temp;
             }
         }
 

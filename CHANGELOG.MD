@@ -10,6 +10,7 @@
 * Scene Editor: the **Insert Spaces** and **Tab Size** parameters. To convert tabs to spaces in the compiler output.
 * Scene Editor: the new created scenes will get the following parameters value from the latest modified scene: **compilerOutputLanguage**,**compilerInsertSpaces**, **compilerTabSize**, **borderWidth**, **borderHeight**, **borderX**, **borderY**.
 * SceneEditor: the Pan scene tool.
+* Scene Editor: allows move up/down the user components.
 * User Components Editor: the **Insert Spaces** and **Tab Size** parameters.
 * Saves the zooming state of all viewers in views, editors, dialogs, etc...
 
