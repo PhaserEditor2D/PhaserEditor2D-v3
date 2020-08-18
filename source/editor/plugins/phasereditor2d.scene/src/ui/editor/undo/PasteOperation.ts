@@ -45,7 +45,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     const data = item.data as json.IObjectData;
 
-                    data.id = Phaser.Utils.String.UUID();
+                    this.setNewObjectId(data);
+
                     data.label = nameMaker.makeName(data.label);
 
                     const { x, y } = this.getEditor().getMouseManager().getDropPosition();
@@ -63,6 +64,19 @@ namespace phasereditor2d.scene.ui.editor.undo {
             maker.afterDropObjects(prefabObj, sprites);
 
             this._editor.setSelection(sel);
+        }
+
+        private setNewObjectId(data: json.IObjectData) {
+
+            data.id = Phaser.Utils.String.UUID();
+
+            if (data.type === sceneobjects.ContainerExtension.getInstance().getTypeName()) {
+
+                for(const data2 of (data as any).list) {
+
+                    this.setNewObjectId(data2);
+                }
+            }
         }
     }
 }
