@@ -22,6 +22,7 @@
 ### Fixes
 
 * Scene Editor: fixes serialization of user number properties with `null` as default value.
+* Scene Editor: fixes ID generation when pasting container objects.
 
 ## Version 3.4.0 - Aug 4, 2020
 
