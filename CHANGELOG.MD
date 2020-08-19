@@ -5,24 +5,26 @@
 ### Added
 
 * Scene Editor: shows error dialog when multiple files share the same scene id.
-* Scene Editor: the **Fix Duplicated Scenes ID** command assign new IDs to the newer scene files.
+* [#63](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/63) Scene Editor: the **Fix Duplicated Scenes ID** command assign new IDs to the newer scene files.
 * Scene Editor: the **Duplicate Scene File** command, available in Scene Editor > context menu > Scene.
-* Scene Editor: the **Insert Spaces** and **Tab Size** parameters. To convert tabs to spaces in the compiler output.
+* [#65](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/65) Scene Editor: the **Insert Spaces** and **Tab Size** parameters. To convert tabs to spaces in the compiler output.
 * Scene Editor: the new created scenes will get the following parameters value from the latest modified scene: **compilerOutputLanguage**,**compilerInsertSpaces**, **compilerTabSize**, **borderWidth**, **borderHeight**, **borderX**, **borderY**.
 * SceneEditor: the Pan scene tool.
 * Scene Editor: allows move up/down the user components.
 * User Components Editor: the **Insert Spaces** and **Tab Size** parameters.
 * Saves the zooming state of all viewers in views, editors, dialogs, etc...
+* [#59](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/59) Option to exclude a directory from the project.
 
 ### Modified
 
-* Alphabetic sorting of viewer content.
+* [#61](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/61) Alphabetic sorting of viewer content.
 * [#47](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/47) Inspector view: clearing content of a number field resets it to the default value.
 
 ### Fixes
 
 * Scene Editor: fixes serialization of user number properties with `null` as default value.
 * Scene Editor: fixes ID generation when pasting container objects.
+* [#62](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/63) Scene Editor: fixes prefab constructor code generation when the texture is empty.
 
 ## Version 3.4.0 - Aug 4, 2020
 
@@ -102,7 +104,7 @@
 * Fixes menu vertical positioning when there is few space at the top.
 * Scene Editor: shows message when a prefab is not found.
 * Scene Editor: fixes user property declaration when no initial value is provided.
-* [#45](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/45) Scene Editor: compiler skips using field declarations in JavaScript output. It is not supported in Safari.
+* [#59](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/59) Scene Editor: compiler skips using field declarations in JavaScript output. It is not supported in Safari.
 * Scene Editor: fixes scene compiler code merging when the output file was modified by formatters that replace tab chars with spaces.
 * Scene Editor: fixes mouse wheel click on Safari.
 
