@@ -2,7 +2,6 @@ namespace phasereditor2d.ide.ui.dialogs {
 
     import controls = colibri.ui.controls;
     import viewers = colibri.ui.controls.viewers;
-    import io = colibri.core.io;
 
     interface ITemplateInfo {
         name: string;
@@ -215,7 +214,7 @@ namespace phasereditor2d.ide.ui.dialogs {
 
         private createFilteredViewer() {
 
-            const viewer = new controls.viewers.TreeViewer();
+            const viewer = new controls.viewers.TreeViewer("phasereditor2d.ide.ui.dialogs.NewProjectDialog");
 
             viewer.setLabelProvider(new TemplatesLabelProvider());
             viewer.setCellRendererProvider(new TemplatesCellRendererProvider());

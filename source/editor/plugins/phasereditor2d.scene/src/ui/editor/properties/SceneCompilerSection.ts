@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const btn = this.createButton(parent, "0 selected", async (e) => {
 
-                const viewer = new controls.viewers.TreeViewer();
+                const viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.editor.properties.SceneCompilerSection.SelectPackDialog");
                 viewer.setLabelProvider(new files.ui.viewers.FileLabelProvider());
                 viewer.setCellRendererProvider(new files.ui.viewers.FileCellRendererProvider("tree"));
                 viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());

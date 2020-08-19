@@ -128,5 +128,13 @@ namespace phasereditor2d.scene.ui.editor.tools {
                 }
             }
         }
+
+        onActivated(args: ISceneToolContextArgs) {
+            // nothing
+        }
+
+        onDeactivated(args: ISceneToolContextArgs) {
+            // nothing
+        }
     }
 }

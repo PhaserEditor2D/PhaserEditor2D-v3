@@ -6,12 +6,20 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             return (args: files.ui.dialogs.ICreateFileContentArgs) => {
 
+                const settings = ScenePlugin.getInstance().getDefaultSceneSettings();
+
                 const sceneData: core.json.ISceneData = {
                     id: Phaser.Utils.String.UUID(),
                     settings: {
                         createMethodName: "",
                         preloadMethodName: "",
-                        compilerOutputLanguage: ScenePlugin.getInstance().getDefaultSceneLanguage()
+                        compilerOutputLanguage: settings.compilerOutputLanguage,
+                        compilerInsertSpaces: settings.compilerInsertSpaces,
+                        compilerTabSize: settings.compilerTabSize,
+                        borderWidth: settings.borderWidth,
+                        borderHeight: settings.borderHeight,
+                        borderX: settings.borderX,
+                        borderY: settings.borderY,
                     },
                     sceneType: core.json.SceneType.PREFAB,
                     displayList,

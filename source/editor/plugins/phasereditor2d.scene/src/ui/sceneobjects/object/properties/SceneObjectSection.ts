@@ -129,7 +129,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createLock(parent, prop);
             }
 
-            this.createBooleanField(parent, prop);
+            const elements = this.createBooleanField(parent, prop);
+            elements.labelElement.style.gridColumn = "2 / auto";
         }
 
         createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
@@ -270,10 +271,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             text.addEventListener("change", e => {
 
-                const value = Number.parseFloat(text.value);
+                const textValue = text.value;
 
-                this.getEditor().getUndoManager().add(
-                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                let value: number;
+
+                if (textValue.trim() === "") {
+
+                    value = property.defValue;
+
+                } else {
+
+                    value = Number.parseFloat(textValue);
+                }
+
+                if (isNaN(value)) {
+
+                    this.updateWithSelection();
+
+                } else {
+
+                    this.getEditor().getUndoManager().add(
+                        new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                }
             });
 
             this.addUpdater(() => {
@@ -392,7 +411,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 checkElement.checked = list.length === 0;
             });
 
-            return checkElement;
+            return {
+                labelElement,
+                checkElement
+            };
         }
 
     }

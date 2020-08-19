@@ -61,6 +61,10 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
 
+            menu.addCommand(commands.CMD_DUPLICATE_SCENE_FILE, {
+                text: "Duplicate Scene"
+            });
+
             menu.addSeparator();
 
             menu.addCommand(commands.CMD_OPEN_COMPILED_FILE);

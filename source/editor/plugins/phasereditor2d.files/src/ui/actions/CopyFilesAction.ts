@@ -15,7 +15,7 @@ namespace phasereditor2d.files.ui.actions {
 
             const rootFolder = colibri.ui.ide.FileUtils.getRoot();
 
-            const viewer = new controls.viewers.TreeViewer();
+            const viewer = new controls.viewers.TreeViewer("phasereditor2d.files.ui.actions.CopyFilesAction");
 
             viewer.setLabelProvider(new viewers.FileLabelProvider());
             viewer.setCellRendererProvider(new viewers.FileCellRendererProvider());

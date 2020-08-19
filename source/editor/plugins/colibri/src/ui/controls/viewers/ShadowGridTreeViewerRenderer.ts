@@ -7,7 +7,7 @@ namespace colibri.ui.controls.viewers {
         constructor(viewer: controls.viewers.TreeViewer, flat: boolean = false, center: boolean = false) {
             super(viewer, flat, center);
 
-            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO);
+            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
         }
 
         renderCellBack(args: controls.viewers.RenderCellArgs, selected: boolean, isLastChild: boolean) {

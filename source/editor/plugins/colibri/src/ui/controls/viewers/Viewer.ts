@@ -23,15 +23,19 @@ namespace colibri.ui.controls.viewers {
         private _filterText: string;
         protected _filterIncludeSet: Set<any>;
         private _menu: controls.Menu;
+        private _viewerId: string;
+        private _sorted: boolean;
 
-        constructor(...classList: string[]) {
+        constructor(id: string, ...classList: string[]) {
             super("canvas", "Viewer");
+
+            this._viewerId = id;
+            this._filterText = "";
+            this._cellSize = 48;
+            this._sorted = true;
 
             this.getElement().tabIndex = 1;
             this.getElement().draggable = true;
-
-            this._filterText = "";
-            this._cellSize = 48;
 
             this.initContext();
 
@@ -40,6 +44,41 @@ namespace colibri.ui.controls.viewers {
             this._selectedObjects = new Set();
 
             this.initListeners();
+
+            this.restoreCellSize();
+        }
+
+        isSorted() {
+
+            return this._sorted;
+        }
+
+        setSorted(sorted: boolean) {
+
+            this._sorted = sorted;
+        }
+
+        restoreCellSize() {
+
+            const key = "Viewer.cellSize." + this._viewerId;
+            const value = localStorage.getItem(key);
+
+            if (value) {
+
+                const size = Number.parseInt(value, 10);
+
+                if (!isNaN(size)) {
+
+                    this._cellSize = size;
+                }
+            }
+        }
+
+        saveCellSize() {
+
+            const key = "Viewer.cellSize." + this._viewerId;
+
+            localStorage.setItem(key, this._cellSize.toString());
         }
 
         private initListeners() {
@@ -274,6 +313,8 @@ namespace colibri.ui.controls.viewers {
 
                 this.setCellSize(this.getCellSize() - ROW_HEIGHT);
             }
+
+            this.saveCellSize();
 
             this.repaint();
         }
@@ -576,9 +617,14 @@ namespace colibri.ui.controls.viewers {
             return this._cellSize;
         }
 
-        setCellSize(cellSize: number): void {
+        setCellSize(cellSize: number, restoreSavedSize = false): void {
 
             this._cellSize = Math.max(ROW_HEIGHT, cellSize);
+
+            if (restoreSavedSize) {
+
+                this.restoreCellSize();
+            }
         }
 
         getContentProvider() {

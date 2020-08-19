@@ -52,6 +52,7 @@ namespace phasereditor2d.scene {
             }));
 
             // preload project
+
             reg.addExtension(this._sceneFinder.getProjectPreloader());
 
             // content type resolvers
@@ -194,8 +195,9 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.RotateTool(),
                 new ui.sceneobjects.ScaleTool(),
                 new ui.sceneobjects.OriginTool(),
+                new ui.sceneobjects.TileSpriteSizeTool(),
                 new ui.sceneobjects.SelectionRegionTool(),
-                new ui.sceneobjects.TileSpriteSizeTool()
+                new ui.sceneobjects.PanTool(),
             ));
         }
 
@@ -209,11 +211,12 @@ namespace phasereditor2d.scene {
             return this.getTools().find(tool => tool.getId() === toolId);
         }
 
-        getDefaultSceneLanguage() {
+        getDefaultSceneSettings() {
 
-            let typeScript = false;
+            const settings = new core.json.SceneSettings();
 
             try {
+
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
                 const files = [...finder.getSceneFiles()];
@@ -224,11 +227,7 @@ namespace phasereditor2d.scene {
 
                     const file = files[0];
 
-                    const s = new core.json.SceneSettings();
-
-                    s.readJSON(finder.getSceneData(file).settings);
-
-                    typeScript = s.compilerOutputLanguage === core.json.SourceLang.TYPE_SCRIPT;
+                    settings.readJSON(finder.getSceneData(file).settings);
                 }
 
             } catch (e) {
@@ -236,8 +235,7 @@ namespace phasereditor2d.scene {
                 console.error(e);
             }
 
-            return typeScript ?
-                core.json.SourceLang.TYPE_SCRIPT : core.json.SourceLang.JAVA_SCRIPT;
+            return settings;
         }
 
         createUserPropertyTypes() {

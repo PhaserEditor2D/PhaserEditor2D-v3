@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _editor: editor.SceneEditor;
 
         constructor(editor: editor.SceneEditor) {
-            super(new controls.viewers.TreeViewer(), false);
+            super(new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.ParentDialog"), false);
 
             this._editor = editor;
         }

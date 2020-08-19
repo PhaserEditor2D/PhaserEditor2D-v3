@@ -17,6 +17,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
     export const CMD_SELECT_REGION = "phasereditor2d.scene.ui.editor.commands.SelectRegion";
+    export const CMD_PAN_SCENE = "phasereditor2d.scene.ui.editor.commands.PanScene";
     export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
     export const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
@@ -32,6 +33,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_MOVE_OBJECT_RIGHT = "phasereditor2d.scene.ui.editor.commands.MoveObjectRight";
     export const CMD_MOVE_OBJECT_UP = "phasereditor2d.scene.ui.editor.commands.MoveObjectUp";
     export const CMD_MOVE_OBJECT_DOWN = "phasereditor2d.scene.ui.editor.commands.MoveObjectDown";
+    export const CMD_FIX_SCENE_FILES_ID = "phasereditor2d.scene.ui.editor.commands.FixSceneFilesID";
+    export const CMD_DUPLICATE_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.DuplicateSceneFile";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -69,83 +72,13 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 name: "Scene Editor"
             });
 
-            // copy
+            SceneEditorCommands.registerGlobalCommands(manager);
 
-            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_COPY,
+            SceneEditorCommands.registerEditCommands(manager);
 
-                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+            SceneEditorCommands.registerSceneCommands(manager);
 
-                args => {
-                    (args.activeEditor as SceneEditor).getClipboardManager().copy();
-                });
-
-            // paste
-
-            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_PASTE,
-
-                args => isSceneScope(args),
-
-                args => {
-                    (args.activeEditor as SceneEditor).getClipboardManager().paste();
-                });
-
-            // cut
-
-            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_CUT,
-
-                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
-
-                args => {
-                    (args.activeEditor as SceneEditor).getClipboardManager().cut();
-                });
-
-            // update current editor
-
-            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR,
-                args => args.activeEditor instanceof SceneEditor,
-                args => (args.activeEditor as SceneEditor).refreshScene());
-
-            // select all
-
-            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL,
-
-                args => args.activePart instanceof SceneEditor,
-
-                args => {
-                    const editor = args.activeEditor as SceneEditor;
-                    editor.getSelectionManager().selectAll();
-                });
-
-            // clear selection
-
-            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
-
-                args => {
-
-                    if (controls.dialogs.Dialog.getActiveDialog()
-
-                        || controls.ColorPickerManager.isActivePicker()) {
-
-                        return false;
-                    }
-
-                    return isSceneScope(args);
-                },
-
-                args => {
-                    const editor = args.activeEditor as SceneEditor;
-                    editor.getSelectionManager().clearSelection();
-                });
-
-            // delete
-
-            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
-
-                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
-
-                args => args.activeEditor.getUndoManager()
-                    .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
-            );
+            SceneEditorCommands.registerSelectionCommands(manager);
 
             SceneEditorCommands.registerContainerCommands(manager);
 
@@ -161,14 +94,104 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             SceneEditorCommands.registerMoveObjectCommands(manager);
 
-            // add object dialog
+            SceneEditorCommands.registerAddObjectCommands(manager);
+
+            SceneEditorCommands.registerTextureCommands(manager);
+
+            SceneEditorCommands.registerSnappingCommands(manager);
+        }
+
+        static registerGlobalCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // fix scene id
 
             manager.add({
                 command: {
-                    id: CMD_ADD_SCENE_OBJECT,
-                    icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
-                    name: "Add Object",
-                    tooltip: "Add a new object to the scene",
+                    id: CMD_FIX_SCENE_FILES_ID,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Fix Duplicated Scenes ID",
+                    tooltip: "Fix the duplicated ID of the scene files."
+                },
+                handler: {
+                    testFunc: phasereditor2d.ide.ui.actions.isNotWelcomeWindowScope,
+                    executeFunc: async args => {
+
+                        const files = await colibri.ui.ide.FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+
+                        files.sort((a, b) => a.getModTime() - b.getModTime());
+
+                        const usedIds = new Set();
+
+                        const dlg = new controls.dialogs.ProgressDialog();
+                        const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
+
+                        dlg.create();
+
+                        dlg.setTitle("Fix Duplicated Scenes ID");
+
+                        monitor.addTotal(files.length);
+
+                        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                        finder.setEnabled(false);
+
+                        let someoneFixed = false;
+
+                        for (const file of files) {
+
+                            const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+
+                            const data = JSON.parse(content) as core.json.ISceneData;
+
+                            const id = data.id;
+
+                            if (usedIds.has(id)) {
+
+                                data.id = Phaser.Utils.String.UUID();
+
+                                console.log(`Fix Scene ID of "${file.getFullName()}". New id: ` + data.id);
+
+                                const newContent = JSON.stringify(data, null, 4);
+
+                                await colibri.ui.ide.FileUtils.setFileString_async(file, newContent);
+
+                                someoneFixed = true;
+
+                            } else {
+
+                                usedIds.add(id);
+                            }
+
+                            monitor.step();
+                        }
+
+                        finder.setEnabled(true);
+
+                        dlg.close();
+
+                        if (someoneFixed) {
+
+                            await finder.preload(monitor);
+
+                        } else {
+
+                            alert("No scene files found with a duplicated ID.");
+                        }
+                    }
+                }
+            });
+
+        }
+
+        static registerSnappingCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // snapping
+
+            manager.add({
+                command: {
+                    id: CMD_TOGGLE_SNAPPING,
+                    name: "Toggle Snapping",
+                    tooltip: "Enable/disable the snapping.",
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
@@ -177,20 +200,38 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const editor = args.activeEditor as SceneEditor;
 
-                        if (editor.isLoading()) {
-
-                            alert("Cannot add objects while the editor is loading.");
-                            return;
-                        }
-
-                        const dlg = new ui.editor.AddObjectDialog(editor);
-                        dlg.create();
+                        editor.toggleSnapping();
                     }
                 },
                 keys: {
-                    key: "A"
+                    key: "E"
                 }
             });
+
+            manager.add({
+                command: {
+                    id: CMD_SET_SNAPPING_TO_OBJECT_SIZE,
+                    name: "Snap To Object Size",
+                    tooltip: "Enable snapping and set size to the selected object.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args)
+                        && (args.activeEditor as SceneEditor).getSelectedGameObjects().length > 0,
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        editor.setSnappingToObjectSize();
+                    }
+                },
+                keys: {
+                    key: "W"
+                }
+            });
+        }
+
+        static registerTextureCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
             // texture
 
@@ -272,14 +313,18 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "X"
                 }
             });
+        }
 
-            // snapping
+        static registerAddObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // add object dialog
 
             manager.add({
                 command: {
-                    id: CMD_TOGGLE_SNAPPING,
-                    name: "Toggle Snapping",
-                    tooltip: "Enable/disable the snapping.",
+                    id: CMD_ADD_SCENE_OBJECT,
+                    icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
+                    name: "Add Object",
+                    tooltip: "Add a new object to the scene",
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
@@ -288,35 +333,140 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const editor = args.activeEditor as SceneEditor;
 
-                        editor.toggleSnapping();
+                        if (editor.isLoading()) {
+
+                            alert("Cannot add objects while the editor is loading.");
+                            return;
+                        }
+
+                        const dlg = new ui.editor.AddObjectDialog(editor);
+                        dlg.create();
                     }
                 },
                 keys: {
-                    key: "E"
+                    key: "A"
                 }
             });
+
+        }
+
+        static registerSceneCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // update current editor
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR,
+                args => args.activeEditor instanceof SceneEditor,
+                args => (args.activeEditor as SceneEditor).refreshScene());
 
             manager.add({
                 command: {
-                    id: CMD_SET_SNAPPING_TO_OBJECT_SIZE,
-                    name: "Snap To Object Size",
-                    tooltip: "Enable snapping and set size to the selected object.",
-                    category: CAT_SCENE_EDITOR
+                    id: CMD_DUPLICATE_SCENE_FILE,
+                    name: "Duplicate Scene File",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Duplicate the scene file, with a new ID.",
                 },
                 handler: {
-                    testFunc: args => isSceneScope(args)
-                        && (args.activeEditor as SceneEditor).getSelectedGameObjects().length > 0,
-                    executeFunc: args => {
+                    testFunc: isSceneScope,
+                    executeFunc: async args => {
 
                         const editor = args.activeEditor as SceneEditor;
 
-                        editor.setSnappingToObjectSize();
+                        const file = editor.getInput();
+
+                        const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+
+                        const data = JSON.parse(content);
+
+                        data.id = Phaser.Utils.String.UUID();
+
+                        const newContent = JSON.stringify(data, null, 4);
+
+                        const newName = colibri.ui.ide.FileUtils.getFileCopyName(file);
+
+                        const newFile = await colibri.ui.ide.FileUtils.createFile_async(file.getParent(), newName, newContent);
+
+                        colibri.Platform.getWorkbench().openEditor(newFile);
                     }
-                },
-                keys: {
-                    key: "W"
                 }
-            });
+            })
+        }
+
+        static registerSelectionCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // select all
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL,
+
+                args => args.activePart instanceof SceneEditor,
+
+                args => {
+                    const editor = args.activeEditor as SceneEditor;
+                    editor.getSelectionManager().selectAll();
+                });
+
+            // clear selection
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
+
+                args => {
+
+                    if (controls.dialogs.Dialog.getActiveDialog()
+
+                        || controls.ColorPickerManager.isActivePicker()) {
+
+                        return false;
+                    }
+
+                    return isSceneScope(args);
+                },
+
+                args => {
+                    const editor = args.activeEditor as SceneEditor;
+                    editor.getSelectionManager().clearSelection();
+                });
+        }
+
+        static registerEditCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // copy
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_COPY,
+
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+
+                args => {
+                    (args.activeEditor as SceneEditor).getClipboardManager().copy();
+                });
+
+            // paste
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_PASTE,
+
+                args => isSceneScope(args),
+
+                args => {
+                    (args.activeEditor as SceneEditor).getClipboardManager().paste();
+                });
+
+            // cut
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_CUT,
+
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+
+                args => {
+                    (args.activeEditor as SceneEditor).getClipboardManager().cut();
+                });
+
+            // delete
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
+
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+
+                args => args.activeEditor.getUndoManager()
+                    .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
+            );
         }
 
         private static registerMoveObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -881,7 +1031,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_SELECT_REGION,
-                    name: "Select Region",
+                    name: "Select Region Tool",
                     category: CAT_SCENE_EDITOR,
                     tooltip: "Select all objects inside a region",
                     icon: ScenePlugin.getInstance().getIcon(ICON_SELECT_REGION)
@@ -894,6 +1044,27 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 keys: {
                     shift: true,
                     key: "S"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_PAN_SCENE,
+                    name: "Pan Tool",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Pan the scene viewport"
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const editor = (args.activeEditor as SceneEditor);
+
+                        editor.getToolsManager().swapTool(ui.sceneobjects.PanTool.ID);
+                    }
+                },
+                keys: {
+                    key: " "
                 }
             });
 

@@ -56,12 +56,33 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         setActiveTool(tool: SceneTool) {
 
+            const args = this.createToolArgs();
+
+            if (this._activeTool) {
+
+                this._activeTool.onDeactivated(args);
+            }
+
             this.updateAction(this._activeTool, false);
             this.updateAction(tool, true);
 
             this._activeTool = tool;
 
+            if (this._activeTool) {
+
+                this._activeTool.onActivated(args);
+            }
+
             this._editor.repaint();
+        }
+
+        private createToolArgs(): ISceneToolContextArgs {
+            return {
+                camera: null,
+                editor: this._editor,
+                localCoords: this._editor.isLocalCoords(),
+                objects: this._editor.getSelection()
+            };
         }
 
         private updateAction(tool: tools.SceneTool, selected: boolean) {

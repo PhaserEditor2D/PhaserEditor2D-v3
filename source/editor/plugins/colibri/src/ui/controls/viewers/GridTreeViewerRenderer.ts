@@ -15,6 +15,8 @@ namespace colibri.ui.controls.viewers {
 
             viewer.setCellSize(128 * controls.DEVICE_PIXEL_RATIO);
 
+            viewer.restoreCellSize();
+
             this._center = center;
             this._flat = flat;
             this._sections = [];
@@ -44,6 +46,8 @@ namespace colibri.ui.controls.viewers {
         protected paintItems(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number) {
+
+            objects = this.sortObjects(objects);
 
             const viewer = this.getViewer();
 
@@ -146,6 +150,8 @@ namespace colibri.ui.controls.viewers {
         private paintItems2(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number) {
+
+            objects = this.sortObjects(objects);
 
             const viewer = this.getViewer();
             const cellSize = Math.max(ROW_HEIGHT, viewer.getCellSize());

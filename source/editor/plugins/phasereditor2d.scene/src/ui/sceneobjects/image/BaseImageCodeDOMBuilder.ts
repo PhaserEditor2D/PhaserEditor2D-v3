@@ -59,6 +59,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 if (frameCode) {
 
                     call.arg("frame !== undefined && frame !== null ? frame : " + frameCode);
+
+                } else {
+
+                    call.arg("frame");
                 }
             }
         }

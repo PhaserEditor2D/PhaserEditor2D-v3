@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp.style.gridTemplateColumns = "1fr";
 
             this._propArea = this.createGridElement(comp);
-            this._propArea.style.gridTemplateColumns = "auto auto 1fr";
+            this._propArea.style.gridTemplateColumns = "1fr";
 
             comp.appendChild(this._propArea);
 
@@ -75,7 +75,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const headerDiv = document.createElement("div");
                     headerDiv.classList.add("PrefabLink");
-                    headerDiv.style.gridColumn = "1 / span 3";
                     headerDiv.style.width = "100%";
 
                     this._propArea.appendChild(headerDiv);
@@ -97,9 +96,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this.createComponentMenuIcon(headerDiv, editorCompList, compName, true);
 
-                    for (const prop of compInfo.component.getUserProperties().getProperties()) {
+                    {
+                        const props = compInfo.component.getUserProperties().getProperties();
 
-                        prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, false);
+                        if (props.length > 0) {
+
+                            const compPropArea = this.createGridElement(this._propArea);
+                            compPropArea.style.gridTemplateColumns = "auto auto 1fr";
+                            compPropArea.style.width = "100%";
+
+                            for (const prop of props) {
+
+                                prop.getType().createInspectorPropertyEditor(this, compPropArea, prop, false);
+                            }
+                        }
                     }
                 }
 
@@ -132,7 +142,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                             const headerDiv = document.createElement("div");
                             headerDiv.classList.add("PrefabLink");
-                            headerDiv.style.gridColumn = "1 / span 3";
                             headerDiv.style.width = "100%";
 
                             this._propArea.appendChild(headerDiv);
@@ -167,9 +176,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                             this.createComponentMenuIcon(headerDiv, editorCompList, userComp.getName(), false);
 
-                            for (const prop of userComp.getUserProperties().getProperties()) {
+                            {
+                                const props = userComp.getUserProperties().getProperties();
 
-                                prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, true);
+                                if (props.length > 0) {
+
+                                    const compPropArea = this.createGridElement(this._propArea);
+                                    compPropArea.style.gridTemplateColumns = "auto auto 1fr";
+                                    compPropArea.style.width = "100%";
+
+                                    for (const prop of props) {
+
+                                        prop.getType().createInspectorPropertyEditor(this, compPropArea, prop, true);
+                                    }
+                                }
                             }
                         }
                     }
@@ -217,7 +237,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         this.updateWithSelection();
                     }
                 });
-                btn.style.gridColumn = "1 / span 3";
+                btn.style.width = "100%";
                 btn.style.justifySelf = "self-center";
                 btn.style.marginTop = "10px";
                 btn.disabled = items.length === 0;
@@ -257,6 +277,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 });
 
                 if (localComponent) {
+
+                    if (editorCompList.length === 1) {
+
+                        menu.addAction({
+                            text: "Move Up",
+                            callback: () => {
+
+                                this.runOperation(() => {
+
+                                    const editorComp = editorCompList[0];
+                                    editorComp.moveUpUserComponent(compName)
+                                });
+
+                                this.updateWithSelection();
+                            }
+                        });
+
+                        menu.addAction({
+                            text: "Move Down",
+                            callback: () => {
+
+                                this.runOperation(() => {
+
+                                    const editorComp = editorCompList[0];
+                                    editorComp.moveDownUserComponent(compName)
+                                });
+
+                                this.updateWithSelection();
+                            }
+                        });
+                    }
 
                     menu.addAction({
                         text: "Delete",

@@ -18,7 +18,7 @@ namespace colibri.ui.ide {
 
         protected createViewer(): viewers.TreeViewer {
 
-            const viewer = new viewers.TreeViewer();
+            const viewer = new viewers.TreeViewer(this.getId() + ".EditorViewerView");
 
             viewer.eventSelectionChanged.addListener(() => {
 
