@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 3.5.0-next
+
+### Fixed
+
+* [#71](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/71) Files view: fixes files sorting. Folders go first.
+
 ## Version 3.5.0 Aug 19, 2020
 
 ### Added
