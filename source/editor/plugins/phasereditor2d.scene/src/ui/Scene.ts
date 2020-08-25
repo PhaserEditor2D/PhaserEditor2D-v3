@@ -171,7 +171,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container) {
 
-                    this.getInputSortedObjects2(result, obj.list);
+                    this.getInputSortedObjects2(result, obj.getList());
 
                 } else {
 
@@ -195,7 +195,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container) {
 
-                    this.visit2(visitor, obj.list);
+                    this.visit2(visitor, obj.getList());
                 }
             }
         }
@@ -216,7 +216,7 @@ namespace phasereditor2d.scene.ui {
 
                     if (obj instanceof sceneobjects.Container) {
 
-                        this.visitAskChildren2(visitor, obj.list);
+                        this.visitAskChildren2(visitor, obj.getList());
                     }
                 }
             }
@@ -284,7 +284,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container) {
 
-                    i += this.buildObjectSortingMap2(map, obj.list);
+                    i += this.buildObjectSortingMap2(map, obj.getList());
                 }
 
                 i++;
@@ -346,7 +346,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container) {
 
-                    const result = this.findByEditorId(obj.list, id);
+                    const result = this.findByEditorId(obj.getList(), id);
 
                     if (result) {
                         return result;
