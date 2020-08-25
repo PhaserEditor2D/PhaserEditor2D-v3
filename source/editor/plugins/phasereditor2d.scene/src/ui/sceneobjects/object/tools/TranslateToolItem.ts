@@ -46,8 +46,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
-            const rot = Phaser.Math.DegToRad(this.getAvgGlobalAngle(args));
-
             for (const obj of args.objects) {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;

@@ -5,6 +5,7 @@
 ### Fixed
 
 * [#71](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/71) Files view: fixes files sorting. Folders go first.
+* Viewer: scrolling when distant elements are selected.
 
 ### Plugin Development
 

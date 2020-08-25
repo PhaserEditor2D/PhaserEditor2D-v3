@@ -420,8 +420,11 @@ namespace colibri.ui.controls.viewers {
         setExpanded(obj: any, expanded: boolean): void {
 
             if (expanded) {
+
                 this._expandedObjects.add(obj);
+
             } else {
+
                 this._expandedObjects.delete(obj);
             }
         }

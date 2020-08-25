@@ -64,6 +64,8 @@ namespace colibri.ui.controls.viewers {
 
             this.repaint().then(() => {
 
+                console.log("<<<");
+
                 const objSet = new Set(objects);
 
                 let found = false;
@@ -72,28 +74,33 @@ namespace colibri.ui.controls.viewers {
 
                 const b = this.getBounds();
 
-                for (const item of this._paintItems) {
+                const items = [...this._paintItems];
+
+                items.sort((i1, i2) => i1.y - i2.y);
+
+                for (const item of items) {
 
                     if (objSet.has(item.data)) {
 
-                        if (item.y < 0 || item.y + item.h > b.height) {
+                        y = (item.y - b.height / 2 + item.h / 2) - this.getScrollY();
 
-                            y = (item.y - b.height / 2 + item.h / 2) - this.getScrollY();
+                        found = true;
 
-                            found = true;
-
-                            break;
-                        }
+                        break;
                     }
                 }
 
                 if (found) {
+
+                    console.log(-y);
 
                     this.setScrollY(-y);
                     this.repaint();
 
                     scrollPane.layout();
                 }
+
+                console.log(">>");
             });
 
         }
@@ -101,6 +108,7 @@ namespace colibri.ui.controls.viewers {
         private revealPath(path: any[]) {
 
             for (let i = 0; i < path.length - 1; i++) {
+
                 this.setExpanded(path[i], true);
             }
         }
