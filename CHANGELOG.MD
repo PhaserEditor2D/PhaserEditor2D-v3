@@ -6,6 +6,10 @@
 
 * [#71](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/71) Files view: fixes files sorting. Folders go first.
 
+### Plugin Development
+
+* Updated to TypeScript 4.0.4.
+
 ## Version 3.5.0 Aug 19, 2020
 
 ### Added
