@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getList(): ISceneObject[] {
 
-            return super.list as any;
+            return this.list as any;
         }
     }
 }
