@@ -233,7 +233,6 @@ namespace phasereditor2d.scene.ui.editor {
             this._gameCanvas.classList.add("GameCanvas");
 
             this._gameCanvas.style.position = "absolute";
-            this.getElement().appendChild(container);
 
             container.appendChild(this._gameCanvas);
 
