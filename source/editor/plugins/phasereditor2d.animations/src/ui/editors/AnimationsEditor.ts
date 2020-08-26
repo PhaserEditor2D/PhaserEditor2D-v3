@@ -215,5 +215,25 @@ namespace phasereditor2d.animations.ui.editors {
 
             return false;
         }
+
+        onPartDeactivated() {
+
+            super.onPartActivated();
+
+            if (this._game.loop) {
+
+                this._game.loop.stop();
+            }
+        }
+
+        onPartActivated() {
+
+            super.onPartActivated();
+
+            if (this._gameBooted && !this._game.loop.running) {
+
+                this._game.loop.start(this._game.loop.callback);
+            }
+        }
     }
 }

@@ -21,8 +21,8 @@ namespace phasereditor2d.animations.ui.editors {
 
             const size = 128;
 
-            let x = 10;
-            let y = 10;
+            let x = 5;
+            let y = 5;
 
             for (const obj of list) {
 
@@ -73,12 +73,12 @@ namespace phasereditor2d.animations.ui.editors {
                 sprite.x = x + marginX;
                 sprite.y = y + marginY;
 
-                x += size + 10;
+                x += size + 5;
 
-                if (x + size > this.scale.width - 10) {
+                if (x + size > this.scale.width - 5) {
 
-                    x = 10;
-                    y += size + 10;
+                    x = 5;
+                    y += size + 5;
                 }
             }
         }
