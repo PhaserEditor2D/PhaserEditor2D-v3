@@ -1,4 +1,4 @@
-
+/// <reference path="./BaseSceneMaker.ts" />
 namespace phasereditor2d.scene.ui {
 
     import controls = colibri.ui.controls;
@@ -7,21 +7,21 @@ namespace phasereditor2d.scene.ui {
     import json = core.json;
     import FileUtils = colibri.ui.ide.FileUtils;
 
-    export class SceneMaker {
+    export class SceneMaker extends BaseSceneMaker {
 
-        private _scene: Scene;
-        private _packFinder: pack.core.PackFinder;
+        private _editorScene: Scene;
 
         constructor(scene: Scene) {
-            this._scene = scene;
-            this._packFinder = new pack.core.PackFinder();
+            super(scene);
+
+            this._editorScene = scene;
         }
 
         afterDropObjects(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
 
             let container: sceneobjects.Container;
 
-            for (const sprite of this._scene.getEditor().getSelectedGameObjects()) {
+            for (const sprite of this._editorScene.getEditor().getSelectedGameObjects()) {
 
                 let sprite2 = sprite;
 
@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.ui {
                     const p = new Phaser.Math.Vector2();
                     sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
 
-                    this._scene.sys.displayList.remove(sprite);
+                    this._editorScene.sys.displayList.remove(sprite);
                     container.add(sprite);
 
                     container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
@@ -170,46 +170,16 @@ namespace phasereditor2d.scene.ui {
             return "displayList" in data && Array.isArray(data.displayList);
         }
 
-        getPackFinder() {
-            return this._packFinder;
-        }
-
-        async preload() {
-
-            await this._packFinder.preload();
-
-            const updaters = ScenePlugin.getInstance().getLoaderUpdaters();
-
-            for (const updater of updaters) {
-
-                updater.clearCache(this._scene.game);
-            }
-        }
-
         async buildDependenciesHash() {
 
             const builder = new phasereditor2d.ide.core.MultiHashBuilder();
 
-            for (const obj of this._scene.getDisplayListChildren()) {
+            for (const obj of this._editorScene.getDisplayListChildren()) {
 
                 await obj.getEditorSupport().buildDependencyHash({ builder });
             }
 
-            const cache = this._scene.getPackCache();
-
-            const files = new Set<io.FilePath>();
-
-            for (const asset of cache.getAssets()) {
-
-                files.add(asset.getPack().getFile());
-
-                asset.computeUsedFiles(files);
-            }
-
-            for (const file of files) {
-
-                builder.addPartialFileToken(file);
-            }
+           this._editorScene.getPackCache().buildAssetsDependenciesHash(builder);
 
             const hash = builder.build();
 
@@ -281,23 +251,23 @@ namespace phasereditor2d.scene.ui {
 
             if (sceneData.settings) {
 
-                this._scene.getSettings().readJSON(sceneData.settings);
+                this._editorScene.getSettings().readJSON(sceneData.settings);
             }
 
             if (sceneData.lists) {
 
-                this._scene.getObjectLists().readJSON(sceneData);
+                this._editorScene.getObjectLists().readJSON(sceneData);
             }
 
             if (sceneData.prefabProperties) {
 
-                this._scene.getPrefabUserProperties().readJSON(sceneData.prefabProperties);
+                this._editorScene.getPrefabUserProperties().readJSON(sceneData.prefabProperties);
             }
 
-            this._scene.setSceneType(sceneData.sceneType || core.json.SceneType.SCENE);
+            this._editorScene.setSceneType(sceneData.sceneType || core.json.SceneType.SCENE);
 
             // removes this condition, it is used temporal for compatibility
-            this._scene.setId(sceneData.id);
+            this._editorScene.setId(sceneData.id);
 
             for (const objData of sceneData.displayList) {
 
@@ -332,7 +302,7 @@ namespace phasereditor2d.scene.ui {
                         const objAssets = await ext.getAssetsFromObjectData({
                             serializer: ser,
                             finder: finder,
-                            scene: this._scene
+                            scene: this._editorScene
                         });
 
                         assets.push(...objAssets);
@@ -354,7 +324,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (updater) {
 
-                    await updater.updateLoader(this._scene, asset);
+                    await updater.updateLoader(this._editorScene, asset);
 
                     if (monitor) {
 
@@ -366,12 +336,12 @@ namespace phasereditor2d.scene.ui {
 
         getCanvasCenterPoint() {
 
-            const canvas = this._scene.game.canvas;
+            const canvas = this._editorScene.game.canvas;
 
             let x = canvas.width / 2;
             let y = canvas.height / 2;
 
-            const worldPoint = this._scene.getCamera().getWorldPoint(x, y);
+            const worldPoint = this._editorScene.getCamera().getWorldPoint(x, y);
 
             x = Math.floor(worldPoint.x);
             y = Math.floor(worldPoint.y);
@@ -384,7 +354,7 @@ namespace phasereditor2d.scene.ui {
             const { x, y } = this.getCanvasCenterPoint();
 
             const newObject = ext.createEmptySceneObject({
-                scene: this._scene,
+                scene: this._editorScene,
                 x,
                 y,
                 extraData
@@ -394,7 +364,7 @@ namespace phasereditor2d.scene.ui {
                 return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
             });
 
-            this._scene.visit(obj => nameMaker.update([obj]));
+            this._editorScene.visit(obj => nameMaker.update([obj]));
 
             newObject.getEditorSupport().setLabel(nameMaker.makeName(ext.getTypeName().toLowerCase()));
 
@@ -415,7 +385,7 @@ namespace phasereditor2d.scene.ui {
 
                     const sprite = ext.createSceneObjectWithData({
                         data: data,
-                        scene: this._scene
+                        scene: this._editorScene
                     });
 
                     return sprite;

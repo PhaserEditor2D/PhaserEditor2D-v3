@@ -1,0 +1,32 @@
+.AnimationsEditor {
+    padding: 5px;
+}
+
+.AnimationsEditor .AnimationsEditorContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.AnimationsEditor canvas {
+    border-radius: 3px;
+}
+
+
+/* light */
+
+.light .AnimationsEditor .AnimationsEditorContainer {
+    background: #8e8e8e;
+}
+
+/* dark */
+
+.dark .AnimationsEditor .AnimationsEditorContainer {
+    background: #3f3f3f;
+    border-radius: 3px;
+}
+
+/* dark plus */
+
+.darkPlus .AnimationsEditor {
+    padding: 0px !important;
+}

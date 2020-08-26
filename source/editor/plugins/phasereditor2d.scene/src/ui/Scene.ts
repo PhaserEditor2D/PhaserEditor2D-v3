@@ -1,16 +1,14 @@
-
+/// <reference path="./BaseScene.ts" />
 namespace phasereditor2d.scene.ui {
 
-    export class Scene extends Phaser.Scene {
+    export class Scene extends BaseScene {
 
         private _id: string;
         private _sceneType: core.json.SceneType;
         private _editor: editor.SceneEditor;
-        private _maker: SceneMaker;
         private _settings: core.json.SceneSettings;
         private _prefabProperties: sceneobjects.PrefabUserProperties;
         private _objectLists: sceneobjects.ObjectLists;
-        private _packCache: pack.core.parsers.AssetPackCache;
 
         constructor(editor?: editor.SceneEditor) {
             super("ObjectScene");
@@ -19,15 +17,16 @@ namespace phasereditor2d.scene.ui {
 
             this._editor = editor;
 
-            this._maker = new SceneMaker(this);
-
             this._settings = new core.json.SceneSettings();
-
-            this._packCache = new pack.core.parsers.AssetPackCache();
 
             this._objectLists = new sceneobjects.ObjectLists();
 
             this._prefabProperties = new sceneobjects.PrefabUserProperties();
+        }
+
+        createSceneMaker() {
+
+            return new SceneMaker(this);
         }
 
         getEditor() {
@@ -40,10 +39,6 @@ namespace phasereditor2d.scene.ui {
             // this.game.events.on(Phaser.Core.Events.DESTROY, e => {
             //     console.log(name + ": destroyed.");
             // });
-        }
-
-        getPackCache() {
-            return this._packCache;
         }
 
         destroyGame() {
@@ -151,7 +146,7 @@ namespace phasereditor2d.scene.ui {
 
         getMaker() {
 
-            return this._maker;
+            return super.getMaker() as SceneMaker;
         }
 
         getDisplayListChildren(): sceneobjects.ISceneObject[] {
