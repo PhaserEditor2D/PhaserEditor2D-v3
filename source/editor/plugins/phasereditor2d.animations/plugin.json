@@ -1,5 +1,6 @@
 {
     "id": "phasereditor2d.animations",
+    "priority": 1,
     "scripts": [
         "_out/phasereditor2d.animations.js"
     ]
