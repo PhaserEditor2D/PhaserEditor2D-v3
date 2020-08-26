@@ -64,8 +64,6 @@ namespace colibri.ui.controls.viewers {
 
             this.repaint().then(() => {
 
-                console.log("<<<");
-
                 const objSet = new Set(objects);
 
                 let found = false;
@@ -99,8 +97,6 @@ namespace colibri.ui.controls.viewers {
 
                     scrollPane.layout();
                 }
-
-                console.log(">>");
             });
 
         }
