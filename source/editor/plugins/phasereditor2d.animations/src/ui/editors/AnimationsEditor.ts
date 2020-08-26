@@ -8,7 +8,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
         private _gameCanvas: HTMLCanvasElement;
-        _scene: AnimationsScene;
+        private _scene: AnimationsScene;
         private _game: Phaser.Game;
         private _sceneRead: boolean;
         private _gameBooted: boolean;
@@ -32,8 +32,14 @@ namespace phasereditor2d.animations.ui.editors {
             // nothing
         }
 
+        getScene() {
+
+            return this._scene;
+        }
 
         protected createPart(): void {
+
+            this.setLayoutChildren(false);
 
             const container = document.createElement("div");
             container.classList.add("AnimationsEditorContainer");
@@ -45,6 +51,8 @@ namespace phasereditor2d.animations.ui.editors {
             this._gameCanvas = pool.create2D(this.getElement(), 100, 100);
 
             this._gameCanvas.style.position = "absolute";
+
+            container.appendChild(this._gameCanvas);
 
             this._overlayLayer = new AnimationsOverlayLayer(this);
 
@@ -107,6 +115,8 @@ namespace phasereditor2d.animations.ui.editors {
 
             this.layout();
 
+            this.repaint();
+
             this.refreshOutline();
         }
 
@@ -138,7 +148,8 @@ namespace phasereditor2d.animations.ui.editors {
                 maker.createScene(data, errors);
 
                 this._overlayLayer.setLoading(false);
-                this._overlayLayer.render();
+
+                this._scene.events.once(Phaser.Scenes.Events.POST_UPDATE, () => this.repaint());
 
                 if (errors.length > 0) {
 
@@ -156,6 +167,53 @@ namespace phasereditor2d.animations.ui.editors {
         refreshOutline() {
 
             // this._outlineProvider.repaint();
+        }
+
+        repaint() {
+
+            this._overlayLayer.render();
+        }
+
+        layout() {
+
+            super.layout();
+
+            if (!this._game) {
+                return;
+            }
+
+            this._overlayLayer.resizeTo();
+
+            const parent = this._gameCanvas.parentElement;
+
+            const w = parent.clientWidth;
+            const h = parent.clientHeight;
+
+            this._game.scale.resize(w, h);
+
+            if (this._gameBooted) {
+
+                this._scene.getCamera().setSize(w, h);
+
+                this.repaint();
+
+                this._scene.events.once(Phaser.Scenes.Events.POST_UPDATE, () => this.repaint());
+            }
+        }
+
+        onPartClosed() {
+
+            if (super.onPartClosed()) {
+
+                if (this._scene) {
+
+                    this._scene.destroyGame();
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

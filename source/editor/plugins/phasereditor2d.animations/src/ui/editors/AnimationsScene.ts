@@ -14,5 +14,73 @@ namespace phasereditor2d.animations.ui.editors {
 
             return new AnimationsSceneMaker(this);
         }
+
+        update() {
+
+            const list = this.sys.displayList.list;
+
+            const size = 128;
+
+            let x = 10;
+            let y = 10;
+
+            for (const obj of list) {
+
+                const sprite = obj as Phaser.GameObjects.Sprite;
+
+                if (!sprite.anims.isPlaying) {
+
+                    if (sprite.data.has("wait")) {
+
+                        if (sprite.data.get("wait") === 0) {
+
+                            sprite.data.remove("wait");
+
+                            sprite.visible = true;
+                            sprite.play(sprite.anims.getCurrentKey());
+
+                        } else {
+
+                            sprite.data.set("wait", sprite.data.get("wait") - 1);
+                        }
+
+                    } else {
+
+                        sprite.data.set("wait", 60);
+                    }
+                }
+
+                sprite.setOrigin(0, 0);
+
+                let scale = 1;
+
+                if (sprite.width > sprite.height) {
+
+                    scale = size / sprite.width;
+
+                } else {
+
+                    scale = size / sprite.height;
+                }
+
+                sprite.setScale(scale, scale);
+
+                const marginX = size - sprite.width * scale;
+                const marginY = size - sprite.height * scale;
+
+                sprite.setData("cell", { x, y, size });
+
+                sprite.x = x + marginX;
+                sprite.y = y + marginY;
+
+                x += size + 10;
+
+                if (x + size > this.scale.width - 10) {
+
+                    x = 10;
+                    y += size + 10;
+                }
+            }
+        }
     }
 }

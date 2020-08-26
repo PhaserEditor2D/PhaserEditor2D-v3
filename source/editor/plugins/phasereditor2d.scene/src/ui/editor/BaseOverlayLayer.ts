@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._canvas.style.position = "absolute";
         }
 
-        abstract renderLayer(): void;
+        protected abstract renderLayer(): void;
 
         setLoading(loading: boolean) {
 

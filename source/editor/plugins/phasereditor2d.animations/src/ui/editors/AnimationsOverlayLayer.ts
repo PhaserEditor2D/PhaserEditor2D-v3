@@ -1,5 +1,7 @@
 namespace phasereditor2d.animations.ui.editors {
 
+    import controls = colibri.ui.controls;
+
     export class AnimationsOverlayLayer extends scene.ui.editor.BaseOverlayLayer {
 
         private _editor: AnimationsEditor;
@@ -10,9 +12,29 @@ namespace phasereditor2d.animations.ui.editors {
             this._editor = editor;
         }
 
-        renderLayer() {
+        protected renderLayer() {
 
-            // TODO
+            const scene = this._editor.getScene();
+
+            const ctx = this.getContext();
+
+            ctx.save();
+
+            ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+
+            for (const obj of scene.sys.displayList.list) {
+
+                const sprite = obj as Phaser.GameObjects.Sprite;
+
+                const cell = sprite.getData("cell");
+
+                if (cell) {
+
+                    controls.Controls.drawRoundedRect(ctx, cell.x, cell.y, cell.size, cell.size);
+                }
+            }
+
+            ctx.restore();
         }
     }
 }

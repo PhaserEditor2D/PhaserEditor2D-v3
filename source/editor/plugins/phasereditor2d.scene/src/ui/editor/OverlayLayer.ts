@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor = editor;
         }
 
-        renderLayer() {
+        protected renderLayer() {
 
             this.renderGrid();
 

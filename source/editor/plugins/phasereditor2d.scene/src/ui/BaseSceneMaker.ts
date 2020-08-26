@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui {
 
         abstract async buildDependenciesHash(): Promise<string>;
 
-        abstract createScene(data: any, errors?: string[]);
+        abstract createScene(data: any, errors?: string[]): void;
 
         getPackFinder() {
 
@@ -39,6 +39,6 @@ namespace phasereditor2d.scene.ui {
 
                 updater.clearCache(this._scene.game);
             }
-        }        
+        }
     }
 }

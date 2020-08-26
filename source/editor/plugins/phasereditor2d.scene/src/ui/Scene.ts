@@ -41,15 +41,6 @@ namespace phasereditor2d.scene.ui {
             // });
         }
 
-        destroyGame() {
-
-            if (this.game) {
-
-                this.game.destroy(true);
-                this.game.loop.tick();
-            }
-        }
-
         removeAll() {
 
             this.sys.updateList.removeAll();
@@ -350,10 +341,6 @@ namespace phasereditor2d.scene.ui {
             }
 
             return null;
-        }
-
-        getCamera() {
-            return this.cameras.main;
         }
 
         create() {

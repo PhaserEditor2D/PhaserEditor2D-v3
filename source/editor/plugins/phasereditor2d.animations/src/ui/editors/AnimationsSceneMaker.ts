@@ -8,17 +8,13 @@ namespace phasereditor2d.animations.ui.editors {
 
             scene.anims.fromJSON(data);
 
-            let x = 10;
-            let y = 10;
-
             for (const anim of data.anims) {
 
-                const sprite = scene.add.sprite(x, y, null);
+                const sprite = scene.add.sprite(0, 0, null);
 
-                sprite.play(anim.key);
+                sprite.setDataEnabled();
 
-                x += 100;
-                y += 100;
+                sprite.anims.play(anim.key);
             }
         }
 
@@ -37,7 +33,7 @@ namespace phasereditor2d.animations.ui.editors {
 
             const scene = this.getScene();
 
-            const cache = scene.getPackCache();
+            const finder = this.getPackFinder();
 
             const assets = [];
 
@@ -45,7 +41,7 @@ namespace phasereditor2d.animations.ui.editors {
 
                 for (const frame of anim.frames) {
 
-                    const image = cache.getImage(frame.key, frame.frame);
+                    const image = finder.getAssetPackItemImage(frame.key, frame.frame);
 
                     if (image) {
 

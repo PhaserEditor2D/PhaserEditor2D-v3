@@ -25,5 +25,19 @@ namespace phasereditor2d.scene.ui {
 
             return this._maker;
         }
+
+        getCamera() {
+
+            return this.cameras.main;
+        }
+
+        destroyGame() {
+
+            if (this.game) {
+
+                this.game.destroy(true);
+                this.game.loop.tick();
+            }
+        }
     }
 }
