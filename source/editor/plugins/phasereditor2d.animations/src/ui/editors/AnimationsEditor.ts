@@ -69,6 +69,18 @@ namespace phasereditor2d.animations.ui.editors {
             this.createGame();
         }
 
+        setSelection(sel: any[], notify: boolean = true) {
+
+            super.setSelection(sel, notify);
+
+            this.repaintAtNextTick();
+        }
+
+        private repaintAtNextTick() {
+
+            this.getScene().events.once(Phaser.Scenes.Events.POST_UPDATE, () => this.repaint());
+        }
+
         private createGame() {
 
             this._scene = new AnimationsScene(this);
@@ -157,7 +169,7 @@ namespace phasereditor2d.animations.ui.editors {
 
                 this._overlayLayer.setLoading(false);
 
-                this._scene.events.once(Phaser.Scenes.Events.POST_UPDATE, () => this.repaint());
+                this.repaintAtNextTick();
 
                 if (errors.length > 0) {
 
@@ -203,9 +215,7 @@ namespace phasereditor2d.animations.ui.editors {
 
                 this._scene.getCamera().setSize(w, h);
 
-                this.repaint();
-
-                this._scene.events.once(Phaser.Scenes.Events.POST_UPDATE, () => this.repaint());
+                this.repaintAtNextTick();
             }
         }
 

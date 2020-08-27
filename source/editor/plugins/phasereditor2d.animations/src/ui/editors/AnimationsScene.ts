@@ -90,7 +90,6 @@ namespace phasereditor2d.animations.ui.editors {
                             && pointer.y <= cell.y + cell.size) {
 
                             this._editor.setSelection([sprite.anims.currentAnim]);
-                            this.events.once(Phaser.Scenes.Events.POST_UPDATE, () => this._editor.repaint());
                         }
                     }
                 }

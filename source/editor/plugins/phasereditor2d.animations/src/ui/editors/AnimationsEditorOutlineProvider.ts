@@ -19,8 +19,6 @@ namespace phasereditor2d.animations.ui.editors {
         onViewerSelectionChanged(sel: any[]) {
 
             this._editor.setSelection(sel, false);
-
-            this._editor.getScene().events.once(Phaser.Scenes.Events.POST_UPDATE, () => this._editor.repaint());
         }
 
         getContentProvider(): controls.viewers.ITreeContentProvider {
