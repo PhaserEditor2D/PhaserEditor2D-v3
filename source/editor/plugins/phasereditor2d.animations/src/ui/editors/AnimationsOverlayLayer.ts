@@ -26,9 +26,11 @@ namespace phasereditor2d.animations.ui.editors {
 
                 const sprite = obj as Phaser.GameObjects.Sprite;
 
+                const selected = sprite.getData("selected");
+
                 const cell = sprite.getData("cell");
 
-                if (cell) {
+                if (selected && cell) {
 
                     controls.Controls.drawRoundedRect(ctx, cell.x, cell.y, cell.size, cell.size);
                 }

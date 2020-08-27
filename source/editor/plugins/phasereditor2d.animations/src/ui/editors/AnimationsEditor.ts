@@ -40,6 +40,11 @@ namespace phasereditor2d.animations.ui.editors {
             return this._scene;
         }
 
+        getOverlayLayer() {
+
+            return this._overlayLayer;
+        }
+
         protected createPart(): void {
 
             this.setLayoutChildren(false);
@@ -49,6 +54,10 @@ namespace phasereditor2d.animations.ui.editors {
 
             this.getElement().appendChild(container);
 
+            this._overlayLayer = new AnimationsOverlayLayer(this);
+
+            container.appendChild(this._overlayLayer.getCanvas());
+
             const pool = Phaser.Display.Canvas.CanvasPool;
 
             this._gameCanvas = pool.create2D(this.getElement(), 100, 100);
@@ -56,10 +65,6 @@ namespace phasereditor2d.animations.ui.editors {
             this._gameCanvas.style.position = "absolute";
 
             container.appendChild(this._gameCanvas);
-
-            this._overlayLayer = new AnimationsOverlayLayer(this);
-
-            container.appendChild(this._overlayLayer.getCanvas());
 
             this.createGame();
         }
@@ -169,7 +174,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         refreshOutline() {
 
-            // this._outlineProvider.repaint();
+            this._outlineProvider.repaint();
         }
 
         repaint() {

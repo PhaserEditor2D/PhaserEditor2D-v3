@@ -121,11 +121,10 @@ namespace phasereditor2d.scene.ui.editor {
             const borderWidth = settings.borderWidth;
             const borderHeight = settings.borderHeight;
 
-            const ctx = this.getContext();
             const canvasWidth = this.getCanvas().width;
             const canvasHeight = this.getCanvas().height;
 
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            const ctx = this.getContext();
 
             // render grid
 

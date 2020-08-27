@@ -10,6 +10,17 @@ namespace phasereditor2d.animations.ui.editors {
             super();
 
             this._editor = editor;
+            this._editor.eventSelectionChanged.addListener(sel => {
+
+                this.setSelection(sel as any[], true, false);
+            });
+        }
+
+        onViewerSelectionChanged(sel: any[]) {
+
+            this._editor.setSelection(sel, false);
+
+            this._editor.getScene().events.once(Phaser.Scenes.Events.POST_UPDATE, () => this._editor.repaint());
         }
 
         getContentProvider(): controls.viewers.ITreeContentProvider {
@@ -32,7 +43,7 @@ namespace phasereditor2d.animations.ui.editors {
                         return obj.textureKey;
                     }
 
-                    return obj.textureFrame + " - " + obj.textureKey;
+                    return `${obj.textureFrame} (${obj.textureKey})`;
                 }
 
                 return "";
@@ -41,7 +52,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider {
 
-            return new controls.viewers.EmptyCellRendererProvider();
+            return new AnimationsEditorOutlineCellRendererProvider(this._editor);
         }
 
         getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer {

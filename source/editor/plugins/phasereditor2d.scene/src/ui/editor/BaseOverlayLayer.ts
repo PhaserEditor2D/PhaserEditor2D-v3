@@ -65,6 +65,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             if (!this._loading) {
 
+                const canvasWidth = this.getCanvas().width;
+                const canvasHeight = this.getCanvas().height;
+
+                this._ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
                 this.renderLayer();
             }
         }
