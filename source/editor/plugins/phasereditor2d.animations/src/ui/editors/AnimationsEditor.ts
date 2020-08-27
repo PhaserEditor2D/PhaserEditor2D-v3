@@ -13,6 +13,7 @@ namespace phasereditor2d.animations.ui.editors {
         private _sceneRead: boolean;
         private _gameBooted: boolean;
         private _overlayLayer: AnimationsOverlayLayer;
+        private _outlineProvider: any;
 
         static getFactory() {
 
@@ -25,6 +26,8 @@ namespace phasereditor2d.animations.ui.editors {
             super(AnimationsEditor.ID);
 
             this.addClass("AnimationsEditor");
+
+            this._outlineProvider = new AnimationsEditorOutlineProvider(this);
         }
 
         protected onEditorInputContentChangedByExternalEditor() {
@@ -220,9 +223,12 @@ namespace phasereditor2d.animations.ui.editors {
 
             super.onPartActivated();
 
-            if (this._game.loop) {
+            if (colibri.Platform.getWorkbench().getActiveEditor() !== this) {
 
-                this._game.loop.stop();
+                if (this._game.loop) {
+
+                    this._game.loop.stop();
+                }
             }
         }
 
@@ -234,6 +240,16 @@ namespace phasereditor2d.animations.ui.editors {
 
                 this._game.loop.start(this._game.loop.callback);
             }
+        }
+
+        getEditorViewerProvider(key: string) {
+
+            if (key === outline.ui.views.OutlineView.EDITOR_VIEWER_PROVIDER_KEY) {
+
+                return this._outlineProvider;
+            }
+
+            return null;
         }
     }
 }
