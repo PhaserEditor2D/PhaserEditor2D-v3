@@ -119,6 +119,7 @@ namespace colibri.ui.ide {
         getPropertyProvider() {
 
             if (this._currentViewerProvider) {
+
                 return this._currentViewerProvider.getPropertySectionProvider();
             }
 

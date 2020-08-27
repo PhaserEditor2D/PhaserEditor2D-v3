@@ -13,7 +13,9 @@ namespace phasereditor2d.animations.ui.editors {
         private _sceneRead: boolean;
         private _gameBooted: boolean;
         private _overlayLayer: AnimationsOverlayLayer;
-        private _outlineProvider: any;
+        private _outlineProvider: AnimationsEditorOutlineProvider;
+        private _blocksProvider: AnimationsEditorBlocksProvider;
+        private _propertiesProvider: AnimationsEditorPropertyProvider;
 
         static getFactory() {
 
@@ -28,6 +30,8 @@ namespace phasereditor2d.animations.ui.editors {
             this.addClass("AnimationsEditor");
 
             this._outlineProvider = new AnimationsEditorOutlineProvider(this);
+            this._blocksProvider = new AnimationsEditorBlocksProvider(this);
+            this._propertiesProvider = new AnimationsEditorPropertyProvider();
         }
 
         protected onEditorInputContentChangedByExternalEditor() {
@@ -257,11 +261,20 @@ namespace phasereditor2d.animations.ui.editors {
             }
         }
 
+        getPropertyProvider() {
+
+            return this._propertiesProvider;
+        }
+
         getEditorViewerProvider(key: string) {
 
             if (key === outline.ui.views.OutlineView.EDITOR_VIEWER_PROVIDER_KEY) {
 
                 return this._outlineProvider;
+
+            } else if (key === blocks.ui.views.BlocksView.EDITOR_VIEWER_PROVIDER_KEY) {
+
+                return this._blocksProvider;
             }
 
             return null;

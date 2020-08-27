@@ -1,34 +1,36 @@
-namespace phasereditor2d.scene.ui.blocks {
+namespace phasereditor2d.pack.ui.viewers {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
 
-    export class SceneEditorBlocksProvider extends ide.EditorViewerProvider {
+    export abstract class AbstractAssetPackClientBlocksProvider<T extends colibri.ui.ide.EditorPart> extends ide.EditorViewerProvider {
 
-        private _editor: editor.SceneEditor;
+        private _editor: T;
         private _packs: pack.core.AssetPack[];
 
-        constructor(editor: editor.SceneEditor) {
+        constructor(editor: T) {
             super();
 
             this._editor = editor;
+
             this._packs = [];
+        }
+
+        abstract async preloadAndGetFinder(complete?: boolean): Promise<pack.core.PackFinder>;
+
+        getPacks() {
+
+            return this._packs;
+        }
+
+        getEditor() {
+
+            return this._editor;
         }
 
         async preload(complete?: boolean) {
 
-            let finder: pack.core.PackFinder;
-
-            if (this._editor.getScene() && !complete) {
-
-                finder = this._editor.getSceneMaker().getPackFinder();
-
-            } else {
-
-                finder = new pack.core.PackFinder();
-
-                await finder.preload();
-            }
+            const finder = await this.preloadAndGetFinder(complete);
 
             this._packs = finder.getPacks();
         }
@@ -90,39 +92,26 @@ namespace phasereditor2d.scene.ui.blocks {
             return finder.findAssetPackItem(item.getKey());
         }
 
-        getContentProvider(): controls.viewers.ITreeContentProvider {
-
-            return new SceneEditorBlocksContentProvider(this._editor, () => this._packs);
-        }
+        abstract getContentProvider();
 
         getLabelProvider(): controls.viewers.ILabelProvider {
-
-            return new SceneEditorBlocksLabelProvider();
+            return new AssetPackLabelProvider();
         }
 
         getCellRendererProvider(): controls.viewers.ICellRendererProvider {
 
-            return new SceneEditorBlocksCellRendererProvider();
+            return new AssetPackCellRendererProvider("grid");
         }
 
-        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer) {
-            // TODO: we should implements the Favorites section
-            return new SceneEditorBlocksTreeRendererProvider(viewer);
-        }
+        abstract getTreeViewerRenderer(viewer: controls.viewers.TreeViewer);
 
         getUndoManager() {
 
             return this._editor.getUndoManager();
         }
 
-        getPropertySectionProvider(): controls.properties.PropertySectionProvider {
+        abstract getPropertySectionProvider();
 
-            return new SceneEditorBlocksPropertyProvider();
-        }
-
-        getInput() {
-
-            return this;
-        }
+        abstract getInput();
     }
 }

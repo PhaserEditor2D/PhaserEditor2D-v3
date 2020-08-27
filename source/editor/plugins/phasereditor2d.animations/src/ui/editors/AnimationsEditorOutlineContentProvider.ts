@@ -8,9 +8,16 @@ namespace phasereditor2d.animations.ui.editors {
 
             const editor = input as AnimationsEditor;
 
-            const manager = editor.getScene().anims;
+            const scene = editor.getScene();
 
-            return manager ? manager["anims"].getArray() : [];
+            if (scene) {
+
+                const manager = scene.anims;
+
+                return manager ? manager["anims"].getArray() : [];
+            }
+
+            return [];
         }
 
         getChildren(parent: any): any[] {
