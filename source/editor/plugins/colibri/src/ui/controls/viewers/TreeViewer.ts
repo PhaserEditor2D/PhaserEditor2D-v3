@@ -90,8 +90,6 @@ namespace colibri.ui.controls.viewers {
 
                 if (found) {
 
-                    console.log(-y);
-
                     this.setScrollY(-y);
                     this.repaint();
 
