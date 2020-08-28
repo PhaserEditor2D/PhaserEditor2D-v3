@@ -45,7 +45,6 @@ namespace phasereditor2d.animations {
                 manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
                     args => args.activePart instanceof ui.editors.AnimationsEditor,
                     args => args.activeEditor.setSelection([]));
-
             }));
         }
     }

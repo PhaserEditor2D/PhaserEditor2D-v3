@@ -18,7 +18,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
             const comp = this.createGridElement(parent, 2);
 
             {
-                const label = this.createLabel(comp, "Key", this.help("key"));
+                this.createLabel(comp, "Key", this.help("key"));
                 const text = this.createText(comp);
 
                 this.addUpdater(() => {
@@ -29,6 +29,12 @@ namespace phasereditor2d.animations.ui.editors.properties {
             }
 
             this.numberProperty(comp, "frameRate", "Frame Rate", 24);
+
+            this.numberProperty(comp, "delay", "Delay", 0);
+
+            this.numberProperty(comp, "repeat", "Repeat", 0);
+
+            this.numberProperty(comp, "repeatDelay", "Repeat Delay", 0);
         }
 
         private numberProperty(parent: HTMLElement, field: string, labelText: string, defValue: number) {
@@ -45,9 +51,12 @@ namespace phasereditor2d.animations.ui.editors.properties {
                     value = defValue;
                 }
 
-                this.getEditor().runAnimationOperation(anim => {
+                this.getEditor().runOperation(() => {
 
-                    anim[field] = value;
+                    for (const anim of this.getSelection()) {
+
+                        anim[field] = value;
+                    }
                 });
             });
 

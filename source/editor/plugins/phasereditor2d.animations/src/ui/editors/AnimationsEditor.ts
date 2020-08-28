@@ -264,24 +264,20 @@ namespace phasereditor2d.animations.ui.editors {
             return null;
         }
 
-        runAnimationOperation(op: (anim: Phaser.Animations.Animation) => void) {
+        runOperation(op: () => void) {
 
-            for (const obj of this.getSelection()) {
+            const before = AnimationsEditorSnapshotOperation.takeSnapshot(this);
 
-                if (obj instanceof Phaser.Animations.Animation) {
+            op();
 
-                    op(obj);
-                }
-            }
+            const after = AnimationsEditorSnapshotOperation.takeSnapshot(this);
 
-            this.getScene().setReset(() => this.reset());
+            this.getUndoManager().add(new AnimationsEditorSnapshotOperation(this, before, after));
         }
 
-        reset() {
+        reset(animsData: Phaser.Types.Animations.JSONAnimations) {
 
             const scene = this.getScene();
-
-            const animData = scene.anims.toJSON();
 
             for (const sprite of scene.getSprites()) {
 
@@ -290,7 +286,9 @@ namespace phasereditor2d.animations.ui.editors {
 
             scene.sys.displayList.removeAll();
 
-            scene.getMaker().createScene(animData);
+            scene.getMaker().createScene(animsData);
+
+            this.refreshOutline();
 
             this.setSelection(this.getSelection().map(obj => {
 
