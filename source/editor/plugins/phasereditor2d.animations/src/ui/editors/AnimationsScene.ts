@@ -1,5 +1,7 @@
 namespace phasereditor2d.animations.ui.editors {
 
+    const padding = 10;
+
     export class AnimationsScene extends scene.ui.BaseScene {
 
         private _editor: AnimationsEditor;
@@ -28,8 +30,8 @@ namespace phasereditor2d.animations.ui.editors {
 
             while (true) {
 
-                let x = 0;
-                let y = 0;
+                let x = padding;
+                let y = padding;
                 maxY = 0;
                 maxX = 0;
 
@@ -49,7 +51,7 @@ namespace phasereditor2d.animations.ui.editors {
 
                         if (x + size > width) {
 
-                            x = 5;
+                            x = padding;
                             y += size + 5;
                         }
                     }
@@ -59,8 +61,8 @@ namespace phasereditor2d.animations.ui.editors {
 
                     return {
                         size,
-                        marginX: Math.floor((width - maxX - size - 5) / 2),
-                        marginY: Math.floor((height - maxY - size - 5) / 2),
+                        marginX: Math.max(padding, Math.floor((width - maxX - size - 5) / 2)),
+                        marginY: Math.max(padding, Math.floor((height - maxY - size - 5) / 2)),
                     };
 
                 } else {
