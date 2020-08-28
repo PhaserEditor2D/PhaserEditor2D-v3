@@ -5,6 +5,7 @@ namespace phasereditor2d.animations.ui.editors {
     export class AnimationsScene extends scene.ui.BaseScene {
 
         private _editor: AnimationsEditor;
+        private _resetCallback: () => void;
 
         constructor(editor: AnimationsEditor) {
             super("AnimationsScene");
@@ -15,6 +16,16 @@ namespace phasereditor2d.animations.ui.editors {
         createSceneMaker(): scene.ui.BaseSceneMaker {
 
             return new AnimationsSceneMaker(this);
+        }
+
+        getMaker() {
+
+            return super.getMaker() as AnimationsSceneMaker;
+        }
+
+        setReset(callback: ()=>void) {
+
+            this._resetCallback = callback;
         }
 
         private computeLayout(selection: Set<any>) {
@@ -99,6 +110,15 @@ namespace phasereditor2d.animations.ui.editors {
         }
 
         update() {
+
+            if (this._resetCallback) {
+
+                this._resetCallback();
+
+                this._resetCallback = null;
+
+                return;
+            }
 
             const list = this.sys.displayList.list;
 
@@ -185,11 +205,11 @@ namespace phasereditor2d.animations.ui.editors {
                     sprite.data.set("wait", 0);
                 }
             }
+
+            this._editor.repaint();
         }
 
-        private getSelectedAnimations() {
-
-            const list = new Set<Phaser.Animations.Animation>();
+        buildAnimationSpriteMap() {
 
             const map = new Map<Phaser.Animations.AnimationFrame, Phaser.Animations.Animation>();
 
@@ -200,6 +220,20 @@ namespace phasereditor2d.animations.ui.editors {
                     map.set(frame, anim);
                 }
             }
+
+            return map;
+        }
+
+        getSprites() {
+
+            return this.sys.displayList.list as Phaser.GameObjects.Sprite[];
+        }
+
+        private getSelectedAnimations() {
+
+            const list = new Set<Phaser.Animations.Animation>();
+
+            const map = this.buildAnimationSpriteMap();
 
             for (const obj of this._editor.getSelection()) {
 

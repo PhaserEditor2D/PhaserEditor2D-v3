@@ -12,13 +12,6 @@ namespace phasereditor2d.outline.ui.views {
             this.setTitle("Outline");
             this.setIcon(OutlinePlugin.getInstance().getIcon(ICON_OUTLINE));
         }
-        
-        getPropertyProvider() {
-
-            console.log("here here !!!");
-
-            return super.getPropertyProvider();
-        }
 
         getViewerProvider(editor: ide.EditorPart): ide.EditorViewerProvider {
 

@@ -15,7 +15,7 @@ namespace phasereditor2d.animations.ui.editors {
         private _overlayLayer: AnimationsOverlayLayer;
         private _outlineProvider: AnimationsEditorOutlineProvider;
         private _blocksProvider: AnimationsEditorBlocksProvider;
-        private _propertiesProvider: AnimationsEditorPropertyProvider;
+        private _propertiesProvider: properties.AnimationsEditorPropertyProvider;
 
         static getFactory() {
 
@@ -31,7 +31,7 @@ namespace phasereditor2d.animations.ui.editors {
 
             this._outlineProvider = new AnimationsEditorOutlineProvider(this);
             this._blocksProvider = new AnimationsEditorBlocksProvider(this);
-            this._propertiesProvider = new AnimationsEditorPropertyProvider();
+            this._propertiesProvider = new properties.AnimationsEditorPropertyProvider();
         }
 
         protected onEditorInputContentChangedByExternalEditor() {
@@ -71,18 +71,6 @@ namespace phasereditor2d.animations.ui.editors {
             container.appendChild(this._gameCanvas);
 
             this.createGame();
-        }
-
-        setSelection(sel: any[], notify: boolean = true) {
-
-            super.setSelection(sel, notify);
-
-            this.repaintAtNextTick();
-        }
-
-        private repaintAtNextTick() {
-
-            this.getScene().events.once(Phaser.Scenes.Events.POST_UPDATE, () => this.repaint());
         }
 
         private createGame() {
@@ -173,8 +161,6 @@ namespace phasereditor2d.animations.ui.editors {
 
                 this._overlayLayer.setLoading(false);
 
-                this.repaintAtNextTick();
-
                 if (errors.length > 0) {
 
                     alert(errors.join("<br>"));
@@ -218,8 +204,6 @@ namespace phasereditor2d.animations.ui.editors {
             if (this._gameBooted) {
 
                 this._scene.getCamera().setSize(w, h);
-
-                this.repaintAtNextTick();
             }
         }
 
@@ -278,6 +262,47 @@ namespace phasereditor2d.animations.ui.editors {
             }
 
             return null;
+        }
+
+        runAnimationOperation(op: (anim: Phaser.Animations.Animation) => void) {
+
+            for (const obj of this.getSelection()) {
+
+                if (obj instanceof Phaser.Animations.Animation) {
+
+                    op(obj);
+                }
+            }
+
+            this.getScene().setReset(() => this.reset());
+        }
+
+        reset() {
+
+            const scene = this.getScene();
+
+            const animData = scene.anims.toJSON();
+
+            for (const sprite of scene.getSprites()) {
+
+                sprite.destroy();
+            }
+
+            scene.sys.displayList.removeAll();
+
+            scene.getMaker().createScene(animData);
+
+            this.setSelection(this.getSelection().map(obj => {
+
+                if (obj instanceof Phaser.Animations.Animation) {
+
+                    return scene.anims.get(obj.key);
+                }
+
+            }).filter(o => {
+
+                return o !== undefined && o !== null
+            }));
         }
     }
 }

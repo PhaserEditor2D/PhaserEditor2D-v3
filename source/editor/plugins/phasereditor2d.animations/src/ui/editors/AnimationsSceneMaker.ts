@@ -6,15 +6,15 @@ namespace phasereditor2d.animations.ui.editors {
 
             const scene = this.getScene();
 
-            scene.anims.fromJSON(data);
+            scene.anims.fromJSON(data, true);
 
-            for (const anim of data.anims) {
+            for (const animData of data.anims) {
 
                 const sprite = scene.add.sprite(0, 0, null);
 
                 sprite.setDataEnabled();
 
-                sprite.anims.play(anim.key);
+                sprite.anims.play(animData.key);
             }
         }
 

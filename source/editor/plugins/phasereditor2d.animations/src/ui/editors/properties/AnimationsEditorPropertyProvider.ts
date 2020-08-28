@@ -1,4 +1,4 @@
-namespace phasereditor2d.animations.ui.editors {
+namespace phasereditor2d.animations.ui.editors.properties {
 
     import controls = colibri.ui.controls;
 
@@ -12,8 +12,11 @@ namespace phasereditor2d.animations.ui.editors {
 
             super.addSections(page, sections);
 
-            sections.push(new AnimationPreviewFrameSection(page));
-            sections.push(new ManyAnimationFramesPreviewSection(page));
+            sections.push(
+                new AnimationSection(page),
+                new AnimationPreviewFrameSection(page),
+                new ManyAnimationFramesPreviewSection(page)
+            );
         }
     }
 }
