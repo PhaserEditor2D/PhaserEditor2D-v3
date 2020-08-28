@@ -34,8 +34,6 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
         canEdit(obj: any, n: number): boolean {
 
-            console.log(obj);
-
             return obj instanceof Phaser.Animations.AnimationFrame;
         }
     }
