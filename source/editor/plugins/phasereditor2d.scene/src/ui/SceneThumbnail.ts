@@ -37,11 +37,42 @@ namespace phasereditor2d.scene.ui {
 
             maker.createScene(this._data);
 
-            let bounds = this.computeSceneBounds();
+            const children = this.getDisplayListChildren();
+
+            let singleObject: sceneobjects.ISceneObject;
 
             const s = this.getSettings();
 
-            if (bounds.width > s.borderWidth && bounds.height > s.borderHeight) {
+            if (this.isPrefabSceneType()) {
+
+                singleObject = this.getPrefabObject();
+
+            } else if (children.length === 1) {
+
+                singleObject = children[0];
+            }
+
+            if (singleObject) {
+
+                if (singleObject.getEditorSupport().hasComponent(sceneobjects.OriginComponent)) {
+
+                    const sprite = singleObject as any as Phaser.GameObjects.Sprite;
+
+                    sprite.setOrigin(0.5, 0.5);
+                    sprite.setPosition(s.borderX + s.borderWidth / 2, s.borderY + s.borderHeight / 2);
+
+                } else if (singleObject instanceof sceneobjects.Container) {
+
+                    const container = singleObject as sceneobjects.Container;
+
+                    container.getEditorSupport().trim();
+                    container.setPosition(s.borderX + s.borderWidth / 2, s.borderY + s.borderHeight / 2);
+                }
+            }
+
+            let bounds = this.computeSceneBounds();
+
+            if (bounds.width > s.borderWidth || bounds.height > s.borderHeight) {
 
                 bounds = {
                     x: s.borderX,
@@ -49,6 +80,36 @@ namespace phasereditor2d.scene.ui {
                     width: s.borderWidth,
                     height: s.borderHeight
                 };
+
+            } else {
+
+                for (const child of children) {
+
+                    const obj = child as any;
+
+                    if ("x" in obj) {
+
+                        if (bounds.x < 0) {
+
+                            obj.x += Math.abs(bounds.x);
+                        }
+
+                        if (bounds.y < 0) {
+
+                            obj.y += Math.abs(bounds.y);
+                        }
+                    }
+                }
+
+                if (bounds.x < 0) {
+
+                    bounds.x = 0;
+                }
+
+                if (bounds.y < 0) {
+
+                    bounds.y = 0;
+                }
             }
 
             this.sys.renderer.snapshotArea(bounds.x, bounds.y, bounds.width, bounds.height, (img: HTMLImageElement) => {
