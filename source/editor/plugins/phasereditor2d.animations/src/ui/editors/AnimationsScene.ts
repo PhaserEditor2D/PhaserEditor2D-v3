@@ -23,7 +23,7 @@ namespace phasereditor2d.animations.ui.editors {
             return super.getMaker() as AnimationsSceneMaker;
         }
 
-        setReset(callback: ()=>void) {
+        setReset(callback: () => void) {
 
             this._resetCallback = callback;
         }
@@ -103,9 +103,13 @@ namespace phasereditor2d.animations.ui.editors {
                             && pointer.y <= cell.y + cell.size) {
 
                             this._editor.setSelection([sprite.anims.currentAnim]);
+
+                            return;
                         }
                     }
                 }
+
+                this._editor.setSelection([]);
             });
         }
 

@@ -49,6 +49,11 @@ namespace phasereditor2d.animations.ui.editors {
             return this._overlayLayer;
         }
 
+        selectAll() {
+
+            this.setSelection(this._scene.anims["anims"].getArray());
+        }
+
         protected createPart(): void {
 
             this.setLayoutChildren(false);
