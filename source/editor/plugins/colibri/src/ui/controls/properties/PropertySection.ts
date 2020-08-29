@@ -114,6 +114,19 @@ namespace colibri.ui.controls.properties {
             return set.size === 1 ? values[0] : `(${values.length} selected)`;
         }
 
+        flatValues_BooleanAnd(values: boolean[]) {
+
+            for(const value of values) {
+
+                if (!value) {
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         createGridElement(parent: HTMLElement, cols = 0, simpleProps = true) {
 
             const div = document.createElement("div");

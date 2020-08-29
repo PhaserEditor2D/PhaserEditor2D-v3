@@ -28,18 +28,47 @@ namespace phasereditor2d.animations.ui.editors.properties {
                 });
             }
 
-            this.numberProperty(comp, "frameRate", "Frame Rate", 24);
+            this.createNumberProperty(comp, "frameRate", "Frame Rate", 24);
 
-            this.numberProperty(comp, "delay", "Delay", 0);
+            this.createNumberProperty(comp, "delay", "Delay", 0);
 
-            this.numberProperty(comp, "repeat", "Repeat", 0);
+            this.createNumberProperty(comp, "repeat", "Repeat", 0);
 
-            this.numberProperty(comp, "repeatDelay", "Repeat Delay", 0);
+            this.createNumberProperty(comp, "repeatDelay", "Repeat Delay", 0);
+
+            this.createBooleanProperty(comp, "yoyo", "Yoyo");
+
+            this.createBooleanProperty(comp, "showOnStart", "Show On Start");
+
+            this.createBooleanProperty(comp, "hideOnComplete", "Hide On Complete");
+
+            this.createBooleanProperty(comp, "skipMissedFrames", "Skip Missed Frames");
         }
 
-        private numberProperty(parent: HTMLElement, field: string, labelText: string, defValue: number) {
+        private createBooleanProperty(parent: HTMLElement, field: string, labelText: string) {
 
-            const label = this.createLabel(parent, labelText, this.help(field));
+            const checkbox = this.createCheckbox(parent, this.createLabel(parent, labelText, this.help(field)));
+
+            checkbox.addEventListener("change", e => {
+
+                this.getEditor().runOperation(() => {
+
+                    const value = checkbox.checked;
+
+                    this.getSelection().forEach(a => a[field] = value);
+                });
+            });
+
+            this.addUpdater(() => {
+
+                checkbox.checked = this.flatValues_BooleanAnd(this.getSelection().map(a => a[field]));
+            })
+        }
+
+        private createNumberProperty(parent: HTMLElement, field: string, labelText: string, defValue: number) {
+
+            this.createLabel(parent, labelText, this.help(field));
+
             const text = this.createText(parent);
 
             text.addEventListener("change", e => {
@@ -49,6 +78,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
                 if (isNaN(value)) {
 
                     value = defValue;
+                    text.value = defValue.toString();
                 }
 
                 this.getEditor().runOperation(() => {
