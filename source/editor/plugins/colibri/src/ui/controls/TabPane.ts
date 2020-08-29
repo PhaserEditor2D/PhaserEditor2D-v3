@@ -66,7 +66,7 @@ namespace colibri.ui.controls {
         static createElement(icon: IImage, size: number) {
 
             const canvas = document.createElement("canvas");
-            canvas.classList.add("TabCloseIcon");
+            canvas.classList.add("TabIconImage");
 
             const manager = new TabIconManager(canvas, icon);
 
