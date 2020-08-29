@@ -18,5 +18,26 @@ namespace phasereditor2d.animations.ui.editors.properties {
                 new ManyAnimationFramesPreviewSection(page)
             );
         }
+
+        getEmptySelectionArray() {
+
+            const wb = colibri.Platform.getWorkbench();
+
+            const editor = wb.getActiveEditor();
+
+            if (editor instanceof AnimationsEditor) {
+
+                const activePart = colibri.Platform.getWorkbench().getActivePart();
+
+                if (activePart instanceof AnimationsEditor
+                    || activePart instanceof phasereditor2d.inspector.ui.views.InspectorView
+                    || activePart instanceof phasereditor2d.outline.ui.views.OutlineView) {
+
+                    return editor.getAllAnimations();
+                }
+            }
+
+            return null;
+        }
     }
 }

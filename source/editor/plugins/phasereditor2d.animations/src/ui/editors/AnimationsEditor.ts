@@ -115,26 +115,13 @@ namespace phasereditor2d.animations.ui.editors {
             if (!this._sceneRead) {
 
                 await this.readScene();
-
-                // if (this._editorState) {
-
-                //     if (this._editorState) {
-
-                //         this._cameraManager.setState(this._editorState.cameraState);
-                //     }
-
-                //     this._editorState = null;
-                // }
-
-                // this._currentRefreshHash = await this.buildDependenciesHash();
-
             }
 
             this.layout();
 
-            this.repaint();
-
             this.refreshOutline();
+
+            this.setSelection([]);
         }
 
         private async readScene() {
