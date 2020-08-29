@@ -126,9 +126,9 @@ namespace phasereditor2d.animations.ui.editors {
 
             const list = this.sys.displayList.list;
 
-            const selection = this.getSelectedAnimations();
+            const selectionSet = new Set(this._editor.getSelectedAnimations());
 
-            const layout = this.computeLayout(selection);
+            const layout = this.computeLayout(selectionSet);
             const size = layout.size;
 
             const width = this.scale.width;
@@ -140,7 +140,7 @@ namespace phasereditor2d.animations.ui.editors {
 
                 const sprite = obj as Phaser.GameObjects.Sprite;
 
-                const selected = selection.size === 0 || selection.has(sprite.anims.currentAnim);
+                const selected = selectionSet.size === 0 || selectionSet.has(sprite.anims.currentAnim);
 
                 sprite.setData("selected", selected);
 
@@ -213,47 +213,9 @@ namespace phasereditor2d.animations.ui.editors {
             this._editor.repaint();
         }
 
-        buildAnimationSpriteMap() {
-
-            const map = new Map<Phaser.Animations.AnimationFrame, Phaser.Animations.Animation>();
-
-            for (const anim of this.anims["anims"].getArray()) {
-
-                for (const frame of anim.frames) {
-
-                    map.set(frame, anim);
-                }
-            }
-
-            return map;
-        }
-
         getSprites() {
 
             return this.sys.displayList.list as Phaser.GameObjects.Sprite[];
-        }
-
-        private getSelectedAnimations() {
-
-            const list = new Set<Phaser.Animations.Animation>();
-
-            const map = this.buildAnimationSpriteMap();
-
-            for (const obj of this._editor.getSelection()) {
-
-                if (obj instanceof Phaser.Animations.Animation) {
-
-                    list.add(obj);
-
-                } else {
-
-                    const frame = obj as Phaser.Animations.AnimationFrame;
-
-                    list.add(map.get(frame));
-                }
-            }
-
-            return list;
         }
     }
 }

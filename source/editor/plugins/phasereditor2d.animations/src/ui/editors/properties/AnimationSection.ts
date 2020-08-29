@@ -21,9 +21,30 @@ namespace phasereditor2d.animations.ui.editors.properties {
                 this.createLabel(comp, "Key", this.help("key"));
                 const text = this.createText(comp);
 
+                text.addEventListener("change", e => {
+
+                    const key = text.value;
+
+                    if (key.trim().length > 0) {
+
+                        const anim = this.getSelectionFirstElement();
+
+                        this.getEditor().runOperation(() => {
+
+                            anim.key = key;
+
+                        }, true);
+
+                    } else {
+
+                        this.updateWithSelection();
+                    }
+                });
+
                 this.addUpdater(() => {
 
                     text.value = this.flatValues_StringJoin(this.getSelection().map(a => a.key));
+
                     text.readOnly = this.getSelection().length > 1;
                 });
             }
@@ -87,6 +108,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
                         anim[field] = value;
                     }
+
                 });
             });
 

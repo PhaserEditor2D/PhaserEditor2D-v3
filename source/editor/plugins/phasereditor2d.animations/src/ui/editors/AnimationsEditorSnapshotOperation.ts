@@ -7,13 +7,15 @@ namespace phasereditor2d.animations.ui.editors {
         private _before: JSONAnimations;
         private _after: JSONAnimations;
         private _editor: AnimationsEditor;
+        private _useAnimationIndexAsKey: boolean;
 
-        constructor(editor: AnimationsEditor, before: JSONAnimations, after: JSONAnimations) {
+        constructor(editor: AnimationsEditor, before: JSONAnimations, after: JSONAnimations, useAnimationIndexAsKey: boolean) {
             super();
 
             this._editor = editor;
             this._before = before;
             this._after = after;
+            this._useAnimationIndexAsKey = useAnimationIndexAsKey;
         }
 
         async execute() {
@@ -28,7 +30,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         private loadSnapshot(data: JSONAnimations) {
 
-            this._editor.reset(data);
+            this._editor.reset(data, this._useAnimationIndexAsKey);
         }
 
         undo(): void {

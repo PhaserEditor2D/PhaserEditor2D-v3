@@ -51,7 +51,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         selectAll() {
 
-            this.setSelection(this._scene.anims["anims"].getArray());
+            this.setSelection(this.getAllAnimations());
         }
 
         protected createPart(): void {
@@ -269,7 +269,7 @@ namespace phasereditor2d.animations.ui.editors {
             return null;
         }
 
-        runOperation(op: () => void) {
+        runOperation(op: () => void, useAnimationIndexAsKey = false) {
 
             const before = AnimationsEditorSnapshotOperation.takeSnapshot(this);
 
@@ -277,10 +277,72 @@ namespace phasereditor2d.animations.ui.editors {
 
             const after = AnimationsEditorSnapshotOperation.takeSnapshot(this);
 
-            this.getUndoManager().add(new AnimationsEditorSnapshotOperation(this, before, after));
+            this.getUndoManager().add(new AnimationsEditorSnapshotOperation(this, before, after, useAnimationIndexAsKey));
         }
 
-        reset(animsData: Phaser.Types.Animations.JSONAnimations) {
+        getSelectedAnimations() {
+
+            const used = new Set();
+
+            const list = [];
+
+            const map = this.buildAnimationFrame_AnimationMap();
+
+            for (const obj of this.getSelection()) {
+
+                let anim: Phaser.Animations.Animation;
+
+                if (obj instanceof Phaser.Animations.Animation) {
+
+                    anim = obj;
+
+                } else {
+
+                    const frame = obj as Phaser.Animations.AnimationFrame;
+
+                    anim = map.get(frame);
+                }
+
+                if (anim && !used.has(anim)) {
+
+                    used.add(anim);
+                    list.push(anim);
+                }
+            }
+
+            return list;
+        }
+
+        getAllAnimations() {
+
+            return this._scene.anims["anims"].getArray();
+        }
+
+        buildAnimationFrame_AnimationMap() {
+
+            const map = new Map<Phaser.Animations.AnimationFrame, Phaser.Animations.Animation>();
+
+            for (const anim of this.getAllAnimations()) {
+
+                for (const frame of anim.frames) {
+
+                    map.set(frame, anim);
+                }
+            }
+
+            return map;
+        }
+
+        reset(animsData: Phaser.Types.Animations.JSONAnimations, useAnimationIndexAsKey: boolean) {
+
+            let selectedIndexes: number[];
+
+            if (useAnimationIndexAsKey) {
+
+                const allAnimations = this.getAllAnimations();
+
+                selectedIndexes = this.getSelectedAnimations().map(anim => allAnimations.indexOf(anim));
+            }
 
             const scene = this.getScene();
 
@@ -295,17 +357,26 @@ namespace phasereditor2d.animations.ui.editors {
 
             this.refreshOutline();
 
-            this.setSelection(this.getSelection().map(obj => {
+            if (useAnimationIndexAsKey) {
 
-                if (obj instanceof Phaser.Animations.Animation) {
+                const allAnimations = this.getAllAnimations();
 
-                    return scene.anims.get(obj.key);
-                }
+                this.setSelection(selectedIndexes.map(i => allAnimations[i]));
 
-            }).filter(o => {
+            } else {
 
-                return o !== undefined && o !== null
-            }));
+                this.setSelection(this.getSelection().map(obj => {
+
+                    if (obj instanceof Phaser.Animations.Animation) {
+
+                        return scene.anims.get(obj.key);
+                    }
+
+                }).filter(o => {
+
+                    return o !== undefined && o !== null
+                }));
+            }
         }
     }
 }
