@@ -34,9 +34,41 @@ namespace phasereditor2d.animations.ui.editors {
             this._propertiesProvider = new properties.AnimationsEditorPropertyProvider();
         }
 
+        protected async doSave() {
+
+            const animsData = this._scene.anims.toJSON();
+
+            for (const a of animsData.anims) {
+
+                if (a.delay === 0) delete a.delay;
+
+                if (a.repeat === 0) delete a.repeat;
+
+                if (a.repeatDelay === 0) delete a.repeatDelay;
+
+                if (!a.yoyo) delete a.yoyo;
+
+                if (!a.showOnStart) delete a.showOnStart;
+
+                if (!a.hideOnComplete) delete a.hideOnComplete;
+
+                if (!a.skipMissedFrames) delete a.skipMissedFrames;
+
+                delete a.duration;
+            }
+
+            animsData["meta"] = AnimationsPlugin.getInstance().createAnimationsMetaData();
+
+            const content = JSON.stringify(animsData, null, 4);
+
+            await FileUtils.setFileString_async(this.getInput(), content);
+
+            this.setDirty(false);
+        }
+
         protected onEditorInputContentChangedByExternalEditor() {
 
-            // nothing
+            //TODO
         }
 
         getScene() {

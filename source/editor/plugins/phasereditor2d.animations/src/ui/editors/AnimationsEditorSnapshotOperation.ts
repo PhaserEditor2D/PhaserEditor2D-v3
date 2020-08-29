@@ -30,6 +30,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         private loadSnapshot(data: JSONAnimations) {
 
+            this._editor.setDirty(true);
             this._editor.reset(data, this._useAnimationIndexAsKey);
         }
 

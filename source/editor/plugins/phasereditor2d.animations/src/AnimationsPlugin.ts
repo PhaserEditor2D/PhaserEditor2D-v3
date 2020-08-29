@@ -55,6 +55,14 @@ namespace phasereditor2d.animations {
                     args => (args.activePart as ui.editors.AnimationsEditor).selectAll())
             }));
         }
+
+        createAnimationsMetaData() {
+
+            return {
+                "app": "Phaser Editor 2D v3",
+                "contentType": pack.core.contentTypes.CONTENT_TYPE_ANIMATIONS
+            }
+        }
     }
 
     colibri.Platform.addPlugin(AnimationsPlugin.getInstance());
