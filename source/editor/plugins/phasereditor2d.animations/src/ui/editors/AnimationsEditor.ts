@@ -16,6 +16,7 @@ namespace phasereditor2d.animations.ui.editors {
         private _outlineProvider: AnimationsEditorOutlineProvider;
         private _blocksProvider: AnimationsEditorBlocksProvider;
         private _propertiesProvider: properties.AnimationsEditorPropertyProvider;
+        private _selectedAnimations: Phaser.Animations.Animation[];
 
         static getFactory() {
 
@@ -32,6 +33,8 @@ namespace phasereditor2d.animations.ui.editors {
             this._outlineProvider = new AnimationsEditorOutlineProvider(this);
             this._blocksProvider = new AnimationsEditorBlocksProvider(this);
             this._propertiesProvider = new properties.AnimationsEditorPropertyProvider();
+
+            this._selectedAnimations = [];
         }
 
         protected async doSave() {
@@ -84,6 +87,34 @@ namespace phasereditor2d.animations.ui.editors {
         selectAll() {
 
             this.setSelection(this.getAllAnimations());
+        }
+
+        deleteSelected() {
+
+            this.runOperation(() => {
+
+                for (const obj of this.getSelection()) {
+
+                    if (obj instanceof Phaser.Animations.Animation) {
+
+                        const sprite = this.getSpriteForAnimation(obj);
+
+                        sprite.destroy();
+
+                        this.getScene().anims.remove(obj.key);
+                    }
+                }
+
+                for (const obj of this.getSelection()) {
+
+                    if (obj instanceof Phaser.Animations.AnimationFrame) {
+
+                        const anim = AnimationsEditor.getAnimationOfAFrame(obj);
+
+                        anim.removeFrame(obj);
+                    }
+                }
+            });
         }
 
         protected createPart(): void {
@@ -299,13 +330,11 @@ namespace phasereditor2d.animations.ui.editors {
             this.getUndoManager().add(new AnimationsEditorSnapshotOperation(this, before, after, useAnimationIndexAsKey));
         }
 
-        getSelectedAnimations() {
+        private computeSelectedAnimations() {
 
             const used = new Set();
 
-            const list = [];
-
-            const map = this.buildAnimationFrame_AnimationMap();
+            const list: Phaser.Animations.Animation[] = [];
 
             for (const obj of this.getSelection()) {
 
@@ -319,7 +348,7 @@ namespace phasereditor2d.animations.ui.editors {
 
                     const frame = obj as Phaser.Animations.AnimationFrame;
 
-                    anim = map.get(frame);
+                    anim = AnimationsEditor.getAnimationOfAFrame(frame);
                 }
 
                 if (anim && !used.has(anim)) {
@@ -337,19 +366,48 @@ namespace phasereditor2d.animations.ui.editors {
             return this._scene.anims["anims"].getArray();
         }
 
-        buildAnimationFrame_AnimationMap() {
+        getSpriteForAnimation(animation: Phaser.Animations.Animation) {
 
-            const map = new Map<Phaser.Animations.AnimationFrame, Phaser.Animations.Animation>();
+            return this.getScene().getSprites().find(sprite => sprite.anims.currentAnim === animation);
+        }
 
-            for (const anim of this.getAllAnimations()) {
+        setSelection(sel: any[], notify = true) {
 
-                for (const frame of anim.frames) {
+            super.setSelection(sel, notify);
 
-                    map.set(frame, anim);
-                }
+            this._selectedAnimations = this.computeSelectedAnimations();
+        }
+
+        getSelectedAnimations() {
+
+            return this._selectedAnimations;
+        }
+
+        getAnimation(key: string) {
+
+            return this.getScene().anims.get(key);
+        }
+
+        getAnimationFrame(animKey: string, frameTextureKey: string, frameTextureFrame: string) {
+
+            const anim = this.getAnimation(animKey);
+
+            if (anim) {
+
+                return anim.frames.find(f => f.textureKey === frameTextureKey && f.textureFrame === frameTextureFrame);
             }
 
-            return map;
+            return undefined;
+        }
+
+        static getAnimationOfAFrame(obj: Phaser.Animations.AnimationFrame) {
+
+            return obj["__animation"] as Phaser.Animations.Animation;
+        }
+
+        static setAnimationToFrame(frame: Phaser.Animations.AnimationFrame, anim: Phaser.Animations.Animation) {
+
+            frame["__animation"] = anim;
         }
 
         reset(animsData: Phaser.Types.Animations.JSONAnimations, useAnimationIndexAsKey: boolean) {
@@ -384,12 +442,9 @@ namespace phasereditor2d.animations.ui.editors {
 
             } else {
 
-                this.setSelection(this.getSelection().map(obj => {
+                this.setSelection(this._selectedAnimations.map(obj => {
 
-                    if (obj instanceof Phaser.Animations.Animation) {
-
-                        return scene.anims.get(obj.key);
-                    }
+                    return this.getAnimation(obj.key);
 
                 }).filter(o => {
 

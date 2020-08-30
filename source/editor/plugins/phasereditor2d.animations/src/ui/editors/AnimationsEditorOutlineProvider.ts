@@ -16,6 +16,18 @@ namespace phasereditor2d.animations.ui.editors {
             });
         }
 
+        prepareViewerState(state: controls.viewers.ViewerState) {
+
+            if (state.expandedObjects) {
+
+                state.expandedObjects = new Set([...state.expandedObjects]
+
+                    .map(o => this._editor.getAnimation(o.key))
+
+                    .filter(o => o !== null && o !== undefined));
+            }
+        }
+
         onViewerSelectionChanged(sel: any[]) {
 
             this._editor.setSelection(sel, false);

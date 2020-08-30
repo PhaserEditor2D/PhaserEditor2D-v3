@@ -16,6 +16,14 @@ namespace phasereditor2d.animations.ui.editors {
 
                 sprite.anims.play(animData.key);
             }
+
+            for(const anim of scene.anims["anims"].getArray()) {
+
+                for(const frame of anim.frames) {
+
+                   AnimationsEditor.setAnimationToFrame(frame, anim);
+                }
+            }
         }
 
         async buildDependenciesHash(): Promise<string> {

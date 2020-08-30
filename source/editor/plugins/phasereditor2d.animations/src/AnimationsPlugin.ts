@@ -48,6 +48,21 @@ namespace phasereditor2d.animations {
                 //     args => args.activePart instanceof ui.editors.AnimationsEditor,
                 //     args => args.activeEditor.setSelection([]));
 
+
+                manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
+
+                    args => (
+                        args.activePart instanceof ui.editors.AnimationsEditor ||
+
+                        (args.activeEditor instanceof ui.editors.AnimationsEditor &&
+                            args.activePart instanceof outline.ui.views.OutlineView)
+
+                    ) && args.activeEditor.getSelection().length > 0,
+
+                    args => {
+                        (args.activeEditor as ui.editors.AnimationsEditor).deleteSelected()
+                    });
+
                 // select all
 
                 manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL,
