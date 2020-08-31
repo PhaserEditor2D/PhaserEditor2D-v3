@@ -71,7 +71,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         protected onEditorInputContentChangedByExternalEditor() {
 
-            //TODO
+            this.reset(this._scene.anims.toJSON(), false);
         }
 
         getScene() {
@@ -298,6 +298,19 @@ namespace phasereditor2d.animations.ui.editors {
 
                 this._game.loop.start(this._game.loop.callback);
             }
+
+            console.log("refresh blocks");
+
+            this.refreshBlocks();
+        }
+
+        private async refreshBlocks() {
+
+            console.log("AnimationsEditor.refreshBlocks()");
+
+            await this._blocksProvider.preload();
+
+            this._blocksProvider.repaint();
         }
 
         getPropertyProvider() {

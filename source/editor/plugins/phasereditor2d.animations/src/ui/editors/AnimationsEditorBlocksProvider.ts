@@ -9,18 +9,9 @@ namespace phasereditor2d.animations.ui.editors {
 
         async preloadAndGetFinder(complete?: boolean): Promise<pack.core.PackFinder> {
 
-            let finder: pack.core.PackFinder;
+            const finder = new pack.core.PackFinder();
 
-            if (this.getEditor().getScene() && !complete) {
-
-                finder = this.getEditor().getScene().getMaker().getPackFinder();
-
-            } else {
-
-                finder = new pack.core.PackFinder();
-
-                await finder.preload();
-            }
+            await finder.preload();
 
             return finder;
         }
