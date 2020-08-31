@@ -29,7 +29,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
                 const dlg = new controls.dialogs.InputDialog();
                 dlg.create();
                 dlg.setTitle("Animations prefix");
-                dlg.setMessage("Enter a prefix to be inserted in the name of the new animations:")
+                dlg.setMessage("Enter a prefix to be inserted in the name of the new animations")
                 dlg.setInitialValue("");
                 dlg.setInputValidator(value => true);
                 dlg.setResultCallback((prefix) => {
@@ -129,6 +129,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
         private buildClusters() {
 
             const builder = new NameClustersBuilder();
+            const used = new Set();
 
             for (const elem of this.getSelection()) {
 
@@ -145,14 +146,35 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
                 for (const frame of frames) {
 
-                    const name = typeof frame.getName() === "string" ?
+                    {
+                        const id = frame.getPackItem().getKey() + "$" + frame.getName();
+
+                        if (used.has(id)) {
+
+                            continue;
+                        }
+
+                        used.add(id);
+                    }
+
+                    let name = typeof frame.getName() === "string" ?
                         frame.getName() as string :
                         frame.getPackItem().getKey() + "-" + frame.getName();
+
+                    const lowerName = name.toLowerCase();
+
+                    for (const ext of [".png", ".jpg", ".bmp", ".gif", ".webp"]) {
+
+                        if (lowerName.endsWith(ext)) {
+
+                            name = name.substring(0, name.length - ext.length);
+                        }
+                    }
 
                     builder.addElement({
                         name: name,
                         data: frame
-                    })
+                    });
                 }
             }
 
