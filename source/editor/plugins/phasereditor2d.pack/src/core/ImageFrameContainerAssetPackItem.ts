@@ -15,6 +15,7 @@ namespace phasereditor2d.pack.core {
         async preload(): Promise<controls.PreloadResult> {
 
             if (this._frames) {
+
                 return controls.Controls.resolveNothingLoaded();
             }
 

@@ -20,7 +20,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         async execute() {
 
-            this.loadSnapshot(this._after);
+            await this.loadSnapshot(this._after);
         }
 
         static takeSnapshot(editor: AnimationsEditor) {
@@ -28,10 +28,11 @@ namespace phasereditor2d.animations.ui.editors {
             return editor.getScene().anims.toJSON();
         }
 
-        private loadSnapshot(data: JSONAnimations) {
+        private async loadSnapshot(data: JSONAnimations) {
 
             this._editor.setDirty(true);
-            this._editor.reset(data, this._useAnimationIndexAsKey);
+
+            await this._editor.reset(data, this._useAnimationIndexAsKey);
         }
 
         undo(): void {

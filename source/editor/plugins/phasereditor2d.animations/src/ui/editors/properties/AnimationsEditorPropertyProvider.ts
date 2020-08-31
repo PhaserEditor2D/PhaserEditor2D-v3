@@ -10,6 +10,8 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
         addSections(page: controls.properties.PropertyPage, sections: Array<controls.properties.PropertySection<any>>) {
 
+            sections.push(new BuildAnimationsSection(page));
+
             super.addSections(page, sections);
 
             sections.push(

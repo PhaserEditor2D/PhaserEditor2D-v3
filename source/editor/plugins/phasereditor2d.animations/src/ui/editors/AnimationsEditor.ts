@@ -319,6 +319,15 @@ namespace phasereditor2d.animations.ui.editors {
             return null;
         }
 
+        async runAddAnimationsOperation(data: Phaser.Types.Animations.JSONAnimations, op: () => void) {
+
+            const maker = this._scene.getMaker();
+
+            await maker.updateSceneLoader(data, this._overlayLayer.createLoadingMonitor());
+
+            this.runOperation(op);
+        }
+
         runOperation(op: () => void, useAnimationIndexAsKey = false) {
 
             const before = AnimationsEditorSnapshotOperation.takeSnapshot(this);
