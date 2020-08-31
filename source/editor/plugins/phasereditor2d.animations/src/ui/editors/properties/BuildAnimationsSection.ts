@@ -26,54 +26,16 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
             const btn = this.createButton(comp, "Build", async () => {
 
-                const clusters = this.buildClusters().filter(c => c.elements.length > 1);
+                const dlg = new controls.dialogs.InputDialog();
+                dlg.create();
+                dlg.setTitle("Animations prefix");
+                dlg.setMessage("Enter a prefix to be inserted in the name of the new animations:")
+                dlg.setInitialValue("");
+                dlg.setInputValidator(value => true);
+                dlg.setResultCallback((prefix) => {
 
-                const animsArray: any[] = clusters.map(c => {
-
-                    return {
-                        key: c.prefix,
-                        frameRate: 24,
-                        repeat: -1,
-                        frames: c.elements.map(e => {
-
-                            const packFrame = e.data as pack.core.AssetPackImageFrame;
-
-                            const packItem = packFrame.getPackItem();
-
-                            if (packItem instanceof pack.core.ImageAssetPackItem) {
-
-                                return {
-                                    key: packItem.getKey()
-                                }
-
-                            }
-
-                            return {
-                                key: packItem.getKey(),
-                                frame: packFrame.getName()
-                            }
-                        })
-                    }
-                });
-
-                const editor = this.getEditor();
-
-                const scene = editor.getScene();
-
-                const data = scene.anims.toJSON();
-
-                data.anims.push(...animsArray);
-
-                editor.runAddAnimationsOperation(data, () => {
-
-                    editor.reset(data, false);
-
-                    editor.setSelection(animsArray.map(a => editor.getAnimation(a.key)));
-
-                    editor.getElement().focus();
-
-                    colibri.Platform.getWorkbench().setActivePart(editor);
-                });
+                    this.autoBuild(prefix);
+                })
             });
 
             this.addUpdater(() => {
@@ -105,6 +67,62 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
                 btn.disabled = len === 0;
                 btn.textContent = "Build " + len + " animations";
+            });
+        }
+
+        private autoBuild(prependToName: string) {
+
+            const editor = this.getEditor();
+
+            const nameMaker = new colibri.ui.ide.utils.NameMaker((a: Phaser.Animations.Animation) => a.key)
+
+            nameMaker.update(editor.getAnimations());
+
+            const clusters = this.buildClusters().filter(c => c.elements.length > 1);
+
+            const animsArray: any[] = clusters.map(c => {
+
+                return {
+                    key: nameMaker.makeName(prependToName + c.prefix),
+                    frameRate: 24,
+                    repeat: -1,
+                    frames: c.elements.map(e => {
+
+                        const packFrame = e.data as pack.core.AssetPackImageFrame;
+
+                        const packItem = packFrame.getPackItem();
+
+                        if (packItem instanceof pack.core.ImageAssetPackItem) {
+
+                            return {
+                                key: packItem.getKey()
+                            }
+
+                        }
+
+                        return {
+                            key: packItem.getKey(),
+                            frame: packFrame.getName()
+                        }
+                    })
+                }
+            });
+
+            const scene = editor.getScene();
+
+            const data = scene.anims.toJSON();
+
+            data.anims.push(...animsArray);
+
+            editor.runAddAnimationsOperation(data, () => {
+
+                editor.reset(data, false);
+
+                editor.setSelection(animsArray.map(a => editor.getAnimation(a.key)));
+
+                editor.getElement().focus();
+
+                colibri.Platform.getWorkbench().setActivePart(editor);
             });
         }
 

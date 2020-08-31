@@ -86,7 +86,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         selectAll() {
 
-            this.setSelection(this.getAllAnimations());
+            this.setSelection(this.getAnimations());
         }
 
         deleteSelected() {
@@ -370,7 +370,7 @@ namespace phasereditor2d.animations.ui.editors {
             return list;
         }
 
-        getAllAnimations() {
+        getAnimations() {
 
             return this._scene.anims["anims"].getArray();
         }
@@ -425,7 +425,7 @@ namespace phasereditor2d.animations.ui.editors {
 
             if (useAnimationIndexAsKey) {
 
-                const allAnimations = this.getAllAnimations();
+                const allAnimations = this.getAnimations();
 
                 selectedIndexes = this.getSelectedAnimations().map(anim => allAnimations.indexOf(anim));
             }
@@ -445,7 +445,7 @@ namespace phasereditor2d.animations.ui.editors {
 
             if (useAnimationIndexAsKey) {
 
-                const allAnimations = this.getAllAnimations();
+                const allAnimations = this.getAnimations();
 
                 this.setSelection(selectedIndexes.map(i => allAnimations[i]));
 

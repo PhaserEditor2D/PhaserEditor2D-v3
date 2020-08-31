@@ -35,7 +35,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
                     || activePart instanceof phasereditor2d.inspector.ui.views.InspectorView
                     || activePart instanceof phasereditor2d.outline.ui.views.OutlineView) {
 
-                    return editor.getAllAnimations();
+                    return editor.getAnimations();
                 }
             }
 
