@@ -1,5 +1,8 @@
 namespace phasereditor2d.animations {
 
+    export const CAT_ANIMATIONS = "phasereditor2d.animations.AnimationsCategory";
+    export const CMD_ADD_ANIMATION = "phasereditor2d.animations.AddAnimations";
+
     export class AnimationsPlugin extends colibri.Plugin {
 
         private static _instance: AnimationsPlugin;
@@ -40,35 +43,66 @@ namespace phasereditor2d.animations {
 
             // commands
 
-            reg.addExtension(new colibri.ui.ide.commands.CommandExtension(manager => {
+            reg.addExtension(
+                new colibri.ui.ide.commands.CommandExtension(manager => this.registerCommands(manager))
+            );
+        }
 
-                // // escape
+        private registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
-                // manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
-                //     args => args.activePart instanceof ui.editors.AnimationsEditor,
-                //     args => args.activeEditor.setSelection([]));
+            manager.addCategory({
+                id: CAT_ANIMATIONS,
+                name: "Sprite Animation"
+            });
 
+            // // escape
 
-                manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
+            // manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
+            //     args => args.activePart instanceof ui.editors.AnimationsEditor,
+            //     args => args.activeEditor.setSelection([]));
 
-                    args => (
-                        args.activePart instanceof ui.editors.AnimationsEditor ||
+            // delete
 
-                        (args.activeEditor instanceof ui.editors.AnimationsEditor &&
-                            args.activePart instanceof outline.ui.views.OutlineView)
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
 
-                    ) && args.activeEditor.getSelection().length > 0,
+                args => (
+                    args.activePart instanceof ui.editors.AnimationsEditor ||
 
-                    args => {
-                        (args.activeEditor as ui.editors.AnimationsEditor).deleteSelected()
-                    });
+                    (args.activeEditor instanceof ui.editors.AnimationsEditor &&
+                        args.activePart instanceof outline.ui.views.OutlineView)
 
-                // select all
+                ) && args.activeEditor.getSelection().length > 0,
 
-                manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL,
-                    args => args.activePart instanceof ui.editors.AnimationsEditor,
-                    args => (args.activePart as ui.editors.AnimationsEditor).selectAll())
-            }));
+                args => {
+                    (args.activeEditor as ui.editors.AnimationsEditor).deleteSelected()
+                });
+
+            // select all
+
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL,
+                args => args.activePart instanceof ui.editors.AnimationsEditor,
+                args => (args.activePart as ui.editors.AnimationsEditor).selectAll());
+
+            // add animation
+
+            manager.add({
+                command: {
+                    id: CMD_ADD_ANIMATION,
+                    category: CAT_ANIMATIONS,
+                    name: "Add Animation",
+                    tooltip: "Add a new animation",
+                    icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_PLUS)
+                },
+                handler: {
+                    testFunc: args => args.activeEditor instanceof ui.editors.AnimationsEditor,
+                    executeFunc: args => {
+                        (args.activeEditor as ui.editors.AnimationsEditor).openAddAnimationDialog();
+                    }
+                },
+                keys: {
+                    key: "A"
+                }
+            });
         }
 
         createAnimationsMetaData() {

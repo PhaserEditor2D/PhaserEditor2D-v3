@@ -120,10 +120,20 @@ namespace colibri.ui.controls {
         }
 
         setLocation(x: number, y: number): void {
-            this._element.style.left = x + "px";
-            this._element.style.top = y + "px";
-            this._bounds.x = x;
-            this._bounds.y = y;
+
+            if (x !== undefined) {
+
+                x = Math.floor(x);
+                this._element.style.left = x + "px";
+                this._bounds.x = x;
+            }
+
+            if (y !== undefined) {
+
+                y = Math.floor(y);
+                this._element.style.top = y + "px";
+                this._bounds.y = y;
+            }
         }
 
         layout(): void {

@@ -1,6 +1,7 @@
 namespace phasereditor2d.animations.ui.editors {
 
     import FileUtils = colibri.ui.ide.FileUtils;
+    import controls = colibri.ui.controls;
 
     export class AnimationsEditor extends colibri.ui.ide.FileEditor {
 
@@ -114,6 +115,124 @@ namespace phasereditor2d.animations.ui.editors {
                         anim.removeFrame(obj);
                     }
                 }
+            });
+        }
+
+        createEditorToolbar(parent: HTMLElement) {
+
+            const manager = new controls.ToolbarManager(parent);
+
+            manager.addCommand(CMD_ADD_ANIMATION);
+
+            return manager;
+        }
+
+        openAddAnimationDialog() {
+
+            const dlg = new controls.dialogs.InputDialog();
+            dlg.create();
+            dlg.setTitle("New Animation");
+            dlg.setMessage("Enter the animation name");
+            dlg.setInputValidator(name => {
+
+                if (name.trim().length === 0) {
+
+                    return false;
+                }
+
+                const found = this.getAnimation(name);
+
+                return found === null || found === undefined;
+            });
+            dlg.setInitialValue("animation");
+            dlg.validate();
+
+            dlg.setResultCallback(name => {
+
+                const viewer = new controls.viewers.TreeViewer(
+                    "phasereditor2d.animations.ui.editors.AnimationsEditor.NewAnimation");
+                viewer.setLabelProvider(this._blocksProvider.getLabelProvider());
+                viewer.setContentProvider(this._blocksProvider.getContentProvider());
+                viewer.setCellRendererProvider(this._blocksProvider.getCellRendererProvider());
+                viewer.setTreeRenderer(this._blocksProvider.getTreeViewerRenderer(viewer));
+                viewer.setInput(this._blocksProvider.getInput());
+
+                const framesDialog = new controls.dialogs.ViewerDialog(viewer, true);
+                framesDialog.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3)
+                framesDialog.create();
+                framesDialog.setLocation(undefined, window.innerHeight * 1 / 8);
+                framesDialog.setTitle("Select Frames");
+                framesDialog.addOpenButton("Select", sel => {
+
+                    const frames: pack.core.AssetPackImageFrame[] = [];
+                    const used = new Set();
+
+                    for (const elem of sel) {
+
+                        let elemFrames: pack.core.AssetPackImageFrame[];
+
+                        if (elem instanceof pack.core.ImageFrameContainerAssetPackItem) {
+
+                            elemFrames = elem.getFrames();
+
+                        } else {
+
+                            elemFrames = [elem];
+                        }
+
+                        for (const frame of elemFrames) {
+
+                            const id = frame.getPackItem().getKey() + "$" + frame.getName();
+
+                            if (used.has(id)) {
+
+                                continue;
+                            }
+
+                            used.add(id);
+                            frames.push(frame);
+                        }
+
+                        const animData = {
+                            key: name,
+                            frameRate: 24,
+                            repeat: -1,
+                            delay: 0,
+                            frames: frames.map(frame => {
+
+                                const packItem = frame.getPackItem();
+
+                                if (packItem instanceof pack.core.ImageAssetPackItem) {
+
+                                    return {
+                                        key: packItem.getKey()
+                                    }
+
+                                }
+
+                                return {
+                                    key: packItem.getKey(),
+                                    frame: frame.getName()
+                                }
+                            })
+                        }
+
+                        const data = this.getScene().anims.toJSON();
+
+                        data.anims.push(animData as any);
+
+                        this.runAddAnimationsOperation(data, () => {
+
+                            this.reset(data, false);
+
+                            this.setSelection([this.getAnimation(name)]);
+
+                            this.getElement().focus();
+
+                            colibri.Platform.getWorkbench().setActivePart(this);
+                        });
+                    }
+                });
             });
         }
 
@@ -298,8 +417,6 @@ namespace phasereditor2d.animations.ui.editors {
 
                 this._game.loop.start(this._game.loop.callback);
             }
-
-            console.log("refresh blocks");
 
             this.refreshBlocks();
         }
