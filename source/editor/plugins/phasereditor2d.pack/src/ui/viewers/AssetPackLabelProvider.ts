@@ -45,6 +45,31 @@ namespace phasereditor2d.pack.ui.viewers {
             }
 
             if (obj instanceof controls.ImageFrame) {
+
+                if (obj instanceof core.AssetPackImageFrame) {
+
+                    let name = obj.getName().toString();
+
+                    const item = obj.getPackItem();
+
+                    if (item instanceof core.SpritesheetAssetPackItem) {
+
+                        const len = item.getFrames().length;
+
+                        if (len > 0) {
+
+                            const spaces = Math.ceil(Math.log10(len));
+
+                            while(name.length < spaces) {
+
+                                name = "0" + name;
+                            }
+                        }
+                    }
+
+                    return name;
+                }
+
                 return obj.getName() + "";
             }
 
