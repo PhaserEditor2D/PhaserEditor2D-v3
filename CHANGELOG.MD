@@ -8,6 +8,10 @@
 * Viewer: scrolling when distant elements are selected.
 * Scene Editor: better scene thumbnail generation.
 
+### Modified
+
+* Viewers: Pads with `0` chars the labels of spritesheet frames. It helps with sorting: `001`, `002`,...,`126`.
+
 ### Plugin Development
 
 * Updated to TypeScript 4.0.4.
