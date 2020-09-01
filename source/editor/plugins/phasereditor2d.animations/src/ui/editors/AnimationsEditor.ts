@@ -233,6 +233,7 @@ namespace phasereditor2d.animations.ui.editors {
                         });
                     }
                 });
+                framesDialog.addCancelButton();
             });
         }
 
