@@ -128,6 +128,10 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
         private buildClusters() {
 
+            const labelProvider = this.getEditor()
+                .getEditorViewerProvider(blocks.ui.views.BlocksView.EDITOR_VIEWER_PROVIDER_KEY)
+                .getLabelProvider();
+
             const builder = new NameClustersBuilder();
             const used = new Set();
 
@@ -160,6 +164,11 @@ namespace phasereditor2d.animations.ui.editors.properties {
                     let name = typeof frame.getName() === "string" ?
                         frame.getName() as string :
                         frame.getPackItem().getKey() + "-" + frame.getName();
+
+                    if (frame.getPackItem() instanceof pack.core.SpritesheetAssetPackItem) {
+
+                        name = frame.getPackItem().getKey() + "-" + labelProvider.getLabel(frame.getName());
+                    }
 
                     const lowerName = name.toLowerCase();
 
