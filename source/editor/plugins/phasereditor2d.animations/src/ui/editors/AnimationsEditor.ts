@@ -18,6 +18,7 @@ namespace phasereditor2d.animations.ui.editors {
         private _blocksProvider: AnimationsEditorBlocksProvider;
         private _propertiesProvider: properties.AnimationsEditorPropertyProvider;
         private _selectedAnimations: Phaser.Animations.Animation[];
+        private _currentDependenciesHash: string;
 
         static getFactory() {
 
@@ -70,9 +71,40 @@ namespace phasereditor2d.animations.ui.editors {
             this.setDirty(false);
         }
 
-        protected onEditorInputContentChangedByExternalEditor() {
+        protected async onEditorInputContentChangedByExternalEditor() {
 
-            this.reset(this._scene.anims.toJSON(), false);
+            this.deepUpdateEditor();
+        }
+
+        private async deepUpdateEditor() {
+
+            console.log("AnimationsEditor.deepUpdate()");
+
+            const scene = this.getScene();
+
+            for (const obj of scene.sys.displayList.list) {
+
+                obj.destroy();
+            }
+
+            scene.sys.displayList.removeAll();
+            scene.sys.updateList.removeAll();
+
+            const str = colibri.ui.ide.FileUtils.getFileString(this.getInput());
+
+            const data = JSON.parse(str);
+
+            const maker = this.getScene().getMaker();
+
+            await maker.preload();
+
+            this._overlayLayer.setLoading(true);
+
+            await maker.updateSceneLoader(data, this._overlayLayer.createLoadingMonitor());
+
+            this._overlayLayer.setLoading(false);
+
+            this.reset(data, false);
         }
 
         getScene() {
@@ -345,11 +377,20 @@ namespace phasereditor2d.animations.ui.editors {
 
                 throw e;
             }
+
+            this._currentDependenciesHash = await this.getScene().getMaker().buildDependenciesHash();
         }
 
         refreshOutline() {
 
             this._outlineProvider.repaint();
+        }
+
+        private async refreshBlocks() {
+
+            await this._blocksProvider.preload();
+
+            this._blocksProvider.repaint();
         }
 
         repaint() {
@@ -408,23 +449,31 @@ namespace phasereditor2d.animations.ui.editors {
             }
         }
 
-        onPartActivated() {
+        async onPartActivated() {
 
             super.onPartActivated();
 
-            if (this._gameBooted && !this._game.loop.running) {
+            if (this._gameBooted) {
 
-                this._game.loop.start(this._game.loop.callback);
+                if (!this._game.loop.running) {
+
+                    this._game.loop.start(this._game.loop.callback);
+                }
+
+                this.updateIfDependenciesChanged();
             }
-
-            this.refreshBlocks();
         }
 
-        private async refreshBlocks() {
+        private async updateIfDependenciesChanged() {
 
-            await this._blocksProvider.preload();
+            const hash = await this.getScene().getMaker().buildDependenciesHash();
 
-            this._blocksProvider.repaint();
+            if (hash !== this._currentDependenciesHash) {
+
+                this._currentDependenciesHash = hash;
+
+                this.deepUpdateEditor();
+            }
         }
 
         getPropertyProvider() {
@@ -569,6 +618,8 @@ namespace phasereditor2d.animations.ui.editors {
             scene.getMaker().createScene(animsData);
 
             this.refreshOutline();
+
+            this.refreshBlocks();
 
             if (useAnimationIndexAsKey) {
 
