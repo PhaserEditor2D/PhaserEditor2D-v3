@@ -247,15 +247,13 @@ namespace phasereditor2d.animations.ui.editors {
             this.getElement().appendChild(container);
 
             this._overlayLayer = new AnimationsOverlayLayer(this);
-
             container.appendChild(this._overlayLayer.getCanvas());
 
             const pool = Phaser.Display.Canvas.CanvasPool;
 
             this._gameCanvas = pool.create2D(this.getElement(), 100, 100);
-
             this._gameCanvas.style.position = "absolute";
-
+            this._gameCanvas.tabIndex = 1;
             container.appendChild(this._gameCanvas);
 
             this.createGame();
@@ -423,8 +421,6 @@ namespace phasereditor2d.animations.ui.editors {
         }
 
         private async refreshBlocks() {
-
-            console.log("AnimationsEditor.refreshBlocks()");
 
             await this._blocksProvider.preload();
 

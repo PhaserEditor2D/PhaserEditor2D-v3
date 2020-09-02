@@ -87,6 +87,8 @@ namespace phasereditor2d.animations.ui.editors {
 
             this.input.on(Phaser.Input.Events.POINTER_UP, e => {
 
+                let sel = [];
+
                 const pointer = e as Phaser.Input.Pointer;
 
                 for (const obj of this.sys.displayList.list) {
@@ -102,14 +104,14 @@ namespace phasereditor2d.animations.ui.editors {
                             && pointer.y >= cell.y
                             && pointer.y <= cell.y + cell.size) {
 
-                            this._editor.setSelection([sprite.anims.currentAnim]);
-
-                            return;
+                            sel = [sprite.anims.currentAnim];
+                            break;
                         }
                     }
                 }
 
-                this._editor.setSelection([]);
+                this._editor.setSelection(sel);
+                this.game.canvas.focus();
             });
         }
 
