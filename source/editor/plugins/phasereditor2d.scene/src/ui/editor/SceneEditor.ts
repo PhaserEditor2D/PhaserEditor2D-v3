@@ -391,8 +391,6 @@ namespace phasereditor2d.scene.ui.editor {
 
         fillContextMenu(menu: controls.Menu) {
 
-
-
             this._menuCreator.fillMenu(menu);
         }
 

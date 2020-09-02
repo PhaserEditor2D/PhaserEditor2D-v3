@@ -13,6 +13,17 @@ namespace phasereditor2d.animations.ui.editors {
             this._editor = editor;
         }
 
+        removeAll() {
+
+            for (const sprite of this.getSprites()) {
+
+                sprite.destroy();
+            }
+
+            this.sys.displayList.removeAll();
+            this.sys.updateList.removeAll();
+        }
+
         createSceneMaker(): scene.ui.BaseSceneMaker {
 
             return new AnimationsSceneMaker(this);

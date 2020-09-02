@@ -114,9 +114,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
             data.anims.push(...animsArray);
 
-            editor.runAddAnimationsOperation(data, () => {
-
-                editor.reset(data, false);
+            editor.fullResetDataOperation(data, async () => {
 
                 editor.setSelection(animsArray.map(a => editor.getAnimation(a.key)));
 

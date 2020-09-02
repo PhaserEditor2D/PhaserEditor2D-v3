@@ -2,6 +2,8 @@ namespace phasereditor2d.animations {
 
     export const CAT_ANIMATIONS = "phasereditor2d.animations.AnimationsCategory";
     export const CMD_ADD_ANIMATION = "phasereditor2d.animations.AddAnimations";
+    export const CMD_APPEND_FRAMES = "phasereditor2d.animations.AppendFrames";
+    export const CMD_PREPEND_FRAMES = "phasereditor2d.animations.PrependFrames";
 
     export class AnimationsPlugin extends colibri.Plugin {
 
@@ -101,6 +103,39 @@ namespace phasereditor2d.animations {
                 },
                 keys: {
                     key: "A"
+                }
+            });
+
+            // add frames
+
+            const testAppendFrames = (args: colibri.ui.ide.commands.HandlerArgs) =>
+                (args.activeEditor instanceof ui.editors.AnimationsEditor
+                    && args.activeEditor.getSelection().length === 1
+                    && args.activeEditor.getSelection()[0] instanceof Phaser.Animations.Animation);
+
+            manager.add({
+                command: {
+                    id: CMD_PREPEND_FRAMES,
+                    name: "Prepend Frames",
+                    category: CAT_ANIMATIONS,
+                    tooltip: "Prepend frames to the selected animation."
+                },
+                handler: {
+                    testFunc: testAppendFrames,
+                    executeFunc: args => (args.activeEditor as ui.editors.AnimationsEditor).openAddFramesDialog("prepend")
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_APPEND_FRAMES,
+                    name: "Append Frames",
+                    category: CAT_ANIMATIONS,
+                    tooltip: "Append frames to the selected animation."
+                },
+                handler: {
+                    testFunc: testAppendFrames,
+                    executeFunc: args => (args.activeEditor as ui.editors.AnimationsEditor).openAddFramesDialog("append")
                 }
             });
         }

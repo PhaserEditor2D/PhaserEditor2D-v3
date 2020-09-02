@@ -19,6 +19,7 @@ namespace phasereditor2d.animations.ui.editors {
         private _propertiesProvider: properties.AnimationsEditorPropertyProvider;
         private _selectedAnimations: Phaser.Animations.Animation[];
         private _currentDependenciesHash: string;
+        private _menuCreator: AnimationsEditorMenuCreator;
 
         static getFactory() {
 
@@ -71,30 +72,58 @@ namespace phasereditor2d.animations.ui.editors {
             this.setDirty(false);
         }
 
-        protected async onEditorInputContentChangedByExternalEditor() {
+        openAddFramesDialog(cmd: "prepend" | "append"): void {
 
-            this.deepUpdateEditor();
+            this.openSelectFramesDialog(async (frames) => {
+
+                const data = this.getScene().anims.toJSON();
+
+                const animData = data.anims.find(a => a.key === this.getSelection()[0].key);
+
+                for (const frame of frames) {
+
+                    const frameData = {
+                        key: frame.getPackItem().getKey()
+                    };
+
+                    if (!(frame.getPackItem() instanceof pack.core.ImageAssetPackItem)) {
+
+                        frameData["frame"] = frame.getName();
+                    }
+
+                    if (cmd === "append") {
+
+                        animData.frames.push(frameData as any);
+
+                    } else {
+
+                        animData.frames.splice(0, 0, frameData as any);
+                    }
+                }
+
+
+                this.fullResetDataOperation(data);
+            });
         }
 
-        private async deepUpdateEditor() {
+        protected async onEditorInputContentChangedByExternalEditor() {
 
-            console.log("AnimationsEditor.deepUpdate()");
-
-            const scene = this.getScene();
-
-            for (const obj of scene.sys.displayList.list) {
-
-                obj.destroy();
-            }
-
-            scene.sys.displayList.removeAll();
-            scene.sys.updateList.removeAll();
+            console.log("onEditorInputContentChangedByExternalEditor");
 
             const str = colibri.ui.ide.FileUtils.getFileString(this.getInput());
 
             const data = JSON.parse(str);
 
-            const maker = this.getScene().getMaker();
+            this.fullReset(data, false);
+        }
+
+        private async fullReset(data: any, useAnimationIndexAsKey: boolean) {
+
+            const scene = this.getScene();
+
+            scene.removeAll();
+
+            const maker = scene.getMaker();
 
             await maker.preload();
 
@@ -104,7 +133,9 @@ namespace phasereditor2d.animations.ui.editors {
 
             this._overlayLayer.setLoading(false);
 
-            this.reset(data, false);
+            this.reset(data, useAnimationIndexAsKey);
+
+            await this.updateDependenciesHash();
         }
 
         getScene() {
@@ -163,6 +194,8 @@ namespace phasereditor2d.animations.ui.editors {
 
             this.runOperation(() => {
 
+                this.setDirty(true);
+
                 for (const obj of this.getSelection()) {
 
                     if (obj instanceof Phaser.Animations.Animation) {
@@ -196,6 +229,59 @@ namespace phasereditor2d.animations.ui.editors {
             return manager;
         }
 
+        private openSelectFramesDialog(selectFramesCallback: (frames: pack.core.AssetPackImageFrame[]) => void) {
+
+            const viewer = new controls.viewers.TreeViewer(
+                "phasereditor2d.animations.ui.editors.AnimationsEditor.SelectFrames");
+            viewer.setLabelProvider(this._blocksProvider.getLabelProvider());
+            viewer.setContentProvider(this._blocksProvider.getContentProvider());
+            viewer.setCellRendererProvider(this._blocksProvider.getCellRendererProvider());
+            viewer.setTreeRenderer(this._blocksProvider.getTreeViewerRenderer(viewer));
+            viewer.setInput(this._blocksProvider.getInput());
+
+            const dlg = new controls.dialogs.ViewerDialog(viewer, true);
+            dlg.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3)
+            dlg.create();
+            dlg.setLocation(undefined, window.innerHeight * 1 / 8);
+            dlg.setTitle("Select Frames");
+            dlg.addOpenButton("Select", sel => {
+
+                const frames: pack.core.AssetPackImageFrame[] = [];
+                const used = new Set();
+
+                for (const elem of sel) {
+
+                    let elemFrames: pack.core.AssetPackImageFrame[];
+
+                    if (elem instanceof pack.core.ImageFrameContainerAssetPackItem) {
+
+                        elemFrames = elem.getFrames();
+
+                    } else {
+
+                        elemFrames = [elem];
+                    }
+
+                    for (const frame of elemFrames) {
+
+                        const id = frame.getPackItem().getKey() + "$" + frame.getName();
+
+                        if (used.has(id)) {
+
+                            continue;
+                        }
+
+                        used.add(id);
+                        frames.push(frame);
+                    }
+                }
+
+                selectFramesCallback(frames);
+            });
+
+            dlg.addCancelButton();
+        }
+
         openAddAnimationDialog() {
 
             const dlg = new controls.dialogs.InputDialog();
@@ -218,91 +304,45 @@ namespace phasereditor2d.animations.ui.editors {
 
             dlg.setResultCallback(name => {
 
-                const viewer = new controls.viewers.TreeViewer(
-                    "phasereditor2d.animations.ui.editors.AnimationsEditor.NewAnimation");
-                viewer.setLabelProvider(this._blocksProvider.getLabelProvider());
-                viewer.setContentProvider(this._blocksProvider.getContentProvider());
-                viewer.setCellRendererProvider(this._blocksProvider.getCellRendererProvider());
-                viewer.setTreeRenderer(this._blocksProvider.getTreeViewerRenderer(viewer));
-                viewer.setInput(this._blocksProvider.getInput());
+                this.openSelectFramesDialog(frames => {
 
-                const framesDialog = new controls.dialogs.ViewerDialog(viewer, true);
-                framesDialog.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3)
-                framesDialog.create();
-                framesDialog.setLocation(undefined, window.innerHeight * 1 / 8);
-                framesDialog.setTitle("Select Frames");
-                framesDialog.addOpenButton("Select", sel => {
+                    const animData = {
+                        key: name,
+                        frameRate: 24,
+                        repeat: -1,
+                        delay: 0,
+                        frames: frames.map(frame => {
 
-                    const frames: pack.core.AssetPackImageFrame[] = [];
-                    const used = new Set();
+                            const packItem = frame.getPackItem();
 
-                    for (const elem of sel) {
-
-                        let elemFrames: pack.core.AssetPackImageFrame[];
-
-                        if (elem instanceof pack.core.ImageFrameContainerAssetPackItem) {
-
-                            elemFrames = elem.getFrames();
-
-                        } else {
-
-                            elemFrames = [elem];
-                        }
-
-                        for (const frame of elemFrames) {
-
-                            const id = frame.getPackItem().getKey() + "$" + frame.getName();
-
-                            if (used.has(id)) {
-
-                                continue;
-                            }
-
-                            used.add(id);
-                            frames.push(frame);
-                        }
-
-                        const animData = {
-                            key: name,
-                            frameRate: 24,
-                            repeat: -1,
-                            delay: 0,
-                            frames: frames.map(frame => {
-
-                                const packItem = frame.getPackItem();
-
-                                if (packItem instanceof pack.core.ImageAssetPackItem) {
-
-                                    return {
-                                        key: packItem.getKey()
-                                    }
-
-                                }
+                            if (packItem instanceof pack.core.ImageAssetPackItem) {
 
                                 return {
-                                    key: packItem.getKey(),
-                                    frame: frame.getName()
+                                    key: packItem.getKey()
                                 }
-                            })
-                        }
 
-                        const data = this.getScene().anims.toJSON();
+                            }
 
-                        data.anims.push(animData as any);
-
-                        this.runAddAnimationsOperation(data, () => {
-
-                            this.reset(data, false);
-
-                            this.setSelection([this.getAnimation(name)]);
-
-                            this.getElement().focus();
-
-                            colibri.Platform.getWorkbench().setActivePart(this);
-                        });
+                            return {
+                                key: packItem.getKey(),
+                                frame: frame.getName()
+                            }
+                        })
                     }
+
+                    const data = this.getScene().anims.toJSON();
+
+                    data.anims.push(animData as any);
+
+                    this.fullResetDataOperation(data, () => {
+
+                        this.setSelection([this.getAnimation(name)]);
+
+                        this.getElement().focus();
+
+                        colibri.Platform.getWorkbench().setActivePart(this);
+                    });
                 });
-                framesDialog.addCancelButton();
             });
         }
 
@@ -326,6 +366,26 @@ namespace phasereditor2d.animations.ui.editors {
             container.appendChild(this._gameCanvas);
 
             this.createGame();
+
+            this.registerMenu();
+        }
+
+        private registerMenu() {
+
+            this._menuCreator = new AnimationsEditorMenuCreator(this);
+
+            this._gameCanvas.addEventListener("contextmenu", e => this.onMenu(e));
+        }
+
+        private onMenu(e: MouseEvent) {
+
+            e.preventDefault();
+
+            const menu = new controls.Menu();
+
+            this._menuCreator.fillMenu(menu);
+
+            menu.createWithEvent(e);
         }
 
         private createGame() {
@@ -498,7 +558,16 @@ namespace phasereditor2d.animations.ui.editors {
                 }
 
                 this.updateIfDependenciesChanged();
+
+                this.refreshBlocks();
             }
+        }
+
+        private async updateDependenciesHash() {
+
+            const hash = await this.getScene().getMaker().buildDependenciesHash();
+
+            this._currentDependenciesHash = hash;
         }
 
         private async updateIfDependenciesChanged() {
@@ -509,7 +578,9 @@ namespace phasereditor2d.animations.ui.editors {
 
                 this._currentDependenciesHash = hash;
 
-                this.deepUpdateEditor();
+                const data = this.getScene().anims.toJSON();
+
+                this.fullReset(data, false);
             }
         }
 
@@ -532,13 +603,20 @@ namespace phasereditor2d.animations.ui.editors {
             return null;
         }
 
-        async runAddAnimationsOperation(data: Phaser.Types.Animations.JSONAnimations, op: () => void) {
+        async fullResetDataOperation(data: Phaser.Types.Animations.JSONAnimations, op?: () => any) {
 
-            const maker = this._scene.getMaker();
+            const before = AnimationsEditorSnapshotOperation.takeSnapshot(this);
 
-            await maker.updateSceneLoader(data, this._overlayLayer.createLoadingMonitor());
+            await this.fullReset(data, false);
 
-            this.runOperation(op);
+            if (op) {
+
+                await op();
+            }
+
+            const after = AnimationsEditorSnapshotOperation.takeSnapshot(this);
+
+            this.getUndoManager().add(new AnimationsEditorSnapshotOperation(this, before, after, false));
         }
 
         runOperation(op: () => void, useAnimationIndexAsKey = false) {
@@ -645,12 +723,7 @@ namespace phasereditor2d.animations.ui.editors {
 
             const scene = this.getScene();
 
-            for (const sprite of scene.getSprites()) {
-
-                sprite.destroy();
-            }
-
-            scene.sys.displayList.removeAll();
+            scene.removeAll();
 
             scene.getMaker().createScene(animsData);
 
