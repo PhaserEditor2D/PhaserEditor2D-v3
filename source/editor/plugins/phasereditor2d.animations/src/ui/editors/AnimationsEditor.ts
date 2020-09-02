@@ -124,6 +124,43 @@ namespace phasereditor2d.animations.ui.editors {
 
         deleteSelected() {
 
+            const selectedFrames = new Set();
+            const selectedParentAnimations = new Set<Phaser.Animations.Animation>();
+            const selectedAnimations = new Set(this.getSelection().filter(a => a instanceof Phaser.Animations.Animation));
+
+            for (const obj of this.getSelection()) {
+
+                if (obj instanceof Phaser.Animations.AnimationFrame) {
+
+                    const anim = AnimationsEditor.getAnimationOfAFrame(obj);
+
+                    if (!selectedAnimations.has(anim)) {
+
+                        selectedFrames.add(obj);
+                        selectedParentAnimations.add(anim);
+                    }
+                }
+            }
+
+            let exitMethod = false;
+
+            for (const anim of selectedParentAnimations) {
+
+                const found = anim.frames.find(frame => !selectedFrames.has(frame));
+
+                if (!found && !selectedAnimations.has(anim)) {
+
+                    alert(`Cannot delete all frames of the animation "${anim.key}".`);
+
+                    exitMethod = true;
+                }
+            }
+
+            if (exitMethod) {
+
+                return;
+            }
+
             this.runOperation(() => {
 
                 for (const obj of this.getSelection()) {
