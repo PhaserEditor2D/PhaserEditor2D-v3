@@ -7,6 +7,7 @@
     "linterOptions": {
         "exclude": [
             "plugins/phasereditor2d.phaser/src/phaser/*.ts",
+            "node_modules/**",
             "*.d.ts"
         ]
     },
