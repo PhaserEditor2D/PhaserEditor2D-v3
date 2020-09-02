@@ -85,6 +85,11 @@ namespace phasereditor2d.animations.ui.editors {
             // nothing
         }
 
+        fillContextMenu(menu: controls.Menu) {
+
+            this._editor.fillMenu(menu);
+        }
+
         getUndoManager() {
 
             return this._editor.getUndoManager();

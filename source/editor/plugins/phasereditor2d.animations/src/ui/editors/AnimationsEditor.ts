@@ -383,9 +383,14 @@ namespace phasereditor2d.animations.ui.editors {
 
             const menu = new controls.Menu();
 
-            this._menuCreator.fillMenu(menu);
+            this.fillMenu(menu);
 
             menu.createWithEvent(e);
+        }
+
+        fillMenu(menu: controls.Menu) {
+
+            this._menuCreator.fillMenu(menu);
         }
 
         private createGame() {

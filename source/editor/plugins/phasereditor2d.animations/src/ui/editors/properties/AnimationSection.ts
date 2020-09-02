@@ -13,6 +13,16 @@ namespace phasereditor2d.animations.ui.editors.properties {
             return AnimationsPlugin.getInstance().getPhaserDocs().getDoc("Phaser.Types.Animations.Animation." + key);
         }
 
+        createMenu(menu: controls.Menu) {
+
+            ide.IDEPlugin.getInstance().createHelpMenuItem(menu, "animations-editor");
+        }
+
+        hasMenu() {
+
+            return true;
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);
