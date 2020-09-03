@@ -43,6 +43,10 @@ namespace phasereditor2d.animations {
                     ui.editors.AnimationsEditor.getFactory()
                 ]));
 
+            // new file wizards
+
+            reg.addExtension(new ui.dialogs.NewAnimationsFileExtension());
+
             // commands
 
             reg.addExtension(
