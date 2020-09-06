@@ -368,6 +368,38 @@ namespace phasereditor2d.animations.ui.editors {
             this.createGame();
 
             this.registerMenu();
+
+            this.registerDropListeners();
+        }
+
+        private registerDropListeners() {
+
+            this._gameCanvas.addEventListener("dragover", e => {
+
+                const dataArray = controls.Controls.getApplicationDragData();
+
+                for (const elem of dataArray) {
+
+                    if (elem instanceof pack.core.ImageFrameContainerAssetPackItem
+                        || elem instanceof pack.core.AssetPackImageFrame) {
+
+                        e.preventDefault();
+
+                        return;
+                    }
+                }
+            });
+
+            this._gameCanvas.addEventListener("drop", e => {
+
+                e.preventDefault();
+
+                const data = controls.Controls.getApplicationDragData();
+
+                const builder = new AnimationsBuilder(this, data);
+
+                builder.build();
+            });
         }
 
         private registerMenu() {
