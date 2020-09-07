@@ -1,5 +1,21 @@
 # Change Log
 
+## Version 3.6.0 Sep 7, 2020
+
+### Added
+
+* The Animations Editor.
+
+### Fixed
+
+* [#71](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/71) Files view: fixes files sorting. Folders go first.
+* Viewer: scrolling when distant elements are selected.
+* Scene Editor: better scene thumbnail generation.
+
+### Modified
+
+* Viewers: Pads with `0` chars the labels of spritesheet frames. It helps with sorting: `001`, `002`,...,`126`.
+
 ## Version 3.5.0 Aug 19, 2020
 
 ### Added

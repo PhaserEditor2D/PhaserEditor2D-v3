@@ -57,7 +57,7 @@ namespace colibri.ui.controls.viewers {
 
                 return objects;
             }
- 
+
             const labelMap = new Map<any, string>();
 
             for (const obj of objects) {

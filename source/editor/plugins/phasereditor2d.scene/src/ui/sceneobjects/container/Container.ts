@@ -11,15 +11,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getEditorSupport() {
+
             return this._editorSupport;
         }
 
-        get list(): ISceneObject[] {
-            return super.list as any;
-        }
+        getList(): ISceneObject[] {
 
-        set list(list: ISceneObject[]) {
-            super.list = list;
+            return this.list as any;
         }
     }
 }

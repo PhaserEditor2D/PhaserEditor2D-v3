@@ -1,7 +1,5 @@
 namespace phasereditor2d.scene.ui.blocks {
 
-    import ide = colibri.ui.ide;
-
     const SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES = new Set(
         [
             pack.core.IMAGE_TYPE,

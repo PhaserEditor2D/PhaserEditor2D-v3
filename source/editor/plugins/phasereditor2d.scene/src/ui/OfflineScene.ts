@@ -2,8 +2,6 @@
 
 namespace phasereditor2d.scene.ui {
 
-    import controls = colibri.ui.controls;
-
     export class OfflineScene extends Scene {
 
         static async createScene(data: core.json.ISceneData) {

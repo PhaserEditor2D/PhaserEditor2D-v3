@@ -30,7 +30,6 @@ namespace colibri.ui.controls.viewers {
             } else {
 
                 img.paint(args.canvasContext, args.x, args.y, args.w, args.h, args.center);
-
             }
         }
 

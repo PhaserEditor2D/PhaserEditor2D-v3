@@ -174,7 +174,7 @@ namespace phasereditor2d.scene.core.code {
                 if (obj instanceof ui.sceneobjects.Container
                     && !obj.getEditorSupport().isPrefabInstance()) {
 
-                    this.buildObjectClassFields(fields, obj.list);
+                    this.buildObjectClassFields(fields, obj.getList());
                 }
             }
         }
@@ -520,7 +520,7 @@ namespace phasereditor2d.scene.core.code {
             lazyStatements: CodeDOM[]
         }) {
 
-            for (const child of args.obj.list) {
+            for (const child of args.obj.getList()) {
 
                 args.createMethodDecl.getBody().push(new RawCodeDOM(""));
                 args.createMethodDecl.getBody().push(new RawCodeDOM("// " + child.getEditorSupport().getLabel()));

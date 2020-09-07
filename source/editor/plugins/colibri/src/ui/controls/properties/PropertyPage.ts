@@ -53,7 +53,7 @@ namespace colibri.ui.controls.properties {
 
                 this._menuIcon = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_SMALL_MENU));
                 this._menuIcon.getCanvas().classList.add("IconButton");
-                this._menuIcon.getCanvas().style.visibility = this._section.hasMenu()? "visible" : "hidden";
+                this._menuIcon.getCanvas().style.visibility = this._section.hasMenu() ? "visible" : "hidden";
                 this._menuIcon.getCanvas().addEventListener("mousedown", e => {
 
                     if (this._section.hasMenu()) {
@@ -238,6 +238,16 @@ namespace colibri.ui.controls.properties {
 
                     selection = [obj];
                     n = 1;
+
+                } else {
+
+                    const array = this._sectionProvider.getEmptySelectionArray();
+
+                    if (array) {
+
+                        selection = array;
+                        n = selection.length;
+                    }
                 }
             }
 
@@ -318,6 +328,7 @@ namespace colibri.ui.controls.properties {
         }
 
         getSelection() {
+
             return this._selection;
         }
 

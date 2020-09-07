@@ -91,14 +91,17 @@ namespace phasereditor2d.scene.ui.blocks {
         }
 
         getContentProvider(): controls.viewers.ITreeContentProvider {
+
             return new SceneEditorBlocksContentProvider(this._editor, () => this._packs);
         }
 
         getLabelProvider(): controls.viewers.ILabelProvider {
+
             return new SceneEditorBlocksLabelProvider();
         }
 
         getCellRendererProvider(): controls.viewers.ICellRendererProvider {
+
             return new SceneEditorBlocksCellRendererProvider();
         }
 
@@ -108,14 +111,17 @@ namespace phasereditor2d.scene.ui.blocks {
         }
 
         getUndoManager() {
-            return this._editor;
+
+            return this._editor.getUndoManager();
         }
 
         getPropertySectionProvider(): controls.properties.PropertySectionProvider {
+
             return new SceneEditorBlocksPropertyProvider();
         }
 
         getInput() {
+
             return this;
         }
     }

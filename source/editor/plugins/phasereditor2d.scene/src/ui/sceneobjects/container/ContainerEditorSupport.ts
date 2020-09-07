@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         destroy() {
 
-            for (const obj of this.getObject().list) {
+            for (const obj of this.getObject().getList()) {
 
                 obj.getEditorSupport().destroy();
             }
@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (!this.isPrefabInstance()) {
 
-                for (const obj of this.getObject().list) {
+                for (const obj of this.getObject().getList()) {
 
                     obj.getEditorSupport().buildDependencyHash(args);
                 }
@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (!this.isPrefabInstance()) {
 
-                containerData.list = this.getObject().list.map(obj => {
+                containerData.list = this.getObject().getList().map(obj => {
 
                     const objData = {} as json.IObjectData;
 
@@ -130,7 +130,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const points: Phaser.Math.Vector2[] = [];
 
-            for (const obj of container.list) {
+            for (const obj of container.getList()) {
 
                 const bounds = obj.getEditorSupport().getScreenBounds(camera);
 

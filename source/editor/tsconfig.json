@@ -35,6 +35,9 @@
         },
         {
             "path": "./plugins/phasereditor2d.webContentTypes/src"
+        },
+        {
+            "path": "./plugins/phasereditor2d.animations/src"
         }
     ],
     "files": []

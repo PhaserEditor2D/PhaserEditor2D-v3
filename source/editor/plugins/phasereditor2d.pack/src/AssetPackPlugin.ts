@@ -2,7 +2,6 @@
 
 namespace phasereditor2d.pack {
 
-    import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
 
     export const ICON_ASSET_PACK = "asset-pack";

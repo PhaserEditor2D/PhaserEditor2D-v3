@@ -30,7 +30,10 @@ namespace colibri.ui.ide {
 
                 this._viewer.setSelection(selection, notify);
 
-                this._viewer.reveal(...selection);
+                if (reveal) {
+
+                    this._viewer.reveal(...selection);
+                }
 
             } else {
                 this._initialSelection = selection;
