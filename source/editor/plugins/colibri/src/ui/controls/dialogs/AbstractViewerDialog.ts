@@ -66,6 +66,16 @@ namespace colibri.ui.controls.dialogs {
 
             const btn = this.addButton(text, callback2);
 
+            if (!allowSelectEmpty) {
+
+                this.getViewer().eventSelectionChanged.addListener(() => {
+
+                    btn.disabled = this.getViewer().getSelection().length === 0;
+                });
+
+                btn.disabled = true;
+            }
+
             const inputElement = this.getFilteredViewer().getFilterControl().getElement();
 
             inputElement.addEventListener("keyup", e => {

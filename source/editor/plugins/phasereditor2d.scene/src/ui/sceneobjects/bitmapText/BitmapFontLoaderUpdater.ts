@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return asset instanceof pack.core.BitmapFontAssetPackItem;
         }
 
-        async updateLoader(scene: Scene, asset: any) {
+        async updateLoader(scene: BaseScene, asset: any) {
 
             const font = asset as pack.core.BitmapFontAssetPackItem;
 

@@ -1,0 +1,11 @@
+{
+  "Phaser.Types.Animations.Animation.key": "The key that the animation will be associated with. i.e. sprite.animations.play(key)",
+  "Phaser.Types.Animations.Animation.frameRate": "The frame rate of playback in frames per second (default 24 if duration is null)",
+  "Phaser.Types.Animations.Animation.delay": "Delay before starting playback. Value given in milliseconds.",
+  "Phaser.Types.Animations.Animation.repeat": "Number of times to repeat the animation (-1 for infinity)",
+  "Phaser.Types.Animations.Animation.repeatDelay": "Delay before the animation repeats. Value given in milliseconds.",
+  "Phaser.Types.Animations.Animation.yoyo": "Should the animation yoyo? (reverse back down to the start) before repeating?",
+  "Phaser.Types.Animations.Animation.showOnStart": "Should sprite.visible = true when the animation starts to play?",
+  "Phaser.Types.Animations.Animation.hideOnComplete": "Should sprite.visible = false when the animation finishes?",
+  "Phaser.Types.Animations.Animation.skipMissedFrames": "Skip frames if the time lags, or always advanced anyway?"
+}

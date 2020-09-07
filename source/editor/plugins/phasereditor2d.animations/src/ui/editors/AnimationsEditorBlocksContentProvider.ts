@@ -1,4 +1,4 @@
-namespace phasereditor2d.scene.ui.blocks {
+namespace phasereditor2d.animations.ui.editors {
 
     const SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES = new Set(
         [
@@ -11,15 +11,16 @@ namespace phasereditor2d.scene.ui.blocks {
             pack.core.BITMAP_FONT_TYPE
         ]);
 
-    export class SceneEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
+    export class AnimationsEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
 
         private _getPacks: () => pack.core.AssetPack[];
-        private _editor: editor.SceneEditor;
+        private _editor: AnimationsEditor;
 
-        constructor(sceneEditor: editor.SceneEditor, getPacks: () => pack.core.AssetPack[]) {
+        constructor(sceneEditor: AnimationsEditor, getPacks: () => pack.core.AssetPack[]) {
             super();
 
             this._getPacks = getPacks;
+
             this._editor = sceneEditor;
         }
 
@@ -34,22 +35,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getRoots(input: any): any[] {
 
-            const roots = [];
-
-            roots.push(...this.getSceneFiles());
-
-            roots.push(...this.getPackItems());
-
-            return roots;
-        }
-
-        getSceneFiles() {
-
-            const finder = ScenePlugin.getInstance().getSceneFinder();
-
-            return finder.getSceneFiles()
-
-                .filter(file => SceneMaker.acceptDropFile(file, this._editor.getInput()));
+            return this.getPackItems();
         }
 
         getChildren(parent: any): any[] {
@@ -61,13 +47,9 @@ namespace phasereditor2d.scene.ui.blocks {
                         return this.getPackItems()
                             .filter(item => item instanceof pack.core.BaseAtlasAssetPackItem);
 
-                    case pack.core.BITMAP_FONT_TYPE:
+                    case pack.core.SPRITESHEET_TYPE:
                         return this.getPackItems()
-                            .filter(item => item instanceof pack.core.BitmapFontAssetPackItem);
-
-                    case PREFAB_SECTION:
-                        const files = this.getSceneFiles();
-                        return files;
+                            .filter(item => item instanceof pack.core.SpritesheetAssetPackItem);
                 }
 
                 return this.getPackItems()

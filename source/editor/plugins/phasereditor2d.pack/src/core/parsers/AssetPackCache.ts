@@ -1,6 +1,7 @@
 namespace phasereditor2d.pack.core.parsers {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export class AssetPackCache {
 
@@ -44,6 +45,23 @@ namespace phasereditor2d.pack.core.parsers {
         private getImageMapKey(key: string, frame: string | number) {
 
             return key + "$" + (frame === null || frame === undefined ? "." : frame);
+        }
+
+        buildAssetsDependenciesHash(builder: phasereditor2d.ide.core.MultiHashBuilder) {
+
+            const files = new Set<io.FilePath>();
+
+            for (const asset of this.getAssets()) {
+
+                files.add(asset.getPack().getFile());
+
+                asset.computeUsedFiles(files);
+            }
+
+            for (const file of files) {
+
+                builder.addPartialFileToken(file);
+            }
         }
     }
 }

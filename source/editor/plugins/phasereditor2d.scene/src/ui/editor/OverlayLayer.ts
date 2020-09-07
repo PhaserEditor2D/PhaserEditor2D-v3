@@ -1,77 +1,25 @@
+/// <reference path="./BaseOverlayLayer.ts" />
 namespace phasereditor2d.scene.ui.editor {
 
     import controls = colibri.ui.controls;
 
-    export class OverlayLayer {
+    export class OverlayLayer extends BaseOverlayLayer {
 
         private _editor: SceneEditor;
-        private _canvas: HTMLCanvasElement;
-        private _ctx: CanvasRenderingContext2D;
-        private _loading: boolean;
 
         constructor(editor: SceneEditor) {
+            super();
+
             this._editor = editor;
-            this._canvas = document.createElement("canvas");
-            this._canvas.style.position = "absolute";
         }
 
-        setLoading(loading: boolean) {
-            this._loading = loading;
-        }
+        protected renderLayer() {
 
-        isLoading() {
-            return this._loading;
-        }
+            this.renderGrid();
 
-        createLoadingMonitor(): controls.IProgressMonitor {
+            this.renderSelection();
 
-            return new controls.CanvasProgressMonitor(this.getCanvas());
-        }
-
-        getCanvas(): HTMLCanvasElement {
-            return this._canvas;
-        }
-
-        private resetContext() {
-
-            this._ctx = this._canvas.getContext("2d");
-
-            controls.Controls.adjustCanvasDPI(this._canvas);
-
-            this._ctx.imageSmoothingEnabled = false;
-            this._ctx.font = "12px Monospace";
-        }
-
-        resizeTo() {
-
-            const parent = this._canvas.parentElement;
-            this._canvas.width = Math.floor(parent.clientWidth);
-            this._canvas.height = Math.floor(parent.clientHeight);
-            this._canvas.style.width = this._canvas.width + "px";
-            this._canvas.style.height = this._canvas.height + "px";
-
-            this.resetContext();
-        }
-
-        render() {
-
-            if (!this._ctx) {
-
-                this.resetContext();
-            }
-
-            if (!this._loading) {
-
-                this.renderGrid();
-
-                this.renderSelection();
-
-                this.renderTools();
-            }
-        }
-
-        getContext() {
-            return this._ctx;
+            this.renderTools();
         }
 
         private renderTools() {
@@ -92,7 +40,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const editSel = this._editor.getSelection().filter(obj => tool.canEdit(obj));
 
-            const ctx = this._ctx;
+            const ctx = this.getContext();
 
             ctx.save();
 
@@ -110,7 +58,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private renderSelection() {
 
-            const ctx = this._ctx;
+            const ctx = this.getContext();
 
             ctx.save();
 
@@ -173,11 +121,10 @@ namespace phasereditor2d.scene.ui.editor {
             const borderWidth = settings.borderWidth;
             const borderHeight = settings.borderHeight;
 
-            const ctx = this._ctx;
-            const canvasWidth = this._canvas.width;
-            const canvasHeight = this._canvas.height;
+            const canvasWidth = this.getCanvas().width;
+            const canvasHeight = this.getCanvas().height;
 
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            const ctx = this.getContext();
 
             // render grid
 

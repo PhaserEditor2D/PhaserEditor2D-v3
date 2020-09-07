@@ -152,4 +152,18 @@ utils.makeHelpFile([
 
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 
+utils.makeHelpFile([
+    
+    "Phaser.Types.Animations.Animation.key",
+    "Phaser.Types.Animations.Animation.frameRate",
+    "Phaser.Types.Animations.Animation.delay",
+    "Phaser.Types.Animations.Animation.repeat",
+    "Phaser.Types.Animations.Animation.repeatDelay",
+    "Phaser.Types.Animations.Animation.yoyo",
+    "Phaser.Types.Animations.Animation.showOnStart",
+    "Phaser.Types.Animations.Animation.hideOnComplete",
+    "Phaser.Types.Animations.Animation.skipMissedFrames",
+
+], "../source/editor/plugins/phasereditor2d.animations/data/phaser-docs.json");
+
 console.log("DONE!");

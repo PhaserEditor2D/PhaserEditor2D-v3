@@ -1,0 +1,10 @@
+{
+    "id": "phasereditor2d.animations",
+    "priority": 1,
+    "styles": [
+        "styles/AnimationsEditor.css"
+    ],
+    "scripts": [
+        "_out/phasereditor2d.animations.js"
+    ]
+}

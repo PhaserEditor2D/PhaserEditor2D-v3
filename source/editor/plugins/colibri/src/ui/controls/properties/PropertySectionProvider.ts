@@ -8,5 +8,10 @@ namespace colibri.ui.controls.properties {
 
             return null;
         }
+
+        getEmptySelectionArray() {
+
+            return null;
+        }
     }
 }
