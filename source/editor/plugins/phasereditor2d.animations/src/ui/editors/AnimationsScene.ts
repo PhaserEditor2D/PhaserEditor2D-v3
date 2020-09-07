@@ -228,7 +228,12 @@ namespace phasereditor2d.animations.ui.editors {
 
         getSprites() {
 
-            return this.sys.displayList.list as Phaser.GameObjects.Sprite[];
+            if (this.sys.displayList) {
+
+                return this.sys.displayList.list as Phaser.GameObjects.Sprite[];
+            }
+
+            return [];
         }
     }
 }

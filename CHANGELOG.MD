@@ -2,6 +2,10 @@
 
 ## Version 3.5.0-next
 
+### Added
+
+* The Animations Editor.
+
 ### Fixed
 
 * [#71](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/71) Files view: fixes files sorting. Folders go first.
@@ -11,10 +15,6 @@
 ### Modified
 
 * Viewers: Pads with `0` chars the labels of spritesheet frames. It helps with sorting: `001`, `002`,...,`126`.
-
-### Plugin Development
-
-* Updated to TypeScript 4.0.4.
 
 ## Version 3.5.0 Aug 19, 2020
 
