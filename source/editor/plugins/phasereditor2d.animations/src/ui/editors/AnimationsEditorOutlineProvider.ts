@@ -67,7 +67,9 @@ namespace phasereditor2d.animations.ui.editors {
 
         getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer {
 
-            return new controls.viewers.TreeViewerRenderer(viewer);
+            const renderer = new controls.viewers.TreeViewerRenderer(viewer, 64);
+
+            return renderer;
         }
 
         getPropertySectionProvider(): colibri.ui.controls.properties.PropertySectionProvider {
