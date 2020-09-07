@@ -56,28 +56,27 @@ namespace phasereditor2d.animations {
 
         private registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
+            const editorContext = (args: colibri.ui.ide.commands.HandlerArgs) =>
+                args.activePart instanceof ui.editors.AnimationsEditor ||
+                (args.activeEditor instanceof ui.editors.AnimationsEditor &&
+                    args.activePart instanceof outline.ui.views.OutlineView);
+
             manager.addCategory({
                 id: CAT_ANIMATIONS,
                 name: "Sprite Animation"
             });
 
-            // // escape
+            // escape
 
-            // manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
-            //     args => args.activePart instanceof ui.editors.AnimationsEditor,
-            //     args => args.activeEditor.setSelection([]));
+            manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
+                args => args.activePart instanceof ui.editors.AnimationsEditor,
+                args => args.activeEditor.setSelection([]));
 
             // delete
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
 
-                args => (
-                    args.activePart instanceof ui.editors.AnimationsEditor ||
-
-                    (args.activeEditor instanceof ui.editors.AnimationsEditor &&
-                        args.activePart instanceof outline.ui.views.OutlineView)
-
-                ) && args.activeEditor.getSelection().length > 0,
+                args => editorContext(args) && args.activeEditor.getSelection().length > 0,
 
                 args => {
                     (args.activeEditor as ui.editors.AnimationsEditor).deleteSelected()
@@ -86,7 +85,7 @@ namespace phasereditor2d.animations {
             // select all
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_SELECT_ALL,
-                args => args.activePart instanceof ui.editors.AnimationsEditor,
+                editorContext,
                 args => (args.activePart as ui.editors.AnimationsEditor).selectAll());
 
             // add animation
@@ -100,7 +99,7 @@ namespace phasereditor2d.animations {
                     icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_PLUS)
                 },
                 handler: {
-                    testFunc: args => args.activeEditor instanceof ui.editors.AnimationsEditor,
+                    testFunc: editorContext,
                     executeFunc: args => {
                         (args.activeEditor as ui.editors.AnimationsEditor).openAddAnimationDialog();
                     }
@@ -113,9 +112,9 @@ namespace phasereditor2d.animations {
             // add frames
 
             const testAppendFrames = (args: colibri.ui.ide.commands.HandlerArgs) =>
-                (args.activeEditor instanceof ui.editors.AnimationsEditor
-                    && args.activeEditor.getSelection().length === 1
-                    && args.activeEditor.getSelection()[0] instanceof Phaser.Animations.Animation);
+                editorContext(args)
+                && args.activeEditor.getSelection().length === 1
+                && args.activeEditor.getSelection()[0] instanceof Phaser.Animations.Animation;
 
             manager.add({
                 command: {
