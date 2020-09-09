@@ -4,7 +4,7 @@
 
 ### Added
 
-* Scene Editor: Asset Pack key user property.
+* Scene Editor: add more user property types: Asset Key, Animation Key.
 
 ## Version 3.6.0 Sep 7, 2020
 

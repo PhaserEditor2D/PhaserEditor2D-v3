@@ -5,8 +5,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class AssetKeyPropertyType extends StringPropertyType {
 
-        constructor() {
-            super("asset-key");
+        constructor(id: string = "asset-key") {
+            super(id);
         }
 
         getName() {
@@ -76,24 +76,51 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return btn;
         }
 
-        private async createSearchDialog(callback: (key: string) => void) {
-
-            const finder = new pack.core.PackFinder();
+        protected createViewer(finder: pack.core.PackFinder) {
 
             const viewer = new controls.viewers.TreeViewer(
-                "phasereditor2d.scene.ui.sceneobjects.AssetKeyPropertyType.SelectAssetDialog");
+                "phasereditor2d.scene.ui.sceneobjects.SelectAssetDialog." + this.getId());
+
             viewer.setSorted(false);
 
             viewer.setCellRendererProvider(new CellRendererProvider(finder, "tree"));
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
             viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
             viewer.setContentProvider(new AssetKeyContentProvider());
+
+            return viewer;
+        }
+
+        protected getDialogName() {
+
+            return "Select Asset Key";
+        }
+
+        protected getDialogSize(): { width?: number, height?: number } {
+
+            return {
+                width: undefined,
+                height: window.innerHeight * 2 / 3
+            };
+        }
+
+        private async createSearchDialog(callback: (key: string) => void) {
+
+            const finder = new pack.core.PackFinder();
+
+            const viewer = this.createViewer(finder);
+
             viewer.setInput([]);
 
             const dlg = new controls.dialogs.ViewerDialog(viewer, true);
-            dlg.setSize(undefined, window.innerHeight * 2 / 3);
+
+            const size = this.getDialogSize();
+
+            dlg.setSize(size.width, size.height);
+
             dlg.create();
-            dlg.setTitle("Select Asset Key");
+
+            dlg.setTitle(this.getDialogName());
 
             dlg.enableButtonOnlyWhenOneElementIsSelected(
                 dlg.addOpenButton("Select", sel => {
