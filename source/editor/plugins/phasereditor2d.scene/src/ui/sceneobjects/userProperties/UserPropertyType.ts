@@ -62,6 +62,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return decl;
         }
 
+        protected buildExpressionFieldCode(prop: UserProperty, type: string, value: string) {
+
+            const decl = new code.FieldDeclCodeDOM(prop.getInfo().name, type, true);
+
+            decl.setInitialValueExpr(value);
+
+            return decl;
+        }
+
         protected buildNumberFieldCode(prop: UserProperty, value: number) {
 
             const decl = new code.FieldDeclCodeDOM(prop.getInfo().name, "number", true);

@@ -32,14 +32,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const text = section.createStringField(comp, prop);
 
-            const btn = this.createSearchButton(key => {
+            const btn = this.createSearchButton(value => {
 
-                text.value = key;
+                text.value = value;
 
                 const editor = section.getEditor();
 
                 editor.getUndoManager().add(
-                    new SimpleOperation(editor, section.getSelection(), prop, key));
+                    new SimpleOperation(editor, section.getSelection(), prop, value));
             });
 
             section.addUpdater(() => {
@@ -61,7 +61,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-        private createSearchButton(callback: (key: string) => void) {
+        private createSearchButton(callback: (value: string) => void) {
 
             const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
@@ -104,7 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             };
         }
 
-        private async createSearchDialog(callback: (key: string) => void) {
+        private async createSearchDialog(callback: (value: string) => void) {
 
             const finder = new pack.core.PackFinder();
 
@@ -126,9 +126,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 dlg.addOpenButton("Select", sel => {
 
                     const selected = sel[0];
-                    const key = viewer.getLabelProvider().getLabel(selected);
 
-                    callback(key);
+                    let value: string;
+
+                    if (selected instanceof pack.core.AssetPackImageFrame) {
+
+                        value = this.formatKeyFrame(selected.getPackItem().getKey(), selected.getName());
+
+                    } else {
+
+                        const key = viewer.getLabelProvider().getLabel(selected);
+
+                        value = this.formatKeyFrame(key);
+                    }
+
+                    callback(value);
                 }));
 
             dlg.addCancelButton();
@@ -169,6 +181,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 element: comp,
                 update
             };
+        }
+
+        protected formatKeyFrame(key: string, frame?: string | number) {
+
+            return key;
         }
     }
 

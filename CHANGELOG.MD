@@ -4,7 +4,10 @@
 
 ### Added
 
-* Scene Editor: add more user property types: Asset Key, Animation Key.
+* Scene Editor: add more user property types:
+    * Texture Config
+    * Animation Key
+    * Asset Key
 
 ## Version 3.6.0 Sep 7, 2020
 
