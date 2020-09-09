@@ -44,6 +44,7 @@ namespace phasereditor2d.pack.core {
         }
 
         resetCache() {
+
             this._frames = null;
         }
 

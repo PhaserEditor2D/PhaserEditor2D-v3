@@ -12,8 +12,11 @@ namespace phasereditor2d.pack.ui.viewers {
         }
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
+            if (element instanceof core.AssetPack) {
 
-            if (typeof (element) === "string") {
+                return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK));
+
+            } else if (typeof (element) === "string") {
 
                 return new controls.viewers.IconImageCellRenderer(
                     ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
@@ -86,6 +89,9 @@ namespace phasereditor2d.pack.ui.viewers {
                     case core.VIDEO_TYPE:
                         return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_VIDEO));
 
+                    case core.ANIMATION_TYPE:
+                        return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ANIMATIONS));
+
                     default:
                         break;
                 }
@@ -94,6 +100,9 @@ namespace phasereditor2d.pack.ui.viewers {
 
                 return new controls.viewers.ImageCellRenderer();
 
+            } else if (element instanceof core.AnimationConfigInPackItem) {
+
+                return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ANIMATIONS));
             }
 
             return this.getIconRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FILE));
@@ -102,6 +111,7 @@ namespace phasereditor2d.pack.ui.viewers {
         private getIconRenderer(icon: controls.IImage) {
 
             if (this._layout === "grid") {
+
                 return new controls.viewers.IconGridCellRenderer(icon);
             }
 

@@ -24,15 +24,18 @@ namespace phasereditor2d.pack.core {
         }
 
         protected addFilesFromDataKey(files: Set<io.FilePath>, ...keys: string[]) {
+
             const urls: string[] = [];
 
             for (const key of keys) {
 
                 if (Array.isArray(this._data[key])) {
+
                     urls.push(...this._data[key]);
                 }
 
                 if (typeof (this._data[key]) === "string") {
+
                     urls.push(this._data[key]);
                 }
             }

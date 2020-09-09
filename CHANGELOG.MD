@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 3.6.0-next
+
+### Added
+
+* Scene Editor: Asset Pack key user property.
+
 ## Version 3.6.0 Sep 7, 2020
 
 ### Added
