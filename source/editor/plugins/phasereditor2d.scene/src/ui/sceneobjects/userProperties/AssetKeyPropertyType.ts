@@ -185,7 +185,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected formatKeyFrame(key: string, frame?: string | number) {
 
-            return key;
+            if (frame === undefined || frame === null) {
+
+                return key;
+            }
+
+            return frame.toString();
         }
     }
 
