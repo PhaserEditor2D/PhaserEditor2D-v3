@@ -14,7 +14,14 @@ namespace phasereditor2d.animations.ui.editors {
 
                 sprite.setDataEnabled();
 
-                sprite.anims.play(animData.key);
+                try {
+
+                    sprite.anims.play(animData.key);
+
+                } catch (e) {
+
+                    console.error(e);
+                }
             }
 
             for (const anim of scene.anims["anims"].getArray()) {

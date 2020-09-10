@@ -23,7 +23,12 @@ namespace phasereditor2d.animations.ui.editors {
 
                 const image = cache.getImage(element.textureKey, element.textureFrame);
 
-                return new controls.viewers.ImageCellRenderer(image);
+                if (image) {
+
+                    return new controls.viewers.ImageCellRenderer(image);
+                }
+
+                return new controls.viewers.EmptyCellRenderer(false);
             }
 
             return new controls.viewers.EmptyCellRenderer();
