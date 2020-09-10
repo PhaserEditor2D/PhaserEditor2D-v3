@@ -10,6 +10,7 @@
     * Audio Key.
     * Asset Key
 * Scene Editor: allows change type of the selected objects in the Variable section.
+* Scene Editor: allows change type of user properties.
 
 ## Version 3.6.0 Sep 7, 2020
 
