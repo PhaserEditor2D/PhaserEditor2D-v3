@@ -27,9 +27,9 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (data.getExtension() !== "scene") {
 
-                        alert(`Only items shown in the Blocks view can be added to the scene.
-                        <br>The Blocks view shows Scene Prefabs and items defined in the Asset Pack files.
-                        <br>You can add files to a Pack File using the Inspector view or opening a pack file in the Asset Pack editor.`);
+                        alert("Only items shown in the Blocks view can be added to the scene.\n" +
+                        "The Blocks view shows Scene Prefabs and items defined in the Asset Pack files.\n" +
+                        "You can add files to a Pack File using the Inspector view or opening a pack file in the Asset Pack editor.");
 
                         return;
                     }
