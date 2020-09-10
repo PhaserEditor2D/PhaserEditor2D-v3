@@ -333,11 +333,17 @@ namespace colibri.ui.controls.viewers {
 
         onMouseUp(e: MouseEvent): void {
 
+            if (Controls.getMouseDownElement() !== e.target) {
+
+                return;
+            }
+
             if (e.button !== 0 && e.button !== 2) {
                 return;
             }
 
             if (!this.canSelectAtPoint(e)) {
+
                 return;
             }
 

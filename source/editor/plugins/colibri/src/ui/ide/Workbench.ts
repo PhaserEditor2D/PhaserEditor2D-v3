@@ -82,6 +82,8 @@ namespace colibri.ui.ide {
 
             console.log("Workbench: starting.");
 
+            controls.Controls.initEvents();
+
             controls.Controls.preloadTheme();
 
             {
