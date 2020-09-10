@@ -91,7 +91,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return viewer;
         }
 
-        protected getDialogName() {
+        protected getDialogTitle() {
 
             return "Select Asset Key";
         }
@@ -120,7 +120,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             dlg.create();
 
-            dlg.setTitle(this.getDialogName());
+            dlg.setTitle(this.getDialogTitle());
 
             dlg.enableButtonOnlyWhenOneElementIsSelected(
                 dlg.addOpenButton("Select", sel => {

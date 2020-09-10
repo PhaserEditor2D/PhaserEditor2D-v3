@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "Texture Config";
         }
 
-        getDialogName() {
+        getDialogTitle() {
 
             return "Texture";
         }

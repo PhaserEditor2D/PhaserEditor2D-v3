@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "Animation Key";
         }
 
-        protected getDialogName() {
+        protected getDialogTitle() {
 
             return "Select Animation Key";
         }
