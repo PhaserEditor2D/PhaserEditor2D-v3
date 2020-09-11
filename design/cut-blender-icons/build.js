@@ -16,7 +16,11 @@ const size = 32;
 
 let html = "";
 
-for (let theme of ["dark"]) {
+for (let theme of ["dark", "light"]) {
+
+    const isDark = theme === "dark";
+
+    child_process.execSync(`rm -f icons/${theme}/*.png`);
 
     for (let row = 0; row < rows; row++) {
 
@@ -29,7 +33,7 @@ for (let theme of ["dark"]) {
                 continue;
             }
 
-            console.log(`Processing ${col}x${row}: ${name}...`);
+            console.log(`Processing ${col}x${row}: ${name}`);
 
             const x = 10 + col * (size + 10);
             const y = 20 + row * (size + 10);
@@ -38,10 +42,16 @@ for (let theme of ["dark"]) {
 
             child_process.execSync(`convert blender-${theme}-${size}.png -crop ${size}x${size}+${x}+${y} +repage ${iconPath}`)
 
-            html += `<div class="icon"><img src="${iconPath}"><br><br><label>${col}x${row} ${name}</label></div>\n`;
+            if (isDark) {
+
+                html += `<div class="icon"><img src="${iconPath}"><br><br><label>${name}</label></div>\n`;
+            }
         }
 
-        html += "<div style='clear:both'></div>";
+        if (isDark) {
+
+            html += "<div style='clear:both'></div>";
+        }
     }
 }
 
@@ -54,6 +64,10 @@ html = `
 .icon {
     float:left;
     margin: 10px;
+}
+
+label {
+    font-size: 12px;
 }
 
 body {

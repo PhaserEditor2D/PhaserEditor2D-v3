@@ -10,7 +10,7 @@ function getNames() {
 
     const cols = 26;
 
-    let row = 0;
+    let row = 29;
     let col = 0;
 
     for (let line of lines) {
@@ -52,7 +52,7 @@ function getNames() {
         if (col >= cols) {
 
             col = 0;
-            row++;
+            row--;
         }
     }
 
