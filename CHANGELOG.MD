@@ -15,6 +15,7 @@
 ### Fixed
 
 * Viewer: ignore mouse-up event if it was originated outside the viewer.
+* Assets: increase the limit of spritesheet frames to 1000.
 * Animations Editor: handles asset missing errors.
 
 ## Version 3.6.0 Sep 7, 2020
