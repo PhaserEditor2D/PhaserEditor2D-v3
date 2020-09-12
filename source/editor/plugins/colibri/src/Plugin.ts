@@ -26,8 +26,10 @@ namespace colibri {
 
         getIcon(name: string): ui.controls.IImage {
 
+            const x2 = ui.controls.ICON_SIZE === 32;
+
             return ui.controls.Controls
-                .getImage(`app/plugins/${this.getId()}/icons/dark/${name}.png`, name);
+                .getImage(`app/plugins/${this.getId()}/icons/dark/${name}${x2 ? "@2x" : ""}.png`, name);
         }
 
         getResourceURL(pathInPlugin: string) {
