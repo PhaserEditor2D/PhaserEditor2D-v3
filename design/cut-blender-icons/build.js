@@ -18,39 +18,49 @@ let html = "";
 
 for (let theme of ["dark", "light"]) {
 
-    const isDark = theme === "dark";
-
     child_process.execSync(`rm -f icons/${theme}/*.png`);
 
-    for (let row = 0; row < rows; row++) {
+    for (let size of [16, 32]) {
 
-        for (let col = 0; col < cols; col++) {
+        const genHTML = theme === "dark" && size === 32;
 
-            const name = names[col + "x" + row];
+        for (let row = 0; row < rows; row++) {
 
-            if (name === "blank") {
+            for (let col = 0; col < cols; col++) {
 
-                continue;
+                let name = names[col + "x" + row];
+
+                if (name === "blank") {
+
+                    continue;
+                }
+
+                let f = size === 16 ? 1 : 2;
+
+                if (f === 2) {
+                    
+                    name += "@2x";
+                }
+
+                console.log(`Processing ${col}x${row}: ${name}`);
+
+                const x = 5 * f + col * (size + 5 * f);
+                const y = 10 * f + row * (size + 5 * f);
+
+                const iconPath = `icons/${theme}/${name}.png`;
+
+                child_process.execSync(`convert blender-${theme}-${size}.png -crop ${size}x${size}+${x}+${y} +repage ${iconPath}`)
+
+                if (genHTML) {
+
+                    html += `<div class="icon"><img src="${iconPath}"><br><br><label>${name}</label></div>\n`;
+                }
             }
 
-            console.log(`Processing ${col}x${row}: ${name}`);
+            if (genHTML) {
 
-            const x = 10 + col * (size + 10);
-            const y = 20 + row * (size + 10);
-
-            const iconPath = `icons/${theme}/${name}.png`;
-
-            child_process.execSync(`convert blender-${theme}-${size}.png -crop ${size}x${size}+${x}+${y} +repage ${iconPath}`)
-
-            if (isDark) {
-
-                html += `<div class="icon"><img src="${iconPath}"><br><br><label>${name}</label></div>\n`;
+                html += "<div style='clear:both'></div>";
             }
-        }
-
-        if (isDark) {
-
-            html += "<div style='clear:both'></div>";
         }
     }
 }
