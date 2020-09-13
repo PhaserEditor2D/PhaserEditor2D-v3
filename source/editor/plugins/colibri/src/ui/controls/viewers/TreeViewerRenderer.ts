@@ -170,12 +170,18 @@ namespace colibri.ui.controls.viewers {
 
             let args2: RenderCellArgs;
 
+            const renderCell = !(renderer instanceof EmptyCellRenderer);
+
             if (args.h <= ROW_HEIGHT) {
 
                 args2 = new RenderCellArgs(
                     args.canvasContext, args.x, args.y, TREE_ICON_SIZE, args.h, args.obj, args.viewer);
 
-                x += 20;
+                if (renderCell) {
+
+                    x += 20;
+                }
+
                 y += 15;
 
             } else {
@@ -189,7 +195,10 @@ namespace colibri.ui.controls.viewers {
 
             this.prepareContextForRenderCell(args2);
 
-            renderer.renderCell(args2);
+            if (renderCell) {
+
+                renderer.renderCell(args2);
+            }
 
             ctx.restore();
 
@@ -226,8 +235,6 @@ namespace colibri.ui.controls.viewers {
         }
 
         protected renderStyledLabel(args: RenderCellArgs, x: number, y: number, styledProvider: IStyledLabelProvider) {
-
-            const selected = this._viewer.isSelected(args.obj);
 
             const dark = controls.Controls.getTheme().dark;
 

@@ -29,6 +29,11 @@ namespace phasereditor2d.files.ui.viewers {
                 }
             }
 
+            if (this._layout === "tree" && file.isFolder()) {
+
+                return controls.viewers.EmptyCellRenderer.instance;
+            }
+
             return new FileCellRenderer();
         }
 
