@@ -211,7 +211,7 @@ namespace colibri.ui.controls.viewers {
                             context.fill();
                             context.closePath();
 
-                            icon.paint(context, iconX, iconY, icon.getWidth(), icon.getHeight(), false);
+                            icon.paint(context, iconX + 1, iconY - 1, icon.getWidth(), icon.getHeight(), false);
 
                             context.restore();
 
