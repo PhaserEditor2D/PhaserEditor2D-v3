@@ -16,8 +16,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (element instanceof Phaser.GameObjects.DisplayList
                 || element instanceof sceneobjects.ObjectLists) {
 
-                return new controls.viewers.IconImageCellRenderer(
-                    colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+                return controls.viewers.EmptyCellRenderer.instance;
 
             } else if (element instanceof sceneobjects.ObjectList) {
 

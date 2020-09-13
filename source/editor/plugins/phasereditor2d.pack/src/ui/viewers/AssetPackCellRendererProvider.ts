@@ -18,8 +18,9 @@ namespace phasereditor2d.pack.ui.viewers {
 
             } else if (typeof (element) === "string") {
 
-                return new controls.viewers.IconImageCellRenderer(
-                    ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
+                // return new controls.viewers.IconImageCellRenderer(
+                //     ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
+                return controls.viewers.EmptyCellRenderer.instance;
 
             } else if (element instanceof core.AssetPackItem) {
 
