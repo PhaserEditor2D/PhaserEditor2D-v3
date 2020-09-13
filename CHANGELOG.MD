@@ -12,6 +12,10 @@
 * Scene Editor: allows change type of the selected objects in the Variable section.
 * Scene Editor: allows change type of user properties.
 
+### Modified
+
+* Use new icons theme.
+
 ### Fixed
 
 * Viewer: ignore mouse-up event if it was originated outside the viewer.
