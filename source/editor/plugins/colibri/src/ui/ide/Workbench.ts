@@ -252,10 +252,10 @@ namespace colibri.ui.ide {
             // count icon extensions
             const icons: controls.IImage[] = [];
             {
-                for (const name of [ICON_FILE, ICON_FOLDER, ICON_PLUS, ICON_MINUS, ICON_CHECKED, ICON_KEYMAP]) {
+                // for (const name of [ICON_FILE, ICON_FOLDER, ICON_PLUS, ICON_MINUS, ICON_CHECKED, ICON_KEYMAP]) {
 
-                    icons.push(this.getWorkbenchIcon(name));
-                }
+                //     icons.push(this.getWorkbenchIcon(name));
+                // }
 
                 const extensions = Platform
                     .getExtensions<IconLoaderExtension>(IconLoaderExtension.POINT_ID);

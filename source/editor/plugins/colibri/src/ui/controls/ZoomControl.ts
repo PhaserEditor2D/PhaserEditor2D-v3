@@ -13,7 +13,7 @@ namespace colibri.ui.controls {
 
             // zoom in
 
-            const zoomIn = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_PLUS), true);
+            const zoomIn = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_ZOOM_IN), true);
 
             this._element.appendChild(zoomIn.getCanvas());
 
@@ -27,7 +27,7 @@ namespace colibri.ui.controls {
 
             // zoom out
 
-            const zoomOut = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_MINUS), true);
+            const zoomOut = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_ZOOM_OUT), true);
             this._element.appendChild(zoomOut.getCanvas());
 
             zoomOut.getCanvas().addEventListener("click", e => {
