@@ -3,9 +3,13 @@ namespace colibri {
     export abstract class Plugin {
 
         private _id: string;
+        private _iconCache: Map<string, ui.controls.IconImage>;
 
         constructor(id: string) {
+
             this._id = id;
+
+            this._iconCache = new Map();
         }
 
         getId() {
@@ -24,12 +28,26 @@ namespace colibri {
             // nothing
         }
 
-        getIcon(name: string): ui.controls.IImage {
+        getThemeIcon(name: string, theme: "dark" | "light") {
 
             const x2 = ui.controls.ICON_SIZE === 32;
 
             return ui.controls.Controls
-                .getImage(`app/plugins/${this.getId()}/icons/dark/${name}${x2 ? "@2x" : ""}.png`, name);
+                .getImage(`app/plugins/${this.getId()}/icons/${theme}/${name}${x2 ? "@2x" : ""}.png`, theme + "." + name);
+        }
+
+        getIcon(name: string): ui.controls.IImage {
+
+            if (this._iconCache.has(name)) {
+
+                return this._iconCache.get(name);
+            }
+
+            const image = new ui.controls.IconImage(this, name);
+
+            this._iconCache.set(name, image);
+
+            return image;
         }
 
         getResourceURL(pathInPlugin: string) {

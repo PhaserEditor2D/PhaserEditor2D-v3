@@ -4,11 +4,10 @@ namespace colibri.ui.controls.properties {
 
         private _section: PropertySection<any>;
         private _titleArea: HTMLDivElement;
-        private _expandIconElement: HTMLCanvasElement;
-        private _expandIconContext: CanvasRenderingContext2D;
         private _formArea: HTMLDivElement;
         private _page: PropertyPage;
         private _menuIcon: IconControl;
+        private _expandIconControl: IconControl;
 
         constructor(page: PropertyPage, section: PropertySection<any>) {
             super();
@@ -27,24 +26,13 @@ namespace colibri.ui.controls.properties {
                 this._titleArea = document.createElement("div");
                 this._titleArea.classList.add("PropertyTitleArea");
 
-                this._expandIconElement = document.createElement("canvas");
+                this._expandIconControl = new IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE));
 
-                this._expandIconElement.classList.add("expanded");
+                this._expandIconControl.getCanvas().classList.add("expanded");
 
-                this._expandIconElement.style.width =
-                    (this._expandIconElement.width = controls.RENDER_ICON_SIZE) + "px";
-                this._expandIconElement.style.height =
-                    (this._expandIconElement.height = controls.RENDER_ICON_SIZE) + "px";
+                this._expandIconControl.getCanvas().addEventListener("mouseup", () => this.toggleSection());
 
-                controls.Controls.adjustCanvasDPI(
-                    this._expandIconElement, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE);
-
-                this._expandIconElement.addEventListener("mouseup", () => this.toggleSection());
-
-                this._titleArea.appendChild(this._expandIconElement);
-
-                this._expandIconContext = this._expandIconElement.getContext("2d");
-                this._expandIconContext.imageSmoothingEnabled = false;
+                this._titleArea.appendChild(this._expandIconControl.getCanvas());
 
                 const label = document.createElement("label");
                 label.innerText = this._section.getTitle();
@@ -107,7 +95,7 @@ namespace colibri.ui.controls.properties {
 
 
         isExpanded() {
-            return this._expandIconElement.classList.contains("expanded");
+            return this._expandIconControl.getCanvas().classList.contains("expanded");
         }
 
         private toggleSection(): void {
@@ -115,12 +103,12 @@ namespace colibri.ui.controls.properties {
             if (this.isExpanded()) {
 
                 this._formArea.style.display = "none";
-                this._expandIconElement.classList.remove("expanded");
+                this._expandIconControl.getCanvas().classList.remove("expanded");
 
             } else {
 
                 this._formArea.style.display = "grid";
-                this._expandIconElement.classList.add("expanded");
+                this._expandIconControl.getCanvas().classList.add("expanded");
             }
 
             this._page.updateExpandStatus();
@@ -134,15 +122,11 @@ namespace colibri.ui.controls.properties {
 
         private updateExpandIcon() {
 
-            const size = controls.RENDER_ICON_SIZE;
-
-            this._expandIconContext.clearRect(0, 0, size, size);
-
             const icon = this.isExpanded() ? colibri.ICON_CONTROL_TREE_COLLAPSE : colibri.ICON_CONTROL_TREE_EXPAND;
+
             const image = ColibriPlugin.getInstance().getIcon(icon);
 
-            // controls.Controls.adjustCanvasDPI(this._expandIconElement);
-            image.paint(this._expandIconContext, 0, 0, size, size, false);
+            this._expandIconControl.setIcon(image);
         }
 
         getSection() {

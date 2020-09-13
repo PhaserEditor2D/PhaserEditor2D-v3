@@ -5,13 +5,16 @@ namespace colibri.ui.controls {
         private _icon: IImage;
         _context: CanvasRenderingContext2D;
         private _canvas: HTMLCanvasElement;
+        private static _themeListenerRegistered = false;
 
-        constructor(icon?: IImage, isButtonStyle=false) {
+        constructor(icon?: IImage, isButtonStyle = false) {
 
             const size = RENDER_ICON_SIZE;
 
             this._canvas = document.createElement("canvas");
+            this._canvas["__IconControl"] = this;
 
+            this._canvas.classList.add("IconControlCanvas");
             this._canvas.width = this._canvas.height = size;
             this._canvas.style.width = this._canvas.style.height = size + "px";
 
@@ -26,6 +29,25 @@ namespace colibri.ui.controls {
             if (isButtonStyle) {
 
                 this._canvas.classList.add("IconButton");
+            }
+
+            if (!IconControl._themeListenerRegistered) {
+
+                IconControl._themeListenerRegistered = true;
+
+                colibri.Platform.getWorkbench().eventThemeChanged.addListener(() => {
+
+                    const result = document.getElementsByClassName("IconControlCanvas");
+
+                    for (let i = 0; i < result.length; i++) {
+
+                        const elem = result.item(i);
+
+                        const control = elem["__IconControl"] as IconControl;
+
+                        control.repaint();
+                    }
+                });
             }
         }
 

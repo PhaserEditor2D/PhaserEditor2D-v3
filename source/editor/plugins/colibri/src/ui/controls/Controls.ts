@@ -128,6 +128,7 @@ namespace colibri.ui.controls {
         static getImage(url: string, id: string, appendVersion = true): IImage {
 
             if (Controls._images.has(id)) {
+
                 return Controls._images.get(id);
             }
 
@@ -207,10 +208,12 @@ namespace colibri.ui.controls {
             let id = localStorage.getItem("colibri.theme.id");
 
             if (!id) {
+
                 id = "light";
             }
 
             const classList = document.getElementsByTagName("html")[0].classList;
+
             classList.add(id);
         }
 
