@@ -163,7 +163,8 @@ Important:
 
 .darkPlus .ToolbarItem {
     background: #323232;
-    border-color: #646464;
+    --border-color: #646464;
+    border-style: none;
     text-shadow: 1px 1px #0e0e0e;
 }
 
