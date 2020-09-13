@@ -548,18 +548,20 @@ namespace colibri.ui.controls.viewers {
                 this._context.save();
 
                 this._context.fillStyle = fillStyle;
-                this._context.strokeStyle = fillStyle;
 
                 if (radius > 0) {
 
                     this._context.lineJoin = "round";
                     this._context.lineWidth = radius;
-                    this._context.strokeRect(x + (radius / 2), y + (radius / 2), w - radius, h - radius);
-                    this._context.fillRect(x + (radius / 2), y + (radius / 2), w - radius, h - radius);
+                    this._context.fillRect(
+                        Math.floor(x + (radius / 2)),
+                        Math.floor(y + (radius / 2)),
+                        Math.ceil(w - radius),
+                        Math.ceil(h - radius));
 
                 } else {
 
-                    this._context.fillRect(x, y, w, h);
+                    this._context.fillRect(Math.floor(x), Math.floor(y), Math.ceil(w), Math.ceil(h));
                 }
 
                 this._context.restore();

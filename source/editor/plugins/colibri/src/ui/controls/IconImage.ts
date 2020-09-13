@@ -26,6 +26,18 @@ namespace colibri.ui.controls {
             return this._name;
         }
 
+        getNegativeThemeImage() {
+
+            const img = this.getThemeImage();
+
+            if (img === this._lightImage) {
+
+                return this._darkImage;
+            }
+
+            return this._lightImage;
+        }
+
         getThemeImage() {
 
             if (controls.Controls.getTheme().dark) {

@@ -117,10 +117,17 @@ namespace colibri.ui.controls.viewers {
                         if (children.length > 0) {
                             const iconY = y + (cellHeight - TREE_ICON_SIZE) / 2;
 
-                            const icon = ColibriPlugin.getInstance()
+                            const themeIcon = ColibriPlugin.getInstance()
                                 .getIcon(expanded ? ICON_CONTROL_TREE_COLLAPSE : ICON_CONTROL_TREE_EXPAND);
 
-                            icon.paint(context, x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
+                            let treeIcon: IImage = themeIcon;
+
+                            if (viewer.isSelected(obj)) {
+
+                                treeIcon = themeIcon.getNegativeThemeImage();
+                            }
+
+                            treeIcon.paint(context, x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
 
                             treeIconList.push({
                                 rect: new Rect(x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE),

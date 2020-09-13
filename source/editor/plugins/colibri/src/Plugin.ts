@@ -36,7 +36,7 @@ namespace colibri {
                 .getImage(`app/plugins/${this.getId()}/icons/${theme}/${name}${x2 ? "@2x" : ""}.png`, theme + "." + name);
         }
 
-        getIcon(name: string): ui.controls.IImage {
+        getIcon(name: string) {
 
             if (this._iconCache.has(name)) {
 

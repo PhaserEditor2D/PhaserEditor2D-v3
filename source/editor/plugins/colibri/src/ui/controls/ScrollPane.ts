@@ -88,7 +88,9 @@ namespace colibri.ui.controls {
         }
 
         private setClientScrollY(y: number) {
+
             const b = this.getBounds();
+
             y = Math.max(-this._clientContentHeight + b.height, y);
             y = Math.min(0, y);
 

@@ -182,14 +182,41 @@ namespace colibri.ui.controls.viewers {
 
                             const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
-                            const icon = ColibriPlugin.getInstance().getIcon(expanded ?
+                            const themeIcon = ColibriPlugin.getInstance().getIcon(expanded ?
                                 ICON_CONTROL_TREE_COLLAPSE
                                 : ICON_CONTROL_TREE_EXPAND);
 
-                            icon.paint(context, x + 5, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
+                            let icon: IImage = themeIcon;
+
+                            const selected = viewer.isSelected(obj);
+
+                            if (viewer.isSelected(obj)) {
+
+                                icon = themeIcon.getNegativeThemeImage();
+                            }
+
+                            context.save();
+
+                            const iconX = x + cellSize - icon.getWidth() - 5;
+
+                            const white = "rgba(220, 220, 220)";
+                            const black = "rgba(30, 30, 30)";
+
+                            const color = controls.Controls.getTheme().dark ?
+                                (selected ? white : black) : (selected ? black : white);
+
+                            context.fillStyle = color;
+                            context.beginPath();
+                            context.arc(iconX + icon.getWidth() / 2, iconY + icon.getHeight() / 2 - 1, icon.getWidth() / 2, 0, Math.PI * 2);
+                            context.fill();
+                            context.closePath();
+
+                            icon.paint(context, iconX, iconY, icon.getWidth(), icon.getHeight(), false);
+
+                            context.restore();
 
                             treeIconList.push({
-                                rect: new Rect(x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE),
+                                rect: new Rect(iconX, iconY, icon.getWidth(), icon.getHeight()),
                                 obj: obj
                             });
                         }

@@ -12,19 +12,31 @@ namespace colibri.ui.controls.viewers {
 
         renderCell(args: RenderCellArgs): void {
 
-            if (!this._icon) {
+            let icon = this._icon;
 
-                DefaultImage.paintEmpty(args.canvasContext, args.x, args.y, args.w, args.h);
-
-            } else {
+            if (icon) {
 
                 const x2 = (args.w - controls.RENDER_ICON_SIZE) / 2;
 
                 const y2 = (args.h - controls.RENDER_ICON_SIZE) / 2;
 
-                this._icon.paint(
+                const selected = args.viewer.isSelected(args.obj);
+
+                if (selected) {
+
+                    if (icon instanceof IconImage) {
+
+                        icon = icon.getNegativeThemeImage();
+                    }
+                }
+
+                icon.paint(
                     args.canvasContext, args.x + x2, args.y + y2,
                     controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE, false);
+
+            } else {
+
+                DefaultImage.paintEmpty(args.canvasContext, args.x, args.y, args.w, args.h);
             }
 
             /*const ctx = args.canvasContext;

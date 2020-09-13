@@ -30,68 +30,86 @@ namespace colibri.ui.controls {
         }
 
         static getControlOf(element: HTMLElement): Control {
+
             return element["__control"];
         }
 
         isHandlePosition() {
+
             return this._handlePosition;
         }
 
         setHandlePosition(_handlePosition: boolean): void {
+
             this._handlePosition = _handlePosition;
         }
 
         get style() {
+
             return this.getElement().style;
         }
 
         isLayoutChildren() {
+
             return this._layoutChildren;
         }
 
         setLayoutChildren(layout: boolean): void {
+
             this._layoutChildren = layout;
         }
 
         getScrollY() {
+
             return this._scrollY;
         }
 
         setScrollY(scrollY: number) {
+
             this._scrollY = scrollY;
         }
 
         getContainer() {
+
             return this._container;
         }
 
         getLayout() {
+
             return this._layout;
         }
 
         setLayout(layout: ILayout): void {
+
             this._layout = layout;
+
             this.layout();
         }
 
         addClass(...tokens: string[]): void {
+
             this._element.classList.add(...tokens);
         }
 
         removeClass(...tokens: string[]): void {
+
             this._element.classList.remove(...tokens);
         }
 
         containsClass(className: string) {
+
             return this._element.classList.contains(className);
         }
 
         getElement() {
+
             return this._element;
         }
 
         getControlPosition(windowX: number, windowY: number) {
+
             const b = this.getElement().getBoundingClientRect();
+
             return {
                 x: windowX - b.left,
                 y: windowY - b.top
@@ -99,10 +117,12 @@ namespace colibri.ui.controls {
         }
 
         containsLocalPoint(x: number, y: number) {
+
             return x >= 0 && x <= this._bounds.width && y >= 0 && y <= this._bounds.height;
         }
 
         setBounds(bounds: IBounds): void {
+
             this._bounds.x = bounds.x === undefined ? this._bounds.x : bounds.x;
             this._bounds.y = bounds.y === undefined ? this._bounds.y : bounds.y;
             this._bounds.width = bounds.width === undefined ? this._bounds.width : bounds.width;
@@ -112,10 +132,12 @@ namespace colibri.ui.controls {
         }
 
         setBoundsValues(x: number, y: number, w: number, h: number): void {
+
             this.setBounds({ x: x, y: y, width: w, height: h });
         }
 
         getBounds() {
+            
             return this._bounds;
         }
 
