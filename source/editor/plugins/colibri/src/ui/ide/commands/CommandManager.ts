@@ -103,23 +103,20 @@ namespace colibri.ui.ide.commands {
 
         private preventKeyEvent(event: KeyboardEvent) {
 
-            let prevent = false;
-            const key = event.key.toUpperCase();
+            const code = [
+                event.metaKey || event.ctrlKey ? "ctrl" : "",
+                event.shiftKey ? "shift" : "",
+                event.altKey ? "alt" : "",
+                event.key.toLowerCase()
+            ].filter(s => s.length > 0).join(" ");
 
-            // ctrl+x
-            if ((event.metaKey || event.ctrlKey) && !event.shiftKey && !event.altKey) {
-
-                switch (key) {
-
-                    case "S":
-                        prevent = true;
-                        break;
-                }
-            }
-
-            if (prevent) {
-
-                event.preventDefault();
+            switch (code) {
+                case "ctrl s":
+                case "ctrl shift s":
+                case "ctrl w":
+                case "ctrl shift w":
+                    event.preventDefault();
+                    break;
             }
         }
 
