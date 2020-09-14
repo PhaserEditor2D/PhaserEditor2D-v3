@@ -161,24 +161,27 @@ Important:
 
 /* Toolbar */
 
-.darkPlus .IconButton {
-    padding: 2px;
-}
-
-.darkPlus .ToolbarItem,
-.darkPlus .IconButton {
-    border-style: none;
+.darkPlus .ToolbarItem {
+    background: #323232;
+    border-color: #646464;
+    border-style: solid;
     text-shadow: 1px 1px #0e0e0e;
 }
 
 .darkPlus .ToolbarItem:hover,
 .darkPlus .IconButton:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: #424242;
+    border-color: #757575;
 }
 
 .darkPlus .ToolbarItem:active,
+.darkPlus .ToolbarItem.ActionSelected,
+.darkPlus .IconButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
 .darkPlus .ToolbarItem.ActionSelected {
-    background: rgba(255, 255, 255, 0.2);
+    border-color: #858585;
 }
 
 /* ProgressBar */
