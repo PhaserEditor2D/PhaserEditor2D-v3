@@ -175,13 +175,22 @@ Important:
 }
 
 .darkPlus .ToolbarItem:active,
-.darkPlus .ToolbarItem.ActionSelected,
-.darkPlus .IconButton:hover {
+.darkPlus .ToolbarItem.ActionSelected {
     background: rgba(255, 255, 255, 0.3);
+}
+
+.darkPlus .IconButton:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .darkPlus .ToolbarItem.ActionSelected {
     border-color: #858585;
+}
+
+/* Zoom controls */
+
+.ZoomControl {
+    opacity: 0.2;
 }
 
 /* ProgressBar */

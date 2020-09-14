@@ -164,7 +164,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     display: grid;
     grid-template-columns: auto auto auto;
     column-gap: 2px;
-    opacity: 0.4;
+    opacity: 0.3;
     z-index: 3;
 }
 
