@@ -15,7 +15,6 @@ namespace colibri.ui.ide.commands {
         private _control: boolean;
         private _shift: boolean;
         private _alt: boolean;
-        private _meta: boolean;
         private _key: string;
         private _filterInputElements: boolean;
 
@@ -24,7 +23,6 @@ namespace colibri.ui.ide.commands {
             this._control = config.control === undefined ? false : config.control;
             this._shift = config.shift === undefined ? false : config.shift;
             this._alt = config.alt === undefined ? false : config.alt;
-            this._meta = config.meta === undefined ? false : config.meta;
             this._key = config.key === undefined ? "" : config.key;
             this._filterInputElements = config.filterInputElements === undefined ? true : config.filterInputElements;
         }
@@ -34,22 +32,22 @@ namespace colibri.ui.ide.commands {
             const keys = [];
 
             if (this._control) {
-                keys.push("Ctrl");
-            }
 
-            if (this._meta) {
                 keys.push("Ctrl");
             }
 
             if (this._shift) {
+
                 keys.push("Shift");
             }
 
             if (this._alt) {
+
                 keys.push("Alt");
             }
 
             if (this._key) {
+
                 keys.push(this._key.replace(" ", "Space"));
             }
 
@@ -58,10 +56,9 @@ namespace colibri.ui.ide.commands {
 
         matchesKeys(event: KeyboardEvent) {
 
-            return event.ctrlKey === this._control
+            return (event.ctrlKey || event.metaKey) === this._control
                 && event.shiftKey === this._shift
                 && event.altKey === this._alt
-                && event.metaKey === this._meta
                 && event.key.toLowerCase() === this._key.toLowerCase();
         }
 
