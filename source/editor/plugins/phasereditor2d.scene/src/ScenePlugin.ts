@@ -82,18 +82,11 @@ namespace phasereditor2d.scene {
                 )
             );
 
-            reg.addExtension(
-                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(this, [
-                    {
-                        iconName: ICON_USER_COMPONENT,
-                        contentType: core.CONTENT_TYPE_USER_COMPONENTS
-                    }
-                ]));
-
             // icons loader
 
             reg.addExtension(
                 ide.IconLoaderExtension.withPluginFiles(this, [
+                    ICON_USER_COMPONENT,
                     ICON_GROUP,
                     ICON_ANGLE,
                     ICON_ORIGIN,
@@ -101,12 +94,24 @@ namespace phasereditor2d.scene {
                     ICON_SCALE,
                     ICON_TRANSLATE,
                     ICON_BUILD,
+                    ICON_LIST
+                ], true)
+            );
+
+            reg.addExtension(
+                ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_LOCKED,
-                    ICON_UNLOCKED,
-                    ICON_LIST,
-                    ICON_USER_COMPONENT
+                    ICON_UNLOCKED
                 ])
             );
+
+            reg.addExtension(
+                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(this, [
+                    {
+                        iconName: ICON_USER_COMPONENT,
+                        contentType: core.CONTENT_TYPE_USER_COMPONENTS
+                    }
+                ]));
 
             // loader updates
 

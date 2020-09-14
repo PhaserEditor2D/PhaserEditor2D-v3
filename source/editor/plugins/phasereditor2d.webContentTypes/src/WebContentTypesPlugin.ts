@@ -26,14 +26,6 @@ namespace phasereditor2d.webContentTypes {
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
 
-            // content types
-
-            reg.addExtension(
-                new colibri.core.ContentTypeExtension(
-                    [new core.DefaultExtensionTypeResolver()],
-                    1000
-                ));
-
             // icons loader
 
             reg.addExtension(
@@ -44,8 +36,16 @@ namespace phasereditor2d.webContentTypes {
                     ICON_FILE_SCRIPT,
                     ICON_FILE_TEXT,
                     ICON_FILE_FONT
-                ])
+                ], true)
             );
+
+            // content types
+
+            reg.addExtension(
+                new colibri.core.ContentTypeExtension(
+                    [new core.DefaultExtensionTypeResolver()],
+                    1000
+                ));
 
             // content type icons
 

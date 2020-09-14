@@ -43,22 +43,27 @@ namespace colibri {
             reg.addExtension(
                 colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_FILE,
-                    ICON_FOLDER,
                     ICON_PLUS,
+                    ICON_FOLDER,
                     ICON_MINUS,
                     ICON_DELETE,
-                    ICON_ZOOM_RESET,
-                    ICON_ZOOM_IN,
-                    ICON_ZOOM_OUT,
-                    ICON_MENU,
-                    ICON_SMALL_MENU,
-                    ICON_CHECKED,
                     ICON_KEYMAP,
                     ICON_COLOR,
                     ICON_CONTROL_TREE_COLLAPSE,
                     ICON_CONTROL_TREE_EXPAND,
                     ICON_CONTROL_CLOSE,
                     ICON_CONTROL_DIRTY
+                ], true)
+            );
+
+            reg.addExtension(
+                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                    ICON_ZOOM_RESET,
+                    ICON_ZOOM_IN,
+                    ICON_ZOOM_OUT,
+                    ICON_MENU,
+                    ICON_SMALL_MENU,
+                    ICON_CHECKED
                 ])
             );
 

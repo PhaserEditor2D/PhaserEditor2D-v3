@@ -7,13 +7,21 @@ namespace colibri.ui.controls {
         private _darkImage: IImage;
         private _lightImage: IImage;
 
-        constructor(plugin: colibri.Plugin, name: string) {
+        constructor(plugin: colibri.Plugin, name: string, common: boolean) {
 
             this._plugin = plugin;
             this._name = name;
 
-            this._darkImage = plugin.getThemeIcon(name, "dark");
-            this._lightImage = plugin.getThemeIcon(name, "light");
+            if (common) {
+
+                this._darkImage = plugin.getThemeIcon(name, "common");
+                this._lightImage = this._darkImage;
+
+            } else {
+
+                this._darkImage = plugin.getThemeIcon(name, "dark");
+                this._lightImage = plugin.getThemeIcon(name, "light");
+            }
         }
 
         getPlugin() {

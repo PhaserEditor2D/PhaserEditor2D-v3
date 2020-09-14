@@ -21,7 +21,7 @@ namespace phasereditor2d.inspector {
             reg.addExtension(
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_INSPECTOR
-                ])
+                ], true)
             );
 
         }

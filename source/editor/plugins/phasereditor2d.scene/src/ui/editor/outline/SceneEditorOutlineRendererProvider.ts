@@ -1,7 +1,6 @@
 namespace phasereditor2d.scene.ui.editor.outline {
 
     import controls = colibri.ui.controls;
-    import ide = colibri.ui.ide;
 
     export class SceneEditorOutlineRendererProvider implements controls.viewers.ICellRendererProvider {
 
@@ -16,7 +15,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (element instanceof Phaser.GameObjects.DisplayList
                 || element instanceof sceneobjects.ObjectLists) {
 
-                return controls.viewers.EmptyCellRenderer.instance;
+                return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
             } else if (element instanceof sceneobjects.ObjectList) {
 
@@ -27,6 +26,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
         }
 
         async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
+
             return controls.Controls.resolveNothingLoaded();
         }
     }

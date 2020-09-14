@@ -28,7 +28,7 @@ namespace colibri {
             // nothing
         }
 
-        getThemeIcon(name: string, theme: "dark" | "light") {
+        getThemeIcon(name: string, theme: "dark" | "light" | "common") {
 
             const x2 = ui.controls.ICON_SIZE === 32;
 
@@ -36,14 +36,14 @@ namespace colibri {
                 .getImage(`app/plugins/${this.getId()}/icons/${theme}/${name}${x2 ? "@2x" : ""}.png`, theme + "." + name);
         }
 
-        getIcon(name: string) {
+        getIcon(name: string, common: boolean = false) {
 
             if (this._iconCache.has(name)) {
 
                 return this._iconCache.get(name);
             }
 
-            const image = new ui.controls.IconImage(this, name);
+            const image = new ui.controls.IconImage(this, name, common);
 
             this._iconCache.set(name, image);
 
