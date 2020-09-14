@@ -14,7 +14,7 @@
 
 ### Modified
 
-* Use new icons theme.
+* Some icons updated.
 
 ### Fixed
 
