@@ -4,16 +4,16 @@ namespace colibri.ui.ide {
 
         static POINT_ID = "colibri.ui.ide.IconLoaderExtension";
 
-        static withPluginFiles(plugin: colibri.Plugin, iconNames: string[]) {
+        static withPluginFiles(plugin: colibri.Plugin, iconNames: string[], common: boolean = false) {
 
-            const icons = iconNames.map(name => plugin.getIcon(name));
+            const icons = iconNames.map(name => plugin.getIcon(name, common));
 
             return new IconLoaderExtension(icons);
         }
 
-        private _icons: controls.IImage[];
+        private _icons: controls.IconImage[];
 
-        constructor(icons: controls.IImage[]) {
+        constructor(icons: controls.IconImage[]) {
             super(IconLoaderExtension.POINT_ID);
 
             this._icons = icons;

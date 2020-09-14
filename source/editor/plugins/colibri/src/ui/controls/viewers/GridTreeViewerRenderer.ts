@@ -182,14 +182,27 @@ namespace colibri.ui.controls.viewers {
 
                             const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
-                            const icon = ColibriPlugin.getInstance().getIcon(expanded ?
+                            const themeIcon = ColibriPlugin.getInstance().getIcon(expanded ?
                                 ICON_CONTROL_TREE_COLLAPSE
                                 : ICON_CONTROL_TREE_EXPAND);
 
-                            icon.paint(context, x + 5, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
+                            let icon: IImage = themeIcon;
+
+                            if (viewer.isSelected(obj)) {
+
+                                icon = themeIcon.getNegativeThemeImage();
+                            }
+
+                            context.save();
+
+                            const iconX = x + 5;
+
+                            icon.paint(context, iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
+
+                            context.restore();
 
                             treeIconList.push({
-                                rect: new Rect(x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE),
+                                rect: new Rect(iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE),
                                 obj: obj
                             });
                         }

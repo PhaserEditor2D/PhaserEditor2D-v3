@@ -31,10 +31,6 @@ namespace phasereditor2d.files.ui.views {
 
         fillContextMenu(menu: controls.Menu) {
 
-            const sel = this._viewer.getSelection();
-
-            //  menu.add(new actions.NewFileAction(this));
-
             menu.addMenu(this.createNewFileMenu());
 
             menu.addSeparator();

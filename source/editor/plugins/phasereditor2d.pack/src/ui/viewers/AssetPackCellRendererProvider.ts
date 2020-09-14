@@ -25,7 +25,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
                 const type = element.getType();
 
-                const filesPlugin = files.FilesPlugin.getInstance();
+                const webPlugin = webContentTypes.WebContentTypesPlugin.getInstance();
 
                 switch (type) {
 
@@ -48,7 +48,7 @@ namespace phasereditor2d.pack.ui.viewers {
                         return new viewers.ImageFrameContainerIconCellRenderer();
 
                     case core.AUDIO_TYPE:
-                        return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_SOUND));
+                        return this.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SOUND));
 
                     case core.SCRIPT_TYPE:
                     case core.SCENE_FILE_TYPE:
@@ -66,7 +66,7 @@ namespace phasereditor2d.pack.ui.viewers {
                             }
                         }
 
-                        return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT));
+                        return this.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT));
 
                     case core.SCENE_PLUGIN_TYPE:
                     case core.PLUGIN_TYPE:
@@ -75,19 +75,19 @@ namespace phasereditor2d.pack.ui.viewers {
                     case core.XML_TYPE:
                     case core.HTML_TYPE:
                     case core.JSON_TYPE:
-                        return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT));
+                        return this.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT));
 
                     case core.TEXT_TYPE:
-                        return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_TEXT));
+                        return this.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_TEXT));
 
                     case core.HTML_TEXTURE_TYPE:
-                        return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_IMAGE));
+                        return this.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_IMAGE));
 
                     case core.BITMAP_FONT_TYPE:
                         return new BitmapFontAssetCellRenderer();
 
                     case core.VIDEO_TYPE:
-                        return this.getIconRenderer(filesPlugin.getIcon(webContentTypes.ICON_FILE_VIDEO));
+                        return this.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_VIDEO));
 
                     case core.ANIMATION_TYPE:
                         return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ANIMATIONS));

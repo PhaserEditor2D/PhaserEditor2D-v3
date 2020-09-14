@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.dialogs {
         constructor() {
             super({
                 dialogName: "User Components File",
-                dialogIcon: ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT),
+                dialogIconDescriptor: ScenePlugin.getInstance().getIconDescriptor(ICON_USER_COMPONENT),
                 fileExtension: "components",
                 initialFileName: "Object"
             });

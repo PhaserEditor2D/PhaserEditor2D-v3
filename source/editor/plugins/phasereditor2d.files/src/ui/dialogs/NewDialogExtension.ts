@@ -8,18 +8,18 @@ namespace phasereditor2d.files.ui.dialogs {
         static POINT_ID = "phasereditor2d.files.ui.dialogs.NewDialogExtension";
 
         private _dialogName: string;
-        private _dialogIcon: controls.IImage;
+        private _dialogIconDescriptor: controls.IconDescriptor;
 
         constructor(
             config: {
                 dialogName: string,
-                dialogIcon: controls.IImage
+                dialogIconDescriptor: controls.IconDescriptor,
             }) {
 
             super(NewDialogExtension.POINT_ID);
 
             this._dialogName = config.dialogName;
-            this._dialogIcon = config.dialogIcon;
+            this._dialogIconDescriptor = config.dialogIconDescriptor;
         }
 
         getDialogName() {
@@ -27,7 +27,8 @@ namespace phasereditor2d.files.ui.dialogs {
         }
 
         getDialogIcon() {
-            return this._dialogIcon;
+
+            return this._dialogIconDescriptor.getIcon();
         }
 
         abstract createDialog(args: {

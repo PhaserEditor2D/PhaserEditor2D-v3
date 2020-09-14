@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.dialogs {
         constructor() {
             super({
                 dialogName: "Prefab File",
-                dialogIcon: ScenePlugin.getInstance().getIcon(ICON_GROUP),
+                dialogIconDescriptor: ScenePlugin.getInstance().getIconDescriptor(ICON_GROUP),
                 fileExtension: "scene",
                 initialFileName: "Prefab"
             });

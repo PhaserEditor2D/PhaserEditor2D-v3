@@ -81,8 +81,7 @@ namespace colibri.ui.controls {
 
             size = Math.max(size, RENDER_ICON_SIZE);
 
-            if (this._icon && this._icon.getWidth() === ICON_SIZE
-                && this._icon.getHeight() === ICON_SIZE) {
+            if (this._icon && this._icon instanceof IconImage) {
 
                 size = RENDER_ICON_SIZE;
             }
@@ -160,6 +159,7 @@ namespace colibri.ui.controls {
         private _contentAreaElement: HTMLElement;
         private _iconSize: number;
         private static _selectedTimeCounter: number = 0;
+        private _themeListener: any;
 
         constructor(...classList: string[]) {
             super("div", "TabPane", ...classList);
@@ -173,6 +173,34 @@ namespace colibri.ui.controls {
             this.getElement().appendChild(this._contentAreaElement);
 
             this._iconSize = RENDER_ICON_SIZE;
+
+            this.registerThemeListener();
+        }
+
+        private registerThemeListener() {
+
+            this._themeListener = () => {
+
+                if (this.getElement().isConnected) {
+
+                    const result = this.getElement().getElementsByClassName("TabIconImage");
+
+                    for (let i = 0; i < result.length; i++) {
+
+                        const e = result.item(i);
+
+                        const manager = TabIconManager.getManager(e as any);
+
+                        manager.repaint();
+                    }
+
+                } else {
+
+                    colibri.Platform.getWorkbench().eventThemeChanged.removeListener(this._themeListener);
+                }
+            };
+
+            colibri.Platform.getWorkbench().eventThemeChanged.addListener(this._themeListener);
         }
 
         addTab(label: string, icon: IImage, content: Control, closeable = false, selectIt = true): void {

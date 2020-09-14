@@ -117,10 +117,17 @@ namespace colibri.ui.controls.viewers {
                         if (children.length > 0) {
                             const iconY = y + (cellHeight - TREE_ICON_SIZE) / 2;
 
-                            const icon = ColibriPlugin.getInstance()
+                            const themeIcon = ColibriPlugin.getInstance()
                                 .getIcon(expanded ? ICON_CONTROL_TREE_COLLAPSE : ICON_CONTROL_TREE_EXPAND);
 
-                            icon.paint(context, x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
+                            let treeIcon: IImage = themeIcon;
+
+                            if (viewer.isSelected(obj)) {
+
+                                treeIcon = themeIcon.getNegativeThemeImage();
+                            }
+
+                            treeIcon.paint(context, x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
 
                             treeIconList.push({
                                 rect: new Rect(x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE),
@@ -163,12 +170,18 @@ namespace colibri.ui.controls.viewers {
 
             let args2: RenderCellArgs;
 
+            const renderCell = !(renderer instanceof EmptyCellRenderer);
+
             if (args.h <= ROW_HEIGHT) {
 
                 args2 = new RenderCellArgs(
                     args.canvasContext, args.x, args.y, TREE_ICON_SIZE, args.h, args.obj, args.viewer);
 
-                x += 20;
+                if (renderCell) {
+
+                    x += 20;
+                }
+
                 y += 15;
 
             } else {
@@ -182,7 +195,10 @@ namespace colibri.ui.controls.viewers {
 
             this.prepareContextForRenderCell(args2);
 
-            renderer.renderCell(args2);
+            if (renderCell) {
+
+                renderer.renderCell(args2);
+            }
 
             ctx.restore();
 
@@ -219,8 +235,6 @@ namespace colibri.ui.controls.viewers {
         }
 
         protected renderStyledLabel(args: RenderCellArgs, x: number, y: number, styledProvider: IStyledLabelProvider) {
-
-            const selected = this._viewer.isSelected(args.obj);
 
             const dark = controls.Controls.getTheme().dark;
 

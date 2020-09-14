@@ -5,7 +5,7 @@ namespace phasereditor2d.animations.ui.dialogs {
         constructor() {
             super({
                 dialogName: "Animations File",
-                dialogIcon: AnimationsPlugin.getInstance().getIcon(pack.ICON_ANIMATIONS),
+                dialogIconDescriptor: pack.AssetPackPlugin.getInstance().getIconDescriptor(pack.ICON_ANIMATIONS),
                 fileExtension: "json",
                 initialFileName: "animations"
             });

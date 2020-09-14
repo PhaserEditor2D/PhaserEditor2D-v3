@@ -42,9 +42,9 @@ namespace phasereditor2d.ide {
             // icons
 
             reg.addExtension(
-                new colibri.ui.ide.IconLoaderExtension([
-                    this.getIcon(ICON_PLAY),
-                ]));
+                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                    ICON_PLAY
+                ], true));
 
             // keys
 

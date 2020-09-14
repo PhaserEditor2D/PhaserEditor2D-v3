@@ -11,7 +11,7 @@ namespace phasereditor2d.files.ui.dialogs {
 
         constructor(config: {
             dialogName: string,
-            dialogIcon: controls.IImage,
+            dialogIconDescriptor: controls.IconDescriptor,
             initialFileName: string
         }) {
             super(config);
