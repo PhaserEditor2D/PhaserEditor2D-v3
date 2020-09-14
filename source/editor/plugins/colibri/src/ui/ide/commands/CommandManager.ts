@@ -69,6 +69,8 @@ namespace colibri.ui.ide.commands {
                 return;
             }
 
+            let executed = false;
+
             const args = this.makeArgs();
 
             for (const command of this._commands) {
@@ -89,8 +91,35 @@ namespace colibri.ui.ide.commands {
 
                 if (eventMatches) {
 
-                    this.executeHandler(command, args);
+                    executed = this.executeHandler(command, args);
                 }
+            }
+
+            if (!executed) {
+
+                this.preventKeyEvent(event);
+            }
+        }
+
+        private preventKeyEvent(event: KeyboardEvent) {
+
+            let prevent = false;
+            const key = event.key.toUpperCase();
+
+            // ctrl+x
+            if ((event.metaKey || event.ctrlKey) && !event.shiftKey && !event.altKey) {
+
+                switch (key) {
+
+                    case "S":
+                        prevent = true;
+                        break;
+                }
+            }
+
+            if (prevent) {
+
+                event.preventDefault();
             }
         }
 
@@ -116,7 +145,7 @@ namespace colibri.ui.ide.commands {
             return false;
         }
 
-        private executeHandler(command: Command, args: HandlerArgs, checkContext: boolean = true) {
+        private executeHandler(command: Command, args: HandlerArgs, checkContext: boolean = true): boolean {
 
             const handlers = this._commandHandlerMap.get(command);
 
@@ -135,9 +164,11 @@ namespace colibri.ui.ide.commands {
 
                     handler.execute(args);
 
-                    return;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         addCategory(category: ICommandCategory) {
