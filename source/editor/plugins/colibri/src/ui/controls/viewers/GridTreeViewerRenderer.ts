@@ -188,8 +188,6 @@ namespace colibri.ui.controls.viewers {
 
                             let icon: IImage = themeIcon;
 
-                            const selected = viewer.isSelected(obj);
-
                             if (viewer.isSelected(obj)) {
 
                                 icon = themeIcon.getNegativeThemeImage();
@@ -197,26 +195,14 @@ namespace colibri.ui.controls.viewers {
 
                             context.save();
 
-                            const iconX = x + cellSize - icon.getWidth() - 5;
+                            const iconX = x + 5;
 
-                            const white = "rgba(220, 220, 220)";
-                            const black = "rgba(30, 30, 30)";
-
-                            const color = controls.Controls.getTheme().dark ?
-                                (selected ? white : black) : (selected ? black : white);
-
-                            context.fillStyle = color;
-                            context.beginPath();
-                            context.arc(iconX + icon.getWidth() / 2, iconY + icon.getHeight() / 2 - 1, icon.getWidth() / 2, 0, Math.PI * 2);
-                            context.fill();
-                            context.closePath();
-
-                            icon.paint(context, iconX + 1, iconY - 1, icon.getWidth(), icon.getHeight(), false);
+                            icon.paint(context, iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
 
                             context.restore();
 
                             treeIconList.push({
-                                rect: new Rect(iconX, iconY, icon.getWidth(), icon.getHeight()),
+                                rect: new Rect(iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE),
                                 obj: obj
                             });
                         }
