@@ -309,7 +309,7 @@ namespace colibri.ui.ide {
 
                 for (const item of extension.getConfig()) {
 
-                    this._contentType_icon_Map.set(item.contentType, item.plugin.getIcon(item.iconName));
+                    this._contentType_icon_Map.set(item.contentType, item.iconDescriptor.getIcon());
                 }
             }
         }

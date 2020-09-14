@@ -2,8 +2,7 @@
 namespace colibri.ui.ide {
 
     export declare type ContentTypeIconExtensionConfig = Array<{
-        plugin?: colibri.Plugin,
-        iconName: string,
+        iconDescriptor: controls.IconDescriptor,
         contentType: string
     }>;
 
@@ -13,13 +12,16 @@ namespace colibri.ui.ide {
 
         private _config: ContentTypeIconExtensionConfig;
 
-        static withPluginIcons(plugin: colibri.Plugin, config: ContentTypeIconExtensionConfig) {
+        static withPluginIcons(plugin: colibri.Plugin, config: Array<{
+            plugin?: Plugin;
+            iconName:string;
+            contentType: string;
+        }>) {
 
             return new ContentTypeIconExtension(
                 config.map(item => {
                     return {
-                        plugin: item.plugin ?? plugin,
-                        iconName: item.iconName,
+                        iconDescriptor: plugin.getIconDescriptor(item.iconName),
                         contentType: item.contentType
                     };
                 }));

@@ -7,7 +7,7 @@ namespace phasereditor2d.files.ui.dialogs {
         constructor() {
             super({
                 dialogName: "Folder",
-                dialogIcon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER),
+                dialogIconDescriptor: colibri.ColibriPlugin.getInstance().getIconDescriptor(colibri.ICON_FOLDER),
                 initialFileName: "folder"
             });
         }
