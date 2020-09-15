@@ -297,7 +297,7 @@ namespace colibri.ui.controls.viewers {
 
                     renderer.renderCell(args2);
 
-                    this.renderCellFront(args, selected, isLastChild);
+                    // this.renderCellFront(args, selected, isLastChild);
 
                     args.viewer.paintItemBackground(
                         args.obj, args.x, args.y + args.h - lineHeight, args.w, labelHeight, 10);
@@ -330,8 +330,7 @@ namespace colibri.ui.controls.viewers {
 
                 ctx.save();
 
-                ctx.fillStyle = Controls.getTheme().viewerSelectionBackground + "88";
-                // ctx.fillRect(args.x, args.y, args.w, args.h);
+                ctx.fillStyle = Controls.getTheme().viewerSelectionBackground;// + "88";
                 controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
 
                 ctx.restore();
@@ -340,18 +339,7 @@ namespace colibri.ui.controls.viewers {
 
         protected renderCellFront(args: RenderCellArgs, selected: boolean, isLastChild: boolean) {
 
-            if (selected) {
-
-                const ctx = args.canvasContext;
-
-                ctx.save();
-
-                ctx.fillStyle = Controls.getTheme().viewerSelectionBackground + "44";
-                // ctx.fillRect(args.x, args.y, args.w, args.h);
-                controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
-
-                ctx.restore();
-            }
+            // nothing for now
         }
     }
 }
