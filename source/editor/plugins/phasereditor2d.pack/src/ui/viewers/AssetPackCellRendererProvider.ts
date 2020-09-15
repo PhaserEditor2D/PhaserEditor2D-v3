@@ -12,14 +12,21 @@ namespace phasereditor2d.pack.ui.viewers {
         }
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
+
             if (element instanceof core.AssetPack) {
 
                 return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK));
 
             } else if (typeof (element) === "string") {
 
+                if (core.TYPES.indexOf(element) >= 0) {
+
+                    return new controls.viewers.IconImageCellRenderer(
+                        colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+                }
+
                 return new controls.viewers.IconImageCellRenderer(
-                    ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
+                    colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FILE));
 
             } else if (element instanceof core.AssetPackItem) {
 
@@ -68,6 +75,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
                         return this.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT));
 
+                    case core.SCRIPTS_TYPE:
                     case core.SCENE_PLUGIN_TYPE:
                     case core.PLUGIN_TYPE:
                     case core.CSS_TYPE:

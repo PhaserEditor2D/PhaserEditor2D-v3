@@ -63,6 +63,8 @@ namespace phasereditor2d.pack.ui.importers {
 
                     new SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.SCRIPT_TYPE),
 
+                    new SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.SCRIPTS_TYPE, true),
+
                     new SingleFileImporter(webContentTypes.core.CONTENT_TYPE_AUDIO, core.AUDIO_TYPE, true),
 
                     new AudioSpriteImporter(),

@@ -19,6 +19,7 @@ namespace phasereditor2d.pack.ui.viewers {
         sceneFile: "Scene File",
         scenePlugin: "Scene Plugin",
         script: "Script",
+        scripts: "Multiple Scripts",
         audio: "Audio",
         audioSprite: "Audio Sprite",
         video: "Video",
@@ -88,6 +89,7 @@ namespace phasereditor2d.pack.ui.viewers {
             if (typeof (obj) === "string") {
 
                 if (obj in ASSET_PACK_TYPE_DISPLAY_NAME) {
+
                     return ASSET_PACK_TYPE_DISPLAY_NAME[obj];
                 }
 
