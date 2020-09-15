@@ -236,7 +236,11 @@ namespace phasereditor2d.pack.ui.editor {
 
             const manager = new controls.ToolbarManager(parent);
 
-            manager.addCommand(CMD_ASSET_PACK_EDITOR_ADD_FILE);
+            manager.addAction({
+                text: "Add File",
+                icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_PLUS),
+                callback: () => this.openAddFileDialog()
+            });
 
             return manager;
         }
