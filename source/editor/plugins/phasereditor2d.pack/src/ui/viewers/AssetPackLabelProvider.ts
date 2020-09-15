@@ -19,7 +19,7 @@ namespace phasereditor2d.pack.ui.viewers {
         sceneFile: "Scene File",
         scenePlugin: "Scene Plugin",
         script: "Script",
-        scripts: "Multiple Scripts",
+        scripts: "Scripts (Predictable Order)",
         audio: "Audio",
         audioSprite: "Audio Sprite",
         video: "Video",
