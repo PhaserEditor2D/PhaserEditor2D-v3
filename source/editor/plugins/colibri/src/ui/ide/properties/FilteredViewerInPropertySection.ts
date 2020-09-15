@@ -22,17 +22,20 @@ namespace colibri.ui.ide.properties {
 
         resizeTo() {
 
-            const parent = this.getElement().parentElement;
+            requestAnimationFrame(() => {
 
-            if (parent) {
+                const parent = this.getElement().parentElement;
 
-                this.setBounds({
-                    width: parent.clientWidth,
-                    height: parent.clientHeight
-                });
-            }
+                if (parent) {
 
-            this.getViewer().repaint();
+                    this.setBounds({
+                        width: parent.clientWidth,
+                        height: parent.clientHeight
+                    });
+                }
+
+                this.getViewer().repaint();
+            });
         }
     }
 }
