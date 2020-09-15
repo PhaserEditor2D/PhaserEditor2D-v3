@@ -22,6 +22,7 @@
 * Assets: increase the limit of spritesheet frames to 1000.
 * Animations Editor: handles asset missing errors.
 * Scene Editor: does not sort the content of the Add Object dialog.
+* Keys: in macOS, the `Command` and `Ctrl` keys are handled as the same key.
 
 ## Version 3.6.0 Sep 7, 2020
 
