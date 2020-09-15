@@ -249,6 +249,7 @@ namespace phasereditor2d.pack.ui.editor {
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setCellRendererProvider(new viewers.AssetPackCellRendererProvider("tree"));
             viewer.setInput(core.TYPES);
+            viewer.setSorted(false);
 
             const dlg = new dialogs.ViewerDialog(viewer, false);
 
