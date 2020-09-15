@@ -554,6 +554,7 @@ namespace colibri.ui.controls.viewers {
 
                 this._context.save();
 
+                this._context.strokeStyle = fillStyle;
                 this._context.fillStyle = fillStyle;
 
                 if (radius > 0) {
@@ -561,6 +562,11 @@ namespace colibri.ui.controls.viewers {
                     this._context.lineJoin = "round";
                     this._context.lineWidth = radius;
                     this._context.fillRect(
+                        Math.floor(x + (radius / 2)),
+                        Math.floor(y + (radius / 2)),
+                        Math.ceil(w - radius),
+                        Math.ceil(h - radius));
+                    this._context.strokeRect(
                         Math.floor(x + (radius / 2)),
                         Math.floor(y + (radius / 2)),
                         Math.ceil(w - radius),

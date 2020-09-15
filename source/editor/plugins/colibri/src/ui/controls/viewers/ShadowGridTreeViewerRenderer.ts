@@ -12,6 +12,8 @@ namespace colibri.ui.controls.viewers {
 
         renderCellBack(args: controls.viewers.RenderCellArgs, selected: boolean, isLastChild: boolean) {
 
+            super.renderCellBack(args, selected, isLastChild);
+            
             const shadowAsChild = this.isShadowAsChild(args.obj);
             const expanded = args.viewer.isExpanded(args.obj);
 
@@ -58,10 +60,6 @@ namespace colibri.ui.controls.viewers {
 
                 ctx.restore();
             }
-
-            // for rendering the selection
-
-            super.renderCellBack(args, selected, isLastChild);
         }
 
         protected isShadowAsChild(obj: any) {

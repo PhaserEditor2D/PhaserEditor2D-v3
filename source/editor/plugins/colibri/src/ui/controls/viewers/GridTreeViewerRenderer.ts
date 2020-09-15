@@ -297,7 +297,7 @@ namespace colibri.ui.controls.viewers {
 
                     renderer.renderCell(args2);
 
-                    // this.renderCellFront(args, selected, isLastChild);
+                    this.renderCellFront(args, selected, isLastChild);
 
                     args.viewer.paintItemBackground(
                         args.obj, args.x, args.y + args.h - lineHeight, args.w, labelHeight, 10);
@@ -305,19 +305,26 @@ namespace colibri.ui.controls.viewers {
             }
 
             if (visible) {
+
                 ctx.save();
 
                 if (selected) {
+
                     ctx.fillStyle = Controls.getTheme().viewerSelectionForeground;
+
                 } else {
+
                     ctx.fillStyle = Controls.getTheme().viewerForeground;
                 }
 
                 this.prepareContextForText(args);
 
                 const m = ctx.measureText(line);
+
                 const x2 = Math.max(x, x + args.w / 2 - m.width / 2);
+
                 ctx.fillText(line, x2, args.y + args.h - 5);
+
                 ctx.restore();
             }
         }
@@ -330,7 +337,7 @@ namespace colibri.ui.controls.viewers {
 
                 ctx.save();
 
-                ctx.fillStyle = Controls.getTheme().viewerSelectionBackground;// + "88";
+                ctx.fillStyle = Controls.getTheme().viewerSelectionBackground + "88";
                 controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
 
                 ctx.restore();
@@ -339,7 +346,18 @@ namespace colibri.ui.controls.viewers {
 
         protected renderCellFront(args: RenderCellArgs, selected: boolean, isLastChild: boolean) {
 
-            // nothing for now
+            if (selected) {
+
+                const ctx = args.canvasContext;
+
+                ctx.save();
+
+                ctx.fillStyle = Controls.getTheme().viewerSelectionBackground + "44";
+                // ctx.fillRect(args.x, args.y, args.w, args.h);
+                controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
+
+                ctx.restore();
+            }
         }
     }
 }
