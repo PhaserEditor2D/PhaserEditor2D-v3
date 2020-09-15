@@ -10,6 +10,8 @@ namespace colibri.ui.controls.viewers {
             this.style.height = "100%";
 
             this.resizeTo();
+
+            setTimeout(() => this.resizeTo(), 10);
         }
 
         resizeTo() {

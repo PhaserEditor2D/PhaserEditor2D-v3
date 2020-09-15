@@ -12,6 +12,8 @@ namespace colibri.ui.ide.properties {
 
             this.resizeTo();
 
+            setTimeout(() => this.resizeTo(), 10);
+
             page.eventControlLayout.addListener(() => {
 
                 this.resizeTo();
