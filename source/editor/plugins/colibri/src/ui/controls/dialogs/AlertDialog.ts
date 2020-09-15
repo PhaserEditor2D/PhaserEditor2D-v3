@@ -48,10 +48,11 @@ namespace colibri.ui.controls.dialogs {
                     this._currentDialog = dlg;
                 }
 
-                const preElement = document.createElement("pre");
-                preElement.innerText = msg;
+                const preElement = document.createElement("div");
+                preElement.style.overflow = "wrap";
+                preElement.innerHTML = msg;
                 preElement.style.userSelect = "all";
-
+                this._currentDialog._messageElement.innerHTML = "";
                 this._currentDialog._messageElement.appendChild(preElement);
             };
         }
