@@ -19,18 +19,18 @@ namespace colibri.ui.ide.properties {
         }
 
         resizeTo() {
-            setTimeout(() => {
-                const parent = this.getElement().parentElement;
-                if (parent) {
-                    this.setBounds({
-                        width: parent.clientWidth,
-                        height: parent.clientHeight
-                    });
-                }
-                this.getViewer().repaint();
-            }, 10);
+
+            const parent = this.getElement().parentElement;
+
+            if (parent) {
+
+                this.setBounds({
+                    width: parent.clientWidth,
+                    height: parent.clientHeight
+                });
+            }
+
+            this.getViewer().repaint();
         }
-
     }
-
 }
