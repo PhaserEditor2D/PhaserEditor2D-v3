@@ -137,7 +137,7 @@ namespace colibri.ui.controls {
         }
 
         getBounds() {
-            
+
             return this._bounds;
         }
 

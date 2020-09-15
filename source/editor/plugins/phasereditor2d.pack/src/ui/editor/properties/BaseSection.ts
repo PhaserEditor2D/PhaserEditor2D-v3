@@ -156,9 +156,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
                     const url = core.AssetPackUtils.getFilePackUrl(file);
 
                     this.changeItemField(fieldKey, url, true);
-
                 });
-
             });
         }
 
