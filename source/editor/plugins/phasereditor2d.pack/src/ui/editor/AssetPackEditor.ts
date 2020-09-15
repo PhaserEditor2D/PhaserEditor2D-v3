@@ -366,26 +366,22 @@ namespace phasereditor2d.pack.ui.editor {
 
             const before = undo.AssetPackEditorOperation.takeSnapshot(this);
 
-            const sel = [];
+            const items = await importData.importer.autoImport(this._pack, importData.files);
 
-            for (const file of importData.files) {
-
-                const item = await importData.importer.importFile(this._pack, file);
+            for(const item of items) {
 
                 await item.preload();
-
-                sel.push(item);
             }
-
+ 
             this._viewer.repaint();
 
             this.setDirty(true);
 
             await this.updateBlocks();
 
-            this._viewer.setSelection(sel);
+            this._viewer.setSelection(items);
 
-            this._viewer.reveal(...sel);
+            this._viewer.reveal(...items);
 
             const after = undo.AssetPackEditorOperation.takeSnapshot(this);
 

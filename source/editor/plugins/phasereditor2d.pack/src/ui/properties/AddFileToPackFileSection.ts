@@ -29,14 +29,27 @@ namespace phasereditor2d.pack.ui.properties {
                     packItems.push(...items);
                 }
 
-               comp.innerHTML = "";
+                comp.innerHTML = "";
+
+                const used = new Set();
 
                 for (const item of packItems) {
 
                     const btn = document.createElement("button");
 
+                    const key = item.getKey();
+                    const packPath = item.getPack().getFile().getProjectRelativeName();
+                    const hash = `${key}@${packPath}`;
+
+                    if (used.has(hash)) {
+
+                        continue;
+                    }
+
+                    used.add(hash);
+
                     btn.innerHTML =
-                        `${item.getKey()} at ${item.getPack().getFile().getProjectRelativeName()}`;
+                        `${key} at ${packPath}`;
 
                     btn.addEventListener("click", async (e) => {
 
@@ -119,10 +132,7 @@ namespace phasereditor2d.pack.ui.properties {
 
             const importer = importData.importer;
 
-            for (const file of importData.files) {
-
-                importer.importFile(pack, file);
-            }
+            await importer.autoImport(pack, importData.files);
 
             const newContent = JSON.stringify(pack.toJSON(), null, 4);
 
