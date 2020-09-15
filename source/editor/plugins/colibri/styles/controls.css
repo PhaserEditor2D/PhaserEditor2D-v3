@@ -397,7 +397,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .Dialog .DialogButtonPane button {
     float: right;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 /* AlertDialog */

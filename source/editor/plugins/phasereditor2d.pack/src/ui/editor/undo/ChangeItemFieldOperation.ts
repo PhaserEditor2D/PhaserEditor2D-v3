@@ -61,7 +61,8 @@ namespace phasereditor2d.pack.ui.editor.undo {
             this._editor.setDirty(true);
 
             if (this._updateSelection) {
-                this._editor.setSelection(this._editor.getSelection());
+
+                this._editor.dispatchSelectionChanged();
             }
         }
     }

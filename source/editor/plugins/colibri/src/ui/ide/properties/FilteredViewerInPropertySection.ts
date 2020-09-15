@@ -12,6 +12,8 @@ namespace colibri.ui.ide.properties {
 
             this.resizeTo();
 
+            setTimeout(() => this.resizeTo(), 10);
+
             page.eventControlLayout.addListener(() => {
 
                 this.resizeTo();
@@ -19,18 +21,18 @@ namespace colibri.ui.ide.properties {
         }
 
         resizeTo() {
-            setTimeout(() => {
-                const parent = this.getElement().parentElement;
-                if (parent) {
-                    this.setBounds({
-                        width: parent.clientWidth,
-                        height: parent.clientHeight
-                    });
-                }
-                this.getViewer().repaint();
-            }, 10);
+
+            const parent = this.getElement().parentElement;
+
+            if (parent) {
+
+                this.setBounds({
+                    width: parent.clientWidth,
+                    height: parent.clientHeight
+                });
+            }
+
+            this.getViewer().repaint();
         }
-
     }
-
 }

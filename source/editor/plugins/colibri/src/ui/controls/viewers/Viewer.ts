@@ -8,6 +8,8 @@ namespace colibri.ui.controls.viewers {
     export abstract class Viewer extends Control {
 
         public eventOpenItem = new ListenerList();
+        public eventDeletePressed = new ListenerList();
+
         private _contentProvider: IContentProvider;
         private _cellRendererProvider: ICellRendererProvider;
         private _labelProvider: ILabelProvider = null;
@@ -106,6 +108,11 @@ namespace colibri.ui.controls.viewers {
                 case "ArrowRight":
 
                     this.moveCursor(1);
+                    break;
+
+                case "Delete":
+
+                    this.eventDeletePressed.fire(this.getSelection());
                     break;
             }
         }

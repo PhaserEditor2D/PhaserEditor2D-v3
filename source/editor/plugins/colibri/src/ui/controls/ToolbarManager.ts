@@ -21,6 +21,11 @@ namespace colibri.ui.controls {
             this.add(new Action(config));
         }
 
+        addAction(config: IActionConfig) {
+
+            this.add(new Action(config));
+        }
+
         add(action: Action) {
 
             const btnElement = document.createElement("div");

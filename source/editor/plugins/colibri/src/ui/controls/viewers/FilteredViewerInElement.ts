@@ -2,7 +2,7 @@ namespace colibri.ui.controls.viewers {
 
     export class FilteredViewerInElement<T extends Viewer> extends FilteredViewer<T> {
 
-        constructor(viewer: T, showZoomControls:boolean, ...classList: string[]) {
+        constructor(viewer: T, showZoomControls: boolean, ...classList: string[]) {
             super(viewer, showZoomControls, ...classList);
 
             this.setHandlePosition(false);
@@ -10,25 +10,23 @@ namespace colibri.ui.controls.viewers {
             this.style.height = "100%";
 
             this.resizeTo();
+
+            setTimeout(() => this.resizeTo(), 10);
         }
 
         resizeTo() {
 
-            setTimeout(() => {
+            const parent = this.getElement().parentElement;
 
-                const parent = this.getElement().parentElement;
+            if (parent) {
 
-                if (parent) {
+                this.setBounds({
+                    width: parent.clientWidth,
+                    height: parent.clientHeight
+                });
+            }
 
-                    this.setBounds({
-                        width: parent.clientWidth,
-                        height: parent.clientHeight
-                    });
-                }
-
-                this.getViewer().repaint();
-
-            }, 10);
+            this.getViewer().repaint();
         }
     }
 }

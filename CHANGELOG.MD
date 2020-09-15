@@ -11,6 +11,7 @@
     * Asset Key
 * Scene Editor: allows change type of the selected objects in the Variable section.
 * Scene Editor: allows change type of user properties.
+* Asset Pack Editor: adds support of the Scripts asset type. To load multiple scripts in a predictable order.
 
 ### Modified
 
@@ -35,6 +36,7 @@
 * [#71](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/71) Files view: fixes files sorting. Folders go first.
 * Viewer: scrolling when distant elements are selected.
 * Scene Editor: better scene thumbnail generation.
+* Viewers in Inspector view: removes the lag when updating the viewer size with its parent.
 
 ### Modified
 

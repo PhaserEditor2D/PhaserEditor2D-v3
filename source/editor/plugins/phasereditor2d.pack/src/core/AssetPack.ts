@@ -24,6 +24,7 @@ namespace phasereditor2d.pack.core {
     export const SCENE_FILE_TYPE = "sceneFile";
     export const SCENE_PLUGIN_TYPE = "scenePlugin";
     export const SCRIPT_TYPE = "script";
+    export const SCRIPTS_TYPE = "scripts";
     export const SVG_TYPE = "svg";
     export const TEXT_TYPE = "text";
     export const TILEMAP_CSV_TYPE = "tilemapCSV";
@@ -49,6 +50,7 @@ namespace phasereditor2d.pack.core {
         SCENE_FILE_TYPE,
         SCENE_PLUGIN_TYPE,
         SCRIPT_TYPE,
+        SCRIPTS_TYPE,
         AUDIO_TYPE,
         AUDIO_SPRITE_TYPE,
         VIDEO_TYPE,
@@ -174,6 +176,8 @@ namespace phasereditor2d.pack.core {
                     return new ScenePluginAssetPackItem(this, data);
                 case SCRIPT_TYPE:
                     return new ScriptAssetPackItem(this, data);
+                case SCRIPTS_TYPE:
+                    return new ScriptsAssetPackItem(this, data);
                 case AUDIO_TYPE:
                     return new AudioAssetPackItem(this, data);
                 case AUDIO_SPRITE_TYPE:
