@@ -41,6 +41,7 @@
 ### Modified
 
 * Viewers: Pads with `0` chars the labels of spritesheet frames. It helps with sorting: `001`, `002`,...,`126`.
+* Code editor: when is active, the `Ctrl+P` keys open the Go To File dialog, and not the printing dialog.
 
 ## Version 3.5.0 Aug 19, 2020
 
