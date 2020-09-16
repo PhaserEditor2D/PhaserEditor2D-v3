@@ -39,9 +39,10 @@ namespace phasereditor2d.pack.ui.viewers {
             iconRenderer.renderCell(args);
         }
 
-        private getSceneFile(packItem: core.AssetPackItem) {
+        private getSceneFile(obj: core.AssetPackItem | string) {
 
-            const url = packItem.getData().url;
+            const url = obj instanceof core.AssetPackItem ? obj.getData().url : obj;
+
             const file = core.AssetPackUtils.getFileFromPackUrl(url);
 
             if (file) {

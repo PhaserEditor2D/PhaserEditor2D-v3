@@ -2,13 +2,17 @@ namespace phasereditor2d.pack.ui.viewers {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
+    import io = colibri.core.io;
 
     export class AssetPackCellRendererProvider implements controls.viewers.ICellRendererProvider {
 
         private _layout: "grid" | "tree";
+        private _fileRendererProvider: files.ui.viewers.FileCellRendererProvider;
 
         constructor(layout: "grid" | "tree") {
             this._layout = layout;
+
+            this._fileRendererProvider = new files.ui.viewers.FileCellRendererProvider(layout);
         }
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
@@ -25,8 +29,11 @@ namespace phasereditor2d.pack.ui.viewers {
                         colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
                 }
 
-                return new controls.viewers.IconImageCellRenderer(
-                    colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FILE));
+                return this.getScriptUrlCellRenderer(element);
+
+            } if (element instanceof io.FilePath) {
+
+                return this._fileRendererProvider.getCellRenderer(element);
 
             } else if (element instanceof core.AssetPackItem) {
 
@@ -61,21 +68,13 @@ namespace phasereditor2d.pack.ui.viewers {
                     case core.SCENE_FILE_TYPE:
 
                         const url = element.getData().url;
-                        const file = core.AssetPackUtils.getFileFromPackUrl(url);
 
-                        if (file) {
-
-                            const sceneFile = file.getParent().getFile(file.getNameWithoutExtension() + ".scene");
-
-                            if (sceneFile) {
-
-                                return new SceneScriptCellRenderer(this._layout);
-                            }
-                        }
-
-                        return this.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT));
+                        return this.getScriptUrlCellRenderer(url);
 
                     case core.SCRIPTS_TYPE:
+
+                        return new controls.viewers.FolderCellRenderer();
+
                     case core.SCENE_PLUGIN_TYPE:
                     case core.PLUGIN_TYPE:
                     case core.CSS_TYPE:
@@ -114,6 +113,24 @@ namespace phasereditor2d.pack.ui.viewers {
             }
 
             return this.getIconRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FILE));
+        }
+
+        private getScriptUrlCellRenderer(url: any) {
+
+            const file = core.AssetPackUtils.getFileFromPackUrl(url);
+
+            if (file) {
+
+                const sceneFile = file.getParent().getFile(file.getNameWithoutExtension() + ".scene");
+
+                if (sceneFile) {
+
+                    return new SceneScriptCellRenderer(this._layout);
+                }
+            }
+
+            return this.getIconRenderer(webContentTypes.WebContentTypesPlugin
+                .getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT));
         }
 
         private getIconRenderer(icon: controls.IImage) {

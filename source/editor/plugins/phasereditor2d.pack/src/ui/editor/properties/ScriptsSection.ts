@@ -15,10 +15,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
             const viewer = new controls.viewers.TreeViewer("phasereditor2d.pack.ui.editor.properties.ScriptSection");
             viewer.setSorted(false);
-            viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
-                args => new controls.viewers.IconImageCellRenderer(
-                    webContentTypes.WebContentTypesPlugin.getInstance()
-                        .getIcon(webContentTypes.ICON_FILE_SCRIPT))));
+            viewer.setCellRendererProvider(new ui.viewers.AssetPackCellRendererProvider("tree"));
             viewer.setLabelProvider(new controls.viewers.LabelProvider(obj => obj));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setInput([]);
