@@ -26,6 +26,7 @@
 * Scene Editor: does not sort the content of the Add Object dialog.
 * Keys: in macOS, the `Command` and `Ctrl` keys are handled as the same key.
 * Code editor: when is active, the `Ctrl+P` keys open the Go To File dialog, and not the printing dialog.
+* Fixed: Scene Editor captures the key commands even if a dialog is open.
 
 ## Version 3.6.0 Sep 7, 2020
 
