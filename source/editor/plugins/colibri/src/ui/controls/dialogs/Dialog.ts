@@ -37,6 +37,10 @@ namespace colibri.ui.controls.dialogs {
                             const dlg = Dialog._dialogs[Dialog._dialogs.length - 1];
 
                             if (dlg.isCloseWithEscapeKey()) {
+
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+
                                 dlg.close();
                             }
                         }
@@ -60,6 +64,11 @@ namespace colibri.ui.controls.dialogs {
             }
 
             Dialog._dialogs.push(this);
+        }
+
+        processKeyCommands() {
+
+            return false;
         }
 
         static closeAllDialogs() {

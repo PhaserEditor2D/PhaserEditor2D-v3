@@ -132,7 +132,7 @@ namespace colibri.ui.ide.commands {
 
                 for (const handler of handlers) {
 
-                    if (handler.test(args)) {
+                    if (this.testHandler(handler, args)) {
 
                         return true;
                     }
@@ -142,13 +142,28 @@ namespace colibri.ui.ide.commands {
             return false;
         }
 
+        private testHandler(handler: CommandHandler, args: HandlerArgs) {
+
+            const dlg = colibri.Platform.getWorkbench().getActiveDialog();
+
+            if (dlg) {
+
+                if (!(dlg instanceof controls.dialogs.CommandDialog) && !dlg.processKeyCommands()) {
+
+                    return false;
+                }
+            }
+
+            return handler.test(args);
+        }
+
         private executeHandler(command: Command, args: HandlerArgs, checkContext: boolean = true): boolean {
 
             const handlers = this._commandHandlerMap.get(command);
 
             for (const handler of handlers) {
 
-                if (!checkContext || handler.test(args)) {
+                if (!checkContext || this.testHandler(handler, args)) {
 
                     event.preventDefault();
 
@@ -305,6 +320,7 @@ namespace colibri.ui.ide.commands {
             const command = this.getCommand(commandId);
 
             if (command) {
+
                 this._commandHandlerMap.get(command).push(handler);
             }
         }
