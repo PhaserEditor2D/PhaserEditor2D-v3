@@ -16,6 +16,7 @@
 ### Modified
 
 * Some icons updated.
+* The Delete command is mapped to the `Backspace` key (in addition to the `Delete` one). It is more friendly for macOS users.
 
 ### Fixed
 
