@@ -111,6 +111,7 @@ namespace colibri.ui.controls.viewers {
                     break;
 
                 case "Delete":
+                case "Backspace":
 
                     this.eventDeletePressed.fire(this.getSelection());
                     break;
