@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 3.6.0-next
+## Version 3.7.0 - September 19
 
 ### Added
 
