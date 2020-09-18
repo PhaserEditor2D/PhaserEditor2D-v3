@@ -91,7 +91,7 @@ namespace colibri.ui.ide.commands {
 
                 if (eventMatches) {
 
-                    executed = this.executeHandler(command, args);
+                    executed = this.executeHandler(command, args, event);
                 }
             }
 
@@ -144,20 +144,20 @@ namespace colibri.ui.ide.commands {
 
         private testHandler(handler: CommandHandler, args: HandlerArgs) {
 
-            const dlg = colibri.Platform.getWorkbench().getActiveDialog();
+            // const dlg = colibri.Platform.getWorkbench().getActiveDialog();
 
-            if (dlg) {
+            // if (dlg) {
 
-                if (!(dlg instanceof controls.dialogs.CommandDialog) && !dlg.processKeyCommands()) {
+            //     if (!(dlg instanceof controls.dialogs.CommandDialog) && !dlg.processKeyCommands()) {
 
-                    return false;
-                }
-            }
+            //         return false;
+            //     }
+            // }
 
             return handler.test(args);
         }
 
-        private executeHandler(command: Command, args: HandlerArgs, checkContext: boolean = true): boolean {
+        private executeHandler(command: Command, args: HandlerArgs, event: KeyboardEvent, checkContext: boolean = true): boolean {
 
             const handlers = this._commandHandlerMap.get(command);
 
@@ -165,7 +165,10 @@ namespace colibri.ui.ide.commands {
 
                 if (!checkContext || this.testHandler(handler, args)) {
 
-                    event.preventDefault();
+                    if (event) {
+
+                        event.preventDefault();
+                    }
 
                     const dlg = colibri.Platform.getWorkbench().getActiveDialog();
 
@@ -232,8 +235,8 @@ namespace colibri.ui.ide.commands {
                 ? null : wb.getActiveDialog();
 
             return new HandlerArgs(
-                wb.getActivePart(),
-                wb.getActiveEditor(),
+                activeDialog ? null : wb.getActivePart(),
+                activeDialog ? null : wb.getActiveEditor(),
                 activeElement,
                 activeMenu,
                 wb.getActiveWindow(),
@@ -298,7 +301,7 @@ namespace colibri.ui.ide.commands {
 
             if (command) {
 
-                this.executeHandler(command, this.makeArgs(), checkContext);
+                this.executeHandler(command, this.makeArgs(), null, checkContext);
             }
         }
 
