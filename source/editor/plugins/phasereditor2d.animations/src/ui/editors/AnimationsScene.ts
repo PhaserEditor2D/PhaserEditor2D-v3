@@ -172,7 +172,14 @@ namespace phasereditor2d.animations.ui.editors {
                                 sprite.data.remove("wait");
 
                                 sprite.visible = true;
-                                sprite.play(sprite.anims.getCurrentKey());
+
+                                try {
+
+                                    sprite.play(sprite.anims.getCurrentKey());
+
+                                } catch (e) {
+                                    // nothing
+                                }
 
                             } else {
 

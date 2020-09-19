@@ -213,6 +213,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     }
                 });
 
+                menu.addSeparator();
+
+                menu.addMenu(this.createMorphMenu(prop));
+
+                menu.addSeparator();
+
                 menu.addAction({
                     text: "Delete",
                     callback: () => {
@@ -228,6 +234,45 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 });
                 menu.createWithEvent(e);
             });
+        }
+
+        private createMorphMenu(prop: sceneobjects.UserProperty) {
+
+            const menu = new controls.Menu("Change Type");
+
+            const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
+
+            for (const propType of propTypes) {
+
+                menu.addAction({
+                    text: propType.getName(),
+                    callback: () => {
+
+                        this.runOperation(userProps => {
+
+                            prop.getInfo().type = propType;
+
+                        }, true);
+                    }
+                });
+            }
+
+            // const btn = this.createMenuButton(comp, "Add Property", propTypes.map(t => ({
+            //     name: t.getName() + " Property",
+            //     value: t.getId()
+            // })), (typeId: string) => {
+
+            //     const newType = ScenePlugin.getInstance().createUserPropertyType(typeId);
+
+            //     this.runOperation(userProps => {
+
+            //         const prop = userProps.createProperty(newType);
+            //         userProps.add(prop);
+            //         this.setExpandedStateInStorage(prop, true);
+            //     }, true);
+            // });
+
+            return menu;
         }
 
         private createExpressionTypeField(parent: HTMLDivElement, prop: sceneobjects.UserProperty) {

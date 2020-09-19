@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+        "module": "commonJS",
+        "moduleResolution": "node"
+    }
+}

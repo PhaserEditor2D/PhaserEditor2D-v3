@@ -90,7 +90,7 @@ namespace phasereditor2d.pack.core.parsers {
 
             while (true) {
 
-                if (i > end || y >= image.getHeight() || i > 50) {
+                if (i > end || y >= image.getHeight() || i > 1000) {
                     break;
                 }
 

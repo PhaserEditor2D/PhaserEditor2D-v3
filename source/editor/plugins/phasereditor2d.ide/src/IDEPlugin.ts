@@ -42,9 +42,9 @@ namespace phasereditor2d.ide {
             // icons
 
             reg.addExtension(
-                new colibri.ui.ide.IconLoaderExtension([
-                    this.getIcon(ICON_PLAY),
-                ]));
+                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                    ICON_PLAY
+                ], true));
 
             // keys
 
@@ -298,7 +298,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.6.0";
+    export const VER = "3.7.0";
 
     async function main() {
 

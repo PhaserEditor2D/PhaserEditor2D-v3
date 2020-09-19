@@ -8,6 +8,8 @@ namespace colibri.ui.controls.viewers {
     export abstract class Viewer extends Control {
 
         public eventOpenItem = new ListenerList();
+        public eventDeletePressed = new ListenerList();
+
         private _contentProvider: IContentProvider;
         private _cellRendererProvider: ICellRendererProvider;
         private _labelProvider: ILabelProvider = null;
@@ -106,6 +108,12 @@ namespace colibri.ui.controls.viewers {
                 case "ArrowRight":
 
                     this.moveCursor(1);
+                    break;
+
+                case "Delete":
+                case "Backspace":
+
+                    this.eventDeletePressed.fire(this.getSelection());
                     break;
             }
         }
@@ -333,11 +341,17 @@ namespace colibri.ui.controls.viewers {
 
         onMouseUp(e: MouseEvent): void {
 
+            if (Controls.getMouseDownElement() !== e.target) {
+
+                return;
+            }
+
             if (e.button !== 0 && e.button !== 2) {
                 return;
             }
 
             if (!this.canSelectAtPoint(e)) {
+
                 return;
             }
 
@@ -541,19 +555,27 @@ namespace colibri.ui.controls.viewers {
 
                 this._context.save();
 
-                this._context.fillStyle = fillStyle;
                 this._context.strokeStyle = fillStyle;
+                this._context.fillStyle = fillStyle;
 
                 if (radius > 0) {
 
                     this._context.lineJoin = "round";
                     this._context.lineWidth = radius;
-                    this._context.strokeRect(x + (radius / 2), y + (radius / 2), w - radius, h - radius);
-                    this._context.fillRect(x + (radius / 2), y + (radius / 2), w - radius, h - radius);
+                    this._context.fillRect(
+                        Math.floor(x + (radius / 2)),
+                        Math.floor(y + (radius / 2)),
+                        Math.ceil(w - radius),
+                        Math.ceil(h - radius));
+                    this._context.strokeRect(
+                        Math.floor(x + (radius / 2)),
+                        Math.floor(y + (radius / 2)),
+                        Math.ceil(w - radius),
+                        Math.ceil(h - radius));
 
                 } else {
 
-                    this._context.fillRect(x, y, w, h);
+                    this._context.fillRect(Math.floor(x), Math.floor(y), Math.ceil(w), Math.ceil(h));
                 }
 
                 this._context.restore();

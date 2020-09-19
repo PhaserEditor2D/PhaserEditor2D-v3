@@ -22,7 +22,7 @@ namespace phasereditor2d.outline {
             reg.addExtension(
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_OUTLINE
-                ])
+                ], true)
             );
 
         }

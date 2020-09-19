@@ -231,6 +231,7 @@ namespace colibri.ui.controls.properties {
             colorElement.style.display = "grid";
             colorElement.style.gridTemplateColumns = "1fr auto";
             colorElement.style.gridGap = "5px";
+            colorElement.style.alignItems = "center";
             colorElement.appendChild(text);
             colorElement.appendChild(btn);
 

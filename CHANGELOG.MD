@@ -1,5 +1,33 @@
 # Change Log
 
+## Version 3.7.0 - September 19
+
+### Added
+
+* Scene Editor: add more user property types:
+    * Texture Config
+    * Animation Key
+    * Audio Key.
+    * Asset Key
+* Scene Editor: allows change type of the selected objects in the Variable section.
+* Scene Editor: allows change type of user properties.
+* Asset Pack Editor: adds support of the Scripts asset type. To load multiple scripts in a predictable order.
+
+### Modified
+
+* Some icons updated.
+* The Delete command is mapped to the `Backspace` key (in addition to the `Delete` one). It is more friendly for macOS users.
+
+### Fixed
+
+* Viewer: ignore mouse-up event if it was originated outside the viewer.
+* Assets: increase the limit of spritesheet frames to 1000.
+* Animations Editor: handles asset missing errors.
+* Scene Editor: does not sort the content of the Add Object dialog.
+* Keys: in macOS, the `Command` and `Ctrl` keys are handled as the same key.
+* Code editor: when is active, the `Ctrl+P` keys open the Go To File dialog, and not the printing dialog.
+* Fixed: Scene Editor captures the key commands even if a dialog is open.
+
 ## Version 3.6.0 Sep 7, 2020
 
 ### Added
@@ -11,6 +39,7 @@
 * [#71](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/71) Files view: fixes files sorting. Folders go first.
 * Viewer: scrolling when distant elements are selected.
 * Scene Editor: better scene thumbnail generation.
+* Viewers in Inspector view: removes the lag when updating the viewer size with its parent.
 
 ### Modified
 

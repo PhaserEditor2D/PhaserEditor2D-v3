@@ -15,6 +15,20 @@ namespace colibri.ui.controls {
 
         private static _images: Map<string, IImage> = new Map();
         private static _applicationDragData: any[] = null;
+        private static _mouseDownElement: HTMLElement;
+
+        static initEvents() {
+
+            window.addEventListener("mousedown", e => {
+
+                this._mouseDownElement = e.target as any;
+            });
+        }
+
+        static getMouseDownElement() {
+
+            return this._mouseDownElement;
+        }
 
         static adjustCanvasDPI(canvas: HTMLCanvasElement, widthHint = 1, heightHint = 1) {
 
@@ -114,6 +128,7 @@ namespace colibri.ui.controls {
         static getImage(url: string, id: string, appendVersion = true): IImage {
 
             if (Controls._images.has(id)) {
+
                 return Controls._images.get(id);
             }
 
@@ -193,10 +208,12 @@ namespace colibri.ui.controls {
             let id = localStorage.getItem("colibri.theme.id");
 
             if (!id) {
+
                 id = "light";
             }
 
             const classList = document.getElementsByTagName("html")[0].classList;
+
             classList.add(id);
         }
 

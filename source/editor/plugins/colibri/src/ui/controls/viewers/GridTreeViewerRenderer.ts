@@ -182,14 +182,27 @@ namespace colibri.ui.controls.viewers {
 
                             const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
-                            const icon = ColibriPlugin.getInstance().getIcon(expanded ?
+                            const themeIcon = ColibriPlugin.getInstance().getIcon(expanded ?
                                 ICON_CONTROL_TREE_COLLAPSE
                                 : ICON_CONTROL_TREE_EXPAND);
 
-                            icon.paint(context, x + 5, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE, false);
+                            let icon: IImage = themeIcon;
+
+                            if (viewer.isSelected(obj)) {
+
+                                icon = themeIcon.getNegativeThemeImage();
+                            }
+
+                            context.save();
+
+                            const iconX = x + 5;
+
+                            icon.paint(context, iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
+
+                            context.restore();
 
                             treeIconList.push({
-                                rect: new Rect(x, iconY, TREE_ICON_SIZE, TREE_ICON_SIZE),
+                                rect: new Rect(iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE),
                                 obj: obj
                             });
                         }
@@ -292,19 +305,26 @@ namespace colibri.ui.controls.viewers {
             }
 
             if (visible) {
+
                 ctx.save();
 
                 if (selected) {
+
                     ctx.fillStyle = Controls.getTheme().viewerSelectionForeground;
+
                 } else {
+
                     ctx.fillStyle = Controls.getTheme().viewerForeground;
                 }
 
                 this.prepareContextForText(args);
 
                 const m = ctx.measureText(line);
+
                 const x2 = Math.max(x, x + args.w / 2 - m.width / 2);
+
                 ctx.fillText(line, x2, args.y + args.h - 5);
+
                 ctx.restore();
             }
         }
@@ -318,7 +338,6 @@ namespace colibri.ui.controls.viewers {
                 ctx.save();
 
                 ctx.fillStyle = Controls.getTheme().viewerSelectionBackground + "88";
-                // ctx.fillRect(args.x, args.y, args.w, args.h);
                 controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
 
                 ctx.restore();

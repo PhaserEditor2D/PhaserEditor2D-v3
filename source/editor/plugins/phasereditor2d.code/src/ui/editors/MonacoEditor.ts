@@ -86,6 +86,13 @@ namespace phasereditor2d.code.ui.editors {
                 fontSize: 16
             });
 
+            // tslint:disable-next-line:no-bitwise
+            this._editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_P, () => {
+
+                const manager = colibri.Platform.getWorkbench().getCommandManager();
+                manager.executeCommand(files.ui.actions.CMD_GO_TO_FILE);
+            });
+
             this.getElement().appendChild(container);
 
             this.updateContent();

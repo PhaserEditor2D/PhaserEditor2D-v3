@@ -398,6 +398,10 @@ namespace colibri.ui.ide.actions {
                 key: "Delete"
             }));
 
+            manager.addKeyBinding(CMD_DELETE, new KeyMatcher({
+                key: "Backspace"
+            }));
+
             // rename
 
             manager.addCommandHelper({

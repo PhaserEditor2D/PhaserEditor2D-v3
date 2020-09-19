@@ -25,7 +25,7 @@ namespace phasereditor2d.files {
                 colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_NEW_FILE,
                     ICON_PROJECT
-                ])
+                ], true)
             );
 
             // new files

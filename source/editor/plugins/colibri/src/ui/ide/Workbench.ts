@@ -82,17 +82,22 @@ namespace colibri.ui.ide {
 
             console.log("Workbench: starting.");
 
+            controls.Controls.initEvents();
+
             controls.Controls.preloadTheme();
 
             {
                 const plugins = Platform.getPlugins();
 
                 for (const plugin of plugins) {
+
                     plugin.registerExtensions(Platform.getExtensionRegistry());
                 }
 
                 for (const plugin of plugins) {
+
                     console.log(`\tPlugin: starting %c${plugin.getId()}`, "color:blue");
+
                     await plugin.starting();
                 }
             }
@@ -248,13 +253,9 @@ namespace colibri.ui.ide {
             let resCount = 0;
 
             // count icon extensions
-            const icons: controls.IImage[] = [];
+
+            const icons: controls.IconImage[] = [];
             {
-                for (const name of [ICON_FILE, ICON_FOLDER, ICON_PLUS, ICON_MINUS, ICON_CHECKED, ICON_KEYMAP]) {
-
-                    icons.push(this.getWorkbenchIcon(name));
-                }
-
                 const extensions = Platform
                     .getExtensions<IconLoaderExtension>(IconLoaderExtension.POINT_ID);
 
@@ -289,6 +290,8 @@ namespace colibri.ui.ide {
                 await resExt.preload();
 
                 i++;
+
+                dlg.setProgress(i / resCount);
             }
 
             // resources
@@ -305,7 +308,8 @@ namespace colibri.ui.ide {
             for (const extension of extensions) {
 
                 for (const item of extension.getConfig()) {
-                    this._contentType_icon_Map.set(item.contentType, item.icon);
+
+                    this._contentType_icon_Map.set(item.contentType, item.iconDescriptor.getIcon());
                 }
             }
         }

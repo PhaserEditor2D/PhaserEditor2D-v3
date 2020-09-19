@@ -30,7 +30,7 @@ namespace phasereditor2d.pack {
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_ASSET_PACK,
                     ICON_ANIMATIONS
-                ])
+                ], true)
             );
 
             // content type resolvers

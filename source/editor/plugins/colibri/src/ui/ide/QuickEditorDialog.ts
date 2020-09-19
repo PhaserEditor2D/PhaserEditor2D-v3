@@ -64,6 +64,11 @@ namespace colibri.ui.ide {
             this._editor.onPartActivated();
         }
 
+        processKeyCommands() {
+
+            return true;
+        }
+
         create() {
 
             super.create();

@@ -21,6 +21,11 @@ namespace colibri.ui.controls {
             this.add(new Action(config));
         }
 
+        addAction(config: IActionConfig) {
+
+            this.add(new Action(config));
+        }
+
         add(action: Action) {
 
             const btnElement = document.createElement("div");
@@ -84,7 +89,9 @@ namespace colibri.ui.controls {
         }
 
         private updateButtonWithAction(btn: HTMLElement, action: Action) {
+
             const textElement = btn["__text"] as HTMLElement;
+
             textElement.innerText = action.getText();
 
             if (action.isSelected()) {

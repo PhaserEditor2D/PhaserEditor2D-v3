@@ -26,6 +26,7 @@ namespace phasereditor2d.pack.ui.editor {
                     const files = this.getSelection().filter(file => importer.acceptFile(file));
 
                     if (files.length > 0) {
+
                         importList.push({
                             importer: importer,
                             files: files

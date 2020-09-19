@@ -20,6 +20,11 @@ namespace phasereditor2d.pack.ui.viewers {
                 return parent.getFrames();
             }
 
+            if (parent instanceof core.ScriptsAssetPackItem) {
+
+                return parent.getUrls();
+            }
+
             return [];
         }
     }

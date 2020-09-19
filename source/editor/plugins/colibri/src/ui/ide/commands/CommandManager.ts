@@ -69,6 +69,8 @@ namespace colibri.ui.ide.commands {
                 return;
             }
 
+            let executed = false;
+
             const args = this.makeArgs();
 
             for (const command of this._commands) {
@@ -89,8 +91,32 @@ namespace colibri.ui.ide.commands {
 
                 if (eventMatches) {
 
-                    this.executeHandler(command, args);
+                    executed = this.executeHandler(command, args, event);
                 }
+            }
+
+            if (!executed) {
+
+                this.preventKeyEvent(event);
+            }
+        }
+
+        private preventKeyEvent(event: KeyboardEvent) {
+
+            const code = [
+                event.metaKey || event.ctrlKey ? "ctrl" : "",
+                event.shiftKey ? "shift" : "",
+                event.altKey ? "alt" : "",
+                event.key.toLowerCase()
+            ].filter(s => s.length > 0).join(" ");
+
+            switch (code) {
+                case "ctrl s":
+                case "ctrl shift s":
+                case "ctrl w":
+                case "ctrl shift w":
+                    event.preventDefault();
+                    break;
             }
         }
 
@@ -106,7 +132,7 @@ namespace colibri.ui.ide.commands {
 
                 for (const handler of handlers) {
 
-                    if (handler.test(args)) {
+                    if (this.testHandler(handler, args)) {
 
                         return true;
                     }
@@ -116,15 +142,33 @@ namespace colibri.ui.ide.commands {
             return false;
         }
 
-        private executeHandler(command: Command, args: HandlerArgs, checkContext: boolean = true) {
+        private testHandler(handler: CommandHandler, args: HandlerArgs) {
+
+            // const dlg = colibri.Platform.getWorkbench().getActiveDialog();
+
+            // if (dlg) {
+
+            //     if (!(dlg instanceof controls.dialogs.CommandDialog) && !dlg.processKeyCommands()) {
+
+            //         return false;
+            //     }
+            // }
+
+            return handler.test(args);
+        }
+
+        private executeHandler(command: Command, args: HandlerArgs, event: KeyboardEvent, checkContext: boolean = true): boolean {
 
             const handlers = this._commandHandlerMap.get(command);
 
             for (const handler of handlers) {
 
-                if (!checkContext || handler.test(args)) {
+                if (!checkContext || this.testHandler(handler, args)) {
 
-                    event.preventDefault();
+                    if (event) {
+
+                        event.preventDefault();
+                    }
 
                     const dlg = colibri.Platform.getWorkbench().getActiveDialog();
 
@@ -135,9 +179,11 @@ namespace colibri.ui.ide.commands {
 
                     handler.execute(args);
 
-                    return;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         addCategory(category: ICommandCategory) {
@@ -189,8 +235,8 @@ namespace colibri.ui.ide.commands {
                 ? null : wb.getActiveDialog();
 
             return new HandlerArgs(
-                wb.getActivePart(),
-                wb.getActiveEditor(),
+                activeDialog ? null : wb.getActivePart(),
+                activeDialog ? null : wb.getActiveEditor(),
                 activeElement,
                 activeMenu,
                 wb.getActiveWindow(),
@@ -255,7 +301,7 @@ namespace colibri.ui.ide.commands {
 
             if (command) {
 
-                this.executeHandler(command, this.makeArgs(), checkContext);
+                this.executeHandler(command, this.makeArgs(), null, checkContext);
             }
         }
 
@@ -277,6 +323,7 @@ namespace colibri.ui.ide.commands {
             const command = this.getCommand(commandId);
 
             if (command) {
+
                 this._commandHandlerMap.get(command).push(handler);
             }
         }

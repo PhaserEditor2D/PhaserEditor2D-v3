@@ -1,14 +1,16 @@
+/// <reference path="./UserPropertyType.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
     export class StringPropertyType extends UserPropertyType<string> {
 
-        constructor() {
-            super("string", "");
+        constructor(typeId: string = "string") {
+            super(typeId, "");
         }
 
-        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
+        createInspectorPropertyEditor(
+            section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 
             section.createPropertyStringRow(parent, userProp.getComponentProperty(), lockIcon);
         }

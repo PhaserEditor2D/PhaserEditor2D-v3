@@ -19,6 +19,7 @@ namespace phasereditor2d.pack.ui.viewers {
         sceneFile: "Scene File",
         scenePlugin: "Scene Plugin",
         script: "Script",
+        scripts: "Scripts (Predictable Order)",
         audio: "Audio",
         audioSprite: "Audio Sprite",
         video: "Video",
@@ -60,7 +61,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
                             const spaces = Math.ceil(Math.log10(len));
 
-                            while(name.length < spaces) {
+                            while (name.length < spaces) {
 
                                 name = "0" + name;
                             }
@@ -73,9 +74,22 @@ namespace phasereditor2d.pack.ui.viewers {
                 return obj.getName() + "";
             }
 
+            if (obj instanceof pack.core.AnimationConfigInPackItem) {
+
+                return obj.getKey();
+            }
+
+            if (obj instanceof pack.core.AnimationFrameConfigInPackItem) {
+
+                return obj.getFrameKey() !== undefined ?
+                    obj.getFrameKey() + " / " + obj.getTextureKey()
+                    : obj.getTextureKey();
+            }
+
             if (typeof (obj) === "string") {
 
                 if (obj in ASSET_PACK_TYPE_DISPLAY_NAME) {
+
                     return ASSET_PACK_TYPE_DISPLAY_NAME[obj];
                 }
 

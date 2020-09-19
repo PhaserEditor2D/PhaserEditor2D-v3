@@ -1,10 +1,17 @@
 namespace colibri.ui.controls.viewers {
+
     export class EmptyCellRenderer implements ICellRenderer {
 
+        static readonly instance = new EmptyCellRenderer(false);
         private _variableSize: boolean;
 
         constructor(variableSize: boolean = true) {
             this._variableSize = variableSize;
+        }
+
+        isVariableSize() {
+
+            return this._variableSize;
         }
 
         renderCell(args: RenderCellArgs): void {

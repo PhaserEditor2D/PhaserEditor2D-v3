@@ -47,11 +47,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.createLabel(comp, "Type", "The type of the object.");
 
-                const text = this.createText(comp, true);
+                const btn = this.createButton(comp, "", e => {
+
+                    const dlg = new editor.ConvertTypeDialog(this.getEditor());
+
+                    dlg.create();
+                });
 
                 this.addUpdater(() => {
 
-                    text.value = this.flatValues_StringJoinDifferent(
+                    btn.textContent = this.flatValues_StringJoinDifferent(
 
                         this.getSelection().map(obj => {
 

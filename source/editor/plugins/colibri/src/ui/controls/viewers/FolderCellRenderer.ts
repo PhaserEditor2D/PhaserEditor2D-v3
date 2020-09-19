@@ -21,8 +21,10 @@ namespace colibri.ui.controls.viewers {
         }
 
         private renderFolder(args: RenderCellArgs) {
-            // const icon = ide.Workbench.getWorkbench().getWorkbenchIcon(ide.ICON_FOLDER);
-            // icon.paint(args.canvasContext, args.x, args.y, args.w, args.h, true);
+
+            const icon = ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER);
+
+            icon.paint(args.canvasContext, args.x, args.y, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE, true);
         }
 
         async preload(args: PreloadCellArgs): Promise<PreloadResult> {
