@@ -41,6 +41,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
+        revealValue(viewer: controls.viewers.TreeViewer, value: string) {
+
+            try {
+
+                const obj = JSON.parse(value);
+
+                const finder = new pack.core.PackFinder(...viewer.getInput());
+
+                const found = finder.getAssetPackItemOrFrame(obj.key, obj.frame);
+
+                if (found) {
+
+                    viewer.setSelection([found]);
+                    viewer.reveal(found);
+                }
+
+            } catch (e) {
+                // nothing
+            }
+        }
+
         buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
 
             comp.buildSetObjectPropertyCodeDOM_StringVerbatimProperty(args, userProp.getComponentProperty());

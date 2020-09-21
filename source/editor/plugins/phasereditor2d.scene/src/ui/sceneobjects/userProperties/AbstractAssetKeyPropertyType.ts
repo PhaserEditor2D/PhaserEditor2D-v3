@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._name = config.name;
             this._dialogTitle = config.dialogTitle;
-            this._hasCustomIcon = config.hasCustomIcon === undefined? false : config.hasCustomIcon;
+            this._hasCustomIcon = config.hasCustomIcon === undefined ? false : config.hasCustomIcon;
         }
 
         getName() {
@@ -84,7 +84,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             btn.addEventListener("click", async (e) => {
 
-                this.createSearchDialog(callback);
+                const value = getValue();
+
+                this.createSearchDialog(value, callback);
             });
 
 
@@ -149,7 +151,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             };
         }
 
-        private async createSearchDialog(callback: (value: string) => void) {
+        private async createSearchDialog(revealValue: string, callback: (value: string) => void) {
 
             const finder = new pack.core.PackFinder();
 
@@ -197,6 +199,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const pack of finder.getPacks()) {
 
                 viewer.setExpanded(pack, true);
+            }
+
+            this.revealValue(viewer, revealValue);
+        }
+
+        protected revealValue(viewer: controls.viewers.TreeViewer, value: string) {
+
+            const found = viewer.findElementByLabel(value);
+
+            if (found) {
+
+                viewer.setSelection([found]);
+                viewer.reveal(found);
             }
         }
 
