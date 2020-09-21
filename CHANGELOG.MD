@@ -2,6 +2,10 @@
 
 ## Version 3.7.0 - September 19
 
+### Modified
+
+* User property: Texture Config type shows the texture as the search-button icon.
+
 ### Added
 
 * Scene Editor: add more user property types:

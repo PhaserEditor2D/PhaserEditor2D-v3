@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const text = section.createStringField(comp, prop);
 
-            const btn = this.createSearchButton(value => {
+            const btn = this.createSearchButton(() => prop.getValue(section.getSelectionFirstElement()), value => {
 
                 text.value = value;
 
@@ -61,19 +61,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-        private createSearchButton(callback: (value: string) => void) {
+        private createSearchButton(getValue: () => any, callback: (value: string) => void) {
 
-            const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+            const iconControl = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
             const btn = document.createElement("button");
-            btn.appendChild(icon.getCanvas());
+            btn.appendChild(iconControl.getCanvas());
 
             btn.addEventListener("click", async (e) => {
 
                 this.createSearchDialog(callback);
             });
 
+
+            this.updateIcon(iconControl, getValue());
+
+
             return btn;
+        }
+
+        private async updateIcon(iconControl: controls.IconControl, value: any) {
+
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
+
+            const icon = this.getIcon(finder, value);
+
+            if (icon) {
+
+                iconControl.setIcon(icon);
+            }
+        }
+
+        protected getIcon(finder: pack.core.PackFinder, value: string): controls.IImage {
+
+            return null;
         }
 
         protected createViewer(finder: pack.core.PackFinder) {
@@ -174,7 +197,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 inputElement.value = getValue();
             };
 
-            const btn = this.createSearchButton(setValue);
+            const btn = this.createSearchButton(getValue, setValue);
             comp.appendChild(btn);
 
             return {

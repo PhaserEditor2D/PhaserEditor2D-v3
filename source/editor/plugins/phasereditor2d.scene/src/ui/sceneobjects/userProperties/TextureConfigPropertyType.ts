@@ -26,6 +26,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             };
         }
 
+        protected getIcon(finder: pack.core.PackFinder, value: string): controls.IImage {
+
+            try {
+
+                const config = JSON.parse(value);
+
+                if (config) {
+
+                    const result = finder.getAssetPackItemImage(config.key, config.frame);
+
+                    return result;
+                }
+
+            } catch (e) {
+                // nothing
+            }
+
+            return null;
+        }
+
         buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
 
             comp.buildSetObjectPropertyCodeDOM_StringVerbatimProperty(args, userProp.getComponentProperty());
