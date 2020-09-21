@@ -2,20 +2,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class TextureConfigPropertyType extends AssetKeyPropertyType {
+    export class TextureConfigPropertyType extends AbstractAssetKeyPropertyType {
 
         constructor() {
-            super("texture-config");
-        }
-
-        getName() {
-
-            return "Texture Config";
-        }
-
-        getDialogTitle() {
-
-            return "Texture";
+            super({
+                id: "texture-config",
+                name: "Texture Config",
+                dialogTitle: "Select Texture",
+                hasCustomIcon: true
+            });
         }
 
         getDialogSize() {

@@ -1,22 +1,47 @@
-/// <reference path="./AssetKeyPropertyType.ts" />
+/// <reference path="./AbstractAssetKeyPropertyType.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class AnimationKeyPropertyType extends AssetKeyPropertyType {
+    export class AnimationKeyPropertyType extends AbstractAssetKeyPropertyType {
 
         constructor() {
-            super("animation-key");
+            super({
+                id: "animation-key",
+                name: "Animation Key",
+                dialogTitle: "Select Animation Key",
+                hasCustomIcon: true
+            });
         }
 
-        getName() {
+        protected getIcon(finder: pack.core.PackFinder, value: string): controls.IImage {
 
-            return "Animation Key";
-        }
+            const animation = finder.getPacks()
 
-        protected getDialogTitle() {
+                .flatMap(pack => pack.getItems())
 
-            return "Select Animation Key";
+                .filter(item => item instanceof pack.core.AnimationsAssetPackItem)
+
+                .flatMap((item: pack.core.AnimationsAssetPackItem) => item.getAnimations())
+
+                .find(anim => anim.getKey() === value);
+
+            if (animation) {
+
+                const frames = animation.getFrames();
+
+                if (frames.length > 0) {
+
+                    const frame = frames[Math.floor(frames.length / 2)];
+
+                    if (frame) {
+
+                        return finder.getAssetPackItemImage(frame.getTextureKey(), frame.getFrameKey());
+                    }
+                }
+            }
+
+            return null;
         }
 
         protected createViewer(finder: pack.core.PackFinder) {

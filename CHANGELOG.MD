@@ -5,6 +5,7 @@
 ### Modified
 
 * User property: Texture Config type shows the texture as the search-button icon.
+* User property: Animation Key type shows the middle frame as the search-button icon.
 
 ### Added
 
