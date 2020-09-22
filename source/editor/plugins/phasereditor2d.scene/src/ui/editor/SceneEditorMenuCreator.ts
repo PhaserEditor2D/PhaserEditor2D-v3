@@ -13,8 +13,6 @@ namespace phasereditor2d.scene.ui.editor {
 
         fillMenu(menu: controls.Menu) {
 
-            menu.addCommand(commands.CMD_ADD_SCENE_OBJECT);
-
             menu.addMenu(this.createToolsMenu());
 
             menu.addMenu(this.createCoordsMenu());

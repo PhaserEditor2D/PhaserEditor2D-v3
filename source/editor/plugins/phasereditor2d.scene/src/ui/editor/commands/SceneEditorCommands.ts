@@ -18,7 +18,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
     export const CMD_SELECT_REGION = "phasereditor2d.scene.ui.editor.commands.SelectRegion";
     export const CMD_PAN_SCENE = "phasereditor2d.scene.ui.editor.commands.PanScene";
-    export const CMD_ADD_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddSceneObject";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
     export const CMD_SET_SNAPPING_TO_OBJECT_SIZE = "phasereditor2d.scene.ui.editor.commands.SetSnappingToObjectSize";
     export const CMD_CONVERT_OBJECTS = "phasereditor2d.scene.ui.editor.commands.MorphObjects";
@@ -93,8 +92,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
             SceneEditorCommands.registerTypeCommands(manager);
 
             SceneEditorCommands.registerMoveObjectCommands(manager);
-
-            SceneEditorCommands.registerAddObjectCommands(manager);
 
             SceneEditorCommands.registerTextureCommands(manager);
 
@@ -313,41 +310,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     key: "X"
                 }
             });
-        }
-
-        static registerAddObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
-
-            // add object dialog
-
-            manager.add({
-                command: {
-                    id: CMD_ADD_SCENE_OBJECT,
-                    icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
-                    name: "Add Object",
-                    tooltip: "Add a new object to the scene",
-                    category: CAT_SCENE_EDITOR
-                },
-                handler: {
-                    testFunc: isSceneScope,
-                    executeFunc: args => {
-
-                        const editor = args.activeEditor as SceneEditor;
-
-                        if (editor.isLoading()) {
-
-                            alert("Cannot add objects while the editor is loading.");
-                            return;
-                        }
-
-                        const dlg = new ui.editor.AddObjectDialog(editor);
-                        dlg.create();
-                    }
-                },
-                keys: {
-                    key: "A"
-                }
-            });
-
         }
 
         static registerSceneCommands(manager: colibri.ui.ide.commands.CommandManager) {

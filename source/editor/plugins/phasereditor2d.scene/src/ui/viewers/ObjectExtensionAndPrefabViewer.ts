@@ -19,8 +19,8 @@ namespace phasereditor2d.scene.ui.viewers {
 
             treeRenderer.setSections(ObjectExtensionAndPrefabViewer.SECTIONS);
 
-            this.setLabelProvider(new ObjectExtensionAndPrefabLabelProvider());
-            this.setCellRendererProvider(new ObjectExtensionAndPrefabCellRendererProvider());
+            this.setLabelProvider(new ui.blocks.SceneEditorBlocksLabelProvider());
+            this.setCellRendererProvider(new ui.blocks.SceneEditorBlocksCellRendererProvider());
             this.setContentProvider(new ObjectExtensionAndPrefabContentProvider());
             this.setTreeRenderer(treeRenderer);
             this.setInput(ObjectExtensionAndPrefabViewer.SECTIONS);

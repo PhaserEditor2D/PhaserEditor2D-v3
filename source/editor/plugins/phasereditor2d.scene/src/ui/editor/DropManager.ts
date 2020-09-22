@@ -28,8 +28,8 @@ namespace phasereditor2d.scene.ui.editor {
                     if (data.getExtension() !== "scene") {
 
                         alert("<p>Only items shown in the Blocks view can be added to the scene.</p>" +
-                        "<p>The Blocks view shows Scene Prefabs and items defined in the Asset Pack files.</p>" +
-                        "<p>You can add files to a Pack File using the Inspector view or opening a pack file in the Asset Pack editor.</p>");
+                            "<p>The Blocks view shows Scene Prefabs and items defined in the Asset Pack files.</p>" +
+                            "<p>You can add files to a Pack File using the Inspector view or opening a pack file in the Asset Pack editor.</p>");
 
                         return;
                     }
@@ -58,10 +58,17 @@ namespace phasereditor2d.scene.ui.editor {
             const exts = ScenePlugin.getInstance().getObjectExtensions();
 
             const nameMaker = new ide.utils.NameMaker(obj => {
+
+                if (obj instanceof sceneobjects.ObjectList) {
+
+                    return obj.getLabel();
+                }
+
                 return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
             });
 
             scene.visit(obj => nameMaker.update([obj]));
+            nameMaker.update(scene.getObjectLists().getLists());
 
             const worldPoint = scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
             const x = Math.floor(worldPoint.x);
@@ -99,7 +106,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             const prefabObj = scene.getPrefabObject();
 
-            const sprites: sceneobjects.ISceneObject[] = [];
+            const newSprites: sceneobjects.ISceneObject[] = [];
+            const newLists = [];
 
             for (const data of dropAssetArray) {
 
@@ -121,7 +129,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                         if (sprite) {
 
-                            sprites.push(sprite);
+                            newSprites.push(sprite);
                         }
 
                         continue;
@@ -139,14 +147,53 @@ namespace phasereditor2d.scene.ui.editor {
                             scene: scene
                         });
 
-                        sprites.push(sprite);
+                        newSprites.push(sprite);
 
                         break;
                     }
                 }
+
+                if (data instanceof sceneobjects.SceneObjectExtension) {
+
+                    let extraData: any;
+
+                    if (data instanceof sceneobjects.SceneObjectExtension) {
+
+                        const result = await data.collectExtraDataForCreateEmptyObject();
+
+                        if (result.abort) {
+
+                            continue;
+                        }
+
+                        if (result.dataNotFoundMessage) {
+
+                            alert(result.dataNotFoundMessage);
+
+                            continue;
+                        }
+
+                        extraData = result.data;
+
+                        const sprite = this._editor.getSceneMaker()
+                            .createEmptyObject(data, extraData, x, y);
+
+                        newSprites.push(sprite);
+                    }
+
+                } else if (data === sceneobjects.ObjectList) {
+
+                    const list = new sceneobjects.ObjectList();
+
+                    list.setLabel(nameMaker.makeName("list"));
+
+                    scene.getObjectLists().getLists().push(list);
+
+                    newLists.push(list);
+                }
             }
 
-            for (const sprite of sprites) {
+            for (const sprite of newSprites) {
 
                 const support = sprite.getEditorSupport();
 
@@ -160,9 +207,9 @@ namespace phasereditor2d.scene.ui.editor {
             }
 
 
-            scene.getMaker().afterDropObjects(prefabObj, sprites);
+            scene.getMaker().afterDropObjects(prefabObj, newSprites);
 
-            return sprites;
+            return [...newSprites, ...newLists];
         }
 
         private onDragOver(e: DragEvent) {
@@ -198,6 +245,16 @@ namespace phasereditor2d.scene.ui.editor {
                 if (ext.acceptsDropData(data)) {
                     return true;
                 }
+            }
+
+            if (data instanceof sceneobjects.SceneObjectExtension) {
+
+                return true;
+            }
+
+            if (data === sceneobjects.ObjectList) {
+
+                return true;
             }
 
             return false;

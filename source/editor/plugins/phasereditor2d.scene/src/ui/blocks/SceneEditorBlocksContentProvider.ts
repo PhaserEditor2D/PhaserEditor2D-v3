@@ -38,6 +38,8 @@ namespace phasereditor2d.scene.ui.blocks {
 
             roots.push(...ScenePlugin.getInstance().getObjectExtensions());
 
+            roots.push(sceneobjects.ObjectList);
+
             roots.push(...this.getSceneFiles());
 
             roots.push(...this.getPackItems());
@@ -71,7 +73,9 @@ namespace phasereditor2d.scene.ui.blocks {
 
                     case BUILTIN_SECTION:
 
-                        return ScenePlugin.getInstance().getObjectExtensions();
+                        return [
+                            ...ScenePlugin.getInstance().getObjectExtensions(),
+                            sceneobjects.ObjectList];
 
                     case PREFAB_SECTION:
 

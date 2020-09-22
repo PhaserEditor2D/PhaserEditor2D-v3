@@ -179,7 +179,7 @@ namespace phasereditor2d.scene.ui {
                 await obj.getEditorSupport().buildDependencyHash({ builder });
             }
 
-           this._editorScene.getPackCache().buildAssetsDependenciesHash(builder);
+            this._editorScene.getPackCache().buildAssetsDependenciesHash(builder);
 
             const hash = builder.build();
 
@@ -349,9 +349,15 @@ namespace phasereditor2d.scene.ui {
             return { x, y };
         }
 
-        createEmptyObject(ext: sceneobjects.SceneObjectExtension, extraData?: any) {
+        createEmptyObject(ext: sceneobjects.SceneObjectExtension, extraData?: any, x?: number, y?: number) {
 
-            const { x, y } = this.getCanvasCenterPoint();
+            if (x === undefined) {
+
+                const point = this.getCanvasCenterPoint();
+
+                x = point.x;
+                y = point.y;
+            }
 
             const newObject = ext.createEmptySceneObject({
                 scene: this._editorScene,

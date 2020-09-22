@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.blocks {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export const BUILTIN_SECTION = "Built-In Type";
+    export const BUILTIN_SECTION = "Built-In";
 
     export const PREFAB_SECTION = "Prefab";
 
