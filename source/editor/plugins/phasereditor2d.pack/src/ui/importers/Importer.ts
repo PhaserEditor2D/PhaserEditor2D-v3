@@ -65,7 +65,7 @@ namespace phasereditor2d.pack.ui.importers {
 
             const item = pack.createPackItem(data);
 
-            pack.getItems().push(item);
+            pack.addItem(item);
 
             await item.preload();
 
@@ -85,7 +85,7 @@ namespace phasereditor2d.pack.ui.importers {
 
             const item = pack.createPackItem(data);
 
-            pack.getItems().push(item);
+            pack.addItem(item);
 
             await item.preload();
 

@@ -22,11 +22,7 @@ namespace phasereditor2d.files.ui.views {
 
         protected createViewer() {
 
-            const viewer = new controls.viewers.TreeViewer(FilesView.ID);
-
-            viewer.setSorted(false);
-
-            return viewer;
+            return new controls.viewers.TreeViewer(FilesView.ID);
         }
 
         fillContextMenu(menu: controls.Menu) {
