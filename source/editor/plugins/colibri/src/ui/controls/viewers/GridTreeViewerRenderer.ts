@@ -106,7 +106,6 @@ namespace colibri.ui.controls.viewers {
                     ctx.save();
 
                     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-                    ctx.fillStyle = "#ff000";
 
                     ctx.fillRect(0, y2 - 18, b.width, 25);
 
