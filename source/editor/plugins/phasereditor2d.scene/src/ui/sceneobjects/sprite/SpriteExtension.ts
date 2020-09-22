@@ -16,11 +16,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+
             return new BaseImageCodeDOMBuilder("sprite");
         }
 
         protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
-            return new Sprite(scene, x, y, key, frame);
+
+            return new Sprite(scene, x, y, key || null, frame);
         }
     }
 }

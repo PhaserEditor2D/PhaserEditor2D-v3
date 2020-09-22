@@ -1,12 +1,19 @@
 # Change Log
 
-## Version 3.7.0 - September 19
+## Version 3.7.0-next
 
 ### Added
 
 * User property: Texture Config type shows the texture as the search-button icon.
 * User property: Animation Key type shows the middle frame as the search-button icon.
 * User property: Asset Key (and derived) properties reveal current value when the search dialog is open.
+* Blocks view of Scene Editor shows built-in type blocks, ready to be dropped into the scene.
+
+### Removed
+
+* Removed the Add Object dialog. Instead, you should use the Blocks view.
+
+## Version 3.7.0 - September 19
 
 ### Added
 

@@ -8,7 +8,7 @@ namespace colibri.ui.controls.viewers {
 
         private _center: boolean;
         private _flat: boolean;
-        private _sections: any[];
+        private _sections: string[];
 
         constructor(viewer: TreeViewer, flat: boolean = false, center: boolean = false) {
             super(viewer);
@@ -26,7 +26,7 @@ namespace colibri.ui.controls.viewers {
             return this._flat;
         }
 
-        setSections(sections: any[]) {
+        setSections(sections: string[]) {
             this._sections = sections;
         }
 
@@ -106,7 +106,6 @@ namespace colibri.ui.controls.viewers {
                     ctx.save();
 
                     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-                    ctx.fillStyle = "#ff000";
 
                     ctx.fillRect(0, y2 - 18, b.width, 25);
 
@@ -120,8 +119,10 @@ namespace colibri.ui.controls.viewers {
 
                     y2 += sectionMargin;
 
+                    const sorted = this.isSectionSorted(section);
+
                     const result = this.paintItems2(
-                        objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0);
+                        objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0, sorted);
 
                     y2 = result.y + sectionMargin;
 
@@ -147,11 +148,19 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
+        protected isSectionSorted(section: string) {
+
+            return true;
+        }
+
         private paintItems2(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
-            parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number) {
+            parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number, sorted = true) {
 
-            objects = this.sortObjects(objects);
+            if (sorted) {
+
+                objects = this.sortObjects(objects);
+            }
 
             const viewer = this.getViewer();
             const cellSize = Math.max(ROW_HEIGHT, viewer.getCellSize());

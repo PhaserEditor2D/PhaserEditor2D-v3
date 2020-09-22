@@ -3,6 +3,8 @@ namespace phasereditor2d.scene.ui.blocks {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
+    export const BUILTIN_SECTION = "Built-In";
+
     export const PREFAB_SECTION = "Prefab";
 
     export class SceneEditorBlocksTreeRendererProvider extends pack.ui.viewers.AssetPackTreeViewerRenderer {
@@ -12,12 +14,23 @@ namespace phasereditor2d.scene.ui.blocks {
 
             this.setSections([
 
+                BUILTIN_SECTION,
                 PREFAB_SECTION,
                 pack.core.IMAGE_TYPE,
                 pack.core.ATLAS_TYPE,
                 pack.core.SPRITESHEET_TYPE,
                 pack.core.BITMAP_FONT_TYPE
             ]);
+        }
+
+        isSectionSorted(section: string) {
+
+            if (section === BUILTIN_SECTION) {
+
+                return false;
+            }
+
+            return true;
         }
 
         prepareContextForText(args: controls.viewers.RenderCellArgs) {
