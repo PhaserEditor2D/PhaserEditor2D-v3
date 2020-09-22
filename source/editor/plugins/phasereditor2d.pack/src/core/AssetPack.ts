@@ -137,6 +137,13 @@ namespace phasereditor2d.pack.core {
                     }
                 }
             }
+
+            this.sortItems();
+        }
+
+        private sortItems() {
+
+            this._items.sort((a, b) => a.getKey().localeCompare(b.getKey()));
         }
 
         createPackItem(data: any) {
@@ -216,7 +223,15 @@ namespace phasereditor2d.pack.core {
             return this._items;
         }
 
+        addItem(item: AssetPackItem) {
+
+            this._items.push(item);
+
+            this.sortItems();
+        }
+
         deleteItem(item: AssetPackItem) {
+
             const i = this._items.indexOf(item);
 
             if (i >= 0) {

@@ -128,8 +128,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const viewer = new controls.viewers.TreeViewer(
                 "phasereditor2d.scene.ui.sceneobjects.SelectAssetDialog." + this.getId());
 
-            viewer.setSorted(false);
-
             viewer.setCellRendererProvider(new CellRendererProvider(finder, "tree"));
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
             viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));

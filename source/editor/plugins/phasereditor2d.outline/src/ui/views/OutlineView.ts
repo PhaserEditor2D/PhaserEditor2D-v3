@@ -17,14 +17,5 @@ namespace phasereditor2d.outline.ui.views {
 
             return editor.getEditorViewerProvider(OutlineView.EDITOR_VIEWER_PROVIDER_KEY);
         }
-
-        protected createViewer() {
-
-            const viewer = super.createViewer();
-
-            viewer.setSorted(false);
-
-            return viewer;
-        }
     }
 }

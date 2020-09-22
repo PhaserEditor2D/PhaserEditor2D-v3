@@ -14,7 +14,6 @@ namespace phasereditor2d.pack.ui.editor.properties {
             comp.style.gridTemplateRows = "1fr auto";
 
             const viewer = new controls.viewers.TreeViewer("phasereditor2d.pack.ui.editor.properties.ScriptSection");
-            viewer.setSorted(false);
             viewer.setCellRendererProvider(new ui.viewers.AssetPackCellRendererProvider("tree"));
             viewer.setLabelProvider(new controls.viewers.LabelProvider(obj => obj));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());

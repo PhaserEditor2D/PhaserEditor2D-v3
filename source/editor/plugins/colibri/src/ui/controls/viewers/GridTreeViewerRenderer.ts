@@ -47,8 +47,6 @@ namespace colibri.ui.controls.viewers {
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number) {
 
-            objects = this.sortObjects(objects);
-
             const viewer = this.getViewer();
 
             const labelProvider = viewer.getLabelProvider();
@@ -119,10 +117,8 @@ namespace colibri.ui.controls.viewers {
 
                     y2 += sectionMargin;
 
-                    const sorted = this.isSectionSorted(section);
-
                     const result = this.paintItems2(
-                        objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0, sorted);
+                        objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0);
 
                     y2 = result.y + sectionMargin;
 
@@ -148,19 +144,9 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        protected isSectionSorted(section: string) {
-
-            return true;
-        }
-
         private paintItems2(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
-            parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number, sorted = true) {
-
-            if (sorted) {
-
-                objects = this.sortObjects(objects);
-            }
+            parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number) {
 
             const viewer = this.getViewer();
             const cellSize = Math.max(ROW_HEIGHT, viewer.getCellSize());
