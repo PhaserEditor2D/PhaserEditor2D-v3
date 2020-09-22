@@ -48,9 +48,20 @@ namespace phasereditor2d.animations.ui.editors {
 
                 } else if (obj instanceof Phaser.Animations.AnimationFrame) {
 
-                    if (obj.textureFrame === undefined || obj.textureFrame === null) {
+                    try {
 
-                        return obj.textureKey;
+                        const finder = this._editor.getScene().getMaker().getPackFinder();
+
+                        const image = finder.getAssetPackItemImage(obj.textureKey, obj.textureFrame);
+
+                        if (image.getPackItem() instanceof pack.core.ImageAssetPackItem
+                            || obj.textureFrame === undefined
+                            || obj.textureFrame === null) {
+
+                            return obj.textureKey;
+                        }
+                    } catch (e) {
+                        // nothing
                     }
 
                     return `${obj.textureFrame} (${obj.textureKey})`;
