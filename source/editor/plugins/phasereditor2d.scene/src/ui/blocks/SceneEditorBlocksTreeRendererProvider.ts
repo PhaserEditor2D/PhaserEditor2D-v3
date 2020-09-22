@@ -23,6 +23,16 @@ namespace phasereditor2d.scene.ui.blocks {
             ]);
         }
 
+        isSectionSorted(section: string) {
+
+            if (section === BUILTIN_SECTION) {
+
+                return false;
+            }
+
+            return true;
+        }
+
         prepareContextForText(args: controls.viewers.RenderCellArgs) {
 
             super.prepareContextForText(args);
