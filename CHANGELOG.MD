@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 3.7.1 - September 22
+
+### Fixes
+
+* Animations Editor: fixes display and serialization of animations based on simple image files.
+
 ## Version 3.7.0 - September 19
 
 ### Added
