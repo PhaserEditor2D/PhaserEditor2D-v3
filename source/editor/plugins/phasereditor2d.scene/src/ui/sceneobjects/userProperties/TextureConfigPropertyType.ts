@@ -2,20 +2,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class TextureConfigPropertyType extends AssetKeyPropertyType {
+    export class TextureConfigPropertyType extends AbstractAssetKeyPropertyType {
 
         constructor() {
-            super("texture-config");
-        }
-
-        getName() {
-
-            return "Texture Config";
-        }
-
-        getDialogTitle() {
-
-            return "Texture";
+            super({
+                id: "texture-config",
+                name: "Texture Config",
+                dialogTitle: "Select Texture",
+                hasCustomIcon: true
+            });
         }
 
         getDialogSize() {
@@ -24,6 +19,47 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 width: window.innerWidth * 2 / 3,
                 height: window.innerHeight * 2 / 3
             };
+        }
+
+        protected getIcon(finder: pack.core.PackFinder, value: string): controls.IImage {
+
+            try {
+
+                const config = JSON.parse(value);
+
+                if (config) {
+
+                    const result = finder.getAssetPackItemImage(config.key, config.frame);
+
+                    return result;
+                }
+
+            } catch (e) {
+                // nothing
+            }
+
+            return null;
+        }
+
+        revealValue(viewer: controls.viewers.TreeViewer, value: string) {
+
+            try {
+
+                const obj = JSON.parse(value);
+
+                const finder = new pack.core.PackFinder(...viewer.getInput());
+
+                const found = finder.getAssetPackItemOrFrame(obj.key, obj.frame);
+
+                if (found) {
+
+                    viewer.setSelection([found]);
+                    viewer.reveal(found);
+                }
+
+            } catch (e) {
+                // nothing
+            }
         }
 
         buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {

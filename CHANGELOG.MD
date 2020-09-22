@@ -4,6 +4,12 @@
 
 ### Added
 
+* User property: Texture Config type shows the texture as the search-button icon.
+* User property: Animation Key type shows the middle frame as the search-button icon.
+* User property: Asset Key (and derived) properties reveal current value when the search dialog is open.
+
+### Added
+
 * Scene Editor: add more user property types:
     * Texture Config
     * Animation Key

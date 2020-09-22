@@ -107,6 +107,45 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
+        findElementByLabel(label: string) {
+
+            const list = this.getContentProvider().getRoots(this.getInput());
+
+            return this.findElementByLabel_inList(list, label);
+        }
+
+        private findElementByLabel_inList(list: any[], label: string) {
+
+            if (list) {
+
+                for (const child of list) {
+
+                    const found = this.findElementByLabel_inElement(child, label);
+
+                    if (found) {
+
+                        return found;
+                    }
+                }
+            }
+
+            return undefined;
+        }
+
+        private findElementByLabel_inElement(elem: any, label: string) {
+
+            const elemLabel = this.getLabelProvider().getLabel(elem);
+
+            if (label === elemLabel) {
+
+                return elem;
+            }
+
+            const list = this.getContentProvider().getChildren(elem);
+
+            return this.findElementByLabel_inList(list, label);
+        }
+
         getObjectPath(obj: any) {
 
             const list = this.getContentProvider().getRoots(this.getInput());

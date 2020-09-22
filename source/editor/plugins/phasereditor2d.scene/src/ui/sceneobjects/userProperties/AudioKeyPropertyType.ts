@@ -2,20 +2,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class AudioKeyPropertyType extends AssetKeyPropertyType {
+    export class AudioKeyPropertyType extends AbstractAssetKeyPropertyType {
 
         constructor() {
-            super("audio-key");
-        }
-
-        getName() {
-
-            return "Audio Key";
-        }
-
-        getDialogTitle() {
-
-            return "Select Audio Key";
+            super({
+                id: "audio-key",
+                name: "Audio Key",
+                dialogTitle:  "Select Audio Key"
+            });
         }
 
         getDialogSize() {
