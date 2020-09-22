@@ -36,6 +36,8 @@ namespace phasereditor2d.scene.ui.blocks {
 
             const roots = [];
 
+            roots.push(...ScenePlugin.getInstance().getObjectExtensions());
+
             roots.push(...this.getSceneFiles());
 
             roots.push(...this.getPackItems());
@@ -58,15 +60,23 @@ namespace phasereditor2d.scene.ui.blocks {
 
                 switch (parent) {
                     case pack.core.ATLAS_TYPE:
+
                         return this.getPackItems()
                             .filter(item => item instanceof pack.core.BaseAtlasAssetPackItem);
 
                     case pack.core.BITMAP_FONT_TYPE:
+
                         return this.getPackItems()
                             .filter(item => item instanceof pack.core.BitmapFontAssetPackItem);
 
+                    case BUILTIN_SECTION:
+
+                        return ScenePlugin.getInstance().getObjectExtensions();
+
                     case PREFAB_SECTION:
+
                         const files = this.getSceneFiles();
+
                         return files;
                 }
 
