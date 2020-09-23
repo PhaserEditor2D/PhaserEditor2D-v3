@@ -14,9 +14,9 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
             const frame = this.getSelectionFirstElement();
 
-            const cache = this.getEditor().getScene().getPackCache();
+            const finder = this.getEditor().getScene().getMaker().getPackFinder();
 
-            const image = cache.getImage(frame.textureKey, frame.textureFrame);
+            const image = finder.getAssetPackItemImage(frame.textureKey, frame.textureFrame);
 
             return image;
         }

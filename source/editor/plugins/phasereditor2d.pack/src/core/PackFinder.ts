@@ -86,11 +86,13 @@ namespace phasereditor2d.pack.core {
 
             if (item.getType() === IMAGE_TYPE) {
 
-                if (frame === null || frame === undefined) {
-                    return item;
-                }
+                // if (frame === null || frame === undefined) {
+                //     return item;
+                // }
 
-                return null;
+                // return null;
+
+                return item;
 
             } else if (item instanceof ImageFrameContainerAssetPackItem) {
 
