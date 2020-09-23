@@ -61,6 +61,20 @@ namespace phasereditor2d.animations.ui.editors {
                 if (!a.skipMissedFrames) delete a.skipMissedFrames;
 
                 delete a.duration;
+
+                for (const frame of a.frames) {
+
+                    try {
+                        const item = this.getScene().getMaker().getPackFinder().findAssetPackItem(frame.key);
+
+                        if (item instanceof pack.core.ImageAssetPackItem) {
+
+                            delete frame.frame;
+                        }
+                    } catch (e) {
+                        // nothing
+                    }
+                }
             }
 
             animsData["meta"] = AnimationsPlugin.getInstance().createAnimationsMetaData();

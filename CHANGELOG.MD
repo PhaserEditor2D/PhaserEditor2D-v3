@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 3.7.0-next
+## Version 3.7.1-next
 
 ### Added
 
@@ -12,6 +12,12 @@
 ### Removed
 
 * Removed the Add Object dialog. Instead, you should use the Blocks view.
+
+## Version 3.7.1 - September 22
+
+### Fixes
+
+* Animations Editor: fixes display and serialization of animations based on simple image files.
 
 ## Version 3.7.0 - September 19
 

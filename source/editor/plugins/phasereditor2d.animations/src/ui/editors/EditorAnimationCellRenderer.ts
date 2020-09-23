@@ -64,7 +64,8 @@ namespace phasereditor2d.animations.ui.editors {
 
         private getImage(frame: Phaser.Animations.AnimationFrame) {
 
-            return this._editor.getScene().getPackCache().getImage(frame.textureKey, frame.textureFrame);
+            return this._editor.getScene().getMaker().getPackFinder()
+                .getAssetPackItemImage(frame.textureKey, frame.textureFrame);
         }
 
         cellHeight(args: controls.viewers.RenderCellArgs): number {

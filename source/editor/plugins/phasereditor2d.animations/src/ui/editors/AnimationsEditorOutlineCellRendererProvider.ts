@@ -19,9 +19,8 @@ namespace phasereditor2d.animations.ui.editors {
 
             } else if (element instanceof Phaser.Animations.AnimationFrame) {
 
-                const cache = this._editor.getScene().getPackCache();
-
-                const image = cache.getImage(element.textureKey, element.textureFrame);
+                const image = this._editor.getScene().getMaker().getPackFinder()
+                    .getAssetPackItemImage(element.textureKey, element.textureFrame);
 
                 if (image) {
 
