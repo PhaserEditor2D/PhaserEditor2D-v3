@@ -1,12 +1,12 @@
 # Change Log
 
-## Version 3.7.1 - September 22
+## Version 3.7.1 - Sep 22, 2020
 
 ### Fixes
 
 * Animations Editor: fixes display and serialization of animations based on simple image files.
 
-## Version 3.7.0 - September 19
+## Version 3.7.0 - Sep 19, 2020
 
 ### Added
 
