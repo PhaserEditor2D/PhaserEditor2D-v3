@@ -12,6 +12,7 @@
 ### Removed
 
 * Removed the Add Object dialog. Instead, you should use the Blocks view.
+* Removed old Dark theme. Renamed Dark Plus theme to Dark.
 
 ### Modified
 
