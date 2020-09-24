@@ -13,6 +13,10 @@
 
 * Removed the Add Object dialog. Instead, you should use the Blocks view.
 
+### Modified
+
+* Improves some colors in the blue theme: scene editor, buttons and toolbar items.
+
 ## Version 3.7.1 - Sep 22, 2020
 
 ### Fixes
