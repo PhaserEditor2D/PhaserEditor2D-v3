@@ -34,6 +34,12 @@
     background: #8e8e8e;
 }
 
+/* lightBlue*/
+
+.lightBlue .SceneEditor .SceneEditorContainer {
+    background: #97AAC2;
+}
+
 /* dark */
 
 .dark .SceneEditor .SceneEditorContainer {
