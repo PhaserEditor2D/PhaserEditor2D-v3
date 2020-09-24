@@ -19,7 +19,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private constructor() {
             super({
                 typeName: "Container",
-                phaserTypeName: "Phaser.GameObjects.Container"
+                phaserTypeName: "Phaser.GameObjects.Container",
+                iconName: ICON_GROUP
             });
         }
 

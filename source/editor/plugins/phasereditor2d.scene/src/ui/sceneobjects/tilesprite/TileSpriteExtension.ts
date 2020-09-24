@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super({
                 phaserTypeName: "Phaser.GameObjects.TileSprite",
-                typeName: "TileSprite"
+                typeName: "TileSprite",
+                iconName: ICON_IMAGE_TYPE
             });
         }
 

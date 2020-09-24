@@ -14,6 +14,9 @@ namespace phasereditor2d.scene {
     export const ICON_UNLOCKED = "unlocked";
     export const ICON_LIST = "list";
     export const ICON_USER_COMPONENT = "user-component";
+    export const ICON_IMAGE_TYPE = "image-type";
+    export const ICON_SPRITE_TYPE = "sprite-type";
+    export const ICON_TEXT_TYPE = "text-type";
 
     export class ScenePlugin extends colibri.Plugin {
 
@@ -94,7 +97,10 @@ namespace phasereditor2d.scene {
                     ICON_SCALE,
                     ICON_TRANSLATE,
                     ICON_BUILD,
-                    ICON_LIST
+                    ICON_LIST,
+                    ICON_IMAGE_TYPE,
+                    ICON_SPRITE_TYPE,
+                    ICON_TEXT_TYPE
                 ], true)
             );
 

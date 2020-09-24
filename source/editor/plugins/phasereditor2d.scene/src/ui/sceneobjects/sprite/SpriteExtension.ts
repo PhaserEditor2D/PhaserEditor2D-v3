@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super({
                 phaserTypeName: "Phaser.GameObjects.Sprite",
-                typeName: "Sprite"
+                typeName: "Sprite",
+                iconName: ICON_SPRITE_TYPE
             });
         }
 

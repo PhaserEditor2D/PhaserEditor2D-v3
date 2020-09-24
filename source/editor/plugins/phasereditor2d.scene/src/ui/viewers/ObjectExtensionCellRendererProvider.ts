@@ -5,7 +5,14 @@ namespace phasereditor2d.scene.ui.viewers {
     export class ObjectExtensionCellRendererProvider extends controls.viewers.EmptyCellRendererProvider {
 
         constructor() {
-            super(_ => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP)));
+            super();
+        }
+
+        getCellRenderer(element: any) {
+
+            const ext = element as sceneobjects.SceneObjectExtension;
+
+            return new controls.viewers.IconImageCellRenderer(ext.getIcon());
         }
     }
 }

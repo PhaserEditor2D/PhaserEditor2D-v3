@@ -13,7 +13,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private constructor() {
             super({
                 typeName: "Image",
-                phaserTypeName: "Phaser.GameObjects.Image"
+                phaserTypeName: "Phaser.GameObjects.Image",
+                iconName: ICON_IMAGE_TYPE
             });
         }
 

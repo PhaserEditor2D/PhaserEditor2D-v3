@@ -76,15 +76,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _typeName: string;
         private _phaserTypeName: string;
+        private _iconName: string;
 
         constructor(config: {
             typeName: string,
-            phaserTypeName: string
+            phaserTypeName: string,
+            iconName: string,
         }) {
             super(SceneObjectExtension.POINT_ID);
 
             this._typeName = config.typeName;
             this._phaserTypeName = config.phaserTypeName;
+            this._iconName = config.iconName;
+        }
+
+        getIcon() {
+
+            return ScenePlugin.getInstance().getIcon(this._iconName);
         }
 
         getTypeName() {

@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super({
                 phaserTypeName: "Phaser.GameObjects.Text",
-                typeName: "Text"
+                typeName: "Text",
+                iconName: ICON_TEXT_TYPE
             });
         }
 

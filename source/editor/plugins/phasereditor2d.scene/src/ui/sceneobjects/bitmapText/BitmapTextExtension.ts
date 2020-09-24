@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super({
                 phaserTypeName: "Phaser.GameObjects.BitmapText",
-                typeName: "BitmapText"
+                typeName: "BitmapText",
+                iconName: ICON_TEXT_TYPE
             });
         }
 
