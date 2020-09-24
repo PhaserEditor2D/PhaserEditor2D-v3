@@ -28,6 +28,10 @@
     margin-top: 0px;
 }
 
+.lightBlue #InspectorView .PrefabLink {
+    background: #b2c3dd66;
+}
+
 /* light */
 
 .light .SceneEditor .SceneEditorContainer {
