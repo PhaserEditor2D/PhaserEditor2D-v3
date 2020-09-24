@@ -28,10 +28,20 @@
     margin-top: 0px;
 }
 
+.lightBlue #InspectorView .PrefabLink {
+    background: #b2c3dd66;
+}
+
 /* light */
 
 .light .SceneEditor .SceneEditorContainer {
     background: #8e8e8e;
+}
+
+/* lightBlue*/
+
+.lightBlue .SceneEditor .SceneEditorContainer {
+    background: #97AAC2;
 }
 
 /* dark */
@@ -43,6 +53,6 @@
 
 /* dark plus */
 
-.darkPlus .SceneEditor {
+.dark .SceneEditor {
     padding: 0px !important;
 }

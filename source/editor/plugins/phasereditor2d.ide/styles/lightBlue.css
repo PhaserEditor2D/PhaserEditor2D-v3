@@ -30,7 +30,7 @@
 .lightBlue button,
 .lightBlue input[type="submit"] {
     background: #bbc9dd;
-    border-color: #4f555e;
+    border-color: #00000044;
     text-shadow: 1px 1px #ffffff;
     color: #0f0f0f;
     border-style: solid;
@@ -136,11 +136,12 @@
     background: #b2c3dd88;    
 }
 
+
 /* Toolbar */
 
 .lightBlue .ToolbarItem {
     background: #bbc9dd;
-    border-color: #4f555e;
+    border-color: #00000044;
     text-shadow: 1px 1px #ffffff6f;
 }
 
