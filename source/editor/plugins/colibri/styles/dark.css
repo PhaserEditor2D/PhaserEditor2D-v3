@@ -10,7 +10,7 @@ Important:
 */
 
 .dark body {
-    background: #262626;
+    background: #202020 !important;
     color: #e0e0e0;
 }
 
@@ -51,13 +51,12 @@ Important:
     background: #323232;
     border-color: #646464;
     color: #f0f0f0;
-    text-shadow: 1px 1px #0e0e0e;
+    text-shadow: 1px 1px #0e0e0e;    
     border-style: solid;
     border-width: 1px;
     border-radius: 3px;
     padding: 5px;
 }
-
 
 .dark button[disabled] {
     color: rgba(0, 0, 0, 0.4);
@@ -88,7 +87,7 @@ Important:
 
 .dark .TabPaneContentArea,
 .dark .TabPaneLabel.selected {
-    background: #5e5e5e;
+    background: #343434;
 }
 
 .dark .TabPaneContentArea:empty {
@@ -107,51 +106,52 @@ Important:
 
 .dark .TabPane.activePart .TabPaneContentArea,
 .dark .TabPane.activePart .TabPaneLabel.selected {
-    background: #6e6e6e;
+    background: #3f3f3f;
 }
 
 .dark .ViewerPart .FilteredViewer {
-    background: #3f3f3f;
+    background: transparent;
+}
+
+/* ViewerPart */
+
+.dark .ViewerPart {
+    display: grid;
+    grid-template-columns: 2px 1fr 2px;
+    grid-template-rows: 0px 1fr 0px;
 }
 
 /* Scroll Bar */
 
 .dark {
     /* firefox */
-    scrollbar-color: #858585 #4b4b4b;
-}
-
-.dark .ScrollHandler {
-    background: transparent;
+    scrollbar-color: #4b4b4b #858585;
 }
 
 .dark .ScrollBar,
 .dark ::-webkit-scrollbar-track {
-    background: #4b4b4b;
+    background: #ffffff08;
 }
 
 .dark .ScrollHandler,
 .dark ::-webkit-scrollbar-thumb {
-    background: #858585;
+    background: #606060;
 }
 
 .dark .ScrollHandler:hover,
 .dark ::-webkit-scrollbar-thumb:hover {
-    background: #585858;
+    background: #656565;
 }
 
 .dark .ScrollHandler:active,
 .dark ::-webkit-scrollbar-thumb:active {
-    background: #282828;
+    background: #767676;
 }
-
 
 /* Property Page */
 
-
 .dark .PropertyTitleArea {
-    background: linear-gradient(#343434, #323232);
-    border-radius: 3px 3px 0 0;
+    background: #20202088;    
 }
 
 .dark .PropertyTitleArea label,
@@ -159,32 +159,38 @@ Important:
     font-weight: bold;
 }
 
-.dark .PropertySectionPane {
-    background: #3f3f3f;
-}
-
 /* Toolbar */
 
 .dark .ToolbarItem {
-    background: #525252;
+    background: #323232;
     border-color: #646464;
+    border-style: solid;
     text-shadow: 1px 1px #0e0e0e;
 }
 
 .dark .ToolbarItem:hover,
 .dark .IconButton:hover {
-    background: #656565;
+    background: #424242;
     border-color: #757575;
 }
 
-.dark .ToolbarItem:active {
+.dark .ToolbarItem:active,
+.dark .ToolbarItem.ActionSelected {
     background: rgba(255, 255, 255, 0.3);
 }
 
-.dark .ToolbarItem.ActionSelected,
 .dark .IconButton:hover {
-    background: rgba(255, 255, 255, 0.5);
-    border-color: darkgray;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .ToolbarItem.ActionSelected {
+    border-color: #858585;
+}
+
+/* Zoom controls */
+
+.ZoomControl {
+    opacity: 0.2;
 }
 
 /* ProgressBar */
@@ -195,8 +201,8 @@ Important:
 
 /* Dialog */
 
-.dark .DarkDialogContainer {
-    background: #262626;
+.dark .darkDialogContainer {
+    background: #202020;
 }
 
 .dark .Dialog {
@@ -205,13 +211,6 @@ Important:
 
 .dark .Dialog .DialogTitlePane {
     text-shadow: 1px 1px #0e0e0e;
-}
-
-.dark .Dialog .FilteredViewer {
-    border-color: rgba(255, 255, 255, 0.1);
-    border-style: solid;
-    border-width: 1px;
-    box-sizing: border-box;
 }
 
 /* Menu */

@@ -76,16 +76,6 @@ namespace phasereditor2d.ide {
                 viewerSelectionBackground: controls.Controls.LIGHT_THEME.viewerSelectionBackground,
             }));
 
-            reg.addExtension(new colibri.ui.ide.themes.ThemeExtension({
-                dark: true,
-                id: "darkPlus",
-                classList: ["darkPlus"],
-                displayName: "Dark Plus",
-                viewerForeground: controls.Controls.DARK_THEME.viewerForeground,
-                viewerSelectionForeground: controls.Controls.DARK_THEME.viewerSelectionForeground,
-                viewerSelectionBackground: controls.Controls.DARK_THEME.viewerSelectionBackground,
-            }));
-
             // new dialogs
 
             reg.addExtension(new ui.dialogs.NewProjectDialogExtension());
