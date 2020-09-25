@@ -16,11 +16,12 @@ for(const item of data.docs) {
 
     const longname = item.longname.replace("#", ".");
     
-    docsMap[longname] = item.description;
+    docsMap[longname] = item.description || item.classdesc;    
 
     if (item.params) {
         
         for(const param of item.params) {
+
             docsMap[longname + "(" + param.name + ")"] = param.description;
         }
 
@@ -35,12 +36,20 @@ for(const item of data.docs) {
 
 function makeHelpFile(members, outputPath) {
 
+    console.log(outputPath + ":")
+
     const outputMap = {};
 
     for(const name of members) {
         
-        if (name in docsMap) {
-            outputMap[name] = docsMap[name];
+        const docs = docsMap[name];
+
+        if (docs) {
+                        
+            outputMap[name] = docs;
+
+            console.log(name + " -> " + docs.substring(0, Math.min(docs.length, 80)).split("\n").join(" ") + "...")
+            
         } else {
         	console.log("Cannot find name " + name);
             throw new Error("Cannot find name: " + name);
@@ -48,9 +57,7 @@ function makeHelpFile(members, outputPath) {
     }
     
     const output = JSON.stringify(outputMap, null, 2);
-    
-    console.log(outputPath + ":")
-    console.log(output);
+        
     console.log("---");
 
     fs.writeFileSync(outputPath, output);

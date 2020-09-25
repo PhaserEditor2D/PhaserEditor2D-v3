@@ -147,8 +147,14 @@ utils.makeHelpFile([
     "Phaser.GameObjects.BitmapText.setFont",
     "Phaser.GameObjects.BitmapText.align",
     "Phaser.GameObjects.BitmapText.setFontSize",
-    "Phaser.GameObjects.BitmapText.setLetterSpacing"
+    "Phaser.GameObjects.BitmapText.setLetterSpacing",
 
+    "Phaser.GameObjects.Image",
+    "Phaser.GameObjects.Sprite",
+    "Phaser.GameObjects.TileSprite",
+    "Phaser.GameObjects.Text",
+    "Phaser.GameObjects.BitmapText",
+    "Phaser.GameObjects.Container",
 
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 
