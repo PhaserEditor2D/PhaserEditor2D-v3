@@ -90,6 +90,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._iconName = config.iconName;
         }
 
+        getHelp() {
+
+            return ScenePlugin.getInstance().getPhaserDocs().getDoc(this._phaserTypeName);
+        }
+
         getIcon() {
 
             return ScenePlugin.getInstance().getIcon(this._iconName);

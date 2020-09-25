@@ -10,6 +10,9 @@ namespace phasereditor2d.scene.ui.blocks {
             sections: Array<controls.properties.PropertySection<any>>): void {
 
             super.addSections(page, sections);
+
+            sections.push(new sceneobjects.ObjectTypeDocSection(page));
+            sections.push(new sceneobjects.ObjectListDocSection(page));
         }
     }
 }
