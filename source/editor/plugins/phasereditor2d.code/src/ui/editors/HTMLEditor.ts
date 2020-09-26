@@ -9,12 +9,12 @@ namespace phasereditor2d.code.ui.editors {
 
             return this._factory
 
-                || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
+                || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory("HTML Editor",
                     webContentTypes.core.CONTENT_TYPE_HTML, () => new HTMLEditor()));
         }
 
         constructor() {
-            super("phasereditor2d.core.ui.editors.HTMLEditor", "html");
+            super("phasereditor2d.core.ui.editors.HTMLEditor", "html", HTMLEditor.getFactory());
         }
 
         async requestOutlineItems() {

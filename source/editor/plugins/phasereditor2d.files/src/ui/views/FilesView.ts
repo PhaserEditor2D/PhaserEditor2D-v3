@@ -29,6 +29,8 @@ namespace phasereditor2d.files.ui.views {
 
             menu.addMenu(this.createNewFileMenu());
 
+            menu.addMenu(this.createOpenWithMenu());
+
             menu.addSeparator();
 
             menu.add(new actions.RenameFileAction(this));
@@ -46,6 +48,47 @@ namespace phasereditor2d.files.ui.views {
             menu.addSeparator();
 
             menu.add(new actions.UploadFilesAction(this));
+        }
+
+        createOpenWithMenu(): controls.Menu {
+
+            const menu = new controls.Menu("Open With...");
+
+            const reg = colibri.Platform.getWorkbench().getEditorRegistry();
+
+            const sel = this.getViewer().getSelection();
+            const file = sel.length === 1 && sel[0] instanceof io.FilePath ? sel[0] : undefined;
+
+            const factories: colibri.ui.ide.EditorFactory[] = [];
+
+            const defaultFactory = reg.getDefaultFactory();
+
+            const registeredFactory = file ? reg.getFactoryForInput(file) : undefined;
+
+            if (registeredFactory !== defaultFactory) {
+
+                factories.push(registeredFactory);
+            }
+
+            factories.push(defaultFactory);
+
+            factories.push(...reg.getFactories().filter(f => f !== defaultFactory && f !== registeredFactory));
+
+            for (const factory of factories) {
+
+                menu.addAction({
+                    text: factory.getName(),
+                    enabled: file !== undefined,
+                    callback: () => colibri.Platform.getWorkbench().openEditor(file, factory)
+                });
+
+                if (factory === defaultFactory) {
+
+                    menu.addSeparator();
+                }
+            }
+
+            return menu;
         }
 
         private createNewFileMenu() {

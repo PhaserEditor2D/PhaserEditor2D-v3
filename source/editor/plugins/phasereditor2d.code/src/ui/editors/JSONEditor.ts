@@ -9,12 +9,12 @@ namespace phasereditor2d.code.ui.editors {
 
             return this._factory
 
-                || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
+                || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory("JSON Editor",
                     webContentTypes.core.CONTENT_TYPE_JSON, () => new JSONEditor()));
         }
 
         constructor() {
-            super("phasereditor2d.core.ui.editors.JSONEditor", "json");
+            super("phasereditor2d.core.ui.editors.JSONEditor", "json", JSONEditor.getFactory());
         }
 
         async requestOutlineItems() {

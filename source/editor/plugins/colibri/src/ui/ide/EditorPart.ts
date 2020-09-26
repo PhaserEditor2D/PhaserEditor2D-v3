@@ -7,8 +7,9 @@ namespace colibri.ui.ide {
         private _input: IEditorInput;
         private _dirty: boolean;
         private _embeddedMode: boolean;
+        private _editorFactory: EditorFactory;
 
-        constructor(id: string) {
+        constructor(id: string, factory: EditorFactory) {
             super(id);
 
             this.addClass("EditorPart");
@@ -16,6 +17,13 @@ namespace colibri.ui.ide {
             this._dirty = false;
 
             this._embeddedMode = false;
+
+            this._editorFactory = factory;
+        }
+
+        getEditorFactory() {
+
+            return this._editorFactory;
         }
 
         isEmbeddedMode() {

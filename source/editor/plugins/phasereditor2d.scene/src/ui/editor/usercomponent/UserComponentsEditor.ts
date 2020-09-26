@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         static getFactory() {
 
-            return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
+            return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory("User Components Editor",
                 core.CONTENT_TYPE_USER_COMPONENTS, () => new UserComponentsEditor()
             ));
         }
@@ -104,7 +104,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         private _propertyProvider: UserComponentsEditorPropertySectionProvider;
 
         constructor() {
-            super(UserComponentsEditor.ID);
+            super(UserComponentsEditor.ID, UserComponentsEditor.getFactory());
 
             this._model = new UserComponentsModel();
             this._outlineProvider = new UserComponentsEditorOutlineProvider(this);

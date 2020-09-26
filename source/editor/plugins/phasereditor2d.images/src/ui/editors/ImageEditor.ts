@@ -2,7 +2,6 @@ namespace phasereditor2d.images.ui.editors {
 
     import ide = colibri.ui.ide;
     import controls = colibri.ui.controls;
-    import io = colibri.core.io;
 
     export class ImageEditor extends ide.FileEditor {
 
@@ -10,14 +9,14 @@ namespace phasereditor2d.images.ui.editors {
         static _factory: ide.ContentTypeEditorFactory;
 
         constructor() {
-            super("phasereditor2d.ImageEditor");
+            super("phasereditor2d.ImageEditor", ImageEditor.getFactory());
             this.addClass("ImageEditor");
         }
 
         static getFactory() {
 
             return this._factory
-                || (this._factory = new ide.ContentTypeEditorFactory(
+                || (this._factory = new ide.ContentTypeEditorFactory("Image Editor",
                     webContentTypes.core.CONTENT_TYPE_IMAGE, () => new ImageEditor()));
         }
 

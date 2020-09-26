@@ -23,13 +23,13 @@ namespace phasereditor2d.animations.ui.editors {
 
         static getFactory() {
 
-            return this._factory ?? (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
+            return this._factory ?? (this._factory = new colibri.ui.ide.ContentTypeEditorFactory("Animations Editor",
                 phasereditor2d.pack.core.contentTypes.CONTENT_TYPE_ANIMATIONS, () => new AnimationsEditor()
             ));
         }
 
         constructor() {
-            super(AnimationsEditor.ID);
+            super(AnimationsEditor.ID, AnimationsEditor.getFactory());
 
             this.addClass("AnimationsEditor");
 

@@ -14,7 +14,7 @@ namespace phasereditor2d.code.ui.editors {
 
             return this._jsFactory
 
-                || (this._jsFactory = new colibri.ui.ide.ContentTypeEditorFactory(
+                || (this._jsFactory = new colibri.ui.ide.ContentTypeEditorFactory("JavaScript Editor",
                     webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor("javascript")));
         }
 
@@ -22,12 +22,13 @@ namespace phasereditor2d.code.ui.editors {
 
             return this._tsFactory
 
-                || (this._tsFactory = new colibri.ui.ide.ContentTypeEditorFactory(
+                || (this._tsFactory = new colibri.ui.ide.ContentTypeEditorFactory("TypeScript Editor",
                     webContentTypes.core.CONTENT_TYPE_TYPESCRIPT, () => new JavaScriptEditor("typescript")));
         }
 
         constructor(lang: "javascript" | "typescript") {
-            super("phasereditor2d.core.ui.editors.JavaScriptEditor", lang);
+            super("phasereditor2d.core.ui.editors.JavaScriptEditor", lang,
+                lang === "javascript" ? JavaScriptEditor.getJavaScriptFactory() : JavaScriptEditor.getTypeScriptFactory());
 
             this._finder = new pack.core.PackFinder();
         }

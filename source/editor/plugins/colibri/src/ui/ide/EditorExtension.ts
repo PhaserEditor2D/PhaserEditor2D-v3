@@ -15,7 +15,5 @@ namespace colibri.ui.ide {
         getFactories() {
             return this._factories;
         }
-
     }
-
 }

@@ -8,7 +8,8 @@
 * User property: Animation Key type shows the middle frame as the search-button icon.
 * User property: Asset Key (and derived) properties reveal current value when the search dialog is open.
 * Blocks view of Scene Editor shows built-in type blocks, ready to be dropped into the scene.
-* Open a file with the default editor if no other editor is available for it.
+* Files view: Open a file with the default editor if no other editor is available for it.
+* Files view: shows the Open With option in the context menu.
 
 ### Removed
 

@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         static getFactory() {
 
-            return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
+            return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory("Scene Editor",
                 core.CONTENT_TYPE_SCENE, () => new SceneEditor()
             ));
         }
@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _localCoords: boolean;
 
         constructor() {
-            super("phasereditor2d.SceneEditor");
+            super("phasereditor2d.SceneEditor", SceneEditor.getFactory());
 
             this.addClass("SceneEditor");
 
