@@ -14,14 +14,14 @@ namespace colibri.ui.ide {
 
         static withPluginIcons(plugin: colibri.Plugin, config: Array<{
             plugin?: Plugin;
-            iconName:string;
+            iconName: string;
             contentType: string;
         }>) {
 
             return new ContentTypeIconExtension(
                 config.map(item => {
                     return {
-                        iconDescriptor: plugin.getIconDescriptor(item.iconName),
+                        iconDescriptor: (item.plugin || plugin).getIconDescriptor(item.iconName),
                         contentType: item.contentType
                     };
                 }));

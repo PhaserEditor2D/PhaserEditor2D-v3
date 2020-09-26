@@ -28,7 +28,7 @@ namespace colibri.ui.ide {
         private _fileImageCache: ImageFileCache;
         private _fileImageSizeCache: ImageSizeFileCache;
         private _activeWindow: ide.WorkbenchWindow;
-        private _contentType_icon_Map: Map<string, controls.IImage>;
+        private _contentType_icon_Map: Map<string, controls.IconDescriptor>;
         private _fileStorage: core.io.IFileStorage;
         private _contentTypeRegistry: core.ContentTypeRegistry;
         private _activePart: Part;
@@ -309,7 +309,7 @@ namespace colibri.ui.ide {
 
                 for (const item of extension.getConfig()) {
 
-                    this._contentType_icon_Map.set(item.contentType, item.iconDescriptor.getIcon());
+                    this._contentType_icon_Map.set(item.contentType, item.iconDescriptor);
                 }
             }
         }
@@ -535,8 +535,14 @@ namespace colibri.ui.ide {
 
             if (this._contentType_icon_Map.has(contentType)) {
 
-                return this._contentType_icon_Map.get(contentType);
+                const iconDesc = this._contentType_icon_Map.get(contentType);
 
+                if (iconDesc) {
+
+                    const icon = iconDesc.getIcon();
+
+                    return icon;
+                }
             }
 
             return null;
