@@ -3,10 +3,16 @@ namespace colibri.ui.ide {
     export class EditorRegistry {
 
         private _factories: EditorFactory[];
+        private _defaultFactory: EditorFactory;
 
         constructor() {
 
             this._factories = [];
+        }
+
+        registerDefaultFactory(defaultFactory: EditorFactory) {
+
+            this._defaultFactory = defaultFactory;
         }
 
         registerFactory(factory: EditorFactory): void {
@@ -23,7 +29,7 @@ namespace colibri.ui.ide {
                 }
             }
 
-            return null;
+            return this._defaultFactory;
         }
     }
 }

@@ -604,8 +604,6 @@ namespace colibri.ui.ide {
 
             const editorArea = this.getActiveWindow().getEditorArea();
 
-            const factory = this._editorRegistry.getFactoryForInput(input);
-
             const editor = this.makeEditor(input);
 
             if (editor) {

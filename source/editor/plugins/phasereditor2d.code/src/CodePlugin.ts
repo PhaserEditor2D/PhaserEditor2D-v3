@@ -63,6 +63,10 @@ namespace phasereditor2d.code {
                     ])
             );
 
+            // default editor factory
+
+            colibri.Platform.getWorkbench().getEditorRegistry().registerDefaultFactory(ui.editors.TextEditor.getFactory());
+
             // extra libs loader
 
             if (this.isAdvancedJSEditor()) {
