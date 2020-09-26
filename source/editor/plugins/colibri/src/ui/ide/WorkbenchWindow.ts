@@ -8,7 +8,8 @@ namespace colibri.ui.ide {
         inputDataList: Array<{
             inputExtensionId: string,
             inputState: any,
-            editorState: any
+            editorState: any,
+            editorFactory: string
         }>,
         activeEditorIndex: number,
         tabIconSize: number
@@ -72,7 +73,8 @@ namespace colibri.ui.ide {
                 restoreEditorData.inputDataList.push({
                     inputExtensionId: inputExtension.getId(),
                     inputState: inputExtension.getEditorInputState(input),
-                    editorState: editorState
+                    editorState: editorState,
+                    editorFactory: editor.getEditorFactory().getName()
                 });
             }
 
@@ -88,6 +90,7 @@ namespace colibri.ui.ide {
             if (restoreEditorData) {
 
                 if (restoreEditorData.tabIconSize) {
+
                     editorArea.setTabIconSize(restoreEditorData.tabIconSize);
                 }
 
@@ -110,9 +113,12 @@ namespace colibri.ui.ide {
 
                     if (input) {
 
-                        const editor = wb.createEditor(input);
+                        const factory = wb.getEditorRegistry().getFactoryByName(inputData.editorFactory);
+
+                        const editor = wb.createEditor(input, factory);
 
                         if (!editor) {
+
                             continue;
                         }
 
