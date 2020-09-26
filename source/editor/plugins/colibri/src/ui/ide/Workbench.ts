@@ -638,6 +638,11 @@ namespace colibri.ui.ide {
 
                     if (editor.getInput() === input) {
 
+                        if (editorFactory && editorFactory !== editor.getEditorFactory()) {
+
+                            continue;
+                        }
+
                         editorArea.activateEditor(editor);
 
                         this.setActivePart(editor);

@@ -29,7 +29,7 @@ namespace phasereditor2d.animations.ui.editors {
         }
 
         constructor() {
-            super(AnimationsEditor.ID);
+            super(AnimationsEditor.ID, AnimationsEditor.getFactory());
 
             this.addClass("AnimationsEditor");
 

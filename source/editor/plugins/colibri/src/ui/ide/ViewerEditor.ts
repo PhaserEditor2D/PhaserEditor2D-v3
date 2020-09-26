@@ -7,8 +7,8 @@ namespace colibri.ui.ide {
         protected _filteredViewer: controls.viewers.FilteredViewer<any>;
         protected _viewer: controls.viewers.TreeViewer;
 
-        constructor(id: string) {
-            super(id);
+        constructor(id: string, editorFactory: EditorFactory) {
+            super(id, editorFactory);
         }
 
         protected abstract createViewer(): controls.viewers.TreeViewer;

@@ -52,7 +52,7 @@ namespace phasereditor2d.files.ui.views {
 
         createOpenWithMenu(): controls.Menu {
 
-            const menu = new controls.Menu("Open With");
+            const menu = new controls.Menu("Open With...");
 
             const reg = colibri.Platform.getWorkbench().getEditorRegistry();
 

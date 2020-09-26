@@ -14,7 +14,7 @@ namespace phasereditor2d.code.ui.editors {
         }
 
         constructor() {
-            super("phasereditor2d.core.ui.editors.TextLEditor", "text");
+            super("phasereditor2d.core.ui.editors.TextLEditor", "text", TextEditor.getFactory());
         }
 
         async requestOutlineItems() {

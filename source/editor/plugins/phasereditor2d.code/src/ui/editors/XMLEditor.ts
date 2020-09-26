@@ -14,7 +14,7 @@ namespace phasereditor2d.code.ui.editors {
         }
 
         constructor() {
-            super("phasereditor2d.core.ui.editors.XMLEditor", "xml");
+            super("phasereditor2d.core.ui.editors.XMLEditor", "xml", XMLEditor.getFactory());
         }
 
         async requestOutlineItems() {

@@ -104,7 +104,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         private _propertyProvider: UserComponentsEditorPropertySectionProvider;
 
         constructor() {
-            super(UserComponentsEditor.ID);
+            super(UserComponentsEditor.ID, UserComponentsEditor.getFactory());
 
             this._model = new UserComponentsModel();
             this._outlineProvider = new UserComponentsEditorOutlineProvider(this);

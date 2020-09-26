@@ -177,6 +177,11 @@ namespace phasereditor2d.code {
             return phasereditor2d.ide.IDEPlugin.getInstance().isAdvancedJSEditor();
         }
 
+        getModelManager() {
+
+            return this._modelManager;
+        }
+
         async starting() {
 
             if (this.isAdvancedJSEditor()) {

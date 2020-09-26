@@ -23,7 +23,7 @@ namespace phasereditor2d.pack.ui.editor {
         private _propertyProvider = new properties.AssetPackEditorPropertyProvider();
 
         constructor() {
-            super("phasereditor2d.pack.ui.AssetPackEditor");
+            super("phasereditor2d.pack.ui.AssetPackEditor", AssetPackEditor.getFactory());
 
             this.addClass("AssetPackEditor");
         }

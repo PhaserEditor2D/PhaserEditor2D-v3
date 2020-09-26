@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _localCoords: boolean;
 
         constructor() {
-            super("phasereditor2d.SceneEditor");
+            super("phasereditor2d.SceneEditor", SceneEditor.getFactory());
 
             this.addClass("SceneEditor");
 

@@ -14,7 +14,7 @@ namespace phasereditor2d.code.ui.editors {
         }
 
         constructor() {
-            super("phasereditor2d.core.ui.editors.JSONEditor", "json");
+            super("phasereditor2d.core.ui.editors.JSONEditor", "json", JSONEditor.getFactory());
         }
 
         async requestOutlineItems() {

@@ -17,9 +17,8 @@ namespace phasereditor2d.code.ui.editors {
         private _onDidChangeContentListener: monaco.IDisposable;
         private _onDidChangeCountListener: monaco.IDisposable;
 
-        constructor(id: string, language: string) {
-
-            super(id);
+        constructor(id: string, language: string, editorFactory: colibri.ui.ide.EditorFactory) {
+            super(id, editorFactory);
 
             this.addClass("MonacoEditor");
 
@@ -200,7 +199,7 @@ namespace phasereditor2d.code.ui.editors {
 
             const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
 
-            const model = monaco.editor.createModel(content, this._language, CodePlugin.fileUri(file.getFullName()));
+            const model = monaco.editor.createModel(content, this._language);
 
             return model;
         }

@@ -27,7 +27,8 @@ namespace phasereditor2d.code.ui.editors {
         }
 
         constructor(lang: "javascript" | "typescript") {
-            super("phasereditor2d.core.ui.editors.JavaScriptEditor", lang);
+            super("phasereditor2d.core.ui.editors.JavaScriptEditor", lang,
+                lang === "javascript" ? JavaScriptEditor.getJavaScriptFactory() : JavaScriptEditor.getTypeScriptFactory());
 
             this._finder = new pack.core.PackFinder();
         }

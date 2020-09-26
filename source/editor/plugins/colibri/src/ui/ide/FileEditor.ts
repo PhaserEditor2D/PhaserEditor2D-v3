@@ -7,8 +7,8 @@ namespace colibri.ui.ide {
         private _onFileStorageListener: io.ChangeListenerFunc;
         private _savingThisEditor: boolean;
 
-        constructor(id: string) {
-            super(id);
+        constructor(id: string, factory: EditorFactory) {
+            super(id, factory);
 
             this._onFileStorageListener = change => {
 
