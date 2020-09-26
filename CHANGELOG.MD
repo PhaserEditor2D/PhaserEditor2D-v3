@@ -10,6 +10,7 @@
 * Blocks view of Scene Editor shows built-in type blocks, ready to be dropped into the scene.
 * Files view: Open a file with the default editor if no other editor is available for it.
 * Files view: shows the Open With option in the context menu.
+* Remember the editor type when open a file at startup.
 
 ### Removed
 
