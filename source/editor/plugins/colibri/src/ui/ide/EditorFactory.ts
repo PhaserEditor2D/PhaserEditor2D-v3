@@ -5,5 +5,7 @@ namespace colibri.ui.ide {
         abstract acceptInput(input: any): boolean;
 
         abstract createEditor(): EditorPart;
+
+        abstract getName();
     }
 }

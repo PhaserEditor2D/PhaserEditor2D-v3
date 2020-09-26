@@ -13,7 +13,7 @@ namespace phasereditor2d.pack.ui.editor {
         static getFactory() {
 
             return this._factory
-                || (this._factory = new ide.ContentTypeEditorFactory(
+                || (this._factory = new ide.ContentTypeEditorFactory("Asset Pack Editor",
                     core.contentTypes.CONTENT_TYPE_ASSET_PACK, () => new AssetPackEditor()));
         }
 

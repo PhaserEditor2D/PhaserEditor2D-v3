@@ -9,7 +9,7 @@ namespace phasereditor2d.code.ui.editors {
 
             return this._factory
 
-                || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
+                || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory("Text Editor",
                     webContentTypes.core.CONTENT_TYPE_TEXT, () => new TextEditor()));
         }
 

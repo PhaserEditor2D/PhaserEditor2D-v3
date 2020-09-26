@@ -31,5 +31,15 @@ namespace colibri.ui.ide {
 
             return this._defaultFactory;
         }
+
+        getFactories() {
+
+            return this._factories;
+        }
+
+        getDefaultFactory() {
+
+            return this._defaultFactory;
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace phasereditor2d.code.ui.editors {
 
             return this._jsFactory
 
-                || (this._jsFactory = new colibri.ui.ide.ContentTypeEditorFactory(
+                || (this._jsFactory = new colibri.ui.ide.ContentTypeEditorFactory("JavaScript Editor",
                     webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, () => new JavaScriptEditor("javascript")));
         }
 
@@ -22,7 +22,7 @@ namespace phasereditor2d.code.ui.editors {
 
             return this._tsFactory
 
-                || (this._tsFactory = new colibri.ui.ide.ContentTypeEditorFactory(
+                || (this._tsFactory = new colibri.ui.ide.ContentTypeEditorFactory("TypeScript Editor",
                     webContentTypes.core.CONTENT_TYPE_TYPESCRIPT, () => new JavaScriptEditor("typescript")));
         }
 

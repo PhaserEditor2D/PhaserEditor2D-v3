@@ -578,9 +578,9 @@ namespace colibri.ui.ide {
             return this.getEditors().filter(editor => editor.getInput() === input);
         }
 
-        makeEditor(input: IEditorInput): EditorPart {
+        makeEditor(input: IEditorInput, editorFactory?: EditorFactory): EditorPart {
 
-            const factory = this._editorRegistry.getFactoryForInput(input);
+            const factory = editorFactory || this._editorRegistry.getFactoryForInput(input);
 
             if (factory) {
 
@@ -600,11 +600,11 @@ namespace colibri.ui.ide {
             return null;
         }
 
-        createEditor(input: IEditorInput): EditorPart {
+        createEditor(input: IEditorInput, editorFactory?: EditorFactory): EditorPart {
 
             const editorArea = this.getActiveWindow().getEditorArea();
 
-            const editor = this.makeEditor(input);
+            const editor = this.makeEditor(input, editorFactory);
 
             if (editor) {
 
@@ -626,7 +626,7 @@ namespace colibri.ui.ide {
                 .find(e => e.getId() === id);
         }
 
-        openEditor(input: IEditorInput): EditorPart {
+        openEditor(input: IEditorInput, editorFactory?: EditorFactory): EditorPart {
 
             const editorArea = this.getActiveWindow().getEditorArea();
 
@@ -647,7 +647,7 @@ namespace colibri.ui.ide {
                 }
             }
 
-            const editor = this.createEditor(input);
+            const editor = this.createEditor(input, editorFactory);
 
             if (editor) {
 

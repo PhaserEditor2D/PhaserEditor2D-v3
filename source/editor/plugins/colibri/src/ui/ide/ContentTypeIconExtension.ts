@@ -36,7 +36,5 @@ namespace colibri.ui.ide {
         getConfig() {
             return this._config;
         }
-
     }
-
 }

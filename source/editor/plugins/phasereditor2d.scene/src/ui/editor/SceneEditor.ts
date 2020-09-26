@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         static getFactory() {
 
-            return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory(
+            return this._factory || (this._factory = new colibri.ui.ide.ContentTypeEditorFactory("Scene Editor",
                 core.CONTENT_TYPE_SCENE, () => new SceneEditor()
             ));
         }
