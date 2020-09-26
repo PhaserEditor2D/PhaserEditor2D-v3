@@ -17,6 +17,7 @@
 ### Modified
 
 * Improves some colors in the blue theme: scene editor, buttons and toolbar items.
+* Allows add more files to the Upload dialog.
 
 ## Version 3.7.1 - Sep 22, 2020
 

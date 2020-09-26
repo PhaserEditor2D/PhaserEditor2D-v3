@@ -174,7 +174,7 @@ namespace phasereditor2d.files.ui.dialogs {
         }
 
         private prepareFilesForUpload(files: FileList) {
-            const input = [];
+            const newFiles = [];
             const skippedFiles = [];
 
             for (let i = 0; i < files.length; i++) {
@@ -189,7 +189,7 @@ namespace phasereditor2d.files.ui.dialogs {
                     continue;
                 }
 
-                input.push(file);
+                newFiles.push(file);
             }
 
             if (skippedFiles.length > 0) {
@@ -205,6 +205,10 @@ namespace phasereditor2d.files.ui.dialogs {
                     + "</ul>"
                 );
             }
+
+            const input = this.getViewer().getInput() as any[];
+
+            input.push(...newFiles);
 
             this.getViewer().setInput(input);
 
