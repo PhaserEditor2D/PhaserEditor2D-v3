@@ -244,6 +244,11 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     border-radius: 3px;
 }
 
+.PropertyTitleArea .IconControlCanvas {
+    align-self: center;
+    justify-self: center;
+}
+
 .PropertyTitleArea label {
     overflow: hidden;
     white-space: nowrap;
