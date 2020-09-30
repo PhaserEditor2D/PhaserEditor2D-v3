@@ -25,24 +25,31 @@ namespace colibri.ui.controls.properties {
 
                 this._titleArea = document.createElement("div");
                 this._titleArea.classList.add("PropertyTitleArea");
+                this._titleArea.addEventListener("mouseup", () => this.toggleSection());
 
                 this._expandIconControl = new IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE));
 
                 this._expandIconControl.getCanvas().classList.add("expanded");
 
-                this._expandIconControl.getCanvas().addEventListener("mouseup", () => this.toggleSection());
+                this._expandIconControl.getCanvas().addEventListener("mouseup", e => {
+
+                    e.stopImmediatePropagation();
+
+                    this.toggleSection()
+                });
 
                 this._titleArea.appendChild(this._expandIconControl.getCanvas());
 
                 const label = document.createElement("label");
                 label.innerText = this._section.getTitle();
-                label.addEventListener("mouseup", () => this.toggleSection());
                 this._titleArea.appendChild(label);
 
                 this._menuIcon = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_SMALL_MENU));
                 this._menuIcon.getCanvas().classList.add("IconButton");
                 this._menuIcon.getCanvas().style.visibility = this._section.hasMenu() ? "visible" : "hidden";
-                this._menuIcon.getCanvas().addEventListener("mousedown", e => {
+                this._menuIcon.getCanvas().addEventListener("mouseup", e => {
+
+                    e.stopImmediatePropagation();
 
                     if (this._section.hasMenu()) {
 
