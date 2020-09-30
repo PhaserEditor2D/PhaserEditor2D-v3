@@ -22,6 +22,10 @@
 * Improves some colors in the blue theme: scene editor, buttons and toolbar items.
 * Allows add more files to the Upload dialog.
 
+### Fixes
+
+* Fixed the clicking-area of the titles in the Inspector sections.
+
 ## Version 3.7.1 - Sep 22, 2020
 
 ### Fixes
