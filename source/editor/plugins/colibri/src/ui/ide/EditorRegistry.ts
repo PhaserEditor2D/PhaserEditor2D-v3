@@ -37,6 +37,11 @@ namespace colibri.ui.ide {
             return this._factories;
         }
 
+        getFactoryByName(name: string) {
+
+            return this._factories.find(f => f.getName() === name);
+        }
+
         getDefaultFactory() {
 
             return this._defaultFactory;
