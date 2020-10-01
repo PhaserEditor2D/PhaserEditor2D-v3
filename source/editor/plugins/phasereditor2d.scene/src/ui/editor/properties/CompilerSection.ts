@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         createMenu(menu: controls.Menu) {
 
-            this.getEditor().getMenuCreator().createSceneMenuItems(menu);
+            this.getEditor().getMenuCreator().createCompilerMenu(menu);
 
             menu.addSeparator();
 

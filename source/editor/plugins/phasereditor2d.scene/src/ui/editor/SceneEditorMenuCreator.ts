@@ -40,28 +40,28 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addSeparator();
 
             menu.addMenu(this.createSceneMenu());
+
+            menu.addMenu(this.createCompilerMenu());
         }
 
         private createSceneMenu() {
 
             const menu = new controls.Menu("Scene");
 
-            this.createSceneMenuItems(menu);
-
-            return menu;
-        }
-
-        createSceneMenuItems(menu: controls.Menu) {
-
             menu.addCommand(colibri.ui.ide.actions.CMD_UPDATE_CURRENT_EDITOR, {
                 text: "Refresh Scene"
             });
 
-            menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
-
             menu.addCommand(commands.CMD_DUPLICATE_SCENE_FILE, {
                 text: "Duplicate Scene"
             });
+
+            return menu;
+        }
+
+        createCompilerMenu(menu: controls.Menu = new controls.Menu("Compiler")) {
+
+            menu.addCommand(commands.CMD_COMPILE_SCENE_EDITOR);
 
             menu.addSeparator();
 
@@ -73,7 +73,10 @@ namespace phasereditor2d.scene.ui.editor {
             }
 
             menu.addCommand(commands.CMD_QUICK_EDIT_OUTPUT_FILE);
+
+            return menu;
         }
+
 
         private createDepthMenu(): controls.Menu {
 
