@@ -96,5 +96,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             viewer.reveal(...selection);
             viewer.repaint();
         }
+
+        fillContextMenu(menu: controls.Menu) {
+
+            this._editor.fillContextMenu(menu);
+        }
     }
 }
