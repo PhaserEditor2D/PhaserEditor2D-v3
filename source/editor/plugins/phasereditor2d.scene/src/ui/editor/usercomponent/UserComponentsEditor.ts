@@ -5,6 +5,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.usercomponent.AddUserComponent";
     export const CMD_COMPILE_FILE = "phasereditor2d.scene.ui.editor.usercomponent.CompileFile";
     export const CMD_QUICK_EDIT_COMPONENT_FILE = "phasereditor2d.scene.ui.editor.usercomponent.QuickEditComponentFile";
+    export const CMD_OPEN_COMPONENT_OUTPUT_FILE_IN_VSCODE = "phasereditor2d.scene.ui.editor.usercomponent.OpenComponentOutputFileInVSCode";
+    export const CMD_OPEN_COMPONENT_OUTPUT_FILE = "phasereditor2d.scene.ui.editor.usercomponent.OpenComponentOutputFile";
     export const CAT_USER_COMPONENTS_EDITOR = "phasereditor2d.scene.ui.editor.usercomponent.UserComponentsCategory";
 
     export class UserComponentsEditor extends colibri.ui.ide.ViewerFileEditor {
@@ -81,6 +83,39 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             manager.add({
                 command: {
+                    id: CMD_OPEN_COMPONENT_OUTPUT_FILE,
+                    icon: webContentTypes.WebContentTypesPlugin.getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
+                    name: "Open Component Output File",
+                    tooltip: "Open the output source file of the selected component.",
+                    category: CAT_USER_COMPONENTS_EDITOR
+                },
+                handler: {
+                    testFunc: args => {
+
+                        if (args.activeEditor instanceof UserComponentsEditor) {
+
+                            return args.activeEditor.getSelectedComponents().length === 1;
+                        }
+
+                        return false;
+                    },
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as UserComponentsEditor;
+
+                        const compiler = new UserComponentCompiler(editor.getInput(), editor.getModel());
+
+                        const component = editor.getSelectedComponents()[0];
+
+                        const file = compiler.getOutputFile(component.getName());
+
+                        colibri.Platform.getWorkbench().openEditor(file);
+                    }
+                }
+            });
+
+            manager.add({
+                command: {
                     id: CMD_QUICK_EDIT_COMPONENT_FILE,
                     name: "Quick Edit Component Source File",
                     category: CAT_USER_COMPONENTS_EDITOR,
@@ -97,6 +132,48 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     key: "Q"
                 }
             });
+
+            if (ide.IDEPlugin.getInstance().isDesktopMode()) {
+
+                manager.add({
+                    command: {
+                        id: CMD_OPEN_COMPONENT_OUTPUT_FILE_IN_VSCODE,
+                        name: "Open Component Output File in VS Code",
+                        category: CAT_USER_COMPONENTS_EDITOR,
+                        tooltip: "Open the compiler output file in Visual Studio Code"
+                    },
+                    handler: {
+                        testFunc: args => {
+
+                            if (args.activeEditor instanceof UserComponentsEditor) {
+
+                                return args.activeEditor.getSelectedComponents().length === 1;
+                            }
+
+                            return false;
+                        },
+                        executeFunc: args => {
+
+                            const editor = args.activeEditor as UserComponentsEditor;
+
+                            const compiler = new UserComponentCompiler(editor.getInput(), editor.getModel());
+
+                            const component = editor.getSelectedComponents()[0] as UserComponent;
+
+                            const file = compiler.getOutputFile(component.getName());
+
+                            if (file) {
+
+                                ide.IDEPlugin.getInstance().openFileInVSCode(file);
+
+                            } else {
+
+                                alert(`Output file "${file.getProjectRelativeName()}" not found.`);
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         private _model: UserComponentsModel;
@@ -182,9 +259,19 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             menu.addSeparator();
 
-            menu.addCommand(CMD_COMPILE_FILE);
+            const compilerMenu = new controls.Menu("Compiler");
 
-            menu.addCommand(CMD_QUICK_EDIT_COMPONENT_FILE);
+            compilerMenu.addCommand(CMD_COMPILE_FILE);
+
+            compilerMenu.addSeparator();
+
+            compilerMenu.addCommand(CMD_OPEN_COMPONENT_OUTPUT_FILE);
+
+            compilerMenu.addCommand(CMD_QUICK_EDIT_COMPONENT_FILE);
+
+            compilerMenu.addCommand(CMD_OPEN_COMPONENT_OUTPUT_FILE_IN_VSCODE);
+
+            menu.addMenu(compilerMenu);
         }
 
         async doSave() {
