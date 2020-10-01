@@ -11,6 +11,8 @@
 * Files view: Open a file with the default editor if no other editor is available for it.
 * Files view: shows the Open With option in the context menu.
 * Remember the editor type when open a file at startup.
+* User components editor: complete the Compiler menu in the context menu. With commands to open the output file.
+* User components editor: shows the context menu in the Outline view.
 
 ### Removed
 
