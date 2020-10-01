@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isPrefabSceneObject(obj: any) {
 
-            const support = EditorSupport.getEditorSupport(obj);
+            const support = GameObjectEditorSupport.getEditorSupport(obj);
 
             if (support) {
 

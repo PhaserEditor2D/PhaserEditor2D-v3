@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of this.getSelection()) {
 
-                const editorComp = EditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
+                const editorComp = GameObjectEditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
 
                 const result = getComponents(editorComp);
 
@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
                 const editorCompList = this.getSelection()
-                    .map(obj => EditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent);
+                    .map(obj => GameObjectEditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent);
 
                 const commonLocalComponents = this.getCommonComponents(c => c.getUserComponents().map(info => info.component.getName()));
 
@@ -260,9 +260,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         this.getEditor().getScene().visit(obj => {
 
 
-                            if (EditorSupport.hasObjectComponent(obj, UserComponentsEditorComponent)) {
+                            if (GameObjectEditorSupport.hasObjectComponent(obj, UserComponentsEditorComponent)) {
 
-                                const userComp = EditorSupport
+                                const userComp = GameObjectEditorSupport
                                     .getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
 
                                 if (userComp.hasUserComponent(compName)) {
@@ -339,7 +339,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            return EditorSupport.hasEditorSupport(obj);
+            return GameObjectEditorSupport.hasEditorSupport(obj);
         }
 
         canEditNumber(n: number): boolean {

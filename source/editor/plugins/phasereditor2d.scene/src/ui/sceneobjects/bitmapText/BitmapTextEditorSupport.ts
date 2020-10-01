@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class BitmapTextEditorSupport extends EditorSupport<BitmapText> {
+    export class BitmapTextEditorSupport extends GameObjectEditorSupport<BitmapText> {
 
         constructor(obj: BitmapText, scene: Scene) {
             super(BitmapTextExtension.getInstance(), obj, scene);

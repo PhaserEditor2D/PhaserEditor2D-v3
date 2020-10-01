@@ -6,6 +6,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         Phaser.GameObjects.GameObject {
 
-        getEditorSupport(): EditorSupport<ISceneGameObject>;
+        getEditorSupport(): GameObjectEditorSupport<ISceneGameObject>;
     }
 }

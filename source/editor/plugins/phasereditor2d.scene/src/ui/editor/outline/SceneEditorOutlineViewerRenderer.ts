@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         private isNonTopPrefabObject(obj: any) {
 
-            const support = sceneobjects.EditorSupport.getEditorSupport(obj);
+            const support = sceneobjects.GameObjectEditorSupport.getEditorSupport(obj);
 
             if (support) {
 

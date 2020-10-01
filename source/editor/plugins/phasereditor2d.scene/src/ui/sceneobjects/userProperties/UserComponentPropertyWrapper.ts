@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private getComponent(obj: ISceneGameObject) {
 
-            return EditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
+            return GameObjectEditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
         }
 
         get name(): string {

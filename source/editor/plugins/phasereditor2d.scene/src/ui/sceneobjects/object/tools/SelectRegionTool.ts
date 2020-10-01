@@ -108,7 +108,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // TODO: don't enter in prefab objects
             scene.visitAskChildren(obj => {
 
-                if (EditorSupport.hasObjectComponent(obj, TransformComponent)) {
+                if (GameObjectEditorSupport.hasObjectComponent(obj, TransformComponent)) {
 
                     const points = obj.getEditorSupport().getScreenBounds(scene.getCamera());
 

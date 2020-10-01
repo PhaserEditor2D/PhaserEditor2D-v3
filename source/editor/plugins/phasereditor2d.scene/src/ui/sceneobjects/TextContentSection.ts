@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            return EditorSupport.hasObjectComponent(obj, TextContentComponent);
+            return GameObjectEditorSupport.hasObjectComponent(obj, TextContentComponent);
         }
 
         canEditNumber(n: number): boolean {
