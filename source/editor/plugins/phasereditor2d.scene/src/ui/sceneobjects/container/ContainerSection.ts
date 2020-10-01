@@ -1,10 +1,10 @@
-/// <reference path="../object/properties/SceneObjectSection.ts" />
+/// <reference path="../object/properties/SceneGameObjectSection.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class ContainerSection extends SceneObjectSection<Container> {
+    export class ContainerSection extends SceneGameObjectSection<Container> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.ContainerSection", "Container", false, true);

@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class TileSpriteSection extends SceneObjectSection<TileSprite> {
+    export class TileSpriteSection extends SceneGameObjectSection<TileSprite> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TileSprite", "Tile Sprite", false, true);

@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class AlphaSection extends SceneObjectSection<sceneobjects.IAlphaLikeObject> {
+    export class AlphaSection extends SceneGameObjectSection<sceneobjects.IAlphaLikeObject> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.AlphaSection", "Alpha", false, true);

@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         parentContainer: Container;
     }
 
-    export class ParentSection extends SceneObjectSection<IHasParentContainer> {
+    export class ParentSection extends SceneGameObjectSection<IHasParentContainer> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page,

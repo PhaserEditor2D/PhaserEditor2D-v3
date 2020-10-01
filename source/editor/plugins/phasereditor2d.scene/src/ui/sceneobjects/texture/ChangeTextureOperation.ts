@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ChangeTextureOperation extends SceneObjectOperation<ITextureLikeObject> {
+    export class ChangeTextureOperation extends SceneGameObjectOperation<ITextureLikeObject> {
 
         static runDialog(editor: editor.SceneEditor) {
 

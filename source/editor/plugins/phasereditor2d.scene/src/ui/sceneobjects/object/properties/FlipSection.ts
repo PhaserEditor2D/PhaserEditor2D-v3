@@ -1,10 +1,10 @@
-/// <reference path="./SceneObjectSection.ts" />
+/// <reference path="./SceneGameObjectSection.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class FlipSection extends SceneObjectSection<IOriginLikeObject> {
+    export class FlipSection extends SceneGameObjectSection<IOriginLikeObject> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.FlipSection", "Flip", false, true);

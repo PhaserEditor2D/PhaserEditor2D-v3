@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class TextSection extends SceneObjectSection<Text> {
+    export class TextSection extends SceneGameObjectSection<Text> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor.scene.ui.sceneobjects.TextSection", "Text");

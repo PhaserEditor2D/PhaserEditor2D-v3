@@ -1,6 +1,7 @@
+/// <reference path="./SceneGameObjectOperation.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class SimpleOperation<T extends ISceneGameObjectLike> extends SceneObjectOperation<T> {
+    export class SimpleOperation<T extends ISceneGameObjectLike> extends SceneGameObjectOperation<T> {
 
         private _property: IProperty<T>;
 
