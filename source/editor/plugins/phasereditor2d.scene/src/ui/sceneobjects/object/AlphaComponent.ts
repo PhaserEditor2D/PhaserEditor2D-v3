@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export interface IAlphaLikeObject extends ISceneObject {
+    export interface IAlphaLikeObject extends ISceneGameObject {
 
         alpha: number;
         alphaTopLeft: number;

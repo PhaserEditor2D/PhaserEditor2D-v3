@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     let extraData: any = {};
 
-                    if (targetType instanceof sceneobjects.SceneObjectExtension) {
+                    if (targetType instanceof sceneobjects.SceneGameObjectExtension) {
 
                         const result = await targetType.collectExtraDataForCreateEmptyObject();
 

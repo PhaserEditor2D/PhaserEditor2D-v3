@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export abstract class SceneObjectOperation<T extends ISceneObjectLike> extends editor.undo.SceneEditorOperation {
+    export abstract class SceneObjectOperation<T extends ISceneGameObjectLike> extends editor.undo.SceneEditorOperation {
 
         private _objIdList: string[];
         private _value: any;

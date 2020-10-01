@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject, extraData: any) {
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneGameObject, extraData: any) {
 
             super.adaptDataAfterTypeConversion(serializer, originalObject, extraData);
 
@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new TileSpriteCodeDOMBuilder();
         }
 
-        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
 
             if (key) {
 

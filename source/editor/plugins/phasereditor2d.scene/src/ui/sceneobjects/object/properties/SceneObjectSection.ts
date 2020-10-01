@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+    export abstract class SceneObjectSection<T extends ISceneGameObjectLike> extends editor.properties.BaseSceneSection<T> {
 
         isPrefabSceneObject(obj: any) {
 

@@ -57,7 +57,7 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        getPrefabObject(): sceneobjects.ISceneObject {
+        getPrefabObject(): sceneobjects.ISceneGameObject {
 
             if (this.sys.displayList) {
 
@@ -140,7 +140,7 @@ namespace phasereditor2d.scene.ui {
             return super.getMaker() as SceneMaker;
         }
 
-        getDisplayListChildren(): sceneobjects.ISceneObject[] {
+        getDisplayListChildren(): sceneobjects.ISceneGameObject[] {
 
             return this.sys.displayList.getChildren() as any;
         }
@@ -151,7 +151,7 @@ namespace phasereditor2d.scene.ui {
         }
 
         private getInputSortedObjects2(
-            result: sceneobjects.ISceneObject[], list: sceneobjects.ISceneObject[]): sceneobjects.ISceneObject[] {
+            result: sceneobjects.ISceneGameObject[], list: sceneobjects.ISceneGameObject[]): sceneobjects.ISceneGameObject[] {
 
             for (const obj of list) {
 
@@ -168,12 +168,12 @@ namespace phasereditor2d.scene.ui {
             return result;
         }
 
-        visit(visitor: (obj: sceneobjects.ISceneObject) => void) {
+        visit(visitor: (obj: sceneobjects.ISceneGameObject) => void) {
 
             this.visit2(visitor, this.getDisplayListChildren());
         }
 
-        private visit2(visitor: (obj: sceneobjects.ISceneObject) => void, children: sceneobjects.ISceneObject[]) {
+        private visit2(visitor: (obj: sceneobjects.ISceneGameObject) => void, children: sceneobjects.ISceneGameObject[]) {
 
             for (const obj of children) {
 
@@ -186,13 +186,13 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        visitAskChildren(visitor: (obj: sceneobjects.ISceneObject) => boolean) {
+        visitAskChildren(visitor: (obj: sceneobjects.ISceneGameObject) => boolean) {
 
             this.visitAskChildren2(visitor, this.getDisplayListChildren());
         }
 
         private visitAskChildren2(
-            visitor: (obj: sceneobjects.ISceneObject) => boolean, children: sceneobjects.ISceneObject[]) {
+            visitor: (obj: sceneobjects.ISceneGameObject) => boolean, children: sceneobjects.ISceneGameObject[]) {
 
             for (const obj of children) {
 
@@ -214,7 +214,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof Phaser.GameObjects.GameObject) {
 
-                    return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
+                    return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
                 }
 
                 return (obj as sceneobjects.ObjectList).getLabel();
@@ -240,14 +240,14 @@ namespace phasereditor2d.scene.ui {
          */
         buildObjectSortingMap() {
 
-            const map = new Map<sceneobjects.ISceneObject, number>();
+            const map = new Map<sceneobjects.ISceneGameObject, number>();
 
             this.buildObjectSortingMap2(map, this.getDisplayListChildren());
 
             return map;
         }
 
-        sortObjectsByRenderingOrder(list: sceneobjects.ISceneObject[]) {
+        sortObjectsByRenderingOrder(list: sceneobjects.ISceneGameObject[]) {
 
             const map = this.buildObjectSortingMap();
 
@@ -260,7 +260,7 @@ namespace phasereditor2d.scene.ui {
             });
         }
 
-        private buildObjectSortingMap2(map: Map<sceneobjects.ISceneObject, number>, list: sceneobjects.ISceneObject[]) {
+        private buildObjectSortingMap2(map: Map<sceneobjects.ISceneGameObject, number>, list: sceneobjects.ISceneGameObject[]) {
 
             let i = 0;
 
@@ -281,7 +281,7 @@ namespace phasereditor2d.scene.ui {
 
         buildObjectIdMap() {
 
-            const map = new Map<string, sceneobjects.ISceneObject>();
+            const map = new Map<string, sceneobjects.ISceneGameObject>();
 
             this.visit(obj => {
 
@@ -322,7 +322,7 @@ namespace phasereditor2d.scene.ui {
             return obj;
         }
 
-        static findByEditorId(list: sceneobjects.ISceneObject[], id: string) {
+        static findByEditorId(list: sceneobjects.ISceneGameObject[], id: string) {
 
             for (const obj of list) {
 

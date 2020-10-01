@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui {
             this._editorScene = scene;
         }
 
-        afterDropObjects(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
+        afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             let container: sceneobjects.Container;
 
@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        private afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
+        private afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             if (!prefabObj) {
                 return;
@@ -349,7 +349,7 @@ namespace phasereditor2d.scene.ui {
             return { x, y };
         }
 
-        createEmptyObject(ext: sceneobjects.SceneObjectExtension, extraData?: any, x?: number, y?: number) {
+        createEmptyObject(ext: sceneobjects.SceneGameObjectExtension, extraData?: any, x?: number, y?: number) {
 
             if (x === undefined) {
 
@@ -367,7 +367,7 @@ namespace phasereditor2d.scene.ui {
             });
 
             const nameMaker = new ide.utils.NameMaker(obj => {
-                return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
+                return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
             });
 
             this._editorScene.visit(obj => nameMaker.update([obj]));

@@ -1,7 +1,7 @@
 namespace phasereditor2d.scene.ui.editor.undo {
 
     import json = core.json;
-    import ISceneObject = sceneobjects.ISceneObject;
+    import ISceneObject = sceneobjects.ISceneGameObject;
     import controls = colibri.ui.controls;
 
     export interface IObjectSnapshot {

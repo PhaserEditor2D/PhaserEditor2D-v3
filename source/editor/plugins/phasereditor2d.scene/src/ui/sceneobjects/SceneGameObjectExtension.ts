@@ -47,13 +47,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export interface IBuildObjectFactoryCodeDOMArgs {
 
-        obj: ISceneObject;
+        obj: ISceneGameObject;
         gameObjectFactoryExpr: string;
     }
 
     export interface IBuildPrefabConstructorCodeDOMArgs {
 
-        obj: ISceneObject;
+        obj: ISceneGameObject;
         sceneExpr: string;
         methodCallDOM: code.MethodCallCodeDOM;
         prefabSerializer: json.Serializer;
@@ -67,12 +67,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export interface IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {
 
         superMethodCallCodeDOM: code.MethodCallCodeDOM;
-        prefabObj: ISceneObject;
+        prefabObj: ISceneGameObject;
     }
 
-    export abstract class SceneObjectExtension extends colibri.Extension {
+    export abstract class SceneGameObjectExtension extends colibri.Extension {
 
-        static POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
+        static POINT_ID = "phasereditor2d.scene.ui.SceneGameObjectExtension";
 
         private _typeName: string;
         private _phaserTypeName: string;
@@ -83,7 +83,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             phaserTypeName: string,
             iconName: string,
         }) {
-            super(SceneObjectExtension.POINT_ID);
+            super(SceneGameObjectExtension.POINT_ID);
 
             this._typeName = config.typeName;
             this._phaserTypeName = config.phaserTypeName;
@@ -116,7 +116,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param extraData Sometimes, to create the object, some extra data is needed.
          * For example, the bitmap font of a bitmap text.
          */
-        adaptDataAfterTypeConversion(serializer: json.Serializer, originalObject: ISceneObject, extraData: any) {
+        adaptDataAfterTypeConversion(serializer: json.Serializer, originalObject: ISceneGameObject, extraData: any) {
             // nothing by default
         }
 
@@ -133,7 +133,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args The data involved in a drop action.
          */
-        abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
+        abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject;
 
         /**
          * Collect the data used to create a new, empty object. For example, a BitmapText requires
@@ -149,14 +149,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args The data needed to create the object.
          */
-        abstract createEmptySceneObject(args: ICreateEmptyArgs): sceneobjects.ISceneObject;
+        abstract createEmptySceneObject(args: ICreateEmptyArgs): sceneobjects.ISceneGameObject;
 
         /**
          * Create the scene object of this extension with the data involved in a deserialization.
          *
          * @param args The data involved in the creation of the object.
          */
-        abstract createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
+        abstract createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneGameObject;
 
         /**
          * Get the assets contained in a scene object data.

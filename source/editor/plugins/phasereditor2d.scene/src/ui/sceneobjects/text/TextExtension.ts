@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TextExtension extends SceneObjectExtension {
+    export class TextExtension extends SceneGameObjectExtension {
 
         private static _instance = new TextExtension();
 
@@ -20,18 +20,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        createSceneObjectWithAsset(args: ICreateWithAssetArgs): ISceneObject {
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): ISceneGameObject {
             return null;
         }
 
-        createEmptySceneObject(args: ICreateEmptyArgs): ISceneObject {
+        createEmptySceneObject(args: ICreateEmptyArgs): ISceneGameObject {
 
             const text = new Text(args.scene, args.x, args.y, "New text", {});
 
             return text;
         }
 
-        createSceneObjectWithData(args: ICreateWithDataArgs): ISceneObject {
+        createSceneObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
 
             const text = new Text(args.scene, 0, 0, "", {});
 

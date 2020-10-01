@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
             return roots;
         }
 
-        getChildren(parent: sceneobjects.ISceneObject): any[] {
+        getChildren(parent: sceneobjects.ISceneGameObject): any[] {
 
             if (parent instanceof Phaser.GameObjects.DisplayList) {
 

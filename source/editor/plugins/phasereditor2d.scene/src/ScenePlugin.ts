@@ -274,9 +274,9 @@ namespace phasereditor2d.scene {
             return this._sceneFinder;
         }
 
-        getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[] {
+        getObjectExtensions(): ui.sceneobjects.SceneGameObjectExtension[] {
             return colibri.Platform
-                .getExtensions<ui.sceneobjects.SceneObjectExtension>(ui.sceneobjects.SceneObjectExtension.POINT_ID);
+                .getExtensions<ui.sceneobjects.SceneGameObjectExtension>(ui.sceneobjects.SceneGameObjectExtension.POINT_ID);
         }
 
         getObjectExtensionByObjectType(type: string) {

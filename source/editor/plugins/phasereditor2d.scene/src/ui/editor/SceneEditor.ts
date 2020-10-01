@@ -491,7 +491,7 @@ namespace phasereditor2d.scene.ui.editor {
             return this._overlayLayer && this._overlayLayer.isLoading();
         }
 
-        getSelectedGameObjects(): sceneobjects.ISceneObject[] {
+        getSelectedGameObjects(): sceneobjects.ISceneGameObject[] {
 
             return this.getSelection()
 
@@ -626,7 +626,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 .map(obj =>
                     obj instanceof Phaser.GameObjects.GameObject ?
-                        this._scene.getByEditorId((obj as sceneobjects.ISceneObject).getEditorSupport().getId())
+                        this._scene.getByEditorId((obj as sceneobjects.ISceneGameObject).getEditorSupport().getId())
                         : obj)
 
                 .filter(v => v !== null && v !== undefined);

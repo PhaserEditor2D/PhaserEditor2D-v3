@@ -10,9 +10,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         PUBLIC = "PUBLIC"
     }
 
-    export abstract class EditorSupport<T extends ISceneObject> {
+    export abstract class EditorSupport<T extends ISceneGameObject> {
 
-        private _extension: SceneObjectExtension;
+        private _extension: SceneGameObjectExtension;
         private _object: T;
         private _prefabId: string;
         private _label: string;
@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
 
-        constructor(extension: SceneObjectExtension, obj: T, scene: Scene) {
+        constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene) {
 
             this._extension = extension;
             this._object = obj;
@@ -274,7 +274,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._serializables.push(...components);
         }
 
-        protected setNewId(sprite: sceneobjects.ISceneObject) {
+        protected setNewId(sprite: sceneobjects.ISceneGameObject) {
             this.setId(Phaser.Utils.String.UUID());
         }
 
@@ -298,7 +298,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this.getObject().parentContainer) {
 
-                return (this.getObject().parentContainer as unknown as ISceneObject)
+                return (this.getObject().parentContainer as unknown as ISceneGameObject)
                     .getEditorSupport().getId();
             }
 
@@ -368,11 +368,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.isPrefabInstance() && this.getOwnerPrefabInstance() !== this._object;
         }
 
-        getOwnerPrefabInstance(): ISceneObject {
+        getOwnerPrefabInstance(): ISceneGameObject {
 
             if (this._object.parentContainer) {
 
-                const parent = this._object.parentContainer as unknown as ISceneObject;
+                const parent = this._object.parentContainer as unknown as ISceneGameObject;
 
                 const owner = parent.getEditorSupport().getOwnerPrefabInstance();
 

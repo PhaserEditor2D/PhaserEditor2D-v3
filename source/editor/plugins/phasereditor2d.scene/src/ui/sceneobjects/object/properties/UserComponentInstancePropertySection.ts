@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class UserComponentInstancePropertySection extends SceneObjectSection<ISceneObject> {
+    export class UserComponentInstancePropertySection extends SceneObjectSection<ISceneGameObject> {
 
         private _propArea: HTMLDivElement;
 

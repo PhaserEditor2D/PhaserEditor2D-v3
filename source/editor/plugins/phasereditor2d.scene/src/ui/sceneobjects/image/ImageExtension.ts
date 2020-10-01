@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new BaseImageCodeDOMBuilder("image");
         }
 
-        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
 
             return new sceneobjects.Image(scene, x, y, key || null, frame);
         }

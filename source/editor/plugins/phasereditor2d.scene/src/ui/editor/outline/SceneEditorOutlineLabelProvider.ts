@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             if (obj instanceof Phaser.GameObjects.GameObject) {
 
-                const support = (obj as sceneobjects.ISceneObject).getEditorSupport();
+                const support = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 
                 if (support.getScene().isPrefabSceneType() && obj === support.getScene().getPrefabObject()) {
 

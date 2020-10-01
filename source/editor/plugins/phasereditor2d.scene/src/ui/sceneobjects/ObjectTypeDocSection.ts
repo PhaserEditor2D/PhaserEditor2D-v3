@@ -11,12 +11,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getHelp() {
 
-            return (this.getSelectionFirstElement() as SceneObjectExtension).getHelp();
+            return (this.getSelectionFirstElement() as SceneGameObjectExtension).getHelp();
         }
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof SceneObjectExtension;
+            return obj instanceof SceneGameObjectExtension;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (obj instanceof Phaser.GameObjects.GameObject) {
 
-                        return objMap.get((obj as sceneobjects.ISceneObject).getEditorSupport().getId());
+                        return objMap.get((obj as sceneobjects.ISceneGameObject).getEditorSupport().getId());
                     }
 
                     if (obj instanceof sceneobjects.ObjectList) {
@@ -103,7 +103,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (selected) {
 
-                    const obj = selected as sceneobjects.ISceneObject;
+                    const obj = selected as sceneobjects.ISceneGameObject;
 
                     const owner = obj.getEditorSupport().getOwnerPrefabInstance();
 

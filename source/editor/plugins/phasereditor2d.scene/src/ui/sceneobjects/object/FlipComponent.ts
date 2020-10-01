@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export interface IFlipLikeObject extends ISceneObject {
+    export interface IFlipLikeObject extends ISceneGameObject {
 
         flipX: boolean;
         flipY: boolean;

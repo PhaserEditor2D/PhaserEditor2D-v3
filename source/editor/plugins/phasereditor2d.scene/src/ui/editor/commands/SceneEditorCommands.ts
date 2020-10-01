@@ -793,7 +793,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     },
                     executeFunc: args => {
 
-                        const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneObject;
+                        const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneGameObject;
 
                         const objData: core.json.IObjectData = {} as any;
 
@@ -1149,7 +1149,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                 .filter(obj =>
                                     sceneobjects.EditorSupport.hasObjectComponent(
                                         obj, sceneobjects.OriginComponent)
-                                    && (obj as sceneobjects.ISceneObject)
+                                    && (obj as sceneobjects.ISceneGameObject)
                                         .getEditorSupport().isUnlockedProperty(sceneobjects.OriginComponent.originX))
                                 .length;
 

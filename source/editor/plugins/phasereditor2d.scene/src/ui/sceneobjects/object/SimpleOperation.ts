@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class SimpleOperation<T extends ISceneObjectLike> extends SceneObjectOperation<T> {
+    export class SimpleOperation<T extends ISceneGameObjectLike> extends SceneObjectOperation<T> {
 
         private _property: IProperty<T>;
 

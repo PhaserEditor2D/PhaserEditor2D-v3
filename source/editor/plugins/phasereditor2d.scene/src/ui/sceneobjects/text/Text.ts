@@ -1,11 +1,11 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export interface ITextContentLikeObject extends ISceneObject {
+    export interface ITextContentLikeObject extends ISceneGameObject {
 
         text: string;
     }
 
-    export class Text extends Phaser.GameObjects.Text implements ISceneObject {
+    export class Text extends Phaser.GameObjects.Text implements ISceneGameObject {
 
         private _editorSupport: TextEditorSupport;
 
@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new TextEditorSupport(this, scene);
         }
 
-        getEditorSupport(): EditorSupport<ISceneObject> {
+        getEditorSupport(): EditorSupport<ISceneGameObject> {
 
             return this._editorSupport;
         }

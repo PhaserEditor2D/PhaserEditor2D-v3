@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class BitmapText extends Phaser.GameObjects.BitmapText implements ISceneObject {
+    export class BitmapText extends Phaser.GameObjects.BitmapText implements ISceneGameObject {
 
         private _editorSupport: BitmapTextEditorSupport;
 
@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new BitmapTextEditorSupport(this, scene);
         }
 
-        getEditorSupport(): EditorSupport<ISceneObject> {
+        getEditorSupport(): EditorSupport<ISceneGameObject> {
 
             return this._editorSupport;
         }

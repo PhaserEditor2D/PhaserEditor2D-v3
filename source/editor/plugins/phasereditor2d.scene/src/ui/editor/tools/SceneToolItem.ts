@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         abstract onStopDrag(args: ISceneToolDragEventArgs): void;
 
-        isValidFor(objects: sceneobjects.ISceneObject[]): boolean {
+        isValidFor(objects: sceneobjects.ISceneGameObject[]): boolean {
             return true;
         }
 

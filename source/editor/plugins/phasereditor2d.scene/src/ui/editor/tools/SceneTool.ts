@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.editor.tools {
 
-    import ISceneObject = ui.sceneobjects.ISceneObject;
+    import ISceneObject = ui.sceneobjects.ISceneGameObject;
     import controls = colibri.ui.controls;
 
     export interface ISceneToolContextArgs {

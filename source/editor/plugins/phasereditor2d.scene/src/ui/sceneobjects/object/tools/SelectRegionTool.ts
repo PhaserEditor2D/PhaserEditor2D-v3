@@ -1,7 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     interface IResultItem {
-        obj: ISceneObject,
+        obj: ISceneGameObject,
         points: Array<{
             point: Phaser.Math.Vector2,
             contains: boolean;

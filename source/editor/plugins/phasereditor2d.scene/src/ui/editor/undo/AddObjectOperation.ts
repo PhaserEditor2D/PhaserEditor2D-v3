@@ -6,10 +6,10 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
     export class AddObjectOperation extends SceneSnapshotOperation {
 
-        private _type: sceneobjects.SceneObjectExtension | io.FilePath;
+        private _type: sceneobjects.SceneGameObjectExtension | io.FilePath;
         private _extraData: any;
 
-        constructor(editor: SceneEditor, type: sceneobjects.SceneObjectExtension | io.FilePath, extraData: any) {
+        constructor(editor: SceneEditor, type: sceneobjects.SceneGameObjectExtension | io.FilePath, extraData: any) {
             super(editor);
 
             this._type = type;
@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const maker = this._editor.getSceneMaker();
 
-            let obj: sceneobjects.ISceneObject;
+            let obj: sceneobjects.ISceneGameObject;
 
             if (this._type instanceof io.FilePath) {
 

@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             if (element instanceof Phaser.GameObjects.GameObject) {
 
-                const obj = element as sceneobjects.ISceneObject;
+                const obj = element as sceneobjects.ISceneGameObject;
 
                 return obj.getEditorSupport().getCellRenderer();
 

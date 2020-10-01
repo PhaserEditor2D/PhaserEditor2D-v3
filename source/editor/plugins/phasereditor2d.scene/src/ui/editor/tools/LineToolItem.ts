@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             this._tools = tools;
         }
 
-        isValidFor(objects: sceneobjects.ISceneObject[]) {
+        isValidFor(objects: sceneobjects.ISceneGameObject[]) {
 
             for (const tool of this._tools) {
 

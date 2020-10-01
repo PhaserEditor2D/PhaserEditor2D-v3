@@ -3,7 +3,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class UserComponentOptionPropertyWrapper
-        extends UserComponentPropertyWrapper implements IEnumProperty<ISceneObject, string> {
+        extends UserComponentPropertyWrapper implements IEnumProperty<ISceneGameObject, string> {
 
         constructor(userComp: ui.editor.usercomponent.UserComponent, userProp: UserProperty) {
             super(userComp, userProp);

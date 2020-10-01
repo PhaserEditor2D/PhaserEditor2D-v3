@@ -8,12 +8,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         components: editor.usercomponent.UserComponent[];
     }
 
-    export class UserComponentsEditorComponent extends Component<ISceneObject> {
+    export class UserComponentsEditorComponent extends Component<ISceneGameObject> {
 
         private _propData: any;
         private _compNames: string[];
 
-        constructor(obj: ISceneObject) {
+        constructor(obj: ISceneGameObject) {
             super(obj, []);
 
             this._propData = {};

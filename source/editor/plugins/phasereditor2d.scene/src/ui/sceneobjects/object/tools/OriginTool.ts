@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
-        canEdit(obj: ISceneObject) {
+        canEdit(obj: ISceneGameObject) {
 
             if (obj instanceof Container) {
 
@@ -47,7 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return super.canEdit(obj);
         }
 
-        canRender(obj: ISceneObject) {
+        canRender(obj: ISceneGameObject) {
 
             if (obj instanceof Container) {
 

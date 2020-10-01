@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.viewers {
 
     export class ObjectExtensionLabelProvider extends controls.viewers.LabelProvider {
 
-        getLabel(ext: sceneobjects.SceneObjectExtension) {
+        getLabel(ext: sceneobjects.SceneGameObjectExtension) {
 
             return ext.getTypeName();
         }

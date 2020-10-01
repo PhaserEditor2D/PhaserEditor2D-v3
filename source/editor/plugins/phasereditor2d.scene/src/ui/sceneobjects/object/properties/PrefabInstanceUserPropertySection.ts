@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class PrefabInstanceSection extends SceneObjectSection<ISceneObject> {
+    export class PrefabInstanceSection extends SceneObjectSection<ISceneGameObject> {
 
         private _propArea: HTMLDivElement;
 
@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._propArea.innerHTML = "";
 
-                const obj = this.getSelectionFirstElement() as ISceneObject;
+                const obj = this.getSelectionFirstElement() as ISceneGameObject;
 
                 const userPropsComponent = EditorSupport
                     .getObjectComponent(obj, PrefabUserPropertyComponent) as PrefabUserPropertyComponent;

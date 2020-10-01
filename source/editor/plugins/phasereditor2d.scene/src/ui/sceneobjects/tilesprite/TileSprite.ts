@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TileSprite extends Phaser.GameObjects.TileSprite implements ISceneObject {
+    export class TileSprite extends Phaser.GameObjects.TileSprite implements ISceneGameObject {
 
         private _editorSupport: TileSpriteEditorSupport;
 
@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new TileSpriteEditorSupport(this, scene);
         }
 
-        getEditorSupport(): EditorSupport<ISceneObject> {
+        getEditorSupport(): EditorSupport<ISceneGameObject> {
             return this._editorSupport;
         }
     }

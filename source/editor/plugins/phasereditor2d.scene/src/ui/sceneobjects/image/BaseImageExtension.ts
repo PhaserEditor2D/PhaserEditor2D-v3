@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export abstract class BaseImageExtension extends SceneObjectExtension {
+    export abstract class BaseImageExtension extends SceneGameObjectExtension {
 
         abstract getCodeDOMBuilder(): ObjectCodeDOMBuilder;
 
@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.createImageObject(args.scene, args.x, args.y);
         }
 
-        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject {
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject {
 
             let key: string;
             let frame: string | number;
@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return sprite;
         }
 
-        createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject {
+        createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneGameObject {
 
             let key: string;
             let frame: string | number;
@@ -87,17 +87,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected abstract newObject(
-            scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject;
+            scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject;
 
         private createImageObject(
-            scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
+            scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
 
             const sprite = this.newObject(scene, x, y, key, frame);
 
             return sprite;
         }
 
-        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject, extraData: any) {
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneGameObject, extraData: any) {
 
             const support = originalObject.getEditorSupport();
 

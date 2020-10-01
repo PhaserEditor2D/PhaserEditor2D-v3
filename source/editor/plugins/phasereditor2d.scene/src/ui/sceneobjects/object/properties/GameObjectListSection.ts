@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class GameObjectListSection extends SceneObjectSection<ISceneObjectLike> {
+    export class GameObjectListSection extends SceneObjectSection<ISceneGameObjectLike> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectListSection", "Lists", false, true);

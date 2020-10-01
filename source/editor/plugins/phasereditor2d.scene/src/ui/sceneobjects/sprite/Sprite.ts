@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class Sprite extends Phaser.GameObjects.Image implements ISceneObject {
+    export class Sprite extends Phaser.GameObjects.Image implements ISceneGameObject {
 
         private _editorSupport: SpriteEditorSupport;
 

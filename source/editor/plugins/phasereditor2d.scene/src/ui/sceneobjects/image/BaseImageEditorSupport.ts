@@ -1,8 +1,8 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class BaseImageEditorSupport<T extends ISceneObject> extends EditorSupport<T> {
+    export class BaseImageEditorSupport<T extends ISceneGameObject> extends EditorSupport<T> {
 
-        constructor(extension: SceneObjectExtension, obj: T, scene: Scene) {
+        constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene) {
             super(extension, obj, scene);
 
             this.addComponent(

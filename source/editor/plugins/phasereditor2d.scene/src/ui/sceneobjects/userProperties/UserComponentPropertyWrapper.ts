@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import usercomponent = ui.editor.usercomponent;
 
-    export class UserComponentPropertyWrapper implements IProperty<ISceneObject> {
+    export class UserComponentPropertyWrapper implements IProperty<ISceneGameObject> {
 
         private _userProp: UserProperty;
         private _userComp: usercomponent.UserComponent;
@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._userProp;
         }
 
-        getValue(obj: ISceneObject) {
+        getValue(obj: ISceneGameObject) {
 
             const comp = this.getComponent(obj);
 
@@ -35,12 +35,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._userProp.getDefaultValue();
         }
 
-        setValue(obj: ISceneObject, value: any): void {
+        setValue(obj: ISceneGameObject, value: any): void {
 
             this.getComponent(obj).setPropertyValue(this._userComp.getName(), this._userProp, value);
         }
 
-        private getComponent(obj: ISceneObject) {
+        private getComponent(obj: ISceneGameObject) {
 
             return EditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
         }
