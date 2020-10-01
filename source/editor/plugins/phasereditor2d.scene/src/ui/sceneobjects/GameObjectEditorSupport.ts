@@ -1,6 +1,5 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import controls = colibri.ui.controls;
     import json = core.json;
 
     export abstract class GameObjectEditorSupport<T extends ISceneGameObject> extends EditorSupport<T> {
@@ -54,7 +53,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 list.splice(i, 1);
             }
-
         }
 
         hasProperty(property: IProperty<any>) {

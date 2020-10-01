@@ -1,3 +1,4 @@
+/// <reference path="./SceneObjectExtension.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
@@ -70,42 +71,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         prefabObj: ISceneGameObject;
     }
 
-    export abstract class SceneGameObjectExtension extends colibri.Extension {
+    export abstract class SceneGameObjectExtension extends SceneObjectExtension {
 
         static POINT_ID = "phasereditor2d.scene.ui.SceneGameObjectExtension";
-
-        private _typeName: string;
-        private _phaserTypeName: string;
-        private _iconName: string;
 
         constructor(config: {
             typeName: string,
             phaserTypeName: string,
             iconName: string,
         }) {
-            super(SceneGameObjectExtension.POINT_ID);
-
-            this._typeName = config.typeName;
-            this._phaserTypeName = config.phaserTypeName;
-            this._iconName = config.iconName;
-        }
-
-        getHelp() {
-
-            return ScenePlugin.getInstance().getPhaserDocs().getDoc(this._phaserTypeName);
-        }
-
-        getIcon() {
-
-            return ScenePlugin.getInstance().getIcon(this._iconName);
-        }
-
-        getTypeName() {
-            return this._typeName;
-        }
-
-        getPhaserTypeName() {
-            return this._phaserTypeName;
+            super({
+                id: SceneGameObjectExtension.POINT_ID,
+                ...config
+            });
         }
 
         /**
