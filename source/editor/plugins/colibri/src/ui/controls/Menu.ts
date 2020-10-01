@@ -224,10 +224,19 @@ namespace colibri.ui.controls {
 
                 this._bgElement.classList.add("MenuContainer");
 
-                this._bgElement.addEventListener("mousedown", (ev: MouseEvent) => {
+                const stop = (e: MouseEvent) => {
 
-                    ev.preventDefault();
-                    ev.stopImmediatePropagation();
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                }
+
+                this._bgElement.addEventListener("contextmenu", stop);
+
+                this._bgElement.addEventListener("mousedown", stop);
+
+                this._bgElement.addEventListener("mouseup", (ev: MouseEvent) => {
+
+                    stop(ev);
 
                     this.closeAll();
                 });
