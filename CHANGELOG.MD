@@ -23,6 +23,7 @@
 
 * Improves some colors in the blue theme: scene editor, buttons and toolbar items.
 * Allows add more files to the Upload dialog.
+* Scene Editor: groups the compiler commands in the compiler section of the context menu.
 
 ### Fixes
 
