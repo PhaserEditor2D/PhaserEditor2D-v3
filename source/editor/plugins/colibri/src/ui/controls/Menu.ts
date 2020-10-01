@@ -232,9 +232,9 @@ namespace colibri.ui.controls {
 
                 this._bgElement.addEventListener("contextmenu", stop);
 
-                this._bgElement.addEventListener("mousedown", stop);
+                this._bgElement.addEventListener("mouseup", stop);
 
-                this._bgElement.addEventListener("mouseup", (ev: MouseEvent) => {
+                this._bgElement.addEventListener("mousedown", (ev: MouseEvent) => {
 
                     stop(ev);
 
