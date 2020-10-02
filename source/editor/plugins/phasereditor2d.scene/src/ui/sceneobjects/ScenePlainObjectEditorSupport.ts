@@ -12,6 +12,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._extension = extension;
         }
 
+        getExtension() {
+
+            return this._extension;
+        }
+
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
             return new controls.viewers.IconImageCellRenderer(this._extension.getIcon());
@@ -30,6 +35,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getPhaserType(): string {
 
             return this._extension.getPhaserTypeName();
+        }
+
+        static hasEditorSupport(obj: IScenePlainObject) {
+
+            if (typeof obj.getEditorSupport === "function") {
+
+                return obj.getEditorSupport() instanceof ScenePlainObjectEditorSupport;
+            }
+
+            return false;
         }
     }
 }

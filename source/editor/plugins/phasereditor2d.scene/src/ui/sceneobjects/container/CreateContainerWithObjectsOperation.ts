@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async performModification() {
 
-            const container = sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
+            const container = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
                 scene: this.getScene(),
                 x: 0,
                 y: 0

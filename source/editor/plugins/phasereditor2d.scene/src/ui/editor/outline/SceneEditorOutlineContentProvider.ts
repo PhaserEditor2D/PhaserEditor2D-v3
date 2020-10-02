@@ -4,18 +4,23 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
     export class SceneEditorOutlineContentProvider implements controls.viewers.ITreeContentProvider {
 
+        private _editor: SceneEditor;
+
+        constructor(editor: SceneEditor) {
+
+            this._editor = editor;
+        }
+
         getRoots(input: any): any[] {
 
-            const editor: SceneEditor = input;
-
-            const scene = editor.getScene();
+            const scene = this._editor.getScene();
 
             if (!scene) {
 
                 return [];
             }
 
-            const displayList = editor.getScene().sys.displayList;
+            const displayList = scene.sys.displayList;
 
             const roots = [];
 
@@ -24,7 +29,9 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 roots.push(displayList);
             }
 
-            roots.push(editor.getScene().getObjectLists());
+            roots.push(scene.getObjectLists());
+
+            roots.push(...ScenePlugin.getInstance().getPlainObjectCategories());
 
             return roots;
         }
@@ -55,6 +62,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (parent instanceof sceneobjects.ObjectLists) {
 
                 return parent.getLists();
+
+            } else if (typeof parent === "string") {
+
+                return this._editor.getScene().getPlainObjectsByCategory(parent);
             }
 
             return [];

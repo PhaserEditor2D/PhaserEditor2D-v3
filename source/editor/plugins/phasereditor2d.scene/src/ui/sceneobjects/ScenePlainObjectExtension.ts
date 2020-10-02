@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ScenePlainObjectExtension extends SceneObjectExtension {
+    export abstract class ScenePlainObjectExtension extends SceneObjectExtension {
 
         static POINT_ID = "phasereditor2d.scene.ui.sceneobjects.ScenePlainObjectExtension";
 

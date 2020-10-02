@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const maker = this._editor.getSceneMaker();
 
-            let obj: sceneobjects.ISceneGameObject;
+            let obj: sceneobjects.ISceneObject;
 
             if (this._type instanceof io.FilePath) {
 
@@ -30,10 +30,15 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             } else {
 
-                obj = maker.createEmptyObject(this._type, this._extraData);
+                obj = maker.createDefaultObject(this._type, this._extraData);
             }
 
-            this._editor.getSceneMaker().afterDropObjects(prefabObj, [obj]);
+            // TODO
+            // this._editor.getSceneMaker().afterDropObjects(prefabObj, [obj]);
+            if (obj instanceof Phaser.GameObjects.GameObject) {
+
+                this._editor.getSceneMaker().afterDropObjects(prefabObj, [obj]);
+            }
 
             this.getEditor().setSelection([obj]);
         }

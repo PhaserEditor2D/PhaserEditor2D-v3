@@ -75,14 +75,10 @@ namespace phasereditor2d.scene.ui.blocks {
 
                     case BUILTIN_SECTION:
 
-                        const r = [
+                        return [
                             ...ScenePlugin.getInstance().getGameObjectExtensions(),
                             ...ScenePlugin.getInstance().getPlainObjectExtensions(),
                             sceneobjects.ObjectList];
-
-                        console.log(r);
-
-                        return r;
 
                     case PREFAB_SECTION:
 

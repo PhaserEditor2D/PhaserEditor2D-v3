@@ -6,9 +6,12 @@ namespace phasereditor2d.pack.ui.dialogs {
 
         private _selectionCallback: (selection: any[]) => void;
         private _cancelCallback: () => void;
+        private _viewerLayout: "tree" | "grid";
 
-        constructor() {
+        constructor(layout: "tree" | "grid" = "grid") {
             super(new controls.viewers.TreeViewer("phasereditor2d.pack.ui.dialogs.AssetSelectionDialog"), true);
+
+            this._viewerLayout = layout;
 
             const size = this.getSize();
 
@@ -28,8 +31,10 @@ namespace phasereditor2d.pack.ui.dialogs {
             const viewer = this.getViewer();
 
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
-            viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
-            viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
+            viewer.setTreeRenderer(this._viewerLayout === "tree" ?
+                new controls.viewers.TreeViewerRenderer(viewer)
+                : new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
+            viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider(this._viewerLayout));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
             viewer.setInput([]);

@@ -13,13 +13,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 return obj.getEditorSupport().getCellRenderer();
 
             } else if (element instanceof Phaser.GameObjects.DisplayList
-                || element instanceof sceneobjects.ObjectLists) {
+                || element instanceof sceneobjects.ObjectLists
+                || typeof element === "string") {
 
                 return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
-
-            } else if (element instanceof sceneobjects.ObjectList) {
-
-                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
             }
 
             return new controls.viewers.EmptyCellRenderer(false);

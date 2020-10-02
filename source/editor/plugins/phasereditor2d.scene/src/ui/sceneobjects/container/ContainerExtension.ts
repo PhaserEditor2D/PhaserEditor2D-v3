@@ -58,7 +58,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return list;
         }
 
-        createEmptySceneObject(args: ICreateEmptyArgs) {
+        createDefaultSceneObject(args: ICreateEmptyArgs) {
 
             return this.createContainerObject(args.scene, 0, 0, []);
         }

@@ -205,9 +205,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         // tslint:disable-next-line:ban-types
         static getObjectComponent(obj: any, ctr: Function) {
 
-            if (obj && typeof obj["getEditorSupport"] === "function") {
+            if (this.hasEditorSupport(obj)) {
 
-                const support = obj["getEditorSupport"]() as GameObjectEditorSupport<any>;
+                const support = (obj as ISceneGameObject).getEditorSupport();
 
                 return support.getComponent(ctr) ?? null;
             }
@@ -217,14 +217,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static hasEditorSupport(obj: any) {
 
-            return obj && typeof obj["getEditorSupport"] === "function";
+            return obj && obj instanceof Phaser.GameObjects.GameObject
+                && typeof obj["getEditorSupport"] === "function";
         }
 
         static getEditorSupport(obj: any) {
 
             if (this.hasEditorSupport(obj)) {
 
-                return obj["getEditorSupport"]() as GameObjectEditorSupport<any>;
+                return (obj as ISceneGameObject).getEditorSupport();
             }
 
             return null;

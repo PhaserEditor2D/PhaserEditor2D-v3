@@ -2,6 +2,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class Tilemap extends Phaser.Tilemaps.Tilemap implements IScenePlainObject {
 
+        private _key: string;
+
         static createTilemapData(scene: Scene, key: string) {
 
             const tilemapData = scene.cache.tilemap.get(key);
@@ -21,7 +23,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(scene: Scene, key: string) {
             super(scene, Tilemap.createTilemapData(scene, key));
 
+            this._key = key;
             this._editorSupport = new TilemapEditorSupport(scene, this);
+        }
+
+        getTilemapAssetKey() {
+            return this._key;
         }
 
         getEditorSupport() {

@@ -18,30 +18,37 @@ namespace phasereditor2d.scene.ui.editor.outline {
         }
 
         getUndoManager() {
+
             return this._editor.getUndoManager();
         }
 
         getContentProvider(): controls.viewers.ITreeContentProvider {
-            return new SceneEditorOutlineContentProvider();
+
+            return new SceneEditorOutlineContentProvider(this._editor);
         }
 
         getLabelProvider(): controls.viewers.ILabelProvider {
+
             return new SceneEditorOutlineLabelProvider();
         }
 
         getCellRendererProvider(): controls.viewers.ICellRendererProvider {
+
             return new SceneEditorOutlineRendererProvider();
         }
 
         getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer {
+
             return new SceneEditorOutlineViewerRenderer(viewer);
         }
 
         getPropertySectionProvider(): controls.properties.PropertySectionProvider {
+
             return this._editor.getPropertyProvider();
         }
 
         getInput() {
+
             return this._editor;
         }
 
@@ -50,9 +57,9 @@ namespace phasereditor2d.scene.ui.editor.outline {
         }
 
         onViewerSelectionChanged(selection: any[]) {
+
             this._editor.setSelection(selection, false);
             this._editor.repaint();
         }
     }
-
 }

@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui {
         private _settings: core.json.SceneSettings;
         private _prefabProperties: sceneobjects.PrefabUserProperties;
         private _objectLists: sceneobjects.ObjectLists;
+        private _plainObjects: sceneobjects.IScenePlainObject[];
 
         constructor(editor?: editor.SceneEditor) {
             super("ObjectScene");
@@ -21,7 +22,30 @@ namespace phasereditor2d.scene.ui {
 
             this._objectLists = new sceneobjects.ObjectLists();
 
+            this._plainObjects = [];
+
             this._prefabProperties = new sceneobjects.PrefabUserProperties();
+        }
+
+        addPlainObject(obj: sceneobjects.IScenePlainObject) {
+
+            this._plainObjects.push(obj);
+        }
+
+        getPlainObjectById(id: string) {
+
+            return this.getPlainObjects().find(o => o.getEditorSupport().getId() === id);
+        }
+
+        getPlainObjects() {
+
+            return this._plainObjects;
+        }
+
+        getPlainObjectsByCategory(category: string) {
+
+            return this._plainObjects.filter(obj => obj.getEditorSupport()
+                .getExtension().getCategory() === category);
         }
 
         createSceneMaker() {

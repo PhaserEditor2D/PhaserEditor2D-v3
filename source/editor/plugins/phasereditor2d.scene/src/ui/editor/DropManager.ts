@@ -64,10 +64,11 @@ namespace phasereditor2d.scene.ui.editor {
                     return obj.getLabel();
                 }
 
-                return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
+                return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
             });
 
             scene.visit(obj => nameMaker.update([obj]));
+            nameMaker.update(scene.getPlainObjects());
             nameMaker.update(scene.getObjectLists().getLists());
 
             const worldPoint = scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
@@ -108,6 +109,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const newSprites: sceneobjects.ISceneGameObject[] = [];
             const newLists = [];
+            const newPlainObjects: sceneobjects.IScenePlainObject[] = [];
 
             for (const data of dropAssetArray) {
 
@@ -153,13 +155,13 @@ namespace phasereditor2d.scene.ui.editor {
                     }
                 }
 
-                if (data instanceof sceneobjects.SceneGameObjectExtension) {
+                if (data instanceof sceneobjects.SceneObjectExtension) {
 
                     let extraData: any;
 
-                    if (data instanceof sceneobjects.SceneGameObjectExtension) {
+                    if (data instanceof sceneobjects.SceneObjectExtension) {
 
-                        const result = await data.collectExtraDataForCreateEmptyObject();
+                        const result = await data.collectExtraDataForCreateDefaultObject();
 
                         if (result.abort) {
 
@@ -175,10 +177,19 @@ namespace phasereditor2d.scene.ui.editor {
 
                         extraData = result.data;
 
-                        const sprite = this._editor.getSceneMaker()
-                            .createEmptyObject(data, extraData, x, y);
+                        const defaultObject = this._editor.getSceneMaker()
+                            .createDefaultObject(data, extraData, x, y);
 
-                        newSprites.push(sprite);
+                        if (defaultObject instanceof Phaser.GameObjects.GameObject) {
+
+                            newSprites.push(defaultObject);
+
+                        } else {
+
+                            scene.addPlainObject(defaultObject);
+
+                            newPlainObjects.push(defaultObject);
+                        }
                     }
 
                 } else if (data === sceneobjects.ObjectList) {
@@ -193,11 +204,17 @@ namespace phasereditor2d.scene.ui.editor {
                 }
             }
 
-            for (const sprite of newSprites) {
+            for (const sceneObject of [...newSprites, ...newPlainObjects]) {
 
-                const support = sprite.getEditorSupport();
+                const support = sceneObject.getEditorSupport();
 
-                let label = support.isPrefabInstance() ? support.getPrefabName() : support.getLabel();
+                let label = support.getLabel();
+
+                if (support instanceof sceneobjects.GameObjectEditorSupport) {
+
+                    label = support.isPrefabInstance() ? support.getPrefabName() : support.getLabel();
+
+                }
 
                 label = core.code.formatToValidVarName(label);
 
@@ -206,10 +223,9 @@ namespace phasereditor2d.scene.ui.editor {
                 support.setLabel(label);
             }
 
-
             scene.getMaker().afterDropObjects(prefabObj, newSprites);
 
-            return [...newSprites, ...newLists];
+            return [...newSprites, ...newPlainObjects, ...newLists];
         }
 
         private onDragOver(e: DragEvent) {
@@ -247,7 +263,7 @@ namespace phasereditor2d.scene.ui.editor {
                 }
             }
 
-            if (data instanceof sceneobjects.SceneGameObjectExtension) {
+            if (data instanceof sceneobjects.SceneObjectExtension) {
 
                 return true;
             }

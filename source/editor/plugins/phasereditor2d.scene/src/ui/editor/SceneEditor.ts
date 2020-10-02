@@ -505,6 +505,11 @@ namespace phasereditor2d.scene.ui.editor {
                 .filter(obj => obj instanceof sceneobjects.ObjectList) as any;
         }
 
+        getSelectedPlainObjects(): sceneobjects.IScenePlainObject[] {
+
+            return this.getSelection().filter(obj => sceneobjects.ScenePlainObjectEditorSupport.hasEditorSupport(obj));
+        }
+
         getDropManager() {
             return this._dropManager;
         }

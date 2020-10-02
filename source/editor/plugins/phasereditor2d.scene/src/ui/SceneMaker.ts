@@ -90,7 +90,7 @@ namespace phasereditor2d.scene.ui {
 
                     } else {
 
-                        container = sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
+                        container = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
                             scene: scene,
                             x: 0,
                             y: 0
@@ -349,7 +349,7 @@ namespace phasereditor2d.scene.ui {
             return { x, y };
         }
 
-        createEmptyObject(ext: sceneobjects.SceneGameObjectExtension, extraData?: any, x?: number, y?: number) {
+        createDefaultObject(ext: sceneobjects.SceneObjectExtension, extraData?: any, x?: number, y?: number) {
 
             if (x === undefined) {
 
@@ -359,7 +359,7 @@ namespace phasereditor2d.scene.ui {
                 y = point.y;
             }
 
-            const newObject = ext.createEmptySceneObject({
+            const newObject = ext.createDefaultSceneObject({
                 scene: this._editorScene,
                 x,
                 y,
