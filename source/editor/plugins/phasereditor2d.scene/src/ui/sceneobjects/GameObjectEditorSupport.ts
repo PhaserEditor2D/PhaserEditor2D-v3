@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _unlockedProperties: Set<string>;
 
         constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene) {
-            super(obj, extension.getTypeName().toLocaleLowerCase(), scene);
+            super(obj, extension.getTypeName().toLowerCase(), scene);
 
             this._extension = extension;
             this._unlockedProperties = new Set();

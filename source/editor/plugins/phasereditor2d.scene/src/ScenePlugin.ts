@@ -164,7 +164,7 @@ namespace phasereditor2d.scene {
                 page => new ui.ManySceneFileSection(page)
             ));
 
-            // scene object extensions
+            // scene game object extensions
 
             reg.addExtension(
                 ui.sceneobjects.ImageExtension.getInstance(),
@@ -173,6 +173,12 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.TextExtension.getInstance(),
                 ui.sceneobjects.BitmapTextExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance()
+            );
+
+            // scene plain object extensions
+
+            reg.addExtension(
+                ui.sceneobjects.TilemapExtension.getInstance()
             );
 
             // property sections
