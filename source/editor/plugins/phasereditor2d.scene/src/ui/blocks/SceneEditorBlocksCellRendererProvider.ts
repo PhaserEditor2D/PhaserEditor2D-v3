@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
                 return new viewers.SceneFileCellRenderer();
 
-            } else if (element instanceof sceneobjects.SceneGameObjectExtension) {
+            } else if (element instanceof sceneobjects.SceneObjectExtension) {
 
                 return new viewers.ObjectExtensionCellRendererProvider().getCellRenderer(element);
 

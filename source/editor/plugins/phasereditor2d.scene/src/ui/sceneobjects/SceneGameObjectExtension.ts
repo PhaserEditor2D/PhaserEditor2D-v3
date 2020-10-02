@@ -81,7 +81,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             iconName: string,
         }) {
             super({
-                id: SceneGameObjectExtension.POINT_ID,
+                extensionPoint: SceneGameObjectExtension.POINT_ID,
                 ...config
             });
         }

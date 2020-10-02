@@ -7,12 +7,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _iconName: string;
 
         constructor(config: {
-            id: string,
+            extensionPoint: string,
             typeName: string,
             phaserTypeName: string,
             iconName: string,
         }) {
-            super(config.id);
+            super(config.extensionPoint);
 
             this._typeName = config.typeName;
             this._phaserTypeName = config.phaserTypeName;

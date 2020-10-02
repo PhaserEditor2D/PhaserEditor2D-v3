@@ -155,6 +155,7 @@ utils.makeHelpFile([
     "Phaser.GameObjects.Text",
     "Phaser.GameObjects.BitmapText",
     "Phaser.GameObjects.Container",
+    "Phaser.Tilemaps.Tilemap",
 
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

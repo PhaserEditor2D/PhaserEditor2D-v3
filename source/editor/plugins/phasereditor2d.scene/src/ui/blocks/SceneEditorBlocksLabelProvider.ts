@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
                 return obj.getNameWithoutExtension();
 
-            } else if (obj instanceof sceneobjects.SceneGameObjectExtension) {
+            } else if (obj instanceof sceneobjects.SceneObjectExtension) {
 
                 return obj.getTypeName();
 

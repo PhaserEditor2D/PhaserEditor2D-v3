@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.viewers {
 
         getCellRenderer(element: any) {
 
-            const ext = element as sceneobjects.SceneGameObjectExtension;
+            const ext = element as sceneobjects.SceneObjectExtension;
 
             return new controls.viewers.IconImageCellRenderer(ext.getIcon());
         }
