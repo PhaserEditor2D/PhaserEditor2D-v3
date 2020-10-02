@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const type = ser.getType();
 
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                 if (ext) {
 

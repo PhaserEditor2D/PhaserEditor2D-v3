@@ -280,13 +280,13 @@ namespace phasereditor2d.scene {
             return this._sceneFinder;
         }
 
-        getObjectExtensions(): ui.sceneobjects.SceneGameObjectExtension[] {
+        getGameObjectExtensions(): ui.sceneobjects.SceneGameObjectExtension[] {
             return colibri.Platform
                 .getExtensions<ui.sceneobjects.SceneGameObjectExtension>(ui.sceneobjects.SceneGameObjectExtension.POINT_ID);
         }
 
-        getObjectExtensionByObjectType(type: string) {
-            return this.getObjectExtensions().find(ext => ext.getTypeName() === type);
+        getGameObjectExtensionByObjectType(type: string) {
+            return this.getGameObjectExtensions().find(ext => ext.getTypeName() === type);
         }
 
         getLoaderUpdaterForAsset(asset: any) {

@@ -85,7 +85,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 const ser = this._editor.getScene().getMaker().getSerializer(objData);
                 const type = ser.getType();
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                 ext.adaptDataAfterTypeConversion(ser, obj, this._extraData);
 

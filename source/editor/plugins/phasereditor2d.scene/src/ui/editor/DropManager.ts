@@ -55,7 +55,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const sceneMaker = scene.getMaker();
 
-            const exts = ScenePlugin.getInstance().getObjectExtensions();
+            const exts = ScenePlugin.getInstance().getGameObjectExtensions();
 
             const nameMaker = new ide.utils.NameMaker(obj => {
 
@@ -240,7 +240,7 @@ namespace phasereditor2d.scene.ui.editor {
                 return SceneMaker.acceptDropFile(data, this._editor.getInput());
             }
 
-            for (const ext of ScenePlugin.getInstance().getObjectExtensions()) {
+            for (const ext of ScenePlugin.getInstance().getGameObjectExtensions()) {
 
                 if (ext.acceptsDropData(data)) {
                     return true;

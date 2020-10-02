@@ -50,7 +50,7 @@ namespace phasereditor2d.scene.core.json {
                 return this._prefabSer.getPhaserType();
             }
 
-            const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(this._data.type);
+            const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(this._data.type);
 
             return ext.getPhaserTypeName();
         }

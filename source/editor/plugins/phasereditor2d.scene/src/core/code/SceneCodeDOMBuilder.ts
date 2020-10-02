@@ -194,7 +194,7 @@ namespace phasereditor2d.scene.core.code {
 
             const type = prefabObj.getEditorSupport().getObjectType();
 
-            const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+            const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
             const objBuilder = ext.getCodeDOMBuilder();
 
@@ -369,7 +369,7 @@ namespace phasereditor2d.scene.core.code {
 
                 const type = objSupport.getObjectType();
 
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                 createObjectMethodCall = new code.MethodCallCodeDOM(clsName);
                 createObjectMethodCall.setConstructor(true);

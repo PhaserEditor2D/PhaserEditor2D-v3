@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.viewers {
 
             if (parent === ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION) {
 
-                return plugin.getObjectExtensions();
+                return plugin.getGameObjectExtensions();
 
             } else if (parent === ObjectExtensionAndPrefabViewer.PREFAB_SECTION) {
 
