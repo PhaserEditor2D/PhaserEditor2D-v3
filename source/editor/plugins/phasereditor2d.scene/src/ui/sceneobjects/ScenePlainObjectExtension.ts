@@ -1,8 +1,13 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export interface ICreatePlainObjectWithDataArgs {
-
         scene: Scene;
+        data: core.json.IScenePlainObjectData;
+    }
+
+    export interface IGetAssetsFromPlainObjectArgs {
+        scene: Scene;
+        finder: pack.core.PackFinder;
         data: core.json.IScenePlainObjectData;
     }
 
@@ -32,6 +37,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args The data involved in the creation of the object.
          */
         abstract createPlainObjectWithData(args: ICreatePlainObjectWithDataArgs): sceneobjects.IScenePlainObject;
+
+        /**
+         * Get the assets contained in a plain object data.
+         * The result of this method may be used to prepare the scene loader before de-serialize an object.
+         *
+         * @param args This method args.
+         * @returns The assets.
+         */
+        async abstract getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]>;
 
         getCategory() {
 

@@ -75,7 +75,11 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const selectionIds = this.getEditor().getSelectionManager().getSelectionIds();
 
-            await maker.updateSceneLoaderWithObjDataList(
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
+
+            await maker.updateSceneLoaderWithGameObjectDataList(finder,
                 snapshot.objects.map(objSnapshot => objSnapshot.objData));
 
             for (const objSnapshot of snapshot.objects) {

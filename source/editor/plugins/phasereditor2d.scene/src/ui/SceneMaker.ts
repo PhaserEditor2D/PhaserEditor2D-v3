@@ -282,20 +282,60 @@ namespace phasereditor2d.scene.ui {
 
         async updateSceneLoader(sceneData: json.ISceneData, monitor?: controls.IProgressMonitor) {
 
-            await this.updateSceneLoaderWithObjDataList(sceneData.displayList, monitor);
-        }
-
-        async updateSceneLoaderWithObjDataList(list: json.IObjectData[], monitor?: controls.IProgressMonitor) {
-
             const finder = new pack.core.PackFinder();
 
             await finder.preload();
+
+            await this.updateSceneLoaderWithGameObjectDataList(finder, sceneData.displayList, monitor);
+
+            await this.updateSceneLoaderWithPlainObjDataList(finder, sceneData.plainObjects, monitor);
+        }
+
+        async updateSceneLoaderWithPlainObjDataList(finder: pack.core.PackFinder, list: json.IScenePlainObjectData[], monitor?: controls.IProgressMonitor) {
+
+            if (!list) {
+
+                return;
+            }
+
+            const assets = [];
+
+            for (const data of list) {
+
+                try {
+
+                    const type = data.type;
+
+                    const ext = ScenePlugin.getInstance().getPlainObjectExtensionByObjectType(type);
+
+                    if (ext) {
+
+                        const result = await ext.getAssetsFromObjectData({
+                            scene: this._editorScene,
+                            finder,
+                            data
+                        });
+
+                        assets.push(...result);
+                    }
+
+                } catch (e) {
+
+                    console.error(e);
+                }
+            }
+
+            await this.updateSceneLoaderWithAssets(assets, monitor);
+        }
+
+        async updateSceneLoaderWithGameObjectDataList(finder: pack.core.PackFinder, list: json.IObjectData[], monitor?: controls.IProgressMonitor) {
 
             const assets = [];
 
             for (const objData of list) {
 
                 try {
+
                     const ser = this.getSerializer(objData);
 
                     const type = ser.getType();
@@ -312,11 +352,17 @@ namespace phasereditor2d.scene.ui {
 
                         assets.push(...objAssets);
                     }
+
                 } catch (e) {
 
                     console.error(e);
                 }
             }
+
+            await this.updateSceneLoaderWithAssets(assets, monitor);
+        }
+
+        async updateSceneLoaderWithAssets(assets: any[], monitor?: controls.IProgressMonitor) {
 
             if (monitor) {
 

@@ -100,8 +100,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             const sel = this._editor.getSelection();
 
-            console.log(sel);
-
             provider.setSelection(sel, true, true);
 
             provider.repaint();

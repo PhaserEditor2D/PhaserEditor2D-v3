@@ -21,6 +21,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        async getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]> {
+
+            const key = args.data["key"];
+
+            const item = args.finder.findAssetPackItem(key);
+
+            if (item instanceof pack.core.TilemapTiledJSONAssetPackItem) {
+
+                return [item];
+            }
+
+            return [];
+        }
+
         async collectExtraDataForCreateDefaultObject() {
 
             const finder = new pack.core.PackFinder();
