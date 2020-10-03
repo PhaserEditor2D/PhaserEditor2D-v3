@@ -259,6 +259,11 @@ namespace phasereditor2d.scene.ui {
                 this._editorScene.getObjectLists().readJSON(sceneData);
             }
 
+            if (sceneData.plainObjects) {
+
+                this._editorScene.readPlainObjects(sceneData.plainObjects);
+            }
+
             if (sceneData.prefabProperties) {
 
                 this._editorScene.getPrefabUserProperties().readJSON(sceneData.prefabProperties);
@@ -389,7 +394,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (ext) {
 
-                    const sprite = ext.createSceneObjectWithData({
+                    const sprite = ext.createGameObjectWithData({
                         data: data,
                         scene: this._editorScene
                     });

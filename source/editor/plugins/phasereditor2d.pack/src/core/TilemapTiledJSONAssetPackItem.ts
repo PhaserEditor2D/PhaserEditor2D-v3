@@ -10,7 +10,7 @@ namespace phasereditor2d.pack.core {
 
         async preload() {
 
-            const url = this.getData()["url"];
+            const url = this.getUrl();
 
             const file = pack.core.AssetPackUtils.getFileFromPackUrl(url);
 
@@ -20,6 +20,29 @@ namespace phasereditor2d.pack.core {
             }
 
             return colibri.ui.controls.PreloadResult.NOTHING_LOADED;
+        }
+
+        getUrl() {
+
+            return this.getData()["url"];
+        }
+
+        addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
+
+            const file = pack.core.AssetPackUtils.getFileFromPackUrl(this.getUrl());
+
+            if (file) {
+
+                const fileContent = colibri.ui.ide.FileUtils.getFileString(file);
+
+                const fileData = JSON.parse(fileContent);
+
+                const tileData = { format: Phaser.Tilemaps.Formats.TILED_JSON, data: fileData };
+
+                game.cache.tilemap.add(this.getKey(), tileData);
+            }
+
+            cache.addAsset(this);
         }
     }
 }

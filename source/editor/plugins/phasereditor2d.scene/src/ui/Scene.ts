@@ -27,6 +27,26 @@ namespace phasereditor2d.scene.ui {
             this._prefabProperties = new sceneobjects.PrefabUserProperties();
         }
 
+        readPlainObjects(list: core.json.IScenePlainObjectData[]) {
+
+            for (const objData of list) {
+
+                const ext = ScenePlugin.getInstance().getPlainObjectExtensionByObjectType(objData.type);
+
+                if (ext) {
+
+                    const plainObject = ext.createPlainObjectWithData({
+                        scene: this,
+                        data: objData
+                    });
+
+                    plainObject.getEditorSupport().readJSON(objData);
+
+                    this.addPlainObject(plainObject);
+                }
+            }
+        }
+
         addPlainObject(obj: sceneobjects.IScenePlainObject) {
 
             this._plainObjects.push(obj);

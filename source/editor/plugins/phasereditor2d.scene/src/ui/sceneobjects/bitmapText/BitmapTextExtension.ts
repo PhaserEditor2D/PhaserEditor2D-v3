@@ -112,7 +112,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new BitmapText(args.scene, args.x, args.y, fontAsset.getKey(), "New BitmapText");
         }
 
-        createSceneObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
+        createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
 
             const serializer = new core.json.Serializer(args.data);
 

@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return sprite;
         }
 
-        createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneGameObject {
+        createGameObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneGameObject {
 
             let key: string;
             let frame: string | number;

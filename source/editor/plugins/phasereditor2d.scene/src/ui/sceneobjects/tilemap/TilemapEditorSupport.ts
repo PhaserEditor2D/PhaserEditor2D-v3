@@ -6,6 +6,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(TilemapExtension.getInstance(), obj, scene);
         }
 
+        writeJSON(data: core.json.IScenePlainObjectData) {
+
+            super.writeJSON(data)
+
+            data["key"] = this.getObject().getTilemapAssetKey();
+        }
+
         destroy() {
 
             this.getObject().destroy();

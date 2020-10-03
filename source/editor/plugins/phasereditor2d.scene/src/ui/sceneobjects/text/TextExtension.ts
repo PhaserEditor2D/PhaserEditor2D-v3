@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        createSceneObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
+        createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
 
             const text = new Text(args.scene, 0, 0, "", {});
 

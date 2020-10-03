@@ -12,6 +12,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._extension = extension;
         }
 
+        writeJSON(objData: core.json.IScenePlainObjectData) {
+
+            objData.id = this._id;
+            objData.type = this._extension.getTypeName()
+        }
+
+        readJSON(objData: core.json.IScenePlainObjectData) {
+
+            this._id = objData.id;
+        }
+
         getExtension() {
 
             return this._extension;

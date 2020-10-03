@@ -72,5 +72,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return new sceneobjects.Tilemap(args.scene, item.getKey());
         }
+
+        createPlainObjectWithData(args: ICreatePlainObjectWithDataArgs): IScenePlainObject {
+
+            const data = args.data as any;
+
+            const key = data.key as string;
+
+            return new sceneobjects.Tilemap(args.scene, key);
+        }
     }
 }
