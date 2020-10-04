@@ -10,8 +10,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createForm(parent: HTMLDivElement) {
 
-            // TODO: missing tooltips
-
             const comp = this.createGridElement(parent, 2);
 
             this.simpleProperty(comp, "name", "Name");

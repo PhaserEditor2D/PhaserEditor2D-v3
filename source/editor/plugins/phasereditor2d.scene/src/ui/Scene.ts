@@ -49,6 +49,13 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
+        removePlainObjects(objects: sceneobjects.IScenePlainObject[]) {
+
+            const set = new Set(objects);
+
+            this._plainObjects = this._plainObjects.filter(obj => !set.has(obj));
+        }
+
         addPlainObject(obj: sceneobjects.IScenePlainObject) {
 
             this._plainObjects.push(obj);
