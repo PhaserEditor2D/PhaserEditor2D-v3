@@ -27,9 +27,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const key = tileset.image.key;
 
-                const editor = colibri.Platform.getWorkbench().getActiveEditor() as ui.editor.SceneEditor;
+                const tilemap = Tilemap.getTilemapFromTileset(tileset);
 
-                return editor.getScene().getPackCache().getImage(key);
+                if (tilemap) {
+
+                    const scene = tilemap.scene as Scene;
+
+                    return scene.getPackCache().getImage(key);
+                }
             }
 
             return null;

@@ -25,6 +25,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._key = key;
             this._editorSupport = new TilemapEditorSupport(scene, this);
+
+            for(const tileset of this.tilesets) {
+
+                tileset["__tilemap"] = this;
+            }
+        }
+
+        static getTilemapFromTileset(tileset: Phaser.Tilemaps.Tileset) {
+
+            return tileset["__tilemap"] as Tilemap;
         }
 
         getTilemapAssetKey() {
