@@ -204,7 +204,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TextSection(page),
                 page => new ui.sceneobjects.BitmapTextSection(page),
                 page => new ui.sceneobjects.ListSection(page),
-                page => new ui.sceneobjects.TilemapSection(page)
+                page => new ui.sceneobjects.TilemapSection(page),
+                page => new ui.sceneobjects.TilesetSection(page)
             ));
 
             // scene tools
