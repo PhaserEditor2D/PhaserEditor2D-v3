@@ -33,8 +33,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 obj = maker.createDefaultObject(this._type, this._extraData);
             }
 
-            // TODO
-            // this._editor.getSceneMaker().afterDropObjects(prefabObj, [obj]);
+
             if (obj instanceof Phaser.GameObjects.GameObject) {
 
                 this._editor.getSceneMaker().afterDropObjects(prefabObj, [obj]);

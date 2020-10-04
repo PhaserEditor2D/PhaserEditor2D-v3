@@ -26,6 +26,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(Phaser.Utils.String.UUID());
         }
 
+        static getEditorSupport(obj: any): EditorSupport<any> {
+
+            if (obj["getEditorSupport"]) {
+
+                const support = obj["getEditorSupport"]();
+
+                if (support instanceof EditorSupport)
+
+                    return support;
+            }
+
+            return null;
+        }
+
         abstract destroy();
 
         abstract async buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;

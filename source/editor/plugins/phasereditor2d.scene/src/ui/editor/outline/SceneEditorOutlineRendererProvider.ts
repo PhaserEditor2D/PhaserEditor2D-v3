@@ -6,11 +6,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
-            if (element instanceof Phaser.GameObjects.GameObject) {
+            const support = sceneobjects.EditorSupport.getEditorSupport(element);
 
-                const obj = element as sceneobjects.ISceneGameObject;
+            if (support) {
 
-                return obj.getEditorSupport().getCellRenderer();
+                return support.getCellRenderer();
 
             } else if (element instanceof Phaser.GameObjects.DisplayList
                 || element instanceof sceneobjects.ObjectLists
