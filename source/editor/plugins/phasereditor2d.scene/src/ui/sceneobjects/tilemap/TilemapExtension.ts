@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import controls = colibri.ui.controls;
+    import code = core.code;
 
     export class TilemapExtension extends ScenePlainObjectExtension {
 
@@ -19,6 +19,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 phaserTypeName: "Phaser.Tilemaps.Tilemap",
                 typeName: "Tilemap"
             });
+        }
+
+        buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM[] {
+
+            const result: code.MethodCallCodeDOM[] = [];
+
+            const tilemap = args.obj as Tilemap;
+
+            const addTilemapDom = new code.MethodCallCodeDOM("tilemap", args.gameObjectFactoryExpr + ".add");
+
+            addTilemapDom.argLiteral(tilemap.getTilemapAssetKey());
+
+            result.push(addTilemapDom);
+
+            for (const tileset of tilemap.tilesets) {
+
+                const addTilesetImageDom = new code.MethodCallCodeDOM("addTilesetImage", args.varname);
+                addTilesetImageDom.argLiteral(tileset.name);
+
+                if (tileset.image) {
+
+                    addTilesetImageDom.argLiteral(tileset.image.key);
+                }
+
+                result.push(addTilesetImageDom);
+            }
+
+            return result;
         }
 
         async getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]> {

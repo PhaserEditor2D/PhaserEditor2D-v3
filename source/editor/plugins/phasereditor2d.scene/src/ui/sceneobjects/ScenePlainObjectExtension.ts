@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import code = core.code;
+
     export interface ICreatePlainObjectWithDataArgs {
         scene: Scene;
         data: core.json.IScenePlainObjectData;
@@ -9,6 +11,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         scene: Scene;
         finder: pack.core.PackFinder;
         data: core.json.IScenePlainObjectData;
+    }
+
+    export interface IBuildPlainObjectFactoryCodeDOMArgs {
+
+        obj: IScenePlainObject;
+        varname: string;
+        gameObjectFactoryExpr: string;
     }
 
     export abstract class ScenePlainObjectExtension extends SceneObjectExtension {
@@ -46,6 +55,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @returns The assets.
          */
         async abstract getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]>;
+
+        /**
+         * Build a method call CodeDOM to create the scene plain object of this extension,
+         * using the factories provided by Phaser.
+         *
+         * This method is used by the Scene compiler.
+         *
+         * @param args This method args.
+         */
+        abstract buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM[];
 
         getCategory() {
 

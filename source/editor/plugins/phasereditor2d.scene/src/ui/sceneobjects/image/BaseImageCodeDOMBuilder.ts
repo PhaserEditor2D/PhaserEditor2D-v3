@@ -1,10 +1,10 @@
-/// <reference path="../ObjectCodeDOMBuilder.ts" />
+/// <reference path="../GameObjectCodeDOMBuilder.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class BaseImageCodeDOMBuilder extends ObjectCodeDOMBuilder {
+    export class BaseImageCodeDOMBuilder extends GameObjectCodeDOMBuilder {
 
         private _factoryMethodName: string;
 

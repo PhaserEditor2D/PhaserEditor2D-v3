@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             serializer.getData()[TileSpriteComponent.height.name] = height;
         }
 
-        getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return new TileSpriteCodeDOMBuilder();
         }

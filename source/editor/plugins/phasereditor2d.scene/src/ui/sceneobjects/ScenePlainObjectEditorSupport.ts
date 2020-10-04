@@ -10,17 +10,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(extension: ScenePlainObjectExtension, obj: T, scene: Scene) {
             super(obj, extension.getTypeName().toLowerCase(), scene)
             this._extension = extension;
+
+            this.setScope(ObjectScope.CLASS);
         }
 
         writeJSON(objData: core.json.IScenePlainObjectData) {
 
             objData.id = this._id;
-            objData.type = this._extension.getTypeName()
+            objData.type = this._extension.getTypeName();
+            objData.label = this.getLabel();
+            colibri.core.json.write(objData, "scope", this.getScope(), ObjectScope.CLASS);
         }
 
         readJSON(objData: core.json.IScenePlainObjectData) {
 
             this._id = objData.id;
+            this.setScope(colibri.core.json.read(objData, "scope", ObjectScope.CLASS));
+            this.setLabel(objData.label);
         }
 
         getExtension() {

@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class BaseImageExtension extends SceneGameObjectExtension {
 
-        abstract getCodeDOMBuilder(): ObjectCodeDOMBuilder;
+        abstract getCodeDOMBuilder(): GameObjectCodeDOMBuilder;
 
         async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
 

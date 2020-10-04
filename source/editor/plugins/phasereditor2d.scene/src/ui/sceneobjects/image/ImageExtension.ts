@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return new BaseImageCodeDOMBuilder("image");
         }

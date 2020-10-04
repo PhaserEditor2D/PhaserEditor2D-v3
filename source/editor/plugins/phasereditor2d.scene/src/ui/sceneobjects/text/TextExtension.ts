@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return [];
         }
 
-        getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return new TextCodeDOMBuilder();
         }
