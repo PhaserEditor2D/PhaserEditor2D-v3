@@ -14,25 +14,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 2);
 
-            {
-                this.createLabel(comp, "Name");
-
-                const text = this.createText(comp, true);
-
-                this.addUpdater(() => {
-
-                    text.value = this.getSelectionFirstElement().name;
-                });
-            }
+            this.simpleProperty(comp, "name", "Name");
 
             {
-                this.createLabel(comp, "Image");
+                this.createLabel(comp, "Image", this.help("image"));
 
                 const btn = this.createButton(comp, "", () => this.selectImage());
 
                 this.addUpdater(() => {
 
-                    let text = "";
+                    let text = "Select Image...";
 
                     const image = this.getSelectionFirstElement().image;
 
@@ -43,29 +34,36 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     btn.textContent = text;
                 });
+
+                controls.Tooltip.tooltip(btn, "Select a new image for this tileset.");
             }
 
-            {
-                this.createLabel(comp, "Tile Width");
+            this.simpleProperty(comp, "tileWidth", "Tile Width");
 
-                const text = this.createText(comp, true);
+            this.simpleProperty(comp, "tileHeight", "Tile Height");
 
-                this.addUpdater(() => {
+            this.simpleProperty(comp, "tileMargin", "Tile Margin");
 
-                    text.value = this.getSelectionFirstElement().tileWidth.toString();
-                });
-            }
+            this.simpleProperty(comp, "tileSpacing", "Tile Spacing");
+        }
 
-            {
-                this.createLabel(comp, "Tile Height");
+        private help(prop: string) {
 
-                const text = this.createText(comp, true);
+            return ScenePlugin.getInstance().getPhaserDocs().getDoc("Phaser.Tilemaps.Tileset." + prop);
+        }
 
-                this.addUpdater(() => {
+        private simpleProperty(comp: HTMLElement, prop: string, name: string) {
 
-                    text.value = this.getSelectionFirstElement().tileHeight.toString();
-                });
-            }
+            this.createLabel(comp, name, this.help(prop));
+
+            const text = this.createText(comp, true);
+
+            this.addUpdater(() => {
+
+                const tileset = this.getSelectionFirstElement();
+
+                text.value = tileset[prop].toString();
+            });
         }
 
         private async selectImage() {
