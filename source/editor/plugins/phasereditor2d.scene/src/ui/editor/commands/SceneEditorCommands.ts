@@ -445,7 +445,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     this._dy = dy;
                 }
 
-                protected performModification() {
+                protected async performModification() {
 
                     for (const obj of this._editor.getSelection()) {
 

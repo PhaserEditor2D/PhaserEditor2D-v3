@@ -2,151 +2,121 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class TilesetSection extends editor.properties.BaseSceneSection<Tilemap> {
+    export class TilesetSection extends editor.properties.BaseSceneSection<Phaser.Tilemaps.Tileset> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.TilesetSection", "Tilesets", false, false);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.TilesetSection2", "Tileset", false, false);
         }
 
         createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElement(parent, 1);
+            // TODO: missing tooltips
 
-            const viewerContainer = document.createElement("div");
-            viewerContainer.style.display = "grid";
-            viewerContainer.style.gridTemplateColumns = "1fr";
-            viewerContainer.style.height = "200px";
+            const comp = this.createGridElement(parent, 2);
 
-            comp.appendChild(viewerContainer);
+            {
+                this.createLabel(comp, "Name");
 
-            const viewer = this.createViewer();
+                const text = this.createText(comp, true);
 
-            const filteredViewer = new colibri.ui.ide.properties.FilteredViewerInPropertySection(this.getPage(), viewer, true);
+                this.addUpdater(() => {
 
-            viewerContainer.appendChild(filteredViewer.getElement());
-
-            this.addUpdater(async () => {
-
-                const tilemap = this.getSelectionFirstElement();
-
-                viewer.setInput(tilemap.tilesets);
-                viewer.setSelection([]);
-
-                filteredViewer.layout();
-                viewer.repaint();
-            });
-
-            const buttonPanel = document.createElement("div");
-
-            const setImageButton = this.createButton(buttonPanel, "Set Image", async () => {
-
-                const finder = new pack.core.PackFinder();
-
-                await finder.preload();
-
-                const dlg = new pack.ui.dialogs.AssetSelectionDialog("tree");
-
-                dlg.create();
-
-                dlg.getViewer().setInput(finder.getAssets(i => i instanceof pack.core.ImageAssetPackItem));
-
-                dlg.setSelectionCallback(async (sel) => {
-
-                    const scene = this.getEditor().getScene();
-
-                    const textures = scene.sys.textures;
-
-                    const imageItem = sel[0] as pack.core.ImageAssetPackItem;
-
-                    const imageKey = imageItem.getKey();
-
-                    const tilemap = this.getSelectionFirstElement();
-
-                    const tilesetData = viewer.getSelectionFirstElement() as pack.core.ITilesetData;
-
-                    let texture: Phaser.Textures.Texture;
-
-                    if (textures.exists(imageKey)) {
-
-                        texture = textures.get(imageKey);
-
-                    } else {
-
-                        const loaderExt = ScenePlugin.getInstance().getLoaderUpdaterForAsset(imageItem);
-
-                        await loaderExt.updateLoader(scene, imageItem);
-
-                        texture = textures.get(imageKey);
-                    }
-
-                    const tileset = tilemap.getTileset(tilesetData.name);
-
-                    if (tileset) {
-
-                        tileset.setImage(texture);
-
-                    } else {
-
-                        alert(`Tileset ${tilesetData.name} not found.`);
-                    }
-
-                    viewer.repaint();
+                    text.value = this.getSelectionFirstElement().name;
                 });
-            });
+            }
 
-            setImageButton.disabled = true;
+            {
+                this.createLabel(comp, "Image");
 
-            setImageButton.style.float = "right";
+                const btn = this.createButton(comp, "", () => this.selectImage());
 
-            viewer.eventSelectionChanged.addListener(() => {
+                this.addUpdater(() => {
 
-                const sel = viewer.getSelection();
+                    let text = "";
 
-                setImageButton.disabled = sel.length !== 1;
-            });
+                    const image = this.getSelectionFirstElement().image;
 
-            comp.appendChild(buttonPanel);
+                    if (image) {
+
+                        text = image.key;
+                    }
+
+                    btn.textContent = text;
+                });
+            }
+
+            {
+                this.createLabel(comp, "Tile Width");
+
+                const text = this.createText(comp, true);
+
+                this.addUpdater(() => {
+
+                    text.value = this.getSelectionFirstElement().tileWidth.toString();
+                });
+            }
+
+            {
+                this.createLabel(comp, "Tile Height");
+
+                const text = this.createText(comp, true);
+
+                this.addUpdater(() => {
+
+                    text.value = this.getSelectionFirstElement().tileHeight.toString();
+                });
+            }
         }
 
-        private createViewer() {
+        private async selectImage() {
 
-            const viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.TilesetSection");
-            viewer.setLabelProvider(
-                new controls.viewers.LabelProvider(
-                    (data: pack.core.ITilesetData) => data.name));
+            const finder = new pack.core.PackFinder();
 
-            viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+            await finder.preload();
 
-            viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
-                (tileset: Phaser.Tilemaps.Tileset) => {
+            const dlg = new pack.ui.dialogs.AssetSelectionDialog("tree");
 
-                    const tilesetImage = tileset.image;
+            dlg.create();
 
-                    if (tilesetImage) {
+            dlg.getViewer().setInput(finder.getAssets(i => i instanceof pack.core.ImageAssetPackItem));
 
-                        const key = tilesetImage.key;
+            dlg.setSelectionCallback(async (sel) => {
 
-                        const image = this.getEditor().getScene().getPackCache().getImage(key);
+                const editor = this.getEditor();
 
-                        if (image) {
+                const scene = this.getEditor().getScene();
 
-                            return new controls.viewers.ImageCellRenderer(image);
-                        }
-                    }
+                const imageAsset = sel[0] as pack.core.ImageAssetPackItem;
 
-                    return new controls.viewers.EmptyCellRenderer(false);
-                }));
+                const textures = scene.sys.textures;
 
-            viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
+                const imageKey = imageAsset.getKey();
 
-            viewer.setInput([]);
+                let texture: Phaser.Textures.Texture;
 
-            return viewer;
+                if (textures.exists(imageKey)) {
+
+                    texture = textures.get(imageKey);
+
+                } else {
+
+                    const loaderExt = ScenePlugin.getInstance().getLoaderUpdaterForAsset(imageAsset);
+
+                    await loaderExt.updateLoader(scene, imageAsset);
+
+                    texture = textures.get(imageKey);
+                }
+
+                editor.getUndoManager().add(
+                    new ui.editor.undo.SceneSnapshotOperation(editor, async () => {
+                        this.getSelectionFirstElement().setImage(texture);
+                    }));
+            });
         }
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof Tilemap;
+            return obj instanceof Phaser.Tilemaps.Tileset;
         }
 
         canEditNumber(n: number): boolean {

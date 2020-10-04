@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._depthMove = depthMove;
         }
 
-        protected performModification() {
+        protected async performModification() {
 
             const objects = this.getEditor().getSelectedGameObjects();
 
