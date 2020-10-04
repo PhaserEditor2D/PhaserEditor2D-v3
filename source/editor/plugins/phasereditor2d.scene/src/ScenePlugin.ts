@@ -127,6 +127,12 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.TilemapLoaderUpdater()
             );
 
+            // outline extensions
+
+            reg.addExtension(
+                new ui.sceneobjects.TilemapOutlineExtension()
+            );
+
             // commands
 
             reg.addExtension(
@@ -307,6 +313,13 @@ namespace phasereditor2d.scene {
 
         getGameObjectExtensionByObjectType(type: string) {
             return this.getGameObjectExtensions().find(ext => ext.getTypeName() === type);
+        }
+
+        getSceneEditorOutlineExtensions() {
+
+            return colibri.Platform
+                .getExtensions<ui.editor.outline.SceneEditorOutlineExtension>(
+                    ui.editor.outline.SceneEditorOutlineExtension.POINT_ID);
         }
 
         getLoaderUpdaterForAsset(asset: any) {

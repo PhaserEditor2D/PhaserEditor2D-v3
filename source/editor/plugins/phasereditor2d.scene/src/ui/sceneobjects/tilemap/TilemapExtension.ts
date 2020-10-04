@@ -23,16 +23,35 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]> {
 
-            const key = args.data["key"];
+            const result = [];
+
+            const finder = args.finder;
+
+            const data = args.data as ITilemapData;
+
+            const key = data.key;
 
             const item = args.finder.findAssetPackItem(key);
 
             if (item instanceof pack.core.TilemapTiledJSONAssetPackItem) {
 
-                return [item];
+                result.push(item);
             }
 
-            return [];
+            for (const tileset of data.tilesets) {
+
+                if (tileset.imageKey) {
+
+                    const asset = finder.findAssetPackItem(tileset.imageKey);
+
+                    if (asset instanceof pack.core.ImageAssetPackItem) {
+
+                        result.push(asset);
+                    }
+                }
+            }
+
+            return result;
         }
 
         async collectExtraDataForCreateDefaultObject() {
@@ -89,11 +108,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createPlainObjectWithData(args: ICreatePlainObjectWithDataArgs): IScenePlainObject {
 
-            const data = args.data as any;
+            const data = args.data as ITilemapData;
 
-            const key = data.key as string;
+            const key = data.key;
 
-            return new sceneobjects.Tilemap(args.scene, key);
+            const tilemap = new sceneobjects.Tilemap(args.scene, key);
+
+            tilemap.getEditorSupport().readJSON(data);
+
+            return tilemap;
         }
     }
 }

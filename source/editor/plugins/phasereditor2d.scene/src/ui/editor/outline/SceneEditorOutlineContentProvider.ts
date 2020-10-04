@@ -68,8 +68,17 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 return this._editor.getScene().getPlainObjectsByCategory(parent);
             }
 
+            const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();
+
+            for (const ext of extensions) {
+
+                if (ext.isContentProviderFor(parent)) {
+
+                    return ext.getContentProvider().getChildren(parent);
+                }
+            }
+
             return [];
         }
-
     }
 }

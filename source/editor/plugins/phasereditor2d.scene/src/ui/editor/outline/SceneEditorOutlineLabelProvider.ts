@@ -38,6 +38,16 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 return obj.getLabel();
             }
 
+            const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();
+
+            for (const ext of extensions) {
+
+                if (ext.isLabelProviderFor(obj)) {
+
+                    return ext.getLabelProvider().getLabel(obj);
+                }
+            }
+
             return "" + obj;
         }
     }

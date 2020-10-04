@@ -29,6 +29,8 @@ namespace phasereditor2d.scene.ui {
 
         readPlainObjects(list: core.json.IScenePlainObjectData[]) {
 
+            this._plainObjects = [];
+
             for (const objData of list) {
 
                 const ext = ScenePlugin.getInstance().getPlainObjectExtensionByObjectType(objData.type);
