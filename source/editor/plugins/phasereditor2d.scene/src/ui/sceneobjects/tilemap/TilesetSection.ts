@@ -27,24 +27,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(async () => {
 
-                let input = [];
-
                 const tilemap = this.getSelectionFirstElement();
 
-                const finder = new pack.core.PackFinder();
-
-                await finder.preload();
-
-                const item = finder.findAssetPackItem(tilemap.getTilemapAssetKey());
-
-                if (item instanceof pack.core.TilemapTiledJSONAssetPackItem) {
-
-                    await item.preload();
-
-                    input = item.getTilesetsData();
-                }
-
-                viewer.setInput(input);
+                viewer.setInput(tilemap.tilesets);
                 viewer.setSelection([]);
 
                 filteredViewer.layout();
@@ -65,50 +50,48 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 dlg.getViewer().setInput(finder.getAssets(i => i instanceof pack.core.ImageAssetPackItem));
 
-                dlg.enableButtonOnlyWhenOneElementIsSelected(
+                dlg.setSelectionCallback(async (sel) => {
 
-                    dlg.addOpenButton("Select", async (sel) => {
+                    const scene = this.getEditor().getScene();
 
-                        const scene = this.getEditor().getScene();
+                    const textures = scene.sys.textures;
 
-                        const textures = scene.sys.textures;
+                    const imageItem = sel[0] as pack.core.ImageAssetPackItem;
 
-                        const imageItem = sel[0] as pack.core.ImageAssetPackItem;
+                    const imageKey = imageItem.getKey();
 
-                        const imageKey = imageItem.getKey();
+                    const tilemap = this.getSelectionFirstElement();
 
-                        const tilemap = this.getSelectionFirstElement();
+                    const tilesetData = viewer.getSelectionFirstElement() as pack.core.ITilesetData;
 
-                        const tilesetData = viewer.getSelectionFirstElement() as pack.core.ITilesetData;
+                    let texture: Phaser.Textures.Texture;
 
-                        let texture: Phaser.Textures.Texture;
+                    if (textures.exists(imageKey)) {
 
-                        if (textures.exists(imageKey)) {
+                        texture = textures.get(imageKey);
 
-                            texture = textures.get(imageKey);
+                    } else {
 
-                        } else {
+                        const loaderExt = ScenePlugin.getInstance().getLoaderUpdaterForAsset(imageItem);
 
-                            const loaderExt = ScenePlugin.getInstance().getLoaderUpdaterForAsset(imageItem);
+                        await loaderExt.updateLoader(scene, imageItem);
 
-                            await loaderExt.updateLoader(scene, imageItem);
+                        texture = textures.get(imageKey);
+                    }
 
-                            texture = textures.get(imageKey);
-                        }
+                    const tileset = tilemap.getTileset(tilesetData.name);
 
-                        const tileset = tilemap.getTileset(tilesetData.name);
+                    if (tileset) {
 
-                        if (tileset) {
+                        tileset.setImage(texture);
 
-                            tileset.setImage(texture);
+                    } else {
 
-                        } else {
+                        alert(`Tileset ${tilesetData.name} not found.`);
+                    }
 
-                            alert(`Tileset ${tilesetData.name} not found.`);
-                        }
-
-                        viewer.repaint();
-                    }));
+                    viewer.repaint();
+                });
             });
 
             setImageButton.disabled = true;
@@ -135,31 +118,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
 
             viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
-                (tilesetData: pack.core.ITilesetData) => {
+                (tileset: Phaser.Tilemaps.Tileset) => {
 
-                    const tilemap = this.getSelectionFirstElement();
+                    const tilesetImage = tileset.image;
 
-                    const tileset = tilemap.getTileset(tilesetData.name);
+                    if (tilesetImage) {
 
-                    if (tileset) {
+                        const key = tilesetImage.key;
 
-                        const tilesetImage = tileset.image;
+                        const image = this.getEditor().getScene().getPackCache().getImage(key);
 
-                        if (tilesetImage) {
+                        if (image) {
 
-                            const key = tilesetImage.key;
-
-                            const packItem = this.getEditor().getSceneMaker().getPackFinder().findAssetPackItem(key);
-
-                            if (packItem instanceof pack.core.ImageAssetPackItem) {
-
-                                const image = pack.core.AssetPackUtils.getImageFromPackUrl(packItem.getUrl());
-
-                                if (image) {
-
-                                    return new controls.viewers.ImageCellRenderer(image);
-                                }
-                            }
+                            return new controls.viewers.ImageCellRenderer(image);
                         }
                     }
 
