@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const scene = tilemap.scene as Scene;
 
-                    return scene.getPackCache().getImage(key);
+                    return scene.getPackCache().getImage(key) || scene.getPackCache().getSpritesheetImage(key);
                 }
             }
 

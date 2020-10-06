@@ -6,17 +6,22 @@ namespace phasereditor2d.pack.core.parsers {
     export class AssetPackCache {
 
         private _imageMap: Map<string, controls.IImage>;
+        private _spriteSheetMap: Map<string, controls.IImage>;
         private _assets: Set<AssetPackItem>;
 
         constructor() {
 
             this._imageMap = new Map();
+
+            this._spriteSheetMap = new Map();
+
             this._assets = new Set();
         }
 
         clear() {
 
             this._imageMap.clear();
+            this._spriteSheetMap.clear();
         }
 
         addAsset(asset: AssetPackItem) {
@@ -40,6 +45,16 @@ namespace phasereditor2d.pack.core.parsers {
             const mapKey = this.getImageMapKey(key, frame);
 
             return this._imageMap.get(mapKey);
+        }
+
+        addSpritesheetImage(image: controls.IImage, key: string) {
+
+            this._spriteSheetMap.set(key, image);
+        }
+
+        getSpritesheetImage(key: string) {
+
+            return this._spriteSheetMap.get(key);
         }
 
         private getImageMapKey(key: string, frame: string | number) {

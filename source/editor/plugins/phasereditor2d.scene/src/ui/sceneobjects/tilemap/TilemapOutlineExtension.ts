@@ -41,7 +41,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         if (editor instanceof ui.editor.SceneEditor) {
 
-                            const image = editor.getScene().getPackCache().getImage(obj.image.key);
+                            const cache = editor.getScene().getPackCache();
+
+                            const image = cache.getImage(obj.image.key)
+                                || cache.getSpritesheetImage(obj.image.key);
 
                             if (image) {
 

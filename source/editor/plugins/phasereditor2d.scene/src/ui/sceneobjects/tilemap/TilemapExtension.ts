@@ -72,7 +72,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const asset = finder.findAssetPackItem(tileset.imageKey);
 
-                    if (asset instanceof pack.core.ImageAssetPackItem) {
+                    if (asset instanceof pack.core.ImageAssetPackItem
+                        || asset instanceof pack.core.SpritesheetAssetPackItem) {
 
                         result.push(asset);
                     }

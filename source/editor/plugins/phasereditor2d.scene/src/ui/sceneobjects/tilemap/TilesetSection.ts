@@ -74,7 +74,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             dlg.create();
 
-            dlg.getViewer().setInput(finder.getAssets(i => i instanceof pack.core.ImageAssetPackItem));
+            dlg.getViewer().setInput(finder.getAssets(i => i instanceof pack.core.ImageAssetPackItem
+                || i instanceof pack.core.SpritesheetAssetPackItem));
 
             dlg.setSelectionCallback(async (sel) => {
 
@@ -82,7 +83,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const scene = this.getEditor().getScene();
 
-                const imageAsset = sel[0] as pack.core.ImageAssetPackItem;
+                const imageAsset = sel[0] as (pack.core.ImageAssetPackItem | pack.core.SpritesheetAssetPackItem);
 
                 const textures = scene.sys.textures;
 
