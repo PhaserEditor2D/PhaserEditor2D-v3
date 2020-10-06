@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
-        createDefaultSceneObject(args: ICreateEmptyArgs): ISceneGameObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs): ISceneGameObject {
 
             const text = new Text(args.scene, args.x, args.y, "New text", {});
 

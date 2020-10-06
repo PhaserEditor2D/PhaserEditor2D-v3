@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ImageExtension.isImageOrImageFrameAsset(data);
         }
 
-        createDefaultSceneObject(args: ICreateEmptyArgs) {
+        createDefaultSceneObject(args: ICreateDefaultArgs) {
 
             return this.createImageObject(args.scene, args.x, args.y);
         }

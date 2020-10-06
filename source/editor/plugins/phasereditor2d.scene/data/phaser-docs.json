@@ -73,10 +73,12 @@
   "Phaser.Tilemaps.Tilemap.tileWidth": "The base width of a tile in pixels. Note that individual layers may have a different tile\nwidth.",
   "Phaser.Tilemaps.Tilemap.tileHeight": "The base height of a tile in pixels. Note that individual layers may have a different\ntile height.",
   "Phaser.GameObjects.GameObjectFactory.tilemap(key)": "The key in the Phaser cache that corresponds to the loaded tilemap data.",
+  "Phaser.Tilemaps.Tileset": "A Tileset is a combination of an image containing the tiles and a container for data about\neach tile.",
   "Phaser.Tilemaps.Tileset.name": "The name of the Tileset.",
   "Phaser.Tilemaps.Tileset.image": "The cached image that contains the individual tiles. Use setImage to set.",
   "Phaser.Tilemaps.Tileset.tileWidth": "The width of each tile (in pixels). Use setTileSize to change.",
   "Phaser.Tilemaps.Tileset.tileHeight": "The height of each tile (in pixels). Use setTileSize to change.",
   "Phaser.Tilemaps.Tileset.tileMargin": "The margin around the tiles in the sheet (in pixels). Use `setSpacing` to change.",
-  "Phaser.Tilemaps.Tileset.tileSpacing": "The spacing between each the tile in the sheet (in pixels). Use `setSpacing` to change."
+  "Phaser.Tilemaps.Tileset.tileSpacing": "The spacing between each the tile in the sheet (in pixels). Use `setSpacing` to change.",
+  "Phaser.Tilemaps.StaticTilemapLayer": "A Static Tilemap Layer is a Game Object that renders LayerData from a Tilemap when used in combination\nwith one, or more, Tilesets.\n\nA Static Tilemap Layer is optimized for rendering speed over flexibility. You cannot apply per-tile\neffects like tint or alpha, or change the tiles or tilesets the layer uses.\n\nUse a Static Tilemap Layer instead of a Dynamic Tilemap Layer when you don't need tile manipulation features."
 }

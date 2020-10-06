@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         data?: any;
     }
 
-    export interface ICreateEmptyArgs {
+    export interface ICreateDefaultArgs {
 
         x: number;
         y: number;
@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * Collect the data used to create a new, empty object. For example, a BitmapText requires
          * a BitmapFont key to be created, so this method opens a dialog to select the font.
          */
-        async collectExtraDataForCreateDefaultObject(): Promise<ICreateExtraDataResult> {
+        async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor): Promise<ICreateExtraDataResult> {
 
             return {};
         }
@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args The data needed to create the object.
          */
-        abstract createDefaultSceneObject(args: ICreateEmptyArgs): ISceneObject;
+        abstract createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject;
 
         getIcon() {
 

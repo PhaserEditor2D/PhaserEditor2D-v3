@@ -161,7 +161,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (data instanceof sceneobjects.SceneObjectExtension) {
 
-                        const result = await data.collectExtraDataForCreateDefaultObject();
+                        const result = await data.collectExtraDataForCreateDefaultObject(this._editor);
 
                         if (result.abort) {
 

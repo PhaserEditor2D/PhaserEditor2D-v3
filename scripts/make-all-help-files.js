@@ -162,12 +162,15 @@ utils.makeHelpFile([
     "Phaser.Tilemaps.Tilemap.tileHeight",
     "Phaser.GameObjects.GameObjectFactory.tilemap(key)",
 
+    "Phaser.Tilemaps.Tileset",
     "Phaser.Tilemaps.Tileset.name",
     "Phaser.Tilemaps.Tileset.image",
     "Phaser.Tilemaps.Tileset.tileWidth",
     "Phaser.Tilemaps.Tileset.tileHeight",
     "Phaser.Tilemaps.Tileset.tileMargin",
     "Phaser.Tilemaps.Tileset.tileSpacing",
+
+    "Phaser.Tilemaps.StaticTilemapLayer",
 
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        async collectExtraDataForCreateDefaultObject() {
+        async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor) {
 
             const finder = new pack.core.PackFinder();
 
@@ -103,7 +103,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return promise;
         }
 
-        createDefaultSceneObject(args: ICreateEmptyArgs): ISceneGameObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs): ISceneGameObject {
 
             const fontAsset = args.extraData as pack.core.BitmapFontAssetPackItem;
 

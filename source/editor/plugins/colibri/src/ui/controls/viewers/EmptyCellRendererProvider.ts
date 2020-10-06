@@ -4,6 +4,11 @@ namespace colibri.ui.controls.viewers {
 
         private _getRenderer: (element: any) => ICellRenderer;
 
+        static withIcon(icon: IImage) {
+
+            return new EmptyCellRendererProvider(() => new IconImageCellRenderer(icon));
+        }
+
         constructor(getRenderer?: (element: any) => ICellRenderer) {
             this._getRenderer = getRenderer ?? ((e) => new EmptyCellRenderer());
         }

@@ -83,7 +83,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return result;
         }
 
-        async collectExtraDataForCreateDefaultObject() {
+        async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor) {
 
             const finder = new pack.core.PackFinder();
 
@@ -128,7 +128,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return promise;
         }
 
-        createDefaultSceneObject(args: ICreateEmptyArgs): IScenePlainObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs): IScenePlainObject {
 
             const item = args.extraData as pack.core.TilemapTiledJSONAssetPackItem;
 
