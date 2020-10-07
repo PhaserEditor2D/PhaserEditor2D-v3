@@ -1,5 +1,12 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export interface ITilemapLayerData extends core.json.IObjectData {
+
+        tilemapId: string;
+        layerName: string;
+        tilesets: string[]
+    }
+
     export class TilemapLayerEditorSupport extends GameObjectEditorSupport<TilemapLayer> {
 
         constructor(obj: TilemapLayer, scene: Scene) {
@@ -32,5 +39,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new colibri.ui.controls.viewers.EmptyCellRenderer();
         }
 
+        writeJSON(data: ITilemapLayerData) {
+
+            super.writeJSON(data);
+
+            const layer = this.getObject();
+
+            const tilemap = layer.tilemap as Tilemap;
+
+            data.tilemapId = tilemap.getEditorSupport().getId();
+            data.layerName = layer.layer.name;
+            data.tilesets = tilemap.tilesets.map(t => t.name);
+        }
     }
 }

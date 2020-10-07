@@ -4,8 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _editorSupport: TilemapLayerEditorSupport;
 
-        constructor(scene: Scene, tilemap: Tilemap, layerID: string) {
-            super(scene, tilemap, tilemap.getLayerIndex(layerID), tilemap.tilesets);
+        constructor(scene: Scene, tilemap: Tilemap, layerName: string) {
+            super(scene, tilemap, tilemap.getLayerIndex(layerName), tilemap.tilesets);
 
             this.setRenderOrder(tilemap.renderOrder);
             this.setOrigin(0, 0);
@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
 
-        getEditorSupport(): GameObjectEditorSupport<ISceneGameObject> {
+        getEditorSupport(): TilemapLayerEditorSupport {
 
             return this._editorSupport;
         }

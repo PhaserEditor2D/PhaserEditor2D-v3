@@ -103,11 +103,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
-            throw new Error("Method not implemented.");
+
+            const data = args.data as ITilemapLayerData;
+
+            const scene = args.scene;
+
+            const tilemap = scene.getPlainObjectById(data.tilemapId) as Tilemap;
+
+            if (!tilemap) {
+
+                throw new Error("Cannot find Tilemap with id " + data.tilemapId);
+            }
+
+            const layer = new TilemapLayer(scene, tilemap, data.layerName);
+
+            return layer;
         }
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
-            throw new Error("Method not implemented.");
+
+            return new TilemapLayerCodeDOMBuilder();
         }
 
         createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject {
