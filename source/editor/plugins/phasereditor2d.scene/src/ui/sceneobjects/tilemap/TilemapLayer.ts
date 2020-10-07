@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(scene, tilemap, tilemap.getLayerIndex(layerID), tilemap.tilesets);
 
             this.setRenderOrder(tilemap.renderOrder);
+            this.setOrigin(0, 0);
 
             this._editorSupport = new TilemapLayerEditorSupport(this, scene);
         }

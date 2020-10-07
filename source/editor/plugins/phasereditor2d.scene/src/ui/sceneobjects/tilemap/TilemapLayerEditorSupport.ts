@@ -12,9 +12,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
+        isUnlockedProperty(property: IProperty<any>) {
+
+            if (property === TransformComponent.angle) {
+
+                return false;
+            }
+
+            return super.isUnlockedProperty(property);
+        }
+
         setInteractive(): void {
 
-            //
+            this.getObject().setInteractive();
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {

@@ -124,24 +124,4 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return [];
         }
     }
-
-    class TilemapLayerNameContentProvider implements controls.viewers.ITreeContentProvider {
-
-        private _editor: ui.editor.SceneEditor;
-
-        getRoots(input: any): any[] {
-
-            return this._editor.getScene().getPlainObjects().filter(o => o instanceof Tilemap);
-        }
-
-        getChildren(parent: any): any[] {
-
-            if (parent instanceof Tilemap) {
-
-                return parent.getTileLayerNames();
-            }
-
-            return [];
-        }
-    }
 }
