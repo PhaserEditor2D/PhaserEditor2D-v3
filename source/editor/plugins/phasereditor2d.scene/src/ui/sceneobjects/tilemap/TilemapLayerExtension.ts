@@ -138,5 +138,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return [];
         }
+
+        isAvailableAsPrefabElement() {
+
+            return false;
+        }
     }
 }

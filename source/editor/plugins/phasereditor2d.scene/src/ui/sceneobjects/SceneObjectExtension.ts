@@ -35,6 +35,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         /**
+         * Some types like TilemapLayer are too complex to be included in a prefab instance.
+         * For now, those types should be excluded from a prefab scene.
+         */
+        isAvailableAsPrefabElement(): boolean {
+
+            return true;
+        }
+
+        /**
          * Collect the data used to create a new, empty object. For example, a BitmapText requires
          * a BitmapFont key to be created, so this method opens a dialog to select the font.
          */

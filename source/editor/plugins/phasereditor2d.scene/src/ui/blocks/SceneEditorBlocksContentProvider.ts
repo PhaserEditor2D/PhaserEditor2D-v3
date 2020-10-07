@@ -36,9 +36,19 @@ namespace phasereditor2d.scene.ui.blocks {
 
             const roots = [];
 
-            roots.push(...ScenePlugin.getInstance().getGameObjectExtensions());
+            if (this._editor.getScene().isPrefabSceneType()) {
 
-            roots.push(...ScenePlugin.getInstance().getPlainObjectExtensions());
+                roots.push(...ScenePlugin.getInstance().getGameObjectExtensions()
+                    .filter(ext => ext.isAvailableAsPrefabElement()));
+
+                roots.push(...ScenePlugin.getInstance().getPlainObjectExtensions()
+                    .filter(ext => ext.isAvailableAsPrefabElement()));
+
+            } else {
+
+                roots.push(...ScenePlugin.getInstance().getGameObjectExtensions());
+                roots.push(...ScenePlugin.getInstance().getPlainObjectExtensions());
+            }
 
             roots.push(sceneobjects.ObjectList);
 

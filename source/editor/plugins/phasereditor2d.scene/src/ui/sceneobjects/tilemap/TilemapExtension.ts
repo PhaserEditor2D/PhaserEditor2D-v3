@@ -147,5 +147,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return tilemap;
         }
+
+        isAvailableAsPrefabElement() {
+
+            return false;
+        }
     }
 }
