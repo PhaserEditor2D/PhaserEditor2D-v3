@@ -4,6 +4,7 @@ namespace phasereditor2d.scene {
     import controls = colibri.ui.controls;
 
     export const ICON_GROUP = "group";
+    export const ICON_TILEMAP = "tilemap";
     export const ICON_TRANSLATE = "translate";
     export const ICON_ANGLE = "angle";
     export const ICON_SCALE = "scale";
@@ -91,6 +92,7 @@ namespace phasereditor2d.scene {
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_USER_COMPONENT,
                     ICON_GROUP,
+                    ICON_TILEMAP,
                     ICON_ANGLE,
                     ICON_ORIGIN,
                     ICON_SELECT_REGION,

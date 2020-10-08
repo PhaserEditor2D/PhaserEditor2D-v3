@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private constructor() {
             super({
                 category: TilemapExtension.CATEGORY,
-                iconName: ICON_GROUP,
+                iconName: ICON_TILEMAP,
                 phaserTypeName: "Phaser.Tilemaps.Tilemap",
                 typeName: "Tilemap"
             });

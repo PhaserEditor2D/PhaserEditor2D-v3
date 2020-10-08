@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor() {
             super({
-                iconName: ICON_GROUP,
+                iconName: ICON_TILEMAP,
                 phaserTypeName: "Phaser.Tilemaps.StaticTilemapLayer",
                 typeName: "TilemapLayer"
             });
@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }));
 
                 viewer.setCellRendererProvider(controls.viewers.EmptyCellRendererProvider.withIcon(
-                    ScenePlugin.getInstance().getIcon(ICON_GROUP)));
+                    ScenePlugin.getInstance().getIcon(ICON_TILEMAP)));
 
                 viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
 
