@@ -1,8 +1,8 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TilemapLayer extends Phaser.Tilemaps.StaticTilemapLayer implements ISceneGameObject {
+    export class StaticTilemapLayer extends Phaser.Tilemaps.StaticTilemapLayer implements ISceneGameObject {
 
-        private _editorSupport: TilemapLayerEditorSupport;
+        private _editorSupport: StaticTilemapLayerEditorSupport;
 
         constructor(scene: Scene, tilemap: Tilemap, layerName: string) {
             super(scene, tilemap, tilemap.getLayerIndex(layerName), tilemap.tilesets);
@@ -10,11 +10,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setRenderOrder(tilemap.renderOrder);
             this.setOrigin(0, 0);
 
-            this._editorSupport = new TilemapLayerEditorSupport(this, scene);
+            this._editorSupport = new StaticTilemapLayerEditorSupport(this, scene);
         }
 
 
-        getEditorSupport(): TilemapLayerEditorSupport {
+        getEditorSupport(): StaticTilemapLayerEditorSupport {
 
             return this._editorSupport;
         }

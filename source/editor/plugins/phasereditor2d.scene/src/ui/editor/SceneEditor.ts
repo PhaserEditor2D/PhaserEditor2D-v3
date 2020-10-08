@@ -757,12 +757,20 @@ namespace phasereditor2d.scene.ui.editor {
         repaint(): void {
 
             if (!this._gameBooted) {
+
                 return;
             }
 
-            this._game.loop.tick();
+            try {
 
-            this._overlayLayer.render();
+                this._game.loop.tick();
+
+                this._overlayLayer.render();
+
+            } catch (e) {
+
+                alert(e.message);
+            }
         }
     }
 }

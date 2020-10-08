@@ -2,11 +2,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class TilemapLayerCodeDOMBuilder extends GameObjectCodeDOMBuilder {
+    export class StaticTilemapLayerCodeDOMBuilder extends GameObjectCodeDOMBuilder {
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
 
-            const tilemapLayer = args.obj as TilemapLayer;
+            const tilemapLayer = args.obj as StaticTilemapLayer;
 
             const tilemap = tilemapLayer.tilemap as Tilemap;
 

@@ -7,10 +7,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         tilesets: string[]
     }
 
-    export class TilemapLayerEditorSupport extends GameObjectEditorSupport<TilemapLayer> {
+    export class StaticTilemapLayerEditorSupport extends GameObjectEditorSupport<StaticTilemapLayer> {
 
-        constructor(obj: TilemapLayer, scene: Scene) {
-            super(TilemapLayerExtension.getInstance(), obj, scene);
+        constructor(obj: StaticTilemapLayer, scene: Scene) {
+            super(StaticTilemapLayerExtension.getInstance(), obj, scene);
 
             this.addComponent(
 

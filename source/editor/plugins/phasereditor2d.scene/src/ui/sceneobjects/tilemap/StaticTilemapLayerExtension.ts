@@ -7,20 +7,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         layerName: string;
     }
 
-    export class TilemapLayerExtension extends SceneGameObjectExtension {
+    export class StaticTilemapLayerExtension extends SceneGameObjectExtension {
 
-        private static _instance: TilemapLayerExtension;
+        private static _instance: StaticTilemapLayerExtension;
 
         static getInstance() {
 
-            return this._instance ? this._instance : (this._instance = new TilemapLayerExtension());
+            return this._instance ? this._instance : (this._instance = new StaticTilemapLayerExtension());
         }
 
         constructor() {
             super({
                 iconName: ICON_TILEMAP_LAYER,
                 phaserTypeName: "Phaser.Tilemaps.StaticTilemapLayer",
-                typeName: "TilemapLayer"
+                typeName: "StaticTilemapLayer"
             });
         }
 
@@ -114,7 +114,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 throw new Error("Cannot find Tilemap with id " + data.tilemapId);
             }
 
-            const layer = new TilemapLayer(scene, tilemap, data.layerName);
+            const layer = new StaticTilemapLayer(scene, tilemap, data.layerName);
 
             layer.getEditorSupport().readJSON(data);
 
@@ -123,14 +123,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
-            return new TilemapLayerCodeDOMBuilder();
+            return new StaticTilemapLayerCodeDOMBuilder();
         }
 
         createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject {
 
             const data = args.extraData as ITilemapLayerReference;
 
-            const layer = new TilemapLayer(args.scene, data.tilemap, data.layerName);
+            const layer = new StaticTilemapLayer(args.scene, data.tilemap, data.layerName);
 
             return layer;
         }
