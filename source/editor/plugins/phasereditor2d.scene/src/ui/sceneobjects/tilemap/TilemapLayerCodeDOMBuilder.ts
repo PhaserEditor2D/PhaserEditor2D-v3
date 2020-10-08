@@ -16,6 +16,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.argLiteral(tilemapLayer.layer.name);
             call.arg(tilemapVarName + ".tilesets");
+            call.argInt(tilemapLayer.x);
+            call.argInt(tilemapLayer.y);
 
             return call;
         }

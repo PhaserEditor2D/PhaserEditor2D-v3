@@ -117,6 +117,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const layer = new TilemapLayer(scene, tilemap, data.layerName);
 
+            layer.getEditorSupport().readJSON(data);
+
             return layer;
         }
 
