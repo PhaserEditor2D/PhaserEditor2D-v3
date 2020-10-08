@@ -5,6 +5,7 @@ namespace phasereditor2d.scene {
 
     export const ICON_GROUP = "group";
     export const ICON_TILEMAP = "tilemap";
+    export const ICON_TILEMAP_LAYER = "tilemap-layer";
     export const ICON_TRANSLATE = "translate";
     export const ICON_ANGLE = "angle";
     export const ICON_SCALE = "scale";
@@ -93,6 +94,7 @@ namespace phasereditor2d.scene {
                     ICON_USER_COMPONENT,
                     ICON_GROUP,
                     ICON_TILEMAP,
+                    ICON_TILEMAP_LAYER,
                     ICON_ANGLE,
                     ICON_ORIGIN,
                     ICON_SELECT_REGION,

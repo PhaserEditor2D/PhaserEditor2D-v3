@@ -16,7 +16,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
    version="1.0"
-   sodipodi:docname="tilemap.svg"
+   sodipodi:docname="tilemap-layer.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    style="display:inline;enable-background:new"
    inkscape:export-filename="blender_icons16.png"
@@ -2170,7 +2170,7 @@
        y2="105.27895" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient319"
+       xlink:href="#linearGradient29149"
        id="linearGradient42352"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.3001261,0,0,0.19974795,98.544104,377.02651)"
@@ -2180,7 +2180,7 @@
        y2="105.27895" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient319"
+       xlink:href="#linearGradient29149"
        id="linearGradient42354"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.3001261,0,0,0.19974795,98.544104,381.02651)"
@@ -2200,7 +2200,7 @@
        y2="105.27895" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient29149"
+       xlink:href="#linearGradient319"
        id="linearGradient42358"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.20007106,0,0,0.19974795,108.1968,377.02481)"
@@ -2210,7 +2210,7 @@
        y2="105.27895" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient29149"
+       xlink:href="#linearGradient319"
        id="linearGradient42360"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.20007106,0,0,0.29987827,108.1968,362.7635)"
@@ -2220,7 +2220,7 @@
        y2="105.27895" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient319"
+       xlink:href="#linearGradient29149"
        id="linearGradient42362"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.20007106,0,0,0.19974795,112.19681,381.02651)"
@@ -2240,7 +2240,7 @@
        y2="105.27895" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient29149"
+       xlink:href="#linearGradient319"
        id="linearGradient42366"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.20007106,0,0,0.29987827,112.1968,362.7635)"
@@ -12796,9 +12796,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="117.04951"
-     inkscape:cy="266.49866"
+     inkscape:zoom="32"
+     inkscape:cx="120.68659"
+     inkscape:cy="245.70439"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -12891,8 +12891,8 @@
      id="layer1"
      style="display:inline">
     <g
-       id="g17827"
-       inkscape:export-filename="./tilemap@2x.png"
+       id="g17879"
+       inkscape:export-filename="./tilemap-layer@2x.png"
        inkscape:export-xdpi="192"
        inkscape:export-ydpi="192">
       <rect
@@ -12906,7 +12906,7 @@
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Documents and Settings\Tata\Pulpit\BLENDER ICONSET\Kopia blender\.blender\icons\jendrzych's iconset.png"
-         style="fill:url(#linearGradient42348);fill-opacity:1;fill-rule:nonzero;stroke:#5d5d5d;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:url(#linearGradient42348);fill-opacity:1;fill-rule:nonzero;stroke:#4a4a4a;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect41261"
          width="12.000004"
          height="12.00002"
@@ -12926,7 +12926,7 @@
          sodipodi:nodetypes="ccccc"
          id="path41265"
          d="m 113.5,397.5 v -1.9983 h 2 v 1.99829 z"
-         style="fill:none;stroke:url(#linearGradient42352);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:#204a87;stroke:url(#linearGradient42352);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
          inkscape:export-filename="C:\Documents and Settings\Tata\Pulpit\BLENDER ICONSET\Kopia blender\.blender\icons\jendrzych's iconset.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
@@ -12935,7 +12935,7 @@
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Documents and Settings\Tata\Pulpit\BLENDER ICONSET\Kopia blender\.blender\icons\jendrzych's iconset.png"
-         style="fill:none;stroke:url(#linearGradient42354);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:#204a87;stroke:url(#linearGradient42354);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
          d="m 113.5,401.49999 v -1.99829 h 2 v 1.99829 z"
          id="path41267"
          sodipodi:nodetypes="ccccc" />
@@ -12953,7 +12953,7 @@
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Documents and Settings\Tata\Pulpit\BLENDER ICONSET\Kopia blender\.blender\icons\jendrzych's iconset.png"
-         style="fill:#204a87;stroke:url(#linearGradient42358);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:none;stroke:url(#linearGradient42358);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
          d="M 117.5,397.49829 V 395.5 h 2 v 1.99829 z"
          id="path41271"
          sodipodi:nodetypes="ccc" />
@@ -12962,7 +12962,7 @@
          sodipodi:nodetypes="ccccc"
          id="path41273"
          d="m 117.5,393.5 v -2 h 2 v 2 z"
-         style="fill:#204a87;stroke:url(#linearGradient42360);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:none;stroke:url(#linearGradient42360);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
          inkscape:export-filename="C:\Documents and Settings\Tata\Pulpit\BLENDER ICONSET\Kopia blender\.blender\icons\jendrzych's iconset.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
@@ -12971,7 +12971,7 @@
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Documents and Settings\Tata\Pulpit\BLENDER ICONSET\Kopia blender\.blender\icons\jendrzych's iconset.png"
-         style="fill:none;stroke:url(#linearGradient42362);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:#204a87;stroke:url(#linearGradient42362);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
          d="m 121.5,401.49999 v -1.99829 h 2 v 1.99829 z"
          id="path41275"
          sodipodi:nodetypes="ccc" />
@@ -12989,7 +12989,7 @@
          inkscape:export-ydpi="90"
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Documents and Settings\Tata\Pulpit\BLENDER ICONSET\Kopia blender\.blender\icons\jendrzych's iconset.png"
-         style="fill:#204a87;stroke:url(#linearGradient42366);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:none;stroke:url(#linearGradient42366);stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
          d="m 121.5,393.5 v -2 h 2 v 2 z"
          id="path41279"
          sodipodi:nodetypes="ccccc" />

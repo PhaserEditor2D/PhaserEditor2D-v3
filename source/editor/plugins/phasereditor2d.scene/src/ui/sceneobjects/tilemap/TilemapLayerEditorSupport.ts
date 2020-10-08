@@ -36,7 +36,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
-            return new colibri.ui.controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_TILEMAP));
+            return new colibri.ui.controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_TILEMAP_LAYER));
         }
 
         writeJSON(data: ITilemapLayerData) {
