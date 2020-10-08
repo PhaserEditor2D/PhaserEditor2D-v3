@@ -108,6 +108,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     await item.preload();
 
+                    const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(item);
+
+                    await updater.updateLoader(editor.getScene(), item);
+
                     const result: ICreateExtraDataResult = {
                         data: item
                     };
@@ -132,7 +136,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const item = args.extraData as pack.core.TilemapTiledJSONAssetPackItem;
 
-            return new sceneobjects.Tilemap(args.scene, item.getKey());
+            const tilemap = new sceneobjects.Tilemap(args.scene, item.getKey());
+
+            console.log(tilemap.tilesets);
+
+            return tilemap;
         }
 
         createPlainObjectWithData(args: ICreatePlainObjectWithDataArgs): IScenePlainObject {
