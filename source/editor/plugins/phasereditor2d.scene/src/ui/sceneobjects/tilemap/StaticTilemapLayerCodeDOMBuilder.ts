@@ -2,17 +2,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class StaticTilemapLayerCodeDOMBuilder extends GameObjectCodeDOMBuilder {
+    export class TilemapLayerCodeDOMBuilder extends GameObjectCodeDOMBuilder {
+
+        private _factoryMethod: string;
+
+        constructor(factoryMethod: string) {
+            super();
+
+            this._factoryMethod = factoryMethod;
+        }
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
 
-            const tilemapLayer = args.obj as StaticTilemapLayer;
+            const tilemapLayer = args.obj as (StaticTilemapLayer | DynamicTilemapLayer);
 
             const tilemap = tilemapLayer.tilemap as Tilemap;
 
             const tilemapVarName = code.formatToValidVarName(tilemap.getEditorSupport().getLabel());
 
-            const call = new code.MethodCallCodeDOM("createStaticLayer", tilemapVarName);
+            const call = new code.MethodCallCodeDOM(this._factoryMethod, tilemapVarName);
 
             call.argLiteral(tilemapLayer.layer.name);
             call.arg(tilemapVarName + ".tilesets");

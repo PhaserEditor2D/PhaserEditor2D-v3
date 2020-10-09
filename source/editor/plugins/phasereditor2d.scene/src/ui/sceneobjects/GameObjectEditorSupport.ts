@@ -237,7 +237,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.getObjectComponent(obj, ctr) !== null;
         }
 
-        protected addComponent(...components: Array<Component<any>>) {
+        addComponent(...components: Array<Component<any>>) {
 
             for (const c of components) {
 

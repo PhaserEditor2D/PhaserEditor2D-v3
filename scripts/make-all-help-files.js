@@ -171,6 +171,7 @@ utils.makeHelpFile([
     "Phaser.Tilemaps.Tileset.tileSpacing",
 
     "Phaser.Tilemaps.StaticTilemapLayer",
+    "Phaser.Tilemaps.DynamicTilemapLayer",
 
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

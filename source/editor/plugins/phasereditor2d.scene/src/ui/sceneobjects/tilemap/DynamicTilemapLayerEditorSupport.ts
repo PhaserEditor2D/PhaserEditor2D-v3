@@ -7,10 +7,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         tilesets: string[]
     }
 
-    export class StaticTilemapLayerEditorSupport extends GameObjectEditorSupport<StaticTilemapLayer> {
+    export class DynamicTilemapLayerEditorSupport extends GameObjectEditorSupport<DynamicTilemapLayer> {
 
-        constructor(obj: StaticTilemapLayer, scene: Scene) {
-            super(StaticTilemapLayerExtension.getInstance(), obj, scene);
+        constructor(obj: DynamicTilemapLayer, scene: Scene) {
+            super(DynamicTilemapLayerExtension.getInstance(), obj, scene);
 
             StaticTilemapLayerEditorSupport.helper_init(this);
         }
@@ -40,27 +40,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.writeJSON(data);
 
             StaticTilemapLayerEditorSupport.helper_writeJSON(this.getObject(), data);
-        }
-
-
-        static helper_writeJSON(layer: StaticTilemapLayer | DynamicTilemapLayer, data: ITilemapLayerData) {
-
-            const tilemap = layer.tilemap as Tilemap;
-
-            data.tilemapId = tilemap.getEditorSupport().getId();
-            data.layerName = layer.layer.name;
-            data.tilesets = tilemap.tilesets.map(t => t.name);
-        }
-
-        static helper_init(support: StaticTilemapLayerEditorSupport | DynamicTilemapLayerEditorSupport) {
-
-            const obj = support.getObject();
-
-            support.addComponent(
-
-                new TransformComponent(obj as unknown as ITransformLikeObject),
-                new VisibleComponent(obj as unknown as IVisibleLikeObject),
-            );
         }
     }
 }
