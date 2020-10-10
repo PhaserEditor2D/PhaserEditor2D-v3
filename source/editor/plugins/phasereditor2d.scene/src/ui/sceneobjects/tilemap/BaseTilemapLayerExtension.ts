@@ -113,7 +113,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return layer;
         }
 
-        abstract createTilemapLayer(scene: Scene, tilemap: Tilemap, layerName: string): ISceneGameObject;
+        abstract createTilemapLayer(scene: Scene, tilemap: Tilemap, layerName: string): StaticTilemapLayer | DynamicTilemapLayer;
 
         abstract getCodeFactoryMethod(): string;
 
@@ -127,6 +127,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const data = args.extraData as ITilemapLayerReference;
 
             const layer = this.createTilemapLayer(args.scene, data.tilemap, data.layerName);
+
+            layer.setPosition(args.x, args.y);
 
             return layer;
         }

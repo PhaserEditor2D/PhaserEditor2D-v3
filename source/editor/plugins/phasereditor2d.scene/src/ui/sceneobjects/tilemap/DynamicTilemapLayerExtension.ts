@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        createTilemapLayer(scene: Scene, tilemap: Tilemap, layerName: string): ISceneGameObject {
+        createTilemapLayer(scene: Scene, tilemap: Tilemap, layerName: string) {
 
             return new DynamicTilemapLayer(scene, tilemap, layerName);
         }
