@@ -90,14 +90,14 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             scene.removeAll();
 
+            scene.readPlainObjects(snapshot.plainObjects);
+
             for (const data of snapshot.displayList) {
 
                 maker.createObject(data);
             }
 
             scene.getObjectLists().readJSON_lists(snapshot.lists);
-
-            scene.readPlainObjects(snapshot.plainObjects);
 
             editor.setDirty(true);
             editor.repaint();
