@@ -14,6 +14,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new DynamicTilemapLayerEditorSupport(this, scene);
         }
 
+        destroy() {
+
+            super.destroy(false);
+        }
 
         getEditorSupport(): DynamicTilemapLayerEditorSupport {
 

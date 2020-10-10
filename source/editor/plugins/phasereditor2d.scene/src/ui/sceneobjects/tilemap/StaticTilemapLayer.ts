@@ -13,6 +13,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new StaticTilemapLayerEditorSupport(this, scene);
         }
 
+        destroy() {
+
+            super.destroy(false);
+        }
+
 
         getEditorSupport(): StaticTilemapLayerEditorSupport {
 

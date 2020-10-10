@@ -451,7 +451,10 @@ namespace phasereditor2d.scene.ui {
 
                     const msg = `SceneMaker: no extension is registered for type "${type}".`;
 
-                    errors.push(msg);
+                    if (errors) {
+
+                        errors.push(msg);
+                    }
 
                     console.error(msg);
                 }
@@ -462,7 +465,10 @@ namespace phasereditor2d.scene.ui {
 
                 const msg = (e as Error).message;
 
-                errors.push(msg);
+                if (errors) {
+
+                    errors.push(msg);
+                }
 
                 console.error(msg);
 

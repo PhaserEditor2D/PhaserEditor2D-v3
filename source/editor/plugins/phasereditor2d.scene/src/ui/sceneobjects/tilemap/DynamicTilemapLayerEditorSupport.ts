@@ -15,13 +15,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             StaticTilemapLayerEditorSupport.helper_init(this);
         }
 
-        destroy() {
-
-            super.destroy();
-
-            return true;
-        }
-
         isUnlockedProperty(property: IProperty<any>) {
 
             if (property === TransformComponent.angle) {

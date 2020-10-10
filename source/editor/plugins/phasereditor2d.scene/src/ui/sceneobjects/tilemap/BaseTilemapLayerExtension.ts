@@ -15,8 +15,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          */
         async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor): Promise<ICreateExtraDataResult> {
 
-            const scene = editor.getScene();
-
             const tilemaps = editor.getScene().getPlainObjects()
                 .filter(o => o instanceof Tilemap) as Tilemap[];
 
@@ -39,6 +37,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 return {
                     dataNotFoundMessage: "No layers are available in the current tilemaps."
+                };
+            }
+
+            if (layers.length === 1) {
+
+                return {
+                    data: layers[0]
                 };
             }
 
