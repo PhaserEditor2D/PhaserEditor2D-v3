@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.setRenderOrder(tilemap.renderOrder);
             this.setOrigin(0, 0);
+            this.setSkipCull(true);
 
             this._editorSupport = new DynamicTilemapLayerEditorSupport(this, scene);
         }
