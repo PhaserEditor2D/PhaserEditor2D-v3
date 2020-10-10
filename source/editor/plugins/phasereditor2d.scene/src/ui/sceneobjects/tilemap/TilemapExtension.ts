@@ -138,8 +138,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const tilemap = new sceneobjects.Tilemap(args.scene, item.getKey());
 
-            console.log(tilemap.tilesets);
-
             return tilemap;
         }
 

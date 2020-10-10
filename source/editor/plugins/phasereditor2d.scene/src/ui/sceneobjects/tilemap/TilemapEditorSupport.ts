@@ -13,6 +13,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(scene: Scene, obj: Tilemap) {
             super(TilemapExtension.getInstance(), obj, scene);
+
+            this.setLabel(obj.getTilemapAssetKey());
         }
 
         writeJSON(data: ITilemapData) {
@@ -62,7 +64,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         destroy() {
 
-            this.getObject().destroy();
+            const tilemap = this.getObject();
+
+            const layers: Array<StaticTilemapLayer | DynamicTilemapLayer> = [];
+
+            this.getScene().visit(obj => {
+
+                if (obj instanceof StaticTilemapLayer || obj instanceof DynamicTilemapLayer) {
+
+                    if (obj.tilemap === tilemap) {
+
+                        layers.push(obj);
+                    }
+                }
+            });
+
+            for (const layer of layers) {
+
+                layer.getEditorSupport().destroy();
+            }
+
+            tilemap.destroy();
         }
 
         async buildDependencyHash(args: IBuildDependencyHashArgs) {

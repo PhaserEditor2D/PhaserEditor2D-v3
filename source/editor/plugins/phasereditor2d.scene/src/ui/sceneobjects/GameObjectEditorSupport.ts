@@ -42,8 +42,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const obj = this.getObject() as Phaser.GameObjects.GameObject;
 
             obj.disableInteractive();
+
             obj.destroy();
+
             obj.active = false;
+
             (obj as unknown as Phaser.GameObjects.Components.Visible).visible = false;
 
             // hack, to remove the object from the input list

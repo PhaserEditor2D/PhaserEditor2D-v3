@@ -25,6 +25,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 };
             }
 
+            const noImageTilesets = tilemaps
+
+                .flatMap(tilemap => tilemap.tilesets)
+
+                .filter(tileset => !tileset.image)
+
+                .map(tileset => tileset.name);
+
+            if (noImageTilesets.length > 0) {
+
+                const names = `<ul>${noImageTilesets.map(n => `<li>${n}</li>`).join("")}</ul>`;
+
+                return {
+                    dataNotFoundMessage: "The following tilesets have no image:" + names
+                };
+            }
+
             const layers = tilemaps
                 .flatMap(tilemap => tilemap.getTileLayerNames().map(layerName => {
                     return {
