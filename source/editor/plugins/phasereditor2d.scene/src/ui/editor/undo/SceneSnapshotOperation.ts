@@ -14,9 +14,9 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         private _before: ISceneSnapshot;
         private _after: ISceneSnapshot;
-        private _operation: () => Promise<void>;
+        private _operation: () => Promise<boolean | void>;
 
-        constructor(editor: SceneEditor, operation?: () => Promise<void>) {
+        constructor(editor: SceneEditor, operation?: () => Promise<boolean | void>) {
             super(editor);
 
             this._operation = operation;
@@ -26,22 +26,34 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             this._before = this.takeSnapshot();
 
-            await this.performModification();
+            const requiresRefreshScene = await this.performModification();
 
             this._after = this.takeSnapshot();
 
-            this._editor.setDirty(true);
-            this._editor.refreshOutline();
-            this._editor.repaint();
-            this._editor.dispatchSelectionChanged();
+            if (requiresRefreshScene) {
+
+                this.loadSnapshot(this._after);
+
+            } else {
+                this._editor.setDirty(true);
+                this._editor.refreshOutline();
+                this._editor.repaint();
+                this._editor.dispatchSelectionChanged();
+            }
         }
 
-        protected async performModification() {
+        protected async performModification(): Promise<boolean | void> {
+
+            let result = false;
 
             if (this._operation) {
 
-                await this._operation();
+                const opResult = await this._operation();
+
+                result = result || opResult === true;
             }
+
+            return result;
         }
 
         private takeSnapshot(): ISceneSnapshot {

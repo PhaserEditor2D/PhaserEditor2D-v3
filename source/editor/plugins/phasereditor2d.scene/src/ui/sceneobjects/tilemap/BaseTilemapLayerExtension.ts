@@ -15,6 +15,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          */
         async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor): Promise<ICreateExtraDataResult> {
 
+            const scene = editor.getScene();
+
             const tilemaps = editor.getScene().getPlainObjects()
                 .filter(o => o instanceof Tilemap) as Tilemap[];
 

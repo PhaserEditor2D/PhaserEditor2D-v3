@@ -34,7 +34,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract setInteractive(): void;
 
-        destroy() {
+        /**
+         * Destroy the object. Return `true` if it requires a complete refresh of the scene, to re-build all objects.
+         */
+        destroy(): boolean | void {
 
             const obj = this.getObject() as Phaser.GameObjects.GameObject;
 
@@ -53,6 +56,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 list.splice(i, 1);
             }
+
+            return false;
         }
 
         hasProperty(property: IProperty<any>) {

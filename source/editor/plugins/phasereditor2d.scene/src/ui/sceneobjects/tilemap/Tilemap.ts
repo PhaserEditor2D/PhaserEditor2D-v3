@@ -18,6 +18,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new Phaser.Tilemaps.MapData();
         }
 
+        static getTilemapLayerNames(scene: Scene, key: string) {
+
+            const data = this.createTilemapData(scene, key);
+
+            if (data.layers instanceof Phaser.Tilemaps.ObjectLayer) {
+
+                return [data.layers.name];
+            }
+
+            return data.layers.map(layer => layer.name);
+        }
+
         private _editorSupport: TilemapEditorSupport;
 
         constructor(scene: Scene, key: string) {
@@ -26,7 +38,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._key = key;
             this._editorSupport = new TilemapEditorSupport(scene, this);
 
-            for(const tileset of this.tilesets) {
+            for (const tileset of this.tilesets) {
 
                 tileset["__tilemap"] = this;
             }
