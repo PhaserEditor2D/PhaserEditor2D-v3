@@ -106,7 +106,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 editor.getUndoManager().add(
                     new ui.editor.undo.SceneSnapshotOperation(editor, async () => {
-                        this.getSelectionFirstElement().setImage(texture);
+
+                        const tileset = this.getSelectionFirstElement();
+
+                        tileset.setImage(texture);
+
+                        this.getEditor().refreshScene();
                     }));
             });
         }
