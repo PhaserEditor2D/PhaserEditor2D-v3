@@ -421,9 +421,19 @@ namespace phasereditor2d.scene.ui {
                 return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
             });
 
-            this._editorScene.visit(obj => nameMaker.update([obj]));
+            this._editorScene.visit(obj => {
 
-            newObject.getEditorSupport().setLabel(nameMaker.makeName(ext.getTypeName().toLowerCase()));
+                if (obj !== newObject) {
+
+                    nameMaker.update([obj]);
+                }
+            });
+
+            const oldLabel = newObject.getEditorSupport().getLabel();
+
+            const newLabel = nameMaker.makeName(oldLabel);
+
+            newObject.getEditorSupport().setLabel(newLabel);
 
             return newObject;
         }

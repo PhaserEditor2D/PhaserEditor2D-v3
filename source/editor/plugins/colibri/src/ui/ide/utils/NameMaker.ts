@@ -20,6 +20,7 @@ namespace colibri.ui.ide.utils {
         }
 
         makeName(baseName: string) {
+
             let name: string;
 
             let i = 0;

@@ -20,7 +20,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createTilemapLayer(scene: Scene, tilemap: Tilemap, layerName: string) {
 
-            return new StaticTilemapLayer(scene, tilemap, layerName);
+            const layer = new StaticTilemapLayer(scene, tilemap, layerName);
+
+            return layer;
         }
 
         getCodeFactoryMethod(): string {
