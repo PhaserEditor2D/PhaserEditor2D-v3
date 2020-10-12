@@ -173,6 +173,15 @@ utils.makeHelpFile([
     "Phaser.Tilemaps.StaticTilemapLayer",
     "Phaser.Tilemaps.DynamicTilemapLayer",
 
+    "Phaser.Tilemaps.LayerData",
+    "Phaser.Tilemaps.LayerData.name",
+    "Phaser.Tilemaps.LayerData.width",
+    "Phaser.Tilemaps.LayerData.height",
+    "Phaser.Tilemaps.LayerData.tileWidth",
+    "Phaser.Tilemaps.LayerData.tileHeight",
+    "Phaser.Tilemaps.LayerData.widthInPixels",
+    "Phaser.Tilemaps.LayerData.heightInPixels",
+    
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 
 utils.makeHelpFile([

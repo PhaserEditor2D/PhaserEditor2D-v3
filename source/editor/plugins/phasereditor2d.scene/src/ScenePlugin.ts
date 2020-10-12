@@ -219,7 +219,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ScenePlainObjectVariableSection(page),
                 page => new ui.sceneobjects.TilemapSection(page),
                 page => new ui.sceneobjects.TilesetSection(page),
-                page => new ui.sceneobjects.TilesetPreviewSection(page)
+                page => new ui.sceneobjects.TilesetPreviewSection(page),
+                page => new ui.sceneobjects.TilemapLayerSection(page),
             ));
 
             // scene tools

@@ -81,5 +81,13 @@
   "Phaser.Tilemaps.Tileset.tileMargin": "The margin around the tiles in the sheet (in pixels). Use `setSpacing` to change.",
   "Phaser.Tilemaps.Tileset.tileSpacing": "The spacing between each the tile in the sheet (in pixels). Use `setSpacing` to change.",
   "Phaser.Tilemaps.StaticTilemapLayer": "A Static Tilemap Layer is a Game Object that renders LayerData from a Tilemap when used in combination\nwith one, or more, Tilesets.\n\nA Static Tilemap Layer is optimized for rendering speed over flexibility. You cannot apply per-tile\neffects like tint or alpha, or change the tiles or tilesets the layer uses.\n\nUse a Static Tilemap Layer instead of a Dynamic Tilemap Layer when you don't need tile manipulation features.",
-  "Phaser.Tilemaps.DynamicTilemapLayer": "A Dynamic Tilemap Layer is a Game Object that renders LayerData from a Tilemap when used in combination\nwith one, or more, Tilesets.\n\nA Dynamic Tilemap Layer trades some speed for being able to apply powerful effects. Unlike a\nStatic Tilemap Layer, you can apply per-tile effects like tint or alpha, and you can change the\ntiles in a DynamicTilemapLayer.\n\nUse this over a Static Tilemap Layer when you need those features."
+  "Phaser.Tilemaps.DynamicTilemapLayer": "A Dynamic Tilemap Layer is a Game Object that renders LayerData from a Tilemap when used in combination\nwith one, or more, Tilesets.\n\nA Dynamic Tilemap Layer trades some speed for being able to apply powerful effects. Unlike a\nStatic Tilemap Layer, you can apply per-tile effects like tint or alpha, and you can change the\ntiles in a DynamicTilemapLayer.\n\nUse this over a Static Tilemap Layer when you need those features.",
+  "Phaser.Tilemaps.LayerData": "A class for representing data about about a layer in a map. Maps are parsed from CSV, Tiled,\netc. into this format. Tilemap, StaticTilemapLayer and DynamicTilemapLayer have a reference\nto this data and use it to look up and perform operations on tiles.",
+  "Phaser.Tilemaps.LayerData.name": "The name of the layer, if specified in Tiled.",
+  "Phaser.Tilemaps.LayerData.width": "The width of the layer in tiles.",
+  "Phaser.Tilemaps.LayerData.height": "The height of the layer in tiles.",
+  "Phaser.Tilemaps.LayerData.tileWidth": "The pixel width of the tiles.",
+  "Phaser.Tilemaps.LayerData.tileHeight": "The pixel height of the tiles.",
+  "Phaser.Tilemaps.LayerData.widthInPixels": "The width in pixels of the entire layer.",
+  "Phaser.Tilemaps.LayerData.heightInPixels": "The height in pixels of the entire layer."
 }
