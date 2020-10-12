@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class TilemapConfigDialog extends controls.dialogs.Dialog {
 
         private _tilemapAsset: pack.core.TilemapTiledJSONAssetPackItem;
-        private _tilesetImages: Map<string, pack.core.ImageAssetPackItem|pack.core.SpritesheetAssetPackItem> = new Map();
+        private _tilesetImages: Map<string, pack.core.ImageAssetPackItem | pack.core.SpritesheetAssetPackItem> = new Map();
         private _tilemapButton: HTMLButtonElement;
         private _finder: pack.core.PackFinder;
         private _clientArea: HTMLDivElement;
@@ -83,11 +83,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     this._tilemapButton.textContent = this._tilemapAsset.getKey();
                 }
 
-                // TODO: find for the tilesets, maybe the images and names match.
-
                 this.generateTilesetFields();
                 this.validateData();
             });
+        }
+
+        private findTilesetImage(tilesetImage: string) {
+
+            const image1 = tilesetImage;
+            const image2 = colibri.ui.ide.FileUtils.getFileNameWithoutExtension(image1);
+
+            const split1 = image2.split("/");
+            const image3 = split1[split1.length - 1];
+
+            const split2 = image2.split("\\");
+            const image4 = split2[split2.length - 1];
+
+            for (const image of [image1, image2, image3, image4]) {
+
+                const result = this._finder.findAssetPackItem(image);
+
+                if (result && (result instanceof pack.core.ImageAssetPackItem
+                    || result instanceof pack.core.SpritesheetAssetPackItem)) {
+
+                    return result;
+                }
+            }
+
+            return undefined;
         }
 
         private generateTilesetFields() {
@@ -98,6 +121,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             this._tilesetElements = [];
+
             this._tilesetImages = new Map();
 
             if (this._tilemapAsset) {
@@ -135,6 +159,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         });
 
                     }, true);
+
+                    const tilesetImage = this.findTilesetImage(tileset.name);
+
+                    if (tilesetImage) {
+
+                        this._tilesetImages.set(tileset.name, tilesetImage);
+
+                        btn.textContent = tilesetImage.getKey();
+                    }
 
                     this._tilesetElements.push(label, btn);
                 }
