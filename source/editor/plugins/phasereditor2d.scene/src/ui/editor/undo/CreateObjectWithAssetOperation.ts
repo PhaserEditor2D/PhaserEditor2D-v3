@@ -1,3 +1,4 @@
+/// <reference path="./SceneSnapshotOperation.ts" />
 namespace phasereditor2d.scene.ui.editor.undo {
 
     export class CreateObjectWithAssetOperation extends SceneSnapshotOperation {

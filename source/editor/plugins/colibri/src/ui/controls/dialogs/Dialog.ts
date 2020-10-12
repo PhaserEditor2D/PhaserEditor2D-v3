@@ -98,7 +98,7 @@ namespace colibri.ui.controls.dialogs {
             return this._parentDialog;
         }
 
-        create() {
+        create(hideParentDialog = true) {
 
             this._containerElement = document.createElement("div");
             this._containerElement.classList.add("DialogContainer");
@@ -121,18 +121,29 @@ namespace colibri.ui.controls.dialogs {
 
             this.resize();
 
-            if (this._parentDialog) {
+            if (this._parentDialog && hideParentDialog) {
+
                 this._parentDialog._containerElement.style.display = "none";
                 this._parentDialog.style.display = "none";
             }
         }
 
         setTitle(title: string) {
+
             this._titlePaneElement.innerText = title;
         }
 
-        addCancelButton() {
-            this.addButton("Cancel", () => this.close());
+        addCancelButton(callback?: () => void) {
+
+            this.addButton("Cancel", () => {
+
+                this.close();
+
+                if (callback) {
+
+                    callback();
+                }
+            });
         }
 
         addButton(text: string, callback: () => void) {

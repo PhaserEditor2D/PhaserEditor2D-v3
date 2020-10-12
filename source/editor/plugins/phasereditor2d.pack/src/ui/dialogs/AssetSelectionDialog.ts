@@ -19,14 +19,41 @@ namespace phasereditor2d.pack.ui.dialogs {
         }
 
         setSelectionCallback(callback: (selection: any[]) => void) {
+
             this._selectionCallback = callback;
         }
 
         setCancelCallback(callback: () => void) {
+
             this._cancelCallback = callback;
         }
 
-        create() {
+        async getResultPromise(): Promise<any[]> {
+
+            const promise = new Promise<any[]>((resolve, reject) => {
+
+                this.setSelectionCallback((sel: any[]) => {
+
+                    resolve(sel);
+                });
+
+                this.setCancelCallback(() => {
+
+                    reject();
+                })
+            });
+
+            return promise;
+        }
+
+        async getSingleResultPromise(): Promise<any> {
+
+            const sel = await this.getResultPromise();
+
+            return sel[0];
+        }
+
+        create(hideParentDialog = true) {
 
             const viewer = this.getViewer();
 
@@ -39,7 +66,7 @@ namespace phasereditor2d.pack.ui.dialogs {
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
             viewer.setInput([]);
 
-            super.create();
+            super.create(hideParentDialog);
 
             this.setTitle("Select Asset");
 

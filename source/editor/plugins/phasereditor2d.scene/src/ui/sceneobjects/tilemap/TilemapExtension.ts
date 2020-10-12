@@ -2,6 +2,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
+    interface ITilemapExtraData {
+        tilemap: pack.core.TilemapTiledJSONAssetPackItem,
+        tilesetsImages: Map<string, pack.core.ImageAssetPackItem | pack.core.SpritesheetAssetPackItem>;
+    }
+
     export class TilemapExtension extends ScenePlainObjectExtension {
 
         static CATEGORY = "Tilemap";
@@ -85,48 +90,43 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor) {
 
-            const finder = new pack.core.PackFinder();
+            const dlg = new TilemapConfigDialog();
 
-            await finder.preload();
+            const promise = new Promise((resolve, reject) => {
 
-            const dlg = new pack.ui.dialogs.AssetSelectionDialog("tree");
+                dlg.create();
 
-            dlg.create();
+                dlg.setCreateCallback(async () => {
 
-            dlg.getViewer().setInput(
-                finder.getPacks()
-                    .flatMap(pack => pack.getItems())
-                    .filter(item => item instanceof pack.core.TilemapTiledJSONAssetPackItem));
+                    const tilemapAsset = dlg.getTilemapAsset();
 
-            dlg.setTitle("Select Tilemap Key");
+                    const scene = editor.getScene();
 
-            const promise = new Promise((resolver, reject) => {
+                    let updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(tilemapAsset);
 
-                dlg.setSelectionCallback(async (sel) => {
+                    await updater.updateLoader(scene, tilemapAsset);
 
-                    const item = sel[0] as pack.core.TilemapTiledJSONAssetPackItem;
+                    for (const [name, image] of dlg.getTilesetsImages().entries()) {
 
-                    await item.preload();
+                        updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(image);
 
-                    const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(item);
+                        await updater.updateLoader(scene, image);
+                    }
 
-                    await updater.updateLoader(editor.getScene(), item);
-
-                    const result: ICreateExtraDataResult = {
-                        data: item
+                    const data: ITilemapExtraData = {
+                        tilemap: tilemapAsset,
+                        tilesetsImages: dlg.getTilesetsImages()
                     };
 
-                    resolver(result);
-                });
-
-                dlg.setCancelCallback(() => {
-
                     const result: ICreateExtraDataResult = {
-                        abort: true
+                        data
                     };
 
-                    resolver(result);
+                    resolve(result);
                 });
+
+                dlg.setCancelCallback(() => reject());
+
             });
 
             return promise;
@@ -134,9 +134,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createDefaultSceneObject(args: ICreateDefaultArgs): IScenePlainObject {
 
-            const item = args.extraData as pack.core.TilemapTiledJSONAssetPackItem;
+            const extraData = args.extraData as ITilemapExtraData;
 
-            const tilemap = new sceneobjects.Tilemap(args.scene, item.getKey());
+            const tilesetsImages = extraData.tilesetsImages;
+
+            console.log(extraData);
+
+            const tilemap = new sceneobjects.Tilemap(args.scene, extraData.tilemap.getKey());
+
+            for (const [name, image] of tilesetsImages.entries()) {
+
+                tilemap.addTilesetImage(name, image.getKey());
+            }
 
             return tilemap;
         }
