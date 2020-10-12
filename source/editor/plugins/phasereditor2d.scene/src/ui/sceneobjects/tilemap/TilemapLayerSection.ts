@@ -22,7 +22,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.addUpdater(() => {
 
-                    btn.textContent = (this.getSelectionFirstElement().tilemap as Tilemap).getEditorSupport().getLabel();
+                    const tilemap = (this.getSelectionFirstElement().tilemap as Tilemap);
+
+                    btn.textContent = tilemap.getEditorSupport().getLabel();
                 });
             }
 
@@ -43,13 +45,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(() => {
 
-                text.value = this.getSelectionFirstElement().tilemap.layer[prop];
+                const layer = this.getSelectionFirstElement();
+
+                const tilemap = layer.tilemap;
+
+                const layerData = tilemap.layer;
+
+                text.value = layerData[prop];
             });
         }
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof StaticTilemapLayer || obj instanceof DynamicTilemapLayer;
+            return (obj instanceof StaticTilemapLayer || obj instanceof DynamicTilemapLayer)
+                && obj.tilemap !== undefined;
         }
 
         canEditNumber(n: number): boolean {

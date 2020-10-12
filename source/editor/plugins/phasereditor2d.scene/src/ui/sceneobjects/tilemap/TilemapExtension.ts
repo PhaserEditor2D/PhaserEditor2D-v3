@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
+    import controls = colibri.ui.controls;
 
     interface ITilemapExtraData {
         tilemap: pack.core.TilemapTiledJSONAssetPackItem,
@@ -143,6 +144,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const [name, image] of tilesetsImages.entries()) {
 
                 tilemap.addTilesetImage(name, image.getKey());
+            }
+
+            const layers = tilemap.layers;
+
+            if (layers.length > 0) {
+
+                const menu = new controls.Menu();
+
+                for (const layer of layers) {
+
+                    menu.addAction({
+                        text: layer.name,
+                        icon: ScenePlugin.getInstance().getIcon(ICON_TILEMAP_LAYER)
+                    });
+                }
+
+                menu.create(args.x, args.y);
             }
 
             return tilemap;
