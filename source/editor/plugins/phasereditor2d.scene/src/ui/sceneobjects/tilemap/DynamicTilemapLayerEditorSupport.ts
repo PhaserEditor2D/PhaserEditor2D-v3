@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setInteractive(): void {
 
-            this.getObject().setInteractive();
+            this.getObject().setInteractive(StaticTilemapLayerEditorSupport.helper_interactiveCallback);
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {

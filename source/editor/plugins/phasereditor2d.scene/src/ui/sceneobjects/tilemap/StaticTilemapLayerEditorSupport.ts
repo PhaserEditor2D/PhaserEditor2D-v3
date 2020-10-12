@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setInteractive(): void {
 
-            this.getObject().setInteractive();
+            this.getObject().setInteractive(StaticTilemapLayerEditorSupport.helper_interactiveCallback);
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
@@ -42,6 +42,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             StaticTilemapLayerEditorSupport.helper_writeJSON(this.getObject(), data);
         }
 
+        static helper_interactiveCallback(hitArea: any, x: number, y: number, layer: StaticTilemapLayer) {
+
+            if (x >= 0 && y >= 0 && x <= layer.width && y <= layer.height) {
+
+                const col = Math.floor(x / layer.layer.tileWidth);
+                const row = Math.floor(y / layer.layer.tileHeight);
+
+                const tile = layer.getTileAt(col, row);
+
+                return tile !== null && tile !== undefined;
+            }
+
+            return false;
+        }
 
         static helper_writeJSON(layer: StaticTilemapLayer | DynamicTilemapLayer, data: ITilemapLayerData) {
 
