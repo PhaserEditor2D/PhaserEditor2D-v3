@@ -51,8 +51,11 @@ namespace phasereditor2d.pack.ui.viewers {
                     case core.UNITY_ATLAS_TYPE:
                     case core.ATLAS_XML_TYPE: {
 
-                        if (this._layout === "grid") {
-                            return new controls.viewers.FolderCellRenderer();
+                        const simple = AssetPackPlugin.getInstance().isSimpleRenderingOfTextureAtlas();
+
+                        if (this._layout === "grid" && !simple) {
+
+                            return new controls.viewers.FolderCellRenderer(4);
                         }
 
                         return new viewers.ImageFrameContainerIconCellRenderer();

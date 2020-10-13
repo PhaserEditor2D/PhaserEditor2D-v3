@@ -13,6 +13,7 @@
 * Remember the editor type when open a file at startup.
 * User components editor: complete the Compiler menu in the context menu. With commands to open the output file.
 * User components editor: shows the context menu in the Outline view.
+* Allows the Simple-Rendering-Mode of texture atlases. You can enable it if your project a lot and huge texture atlases.
 
 ### Removed
 
