@@ -7,8 +7,9 @@ namespace phasereditor2d.pack {
     export const ICON_ASSET_PACK = "asset-pack";
     export const ICON_ANIMATIONS = "animations";
 
-    export const CAT_ASSET_PACK_EDITOR = "phasereditor2d.pack.ui.editor.category";
+    export const CAT_ASSET_PACK = "phasereditor2d.pack.ui.editor.category";
     export const CMD_ASSET_PACK_EDITOR_ADD_FILE = "phasereditor2d.pack.ui.editor.AddFile";
+    export const CMD_TOGGLE_SIMPLE_RENDERING_OF_TEXTURE_ATLAS = "phasereditor2d.pack.ui.editor.ToggleSimpleRenderingOfTextureAtlas";
 
     export class AssetPackPlugin extends colibri.Plugin {
 
@@ -18,8 +19,24 @@ namespace phasereditor2d.pack {
             return this._instance;
         }
 
+        private _simpleRenderingOfTextureAtlas: boolean;
+
         private constructor() {
             super("phasereditor2d.pack");
+
+            this._simpleRenderingOfTextureAtlas = localStorage.getItem("phasereditor2d.pack.simpleRenderingOfTextureAtlas") === "on";
+        }
+
+        isSimpleRenderingOfTextureAtlas() {
+
+            return this._simpleRenderingOfTextureAtlas;
+        }
+
+        setSimpleRenderingOfTextureAtlas(enabled: boolean) {
+
+            this._simpleRenderingOfTextureAtlas = enabled;
+
+            localStorage.setItem("phasereditor2d.pack.simpleRenderingOfTextureAtlas", enabled ? "on" : "off")
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -139,8 +156,35 @@ namespace phasereditor2d.pack {
                     // category
 
                     manager.addCategory({
-                        id: CAT_ASSET_PACK_EDITOR,
-                        name: "Asset Pack File"
+                        id: CAT_ASSET_PACK,
+                        name: "Asset Pack"
+                    });
+
+                    // enable/disable simple rendering of texture atlas
+
+                    manager.add({
+                        command: {
+                            id: CMD_TOGGLE_SIMPLE_RENDERING_OF_TEXTURE_ATLAS,
+                            category: CAT_ASSET_PACK,
+                            name: "Toggle Simple Rendering Of Texture Atlas",
+                            tooltip: "Enable or disable the simple-rendering mode of texture atlases. Enable this if you have huge textures."
+                        },
+                        handler: {
+                            executeFunc: args => {
+                                const enabled = !AssetPackPlugin.getInstance().isSimpleRenderingOfTextureAtlas();
+                                AssetPackPlugin.getInstance().setSimpleRenderingOfTextureAtlas(enabled);
+
+                                alert(`The Simple-Rendering mode of texture atlases is ${enabled ? "ON" : "OFF"}.
+                                <br>
+                                Please, refresh the page.`);
+
+                                setTimeout(() => {
+
+                                    window.location.reload();
+
+                                }, 1000);
+                            }
+                        }
                     });
 
                     // delete
@@ -162,7 +206,7 @@ namespace phasereditor2d.pack {
                             icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
                             name: "Add File",
                             tooltip: "Add new file configuration",
-                            category: CAT_ASSET_PACK_EDITOR
+                            category: CAT_ASSET_PACK
                         },
                         handler: {
                             testFunc: args => ui.editor.AssetPackEditor.isEditorScope(args),
