@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 3.7.1-next
+
+* Allows the Simple-Rendering-Mode of texture atlases. You can enable it if your project a lot and huge texture atlases.
+
 ## Version 3.7.1 - Sep 22, 2020
 
 ### Fixes
