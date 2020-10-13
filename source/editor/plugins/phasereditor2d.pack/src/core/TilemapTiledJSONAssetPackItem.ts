@@ -10,6 +10,7 @@ namespace phasereditor2d.pack.core {
     export class TilemapTiledJSONAssetPackItem extends AssetPackItem {
 
         private _tilesetsData: ITilesetData[];
+        private _layerNames: string[];
 
         constructor(pack: AssetPack, data: any) {
             super(pack, data);
@@ -44,6 +45,15 @@ namespace phasereditor2d.pack.core {
                     }
                 }
 
+                if (data.layers) {
+
+                    this._layerNames = data.layers.filter(layer => layer.name).map(layer => layer.name);
+
+                } else {
+
+                    this._layerNames = [];
+                }
+
                 this._tilesetsData = tilesetsData;
 
                 return result;
@@ -62,6 +72,11 @@ namespace phasereditor2d.pack.core {
         getTilesetsData() {
 
             return this._tilesetsData;
+        }
+
+        getLayerNames() {
+
+            return this._layerNames;
         }
 
         addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
