@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     menu.addAction({
                         text: asset.getKey(),
-                        icon: ScenePlugin.getInstance().getIcon(ICON_TILEMAP),
+                        icon: pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP),
                         callback: () => {
 
                             if (asset !== this._tilemapAsset) {

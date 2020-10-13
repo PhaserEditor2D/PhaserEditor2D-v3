@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 phaserTypeName: "Phaser.GameObjects.BitmapText",
                 typeName: "BitmapText",
-                iconName: ICON_TEXT_TYPE
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_TEXT_TYPE)
             });
         }
 

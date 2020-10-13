@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             category: string,
             typeName: string,
             phaserTypeName: string,
-            iconName: string,
+            icon: colibri.ui.controls.IconDescriptor,
         }) {
             super({
                 extensionPoint: ScenePlainObjectExtension.POINT_ID,

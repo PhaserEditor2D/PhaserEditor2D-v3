@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import controls = colibri.ui.controls;
+
     export interface ICreateExtraDataResult {
 
         dataNotFoundMessage?: string;
@@ -19,19 +21,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _typeName: string;
         private _phaserTypeName: string;
-        private _iconName: string;
+        private _iconDescriptor: controls.IconDescriptor;
 
         constructor(config: {
             extensionPoint: string,
             typeName: string,
             phaserTypeName: string,
-            iconName: string,
+            icon: colibri.ui.controls.IconDescriptor,
         }) {
             super(config.extensionPoint);
 
             this._typeName = config.typeName;
             this._phaserTypeName = config.phaserTypeName;
-            this._iconName = config.iconName;
+            this._iconDescriptor = config.icon;
         }
 
         /**
@@ -61,7 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getIcon() {
 
-            return ScenePlugin.getInstance().getIcon(this._iconName);
+            return this._iconDescriptor.getIcon();
         }
 
         getTypeName() {

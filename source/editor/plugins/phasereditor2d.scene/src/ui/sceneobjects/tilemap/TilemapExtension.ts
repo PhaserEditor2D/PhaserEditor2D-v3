@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private constructor() {
             super({
                 category: TilemapExtension.CATEGORY,
-                iconName: ICON_TILEMAP,
+                icon: pack.AssetPackPlugin.getInstance().getIconDescriptor(pack.ICON_TILEMAP),
                 phaserTypeName: "Phaser.Tilemaps.Tilemap",
                 typeName: "Tilemap"
             });
@@ -156,7 +156,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     menu.addAction({
                         text: layer.name,
-                        icon: ScenePlugin.getInstance().getIcon(ICON_TILEMAP_LAYER)
+                        icon: pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER)
                     });
                 }
 

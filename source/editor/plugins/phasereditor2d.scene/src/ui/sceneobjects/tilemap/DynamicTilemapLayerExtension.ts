@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor() {
             super({
-                iconName: ICON_TILEMAP_LAYER,
+                icon: pack.AssetPackPlugin.getInstance().getIconDescriptor(pack.ICON_TILEMAP_LAYER),
                 phaserTypeName: "Phaser.Tilemaps.DynamicTilemapLayer",
                 typeName: "DynamicTilemapLayer"
             });
