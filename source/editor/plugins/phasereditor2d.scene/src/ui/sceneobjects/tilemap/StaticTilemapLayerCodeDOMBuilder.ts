@@ -16,6 +16,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const tilemapLayer = args.obj as (StaticTilemapLayer | DynamicTilemapLayer);
 
+            const tilesets = StaticTilemapLayer.scanTilesets(tilemapLayer);
+            const tilesetArray = "[" + tilesets.map(t => code.CodeDOM.quote(t.name)).join(",") + "]";
+
             const tilemap = tilemapLayer.tilemap as Tilemap;
 
             const tilemapVarName = code.formatToValidVarName(tilemap.getEditorSupport().getLabel());
@@ -23,7 +26,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const call = new code.MethodCallCodeDOM(this._factoryMethod, tilemapVarName);
 
             call.argLiteral(tilemapLayer.layer.name);
-            call.arg(tilemapVarName + ".tilesets");
+            call.arg(tilesetArray);
             call.argInt(tilemapLayer.x);
             call.argInt(tilemapLayer.y);
 

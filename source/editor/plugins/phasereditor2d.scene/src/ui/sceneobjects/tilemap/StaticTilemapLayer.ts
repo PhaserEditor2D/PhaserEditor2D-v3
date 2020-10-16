@@ -13,6 +13,45 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new StaticTilemapLayerEditorSupport(this, scene);
         }
 
+        static scanTilesets(layer: StaticTilemapLayer | DynamicTilemapLayer) {
+
+            const gidMap = new Map();
+
+            const allTilesets = layer.tilemap.tilesets;
+
+            for (const tileset of allTilesets) {
+
+                const s = tileset.firstgid;
+
+                for (let t = 0; t < tileset.total; t++) {
+
+                    gidMap.set(s + t, tileset);
+                }
+            }
+
+            const layerTilesets = new Set<Phaser.Tilemaps.Tileset>();
+
+            for (let x = 0; x < layer.width; x++) {
+
+                for (let y = 0; y < layer.height; y++) {
+
+                    const tile = layer.getTileAt(x, y);
+
+                    if (tile) {
+
+                        const tileset = gidMap.get(tile.index);
+
+                        if (tileset) {
+
+                            layerTilesets.add(tileset);
+                        }
+                    }
+                }
+            }
+
+            return [...layerTilesets];
+        }
+
         destroy() {
 
             super.destroy(false);
