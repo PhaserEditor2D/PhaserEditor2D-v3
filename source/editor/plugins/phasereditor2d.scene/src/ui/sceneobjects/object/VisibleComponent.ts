@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export interface IVisibleLikeObject extends ISceneObject {
+    export interface IVisibleLikeObject extends ISceneGameObject {
 
         visible: boolean;
     }

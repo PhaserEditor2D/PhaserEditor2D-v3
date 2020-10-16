@@ -6,9 +6,15 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         getLabel(obj: any): string {
 
-            if (obj instanceof Phaser.GameObjects.GameObject) {
+            if (sceneobjects.ScenePlainObjectEditorSupport.hasEditorSupport(obj)) {
 
-                const support = (obj as sceneobjects.ISceneObject).getEditorSupport();
+                const plainObject = obj as sceneobjects.IScenePlainObject;
+
+                return plainObject.getEditorSupport().getLabel();
+
+            } if (obj instanceof Phaser.GameObjects.GameObject) {
+
+                const support = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 
                 if (support.getScene().isPrefabSceneType() && obj === support.getScene().getPrefabObject()) {
 
@@ -30,6 +36,16 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (obj instanceof sceneobjects.ObjectList) {
 
                 return obj.getLabel();
+            }
+
+            const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();
+
+            for (const ext of extensions) {
+
+                if (ext.isLabelProviderFor(obj)) {
+
+                    return ext.getLabelProvider().getLabel(obj);
+                }
             }
 
             return "" + obj;

@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.ui {
 
             const children = this.getDisplayListChildren();
 
-            let singleObject: sceneobjects.ISceneObject;
+            let singleObject: sceneobjects.ISceneGameObject;
 
             const s = this.getSettings();
 

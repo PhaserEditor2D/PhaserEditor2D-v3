@@ -1,7 +1,5 @@
 namespace phasereditor2d.scene.ui.editor {
 
-    import controls = colibri.ui.controls;
-
     export class SelectionManager {
 
         private _editor: SceneEditor;
@@ -20,6 +18,9 @@ namespace phasereditor2d.scene.ui.editor {
             list.push(...this._editor.getSelectedGameObjects()
                 .map(obj => obj.getEditorSupport().getId()));
 
+            list.push(...this._editor.getSelectedPlainObjects()
+                .map(obj => obj.getEditorSupport().getId()))
+
             list.push(...this._editor.getSelection()
                 .filter(obj => obj instanceof sceneobjects.ObjectList)
                 .map(obj => (obj as sceneobjects.ObjectList).getId()));
@@ -27,17 +28,24 @@ namespace phasereditor2d.scene.ui.editor {
             return list;
         }
 
-        setSelectionByIds(ids: string[]) {
+        setSelectionByIds(selectionIds: string[]) {
+
+            const scene = this._editor.getScene();
 
             const map: Map<string, any> = new Map(
-                this._editor.getScene().buildObjectIdMap());
+                scene.buildObjectIdMap());
+
+            for (const obj of scene.getPlainObjects()) {
+
+                map.set(obj.getEditorSupport().getId(), obj);
+            }
 
             for (const list of this._editor.getScene().getObjectLists().getLists()) {
 
                 map.set(list.getId(), list);
             }
 
-            const sel = ids
+            const sel = selectionIds
                 .map(id => map.get(id))
                 .filter(obj => obj !== undefined);
 
@@ -59,7 +67,13 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (obj instanceof Phaser.GameObjects.GameObject) {
 
-                        return objMap.get((obj as sceneobjects.ISceneObject).getEditorSupport().getId());
+                        return objMap.get((obj as sceneobjects.ISceneGameObject).getEditorSupport().getId());
+                    }
+
+                    if (sceneobjects.ScenePlainObjectEditorSupport.hasEditorSupport(obj)) {
+
+                        return this._editor.getScene().getPlainObjectById(
+                            (obj as sceneobjects.IScenePlainObject).getEditorSupport().getId());
                     }
 
                     if (obj instanceof sceneobjects.ObjectList) {
@@ -84,7 +98,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             const provider = this._editor.getOutlineProvider();
 
-            provider.setSelection(this._editor.getSelection(), true, true);
+            const sel = this._editor.getSelection();
+
+            provider.setSelection(sel, true, true);
 
             provider.repaint();
         }
@@ -103,7 +119,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (selected) {
 
-                    const obj = selected as sceneobjects.ISceneObject;
+                    const obj = selected as sceneobjects.ISceneGameObject;
 
                     const owner = obj.getEditorSupport().getOwnerPrefabInstance();
 

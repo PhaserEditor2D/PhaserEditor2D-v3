@@ -2,11 +2,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export abstract class SceneObjectSection<T extends ISceneObjectLike> extends editor.properties.BaseSceneSection<T> {
+    export abstract class SceneGameObjectSection<T extends ISceneGameObjectLike> extends editor.properties.BaseSceneSection<T> {
 
         isPrefabSceneObject(obj: any) {
 
-            const support = EditorSupport.getEditorSupport(obj);
+            const support = GameObjectEditorSupport.getEditorSupport(obj);
 
             if (support) {
 
@@ -281,7 +281,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 } else {
 
-                    value = Number.parseFloat(textValue);
+                    value = this.parseNumberExpression(text);
                 }
 
                 if (isNaN(value)) {

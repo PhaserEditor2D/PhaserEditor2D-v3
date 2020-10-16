@@ -36,7 +36,6 @@ namespace phasereditor2d.ide.ui.dialogs {
             clientArea.classList.add("DialogClientArea");
 
             clientArea.style.display = "grid";
-            clientArea.style.gridTemplateRows = "1fr auto";
             clientArea.style.gridTemplateRows = "1fr";
             clientArea.style.gridRowGap = "5px";
 

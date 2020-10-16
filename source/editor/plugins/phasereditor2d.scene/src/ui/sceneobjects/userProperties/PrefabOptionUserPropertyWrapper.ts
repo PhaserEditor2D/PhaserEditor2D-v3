@@ -3,7 +3,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class PrefabOptionUserPropertyWrapper
-        extends PrefabUserPropertyWrapper implements IEnumProperty<ISceneObject, string> {
+        extends PrefabUserPropertyWrapper implements IEnumProperty<ISceneGameObject, string> {
 
         constructor(userProp: UserProperty) {
             super(userProp);

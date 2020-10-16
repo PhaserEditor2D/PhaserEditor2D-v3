@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ChangeTextureOperation extends SceneObjectOperation<ITextureLikeObject> {
+    export class ChangeTextureOperation extends SceneGameObjectOperation<ITextureLikeObject> {
 
         static runDialog(editor: editor.SceneEditor) {
 
@@ -10,14 +10,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const objects = editor.getSelectedGameObjects()
 
-                .filter(obj => EditorSupport.hasObjectComponent(obj, TextureComponent))
+                .filter(obj => GameObjectEditorSupport.hasObjectComponent(obj, TextureComponent))
 
                 .filter(obj => !obj.getEditorSupport().isPrefabInstance()
                     || obj.getEditorSupport().isUnlockedProperty(TextureComponent.texture));
 
             const objectKeys = objects
 
-                .map(obj => EditorSupport.getObjectComponent(obj, TextureComponent) as TextureComponent)
+                .map(obj => GameObjectEditorSupport.getObjectComponent(obj, TextureComponent) as TextureComponent)
 
                 .map(comp => comp.getTextureKeys());
 

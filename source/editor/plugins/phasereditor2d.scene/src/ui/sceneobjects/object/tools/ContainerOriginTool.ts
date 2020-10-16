@@ -53,7 +53,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._axis = axis;
         }
 
-        isValidFor(objects: sceneobjects.ISceneObject[]) {
+        isValidFor(objects: sceneobjects.ISceneGameObject[]) {
 
             return objects.length === 1 && objects[0] instanceof Container;
         }

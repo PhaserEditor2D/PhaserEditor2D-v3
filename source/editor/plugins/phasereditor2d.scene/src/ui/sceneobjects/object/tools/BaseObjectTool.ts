@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (obj instanceof Phaser.GameObjects.GameObject) {
 
-                const support = (obj as unknown as ISceneObject).getEditorSupport();
+                const support = (obj as unknown as ISceneGameObject).getEditorSupport();
 
                 for (const prop of this._properties) {
 
@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (obj instanceof Phaser.GameObjects.GameObject) {
 
-                const support = (obj as unknown as ISceneObject).getEditorSupport();
+                const support = (obj as unknown as ISceneGameObject).getEditorSupport();
 
                 for (const prop of this._properties) {
 

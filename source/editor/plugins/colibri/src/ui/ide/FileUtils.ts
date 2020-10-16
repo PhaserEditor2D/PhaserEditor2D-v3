@@ -4,6 +4,13 @@ namespace colibri.ui.ide {
 
     export class FileUtils {
 
+        static getFileNameWithoutExtension(filename: string) {
+
+            const i = filename.lastIndexOf(".");
+
+            return filename.substring(0, i);
+        }
+
         static getFileCopyName(file: io.FilePath) {
 
             const parent = file.getParent();

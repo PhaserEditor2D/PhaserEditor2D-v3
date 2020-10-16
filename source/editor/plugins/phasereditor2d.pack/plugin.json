@@ -2,5 +2,8 @@
     "id": "phasereditor2d.pack",
     "scripts": [
         "_out/phasereditor2d.pack.js"
+    ],
+    "styles": [
+        "styles/AssetPackEditor.css"
     ]
 }

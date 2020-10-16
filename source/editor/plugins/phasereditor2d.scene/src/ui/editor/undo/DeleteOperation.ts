@@ -9,7 +9,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
         protected async performModification() {
 
             const editor = this._editor;
-            const lists = editor.getScene().getObjectLists();
+            const scene = this._editor.getScene();
+            const lists = scene.getObjectLists();
 
             for (const obj of editor.getSelectedGameObjects()) {
 
@@ -22,6 +23,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 lists.removeListById(obj.getId());
             }
+
+            scene.removePlainObjects(editor.getSelectedPlainObjects());
 
             editor.setSelection([]);
         }

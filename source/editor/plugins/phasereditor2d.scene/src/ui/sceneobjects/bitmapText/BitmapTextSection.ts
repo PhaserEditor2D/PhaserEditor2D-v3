@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class BitmapTextSection extends SceneObjectSection<BitmapText> {
+    export class BitmapTextSection extends SceneGameObjectSection<BitmapText> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor.scene.ui.sceneobjects.BitmapTextSection", "Bitmap Text");

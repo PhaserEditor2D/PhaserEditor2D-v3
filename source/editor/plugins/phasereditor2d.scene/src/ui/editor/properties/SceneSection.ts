@@ -73,7 +73,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 const editor = this.getEditor();
 
-                const value = Number.parseInt(textElement.value, 10);
+                const value = this.parseNumberExpression(textElement, true);
 
                 if (isNaN(value)) {
 

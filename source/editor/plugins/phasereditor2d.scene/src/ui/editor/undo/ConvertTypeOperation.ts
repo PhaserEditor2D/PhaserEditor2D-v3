@@ -4,15 +4,15 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
     import io = colibri.core.io;
     import json = core.json;
-    import ISceneObject = sceneobjects.ISceneObject;
+    import ISceneObject = sceneobjects.ISceneGameObject;
 
     interface IObjectConversionData {
         parentId: string;
         objData: json.IObjectData;
-        targetType: sceneobjects.SceneObjectExtension | io.FilePath;
+        targetType: sceneobjects.SceneGameObjectExtension | io.FilePath;
     }
 
-    declare type ITargetType = sceneobjects.SceneObjectExtension | io.FilePath;
+    declare type ITargetType = sceneobjects.SceneGameObjectExtension | io.FilePath;
 
     export class ConvertTypeOperation extends undo.ObjectSnapshotOperation {
 
@@ -85,7 +85,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 const ser = this._editor.getScene().getMaker().getSerializer(objData);
                 const type = ser.getType();
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                 ext.adaptDataAfterTypeConversion(ser, obj, this._extraData);
 

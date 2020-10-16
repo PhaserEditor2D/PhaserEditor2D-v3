@@ -6,20 +6,27 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
-            if (element instanceof Phaser.GameObjects.GameObject) {
+            const support = sceneobjects.EditorSupport.getEditorSupport(element);
 
-                const obj = element as sceneobjects.ISceneObject;
+            if (support) {
 
-                return obj.getEditorSupport().getCellRenderer();
+                return support.getCellRenderer();
 
             } else if (element instanceof Phaser.GameObjects.DisplayList
-                || element instanceof sceneobjects.ObjectLists) {
+                || element instanceof sceneobjects.ObjectLists
+                || typeof element === "string") {
 
                 return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+            }
 
-            } else if (element instanceof sceneobjects.ObjectList) {
+            const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();
 
-                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
+            for (const ext of extensions) {
+
+                if (ext.isCellRendererProviderFor(element)) {
+
+                    return ext.getCellRendererProvider().getCellRenderer(element);
+                }
             }
 
             return new controls.viewers.EmptyCellRenderer(false);

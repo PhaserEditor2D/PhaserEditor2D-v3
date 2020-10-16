@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._parentId = parentId;
         }
 
-        static canMoveAllTo(objList: ISceneObject[], container: Container) {
+        static canMoveAllTo(objList: ISceneGameObject[], container: Container) {
 
             for (const obj of objList) {
 
@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return true;
         }
 
-        static canMoveTo(obj: ISceneObject, container: Container) {
+        static canMoveTo(obj: ISceneGameObject, container: Container) {
 
             if (obj.parentContainer === container) {
 
@@ -57,7 +57,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return true;
         }
 
-        protected performModification() {
+        protected async performModification() {
 
             const map = this.getScene().buildObjectIdMap();
 

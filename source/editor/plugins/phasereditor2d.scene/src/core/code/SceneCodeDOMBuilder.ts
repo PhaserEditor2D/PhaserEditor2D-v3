@@ -1,7 +1,7 @@
 namespace phasereditor2d.scene.core.code {
 
     import io = colibri.core.io;
-    import SceneObject = ui.sceneobjects.ISceneObject;
+    import SceneObject = ui.sceneobjects.ISceneGameObject;
 
     export class SceneCodeDOMBuilder {
 
@@ -194,7 +194,7 @@ namespace phasereditor2d.scene.core.code {
 
             const type = prefabObj.getEditorSupport().getObjectType();
 
-            const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+            const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
             const objBuilder = ext.getCodeDOMBuilder();
 
@@ -238,6 +238,8 @@ namespace phasereditor2d.scene.core.code {
                 });
             }
 
+            this.addCreateAllPlainObjectCode(ctrDecl);
+
             this.addCreateListsCode(body);
 
             body.push(...lazyStatements);
@@ -260,6 +262,8 @@ namespace phasereditor2d.scene.core.code {
 
             const body = createMethodDecl.getBody();
 
+            this.addCreateAllPlainObjectCode(createMethodDecl);
+
             const lazyStatements: CodeDOM[] = [];
 
             for (const obj of this._scene.getDisplayListChildren()) {
@@ -277,6 +281,19 @@ namespace phasereditor2d.scene.core.code {
             this.addFieldInitCode(body);
 
             return createMethodDecl;
+        }
+
+        private addCreateAllPlainObjectCode(createMethodDecl: MethodDeclCodeDOM) {
+
+            const body = createMethodDecl.getBody();
+
+            for (const obj of this._scene.getPlainObjects()) {
+
+                body.push(new RawCodeDOM(""));
+                body.push(new RawCodeDOM("// " + obj.getEditorSupport().getLabel()));
+
+                this.addCreatePlainObjectCode(obj, createMethodDecl);
+            }
         }
 
         private addCreateListsCode(body: CodeDOM[]) {
@@ -336,6 +353,22 @@ namespace phasereditor2d.scene.core.code {
                 return !support.isPrefabInstance();
             });
 
+            for(const obj of this._scene.getPlainObjects()) {
+
+                const editorSupport = obj.getEditorSupport();
+
+                if (editorSupport.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
+
+                    const varname = formatToValidVarName(editorSupport.getLabel());
+
+                    const dom = new AssignPropertyCodeDOM(varname, "this");
+
+                    dom.value(varname);
+
+                    fields.push(dom);
+                }
+            }
+
             for (const list of this._scene.getObjectLists().getLists()) {
 
                 if (list.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
@@ -357,6 +390,37 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
+        private addCreatePlainObjectCode(
+            obj: ui.sceneobjects.IScenePlainObject, createMethodDecl: MethodDeclCodeDOM) {
+
+            const objSupport = obj.getEditorSupport();
+
+            const varname = formatToValidVarName(objSupport.getLabel());
+
+            const createObjectMethodCalls = objSupport.getExtension().buildCreateObjectWithFactoryCodeDOM({
+                gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene" : "this",
+                obj: obj,
+                varname
+            })
+
+            createMethodDecl.getBody().push(...createObjectMethodCalls);
+
+            const mainCreateMethodCall = createObjectMethodCalls[0];
+
+            mainCreateMethodCall.setDeclareReturnToVar(true);
+
+            if (!objSupport.isMethodScope()) {
+
+                mainCreateMethodCall.setDeclareReturnToVar(true);
+                mainCreateMethodCall.setDeclareReturnToField(true);
+            }
+
+            if (mainCreateMethodCall.isDeclareReturnToVar()) {
+
+                mainCreateMethodCall.setReturnToVar(varname);
+            }
+        }
+
         private addCreateObjectCode(obj: SceneObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
 
             const objSupport = obj.getEditorSupport();
@@ -369,7 +433,7 @@ namespace phasereditor2d.scene.core.code {
 
                 const type = objSupport.getObjectType();
 
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                 createObjectMethodCall = new code.MethodCallCodeDOM(clsName);
                 createObjectMethodCall.setConstructor(true);

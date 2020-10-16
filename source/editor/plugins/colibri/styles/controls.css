@@ -52,6 +52,10 @@ button:focus {
     outline-color: rgba(255, 255, 255, 0.1);
 }
 
+button.alignLeft {
+    text-align: left;
+}
+
 canvas {
     outline: none;
     image-rendering: crisp-edges;
@@ -452,6 +456,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .Menu {
     position: fixed;
+    z-index: 2001;
 }
 
 .MenuItem {
@@ -486,6 +491,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 }
 
 .MenuContainer {
+    z-index: 2000;
     position: absolute;
     left: 0px;
     right: 0px;

@@ -2,12 +2,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export interface IHasParentContainer extends ISceneObject {
+    export interface IHasParentContainer extends ISceneGameObject {
 
         parentContainer: Container;
     }
 
-    export class ParentSection extends SceneObjectSection<IHasParentContainer> {
+    export class ParentSection extends SceneGameObjectSection<IHasParentContainer> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page,

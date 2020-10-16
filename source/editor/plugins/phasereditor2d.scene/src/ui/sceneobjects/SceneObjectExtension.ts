@@ -1,7 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import json = core.json;
-    import code = core.code;
+    import controls = colibri.ui.controls;
 
     export interface ICreateExtraDataResult {
 
@@ -10,15 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         data?: any;
     }
 
-    export interface ICreateWithAssetArgs {
-
-        x: number;
-        y: number;
-        scene: Scene;
-        asset: any;
-    }
-
-    export interface ICreateEmptyArgs {
+    export interface ICreateDefaultArgs {
 
         x: number;
         y: number;
@@ -26,78 +17,53 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         extraData?: any;
     }
 
-    export interface ICreateWithDataArgs {
-
-        scene: Scene;
-        data: json.IObjectData;
-    }
-
-    export interface IGetAssetsFromObjectArgs {
-
-        serializer: json.Serializer;
-        scene: Scene;
-        finder: pack.core.PackFinder;
-    }
-
-    export interface IUpdateLoaderWithAsset {
-
-        asset: any;
-        scene: Scene;
-    }
-
-    export interface IBuildObjectFactoryCodeDOMArgs {
-
-        obj: ISceneObject;
-        gameObjectFactoryExpr: string;
-    }
-
-    export interface IBuildPrefabConstructorCodeDOMArgs {
-
-        obj: ISceneObject;
-        sceneExpr: string;
-        methodCallDOM: code.MethodCallCodeDOM;
-        prefabSerializer: json.Serializer;
-    }
-
-    export interface IBuildPrefabConstructorDeclarationCodeDOM {
-
-        ctrDeclCodeDOM: code.MethodDeclCodeDOM;
-    }
-
-    export interface IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {
-
-        superMethodCallCodeDOM: code.MethodCallCodeDOM;
-        prefabObj: ISceneObject;
-    }
-
     export abstract class SceneObjectExtension extends colibri.Extension {
-
-        static POINT_ID = "phasereditor2d.scene.ui.SceneObjectExtension";
 
         private _typeName: string;
         private _phaserTypeName: string;
-        private _iconName: string;
+        private _iconDescriptor: controls.IconDescriptor;
 
         constructor(config: {
+            extensionPoint: string,
             typeName: string,
             phaserTypeName: string,
-            iconName: string,
+            icon: colibri.ui.controls.IconDescriptor,
         }) {
-            super(SceneObjectExtension.POINT_ID);
+            super(config.extensionPoint);
 
             this._typeName = config.typeName;
             this._phaserTypeName = config.phaserTypeName;
-            this._iconName = config.iconName;
+            this._iconDescriptor = config.icon;
         }
 
-        getHelp() {
+        /**
+         * Some types like TilemapLayer are too complex to be included in a prefab instance.
+         * For now, those types should be excluded from a prefab scene.
+         */
+        isAvailableAsPrefabElement(): boolean {
 
-            return ScenePlugin.getInstance().getPhaserDocs().getDoc(this._phaserTypeName);
+            return true;
         }
+
+        /**
+         * Collect the data used to create a new, empty object. For example, a BitmapText requires
+         * a BitmapFont key to be created, so this method opens a dialog to select the font.
+         */
+        async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor): Promise<ICreateExtraDataResult> {
+
+            return {};
+        }
+
+        /**
+         * Create an empty object of this extension.
+         *
+         * @param args The data needed to create the object.
+         */
+        abstract createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject;
 
         getIcon() {
 
-            return ScenePlugin.getInstance().getIcon(this._iconName);
+            return this._iconDescriptor.getIcon();
         }
 
         getTypeName() {
@@ -108,68 +74,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._phaserTypeName;
         }
 
-        /**
-         * Adapt the data taken from a type conversion.
-         *
-         * @param serializer Serializer of the data resulted by the type-conversion.
-         * @param originalObject The original object that was converted.
-         * @param extraData Sometimes, to create the object, some extra data is needed.
-         * For example, the bitmap font of a bitmap text.
-         */
-        adaptDataAfterTypeConversion(serializer: json.Serializer, originalObject: ISceneObject, extraData: any) {
-            // nothing by default
+        getHelp() {
+
+            return ScenePlugin.getInstance().getPhaserDocs().getDoc(this.getPhaserTypeName());
         }
-
-        /**
-         * Check if an object dropped into the scene can be used to create the scene object of this extension.
-         *
-         * @param data Data dropped from outside the scene editor. For example, items from the Blocks view.
-         */
-        abstract acceptsDropData(data: any): boolean;
-
-        /**
-         * Create the scene object of this extension with the data involved in a drop action.
-         * The data was tested before with the `acceptsDropData()` method.
-         *
-         * @param args The data involved in a drop action.
-         */
-        abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject;
-
-        /**
-         * Collect the data used to create a new, empty object. For example, a BitmapText requires
-         * a BitmapFont key to be created, so this method opens a dialog to select the font.
-         */
-        async collectExtraDataForCreateEmptyObject(): Promise<ICreateExtraDataResult> {
-
-            return {};
-        }
-
-        /**
-         * Create an empty object of this extension.
-         *
-         * @param args The data needed to create the object.
-         */
-        abstract createEmptySceneObject(args: ICreateEmptyArgs): sceneobjects.ISceneObject;
-
-        /**
-         * Create the scene object of this extension with the data involved in a deserialization.
-         *
-         * @param args The data involved in the creation of the object.
-         */
-        abstract createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject;
-
-        /**
-         * Get the assets contained in a scene object data.
-         * The result of this method may be used to prepare the scene loader before de-serialize an object.
-         *
-         * @param args This method args.
-         * @returns The assets.
-         */
-        async abstract getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
-
-        /**
-         * Gets a CodeDOM provider used by the Scene compiler to generate the object creation and prefab class codes.
-         */
-        abstract getCodeDOMBuilder(): ObjectCodeDOMBuilder;
     }
 }

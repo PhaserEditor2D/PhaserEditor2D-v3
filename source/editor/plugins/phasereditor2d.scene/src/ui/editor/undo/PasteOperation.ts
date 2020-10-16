@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
             const sel = [];
 
             const nameMaker = new colibri.ui.ide.utils.NameMaker(
-                (obj: sceneobjects.ISceneObject) => obj.getEditorSupport().getLabel());
+                (obj: sceneobjects.ISceneGameObject) => obj.getEditorSupport().getLabel());
 
             this.getScene().visitAskChildren(obj => {
 
@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const prefabObj = this._editor.getScene().getPrefabObject();
 
-            const sprites: sceneobjects.ISceneObject[] = [];
+            const sprites: sceneobjects.ISceneGameObject[] = [];
 
             for (const item of items) {
 

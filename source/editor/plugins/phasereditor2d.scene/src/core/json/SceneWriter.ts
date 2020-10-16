@@ -15,6 +15,7 @@ namespace phasereditor2d.scene.core.json {
                 sceneType: this._scene.getSceneType(),
                 settings: this._scene.getSettings().toJSON(),
                 displayList: [],
+                plainObjects: [],
                 meta: {
                     app: "Phaser Editor 2D - Scene Editor",
                     url: "https://phasereditor2d.com",
@@ -25,6 +26,17 @@ namespace phasereditor2d.scene.core.json {
             // object lists
 
             this._scene.getObjectLists().writeJSON(sceneData);
+
+            // plain objects
+
+            for (const obj of this._scene.getPlainObjects()) {
+
+                const objData = {} as IScenePlainObjectData;
+
+                obj.getEditorSupport().writeJSON(objData);
+
+                sceneData.plainObjects.push(objData);
+            }
 
             // display list
 

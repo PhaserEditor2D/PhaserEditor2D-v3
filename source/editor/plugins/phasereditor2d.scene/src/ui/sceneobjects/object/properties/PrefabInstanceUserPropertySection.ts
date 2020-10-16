@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class PrefabInstanceSection extends SceneObjectSection<ISceneObject> {
+    export class PrefabInstanceSection extends SceneGameObjectSection<ISceneGameObject> {
 
         private _propArea: HTMLDivElement;
 
@@ -39,9 +39,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._propArea.innerHTML = "";
 
-                const obj = this.getSelectionFirstElement() as ISceneObject;
+                const obj = this.getSelectionFirstElement() as ISceneGameObject;
 
-                const userPropsComponent = EditorSupport
+                const userPropsComponent = GameObjectEditorSupport
                     .getObjectComponent(obj, PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
 
                 const propsByPrefabList = userPropsComponent.getPropertiesByPrefab();
@@ -80,9 +80,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                                 this.getEditor().getScene().visit(obj2 => {
 
-                                    if (EditorSupport.hasEditorSupport(obj2)) {
+                                    if (GameObjectEditorSupport.hasEditorSupport(obj2)) {
 
-                                        const editorSupport = EditorSupport.getEditorSupport(obj2);
+                                        const editorSupport = GameObjectEditorSupport.getEditorSupport(obj2);
 
                                         if (editorSupport.isPrefabInstance()) {
 
@@ -130,9 +130,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getSelectionFirstElement();
 
-            if (EditorSupport.hasEditorSupport(obj)) {
+            if (GameObjectEditorSupport.hasEditorSupport(obj)) {
 
-                const support = EditorSupport.getEditorSupport(obj);
+                const support = GameObjectEditorSupport.getEditorSupport(obj);
 
                 if (support.isPrefabInstance()) {
 
@@ -140,9 +140,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     for (const obj2 of this.getSelection()) {
 
-                        if (EditorSupport.hasEditorSupport(obj2)) {
+                        if (GameObjectEditorSupport.hasEditorSupport(obj2)) {
 
-                            const support2 = EditorSupport.getEditorSupport(obj2);
+                            const support2 = GameObjectEditorSupport.getEditorSupport(obj2);
 
                             if (support2.isPrefabInstance()) {
 

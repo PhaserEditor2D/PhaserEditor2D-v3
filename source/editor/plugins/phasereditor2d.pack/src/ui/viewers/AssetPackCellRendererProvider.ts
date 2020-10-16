@@ -102,6 +102,11 @@ namespace phasereditor2d.pack.ui.viewers {
                     case core.ANIMATION_TYPE:
                         return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ANIMATIONS));
 
+                    case core.TILEMAP_CSV_TYPE:
+                    case core.TILEMAP_IMPACT_TYPE:
+                    case core.TILEMAP_TILED_JSON_TYPE:
+                        return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_TILEMAP));
+
                     default:
                         break;
                 }

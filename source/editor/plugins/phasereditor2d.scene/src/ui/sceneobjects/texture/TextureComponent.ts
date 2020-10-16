@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export interface ITextureLikeObject extends ISceneObject {
+    export interface ITextureLikeObject extends ISceneGameObject {
 
         setTexture(key: string, frame?: string | number): void;
     }

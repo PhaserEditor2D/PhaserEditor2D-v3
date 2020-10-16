@@ -491,7 +491,7 @@ namespace phasereditor2d.scene.ui.editor {
             return this._overlayLayer && this._overlayLayer.isLoading();
         }
 
-        getSelectedGameObjects(): sceneobjects.ISceneObject[] {
+        getSelectedGameObjects(): sceneobjects.ISceneGameObject[] {
 
             return this.getSelection()
 
@@ -503,6 +503,11 @@ namespace phasereditor2d.scene.ui.editor {
             return this.getSelection()
 
                 .filter(obj => obj instanceof sceneobjects.ObjectList) as any;
+        }
+
+        getSelectedPlainObjects(): sceneobjects.IScenePlainObject[] {
+
+            return this.getSelection().filter(obj => sceneobjects.ScenePlainObjectEditorSupport.hasEditorSupport(obj));
         }
 
         getDropManager() {
@@ -626,7 +631,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 .map(obj =>
                     obj instanceof Phaser.GameObjects.GameObject ?
-                        this._scene.getByEditorId((obj as sceneobjects.ISceneObject).getEditorSupport().getId())
+                        this._scene.getByEditorId((obj as sceneobjects.ISceneGameObject).getEditorSupport().getId())
                         : obj)
 
                 .filter(v => v !== null && v !== undefined);
@@ -752,12 +757,20 @@ namespace phasereditor2d.scene.ui.editor {
         repaint(): void {
 
             if (!this._gameBooted) {
+
                 return;
             }
 
-            this._game.loop.tick();
+            try {
 
-            this._overlayLayer.render();
+                this._game.loop.tick();
+
+                this._overlayLayer.render();
+
+            } catch (e) {
+
+                alert(e.message);
+            }
         }
     }
 }

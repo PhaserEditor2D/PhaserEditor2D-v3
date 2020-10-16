@@ -1,10 +1,10 @@
-/// <reference path="./SceneObjectSection.ts"/>
+/// <reference path="./SceneGameObjectSection.ts"/>
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class GameObjectVariableSection extends SceneObjectSection<ISceneObjectLike> {
+    export class GameObjectVariableSection extends SceneGameObjectSection<ISceneGameObjectLike> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectVariableSection", "Variable", false);

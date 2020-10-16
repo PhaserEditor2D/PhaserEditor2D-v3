@@ -14,16 +14,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 typeName: "Image",
                 phaserTypeName: "Phaser.GameObjects.Image",
-                iconName: ICON_IMAGE_TYPE
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_IMAGE_TYPE)
             });
         }
 
-        getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return new BaseImageCodeDOMBuilder("image");
         }
 
-        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
 
             return new sceneobjects.Image(scene, x, y, key || null, frame);
         }

@@ -15,7 +15,7 @@ const docsMap = {};
 for(const item of data.docs) {
 
     const longname = item.longname.replace("#", ".");
-    
+
     docsMap[longname] = item.description || item.classdesc;    
 
     if (item.params) {

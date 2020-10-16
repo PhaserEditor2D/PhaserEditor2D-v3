@@ -6,6 +6,8 @@ namespace phasereditor2d.pack {
 
     export const ICON_ASSET_PACK = "asset-pack";
     export const ICON_ANIMATIONS = "animations";
+    export const ICON_TILEMAP = "tilemap";
+    export const ICON_TILEMAP_LAYER = "tilemap-layer";
 
     export const CAT_ASSET_PACK = "phasereditor2d.pack.ui.editor.category";
     export const CMD_ASSET_PACK_EDITOR_ADD_FILE = "phasereditor2d.pack.ui.editor.AddFile";
@@ -46,7 +48,9 @@ namespace phasereditor2d.pack {
             reg.addExtension(
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_ASSET_PACK,
-                    ICON_ANIMATIONS
+                    ICON_ANIMATIONS,
+                    ICON_TILEMAP,
+                    ICON_TILEMAP_LAYER
                 ], true)
             );
 

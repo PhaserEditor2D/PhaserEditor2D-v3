@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export interface IOriginLikeObject extends ISceneObject {
+    export interface IOriginLikeObject extends ISceneGameObject {
 
         originX: number;
         originY: number;

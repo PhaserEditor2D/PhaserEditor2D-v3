@@ -1,11 +1,11 @@
 /// <reference path="../../../editor/properties/BaseSceneSection.ts"/>
-/// <reference path="./SceneObjectSection.ts" />
+/// <reference path="./SceneGameObjectSection.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class TransformSection extends SceneObjectSection<sceneobjects.ITransformLikeObject> {
+    export class TransformSection extends SceneGameObjectSection<sceneobjects.ITransformLikeObject> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TransformSection", "Transform", false);
@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEdit(obj: any, n: number): boolean {
-            return EditorSupport.getObjectComponent(obj, TransformComponent) !== null && n > 0;
+            return GameObjectEditorSupport.getObjectComponent(obj, TransformComponent) !== null && n > 0;
         }
 
         canEditNumber(n: number): boolean {

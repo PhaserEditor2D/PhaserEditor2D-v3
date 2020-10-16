@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class PrefabUserPropertyWrapper implements IProperty<ISceneObject> {
+    export class PrefabUserPropertyWrapper implements IProperty<ISceneGameObject> {
 
         private _userProp: UserProperty;
 
@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._userProp;
         }
 
-        getValue(obj: ISceneObject) {
+        getValue(obj: ISceneGameObject) {
 
             const comp = this.getComponent(obj);
 
@@ -26,14 +26,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._userProp.getDefaultValue();
         }
 
-        setValue(obj: ISceneObject, value: any): void {
+        setValue(obj: ISceneGameObject, value: any): void {
 
             this.getComponent(obj).setPropertyValue(this._userProp, value);
         }
 
-        private getComponent(obj: ISceneObject) {
+        private getComponent(obj: ISceneGameObject) {
 
-            return EditorSupport.getObjectComponent(obj, PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
+            return GameObjectEditorSupport.getObjectComponent(obj, PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
         }
 
         get name(): string {

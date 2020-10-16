@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class BitmapTextCodeDOMBuilder extends ObjectCodeDOMBuilder {
+    export class BitmapTextCodeDOMBuilder extends GameObjectCodeDOMBuilder {
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 

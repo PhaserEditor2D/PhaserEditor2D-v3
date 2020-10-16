@@ -1,10 +1,10 @@
-/// <reference path="./object/properties/SceneObjectSection.ts" />
+/// <reference path="./object/properties/SceneGameObjectSection.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class TextContentSection extends SceneObjectSection<ITextContentLikeObject> {
+    export class TextContentSection extends SceneGameObjectSection<ITextContentLikeObject> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor.scene.ui.sceneobjects.TextContentSection", "Text Content", false, false);
@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            return EditorSupport.hasObjectComponent(obj, TextContentComponent);
+            return GameObjectEditorSupport.hasObjectComponent(obj, TextContentComponent);
         }
 
         canEditNumber(n: number): boolean {

@@ -82,7 +82,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     }
 
 
-    export class TintComponent extends Component<ISceneObject> {
+    export class TintComponent extends Component<ISceneGameObject> {
 
         static tintFill = SimpleProperty("tintFill", false, "Tint Fill", "phaser:Phaser.GameObjects.Components.Tint.tintFill");
         static tintTopLeft = TintProperty("tintTopLeft", "Tint Top Left");
@@ -90,7 +90,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static tintBottomLeft = TintProperty("tintBottomLeft", "Tint Bottom Left");
         static tintBottomRight = TintProperty("tintBottomRight", "Tint Bottom Right");
 
-        constructor(obj: ISceneObject) {
+        constructor(obj: ISceneGameObject) {
             super(obj, [
                 TintComponent.tintTopLeft,
                 TintComponent.tintTopRight,

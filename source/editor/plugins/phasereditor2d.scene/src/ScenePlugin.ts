@@ -123,7 +123,14 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(
                 new ui.sceneobjects.ImageLoaderUpdater(),
-                new ui.sceneobjects.BitmapFontLoaderUpdater()
+                new ui.sceneobjects.BitmapFontLoaderUpdater(),
+                new ui.sceneobjects.TilemapLoaderUpdater()
+            );
+
+            // outline extensions
+
+            reg.addExtension(
+                new ui.sceneobjects.TilemapOutlineExtension()
             );
 
             // commands
@@ -164,7 +171,7 @@ namespace phasereditor2d.scene {
                 page => new ui.ManySceneFileSection(page)
             ));
 
-            // scene object extensions
+            // scene game object extensions
 
             reg.addExtension(
                 ui.sceneobjects.ImageExtension.getInstance(),
@@ -172,7 +179,15 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.TileSpriteExtension.getInstance(),
                 ui.sceneobjects.TextExtension.getInstance(),
                 ui.sceneobjects.BitmapTextExtension.getInstance(),
-                ui.sceneobjects.ContainerExtension.getInstance()
+                ui.sceneobjects.ContainerExtension.getInstance(),
+                ui.sceneobjects.StaticTilemapLayerExtension.getInstance(),
+                ui.sceneobjects.DynamicTilemapLayerExtension.getInstance()
+            );
+
+            // scene plain object extensions
+
+            reg.addExtension(
+                ui.sceneobjects.TilemapExtension.getInstance()
             );
 
             // property sections
@@ -196,7 +211,12 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TextContentSection(page),
                 page => new ui.sceneobjects.TextSection(page),
                 page => new ui.sceneobjects.BitmapTextSection(page),
-                page => new ui.sceneobjects.ListSection(page)
+                page => new ui.sceneobjects.ListSection(page),
+                page => new ui.sceneobjects.ScenePlainObjectVariableSection(page),
+                page => new ui.sceneobjects.TilemapSection(page),
+                page => new ui.sceneobjects.TilesetSection(page),
+                page => new ui.sceneobjects.TilesetPreviewSection(page),
+                page => new ui.sceneobjects.TilemapLayerSection(page),
             ));
 
             // scene tools
@@ -274,13 +294,37 @@ namespace phasereditor2d.scene {
             return this._sceneFinder;
         }
 
-        getObjectExtensions(): ui.sceneobjects.SceneObjectExtension[] {
+        getPlainObjectExtensions() {
+
             return colibri.Platform
-                .getExtensions<ui.sceneobjects.SceneObjectExtension>(ui.sceneobjects.SceneObjectExtension.POINT_ID);
+                .getExtensions<ui.sceneobjects.ScenePlainObjectExtension>(ui.sceneobjects.ScenePlainObjectExtension.POINT_ID);
         }
 
-        getObjectExtensionByObjectType(type: string) {
-            return this.getObjectExtensions().find(ext => ext.getTypeName() === type);
+        getPlainObjectCategories() {
+
+            return this.getPlainObjectExtensions().map(e => e.getCategory());
+        }
+
+        getPlainObjectExtensionByObjectType(type: string) {
+
+            return this.getPlainObjectExtensions().find(ext => ext.getTypeName() === type);
+        }
+
+        getGameObjectExtensions(): ui.sceneobjects.SceneGameObjectExtension[] {
+
+            return colibri.Platform
+                .getExtensions<ui.sceneobjects.SceneGameObjectExtension>(ui.sceneobjects.SceneGameObjectExtension.POINT_ID);
+        }
+
+        getGameObjectExtensionByObjectType(type: string) {
+            return this.getGameObjectExtensions().find(ext => ext.getTypeName() === type);
+        }
+
+        getSceneEditorOutlineExtensions() {
+
+            return colibri.Platform
+                .getExtensions<ui.editor.outline.SceneEditorOutlineExtension>(
+                    ui.editor.outline.SceneEditorOutlineExtension.POINT_ID);
         }
 
         getLoaderUpdaterForAsset(asset: any) {

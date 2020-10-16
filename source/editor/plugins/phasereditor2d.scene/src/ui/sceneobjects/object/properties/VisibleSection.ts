@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class VisibleSection extends SceneObjectSection<sceneobjects.IVisibleLikeObject> {
+    export class VisibleSection extends SceneGameObjectSection<sceneobjects.IVisibleLikeObject> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.VisibleSection", "Visible", false, true);
@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            return EditorSupport.getObjectComponent(obj, VisibleComponent) && n > 0;
+            return GameObjectEditorSupport.getObjectComponent(obj, VisibleComponent) && n > 0;
         }
 
         canEditNumber(n: number): boolean {

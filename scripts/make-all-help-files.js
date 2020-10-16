@@ -3,7 +3,7 @@
 const utils = require("./help-file");
 
 utils.makeHelpFile([
-    
+
     "Phaser.Loader.LoaderPlugin.atlas(atlasURL)",
     "Phaser.Loader.LoaderPlugin.atlas(textureURL)",
     "Phaser.Types.Loader.FileTypes.AtlasJSONFileConfig.normalMap",
@@ -13,7 +13,7 @@ utils.makeHelpFile([
     "Phaser.Types.Loader.FileTypes.AtlasXMLFileConfig.normalMap",
 
     "Phaser.Loader.LoaderPlugin.audio(urls)",
-    
+
     "Phaser.Loader.LoaderPlugin.audioSprite(jsonURL)",
     "Phaser.Loader.LoaderPlugin.audioSprite(audioURL)",
 
@@ -74,14 +74,18 @@ utils.makeHelpFile([
 ], "../source/editor/plugins/phasereditor2d.pack/data/phaser-docs.json");
 
 utils.makeHelpFile([
-    
+
+    "Phaser.GameObjects.Image",
+    "Phaser.GameObjects.Sprite",
+    "Phaser.GameObjects.Container",
+
     "Phaser.GameObjects.Components.Transform.x",
     "Phaser.GameObjects.Components.Transform.y",
     "Phaser.GameObjects.Components.Transform.setPosition",
     "Phaser.GameObjects.Components.Transform.scaleX",
     "Phaser.GameObjects.Components.Transform.scaleY",
     "Phaser.GameObjects.Components.Transform.angle",
-    
+
     "Phaser.GameObjects.Components.Origin.originX",
     "Phaser.GameObjects.Components.Origin.originY",
     "Phaser.GameObjects.Components.Origin.setOrigin",
@@ -97,13 +101,14 @@ utils.makeHelpFile([
 
     "Phaser.GameObjects.Components.Visible.visible",
 
-    "Phaser.GameObjects.Components.Tint.tint",        
-    "Phaser.GameObjects.Components.Tint.tintFill",        
-    "Phaser.GameObjects.Components.Tint.tintTopLeft",        
-    "Phaser.GameObjects.Components.Tint.tintTopRight",        
-    "Phaser.GameObjects.Components.Tint.tintBottomLeft",        
-    "Phaser.GameObjects.Components.Tint.tintBottomRight",        
+    "Phaser.GameObjects.Components.Tint.tint",
+    "Phaser.GameObjects.Components.Tint.tintFill",
+    "Phaser.GameObjects.Components.Tint.tintTopLeft",
+    "Phaser.GameObjects.Components.Tint.tintTopRight",
+    "Phaser.GameObjects.Components.Tint.tintBottomLeft",
+    "Phaser.GameObjects.Components.Tint.tintBottomRight",
 
+    "Phaser.GameObjects.TileSprite",
     "Phaser.GameObjects.Components.ComputedSize.width",
     "Phaser.GameObjects.Components.ComputedSize.height",
     "Phaser.GameObjects.Components.ComputedSize.setSize",
@@ -116,6 +121,7 @@ utils.makeHelpFile([
 
     "Phaser.GameObjects.GameObject.parentContainer",
 
+    "Phaser.GameObjects.Text",
     "Phaser.Types.GameObjects.Text.TextStyle.fixedWidth",
     "Phaser.Types.GameObjects.Text.TextStyle.fixedHeight",
     "Phaser.GameObjects.TextStyle.setFixedSize",
@@ -144,22 +150,42 @@ utils.makeHelpFile([
     "Phaser.GameObjects.TextStyle.baselineY",
     "Phaser.GameObjects.Text.setMaxLines",
 
+    "Phaser.GameObjects.BitmapText",
     "Phaser.GameObjects.BitmapText.setFont",
     "Phaser.GameObjects.BitmapText.align",
     "Phaser.GameObjects.BitmapText.setFontSize",
     "Phaser.GameObjects.BitmapText.setLetterSpacing",
 
-    "Phaser.GameObjects.Image",
-    "Phaser.GameObjects.Sprite",
-    "Phaser.GameObjects.TileSprite",
-    "Phaser.GameObjects.Text",
-    "Phaser.GameObjects.BitmapText",
-    "Phaser.GameObjects.Container",
 
+    "Phaser.Tilemaps.Tilemap",
+    "Phaser.Tilemaps.Tilemap.tileWidth",
+    "Phaser.Tilemaps.Tilemap.tileHeight",
+    "Phaser.GameObjects.GameObjectFactory.tilemap(key)",
+
+    "Phaser.Tilemaps.Tileset",
+    "Phaser.Tilemaps.Tileset.name",
+    "Phaser.Tilemaps.Tileset.image",
+    "Phaser.Tilemaps.Tileset.tileWidth",
+    "Phaser.Tilemaps.Tileset.tileHeight",
+    "Phaser.Tilemaps.Tileset.tileMargin",
+    "Phaser.Tilemaps.Tileset.tileSpacing",
+
+    "Phaser.Tilemaps.StaticTilemapLayer",
+    "Phaser.Tilemaps.DynamicTilemapLayer",
+
+    "Phaser.Tilemaps.LayerData",
+    "Phaser.Tilemaps.LayerData.name",
+    "Phaser.Tilemaps.LayerData.width",
+    "Phaser.Tilemaps.LayerData.height",
+    "Phaser.Tilemaps.LayerData.tileWidth",
+    "Phaser.Tilemaps.LayerData.tileHeight",
+    "Phaser.Tilemaps.LayerData.widthInPixels",
+    "Phaser.Tilemaps.LayerData.heightInPixels",
+    
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 
 utils.makeHelpFile([
-    
+
     "Phaser.Types.Animations.Animation.key",
     "Phaser.Types.Animations.Animation.frameRate",
     "Phaser.Types.Animations.Animation.delay",

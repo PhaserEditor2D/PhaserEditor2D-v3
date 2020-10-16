@@ -40,6 +40,15 @@ namespace phasereditor2d.pack.core {
             return this._packs;
         }
 
+        getAssets(filter?: (item: AssetPackItem) => boolean) {
+
+            return this.getPacks()
+
+                .flatMap(p => p.getItems())
+
+                .filter(i => !filter || filter(i));
+        }
+
         findAssetPackItem(key: string) {
 
             if (!key) {

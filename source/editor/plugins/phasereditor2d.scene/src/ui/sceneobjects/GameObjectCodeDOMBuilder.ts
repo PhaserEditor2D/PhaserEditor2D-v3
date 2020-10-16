@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
      *
      * Each object extension provides an instance of this class, that is used by the Scene compiler.
      */
-    export abstract class ObjectCodeDOMBuilder {
+    export abstract class GameObjectCodeDOMBuilder {
 
         /**
          * Build a method call CodeDOM to create the scene object of this extension,

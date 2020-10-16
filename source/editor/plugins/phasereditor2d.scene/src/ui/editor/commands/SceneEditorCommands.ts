@@ -245,7 +245,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         && args.activeEditor.getSelection()
                             .filter(
                                 obj => obj instanceof Phaser.GameObjects.GameObject
-                                    && sceneobjects.EditorSupport.hasObjectComponent(
+                                    && sceneobjects.GameObjectEditorSupport.hasObjectComponent(
                                         obj, sceneobjects.TextureComponent))
                             .length > 0,
 
@@ -257,7 +257,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         for (const obj of args.activeEditor.getSelection()) {
 
-                            const textureComponent = sceneobjects.EditorSupport
+                            const textureComponent = sceneobjects.GameObjectEditorSupport
                                 .getObjectComponent(
                                     obj, sceneobjects.TextureComponent) as sceneobjects.TextureComponent;
 
@@ -269,7 +269,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         editor.getScene().visit(obj => {
 
-                            const textureComponent = sceneobjects.EditorSupport
+                            const textureComponent = sceneobjects.GameObjectEditorSupport
                                 .getObjectComponent(
                                     obj, sceneobjects.TextureComponent) as sceneobjects.TextureComponent;
 
@@ -445,7 +445,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     this._dy = dy;
                 }
 
-                protected performModification() {
+                protected async performModification() {
 
                     for (const obj of this._editor.getSelection()) {
 
@@ -504,7 +504,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                                 for (const obj of args.activeEditor.getSelection()) {
 
-                                    if (!sceneobjects.EditorSupport.hasObjectComponent(obj, sceneobjects.TransformComponent)) {
+                                    if (!sceneobjects.GameObjectEditorSupport.hasObjectComponent(obj, sceneobjects.TransformComponent)) {
 
                                         return false;
                                     }
@@ -793,7 +793,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     },
                     executeFunc: args => {
 
-                        const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneObject;
+                        const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneGameObject;
 
                         const objData: core.json.IObjectData = {} as any;
 
@@ -1147,9 +1147,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             const len = sel
 
                                 .filter(obj =>
-                                    sceneobjects.EditorSupport.hasObjectComponent(
+                                    sceneobjects.GameObjectEditorSupport.hasObjectComponent(
                                         obj, sceneobjects.OriginComponent)
-                                    && (obj as sceneobjects.ISceneObject)
+                                    && (obj as sceneobjects.ISceneGameObject)
                                         .getEditorSupport().isUnlockedProperty(sceneobjects.OriginComponent.originX))
                                 .length;
 
@@ -1158,7 +1158,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         executeFunc: args => {
 
                             const objects = args.activeEditor.getSelection()
-                                .filter(obj => sceneobjects.EditorSupport
+                                .filter(obj => sceneobjects.GameObjectEditorSupport
                                     .hasObjectComponent(obj, sceneobjects.TransformComponent));
 
 

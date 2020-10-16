@@ -2,13 +2,14 @@ namespace colibri.ui.ide.properties {
 
     export abstract class BaseImagePreviewSection<T> extends controls.properties.PropertySection<T> {
 
-        createForm(parent: HTMLDivElement) {
+        static createSectionForm(
+            parent: HTMLElement, section: controls.properties.PropertySection<any>, getImage: () => controls.IImage) {
 
             parent.classList.add("ImagePreviewFormArea");
 
             const imgControl = new controls.ImageControl(ide.IMG_SECTION_PADDING);
 
-            this.getPage().eventControlLayout.addListener(() => {
+            section.getPage().eventControlLayout.addListener(() => {
 
                 imgControl.resizeTo();
             });
@@ -17,14 +18,19 @@ namespace colibri.ui.ide.properties {
 
             setTimeout(() => imgControl.resizeTo(), 1);
 
-            this.addUpdater(() => {
+            section.addUpdater(() => {
 
-                const img = this.getSelectedImage();
+                const img = getImage();
 
                 imgControl.setImage(img);
 
                 setTimeout(() => imgControl.resizeTo(), 1);
             });
+        }
+
+        createForm(parent: HTMLDivElement) {
+
+            BaseImagePreviewSection.createSectionForm(parent, this, () => this.getSelectedImage());
         }
 
         protected abstract getSelectedImage(): controls.IImage;

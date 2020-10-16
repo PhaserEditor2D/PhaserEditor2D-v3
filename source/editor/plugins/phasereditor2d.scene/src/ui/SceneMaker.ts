@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui {
             this._editorScene = scene;
         }
 
-        afterDropObjects(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
+        afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             let container: sceneobjects.Container;
 
@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        private afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneObject, sprites: sceneobjects.ISceneObject[]) {
+        private afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             if (!prefabObj) {
                 return;
@@ -90,7 +90,7 @@ namespace phasereditor2d.scene.ui {
 
                     } else {
 
-                        container = sceneobjects.ContainerExtension.getInstance().createEmptySceneObject({
+                        container = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
                             scene: scene,
                             x: 0,
                             y: 0
@@ -259,6 +259,11 @@ namespace phasereditor2d.scene.ui {
                 this._editorScene.getObjectLists().readJSON(sceneData);
             }
 
+            if (sceneData.plainObjects) {
+
+                this._editorScene.readPlainObjects(sceneData.plainObjects);
+            }
+
             if (sceneData.prefabProperties) {
 
                 this._editorScene.getPrefabUserProperties().readJSON(sceneData.prefabProperties);
@@ -277,25 +282,65 @@ namespace phasereditor2d.scene.ui {
 
         async updateSceneLoader(sceneData: json.ISceneData, monitor?: controls.IProgressMonitor) {
 
-            await this.updateSceneLoaderWithObjDataList(sceneData.displayList, monitor);
-        }
-
-        async updateSceneLoaderWithObjDataList(list: json.IObjectData[], monitor?: controls.IProgressMonitor) {
-
             const finder = new pack.core.PackFinder();
 
             await finder.preload();
+
+            await this.updateSceneLoaderWithGameObjectDataList(finder, sceneData.displayList, monitor);
+
+            await this.updateSceneLoaderWithPlainObjDataList(finder, sceneData.plainObjects, monitor);
+        }
+
+        async updateSceneLoaderWithPlainObjDataList(finder: pack.core.PackFinder, list: json.IScenePlainObjectData[], monitor?: controls.IProgressMonitor) {
+
+            if (!list) {
+
+                return;
+            }
+
+            const assets = [];
+
+            for (const data of list) {
+
+                try {
+
+                    const type = data.type;
+
+                    const ext = ScenePlugin.getInstance().getPlainObjectExtensionByObjectType(type);
+
+                    if (ext) {
+
+                        const result = await ext.getAssetsFromObjectData({
+                            scene: this._editorScene,
+                            finder,
+                            data
+                        });
+
+                        assets.push(...result);
+                    }
+
+                } catch (e) {
+
+                    console.error(e);
+                }
+            }
+
+            await this.updateSceneLoaderWithAssets(assets, monitor);
+        }
+
+        async updateSceneLoaderWithGameObjectDataList(finder: pack.core.PackFinder, list: json.IObjectData[], monitor?: controls.IProgressMonitor) {
 
             const assets = [];
 
             for (const objData of list) {
 
                 try {
+
                     const ser = this.getSerializer(objData);
 
                     const type = ser.getType();
 
-                    const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                    const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                     if (ext) {
 
@@ -307,11 +352,17 @@ namespace phasereditor2d.scene.ui {
 
                         assets.push(...objAssets);
                     }
+
                 } catch (e) {
 
                     console.error(e);
                 }
             }
+
+            await this.updateSceneLoaderWithAssets(assets, monitor);
+        }
+
+        async updateSceneLoaderWithAssets(assets: any[], monitor?: controls.IProgressMonitor) {
 
             if (monitor) {
 
@@ -349,7 +400,7 @@ namespace phasereditor2d.scene.ui {
             return { x, y };
         }
 
-        createEmptyObject(ext: sceneobjects.SceneObjectExtension, extraData?: any, x?: number, y?: number) {
+        createDefaultObject(ext: sceneobjects.SceneObjectExtension, extraData?: any, x?: number, y?: number) {
 
             if (x === undefined) {
 
@@ -359,7 +410,7 @@ namespace phasereditor2d.scene.ui {
                 y = point.y;
             }
 
-            const newObject = ext.createEmptySceneObject({
+            const newObject = ext.createDefaultSceneObject({
                 scene: this._editorScene,
                 x,
                 y,
@@ -367,12 +418,22 @@ namespace phasereditor2d.scene.ui {
             });
 
             const nameMaker = new ide.utils.NameMaker(obj => {
-                return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
+                return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
             });
 
-            this._editorScene.visit(obj => nameMaker.update([obj]));
+            this._editorScene.visit(obj => {
 
-            newObject.getEditorSupport().setLabel(nameMaker.makeName(ext.getTypeName().toLowerCase()));
+                if (obj !== newObject) {
+
+                    nameMaker.update([obj]);
+                }
+            });
+
+            const oldLabel = newObject.getEditorSupport().getLabel();
+
+            const newLabel = nameMaker.makeName(oldLabel);
+
+            newObject.getEditorSupport().setLabel(newLabel);
 
             return newObject;
         }
@@ -385,11 +446,11 @@ namespace phasereditor2d.scene.ui {
 
                 const type = ser.getType();
 
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                 if (ext) {
 
-                    const sprite = ext.createSceneObjectWithData({
+                    const sprite = ext.createGameObjectWithData({
                         data: data,
                         scene: this._editorScene
                     });
@@ -400,7 +461,10 @@ namespace phasereditor2d.scene.ui {
 
                     const msg = `SceneMaker: no extension is registered for type "${type}".`;
 
-                    errors.push(msg);
+                    if (errors) {
+
+                        errors.push(msg);
+                    }
 
                     console.error(msg);
                 }
@@ -411,7 +475,10 @@ namespace phasereditor2d.scene.ui {
 
                 const msg = (e as Error).message;
 
-                errors.push(msg);
+                if (errors) {
+
+                    errors.push(msg);
+                }
 
                 console.error(msg);
 

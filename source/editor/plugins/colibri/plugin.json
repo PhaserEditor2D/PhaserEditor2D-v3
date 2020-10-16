@@ -8,6 +8,7 @@
     ],
     "scripts": [
         "scripts/vanilla-picker/vanilla-picker.js",
+        "scripts/expr-eval/expr-eval.js",
         "_out/colibri.js"
     ]
 }

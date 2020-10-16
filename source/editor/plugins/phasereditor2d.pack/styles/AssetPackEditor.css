@@ -1,0 +1,14 @@
+table.TilemapTable {
+    width: 100%;
+}
+
+.TilemapTable th {
+    text-align: left;
+}
+
+.TilemapTable th,
+.TilemapTable td {
+    padding: 0.5em;
+    word-break: break-all;
+    min-width: 6em;
+}

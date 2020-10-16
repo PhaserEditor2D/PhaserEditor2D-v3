@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._options = [];
         }
 
-        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
+        createInspectorPropertyEditor(section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 
             const prop = userProp.getComponentProperty() as PrefabOptionUserPropertyWrapper;
 

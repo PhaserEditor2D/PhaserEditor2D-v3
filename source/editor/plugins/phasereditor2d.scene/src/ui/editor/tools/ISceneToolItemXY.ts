@@ -4,6 +4,6 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         getPoint(args: ISceneToolContextArgs): { x: number, y: number };
 
-        isValidFor(objects: sceneobjects.ISceneObject[]): boolean;
+        isValidFor(objects: sceneobjects.ISceneGameObject[]): boolean;
     }
 }

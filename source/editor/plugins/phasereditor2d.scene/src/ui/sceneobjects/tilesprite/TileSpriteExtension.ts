@@ -12,11 +12,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 phaserTypeName: "Phaser.GameObjects.TileSprite",
                 typeName: "TileSprite",
-                iconName: ICON_IMAGE_TYPE
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_IMAGE_TYPE)
             });
         }
 
-        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneObject, extraData: any) {
+        adaptDataAfterTypeConversion(serializer: core.json.Serializer, originalObject: ISceneGameObject, extraData: any) {
 
             super.adaptDataAfterTypeConversion(serializer, originalObject, extraData);
 
@@ -29,12 +29,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             serializer.getData()[TileSpriteComponent.height.name] = height;
         }
 
-        getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return new TileSpriteCodeDOMBuilder();
         }
 
-        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
 
             if (key) {
 

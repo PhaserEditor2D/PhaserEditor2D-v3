@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super("boolean", false);
         }
 
-        createInspectorPropertyEditor(section: SceneObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
+        createInspectorPropertyEditor(section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 
             section.createPropertyBoolean(parent, userProp.getComponentProperty(), lockIcon);
         }

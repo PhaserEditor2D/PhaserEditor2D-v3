@@ -27,6 +27,8 @@ namespace phasereditor2d.pack.core.parsers {
 
                     game.textures.addSpriteSheet(item.getKey(), image.getImageElement(), data.frameConfig);
 
+                    cache.addSpritesheetImage(image, item.getKey());
+
                     for (const frame of item.getFrames()) {
 
                         cache.addImage(frame, item.getKey(), frame.getName());

@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         list: json.IObjectData[];
     }
 
-    export class ContainerExtension extends SceneObjectExtension {
+    export class ContainerExtension extends SceneGameObjectExtension {
 
         private static _instance: ContainerExtension;
 
@@ -20,11 +20,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 typeName: "Container",
                 phaserTypeName: "Phaser.GameObjects.Container",
-                iconName: ICON_GROUP
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_GROUP)
             });
         }
 
-        getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return ContainerCodeDOMBuilder.getInstance();
         }
@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const type = ser.getType();
 
-                const ext = ScenePlugin.getInstance().getObjectExtensionByObjectType(type);
+                const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                 if (ext) {
 
@@ -58,12 +58,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return list;
         }
 
-        createEmptySceneObject(args: ICreateEmptyArgs) {
+        createDefaultSceneObject(args: ICreateDefaultArgs) {
 
             return this.createContainerObject(args.scene, 0, 0, []);
         }
 
-        createSceneObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneObject {
+        createGameObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneGameObject {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
@@ -72,7 +72,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return container;
         }
 
-        private createContainerObject(scene: Scene, x: number, y: number, list: sceneobjects.ISceneObject[]) {
+        private createContainerObject(scene: Scene, x: number, y: number, list: sceneobjects.ISceneGameObject[]) {
 
             const container = new sceneobjects.Container(scene, x, y, list);
 
@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createContainerObjectWithChildren(
-            scene: Scene, objectList: sceneobjects.ISceneObject[]): sceneobjects.Container {
+            scene: Scene, objectList: sceneobjects.ISceneGameObject[]): sceneobjects.Container {
 
             const container = this.createContainerObject(scene, 0, 0, objectList);
 
@@ -99,7 +99,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneObject {
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject {
             return null;
         }
     }

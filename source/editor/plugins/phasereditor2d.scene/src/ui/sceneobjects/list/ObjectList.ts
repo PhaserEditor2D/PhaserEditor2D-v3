@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._scope = scope;
         }
 
-        inferType(objMap: Map<string, ISceneObject>) {
+        inferType(objMap: Map<string, ISceneGameObject>) {
 
             const types = new Set(this.getObjectIds()
 

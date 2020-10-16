@@ -7,15 +7,19 @@ namespace phasereditor2d.scene.ui.editor.undo {
         selection: string[];
         displayList: json.IObjectData[];
         lists: json.IObjectListData[];
+        plainObjects: json.IScenePlainObjectData[]
     }
 
-    export abstract class SceneSnapshotOperation extends SceneEditorOperation {
+    export class SceneSnapshotOperation extends SceneEditorOperation {
 
         private _before: ISceneSnapshot;
         private _after: ISceneSnapshot;
+        private _operation: () => Promise<void>;
 
-        constructor(editor: SceneEditor) {
+        constructor(editor: SceneEditor, operation?: () => Promise<void>) {
             super(editor);
+
+            this._operation = operation;
         }
 
         async execute() {
@@ -29,9 +33,16 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._editor.setDirty(true);
             this._editor.refreshOutline();
             this._editor.repaint();
+            this._editor.dispatchSelectionChanged();
         }
 
-        protected async abstract performModification();
+        protected async performModification(): Promise<void> {
+
+            if (this._operation) {
+
+                await this._operation();
+            }
+        }
 
         private takeSnapshot(): ISceneSnapshot {
 
@@ -58,6 +69,15 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 }),
 
+                plainObjects: scene.getPlainObjects().map(obj => {
+
+                    const data = {} as json.IScenePlainObjectData;
+
+                    obj.getEditorSupport().writeJSON(data);
+
+                    return data;
+                }),
+
                 selection: this.getEditor().getSelectionManager().getSelectionIds()
             };
         }
@@ -69,6 +89,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
             const maker = scene.getMaker();
 
             scene.removeAll();
+
+            scene.readPlainObjects(snapshot.plainObjects);
 
             for (const data of snapshot.displayList) {
 

@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class BitmapTextExtension extends SceneObjectExtension {
+    export class BitmapTextExtension extends SceneGameObjectExtension {
 
         private static _instance = new BitmapTextExtension();
 
@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 phaserTypeName: "Phaser.GameObjects.BitmapText",
                 typeName: "BitmapText",
-                iconName: ICON_TEXT_TYPE
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_TEXT_TYPE)
             });
         }
 
@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return data instanceof pack.core.BitmapFontAssetPackItem;
         }
 
-        createSceneObjectWithAsset(args: ICreateWithAssetArgs): ISceneObject {
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): ISceneGameObject {
 
             const font = args.asset as pack.core.BitmapFontAssetPackItem;
 
@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         adaptDataAfterTypeConversion(
-            serializer: core.json.Serializer, originalObject: ISceneObject, extraData: any) {
+            serializer: core.json.Serializer, originalObject: ISceneGameObject, extraData: any) {
 
             const bitmapFont = extraData as pack.core.BitmapFontAssetPackItem;
 
@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        async collectExtraDataForCreateEmptyObject() {
+        async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor) {
 
             const finder = new pack.core.PackFinder();
 
@@ -103,7 +103,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return promise;
         }
 
-        createEmptySceneObject(args: ICreateEmptyArgs): ISceneObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs): ISceneGameObject {
 
             const fontAsset = args.extraData as pack.core.BitmapFontAssetPackItem;
 
@@ -112,7 +112,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new BitmapText(args.scene, args.x, args.y, fontAsset.getKey(), "New BitmapText");
         }
 
-        createSceneObjectWithData(args: ICreateWithDataArgs): ISceneObject {
+        createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
 
             const serializer = new core.json.Serializer(args.data);
 
@@ -139,7 +139,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return [];
         }
 
-        getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return new BitmapTextCodeDOMBuilder();
         }

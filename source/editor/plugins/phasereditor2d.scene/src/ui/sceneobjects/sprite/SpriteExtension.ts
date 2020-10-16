@@ -12,16 +12,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 phaserTypeName: "Phaser.GameObjects.Sprite",
                 typeName: "Sprite",
-                iconName: ICON_SPRITE_TYPE
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_SPRITE_TYPE)
             });
         }
 
-        getCodeDOMBuilder(): ObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return new BaseImageCodeDOMBuilder("sprite");
         }
 
-        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneObject {
+        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
 
             return new Sprite(scene, x, y, key || null, frame);
         }

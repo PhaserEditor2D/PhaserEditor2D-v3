@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         list: json.IObjectData[];
     }
 
-    export class ContainerEditorSupport extends EditorSupport<Container> {
+    export class ContainerEditorSupport extends GameObjectEditorSupport<Container> {
 
         private _allowPickChildren: boolean;
 
