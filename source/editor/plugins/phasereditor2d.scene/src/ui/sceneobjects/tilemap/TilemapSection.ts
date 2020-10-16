@@ -8,9 +8,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TilemapSection", "Tilemap", false, false);
         }
 
-        getHelp() {
-            //TODO
-            return "";
+        protected getSectionHelpPath() {
+
+            return "scene-editor/tilemap-object.html";
         }
 
         createForm(parent: HTMLDivElement) {

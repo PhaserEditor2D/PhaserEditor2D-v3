@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TilemapLayerData", "Tilemap Layer", false, false);
         }
 
+        protected getSectionHelpPath() {
+
+            return "scene-editor/tilemap-layer-object.html";
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 2);
