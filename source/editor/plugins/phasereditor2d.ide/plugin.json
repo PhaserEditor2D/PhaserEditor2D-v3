@@ -6,7 +6,7 @@
         "styles/lightGray.css"
     ],
     "scripts": [
-        "scripts/showdown.min.js",
+        "scripts/showdown.min.js",        
         "_out/phasereditor2d.ide.js"        
     ]
 }

@@ -281,7 +281,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 } else {
 
-                    value = Number.parseFloat(textValue);
+                    value = this.parseNumberExpression(text);
                 }
 
                 if (isNaN(value)) {

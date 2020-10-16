@@ -116,7 +116,7 @@ namespace colibri.ui.controls.properties {
 
         flatValues_BooleanAnd(values: boolean[]) {
 
-            for(const value of values) {
+            for (const value of values) {
 
                 if (!value) {
 
@@ -125,6 +125,44 @@ namespace colibri.ui.controls.properties {
             }
 
             return true;
+        }
+
+        parseNumberExpression(textElement: HTMLInputElement, isInteger = false) {
+
+            const expr = textElement.value;
+
+            let value: number;
+
+            const parser = new exprEval.Parser();
+
+            try {
+
+                value = parser.evaluate(expr);
+
+                if (typeof value === "number") {
+
+                    textElement.value = value.toString();
+
+
+                    if (isInteger) {
+
+                        return Math.floor(value);
+                    }
+
+                    return value;
+                }
+
+            } catch (e) {
+
+                // nothing, wrong syntax
+            }
+
+            if (isInteger) {
+
+                return Number.parseInt(expr, 10);
+            }
+
+            return Number.parseFloat(expr);
         }
 
         createGridElement(parent: HTMLElement, cols = 0, simpleProps = true) {
