@@ -188,6 +188,7 @@ namespace colibri.ui.controls {
                         itemElement.classList.add("MenuItemSelected");
 
                         const menuRect = this._element.getClientRects().item(0);
+
                         const subMenuX = menuRect.right;
                         const subMenuY = menuRect.top;
 
@@ -195,7 +196,7 @@ namespace colibri.ui.controls {
 
                         const subMenuRect = subMenu._element.getClientRects()[0];
 
-                        if (subMenuRect.left < menuRect.right - 5) {
+                        if (Math.floor(subMenuRect.left) < Math.floor(menuRect.right) - 5) {
 
                             subMenu._element.style.left = menuRect.left - subMenuRect.width + 5 + "px";
                         }
