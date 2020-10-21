@@ -11,10 +11,12 @@ namespace colibri.ui.controls {
         }
 
         setImage(image: IImage): void {
+
             this._image = image;
         }
 
         getImage() {
+
             return this._image;
         }
 

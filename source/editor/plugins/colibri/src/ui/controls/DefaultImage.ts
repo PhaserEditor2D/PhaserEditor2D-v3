@@ -128,6 +128,7 @@ namespace colibri.ui.controls {
             const imgDstH = naturalHeight * scale;
 
             if (imgDstW > 0 && imgDstH > 0) {
+
                 context.drawImage(image, imgX, imgY, imgDstW, imgDstH);
             }
         }

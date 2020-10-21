@@ -41,10 +41,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.getPage().eventControlLayout.addListener(() => {
 
-                setTimeout(() => imgControl.resizeTo(), 1);
+                imgControl.resizeTo();
             });
 
             imgComp.appendChild(imgControl.getElement());
+
+            requestAnimationFrame(() => imgControl.resizeTo());
 
             this.addUpdater(async () => {
 
@@ -52,7 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 imgControl.setImage(new controls.MultiImage(frames, 10, 10));
 
-                setTimeout(() => imgControl.resizeTo(), 1);
+                requestAnimationFrame(() => imgControl.resizeTo());
             });
 
             {

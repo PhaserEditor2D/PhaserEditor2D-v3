@@ -16,7 +16,7 @@ namespace colibri.ui.ide.properties {
 
             parent.appendChild(imgControl.getElement());
 
-            setTimeout(() => imgControl.resizeTo(), 1);
+            requestAnimationFrame(() => imgControl.resizeTo());
 
             section.addUpdater(() => {
 
@@ -24,7 +24,7 @@ namespace colibri.ui.ide.properties {
 
                 imgControl.setImage(img);
 
-                setTimeout(() => imgControl.resizeTo(), 1);
+                requestAnimationFrame(() => imgControl.resizeTo());
             });
         }
 

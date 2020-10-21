@@ -17,6 +17,7 @@ namespace colibri.ui.controls {
         }
 
         getCanvas() {
+
             return this._canvas;
         }
 
@@ -33,6 +34,7 @@ namespace colibri.ui.controls {
         }
 
         getPadding() {
+
             return this._padding;
         }
 
@@ -48,6 +50,7 @@ namespace colibri.ui.controls {
         }
 
         clear(): void {
+
             this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
         }
 
@@ -56,10 +59,12 @@ namespace colibri.ui.controls {
             this.ensureCanvasSize();
 
             this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+
             this.paint();
         }
 
         private initContext(): void {
+
             this._context = this.getCanvas().getContext("2d");
             this._context.imageSmoothingEnabled = false;
             this._context.font = `${controls.FONT_HEIGHT}px sans-serif`;

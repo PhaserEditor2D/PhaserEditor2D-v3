@@ -14,17 +14,26 @@ namespace colibri.ui.controls {
 
         paint(context: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, center: boolean): void {
 
-            const frameCount = this._images.length;
+            const imageCount = this._images.length;
 
-            let size = Math.floor(Math.sqrt(w * h / frameCount) * 0.7) + 1;
+            if (imageCount === 1) {
 
-            if (frameCount === 1) {
+                const img = this._images[0];
+
+                img.paint(context, x, y, w, h, center);
+
+                return;
+            }
+
+            let size = Math.floor(Math.sqrt(w * h / imageCount) * 0.7) + 1;
+
+            if (imageCount === 1) {
 
                 size = Math.min(w, h);
             }
 
             const cols = Math.floor(w / size);
-            const rows = frameCount / cols + (frameCount % cols === 0 ? 0 : 1);
+            const rows = imageCount / cols + (imageCount % cols === 0 ? 0 : 1);
             const marginX = Math.floor(Math.max(0, (w - cols * size) / 2));
             const marginY = Math.floor(Math.max(0, (h - rows * size) / 2));
 
