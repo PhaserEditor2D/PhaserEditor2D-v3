@@ -84,7 +84,7 @@ namespace phasereditor2d.pack.core {
             }
 
             const canvas = document.createElement("canvas");
-            canvas.width = canvas.height = 256;
+            canvas.width = canvas.height = 256 * (window.devicePixelRatio || 1);
             canvas.style.width = canvas.style.height = canvas.width + "px";
 
             const ctx = canvas.getContext("2d");
