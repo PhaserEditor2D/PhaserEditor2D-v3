@@ -34,6 +34,7 @@
 * Scene Editor: uses spritesheet name on objects created with a spritesheet frame.
 * Scene Editor: show a message when you open the Quick Editor dialog but no output file is generated yet.
 * Scene Editor: fixes layout of image preview in the Texture section of the Inspector view.
+* Viewer: fixed filtering, now it does not expand mismatching parent items.
 
 ## Version 3.7.1 - Sep 22, 2020
 
