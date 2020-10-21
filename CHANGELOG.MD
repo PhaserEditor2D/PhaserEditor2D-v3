@@ -30,9 +30,10 @@
 ### Fixes
 
 * Fixed the clicking-area of the titles in the Inspector sections.
-* Fixes `Ctrl+S` when is active the Quick Edit Dialog.
+* Fixes `Ctrl+S` when the Quick Edit Dialog is active.
 * Scene Editor: uses spritesheet name on objects created with a spritesheet frame.
 * Scene Editor: show a message when you open the Quick Editor dialog but no output file is generated yet.
+* Scene Editor: fixes layout of image preview in the Texture section of the Inspector view.
 
 ## Version 3.7.1 - Sep 22, 2020
 
