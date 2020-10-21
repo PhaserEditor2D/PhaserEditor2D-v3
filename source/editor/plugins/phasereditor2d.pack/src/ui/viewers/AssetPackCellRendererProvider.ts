@@ -51,31 +51,7 @@ namespace phasereditor2d.pack.ui.viewers {
                     case core.UNITY_ATLAS_TYPE:
                     case core.ATLAS_XML_TYPE: {
 
-                        const simple = AssetPackPlugin.getInstance().isSimpleRenderingOfTextureAtlas();
-
-                        if (!simple) {
-
-                            return new class extends controls.viewers.ImageCellRenderer {
-
-                                getImage(obj: pack.core.ImageFrameContainerAssetPackItem) {
-
-                                    return obj.getThumbnail();
-                                }
-
-                                async preload(args: controls.viewers.PreloadCellArgs) {
-
-                                    const container = args.obj as pack.core.ImageFrameContainerAssetPackItem;
-
-                                    const r1 = await container.preload();
-
-                                    const r2 = await container.preloadImages();
-
-                                    return Math.max(r1, r2);
-                                }
-                            }();
-                        }
-
-                        return new viewers.ImageFrameContainerIconCellRenderer();
+                        return new AtlasItemCellRenderer();
                     }
 
                     case core.SPRITESHEET_TYPE:
