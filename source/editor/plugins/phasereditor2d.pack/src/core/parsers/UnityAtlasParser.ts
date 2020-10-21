@@ -35,7 +35,7 @@ namespace phasereditor2d.pack.core.parsers {
             }
         }
 
-        protected parseFrames2(imageFrames: AssetPackImageFrame[], image: controls.IImage, atlas: string) {
+        protected parseFrames2(imageFrames: AssetPackImageFrame[], image: controls.DefaultImage, atlas: string) {
 
             // Taken from Phaser code.
 
@@ -97,12 +97,13 @@ namespace phasereditor2d.pack.core.parsers {
             }
 
             if (currentSprite !== prevSprite) {
+
                 this.addFrame(image, imageFrames, currentSprite, rect);
             }
 
         }
 
-        private addFrame(image: controls.IImage, imageFrames: AssetPackImageFrame[], spriteName: string, rect: any) {
+        private addFrame(image: controls.DefaultImage, imageFrames: AssetPackImageFrame[], spriteName: string, rect: any) {
 
             if (!image) {
                 return;

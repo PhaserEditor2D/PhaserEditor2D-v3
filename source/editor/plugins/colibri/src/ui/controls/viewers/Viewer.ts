@@ -48,6 +48,11 @@ namespace colibri.ui.controls.viewers {
             this.restoreCellSize();
         }
 
+        getViewerId() {
+
+            return this._viewerId;
+        }
+
         restoreCellSize() {
 
             const key = "Viewer.cellSize." + this._viewerId;
@@ -201,6 +206,7 @@ namespace colibri.ui.controls.viewers {
         private prepareFiltering() {
 
             this._filterIncludeSet = new Set();
+
             this.buildFilterIncludeMap();
         }
 
@@ -484,7 +490,11 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
+        static ID = 0;
+
         async repaint() {
+
+            const id = Viewer.ID++;
 
             this.prepareFiltering();
 

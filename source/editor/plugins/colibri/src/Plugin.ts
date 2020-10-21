@@ -17,10 +17,12 @@ namespace colibri {
         }
 
         starting(): Promise<void> {
+
             return Promise.resolve();
         }
 
         started(): Promise<void> {
+
             return Promise.resolve();
         }
 

@@ -21,24 +21,16 @@ namespace phasereditor2d.pack {
             return this._instance;
         }
 
-        private _simpleRenderingOfTextureAtlas: boolean;
-
         private constructor() {
             super("phasereditor2d.pack");
-
-            this._simpleRenderingOfTextureAtlas = localStorage.getItem("phasereditor2d.pack.simpleRenderingOfTextureAtlas") === "on";
         }
 
-        isSimpleRenderingOfTextureAtlas() {
+        async started() {
 
-            return this._simpleRenderingOfTextureAtlas;
-        }
+            colibri.Platform.getWorkbench().eventBeforeOpenProject.addListener(() => {
 
-        setSimpleRenderingOfTextureAtlas(enabled: boolean) {
-
-            this._simpleRenderingOfTextureAtlas = enabled;
-
-            localStorage.setItem("phasereditor2d.pack.simpleRenderingOfTextureAtlas", enabled ? "on" : "off")
+                core.ImageFrameContainerAssetPackItem.resetCache();
+            });
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -162,33 +154,6 @@ namespace phasereditor2d.pack {
                     manager.addCategory({
                         id: CAT_ASSET_PACK,
                         name: "Asset Pack"
-                    });
-
-                    // enable/disable simple rendering of texture atlas
-
-                    manager.add({
-                        command: {
-                            id: CMD_TOGGLE_SIMPLE_RENDERING_OF_TEXTURE_ATLAS,
-                            category: CAT_ASSET_PACK,
-                            name: "Toggle Simple Rendering Of Texture Atlas",
-                            tooltip: "Enable or disable the simple-rendering mode of texture atlases. Enable this if you have huge textures."
-                        },
-                        handler: {
-                            executeFunc: args => {
-                                const enabled = !AssetPackPlugin.getInstance().isSimpleRenderingOfTextureAtlas();
-                                AssetPackPlugin.getInstance().setSimpleRenderingOfTextureAtlas(enabled);
-
-                                alert(`The Simple-Rendering mode of texture atlases is ${enabled ? "ON" : "OFF"}.
-                                <br>
-                                Please, refresh the page.`);
-
-                                setTimeout(() => {
-
-                                    window.location.reload();
-
-                                }, 1000);
-                            }
-                        }
                     });
 
                     // delete

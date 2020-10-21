@@ -3,10 +3,10 @@ namespace colibri.ui.controls {
     export class ImageFrame implements IImage {
 
         private _name: string | number;
-        private _image: controls.IImage;
+        private _image: controls.DefaultImage;
         private _frameData: FrameData;
 
-        constructor(name: string | number, image: controls.IImage, frameData: FrameData) {
+        constructor(name: string | number, image: controls.DefaultImage, frameData: FrameData) {
             this._name = name;
             this._image = image;
             this._frameData = frameData;

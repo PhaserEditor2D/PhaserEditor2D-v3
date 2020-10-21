@@ -10,7 +10,7 @@ namespace phasereditor2d.pack.core.parsers {
             super(packItem, false);
         }
 
-        protected parseFrames2(imageFrames: AssetPackImageFrame[], image: controls.IImage, atlas: string) {
+        protected parseFrames2(imageFrames: AssetPackImageFrame[], image: controls.DefaultImage, atlas: string) {
             try {
 
                 const data = JSON.parse(atlas);
@@ -51,7 +51,7 @@ namespace phasereditor2d.pack.core.parsers {
         }
 
         static buildFrameData(
-            packItem: AssetPackItem, image: controls.IImage, frame: FrameDataType, index: number): AssetPackImageFrame {
+            packItem: AssetPackItem, image: controls.DefaultImage, frame: FrameDataType, index: number): AssetPackImageFrame {
 
             const src = new controls.Rect(frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h);
 

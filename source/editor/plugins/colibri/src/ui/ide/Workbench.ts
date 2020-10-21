@@ -21,6 +21,7 @@ namespace colibri.ui.ide {
         public eventPartActivated = new controls.ListenerList<Part>();
         public eventEditorDeactivated = new controls.ListenerList<EditorPart>();
         public eventEditorActivated = new controls.ListenerList<EditorPart>();
+        public eventBeforeOpenProject = new controls.ListenerList();
         public eventProjectOpened = new controls.ListenerList();
         public eventThemeChanged = new controls.ListenerList<ui.controls.ITheme>();
 
@@ -155,6 +156,8 @@ namespace colibri.ui.ide {
         }
 
         async openProject(projectName: string, monitor: controls.IProgressMonitor) {
+
+            this.eventBeforeOpenProject.fire(projectName);
 
             this._projectPreferences = new core.preferences.Preferences("__project__" + projectName);
 

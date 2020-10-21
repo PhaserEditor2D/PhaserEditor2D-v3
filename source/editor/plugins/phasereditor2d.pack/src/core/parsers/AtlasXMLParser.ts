@@ -38,7 +38,7 @@ namespace phasereditor2d.pack.core.parsers {
             }
         }
 
-        protected parseFrames2(imageFrames: AssetPackImageFrame[], image: controls.IImage, atlas: string) {
+        protected parseFrames2(imageFrames: AssetPackImageFrame[], image: controls.DefaultImage, atlas: string) {
 
             try {
 

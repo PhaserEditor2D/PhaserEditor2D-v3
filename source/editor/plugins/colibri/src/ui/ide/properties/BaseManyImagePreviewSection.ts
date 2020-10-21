@@ -20,14 +20,20 @@ namespace colibri.ui.ide.properties {
 
             this.addUpdater(async () => {
 
+                console.log("update " + this.getId());
+
                 const input = await this.getViewerInput();
 
                 // clean the viewer first
                 viewer.setInput([]);
-                viewer.repaint();
+
+                await viewer.repaint();
 
                 viewer.setInput(input);
-                filteredViewer.resizeTo();
+
+                viewer.repaint();
+
+                // filteredViewer.resizeTo();
             });
         }
 
