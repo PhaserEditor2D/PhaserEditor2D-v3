@@ -30,6 +30,7 @@
 ### Fixes
 
 * Fixed the clicking-area of the titles in the Inspector sections.
+* Fixes `Ctrl+S` when is active the Quick Edit Dialog.
 
 ## Version 3.7.1 - Sep 22, 2020
 
