@@ -25,6 +25,14 @@ namespace phasereditor2d.pack {
             super("phasereditor2d.pack");
         }
 
+        async started() {
+
+            colibri.Platform.getWorkbench().eventBeforeOpenProject.addListener(() => {
+
+                core.ImageFrameContainerAssetPackItem.resetCache();
+            });
+        }
+
         registerExtensions(reg: colibri.ExtensionRegistry) {
 
             // icons loader

@@ -203,6 +203,7 @@ namespace phasereditor2d.ide {
                     const win = wb.getActiveWindow();
 
                     if (win instanceof ui.DesignWindow) {
+
                         win.saveState(wb.getProjectPreferences());
                     }
                 }

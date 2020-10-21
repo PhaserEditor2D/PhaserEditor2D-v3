@@ -54,6 +54,11 @@ namespace phasereditor2d.pack.core {
             return Math.max(result, result2);
         }
 
+        static resetCache(){
+
+            this._cache = new Map();
+        }
+
         private getCacheKey() {
 
             const files = new Set<io.FilePath>();
