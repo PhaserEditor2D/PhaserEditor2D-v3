@@ -367,11 +367,11 @@ namespace phasereditor2d.pack.ui.editor {
 
             const items = await importData.importer.autoImport(this._pack, importData.files);
 
-            for(const item of items) {
+            for (const item of items) {
 
                 await item.preload();
             }
- 
+
             this._viewer.repaint();
 
             this.setDirty(true);

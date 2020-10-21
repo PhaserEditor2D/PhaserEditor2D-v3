@@ -33,6 +33,7 @@ namespace colibri.ui.ide.actions {
             const control = controls.Control.getControlOf(args.activeElement);
 
             if (control && control instanceof controls.viewers.Viewer) {
+
                 return true;
             }
         }
@@ -195,25 +196,25 @@ namespace colibri.ui.ide.actions {
 
             // collapse all
 
-            manager.addCommandHelper({
-                id: CMD_COLLAPSE_ALL,
-                name: "Collapse All",
-                tooltip: "Collapse all elements",
-                category: CAT_GENERAL
-            });
-
-            manager.addHandlerHelper(CMD_COLLAPSE_ALL,
-                isViewerScope,
-                args => {
-                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
-                    viewer.collapseAll();
-                    viewer.repaint();
+            manager.add({
+                command: {
+                    id: CMD_COLLAPSE_ALL,
+                    name: "Collapse All",
+                    tooltip: "Collapse all elements",
+                    category: CAT_GENERAL
+                },
+                handler: {
+                    testFunc: isViewerScope,
+                    executeFunc: args => {
+                        const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
+                        viewer.collapseAll();
+                        viewer.repaint();
+                    }
+                },
+                keys: {
+                    key: "C"
                 }
-            );
-
-            manager.addKeyBinding(CMD_COLLAPSE_ALL, new KeyMatcher({
-                key: "C"
-            }));
+            })
 
             // select all
 
