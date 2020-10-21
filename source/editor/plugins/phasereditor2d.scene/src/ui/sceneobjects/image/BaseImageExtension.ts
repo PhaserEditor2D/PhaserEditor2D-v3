@@ -43,9 +43,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (args.asset instanceof pack.core.AssetPackImageFrame) {
 
-                key = args.asset.getPackItem().getKey();
+                const packItem = args.asset.getPackItem();
+
+                key = packItem.getKey();
                 frame = args.asset.getName();
                 baseLabel = frame.toString();
+
+                if (packItem instanceof pack.core.SpritesheetAssetPackItem) {
+
+                    baseLabel = key + frame.toString();
+                }
 
             } else if (args.asset instanceof pack.core.ImageAssetPackItem) {
 
