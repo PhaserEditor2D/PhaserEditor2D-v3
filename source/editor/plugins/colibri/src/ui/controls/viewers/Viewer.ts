@@ -203,7 +203,7 @@ namespace colibri.ui.controls.viewers {
             return this._filterText;
         }
 
-        private prepareFiltering() {
+        protected prepareFiltering() {
 
             this._filterIncludeSet = new Set();
 
@@ -227,12 +227,14 @@ namespace colibri.ui.controls.viewers {
             }
 
             if (filter === "") {
+
                 return true;
             }
 
             const label = labelProvider.getLabel(obj);
 
             if (label.toLocaleLowerCase().indexOf(filter) !== -1) {
+
                 return true;
             }
 
@@ -490,11 +492,7 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        static ID = 0;
-
         async repaint() {
-
-            const id = Viewer.ID++;
 
             this.prepareFiltering();
 

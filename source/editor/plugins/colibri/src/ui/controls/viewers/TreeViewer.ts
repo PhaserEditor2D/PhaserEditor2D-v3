@@ -286,6 +286,8 @@ namespace colibri.ui.controls.viewers {
 
             if (filter !== "") {
 
+                this.prepareFiltering();
+
                 this.expandFilteredParents(this.getContentProvider().getRoots(this.getInput()));
 
                 this.repaint();
@@ -312,7 +314,7 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        buildFilterIncludeMap() {
+        protected buildFilterIncludeMap() {
 
             const provider = this.getContentProvider();
 
@@ -336,7 +338,9 @@ namespace colibri.ui.controls.viewers {
                 resultThis = resultThis || resultChildren;
 
                 if (resultThis) {
+
                     this._filterIncludeSet.add(obj);
+
                     result = true;
                 }
             }
