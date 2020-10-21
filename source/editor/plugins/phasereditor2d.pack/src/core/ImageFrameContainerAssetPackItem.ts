@@ -54,7 +54,7 @@ namespace phasereditor2d.pack.core {
             return Math.max(result, result2);
         }
 
-        static resetCache(){
+        static resetCache() {
 
             this._cache = new Map();
         }
@@ -87,7 +87,10 @@ namespace phasereditor2d.pack.core {
             canvas.width = canvas.height = 256;
             canvas.style.width = canvas.style.height = canvas.width + "px";
 
-            this.renderCanvas(canvas, this._frames);
+            const ctx = canvas.getContext("2d");
+            ctx.imageSmoothingEnabled = false;
+
+            this.renderCanvas(ctx, canvas.width, this._frames);
 
             const img = document.createElement("img");
 
@@ -109,14 +112,9 @@ namespace phasereditor2d.pack.core {
             return promise;
         }
 
-        private renderCanvas(canvas: HTMLCanvasElement, frames: AssetPackImageFrame[]) {
+        private renderCanvas(ctx: CanvasRenderingContext2D, canvasSize: number, frames: AssetPackImageFrame[]) {
 
             const maxCount = 4;
-
-            const ctx = canvas.getContext("2d");
-
-            const width = canvas.width;
-            const height = canvas.height;
 
             const realCount = frames.length;
 
@@ -141,23 +139,24 @@ namespace phasereditor2d.pack.core {
                 frameCount = 1;
             }
 
-            let size = Math.floor(Math.sqrt(width * height / frameCount) * 0.8) + 1;
+            let cellSize = Math.floor(Math.sqrt(canvasSize * canvasSize / frameCount) * 0.8) + 1;
 
             if (frameCount === 1) {
-                size = Math.min(width, height);
+
+                cellSize = canvasSize;
             }
 
-            const cols = Math.floor(width / size);
+            const cols = Math.floor(canvasSize / cellSize);
             const rows = frameCount / cols + (frameCount % cols === 0 ? 0 : 1);
-            const marginX = Math.floor(Math.max(0, (width - cols * size) / 2));
-            const marginY = Math.floor(Math.max(0, (height - rows * size) / 2));
+            const marginX = Math.floor(Math.max(0, (canvasSize - cols * cellSize) / 2));
+            const marginY = Math.floor(Math.max(0, (canvasSize - rows * cellSize) / 2));
 
             let itemX = 0;
             let itemY = 0;
 
             for (let i = 0; i < frameCount; i++) {
 
-                if (itemY + size > height) {
+                if (itemY + cellSize > canvasSize) {
                     break;
                 }
 
@@ -165,12 +164,12 @@ namespace phasereditor2d.pack.core {
 
                 const frame = frames[index];
 
-                frame.paint(ctx, marginX + itemX, marginY + itemY, size, size, true);
+                frame.paint(ctx, marginX + itemX, marginY + itemY, cellSize, cellSize, true);
 
-                itemX += size;
+                itemX += cellSize;
 
-                if (itemX + size > width) {
-                    itemY += size;
+                if (itemX + cellSize > canvasSize) {
+                    itemY += cellSize;
                     itemX = 0;
                 }
             }
