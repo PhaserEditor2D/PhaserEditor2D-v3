@@ -126,6 +126,13 @@ namespace phasereditor2d.scene.ui.editor {
 
             const file = this.getOutputFile();
 
+            if (!file) {
+
+                alert("The scene is not compiled yet. There isn't any file to edit.");
+
+                return;
+            }
+
             const dlg = new colibri.ui.ide.QuickEditorDialog(file, this._outputFileEditorState);
 
             dlg.create();
