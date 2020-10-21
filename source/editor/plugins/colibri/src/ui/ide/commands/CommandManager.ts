@@ -234,9 +234,23 @@ namespace colibri.ui.ide.commands {
             const activeDialog = wb.getActiveDialog() instanceof ui.controls.dialogs.CommandDialog
                 ? null : wb.getActiveDialog();
 
+            let activeEditor = wb.getActiveEditor();
+
+            if (activeDialog) {
+
+                if (activeDialog instanceof QuickEditorDialog) {
+
+                    activeEditor = activeDialog.getEditor();
+
+                } else {
+
+                    activeEditor = null;
+                }
+            }
+
             return new HandlerArgs(
                 activeDialog ? null : wb.getActivePart(),
-                activeDialog ? null : wb.getActiveEditor(),
+                activeEditor,
                 activeElement,
                 activeMenu,
                 wb.getActiveWindow(),

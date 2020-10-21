@@ -362,28 +362,32 @@ namespace colibri.ui.ide.actions {
 
             // save
 
-            manager.addCommandHelper({
-                id: CMD_SAVE,
-                name: "Save",
-                tooltip: "Save",
-                category: CAT_EDIT
-            });
+            manager.add({
+                command: {
+                    id: CMD_SAVE,
+                    name: "Save",
+                    tooltip: "Save",
+                    category: CAT_EDIT
+                },
+                handler: {
+                    testFunc: args => {
 
-            manager.addHandlerHelper(CMD_SAVE,
-                args => args.activeEditor ? true : false,
-                args => {
+                        return args.activeEditor ? true : false;
+                    },
+                    executeFunc: args => {
 
-                    if (args.activeEditor.isDirty()) {
-                        args.activeEditor.save();
+                        if (args.activeEditor.isDirty()) {
+
+                            args.activeEditor.save();
+                        }
                     }
+                },
+                keys: {
+                    control: true,
+                    key: "S",
+                    filterInputElements: false
                 }
-            );
-
-            manager.addKeyBinding(CMD_SAVE, new KeyMatcher({
-                control: true,
-                key: "S",
-                filterInputElements: false
-            }));
+            });
 
             // delete
 
