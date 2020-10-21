@@ -1,15 +1,24 @@
+
 namespace phasereditor2d.pack.core {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export abstract class ImageFrameContainerAssetPackItem extends AssetPackItem {
 
         private _frames: AssetPackImageFrame[];
+        private _thumbnail: controls.IImage;
+        private static _cache: Map<string, controls.IImage> = new Map();
 
         constructor(pack: AssetPack, data: any) {
             super(pack, data);
 
             this._frames = null;
+        }
+
+        getThumbnail() {
+
+            return this._thumbnail;
         }
 
         async preload(): Promise<controls.PreloadResult> {
@@ -40,7 +49,126 @@ namespace phasereditor2d.pack.core {
                 }
             }
 
-            return result;
+            const result2 = await this.makeThumbnail();
+
+            return Math.max(result, result2);
+        }
+
+        private getCacheKey() {
+
+            const files = new Set<io.FilePath>();
+
+            this.computeUsedFiles(files);
+
+            const key = [...files].map(file => file.getFullName() + "@" + file.getModTime()).join(",");
+
+            return key;
+        }
+
+        private async makeThumbnail() {
+
+            const cache = ImageFrameContainerAssetPackItem._cache;
+
+            const key = this.getCacheKey();
+
+            if (cache.has(key)) {
+
+                this._thumbnail = cache.get(key);
+
+                return controls.PreloadResult.NOTHING_LOADED;
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.width = canvas.height = 256;
+            canvas.style.width = canvas.style.height = canvas.width + "px";
+
+            this.renderCanvas(canvas, this._frames);
+
+            const img = document.createElement("img");
+
+            const promise = new Promise<controls.PreloadResult>((resolve, reject) => {
+
+                canvas.toBlob(blob => {
+
+                    img.src = URL.createObjectURL(blob);
+
+                    resolve(controls.PreloadResult.RESOURCES_LOADED);
+
+                }, "image/png");
+            });
+
+            this._thumbnail = new controls.ImageWrapper(img);
+
+            cache.set(key, this._thumbnail);
+
+            return promise;
+        }
+
+        private renderCanvas(canvas: HTMLCanvasElement, frames: AssetPackImageFrame[]) {
+
+            const maxCount = 4;
+
+            const ctx = canvas.getContext("2d");
+
+            const width = canvas.width;
+            const height = canvas.height;
+
+            const realCount = frames.length;
+
+            if (realCount === 0) {
+                return;
+            }
+
+            let frameCount = realCount;
+
+            if (frameCount === 0) {
+                return;
+            }
+
+            let step = 1;
+
+            if (frameCount > maxCount) {
+                step = frameCount / maxCount;
+                frameCount = maxCount;
+            }
+
+            if (frameCount === 0) {
+                frameCount = 1;
+            }
+
+            let size = Math.floor(Math.sqrt(width * height / frameCount) * 0.8) + 1;
+
+            if (frameCount === 1) {
+                size = Math.min(width, height);
+            }
+
+            const cols = Math.floor(width / size);
+            const rows = frameCount / cols + (frameCount % cols === 0 ? 0 : 1);
+            const marginX = Math.floor(Math.max(0, (width - cols * size) / 2));
+            const marginY = Math.floor(Math.max(0, (height - rows * size) / 2));
+
+            let itemX = 0;
+            let itemY = 0;
+
+            for (let i = 0; i < frameCount; i++) {
+
+                if (itemY + size > height) {
+                    break;
+                }
+
+                const index = Math.min(realCount - 1, Math.round(i * step));
+
+                const frame = frames[index];
+
+                frame.paint(ctx, marginX + itemX, marginY + itemY, size, size, true);
+
+                itemX += size;
+
+                if (itemX + size > width) {
+                    itemY += size;
+                    itemX = 0;
+                }
+            }
         }
 
         resetCache() {
@@ -59,6 +187,7 @@ namespace phasereditor2d.pack.core {
             if (this._frames === null) {
 
                 const parser = this.createParser();
+
                 this._frames = parser.parseFrames();
             }
 

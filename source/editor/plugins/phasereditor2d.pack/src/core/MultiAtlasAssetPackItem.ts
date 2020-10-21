@@ -31,12 +31,16 @@ namespace phasereditor2d.pack.core {
                     const data = JSON.parse(str);
 
                     for (const texture of data.textures) {
+
                         const url = core.AssetPackUtils.getFilePackUrl(atlasFile.getSibling(texture.image));
+
                         urlSet.add(url);
                     }
 
                     for (const url of urlSet) {
+
                         const file = core.AssetPackUtils.getFileFromPackUrl(url);
+
                         files.add(file);
                     }
                 }

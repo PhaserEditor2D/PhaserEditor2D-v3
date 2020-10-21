@@ -22,5 +22,4 @@ namespace phasereditor2d.pack.ui.editor {
             return [];
         }
     }
-
 }

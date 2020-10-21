@@ -207,8 +207,11 @@ namespace colibri.ui.controls.viewers {
         }
 
         visitObjects(visitor: (obj: any) => void) {
+
             const provider = this.getContentProvider();
+
             const list = provider ? provider.getRoots(this.getInput()) : [];
+
             this.visitObjects2(list, visitor);
         }
 
@@ -219,7 +222,9 @@ namespace colibri.ui.controls.viewers {
                 visitor(obj);
 
                 if (this.isExpanded(obj) || this.getFilterText() !== "") {
+
                     const list = this.getContentProvider().getChildren(obj);
+
                     this.visitObjects2(list, visitor);
                 }
             }

@@ -23,13 +23,13 @@ namespace colibri.ui.controls.viewers {
 
             const img = this.getImage(args.obj);
 
-            if (!img) {
+            if (img) {
 
-                DefaultImage.paintEmpty(args.canvasContext, args.x, args.y, args.w, args.h);
+                img.paint(args.canvasContext, args.x, args.y, args.w, args.h, args.center);
 
             } else {
 
-                img.paint(args.canvasContext, args.x, args.y, args.w, args.h, args.center);
+                DefaultImage.paintEmpty(args.canvasContext, args.x, args.y, args.w, args.h);
             }
         }
 
@@ -42,6 +42,7 @@ namespace colibri.ui.controls.viewers {
             const img = this.getImage(args.obj);
 
             if (img) {
+
                 return img.preload();
             }
 
