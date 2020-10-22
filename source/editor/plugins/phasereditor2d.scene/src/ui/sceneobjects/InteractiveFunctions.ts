@@ -6,6 +6,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         const textureManager = obj.getEditorSupport().getScene().textures;
 
+        if (sprite.flipX) {
+
+            x = 2 * sprite.width * sprite.originX - x;
+        }
+
+        if (sprite.flipY) {
+
+            y = 2 * sprite.height * sprite.originY - y;
+        }
+
         const alpha = textureManager.getPixelAlpha(x, y, sprite.texture.key, sprite.frame.name);
 
         return alpha > 0;
