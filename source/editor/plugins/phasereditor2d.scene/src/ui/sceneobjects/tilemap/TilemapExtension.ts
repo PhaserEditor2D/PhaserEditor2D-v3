@@ -146,23 +146,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 tilemap.addTilesetImage(name, image.getKey());
             }
 
-            const layers = tilemap.layers;
-
-            if (layers.length > 0) {
-
-                const menu = new controls.Menu();
-
-                for (const layer of layers) {
-
-                    menu.addAction({
-                        text: layer.name,
-                        icon: pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER)
-                    });
-                }
-
-                menu.create(args.x, args.y);
-            }
-
             return tilemap;
         }
 
