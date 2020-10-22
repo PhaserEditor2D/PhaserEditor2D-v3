@@ -201,6 +201,7 @@ namespace colibri.ui.controls {
             Platform.getWorkbench().eventThemeChanged.fire(this._theme);
 
             localStorage.setItem("colibri.theme.id", theme.id);
+            localStorage.setItem("colibri.theme.classList", theme.classList.join(","));
         }
 
         static preloadTheme() {
@@ -212,9 +213,18 @@ namespace colibri.ui.controls {
                 id = "light";
             }
 
-            const classList = document.getElementsByTagName("html")[0].classList;
+            let tokens = [id];
 
-            classList.add(id);
+            const str = localStorage.getItem("colibri.theme.classList");
+
+            if (str) {
+
+                tokens = str.split(",");
+            }
+
+            const documentClassList = document.getElementsByTagName("html")[0].classList;
+
+            documentClassList.add(...tokens);
         }
 
         static getTheme() {
