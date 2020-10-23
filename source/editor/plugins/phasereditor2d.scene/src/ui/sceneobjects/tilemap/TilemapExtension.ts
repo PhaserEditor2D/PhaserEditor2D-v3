@@ -91,36 +91,38 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor) {
 
-            const dlg = new TilemapConfigDialog();
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
 
             const promise = new Promise((resolve, reject) => {
 
-                dlg.create();
+                const dlg = new TilemapConfigWizard(finder);
 
-                dlg.setCreateCallback(async () => {
+                dlg.setFinishCallback(async () => {
 
-                    const tilemapAsset = dlg.getTilemapAsset();
+                    const tilemap = dlg.getTilemapKeyPage().getTilemapAsset();
+
+                    const tilesetsImages = dlg.getTilesetsPage().getImageMap();
 
                     const scene = editor.getScene();
 
-                    let updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(tilemapAsset);
+                    let updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(tilemap);
 
-                    await updater.updateLoader(scene, tilemapAsset);
+                    await updater.updateLoader(scene, tilemap);
 
-                    for (const [name, image] of dlg.getTilesetsImages().entries()) {
+                    for (const [name, image] of tilesetsImages.entries()) {
 
                         updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(image);
 
                         await updater.updateLoader(scene, image);
                     }
 
-                    const data: ITilemapExtraData = {
-                        tilemap: tilemapAsset,
-                        tilesetsImages: dlg.getTilesetsImages()
-                    };
-
                     const result: ICreateExtraDataResult = {
-                        data
+                        data: {
+                            tilemap,
+                            tilesetsImages
+                        }
                     };
 
                     resolve(result);
@@ -128,6 +130,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 dlg.setCancelCallback(() => reject());
 
+                dlg.create();
             });
 
             return promise;

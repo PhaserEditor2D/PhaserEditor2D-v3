@@ -173,7 +173,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 }
 
 .ZoomControl:hover {
-    opacity: 0.9;    
+    opacity: 0.9;
 }
 
 /* Viewer */
@@ -244,7 +244,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 .PropertyTitleArea {
     display: inline-grid;
     grid-template-columns: 20px 1fr auto;
-    padding: 5px;    
+    padding: 5px;
     border-radius: 3px;
 }
 
@@ -257,7 +257,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     overflow: hidden;
     white-space: nowrap;
     word-break: break-all;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
 }
 
 .PropertyFormArea {
@@ -287,7 +287,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 }
 
 .PropertySubTitleLabel {
-    width: 100%;    
+    width: 100%;
 }
 
 .formSimpleProps {
@@ -407,6 +407,28 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 .Dialog .DialogButtonPane button {
     float: right;
     margin-left: 5px;
+}
+
+.WizardDialog .DialogClientArea {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    row-gap: 5px;
+}
+
+.WizardDialog .PageTitleLabel {
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.WizardDialog .PageDescArea {
+    padding: 0.5em 0 0.5em 0;
+    font-style: italic;
+    margin-left: 5px;
+}
+
+.WizardDialog .PageArea {
+    height: 100%;
 }
 
 /* AlertDialog */
