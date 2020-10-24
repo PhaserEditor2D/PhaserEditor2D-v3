@@ -151,7 +151,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     class TilesetsPage extends BasePage {
 
-        private _imageMap: Map<string, pack.core.ImageAssetPackItem|pack.core.SpritesheetAssetPackItem>;
+        private _imageMap: Map<string, pack.core.ImageAssetPackItem | pack.core.SpritesheetAssetPackItem>;
         private _assignButton: HTMLButtonElement;
         private _tilesetViewer: controls.viewers.TreeViewer;
 
@@ -166,9 +166,55 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._imageMap;
         }
 
-        createElements(parent: HTMLElement) {
+        private autoSetImages() {
 
             this._imageMap = new Map();
+
+            const tilesets = this.getWizard().getTilemapKeyPage().getTilemapAsset().getTilesetsData();
+
+            for (const tileset of tilesets) {
+
+                const asset = this.findTilesetImage(tileset.image);
+
+                if (asset) {
+
+                    this._imageMap.set(tileset.name, asset);
+                }
+            }
+        }
+
+        private findTilesetImage(tilesetImage: string) {
+
+            const finder = this.getWizard().getFinder();
+
+            const image1 = tilesetImage;
+            const image2 = colibri.ui.ide.FileUtils.getFileNameWithoutExtension(image1);
+
+            const split1 = image2.split("/");
+            const image3 = split1[split1.length - 1];
+
+            const split2 = image2.split("\\");
+            const image4 = split2[split2.length - 1];
+
+            for (const image of [image1, image2, image3, image4]) {
+
+                const result = finder.findAssetPackItem(image);
+
+                if (result && (result instanceof pack.core.ImageAssetPackItem
+                    || result instanceof pack.core.SpritesheetAssetPackItem)) {
+
+                    return result;
+                }
+            }
+
+            return undefined;
+        }
+
+        createElements(parent: HTMLElement) {
+
+            this.autoSetImages();
+
+            const tilesets = this.getWizard().getTilemapKeyPage().getTilemapAsset().getTilesetsData();
 
             const comp = document.createElement("div");
             comp.style.display = "grid";
@@ -202,7 +248,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return new controls.viewers.EmptyCellRenderer(false);
             }));
 
-            this._tilesetViewer.setInput(this.getWizard().getTilemapKeyPage().getTilemapAsset().getTilesetsData());
+            this._tilesetViewer.setInput(tilesets);
 
             this._tilesetViewer.eventSelectionChanged.addListener(e => this.updateUI());
 

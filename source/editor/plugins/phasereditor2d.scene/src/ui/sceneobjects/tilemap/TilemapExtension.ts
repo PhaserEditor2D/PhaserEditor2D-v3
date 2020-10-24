@@ -128,7 +128,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     resolve(result);
                 });
 
-                dlg.setCancelCallback(() => reject());
+                dlg.setCancelCallback(() => {
+
+                    const result: ICreateExtraDataResult = {
+                       abort: true
+                    };
+
+                    resolve(result);
+                });
 
                 dlg.create();
             });
