@@ -68,17 +68,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.CollectExtraDataDialog");
 
-                viewer.setLabelProvider(new controls.viewers.LabelProvider(
-                    (element: ITilemapLayerReference) => {
+                viewer.setLabelProvider(new DialogLabelProvider());
 
-                        return `${element.layerName} (${element.tilemap.getTilemapAssetKey()})`;
-                    }));
+                viewer.setCellRendererProvider(new DialogCellRendererProvider());
 
-                viewer.setCellRendererProvider(controls.viewers.EmptyCellRendererProvider.withIcon(this.getIcon()));
+                viewer.setContentProvider(new DialogContentProvider(editor));
 
-                viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
 
-                viewer.setInput(layers);
+                viewer.setInput([]);
+
+                for (const tilemap of tilemaps) {
+
+                    viewer.setExpanded(tilemap, true);
+                }
 
                 const dlg = new controls.dialogs.ViewerDialog(viewer, false);
 
@@ -95,7 +98,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         resolve({
                             data
                         });
-                    }));
+                    }), obj => !(obj instanceof Tilemap)
+                );
 
                 dlg.addCancelButton();
             });
@@ -159,5 +163,84 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return false;
         }
+    }
+
+    class DialogLabelProvider implements controls.viewers.ILabelProvider {
+
+        getLabel(element: ITilemapLayerReference | Tilemap) {
+
+            if (element instanceof Tilemap) {
+
+                return element.getTilemapAssetKey();
+            }
+
+            return `${element.layerName}`;
+        }
+    }
+
+    class DialogCellRendererProvider implements controls.viewers.ICellRendererProvider {
+
+        getCellRenderer(element: any): controls.viewers.ICellRenderer {
+
+            if (element instanceof Tilemap) {
+
+                return new controls.viewers.IconGridCellRenderer(
+                    pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP));
+            }
+
+            return new controls.viewers.IconGridCellRenderer(
+                pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER));
+        }
+
+        async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
+
+            return controls.PreloadResult.NOTHING_LOADED;
+        }
+    }
+
+    class DialogContentProvider implements controls.viewers.ITreeContentProvider {
+
+        private _editor: editor.SceneEditor;
+        private _map: Map<Tilemap, any>;
+
+        constructor(editor: ui.editor.SceneEditor) {
+
+            this._editor = editor;
+            this._map = new Map();
+        }
+
+        getRoots(input: any): any[] {
+
+            const tilemaps = this._editor.getScene()
+                .getPlainObjects()
+                .filter(obj => obj instanceof Tilemap) as Tilemap[];
+
+            return tilemaps;
+        }
+
+        getChildren(parent: any): any[] {
+
+            if (parent instanceof Tilemap) {
+
+                if (this._map.has(parent)) {
+
+                    return this._map.get(parent);
+                }
+
+                const layers = parent.getTileLayerNames().map(layerName => {
+                    return {
+                        tilemap: parent,
+                        layerName
+                    } as ITilemapLayerReference;
+                });
+
+                this._map.set(parent, layers);
+
+                return layers;
+            }
+
+            return [];
+        }
+
     }
 }

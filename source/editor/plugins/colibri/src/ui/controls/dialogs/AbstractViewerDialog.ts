@@ -43,14 +43,21 @@ namespace colibri.ui.controls.dialogs {
             }
         }
 
-        enableButtonOnlyWhenOneElementIsSelected(btn: HTMLButtonElement) {
+        enableButtonOnlyWhenOneElementIsSelected(btn: HTMLButtonElement, filter?: (obj: any) => boolean) {
 
             this.getViewer().eventSelectionChanged.addListener(() => {
 
                 btn.disabled = this.getViewer().getSelection().length !== 1;
+
+                if (!btn.disabled && filter) {
+
+                    btn.disabled = !filter(this.getViewer().getSelectionFirstElement());
+                }
             });
 
             btn.disabled = this.getViewer().getSelection().length !== 1;
+
+            return btn;
         }
 
         addOpenButton(text: string, callback: (selection: any[]) => void, allowSelectEmpty = false) {
