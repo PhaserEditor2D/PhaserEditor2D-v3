@@ -143,7 +143,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new TilemapLayerCodeDOMBuilder(this.getCodeFactoryMethod());
         }
 
-        createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs) {
 
             const data = args.extraData as ITilemapLayerReference;
 
@@ -151,7 +151,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             layer.setPosition(args.x, args.y);
 
-            return layer;
+            return [layer];
         }
 
         async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {

@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _tilesetsPage: TilesetsPage;
         private _finishCallback: () => void;
         private _cancelCallback: () => void;
+        private _tilemapLayerNamePage: TilemapLayerNamePage;
 
         constructor(finder: pack.core.PackFinder) {
             super();
@@ -26,10 +27,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._tilemapKeyPage = new TilemapKeyPage();
             this._tilesetsPage = new TilesetsPage();
+            this._tilemapLayerNamePage = new TilemapLayerNamePage();
 
             this.addPages(
                 this._tilemapKeyPage,
-                this._tilesetsPage);
+                this._tilesetsPage,
+                this._tilemapLayerNamePage);
 
             super.create();
 
@@ -44,6 +47,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getTilesetsPage() {
 
             return this._tilesetsPage;
+        }
+
+        getTilemapLayerNamePage() {
+
+            return this._tilemapLayerNamePage;
         }
 
         getTilemapAssets() {
@@ -311,6 +319,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
+        canGoNext() {
+
+            return this.canFinish();
+        }
+
         private updateUI() {
 
             this._assignButton.disabled = this._tilesetViewer.getSelection().length === 0;
@@ -318,6 +331,74 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._tilesetViewer.repaint();
 
             this.getWizard().updateWizardButtons();
+        }
+    }
+
+    class TilemapLayerNamePage extends BasePage {
+        private _viewer: controls.viewers.TreeViewer;
+        private _tilemapLayerName: any;
+
+        constructor() {
+            super("Tilemap Layer", "Select a Tilemap Layer.")
+        }
+
+        createElements(parent: HTMLElement) {
+
+            this._viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.LayerPage");
+
+            this._viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+
+            this._viewer.setLabelProvider(new controls.viewers.LabelProvider((name: string) => name));
+
+            this._viewer.setCellRendererProvider(
+                controls.viewers.EmptyCellRendererProvider.withIcon(
+                    pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER)));
+
+            this._viewer.setInput(this.getWizard().getTilemapKeyPage().getTilemapAsset().getLayerNames());
+
+            const filteredViewer = new controls.viewers.FilteredViewerInElement(this._viewer, false);
+
+            parent.appendChild(filteredViewer.getElement());
+
+            this._viewer.eventSelectionChanged.addListener(sel => {
+
+                this._tilemapLayerName = this._viewer.getSelectionFirstElement();
+
+                this.getWizard().updateWizardButtons();
+            });
+
+            this.updateUI();
+        }
+
+        getTilemapLayerName() {
+
+            return this._tilemapLayerName;
+        }
+
+        private updateUI() {
+
+            if (this._tilemapLayerName) {
+
+                this._viewer.setSelection([this._tilemapLayerName]);
+                this._viewer.reveal(this._tilemapLayerName);
+            }
+
+            this.getWizard().updateWizardButtons();
+        }
+
+        canFinish() {
+
+            return true;
+        }
+
+        canGoBack() {
+
+            return true;
+        }
+
+        canGoNext() {
+
+            return true;
         }
     }
 }

@@ -90,7 +90,7 @@ namespace phasereditor2d.scene.ui {
 
                     } else {
 
-                        container = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
+                        [container] = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
                             scene: scene,
                             x: 0,
                             y: 0
@@ -410,7 +410,7 @@ namespace phasereditor2d.scene.ui {
                 y = point.y;
             }
 
-            const newObject = ext.createDefaultSceneObject({
+            const newObjects = ext.createDefaultSceneObject({
                 scene: this._editorScene,
                 x,
                 y,
@@ -421,21 +421,23 @@ namespace phasereditor2d.scene.ui {
                 return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
             });
 
-            this._editorScene.visit(obj => {
+            for (const newObject of newObjects) {
+                this._editorScene.visit(obj => {
 
-                if (obj !== newObject) {
+                    if (obj !== newObject) {
 
-                    nameMaker.update([obj]);
-                }
-            });
+                        nameMaker.update([obj]);
+                    }
+                });
 
-            const oldLabel = newObject.getEditorSupport().getLabel();
+                const oldLabel = newObject.getEditorSupport().getLabel();
 
-            const newLabel = nameMaker.makeName(oldLabel);
+                const newLabel = nameMaker.makeName(oldLabel);
 
-            newObject.getEditorSupport().setLabel(newLabel);
+                newObject.getEditorSupport().setLabel(newLabel);
+            }
 
-            return newObject;
+            return newObjects;
         }
 
         createObject(data: json.IObjectData, errors?: string[]) {

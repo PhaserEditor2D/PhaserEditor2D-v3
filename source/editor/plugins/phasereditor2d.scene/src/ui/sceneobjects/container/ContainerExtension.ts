@@ -60,7 +60,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createDefaultSceneObject(args: ICreateDefaultArgs) {
 
-            return this.createContainerObject(args.scene, 0, 0, []);
+            return [this.createContainerObject(args.scene, 0, 0, [])];
         }
 
         createGameObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneGameObject {

@@ -24,11 +24,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
-        createDefaultSceneObject(args: ICreateDefaultArgs): ISceneGameObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs) {
 
             const text = new Text(args.scene, args.x, args.y, "New text", {});
 
-            return text;
+            return [text];
         }
 
         createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {

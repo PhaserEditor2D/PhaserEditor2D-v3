@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createDefaultSceneObject(args: ICreateDefaultArgs) {
 
-            return this.createImageObject(args.scene, args.x, args.y);
+            return [this.createImageObject(args.scene, args.x, args.y)];
         }
 
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject {

@@ -103,13 +103,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return promise;
         }
 
-        createDefaultSceneObject(args: ICreateDefaultArgs): ISceneGameObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs) {
 
             const fontAsset = args.extraData as pack.core.BitmapFontAssetPackItem;
 
             fontAsset.addToPhaserCache(args.scene.game, args.scene.getPackCache());
 
-            return new BitmapText(args.scene, args.x, args.y, fontAsset.getKey(), "New BitmapText");
+            return [new BitmapText(args.scene, args.x, args.y, fontAsset.getKey(), "New BitmapText")];
         }
 
         createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {

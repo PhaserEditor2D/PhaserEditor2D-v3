@@ -1,11 +1,11 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
-    import controls = colibri.ui.controls;
 
     interface ITilemapExtraData {
         tilemap: pack.core.TilemapTiledJSONAssetPackItem,
         tilesetsImages: Map<string, pack.core.ImageAssetPackItem | pack.core.SpritesheetAssetPackItem>;
+        tilemapLayerName: string;
     }
 
     export class TilemapExtension extends ScenePlainObjectExtension {
@@ -105,6 +105,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const tilesetsImages = dlg.getTilesetsPage().getImageMap();
 
+                    const tilemapLayerName = dlg.getTilemapLayerNamePage().getTilemapLayerName();
+
                     const scene = editor.getScene();
 
                     let updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(tilemap);
@@ -121,7 +123,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const result: ICreateExtraDataResult = {
                         data: {
                             tilemap,
-                            tilesetsImages
+                            tilesetsImages,
+                            tilemapLayerName
                         }
                     };
 
@@ -131,7 +134,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 dlg.setCancelCallback(() => {
 
                     const result: ICreateExtraDataResult = {
-                       abort: true
+                        abort: true
                     };
 
                     resolve(result);
@@ -143,7 +146,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return promise;
         }
 
-        createDefaultSceneObject(args: ICreateDefaultArgs): IScenePlainObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs) {
 
             const extraData = args.extraData as ITilemapExtraData;
 
@@ -156,7 +159,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 tilemap.addTilesetImage(name, image.getKey());
             }
 
-            return tilemap;
+            if (extraData.tilemapLayerName) {
+
+                const layer = new StaticTilemapLayer(args.scene, tilemap, extraData.tilemapLayerName);
+
+                return [tilemap, layer];
+            }
+
+            return [tilemap];
         }
 
         createPlainObjectWithData(args: ICreatePlainObjectWithDataArgs): IScenePlainObject {

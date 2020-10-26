@@ -177,18 +177,21 @@ namespace phasereditor2d.scene.ui.editor {
 
                         extraData = result.data;
 
-                        const defaultObject = this._editor.getSceneMaker()
+                        const defaultObjects = this._editor.getSceneMaker()
                             .createDefaultObject(data, extraData, x, y);
 
-                        if (defaultObject instanceof Phaser.GameObjects.GameObject) {
+                        for (const defaultObject of defaultObjects) {
 
-                            newSprites.push(defaultObject);
+                            if (defaultObject instanceof Phaser.GameObjects.GameObject) {
 
-                        } else {
+                                newSprites.push(defaultObject);
 
-                            scene.addPlainObject(defaultObject);
+                            } else {
 
-                            newPlainObjects.push(defaultObject);
+                                scene.addPlainObject(defaultObject);
+
+                                newPlainObjects.push(defaultObject);
+                            }
                         }
                     }
 
