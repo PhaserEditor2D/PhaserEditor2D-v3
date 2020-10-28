@@ -6,6 +6,11 @@ namespace phasereditor2d.pack.core {
             super(pack, data);
         }
 
+        getUrl() {
+
+            return this.getData().url;
+        }
+
         protected createParser(): parsers.ImageFrameParser {
             return new parsers.SpriteSheetParser(this);
         }

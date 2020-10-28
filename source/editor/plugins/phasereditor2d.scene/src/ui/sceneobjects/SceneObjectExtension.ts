@@ -59,7 +59,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args The data needed to create the object.
          */
-        abstract createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject;
+        abstract createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject[];
 
         getIcon() {
 

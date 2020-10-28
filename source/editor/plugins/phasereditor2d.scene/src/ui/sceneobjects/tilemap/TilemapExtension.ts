@@ -1,11 +1,11 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
-    import controls = colibri.ui.controls;
 
     interface ITilemapExtraData {
         tilemap: pack.core.TilemapTiledJSONAssetPackItem,
         tilesetsImages: Map<string, pack.core.ImageAssetPackItem | pack.core.SpritesheetAssetPackItem>;
+        tilemapLayerName: string;
     }
 
     export class TilemapExtension extends ScenePlainObjectExtension {
@@ -91,49 +91,62 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor) {
 
-            const dlg = new TilemapConfigDialog();
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
 
             const promise = new Promise((resolve, reject) => {
 
-                dlg.create();
+                const dlg = new TilemapConfigWizard(finder);
 
-                dlg.setCreateCallback(async () => {
+                dlg.setFinishCallback(async () => {
 
-                    const tilemapAsset = dlg.getTilemapAsset();
+                    const tilemap = dlg.getTilemapKeyPage().getTilemapAsset();
+
+                    const tilesetsImages = dlg.getTilesetsPage().getImageMap();
+
+                    const tilemapLayerName = dlg.getTilemapLayerNamePage().getTilemapLayerName();
 
                     const scene = editor.getScene();
 
-                    let updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(tilemapAsset);
+                    let updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(tilemap);
 
-                    await updater.updateLoader(scene, tilemapAsset);
+                    await updater.updateLoader(scene, tilemap);
 
-                    for (const [name, image] of dlg.getTilesetsImages().entries()) {
+                    for (const [name, image] of tilesetsImages.entries()) {
 
                         updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(image);
 
                         await updater.updateLoader(scene, image);
                     }
 
-                    const data: ITilemapExtraData = {
-                        tilemap: tilemapAsset,
-                        tilesetsImages: dlg.getTilesetsImages()
-                    };
-
                     const result: ICreateExtraDataResult = {
-                        data
+                        data: {
+                            tilemap,
+                            tilesetsImages,
+                            tilemapLayerName
+                        }
                     };
 
                     resolve(result);
                 });
 
-                dlg.setCancelCallback(() => reject());
+                dlg.setCancelCallback(() => {
 
+                    const result: ICreateExtraDataResult = {
+                        abort: true
+                    };
+
+                    resolve(result);
+                });
+
+                dlg.create();
             });
 
             return promise;
         }
 
-        createDefaultSceneObject(args: ICreateDefaultArgs): IScenePlainObject {
+        createDefaultSceneObject(args: ICreateDefaultArgs) {
 
             const extraData = args.extraData as ITilemapExtraData;
 
@@ -146,24 +159,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 tilemap.addTilesetImage(name, image.getKey());
             }
 
-            const layers = tilemap.layers;
+            if (extraData.tilemapLayerName) {
 
-            if (layers.length > 0) {
+                const layer = new StaticTilemapLayer(args.scene, tilemap, extraData.tilemapLayerName);
 
-                const menu = new controls.Menu();
-
-                for (const layer of layers) {
-
-                    menu.addAction({
-                        text: layer.name,
-                        icon: pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER)
-                    });
-                }
-
-                menu.create(args.x, args.y);
+                return [tilemap, layer];
             }
 
-            return tilemap;
+            return [tilemap];
         }
 
         createPlainObjectWithData(args: ICreatePlainObjectWithDataArgs): IScenePlainObject {

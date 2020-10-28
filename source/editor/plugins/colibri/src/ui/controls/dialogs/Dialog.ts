@@ -135,7 +135,7 @@ namespace colibri.ui.controls.dialogs {
 
         addCancelButton(callback?: () => void) {
 
-            this.addButton("Cancel", () => {
+            return this.addButton("Cancel", () => {
 
                 this.close();
 

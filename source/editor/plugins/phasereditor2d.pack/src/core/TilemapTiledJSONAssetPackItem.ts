@@ -47,7 +47,8 @@ namespace phasereditor2d.pack.core {
 
                 if (data.layers) {
 
-                    this._layerNames = data.layers.filter(layer => layer.name).map(layer => layer.name);
+                    this._layerNames = data.layers
+                        .filter(layer => layer.name && layer.type === "tilelayer").map(layer => layer.name);
 
                 } else {
 
