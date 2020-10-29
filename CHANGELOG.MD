@@ -38,6 +38,7 @@
 * Scene Editor: fixes layout of image preview in the Texture section of the Inspector view.
 * Scene Editor: fixes picking of flipped objects.
 * Viewer: fixed filtering, now it does not expand mismatching parent items.
+* JavaScript editor: fixes the file-rename operation handling.
 
 ## Version 3.7.1 - Sep 22, 2020
 
