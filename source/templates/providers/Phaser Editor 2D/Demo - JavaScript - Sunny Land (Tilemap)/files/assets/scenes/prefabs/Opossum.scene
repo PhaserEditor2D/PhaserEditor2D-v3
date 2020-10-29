@@ -1,0 +1,41 @@
+{
+    "id": "dc8d8561-bce8-49fe-8272-6db97851c196",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "borderWidth": 288,
+        "borderHeight": 192
+    },
+    "displayList": [
+        {
+            "type": "Sprite",
+            "id": "aacdd922-970c-4cf1-9874-633933215a62",
+            "label": "opossum_opossum_1",
+            "components": [
+                "Physics",
+                "PhysicsBody",
+                "StartAnimation"
+            ],
+            "Physics.bodyGravity": 500,
+            "PhysicsBody.bodyX": 16,
+            "PhysicsBody.bodyY": 13,
+            "PhysicsBody.bodyWidth": 8,
+            "PhysicsBody.bodyHeight": 15,
+            "StartAnimation.animationKey": "opossum/opossum",
+            "texture": {
+                "key": "atlas",
+                "frame": "opossum/opossum-1"
+            },
+            "x": 157,
+            "y": 73
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

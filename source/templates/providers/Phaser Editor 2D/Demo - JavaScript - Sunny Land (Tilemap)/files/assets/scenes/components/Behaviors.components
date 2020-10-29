@@ -1,0 +1,152 @@
+{
+    "components": [
+        {
+            "name": "EventComponent",
+            "baseClass": "",
+            "gameObjectType": "Phaser.GameObjects.GameObject",
+            "properties": []
+        },
+        {
+            "name": "Physics",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "bodyGravity",
+                    "label": "Body Gravity",
+                    "tooltip": "Body Gravity",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "PhysicsBody",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "bodyX",
+                    "label": "Body X",
+                    "tooltip": "Body X",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                },
+                {
+                    "name": "bodyY",
+                    "label": "Body Y",
+                    "tooltip": "Body Y",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                },
+                {
+                    "name": "bodyWidth",
+                    "label": "Body Width",
+                    "tooltip": "Body Width",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                },
+                {
+                    "name": "bodyHeight",
+                    "label": "Body Height",
+                    "tooltip": "Body Height",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "StartAnimation",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Sprite",
+            "properties": [
+                {
+                    "name": "animationKey",
+                    "label": "Animation Key",
+                    "tooltip": "Animation Key",
+                    "defValue": "",
+                    "type": {
+                        "id": "animation-key"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "AnimationKillOnComplete",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Sprite",
+            "properties": [
+                {
+                    "name": "animationKey",
+                    "label": "Animation Key",
+                    "tooltip": "Kill the object when the given animation is completed.",
+                    "defValue": "",
+                    "type": {
+                        "id": "animation-key"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "CharacterMove",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "deltaX",
+                    "label": "Delta X",
+                    "tooltip": "Delta X",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                },
+                {
+                    "name": "deltaY",
+                    "label": "Delta Y",
+                    "tooltip": "Delta Y",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                },
+                {
+                    "name": "duration",
+                    "label": "Duration",
+                    "tooltip": "Duration",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "FixedToCamera",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": []
+        },
+        {
+            "name": "ControllerButton",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": []
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Object Script Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

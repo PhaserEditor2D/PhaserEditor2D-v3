@@ -1,0 +1,36 @@
+{
+    "id": "94b6f8e6-1cc2-46e2-812a-1b8b145c099f",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "borderWidth": 288,
+        "borderHeight": 192
+    },
+    "displayList": [
+        {
+            "type": "Sprite",
+            "id": "4a0fe4bb-2b5e-4499-b617-44c08ef781e9",
+            "label": "enemy_death_enemy_death_4",
+            "components": [
+                "StartAnimation",
+                "AnimationKillOnComplete"
+            ],
+            "StartAnimation.animationKey": "enemy-death/enemy-death",
+            "AnimationKillOnComplete.animationKey": "enemy-death/enemy-death",
+            "texture": {
+                "key": "atlas",
+                "frame": "enemy-death/enemy-death-4"
+            },
+            "x": 130,
+            "y": 64
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}
