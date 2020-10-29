@@ -80,6 +80,8 @@ namespace phasereditor2d.code.ui.editors {
             editor.setModel(this._model);
 
             editor.restoreViewState(state);
+
+            this.registerModelListeners(this._model);
         }
 
         getEmbeddedEditorState() {

@@ -14,8 +14,8 @@ namespace phasereditor2d.code.ui.editors {
         private _language: string;
         private _outlineProvider: outline.MonacoEditorOutlineProvider;
         private _modelLines: number;
-        private _onDidChangeContentListener: monaco.IDisposable;
-        private _onDidChangeCountListener: monaco.IDisposable;
+        private _onDidChangeContentEvent: monaco.IDisposable;
+        private _onDidChangeCountEvent: monaco.IDisposable;
 
         constructor(id: string, language: string, editorFactory: colibri.ui.ide.EditorFactory) {
             super(id, editorFactory);
@@ -208,7 +208,12 @@ namespace phasereditor2d.code.ui.editors {
 
             // dirty
 
-            this._onDidChangeContentListener = this._model.onDidChangeContent(async (e) => {
+            if (this._onDidChangeContentEvent) {
+
+                this._onDidChangeContentEvent.dispose();
+            }
+
+            this._onDidChangeContentEvent = this._model.onDidChangeContent(async (e) => {
 
                 const content = await colibri.ui.ide.FileUtils.getFileString(this.getInput());
 
@@ -219,9 +224,14 @@ namespace phasereditor2d.code.ui.editors {
 
                 // refresh outline
 
+                if (this._onDidChangeCountEvent) {
+
+                    this._onDidChangeCountEvent.dispose();
+                }
+
                 this._modelLines = model.getLineCount();
 
-                this._onDidChangeCountListener = model.onDidChangeContent(e => {
+                this._onDidChangeCountEvent = model.onDidChangeContent(e => {
 
                     const count = model.getLineCount();
 
@@ -246,14 +256,14 @@ namespace phasereditor2d.code.ui.editors {
 
         protected removeModelListeners() {
 
-            if (this._onDidChangeContentListener) {
+            if (this._onDidChangeContentEvent) {
 
-                this._onDidChangeContentListener.dispose();
+                this._onDidChangeContentEvent.dispose();
             }
 
-            if (this._onDidChangeCountListener) {
+            if (this._onDidChangeCountEvent) {
 
-                this._onDidChangeCountListener.dispose();
+                this._onDidChangeCountEvent.dispose();
             }
         }
 
