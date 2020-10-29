@@ -7,8 +7,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TransformSection extends SceneGameObjectSection<sceneobjects.ITransformLikeObject> {
 
+        static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.TransformSection";
+
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.TransformSection", "Transform", false);
+            super(page, TransformSection.SECTION_ID, "Transform", false);
         }
 
         getSectionHelpPath() {

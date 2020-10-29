@@ -127,7 +127,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     sprite.setSize(sprite.width, height);
                 }
 
-                args.editor.dispatchSelectionChanged();
+                args.editor.updateInspectorViewSection(TileSpriteSection.SECTION_ID);
             }
         }
 

@@ -161,6 +161,16 @@ namespace colibri.ui.controls.properties {
             this._selection = [];
         }
 
+        getSections() {
+
+            return this._sectionPanes.map(pane => pane.getSection());
+        }
+
+        getSection(sectionId: string) {
+
+            return this.getSections().find(section => section.getId() === sectionId);
+        }
+
         private build() {
 
             if (this._sectionProvider) {

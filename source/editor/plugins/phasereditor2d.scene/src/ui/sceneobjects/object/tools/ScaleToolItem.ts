@@ -238,7 +238,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
                 }
 
-                args.editor.dispatchSelectionChanged();
+                args.editor.updateInspectorViewSection(TransformSection.SECTION_ID);
             }
         }
 
