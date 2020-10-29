@@ -14,6 +14,7 @@
 * User components editor: complete the Compiler menu in the context menu. With commands to open the output file.
 * User components editor: shows the context menu in the Outline view.
 * Scene Editor: allows writing an expression in property fields.
+* New Sunny Land project template, based on Tiled maps.
 
 ### Removed
 
