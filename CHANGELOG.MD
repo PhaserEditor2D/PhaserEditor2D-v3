@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 3.7.1-next
+## Version 3.8.0
 
 ### Added
 
