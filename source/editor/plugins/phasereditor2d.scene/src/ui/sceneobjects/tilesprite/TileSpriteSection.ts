@@ -4,8 +4,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TileSpriteSection extends SceneGameObjectSection<TileSprite> {
 
+        static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.TileSprite";
+
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.TileSprite", "Tile Sprite", false, true);
+            super(page, TileSpriteSection.SECTION_ID, "Tile Sprite", false, true);
         }
 
         getSectionHelpPath() {

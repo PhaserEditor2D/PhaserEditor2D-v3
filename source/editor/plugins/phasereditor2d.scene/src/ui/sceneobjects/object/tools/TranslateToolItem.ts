@@ -75,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 sprite.setPosition(Math.round(spriteLocalPosition2.x), Math.round(spriteLocalPosition2.y));
             }
 
-            args.editor.dispatchSelectionChanged();
+            args.editor.updateInspectorViewSection(TransformSection.SECTION_ID);
         }
 
         static getInitObjectPosition(obj: any): { x: number, y: number } {

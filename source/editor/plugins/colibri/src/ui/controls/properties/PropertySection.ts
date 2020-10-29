@@ -39,6 +39,7 @@ namespace colibri.ui.controls.properties {
         updateWithSelection(): void {
 
             for (const updater of this._updaters) {
+
                 updater();
             }
         }

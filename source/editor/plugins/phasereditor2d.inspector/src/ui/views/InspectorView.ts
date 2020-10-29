@@ -6,12 +6,14 @@ namespace phasereditor2d.inspector.ui.views {
 
     export class InspectorView extends ide.ViewPart {
 
+        static VIEW_ID = "phasereditor2d.inspector.ui.views.InspectorView";
+
         private _propertyPage: controls.properties.PropertyPage;
         private _currentPart: ide.Part;
         private _selectionListener: any;
 
         constructor() {
-            super("InspectorView");
+            super(InspectorView.VIEW_ID);
 
             this.setTitle("Inspector");
             this.setIcon(InspectorPlugin.getInstance().getIcon(ICON_INSPECTOR));
@@ -93,6 +95,11 @@ namespace phasereditor2d.inspector.ui.views {
             }
 
             return super.getUndoManager();
+        }
+
+        getPropertyPage() {
+
+            return this._propertyPage;
         }
     }
 }

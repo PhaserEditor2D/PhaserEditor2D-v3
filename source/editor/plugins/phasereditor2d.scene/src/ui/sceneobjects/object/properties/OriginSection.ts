@@ -5,9 +5,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
 
     export class OriginSection extends SceneGameObjectSection<IOriginLikeObject> {
+        
+        static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.OriginSection";
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.OriginSection", "Origin", false, true);
+            super(page, OriginSection.SECTION_ID, "Origin", false, true);
         }
 
         getSectionHelpPath() {

@@ -86,7 +86,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 sprite.angle = Math.round(initAngle + deltaAngle);
             }
 
-            args.editor.dispatchSelectionChanged();
+            args.editor.updateInspectorViewSection(TransformSection.SECTION_ID);
         }
 
         static getInitialAngle(obj: any) {

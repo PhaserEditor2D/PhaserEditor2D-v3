@@ -97,7 +97,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._position_1.y
             );
 
-            args.editor.dispatchSelectionChanged();
+            args.editor.updateInspectorViewSection(OriginSection.SECTION_ID);
         }
 
         static simpleChangeOriginKeepPosition(
