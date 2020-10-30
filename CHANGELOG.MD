@@ -15,7 +15,7 @@
 * User components editor: shows the context menu in the Outline view.
 * Scene Editor: allows writing an expression in property fields.
 * New Sunny Land project template, based on Tiled maps.
-* Scene Editor: Tilemap, StaticTilemapLayer and DynamicTilemapLayer support.
+* Scene Editor:Tilemap, StaticTilemapLayer and DynamicTilemapLayer support.
 
 ### Removed
 
