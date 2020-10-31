@@ -34,10 +34,6 @@ class Level extends Phaser.Scene {
 		const map = this.add.tilemap("map");
 		map.addTilesetImage("tileset", "tileset");
 		
-		// map_1
-		const map_1 = this.add.tilemap("map");
-		map_1.addTilesetImage("tileset", "tileset");
-		
 		// back3
 		const back3 = this.add.image(0, 0, "back");
 		back3.setOrigin(0, 0);
@@ -232,7 +228,6 @@ class Level extends Phaser.Scene {
 		this.right_button = right_button;
 		this.jump_button = jump_button;
 		this.map = map;
-		this.map_1 = map_1;
 		this.items = items;
 		this.enemies = enemies;
 	}

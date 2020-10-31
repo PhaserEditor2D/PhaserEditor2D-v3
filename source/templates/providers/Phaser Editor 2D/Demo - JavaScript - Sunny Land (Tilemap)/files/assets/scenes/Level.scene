@@ -468,18 +468,6 @@
                     "imageKey": "tileset"
                 }
             ]
-        },
-        {
-            "id": "a1061f1d-0479-4a10-839f-294ee33c167e",
-            "type": "Tilemap",
-            "label": "map_1",
-            "key": "map",
-            "tilesets": [
-                {
-                    "name": "tileset",
-                    "imageKey": "tileset"
-                }
-            ]
         }
     ],
     "meta": {

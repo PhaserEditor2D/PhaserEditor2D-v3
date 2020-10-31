@@ -25,11 +25,6 @@ window.addEventListener('load', function () {
 	});
 	
 	game.scene.add("Boot", Boot, true);
-
-	document.body.addEventListener("pointerdown", () => {
-
-		game.scale.startFullscreen();
-	});
 });
 
 class Boot extends Phaser.Scene {

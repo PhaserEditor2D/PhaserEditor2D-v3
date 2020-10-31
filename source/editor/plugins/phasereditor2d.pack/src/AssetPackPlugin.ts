@@ -121,6 +121,10 @@ namespace phasereditor2d.pack {
                         contentType: core.contentTypes.CONTENT_TYPE_ANIMATIONS
                     },
                     {
+                        iconName: ICON_TILEMAP,
+                        contentType: core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON
+                    },
+                    {
                         plugin: webContentTypes.WebContentTypesPlugin.getInstance(),
                         iconName: webContentTypes.ICON_FILE_FONT,
                         contentType: core.contentTypes.CONTENT_TYPE_BITMAP_FONT
