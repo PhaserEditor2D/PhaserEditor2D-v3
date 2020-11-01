@@ -2,7 +2,6 @@ namespace phasereditor2d.pack.core {
 
     import io = colibri.core.io;
     import ide = colibri.ui.ide;
-    import controls = colibri.ui.controls;
 
     export class MultiatlasAssetPackItem extends BaseAtlasAssetPackItem {
 
