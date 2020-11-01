@@ -65,7 +65,11 @@ namespace phasereditor2d.pack.core {
 
             this.computeUsedFiles(files);
 
-            const key = [...files].map(file => file.getFullName() + "@" + file.getModTime()).join(",");
+            const key = [...files]
+
+                .filter(file => file !== null && file !== undefined)
+
+                .map(file => file.getFullName() + "@" + file.getModTime()).join(",");
 
             return key;
         }

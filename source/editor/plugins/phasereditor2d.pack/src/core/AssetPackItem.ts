@@ -46,8 +46,13 @@ namespace phasereditor2d.pack.core {
         protected addFilesFromUrls(files: Set<io.FilePath>, urls: string[]) {
 
             for (const url of urls) {
+
                 const file = AssetPackUtils.getFileFromPackUrl(url);
-                files.add(file);
+
+                if (file) {
+
+                    files.add(file);
+                }
             }
         }
 

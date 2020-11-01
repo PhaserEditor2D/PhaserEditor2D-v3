@@ -1,5 +1,12 @@
 # Change Log
 
+
+## Version 3.8.1 - Nov 1, 2020
+
+### Fixed
+
+* Fixes atlas thumbnail generation when atlas URL is pointing to a missing file.
+
 ## Version 3.8.0 - Oct 30, 2020
 
 ### Added
