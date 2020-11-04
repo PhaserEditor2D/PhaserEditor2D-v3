@@ -139,7 +139,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._dragging) {
 
-                args.editor.getUndoManager().add(new TileSpriteSizeOperation(args));
+                args.editor.getUndoManager().add(new SizeOperation(args));
 
                 this._dragging = false;
             }

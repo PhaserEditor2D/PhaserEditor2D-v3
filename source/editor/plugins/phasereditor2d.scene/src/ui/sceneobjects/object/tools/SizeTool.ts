@@ -19,7 +19,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: unknown) {
 
-            return GameObjectEditorSupport.hasObjectComponent(obj, SizeComponent);
+            const support = GameObjectEditorSupport.getEditorSupport(obj);
+
+            if (support.hasComponent(SizeComponent)) {
+
+                return support.isUnlockedProperty(SizeComponent.width);
+            }
+
+            return false;
         }
     }
 }

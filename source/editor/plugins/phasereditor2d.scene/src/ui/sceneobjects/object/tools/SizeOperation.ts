@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TileSpriteSizeOperation extends editor.tools.SceneToolOperation<{ x: number, y: number }> {
+    export class SizeOperation extends editor.tools.SceneToolOperation<{ x: number, y: number }> {
 
         getInitialValue(obj: any): { x: number; y: number; } {
 
