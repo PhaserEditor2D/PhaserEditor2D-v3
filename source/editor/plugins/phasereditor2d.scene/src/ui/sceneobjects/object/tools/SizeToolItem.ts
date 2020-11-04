@@ -121,13 +121,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (changeX) {
 
-                    sprite.setSize(width, sprite.height);
+                    sprite.setSize(Math.floor(width), sprite.height);
                     sprite.updateDisplayOrigin();
                 }
 
                 if (changeY) {
 
-                    sprite.setSize(sprite.width, height);
+                    sprite.setSize(sprite.width, Math.floor(height));
                     sprite.updateDisplayOrigin();
                 }
 
