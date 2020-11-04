@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 3.8.1-next
+
+### Added
+
+* Scene Editor: Rectangle shape support.
+
+### Modified
+
+* The **Resize TileSprite Tool** was renamed to **Resize Tool**. It also allows resize shape objects. 
+
 
 ## Version 3.8.1 - Nov 1, 2020
 
