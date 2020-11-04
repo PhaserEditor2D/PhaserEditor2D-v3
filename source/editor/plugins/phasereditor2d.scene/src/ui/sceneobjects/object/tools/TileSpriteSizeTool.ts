@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: unknown) {
 
-            return obj instanceof TileSprite;
+            return obj instanceof TileSprite || obj instanceof Rectangle;
         }
     }
 }

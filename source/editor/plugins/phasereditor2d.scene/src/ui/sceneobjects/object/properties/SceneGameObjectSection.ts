@@ -131,6 +131,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const elements = this.createBooleanField(parent, prop);
             elements.labelElement.style.gridColumn = "2 / auto";
+
+            return elements;
         }
 
         createPropertyBoolXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {

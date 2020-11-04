@@ -198,15 +198,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         // tslint:disable-next-line:ban-types
         getComponent(ctr: Function): Component<any> {
+
             return this._componentMap.get(ctr);
         }
 
         // tslint:disable-next-line:ban-types
         hasComponent(ctr: Function) {
+
             return this._componentMap.has(ctr);
         }
 
         getComponents() {
+
             return this._componentMap.values();
         }
 

@@ -1,5 +1,14 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export function interactive_sizeContains(hitArea, x: number, y: number, obj: ITransformLikeObject) {
+
+        const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+
+        const geom = new Phaser.Geom.Rectangle(0, 0, sprite.width, sprite.height);
+
+        return geom.contains(x, y);
+    }
+
     export function interactive_getAlpha_SharedTexture(hitArea, x: number, y: number, obj: ITransformLikeObject) {
 
         const sprite = obj as unknown as Phaser.GameObjects.Sprite;
