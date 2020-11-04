@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getInitialValue(obj: any): { x: number; y: number; } {
 
-            return TileSpriteSizeToolItem.getInitialSize(obj);
+            return SizeToolItem.getInitialSize(obj);
         }
 
         getFinalValue(obj: any): { x: number; y: number; } {

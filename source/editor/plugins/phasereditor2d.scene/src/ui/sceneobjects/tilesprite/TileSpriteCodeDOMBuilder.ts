@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.argFloat(obj.x);
             call.argFloat(obj.y);
 
-            if (support.isUnlockedProperty(TileSpriteComponent.width)) {
+            if (support.isUnlockedProperty(SizeComponent.width)) {
 
                 call.argFloat(obj.width);
 
@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 call.arg("undefined");
             }
 
-            if (support.isUnlockedProperty(TileSpriteComponent.height)) {
+            if (support.isUnlockedProperty(SizeComponent.height)) {
 
                 call.argFloat(obj.height);
 
@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.arg("x");
             call.arg("y");
 
-            if (support.isLockedProperty(TileSpriteComponent.width)) {
+            if (support.isLockedProperty(SizeComponent.width)) {
 
                 call.argFloat(obj.width);
 
@@ -75,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 call.arg("typeof width === \"number\" ? width : " + obj.width);
             }
 
-            if (support.isLockedProperty(TileSpriteComponent.height)) {
+            if (support.isLockedProperty(SizeComponent.height)) {
 
                 call.argFloat(obj.height);
 

@@ -5,6 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: TileSprite, scene: Scene) {
             super(TileSpriteExtension.getInstance(), obj, scene);
 
+            this.addComponent(new SizeComponent(obj));
             this.addComponent(new TileSpriteComponent(obj));
         }
 

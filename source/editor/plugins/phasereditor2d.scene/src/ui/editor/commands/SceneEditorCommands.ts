@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SET_ORIGIN_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.SetOriginSceneObject";
     export const CMD_ROTATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.RotateSceneObject";
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
-    export const CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeTileSpriteSceneObject";
+    export const CMD_RESIZE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeSceneObject";
     export const CMD_SELECT_REGION = "phasereditor2d.scene.ui.editor.commands.SelectRegion";
     export const CMD_PAN_SCENE = "phasereditor2d.scene.ui.editor.commands.PanScene";
     export const CMD_TOGGLE_SNAPPING = "phasereditor2d.scene.ui.editor.commands.ToggleSnapping";
@@ -1032,15 +1032,15 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.add({
                 command: {
-                    id: CMD_RESIZE_TILE_SPRITE_SCENE_OBJECT,
-                    name: "Resize TileSprite Tool",
-                    tooltip: "Resize selected TileSprite objects.",
+                    id: CMD_RESIZE_SCENE_OBJECT,
+                    name: "Resize Tool",
+                    tooltip: "Resize selected objects.",
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
                     testFunc: isSceneScope,
                     executeFunc: args => (args.activeEditor as SceneEditor)
-                        .getToolsManager().swapTool(ui.sceneobjects.TileSpriteSizeTool.ID)
+                        .getToolsManager().swapTool(ui.sceneobjects.SizeTool.ID)
                 },
                 keys: {
                     key: "Z"

@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createMenu(menu: controls.Menu) {
 
-            this.createToolMenuItem(menu, TileSpriteSizeTool.ID);
+            this.createToolMenuItem(menu, SizeTool.ID);
 
             menu.addSeparator();
 
@@ -27,8 +27,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
-
-            this.createPropertyXYRow(comp, TileSpriteComponent.size);
 
             this.createPropertyXYRow(comp, TileSpriteComponent.tilePosition);
 

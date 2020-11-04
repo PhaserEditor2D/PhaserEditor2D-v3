@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class TileSpriteSizeToolItem
+    export class SizeToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
         private _x: IScaleAxis;
@@ -70,7 +70,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 sprite.getWorldTransformMatrix(worldTx);
                 worldTx.applyInverse(point.x, point.y, initLocalPos);
 
-                sprite.setData("TileSizeTool", {
+                sprite.setData("SizeTool", {
                     initWidth: sprite.width,
                     initHeight: sprite.height,
                     initLocalPos: initLocalPos
@@ -80,7 +80,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static getInitialSize(obj: any): { x: number, y: number } {
 
-            const data = obj.getData("TileSizeTool");
+            const data = obj.getData("SizeTool");
 
             return { x: data.initWidth, y: data.initHeight };
         }
@@ -97,8 +97,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                const sprite = obj as TileSprite;
-                const data = sprite.data.get("TileSizeTool");
+                const sprite = obj as Sprite;
+                const data = sprite.data.get("SizeTool");
                 const initLocalPos: Phaser.Math.Vector2 = data.initLocalPos;
 
                 const localPos = new Phaser.Math.Vector2();
@@ -120,14 +120,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const changeY = this._x === 0.5 && this._y === 1 || changeAll;
 
                 if (changeX) {
+
                     sprite.setSize(width, sprite.height);
+                    sprite.updateDisplayOrigin();
                 }
 
                 if (changeY) {
+
                     sprite.setSize(sprite.width, height);
+                    sprite.updateDisplayOrigin();
                 }
 
-                args.editor.updateInspectorViewSection(TileSpriteSection.SECTION_ID);
+                args.editor.updateInspectorViewSection(SizeSection.SECTION_ID);
             }
         }
 

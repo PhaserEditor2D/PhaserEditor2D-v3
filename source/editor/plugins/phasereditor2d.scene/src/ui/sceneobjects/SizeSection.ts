@@ -6,8 +6,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class SizeSection extends SceneGameObjectSection<ISizeLikeObject> {
 
+        static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.SizeSection";
+
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.SizeSection", "Size", false, true);
+            super(page, SizeSection.SECTION_ID, "Size", false, true);
         }
 
         createForm(parent: HTMLDivElement) {

@@ -229,7 +229,7 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.RotateTool(),
                 new ui.sceneobjects.ScaleTool(),
                 new ui.sceneobjects.OriginTool(),
-                new ui.sceneobjects.TileSpriteSizeTool(),
+                new ui.sceneobjects.SizeTool(),
                 new ui.sceneobjects.SelectionRegionTool(),
                 new ui.sceneobjects.PanTool(),
             ));
