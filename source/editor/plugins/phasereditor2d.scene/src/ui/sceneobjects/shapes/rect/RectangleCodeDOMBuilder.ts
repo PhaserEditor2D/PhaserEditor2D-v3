@@ -2,47 +2,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class RectangleCodeDOMBuilder extends GameObjectCodeDOMBuilder {
+    export class RectangleCodeDOMBuilder extends BaseImageCodeDOMBuilder {
 
-        buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
-
-            const obj = args.obj as Rectangle;
-            const call = new code.MethodCallCodeDOM("rectangle", args.gameObjectFactoryExpr);
-
-            call.argFloat(obj.x);
-            call.argFloat(obj.y);
-            call.argFloat(obj.width);
-            call.argFloat(obj.height);
-
-            return call;
+        constructor() {
+            super("rectangle");
         }
 
-        buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void {
+        buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs) {
 
-            const obj = args.obj as Rectangle;
+            const obj = args.obj as TileSprite;
+            const support = obj.getEditorSupport();
             const call = args.methodCallDOM;
 
             call.arg(args.sceneExpr);
             call.argFloat(obj.x);
             call.argFloat(obj.y);
-            call.argFloat(obj.width);
-            call.argFloat(obj.height);
-        }
 
-        buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
+            if (support.isUnlockedProperty(SizeComponent.width)) {
 
-            const call = args.superMethodCallCodeDOM;
+                call.argFloat(obj.width);
+                call.argFloat(obj.height);
 
-            call.arg("x");
-            call.arg("y");
-            call.arg("width");
-            call.arg("height");
+            } else {
 
-            // if (!args.prefabObj.getEditorSupport().isPrefabInstance()) {
-
-            //     call.arg("");
-            //     call.arg("{}");
-            // }
+                call.arg("undefined");
+                call.arg("undefined");
+            }
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
@@ -51,8 +36,44 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ctr.arg("x", "number");
             ctr.arg("y", "number");
-            ctr.arg("width", "number");
-            ctr.arg("height", "number");
+            ctr.arg("width", "number", true);
+            ctr.arg("height", "number", true);
+        }
+
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(
+            args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
+
+            const obj = args.prefabObj as TileSprite;
+            const support = obj.getEditorSupport();
+
+            const call = args.superMethodCallCodeDOM;
+
+            call.arg("x");
+            call.arg("y");
+
+            if (support.isUnlockedProperty(SizeComponent.width)) {
+
+                call.arg("typeof width === \"number\" ? width : " + obj.width);
+                call.arg("typeof height === \"number\" ? height : " + obj.height);
+
+            } else {
+
+                call.arg("width");
+                call.arg("height");
+            }
+        }
+
+        buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
+
+            const obj = args.obj as TileSprite;
+            const call = new code.MethodCallCodeDOM("rectangle", args.gameObjectFactoryExpr);
+
+            call.argFloat(obj.x);
+            call.argFloat(obj.y);
+            call.argFloat(obj.width);
+            call.argFloat(obj.height);
+
+            return call;
         }
     }
 }

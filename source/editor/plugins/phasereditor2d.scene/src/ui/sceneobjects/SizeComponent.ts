@@ -28,7 +28,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
-            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, SizeComponent.width, SizeComponent.height);
+            // this.buildSetObjectPropertyCodeDOM_FloatProperty(args, SizeComponent.width, SizeComponent.height);
         }
     }
 }
