@@ -42,6 +42,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = new Rectangle(args.scene, args.x, args.y);
 
+            obj.isFilled = true;
+
             return [obj];
         }
 
