@@ -1,21 +1,21 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class RectangleExtension extends SceneGameObjectExtension {
+    export class EllipseExtension extends SceneGameObjectExtension {
 
-        private static _instance: RectangleExtension;
+        private static _instance: EllipseExtension;
 
-        static getInstance() {
-            return this._instance ? this._instance : (this._instance = new RectangleExtension());
+        static getInstance(): EllipseExtension {
+
+            return this._instance ?? (this._instance = new EllipseExtension());
         }
 
         constructor() {
             super({
                 icon: ScenePlugin.getInstance().getIconDescriptor(ICON_GROUP),
-                phaserTypeName: "Phaser.GameObjects.Rectangle",
-                typeName: "Rectangle"
+                phaserTypeName: "Phaser.GameObjects.Ellipse",
+                typeName: "Ellipse"
             });
         }
-
 
         acceptsDropData(data: any): boolean {
 
@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
 
-            const obj = new Rectangle(args.scene, 0, 0);
+            const obj = new Ellipse(args.scene, 0, 0);
 
             obj.getEditorSupport().readJSON(args.data as any);
 
@@ -40,7 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject[] {
 
-            const obj = new Rectangle(args.scene, args.x, args.y);
+            const obj = new Ellipse(args.scene, args.x, args.y);
 
             return [obj];
         }
@@ -52,7 +52,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
-            return new RectangleCodeDOMBuilder();
+            return new EllipseCodeDOMBuilder();
         }
     }
 }

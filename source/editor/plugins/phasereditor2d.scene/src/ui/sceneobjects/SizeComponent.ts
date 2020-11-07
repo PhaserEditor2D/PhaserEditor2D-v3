@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     function updateDisplayOrigin(obj: Phaser.GameObjects.Sprite) {
 
+        obj.setSize(obj.width, obj.height);
         obj.updateDisplayOrigin();
     }
 

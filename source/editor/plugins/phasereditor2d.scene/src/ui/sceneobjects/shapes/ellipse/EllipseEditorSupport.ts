@@ -2,10 +2,10 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class RectangleEditorSupport extends ShapeEditorSupport<Rectangle> {
+    export class EllipseEditorSupport extends ShapeEditorSupport<Ellipse> {
 
-        constructor(scene: Scene, obj: Rectangle) {
-            super(RectangleExtension.getInstance(), obj, scene);
+        constructor(scene: Scene, obj: Ellipse) {
+            super(EllipseExtension.getInstance(), obj, scene);
 
             this.addComponent(
                 new SizeComponent(obj)

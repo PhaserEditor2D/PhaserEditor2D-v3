@@ -182,7 +182,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ContainerExtension.getInstance(),
                 ui.sceneobjects.StaticTilemapLayerExtension.getInstance(),
                 ui.sceneobjects.DynamicTilemapLayerExtension.getInstance(),
-                ui.sceneobjects.RectangleExtension.getInstance()
+                ui.sceneobjects.RectangleExtension.getInstance(),
+                ui.sceneobjects.EllipseExtension.getInstance()
             );
 
             // scene plain object extensions
