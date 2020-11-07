@@ -41,5 +41,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return new controls.viewers.EmptyCellRenderer(false);
         }
+
+        setInteractive() {
+
+            this.getObject().setInteractive(interactive_shape);
+        }
     }
 }

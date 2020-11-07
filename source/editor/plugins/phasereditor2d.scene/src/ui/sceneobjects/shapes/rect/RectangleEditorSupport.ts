@@ -11,10 +11,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new SizeComponent(obj)
             );
         }
-
-        setInteractive(): void {
-
-            this.getObject().setInteractive(interactive_sizeContains);
-        }
     }
 }

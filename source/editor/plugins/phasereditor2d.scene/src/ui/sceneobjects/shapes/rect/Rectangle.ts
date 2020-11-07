@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new RectangleEditorSupport(scene, this);
         }
 
-        getEditorSupport(): GameObjectEditorSupport<ISceneGameObject> {
+        getEditorSupport() {
 
             return this._editorSupport;
         }
