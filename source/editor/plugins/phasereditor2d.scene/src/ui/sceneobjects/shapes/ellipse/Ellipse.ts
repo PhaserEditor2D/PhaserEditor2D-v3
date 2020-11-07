@@ -27,9 +27,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.width = width;
             this.height = height;
 
-            self.updateData();
-
             this.updateDisplayOrigin();
+
+            self.updateData();
 
             return this;
         }

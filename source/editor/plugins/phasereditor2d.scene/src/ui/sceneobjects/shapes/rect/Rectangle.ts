@@ -14,5 +14,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return this._editorSupport;
         }
+
+        setSize(width: number, height: number) {
+
+            super.setSize(width, height);
+
+            const geom = this.geom as Phaser.Geom.Rectangle;
+
+            geom.setSize(width, height);
+
+            this.updateDisplayOrigin();
+
+            const self = this as any;
+
+            self.updateData();
+
+            return this;
+        }
     }
 }
