@@ -4,7 +4,9 @@
 
 ### Added
 
-* Scene Editor: Rectangle shape support.
+* Scene Editor: supports new Shape objects:
+    * Rectangle.
+    * Ellipse.
 
 ### Modified
 
