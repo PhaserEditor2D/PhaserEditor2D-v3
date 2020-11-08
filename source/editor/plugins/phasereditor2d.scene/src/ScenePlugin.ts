@@ -207,6 +207,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.FlipSection(page),
                 page => new ui.sceneobjects.VisibleSection(page),
                 page => new ui.sceneobjects.AlphaSection(page),
+                page => new ui.sceneobjects.AlphaSingleSection(page),
                 page => new ui.sceneobjects.TintSection(page),
                 page => new ui.sceneobjects.SizeSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),

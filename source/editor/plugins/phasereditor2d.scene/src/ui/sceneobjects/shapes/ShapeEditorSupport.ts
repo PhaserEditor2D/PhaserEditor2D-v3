@@ -1,12 +1,11 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import controls = colibri.ui.controls;
-
     export interface IShapeGameObject
         extends ISceneGameObject,
         ITransformLikeObject,
         IOriginLikeObject,
-        IVisibleLikeObject {
+        IVisibleLikeObject,
+        IAlphaSingleLikeObject {
 
         fillColor: number;
         fillAlpha: number;
@@ -33,6 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new TransformComponent(obj),
                 new OriginComponent(obj),
                 new VisibleComponent(obj),
+                new AlphaSingleComponent(obj),
                 new ShapeComponent(obj)
             );
         }
