@@ -8,7 +8,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(EllipseExtension.getInstance(), obj, scene);
 
             this.addComponent(
-                new SizeComponent(obj)
+                new SizeComponent(obj),
+                new EllipseComponent(obj)
             );
         }
     }
