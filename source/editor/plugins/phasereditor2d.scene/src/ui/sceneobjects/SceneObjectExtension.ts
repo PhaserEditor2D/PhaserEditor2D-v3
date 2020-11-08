@@ -66,6 +66,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._iconDescriptor.getIcon();
         }
 
+        getBlockCellRenderer(): controls.viewers.ICellRenderer {
+
+            return new controls.viewers.IconImageCellRenderer(this.getIcon());
+        }
+
         getTypeName() {
             return this._typeName;
         }

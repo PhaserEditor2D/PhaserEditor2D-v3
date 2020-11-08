@@ -191,6 +191,9 @@ utils.makeHelpFile([
     "Phaser.GameObjects.Shape.strokeAlpha",
     "Phaser.GameObjects.Shape.lineWidth",
 
+    "Phaser.GameObjects.Rectangle",
+
+    "Phaser.GameObjects.Ellipse",
     "Phaser.GameObjects.Ellipse.smoothness",
     
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");

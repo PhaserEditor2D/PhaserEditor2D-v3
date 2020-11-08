@@ -16,6 +16,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        getBlockCellRenderer() {
+
+            return RectangleBlockCellRenderer.getInstance();
+        }
+
 
         acceptsDropData(data: any): boolean {
 

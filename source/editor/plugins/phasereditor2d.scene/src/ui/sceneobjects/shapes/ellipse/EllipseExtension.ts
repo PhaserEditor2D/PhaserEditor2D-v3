@@ -17,6 +17,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        getBlockCellRenderer() {
+
+            return EllipseBlockCellRenderer.getInstance();
+        }
+
         acceptsDropData(data: any): boolean {
 
             return false;
