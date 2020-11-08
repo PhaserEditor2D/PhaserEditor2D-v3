@@ -12,6 +12,9 @@
 
 * The **Resize TileSprite Tool** was renamed to **Resize Tool**. It also allows resize shape objects. 
 
+### Fixed
+
+* Fixes regression sorting atlas frames in viewers.
 
 ## Version 3.8.1 - Nov 1, 2020
 
