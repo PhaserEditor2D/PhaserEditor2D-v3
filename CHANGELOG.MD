@@ -6,6 +6,10 @@
 
 * Fixes regression sorting atlas frames in viewers.
 
+### Added
+
+* Scene Editor: the Tilemap Layer Outline cell renderer draws the layer.
+
 ## Version 3.8.1 - Nov 1, 2020
 
 ### Fixed
