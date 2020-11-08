@@ -7,6 +7,7 @@
 * Scene Editor: supports new Shape objects:
     * Rectangle.
     * Ellipse.
+* Scene Editor: the Tilemap Layer Outline cell renderer draws the layer.
 
 ### Modified
 
@@ -15,6 +16,7 @@
 ### Fixed
 
 * Fixes regression sorting atlas frames in viewers.
+
 
 ## Version 3.8.1 - Nov 1, 2020
 

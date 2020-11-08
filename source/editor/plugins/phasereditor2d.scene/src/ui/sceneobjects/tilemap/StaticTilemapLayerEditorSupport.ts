@@ -25,6 +25,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return super.isUnlockedProperty(property);
         }
 
+        computeContentHash() {
+
+            const obj = this.getObject();
+
+            return obj.layer.name + "-TilemapLayer-" + obj.name;
+        }
+
         setInteractive(): void {
 
             this.getObject().setInteractive(StaticTilemapLayerEditorSupport.helper_interactiveCallback);
@@ -32,7 +39,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
-            return new colibri.ui.controls.viewers.IconImageCellRenderer(pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER));
+            //return new colibri.ui.controls.viewers.IconImageCellRenderer(pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER));
+
+            return new ObjectCellRenderer();
         }
 
         writeJSON(data: ITilemapLayerData) {

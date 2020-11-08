@@ -4,6 +4,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ObjectCellRenderer implements controls.viewers.ICellRenderer {
 
+        private _maxWidth: number;
+        private _maxHeight: number;
+
+        constructor(maxWidth = 1024, maxHeight = 1024) {
+
+            this._maxWidth = maxWidth;
+            this._maxHeight = maxHeight;
+        }
+
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
             const obj = args.obj as Image;
@@ -55,8 +64,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.setOrigin(0, 0);
                 obj.setScale(1, 1);
 
-                const w = Math.floor(obj.width);
-                const h = Math.floor(obj.height);
+                const w = Math.min(this._maxWidth, Math.floor(obj.width));
+                const h = Math.min(this._maxHeight, Math.floor(obj.height));
 
                 const render = new Phaser.GameObjects.RenderTexture(
                     support.getScene(), 0, 0, w, h);
