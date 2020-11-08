@@ -2,13 +2,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ShapeComponent extends Component<IShapeGameObject> {
 
-        static fillColor = NumberColorProperty("fillColor", "#fff", "Fill Color", "Fill color");
-        static isFilled = SimpleProperty("isFilled", false, "Is Filled", "Is filled");
-        static fillAlpha = SimpleProperty("fillAlpha", 1, "Fill Alpha", "Fill alpha");
-        static strokeColor = NumberColorProperty("strokeColor", "#fff", "Stroke Color", "Stroke color");
-        static strokeAlpha = SimpleProperty("strokeAlpha", 1, "Stroke Alpha", "Stroke alpha");
-        static lineWidth = SimpleProperty("lineWidth", 1, "Line Width", "Line width");
-        static isStroked = SimpleProperty("isStroked", false, "Is Stroke", "Is stroke");
+        static fillColor = NumberColorProperty("fillColor", "#fff", "Fill Color", "phaser:Phaser.GameObjects.Shape.fillColor");
+        static isFilled = SimpleProperty("isFilled", false, "Is Filled", "phaser:Phaser.GameObjects.Shape.isFilled");
+        static fillAlpha = SimpleProperty("fillAlpha", 1, "Fill Alpha", "phaser:Phaser.GameObjects.Shape.fillAlpha");
+        static isStroked = SimpleProperty("isStroked", false, "Is Stroked", "phaser:Phaser.GameObjects.Shape.isStroked");
+        static strokeColor = NumberColorProperty("strokeColor", "#fff", "Stroke Color", "phaser:Phaser.GameObjects.Shape.strokeColor");
+        static strokeAlpha = SimpleProperty("strokeAlpha", 1, "Stroke Alpha", "phaser:Phaser.GameObjects.Shape.strokeAlpha");
+        static lineWidth = SimpleProperty("lineWidth", 1, "Line Width", "phaser:Phaser.GameObjects.Shape.lineWidth");
 
         constructor(obj: IShapeGameObject) {
             super(obj, [

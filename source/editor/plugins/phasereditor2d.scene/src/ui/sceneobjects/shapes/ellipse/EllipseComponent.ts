@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class EllipseComponent extends Component<Ellipse> {
 
-        static smoothness = SimpleProperty("smoothness", 64, "Smoothness", "Smoothness tip");
+        static smoothness = SimpleProperty("smoothness", 64, "Smoothness", "phaser:Phaser.GameObjects.Ellipse.smoothness");
 
 
         constructor(obj: Ellipse) {

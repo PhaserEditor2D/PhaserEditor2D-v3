@@ -89,5 +89,14 @@
   "Phaser.Tilemaps.LayerData.tileWidth": "The pixel width of the tiles.",
   "Phaser.Tilemaps.LayerData.tileHeight": "The pixel height of the tiles.",
   "Phaser.Tilemaps.LayerData.widthInPixels": "The width in pixels of the entire layer.",
-  "Phaser.Tilemaps.LayerData.heightInPixels": "The height in pixels of the entire layer."
+  "Phaser.Tilemaps.LayerData.heightInPixels": "The height in pixels of the entire layer.",
+  "Phaser.GameObjects.Shape": "The Shape Game Object is a base class for the various different shapes, such as the Arc, Star or Polygon.\nYou cannot add a Shape directly to your Scene, it is meant as a base for your own custom Shape classes.",
+  "Phaser.GameObjects.Shape.isFilled": "Controls if this Shape is filled or not.\nNote that some Shapes do not support being filled (such as Line shapes)",
+  "Phaser.GameObjects.Shape.fillColor": "The fill color used by this Shape.",
+  "Phaser.GameObjects.Shape.fillAlpha": "The fill alpha value used by this Shape.",
+  "Phaser.GameObjects.Shape.isStroked": "Controls if this Shape is stroked or not.\nNote that some Shapes do not support being stroked (such as Iso Box shapes)",
+  "Phaser.GameObjects.Shape.strokeColor": "The stroke color used by this Shape.",
+  "Phaser.GameObjects.Shape.strokeAlpha": "The stroke alpha value used by this Shape.",
+  "Phaser.GameObjects.Shape.lineWidth": "The stroke line width used by this Shape.",
+  "Phaser.GameObjects.Ellipse.smoothness": "The smoothness of the ellipse. The number of points used when rendering it.\nIncrease this value for a smoother ellipse, at the cost of more polygons being rendered."
 }
