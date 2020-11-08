@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 3.8.1-next
+
+### Fixed
+
+* Fixes regression sorting atlas frames in viewers.
 
 ## Version 3.8.1 - Nov 1, 2020
 
