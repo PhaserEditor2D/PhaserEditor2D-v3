@@ -7,6 +7,7 @@
 * Scene Editor: supports new Shape objects:
     * Rectangle.
     * Ellipse.
+    * Triangle.
 * Scene Editor: the Tilemap Layer Outline cell renderer draws the layer.
 
 ### Modified
