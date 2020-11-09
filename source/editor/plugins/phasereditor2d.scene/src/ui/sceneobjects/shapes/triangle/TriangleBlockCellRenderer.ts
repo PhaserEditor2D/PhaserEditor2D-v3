@@ -4,13 +4,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class EllipseBlockCellRenderer extends ShapeBlockCellRenderer {
+    export class TriangleBlockCellRenderer extends ShapeBlockCellRenderer {
 
-        static _instance: EllipseBlockCellRenderer;
+        static _instance: TriangleBlockCellRenderer;
 
         static getInstance() {
 
-            return this._instance ? this._instance : (this._instance = new EllipseBlockCellRenderer());
+            return this._instance ? this._instance : (this._instance = new TriangleBlockCellRenderer());
         }
 
         protected renderShapeCell(ctx: CanvasRenderingContext2D, args: controls.viewers.RenderCellArgs) {
@@ -22,8 +22,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const r = Math.floor(size / 2);
 
             ctx.beginPath();
-            ctx.ellipse(x, y, r, r, 0, 0, 360);
-            ctx.fill();
+            ctx.moveTo(x - r, y + r);
+            ctx.lineTo(x, y - r)
+            ctx.lineTo(x + r, y + r);
+            ctx.closePath();
             ctx.stroke();
         }
     }

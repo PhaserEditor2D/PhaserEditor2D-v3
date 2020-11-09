@@ -183,7 +183,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.StaticTilemapLayerExtension.getInstance(),
                 ui.sceneobjects.DynamicTilemapLayerExtension.getInstance(),
                 ui.sceneobjects.RectangleExtension.getInstance(),
-                ui.sceneobjects.EllipseExtension.getInstance()
+                ui.sceneobjects.EllipseExtension.getInstance(),
+                ui.sceneobjects.TriangleExtension.getInstance()
             );
 
             // scene plain object extensions
@@ -222,7 +223,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TilesetPreviewSection(page),
                 page => new ui.sceneobjects.TilemapLayerSection(page),
                 page => new ui.sceneobjects.ShapeSection(page),
-                page => new ui.sceneobjects.EllipseSection(page)
+                page => new ui.sceneobjects.EllipseSection(page),
+                page => new ui.sceneobjects.TriangleSection(page)
             ));
 
             // scene tools

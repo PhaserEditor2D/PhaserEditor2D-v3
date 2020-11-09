@@ -195,6 +195,15 @@ utils.makeHelpFile([
 
     "Phaser.GameObjects.Ellipse",
     "Phaser.GameObjects.Ellipse.smoothness",
+
+    "Phaser.GameObjects.Triangle",
+
+    "Phaser.Geom.Triangle.x1",
+    "Phaser.Geom.Triangle.y1",
+    "Phaser.Geom.Triangle.x2",
+    "Phaser.Geom.Triangle.y2",
+    "Phaser.Geom.Triangle.x3",
+    "Phaser.Geom.Triangle.y3",
     
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

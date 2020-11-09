@@ -15,14 +15,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const theme = controls.Controls.getTheme();
 
             ctx.strokeStyle = selected ? theme.viewerSelectionForeground : theme.viewerForeground;
-            ctx.fillStyle = "#9DB4CC";
 
             ctx.translate(0.5, 0.5);
 
             this.renderShapeCell(ctx, args);
 
             ctx.restore();
-
         }
 
         protected abstract renderShapeCell(ctx: CanvasRenderingContext2D, args: controls.viewers.RenderCellArgs);

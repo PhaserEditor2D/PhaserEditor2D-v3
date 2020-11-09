@@ -13,9 +13,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElement(parent, 3);
+            const comp = this.createGridElement(parent);
+            comp.style.gridTemplateColumns = "auto auto 1fr";
 
-            this.createNumberPropertyRow(comp, AlphaComponent.alpha);
+            this.createNumberProperty(comp, AlphaComponent.alpha);
         }
 
         canEdit(obj: any, n: number): boolean {
