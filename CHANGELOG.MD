@@ -9,6 +9,7 @@
     * Ellipse.
     * Triangle.
 * Scene Editor: the Tilemap Layer Outline cell renderer draws the layer.
+* Scene Editor: group built-in types by category, in the Blocks view.
 
 ### Modified
 
