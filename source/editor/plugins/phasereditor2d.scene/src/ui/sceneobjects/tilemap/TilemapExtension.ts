@@ -10,7 +10,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TilemapExtension extends ScenePlainObjectExtension {
 
-        static CATEGORY = "Tilemap";
         private static _instance: TilemapExtension;
 
         static getInstance(): ScenePlainObjectExtension {
@@ -20,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private constructor() {
             super({
-                category: TilemapExtension.CATEGORY,
+                category: SCENE_OBJECT_TILEMAP_CATEGORY,
                 icon: pack.AssetPackPlugin.getInstance().getIconDescriptor(pack.ICON_TILEMAP),
                 phaserTypeName: "Phaser.Tilemaps.Tilemap",
                 typeName: "Tilemap"

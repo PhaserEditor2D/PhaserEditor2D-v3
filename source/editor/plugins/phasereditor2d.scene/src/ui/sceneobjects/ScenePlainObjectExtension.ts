@@ -24,8 +24,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static POINT_ID = "phasereditor2d.scene.ui.sceneobjects.ScenePlainObjectExtension";
 
-        private _category: string;
-
         constructor(config: {
             category: string,
             typeName: string,
@@ -36,8 +34,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 extensionPoint: ScenePlainObjectExtension.POINT_ID,
                 ...config
             });
-
-            this._category = config.category;
         }
 
         /**
@@ -65,10 +61,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args This method args.
          */
         abstract buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM[];
-
-        getCategory() {
-
-            return this._category;
-        }
     }
 }

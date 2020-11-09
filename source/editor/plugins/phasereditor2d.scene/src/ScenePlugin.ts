@@ -18,6 +18,22 @@ namespace phasereditor2d.scene {
     export const ICON_SPRITE_TYPE = "sprite-type";
     export const ICON_TEXT_TYPE = "text-type";
 
+    export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
+    export const SCENE_OBJECT_TEXT_CATEGORY = "String";
+    export const SCENE_OBJECT_GROUPING_CATEGORY = "Grouping";
+    export const SCENE_OBJECT_TILEMAP_CATEGORY = "Tile Map";
+    export const SCENE_OBJECT_SHAPE_CATEGORY = "Shape";
+
+    export const SCENE_OBJECT_CATEGORIES = [
+        SCENE_OBJECT_IMAGE_CATEGORY,
+        SCENE_OBJECT_TEXT_CATEGORY,
+        SCENE_OBJECT_GROUPING_CATEGORY,
+        SCENE_OBJECT_TILEMAP_CATEGORY,
+        SCENE_OBJECT_SHAPE_CATEGORY,
+    ];
+
+    export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
+
     export class ScenePlugin extends colibri.Plugin {
 
         private static _instance = new ScenePlugin();

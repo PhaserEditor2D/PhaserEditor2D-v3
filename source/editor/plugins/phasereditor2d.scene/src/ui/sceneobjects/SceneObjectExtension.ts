@@ -22,17 +22,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _typeName: string;
         private _phaserTypeName: string;
         private _iconDescriptor: controls.IconDescriptor;
+        private _category: string;
 
         constructor(config: {
             extensionPoint: string,
             typeName: string,
             phaserTypeName: string,
+            category: string,
             icon: colibri.ui.controls.IconDescriptor,
         }) {
             super(config.extensionPoint);
 
             this._typeName = config.typeName;
             this._phaserTypeName = config.phaserTypeName;
+            this._category = config.category;
             this._iconDescriptor = config.icon;
         }
 
@@ -69,6 +72,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getBlockCellRenderer(): controls.viewers.ICellRenderer {
 
             return new controls.viewers.IconImageCellRenderer(this.getIcon());
+        }
+
+        getCategory() {
+
+            return this._category;
         }
 
         getTypeName() {

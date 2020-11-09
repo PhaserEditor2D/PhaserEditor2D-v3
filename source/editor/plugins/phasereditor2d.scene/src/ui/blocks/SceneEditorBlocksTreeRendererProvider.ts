@@ -25,6 +25,16 @@ namespace phasereditor2d.scene.ui.blocks {
             this.setSections(BLOCKS_SECTIONS);
         }
 
+        isShadowAsChild(obj: any) {
+
+            if (obj instanceof ui.sceneobjects.SceneObjectExtension || obj === ui.sceneobjects.ObjectList) {
+
+                return true;
+            }
+
+            return super.isShadowAsChild(obj);
+        }
+
         isSectionSorted(section: string) {
 
             if (section === BUILTIN_SECTION) {

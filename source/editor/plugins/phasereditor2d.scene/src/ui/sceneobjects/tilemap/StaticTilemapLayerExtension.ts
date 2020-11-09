@@ -14,7 +14,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 icon: pack.AssetPackPlugin.getInstance().getIconDescriptor(pack.ICON_TILEMAP_LAYER),
                 phaserTypeName: "Phaser.Tilemaps.StaticTilemapLayer",
-                typeName: "StaticTilemapLayer"
+                typeName: "StaticTilemapLayer",
+                category: SCENE_OBJECT_TILEMAP_CATEGORY,
             });
         }
 

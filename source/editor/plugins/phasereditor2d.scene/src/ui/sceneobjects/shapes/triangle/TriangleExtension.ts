@@ -12,7 +12,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 icon: ScenePlugin.getInstance().getIconDescriptor(ICON_GROUP),
                 phaserTypeName: "Phaser.GameObjects.Triangle",
-                typeName: "Triangle"
+                typeName: "Triangle",
+                category: SCENE_OBJECT_SHAPE_CATEGORY,
             });
         }
 
