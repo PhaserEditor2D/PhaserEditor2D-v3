@@ -39,5 +39,18 @@ namespace colibri {
         static start() {
             return this.getWorkbench().launch();
         }
+
+        static getElectron() {
+
+            return window["electron"] as IElectron;
+        }
+
+        static onElectron(callback: (electron: IElectron) => void) {
+
+            if (this.getElectron()) {
+
+                callback(this.getElectron());
+            }
+        }
     }
 }

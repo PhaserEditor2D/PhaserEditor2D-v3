@@ -336,13 +336,25 @@ namespace colibri.ui.ide {
                 const part = this.findPart(e.target as any);
 
                 if (part) {
+
                     this.setActivePart(part);
                 }
             });
 
             window.addEventListener("beforeunload", e => {
-                e.preventDefault();
-                e.returnValue = "";
+
+                const dirty = this.getEditors().find(editor => editor.isDirty());
+
+                if (dirty) {
+
+                    e.preventDefault();
+                    e.returnValue = "";
+
+                    Platform.onElectron(electron => {
+
+                        electron.sendMessage("ask-close-window");
+                    });
+                }
             });
         }
 
