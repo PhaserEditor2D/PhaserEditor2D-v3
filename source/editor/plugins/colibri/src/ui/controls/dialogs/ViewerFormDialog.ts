@@ -24,7 +24,7 @@ namespace colibri.ui.controls.dialogs {
             formArea.style.display = "grid";
             formArea.style.gridTemplateColumns = "auto 1fr";
             formArea.style.gridTemplateRows = "auto";
-            formArea.style.columnGap = "10px";
+            formArea.style.columnGap = "5px";
             formArea.style.rowGap = "10px";
             formArea.style.alignItems = "center";
 

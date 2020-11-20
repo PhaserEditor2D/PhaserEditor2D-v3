@@ -2,10 +2,14 @@ namespace phasereditor2d.ide.ui.dialogs {
 
     import controls = colibri.ui.controls;
 
-    export class ProjectsDialog extends controls.dialogs.ViewerDialog {
+    export class ProjectsDialog extends controls.dialogs.ViewerFormDialog {
+        private _wsInputElement: HTMLInputElement;
+        private _workspacePath: string;
 
         constructor() {
             super(new controls.viewers.TreeViewer("phasereditor2d.ide.ui.dialogs.ProjectsDialog"), false);
+
+            this.setSize(undefined, Math.floor(window.innerHeight * 0.45));
         }
 
         async create() {
@@ -20,8 +24,6 @@ namespace phasereditor2d.ide.ui.dialogs {
             viewer.setInput([]);
 
             viewer.eventOpenItem.addListener(() => this.openProject());
-
-            const activeWindow = colibri.Platform.getWorkbench().getActiveWindow();
 
             this.setTitle("Projects");
 
@@ -66,15 +68,70 @@ namespace phasereditor2d.ide.ui.dialogs {
                 });
             }
 
-            const projects = await colibri.ui.ide.FileUtils.getProjects_async();
+            this.refreshData();
+        }
+
+        private async refreshData() {
+
+            const viewer = this.getViewer();
+
+            const root = colibri.ui.ide.FileUtils.getRoot();
+            const { projects, workspacePath } = await colibri.ui.ide.FileUtils.getProjects_async(this._workspacePath);
 
             viewer.setInput(projects);
 
             if (root) {
+
                 viewer.setSelection([root.getName()]);
             }
 
             viewer.repaint();
+
+            if (this._wsInputElement) {
+
+                this._wsInputElement.value = workspacePath;
+            }
+        }
+
+        createFormArea(formArea: HTMLDivElement) {
+
+            const electron = colibri.Platform.getElectron();
+
+            if (!electron) {
+
+                formArea.remove();
+
+                this.layout();
+
+                return;
+            }
+
+            formArea.style.gridTemplateColumns = "auto 1fr auto";
+
+            const label = document.createElement("label");
+            label.innerHTML = "Workspace";
+            formArea.appendChild(label);
+
+            const input = document.createElement("input");
+            input.readOnly = true;
+            formArea.appendChild(input);
+
+            const btn = document.createElement("button");
+            btn.innerText = "Change";
+            formArea.appendChild(btn);
+            btn.addEventListener("click", async () => {
+
+                const dir = electron.sendMessageSync("open-directory");
+
+                if (dir) {
+
+                    this._workspacePath = dir;
+
+                    await this.refreshData();
+                }
+            });
+
+            this._wsInputElement = input;
         }
 
         private async openProject() {
@@ -83,12 +140,12 @@ namespace phasereditor2d.ide.ui.dialogs {
 
             const project = this.getViewer().getSelectionFirstElement();
 
-            IDEPlugin.getInstance().ideOpenProject(project);
+            IDEPlugin.getInstance().ideOpenProject(project, this._workspacePath);
         }
 
         private openNewProjectDialog() {
 
-            const dlg = new NewProjectDialog();
+            const dlg = new NewProjectDialog(this._workspacePath);
 
             dlg.create();
         }

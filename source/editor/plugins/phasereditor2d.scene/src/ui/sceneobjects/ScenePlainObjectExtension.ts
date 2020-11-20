@@ -50,7 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args This method args.
          * @returns The assets.
          */
-        async abstract getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]>;
+        abstract getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]>;
 
         /**
          * Build a method call CodeDOM to create the scene plain object of this extension,

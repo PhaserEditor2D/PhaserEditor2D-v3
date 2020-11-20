@@ -17,11 +17,18 @@ namespace colibri.core.io {
         height: number
     };
 
+    export interface IProjectsData {
+        projects: string[];
+        workspacePath?: string;
+    }
+
     export interface IFileStorage {
 
         reload(): Promise<void>;
 
-        getProjects(): Promise<string[]>;
+        changeWorkspace(serverPath: string): Promise<void>
+
+        getProjects(workspacePath?: string): Promise<IProjectsData>;
 
         openProject(projectName: string): Promise<FilePath>;
 

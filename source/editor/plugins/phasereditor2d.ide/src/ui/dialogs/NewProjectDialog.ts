@@ -18,10 +18,12 @@ namespace phasereditor2d.ide.ui.dialogs {
         private _createBtn: HTMLButtonElement;
         private _projectNames: Set<string>;
         private _cancellable: boolean;
+        private _workspacePath: string;
 
-        constructor() {
+        constructor(workspacePath?: string) {
             super("NewProjectDialog");
 
+            this._workspacePath = workspacePath;
             this._projectNames = new Set();
             this._cancellable = true;
         }
@@ -125,7 +127,11 @@ namespace phasereditor2d.ide.ui.dialogs {
 
             if (!disabled) {
 
+                console.log("validating");
+                console.log(this._projectNames);
+
                 if (this._projectNames.has(this._projectNameText.value.toLowerCase())) {
+
                     disabled = true;
                 }
             }
@@ -135,7 +141,7 @@ namespace phasereditor2d.ide.ui.dialogs {
 
         private async requestProjectsData() {
 
-            const list = (await colibri.ui.ide.FileUtils.getProjects_async()).map(s => s.toLowerCase());
+            const list = ((await colibri.ui.ide.FileUtils.getProjects_async(this._workspacePath)).projects).map(s => s.toLowerCase());
 
             this._projectNames = new Set(list);
         }
@@ -180,6 +186,11 @@ namespace phasereditor2d.ide.ui.dialogs {
         private async createProject(templateInfo: ITemplateInfo) {
 
             const projectName = this._projectNameText.value;
+
+            if (this._workspacePath) {
+
+                await colibri.Platform.getWorkbench().getFileStorage().changeWorkspace(this._workspacePath);
+            }
 
             const ok = await colibri.ui.ide.FileUtils.createProject_async(templateInfo.path, projectName);
 

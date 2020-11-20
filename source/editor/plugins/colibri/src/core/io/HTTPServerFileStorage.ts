@@ -389,11 +389,11 @@ namespace colibri.core.io {
 
                 try {
 
-                   const result = listener(change);
+                    const result = listener(change);
 
-                   if (result instanceof Promise) {
-                       await result;
-                   }
+                    if (result instanceof Promise) {
+                        await result;
+                    }
 
                 } catch (e) {
 
@@ -402,16 +402,32 @@ namespace colibri.core.io {
             }
         }
 
-        async getProjects(): Promise<string[]> {
+        async changeWorkspace(path: string) {
 
-            const data = await apiRequest("GetProjects", {});
+            const data = await apiRequest("ChangeWorkspace", { path });
 
             if (data.error) {
+
                 alert(`Cannot get the projects list`);
+
+                throw new Error(data.error);
+            }
+        }
+
+        async getProjects(workspacePath?: string): Promise<IProjectsData> {
+
+            const data = await apiRequest("GetProjects", {
+                workspace: workspacePath
+            });
+
+            if (data.error) {
+
+                alert(`Cannot get the projects list`);
+
                 throw new Error(data.error);
             }
 
-            return data.projects;
+            return { projects: data.projects, workspacePath: data.workspace };
         }
 
         async createFile(folder: FilePath, fileName: string, content: string): Promise<FilePath> {

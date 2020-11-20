@@ -164,7 +164,7 @@ namespace phasereditor2d.ide {
 
                 const projectName = defaultProjectData["projectName"];
 
-                const projects = await wb.getFileStorage().getProjects();
+                const { projects } = await wb.getFileStorage().getProjects();
 
                 if (projects.indexOf(projectName) >= 0) {
 
@@ -182,7 +182,7 @@ namespace phasereditor2d.ide {
             }
         }
 
-        async ideOpenProject(projectName: string) {
+        async ideOpenProject(projectName: string, workspacePath?: string) {
 
             this._openingProject = true;
 
@@ -216,7 +216,7 @@ namespace phasereditor2d.ide {
 
                 editorArea.closeAllEditors();
 
-                await wb.openProject(projectName, monitor);
+                await wb.openProject(projectName, workspacePath, monitor);
 
                 dlg.setProgress(1);
 
