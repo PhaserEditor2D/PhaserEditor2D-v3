@@ -121,7 +121,12 @@ namespace phasereditor2d.ide.ui.dialogs {
             formArea.appendChild(btn);
             btn.addEventListener("click", async () => {
 
-                const dir = electron.sendMessageSync("open-directory");
+                const dir = electron.sendMessageSync({
+                    method: "open-directory",
+                    body: {
+                        current: this._wsInputElement.value
+                    }
+                });
 
                 if (dir) {
 

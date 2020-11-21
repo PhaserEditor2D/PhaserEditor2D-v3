@@ -357,7 +357,9 @@ namespace colibri.ui.ide {
 
                     Platform.onElectron(electron => {
 
-                        electron.sendMessage("ask-close-window");
+                        electron.sendMessage({
+                            method: "ask-close-window"
+                        });
                     });
                 }
             });
