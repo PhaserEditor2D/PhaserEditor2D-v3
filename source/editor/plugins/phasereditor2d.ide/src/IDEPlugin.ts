@@ -210,6 +210,20 @@ namespace phasereditor2d.ide {
 
                 console.log(`IDEPlugin: opening project ${projectName}`);
 
+                colibri.Platform.onElectron(async () => {
+
+                    let ws = workspacePath;
+
+                    if (!ws) {
+
+                        const result = await colibri.Platform.getWorkbench().getFileStorage().getProjects();
+
+                        ws = result.workspacePath;
+                    }
+
+                    document.title = `Phaser Editor 2D v${VER} (${ws})`;
+                });
+
                 const designWindow = wb.activateWindow(ui.DesignWindow.ID) as ui.DesignWindow;
 
                 const editorArea = designWindow.getEditorArea();
