@@ -12,6 +12,7 @@
 * Scene Editor: group built-in types by category, in the Blocks view.
 * Electron:
     * Allows changing the workspace.
+* An main menu option to unlock the editor, when it runs in application mode.
 
 ### Modified
 
