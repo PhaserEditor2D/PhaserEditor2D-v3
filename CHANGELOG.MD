@@ -13,6 +13,7 @@
 * Electron:
     * Allows changing the workspace.
 * An main menu option to unlock the editor, when it runs in application mode.
+* Shows license activation status in title bar and About dialog.
 
 ### Modified
 

@@ -10,12 +10,13 @@ namespace phasereditor2d.ide.ui.dialogs {
 
         createDialogArea() {
 
+            const activated = IDEPlugin.getInstance().isLicenseActivated();
+
             const element = document.createElement("div");
             element.classList.add("DialogClientArea", "DialogSection");
 
             const html = `
-            <p class="Title"><b>Phaser Editor 2D</b><br><small>v${ide.VER}</small></p>
-
+            <p class="Title"><b>Phaser Editor 2D ${activated? "Premium" : "Free"}</b><br><small>v${ide.VER}</small></p>
             <p><i>A friendly IDE for HTML5 game development</i></p>
 
             <p>
