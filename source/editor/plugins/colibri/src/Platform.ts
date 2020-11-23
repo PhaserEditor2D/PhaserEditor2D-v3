@@ -45,11 +45,15 @@ namespace colibri {
             return window["electron"] as IElectron;
         }
 
-        static onElectron(callback: (electron: IElectron) => void) {
+        static onElectron(callback: (electron: IElectron) => void, elseCallback?: ()=>void) {
 
             if (this.getElectron()) {
 
                 callback(this.getElectron());
+
+            } else if (elseCallback) {
+
+                elseCallback();
             }
         }
     }

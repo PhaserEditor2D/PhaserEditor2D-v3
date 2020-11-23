@@ -28,16 +28,25 @@ namespace phasereditor2d.ide.ui.dialogs {
                     lickey: value
                 });
 
-                if (!data.error) {
+                if (data.error) {
+
+                    alert("Error: " + data.error);
+
+                } else {
 
                     alert(data.message);
 
-                    setTimeout(() => {
-                        if (confirm("A page refresh is required. Do you want to refresh it now?")) {
+                    if (data.activated) {
 
-                            window.location.reload();
-                        }
-                    }, 3000);
+                        setTimeout(() => {
+
+                            if (confirm("A page refresh is required. Do you want to refresh it now?")) {
+
+                                window.location.reload();
+                            }
+
+                        }, 3000);
+                    }
                 }
             });
         }

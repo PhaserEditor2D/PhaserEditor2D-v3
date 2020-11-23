@@ -42,12 +42,15 @@ namespace phasereditor2d.ide.ui.actions {
 
             if (IDEPlugin.getInstance().isDesktopMode()) {
 
+                const activated = IDEPlugin.getInstance().isLicenseActivated();
+
                 menu.add(new controls.Action({
-                    text: "Unlock Phaser Editor 2D",
+                    text: activated ? "Change License Key" : "Unlock Phaser Editor 2D",
                     callback: () => {
                         new dialogs.UnlockDialog().create();
                     }
                 }));
+
             }
 
             menu.add(new controls.Action({
