@@ -63,6 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(config: {
             typeName: string,
             phaserTypeName: string,
+            category: string,
             icon: colibri.ui.controls.IconDescriptor,
         }) {
             super({
@@ -112,7 +113,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args This method args.
          * @returns The assets.
          */
-        async abstract getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
+        abstract getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]>;
 
         /**
          * Gets a CodeDOM provider used by the Scene compiler to generate the object creation and prefab class codes.

@@ -1,5 +1,12 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export function interactive_shape(hitArea, x: number, y: number, obj: ITransformLikeObject) {
+
+        const sprite = obj as any;
+
+        return sprite.geom.contains(x, y);
+    }
+
     export function interactive_getAlpha_SharedTexture(hitArea, x: number, y: number, obj: ITransformLikeObject) {
 
         const sprite = obj as unknown as Phaser.GameObjects.Sprite;

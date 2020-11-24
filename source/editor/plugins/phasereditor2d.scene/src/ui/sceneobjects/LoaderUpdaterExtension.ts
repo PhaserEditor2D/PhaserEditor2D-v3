@@ -12,6 +12,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract acceptAsset(asset: any): boolean;
 
-        abstract async updateLoader(scene: BaseScene, asset: any);
+        abstract updateLoader(scene: BaseScene, asset: any): Promise<void>;
     }
 }

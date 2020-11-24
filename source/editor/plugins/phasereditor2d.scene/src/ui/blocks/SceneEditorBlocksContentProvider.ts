@@ -34,23 +34,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getRoots(input: any): any[] {
 
-            const roots = [];
-
-            if (this._editor.getScene().isPrefabSceneType()) {
-
-                roots.push(...ScenePlugin.getInstance().getGameObjectExtensions()
-                    .filter(ext => ext.isAvailableAsPrefabElement()));
-
-                roots.push(...ScenePlugin.getInstance().getPlainObjectExtensions()
-                    .filter(ext => ext.isAvailableAsPrefabElement()));
-
-            } else {
-
-                roots.push(...ScenePlugin.getInstance().getGameObjectExtensions());
-                roots.push(...ScenePlugin.getInstance().getPlainObjectExtensions());
-            }
-
-            roots.push(sceneobjects.ObjectList);
+            const roots: any[] = [...SCENE_OBJECT_CATEGORIES.filter(c => this.getChildren(c).length > 0)];
 
             roots.push(...this.getSceneFiles());
 
@@ -72,6 +56,24 @@ namespace phasereditor2d.scene.ui.blocks {
 
             if (typeof (parent) === "string") {
 
+                if (SCENE_OBJECT_CATEGORY_SET.has(parent)) {
+
+                    const isPrefabScene = this._editor.getScene() && this._editor.getScene().isPrefabSceneType();
+
+                    const exts = [
+                        ...ScenePlugin.getInstance().getGameObjectExtensions(),
+                        ...ScenePlugin.getInstance().getPlainObjectExtensions()
+                    ]
+                        .filter(ext => !isPrefabScene || ext.isAvailableAsPrefabElement())
+
+                        .filter(ext => ext.getCategory() === parent);
+
+                    return [
+                        ...exts,
+                        ... (parent === SCENE_OBJECT_GROUPING_CATEGORY ? [sceneobjects.ObjectList] : [])
+                    ];
+                }
+
                 switch (parent) {
                     case pack.core.ATLAS_TYPE:
 
@@ -85,10 +87,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
                     case BUILTIN_SECTION:
 
-                        return [
-                            ...ScenePlugin.getInstance().getGameObjectExtensions(),
-                            ...ScenePlugin.getInstance().getPlainObjectExtensions(),
-                            sceneobjects.ObjectList];
+                        return SCENE_OBJECT_CATEGORIES;
 
                     case PREFAB_SECTION:
 

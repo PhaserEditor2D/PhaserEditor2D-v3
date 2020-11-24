@@ -18,21 +18,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.argFloat(obj.x);
             call.argFloat(obj.y);
 
-            if (support.isUnlockedProperty(TileSpriteComponent.width)) {
+            if (support.isUnlockedProperty(SizeComponent.width)) {
 
                 call.argFloat(obj.width);
-
-            } else {
-
-                call.arg("undefined");
-            }
-
-            if (support.isUnlockedProperty(TileSpriteComponent.height)) {
-
                 call.argFloat(obj.height);
 
             } else {
 
+                call.arg("undefined");
                 call.arg("undefined");
             }
 
@@ -66,22 +59,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.arg("x");
             call.arg("y");
 
-            if (support.isLockedProperty(TileSpriteComponent.width)) {
-
-                call.argFloat(obj.width);
-
-            } else {
+            if (support.isUnlockedProperty(SizeComponent.width)) {
 
                 call.arg("typeof width === \"number\" ? width : " + obj.width);
-            }
-
-            if (support.isLockedProperty(TileSpriteComponent.height)) {
-
-                call.argFloat(obj.height);
+                call.arg("typeof height === \"number\" ? height : " + obj.height);
 
             } else {
 
-                call.arg("typeof height === \"number\" ? height : " + obj.height);
+                call.arg("width");
+                call.arg("height");
             }
 
             this.buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args, call);

@@ -16,7 +16,7 @@ namespace phasereditor2d.pack.core.parsers {
 
         abstract addToPhaserCache(game: Phaser.Game, cache: AssetPackCache): void;
 
-        abstract async preloadFrames(): Promise<controls.PreloadResult>;
+        abstract preloadFrames(): Promise<controls.PreloadResult>;
 
         abstract parseFrames(): AssetPackImageFrame[];
     }

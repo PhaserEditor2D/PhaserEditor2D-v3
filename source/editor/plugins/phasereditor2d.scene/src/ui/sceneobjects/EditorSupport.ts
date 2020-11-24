@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract destroy();
 
-        abstract async buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
+        abstract buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
 
         abstract getCellRenderer(): controls.viewers.ICellRenderer;
 

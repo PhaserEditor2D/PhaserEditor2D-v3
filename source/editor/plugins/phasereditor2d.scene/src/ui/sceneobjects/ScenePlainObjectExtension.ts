@@ -24,8 +24,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static POINT_ID = "phasereditor2d.scene.ui.sceneobjects.ScenePlainObjectExtension";
 
-        private _category: string;
-
         constructor(config: {
             category: string,
             typeName: string,
@@ -36,8 +34,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 extensionPoint: ScenePlainObjectExtension.POINT_ID,
                 ...config
             });
-
-            this._category = config.category;
         }
 
         /**
@@ -54,7 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args This method args.
          * @returns The assets.
          */
-        async abstract getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]>;
+        abstract getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]>;
 
         /**
          * Build a method call CodeDOM to create the scene plain object of this extension,
@@ -65,10 +61,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * @param args This method args.
          */
         abstract buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM[];
-
-        getCategory() {
-
-            return this._category;
-        }
     }
 }

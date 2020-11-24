@@ -40,6 +40,19 @@ namespace phasereditor2d.ide.ui.actions {
 
             menu.addCommand(colibri.ui.ide.actions.CMD_SHOW_COMMAND_PALETTE);
 
+            if (IDEPlugin.getInstance().isDesktopMode()) {
+
+                const activated = IDEPlugin.getInstance().isLicenseActivated();
+
+                menu.add(new controls.Action({
+                    text: activated ? "Change License Key" : "Unlock Phaser Editor 2D",
+                    callback: () => {
+                        new dialogs.UnlockDialog().create();
+                    }
+                }));
+
+            }
+
             menu.add(new controls.Action({
                 text: "Help",
                 callback: () => controls.Controls.openUrlInNewPage("https://help.phasereditor2d.com")

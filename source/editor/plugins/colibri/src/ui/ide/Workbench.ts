@@ -155,7 +155,7 @@ namespace colibri.ui.ide {
             this._editorSessionStateRegistry.clear();
         }
 
-        async openProject(projectName: string, monitor: controls.IProgressMonitor) {
+        async openProject(projectName: string, workspacePath: string, monitor: controls.IProgressMonitor) {
 
             this.eventBeforeOpenProject.fire(projectName);
 
@@ -164,6 +164,11 @@ namespace colibri.ui.ide {
             this.resetCache();
 
             console.log(`Workbench: opening project ${projectName}.`);
+
+            if (workspacePath) {
+
+                await this._fileStorage.changeWorkspace(workspacePath);
+            }
 
             await this._fileStorage.openProject(projectName);
 
@@ -336,13 +341,27 @@ namespace colibri.ui.ide {
                 const part = this.findPart(e.target as any);
 
                 if (part) {
+
                     this.setActivePart(part);
                 }
             });
 
             window.addEventListener("beforeunload", e => {
-                e.preventDefault();
-                e.returnValue = "";
+
+                const dirty = this.getEditors().find(editor => editor.isDirty());
+
+                if (dirty) {
+
+                    e.preventDefault();
+                    e.returnValue = "";
+
+                    Platform.onElectron(electron => {
+
+                        electron.sendMessage({
+                            method: "ask-close-window"
+                        });
+                    });
+                }
             });
         }
 

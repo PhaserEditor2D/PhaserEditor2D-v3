@@ -12,6 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 phaserTypeName: "Phaser.GameObjects.Text",
                 typeName: "Text",
+                category: SCENE_OBJECT_TEXT_CATEGORY,
                 icon:  ScenePlugin.getInstance().getIconDescriptor(ICON_TEXT_TYPE)
             });
         }

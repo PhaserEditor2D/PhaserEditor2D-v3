@@ -181,6 +181,29 @@ utils.makeHelpFile([
     "Phaser.Tilemaps.LayerData.tileHeight",
     "Phaser.Tilemaps.LayerData.widthInPixels",
     "Phaser.Tilemaps.LayerData.heightInPixels",
+
+    "Phaser.GameObjects.Shape",
+    "Phaser.GameObjects.Shape.isFilled",
+    "Phaser.GameObjects.Shape.fillColor",
+    "Phaser.GameObjects.Shape.fillAlpha",
+    "Phaser.GameObjects.Shape.isStroked",
+    "Phaser.GameObjects.Shape.strokeColor",
+    "Phaser.GameObjects.Shape.strokeAlpha",
+    "Phaser.GameObjects.Shape.lineWidth",
+
+    "Phaser.GameObjects.Rectangle",
+
+    "Phaser.GameObjects.Ellipse",
+    "Phaser.GameObjects.Ellipse.smoothness",
+
+    "Phaser.GameObjects.Triangle",
+
+    "Phaser.Geom.Triangle.x1",
+    "Phaser.Geom.Triangle.y1",
+    "Phaser.Geom.Triangle.x2",
+    "Phaser.Geom.Triangle.y2",
+    "Phaser.Geom.Triangle.x3",
+    "Phaser.Geom.Triangle.y3",
     
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

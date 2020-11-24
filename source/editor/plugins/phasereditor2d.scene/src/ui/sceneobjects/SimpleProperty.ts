@@ -1,7 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export function SimpleProperty(
-        name: string, defValue: any, label?: string, tooltip?: string, local: boolean = false): IProperty<any> {
+        name: string, defValue: any, label?: string, tooltip?: string, local: boolean = false, afterSetValue?: (obj: any) => void): IProperty<any> {
 
         return {
             name,
@@ -10,7 +10,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             tooltip: tooltip,
             local,
             getValue: obj => obj[name],
-            setValue: (obj, value) => obj[name] = value
+            setValue: (obj, value) => {
+
+                obj[name] = value;
+
+                if (afterSetValue) {
+
+                    afterSetValue(obj);
+                }
+            }
         };
     }
 }

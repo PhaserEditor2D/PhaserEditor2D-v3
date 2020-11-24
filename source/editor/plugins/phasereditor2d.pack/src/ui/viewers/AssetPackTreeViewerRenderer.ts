@@ -14,6 +14,7 @@ namespace phasereditor2d.pack.ui.viewers {
         }
 
         isShadowAsChild(obj: any) {
+
             return obj instanceof controls.ImageFrame;
         }
     }

@@ -18,6 +18,22 @@ namespace phasereditor2d.scene {
     export const ICON_SPRITE_TYPE = "sprite-type";
     export const ICON_TEXT_TYPE = "text-type";
 
+    export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
+    export const SCENE_OBJECT_TEXT_CATEGORY = "String";
+    export const SCENE_OBJECT_GROUPING_CATEGORY = "Grouping";
+    export const SCENE_OBJECT_TILEMAP_CATEGORY = "Tile Map";
+    export const SCENE_OBJECT_SHAPE_CATEGORY = "Shape";
+
+    export const SCENE_OBJECT_CATEGORIES = [
+        SCENE_OBJECT_IMAGE_CATEGORY,
+        SCENE_OBJECT_TEXT_CATEGORY,
+        SCENE_OBJECT_GROUPING_CATEGORY,
+        SCENE_OBJECT_TILEMAP_CATEGORY,
+        SCENE_OBJECT_SHAPE_CATEGORY,
+    ];
+
+    export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
+
     export class ScenePlugin extends colibri.Plugin {
 
         private static _instance = new ScenePlugin();
@@ -181,7 +197,10 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.BitmapTextExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance(),
                 ui.sceneobjects.StaticTilemapLayerExtension.getInstance(),
-                ui.sceneobjects.DynamicTilemapLayerExtension.getInstance()
+                ui.sceneobjects.DynamicTilemapLayerExtension.getInstance(),
+                ui.sceneobjects.RectangleExtension.getInstance(),
+                ui.sceneobjects.EllipseExtension.getInstance(),
+                ui.sceneobjects.TriangleExtension.getInstance()
             );
 
             // scene plain object extensions
@@ -205,7 +224,9 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.FlipSection(page),
                 page => new ui.sceneobjects.VisibleSection(page),
                 page => new ui.sceneobjects.AlphaSection(page),
+                page => new ui.sceneobjects.AlphaSingleSection(page),
                 page => new ui.sceneobjects.TintSection(page),
+                page => new ui.sceneobjects.SizeSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.TextureSection(page),
                 page => new ui.sceneobjects.TextContentSection(page),
@@ -217,6 +238,9 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TilesetSection(page),
                 page => new ui.sceneobjects.TilesetPreviewSection(page),
                 page => new ui.sceneobjects.TilemapLayerSection(page),
+                page => new ui.sceneobjects.ShapeSection(page),
+                page => new ui.sceneobjects.EllipseSection(page),
+                page => new ui.sceneobjects.TriangleSection(page)
             ));
 
             // scene tools
@@ -226,7 +250,7 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.RotateTool(),
                 new ui.sceneobjects.ScaleTool(),
                 new ui.sceneobjects.OriginTool(),
-                new ui.sceneobjects.TileSpriteSizeTool(),
+                new ui.sceneobjects.SizeTool(),
                 new ui.sceneobjects.SelectionRegionTool(),
                 new ui.sceneobjects.PanTool(),
             ));

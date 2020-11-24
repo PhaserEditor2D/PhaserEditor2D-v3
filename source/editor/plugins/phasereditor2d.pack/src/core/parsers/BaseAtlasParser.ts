@@ -86,12 +86,17 @@ namespace phasereditor2d.pack.core.parsers {
                 }
             }
 
-            list.sort((a, b) => {
+            BaseAtlasParser.sortFrames(list);
+
+            return list;
+        }
+
+        static sortFrames(frames: AssetPackImageFrame[]) {
+
+            frames.sort((a, b) => {
 
                 return (a.getName() as string).localeCompare(b.getName() as string);
             });
-
-            return list;
         }
     }
 }

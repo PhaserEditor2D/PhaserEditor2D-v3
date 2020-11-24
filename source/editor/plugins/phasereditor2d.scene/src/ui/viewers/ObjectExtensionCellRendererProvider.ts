@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.viewers {
 
             const ext = element as sceneobjects.SceneObjectExtension;
 
-            return new controls.viewers.IconImageCellRenderer(ext.getIcon());
+            return ext.getBlockCellRenderer();
         }
     }
 }

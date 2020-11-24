@@ -93,6 +93,9 @@ namespace phasereditor2d.pack.core.parsers {
                     console.error(e);
                 }
             }
+
+            BaseAtlasParser.sortFrames(list);
+
             return list;
         }
     }
