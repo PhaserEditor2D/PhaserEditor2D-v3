@@ -13,9 +13,9 @@ namespace phasereditor2d.scene.ui {
             this._scene = scene;
         }
 
-        abstract async updateSceneLoader(data: any, monitor?: controls.IProgressMonitor);
+        abstract updateSceneLoader(data: any, monitor?: controls.IProgressMonitor): Promise<void>;
 
-        abstract async buildDependenciesHash(): Promise<string>;
+        abstract buildDependenciesHash(): Promise<string>;
 
         abstract createScene(data: any, errors?: string[]): void;
 

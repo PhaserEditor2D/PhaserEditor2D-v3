@@ -292,7 +292,7 @@ namespace phasereditor2d.code.ui.editors {
             }
         }
 
-        abstract async requestOutlineItems(): Promise<any[]>;
+        abstract requestOutlineItems(): Promise<any[]>;
 
         layout() {
 

@@ -10,6 +10,10 @@
     * Triangle.
 * Scene Editor: the Tilemap Layer Outline cell renderer draws the layer.
 * Scene Editor: group built-in types by category, in the Blocks view.
+* Electron:
+    * Allows changing the workspace.
+* An main menu option to unlock the editor, when it runs in application mode.
+* Shows license activation status in title bar and About dialog.
 
 ### Modified
 
@@ -18,7 +22,6 @@
 ### Fixed
 
 * Fixes regression sorting atlas frames in viewers.
-
 
 ## Version 3.8.1 - Nov 1, 2020
 

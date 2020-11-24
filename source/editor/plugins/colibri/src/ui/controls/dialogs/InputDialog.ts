@@ -15,19 +15,29 @@ namespace colibri.ui.controls.dialogs {
             super("InputDialog");
         }
 
+        getAcceptButton() {
+
+            return this._acceptButton;
+        }
+
+
         setInputValidator(validator: InputValidator) {
+
             this._validator = validator;
         }
 
         setResultCallback(callback: ResultCallback) {
+
             this._resultCallback = callback;
         }
 
         setMessage(message: string) {
+
             this._messageElement.innerText = message + ":";
         }
 
         setInitialValue(value: string) {
+
             this._textElement.value = value;
         }
 

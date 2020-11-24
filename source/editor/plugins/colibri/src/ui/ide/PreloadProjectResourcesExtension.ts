@@ -8,9 +8,9 @@ namespace colibri.ui.ide {
             super(PreloadProjectResourcesExtension.POINT_ID);
         }
 
-        abstract async computeTotal(): Promise<number>;
+        abstract computeTotal(): Promise<number>;
 
-        abstract async preload(monitor: controls.IProgressMonitor);
+        abstract preload(monitor: controls.IProgressMonitor): Promise<any>;
     }
 
 }

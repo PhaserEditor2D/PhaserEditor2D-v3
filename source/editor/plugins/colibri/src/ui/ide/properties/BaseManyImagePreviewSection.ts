@@ -37,7 +37,7 @@ namespace colibri.ui.ide.properties {
             });
         }
 
-        protected abstract async getViewerInput(): Promise<unknown>;
+        protected abstract getViewerInput(): Promise<unknown>;
 
         protected abstract prepareViewer(viewer: controls.viewers.TreeViewer);
 

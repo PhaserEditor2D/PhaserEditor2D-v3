@@ -155,7 +155,7 @@ namespace colibri.ui.ide {
             this._editorSessionStateRegistry.clear();
         }
 
-        async openProject(projectName: string, monitor: controls.IProgressMonitor) {
+        async openProject(projectName: string, workspacePath: string, monitor: controls.IProgressMonitor) {
 
             this.eventBeforeOpenProject.fire(projectName);
 
@@ -164,6 +164,11 @@ namespace colibri.ui.ide {
             this.resetCache();
 
             console.log(`Workbench: opening project ${projectName}.`);
+
+            if (workspacePath) {
+
+                await this._fileStorage.changeWorkspace(workspacePath);
+            }
 
             await this._fileStorage.openProject(projectName);
 
@@ -352,7 +357,9 @@ namespace colibri.ui.ide {
 
                     Platform.onElectron(electron => {
 
-                        electron.sendMessage("ask-close-window");
+                        electron.sendMessage({
+                            method: "ask-close-window"
+                        });
                     });
                 }
             });

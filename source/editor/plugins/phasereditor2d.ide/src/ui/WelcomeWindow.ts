@@ -17,7 +17,7 @@ namespace phasereditor2d.ide.ui {
 
         protected async createParts() {
 
-            const projects = await colibri.ui.ide.FileUtils.getProjects_async();
+            const { projects } = await colibri.ui.ide.FileUtils.getProjects_async();
 
             if (projects.length === 0) {
 

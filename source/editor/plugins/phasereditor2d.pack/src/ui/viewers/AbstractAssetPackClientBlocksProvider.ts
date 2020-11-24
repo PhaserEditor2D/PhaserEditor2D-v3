@@ -16,7 +16,7 @@ namespace phasereditor2d.pack.ui.viewers {
             this._packs = [];
         }
 
-        abstract async preloadAndGetFinder(complete?: boolean): Promise<pack.core.PackFinder>;
+        abstract preloadAndGetFinder(complete?: boolean): Promise<pack.core.PackFinder>;
 
         getPacks() {
 

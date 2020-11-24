@@ -7,11 +7,14 @@ namespace phasereditor2d.ide {
 
     export class IDEPlugin extends colibri.Plugin {
 
+        public eventActivationChanged = new controls.ListenerList<boolean>();
+
         private static _instance = new IDEPlugin();
 
         private _openingProject: boolean;
         private _desktopMode: boolean;
         private _advancedJSEditor: boolean;
+        private _licenseActivated: boolean;
 
         static getInstance() {
             return this._instance;
@@ -21,6 +24,7 @@ namespace phasereditor2d.ide {
             super("phasereditor2d.ide");
 
             this._openingProject = false;
+            this._licenseActivated = false;
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -120,6 +124,12 @@ namespace phasereditor2d.ide {
 
             this._desktopMode = data.desktop === true;
             this._advancedJSEditor = data.advancedJSEditor === true;
+            this._licenseActivated = data.unlocked === true;
+        }
+
+        isLicenseActivated() {
+
+            return this._licenseActivated;
         }
 
         isDesktopMode() {
@@ -164,7 +174,7 @@ namespace phasereditor2d.ide {
 
                 const projectName = defaultProjectData["projectName"];
 
-                const projects = await wb.getFileStorage().getProjects();
+                const { projects } = await wb.getFileStorage().getProjects();
 
                 if (projects.indexOf(projectName) >= 0) {
 
@@ -182,7 +192,7 @@ namespace phasereditor2d.ide {
             }
         }
 
-        async ideOpenProject(projectName: string) {
+        async ideOpenProject(projectName: string, workspacePath?: string) {
 
             this._openingProject = true;
 
@@ -210,13 +220,31 @@ namespace phasereditor2d.ide {
 
                 console.log(`IDEPlugin: opening project ${projectName}`);
 
+                colibri.Platform.onElectron(async () => {
+
+                    let ws = workspacePath;
+
+                    if (!ws) {
+
+                        const result = await colibri.Platform.getWorkbench().getFileStorage().getProjects();
+
+                        ws = result.workspacePath;
+                    }
+
+                    document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"} (${ws})`;
+
+                }, () => {
+
+                    document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"}`;
+                });
+
                 const designWindow = wb.activateWindow(ui.DesignWindow.ID) as ui.DesignWindow;
 
                 const editorArea = designWindow.getEditorArea();
 
                 editorArea.closeAllEditors();
 
-                await wb.openProject(projectName, monitor);
+                await wb.openProject(projectName, workspacePath, monitor);
 
                 dlg.setProgress(1);
 
