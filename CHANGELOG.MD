@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 3.9.1 - Nov 30, 2020
+
+* Nothing in the client.
+
 ## Version 3.9.0 - Nov 24, 2020
 
 ### Added
