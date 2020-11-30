@@ -51,6 +51,16 @@ namespace phasereditor2d.ide.ui.actions {
                     }
                 }));
 
+                menu.add(new controls.Action({
+                    text: "Check For Updates",
+                    callback: async () => {
+
+                        if (IDEPlugin.getInstance().isNewUpdateAvailable()) {
+
+                            alert("A new version is available!");
+                        }
+                    }
+                }));
             }
 
             menu.add(new controls.Action({

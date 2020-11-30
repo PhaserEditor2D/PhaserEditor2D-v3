@@ -336,7 +336,29 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     height: 10px;
 }
 
-/* Dialog */
+/* Dialog & Notification */
+
+.Notification {
+    z-index: 10000;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    padding: 20px;
+    border-radius: 3px;
+}
+
+.Dialog,
+.Notification {
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.5);
+    box-shadow:
+        -12px -5px 22px rgba(0, 0, 0, 0.2),
+        12px 12px 22px rgba(0, 0, 0, 0.2),
+        -12px 12px 22px rgba(0, 0, 0, 0.2),
+        12px -5px 22px rgba(0, 0, 0, 0.2);
+
+}
 
 .DialogContainer {
     position: absolute;
@@ -350,15 +372,6 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 .Dialog {
     position: absolute;
     z-index: 1001;
-    border-radius: 5px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.5);
-    box-shadow:
-        -12px -5px 22px rgba(0, 0, 0, 0.2),
-        12px 12px 22px rgba(0, 0, 0, 0.2),
-        -12px 12px 22px rgba(0, 0, 0, 0.2),
-        12px -5px 22px rgba(0, 0, 0, 0.2);
-
 }
 
 .Dialog {
@@ -523,4 +536,35 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .MenuItemSeparator {
     height: 1px;
+}
+
+/* Effects */
+
+.FadeInEffect {
+    animation: fadein 2s;
+}
+
+.FadeOutEffect {
+    animation: fadeout 2s;
+    opacity: 0;
+}
+
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
