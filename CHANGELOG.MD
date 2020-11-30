@@ -2,7 +2,9 @@
 
 ## Version 3.9.1 - Nov 30, 2020
 
-* Nothing in the client.
+* Check if a new version is available at startup.
+* *Check For Updates* is a new option in the main menu. It shows a message if there is a new version.
+
 
 ## Version 3.9.0 - Nov 24, 2020
 
