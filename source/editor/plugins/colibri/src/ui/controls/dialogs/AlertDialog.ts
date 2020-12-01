@@ -34,6 +34,11 @@ namespace colibri.ui.controls.dialogs {
             });
         }
 
+        setMessage(text: string) {
+
+            this._messageElement.innerHTML = text;
+        }
+
         static replaceConsoleAlert() {
             window["__alert"] = window.alert;
 

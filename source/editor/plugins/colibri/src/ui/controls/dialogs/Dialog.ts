@@ -237,6 +237,11 @@ namespace colibri.ui.controls.dialogs {
             }
         }
 
+        isClosed() {
+
+            return !this.getElement().isConnected;
+        }
+
         protected goFront() {
             // nothing
         }

@@ -55,10 +55,14 @@ namespace phasereditor2d.ide.ui.actions {
                     text: "Check For Updates",
                     callback: async () => {
 
-                        if (IDEPlugin.getInstance().isNewUpdateAvailable()) {
+                        const dlg = new controls.dialogs.AlertDialog();
+                        dlg.create();
+                        dlg.setTitle("Updates");
+                        dlg.setMessage("Checking for updates...");
 
-                            alert("A new version is available!");
-                        }
+                        const available = await IDEPlugin.getInstance().isNewUpdateAvailable();
+
+                        dlg.setMessage(available ? "A new version is available!" : "Updates not found.");
                     }
                 }));
             }

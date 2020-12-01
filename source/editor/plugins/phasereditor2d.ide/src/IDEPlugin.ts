@@ -131,7 +131,7 @@ namespace phasereditor2d.ide {
 
             if (this.isDesktopMode()) {
 
-                if (this.isNewUpdateAvailable()) {
+                if (await this.isNewUpdateAvailable()) {
 
                     colibri.Platform.getWorkbench().showNotification("A new version is available!");
                 }
@@ -349,7 +349,6 @@ namespace phasereditor2d.ide {
             "background-color:silver",
         );
 
-        colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
 
         await IDEPlugin.getInstance().requestServerMode();
 
