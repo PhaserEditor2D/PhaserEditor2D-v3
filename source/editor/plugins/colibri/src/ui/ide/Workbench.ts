@@ -79,6 +79,27 @@ namespace colibri.ui.ide {
             return this._projectPreferences;
         }
 
+        showNotification(text: string) {
+
+            const element = document.createElement("div");
+            element.classList.add("Notification");
+            element.innerHTML = text;
+
+            document.body.appendChild(element);
+
+            element.classList.add("FadeInEffect");
+
+            element.addEventListener("click", () => element.remove());
+
+            setTimeout(() => {
+
+                element.classList.add("FadeOutEffect");
+
+                setTimeout(() => element.remove(), 4000);
+
+            }, 4000);
+        }
+
         async launch() {
 
             console.log("Workbench: starting.");

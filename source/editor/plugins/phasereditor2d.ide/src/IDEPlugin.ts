@@ -127,6 +127,24 @@ namespace phasereditor2d.ide {
             this._licenseActivated = data.unlocked === true;
         }
 
+        async requestUpdateAvailable() {
+
+            if (this.isDesktopMode()) {
+
+                if (await this.isNewUpdateAvailable()) {
+
+                    colibri.Platform.getWorkbench().showNotification("A new version is available!");
+                }
+            }
+        }
+
+        async isNewUpdateAvailable() {
+
+            const data = await colibri.core.io.apiRequest("GetNewVersionAvailable");
+
+            return data.available;
+        }
+
         isLicenseActivated() {
 
             return this._licenseActivated;
@@ -317,7 +335,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.9.0";
+    export const VER = "3.9.1";
 
     async function main() {
 
@@ -331,13 +349,14 @@ namespace phasereditor2d.ide {
             "background-color:silver",
         );
 
-        colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
 
         await IDEPlugin.getInstance().requestServerMode();
 
         await colibri.Platform.start();
 
         await IDEPlugin.getInstance().openFirstWindow();
+
+        await IDEPlugin.getInstance().requestUpdateAvailable();
     }
 
     window.addEventListener("load", main);
