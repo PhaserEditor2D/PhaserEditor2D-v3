@@ -498,6 +498,8 @@ namespace colibri.ui.controls.viewers {
 
             this.repaint2();
 
+            this.preload();
+
             const result = await this.preload();
 
             if (result === PreloadResult.RESOURCES_LOADED) {

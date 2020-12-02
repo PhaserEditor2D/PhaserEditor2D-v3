@@ -3,6 +3,7 @@ namespace colibri.ui.controls {
     export const CONTROL_PADDING = 3;
     export const ROW_HEIGHT = 20;
     export const FONT_HEIGHT = 14;
+    export const FONT_WITH = 12;
     export const FONT_OFFSET = 2;
     export const FONT_FAMILY = "Arial, Helvetica, sans-serif";
     export const ACTION_WIDTH = 20;

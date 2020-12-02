@@ -54,11 +54,46 @@ namespace colibri.ui.controls {
             return ctx;
         }
 
+        private static _charWidthMap: Map<string, number> = new Map();
+        private static _textWidthMap: Map<string, number> = new Map();
+
         static measureTextWidth(context: CanvasRenderingContext2D, label: string) {
 
-            const measure = context.measureText(label);
+            const font = FONT_FAMILY + FONT_HEIGHT;
 
-            return measure.width * DEVICE_PIXEL_RATIO;
+            const textKey = font + "@" + label;
+
+            let width = 0;
+
+            if (this._textWidthMap.has(textKey)) {
+
+                width = this._textWidthMap.get(textKey);
+
+            } else {
+
+                for (const c of label) {
+
+                    const key = font + "@" + c;
+
+                    let charWidth = 0;
+
+                    if (this._charWidthMap.has(key)) {
+
+                        charWidth = this._charWidthMap.get(key);
+
+                    } else {
+
+                        charWidth = context.measureText(c).width;
+                        this._charWidthMap.set(key, charWidth);
+                    }
+
+                    width += charWidth;
+                }
+
+                this._textWidthMap.set(textKey, width);
+            }
+
+            return width * DEVICE_PIXEL_RATIO;
         }
 
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {
