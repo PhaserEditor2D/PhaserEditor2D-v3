@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 3.9.1-next
+
+* Viewer: massive improvement of rendering performance.
+
 ## Version 3.9.1 - Nov 30, 2020
 
 * Check if a new version is available at startup.
