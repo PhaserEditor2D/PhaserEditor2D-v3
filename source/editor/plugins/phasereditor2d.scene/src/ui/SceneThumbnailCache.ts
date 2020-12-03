@@ -10,6 +10,7 @@ namespace phasereditor2d.scene.ui {
         static getInstance() {
 
             if (!this._instance) {
+
                 this._instance = new SceneThumbnailCache();
             }
 
