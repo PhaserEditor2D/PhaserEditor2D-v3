@@ -43,32 +43,44 @@ namespace colibri.ui.controls {
         }
 
         getViewer() {
+
             if (this._clientControl instanceof viewers.ViewerContainer) {
+
                 return this._clientControl.getViewer();
             }
+
             return this._clientControl;
         }
 
         updateScroll(clientContentHeight: number) {
+
             const scrollY = this.getViewer().getScrollY();
+
             const b = this.getBounds();
+
             let newScrollY = scrollY;
             newScrollY = Math.max(-this._clientContentHeight + b.height, newScrollY);
             newScrollY = Math.min(0, newScrollY);
 
             if (newScrollY !== scrollY) {
+
                 this._clientContentHeight = clientContentHeight;
                 this.setClientScrollY(scrollY);
+
             } else if (clientContentHeight !== this._clientContentHeight) {
+
                 this._clientContentHeight = clientContentHeight;
                 this.layout();
             }
         }
 
         private onBarMouseDown(e: MouseEvent) {
+
             if (e.target !== this._scrollBar) {
+
                 return;
             }
+
             e.stopImmediatePropagation();
             const b = this.getBounds();
             this.setClientScrollY(- e.offsetY / b.height * (this._clientContentHeight - b.height));
@@ -77,6 +89,7 @@ namespace colibri.ui.controls {
         private onClientWheel(e: WheelEvent) {
 
             if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) {
+
                 return;
             }
 
@@ -103,15 +116,20 @@ namespace colibri.ui.controls {
         private _startScrollY = 0;
 
         private onMouseDown(e: MouseEvent) {
+
             if (e.target === this._scrollHandler) {
+
                 e.stopImmediatePropagation();
+
                 this._startDragY = e.y;
                 this._startScrollY = this.getViewer().getScrollY();
             }
         }
 
         private onMouseMove(e: MouseEvent) {
+
             if (this._startDragY !== -1) {
+
                 let delta = e.y - this._startDragY;
                 const b = this.getBounds();
                 delta = delta / b.height * this._clientContentHeight;
@@ -120,21 +138,27 @@ namespace colibri.ui.controls {
         }
 
         private onMouseUp(e: MouseEvent) {
+
             if (this._startDragY !== -1) {
+
                 e.stopImmediatePropagation();
                 this._startDragY = -1;
             }
         }
 
         getBounds() {
+
             const b = this.getElement().getBoundingClientRect();
+
             return { x: 0, y: 0, width: b.width, height: b.height };
         }
 
         layout(): void {
+
             const b = this.getBounds();
 
             if (b.height < this._clientContentHeight) {
+
                 this._scrollHandler.style.display = "block";
                 const h = Math.max(10, b.height / this._clientContentHeight * b.height);
                 const y = -(b.height - h) * this.getViewer().getScrollY() / (this._clientContentHeight - b.height);
@@ -143,8 +167,11 @@ namespace colibri.ui.controls {
                     y: y,
                     height: h
                 });
+
                 this.removeClass("hideScrollBar");
+
             } else {
+
                 this.addClass("hideScrollBar");
             }
 

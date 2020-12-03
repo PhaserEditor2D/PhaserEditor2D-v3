@@ -79,10 +79,13 @@ namespace colibri.ui.controls.viewers {
 
                     viewer.paintItemBackground(obj, 0, y, b.width, cellHeight);
 
+                    let isItemVisible = false;
+
                     if (y > -viewer.getCellSize() && y < b.height) {
 
                         // render tree icon
                         if (children.length > 0) {
+
                             const iconY = y + (cellHeight - TREE_ICON_SIZE) / 2;
 
                             const themeIcon = ColibriPlugin.getInstance()
@@ -103,10 +106,11 @@ namespace colibri.ui.controls.viewers {
                             });
                         }
 
+                        isItemVisible = true;
                         this.renderTreeCell(args, renderer);
                     }
 
-                    const item = new PaintItem(paintItems.length, obj, parentPaintItem);
+                    const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
                     item.set(args.x, args.y, args.w, args.h);
                     paintItems.push(item);
 

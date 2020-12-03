@@ -460,13 +460,17 @@ namespace colibri.ui.controls.viewers {
         }
 
         expandCollapseBranch(obj: any) {
+
             const parents = [];
 
             const item = this._paintItems.find(i => i.data === obj);
 
             if (item && item.parent) {
+
                 const parentObj = item.parent.data;
+
                 this.setExpanded(parentObj, !this.isExpanded(parentObj));
+
                 parents.push(parentObj);
             }
 
@@ -498,14 +502,13 @@ namespace colibri.ui.controls.viewers {
 
             this.repaint2();
 
-            this.preload();
+            this.preload(this._paintItems).then(result => {
 
-            const result = await this.preload();
+                if (result === PreloadResult.RESOURCES_LOADED) {
 
-            if (result === PreloadResult.RESOURCES_LOADED) {
-
-                this.repaint2();
-            }
+                    this.repaint2();
+                }
+            });
 
             this.updateScrollPane();
         }
@@ -538,7 +541,27 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        protected abstract preload(): Promise<PreloadResult>;
+        private async preload(paintItems: PaintItem[]): Promise<PreloadResult> {
+
+            const viewer = this;
+
+            const rendererProvider = this.getCellRendererProvider();
+
+            let result = PreloadResult.NOTHING_LOADED;
+
+            for (const paintItem of paintItems) {
+
+                const obj = paintItem.data;
+
+                const renderer = rendererProvider.getCellRenderer(obj);
+
+                const itemResult = await renderer.preload(new PreloadCellArgs(obj, viewer));
+
+                result = Math.max(itemResult, result);
+            }
+
+            return result;
+        }
 
         paintItemBackground(obj: any, x: number, y: number, w: number, h: number, radius: number = 0): void {
 

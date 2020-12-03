@@ -178,7 +178,7 @@ namespace colibri.ui.controls.viewers {
 
                     const args = new RenderCellArgs(context, x, y, cellSize, cellSize, obj, viewer, true);
 
-                    this.renderGridCell(args, renderer, depth, obj === lastObj);
+                    let isItemVisible = false;
 
                     if (y > -cellSize && y < b.height) {
 
@@ -211,9 +211,12 @@ namespace colibri.ui.controls.viewers {
                                 obj: obj
                             });
                         }
+
+                        isItemVisible = true;
+                        this.renderGridCell(args, renderer, depth, obj === lastObj);
                     }
 
-                    const item = new PaintItem(paintItems.length, obj, parentPaintItem);
+                    const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
 
                     item.set(args.x, args.y, args.w, args.h);
 
