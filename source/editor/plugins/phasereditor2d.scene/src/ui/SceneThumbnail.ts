@@ -65,9 +65,14 @@ namespace phasereditor2d.scene.ui {
 
                     const container = singleObject as sceneobjects.Container;
 
-                    container.getEditorSupport().trim();
-                    container.setPosition(s.borderX + s.borderWidth / 2, s.borderY + s.borderHeight / 2);
+                    //container.getEditorSupport().trim();
+                    //container.setPosition(s.borderX + s.borderWidth / 2, s.borderY + s.borderHeight / 2);
+                    this.breakContainers([container]);
                 }
+
+            } else {
+
+                this.breakContainers(children);
             }
 
             let bounds = this.computeSceneBounds();
@@ -118,6 +123,19 @@ namespace phasereditor2d.scene.ui {
 
                 this.destroyGame();
             });
+        }
+
+        private breakContainers(list: Phaser.GameObjects.GameObject[]) {
+
+            for (const obj of list) {
+
+                if (obj instanceof sceneobjects.Container) {
+
+                    sceneobjects.BreakContainerOperation.breakContainer(this, [obj]);
+
+                    this.breakContainers(obj.list);
+                }
+            }
         }
 
         private computeSceneBounds() {

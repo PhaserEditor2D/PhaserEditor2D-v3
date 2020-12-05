@@ -6,11 +6,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async performModification() {
 
-            const displayList = this.getEditor().getScene().sys.displayList;
+            const editor = this.getEditor();
+
+            const scene = editor.getScene();
+
+            const selectedObjects = editor.getSelectedGameObjects();
+
+            const sel = BreakContainerOperation.breakContainer(scene, selectedObjects);
+
+            this.getEditor().setSelection(sel);
+        }
+
+        static breakContainer(scene: Scene, selectedObjects: ISceneGameObject[]) {
+
+            const displayList = scene.sys.displayList;
 
             const sel = [];
 
-            for (const obj of this._editor.getSelectedGameObjects()) {
+            for (const obj of selectedObjects) {
 
                 const container = obj as sceneobjects.Container;
 
@@ -46,7 +59,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 container.getEditorSupport().destroy();
             }
 
-            this.getEditor().setSelection(sel);
+            return sel;
         }
     }
 }
