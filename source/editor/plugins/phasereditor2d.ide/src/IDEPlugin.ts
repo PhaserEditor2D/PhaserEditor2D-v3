@@ -349,6 +349,7 @@ namespace phasereditor2d.ide {
             "background-color:silver",
         );
 
+        colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
 
         await IDEPlugin.getInstance().requestServerMode();
 
