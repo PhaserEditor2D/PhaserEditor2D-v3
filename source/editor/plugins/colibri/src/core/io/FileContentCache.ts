@@ -1,6 +1,6 @@
 namespace colibri.core.io {
 
-    export declare type GetFileContent<T> = (file: FilePath) => Promise<T>;
+    export declare type GetFileContent<T> = (file: FilePath, force?:boolean) => Promise<T>;
 
     export declare type SetFileContent<T> = (file: FilePath, content: T) => Promise<void>;
 
@@ -54,7 +54,7 @@ namespace colibri.core.io {
                     return ui.controls.Controls.resolveNothingLoaded();
                 }
 
-                const promise2 = this._backendGetContent(file)
+                const promise2 = this._backendGetContent(file, force)
 
                     .then((content) => {
 
@@ -71,7 +71,7 @@ namespace colibri.core.io {
                 return promise2;
             }
 
-            const promise = this._backendGetContent(file)
+            const promise = this._backendGetContent(file, force)
 
                 .then((content) => {
 

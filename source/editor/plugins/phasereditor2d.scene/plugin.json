@@ -4,6 +4,7 @@
         "styles/SceneEditor.css"
     ],
     "scripts": [
+        "libs/localforage.js",
         "_out/phasereditor2d.scene.js"
     ]
 }

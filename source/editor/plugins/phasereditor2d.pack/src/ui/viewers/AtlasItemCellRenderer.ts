@@ -21,8 +21,6 @@ namespace phasereditor2d.pack.ui.viewers {
 
             const result = Math.max(r1, r2);
 
-            console.log(container.getKey() + " " + result);
-
             return result;
         }
     }

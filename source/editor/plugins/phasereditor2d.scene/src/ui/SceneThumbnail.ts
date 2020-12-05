@@ -224,6 +224,16 @@ namespace phasereditor2d.scene.ui {
             return controls.Controls.resolveNothingLoaded();
         }
 
+        getImageElement() {
+
+            if (this._image) {
+
+                return this._image.getImageElement();
+            }
+
+            return null;
+        }
+
         private createImageElement() {
 
             return new Promise<HTMLImageElement>((resolve, reject) => {
