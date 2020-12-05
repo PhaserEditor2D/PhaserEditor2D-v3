@@ -25,6 +25,13 @@ namespace phasereditor2d.scene.ui {
             return this._instance;
         }
 
+        static async clearCache() {
+
+            SceneThumbnailCache.getInstance();
+
+            await this._database.clear();
+        }
+
         private constructor() {
             super(async (file, force) => {
 
