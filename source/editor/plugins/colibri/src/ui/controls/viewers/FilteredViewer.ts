@@ -36,7 +36,8 @@ namespace colibri.ui.controls.viewers {
                 this.addZoomControl();
             }
 
-            setTimeout(() => this.layout(), 1);
+            //setTimeout(() => this.layout(), 1);
+            requestAnimationFrame(() => this.layout());
         }
 
         private addZoomControl() {
@@ -204,6 +205,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         layout() {
+
             this._viewerContainer.layout();
             this._scrollPane.layout();
         }

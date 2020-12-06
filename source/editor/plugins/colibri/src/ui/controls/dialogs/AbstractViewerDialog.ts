@@ -26,6 +26,7 @@ namespace colibri.ui.controls.dialogs {
         }
 
         getViewer() {
+
             return this._viewer;
         }
 
@@ -39,6 +40,7 @@ namespace colibri.ui.controls.dialogs {
             this.resize();
 
             if (this._viewer) {
+
                 this._viewer.repaint();
             }
         }

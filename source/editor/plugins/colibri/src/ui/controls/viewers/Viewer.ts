@@ -513,7 +513,7 @@ namespace colibri.ui.controls.viewers {
             this.updateScrollPane();
         }
 
-        updateScrollPane() {
+        private updateScrollPane() {
 
             const pane = this.getContainer().getContainer();
 
