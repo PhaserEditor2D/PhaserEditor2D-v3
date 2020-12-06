@@ -3,6 +3,8 @@
 ## Version 3.9.1-next
 
 * Viewer: massive improvement of rendering performance.
+* Viewer: fixes layout request in filtered viewers.
+* Scene Editor: browser local cache of scene file thumbnails. 
 
 ## Version 3.9.1 - Nov 30, 2020
 
