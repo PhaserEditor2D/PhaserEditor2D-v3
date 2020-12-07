@@ -8,7 +8,7 @@ class Level extends Phaser.Scene {
 	constructor() {
 		super("Level");
 		
-		/** @type {Phaser.Tilemaps.StaticTilemapLayer} */
+		/** @type {Phaser.Tilemaps.TilemapLayer} */
 		this.layer;
 		/** @type {Player} */
 		this.player;
@@ -71,7 +71,7 @@ class Level extends Phaser.Scene {
 		middle.setOrigin(0, 0);
 		
 		// layer
-		const layer = map.createStaticLayer("Tile Layer 1", ["tileset"], 0, 0);
+		const layer = map.createLayer("Tile Layer 1", ["tileset"], 0, 0);
 		
 		// tree
 		const tree = this.add.image(496, 67, "atlas-props", "tree");
