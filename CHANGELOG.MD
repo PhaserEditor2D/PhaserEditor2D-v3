@@ -5,7 +5,8 @@
 * Viewer: massive improvement of rendering performance.
 * Viewer: fixes layout request in filtered viewers.
 * Viewer-based dialogs: allows open an item with the Enter key.
-* Scene Editor: browser local cache of scene file thumbnails. 
+* Scene Editor: caches scene file thumbnails in local browser Indexed DB. 
+* Scene Editor: more accuracy on thumbnail generation of container-based prefabs.
 * Restore custom "alert" message dialog.
 
 ## Version 3.9.1 - Nov 30, 2020
