@@ -61,7 +61,7 @@ class TitleScreen extends Phaser.Scene {
 
 		this.editorCreate();
 
-		this.input.keyboard.on("keydown_ENTER", this.enterPressed, this);
+		this.input.keyboard.on("keydown-ENTER", this.enterPressed, this);
 		this.input.on("pointerdown", this.enterPressed, this);
 
 		this.blinkText();
