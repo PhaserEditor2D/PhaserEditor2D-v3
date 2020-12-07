@@ -48,6 +48,7 @@ namespace colibri.ui.controls.viewers {
             parentPaintItem: PaintItem, x: number, y: number) {
 
             const viewer = this.getViewer();
+            const paintAreaHeight = viewer.getBounds().height;
 
             const labelProvider = viewer.getLabelProvider();
 
@@ -58,13 +59,16 @@ namespace colibri.ui.controls.viewers {
                 const limit = 64 * controls.DEVICE_PIXEL_RATIO;
 
                 if (cellSize < limit) {
+
                     cellSize = limit;
+
                     viewer.setCellSize(cellSize);
                 }
 
             } else {
 
                 if (cellSize <= 48) {
+
                     return super.paintItems(objects, treeIconList, paintItems, null, x, y);
                 }
             }
@@ -94,26 +98,32 @@ namespace colibri.ui.controls.viewers {
                     }
 
                     if (first) {
+
                         first = false;
+
                     } else {
+
                         y2 += sectionMargin;
                     }
 
-                    const label = labelProvider.getLabel(section);
+                    if (y2 >= -cellSize && y2 <= paintAreaHeight) {
 
-                    ctx.save();
+                        const label = labelProvider.getLabel(section);
 
-                    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+                        ctx.save();
 
-                    ctx.fillRect(0, y2 - 18, b.width, 25);
+                        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
 
-                    ctx.fillStyle = controls.Controls.getTheme().viewerForeground + "aa";
+                        ctx.fillRect(0, y2 - 18, b.width, 25);
 
-                    const textWidth = controls.Controls.measureTextWidth(ctx, label);
+                        ctx.fillStyle = controls.Controls.getTheme().viewerForeground + "aa";
 
-                    ctx.fillText(label, b.width / 2 - textWidth / 2, y2);
+                        const textWidth = controls.Controls.measureTextWidth(ctx, label);
 
-                    ctx.restore();
+                        ctx.fillText(label, b.width / 2 - textWidth / 2, y2);
+
+                        ctx.restore();
+                    }
 
                     y2 += sectionMargin;
 
@@ -123,9 +133,9 @@ namespace colibri.ui.controls.viewers {
                     y2 = result.y + sectionMargin;
 
                     if (result.x > TREE_RENDERER_GRID_PADDING) {
+
                         y2 += cellSize;
                     }
-
                 }
 
                 return {
@@ -168,7 +178,7 @@ namespace colibri.ui.controls.viewers {
 
                     const args = new RenderCellArgs(context, x, y, cellSize, cellSize, obj, viewer, true);
 
-                    this.renderGridCell(args, renderer, depth, obj === lastObj);
+                    let isItemVisible = false;
 
                     if (y > -cellSize && y < b.height) {
 
@@ -201,9 +211,12 @@ namespace colibri.ui.controls.viewers {
                                 obj: obj
                             });
                         }
+
+                        isItemVisible = true;
+                        this.renderGridCell(args, renderer, depth, obj === lastObj);
                     }
 
-                    const item = new PaintItem(paintItems.length, obj, parentPaintItem);
+                    const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
 
                     item.set(args.x, args.y, args.w, args.h);
 
@@ -243,31 +256,6 @@ namespace colibri.ui.controls.viewers {
             const x = args.x;
 
             const ctx = args.canvasContext;
-
-            const label = args.viewer.getLabelProvider().getLabel(args.obj);
-
-            let line = "";
-
-            for (const c of label) {
-
-                const test = line + c;
-
-                const textWidth = controls.Controls.measureTextWidth(ctx, test);
-
-                if (textWidth > args.w) {
-
-                    if (line.length > 2) {
-
-                        line = line.substring(0, line.length - 2) + "..";
-                    }
-
-                    break;
-
-                } else {
-
-                    line += c;
-                }
-            }
 
             const selected = args.viewer.isSelected(args.obj);
 
@@ -314,14 +302,49 @@ namespace colibri.ui.controls.viewers {
 
                 this.prepareContextForText(args);
 
-                const m = ctx.measureText(line);
 
-                const x2 = Math.max(x, x + args.w / 2 - m.width / 2);
+                const label = args.viewer.getLabelProvider().getLabel(args.obj);
 
-                ctx.fillText(line, x2, args.y + args.h - 5);
+                const trim = this.trimLabel(ctx, label, args.w);
+
+                const x2 = Math.max(x, x + args.w / 2 - trim.textWidth / 2);
+
+                ctx.fillText(trim.text, x2, args.y + args.h - 5);
 
                 ctx.restore();
             }
+        }
+
+        private trimLabel(ctx: CanvasRenderingContext2D, label: string, maxWidth: number) {
+
+            let text = "";
+            let textWidth = 0;
+
+            for (const c of label) {
+
+                const test = text + c;
+
+                textWidth = controls.Controls.measureTextWidth(ctx, test);
+
+                if (textWidth > maxWidth) {
+
+                    if (text.length > 2) {
+
+                        text = text.substring(0, text.length - 2) + "..";
+                    }
+
+                    break;
+
+                } else {
+
+                    text += c;
+                }
+            }
+
+            return {
+                text,
+                textWidth
+            };
         }
 
         protected renderCellBack(args: RenderCellArgs, selected: boolean, isLastChild: boolean) {

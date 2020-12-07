@@ -112,7 +112,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 this.setDirty(false);
 
-                this.updateTitleIcon();
+                await this.updateTitleIcon();
 
             } catch (e) {
 
@@ -217,7 +217,7 @@ namespace phasereditor2d.scene.ui.editor {
             super.setInput(file);
 
             // we do this here because the icon should be shown even if the editor is not created yet.
-            this.updateTitleIcon();
+            this.updateTitleIcon(true);
         }
 
         protected createPart() {
@@ -328,6 +328,7 @@ namespace phasereditor2d.scene.ui.editor {
                 const img = SceneThumbnailCache.getInstance().getContent(file);
 
                 if (img) {
+
                     return img;
                 }
             }
@@ -776,7 +777,7 @@ namespace phasereditor2d.scene.ui.editor {
                 this._game.loop.stop();
             }, 500);
 
-            this.updateTitleIcon(true);
+            await this.updateTitleIcon(true);
         }
 
         repaint(): void {

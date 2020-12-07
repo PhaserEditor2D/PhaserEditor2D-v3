@@ -1,14 +1,25 @@
 namespace colibri.core.io {
 
-    export declare type GetFileContent<T> = (file: FilePath) => Promise<T>;
+    export declare type GetFileContent<T> = (file: FilePath, force?:boolean) => Promise<T>;
 
     export declare type SetFileContent<T> = (file: FilePath, content: T) => Promise<void>;
+
+    export interface IContentCacheMap<T> {
+
+        has(key: string): boolean;
+
+        delete(key: string): void;
+
+        set(key: string, value: ContentEntry<T>): void;
+
+        get(key: string): ContentEntry<T>;
+    }
 
     export class FileContentCache<T> {
 
         private _backendGetContent: GetFileContent<T>;
         private _backendSetContent: SetFileContent<T>;
-        private _map: Map<string, ContentEntry<T>>;
+        private _map: IContentCacheMap<T>;
         private _preloadMap: Map<string, Promise<ui.controls.PreloadResult>>;
 
         constructor(getContent: GetFileContent<T>, setContent?: SetFileContent<T>) {
@@ -30,6 +41,7 @@ namespace colibri.core.io {
             const filename = file.getFullName();
 
             if (this._preloadMap.has(filename)) {
+
                 return this._preloadMap.get(filename);
             }
 
@@ -38,10 +50,11 @@ namespace colibri.core.io {
             if (entry) {
 
                 if (!force && entry.modTime === file.getModTime()) {
+
                     return ui.controls.Controls.resolveNothingLoaded();
                 }
 
-                const promise2 = this._backendGetContent(file)
+                const promise2 = this._backendGetContent(file, force)
 
                     .then((content) => {
 
@@ -58,7 +71,7 @@ namespace colibri.core.io {
                 return promise2;
             }
 
-            const promise = this._backendGetContent(file)
+            const promise = this._backendGetContent(file, force)
 
                 .then((content) => {
 
@@ -116,5 +129,4 @@ namespace colibri.core.io {
         ) {
         }
     }
-
 }

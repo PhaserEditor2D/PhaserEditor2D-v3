@@ -41,12 +41,7 @@ namespace phasereditor2d.pack.core {
 
             for (const frame of frames) {
 
-                const img = frame.getImage();
-
-                if (img) {
-
-                    result = Math.max(await img.preload(), result);
-                }
+                result = Math.max(await frame.preload(), result);
             }
 
             const result2 = await this.makeThumbnail();

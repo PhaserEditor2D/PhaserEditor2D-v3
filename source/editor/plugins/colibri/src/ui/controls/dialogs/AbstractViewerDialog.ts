@@ -26,6 +26,7 @@ namespace colibri.ui.controls.dialogs {
         }
 
         getViewer() {
+
             return this._viewer;
         }
 
@@ -39,6 +40,7 @@ namespace colibri.ui.controls.dialogs {
             this.resize();
 
             if (this._viewer) {
+
                 this._viewer.repaint();
             }
         }
@@ -85,9 +87,9 @@ namespace colibri.ui.controls.dialogs {
 
             const inputElement = this.getFilteredViewer().getFilterControl().getElement();
 
-            inputElement.addEventListener("keyup", e => {
+            const listener = e => {
 
-                if (e.keyCode === 13) {
+                if (e.key === "Enter") {
 
                     e.preventDefault();
 
@@ -111,7 +113,10 @@ namespace colibri.ui.controls.dialogs {
                         btn.click();
                     }
                 }
-            });
+            };
+
+            inputElement.addEventListener("keyup", listener);
+            this.getViewer().getElement().addEventListener("keyup", listener);
 
             return btn;
         }

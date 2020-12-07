@@ -230,29 +230,6 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        async preload(): Promise<PreloadResult> {
-
-            const list: Array<Promise<PreloadResult>> = [];
-
-            const viewer = this;
-
-            this.visitObjects(obj => {
-
-                const provider = this.getCellRendererProvider();
-
-                list.push(provider.preload(new PreloadCellArgs(obj, viewer)).then(r1 => {
-
-                    const renderer = provider.getCellRenderer(obj);
-
-                    return renderer.preload(new PreloadCellArgs(obj, viewer)).then(r2 => {
-                        return Math.max(r1, r2);
-                    });
-                }));
-            });
-
-            return Controls.resolveAll(list);
-        }
-
         protected paint(): void {
 
             const result = this._treeRenderer.paint();

@@ -12,11 +12,13 @@ namespace phasereditor2d.scene.ui.viewers {
             const image = SceneThumbnailCache.getInstance().getContent(file);
 
             if (image) {
+
                 image.paint(args.canvasContext, args.x, args.y, args.w, args.h, args.center);
             }
         }
 
         cellHeight(args: controls.viewers.RenderCellArgs): number {
+
             return args.viewer.getCellSize();
         }
 

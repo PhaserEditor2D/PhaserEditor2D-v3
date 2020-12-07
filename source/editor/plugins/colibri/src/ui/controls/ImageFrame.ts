@@ -72,9 +72,9 @@ namespace colibri.ui.controls {
 
         paintFrame(context: CanvasRenderingContext2D,
 
-                   srcX: number, srcY: number, scrW: number, srcH: number,
+            srcX: number, srcY: number, scrW: number, srcH: number,
 
-                   dstX: number, dstY: number, dstW: number, dstH: number): void {
+            dstX: number, dstY: number, dstW: number, dstH: number): void {
 
             // not implemented fow now
         }
@@ -82,6 +82,7 @@ namespace colibri.ui.controls {
         preload(): Promise<PreloadResult> {
 
             if (this._image === null) {
+
                 return controls.Controls.resolveNothingLoaded();
             }
 

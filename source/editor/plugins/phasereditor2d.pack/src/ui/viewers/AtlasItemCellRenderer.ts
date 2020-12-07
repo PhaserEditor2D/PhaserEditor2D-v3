@@ -13,11 +13,15 @@ namespace phasereditor2d.pack.ui.viewers {
 
             const container = args.obj as pack.core.ImageFrameContainerAssetPackItem;
 
-            const r1 = await container.preload();
+            await container.preload();
+
+            const r1 = container.getThumbnail() ? controls.PreloadResult.NOTHING_LOADED : controls.PreloadResult.RESOURCES_LOADED;
 
             const r2 = await container.preloadImages();
 
-            return Math.max(r1, r2);
+            const result = Math.max(r1, r2);
+
+            return result;
         }
     }
 }

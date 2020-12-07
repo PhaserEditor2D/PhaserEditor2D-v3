@@ -57,6 +57,11 @@ namespace colibri.ui.controls {
 
             return 0;
         }
+
+        getImageElement() {
+
+            return this._imageElement;
+        }
     }
 
 }

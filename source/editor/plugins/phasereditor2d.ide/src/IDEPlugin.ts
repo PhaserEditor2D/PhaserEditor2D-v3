@@ -335,7 +335,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.9.1";
+    export const VER = "3.9.2";
 
     async function main() {
 
@@ -349,6 +349,7 @@ namespace phasereditor2d.ide {
             "background-color:silver",
         );
 
+        colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
 
         await IDEPlugin.getInstance().requestServerMode();
 

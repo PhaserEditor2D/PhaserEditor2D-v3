@@ -34,6 +34,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_MOVE_OBJECT_DOWN = "phasereditor2d.scene.ui.editor.commands.MoveObjectDown";
     export const CMD_FIX_SCENE_FILES_ID = "phasereditor2d.scene.ui.editor.commands.FixSceneFilesID";
     export const CMD_DUPLICATE_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.DuplicateSceneFile";
+    export const CMD_CLEAR_SCENE_THUMBNAIL_CACHE = "phasereditor2d.scene.ui.editor.commands.ClearSceneThumbnailCache";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -178,6 +179,21 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 }
             });
 
+            // clear scene thumbnail database
+            manager.add({
+                command: {
+                    id: CMD_CLEAR_SCENE_THUMBNAIL_CACHE,
+                    name: "Clear Scene Thumbnail Cache",
+                    tooltip: "Clear the thumbnail images cache.",
+                    category: CAT_SCENE_EDITOR,
+                },
+                handler: {
+                    executeFunc: args => {
+
+                        ui.SceneThumbnailCache.clearCache();
+                    }
+                }
+            })
         }
 
         static registerSnappingCommands(manager: colibri.ui.ide.commands.CommandManager) {

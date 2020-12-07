@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 3.9.2 - Dec 7, 2020
+
+* Viewer: massive improvement of rendering performance.
+* Viewer: fixes layout request in filtered viewers.
+* Viewer-based dialogs: allows open an item with the Enter key.
+* Scene Editor: caches scene file thumbnails in local browser Indexed DB. 
+* Scene Editor: more accuracy on thumbnail generation of container-based prefabs.
+* Restore custom "alert" message dialog.
+
 ## Version 3.9.1 - Nov 30, 2020
 
 * Check if a new version is available at startup.
