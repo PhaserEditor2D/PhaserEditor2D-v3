@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 3.9.1-next
+## Version 3.9.2 - Dec 7, 2020
 
 * Viewer: massive improvement of rendering performance.
 * Viewer: fixes layout request in filtered viewers.
