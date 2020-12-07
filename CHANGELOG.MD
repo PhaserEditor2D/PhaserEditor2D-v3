@@ -4,6 +4,7 @@
 
 * Viewer: massive improvement of rendering performance.
 * Viewer: fixes layout request in filtered viewers.
+* Viewer-based dialogs: allows open an item with the Enter key.
 * Scene Editor: browser local cache of scene file thumbnails. 
 * Restore custom "alert" message dialog.
 
