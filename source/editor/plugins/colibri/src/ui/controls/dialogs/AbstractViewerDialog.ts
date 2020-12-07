@@ -87,7 +87,7 @@ namespace colibri.ui.controls.dialogs {
 
             const inputElement = this.getFilteredViewer().getFilterControl().getElement();
 
-            inputElement.addEventListener("keyup", e => {
+            const listener = e => {
 
                 if (e.key === "Enter") {
 
@@ -113,7 +113,10 @@ namespace colibri.ui.controls.dialogs {
                         btn.click();
                     }
                 }
-            });
+            };
+
+            inputElement.addEventListener("keyup", listener);
+            this.getViewer().getElement().addEventListener("keyup", listener);
 
             return btn;
         }
