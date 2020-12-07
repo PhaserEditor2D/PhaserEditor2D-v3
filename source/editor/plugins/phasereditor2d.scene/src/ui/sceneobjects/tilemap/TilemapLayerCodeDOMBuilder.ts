@@ -14,9 +14,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
 
-            const tilemapLayer = args.obj as (StaticTilemapLayer | DynamicTilemapLayer);
+            const tilemapLayer = args.obj as (TilemapLayer);
 
-            const tilesets = StaticTilemapLayer.scanTilesets(tilemapLayer);
+            const tilesets = TilemapLayer.scanTilesets(tilemapLayer);
             const tilesetArray = "[" + tilesets.map(t => code.CodeDOM.quote(t.name)).join(",") + "]";
 
             const tilemap = tilemapLayer.tilemap as Tilemap;

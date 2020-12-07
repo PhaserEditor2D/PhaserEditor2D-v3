@@ -116,7 +116,7 @@ namespace phasereditor2d.scene.ui.editor {
             }
 
             // update the camera matrix
-            (camera as any).preRender(scene.scale.resolution);
+            (camera as any).preRender();
 
             const point2 = camera.getWorldPoint(offsetX, offsetY);
 

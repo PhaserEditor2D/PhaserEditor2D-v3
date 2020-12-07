@@ -174,8 +174,8 @@ namespace phasereditor2d.animations.ui.editors {
                                 sprite.visible = true;
 
                                 try {
-
-                                    sprite.play(sprite.anims.getCurrentKey());
+                                    // TODO: Phaser 3.50
+                                    sprite.play(sprite.anims.currentAnim.key);
 
                                 } catch (e) {
                                     // nothing

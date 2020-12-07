@@ -7,7 +7,36 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         layerName: string;
     }
 
-    export abstract class BaseTilemapLayerExtension extends SceneGameObjectExtension {
+    export class TilemapLayerExtension extends SceneGameObjectExtension {
+
+        private static _instance: TilemapLayerExtension;
+
+        static getInstance() {
+
+            return this._instance ? this._instance : (this._instance = new TilemapLayerExtension());
+        }
+
+        constructor() {
+            super({
+                icon: pack.AssetPackPlugin.getInstance().getIconDescriptor(pack.ICON_TILEMAP_LAYER),
+                phaserTypeName: "Phaser.Tilemaps.TilemapLayer",
+                typeName: "TilemapLayer",
+                typeNameAlias: ["StaticTilemapLayer", "DynamicTilemapLayer"],
+                category: SCENE_OBJECT_TILEMAP_CATEGORY,
+            });
+        }
+
+        createTilemapLayer(scene: Scene, tilemap: Tilemap, layerName: string) {
+
+            const layer = new TilemapLayer(scene, tilemap, layerName);
+
+            return layer;
+        }
+
+        getCodeFactoryMethod(): string {
+
+            return "createLayer";
+        }
 
         /**
          * Collect the data used to create a new, empty object. For example, a BitmapText requires
@@ -133,10 +162,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return layer;
         }
-
-        abstract createTilemapLayer(scene: Scene, tilemap: Tilemap, layerName: string): StaticTilemapLayer | DynamicTilemapLayer;
-
-        abstract getCodeFactoryMethod(): string;
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 

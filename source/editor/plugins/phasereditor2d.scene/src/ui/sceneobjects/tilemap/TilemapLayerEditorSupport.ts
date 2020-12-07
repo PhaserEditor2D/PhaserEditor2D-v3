@@ -7,10 +7,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         tilesets: string[]
     }
 
-    export class StaticTilemapLayerEditorSupport extends GameObjectEditorSupport<StaticTilemapLayer> {
+    export class StaticTilemapLayerEditorSupport extends GameObjectEditorSupport<TilemapLayer> {
 
-        constructor(obj: StaticTilemapLayer, scene: Scene) {
-            super(StaticTilemapLayerExtension.getInstance(), obj, scene);
+        constructor(obj: TilemapLayer, scene: Scene) {
+            super(TilemapLayerExtension.getInstance(), obj, scene);
 
             StaticTilemapLayerEditorSupport.helper_init(this);
         }
@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             StaticTilemapLayerEditorSupport.helper_writeJSON(this.getObject(), data);
         }
 
-        static helper_interactiveCallback(hitArea: any, x: number, y: number, layer: StaticTilemapLayer) {
+        static helper_interactiveCallback(hitArea: any, x: number, y: number, layer: TilemapLayer) {
 
             if (x >= 0 && y >= 0 && x <= layer.width && y <= layer.height) {
 
@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        static helper_writeJSON(layer: StaticTilemapLayer | DynamicTilemapLayer, data: ITilemapLayerData) {
+        static helper_writeJSON(layer: TilemapLayer, data: ITilemapLayerData) {
 
             const tilemap = layer.tilemap as Tilemap;
 
@@ -75,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             data.tilesets = tilemap.tilesets.map(t => t.name);
         }
 
-        static helper_init(support: StaticTilemapLayerEditorSupport | DynamicTilemapLayerEditorSupport) {
+        static helper_init(support: StaticTilemapLayerEditorSupport) {
 
             const obj = support.getObject();
 

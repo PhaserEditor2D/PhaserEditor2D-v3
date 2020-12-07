@@ -160,7 +160,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (extraData.tilemapLayerName) {
 
-                const layer = new StaticTilemapLayer(args.scene, tilemap, extraData.tilemapLayerName);
+                const layer = new TilemapLayer(args.scene, tilemap, extraData.tilemapLayerName);
 
                 return [tilemap, layer];
             }

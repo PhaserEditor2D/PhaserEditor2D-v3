@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class StaticTilemapLayer extends Phaser.Tilemaps.StaticTilemapLayer implements ISceneGameObject {
+    export class TilemapLayer extends Phaser.Tilemaps.TilemapLayer implements ISceneGameObject {
 
         private _editorSupport: StaticTilemapLayerEditorSupport;
 
@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new StaticTilemapLayerEditorSupport(this, scene);
         }
 
-        static scanTilesets(layer: StaticTilemapLayer | DynamicTilemapLayer) {
+        static scanTilesets(layer: TilemapLayer) {
 
             const gidMap = new Map();
 

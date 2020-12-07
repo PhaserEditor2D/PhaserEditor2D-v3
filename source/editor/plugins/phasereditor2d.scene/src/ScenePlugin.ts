@@ -196,8 +196,7 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.TextExtension.getInstance(),
                 ui.sceneobjects.BitmapTextExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance(),
-                ui.sceneobjects.StaticTilemapLayerExtension.getInstance(),
-                ui.sceneobjects.DynamicTilemapLayerExtension.getInstance(),
+                ui.sceneobjects.TilemapLayerExtension.getInstance(),
                 ui.sceneobjects.RectangleExtension.getInstance(),
                 ui.sceneobjects.EllipseExtension.getInstance(),
                 ui.sceneobjects.TriangleExtension.getInstance()
@@ -341,7 +340,19 @@ namespace phasereditor2d.scene {
         }
 
         getGameObjectExtensionByObjectType(type: string) {
-            return this.getGameObjectExtensions().find(ext => ext.getTypeName() === type);
+
+            return this.getGameObjectExtensions().find(ext => {
+
+                if (ext.getTypeName() === type) {
+
+                    return ext;
+                }
+
+                if (ext.getTypeNameAlias().indexOf(type) >= 0) {
+
+                    return ext;
+                }
+            });
         }
 
         getSceneEditorOutlineExtensions() {
