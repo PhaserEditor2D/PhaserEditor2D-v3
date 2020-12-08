@@ -87,8 +87,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const width = geom.right - geom.left;
             const height = geom.bottom - geom.top;
 
-            // TODO: Phaser 3.50
-            // this.setSize(width, height);
+            this["setSize"](width, height);
 
             this.updateDisplayOrigin();
 
