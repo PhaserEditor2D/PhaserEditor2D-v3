@@ -38,7 +38,7 @@ namespace phasereditor2d.scene {
 
         private static _instance = new ScenePlugin();
 
-        static DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
+        static DEFAULT_CANVAS_CONTEXT = Phaser.WEBGL;
 
         static DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
 
