@@ -7,12 +7,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         tilesets: string[]
     }
 
-    export class StaticTilemapLayerEditorSupport extends GameObjectEditorSupport<TilemapLayer> {
+    export class TilemapLayerEditorSupport extends GameObjectEditorSupport<TilemapLayer> {
 
         constructor(obj: TilemapLayer, scene: Scene) {
             super(TilemapLayerExtension.getInstance(), obj, scene);
 
-            StaticTilemapLayerEditorSupport.helper_init(this);
+            this.addComponent(
+
+                new TransformComponent(obj as unknown as ITransformLikeObject),
+                new VisibleComponent(obj as unknown as IVisibleLikeObject),
+            );
+
+            this.setLabel(obj.layer.name);
+        }
+
+        getScreenBoundsOrigin() {
+
+            if (this.getOrientation() === Phaser.Tilemaps.Orientation.ISOMETRIC) {
+
+                return { originX: 0.5, originY: 0 };
+            }
+
+            return super.getScreenBoundsOrigin();
         }
 
         isUnlockedProperty(property: IProperty<any>) {
@@ -34,12 +50,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setInteractive(): void {
 
-            this.getObject().setInteractive(StaticTilemapLayerEditorSupport.helper_interactiveCallback);
+            this.getObject().setInteractive(TilemapLayerEditorSupport.helper_interactiveCallback);
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
-
-            //return new colibri.ui.controls.viewers.IconImageCellRenderer(pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER));
 
             return new ObjectCellRenderer();
         }
@@ -48,25 +62,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.writeJSON(data);
 
-            StaticTilemapLayerEditorSupport.helper_writeJSON(this.getObject(), data);
-        }
-
-        static helper_interactiveCallback(hitArea: any, x: number, y: number, layer: TilemapLayer) {
-
-            if (x >= 0 && y >= 0 && x <= layer.width && y <= layer.height) {
-
-                const col = Math.floor(x / layer.layer.tileWidth);
-                const row = Math.floor(y / layer.layer.tileHeight);
-
-                const tile = layer.getTileAt(col, row);
-
-                return tile !== null && tile !== undefined;
-            }
-
-            return false;
-        }
-
-        static helper_writeJSON(layer: TilemapLayer, data: ITilemapLayerData) {
+            const layer = this.getObject();
 
             const tilemap = layer.tilemap as Tilemap;
 
@@ -75,17 +71,63 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             data.tilesets = tilemap.tilesets.map(t => t.name);
         }
 
-        static helper_init(support: StaticTilemapLayerEditorSupport) {
+        getOrientation() {
 
-            const obj = support.getObject();
-
-            support.addComponent(
-
-                new TransformComponent(obj as unknown as ITransformLikeObject),
-                new VisibleComponent(obj as unknown as IVisibleLikeObject),
-            );
-
-            support.setLabel(obj.layer.name);
+            return this.getObject().tilemap.orientation as any as Phaser.Tilemaps.Orientation;
         }
+
+        static helper_interactiveCallback(hitArea: any, x: number, y: number, layer: TilemapLayer) {
+
+            if (x >= -layer.width && y >= -layer.height && x <= layer.width && y <= layer.height) {
+
+                let worldToTile: (worldX: number, worldY: number, layer: Phaser.Tilemaps.LayerData) => { tileX: number, tileY: number };
+
+                const orientation = layer.tilemap.orientation as any as number;
+
+                if (orientation === Phaser.Tilemaps.Orientation.ISOMETRIC) {
+
+                    worldToTile = TilemapLayerEditorSupport.isometricWorldToTileXY;
+
+                } else {
+
+                    worldToTile = TilemapLayerEditorSupport.worldToTileXY;
+                }
+
+                const { tileX, tileY } = worldToTile(x, y, layer.tilemap.layer);
+
+                const tile = layer.getTileAt(tileX, tileY);
+
+                return tile !== null && tile !== undefined;
+            }
+
+            return false;
+        }
+
+        private static worldToTileXY(worldX: number, worldY: number, layer: Phaser.Tilemaps.LayerData) {
+
+            const tilemapLayer = layer.tilemapLayer;
+
+            const tileX = Math.floor(worldX / layer.baseTileWidth * tilemapLayer.scaleX);
+            const tileY = Math.floor(worldY / layer.baseTileHeight * tilemapLayer.scaleY)
+
+            return { tileX, tileY };
+        };
+
+        private static isometricWorldToTileXY(worldX: number, worldY: number, layer: Phaser.Tilemaps.LayerData) {
+
+            let tileWidth = layer.baseTileWidth;
+            let tileHeight = layer.baseTileHeight;
+            const tilemapLayer = layer.tilemapLayer;
+
+            tileHeight *= tilemapLayer.scaleY;
+            tileWidth *= tilemapLayer.scaleX;
+
+            worldX -= tileWidth / 2;
+
+            const tileX = Math.floor((worldX / (tileWidth / 2) + worldY / (tileHeight / 2)) / 2);
+            const tileY = Math.floor((worldY / (tileHeight / 2) - worldX / (tileWidth / 2)) / 2);
+
+            return { tileX, tileY };
+        };
     }
 }

@@ -774,7 +774,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             // for some reason, we should do this after a time, or the game is not stopped well.
             setTimeout(() => {
+
                 this._game.loop.stop();
+
             }, 500);
 
             await this.updateTitleIcon(true);

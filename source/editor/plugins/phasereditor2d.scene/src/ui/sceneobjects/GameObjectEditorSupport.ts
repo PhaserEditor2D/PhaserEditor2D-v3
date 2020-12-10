@@ -180,11 +180,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 h = h / sprite.scaleY;
             }
 
-            const ox = sprite.originX;
-            const oy = sprite.originY;
+            const { originX, originY } = this.getScreenBoundsOrigin();
 
-            const x = -w * ox;
-            const y = -h * oy;
+            const x = -w * originX;
+            const y = -h * originY;
 
             const tx = sprite.getWorldTransformMatrix();
 
@@ -194,6 +193,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             tx.transformPoint(x, y + h, points[3]);
 
             return points.map(p => camera.getScreenPoint(p.x, p.y));
+        }
+
+        protected getScreenBoundsOrigin(): { originX: number, originY: number } {
+
+            const { originX, originY } = this.getObject() as any;
+
+            return { originX, originY };
         }
 
         // tslint:disable-next-line:ban-types

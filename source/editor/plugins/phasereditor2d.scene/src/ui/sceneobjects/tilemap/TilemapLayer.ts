@@ -2,15 +2,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TilemapLayer extends Phaser.Tilemaps.TilemapLayer implements ISceneGameObject {
 
-        private _editorSupport: StaticTilemapLayerEditorSupport;
+        private _editorSupport: TilemapLayerEditorSupport;
 
         constructor(scene: Scene, tilemap: Tilemap, layerName: string) {
             super(scene, tilemap, tilemap.getLayerIndex(layerName), tilemap.tilesets);
 
             this.setRenderOrder(tilemap.renderOrder);
+
             this.setOrigin(0, 0);
 
-            this._editorSupport = new StaticTilemapLayerEditorSupport(this, scene);
+            // we do this to prevent a wrong culling when the camera is scrolled and zoomed.
+            this.setCullPadding(Number.MAX_VALUE, Number.MAX_VALUE);
+
+            this._editorSupport = new TilemapLayerEditorSupport(this, scene);
         }
 
         static scanTilesets(layer: TilemapLayer) {
@@ -58,7 +62,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
 
-        getEditorSupport(): StaticTilemapLayerEditorSupport {
+        getEditorSupport(): TilemapLayerEditorSupport {
 
             return this._editorSupport;
         }

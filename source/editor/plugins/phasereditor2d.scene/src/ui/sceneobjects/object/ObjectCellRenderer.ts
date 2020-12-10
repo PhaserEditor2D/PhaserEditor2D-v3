@@ -64,13 +64,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.setOrigin(0, 0);
                 obj.setScale(1, 1);
 
-                const w = Math.min(this._maxWidth, Math.floor(obj.width));
-                const h = Math.min(this._maxHeight, Math.floor(obj.height));
+                let renderX = 0;
+                let renderY = 0;
+                let renderWidth = obj.width;
+                let renderHeight = obj.height;
+
+                if (obj instanceof sceneobjects.TilemapLayer) {
+
+                    const layer = obj as sceneobjects.TilemapLayer;
+
+                    if (layer.getEditorSupport().getOrientation() === Phaser.Tilemaps.Orientation.ISOMETRIC) {
+
+                        renderX = layer.width / 2;
+                        renderY = -layer.height / 2;
+                        renderWidth = layer.width * 2;
+                        renderHeight = layer.height * 2;
+                    }
+                }
+
+                renderWidth = Math.min(this._maxWidth, renderWidth);
+                renderHeight = Math.min(this._maxWidth, renderHeight);
 
                 const render = new Phaser.GameObjects.RenderTexture(
-                    support.getScene(), 0, 0, w, h);
+                    support.getScene(), 0, 0, renderWidth, renderHeight);
 
-                render.draw(obj, 0, 0);
+                render.draw(obj, renderX, renderY);
 
                 render.snapshot(imgElement => {
 
