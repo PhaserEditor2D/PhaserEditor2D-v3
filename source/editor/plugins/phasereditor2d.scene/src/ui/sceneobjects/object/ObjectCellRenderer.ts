@@ -59,10 +59,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const originY = obj.originY;
                 const scaleX = obj.scaleX;
                 const scaleY = obj.scaleY;
+                const flipY = obj.flipY;
 
                 obj.setAngle(0);
                 obj.setOrigin(0, 0);
                 obj.setScale(1, 1);
+                obj.setFlipY(!flipY);
 
                 let renderX = 0;
                 let renderY = 0;
@@ -83,7 +85,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
 
                 renderWidth = Math.min(this._maxWidth, renderWidth);
-                renderHeight = Math.min(this._maxWidth, renderHeight);
+                renderHeight = Math.min(this._maxHeight, renderHeight);
 
                 const render = new Phaser.GameObjects.RenderTexture(
                     support.getScene(), 0, 0, renderWidth, renderHeight);
@@ -103,6 +105,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.setAngle(angle);
                 obj.setOrigin(originX, originY);
                 obj.setScale(scaleX, scaleY);
+                obj.setFlipY(flipY);
 
                 render.destroy();
             });
