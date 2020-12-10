@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 3.9.2-next
+
+* Adopt Phaser v3.50.
+* Scene Editor: uses WEBGL for scene's thumbnail generation.
+* Scene Editor: support for all tilemap orientation.
+* Project templates:
+    * Migrated Sunny Land template to Phaser v3.50.
+
 ## Version 3.9.2 - Dec 7, 2020
 
 * Viewer: massive improvement of rendering performance.
