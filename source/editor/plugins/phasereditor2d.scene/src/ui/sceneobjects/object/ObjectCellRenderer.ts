@@ -21,7 +21,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (cached) {
 
-                cached.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
+                const ctx = args.canvasContext;
+                ctx.save();
+                ctx.translate(0, args.y + args.h);
+                ctx.scale(1, -1);
+                cached.paint(args.canvasContext, args.x, 0, args.w, args.h, false);
+                ctx.restore();
             }
         }
 
@@ -59,12 +64,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const originY = obj.originY;
                 const scaleX = obj.scaleX;
                 const scaleY = obj.scaleY;
-                const flipY = obj.flipY;
 
                 obj.setAngle(0);
                 obj.setOrigin(0, 0);
                 obj.setScale(1, 1);
-                obj.setFlipY(!flipY);
 
                 let renderX = 0;
                 let renderY = 0;
@@ -78,7 +81,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     if (layer.getEditorSupport().getOrientation() === Phaser.Tilemaps.Orientation.ISOMETRIC) {
 
                         renderX = layer.width / 2;
-                        renderY = -layer.height / 2;
+                        renderY = 0;
                         renderWidth = layer.width * 2;
                         renderHeight = layer.height * 2;
                     }
@@ -105,7 +108,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.setAngle(angle);
                 obj.setOrigin(originX, originY);
                 obj.setScale(scaleX, scaleY);
-                obj.setFlipY(flipY);
 
                 render.destroy();
             });
