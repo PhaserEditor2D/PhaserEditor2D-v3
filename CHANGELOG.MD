@@ -5,6 +5,7 @@
 * Adopt Phaser v3.50.
 * Scene Editor: uses WEBGL for scene's thumbnail generation.
 * Scene Editor: support for all tilemap orientation.
+* Scene Editor: Bitmap Text shadow properties.
 * Project templates:
     * Migrated Sunny Land template to Phaser v3.50.
 
