@@ -27,6 +27,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ctx.scale(1, -1);
                 cached.paint(args.canvasContext, args.x, 0, args.w, args.h, false);
                 ctx.restore();
+
+                //cached.paint(args.canvasContext, args.x, args.y, args.w, args.h, false);
             }
         }
 
