@@ -170,8 +170,8 @@ utils.makeHelpFile([
     "Phaser.Tilemaps.Tileset.tileMargin",
     "Phaser.Tilemaps.Tileset.tileSpacing",
 
-    "Phaser.Tilemaps.StaticTilemapLayer",
-    "Phaser.Tilemaps.DynamicTilemapLayer",
+    "Phaser.Tilemaps.TilemapLayer",
+    "Phaser.Tilemaps.TilemapLayer",
 
     "Phaser.Tilemaps.LayerData",
     "Phaser.Tilemaps.LayerData.name",
