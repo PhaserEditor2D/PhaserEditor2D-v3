@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new BitmapTextEditorSupport(this, scene);
         }
 
-        getEditorSupport(): GameObjectEditorSupport<ISceneGameObject> {
+        getEditorSupport(): BitmapTextEditorSupport {
 
             return this._editorSupport;
         }
