@@ -155,6 +155,10 @@ utils.makeHelpFile([
     "Phaser.GameObjects.BitmapText.align",
     "Phaser.GameObjects.BitmapText.setFontSize",
     "Phaser.GameObjects.BitmapText.setLetterSpacing",
+    "Phaser.GameObjects.BitmapText.dropShadowX",
+    "Phaser.GameObjects.BitmapText.dropShadowY",
+    "Phaser.GameObjects.BitmapText.dropShadowColor",
+    "Phaser.GameObjects.BitmapText.dropShadowAlpha",
 
 
     "Phaser.Tilemaps.Tilemap",
