@@ -21,11 +21,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
 
-            return JSON.stringify({
-                text: obj.text,
-                font: obj.font,
-                fontSize: obj.fontSize
-            });
+            return this.computeContentHashWithComponent(obj,
+                TintComponent,
+                TextContentComponent,
+                BitmapTextComponent);
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {

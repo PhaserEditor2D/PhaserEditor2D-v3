@@ -34,6 +34,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract setInteractive(): void;
 
+        protected computeContentHashWithProperties(obj: ISceneGameObject, ...properties: Array<IProperty<any>>) {
+
+            return properties.map(prop => prop.name + "=" + prop.getValue(obj)).join(";");
+        }
+
+        protected computeContentHashWithComponent(obj: ISceneGameObject, ...compConstructors: any[]) {
+
+            const props = compConstructors.flatMap(ctr => [...obj.getEditorSupport().getComponent(ctr).getProperties()])
+
+            return this.computeContentHashWithProperties(obj, ...props);
+        }
+
         /**
          * Destroy the object. Return `true` if it requires a complete refresh of the scene, to re-build all objects.
          */
