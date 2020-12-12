@@ -43,6 +43,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _currentRefreshHash: string;
         private _editorState: IEditorState;
         private _localCoords: boolean;
+        private _cellRendererCache: CellRendererCache;
 
         constructor() {
             super("phasereditor2d.SceneEditor", SceneEditor.getFactory());
@@ -54,6 +55,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._propertyProvider = new properties.SceneEditorSectionProvider(this);
             this._menuCreator = new SceneEditorMenuCreator(this);
             this._localCoords = true;
+            this._cellRendererCache = new CellRendererCache();
         }
 
         getMenuCreator() {
@@ -610,6 +612,11 @@ namespace phasereditor2d.scene.ui.editor {
             return this._propertyProvider;
         }
 
+        getCellRendererCache() {
+
+            return this._cellRendererCache;
+        }
+
         onPartClosed() {
 
             if (super.onPartClosed()) {
@@ -618,6 +625,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                     this._scene.destroyGame();
                 }
+
+                this._cellRendererCache.clear();
 
                 return true;
             }
