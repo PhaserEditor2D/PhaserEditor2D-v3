@@ -45,7 +45,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
 
-            return obj.layer.name + "-TilemapLayer-" + obj.name;
+            const tilesetHash = obj.tileset.map(t => t.image).filter(img => img).map(img => img.key);
+
+            return (obj.tilemap as Tilemap).getEditorSupport().getId() + "-" + obj.layer.name + "-" + tilesetHash;
         }
 
         setInteractive(): void {
