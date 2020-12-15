@@ -213,9 +213,9 @@ namespace phasereditor2d.scene.ui {
 
             for (const obj of list) {
 
-                if (obj instanceof sceneobjects.Container) {
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    this.getInputSortedObjects2(result, obj.getList());
+                    this.getInputSortedObjects2(result, obj.getChildren());
 
                 } else {
 
@@ -237,9 +237,9 @@ namespace phasereditor2d.scene.ui {
 
                 visitor(obj);
 
-                if (obj instanceof sceneobjects.Container) {
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    this.visit2(visitor, obj.getList());
+                    this.visit2(visitor, obj.getChildren());
                 }
             }
         }
@@ -260,7 +260,7 @@ namespace phasereditor2d.scene.ui {
 
                     if (obj instanceof sceneobjects.Container) {
 
-                        this.visitAskChildren2(visitor, obj.getList());
+                        this.visitAskChildren2(visitor, obj.getChildren());
                     }
                 }
             }
@@ -270,7 +270,7 @@ namespace phasereditor2d.scene.ui {
 
             const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: any) => {
 
-                if (obj instanceof Phaser.GameObjects.GameObject) {
+                if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) {
 
                     return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
                 }
@@ -328,7 +328,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container) {
 
-                    i += this.buildObjectSortingMap2(map, obj.getList());
+                    i += this.buildObjectSortingMap2(map, obj.getChildren());
                 }
 
                 i++;
@@ -388,9 +388,9 @@ namespace phasereditor2d.scene.ui {
                     return obj;
                 }
 
-                if (obj instanceof sceneobjects.Container) {
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    const result = this.findByEditorId(obj.getList(), id);
+                    const result = this.findByEditorId(obj.getChildren(), id);
 
                     if (result) {
                         return result;

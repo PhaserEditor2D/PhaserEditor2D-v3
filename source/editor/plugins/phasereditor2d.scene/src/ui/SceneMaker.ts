@@ -20,6 +20,7 @@ namespace phasereditor2d.scene.ui {
         afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             let container: sceneobjects.Container;
+            let layer: sceneobjects.Layer;
 
             for (const sprite of this._editorScene.getEditor().getSelectedGameObjects()) {
 
@@ -39,6 +40,14 @@ namespace phasereditor2d.scene.ui {
                     } else if (sprite2.parentContainer) {
 
                         container = sprite2.parentContainer as sceneobjects.Container;
+
+                    } else if (sprite2 instanceof sceneobjects.Layer) {
+
+                        layer = sprite2;
+
+                    } else if (sprite2.displayList instanceof sceneobjects.Layer) {
+
+                        layer = sprite2.displayList;
                     }
                 }
             }
@@ -57,6 +66,13 @@ namespace phasereditor2d.scene.ui {
                     container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
                     sprite.x = p.x;
                     sprite.y = p.y;
+                }
+
+            } else if (layer) {
+
+                for (const obj of sprites) {
+
+                    layer.add(obj);
                 }
 
             } else {
@@ -422,6 +438,7 @@ namespace phasereditor2d.scene.ui {
             });
 
             for (const newObject of newObjects) {
+
                 this._editorScene.visit(obj => {
 
                     if (obj !== newObject) {

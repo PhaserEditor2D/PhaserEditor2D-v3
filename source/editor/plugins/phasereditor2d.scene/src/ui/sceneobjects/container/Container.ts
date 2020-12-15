@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._editorSupport;
         }
 
-        getList(): ISceneGameObject[] {
+        getChildren(): ISceneGameObject[] {
 
             return this.list as any;
         }

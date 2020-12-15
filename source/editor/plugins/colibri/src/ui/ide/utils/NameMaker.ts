@@ -13,8 +13,11 @@ namespace colibri.ui.ide.utils {
         }
 
         update(objects: any[]) {
+
             for (const obj of objects) {
+
                 const name = this._getName(obj);
+
                 this._nameSet.add(name);
             }
         }

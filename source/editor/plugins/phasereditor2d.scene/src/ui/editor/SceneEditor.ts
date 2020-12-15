@@ -505,7 +505,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             return this.getSelection()
 
-                .filter(obj => obj instanceof Phaser.GameObjects.GameObject) as any;
+                .filter(obj => obj instanceof Phaser.GameObjects.GameObject || obj instanceof sceneobjects.Layer) as any;
         }
 
         getSelectedLists(): sceneobjects.ObjectList[] {
@@ -521,34 +521,42 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getDropManager() {
+
             return this._dropManager;
         }
 
         getClipboardManager() {
+
             return this._clipboardManager;
         }
 
         getToolsManager() {
+
             return this._toolsManager;
         }
 
         getMouseManager() {
+
             return this._mouseManager;
         }
 
         getSelectionManager() {
+
             return this._selectionManager;
         }
 
         getOverlayLayer() {
+
             return this._overlayLayer;
         }
 
         getGameCanvas() {
+
             return this._gameCanvas;
         }
 
         getScene() {
+
             return this._scene;
         }
 
@@ -557,10 +565,12 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getSceneMaker() {
+
             return this._scene.getMaker();
         }
 
         getPackFinder() {
+
             return this.getSceneMaker().getPackFinder();
         }
 

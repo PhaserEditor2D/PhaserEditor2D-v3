@@ -32,6 +32,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             scene.sys.displayList.add(obj as Phaser.GameObjects.GameObject);
         }
 
+        static getObjectParent(obj: ISceneGameObject): Container|Layer {
+
+            if (obj.parentContainer) {
+
+                return obj.parentContainer as Container;
+            }
+
+            if (obj.displayList instanceof Layer) {
+
+                return obj.displayList;
+            }
+
+            return null;
+        }
+
         abstract setInteractive(): void;
 
         protected computeContentHashWithProperties(obj: ISceneGameObject, ...properties: Array<IProperty<any>>) {
@@ -246,8 +261,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static hasEditorSupport(obj: any) {
 
-            return obj && obj instanceof Phaser.GameObjects.GameObject
-                && typeof obj["getEditorSupport"] === "function";
+            try {
+
+                // tslint:disable-next-line:ban-types
+                const support = obj["getEditorSupport"] as Function;
+
+                return support.apply(obj) instanceof GameObjectEditorSupport;
+
+            } catch (e) {
+                // nothing
+            }
+
+            return false;
         }
 
         static getEditorSupport(obj: any) {
