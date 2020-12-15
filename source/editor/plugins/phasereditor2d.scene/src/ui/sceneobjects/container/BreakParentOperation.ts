@@ -2,7 +2,7 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class BreakContainerOperation extends editor.undo.SceneSnapshotOperation {
+    export class BreakParentOperation extends editor.undo.SceneSnapshotOperation {
 
         protected async performModification() {
 
@@ -12,12 +12,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const selectedObjects = editor.getSelectedGameObjects();
 
-            const sel = BreakContainerOperation.breakContainer(scene, selectedObjects);
+            const sel = BreakParentOperation.breakParent(scene, selectedObjects);
 
             this.getEditor().setSelection(sel);
         }
 
-        static breakContainer(scene: Scene, selectedObjects: ISceneGameObject[]) {
+        static breakParent(scene: Scene, selectedObjects: ISceneGameObject[]) {
 
             const displayList = scene.sys.displayList;
 
@@ -25,9 +25,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of selectedObjects) {
 
-                const container = obj as sceneobjects.Container;
+                const parent = obj as sceneobjects.Container | sceneobjects.Layer;
 
-                const children = [...container.list];
+                const children = [...parent.getChildren()];
 
                 for (const child of children) {
 
@@ -39,24 +39,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     sel.push(sprite);
 
-                    container.remove(sprite);
+                    parent.remove(sprite);
 
-                    if (container.parentContainer) {
+                    if (parent.parentContainer) {
 
-                        container.parentContainer.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+                        parent.parentContainer.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
 
-                        container.parentContainer.add(sprite);
+                        parent.parentContainer.add(sprite);
 
                     } else {
 
-                        displayList.add(sprite);
+                        if (parent.displayList instanceof Layer) {
+
+                            parent.displayList.add(sprite);
+
+                        } else {
+
+                            displayList.add(sprite);
+                        }
                     }
 
                     sprite.x = p.x;
                     sprite.y = p.y;
                 }
 
-                container.getEditorSupport().destroy();
+                parent.getEditorSupport().destroy();
             }
 
             return sel;

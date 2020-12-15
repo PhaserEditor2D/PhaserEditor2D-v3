@@ -197,11 +197,12 @@ namespace phasereditor2d.scene.ui.editor {
 
         private createContainerMenu(): controls.Menu {
 
-            const menu = new controls.Menu("Container");
+            const menu = new controls.Menu("Parent");
 
             menu.addCommand(commands.CMD_JOIN_IN_CONTAINER);
             menu.addCommand(commands.CMD_TRIM_CONTAINER);
-            menu.addCommand(commands.CMD_BREAK_CONTAINER);
+            menu.addSeparator();
+            menu.addCommand(commands.CMD_BREAK_PARENT);
             menu.addCommand(commands.CMD_MOVE_TO_PARENT);
             menu.addCommand(commands.CMD_SELECT_PARENT);
 

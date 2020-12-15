@@ -141,7 +141,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container) {
 
-                    sceneobjects.BreakContainerOperation.breakContainer(this, [obj]);
+                    sceneobjects.BreakParentOperation.breakParent(this, [obj]);
 
                     this.breakContainers(obj.list);
                 }

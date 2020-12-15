@@ -57,6 +57,11 @@ namespace phasereditor2d.scene.ui {
 
                 for (const obj of sprites) {
 
+                    if (obj instanceof sceneobjects.Layer) {
+
+                        continue;
+                    }
+
                     const sprite = obj as sceneobjects.Sprite;
                     const p = new Phaser.Math.Vector2();
                     sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
@@ -73,6 +78,11 @@ namespace phasereditor2d.scene.ui {
 
                 for (const obj of sprites) {
 
+                    if (obj instanceof sceneobjects.Layer) {
+
+                        continue;
+                    }
+
                     layer.add(obj);
                 }
 
@@ -85,6 +95,7 @@ namespace phasereditor2d.scene.ui {
         private afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             if (!prefabObj) {
+
                 return;
             }
 

@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
-    export const CMD_BREAK_CONTAINER = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
+    export const CMD_BREAK_PARENT = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
     export const CMD_TRIM_CONTAINER = "phasereditor2d.scene.ui.editor.commands.TrimContainer";
     export const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
     export const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
@@ -54,6 +54,17 @@ namespace phasereditor2d.scene.ui.editor.commands {
             && (args.activeEditor as SceneEditor).getSelectedGameObjects()
 
                 .filter(obj => obj instanceof sceneobjects.Container)
+
+                .length === args.activeEditor.getSelection().length;
+    }
+
+    function isOnlyContainerOrLayerSelected(args: colibri.ui.ide.commands.HandlerArgs) {
+
+        return isSceneScope(args) && editorHasSelection(args)
+
+            && (args.activeEditor as SceneEditor).getSelectedGameObjects()
+
+                .filter(obj => obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer)
 
                 .length === args.activeEditor.getSelection().length;
     }
@@ -616,16 +627,16 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.add({
                 command: {
-                    id: CMD_BREAK_CONTAINER,
-                    name: "Break Container",
+                    id: CMD_BREAK_PARENT,
+                    name: "Break Parent",
                     tooltip: "Destroy container and re-parent children.",
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
-                    testFunc: isOnlyContainerSelected,
+                    testFunc: isOnlyContainerOrLayerSelected,
 
                     executeFunc: args => args.activeEditor.getUndoManager().add(
-                        new ui.sceneobjects.BreakContainerOperation(args.activeEditor as SceneEditor)
+                        new ui.sceneobjects.BreakParentOperation(args.activeEditor as SceneEditor)
                     )
                 },
                 keys: {
@@ -683,9 +694,33 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
-                    testFunc: args => isSceneScope(args) && editorHasSelection(args)
-                        && (args.activeEditor as SceneEditor).getSelectedGameObjects()
-                            .length === args.activeEditor.getSelection().length,
+                    testFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        if (isSceneScope(args) && editorHasSelection(args)) {
+
+                            for (const obj of editor.getSelection()) {
+
+                                if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) {
+
+                                    if (obj instanceof sceneobjects.Layer) {
+
+                                        return false;
+                                    }
+
+                                } else {
+
+                                    return false;
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+
+                    },
 
                     executeFunc: args => {
 
