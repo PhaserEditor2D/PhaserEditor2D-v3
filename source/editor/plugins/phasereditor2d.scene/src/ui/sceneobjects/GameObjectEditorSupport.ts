@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             scene.sys.displayList.add(obj as Phaser.GameObjects.GameObject);
         }
 
-        static getObjectParent(obj: ISceneGameObject): Container|Layer {
+        static getObjectParent(obj: ISceneGameObject): Container | Layer {
 
             if (obj.parentContainer) {
 
@@ -335,32 +335,35 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         _setPrefabId(prefabId: string) {
+
             this._prefabId = prefabId;
         }
 
         getAllParents() {
 
-            const list: Container[] = [];
+            const list: Array<Container | Layer> = [];
 
             this.getAllParents2(list);
 
             return list;
         }
 
-        isDescendentOf(container: Container) {
+        isDescendentOf(parent: Container | Layer) {
 
             const set = new Set(this.getAllParents());
 
-            return set.has(container);
+            return set.has(parent);
         }
 
-        private getAllParents2(list: Container[]) {
+        private getAllParents2(list: Array<Container | Layer>) {
 
             const obj = this.getObject();
 
-            if (obj.parentContainer) {
+            const objParent = GameObjectEditorSupport.getObjectParent(obj);
 
-                list.push(obj.parentContainer as Container);
+            if (objParent) {
+
+                list.push(objParent);
             }
 
             return list;

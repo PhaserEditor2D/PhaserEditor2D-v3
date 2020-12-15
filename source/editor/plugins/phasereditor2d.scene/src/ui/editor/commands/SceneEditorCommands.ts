@@ -561,7 +561,25 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
-                    testFunc: args => isSceneScope(args),
+                    testFunc: args => {
+
+                        if (isSceneScope(args)) {
+
+                            const editor = args.activeEditor as editor.SceneEditor;
+
+                            for (const obj of editor.getSelectedGameObjects()) {
+
+                                if (obj instanceof sceneobjects.Layer) {
+
+                                    return false;
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+                    },
 
                     executeFunc: args => args.activeEditor.getUndoManager().add(
                         new ui.sceneobjects.CreateContainerWithObjectsOperation(args.activeEditor as SceneEditor)
