@@ -646,9 +646,13 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 handler: {
 
                     testFunc: args => isSceneScope(args) && (args.activeEditor as SceneEditor)
+
                         .getSelectedGameObjects()
-                        .map(obj => obj.parentContainer)
+
+                        .map(obj => sceneobjects.GameObjectEditorSupport.getObjectParent(obj))
+
                         .filter(parent => parent !== undefined && parent !== null)
+
                         .length > 0,
 
                     executeFunc: args => {
@@ -656,7 +660,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const editor = args.activeEditor as SceneEditor;
 
                         const sel = editor.getSelectedGameObjects()
-                            .map(obj => obj.parentContainer)
+
+                            .map(obj => sceneobjects.GameObjectEditorSupport.getObjectParent(obj))
+
                             .filter(parent => parent !== undefined && parent !== null);
 
                         editor.setSelection(sel);
