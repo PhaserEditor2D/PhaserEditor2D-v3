@@ -139,12 +139,11 @@ namespace phasereditor2d.scene.ui {
 
                     if (scene.getPrefabObject() !== obj) {
 
-                        const container = (obj as Phaser.GameObjects.GameObject).parentContainer;
+                        const parent = sceneobjects.GameObjectEditorSupport.getObjectParent(obj);
 
+                        if (parent) {
 
-                        if (container) {
-
-                            return this.isNonTopPrefabObject(container);
+                            return this.isNonTopPrefabObject(parent);
                         }
 
                         return true;
@@ -156,10 +155,12 @@ namespace phasereditor2d.scene.ui {
         }
 
         getObjectLists() {
+
             return this._objectLists;
         }
 
         getSettings() {
+
             return this._settings;
         }
 
@@ -258,7 +259,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (visitChildren) {
 
-                    if (obj instanceof sceneobjects.Container) {
+                    if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
                         this.visitAskChildren2(visitor, obj.getChildren());
                     }
@@ -326,7 +327,7 @@ namespace phasereditor2d.scene.ui {
 
                 map.set(obj, i);
 
-                if (obj instanceof sceneobjects.Container) {
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
                     i += this.buildObjectSortingMap2(map, obj.getChildren());
                 }

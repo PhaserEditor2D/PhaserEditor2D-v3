@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isAllowPickChildren() {
 
-            return true;
+            return !this.isPrefabInstance() && this.getObject().visible;
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {

@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         getChildren(parent: sceneobjects.ISceneGameObject): any[] {
 
-            if (parent instanceof Phaser.GameObjects.DisplayList || parent instanceof sceneobjects.Layer) {
+            if (parent instanceof Phaser.GameObjects.DisplayList) {
 
                 const list = [...parent.getChildren()];
 
@@ -46,14 +46,14 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return list;
 
-            } else if (parent instanceof Phaser.GameObjects.Container) {
+            } else if (parent instanceof sceneobjects.Container || parent instanceof sceneobjects.Layer) {
 
                 if (parent.getEditorSupport().isPrefabInstance()) {
 
                     return [];
                 }
 
-                const list = [...parent.list];
+                const list = [...parent.getChildren()];
 
                 list.reverse();
 

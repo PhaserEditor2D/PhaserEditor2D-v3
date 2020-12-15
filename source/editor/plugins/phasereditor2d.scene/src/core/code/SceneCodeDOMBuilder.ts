@@ -175,7 +175,7 @@ namespace phasereditor2d.scene.core.code {
                     fields.push(field);
                 }
 
-                if (obj instanceof Container
+                if ((obj instanceof Container || obj instanceof Layer)
                     && !obj.getEditorSupport().isPrefabInstance()) {
 
                     this.buildObjectClassFields(fields, obj.getChildren());
@@ -472,13 +472,15 @@ namespace phasereditor2d.scene.core.code {
 
             const varname = formatToValidVarName(objSupport.getLabel());
 
+            const objParent = ui.sceneobjects.GameObjectEditorSupport.getObjectParent(obj);
+
             createMethodDecl.getBody().push(createObjectMethodCall);
 
             if (objSupport.isPrefabInstance()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
 
-                if (!obj.parentContainer) {
+                if (!objParent) {
 
                     const addToScene = new MethodCallCodeDOM("existing", "this.add");
                     addToScene.arg(varname);
@@ -500,23 +502,21 @@ namespace phasereditor2d.scene.core.code {
 
             createMethodDecl.getBody().push(...result.statements);
 
-            const objParent = ui.sceneobjects.GameObjectEditorSupport.getObjectParent(obj);
-
             if (objParent) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
 
                 const parentIsPrefabObject = this._scene.isPrefabSceneType()
-                    && obj.parentContainer as any === this._scene.getPrefabObject();
+                    && objParent === this._scene.getPrefabObject();
 
-                const containerVarname = parentIsPrefabObject ? "this"
+                const parentVarname = parentIsPrefabObject ? "this"
                     : formatToValidVarName(objParent.getEditorSupport().getLabel());
 
-                const addToContainerCall = new MethodCallCodeDOM("add", containerVarname);
+                const addToParentCall = new MethodCallCodeDOM("add", parentVarname);
 
-                addToContainerCall.arg(varname);
+                addToParentCall.arg(varname);
 
-                createMethodDecl.getBody().push(addToContainerCall);
+                createMethodDecl.getBody().push(addToParentCall);
             }
 
             if ((obj instanceof Container || obj instanceof Layer) && !objSupport.isPrefabInstance()) {
@@ -525,7 +525,7 @@ namespace phasereditor2d.scene.core.code {
 
                 this.addChildrenObjects({
                     createMethodDecl,
-                    obj: obj as Container,
+                    obj,
                     lazyStatements
                 });
             }

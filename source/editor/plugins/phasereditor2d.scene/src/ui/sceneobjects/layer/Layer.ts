@@ -2,7 +2,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class Layer extends Phaser.GameObjects.Layer implements ISceneGameObject {
-        
+
         private _editorSupport: LayerEditorSupport;
 
         constructor(scene: Scene, list: Phaser.GameObjects.GameObject[]) {
@@ -29,19 +29,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         body: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody | MatterJS.BodyType;
 
         setInteractive(hitArea?: any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): this {
-            throw new Error("Method not implemented.");
+
+            return this;
         }
 
         disableInteractive(): this {
-            throw new Error("Method not implemented.");
+
+            return this;
         }
 
         removeInteractive(): this {
-            throw new Error("Method not implemented.");
+
+            return this
         }
 
         getIndexList(): number[] {
-            throw new Error("Method not implemented.");
+
+            return [];
         }
 
         eventNames(): Array<string | symbol> {
