@@ -6,6 +6,7 @@
 * Scene Editor: uses WEBGL for scene's thumbnail generation.
 * Scene Editor: support for all tilemap orientation.
 * Scene Editor: Bitmap Text shadow properties.
+* Scene Editor: Layer object.
 * Project templates:
     * Migrated Sunny Land template to Phaser v3.50.
 
