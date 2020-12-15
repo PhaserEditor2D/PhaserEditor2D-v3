@@ -321,10 +321,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getParentId(): string {
 
-            if (this.getObject().parentContainer) {
+            const parent = GameObjectEditorSupport.getObjectParent(this.getObject());
 
-                return (this.getObject().parentContainer as unknown as ISceneGameObject)
-                    .getEditorSupport().getId();
+            if (parent) {
+
+                return parent.getEditorSupport().getId();
             }
 
             return undefined;

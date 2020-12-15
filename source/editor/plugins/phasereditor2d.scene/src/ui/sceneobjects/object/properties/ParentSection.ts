@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page,
-                "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent Container", false, true);
+                "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent", false, true);
         }
 
         getSectionHelpPath() {
@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 2);
 
-            this.createLabel(comp, "Parent", "The parent Container of the object or the Display List");
+            this.createLabel(comp, "Parent", "The parent Container or Layer of the object, or the Display List");
 
             const btn = this.createButton(comp, "(Select)", e => {
 
@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const parents = sel
 
-                    .map(obj => obj.parentContainer as Container)
+                    .map(obj => sceneobjects.GameObjectEditorSupport.getObjectParent(obj))
 
                     .filter(cont => cont);
 

@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._editor.getScene().visit(obj => {
 
-                    if (obj instanceof Container) {
+                    if (obj instanceof Container || obj instanceof Layer) {
 
                         const owner = obj.getEditorSupport().getOwnerPrefabInstance();
 
@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Move", sel => {
 
-                const parent = sel[0];
+                const parent = sel[0] as (Container | Layer);
 
                 if (parent instanceof Phaser.GameObjects.DisplayList) {
 
@@ -59,7 +59,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this._editor.getUndoManager().add(
                         new MoveToContainerOperation(this._editor,
-                            (parent as Container).getEditorSupport().getId()));
+                            parent.getEditorSupport().getId()));
                 }
             }));
 

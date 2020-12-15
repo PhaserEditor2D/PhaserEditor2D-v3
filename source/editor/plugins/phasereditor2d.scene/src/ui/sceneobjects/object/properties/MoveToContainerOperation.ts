@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._parentId = parentId;
         }
 
-        static canMoveAllTo(objList: ISceneGameObject[], container: Container) {
+        static canMoveAllTo(objList: ISceneGameObject[], container: Container | Layer) {
 
             for (const obj of objList) {
 
@@ -32,21 +32,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return true;
         }
 
-        static canMoveTo(obj: ISceneGameObject, container: Container) {
+        static canMoveTo(obj: ISceneGameObject, targetParent: Container | Layer) {
 
-            if (obj.parentContainer === container) {
+            const objParent = GameObjectEditorSupport.getObjectParent(obj);
+
+            if (objParent === targetParent) {
 
                 return false;
             }
 
-            if (obj instanceof Container) {
+            if (obj instanceof Container || obj instanceof Layer) {
 
-                if (obj === container) {
+                if (obj === targetParent) {
 
                     return false;
                 }
 
-                const parents = new Set(container.getEditorSupport().getAllParents());
+                const parents = new Set(targetParent.getEditorSupport().getAllParents());
 
                 if (parents.has(obj)) {
 
@@ -67,6 +69,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
+                const currentParent = GameObjectEditorSupport.getObjectParent(obj);
+
                 const objSupport = obj.getEditorSupport();
 
                 if (objSupport.getParentId() === this._parentId) {
@@ -77,9 +81,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const worldPoint = new Phaser.Math.Vector2(0, 0);
                 sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
-                if (sprite.parentContainer) {
+                if (currentParent) {
 
-                    sprite.parentContainer.remove(sprite);
+                    currentParent.remove(sprite);
 
                 } else {
 
@@ -88,16 +92,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (this._parentId) {
 
-                    const container = map.get(this._parentId) as Container;
+                    const newParent = map.get(this._parentId) as (Container | Layer);
 
                     const p = new Phaser.Math.Vector2(0, 0);
 
-                    container.getWorldTransformMatrix().applyInverse(worldPoint.x, worldPoint.y, p);
+                    if (newParent instanceof Container) {
+
+                        newParent.getWorldTransformMatrix().applyInverse(worldPoint.x, worldPoint.y, p);
+
+                    } else {
+
+                        p.set(worldPoint.x, worldPoint.y);
+                    }
 
                     sprite.x = p.x;
                     sprite.y = p.y;
 
-                    container.add(sprite);
+                    newParent.add(sprite);
 
                 } else {
 
