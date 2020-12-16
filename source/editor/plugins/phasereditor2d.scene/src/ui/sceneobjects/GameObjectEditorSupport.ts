@@ -12,6 +12,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return GameObjectEditorSupport.getObjectParent(obj);
     }
 
+    export function getObjectParentOrDisplayList(obj: ISceneGameObject) {
+
+        return getObjectParent(obj) || obj.getEditorSupport().getScene().sys.displayList;
+    }
+
     export abstract class GameObjectEditorSupport<T extends ISceneGameObject> extends EditorSupport<T> {
 
         private _extension: SceneGameObjectExtension;

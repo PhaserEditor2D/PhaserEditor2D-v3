@@ -16,6 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createMenu(menu: controls.Menu) {
 
+            menu.addCommand(editor.commands.CMD_JOIN_IN_LAYER);
             menu.addCommand(editor.commands.CMD_JOIN_IN_CONTAINER);
             menu.addCommand(editor.commands.CMD_MOVE_TO_PARENT);
             menu.addCommand(editor.commands.CMD_SELECT_PARENT);

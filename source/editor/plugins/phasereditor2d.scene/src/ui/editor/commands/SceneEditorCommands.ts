@@ -5,6 +5,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
+    export const CMD_JOIN_IN_LAYER = "phasereditor2d.scene.ui.editor.commands.JoinInLayer";
     export const CMD_BREAK_PARENT = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
     export const CMD_TRIM_CONTAINER = "phasereditor2d.scene.ui.editor.commands.TrimContainer";
     export const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
@@ -91,7 +92,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             SceneEditorCommands.registerSelectionCommands(manager);
 
-            SceneEditorCommands.registerContainerCommands(manager);
+            SceneEditorCommands.registerParentCommands(manager);
 
             SceneEditorCommands.registerCompilerCommands(manager);
 
@@ -560,7 +561,43 @@ namespace phasereditor2d.scene.ui.editor.commands {
             }
         }
 
-        private static registerContainerCommands(manager: colibri.ui.ide.commands.CommandManager) {
+        private static registerParentCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // join in layer
+
+            manager.add({
+                command: {
+                    id: CMD_JOIN_IN_LAYER,
+                    name: "Create Layer With Selection",
+                    tooltip: "Create a layer with the selected objects",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: args => {
+
+                        if (isSceneScope(args)) {
+
+                            const editor = args.activeEditor as editor.SceneEditor;
+
+                            for (const obj of editor.getSelectedGameObjects()) {
+
+                                if (obj instanceof sceneobjects.Layer) {
+
+                                    return false;
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+                    },
+
+                    executeFunc: args => args.activeEditor.getUndoManager().add(
+                        new ui.sceneobjects.CreateLayerWithObjectsOperation(args.activeEditor as SceneEditor)
+                    )
+                }
+            });
 
             // join in container
 

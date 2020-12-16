@@ -20,8 +20,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             objects.sort((a, b) => {
 
-                const aParent = sceneobjects.getObjectParent(a) || displayList;
-                const bParent = sceneobjects.getObjectParent(a) || displayList;
+                const aParent = sceneobjects.getObjectParentOrDisplayList(a);
+                const bParent = sceneobjects.getObjectParentOrDisplayList(a);
 
                 const aa = aParent.getIndex(a);
                 const bb = bParent.getIndex(b);
@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     for (const obj of objects) {
 
-                        (sceneobjects.getObjectParent(obj) || displayList).bringToTop(obj);
+                        sceneobjects.getObjectParentOrDisplayList(obj).bringToTop(obj);
                     }
 
                     break;
@@ -46,7 +46,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                         const obj = objects[objects.length - i - 1];
 
-                        (sceneobjects.getObjectParent(obj) || displayList).sendToBack(obj);
+                        sceneobjects.getObjectParentOrDisplayList(obj).sendToBack(obj);
                     }
 
                     break;
@@ -57,7 +57,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                         const obj = objects[objects.length - i - 1];
 
-                        (sceneobjects.getObjectParent(obj) || displayList).moveUp(obj);
+                        sceneobjects.getObjectParentOrDisplayList(obj).moveUp(obj);
                     }
 
                     break;
@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     for (const obj of objects) {
 
-                        (sceneobjects.getObjectParent(obj) || displayList).moveDown(obj);
+                        sceneobjects.getObjectParentOrDisplayList(obj).moveDown(obj);
                     }
 
                     break;
