@@ -52,12 +52,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             for (const obj of input) {
 
-                let parentId: string;
-
-                if (obj.parentContainer) {
-
-                    parentId = obj.getEditorSupport().getParentId();
-                }
+                const parentId = obj.getEditorSupport().getParentId();
 
                 const support = obj.getEditorSupport();
 
