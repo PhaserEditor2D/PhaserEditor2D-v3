@@ -271,7 +271,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     testFunc: args => isSceneScope(args)
                         && args.activeEditor.getSelection()
                             .filter(
-                                obj => obj instanceof Phaser.GameObjects.GameObject
+                                obj => sceneobjects.isGameObject(obj)
                                     && sceneobjects.GameObjectEditorSupport.hasObjectComponent(
                                         obj, sceneobjects.TextureComponent))
                             .length > 0,

@@ -505,7 +505,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             return this.getSelection()
 
-                .filter(obj => obj instanceof Phaser.GameObjects.GameObject || obj instanceof sceneobjects.Layer) as any;
+                .filter(obj => sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) as any;
         }
 
         getSelectedLists(): sceneobjects.ObjectList[] {
@@ -675,7 +675,7 @@ namespace phasereditor2d.scene.ui.editor {
             const sel = this.getSelection()
 
                 .map(obj =>
-                    obj instanceof Phaser.GameObjects.GameObject ?
+                    sceneobjects.isGameObject(obj) ?
                         this._scene.getByEditorId((obj as sceneobjects.ISceneGameObject).getEditorSupport().getId())
                         : obj)
 

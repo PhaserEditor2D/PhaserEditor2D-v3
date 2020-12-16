@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     const objMap = this._editor.getScene().buildObjectIdMap();
 
-                    if (obj instanceof Phaser.GameObjects.GameObject) {
+                    if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) {
 
                         return objMap.get((obj as sceneobjects.ISceneGameObject).getEditorSupport().getId());
                     }

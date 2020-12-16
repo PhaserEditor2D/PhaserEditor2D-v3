@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             for (const obj of this._editor.getSelection()) {
 
-                if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) {
+                if (sceneobjects.isGameObject(obj)) {
 
                     const sprite = obj as sceneobjects.ISceneGameObject;
 

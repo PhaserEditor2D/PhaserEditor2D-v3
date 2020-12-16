@@ -8,4 +8,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getEditorSupport(): GameObjectEditorSupport<ISceneGameObject>;
     }
+
+    export function isGameObject(obj: any) {
+
+        return GameObjectEditorSupport.hasEditorSupport(obj);
+    }
 }

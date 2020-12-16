@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: unknown): boolean {
 
-            if (obj instanceof Phaser.GameObjects.GameObject) {
+            if (sceneobjects.isGameObject(obj)) {
 
                 const support = (obj as unknown as ISceneGameObject).getEditorSupport();
 
@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canRender(obj: unknown): boolean {
 
-            if (obj instanceof Phaser.GameObjects.GameObject) {
+            if (sceneobjects.isGameObject(obj)) {
 
                 const support = (obj as unknown as ISceneGameObject).getEditorSupport();
 

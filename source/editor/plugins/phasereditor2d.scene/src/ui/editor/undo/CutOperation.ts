@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             for (const obj of this._editor.getSelection()) {
 
-                if (obj instanceof Phaser.GameObjects.GameObject) {
+                if (sceneobjects.isGameObject(obj)) {
 
                     const sprite = obj as sceneobjects.ISceneGameObject;
 

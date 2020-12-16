@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static isShape(obj: ISceneObject): boolean {
 
-            return obj instanceof Phaser.GameObjects.GameObject
+            return sceneobjects.isGameObject(obj)
                 && obj.getEditorSupport() instanceof ShapeEditorSupport;
         }
 
