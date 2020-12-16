@@ -17,6 +17,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 || typeof element === "string") {
 
                 return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+
+            } else if (element instanceof sceneobjects.ObjectList) {
+
+                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
             }
 
             const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();
