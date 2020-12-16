@@ -17,6 +17,7 @@ namespace phasereditor2d.scene {
     export const ICON_IMAGE_TYPE = "image-type";
     export const ICON_SPRITE_TYPE = "sprite-type";
     export const ICON_TEXT_TYPE = "text-type";
+    export const ICON_LAYER = "layer";
 
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
@@ -116,7 +117,8 @@ namespace phasereditor2d.scene {
                     ICON_LIST,
                     ICON_IMAGE_TYPE,
                     ICON_SPRITE_TYPE,
-                    ICON_TEXT_TYPE
+                    ICON_TEXT_TYPE,
+                    ICON_LAYER
                 ], true)
             );
 

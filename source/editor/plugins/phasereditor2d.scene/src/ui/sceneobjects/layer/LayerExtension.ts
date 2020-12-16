@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super({
                 category: SCENE_OBJECT_GROUPING_CATEGORY,
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_GROUP),
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_LAYER),
                 phaserTypeName: "Phaser.GameObjects.Layer",
                 typeName: "Layer"
             });

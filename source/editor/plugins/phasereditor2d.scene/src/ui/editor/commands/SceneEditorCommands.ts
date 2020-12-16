@@ -864,7 +864,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const obj = sel[0];
 
-                        return obj instanceof Phaser.GameObjects.GameObject;
+                        return sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj);
                     },
                     executeFunc: args => {
 
