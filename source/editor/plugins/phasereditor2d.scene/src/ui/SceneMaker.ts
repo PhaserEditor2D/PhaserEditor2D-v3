@@ -77,11 +77,6 @@ namespace phasereditor2d.scene.ui {
 
                 for (const obj of sprites) {
 
-                    if (obj instanceof sceneobjects.Layer) {
-
-                        continue;
-                    }
-
                     layer.add(obj);
                 }
 
