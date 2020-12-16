@@ -28,8 +28,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (sprite2.getEditorSupport().isPrefabInstance()) {
 
-                    sprite2 = sceneobjects.GameObjectEditorSupport
-                        .getObjectParent(sprite2.getEditorSupport().getOwnerPrefabInstance());
+                    sprite2 = sceneobjects.getObjectParent(sprite2.getEditorSupport().getOwnerPrefabInstance());
                 }
 
                 if (sprite2) {

@@ -2,6 +2,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
+    export function isGameObject(obj: any) {
+
+        return GameObjectEditorSupport.hasEditorSupport(obj);
+    }
+
+    export function getObjectParent(obj: ISceneGameObject) {
+
+        return GameObjectEditorSupport.getObjectParent(obj);
+    }
+
     export abstract class GameObjectEditorSupport<T extends ISceneGameObject> extends EditorSupport<T> {
 
         private _extension: SceneGameObjectExtension;

@@ -139,7 +139,7 @@ namespace phasereditor2d.scene.ui {
 
                     if (scene.getPrefabObject() !== obj) {
 
-                        const parent = sceneobjects.GameObjectEditorSupport.getObjectParent(obj);
+                        const parent = sceneobjects.getObjectParent(obj);
 
                         if (parent) {
 

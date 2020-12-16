@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of list) {
 
-                const objParent = GameObjectEditorSupport.getObjectParent(obj);
+                const objParent = getObjectParent(obj);
 
                 if (objParent) {
 
@@ -55,7 +55,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
-                const objParent = GameObjectEditorSupport.getObjectParent(obj);
+                const objParent = getObjectParent(obj);
 
                 if (objParent) {
 

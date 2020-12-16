@@ -472,7 +472,7 @@ namespace phasereditor2d.scene.core.code {
 
             const varname = formatToValidVarName(objSupport.getLabel());
 
-            const objParent = ui.sceneobjects.GameObjectEditorSupport.getObjectParent(obj);
+            const objParent = ui.sceneobjects.getObjectParent(obj);
 
             createMethodDecl.getBody().push(createObjectMethodCall);
 

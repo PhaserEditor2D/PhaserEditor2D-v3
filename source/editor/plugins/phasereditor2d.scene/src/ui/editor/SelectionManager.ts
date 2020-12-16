@@ -128,7 +128,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (selected) {
 
-                    const objParent = sceneobjects.GameObjectEditorSupport.getObjectParent(selected);
+                    const objParent = sceneobjects.getObjectParent(selected);
 
                     if (objParent) {
 

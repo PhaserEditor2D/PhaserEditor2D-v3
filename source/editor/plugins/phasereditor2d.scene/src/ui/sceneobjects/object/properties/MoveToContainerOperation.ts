@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static canMoveTo(obj: ISceneGameObject, targetParent: Container | Layer) {
 
-            const objParent = GameObjectEditorSupport.getObjectParent(obj);
+            const objParent = getObjectParent(obj);
 
             if (objParent === targetParent) {
 
@@ -69,7 +69,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-                const currentParent = GameObjectEditorSupport.getObjectParent(obj);
+                const currentParent = getObjectParent(obj);
 
                 const objSupport = obj.getEditorSupport();
 
