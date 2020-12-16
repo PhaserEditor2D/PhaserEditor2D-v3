@@ -182,8 +182,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                         for (const defaultObject of defaultObjects) {
 
-
-                            if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(defaultObject)) {
+                            if (sceneobjects.isGameObject(defaultObject)) {
 
                                 newSprites.push(defaultObject as sceneobjects.ISceneGameObject);
 

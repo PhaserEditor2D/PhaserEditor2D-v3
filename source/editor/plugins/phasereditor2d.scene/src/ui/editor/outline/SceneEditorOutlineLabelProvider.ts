@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return plainObject.getEditorSupport().getLabel();
 
-            } if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) {
+            } if (sceneobjects.isGameObject(obj)) {
 
                 const support = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 

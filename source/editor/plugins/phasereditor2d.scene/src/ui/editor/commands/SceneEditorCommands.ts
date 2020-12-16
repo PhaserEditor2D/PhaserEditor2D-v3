@@ -702,7 +702,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelection()) {
 
-                                if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) {
+                                if (sceneobjects.isGameObject(obj)) {
 
                                     if (obj instanceof sceneobjects.Layer) {
 
@@ -864,7 +864,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const obj = sel[0];
 
-                        return sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj);
+                        return sceneobjects.isGameObject(obj);
                     },
                     executeFunc: args => {
 

@@ -271,7 +271,7 @@ namespace phasereditor2d.scene.ui {
 
             const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: any) => {
 
-                if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) {
+                if (sceneobjects.isGameObject(obj)) {
 
                     return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
                 }

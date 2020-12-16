@@ -505,7 +505,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             return this.getSelection()
 
-                .filter(obj => sceneobjects.GameObjectEditorSupport.hasEditorSupport(obj)) as any;
+                .filter(obj => sceneobjects.isGameObject(obj)) as any;
         }
 
         getSelectedLists(): sceneobjects.ObjectList[] {
