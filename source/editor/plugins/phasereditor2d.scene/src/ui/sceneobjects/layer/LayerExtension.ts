@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import json = phasereditor2d.scene.core.json;
+
     export class LayerExtension extends SceneGameObjectExtension {
 
         private static _instance: LayerExtension;
@@ -16,6 +18,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 phaserTypeName: "Phaser.GameObjects.Layer",
                 typeName: "Layer"
             });
+        }
+
+        adaptDataAfterTypeConversion(serializer: json.Serializer, originalObject: ISceneGameObject, extraData: any) {
+
+            if (originalObject instanceof Container) {
+
+                const containerData = serializer.getData() as IContainerData;
+
+                const children = originalObject.getChildren();
+
+                // tslint:disable-next-line:prefer-for-of
+                for (let i = 0; i < children.length; i++) {
+
+                    const child = children[i];
+
+                    if (child.getEditorSupport().hasComponent(TransformComponent)) {
+
+                        const sprite = child as any as Phaser.GameObjects.Sprite;
+                        const p = new Phaser.Math.Vector2();
+                        sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+
+                        const spriteData = containerData.list[i];
+
+                        if (spriteData) {
+
+                            spriteData["x"] = p.x;
+                            spriteData["y"] = p.y;
+                        }
+                    }
+                }
+            }
         }
 
         acceptsDropData(data: any): boolean {
