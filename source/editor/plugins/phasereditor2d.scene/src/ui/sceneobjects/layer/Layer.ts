@@ -21,6 +21,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return super.getChildren() as any;
         }
 
+        replace(oldChild: Phaser.GameObjects.GameObject, newChild: Phaser.GameObjects.GameObject) {
+
+            newChild.displayList = this;
+
+            return super.replace(oldChild, newChild);
+        }
+
         // polyfill GameObject methods
 
         parentContainer: Phaser.GameObjects.Container;
