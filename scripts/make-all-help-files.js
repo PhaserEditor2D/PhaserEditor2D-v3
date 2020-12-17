@@ -208,6 +208,8 @@ utils.makeHelpFile([
     "Phaser.Geom.Triangle.y2",
     "Phaser.Geom.Triangle.x3",
     "Phaser.Geom.Triangle.y3",
+
+    "Phaser.GameObjects.Layer",
     
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 
