@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         if (!owner) {
 
-                            if (MoveToContainerOperation.canMoveAllTo(sel, obj)) {
+                            if (MoveToParentOperation.canMoveAllTo(sel, obj)) {
 
                                 input.push(obj);
                             }
@@ -53,12 +53,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (parent instanceof Phaser.GameObjects.DisplayList) {
 
-                    this._editor.getUndoManager().add(new MoveToContainerOperation(this._editor));
+                    this._editor.getUndoManager().add(new MoveToParentOperation(this._editor));
 
                 } else {
 
                     this._editor.getUndoManager().add(
-                        new MoveToContainerOperation(this._editor,
+                        new MoveToParentOperation(this._editor,
                             parent.getEditorSupport().getId()));
                 }
             }));
