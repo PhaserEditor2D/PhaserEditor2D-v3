@@ -23,7 +23,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return true;
         }
 
-        static canMoveTo(obj: ISceneGameObject, targetParent: Container | Layer) {
+        private static canMoveTo(obj: ISceneGameObject, targetParent: Container | Layer) {
+
+            if (!(targetParent instanceof Container || targetParent instanceof Layer)) {
+
+                return false;
+            }
+
+            if (targetParent.getEditorSupport().isPrefabInstance() || targetParent.getEditorSupport().isPrefabInstanceElement()) {
+
+                return false;
+            }
 
             const objParent = getObjectParent(obj);
 
