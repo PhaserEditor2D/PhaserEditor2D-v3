@@ -235,7 +235,8 @@ namespace phasereditor2d.ide.ui.actions {
 
             manager.addKeyBinding(CMD_CHANGE_THEME, new commands.KeyMatcher({
                 control: true,
-                key: "2",
+                key: "Digit2",
+                keyLabel: "2",
                 filterInputElements: false
             }));
         }

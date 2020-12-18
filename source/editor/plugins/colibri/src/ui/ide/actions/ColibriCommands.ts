@@ -86,7 +86,7 @@ namespace colibri.ui.ide.actions {
                 keys: {
                     control: true,
                     alt: true,
-                    key: " "
+                    key: "Space"
                 }
             });
         }
@@ -268,7 +268,7 @@ namespace colibri.ui.ide.actions {
             );
 
             manager.addKeyBinding(CMD_EXPAND_COLLAPSE_BRANCH, new KeyMatcher({
-                key: " "
+                key: "Space"
             }));
 
             // escape

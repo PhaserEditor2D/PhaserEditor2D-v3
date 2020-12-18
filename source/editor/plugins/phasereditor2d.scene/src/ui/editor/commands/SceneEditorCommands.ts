@@ -1138,7 +1138,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: " "
+                    key: "Space"
                 }
             });
 
@@ -1194,6 +1194,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             command: string,
             name: string,
             key: string,
+            keyLabel: string,
             x: number,
             y: number
         }> {
@@ -1216,7 +1217,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     name: "Set Origin To " + value.n,
                     x: value.x,
                     y: value.y,
-                    key: value.k.toString()
+                    key: "Numpad" + value.k,
+                    keyLabel: "Numpad " + value.k
                 };
             });
         }
@@ -1245,7 +1247,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     },
                     keys: {
                         key: data.key,
-                        shift: true,
+                        keyLabel: data.keyLabel,
+                        control: true,
                     },
                     handler: {
                         testFunc: args => {
