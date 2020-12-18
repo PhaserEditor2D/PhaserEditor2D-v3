@@ -2,14 +2,23 @@
 
 ## Version 3.9.2-next
 
-* Adopt Phaser v3.50.
-* Scene Editor: uses WEBGL for scene's thumbnail generation.
+### Added
+
 * Scene Editor: support for all tilemap orientation.
 * Scene Editor: Bitmap Text shadow properties.
 * Scene Editor: Layer object.
+
+### Updated
+
+* Adopt Phaser v3.50.
+* Scene Editor: uses WEBGL for scene's thumbnail generation.
 * Scene Editor: set origin commands now uses Ctrl+Numpad instead Shift+Numpad.
 * Project templates:
     * Migrated Sunny Land template to Phaser v3.50.
+
+### Fixed
+
+* Editor tab context menu misspelling "Close to the right Right".
 
 ## Version 3.9.2 - Dec 7, 2020
 
