@@ -7,6 +7,7 @@
 * Scene Editor: support for all tilemap orientation.
 * Scene Editor: Bitmap Text shadow properties.
 * Scene Editor: Layer object.
+* Scene Editor: set origin commands now uses Ctrl+Numpad instead Shift+Numpad.
 * Project templates:
     * Migrated Sunny Land template to Phaser v3.50.
 
