@@ -15,6 +15,7 @@
 * Scene Editor: set origin commands now uses Ctrl+Numpad instead Shift+Numpad.
 * Project templates:
     * Migrated Sunny Land template to Phaser v3.50.
+* When running the server in `-dev` mode, don't use Monaco editor dev files. This fixes the `-dev` option when it's used along.
 
 ### Fixed
 
