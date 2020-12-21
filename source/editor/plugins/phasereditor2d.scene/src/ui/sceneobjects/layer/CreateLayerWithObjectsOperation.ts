@@ -4,6 +4,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class CreateLayerWithObjectsOperation extends editor.undo.SceneSnapshotOperation {
 
+        private findParentLayer(obj: ISceneGameObject) {
+
+            const parent = getObjectParent(obj);
+
+            if (parent) {
+
+                if (parent instanceof Layer) {
+
+                    return parent;
+                }
+
+                return this.findParentLayer(parent);
+            }
+
+            return null;
+        }
+
         protected async performModification() {
 
             const [layer] = sceneobjects.LayerExtension.getInstance().createDefaultSceneObject({
@@ -17,6 +34,35 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const list = [...this._editor.getSelectedGameObjects()];
 
             this._editor.getScene().sortObjectsByRenderingOrder(list);
+
+            let newParent: Layer;
+
+            for (const obj of list) {
+
+                const objParent = this.findParentLayer(obj);
+
+                if (objParent && objParent instanceof Layer) {
+
+                    if (newParent) {
+
+                        if (newParent.getEditorSupport().isDescendentOf(objParent)) {
+
+                            newParent = objParent;
+                        }
+
+                    } else {
+
+                        newParent = objParent;
+                    }
+                }
+            }
+
+            if (newParent) {
+
+                this.getScene().sys.displayList.remove(layer);
+
+                newParent.add(layer);
+            }
 
             for (const obj of list) {
 
