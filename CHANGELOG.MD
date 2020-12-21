@@ -20,6 +20,7 @@
 ### Fixed
 
 * Editor tab context menu misspelling "Close to the right Right".
+* Scene Editor: validates a tilemap's tileset doesn't have an external source.
 
 ## Version 3.9.2 - Dec 7, 2020
 
