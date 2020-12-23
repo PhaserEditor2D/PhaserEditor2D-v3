@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createMenu(menu: controls.Menu) {
 
             menu.addCommand(editor.commands.CMD_TRIM_CONTAINER);
-            menu.addCommand(editor.commands.CMD_BREAK_CONTAINER);
+            menu.addCommand(editor.commands.CMD_BREAK_PARENT);
 
             menu.addSeparator();
 

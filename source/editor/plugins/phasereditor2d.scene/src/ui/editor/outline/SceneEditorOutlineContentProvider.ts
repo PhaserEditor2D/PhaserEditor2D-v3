@@ -46,14 +46,14 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return list;
 
-            } else if (parent instanceof Phaser.GameObjects.Container) {
+            } else if (parent instanceof sceneobjects.Container || parent instanceof sceneobjects.Layer) {
 
                 if (parent.getEditorSupport().isPrefabInstance()) {
 
                     return [];
                 }
 
-                const list = [...parent.list];
+                const list = [...parent.getChildren()];
 
                 list.reverse();
 

@@ -182,15 +182,15 @@ namespace phasereditor2d.scene.ui.editor {
 
                         for (const defaultObject of defaultObjects) {
 
-                            if (defaultObject instanceof Phaser.GameObjects.GameObject) {
+                            if (sceneobjects.isGameObject(defaultObject)) {
 
-                                newSprites.push(defaultObject);
+                                newSprites.push(defaultObject as sceneobjects.ISceneGameObject);
 
                             } else {
 
-                                scene.addPlainObject(defaultObject);
+                                scene.addPlainObject(defaultObject as sceneobjects.IScenePlainObject);
 
-                                newPlainObjects.push(defaultObject);
+                                newPlainObjects.push(defaultObject as sceneobjects.IScenePlainObject);
                             }
                         }
                     }

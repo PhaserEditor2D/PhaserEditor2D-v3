@@ -7,6 +7,7 @@ namespace colibri.ui.ide.commands {
         alt?: boolean;
         meta?: boolean;
         key?: string;
+        keyLabel?: string;
         filterInputElements?: boolean;
     }
 
@@ -48,7 +49,7 @@ namespace colibri.ui.ide.commands {
 
             if (this._key) {
 
-                keys.push(this._key.replace(" ", "Space"));
+                keys.push(this._key);
             }
 
             return keys.join("+");
@@ -59,7 +60,7 @@ namespace colibri.ui.ide.commands {
             return (event.ctrlKey || event.metaKey) === this._control
                 && event.shiftKey === this._shift
                 && event.altKey === this._alt
-                && event.key.toLowerCase() === this._key.toLowerCase();
+                && (event.key.toLowerCase() === this._key.toLowerCase() || event.code === this._key);
         }
 
         matchesTarget(element: EventTarget) {

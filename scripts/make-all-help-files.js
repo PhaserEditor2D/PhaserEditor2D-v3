@@ -155,6 +155,10 @@ utils.makeHelpFile([
     "Phaser.GameObjects.BitmapText.align",
     "Phaser.GameObjects.BitmapText.setFontSize",
     "Phaser.GameObjects.BitmapText.setLetterSpacing",
+    "Phaser.GameObjects.BitmapText.dropShadowX",
+    "Phaser.GameObjects.BitmapText.dropShadowY",
+    "Phaser.GameObjects.BitmapText.dropShadowColor",
+    "Phaser.GameObjects.BitmapText.dropShadowAlpha",
 
 
     "Phaser.Tilemaps.Tilemap",
@@ -170,8 +174,8 @@ utils.makeHelpFile([
     "Phaser.Tilemaps.Tileset.tileMargin",
     "Phaser.Tilemaps.Tileset.tileSpacing",
 
-    "Phaser.Tilemaps.StaticTilemapLayer",
-    "Phaser.Tilemaps.DynamicTilemapLayer",
+    "Phaser.Tilemaps.TilemapLayer",
+    "Phaser.Tilemaps.TilemapLayer",
 
     "Phaser.Tilemaps.LayerData",
     "Phaser.Tilemaps.LayerData.name",
@@ -204,6 +208,8 @@ utils.makeHelpFile([
     "Phaser.Geom.Triangle.y2",
     "Phaser.Geom.Triangle.x3",
     "Phaser.Geom.Triangle.y3",
+
+    "Phaser.GameObjects.Layer",
     
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 

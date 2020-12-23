@@ -2,16 +2,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export interface IHasParentContainer extends ISceneGameObject {
-
-        parentContainer: Container;
-    }
-
-    export class ParentSection extends SceneGameObjectSection<IHasParentContainer> {
+    export class ParentSection extends SceneGameObjectSection<ISceneGameObject> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page,
-                "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent Container", false, true);
+                "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent", false, true);
         }
 
         getSectionHelpPath() {
@@ -21,6 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createMenu(menu: controls.Menu) {
 
+            menu.addCommand(editor.commands.CMD_JOIN_IN_LAYER);
             menu.addCommand(editor.commands.CMD_JOIN_IN_CONTAINER);
             menu.addCommand(editor.commands.CMD_MOVE_TO_PARENT);
             menu.addCommand(editor.commands.CMD_SELECT_PARENT);
@@ -34,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 2);
 
-            this.createLabel(comp, "Parent", "The parent Container of the object or the Display List");
+            this.createLabel(comp, "Parent", "The parent Container or Layer of the object, or the Display List");
 
             const btn = this.createButton(comp, "(Select)", e => {
 
@@ -54,7 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const parents = sel
 
-                    .map(obj => obj.parentContainer as Container)
+                    .map(obj => sceneobjects.getObjectParent(obj))
 
                     .filter(cont => cont);
 
@@ -81,7 +77,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof Phaser.GameObjects.GameObject;
+            return sceneobjects.isGameObject(obj);
         }
 
         canEditNumber(n: number): boolean {

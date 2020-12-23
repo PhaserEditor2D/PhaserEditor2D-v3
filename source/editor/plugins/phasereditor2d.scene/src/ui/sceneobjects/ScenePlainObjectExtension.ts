@@ -27,6 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(config: {
             category: string,
             typeName: string,
+            typeNameAlias?: string[],
             phaserTypeName: string,
             icon: colibri.ui.controls.IconDescriptor,
         }) {

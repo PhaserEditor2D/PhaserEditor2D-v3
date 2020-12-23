@@ -1,7 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
-    import code = core.code;
 
     export interface IContainerData extends json.IObjectData {
 
@@ -30,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return ContainerCodeDOMBuilder.getInstance();
         }
 
-        async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs) {
+        static async getAssetsFromNestedData(args: IGetAssetsFromObjectArgs) {
 
             const list = [];
 
@@ -57,6 +56,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return list;
+        }
+
+        async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs) {
+
+            return ContainerExtension.getAssetsFromNestedData(args);
         }
 
         createDefaultSceneObject(args: ICreateDefaultArgs) {
@@ -97,10 +101,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         acceptsDropData(data: any): boolean {
+
             return false;
         }
 
         createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject {
+
             return null;
         }
     }

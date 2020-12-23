@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            if (GameObjectEditorSupport.hasEditorSupport(obj)) {
+            if (isGameObject(obj)) {
 
                 const support = (obj as ISizeLikeObject).getEditorSupport();
 

@@ -20,6 +20,7 @@ namespace phasereditor2d.scene.ui {
         afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             let container: sceneobjects.Container;
+            let layer: sceneobjects.Layer;
 
             for (const sprite of this._editorScene.getEditor().getSelectedGameObjects()) {
 
@@ -27,7 +28,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (sprite2.getEditorSupport().isPrefabInstance()) {
 
-                    sprite2 = sprite2.getEditorSupport().getOwnerPrefabInstance().parentContainer as sceneobjects.Container;
+                    sprite2 = sceneobjects.getObjectParent(sprite2.getEditorSupport().getOwnerPrefabInstance());
                 }
 
                 if (sprite2) {
@@ -39,6 +40,14 @@ namespace phasereditor2d.scene.ui {
                     } else if (sprite2.parentContainer) {
 
                         container = sprite2.parentContainer as sceneobjects.Container;
+
+                    } else if (sprite2 instanceof sceneobjects.Layer) {
+
+                        layer = sprite2;
+
+                    } else if (sprite2.displayList instanceof sceneobjects.Layer) {
+
+                        layer = sprite2.displayList;
                     }
                 }
             }
@@ -46,6 +55,11 @@ namespace phasereditor2d.scene.ui {
             if (container) {
 
                 for (const obj of sprites) {
+
+                    if (obj instanceof sceneobjects.Layer) {
+
+                        continue;
+                    }
 
                     const sprite = obj as sceneobjects.Sprite;
                     const p = new Phaser.Math.Vector2();
@@ -59,6 +73,13 @@ namespace phasereditor2d.scene.ui {
                     sprite.y = p.y;
                 }
 
+            } else if (layer) {
+
+                for (const obj of sprites) {
+
+                    layer.add(obj);
+                }
+
             } else {
 
                 this.afterDropObjectsInPrefabScene(prefabObj, sprites);
@@ -68,6 +89,7 @@ namespace phasereditor2d.scene.ui {
         private afterDropObjectsInPrefabScene(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             if (!prefabObj) {
+
                 return;
             }
 
@@ -78,47 +100,51 @@ namespace phasereditor2d.scene.ui {
                 return;
             }
 
-            let container: sceneobjects.Container;
+            let parent: sceneobjects.Container | sceneobjects.Layer;
 
             if (scene.isPrefabSceneType()) {
 
                 if (sprites.length > 0) {
 
-                    if (prefabObj instanceof sceneobjects.Container) {
+                    if (prefabObj instanceof sceneobjects.Container || prefabObj instanceof sceneobjects.Layer) {
 
-                        container = prefabObj;
+                        parent = prefabObj;
 
                     } else {
 
-                        [container] = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
+                        [parent] = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
                             scene: scene,
                             x: 0,
                             y: 0
                         });
 
-                        container.getEditorSupport().setLabel(scene.makeNewName("container"));
+                        parent.getEditorSupport().setLabel(scene.makeNewName("container"));
 
                         scene.sys.displayList.remove(prefabObj);
-                        container.add(prefabObj);
+                        parent.add(prefabObj);
                     }
 
-                    if (container) {
+                    if (parent) {
 
                         for (const sprite of sprites) {
 
-                            if (sprite.getEditorSupport().hasComponent(sceneobjects.TransformComponent)) {
+                            if (parent instanceof sceneobjects.Container) {
 
-                                (sprite as sceneobjects.Sprite).x -= container.x;
-                                (sprite as sceneobjects.Sprite).y -= container.y;
+                                if (sprite.getEditorSupport().hasComponent(sceneobjects.TransformComponent)) {
+
+                                    (sprite as sceneobjects.Sprite).x -= parent.x;
+                                    (sprite as sceneobjects.Sprite).y -= parent.y;
+                                }
                             }
 
                             scene.sys.displayList.remove(sprite);
-                            container.add(sprite);
+
+                            parent.add(sprite);
                         }
 
-                        if (container !== prefabObj) {
+                        if (parent !== prefabObj && parent instanceof sceneobjects.Container) {
 
-                            container.getEditorSupport().trim();
+                            parent.getEditorSupport().trim();
                         }
                     }
                 }
@@ -422,6 +448,7 @@ namespace phasereditor2d.scene.ui {
             });
 
             for (const newObject of newObjects) {
+
                 this._editorScene.visit(obj => {
 
                     if (obj !== newObject) {

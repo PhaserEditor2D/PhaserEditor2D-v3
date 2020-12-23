@@ -1,5 +1,28 @@
 # Change Log
 
+## v3.9.10 - Dec 22, 2020
+
+### Added
+
+* Scene Editor: support for all tilemap orientation.
+* Scene Editor: Bitmap Text shadow properties.
+* Scene Editor: Layer object.
+
+### Updated
+
+* Adopt Phaser v3.50.
+* Scene Editor: uses WEBGL for scene's thumbnail generation.
+* Scene Editor: set origin commands now uses Ctrl+Numpad instead Shift+Numpad.
+* Project templates:
+    * Migrated Sunny Land template to Phaser v3.50.
+* When running the server in `-dev` mode, don't use Monaco editor dev files. This fixes the `-dev` option when it's used along.
+
+### Fixed
+
+* Editor tab context menu misspelling "Close to the right Right".
+* Scene Editor: validates a tilemap's tileset doesn't have an external source.
+* Scene Editor: catches error when accessing localforage for storing the thumbnail image.
+
 ## Version 3.9.2 - Dec 7, 2020
 
 * Viewer: massive improvement of rendering performance.

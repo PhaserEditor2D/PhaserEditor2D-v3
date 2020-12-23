@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     const objMap = this._editor.getScene().buildObjectIdMap();
 
-                    if (obj instanceof Phaser.GameObjects.GameObject) {
+                    if (sceneobjects.isGameObject(obj)) {
 
                         return objMap.get((obj as sceneobjects.ISceneGameObject).getEditorSupport().getId());
                     }
@@ -128,13 +128,13 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (selected) {
 
-                    const container = selected.parentContainer as sceneobjects.Container;
+                    const objParent = sceneobjects.getObjectParent(selected);
 
-                    if (container) {
+                    if (objParent) {
 
-                        if (!container.getEditorSupport().isAllowPickChildren()) {
+                        if (!objParent.getEditorSupport().isAllowPickChildren()) {
 
-                            selected = container;
+                            selected = objParent;
                         }
                     }
                 }
@@ -162,7 +162,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor.repaint();
         }
 
-        private hitTestOfActivePointer(): Phaser.GameObjects.GameObject[] {
+        private hitTestOfActivePointer(): sceneobjects.ISceneGameObject[] {
 
             const scene = this._editor.getScene();
 

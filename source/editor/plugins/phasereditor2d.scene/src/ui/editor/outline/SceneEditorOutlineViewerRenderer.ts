@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         prepareContextForText(args: controls.viewers.RenderCellArgs) {
 
-            if (args.obj instanceof Phaser.GameObjects.GameObject) {
+            if (sceneobjects.isGameObject(args.obj)) {
 
                 const obj = args.obj as sceneobjects.ISceneGameObject;
 

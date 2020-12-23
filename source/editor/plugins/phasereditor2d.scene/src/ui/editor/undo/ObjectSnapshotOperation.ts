@@ -52,11 +52,11 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 let parentId: string;
 
-                const sprite = obj as Phaser.GameObjects.GameObject;
+                const parent = sceneobjects.getObjectParent(obj);
 
-                if (sprite.parentContainer) {
+                if (parent) {
 
-                    parentId = (sprite.parentContainer as sceneobjects.Container).getEditorSupport().getId();
+                    parentId = parent.getEditorSupport().getId();
                 }
 
                 snapshot.objects.push({
@@ -96,7 +96,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     if (objSnapshot.parentId) {
 
-                        const parent = scene.getByEditorId(objSnapshot.parentId) as sceneobjects.Container;
+                        const parent = scene.getByEditorId(objSnapshot.parentId) as sceneobjects.Container | sceneobjects.Layer;
 
                         if (parent) {
 

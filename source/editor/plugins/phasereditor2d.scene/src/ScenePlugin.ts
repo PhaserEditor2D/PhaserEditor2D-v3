@@ -17,6 +17,7 @@ namespace phasereditor2d.scene {
     export const ICON_IMAGE_TYPE = "image-type";
     export const ICON_SPRITE_TYPE = "sprite-type";
     export const ICON_TEXT_TYPE = "text-type";
+    export const ICON_LAYER = "layer";
 
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
@@ -38,7 +39,7 @@ namespace phasereditor2d.scene {
 
         private static _instance = new ScenePlugin();
 
-        static DEFAULT_CANVAS_CONTEXT = Phaser.CANVAS;
+        static DEFAULT_CANVAS_CONTEXT = Phaser.WEBGL;
 
         static DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
 
@@ -116,7 +117,8 @@ namespace phasereditor2d.scene {
                     ICON_LIST,
                     ICON_IMAGE_TYPE,
                     ICON_SPRITE_TYPE,
-                    ICON_TEXT_TYPE
+                    ICON_TEXT_TYPE,
+                    ICON_LAYER
                 ], true)
             );
 
@@ -196,8 +198,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.TextExtension.getInstance(),
                 ui.sceneobjects.BitmapTextExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance(),
-                ui.sceneobjects.StaticTilemapLayerExtension.getInstance(),
-                ui.sceneobjects.DynamicTilemapLayerExtension.getInstance(),
+                ui.sceneobjects.LayerExtension.getInstance(),
+                ui.sceneobjects.TilemapLayerExtension.getInstance(),
                 ui.sceneobjects.RectangleExtension.getInstance(),
                 ui.sceneobjects.EllipseExtension.getInstance(),
                 ui.sceneobjects.TriangleExtension.getInstance()
@@ -341,7 +343,19 @@ namespace phasereditor2d.scene {
         }
 
         getGameObjectExtensionByObjectType(type: string) {
-            return this.getGameObjectExtensions().find(ext => ext.getTypeName() === type);
+
+            return this.getGameObjectExtensions().find(ext => {
+
+                if (ext.getTypeName() === type) {
+
+                    return ext;
+                }
+
+                if (ext.getTypeNameAlias().indexOf(type) >= 0) {
+
+                    return ext;
+                }
+            });
         }
 
         getSceneEditorOutlineExtensions() {

@@ -43,6 +43,7 @@ namespace phasereditor2d.scene.ui.editor {
         private _currentRefreshHash: string;
         private _editorState: IEditorState;
         private _localCoords: boolean;
+        private _cellRendererCache: CellRendererCache;
 
         constructor() {
             super("phasereditor2d.SceneEditor", SceneEditor.getFactory());
@@ -54,6 +55,7 @@ namespace phasereditor2d.scene.ui.editor {
             this._propertyProvider = new properties.SceneEditorSectionProvider(this);
             this._menuCreator = new SceneEditorMenuCreator(this);
             this._localCoords = true;
+            this._cellRendererCache = new CellRendererCache();
         }
 
         getMenuCreator() {
@@ -503,7 +505,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             return this.getSelection()
 
-                .filter(obj => obj instanceof Phaser.GameObjects.GameObject) as any;
+                .filter(obj => sceneobjects.isGameObject(obj)) as any;
         }
 
         getSelectedLists(): sceneobjects.ObjectList[] {
@@ -519,34 +521,42 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getDropManager() {
+
             return this._dropManager;
         }
 
         getClipboardManager() {
+
             return this._clipboardManager;
         }
 
         getToolsManager() {
+
             return this._toolsManager;
         }
 
         getMouseManager() {
+
             return this._mouseManager;
         }
 
         getSelectionManager() {
+
             return this._selectionManager;
         }
 
         getOverlayLayer() {
+
             return this._overlayLayer;
         }
 
         getGameCanvas() {
+
             return this._gameCanvas;
         }
 
         getScene() {
+
             return this._scene;
         }
 
@@ -555,10 +565,12 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getSceneMaker() {
+
             return this._scene.getMaker();
         }
 
         getPackFinder() {
+
             return this.getSceneMaker().getPackFinder();
         }
 
@@ -610,6 +622,11 @@ namespace phasereditor2d.scene.ui.editor {
             return this._propertyProvider;
         }
 
+        getCellRendererCache() {
+
+            return this._cellRendererCache;
+        }
+
         onPartClosed() {
 
             if (super.onPartClosed()) {
@@ -618,6 +635,8 @@ namespace phasereditor2d.scene.ui.editor {
 
                     this._scene.destroyGame();
                 }
+
+                this._cellRendererCache.clear();
 
                 return true;
             }
@@ -656,7 +675,7 @@ namespace phasereditor2d.scene.ui.editor {
             const sel = this.getSelection()
 
                 .map(obj =>
-                    obj instanceof Phaser.GameObjects.GameObject ?
+                    sceneobjects.isGameObject(obj) ?
                         this._scene.getByEditorId((obj as sceneobjects.ISceneGameObject).getEditorSupport().getId())
                         : obj)
 
@@ -774,7 +793,9 @@ namespace phasereditor2d.scene.ui.editor {
 
             // for some reason, we should do this after a time, or the game is not stopped well.
             setTimeout(() => {
+
                 this._game.loop.stop();
+
             }, 500);
 
             await this.updateTitleIcon(true);

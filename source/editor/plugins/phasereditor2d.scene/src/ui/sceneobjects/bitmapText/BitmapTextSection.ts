@@ -71,6 +71,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createPropertyEnumRow(comp, BitmapTextComponent.align);
 
             this.createPropertyFloatRow(comp, BitmapTextComponent.letterSpacing);
+
+            this.createPropertyFloatRow(comp, BitmapTextComponent.dropShadowX);
+
+            this.createPropertyFloatRow(comp, BitmapTextComponent.dropShadowY);
+
+            this.createPropertyFloatRow(comp, BitmapTextComponent.dropShadowAlpha);
+
+            this.createPropertyColorRow(comp, BitmapTextComponent.dropShadowColor);
         }
 
         canEdit(obj: any, n: number): boolean {

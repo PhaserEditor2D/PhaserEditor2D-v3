@@ -139,12 +139,11 @@ namespace phasereditor2d.scene.ui {
 
                     if (scene.getPrefabObject() !== obj) {
 
-                        const container = (obj as Phaser.GameObjects.GameObject).parentContainer;
+                        const parent = sceneobjects.getObjectParent(obj);
 
+                        if (parent) {
 
-                        if (container) {
-
-                            return this.isNonTopPrefabObject(container);
+                            return this.isNonTopPrefabObject(parent);
                         }
 
                         return true;
@@ -156,10 +155,12 @@ namespace phasereditor2d.scene.ui {
         }
 
         getObjectLists() {
+
             return this._objectLists;
         }
 
         getSettings() {
+
             return this._settings;
         }
 
@@ -213,9 +214,9 @@ namespace phasereditor2d.scene.ui {
 
             for (const obj of list) {
 
-                if (obj instanceof sceneobjects.Container) {
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    this.getInputSortedObjects2(result, obj.getList());
+                    this.getInputSortedObjects2(result, obj.getChildren());
 
                 } else {
 
@@ -237,9 +238,9 @@ namespace phasereditor2d.scene.ui {
 
                 visitor(obj);
 
-                if (obj instanceof sceneobjects.Container) {
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    this.visit2(visitor, obj.getList());
+                    this.visit2(visitor, obj.getChildren());
                 }
             }
         }
@@ -258,9 +259,9 @@ namespace phasereditor2d.scene.ui {
 
                 if (visitChildren) {
 
-                    if (obj instanceof sceneobjects.Container) {
+                    if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                        this.visitAskChildren2(visitor, obj.getList());
+                        this.visitAskChildren2(visitor, obj.getChildren());
                     }
                 }
             }
@@ -270,7 +271,7 @@ namespace phasereditor2d.scene.ui {
 
             const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: any) => {
 
-                if (obj instanceof Phaser.GameObjects.GameObject) {
+                if (sceneobjects.isGameObject(obj)) {
 
                     return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
                 }
@@ -326,9 +327,9 @@ namespace phasereditor2d.scene.ui {
 
                 map.set(obj, i);
 
-                if (obj instanceof sceneobjects.Container) {
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    i += this.buildObjectSortingMap2(map, obj.getList());
+                    i += this.buildObjectSortingMap2(map, obj.getChildren());
                 }
 
                 i++;
@@ -388,9 +389,9 @@ namespace phasereditor2d.scene.ui {
                     return obj;
                 }
 
-                if (obj instanceof sceneobjects.Container) {
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    const result = this.findByEditorId(obj.getList(), id);
+                    const result = this.findByEditorId(obj.getChildren(), id);
 
                     if (result) {
                         return result;

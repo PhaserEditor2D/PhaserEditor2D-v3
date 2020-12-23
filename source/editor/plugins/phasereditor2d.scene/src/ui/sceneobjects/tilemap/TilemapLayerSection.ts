@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class TilemapLayerSection extends SceneGameObjectSection<StaticTilemapLayer | DynamicTilemapLayer> {
+    export class TilemapLayerSection extends SceneGameObjectSection<TilemapLayer> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.scene.ui.sceneobjects.TilemapLayerData", "Tilemap Layer", false, false);
@@ -62,7 +62,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            return (obj instanceof StaticTilemapLayer || obj instanceof DynamicTilemapLayer)
+            return (obj instanceof TilemapLayer)
                 && obj.tilemap !== undefined;
         }
 

@@ -4,15 +4,15 @@
 /* START OF COMPILED CODE */
 
 class ControllerButton extends EventComponent {
-
+	
 	constructor(gameObject) {
 		super(gameObject);
-
+		
 		gameObject["__ControllerButton"] = this;
-
+		
 		/** @type {Phaser.GameObjects.Image} */
 		this.gameObject = gameObject;
-
+		
 		/* START-USER-CTR-CODE */
 
 		this.isDown = false;
@@ -21,12 +21,12 @@ class ControllerButton extends EventComponent {
 
 		/* END-USER-CTR-CODE */
 	}
-
+	
 	/** @returns {ControllerButton} */
 	static getComponent(gameObject) {
 		return gameObject["__ControllerButton"];
 	}
-
+	
 	/* START-USER-CODE */
 
 	update() {

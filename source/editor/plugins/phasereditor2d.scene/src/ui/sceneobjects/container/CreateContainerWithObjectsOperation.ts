@@ -18,11 +18,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._editor.getScene().sortObjectsByRenderingOrder(list);
 
-            let newParent: Container;
+            let newParent: Container | Layer;
 
             for (const obj of list) {
 
-                const objParent = obj.parentContainer as Container;
+                const objParent = getObjectParent(obj);
 
                 if (objParent) {
 
@@ -55,9 +55,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
-                if (sprite.parentContainer) {
+                const objParent = getObjectParent(obj);
 
-                    sprite.parentContainer.remove(sprite);
+                if (objParent) {
+
+                    objParent.remove(sprite);
                 }
 
                 container.add(sprite);

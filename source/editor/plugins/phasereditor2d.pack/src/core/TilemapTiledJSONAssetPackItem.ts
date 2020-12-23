@@ -5,6 +5,7 @@ namespace phasereditor2d.pack.core {
     export interface ITilesetData {
         name: string;
         image: string;
+        source: string;
     }
 
     export class TilemapTiledJSONAssetPackItem extends AssetPackItem {
@@ -39,6 +40,7 @@ namespace phasereditor2d.pack.core {
                     for (const tilesetData of data.tilesets) {
 
                         tilesetsData.push({
+                            source: tilesetData.source,
                             name: tilesetData.name,
                             image: tilesetData.image
                         });

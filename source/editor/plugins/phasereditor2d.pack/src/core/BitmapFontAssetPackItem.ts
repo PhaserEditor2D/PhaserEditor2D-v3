@@ -80,14 +80,23 @@ namespace phasereditor2d.pack.core {
                 return;
             }
 
-            const xmlDoc = Phaser.DOM.ParseXML(xmlString);
-            const xmlData = Phaser.GameObjects.BitmapText.ParseXMLBitmapFont(xmlDoc as any);
+            const frame = game.textures.getFrame(imageAsset.getKey());
 
-            game.cache.bitmapFont.add(key, {
-                data: xmlData,
-                texture: key,
-                frame: null
-            });
+            if (frame) {
+
+                const xmlDoc = Phaser.DOM.ParseXML(xmlString);
+                const xmlData = Phaser.GameObjects.BitmapText.ParseXMLBitmapFont(xmlDoc as any, frame);
+
+                game.cache.bitmapFont.add(key, {
+                    data: xmlData,
+                    texture: key,
+                    frame: null
+                });
+
+            } else {
+
+                console.error(`Image '${imageAsset.getKey()}' key not found.`);
+            }
 
             cache.addAsset(this);
         }

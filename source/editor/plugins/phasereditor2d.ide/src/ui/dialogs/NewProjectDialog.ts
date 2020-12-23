@@ -127,9 +127,6 @@ namespace phasereditor2d.ide.ui.dialogs {
 
             if (!disabled) {
 
-                console.log("validating");
-                console.log(this._projectNames);
-
                 if (this._projectNames.has(this._projectNameText.value.toLowerCase())) {
 
                     disabled = true;

@@ -182,6 +182,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const tileset of tilesets) {
 
+                if (tileset.source) {
+
+                    alert("Phaser does not support external tilesets.");
+
+                    continue;
+                }
+
                 const asset = this.findTilesetImage(tileset.image);
 
                 if (asset) {

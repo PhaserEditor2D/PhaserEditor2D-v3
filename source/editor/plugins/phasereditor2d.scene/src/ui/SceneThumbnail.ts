@@ -115,6 +115,16 @@ namespace phasereditor2d.scene.ui {
 
                     bounds.y = 0;
                 }
+
+                if (bounds.width < 0) {
+
+                    bounds.width = 800;
+                }
+
+                if (bounds.height < 0) {
+
+                    bounds.height = 600;
+                }
             }
 
             this.sys.renderer.snapshotArea(bounds.x, bounds.y, bounds.width, bounds.height, (img: HTMLImageElement) => {
@@ -131,7 +141,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container) {
 
-                    sceneobjects.BreakContainerOperation.breakContainer(this, [obj]);
+                    sceneobjects.BreakParentOperation.breakParent(this, [obj]);
 
                     this.breakContainers(obj.list);
                 }
@@ -252,6 +262,8 @@ namespace phasereditor2d.scene.ui {
             return null;
         }
 
+        private static _canvas: HTMLCanvasElement;
+
         private createImageElement() {
 
             return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -260,22 +272,32 @@ namespace phasereditor2d.scene.ui {
 
                 const data: core.json.ISceneData = JSON.parse(content);
 
-                // const width = 1200;
-                // const height = 800;
+                // const width = data.settings.borderWidth || 800;
+                // const height = data.settings.borderHeight || 600;
 
-                const width = data.settings.borderWidth || 800;
-                const height = data.settings.borderHeight || 600;
+                const width = 1920;
+                const height = 1080;
 
-                const canvas = document.createElement("canvas");
-                canvas.style.width = (canvas.width = width) + "px";
-                canvas.style.height = (canvas.height = height) + "px";
+                let canvas: HTMLCanvasElement;
 
-                const parent = document.createElement("div");
-                parent.style.position = "fixed";
-                parent.style.left = -width - 10 + "px";
-                parent.appendChild(canvas);
+                if (SceneThumbnail._canvas) {
 
-                document.body.appendChild(parent);
+                    canvas = SceneThumbnail._canvas;
+
+                } else {
+
+                    canvas = document.createElement("canvas");
+                    canvas.style.width = (canvas.width = width) + "px";
+                    canvas.style.height = (canvas.height = height) + "px";
+                    SceneThumbnail._canvas = canvas;
+
+                    const parent = document.createElement("div");
+                    parent.style.position = "fixed";
+                    parent.style.left = -width - 10 + "px";
+                    parent.appendChild(canvas);
+
+                    document.body.appendChild(parent);
+                }
 
                 const game = new Phaser.Game({
                     type: ScenePlugin.DEFAULT_CANVAS_CONTEXT,
@@ -300,8 +322,6 @@ namespace phasereditor2d.scene.ui {
                     resolve(image);
 
                     scene.destroyGame();
-
-                    parent.remove();
                 });
 
                 game.scene.add("scene", scene, true);

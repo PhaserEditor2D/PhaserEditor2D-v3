@@ -93,7 +93,7 @@ namespace colibri.ui.controls {
                 this._textWidthMap.set(textKey, width);
             }
 
-            return width * DEVICE_PIXEL_RATIO;
+            return width;
         }
 
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {

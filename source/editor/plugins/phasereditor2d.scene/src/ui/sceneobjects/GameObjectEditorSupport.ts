@@ -2,6 +2,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
+    export function isGameObject(obj: any) {
+
+        return GameObjectEditorSupport.hasEditorSupport(obj);
+    }
+
+    export function getObjectParent(obj: ISceneGameObject) {
+
+        return GameObjectEditorSupport.getObjectParent(obj);
+    }
+
+    export function getObjectParentOrDisplayList(obj: ISceneGameObject) {
+
+        return getObjectParent(obj) || obj.getEditorSupport().getScene().sys.displayList;
+    }
+
     export abstract class GameObjectEditorSupport<T extends ISceneGameObject> extends EditorSupport<T> {
 
         private _extension: SceneGameObjectExtension;
@@ -32,7 +47,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             scene.sys.displayList.add(obj as Phaser.GameObjects.GameObject);
         }
 
+        static getObjectParent(obj: ISceneGameObject): Container | Layer {
+
+            if (obj.parentContainer) {
+
+                return obj.parentContainer as Container;
+            }
+
+            if (obj.displayList instanceof Layer) {
+
+                return obj.displayList;
+            }
+
+            return null;
+        }
+
         abstract setInteractive(): void;
+
+        protected computeContentHashWithProperties(obj: ISceneGameObject, ...properties: Array<IProperty<any>>) {
+
+            return properties.map(prop => prop.name + "=" + prop.getValue(obj)).join(";");
+        }
+
+        protected computeContentHashWithComponent(obj: ISceneGameObject, ...compConstructors: any[]) {
+
+            const props = compConstructors.flatMap(ctr => [...obj.getEditorSupport().getComponent(ctr).getProperties()])
+
+            return this.computeContentHashWithProperties(obj, ...props);
+        }
 
         /**
          * Destroy the object. Return `true` if it requires a complete refresh of the scene, to re-build all objects.
@@ -180,11 +222,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 h = h / sprite.scaleY;
             }
 
-            const ox = sprite.originX;
-            const oy = sprite.originY;
+            const { originX, originY } = this.getScreenBoundsOrigin();
 
-            const x = -w * ox;
-            const y = -h * oy;
+            const x = -w * originX;
+            const y = -h * originY;
 
             const tx = sprite.getWorldTransformMatrix();
 
@@ -194,6 +235,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             tx.transformPoint(x, y + h, points[3]);
 
             return points.map(p => camera.getScreenPoint(p.x, p.y));
+        }
+
+        protected getScreenBoundsOrigin(): { originX: number, originY: number } {
+
+            const { originX, originY } = this.getObject() as any;
+
+            return { originX, originY };
         }
 
         // tslint:disable-next-line:ban-types
@@ -228,8 +276,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static hasEditorSupport(obj: any) {
 
-            return obj && obj instanceof Phaser.GameObjects.GameObject
-                && typeof obj["getEditorSupport"] === "function";
+            try {
+
+                // tslint:disable-next-line:ban-types
+                const support = obj["getEditorSupport"] as Function;
+
+                return support.apply(obj) instanceof GameObjectEditorSupport;
+
+            } catch (e) {
+                // nothing
+            }
+
+            return false;
         }
 
         static getEditorSupport(obj: any) {
@@ -278,10 +336,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getParentId(): string {
 
-            if (this.getObject().parentContainer) {
+            const parent = GameObjectEditorSupport.getObjectParent(this.getObject());
 
-                return (this.getObject().parentContainer as unknown as ISceneGameObject)
-                    .getEditorSupport().getId();
+            if (parent) {
+
+                return parent.getEditorSupport().getId();
             }
 
             return undefined;
@@ -292,32 +351,35 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         _setPrefabId(prefabId: string) {
+
             this._prefabId = prefabId;
         }
 
         getAllParents() {
 
-            const list: Container[] = [];
+            const list: Array<Container | Layer> = [];
 
             this.getAllParents2(list);
 
             return list;
         }
 
-        isDescendentOf(container: Container) {
+        isDescendentOf(parent: Container | Layer) {
 
             const set = new Set(this.getAllParents());
 
-            return set.has(container);
+            return set.has(parent);
         }
 
-        private getAllParents2(list: Container[]) {
+        private getAllParents2(list: Array<Container | Layer>) {
 
             const obj = this.getObject();
 
-            if (obj.parentContainer) {
+            const objParent = GameObjectEditorSupport.getObjectParent(obj);
 
-                list.push(obj.parentContainer as Container);
+            if (objParent) {
+
+                list.push(objParent);
             }
 
             return list;

@@ -66,11 +66,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const tilemap = this.getObject();
 
-            const layers: Array<StaticTilemapLayer | DynamicTilemapLayer> = [];
+            const layers: Array<TilemapLayer> = [];
 
             this.getScene().visit(obj => {
 
-                if (obj instanceof StaticTilemapLayer || obj instanceof DynamicTilemapLayer) {
+                if (obj instanceof TilemapLayer) {
 
                     if (obj.tilemap === tilemap) {
 

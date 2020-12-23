@@ -89,7 +89,7 @@ namespace colibri.ui.ide {
             }));
 
             menu.add(new controls.Action({
-                text: "Close to the right Right",
+                text: "Close to the Right",
                 callback: () => {
 
                     const editor = controls.TabPane.getContentFromLabel(labelElement) as EditorPart;

@@ -20,6 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export abstract class SceneObjectExtension extends colibri.Extension {
 
         private _typeName: string;
+        private _typeNameAlias: string[];
         private _phaserTypeName: string;
         private _iconDescriptor: controls.IconDescriptor;
         private _category: string;
@@ -27,6 +28,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(config: {
             extensionPoint: string,
             typeName: string,
+            typeNameAlias?: string[],
             phaserTypeName: string,
             category: string,
             icon: colibri.ui.controls.IconDescriptor,
@@ -34,6 +36,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(config.extensionPoint);
 
             this._typeName = config.typeName;
+            this._typeNameAlias = config.typeNameAlias || [];
             this._phaserTypeName = config.phaserTypeName;
             this._category = config.category;
             this._iconDescriptor = config.icon;
@@ -81,6 +84,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getTypeName() {
             return this._typeName;
+        }
+
+        getTypeNameAlias() {
+
+            return this._typeNameAlias;
         }
 
         getPhaserTypeName() {
