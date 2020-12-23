@@ -21,6 +21,7 @@
 
 * Editor tab context menu misspelling "Close to the right Right".
 * Scene Editor: validates a tilemap's tileset doesn't have an external source.
+* Scene Editor: catches error when accessing localforage for storing the thumbnail image.
 
 ## Version 3.9.2 - Dec 7, 2020
 
