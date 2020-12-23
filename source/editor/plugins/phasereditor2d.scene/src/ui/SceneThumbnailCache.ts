@@ -44,17 +44,24 @@ namespace phasereditor2d.scene.ui {
 
                 if (!force) {
 
-                    const blob = await db.getItem(imageKey) as Blob;
-                    const savedFileTime = await db.getItem(modTimeKey) as number;
+                    try {
 
-                    if (blob) {
+                        const blob = await db.getItem(imageKey) as Blob;
+                        const savedFileTime = await db.getItem(modTimeKey) as number;
 
-                        if (currentFileTime === savedFileTime) {
+                        if (blob) {
 
-                            const imgElement = createImageFromBlob(blob);
+                            if (currentFileTime === savedFileTime) {
 
-                            return new controls.ImageWrapper(imgElement);
+                                const imgElement = createImageFromBlob(blob);
+
+                                return new controls.ImageWrapper(imgElement);
+                            }
                         }
+
+                    } catch (error) {
+
+                        console.log(error);
                     }
                 }
 
