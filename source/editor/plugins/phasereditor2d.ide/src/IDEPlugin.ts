@@ -171,8 +171,6 @@ namespace phasereditor2d.ide {
 
         async openFirstWindow() {
 
-            this.restoreTheme();
-
             const wb = colibri.Platform.getWorkbench();
 
             wb.eventProjectOpened.addListener(() => {
@@ -292,27 +290,6 @@ namespace phasereditor2d.ide {
             prefs.setValue("phasereditor2d.ide.theme", {
                 theme: theme.id
             });
-        }
-
-        restoreTheme() {
-
-            const prefs = colibri.Platform.getWorkbench().getGlobalPreferences();
-
-            const themeData = prefs.getValue("phasereditor2d.ide.theme");
-
-            let theme = null;
-
-            if (themeData) {
-
-                const id = themeData.theme;
-
-                theme = colibri.Platform
-                    .getExtensions<colibri.ui.ide.themes.ThemeExtension>(colibri.ui.ide.themes.ThemeExtension.POINT_ID)
-                    .map(e => e.getTheme())
-                    .find(t => t.id === id);
-            }
-
-            controls.Controls.setTheme(theme ?? controls.Controls.LIGHT_THEME);
         }
 
         openProjectInVSCode() {

@@ -262,6 +262,23 @@ namespace colibri.ui.controls {
             documentClassList.add(...tokens);
         }
 
+        static restoreTheme() {
+
+            const id = localStorage.getItem("colibri.theme.id");
+
+            let theme = null;
+
+            if (id) {
+
+                theme = colibri.Platform
+                    .getExtensions<colibri.ui.ide.themes.ThemeExtension>(colibri.ui.ide.themes.ThemeExtension.POINT_ID)
+                    .map(e => e.getTheme())
+                    .find(t => t.id === id);
+            }
+
+            controls.Controls.setTheme(theme ?? controls.Controls.LIGHT_THEME);
+        }
+
         static getTheme() {
             return this._theme;
         }
