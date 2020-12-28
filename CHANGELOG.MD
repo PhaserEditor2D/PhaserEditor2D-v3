@@ -5,6 +5,7 @@
 ### Updated
 
 * Theme restoring is managed by the colibri platform. This is not backward-compatible, your saved theme id will be ignored the first time you run this version of the editor.
+* Moved `phasereditor2d.inspector` plugin to `colibri.inspector`.
 
 ## v3.10.0 - Dec 22, 2020
 
