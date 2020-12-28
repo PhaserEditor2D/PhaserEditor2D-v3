@@ -1,12 +1,12 @@
 
-namespace phasereditor2d.inspector.ui.views {
+namespace colibri.inspector.ui.views {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
 
     export class InspectorView extends ide.ViewPart {
 
-        static VIEW_ID = "phasereditor2d.inspector.ui.views.InspectorView";
+        static VIEW_ID = "colibri.inspector.ui.views.InspectorView";
 
         private _propertyPage: controls.properties.PropertyPage;
         private _currentPart: ide.Part;

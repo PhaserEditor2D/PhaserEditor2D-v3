@@ -607,7 +607,7 @@ namespace phasereditor2d.scene.ui.editor {
             }
 
             const window = colibri.Platform.getWorkbench().getActiveWindow();
-            const view = window.getView(inspector.ui.views.InspectorView.VIEW_ID) as inspector.ui.views.InspectorView;
+            const view = window.getView(colibri.inspector.ui.views.InspectorView.VIEW_ID) as colibri.inspector.ui.views.InspectorView;
 
             const section = view.getPropertyPage().getSection(sectionId);
 

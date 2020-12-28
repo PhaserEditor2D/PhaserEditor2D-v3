@@ -4,6 +4,9 @@
             "path": "./plugins/colibri/src"
         },
         {
+            "path": "./plugins/colibri.inspector/src"
+        },
+        {
             "path": "./plugins/phasereditor2d.pack/src"
         },
         {
@@ -20,10 +23,7 @@
         },
         {
             "path": "./plugins/phasereditor2d.images/src"
-        },
-        {
-            "path": "./plugins/phasereditor2d.inspector/src"
-        },
+        },        
         {
             "path": "./plugins/phasereditor2d.outline/src"
         },        
