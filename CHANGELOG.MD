@@ -1,6 +1,14 @@
 # Change Log
 
-## v3.9.10 - Dec 22, 2020
+## v3.10.1 - January 7, 2021
+
+### Updated
+
+* Theme restoring is managed by the colibri platform. This is not backward-compatible, your saved theme id will be ignored the first time you run this version of the editor.
+* Moved `phasereditor2d.inspector` plugin to `colibri.inspector`.
+* Get Phaser v3.51.0.
+
+## v3.10.0 - Dec 22, 2020
 
 ### Added
 

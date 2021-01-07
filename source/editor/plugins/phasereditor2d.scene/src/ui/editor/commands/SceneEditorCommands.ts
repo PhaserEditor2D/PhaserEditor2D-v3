@@ -44,7 +44,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             || (args.activeEditor instanceof SceneEditor &&
                 (
                     args.activePart instanceof phasereditor2d.outline.ui.views.OutlineView
-                    || args.activePart instanceof phasereditor2d.inspector.ui.views.InspectorView
+                    || args.activePart instanceof colibri.inspector.ui.views.InspectorView
                 ));
     }
 

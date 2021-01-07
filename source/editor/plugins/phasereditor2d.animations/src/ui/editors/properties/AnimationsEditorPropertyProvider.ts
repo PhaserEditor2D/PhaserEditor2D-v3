@@ -32,7 +32,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
                 const activePart = colibri.Platform.getWorkbench().getActivePart();
 
                 if (activePart instanceof AnimationsEditor
-                    || activePart instanceof phasereditor2d.inspector.ui.views.InspectorView
+                    || activePart instanceof colibri.inspector.ui.views.InspectorView
                     || activePart instanceof phasereditor2d.outline.ui.views.OutlineView) {
 
                     return editor.getAnimations();

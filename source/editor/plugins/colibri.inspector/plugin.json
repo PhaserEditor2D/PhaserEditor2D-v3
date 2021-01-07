@@ -1,9 +1,9 @@
 {
-    "id": "phasereditor2d.inspector",
+    "id": "colibri.inspector",
     "styles": [
         "styles/InspectorView.css"
     ],
     "scripts": [
-        "_out/phasereditor2d.inspector.js"
+        "_out/colibri.inspector.js"
     ]
 }

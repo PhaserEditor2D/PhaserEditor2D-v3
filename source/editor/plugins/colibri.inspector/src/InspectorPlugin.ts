@@ -1,4 +1,4 @@
-namespace phasereditor2d.inspector {
+namespace colibri.inspector {
 
     import ide = colibri.ui.ide;
 
@@ -13,7 +13,7 @@ namespace phasereditor2d.inspector {
         }
 
         private constructor() {
-            super("phasereditor2d.inspector");
+            super("colibri.inspector");
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
