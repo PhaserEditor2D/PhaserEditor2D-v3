@@ -1,5 +1,10 @@
 # Change Log
 
+## v3.10.1-next
+
+* Scene Editor: Improve error handling when creating an object from JSON data.
+* Scene Editor: Fixes scene creation when a BitmapText font key is not found.
+
 ## v3.10.1 - January 7, 2021
 
 ### Updated
