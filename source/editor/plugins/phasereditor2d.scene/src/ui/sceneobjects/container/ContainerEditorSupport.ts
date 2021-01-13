@@ -113,7 +113,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const sprite = maker.createObject(objData);
 
-                container.add(sprite);
+                if (sprite) {
+
+                    container.add(sprite);
+                }
             }
         }
 
