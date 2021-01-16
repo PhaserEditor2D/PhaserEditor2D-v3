@@ -1,9 +1,10 @@
 # Change Log
 
-## v3.10.1-next
+## v3.10.2 - Jan 17, 2021
 
 * Scene Editor: Improve error handling when creating an object from JSON data.
 * Scene Editor: Fixes scene creation when a BitmapText font key is not found.
+* Update to Phaser 3.52.0.
 
 ## v3.10.1 - January 7, 2021
 
