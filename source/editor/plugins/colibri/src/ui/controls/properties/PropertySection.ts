@@ -253,6 +253,45 @@ namespace colibri.ui.controls.properties {
             return text;
         }
 
+        createTextDialog(parent: HTMLElement, dialogTitle: string, readOnly = false) {
+
+            const text = this.createTextArea(parent, false);
+            text.rows = 1;
+
+            const btn = document.createElement("button");
+            btn.textContent = "...";
+            btn.addEventListener("click", () => {
+
+                const dlg = new StringDialog();
+
+                dlg.create();
+
+                dlg.setTitle(dialogTitle);
+
+                dlg.addButton("Accept", () => {
+
+                    text.value = dlg.getValue();
+                    text.dispatchEvent(new Event("change"));
+
+                    dlg.close();
+                });
+
+                dlg.addCancelButton();
+
+                dlg.setValue(text.value);
+            });
+
+            const container = document.createElement("div");
+            container.classList.add("StringDialogField")
+
+            container.appendChild(text);
+            container.appendChild(btn);
+
+            parent.appendChild(container);
+
+            return { container, text, btn };
+        }
+
         createColor(parent: HTMLElement, readOnly = false, allowAlpha = true) {
 
             const text = document.createElement("input");

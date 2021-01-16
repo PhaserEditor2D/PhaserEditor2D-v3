@@ -184,6 +184,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
+        createPropertyStringDialogRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
+
+            if (lockIcon) {
+
+                this.createLock(parent, prop);
+            }
+
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
+            label.style.gridColumn = "2";
+
+            return this.createStringDialogField(parent, prop);
+        }
+
         createPropertyColorRow(parent: HTMLElement, prop: IProperty<any>, allowAlpha = true, lockIcon: boolean = true) {
 
             if (lockIcon) {
@@ -341,6 +354,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         .map(obj => property.getValue(obj))
                 );
+            });
+
+            return text;
+        }
+
+        createStringDialogField(
+            parent: HTMLElement, property: IProperty<T>,
+            checkUnlock = true, readOnlyOnMultiple = false) {
+
+            const { text, btn } = this.createTextDialog(parent, property.label, false);
+
+            text.addEventListener("change", e => {
+
+                const value = text.value;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                text.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                if (readOnlyOnMultiple) {
+
+                    text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                }
+
+                text.value = this.flatValues_StringOneOrNothing(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValue(obj))
+                );
+
+                btn.disabled = text.readOnly;
             });
 
             return text;
