@@ -7,6 +7,7 @@
 * Files view: fixes bug on opening the context menu for files without an registered editor.
 * Go To File dialog shows the file path.
 * Commands dialog: highlights the keys.
+* [#99](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/99) Scene Editor: string user property allows multi-line text.
 * Update to Phaser 3.52.0.
 
 ## v3.10.1 - January 7, 2021
