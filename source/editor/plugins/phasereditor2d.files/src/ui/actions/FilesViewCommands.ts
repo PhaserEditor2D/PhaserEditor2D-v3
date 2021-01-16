@@ -79,7 +79,6 @@ namespace phasereditor2d.files.ui.actions {
 
                         const viewer = new controls.viewers.TreeViewer("phasereditor2d.files.ui.actions.GoToFile");
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setLabelProvider(new viewers.FileLabelProvider());
                         viewer.setStyledLabelProvider(new viewers.FileStyledLabelProvider());
                         viewer.setCellRendererProvider(new viewers.FileCellRendererProvider());
 

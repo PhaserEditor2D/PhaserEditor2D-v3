@@ -18,7 +18,6 @@ namespace colibri.ui.controls.dialogs {
             const viewer = this.getViewer();
 
             viewer.setStyledLabelProvider(new CommandStyledLabelProvider());
-            viewer.setLabelProvider(new viewers.LabelProviderFromStyledLabelProvider(viewer.getStyledLabelProvider()));
 
             viewer.setCellRendererProvider(
                 new controls.viewers.EmptyCellRendererProvider(
