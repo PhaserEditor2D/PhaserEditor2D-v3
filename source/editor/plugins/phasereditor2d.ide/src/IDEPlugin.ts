@@ -15,6 +15,7 @@ namespace phasereditor2d.ide {
         private _desktopMode: boolean;
         private _advancedJSEditor: boolean;
         private _licenseActivated: boolean;
+        private _externalEditorName: string;
 
         static getInstance() {
             return this._instance;
@@ -125,6 +126,12 @@ namespace phasereditor2d.ide {
             this._desktopMode = data.desktop === true;
             this._advancedJSEditor = data.advancedJSEditor === true;
             this._licenseActivated = data.unlocked === true;
+            this._externalEditorName = data.externalEditorName || "Alien";
+        }
+
+        getExternalEditorName() {
+
+            return this._externalEditorName;
         }
 
         async requestUpdateAvailable() {

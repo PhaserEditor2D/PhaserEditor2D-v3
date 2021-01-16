@@ -205,8 +205,8 @@ namespace phasereditor2d.ide.ui.actions {
                     command: {
                         id: CMD_OPEN_VSCODE,
                         category: CAT_PROJECT,
-                        name: "Open Visual Studio Code",
-                        tooltip: "Open the project in Visual Studio Code."
+                        name: "Open " + IDEPlugin.getInstance().getExternalEditorName(),
+                        tooltip: "Open the project in the configured external editor (" + IDEPlugin.getInstance().getExternalEditorName() + ")."
                     },
                     keys: {
                         control: true,
