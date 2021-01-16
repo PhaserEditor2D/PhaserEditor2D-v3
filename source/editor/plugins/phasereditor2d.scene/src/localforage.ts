@@ -1,3 +1,5 @@
+/* tslint:disable */
+
 interface LocalForageDbInstanceOptions {
     name?: string;
 

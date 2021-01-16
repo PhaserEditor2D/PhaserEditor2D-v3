@@ -65,8 +65,6 @@ namespace phasereditor2d.scene.ui {
 
                     const container = singleObject as sceneobjects.Container;
 
-                    //container.getEditorSupport().trim();
-                    //container.setPosition(s.borderX + s.borderWidth / 2, s.borderY + s.borderHeight / 2);
                     this.breakContainers([container]);
                 }
 
