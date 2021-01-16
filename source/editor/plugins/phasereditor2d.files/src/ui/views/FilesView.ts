@@ -65,7 +65,7 @@ namespace phasereditor2d.files.ui.views {
 
             const registeredFactory = file ? reg.getFactoryForInput(file) : undefined;
 
-            if (registeredFactory !== defaultFactory) {
+            if (registeredFactory && registeredFactory !== defaultFactory) {
 
                 factories.push(registeredFactory);
             }
