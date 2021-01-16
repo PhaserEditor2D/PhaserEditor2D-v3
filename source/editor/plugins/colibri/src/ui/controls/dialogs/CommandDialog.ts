@@ -17,23 +17,8 @@ namespace colibri.ui.controls.dialogs {
 
             const viewer = this.getViewer();
 
-            viewer.setLabelProvider(
-                new controls.viewers.LabelProvider(obj => {
-
-                    const cmd = obj as ide.commands.Command;
-
-                    const label = manager.getCategory(cmd.getCategoryId()).name
-                        + ": " + cmd.getName();
-
-                    const keys = manager.getCommandKeyString(cmd.getId());
-
-                    if (keys) {
-
-                        return label + " (" + keys + ")";
-                    }
-
-                    return label;
-                }));
+            viewer.setStyledLabelProvider(new CommandStyledLabelProvider());
+            viewer.setLabelProvider(new viewers.LabelProviderFromStyledLabelProvider(viewer.getStyledLabelProvider()));
 
             viewer.setCellRendererProvider(
                 new controls.viewers.EmptyCellRendererProvider(
@@ -62,6 +47,44 @@ namespace colibri.ui.controls.dialogs {
             //     viewer.setInput(manager.getCommands());
             //     viewer.repaint();
             // });
+        }
+    }
+
+    class CommandStyledLabelProvider implements controls.viewers.IStyledLabelProvider {
+
+        getStyledTexts(obj: any, dark: boolean): viewers.IStyledText[] {
+
+            const cmd = obj as ide.commands.Command;
+
+            const manager = colibri.Platform.getWorkbench().getCommandManager();
+
+            const label = manager.getCategory(cmd.getCategoryId()).name
+                + ": " + cmd.getName();
+
+            const keys = manager.getCommandKeyString(cmd.getId());
+
+            const theme = controls.Controls.getTheme();
+
+            if (keys) {
+
+                return [
+                    {
+                        text: label,
+                        color: theme.viewerForeground
+                    },
+                    {
+                        text: " (" + keys + ")",
+                        color: theme.viewerForeground + "90"
+                    }
+                ];
+            }
+
+            return [
+                {
+                    text: label,
+                    color: theme.viewerForeground
+                }
+            ];
         }
     }
 }

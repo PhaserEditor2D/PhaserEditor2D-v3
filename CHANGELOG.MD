@@ -5,6 +5,7 @@
 * Scene Editor: Improve error handling when creating an object from JSON data.
 * Scene Editor: Fixes scene creation when a BitmapText font key is not found.
 * Files view: fixes bug on opening the context menu for files without an registered editor.
+* Go To File dialog shows the file path.
 * Update to Phaser 3.52.0.
 
 ## v3.10.1 - January 7, 2021
