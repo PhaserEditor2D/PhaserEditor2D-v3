@@ -2,7 +2,7 @@
 
 ## v3.10.2-next
 
-
+* Scene Editor: keep same origin when change the texture.
 
 ## v3.10.2 - Jan 17, 2021
 
