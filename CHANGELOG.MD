@@ -3,6 +3,7 @@
 ## v3.10.2-next
 
 * Scene Editor: keep same origin when change the texture.
+* Scene Editor: uses `Array<any>` as type for an empty ObjectList.
 
 ## v3.10.2 - Jan 17, 2021
 
