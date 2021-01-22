@@ -10,6 +10,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_TRIM_CONTAINER = "phasereditor2d.scene.ui.editor.commands.TrimContainer";
     export const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
     export const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
+    export const CMD_TOGGLE_VISIBLE = "phasereditor2d.scene.ui.editor.commands.ToggleVisibility";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
@@ -89,6 +90,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             SceneEditorCommands.registerEditCommands(manager);
 
             SceneEditorCommands.registerSceneCommands(manager);
+
+            SceneEditorCommands.registerVisibilityCommands(manager);
 
             SceneEditorCommands.registerSelectionCommands(manager);
 
@@ -1156,6 +1159,65 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "Z"
+                }
+            });
+        }
+
+        private static registerVisibilityCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_TOGGLE_VISIBLE,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Toggle Visibility",
+                    tooltip: "Toggle the visible property of the object"
+                },
+                handler: {
+                    testFunc: e => {
+
+                        if (!isSceneScope(e)) {
+
+                            return false;
+                        }
+
+                        const sel = e.activeEditor.getSelection();
+
+                        for (const obj of sel) {
+
+                            if (!sceneobjects.GameObjectEditorSupport.hasObjectComponent(obj, sceneobjects.VisibleComponent)) {
+
+                                return false;
+                            }
+                        }
+
+                        return sel.length > 0;
+                    },
+                    executeFunc: e => {
+
+                        let visible = false;
+
+                        const sel = e.activeEditor.getSelection();
+
+                        for (const obj of sel) {
+
+                            const objVisible = sceneobjects.VisibleComponent.visible.getValue(obj);
+
+                            if (objVisible) {
+
+                                visible = true;
+                                break;
+                            }
+                        }
+
+                        const editor = e.activeEditor as ui.editor.SceneEditor;
+
+                        editor.getUndoManager().add(
+                            new sceneobjects.SimpleOperation(
+                                editor, sel, sceneobjects.VisibleComponent.visible, !visible));
+                    }
+                },
+                keys: {
+                    key: "V"
                 }
             });
         }
