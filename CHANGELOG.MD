@@ -4,6 +4,7 @@
 
 * Scene Editor: keep same origin when change the texture.
 * Scene Editor: uses `Array<any>` as type for an empty ObjectList.
+* Scene Editor: command `V` toggles the visibility of the selected objects.
 
 ## v3.10.2 - Jan 17, 2021
 
