@@ -2,9 +2,15 @@
 
 ## v3.10.2-next
 
+## Added
+
+* Scene Editor: command `V` toggles the visibility of the selected objects.
+
+### Fixed
+
 * Scene Editor: keep same origin when change the texture.
 * Scene Editor: uses `Array<any>` as type for an empty ObjectList.
-* Scene Editor: command `V` toggles the visibility of the selected objects.
+* Scene Editor: fixes code generation of the Text's `lineSpacing` property.
 
 ## v3.10.2 - Jan 17, 2021
 
