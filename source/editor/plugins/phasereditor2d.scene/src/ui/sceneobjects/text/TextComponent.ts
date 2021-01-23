@@ -411,6 +411,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     args.statements.push(dom);
                 }
             }
+
+            {
+                // lineSpacing
+
+                if (support.isUnlockedProperty(TextComponent.lineSpacing)) {
+
+                    const dom = new code.MethodCallCodeDOM("setLineSpacing", args.objectVarName);
+
+                    const value = TextComponent.lineSpacing.getValue(obj);
+
+                    dom.arg(value);
+
+                    args.statements.push(dom);
+                }
+            }
         }
     }
 }
