@@ -70,6 +70,11 @@ namespace colibri.ui.ide {
 
         abstract getLabelProvider(): viewers.ILabelProvider;
 
+        getStyledLabelProvider(): viewers.IStyledLabelProvider {
+
+            return undefined;
+        }
+
         abstract getCellRendererProvider(): viewers.ICellRendererProvider;
 
         abstract getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): viewers.TreeViewerRenderer;

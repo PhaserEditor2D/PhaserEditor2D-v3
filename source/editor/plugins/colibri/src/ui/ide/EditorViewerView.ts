@@ -88,6 +88,13 @@ namespace colibri.ui.ide {
                 this._viewer.setContentProvider(provider.getContentProvider());
                 this._viewer.setInput(provider.getInput());
 
+                const styledLabelProvider = provider.getStyledLabelProvider();
+
+                if (styledLabelProvider) {
+
+                    this._viewer.setStyledLabelProvider(styledLabelProvider);
+                }
+
                 provider.setViewer(this._viewer);
 
                 const state = this._viewerStateMap.get(editor);
