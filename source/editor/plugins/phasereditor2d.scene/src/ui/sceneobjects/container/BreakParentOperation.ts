@@ -67,8 +67,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 parent.getEditorSupport().destroy();
             }
 
-            console.log(displayList.list);
-
             return sel;
         }
     }

@@ -302,16 +302,22 @@ namespace colibri.ui.controls.viewers {
 
                 this.prepareContextForText(args);
 
-
                 const label = args.viewer.getLabelProvider().getLabel(args.obj);
 
                 const trim = this.trimLabel(ctx, label, args.w);
 
                 const x2 = Math.max(x, x + args.w / 2 - trim.textWidth / 2);
 
-                ctx.fillText(trim.text, x2, args.y + args.h - 5);
+                const y2 = args.y + args.h - 5;
+
+                ctx.fillText(trim.text, x2, y2);
 
                 ctx.restore();
+
+                if (args.viewer.isHighlightMatches() && args.viewer.getFilterText().length > 0) {
+
+                    this.renderMatchHighlight(args, x2, y2, label);
+                }
             }
         }
 
