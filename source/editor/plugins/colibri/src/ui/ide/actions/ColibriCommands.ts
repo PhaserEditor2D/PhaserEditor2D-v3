@@ -251,19 +251,44 @@ namespace colibri.ui.ide.actions {
             manager.addHandlerHelper(CMD_EXPAND_COLLAPSE_BRANCH,
 
                 args => args.activeElement !== null
-                    && controls.Control.getControlOf(args.activeElement) instanceof controls.viewers.Viewer,
+                    && controls.Control.getControlOf(args.activeElement) instanceof controls.viewers.TreeViewer,
 
-                args => {
-                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
+                async (args) => {
 
-                    const parents = [];
+                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.TreeViewer;
 
-                    for (const obj of viewer.getSelection()) {
-                        const objParents = viewer.expandCollapseBranch(obj);
-                        parents.push(...objParents);
+                    const obj = viewer.getSelectionFirstElement();
+
+                    if (obj) {
+
+                        const children = viewer.getContentProvider().getChildren(obj);
+
+                        if (children.length > 0) {
+
+                            viewer.setExpanded(obj, !viewer.isExpanded(obj));
+
+                            viewer.repaint();
+
+                        } else {
+
+                            const path = viewer.getObjectPath(obj);
+
+                            // pop obj
+                            path.pop();
+
+                            // pop parent
+                            const parent = path.pop();
+
+                            if (parent) {
+
+                                await viewer.reveal(parent);
+
+                                viewer.setExpanded(parent, false);
+
+                                viewer.setSelection([parent]);
+                            }
+                        }
                     }
-
-                    viewer.setSelection(parents);
                 }
             );
 

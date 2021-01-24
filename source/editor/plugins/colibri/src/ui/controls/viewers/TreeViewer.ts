@@ -43,7 +43,7 @@ namespace colibri.ui.controls.viewers {
             return icon === null;
         }
 
-        reveal(...objects: any[]): void {
+        async reveal(...objects: any[]): Promise<void> {
 
             for (const obj of objects) {
 
@@ -62,41 +62,39 @@ namespace colibri.ui.controls.viewers {
 
             const scrollPane = this.getContainer().getContainer() as ScrollPane;
 
-            this.repaint().then(() => {
+            await this.repaint();
 
-                const objSet = new Set(objects);
+            const objSet = new Set(objects);
 
-                let found = false;
+            let found = false;
 
-                let y = -this._contentHeight;
+            let y = -this._contentHeight;
 
-                const b = this.getBounds();
+            const b = this.getBounds();
 
-                const items = [...this._paintItems];
+            const items = [...this._paintItems];
 
-                items.sort((i1, i2) => i1.y - i2.y);
+            items.sort((i1, i2) => i1.y - i2.y);
 
-                for (const item of items) {
+            for (const item of items) {
 
-                    if (objSet.has(item.data)) {
+                if (objSet.has(item.data)) {
 
-                        y = (item.y - b.height / 2 + item.h / 2) - this.getScrollY();
+                    y = (item.y - b.height / 2 + item.h / 2) - this.getScrollY();
 
-                        found = true;
+                    found = true;
 
-                        break;
-                    }
+                    break;
                 }
+            }
 
-                if (found) {
+            if (found) {
 
-                    this.setScrollY(-y);
-                    this.repaint();
+                this.setScrollY(-y);
+                this.repaint();
 
-                    scrollPane.layout();
-                }
-            });
-
+                scrollPane.layout();
+            }
         }
 
         private revealPath(path: any[]) {
@@ -201,7 +199,9 @@ namespace colibri.ui.controls.viewers {
             const icon = this.getTreeIconAtPoint(e);
 
             if (icon) {
+
                 this.setExpanded(icon.obj, !this.isExpanded(icon.obj));
+
                 this.repaint();
             }
         }
@@ -376,18 +376,5 @@ namespace colibri.ui.controls.viewers {
         getContentProvider(): ITreeContentProvider {
             return super.getContentProvider() as ITreeContentProvider;
         }
-
-        expandCollapseBranch(obj: any) {
-
-            if (this.getContentProvider().getChildren(obj).length > 0) {
-
-                this.setExpanded(obj, !this.isExpanded(obj));
-
-                return [obj];
-            }
-
-            return super.expandCollapseBranch(obj);
-        }
-
     }
 }

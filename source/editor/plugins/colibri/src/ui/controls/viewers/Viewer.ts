@@ -512,24 +512,6 @@ namespace colibri.ui.controls.viewers {
             this.setScrollY(0);
         }
 
-        expandCollapseBranch(obj: any) {
-
-            const parents = [];
-
-            const item = this._paintItems.find(i => i.data === obj);
-
-            if (item && item.parent) {
-
-                const parentObj = item.parent.data;
-
-                this.setExpanded(parentObj, !this.isExpanded(parentObj));
-
-                parents.push(parentObj);
-            }
-
-            return parents;
-        }
-
         isSelected(obj: any) {
 
             return this._selectedObjects.has(obj);
