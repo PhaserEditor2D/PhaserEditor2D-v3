@@ -5,6 +5,7 @@
 ## Added
 
 * Scene Editor: command `V` toggles the visibility of the selected objects.
+* Viewer: advanced filtering by default. Allows matching different words.
 
 ### Fixed
 
