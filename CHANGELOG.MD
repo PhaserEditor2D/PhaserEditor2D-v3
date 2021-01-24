@@ -5,6 +5,7 @@
 ## Added
 
 * Scene Editor: command `V` toggles the visibility of the selected objects.
+* Scene Editor: non-visible objects are shown with a "hidden" suffix in the Outline view labels.
 * Viewer: advanced filtering by default. Allows matching different words.
 * Viewer: filtering isn't triggered at every key.
 
