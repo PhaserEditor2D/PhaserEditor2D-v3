@@ -508,6 +508,8 @@ namespace colibri.ui.controls.viewers {
         collapseAll() {
 
             this._expandedObjects = new Set();
+
+            this.setScrollY(0);
         }
 
         expandCollapseBranch(obj: any) {
