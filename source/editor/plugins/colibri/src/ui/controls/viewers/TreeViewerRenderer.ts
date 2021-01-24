@@ -182,15 +182,13 @@ namespace colibri.ui.controls.viewers {
 
             if (args.viewer.isHighlightMatches() && args.viewer.getFilterText().length > 0) {
 
-                this.renderMatchHighlight(args, x, y);
+                this.defaultRenderMatchHighlight(args, x, y);
             }
 
             ctx.restore();
         }
 
-        renderMatchHighlight(args: RenderCellArgs, x: number, y: number) {
-
-            const label = args.viewer.getLabelProvider().getLabel(args.obj);
+        protected renderMatchHighlight(args: RenderCellArgs, x: number, y: number, label: string) {
 
             const result = args.viewer.getMatchesResult(label);
 
@@ -198,6 +196,12 @@ namespace colibri.ui.controls.viewers {
 
                 const start = this.measureText(args, result.measureStart);
                 const width = this.measureText(args, result.measureMatch);
+                const cellRight = args.x + args.w;
+
+                if (x + start > cellRight) {
+
+                    return;
+                }
 
                 const ctx = args.canvasContext;
 
@@ -214,7 +218,7 @@ namespace colibri.ui.controls.viewers {
 
                 ctx.moveTo(x + start, y + 2 + 0.5);
 
-                ctx.lineTo(x + start + width, y + 2 + 0.5);
+                ctx.lineTo(Math.min(cellRight - 2,  x + start + width), y + 2 + 0.5);
 
                 ctx.stroke();
 
@@ -222,6 +226,13 @@ namespace colibri.ui.controls.viewers {
 
                 ctx.restore();
             }
+        }
+
+        private defaultRenderMatchHighlight(args: RenderCellArgs, x: number, y: number) {
+
+            const label = args.viewer.getLabelProvider().getLabel(args.obj);
+
+            this.renderMatchHighlight(args, x, y, label);
         }
 
         protected renderLabel(args: RenderCellArgs, x: number, y: number) {
