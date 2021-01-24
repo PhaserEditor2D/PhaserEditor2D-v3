@@ -203,6 +203,19 @@ namespace colibri.ui.controls {
             colibri.Platform.getWorkbench().eventThemeChanged.addListener(this._themeListener);
         }
 
+        addTabSection(label: HTMLElement, section: string) {
+
+            const sectionsElement = label.querySelectorAll(".TabPaneLabelSections")[0] as HTMLDivElement;
+
+            const sectionElement = document.createElement("div");
+
+            sectionElement.classList.add("TabPaneLabelSection");
+
+            sectionElement.innerHTML = section;
+
+            sectionsElement.appendChild(sectionElement);
+        }
+
         addTab(label: string, icon: IImage, content: Control, closeable = false, selectIt = true): void {
 
             const labelElement = this.makeLabel(label, icon, closeable);
@@ -233,6 +246,7 @@ namespace colibri.ui.controls {
             if (selectIt) {
 
                 if (this._titleBarElement.childElementCount === 1) {
+
                     this.selectTab(labelElement);
                 }
             }
@@ -261,6 +275,7 @@ namespace colibri.ui.controls {
         }
 
         incrementTabIconSize(amount: number) {
+
             this.setTabIconSize(this._iconSize + amount);
         }
 
@@ -275,6 +290,10 @@ namespace colibri.ui.controls {
             const textElement = document.createElement("span");
             textElement.innerHTML = label;
             labelElement.appendChild(textElement);
+
+            const sectionsElement = document.createElement("div");
+            sectionsElement.classList.add("TabPaneLabelSections");
+            labelElement.appendChild(sectionsElement);
 
             if (closeable) {
 
