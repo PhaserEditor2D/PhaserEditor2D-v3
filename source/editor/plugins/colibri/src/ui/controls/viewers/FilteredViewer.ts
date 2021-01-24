@@ -126,6 +126,8 @@ namespace colibri.ui.controls.viewers {
             this.setLayoutChildren(false);
 
             this.registerListeners();
+
+            requestAnimationFrame(() => this._scrollPane.layout());
         }
 
         getScrollPane() {

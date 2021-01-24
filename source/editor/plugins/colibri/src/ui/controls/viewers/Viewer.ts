@@ -24,8 +24,12 @@ namespace colibri.ui.controls.viewers {
         protected _contentHeight: number = 0;
         private _filterText: string;
         protected _filterIncludeSet: Set<any>;
-        private _menu: controls.Menu;
+        protected _filterMatches: Map<string, IMatchResult>;
+        private _highlightMatches: boolean;
         private _viewerId: string;
+        private _preloadEnabled = true;
+        private _filterOnRepaintEnabled = true;
+        private _searchEngine: ISearchEngine;
 
         constructor(id: string, ...classList: string[]) {
             super("canvas", "Viewer");
@@ -42,10 +46,34 @@ namespace colibri.ui.controls.viewers {
             this._input = null;
             this._expandedObjects = new Set();
             this._selectedObjects = new Set();
+            this._filterIncludeSet = new Set();
+            this._filterMatches = new Map();
+
+            this._highlightMatches = true;
+            this._searchEngine = new MultiWordSearchEngine();
 
             this.initListeners();
 
             this.restoreCellSize();
+        }
+
+        isHighlightMatches() {
+
+            return this._highlightMatches;
+        }
+        setHighlightMatches(highlightMatches: boolean) {
+
+            this._highlightMatches = highlightMatches;
+        }
+
+        getSearchEngine() {
+
+            return this._searchEngine;
+        }
+
+        setSearchEngine(engine: ISearchEngine) {
+
+            this._searchEngine = engine;
         }
 
         getViewerId() {
@@ -203,16 +231,24 @@ namespace colibri.ui.controls.viewers {
             return this._filterText;
         }
 
-        protected prepareFiltering() {
+        protected prepareFiltering(updateScroll: boolean) {
 
-            this._filterIncludeSet = new Set();
+            if (updateScroll) {
+
+                this.setScrollY(0);
+            }
+
+            this._filterIncludeSet.clear();
+            this._filterMatches.clear();
+
+            this._searchEngine.prepare(this.getFilterText());
 
             this.buildFilterIncludeMap();
         }
 
         isFilterIncluded(obj: any) {
 
-            return this._filterIncludeSet.has(obj);
+            return this._filterIncludeSet.has(obj) || this._filterText.length === 0;
         }
 
         protected abstract buildFilterIncludeMap();
@@ -220,25 +256,34 @@ namespace colibri.ui.controls.viewers {
         protected matches(obj: any): boolean {
 
             const labelProvider = this.getLabelProvider();
-            const filter = this.getFilterText();
 
             if (labelProvider === null) {
-                return true;
-            }
-
-            if (filter === "") {
 
                 return true;
             }
 
             const label = labelProvider.getLabel(obj);
 
-            if (label.toLocaleLowerCase().indexOf(filter) !== -1) {
+            const result = this._searchEngine.matches(label);
 
-                return true;
+            if (this._highlightMatches) {
+
+                if (result.matches) {
+
+                    this._filterMatches.set(label, result);
+
+                } else {
+
+                    this._filterMatches.delete(label);
+                }
             }
 
-            return false;
+            return result.matches;
+        }
+
+        getMatchesResult(label: string) {
+
+            return this._filterMatches.get(label);
         }
 
         protected getPaintItemAt(e: MouseEvent): PaintItem {
@@ -246,6 +291,7 @@ namespace colibri.ui.controls.viewers {
             for (const item of this._paintItems) {
 
                 if (item.contains(e.offsetX, e.offsetY)) {
+
                     return item;
                 }
             }
@@ -482,6 +528,16 @@ namespace colibri.ui.controls.viewers {
             return this._selectedObjects.has(obj);
         }
 
+        setFilterOnRepaintDisabled() {
+
+            this._filterOnRepaintEnabled = false;
+        }
+
+        setPreloadDisabled() {
+
+            this._preloadEnabled = false;
+        }
+
         protected paintTreeHandler(x: number, y: number, collapsed: boolean): void {
 
             if (collapsed) {
@@ -498,17 +554,23 @@ namespace colibri.ui.controls.viewers {
 
         async repaint() {
 
-            this.prepareFiltering();
+            if (this._filterOnRepaintEnabled) {
+
+                this.prepareFiltering(false);
+            }
 
             this.repaint2();
 
-            this.preload(this._paintItems).then(result => {
+            if (this._preloadEnabled) {
 
-                if (result === PreloadResult.RESOURCES_LOADED) {
+                this.preload(this._paintItems).then(result => {
 
-                    this.repaint2();
-                }
-            });
+                    if (result === PreloadResult.RESOURCES_LOADED) {
+
+                        this.repaint2();
+                    }
+                });
+            }
 
             this.updateScrollPane();
         }

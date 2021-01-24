@@ -124,6 +124,8 @@ namespace colibri.ui.ide {
                 }
             }
 
+            controls.Controls.restoreTheme();
+
             console.log("Workbench: fetching UI icons.");
 
             await this.preloadPluginResources();

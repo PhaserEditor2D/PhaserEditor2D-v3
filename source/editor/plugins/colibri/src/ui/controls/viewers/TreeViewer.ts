@@ -261,14 +261,62 @@ namespace colibri.ui.controls.viewers {
 
             super.setFilterText(filter);
 
-            if (filter !== "") {
+            if (filter.length > 0) {
 
-                this.prepareFiltering();
-
-                this.expandFilteredParents(this.getContentProvider().getRoots(this.getInput()));
-
-                this.repaint();
+                this.maybeFilter();
             }
+        }
+
+        private _filterTime = 0;
+        private _token = 0;
+        private _delayOnManyChars = 100;
+        private _delayOnFewChars = 200;
+        private _howMuchIsFewChars = 3;
+
+        setFilterDelay(delayOnManyChars: number, delayOnFewChars: number, howMuchIsFewChars: number) {
+
+            this._delayOnManyChars = delayOnManyChars;
+            this._delayOnFewChars = delayOnFewChars;
+            this._howMuchIsFewChars = howMuchIsFewChars;
+        }
+
+        private maybeFilter() {
+
+            const now = Date.now();
+
+            const count = this.getFilterText().length;
+
+            const delay = count <= this._howMuchIsFewChars ? this._delayOnFewChars : this._delayOnManyChars;
+
+            if (now - this._filterTime > delay) {
+
+                this._filterTime = now;
+
+                this._token++;
+
+                this.filterNow();
+
+            } else {
+
+                const token = this._token;
+
+                requestAnimationFrame(() => {
+
+                    if (token === this._token) {
+
+                        this.maybeFilter();
+                    }
+                });
+            }
+        }
+
+        private filterNow() {
+
+            this.prepareFiltering(true);
+
+            this.expandFilteredParents(this.getContentProvider().getRoots(this.getInput()));
+
+            this.repaint();
         }
 
         private expandFilteredParents(objects: any[]): void {
