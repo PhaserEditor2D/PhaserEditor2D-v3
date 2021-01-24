@@ -13,7 +13,8 @@
 * Scene Editor: keep same origin when change the texture.
 * Scene Editor: uses `Array<any>` as type for an empty ObjectList.
 * Scene Editor: fixes code generation of the Text's `lineSpacing` property.
-* Viewer: collapse all when the viewer is scrolled.
+* Viewer: fixes Collapse All command, when the viewer is scrolled.
+* Viewer: fixes Collapse/Expand branch command, when the viewer is scrolled.
 
 ## v3.10.2 - Jan 17, 2021
 
