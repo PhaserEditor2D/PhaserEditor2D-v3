@@ -32,6 +32,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
             return new SceneEditorOutlineLabelProvider();
         }
 
+        getStyledLabelProvider() {
+
+            return new SceneEditorOutlineStyledLabelProvider();
+        }
+
         getCellRendererProvider(): controls.viewers.ICellRendererProvider {
 
             return new SceneEditorOutlineRendererProvider();
