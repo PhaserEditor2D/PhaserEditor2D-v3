@@ -7,6 +7,30 @@ Important:
 
 */
 
+body,
+html {
+    margin: 0px;
+    padding: 0px;
+}
+
+body,
+button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+input, textarea {
+    min-width: 0px;
+    border-radius: 3px;
+    padding: 3px;
+    outline: none;
+    border-style: none;
+}
+
+label {
+    min-width: 0px;
+}
+
 * {
     user-select: none;
     -webkit-touch-callout: none;
@@ -296,6 +320,18 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .formLabel {
     justify-self: self-end;
+}
+
+.StringDialogField {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 5px;
+    align-items: center;
+}
+
+.StringDialogField textarea {
+    resize: none;
+    overflow: hidden;
 }
 
 /* Toolbar */

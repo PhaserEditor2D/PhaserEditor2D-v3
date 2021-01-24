@@ -1,9 +1,0 @@
-{
-    "id": "phasereditor2d.inspector",
-    "styles": [
-        "styles/InspectorView.css"
-    ],
-    "scripts": [
-        "_out/phasereditor2d.inspector.js"
-    ]
-}

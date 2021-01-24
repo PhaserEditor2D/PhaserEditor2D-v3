@@ -509,7 +509,7 @@ namespace phasereditor2d.scene.ui {
                     errors.push(msg);
                 }
 
-                console.error(msg);
+                console.error(e);
 
                 return null;
             }

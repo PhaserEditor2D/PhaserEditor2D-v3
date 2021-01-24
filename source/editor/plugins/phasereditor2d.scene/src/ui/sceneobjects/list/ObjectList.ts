@@ -69,11 +69,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     return support.getPhaserType();
                 }));
 
+            console.log(types);
+
             let listType = [...types].join("|");
 
             if (types.size === 0) {
 
-                listType = "Array";
+                listType = "Array<any>";
 
             } else if (types.size === 1) {
 

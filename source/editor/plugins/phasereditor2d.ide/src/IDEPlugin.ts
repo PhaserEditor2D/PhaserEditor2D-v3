@@ -15,6 +15,7 @@ namespace phasereditor2d.ide {
         private _desktopMode: boolean;
         private _advancedJSEditor: boolean;
         private _licenseActivated: boolean;
+        private _externalEditorName: string;
 
         static getInstance() {
             return this._instance;
@@ -125,6 +126,12 @@ namespace phasereditor2d.ide {
             this._desktopMode = data.desktop === true;
             this._advancedJSEditor = data.advancedJSEditor === true;
             this._licenseActivated = data.unlocked === true;
+            this._externalEditorName = data.externalEditorName || "Alien";
+        }
+
+        getExternalEditorName() {
+
+            return this._externalEditorName;
         }
 
         async requestUpdateAvailable() {
@@ -170,8 +177,6 @@ namespace phasereditor2d.ide {
         }
 
         async openFirstWindow() {
-
-            this.restoreTheme();
 
             const wb = colibri.Platform.getWorkbench();
 
@@ -294,27 +299,6 @@ namespace phasereditor2d.ide {
             });
         }
 
-        restoreTheme() {
-
-            const prefs = colibri.Platform.getWorkbench().getGlobalPreferences();
-
-            const themeData = prefs.getValue("phasereditor2d.ide.theme");
-
-            let theme = null;
-
-            if (themeData) {
-
-                const id = themeData.theme;
-
-                theme = colibri.Platform
-                    .getExtensions<colibri.ui.ide.themes.ThemeExtension>(colibri.ui.ide.themes.ThemeExtension.POINT_ID)
-                    .map(e => e.getTheme())
-                    .find(t => t.id === id);
-            }
-
-            controls.Controls.setTheme(theme ?? controls.Controls.LIGHT_THEME);
-        }
-
         openProjectInVSCode() {
 
             this.openFileInVSCode(colibri.ui.ide.FileUtils.getRoot());
@@ -335,7 +319,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.10.0";
+    export const VER = "3.10.2-next";
 
     async function main() {
 

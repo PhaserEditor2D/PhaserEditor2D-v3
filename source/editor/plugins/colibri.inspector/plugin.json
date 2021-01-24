@@ -1,0 +1,9 @@
+{
+    "id": "colibri.inspector",
+    "styles": [
+        "styles/InspectorView.css"
+    ],
+    "scripts": [
+        "_out/colibri.inspector.js"
+    ]
+}

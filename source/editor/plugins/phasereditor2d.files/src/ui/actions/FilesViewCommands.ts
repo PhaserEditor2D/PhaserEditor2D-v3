@@ -79,7 +79,7 @@ namespace phasereditor2d.files.ui.actions {
 
                         const viewer = new controls.viewers.TreeViewer("phasereditor2d.files.ui.actions.GoToFile");
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setLabelProvider(new viewers.FileLabelProvider());
+                        viewer.setStyledLabelProvider(new viewers.FileStyledLabelProvider());
                         viewer.setCellRendererProvider(new viewers.FileCellRendererProvider());
 
                         viewer.setInput(colibri.ui.ide.FileUtils.getAllFiles()
@@ -89,6 +89,8 @@ namespace phasereditor2d.files.ui.actions {
                             .sort((a, b) => -(a.getModTime() - b.getModTime())));
 
                         const dlg = new controls.dialogs.ViewerDialog(viewer, true);
+
+                        dlg.setSize(dlg.getSize().width * 1.5, dlg.getSize().height * 1.5);
 
                         dlg.create();
 

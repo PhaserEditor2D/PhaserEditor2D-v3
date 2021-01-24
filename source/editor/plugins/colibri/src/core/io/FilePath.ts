@@ -120,7 +120,7 @@ namespace colibri.core.io {
             return this._name;
         }
 
-        getProjectRelativeName() {
+        getProjectRelativeName(): string {
 
             if (this._parent) {
 

@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const tilemap = this.getObject();
 
-            const layers: Array<TilemapLayer> = [];
+            const layers: TilemapLayer[] = [];
 
             this.getScene().visit(obj => {
 

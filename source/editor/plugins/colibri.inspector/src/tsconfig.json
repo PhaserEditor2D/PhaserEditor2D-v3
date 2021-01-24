@@ -1,0 +1,10 @@
+{
+    "extends": "../../../tsconfig-base.json",
+    "compilerOptions": {
+        "outFile": "../_out/colibri.inspector.js"
+    },
+    "references": [{
+        "path": "../../colibri/src"
+    }],
+    "exclude": ["../_out/"]
+}

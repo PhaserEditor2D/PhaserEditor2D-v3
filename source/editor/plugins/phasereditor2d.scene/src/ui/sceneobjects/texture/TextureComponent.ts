@@ -66,9 +66,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._textureKeys.frame = undefined;
             }
 
-            const obj = this.getObject();
+            const obj = this.getObject() as ITextureLikeObject & IOriginLikeObject;
+
+            const ox = obj.originX;
+            const oy = obj.originY;
 
             obj.setTexture(keys.key || null, keys.frame);
+
+            obj.setOrigin(ox, oy);
         }
 
         removeTexture() {

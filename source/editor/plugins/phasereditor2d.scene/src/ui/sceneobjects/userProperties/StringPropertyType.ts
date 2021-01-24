@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createInspectorPropertyEditor(
             section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 
-            section.createPropertyStringRow(parent, userProp.getComponentProperty(), lockIcon);
+            section.createPropertyStringDialogRow(parent, userProp.getComponentProperty(), lockIcon);
         }
 
         buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): code.MemberDeclCodeDOM[] {

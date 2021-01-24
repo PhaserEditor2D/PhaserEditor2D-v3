@@ -219,6 +219,11 @@ namespace colibri.ui.controls.viewers {
         setStyledLabelProvider(styledLabelProvider: IStyledLabelProvider) {
 
             this._styledLabelProvider = styledLabelProvider;
+
+            if (!this._labelProvider && styledLabelProvider) {
+
+                this._labelProvider = new LabelProviderFromStyledLabelProvider(styledLabelProvider);
+            }
         }
 
         setFilterText(filterText: string) {

@@ -1,6 +1,36 @@
 # Change Log
 
-## v3.9.10 - Dec 22, 2020
+## v3.10.2-next
+
+## Added
+
+* Scene Editor: command `V` toggles the visibility of the selected objects.
+
+### Fixed
+
+* Scene Editor: keep same origin when change the texture.
+* Scene Editor: uses `Array<any>` as type for an empty ObjectList.
+* Scene Editor: fixes code generation of the Text's `lineSpacing` property.
+
+## v3.10.2 - Jan 17, 2021
+
+* Scene Editor: Improve error handling when creating an object from JSON data.
+* Scene Editor: Fixes scene creation when a BitmapText font key is not found.
+* Files view: fixes bug on opening the context menu for files without an registered editor.
+* Go To File dialog shows the file path.
+* Commands dialog: highlights the keys.
+* [#99](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/99) Scene Editor: string user property allows multi-line text.
+* Update to Phaser 3.52.0.
+
+## v3.10.1 - January 7, 2021
+
+### Updated
+
+* Theme restoring is managed by the colibri platform. This is not backward-compatible, your saved theme id will be ignored the first time you run this version of the editor.
+* Moved `phasereditor2d.inspector` plugin to `colibri.inspector`.
+* Get Phaser v3.51.0.
+
+## v3.10.0 - Dec 22, 2020
 
 ### Added
 

@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
 
     export class OriginSection extends SceneGameObjectSection<IOriginLikeObject> {
-        
+
         static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.OriginSection";
 
         constructor(page: controls.properties.PropertyPage) {
