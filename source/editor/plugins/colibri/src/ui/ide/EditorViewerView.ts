@@ -83,17 +83,11 @@ namespace colibri.ui.ide {
                 await provider.preload();
 
                 this._viewer.setTreeRenderer(provider.getTreeViewerRenderer(this._viewer));
+                this._viewer.setStyledLabelProvider(provider.getStyledLabelProvider());
                 this._viewer.setLabelProvider(provider.getLabelProvider());
                 this._viewer.setCellRendererProvider(provider.getCellRendererProvider());
                 this._viewer.setContentProvider(provider.getContentProvider());
                 this._viewer.setInput(provider.getInput());
-
-                const styledLabelProvider = provider.getStyledLabelProvider();
-
-                if (styledLabelProvider) {
-
-                    this._viewer.setStyledLabelProvider(styledLabelProvider);
-                }
 
                 provider.setViewer(this._viewer);
 
