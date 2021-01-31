@@ -130,7 +130,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const theme = controls.Controls.getTheme();
 
-            ctx.strokeStyle = theme.dark ? "#6e6e6eaa" : "#bebebe";
+            ctx.strokeStyle = theme.dark ? "#6e6e6eaa" : "#bebebeaa";
             ctx.lineWidth = 1;
 
             let gapX = 4;
