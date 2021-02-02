@@ -214,6 +214,24 @@ namespace colibri.ui.controls {
             sectionElement.innerHTML = section;
 
             sectionsElement.appendChild(sectionElement);
+
+            sectionElement.addEventListener("click", e => {
+
+                if (sectionElement.classList.contains("selected")) {
+
+                    sectionElement.classList.remove("selected");
+
+                } else {
+
+                    for (let i = 0; i < sectionsElement.children.length; i++) {
+
+                        const elem = sectionsElement.children.item(i);
+                        elem.classList.remove("selected");
+                    }
+
+                    sectionElement.classList.add("selected");
+                }
+            });
         }
 
         addTab(label: string, icon: IImage, content: Control, closeable = false, selectIt = true): void {

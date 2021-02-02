@@ -33,6 +33,7 @@ namespace phasereditor2d.blocks.ui.views {
                 folder.addTabSection(label, "Built-In");
                 folder.addTabSection(label, "Prefabs");
                 folder.addTabSection(label, "Assets");
+                folder.addTabSection(label, "Folder");
 
             }, 1000);
         }

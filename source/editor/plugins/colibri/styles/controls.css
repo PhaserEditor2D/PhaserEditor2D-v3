@@ -147,13 +147,13 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .TabPaneLabelSection {
     margin-left: 10px;
-    border-radius: 3px;
-    padding: 3px;
-    background: rgba(255, 255, 255, 0.2);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: transparent;
 }
 
-.TabPaneLabelSection:hover {
-    background: lightgray;
+.TabPaneLabelSection.selected {
+    border-bottom-color: black;
 }
 
 .TabPaneContentArea {
