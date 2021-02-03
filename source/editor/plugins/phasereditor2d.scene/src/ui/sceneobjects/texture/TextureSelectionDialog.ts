@@ -33,7 +33,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._callback = callback;
 
             const size = this.getSize();
-            this.setSize(size.width, size.height * 1.5);
+
+            this.setSize(size.width * 1.5, size.height * 1.5);
         }
 
         create() {
@@ -41,28 +42,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const viewer = this.getViewer();
 
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
-            viewer.setTreeRenderer(new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
+            const treeRendererProvider = new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false);
+            treeRendererProvider.setSections([pack.core.IMAGE_TYPE, pack.core.ATLAS_TYPE, pack.core.SPRITESHEET_TYPE]);
+            viewer.setTreeRenderer(treeRendererProvider);
+
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
-            viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+            viewer.setContentProvider(new TextureContentProvider(this._finder));
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
-            viewer.setInput(
-                this._finder.getPacks()
-                    .flatMap(pack => pack.getItems())
-                    .filter(item => item instanceof pack.core.ImageFrameContainerAssetPackItem)
-                    .flatMap(item => {
-
-                        const frames = (item as pack.core.ImageFrameContainerAssetPackItem).getFrames();
-
-                        if (item instanceof pack.core.SpritesheetAssetPackItem) {
-
-                            if (frames.length > 50) {
-                                return frames.slice(0, 50);
-                            }
-                        }
-
-                        return frames;
-                    })
-            );
+            viewer.setInput(treeRendererProvider.getSections());
 
             super.create();
 
@@ -79,10 +66,50 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.getViewer().eventSelectionChanged.addListener(() => {
 
-                btn.disabled = this.getViewer().getSelection().length === 0;
+                btn.disabled = this.getViewer().getSelection().length !== 1
+                    || !pack.core.AssetPackUtils.isImageFrameOrImage(this.getViewer().getSelectionFirstElement());
             });
 
             this.addButton("Cancel", () => this.close());
+        }
+    }
+
+    class TextureContentProvider extends pack.ui.viewers.AssetPackContentProvider {
+
+        private _finder: pack.core.PackFinder;
+
+        constructor(finder: pack.core.PackFinder) {
+            super();
+
+            this._finder = finder;
+        }
+
+        getRoots(input: any): any[] {
+
+            // the sections
+            return input;
+        }
+
+        getPackItems() {
+
+            return this._finder.getPacks().flatMap(p => p.getItems());
+        }
+
+        getChildren(parent: any) {
+
+            switch (parent) {
+
+                case pack.core.ATLAS_TYPE:
+
+                    return this.getPackItems().filter(i => pack.core.AssetPackUtils.isAtlasType(i.getType()));
+
+                case pack.core.IMAGE_TYPE:
+                case pack.core.SPRITESHEET_TYPE:
+
+                    return this.getPackItems().filter(i => i.getType() === parent);
+            }
+
+            return super.getChildren(parent);
         }
     }
 }
