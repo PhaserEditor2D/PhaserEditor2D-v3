@@ -255,6 +255,22 @@ namespace colibri.ui.controls {
                 this.selectTab(labelElement);
             });
 
+            if (closeable) {
+
+                labelElement.addEventListener("mouseup", e => {
+
+                    if (e.button === 1) {
+
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+
+                        this.closeTabLabel(labelElement);
+
+                        return;
+                    }
+                });
+            }
+
             const contentArea = new Control("div", "ContentArea");
             contentArea.add(content);
             this._contentAreaElement.appendChild(contentArea.getElement());
