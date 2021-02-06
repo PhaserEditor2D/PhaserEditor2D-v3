@@ -41,7 +41,7 @@ Important:
 }
 
 .dark input:read-only, .dark textarea:read-only {
-    background: #4a4a4a;
+    background: rgba(0, 0, 0, 0.05);
 }
 
 /* button */
@@ -151,8 +151,9 @@ Important:
 /* Property Page */
 
 .dark .PropertyTitleArea {
-    background: #20202088;    
-}
+    background: rgba(255, 255, 255, 0.05);
+    color: #b0b0b0;
+}   
 
 .dark .PropertyTitleArea label,
 .dark .PropertySubTitleLabel {
@@ -217,16 +218,17 @@ Important:
 
 .dark .Menu {
     list-style-type: none;
-    background: #2f2f2f;
+    background: #525252;
     padding: 0px;
     margin: 0px;
     border-style: solid;
     border-width: 1px;
-    border-color: #4f4f4f;
+    border-color: #6f6f6f;
+    padding: 1px;
 }
 
 .dark .MenuItemSeparator {
-    background: #3f3f3f;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .dark .MenuItem:hover, .dark .MenuItemSelected {
