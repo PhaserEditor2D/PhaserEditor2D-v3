@@ -109,14 +109,17 @@ namespace colibri.ui.controls.viewers {
                     if (y2 >= -cellSize && y2 <= paintAreaHeight) {
 
                         const label = labelProvider.getLabel(section);
+                        const theme = controls.Controls.getTheme();
 
                         ctx.save();
 
-                        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+                        ctx.fillStyle = theme.dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
 
-                        ctx.fillRect(0, y2 - 18, b.width, 25);
+                        Controls.drawRoundedRect(ctx, 5, y2 - 18, b.width - 15, 25);
 
-                        ctx.fillStyle = controls.Controls.getTheme().viewerForeground + "aa";
+                        // ctx.fillRect(0, y2 - 18, b.width, 25);
+
+                        ctx.fillStyle = theme.viewerForeground + "aa";
 
                         const textWidth = controls.Controls.measureTextWidth(ctx, label);
 

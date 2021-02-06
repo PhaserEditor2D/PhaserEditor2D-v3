@@ -157,7 +157,7 @@ Important:
 
 .dark .PropertyTitleArea label,
 .dark .PropertySubTitleLabel {
-    font-weight: bold;
+    /* text-shadow: 1px 1px #0e0e0e; */
 }
 
 /* Toolbar */
