@@ -64,6 +64,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }));
                 }
 
+                menu.addSeparator();
+
+                menu.add(new controls.Action({
+                    text: "Add To New List",
+                    callback: () => {
+
+                        const dlg = new controls.dialogs.InputDialog();
+                        dlg.create();
+                        dlg.setTitle("New List");
+                        dlg.setMessage("Enter the name of the new list");
+                        dlg.setInitialValue("list");
+                        dlg.setInputValidator(name => {
+
+                            return this.getEditor().getScene().getObjectLists().getLists().findIndex(list => list.getLabel() === name) < 0;
+                        });
+                        dlg.setResultCallback(name => {
+
+                            this.getUndoManager().add(
+                                new AddObjectsToNewListOperation(this.getEditor(), name, this.getEditor().getSelectedGameObjects()));
+                        });
+                        dlg.validate();
+                    }
+                }));
+
                 menu.createWithEvent(e);
             });
 
