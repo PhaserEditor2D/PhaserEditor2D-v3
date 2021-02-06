@@ -9,6 +9,7 @@
 * Viewer: advanced filtering by default. Allows matching different words.
 * Viewer: filtering isn't triggered at every key.
 * [#103](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/103): Close editor's tab with the mouse middle button.
+* Allows adding the selected object to a new object list.
 
 ### Fixed
 
