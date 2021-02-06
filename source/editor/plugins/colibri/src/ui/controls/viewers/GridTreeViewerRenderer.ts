@@ -304,7 +304,7 @@ namespace colibri.ui.controls.viewers {
 
                 const label = args.viewer.getLabelProvider().getLabel(args.obj);
 
-                const trim = this.trimLabel(ctx, label, args.w);
+                const trim = this.trimLabel(ctx, label, args.w - 5);
 
                 const x2 = Math.max(x, x + args.w / 2 - trim.textWidth / 2);
 
