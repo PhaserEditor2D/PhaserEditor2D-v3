@@ -427,7 +427,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 obj => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT))
             ));
             // tslint:disable-next-line:new-parens
-            viewer.setTreeRenderer(new class extends controls.viewers.GridTreeViewerRenderer {
+            viewer.setTreeRenderer(new class extends controls.viewers.TreeViewerRenderer {
                 constructor() {
                     super(viewer);
                 }
