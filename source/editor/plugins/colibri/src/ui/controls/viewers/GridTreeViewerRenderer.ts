@@ -133,7 +133,7 @@ namespace colibri.ui.controls.viewers {
             for (const obj of objects) {
 
                 const children = viewer.getContentProvider().getChildren(obj);
-                let expanded = viewer.isExpanded(obj);
+                const expanded = viewer.isExpanded(obj);
                 let newParentPaintItem: PaintItem = null;
 
                 if (viewer.isFilterIncluded(obj)) {
@@ -148,30 +148,49 @@ namespace colibri.ui.controls.viewers {
 
                                     y += cellSize + 10; // add new line
                                 }
-
                             }
 
                             y += 20; // a text is rendered using the base, from bottom to top.
 
-                            expanded = true;
+                            const rectY = y - 18;
+                            const rectHeight = 25;
+                            let isItemVisible = false;
 
-                            const label = labelProvider.getLabel(obj);
-                            const theme = controls.Controls.getTheme();
+                            // paint only if needed
+                            if (y > -cellSize && y < b.height) {
 
-                            ctx.save();
+                                const label = labelProvider.getLabel(obj);
+                                const theme = controls.Controls.getTheme();
 
-                            ctx.fillStyle = theme.dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
+                                ctx.save();
 
-                            Controls.drawRoundedRect(ctx, 5, y - 18, b.width - 15, 25);
+                                ctx.fillStyle = theme.dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
 
-                            ctx.fillStyle = theme.viewerForeground + "aa";
+                                Controls.drawRoundedRect(ctx, 5, rectY, b.width - 15, rectHeight);
 
-                            // const textWidth = controls.Controls.measureTextWidth(ctx, label);
-                            // ctx.fillText(label, b.width / 2 - textWidth / 2, y);
+                                if (children.length > 0 && !this._flat) {
 
-                            ctx.fillText(label, TREE_RENDERER_GRID_PADDING * 2, y);
+                                    const iconY = rectY + rectHeight / 2 - ICON_SIZE / 2 + 1;
 
-                            ctx.restore();
+                                    const iconInfo = this.paintIcon(ctx, obj, 10, iconY, expanded, treeIconList);
+
+                                    iconInfo.rect.set(0, rectY, b.width, rectHeight);
+                                }
+
+                                ctx.fillStyle = theme.viewerForeground + "aa";
+
+                                ctx.fillText(label, TREE_RENDERER_GRID_PADDING * 2 + 16 + 5, y);
+
+                                ctx.restore();
+
+                                isItemVisible = true;
+                            }
+
+                            const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
+                            item.set(0, rectY, b.width, rectHeight);
+
+                            paintItems.push(item);
+                            newParentPaintItem = item;
 
                             y += 20;
                             x = offset;
@@ -192,29 +211,7 @@ namespace colibri.ui.controls.viewers {
 
                                 const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
-                                const themeIcon = ColibriPlugin.getInstance().getIcon(expanded ?
-                                    ICON_CONTROL_TREE_COLLAPSE
-                                    : ICON_CONTROL_TREE_EXPAND);
-
-                                let icon: IImage = themeIcon;
-
-                                if (viewer.isSelected(obj)) {
-
-                                    icon = themeIcon.getNegativeThemeImage();
-                                }
-
-                                ctx.save();
-
-                                const iconX = x + 5;
-
-                                icon.paint(ctx, iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
-
-                                ctx.restore();
-
-                                treeIconList.push({
-                                    rect: new Rect(iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE),
-                                    obj: obj
-                                });
+                                this.paintIcon(ctx, obj, x, iconY, expanded, treeIconList);
                             }
 
                             isItemVisible = true;
@@ -253,6 +250,40 @@ namespace colibri.ui.controls.viewers {
                 x: x,
                 y: y
             };
+        }
+
+        private paintIcon(ctx: CanvasRenderingContext2D, obj: any, x: number, y: number, expanded: boolean, treeIconList: TreeIconInfo[]) {
+
+            const viewer = this.getViewer();
+            const cellSize = viewer.getCellSize();
+
+            const themeIcon = ColibriPlugin.getInstance().getIcon(expanded ?
+                ICON_CONTROL_TREE_COLLAPSE
+                : ICON_CONTROL_TREE_EXPAND);
+
+            let icon: IImage = themeIcon;
+
+            if (viewer.isSelected(obj)) {
+
+                icon = themeIcon.getNegativeThemeImage();
+            }
+
+            ctx.save();
+
+            const iconX = x + 5;
+
+            icon.paint(ctx, iconX, y, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
+
+            ctx.restore();
+
+            const iconInfo = {
+                rect: new Rect(iconX, y, RENDER_ICON_SIZE, RENDER_ICON_SIZE),
+                obj: obj
+            };
+
+            treeIconList.push(iconInfo);
+
+            return iconInfo;
         }
 
         private renderGridCell(args: RenderCellArgs, renderer: ICellRenderer, depth: number, isLastChild: boolean) {
