@@ -8,7 +8,9 @@ namespace colibri.ui.controls.viewers {
 
         private _center: boolean;
         private _flat: boolean;
-        private _sections: string[];
+        private _isSectionCriteria: (obj: any) => boolean;
+        private _isShadowChildCriteria: (obj: any) => boolean;
+        private _paintItemShadow: boolean;
 
         constructor(viewer: TreeViewer, flat: boolean = false, center: boolean = false) {
             super(viewer);
@@ -19,19 +21,54 @@ namespace colibri.ui.controls.viewers {
 
             this._center = center;
             this._flat = flat;
-            this._sections = [];
+            this._paintItemShadow = false;
+        }
+
+        setPaintItemShadow(paintShadow: boolean) {
+
+            this._paintItemShadow = paintShadow;
+
+            this.getViewer().setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
+
+            return this;
+        }
+
+        isPaintItemShadow() {
+
+            return this._paintItemShadow;
+        }
+
+        setSectionCriteria(sectionCriteria: (obj: any) => boolean) {
+
+            this._isSectionCriteria = sectionCriteria;
+
+            return this;
+        }
+
+        getSectionCriteria() {
+
+            return this._isSectionCriteria;
+        }
+
+        setShadowChildCriteria(shadowChildCriteria: (any) => boolean) {
+
+            this._isShadowChildCriteria = shadowChildCriteria;
+
+            return this;
+        }
+
+        getShadowChildCriteria() {
+
+            return this._isShadowChildCriteria;
+        }
+
+        private isSection(obj: any) {
+
+            return this._isSectionCriteria ? this._isSectionCriteria(obj) : false;
         }
 
         isFlat() {
             return this._flat;
-        }
-
-        setSections(sections: string[]) {
-            this._sections = sections;
-        }
-
-        getSections() {
-            return this._sections;
         }
 
         paint() {
@@ -75,78 +112,80 @@ namespace colibri.ui.controls.viewers {
 
             const b = viewer.getBounds();
 
-            const sectionMargin = 20;
+            // const sectionMargin = 20;
 
-            if (this._sections.length > 0) {
+            // if (this._sections.length > 0) {
 
-                const ctx = viewer.getContext();
+            //     const ctx = viewer.getContext();
 
-                let y2 = y + sectionMargin;
-                const x2 = x + TREE_RENDERER_GRID_PADDING;
+            //     let y2 = y + sectionMargin;
+            //     const x2 = x + TREE_RENDERER_GRID_PADDING;
 
-                let first = true;
+            //     let first = true;
 
-                for (const section of this._sections) {
+            //     for (const section of this._sections) {
 
-                    const objects2 = viewer
-                        .getContentProvider()
-                        .getChildren(section)
-                        .filter(obj => viewer.isFilterIncluded(obj));
+            //         const objects2 = viewer
+            //             .getContentProvider()
+            //             .getChildren(section)
+            //             .filter(obj => viewer.isFilterIncluded(obj));
 
-                    if (objects2.length === 0) {
-                        continue;
-                    }
+            //         if (objects2.length === 0) {
+            //             continue;
+            //         }
 
-                    if (first) {
+            //         if (first) {
 
-                        first = false;
+            //             first = false;
 
-                    } else {
+            //         } else {
 
-                        y2 += sectionMargin;
-                    }
+            //             y2 += sectionMargin;
+            //         }
 
-                    if (y2 >= -cellSize && y2 <= paintAreaHeight) {
+            //         if (y2 >= -cellSize && y2 <= paintAreaHeight) {
 
-                        const label = labelProvider.getLabel(section);
-                        const theme = controls.Controls.getTheme();
+            //             const label = labelProvider.getLabel(section);
+            //             const theme = controls.Controls.getTheme();
 
-                        ctx.save();
+            //             ctx.save();
 
-                        ctx.fillStyle = theme.dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
+            //             ctx.fillStyle = theme.dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
 
-                        Controls.drawRoundedRect(ctx, 5, y2 - 18, b.width - 15, 25);
+            //             Controls.drawRoundedRect(ctx, 5, y2 - 18, b.width - 15, 25);
 
-                        // ctx.fillRect(0, y2 - 18, b.width, 25);
+            //             // ctx.fillRect(0, y2 - 18, b.width, 25);
 
-                        ctx.fillStyle = theme.viewerForeground + "aa";
+            //             ctx.fillStyle = theme.viewerForeground + "aa";
 
-                        const textWidth = controls.Controls.measureTextWidth(ctx, label);
+            //             const textWidth = controls.Controls.measureTextWidth(ctx, label);
 
-                        ctx.fillText(label, b.width / 2 - textWidth / 2, y2);
+            //             ctx.fillText(label, b.width / 2 - textWidth / 2, y2);
 
-                        ctx.restore();
-                    }
+            //             ctx.restore();
+            //         }
 
-                    y2 += sectionMargin;
+            //         y2 += sectionMargin;
 
-                    const result = this.paintItems2(
-                        objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0);
+            //         const result = this.paintItems2(
+            //             objects2, treeIconList, paintItems, null, x2, y2, TREE_RENDERER_GRID_PADDING, 0);
 
-                    y2 = result.y + sectionMargin;
+            //         y2 = result.y + sectionMargin;
 
-                    if (result.x > TREE_RENDERER_GRID_PADDING) {
+            //         if (result.x > TREE_RENDERER_GRID_PADDING) {
 
-                        y2 += cellSize;
-                    }
-                }
+            //             y2 += cellSize;
+            //         }
+            //     }
 
-                return {
-                    x: TREE_RENDERER_GRID_PADDING,
-                    y: y2
-                };
+            //     return {
+            //         x: TREE_RENDERER_GRID_PADDING,
+            //         y: y2
+            //     };
 
-            } else {
+            // } else 
+
+            {
 
                 const offset = this._center ?
                     Math.floor(b.width % (viewer.getCellSize() + TREE_RENDERER_GRID_PADDING) / 2)
@@ -162,8 +201,9 @@ namespace colibri.ui.controls.viewers {
             parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number) {
 
             const viewer = this.getViewer();
+            const labelProvider = viewer.getLabelProvider();
             const cellSize = Math.max(ROW_HEIGHT, viewer.getCellSize());
-            const context = viewer.getContext();
+            const ctx = viewer.getContext();
 
             const b = viewer.getBounds();
             const included = objects.filter(obj => viewer.isFilterIncluded(obj));
@@ -172,67 +212,112 @@ namespace colibri.ui.controls.viewers {
             for (const obj of objects) {
 
                 const children = viewer.getContentProvider().getChildren(obj);
-                const expanded = viewer.isExpanded(obj);
+                let expanded = viewer.isExpanded(obj);
                 let newParentPaintItem: PaintItem = null;
 
                 if (viewer.isFilterIncluded(obj)) {
 
-                    const renderer = viewer.getCellRendererProvider().getCellRenderer(obj);
+                    if (this.isSection(obj)) {
 
-                    const args = new RenderCellArgs(context, x, y, cellSize, cellSize, obj, viewer, true);
+                        if (children.length > 0) {
 
-                    let isItemVisible = false;
+                            if (x > TREE_RENDERER_GRID_PADDING) {
 
-                    if (y > -cellSize && y < b.height) {
+                                if (paintItems.length > 0) {
 
-                        // render tree icon
-                        if (children.length > 0 && !this._flat) {
+                                    y += cellSize + 10; // add new line
+                                }
 
-                            const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
-
-                            const themeIcon = ColibriPlugin.getInstance().getIcon(expanded ?
-                                ICON_CONTROL_TREE_COLLAPSE
-                                : ICON_CONTROL_TREE_EXPAND);
-
-                            let icon: IImage = themeIcon;
-
-                            if (viewer.isSelected(obj)) {
-
-                                icon = themeIcon.getNegativeThemeImage();
                             }
 
-                            context.save();
+                            y += 20; // a text is rendered using the base, from bottom to top.
 
-                            const iconX = x + 5;
+                            expanded = true;
 
-                            icon.paint(context, iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
+                            const label = labelProvider.getLabel(obj);
+                            const theme = controls.Controls.getTheme();
 
-                            context.restore();
+                            ctx.save();
 
-                            treeIconList.push({
-                                rect: new Rect(iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE),
-                                obj: obj
-                            });
+                            ctx.fillStyle = theme.dark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
+
+                            Controls.drawRoundedRect(ctx, 5, y - 18, b.width - 15, 25);
+
+                            // ctx.fillRect(0, y2 - 18, b.width, 25);
+
+                            ctx.fillStyle = theme.viewerForeground + "aa";
+
+                            const textWidth = controls.Controls.measureTextWidth(ctx, label);
+
+                            ctx.fillText(label, b.width / 2 - textWidth / 2, y);
+
+                            ctx.restore();
+
+                            y += 20;
+                            x = offset;
                         }
 
-                        isItemVisible = true;
-                        this.renderGridCell(args, renderer, depth, obj === lastObj);
-                    }
+                    } else {
 
-                    const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
+                        const renderer = viewer.getCellRendererProvider().getCellRenderer(obj);
 
-                    item.set(args.x, args.y, args.w, args.h);
+                        const args = new RenderCellArgs(ctx, x, y, cellSize, cellSize, obj, viewer, true);
 
-                    paintItems.push(item);
+                        let isItemVisible = false;
 
-                    newParentPaintItem = item;
+                        if (y > -cellSize && y < b.height) {
 
-                    x += cellSize + TREE_RENDERER_GRID_PADDING;
+                            // render tree icon
+                            if (children.length > 0 && !this._flat) {
 
-                    if (x + cellSize > b.width) {
+                                const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
-                        y += cellSize + TREE_RENDERER_GRID_PADDING;
-                        x = 0 + offset;
+                                const themeIcon = ColibriPlugin.getInstance().getIcon(expanded ?
+                                    ICON_CONTROL_TREE_COLLAPSE
+                                    : ICON_CONTROL_TREE_EXPAND);
+
+                                let icon: IImage = themeIcon;
+
+                                if (viewer.isSelected(obj)) {
+
+                                    icon = themeIcon.getNegativeThemeImage();
+                                }
+
+                                ctx.save();
+
+                                const iconX = x + 5;
+
+                                icon.paint(ctx, iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
+
+                                ctx.restore();
+
+                                treeIconList.push({
+                                    rect: new Rect(iconX, iconY, RENDER_ICON_SIZE, RENDER_ICON_SIZE),
+                                    obj: obj
+                                });
+                            }
+
+                            isItemVisible = true;
+
+                            this.renderGridCell(args, renderer, depth, obj === lastObj);
+                        }
+
+                        const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
+
+                        item.set(args.x, args.y, args.w, args.h);
+
+                        paintItems.push(item);
+
+                        newParentPaintItem = item;
+
+                        x += cellSize + TREE_RENDERER_GRID_PADDING;
+
+                        if (x + cellSize > b.width) {
+
+                            y += cellSize + TREE_RENDERER_GRID_PADDING;
+                            x = 0 + offset;
+                        }
+
                     }
                 }
 
@@ -368,6 +453,57 @@ namespace colibri.ui.controls.viewers {
                 controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h);
 
                 ctx.restore();
+            }
+
+            if (this._paintItemShadow) {
+
+                const shadowAsChild = this._isShadowChildCriteria && this._isShadowChildCriteria(args.obj);
+
+                const expanded = args.viewer.isExpanded(args.obj);
+
+                if (shadowAsChild) {
+
+                    const margin = controls.viewers.TREE_RENDERER_GRID_PADDING;
+
+                    const ctx = args.canvasContext;
+
+                    ctx.save();
+
+                    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+
+                    if (isLastChild) {
+
+                        controls.Controls.drawRoundedRect(
+                            ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 5, 5, 0);
+
+                    } else {
+
+                        controls.Controls.drawRoundedRect(
+                            ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 0, 0, 0);
+
+                    }
+
+                    ctx.restore();
+
+                } else /*if (!this.isFlat()) */ {
+
+                    const ctx = args.canvasContext;
+
+                    ctx.save();
+
+                    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+
+                    if (expanded) {
+
+                        controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h, 5, 0, 0, 5);
+
+                    } else {
+
+                        controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h, 5, 5, 5, 5);
+                    }
+
+                    ctx.restore();
+                }
             }
         }
 

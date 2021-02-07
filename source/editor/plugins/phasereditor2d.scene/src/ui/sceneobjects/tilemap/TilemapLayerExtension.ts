@@ -103,7 +103,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 viewer.setContentProvider(new DialogContentProvider(editor));
 
-                viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
+                viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer));
 
                 viewer.setInput([]);
 

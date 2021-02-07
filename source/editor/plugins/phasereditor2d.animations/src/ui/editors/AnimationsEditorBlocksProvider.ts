@@ -23,7 +23,7 @@ namespace phasereditor2d.animations.ui.editors {
 
         getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer) {
 
-            return new AnimationsEditorBlocksTreeRendererProvider(viewer);
+            return new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false);
         }
 
         getPropertySectionProvider() {

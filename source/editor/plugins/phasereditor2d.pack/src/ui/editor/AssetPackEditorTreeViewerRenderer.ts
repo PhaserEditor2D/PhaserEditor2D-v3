@@ -13,8 +13,6 @@ namespace phasereditor2d.pack.ui.editor {
             super(viewer, false);
 
             this._editor = editor;
-
-            this.setSections([]);
         }
 
         isChild(file: io.FilePath) {

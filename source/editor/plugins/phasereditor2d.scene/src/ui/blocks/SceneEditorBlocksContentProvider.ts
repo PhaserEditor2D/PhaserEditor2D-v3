@@ -32,15 +32,9 @@ namespace phasereditor2d.scene.ui.blocks {
                 .filter(item => SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES.has(item.getType()));
         }
 
-        getRoots(input: any): any[] {
+        getRoots(input: any) {
 
-            const roots: any[] = [...SCENE_OBJECT_CATEGORIES.filter(c => this.getChildren(c).length > 0)];
-
-            roots.push(...this.getSceneFiles());
-
-            roots.push(...this.getPackItems());
-
-            return roots;
+            return BLOCKS_SECTIONS;
         }
 
         getSceneFiles() {

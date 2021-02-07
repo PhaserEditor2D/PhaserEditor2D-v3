@@ -64,9 +64,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             );
         }
 
-        getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.TreeViewerRenderer {
+        getTreeViewerRenderer(viewer: colibri.ui.controls.viewers.TreeViewer): colibri.ui.controls.viewers.GridTreeViewerRenderer {
 
-            return new controls.viewers.TreeViewerRenderer(viewer);
+            return new controls.viewers.GridTreeViewerRenderer(viewer);
         }
 
         getPropertySectionProvider(): colibri.ui.controls.properties.PropertySectionProvider {
