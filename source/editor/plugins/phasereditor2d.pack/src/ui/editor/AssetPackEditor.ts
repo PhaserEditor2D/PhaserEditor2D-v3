@@ -86,10 +86,30 @@ namespace phasereditor2d.pack.ui.editor {
 
             const viewer = new controls.viewers.TreeViewer("phasereditor2d.pack.ui.editor.AssetPackEditor");
 
-            viewer.setContentProvider(new AssetPackEditorContentProvider(this, true));
+
+            class Provider extends AssetPackEditorContentProvider {
+
+                constructor(editor: AssetPackEditor) {
+                    super(editor, true)
+                }
+
+                getRoots(input: any) {
+
+                    const types = core.TYPES.filter(
+                        type => type === core.ATLAS_TYPE || type.toLowerCase().indexOf("atlas") < 0);
+
+                    return types;
+                }
+            }
+
+            //viewer.setContentProvider(new AssetPackEditorContentProvider(this, true));
+            viewer.setContentProvider(new Provider(this));
             viewer.setLabelProvider(new viewers.AssetPackLabelProvider());
             viewer.setCellRendererProvider(new viewers.AssetPackCellRendererProvider("grid"));
-            viewer.setTreeRenderer(new viewers.AssetPackTreeViewerRenderer(viewer, true));
+            // viewer.setTreeRenderer(new viewers.AssetPackTreeViewerRenderer(viewer, true));
+            const treeRenderer = new controls.viewers.GridTreeViewerRenderer2(viewer);
+            treeRenderer.setSectionCriteria(obj => typeof obj === "string");
+            viewer.setTreeRenderer(treeRenderer);
             viewer.setCellSize(96 * controls.DEVICE_PIXEL_RATIO);
             viewer.setInput(this);
 
