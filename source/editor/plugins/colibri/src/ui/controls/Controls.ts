@@ -300,6 +300,7 @@ namespace colibri.ui.controls {
             ctx.quadraticCurveTo(x, y, x + topLeft, y);
             ctx.closePath();
             ctx.fill();
+
             ctx.restore();
         }
 
