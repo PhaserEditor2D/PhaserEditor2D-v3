@@ -4,8 +4,10 @@ namespace colibri.ui.controls.viewers {
 
     export const TREE_RENDERER_GRID_PADDING = 5;
 
-    const DARK_FILL = "rgba(255, 255, 255, 0.05)";
-    const LIGHT_FILL = "rgba(255, 255, 255, 0.3)";
+    const DARK_FILL_COLOR = "rgba(255, 255, 255, 0.05)";
+    const DARK_BORDER_COLOR = "rgba(255, 255, 255, 0)";
+    const LIGHT_FILL_COLOR = "rgba(255, 255, 255, 0.3)";
+    const LIGHT_BORDER_COLOR = "rgba(255, 255, 255, 0.3)";
 
     export class GridTreeViewerRenderer extends TreeViewerRenderer {
 
@@ -188,17 +190,14 @@ namespace colibri.ui.controls.viewers {
 
                                 const label = labelProvider.getLabel(obj);
 
-                                ctx.save();
-
-                                ctx.fillStyle = theme.dark ? DARK_FILL : LIGHT_FILL;
-
                                 if (expanded) {
 
-                                    Controls.drawRoundedRect(ctx, 5, rectY, b.width - 10, rectHeight, 5, 5, 0, 0);
+                                    // Controls.drawRoundedRect(ctx, 5, rectY, b.width - 10, rectHeight, 5, 5, 0, 0);
+                                    this.drawPanelTop(ctx, 5, rectY, b.width - 10, rectHeight);
 
                                 } else {
 
-                                    Controls.drawRoundedRect(ctx, 5, rectY, b.width - 10, rectHeight);
+                                    this.drawPanelCollapsed(ctx, 5, rectY, b.width - 10, rectHeight);
                                 }
 
                                 if (children.length > 0 && !this._flat) {
@@ -209,6 +208,8 @@ namespace colibri.ui.controls.viewers {
 
                                     iconInfo.rect.set(0, rectY, b.width, rectHeight);
                                 }
+
+                                ctx.save();
 
                                 ctx.fillStyle = theme.viewerForeground + "aa";
 
@@ -251,10 +252,8 @@ namespace colibri.ui.controls.viewers {
 
                                 ctx.save();
 
-                                ctx.fillStyle = theme.dark ? DARK_FILL : LIGHT_FILL;
-                                // ctx.fillStyle = "red";
-
-                                ctx.fillRect(5, sectionEnd, b.width - 10, bottom - sectionEnd);
+                                // ctx.fillRect(5, sectionEnd, b.width - 10, bottom - sectionEnd);
+                                this.drawPanelRow(ctx, 5, sectionEnd, b.width - 10, bottom - sectionEnd);
 
                                 ctx.restore();
 
@@ -491,7 +490,6 @@ namespace colibri.ui.controls.viewers {
 
                         controls.Controls.drawRoundedRect(
                             ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 0, 0, 0);
-
                     }
 
                     ctx.restore();
@@ -532,6 +530,102 @@ namespace colibri.ui.controls.viewers {
 
                 ctx.restore();
             }
+        }
+
+        private drawPanelTop(
+            ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+
+            const topLeft = 5;
+            const topRight = 5;
+            const bottomRight = 0;
+            const bottomLeft = 0;
+
+            ctx.save();
+
+            ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
+            ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
+
+            // stroke
+
+            ctx.beginPath();
+            ctx.moveTo(x + topLeft, y);
+            ctx.lineTo(x + w - topRight, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + topRight);
+            ctx.lineTo(x + w, y + h - bottomRight);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - bottomRight, y + h);
+
+            ctx.stroke();
+
+            ctx.moveTo(x + bottomLeft, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - bottomLeft);
+            ctx.lineTo(x, y + topLeft);
+            ctx.quadraticCurveTo(x, y, x + topLeft, y);
+            ctx.stroke();
+            ctx.closePath();
+
+            // fill
+
+            ctx.beginPath();
+            ctx.moveTo(x + topLeft, y);
+            ctx.lineTo(x + w - topRight, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + topRight);
+            ctx.lineTo(x + w, y + h - bottomRight);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - bottomRight, y + h);
+            ctx.lineTo(x + bottomLeft, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - bottomLeft);
+            ctx.lineTo(x, y + topLeft);
+            ctx.quadraticCurveTo(x, y, x + topLeft, y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        drawPanelRow(
+            ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+
+            ctx.save();
+
+            ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
+            ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
+
+            ctx.fillRect(x, y, w, h);
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + h);
+            ctx.moveTo(x + w, y);
+            ctx.lineTo(x + w, y + h);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        private drawPanelCollapsed(
+            ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+
+            const c = TREE_RENDERER_GRID_PADDING;
+
+            ctx.save();
+
+            ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
+            ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
+
+            ctx.beginPath();
+            ctx.moveTo(x + c, y);
+            ctx.lineTo(x + w - c, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + c);
+            ctx.lineTo(x + w, y + h - c);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - c, y + h);
+            ctx.lineTo(x + c, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - c);
+            ctx.lineTo(x, y + c);
+            ctx.quadraticCurveTo(x, y, x + c, y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.restore();
         }
     }
 }

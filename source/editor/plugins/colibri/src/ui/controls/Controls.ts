@@ -303,6 +303,5 @@ namespace colibri.ui.controls {
 
             ctx.restore();
         }
-
     }
 }
