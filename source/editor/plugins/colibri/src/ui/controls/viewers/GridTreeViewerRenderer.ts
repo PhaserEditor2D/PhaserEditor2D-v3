@@ -190,14 +190,14 @@ namespace colibri.ui.controls.viewers {
 
                                     const iconY = rectY + rectHeight / 2 - ICON_SIZE / 2 + 1;
 
-                                    const iconInfo = this.paintIcon(ctx, obj, 10, iconY, expanded, treeIconList);
+                                    const iconInfo = this.paintIcon(ctx, obj, 5, iconY, expanded, treeIconList);
 
                                     iconInfo.rect.set(0, rectY, b.width, rectHeight);
                                 }
 
                                 ctx.fillStyle = theme.viewerForeground + "aa";
 
-                                ctx.fillText(label, TREE_RENDERER_GRID_PADDING * 2 + 16 + 5, y);
+                                ctx.fillText(label, TREE_RENDERER_GRID_PADDING * 2 + 16, y);
 
                                 ctx.restore();
 
