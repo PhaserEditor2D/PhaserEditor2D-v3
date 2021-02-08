@@ -24,6 +24,24 @@ namespace colibri.ui.controls.viewers {
             this._paintItemShadow = false;
         }
 
+        static expandSections(viewer: TreeViewer) {
+
+            const renderer = viewer.getTreeRenderer();
+
+            if (renderer instanceof GridTreeViewerRenderer) {
+
+                for (const root of viewer.getContentProvider().getRoots(viewer.getInput())) {
+
+                    if (renderer.isSection(root)) {
+
+                        viewer.setExpanded(root, true);
+                    }
+                }
+            }
+
+            viewer.repaint();
+        }
+
         setPaintItemShadow(paintShadow: boolean) {
 
             this._paintItemShadow = paintShadow;

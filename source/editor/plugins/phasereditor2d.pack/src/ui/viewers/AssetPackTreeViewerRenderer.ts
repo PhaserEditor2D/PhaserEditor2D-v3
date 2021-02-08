@@ -12,9 +12,9 @@ namespace phasereditor2d.pack.ui.viewers {
             this.setShadowChildCriteria(obj => this.isShadowAsChild(obj));
         }
 
-        protected isObjectSection(obj: boolean) {
+        protected isObjectSection(obj: any) {
 
-            return typeof obj === "string";
+            return core.TYPES_SET.has(obj);
         }
 
         isShadowAsChild(obj: any) {

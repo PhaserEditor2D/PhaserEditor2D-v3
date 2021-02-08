@@ -32,9 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._finder = finder;
             this._callback = callback;
 
-            const size = this.getSize();
-
-            this.setSize(size.width * 1.5, size.height * 1.5);
+            this.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
         }
 
         create() {
@@ -48,6 +46,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
             // TODO:
             viewer.setInput([pack.core.IMAGE_TYPE, pack.core.ATLAS_TYPE, pack.core.SPRITESHEET_TYPE]);
+
+            viewer.expandRoots();
 
             super.create();
 

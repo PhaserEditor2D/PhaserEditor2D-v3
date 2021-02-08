@@ -200,6 +200,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             this.revealValue(viewer, revealValue);
+
+            controls.viewers.GridTreeViewerRenderer.expandSections(viewer);
         }
 
         protected revealValue(viewer: controls.viewers.TreeViewer, value: string) {

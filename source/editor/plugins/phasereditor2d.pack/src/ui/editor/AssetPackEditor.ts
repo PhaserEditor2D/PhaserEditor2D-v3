@@ -109,6 +109,8 @@ namespace phasereditor2d.pack.ui.editor {
             super.createPart();
 
             this.updateContent();
+
+            this.getViewer().expandRoots();
         }
 
         private async updateContent() {
