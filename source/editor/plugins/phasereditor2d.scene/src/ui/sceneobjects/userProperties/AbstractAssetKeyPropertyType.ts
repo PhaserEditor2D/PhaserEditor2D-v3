@@ -130,7 +130,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             viewer.setCellRendererProvider(new CellRendererProvider(finder, "tree"));
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
-            viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer));
+            viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
             viewer.setContentProvider(new AssetKeyContentProvider());
 
             return viewer;
