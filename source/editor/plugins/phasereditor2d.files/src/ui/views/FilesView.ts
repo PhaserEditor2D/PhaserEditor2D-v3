@@ -150,6 +150,10 @@ namespace phasereditor2d.files.ui.views {
 
                 if (file.isFolder()) {
 
+                    viewer.setExpanded(file, !viewer.isExpanded(file));
+
+                    viewer.repaint();
+
                     return;
                 }
 
