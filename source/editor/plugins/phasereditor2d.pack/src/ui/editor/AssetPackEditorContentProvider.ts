@@ -5,26 +5,23 @@ namespace phasereditor2d.pack.ui.editor {
     export class AssetPackEditorContentProvider extends viewers.AssetPackContentProvider {
 
         private _editor: AssetPackEditor;
-        private _groupAtlasItems: boolean;
 
-        constructor(editor: AssetPackEditor, groupAtlasItems: boolean) {
+        constructor(editor: AssetPackEditor) {
             super();
 
             this._editor = editor;
-            this._groupAtlasItems = groupAtlasItems;
         }
 
         getPack() {
             return this._editor.getPack();
         }
 
-        getRoots(input: any): any[] {
+        getRoots(input: any) {
 
-            if (this.getPack()) {
-                return this.getPack().getItems();
-            }
+            const types = core.TYPES.filter(
+                type => type === core.ATLAS_TYPE || type.toLowerCase().indexOf("atlas") < 0);
 
-            return [];
+            return types;
         }
 
         getChildren(parent: any): any[] {
@@ -39,13 +36,10 @@ namespace phasereditor2d.pack.ui.editor {
 
                             .filter(item => {
 
-                                if (this._groupAtlasItems) {
+                                if (core.AssetPackUtils.isAtlasType(type)
+                                    && core.AssetPackUtils.isAtlasType(item.getType())) {
 
-                                    if (core.AssetPackUtils.isAtlasType(type)
-                                        && core.AssetPackUtils.isAtlasType(item.getType())) {
-
-                                        return true;
-                                    }
+                                    return true;
                                 }
 
                                 return item.getType() === type;

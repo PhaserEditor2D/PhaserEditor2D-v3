@@ -11,7 +11,7 @@ namespace colibri.ui.ide.properties {
             const viewer = new controls.viewers.TreeViewer("colibri.ui.ide.properties.ManyImagePreviewFormArea");
 
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-            viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer, false, true));
+            viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer, false, true).setPaintItemShadow(true));
 
             this.prepareViewer(viewer);
 

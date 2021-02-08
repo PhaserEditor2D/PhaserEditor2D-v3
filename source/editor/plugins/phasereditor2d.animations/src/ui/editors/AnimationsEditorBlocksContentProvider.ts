@@ -35,7 +35,11 @@ namespace phasereditor2d.animations.ui.editors {
 
         getRoots(input: any): any[] {
 
-            return this.getPackItems();
+            return [
+                pack.core.ATLAS_TYPE,
+                pack.core.SPRITESHEET_TYPE,
+                pack.core.IMAGE_TYPE,
+            ];
         }
 
         getChildren(parent: any): any[] {

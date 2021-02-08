@@ -30,7 +30,8 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer {
-            return new controls.viewers.TreeViewerRenderer(viewer);
+
+            return new controls.viewers.TreeViewerRenderer(viewer, 64);
         }
 
         getPropertySectionProvider(): controls.properties.PropertySectionProvider {

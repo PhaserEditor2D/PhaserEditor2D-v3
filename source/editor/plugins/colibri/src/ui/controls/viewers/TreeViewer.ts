@@ -28,11 +28,28 @@ namespace colibri.ui.controls.viewers {
             this.setContentProvider(new controls.viewers.EmptyTreeContentProvider());
         }
 
+        expandRoots(repaint = true) {
+
+            const roots = this.getContentProvider().getRoots(this.getInput());
+
+            for (const root of roots) {
+
+                this.setExpanded(root, true);
+            }
+
+            if (repaint) {
+
+                this.repaint();
+            }
+        }
+
         getTreeRenderer() {
+
             return this._treeRenderer;
         }
 
         setTreeRenderer(treeRenderer: TreeViewerRenderer): void {
+
             this._treeRenderer = treeRenderer;
         }
 

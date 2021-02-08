@@ -185,7 +185,7 @@ namespace colibri.ui.controls.dialogs {
 
             this.setBounds({
                 x: window.innerWidth / 2 - this._width / 2,
-                y: window.innerHeight * 0.2,
+                y: Math.min(window.innerHeight / 2 - this._height / 2, window.innerHeight * 0.2),
                 width: this._width,
                 height: this._height
             });

@@ -103,6 +103,19 @@ namespace colibri.ui.ide {
                 } else {
 
                     this._filteredViewer.filterText("");
+
+                    const treeRenderer = this._viewer.getTreeRenderer();
+
+                    if (treeRenderer instanceof viewers.GridTreeViewerRenderer) {
+
+                        const roots = this.getViewer().getContentProvider().getRoots(this._viewer.getInput());
+                        const expanded = roots.filter(r => treeRenderer.isSection(r))
+
+                        for (const obj of expanded) {
+
+                            this._viewer.setExpanded(obj, true);
+                        }
+                    }
                 }
 
             } else {

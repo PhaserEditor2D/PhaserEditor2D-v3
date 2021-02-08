@@ -32,9 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._finder = finder;
             this._callback = callback;
 
-            const size = this.getSize();
-
-            this.setSize(size.width * 1.5, size.height * 1.5);
+            this.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
         }
 
         create() {
@@ -42,14 +40,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const viewer = this.getViewer();
 
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
-            const treeRendererProvider = new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false);
-            treeRendererProvider.setSections([pack.core.IMAGE_TYPE, pack.core.ATLAS_TYPE, pack.core.SPRITESHEET_TYPE]);
-            viewer.setTreeRenderer(treeRendererProvider);
-
+            viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
             viewer.setContentProvider(new TextureContentProvider(this._finder));
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
-            viewer.setInput(treeRendererProvider.getSections());
+            // TODO:
+            viewer.setInput([pack.core.IMAGE_TYPE, pack.core.ATLAS_TYPE, pack.core.SPRITESHEET_TYPE]);
+
+            viewer.expandRoots();
 
             super.create();
 

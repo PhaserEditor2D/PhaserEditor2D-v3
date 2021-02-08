@@ -20,8 +20,11 @@ namespace phasereditor2d.scene.ui.blocks {
 
         constructor(viewer: controls.viewers.TreeViewer) {
             super(viewer, false);
+        }
 
-            this.setSections(BLOCKS_SECTIONS);
+        isObjectSection(obj: any) {
+
+            return BLOCKS_SECTIONS.indexOf(obj) >= 0;
         }
 
         isShadowAsChild(obj: any) {

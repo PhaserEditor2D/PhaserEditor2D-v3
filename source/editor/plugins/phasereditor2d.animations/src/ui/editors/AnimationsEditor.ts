@@ -252,9 +252,10 @@ namespace phasereditor2d.animations.ui.editors {
             viewer.setCellRendererProvider(this._blocksProvider.getCellRendererProvider());
             viewer.setTreeRenderer(this._blocksProvider.getTreeViewerRenderer(viewer));
             viewer.setInput(this._blocksProvider.getInput());
+            viewer.expandRoots();
 
             const dlg = new controls.dialogs.ViewerDialog(viewer, true);
-            dlg.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3)
+            dlg.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
             dlg.create();
             dlg.setTitle("Select Frames");
             dlg.addOpenButton("Select", sel => {

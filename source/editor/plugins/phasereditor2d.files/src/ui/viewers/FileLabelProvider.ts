@@ -5,8 +5,21 @@ namespace phasereditor2d.files.ui.viewers {
 
     export class FileLabelProvider implements viewers.ILabelProvider {
 
-        getLabel(obj: io.FilePath): string {
-            return obj.getName();
+        private _folderFullPath: boolean;
+
+        constructor(folderFullPath = false) {
+
+            this._folderFullPath = folderFullPath;
+        }
+
+        getLabel(file: io.FilePath): string {
+
+            if (this._folderFullPath && file.isFolder()) {
+
+                return file.getProjectRelativeName();
+            }
+
+            return file.getName();
         }
     }
 }

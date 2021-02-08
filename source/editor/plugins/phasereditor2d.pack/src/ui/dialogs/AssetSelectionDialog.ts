@@ -58,9 +58,18 @@ namespace phasereditor2d.pack.ui.dialogs {
             const viewer = this.getViewer();
 
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
-            viewer.setTreeRenderer(this._viewerLayout === "tree" ?
-                new controls.viewers.TreeViewerRenderer(viewer)
-                : new controls.viewers.ShadowGridTreeViewerRenderer(viewer, false, true));
+
+            if (this._viewerLayout === "tree") {
+
+                viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer));
+
+            } else {
+
+                const renderer = new controls.viewers.GridTreeViewerRenderer(viewer, false, true);
+                renderer.setPaintItemShadow(true);
+                viewer.setTreeRenderer(renderer);
+            }
+
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider(this._viewerLayout));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
