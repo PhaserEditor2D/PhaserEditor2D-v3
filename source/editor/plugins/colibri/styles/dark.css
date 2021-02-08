@@ -22,25 +22,28 @@ Important:
 
 /* input */
 
-.dark input, .dark textarea {
+.dark input,
+.dark textarea {
     background: #2e2e2e;
     color: #f0f0f0;
     border-style: solid;
     border-width: 1px;
-    border-color: #4e4e4e;
+    border-color: #646464;
 }
 
 .dark input[type="file"] {
     display: none;
 }
 
-.dark input:focus, .dark textarea:focus {
+.dark input:focus,
+.dark textarea:focus {
     background: #2a2a2a;
     border-color: #f59c5c;
     outline-style: none;
 }
 
-.dark input:read-only, .dark textarea:read-only {
+.dark input:read-only,
+.dark textarea:read-only {
     background: rgba(0, 0, 0, 0.05);
 }
 
@@ -48,10 +51,10 @@ Important:
 
 .dark button,
 .dark input[type="submit"] {
-    background: #323232;
+    background: #5f5f5f;
     border-color: #646464;
     color: #f0f0f0;
-    text-shadow: 1px 1px #0e0e0e;    
+    text-shadow: 1px 1px #0e0e0e;
     border-style: solid;
     border-width: 1px;
     border-radius: 3px;
@@ -64,15 +67,15 @@ Important:
 }
 
 .dark button:hover {
-    background: #3b3b3b;
+    background: #747474;
 }
 
 .dark button[disabled]:hover {
-    background: #353535;
+    background: #5f5f5f;
 }
 
 .dark button:active {
-    background: #343434;
+    background: #4f4f4f;
 }
 
 /* Tooltip */
@@ -150,10 +153,13 @@ Important:
 
 /* Property Page */
 
-.dark .PropertyTitleArea {
+.dark .PropertySectionPane {
     background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .PropertyTitleArea {
     color: #b0b0b0;
-}   
+}
 
 .dark .PropertyTitleArea label,
 .dark .PropertySubTitleLabel {
@@ -231,7 +237,8 @@ Important:
     background: rgba(255, 255, 255, 0.1);
 }
 
-.dark .MenuItem:hover, .dark .MenuItemSelected {
+.dark .MenuItem:hover,
+.dark .MenuItemSelected {
     background: #f0a050;
     color: #0e0e0e;
 }
