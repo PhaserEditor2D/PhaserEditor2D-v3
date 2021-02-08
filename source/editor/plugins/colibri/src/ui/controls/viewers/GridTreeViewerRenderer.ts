@@ -62,7 +62,7 @@ namespace colibri.ui.controls.viewers {
             return this._isShadowChildCriteria;
         }
 
-        private isSection(obj: any) {
+        isSection(obj: any) {
 
             return this._isSectionCriteria ? this._isSectionCriteria(obj) : false;
         }
