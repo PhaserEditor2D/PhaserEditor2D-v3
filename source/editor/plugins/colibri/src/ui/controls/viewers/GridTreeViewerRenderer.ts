@@ -171,11 +171,18 @@ namespace colibri.ui.controls.viewers {
 
                         if (children.length > 0) {
 
-                            if (x > offset) {
+                            if (paintItems.length > 0) {
 
-                                if (paintItems.length > 0) {
+                                if (x > offset) {
 
-                                    y += cellSize + TREE_RENDERER_GRID_PADDING * 3; // add new line
+                                    if (hasSections) {
+
+                                        y += cellSize + TREE_RENDERER_GRID_PADDING * 3; // add new line
+                                    }
+
+                                } else {
+
+                                    y += TREE_RENDERER_GRID_PADDING * 2; // add new line
                                 }
                             }
 
@@ -192,7 +199,6 @@ namespace colibri.ui.controls.viewers {
 
                                 if (expanded) {
 
-                                    // Controls.drawRoundedRect(ctx, 5, rectY, b.width - 10, rectHeight, 5, 5, 0, 0);
                                     this.drawPanelTop(ctx, 5, rectY, b.width - 10, rectHeight);
 
                                 } else {
@@ -229,7 +235,15 @@ namespace colibri.ui.controls.viewers {
                             paintItems.push(item);
                             newParentPaintItem = item;
 
-                            y += TREE_RENDERER_GRID_PADDING * 3;
+                            if (expanded) {
+
+                                y += TREE_RENDERER_GRID_PADDING * 3;
+
+                            } else {
+
+                                y += TREE_RENDERER_GRID_PADDING;
+                            }
+
                             x = offset;
                         }
 
