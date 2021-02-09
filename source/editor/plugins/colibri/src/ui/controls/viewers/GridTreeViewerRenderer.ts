@@ -208,7 +208,7 @@ namespace colibri.ui.controls.viewers {
 
                                 if (children.length > 0 && !this._flat) {
 
-                                    const iconY = rectY + rectHeight / 2 - ICON_SIZE / 2 + 1;
+                                    const iconY = rectY + rectHeight / 2 - RENDER_ICON_SIZE / 2 + 1;
 
                                     const iconInfo = this.paintIcon(ctx, obj, 5, iconY, expanded, treeIconList);
 
@@ -283,7 +283,7 @@ namespace colibri.ui.controls.viewers {
 
                                 const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
-                                this.paintIcon(ctx, obj, x, iconY, expanded, treeIconList);
+                                this.paintIcon(ctx, obj, x - 5, iconY, expanded, treeIconList);
                             }
                         }
 
