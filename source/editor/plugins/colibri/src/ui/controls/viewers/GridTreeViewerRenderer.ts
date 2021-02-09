@@ -585,7 +585,7 @@ namespace colibri.ui.controls.viewers {
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
             ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
 
-            this.drawPrevBottomPanel(ctx, x, y, w, h);
+            // this.drawPrevBottomPanel(ctx, x, y, w, h);
 
             // stroke
 
@@ -648,7 +648,7 @@ namespace colibri.ui.controls.viewers {
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
             ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
 
-            this.drawPrevBottomPanel(ctx, x, y, w, h);
+            // this.drawPrevBottomPanel(ctx, x, y, w, h);
 
             ctx.beginPath();
             ctx.moveTo(x + c, y);
