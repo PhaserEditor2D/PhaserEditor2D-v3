@@ -14,7 +14,6 @@
     display: none;
 }
 
-
 .lightBlue input:focus, .lightBlue textarea:focus {
     background: #f6f6f6;
     border-color: #4242ff;
@@ -131,11 +130,10 @@
 
 /* Property Page */
 
-
-.lightBlue .PropertyTitleArea {
-    background: #b2c3dd88;    
+.lightBlue .PropertySectionPane {
+    background: #b2c3dd88;  
+    border-radius: 3px;  
 }
-
 
 /* Toolbar */
 
