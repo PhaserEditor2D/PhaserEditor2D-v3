@@ -546,6 +546,32 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
+        private drawPrevBottomPanel(
+            ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+
+            ctx.save();
+
+            ctx.translate(0, -8);
+            ctx.clearRect(x - 5, y - 5, w + 10, 8);
+
+            ctx.beginPath();
+            ctx.moveTo(x + w, y - 5);
+            ctx.quadraticCurveTo(x + w, y, x + w - 5, y);
+            ctx.lineTo(x + 5, y);
+            ctx.quadraticCurveTo(x, y, x, y - 5);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath()
+            ctx.moveTo(x + w, y - 5);
+            ctx.quadraticCurveTo(x + w, y, x + w - 5, y);
+            ctx.lineTo(x + 5, y);
+            ctx.quadraticCurveTo(x, y, x, y - 5);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
         private drawPanelTop(
             ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
 
@@ -559,6 +585,8 @@ namespace colibri.ui.controls.viewers {
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
             ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
 
+            this.drawPrevBottomPanel(ctx, x, y, w, h);
+
             // stroke
 
             ctx.beginPath();
@@ -567,15 +595,11 @@ namespace colibri.ui.controls.viewers {
             ctx.quadraticCurveTo(x + w, y, x + w, y + topRight);
             ctx.lineTo(x + w, y + h - bottomRight);
             ctx.quadraticCurveTo(x + w, y + h, x + w - bottomRight, y + h);
-
-            ctx.stroke();
-
             ctx.moveTo(x + bottomLeft, y + h);
             ctx.quadraticCurveTo(x, y + h, x, y + h - bottomLeft);
             ctx.lineTo(x, y + topLeft);
             ctx.quadraticCurveTo(x, y, x + topLeft, y);
             ctx.stroke();
-            ctx.closePath();
 
             // fill
 
@@ -589,7 +613,6 @@ namespace colibri.ui.controls.viewers {
             ctx.quadraticCurveTo(x, y + h, x, y + h - bottomLeft);
             ctx.lineTo(x, y + topLeft);
             ctx.quadraticCurveTo(x, y, x + topLeft, y);
-            ctx.closePath();
             ctx.fill();
             ctx.restore();
         }
@@ -624,6 +647,8 @@ namespace colibri.ui.controls.viewers {
 
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
             ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
+
+            this.drawPrevBottomPanel(ctx, x, y, w, h);
 
             ctx.beginPath();
             ctx.moveTo(x + c, y);
