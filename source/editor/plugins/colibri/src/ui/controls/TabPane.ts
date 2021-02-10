@@ -154,6 +154,7 @@ namespace colibri.ui.controls {
         public eventTabClosed = new ListenerList();
         public eventTabSelected = new ListenerList();
         public eventTabLabelResized = new ListenerList();
+        public eventTabSectionSelected = new ListenerList();
 
         private _titleBarElement: HTMLElement;
         private _contentAreaElement: HTMLElement;
@@ -221,6 +222,8 @@ namespace colibri.ui.controls {
 
                     sectionElement.classList.remove("selected");
 
+                    this.eventTabSectionSelected.fire(undefined);
+
                 } else {
 
                     for (let i = 0; i < sectionsElement.children.length; i++) {
@@ -230,6 +233,8 @@ namespace colibri.ui.controls {
                     }
 
                     sectionElement.classList.add("selected");
+
+                    this.eventTabSectionSelected.fire(section);
                 }
             });
         }
