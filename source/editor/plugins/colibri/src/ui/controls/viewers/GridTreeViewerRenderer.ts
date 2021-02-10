@@ -207,7 +207,7 @@ namespace colibri.ui.controls.viewers {
                                     this.drawPanelCollapsed(ctx, 5, rectY, b.width - 10, rectHeight);
                                 }
 
-                                if (children.length > 0 && !this._flat) {
+                                if (children.length > 0) {
 
                                     const iconY = rectY + rectHeight / 2 - RENDER_ICON_SIZE / 2 + 1;
 
