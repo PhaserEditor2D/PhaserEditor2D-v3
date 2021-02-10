@@ -161,11 +161,12 @@ namespace colibri.ui.controls.viewers {
 
                 const children = viewer.getContentProvider().getChildren(obj);
                 const expanded = viewer.isExpanded(obj);
+                const isSection = this.isSection(obj);
                 let newParentPaintItem: PaintItem = null;
 
                 if (viewer.isFilterIncluded(obj)) {
 
-                    if (this.isSection(obj)) {
+                    if (isSection) {
 
                         // drawing section
 
@@ -241,7 +242,8 @@ namespace colibri.ui.controls.viewers {
 
                             } else {
 
-                                y += TREE_RENDERER_GRID_PADDING;
+                                // no idea why!
+                                y += 2;
                             }
 
                             x = offset;
@@ -313,8 +315,21 @@ namespace colibri.ui.controls.viewers {
                         children, treeIconList, paintItems, newParentPaintItem, x, y, offset, depth + 1, sectionStart, sectionEnd);
                     y = result.y;
                     x = result.x;
+
+                    if (sectionEnd !== result.sectionEnd && depth === 0) {
+
+                        this.drawPanelBottom(ctx, 5, result.sectionEnd, b.width - 10);
+                    }
+
                     sectionStart = result.sectionStart;
                     sectionEnd = result.sectionEnd;
+
+                } else {
+
+                    if (isSection && depth === 0) {
+
+                        this.drawPanelBottom(ctx, 5, sectionEnd, b.width - 10);
+                    }
                 }
             }
 
@@ -546,15 +561,17 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        private drawPrevBottomPanel(
-            ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+        private drawPanelBottom(
+            ctx: CanvasRenderingContext2D, x: number, y: number, w: number) {
 
             y = Math.floor(y);
 
             ctx.save();
 
-            ctx.translate(0, -8);
-            ctx.clearRect(x - 5, y - 5, w + 10, 8);
+            ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
+            ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
+
+            ctx.clearRect(x - 5, y - 5, w + 10, 10);
 
             ctx.beginPath();
             ctx.moveTo(x + w, y - 5);
@@ -588,8 +605,6 @@ namespace colibri.ui.controls.viewers {
 
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
             ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
-
-            this.drawPrevBottomPanel(ctx, x, y, w, h);
 
             // stroke
 
@@ -656,7 +671,7 @@ namespace colibri.ui.controls.viewers {
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
             ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
 
-            this.drawPrevBottomPanel(ctx, x, y, w, h);
+            // this.drawPrevBottomPanel(ctx, x, y, w);
 
             ctx.beginPath();
             ctx.moveTo(x + c, y);
