@@ -82,9 +82,9 @@ namespace phasereditor2d.code.ui.editors.outline {
             return new MonacoOutlineCellRendererProvider();
         }
 
-        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.GridTreeViewerRenderer {
+        getTreeViewerRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer {
 
-            return new controls.viewers.GridTreeViewerRenderer(viewer);
+            return new controls.viewers.TreeViewerRenderer(viewer);
         }
 
         getPropertySectionProvider(): controls.properties.PropertySectionProvider {
