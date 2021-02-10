@@ -70,7 +70,10 @@ namespace phasereditor2d.files.ui.views {
                 factories.push(registeredFactory);
             }
 
-            factories.push(defaultFactory);
+            if (defaultFactory) {
+
+                factories.push(defaultFactory);
+            }
 
             factories.push(...reg.getFactories().filter(f => f !== defaultFactory && f !== registeredFactory));
 
