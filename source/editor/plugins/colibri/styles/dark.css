@@ -50,7 +50,8 @@ Important:
 /* button */
 
 .dark button,
-.dark input[type="submit"] {
+.dark input[type="submit"],
+.dark .ToolbarItem {
     background: #5f5f5f;
     border-color: #646464;
     color: #f0f0f0;
@@ -66,7 +67,8 @@ Important:
     text-shadow: 1px 1px rgba(255, 255, 255, 0.4);
 }
 
-.dark button:hover {
+.dark button:hover,
+.dark .ToolbarItem:hover {
     background: #747474;
 }
 
@@ -74,7 +76,8 @@ Important:
     background: #5f5f5f;
 }
 
-.dark button:active {
+.dark button:active,
+.dark .ToolbarItem.active {
     background: #4f4f4f;
 }
 
@@ -169,29 +172,17 @@ Important:
 /* Toolbar */
 
 .dark .ToolbarItem {
-    background: #323232;
-    border-color: #646464;
-    border-style: solid;
     text-shadow: 1px 1px #0e0e0e;
 }
 
-.dark .ToolbarItem:hover,
-.dark .IconButton:hover {
-    background: #424242;
-    border-color: #757575;
-}
 
-.dark .ToolbarItem:active,
 .dark .ToolbarItem.ActionSelected {
-    background: rgba(255, 255, 255, 0.3);
+    background: #3f3f3f;
+    border-color: #858585;
 }
 
 .dark .IconButton:hover {
     background: rgba(255, 255, 255, 0.1);
-}
-
-.dark .ToolbarItem.ActionSelected {
-    border-color: #858585;
 }
 
 /* Zoom controls */
