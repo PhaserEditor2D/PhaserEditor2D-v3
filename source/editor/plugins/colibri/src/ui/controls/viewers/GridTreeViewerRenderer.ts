@@ -6,8 +6,17 @@ namespace colibri.ui.controls.viewers {
 
     const DARK_FILL_COLOR = "rgba(255, 255, 255, 0.05)";
     const DARK_BORDER_COLOR = "rgba(255, 255, 255, 0)";
+
     const LIGHT_FILL_COLOR = "rgba(255, 255, 255, 0.3)";
     const LIGHT_BORDER_COLOR = "rgba(255, 255, 255, 0.3)";
+
+    const DARK_SHADOW_COLOR = "rgba(0, 0, 0, 0.2)";
+    const DARK_CHILD_SHADOW_COLOR = "rgba(0, 0, 0, 0.4)";
+    const DARK_CHILD_SHADOW_BORDER_COLOR = "rgba(0, 0, 0, 0.2)";
+
+    const LIGHT_SHADOW_COLOR = "rgba(255, 255, 255, 0.5)";
+    const LIGHT_CHILD_SHADOW_COLOR = "rgba(0, 0, 0, 0.1)";
+    const LIGHT_CHILD_SHADOW_BORDER_COLOR = "rgba(255, 255, 255, 1)";
 
     export class GridTreeViewerRenderer extends TreeViewerRenderer {
 
@@ -482,6 +491,13 @@ namespace colibri.ui.controls.viewers {
 
         protected renderCellBack(args: RenderCellArgs, selected: boolean, isLastChild: boolean) {
 
+            const theme = Controls.getTheme();
+
+            // originally was (0, 0, 0, 0.2)
+            const shadowColor = theme.dark ? DARK_SHADOW_COLOR : LIGHT_SHADOW_COLOR;
+            const childShadowColor = theme.dark ? DARK_CHILD_SHADOW_COLOR : LIGHT_CHILD_SHADOW_COLOR;
+            const childShadowBorderColor = theme.dark ? DARK_CHILD_SHADOW_BORDER_COLOR : LIGHT_CHILD_SHADOW_BORDER_COLOR;
+
             if (selected) {
 
                 const ctx = args.canvasContext;
@@ -508,17 +524,23 @@ namespace colibri.ui.controls.viewers {
 
                     ctx.save();
 
-                    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+                    ctx.fillStyle = childShadowColor;
+                    ctx.strokeStyle = childShadowBorderColor;
 
                     if (isLastChild) {
 
                         controls.Controls.drawRoundedRect(
-                            ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 5, 5, 0);
+                            ctx, args.x - margin, args.y, args.w + margin, args.h, false, 0, 5, 5, 0);
 
                     } else {
 
+                        ctx.beginPath()
+                        ctx.moveTo(args.x + args.w, args.y + 2);
+                        ctx.lineTo(args.x + args.w, args.y + args.h - 4);
+                        ctx.stroke();
+
                         controls.Controls.drawRoundedRect(
-                            ctx, args.x - margin, args.y, args.w + margin, args.h, 0, 0, 0, 0);
+                            ctx, args.x - margin, args.y, args.w + margin, args.h, false, 0, 0, 0, 0);
                     }
 
                     ctx.restore();
@@ -529,15 +551,16 @@ namespace colibri.ui.controls.viewers {
 
                     ctx.save();
 
-                    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+                    ctx.fillStyle = shadowColor;
+                    // ctx.strokeStyle = "rgba(0, 0, 0, 0.1)";
 
                     if (expanded) {
 
-                        controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h, 5, 0, 0, 5);
+                        controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h, false, 5, 0, 0, 5);
 
                     } else {
 
-                        controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h, 5, 5, 5, 5);
+                        controls.Controls.drawRoundedRect(ctx, args.x, args.y, args.w, args.h, false, 5, 5, 5, 5);
                     }
 
                     ctx.restore();
