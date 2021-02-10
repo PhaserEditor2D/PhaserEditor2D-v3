@@ -136,11 +136,11 @@ namespace colibri.ui.controls.viewers {
                 Math.floor(b.width % (viewer.getCellSize() + TREE_RENDERER_GRID_PADDING) / 2)
                 : (this._isSectionCriteria === undefined ? TREE_RENDERER_GRID_PADDING : TREE_RENDERER_GRID_PADDING * 3);
 
-            return this.paintItems2(
+            return this.paintGrid(
                 objects, treeIconList, paintItems, null, x + offset, y + TREE_RENDERER_GRID_PADDING, offset, 0, undefined, undefined);
         }
 
-        private paintItems2(
+        private paintGrid(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number, offset: number, depth: number, sectionStart: number, sectionEnd: number) {
 
@@ -193,7 +193,7 @@ namespace colibri.ui.controls.viewers {
                             let isItemVisible = false;
 
                             // paint only if needed
-                            if (y > -cellSize && y < b.height) {
+                            if (y > -cellSize && rectY <= b.height) {
 
                                 const label = labelProvider.getLabel(obj);
 
@@ -309,7 +309,7 @@ namespace colibri.ui.controls.viewers {
 
                 if (expanded) {
 
-                    const result = this.paintItems2(
+                    const result = this.paintGrid(
                         children, treeIconList, paintItems, newParentPaintItem, x, y, offset, depth + 1, sectionStart, sectionEnd);
                     y = result.y;
                     x = result.x;
@@ -549,6 +549,8 @@ namespace colibri.ui.controls.viewers {
         private drawPrevBottomPanel(
             ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
 
+            y = Math.floor(y);
+
             ctx.save();
 
             ctx.translate(0, -8);
@@ -575,6 +577,8 @@ namespace colibri.ui.controls.viewers {
         private drawPanelTop(
             ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
 
+            y = Math.floor(y);
+
             const topLeft = 5;
             const topRight = 5;
             const bottomRight = 0;
@@ -585,7 +589,7 @@ namespace colibri.ui.controls.viewers {
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
             ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
 
-            // this.drawPrevBottomPanel(ctx, x, y, w, h);
+            this.drawPrevBottomPanel(ctx, x, y, w, h);
 
             // stroke
 
@@ -620,6 +624,8 @@ namespace colibri.ui.controls.viewers {
         drawPanelRow(
             ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
 
+            y = Math.floor(y);
+
             ctx.save();
 
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
@@ -641,6 +647,8 @@ namespace colibri.ui.controls.viewers {
         private drawPanelCollapsed(
             ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
 
+            y = Math.floor(y);
+
             const c = TREE_RENDERER_GRID_PADDING;
 
             ctx.save();
@@ -648,7 +656,7 @@ namespace colibri.ui.controls.viewers {
             ctx.fillStyle = Controls.getTheme().dark ? DARK_FILL_COLOR : LIGHT_FILL_COLOR;
             ctx.strokeStyle = Controls.getTheme().dark ? DARK_BORDER_COLOR : LIGHT_BORDER_COLOR;
 
-            // this.drawPrevBottomPanel(ctx, x, y, w, h);
+            this.drawPrevBottomPanel(ctx, x, y, w, h);
 
             ctx.beginPath();
             ctx.moveTo(x + c, y);
