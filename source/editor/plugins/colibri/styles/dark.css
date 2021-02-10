@@ -50,8 +50,10 @@ Important:
 /* button */
 
 .dark button,
-.dark input[type="submit"],
-.dark .ToolbarItem {
+.dark input[type="submit"]
+
+/* , .dark .ToolbarItem */
+    {
     background: #5f5f5f;
     border-color: #646464;
     color: #f0f0f0;
@@ -183,6 +185,7 @@ Important:
 
 .dark .ToolbarItem {
     text-shadow: 1px 1px #0e0e0e;
+    border-color: transparent;
 }
 
 
