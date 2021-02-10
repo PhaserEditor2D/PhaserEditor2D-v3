@@ -14,8 +14,8 @@ namespace colibri.ui.controls.viewers {
     const DARK_CHILD_SHADOW_COLOR = "rgba(0, 0, 0, 0.4)";
     const DARK_CHILD_SHADOW_BORDER_COLOR = "rgba(0, 0, 0, 0.2)";
 
-    const LIGHT_SHADOW_COLOR = "rgba(255, 255, 255, 0.5)";
-    const LIGHT_CHILD_SHADOW_COLOR = "rgba(0, 0, 0, 0.1)";
+    const LIGHT_SHADOW_COLOR = "rgba(0, 0, 0, 0.1)";
+    const LIGHT_CHILD_SHADOW_COLOR = "rgba(0, 0, 0, 0.2)";
     const LIGHT_CHILD_SHADOW_BORDER_COLOR = "rgba(255, 255, 255, 1)";
 
     export class GridTreeViewerRenderer extends TreeViewerRenderer {
