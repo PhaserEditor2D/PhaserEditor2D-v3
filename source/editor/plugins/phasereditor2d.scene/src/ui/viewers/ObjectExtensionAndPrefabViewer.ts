@@ -17,6 +17,7 @@ namespace phasereditor2d.scene.ui.viewers {
 
             const treeRenderer = new controls.viewers.GridTreeViewerRenderer(this);
             treeRenderer.setPaintItemShadow(true);
+            treeRenderer.setSectionCriteria(obj => ObjectExtensionAndPrefabViewer.SECTIONS.indexOf(obj) >= 0);
 
             this.setLabelProvider(new ui.blocks.SceneEditorBlocksLabelProvider());
             this.setCellRendererProvider(new ui.blocks.SceneEditorBlocksCellRendererProvider());
