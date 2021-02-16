@@ -2,18 +2,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ChangeTextureOperation extends SceneGameObjectOperation<ITextureLikeObject> {
 
+        static canChangeTextureOf(obj: ISceneGameObject) {
+
+            return GameObjectEditorSupport.hasObjectComponent(obj, TextureComponent)
+                && (!obj.getEditorSupport().isPrefabInstance()
+                    || obj.getEditorSupport().isUnlockedProperty(TextureComponent.texture))
+        }
+
         static runDialog(editor: editor.SceneEditor) {
 
             const finder = editor.getPackFinder();
 
             const cache = editor.getScene().getPackCache();
 
-            const objects = editor.getSelectedGameObjects()
-
-                .filter(obj => GameObjectEditorSupport.hasObjectComponent(obj, TextureComponent))
-
-                .filter(obj => !obj.getEditorSupport().isPrefabInstance()
-                    || obj.getEditorSupport().isUnlockedProperty(TextureComponent.texture));
+            const objects = editor.getSelectedGameObjects().filter(obj => this.canChangeTextureOf(obj));
 
             const objectKeys = objects
 
@@ -25,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             TextureSelectionDialog.createDialog(
                 finder,
-                selectedFrames as pack.core.AssetPackImageFrame[],
+                selectedFrames as (pack.core.AssetPackImageFrame)[],
                 async (sel) => {
 
                     const frame = sel[0];

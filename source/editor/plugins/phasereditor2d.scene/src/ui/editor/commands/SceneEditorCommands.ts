@@ -331,7 +331,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 handler: {
 
-                    testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection().length > 0
+                        && args.activeEditor.getSelection()
+                            .filter(obj => sceneobjects.ChangeTextureOperation.canChangeTextureOf(obj))
+                            .length > 0,
 
                     executeFunc: args => {
                         sceneobjects.ChangeTextureOperation.runDialog(args.activeEditor as SceneEditor);
