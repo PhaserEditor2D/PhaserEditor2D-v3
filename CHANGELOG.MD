@@ -18,6 +18,7 @@
 * Scene Editor: keep same origin when change the texture.
 * Scene Editor: uses `Array<any>` as type for an empty ObjectList.
 * Scene Editor: fixes code generation of the Text's `lineSpacing` property.
+* Scene Editor: fixes change texture command. Doesn't apply to non-texture objects. Fixes when selecting a new image (instead of atlas frame).
 * Viewer: fixes Collapse All command, when the viewer is scrolled.
 * Viewer: fixes Collapse/Expand branch command, when the viewer is scrolled.
 
