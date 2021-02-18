@@ -55,7 +55,7 @@ namespace phasereditor2d.pack.ui.editor {
 
         getInput() {
 
-            return this._editor.getInput().getParent().getFiles();
+            return this._editor.getInput().getParent();
         }
 
         async updateBlocks_async() {

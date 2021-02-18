@@ -44,9 +44,17 @@ namespace phasereditor2d.pack.ui.editor {
 
             const folders = [];
 
-            super.getRoots(input)
+            if (input instanceof io.FilePath && input.isFolder()) {
 
-                .flatMap(file => this.getFolders(file, folders));
+                folders.push(input);
+            }
+
+            const roots = super.getRoots(input);
+
+            for(const file of roots) {
+
+                this.getFolders(file, folders);
+            }
 
             return folders;
         }
