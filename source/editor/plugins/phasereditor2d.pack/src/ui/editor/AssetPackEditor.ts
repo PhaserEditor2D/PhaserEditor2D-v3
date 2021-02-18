@@ -232,6 +232,7 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         getPropertyProvider() {
+
             return this._propertyProvider;
         }
 

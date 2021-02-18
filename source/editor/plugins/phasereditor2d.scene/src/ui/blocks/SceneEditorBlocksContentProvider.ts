@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui.blocks {
     const SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES = new Set(
         [
             pack.core.IMAGE_TYPE,
+            pack.core.SVG_TYPE,
             pack.core.ATLAS_TYPE,
             pack.core.ATLAS_XML_TYPE,
             pack.core.MULTI_ATLAS_TYPE,
@@ -69,6 +70,12 @@ namespace phasereditor2d.scene.ui.blocks {
                 }
 
                 switch (parent) {
+                    case pack.core.IMAGE_TYPE:
+                    case pack.core.SVG_TYPE:
+
+                        return this.getPackItems()
+                            .filter(item => item instanceof pack.core.ImageAssetPackItem);
+
                     case pack.core.ATLAS_TYPE:
 
                         return this.getPackItems()

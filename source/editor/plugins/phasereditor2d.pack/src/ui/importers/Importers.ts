@@ -37,8 +37,8 @@ namespace phasereditor2d.pack.ui.importers {
 
                     new SingleFileImporter(webContentTypes.core.CONTENT_TYPE_SVG, core.SVG_TYPE, false, {
                         svgConfig: {
-                            width: 512,
-                            height: 512
+                            width: 0,
+                            height: 0
                         }
                     }),
                     new SpritesheetImporter(),
