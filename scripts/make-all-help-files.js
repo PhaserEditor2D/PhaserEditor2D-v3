@@ -60,6 +60,7 @@ utils.makeHelpFile([
     "Phaser.Loader.LoaderPlugin.svg(url)",
     "Phaser.Types.Loader.FileTypes.SVGSizeConfig.width",
     "Phaser.Types.Loader.FileTypes.SVGSizeConfig.height",
+    "Phaser.Types.Loader.FileTypes.SVGSizeConfig.scale",
 
     "Phaser.Loader.LoaderPlugin.tilemapCSV(url)",
     "Phaser.Loader.LoaderPlugin.tilemapImpact(url)",
