@@ -1,12 +1,13 @@
 # Change Log
 
-## v3.10.2-next
+## Active development
 
 ## Added
 
 * Scene Editor: command `V` toggles the visibility of the selected objects.
 * Scene Editor: the Change Texture dialog groups the items by type.
 * Scene Editor: support SVG assets in the Blocks view.
+* Scene Editor: show option to open an object's texture in the Asset Pack Editor.
 * Viewer: advanced filtering by default. Allows matching different words.
 * Viewer: filtering isn't triggered at every key.
 * [#103](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/103): Close editor's tab with the mouse middle button.
