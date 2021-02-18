@@ -243,6 +243,38 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
             menu.addCommand(commands.CMD_REPLACE_TEXTURE);
+
+            const obj = this._editor.getSelectedGameObjects()[0];
+
+            if (obj) {
+
+                if (obj.getEditorSupport().hasComponent(sceneobjects.TextureComponent)) {
+
+                    const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent) as sceneobjects.TextureComponent;
+
+                    const keys = comp.getTextureKeys();
+
+                    if (keys) {
+
+                        const item = this._editor.getScene().getMaker().getPackFinder().findAssetPackItem(keys.key);
+
+                        if (item) {
+
+                            menu.addAction({
+                                text: "Show In Asset Pack Editor",
+                                callback: () => {
+
+                                    const file = item.getPack().getFile();
+
+                                    const editor = colibri.Platform.getWorkbench().openEditor(file) as pack.ui.editor.AssetPackEditor;
+
+                                    editor.revealKey(item.getKey());
+                                }
+                            })
+                        }
+                    }
+                }
+            }
         }
     }
 }
