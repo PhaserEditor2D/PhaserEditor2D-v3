@@ -11,6 +11,7 @@ namespace phasereditor2d.scene.ui.blocks {
         BUILTIN_SECTION,
         PREFAB_SECTION,
         pack.core.IMAGE_TYPE,
+        pack.core.SVG_TYPE,
         pack.core.ATLAS_TYPE,
         pack.core.SPRITESHEET_TYPE,
         pack.core.BITMAP_FONT_TYPE

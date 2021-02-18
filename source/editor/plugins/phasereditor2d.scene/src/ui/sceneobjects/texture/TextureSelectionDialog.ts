@@ -45,7 +45,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setContentProvider(new TextureContentProvider(this._finder));
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
             // TODO:
-            viewer.setInput([pack.core.IMAGE_TYPE, pack.core.ATLAS_TYPE, pack.core.SPRITESHEET_TYPE]);
+            viewer.setInput([
+                pack.core.IMAGE_TYPE,
+                pack.core.SVG_TYPE,
+                pack.core.ATLAS_TYPE,
+                pack.core.SPRITESHEET_TYPE
+            ]);
 
             viewer.expandRoots();
 
@@ -102,6 +107,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     return this.getPackItems().filter(i => pack.core.AssetPackUtils.isAtlasType(i.getType()));
 
                 case pack.core.IMAGE_TYPE:
+                case pack.core.SVG_TYPE:
                 case pack.core.SPRITESHEET_TYPE:
 
                     return this.getPackItems().filter(i => i.getType() === parent);

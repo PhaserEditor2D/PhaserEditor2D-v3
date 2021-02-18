@@ -70,11 +70,6 @@ namespace phasereditor2d.scene.ui.blocks {
                 }
 
                 switch (parent) {
-                    case pack.core.IMAGE_TYPE:
-                    case pack.core.SVG_TYPE:
-
-                        return this.getPackItems()
-                            .filter(item => item instanceof pack.core.ImageAssetPackItem);
 
                     case pack.core.ATLAS_TYPE:
 
