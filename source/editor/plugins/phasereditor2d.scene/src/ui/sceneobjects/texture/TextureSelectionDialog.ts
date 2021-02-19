@@ -91,11 +91,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             btn.disabled = true;
 
-            this.getViewer().eventSelectionChanged.addListener(() => {
+            viewer.eventSelectionChanged.addListener(() => {
 
                 btn.disabled = this.getViewer().getSelection().length !== 1
                     || !pack.core.AssetPackUtils.isImageFrameOrImage(this.getViewer().getSelectionFirstElement());
             });
+
+            viewer.eventOpenItem.addListener(() => btn.click());
 
             this.addButton("Cancel", () => this.close());
         }
