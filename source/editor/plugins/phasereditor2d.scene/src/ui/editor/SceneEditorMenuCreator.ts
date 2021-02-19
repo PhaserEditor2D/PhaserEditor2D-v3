@@ -243,6 +243,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
             menu.addCommand(commands.CMD_REPLACE_TEXTURE);
+            menu.addCommand(commands.CMD_REPLACE_TEXTURE_FRAME);
 
             const obj = this._editor.getSelectedGameObjects()[0];
 
@@ -261,7 +262,7 @@ namespace phasereditor2d.scene.ui.editor {
                         if (item) {
 
                             menu.addAction({
-                                text: "Show In Asset Pack Editor",
+                                text: "Show Texture In Asset Pack Editor",
                                 callback: () => {
 
                                     const file = item.getPack().getFile();

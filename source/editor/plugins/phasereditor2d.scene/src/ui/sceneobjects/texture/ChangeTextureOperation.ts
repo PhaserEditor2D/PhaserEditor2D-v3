@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     || obj.getEditorSupport().isUnlockedProperty(TextureComponent.texture))
         }
 
-        static runDialog(editor: editor.SceneEditor) {
+        static runDialog(editor: editor.SceneEditor, atlasKey?: string) {
 
             const finder = editor.getPackFinder();
 
@@ -53,7 +53,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             objects as ITextureLikeObject[],
                             newKeys)
                         );
-                });
+                }, atlasKey);
         }
 
         constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: ITextureKeys) {

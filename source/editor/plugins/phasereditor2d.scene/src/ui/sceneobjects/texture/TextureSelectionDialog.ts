@@ -8,10 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static async createDialog(
             finder: pack.core.PackFinder, selected: pack.core.AssetPackImageFrame[],
-            callback: (selection: pack.core.AssetPackImageFrame[]) => void
+            callback: (selection: pack.core.AssetPackImageFrame[]) => void,
+            atlasKey?: string
         ) {
 
-            const dlg = new TextureSelectionDialog(finder, callback);
+            const dlg = new TextureSelectionDialog(finder, callback, atlasKey);
 
             dlg.create();
 
@@ -22,15 +23,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private _callback: (selection: pack.core.AssetPackImageFrame[]) => void;
+        private _atlasKey: string;
 
         private constructor(
             finder: pack.core.PackFinder,
-            callback: (selection: pack.core.AssetPackImageFrame[]) => void
+            callback: (selection: pack.core.AssetPackImageFrame[]) => void,
+            atlasKey?: string
         ) {
             super(new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog"), true);
 
             this._finder = finder;
             this._callback = callback;
+            this._atlasKey = atlasKey;
 
             this.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
         }
@@ -44,13 +48,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
             viewer.setContentProvider(new TextureContentProvider(this._finder));
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
-            // TODO:
-            viewer.setInput([
-                pack.core.IMAGE_TYPE,
-                pack.core.SVG_TYPE,
-                pack.core.ATLAS_TYPE,
-                pack.core.SPRITESHEET_TYPE
-            ]);
+
+            let input: any;
+
+            if (this._atlasKey) {
+
+                const item = this._finder.findAssetPackItem(this._atlasKey);
+
+                if (item instanceof pack.core.ImageFrameContainerAssetPackItem) {
+
+                    input = item.getFrames();
+
+                } else {
+
+                    input = [];
+                }
+
+            } else {
+
+                input = [
+                    pack.core.IMAGE_TYPE,
+                    pack.core.SVG_TYPE,
+                    pack.core.ATLAS_TYPE,
+                    pack.core.SPRITESHEET_TYPE
+                ];
+            }
+
+            viewer.setInput(input);
 
             viewer.expandRoots();
 

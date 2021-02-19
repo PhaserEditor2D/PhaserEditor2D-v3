@@ -26,6 +26,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
     export const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
     export const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
+    export const CMD_REPLACE_TEXTURE_FRAME = "phasereditor2d.scene.ui.editor.commands.ReplaceTextureFrame";
     export const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
     export const CMD_CREATE_PREFAB_WITH_OBJECT = "phasereditor2d.scene.ui.editor.commands.CreatePrefabWithObject";
     export const CMD_QUICK_EDIT_OUTPUT_FILE = "phasereditor2d.scene.ui.editor.commands.QuickEditOutputFile";
@@ -343,6 +344,37 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "X"
+                }
+            });
+
+            // change texture frame
+
+            manager.add({
+                command: {
+                    id: CMD_REPLACE_TEXTURE_FRAME,
+                    name: "Replace Texture Frame",
+                    tooltip: "Change the texture's frame of the selected objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection().length > 0
+                        && args.activeEditor.getSelection()
+                            .filter(obj => sceneobjects.ChangeTextureOperation.canChangeTextureOf(obj))
+                            .length === 1,
+
+                    executeFunc: args => {
+
+                        const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneGameObject;
+                        const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent) as sceneobjects.TextureComponent;
+                        const keys = comp.getTextureKeys();
+
+                        sceneobjects.ChangeTextureOperation.runDialog(args.activeEditor as SceneEditor, keys.key);
+                    }
+                },
+                keys: {
+                    key: "M"
                 }
             });
         }
