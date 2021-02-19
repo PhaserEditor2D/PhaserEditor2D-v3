@@ -66,18 +66,27 @@ namespace colibri.ui.controls {
         }
 
         addSeparator() {
+
             this._items.push(null);
         }
 
         isEmpty() {
+
             return this._items.length === 0;
         }
 
         getElement() {
+
             return this._element;
         }
 
         static getActiveMenu() {
+
+            if (this._activeMenu && !this._activeMenu._element.isConnected) {
+
+                this._activeMenu = undefined;
+            }
+
             return this._activeMenu;
         }
 
@@ -311,6 +320,7 @@ namespace colibri.ui.controls {
             if (this._parentMenu) {
 
                 this._parentMenu.closeAll();
+                this._parentMenu = undefined;
             }
 
             this.close();
