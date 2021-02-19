@@ -8,6 +8,7 @@
 * Scene Editor: the Change Texture dialog groups the items by type.
 * Scene Editor: support SVG assets in the Blocks view.
 * Scene Editor: show option to open an object's texture in the Asset Pack Editor.
+* Asset Pack Editor: allows setting the scale of the SVG assets.
 * Viewer: advanced filtering by default. Allows matching different words.
 * Viewer: filtering isn't triggered at every key.
 * [#103](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/103): Close editor's tab with the mouse middle button.
