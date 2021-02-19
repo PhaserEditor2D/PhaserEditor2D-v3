@@ -9,6 +9,7 @@
 * Scene Editor: support SVG assets in the Blocks view.
 * Scene Editor: show option to open an object's texture in the Asset Pack Editor.
 * Scene Editor: allows changing texture's frame of an object (`M`).
+* Scene Editor: Change Texture dialog allows selecting a texture with double-click.
 * Asset Pack Editor: allows setting the scale of the SVG assets.
 * Viewer: advanced filtering by default. Allows matching different words.
 * Viewer: filtering isn't triggered at every key.
