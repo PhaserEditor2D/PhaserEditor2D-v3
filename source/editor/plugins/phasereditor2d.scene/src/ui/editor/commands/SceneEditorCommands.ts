@@ -1048,7 +1048,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             if (file) {
 
-                                ide.IDEPlugin.getInstance().openFileInVSCode(file);
+                                ide.IDEPlugin.getInstance().openFileExternalEditor(file);
 
                             } else {
 
