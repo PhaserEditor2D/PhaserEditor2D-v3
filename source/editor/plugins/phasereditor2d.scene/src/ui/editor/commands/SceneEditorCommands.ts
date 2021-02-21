@@ -1029,12 +1029,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             if (ide.IDEPlugin.getInstance().isDesktopMode()) {
 
+                const editorName = ide.IDEPlugin.getInstance().getExternalEditorName();
+
                 manager.add({
                     command: {
                         id: CMD_OPEN_OUTPUT_FILE_IN_VSCODE,
-                        name: "Open Output File in VS Code",
+                        name: "Open Output File in " + editorName,
                         category: CAT_SCENE_EDITOR,
-                        tooltip: "Open the compiler output file in Visual Studio Code"
+                        tooltip: "Open the compiler output file in the configured external editor (" + editorName + ")"
                     },
                     handler: {
                         testFunc: args => args.activeEditor instanceof SceneEditor,
@@ -1050,9 +1052,13 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             } else {
 
-                                alert(`Output file "${file.getProjectRelativeName()}" not found.`);
+                                alert(`Output from "${editor.getInput().getProjectRelativeName()}" not found.`);
                             }
                         }
+                    }, keys: {
+                        control: true,
+                        alt: true,
+                        key: "E"
                     }
                 });
             }
