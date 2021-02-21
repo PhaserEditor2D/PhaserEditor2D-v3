@@ -19,6 +19,10 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addSeparator();
 
+            menu.addMenu(this.createAddObjectMenu())
+
+            menu.addSeparator();
+
             menu.addMenu(this.createPrefabMenu());
 
             menu.addMenu(this.createTypeMenu());
@@ -42,6 +46,46 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createSceneMenu());
 
             menu.addMenu(this.createCompilerMenu());
+        }
+
+        private createAddObjectMenu(): controls.Menu {
+
+            const blocksProvider = this._editor.getEditorViewerProvider(phasereditor2d.blocks.ui.views.BlocksView.EDITOR_VIEWER_PROVIDER_KEY);
+            const contentProvider = blocksProvider.getContentProvider();
+            const labelProvider = blocksProvider.getLabelProvider();
+            const cellRendererProvider = blocksProvider.getCellRendererProvider();
+
+            const menu = new controls.Menu("Add Object");
+
+            for (const cat of SCENE_OBJECT_CATEGORIES) {
+
+                const menu2 = new controls.Menu(cat);
+
+                const list = contentProvider.getChildren(cat);
+
+                for (const obj of list) {
+
+                    menu2.addAction({
+                        text: labelProvider.getLabel(obj),
+                        icon: new controls.viewers.ImageFromCellRenderer(
+                            obj, cellRendererProvider.getCellRenderer(obj), controls.ICON_SIZE, controls.ICON_SIZE),
+                        callback: () => {
+
+                            controls.Controls.setApplicationDragData([obj]);
+
+                            const rect = this._editor.getElement().getClientRects().item(0);
+                            const offsetX = rect.width / 2;
+                            const offsetY = rect.height / 2;
+
+                            this._editor.getDropManager().dropData([obj], offsetX, offsetY);
+                        }
+                    });
+                }
+
+                menu.addMenu(menu2);
+            }
+
+            return menu;
         }
 
         private createSceneMenu() {

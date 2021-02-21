@@ -40,16 +40,21 @@ namespace phasereditor2d.scene.ui.editor {
 
                 e.preventDefault();
 
-                await this._editor.getUndoManager()
-                    .add(new undo.CreateObjectWithAssetOperation(this._editor, e, dataArray));
-
-                await this._editor.refreshDependenciesHash();
-
-                ide.Workbench.getWorkbench().setActivePart(this._editor);
+                await this.dropData(dataArray, e.offsetX, e.offsetY);
             }
         }
 
-        async createWithDropEvent(e: DragEvent, dropAssetArray: any[]) {
+        async dropData(dataArray: any[], offsetX: number, offsetY: number) {
+
+            await this._editor.getUndoManager()
+                .add(new undo.CreateObjectWithAssetOperation(this._editor, dataArray, offsetX, offsetY));
+
+            await this._editor.refreshDependenciesHash();
+
+            ide.Workbench.getWorkbench().setActivePart(this._editor);
+        }
+
+        async createWithDropEvent(dropAssetArray: any[], offsetX: number, offsetY: number) {
 
             const scene = this._editor.getScene();
 
@@ -71,7 +76,7 @@ namespace phasereditor2d.scene.ui.editor {
             nameMaker.update(scene.getPlainObjects());
             nameMaker.update(scene.getObjectLists().getLists());
 
-            const worldPoint = scene.getCamera().getWorldPoint(e.offsetX, e.offsetY);
+            const worldPoint = scene.getCamera().getWorldPoint(offsetX, offsetY);
             const x = Math.floor(worldPoint.x);
             const y = Math.floor(worldPoint.y);
 
