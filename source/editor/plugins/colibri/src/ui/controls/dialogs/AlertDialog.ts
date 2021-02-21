@@ -28,10 +28,15 @@ namespace colibri.ui.controls.dialogs {
 
             this.addButton("Close", () => {
 
-                AlertDialog._currentDialog = null;
-
                 this.close();
             });
+        }
+
+        close() {
+
+            super.close();
+
+            AlertDialog._currentDialog = null;
         }
 
         setMessage(text: string) {
