@@ -170,7 +170,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                             } else {
 
-                                alert(`Output from "${editor.getInput().getProjectRelativeName()}" not found.`);
+                                alert(`Output from "${component.getName()}" not found.`);
                             }
                         }
                     },
