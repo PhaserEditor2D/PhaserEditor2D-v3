@@ -203,11 +203,14 @@ namespace colibri.ui.controls {
 
                         subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
 
-                        const subMenuRect = subMenu._element.getClientRects()[0];
+                        if (subMenu._element) {
 
-                        if (Math.floor(subMenuRect.left) < Math.floor(menuRect.right) - 5) {
+                            const subMenuRect = subMenu._element.getClientRects()[0];
 
-                            subMenu._element.style.left = menuRect.left - subMenuRect.width + 5 + "px";
+                            if (Math.floor(subMenuRect.left) < Math.floor(menuRect.right) - 5) {
+
+                                subMenu._element.style.left = menuRect.left - subMenuRect.width + 5 + "px";
+                            }
                         }
 
                         this._subMenu = subMenu;
@@ -303,9 +306,13 @@ namespace colibri.ui.controls {
                 this._bgElement.remove();
             }
 
-            this._element.remove();
+            if (this._element) {
+
+                this._element.remove();
+            }
 
             if (this._menuCloseCallback) {
+
                 this._menuCloseCallback();
             }
 
