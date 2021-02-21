@@ -43,6 +43,20 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
+        setExpandWhenOpenParentItem() {
+
+            this.eventOpenItem.addListener(obj => {
+
+                if (this.getContentProvider().getChildren(obj).length > 0) {
+
+                    this.setExpanded(obj, !this.isExpanded(obj));
+
+                    this.repaint();
+                }
+            });
+        }
+
+
         getTreeRenderer() {
 
             return this._treeRenderer;

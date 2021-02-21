@@ -4,6 +4,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     import io = colibri.core.io;
 
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
+    export const CMD_ADD_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddObject";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_JOIN_IN_LAYER = "phasereditor2d.scene.ui.editor.commands.JoinInLayer";
     export const CMD_BREAK_PARENT = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
@@ -90,6 +91,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             SceneEditorCommands.registerEditCommands(manager);
 
+            SceneEditorCommands.registerAddObjectCommands(manager);
+
             SceneEditorCommands.registerSceneCommands(manager);
 
             SceneEditorCommands.registerVisibilityCommands(manager);
@@ -113,6 +116,29 @@ namespace phasereditor2d.scene.ui.editor.commands {
             SceneEditorCommands.registerTextureCommands(manager);
 
             SceneEditorCommands.registerSnappingCommands(manager);
+        }
+
+        static registerAddObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_ADD_OBJECT,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Add Object",
+                    tooltip: "Add a built-in object to the scene."
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const dlg = new dialogs.AddObjectDialog(args.activeEditor as editor.SceneEditor);
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    key: "A"
+                }
+            })
         }
 
         static registerGlobalCommands(manager: colibri.ui.ide.commands.CommandManager) {

@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createCompilerMenu());
         }
 
-        private createAddObjectMenu(): controls.Menu {
+        private createAddObjectMenu() {
 
             const blocksProvider = this._editor.getEditorViewerProvider(phasereditor2d.blocks.ui.views.BlocksView.EDITOR_VIEWER_PROVIDER_KEY);
             const contentProvider = blocksProvider.getContentProvider();
@@ -56,6 +56,10 @@ namespace phasereditor2d.scene.ui.editor {
             const cellRendererProvider = blocksProvider.getCellRendererProvider();
 
             const menu = new controls.Menu("Add Object");
+
+            menu.addCommand(commands.CMD_ADD_OBJECT, {
+                text: "Add..."
+            });
 
             for (const cat of SCENE_OBJECT_CATEGORIES) {
 
@@ -71,13 +75,7 @@ namespace phasereditor2d.scene.ui.editor {
                             obj, cellRendererProvider.getCellRenderer(obj), controls.ICON_SIZE, controls.ICON_SIZE),
                         callback: () => {
 
-                            controls.Controls.setApplicationDragData([obj]);
-
-                            const rect = this._editor.getElement().getClientRects().item(0);
-                            const offsetX = rect.width / 2;
-                            const offsetY = rect.height / 2;
-
-                            this._editor.getDropManager().dropData([obj], offsetX, offsetY);
+                            this._editor.getDropManager().dropDataAtCenter([obj]);
                         }
                     });
                 }

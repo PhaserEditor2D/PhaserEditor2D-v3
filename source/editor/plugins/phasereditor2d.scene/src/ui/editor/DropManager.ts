@@ -44,6 +44,17 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
+        async dropDataAtCenter(dataArray: any[]) {
+
+            controls.Controls.setApplicationDragData(dataArray);
+
+            const rect = this._editor.getElement().getClientRects().item(0);
+            const offsetX = rect.width / 2;
+            const offsetY = rect.height / 2;
+
+            this.dropData(dataArray, offsetX, offsetY);
+        }
+
         async dropData(dataArray: any[], offsetX: number, offsetY: number) {
 
             await this._editor.getUndoManager()
