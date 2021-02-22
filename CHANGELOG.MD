@@ -24,6 +24,7 @@
 
 ### Fixed
 
+* Scene Editor: `Text.lineSpacing` is ignored in code generation when it has the default value (`0`).
 * Scene Editor: keep same origin when change the texture.
 * Scene Editor: uses `Array<any>` as type for an empty ObjectList.
 * Scene Editor: fixes code generation of the Text's `lineSpacing` property.
