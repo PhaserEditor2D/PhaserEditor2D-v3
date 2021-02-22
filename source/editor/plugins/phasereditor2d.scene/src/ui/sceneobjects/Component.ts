@@ -187,24 +187,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             fieldName: string, fieldCodeName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
-            let add = false;
 
-            if (args.prefabSerializer) {
-
-                const prefabValue = args.prefabSerializer.read(fieldName, defValue);
-
-                add = value !== prefabValue;
-
-            } else {
-
-                add = value !== defValue;
-            }
+            const add = this.hasValueForIncludeInCode(fieldName, value, defValue, args);
 
             if (add) {
 
                 dom.valueFloat(value);
                 args.statements.push(dom);
             }
+        }
+
+        hasValueForIncludeInCode(fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs) {
+
+            if (args.prefabSerializer) {
+
+                const prefabValue = args.prefabSerializer.read(fieldName, defValue);
+
+                return value !== prefabValue;
+
+            }
+
+            return value !== defValue;
         }
 
         async buildDependenciesHash(args: IBuildDependencyHashArgs) {
