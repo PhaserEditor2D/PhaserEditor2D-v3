@@ -39,6 +39,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_FIX_SCENE_FILES_ID = "phasereditor2d.scene.ui.editor.commands.FixSceneFilesID";
     export const CMD_DUPLICATE_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.DuplicateSceneFile";
     export const CMD_CLEAR_SCENE_THUMBNAIL_CACHE = "phasereditor2d.scene.ui.editor.commands.ClearSceneThumbnailCache";
+    export const CMD_OPEN_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.OpenSceneFile";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -235,7 +236,31 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         ui.SceneThumbnailCache.clearCache();
                     }
                 }
-            })
+            });
+
+            // open scene file
+
+            manager.add({
+                command: {
+                    id: CMD_OPEN_SCENE_FILE,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Open Scene File",
+                    tooltip: "Quick dialog to open a scene file."
+                },
+                handler: {
+                    testFunc: args => colibri.Platform.getWorkbench().getActiveWindow() instanceof ide.ui.DesignWindow,
+                    executeFunc: args => {
+
+                        const dlg = new dialogs.OpenSceneFileDialog();
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    control: true,
+                    alt: true,
+                    key: "O"
+                }
+            });
         }
 
         static registerSnappingCommands(manager: colibri.ui.ide.commands.CommandManager) {
