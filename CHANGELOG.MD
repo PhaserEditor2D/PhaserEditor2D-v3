@@ -13,6 +13,7 @@
 * [#90](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/90) Scene Editor: shows the Add Object dialog. You can open it with the `A` shortcut.
 * Scene Editor: allows panning the scene by pressing `Shift+MouseLeftButton`.
 * Adds key-binding (`Ctrl+Alt+E`) for the command to open the output file in the configured external editor. This command is available in the Scene Editor and the User Components Editor.
+* Scene Editor: new command to open a scene file (`Ctrl+Alt+O`).
 * Asset Pack Editor: allows setting the scale of the SVG assets.
 * Viewer: advanced filtering by default. Allows matching different words.
 * Viewer: filtering isn't triggered at every key.
