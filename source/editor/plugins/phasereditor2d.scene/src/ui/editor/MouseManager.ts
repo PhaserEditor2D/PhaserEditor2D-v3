@@ -127,7 +127,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onClick(e: MouseEvent) {
 
-            if (e.button !== 0 || e.altKey) {
+            if (e.button !== 0 || e.shiftKey) {
 
                 return;
             }

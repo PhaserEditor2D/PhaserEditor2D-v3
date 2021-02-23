@@ -9,10 +9,9 @@
 * Scene Editor: support SVG assets in the Blocks view.
 * Scene Editor: show option to open an object's texture in the Asset Pack Editor.
 * Scene Editor: allows changing texture's frame of an object (`M`).
-* Scene Editor: Change Texture dialog allows selecting a texture with double-click.
 * [#90](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/90) Scene Editor: shows the Add Object sub-menu in the context menu.
 * [#90](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/90) Scene Editor: shows the Add Object dialog. You can open it with the `A` shortcut.
-* Scene Editor: allows panning the scene by pressing `Alt+MouseLeftButton`.
+* Scene Editor: allows panning the scene by pressing `Shift+MouseLeftButton`.
 * Adds key-binding (`Ctrl+Alt+E`) for the command to open the output file in the configured external editor. This command is available in the Scene Editor and the User Components Editor.
 * Asset Pack Editor: allows setting the scale of the SVG assets.
 * Viewer: advanced filtering by default. Allows matching different words.
@@ -24,6 +23,7 @@
 
 ### Fixed
 
+* Scene Editor: Change Texture dialog allows selecting a texture with double-click.
 * Scene Editor: `Text.lineSpacing` is ignored in code generation when it has the default value (`0`).
 * Scene Editor: keep same origin when change the texture.
 * Scene Editor: uses `Array<any>` as type for an empty ObjectList.
