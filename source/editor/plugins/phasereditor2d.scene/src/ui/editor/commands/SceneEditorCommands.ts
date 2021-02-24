@@ -244,7 +244,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_OPEN_SCENE_FILE,
                     category: CAT_SCENE_EDITOR,
-                    name: "Open Scene File",
+                    name: "Go To Scene",
                     tooltip: "Quick dialog to open a scene file."
                 },
                 handler: {

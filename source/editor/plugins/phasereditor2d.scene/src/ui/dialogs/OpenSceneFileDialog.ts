@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             super.create();
 
-            this.setTitle("Open Scene File");
+            this.setTitle("Go To Scene");
 
             const viewer = this.getViewer() as controls.viewers.TreeViewer;
 
