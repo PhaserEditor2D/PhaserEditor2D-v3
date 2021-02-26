@@ -114,8 +114,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addButton("Cancel", () => this.close());
 
-            this.addElementToButtonPanel(this.createGroupByButton());
-
             this.updateFromGroupingType();
         }
 
@@ -167,34 +165,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.expandRoots();
         }
 
-        private createGroupByButton(): HTMLElement {
+        fillContextMenu(menu: controls.Menu) {
 
-            this.typeBtn = this.addButton("Group By " + GROUP_BY_LABEL_MAP[this.getGroupingType()], e => {
+            const selectedType = this.getGroupingType();
 
-                const selectedType = this.getGroupingType();
+            for (const type of ALL_GROUP_BY) {
 
-                const menu = new controls.Menu();
+                menu.addAction({
+                    text: "Group By " + GROUP_BY_LABEL_MAP[type],
+                    selected: type === selectedType,
+                    callback: () => {
 
-                for (const type of ALL_GROUP_BY) {
-
-                    menu.addAction({
-                        text: "Group By " + GROUP_BY_LABEL_MAP[type],
-                        selected: type === selectedType,
-                        callback: () => {
-
-                            this.setGroupingType(type);
-                            this.updateFromGroupingType();
-                        }
-                    });
-                }
-
-                menu.createWithEvent(e);
-            });
-
-            this.typeBtn.style.float = "left";
-            this.typeBtn.style.marginLeft = "0px";
-
-            return this.typeBtn;
+                        this.setGroupingType(type);
+                        this.updateFromGroupingType();
+                    }
+                });
+            }
         }
     }
 
