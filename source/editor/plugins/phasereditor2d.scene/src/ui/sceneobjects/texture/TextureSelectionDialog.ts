@@ -31,11 +31,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static async createDialog(
             finder: pack.core.PackFinder, selected: pack.core.AssetPackImageFrame[],
-            callback: (selection: pack.core.AssetPackImageFrame[]) => void,
-            atlasKey?: string
+            callback: (selection: pack.core.AssetPackImageFrame[]) => void
         ) {
 
-            const dlg = new TextureSelectionDialog(finder, callback, atlasKey);
+            const dlg = new TextureSelectionDialog(finder, callback);
 
             dlg.create();
 
@@ -46,18 +45,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private _callback: (selection: pack.core.AssetPackImageFrame[]) => void;
-        private _atlasKey: string;
 
         private constructor(
             finder: pack.core.PackFinder,
-            callback: (selection: pack.core.AssetPackImageFrame[]) => void,
-            atlasKey?: string
+            callback: (selection: pack.core.AssetPackImageFrame[]) => void
         ) {
             super(new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog"), true);
 
             this._finder = finder;
             this._callback = callback;
-            this._atlasKey = atlasKey;
 
             this.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
         }
@@ -91,28 +87,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
             viewer.setContentProvider(new TypeGroupingContentProvider(this._finder));
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
-
-            let input: any;
-
-            if (this._atlasKey) {
-
-                const item = this._finder.findAssetPackItem(this._atlasKey);
-
-                if (item instanceof pack.core.ImageFrameContainerAssetPackItem) {
-
-                    input = item.getFrames();
-
-                } else {
-
-                    input = [];
-                }
-
-            } else {
-
-                input = TYPES;
-            }
-
-            viewer.setInput(input);
+            viewer.setInput(TYPES);
 
             viewer.expandRoots();
 
@@ -139,12 +114,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addButton("Cancel", () => this.close());
 
-            if (!this._atlasKey) {
+            this.addElementToButtonPanel(this.createGroupByButton());
 
-                this.addElementToButtonPanel(this.createGroupByButton());
-
-                this.updateFromGroupingType();
-            }
+            this.updateFromGroupingType();
         }
 
         private getGroupingType() {

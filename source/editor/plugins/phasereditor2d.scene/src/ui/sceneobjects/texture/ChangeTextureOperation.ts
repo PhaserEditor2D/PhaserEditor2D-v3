@@ -25,35 +25,48 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const selectedFrames = objectKeys.map(k => cache.getImage(k.key, k.frame));
 
-            TextureSelectionDialog.createDialog(
-                finder,
-                selectedFrames as (pack.core.AssetPackImageFrame)[],
-                async (sel) => {
+            const callback = async (sel) => {
 
-                    const frame = sel[0];
+                const frame = sel[0];
 
-                    let newKeys: ITextureKeys;
+                let newKeys: ITextureKeys;
 
-                    const item = frame.getPackItem();
+                const item = frame.getPackItem();
 
-                    item.addToPhaserCache(editor.getGame(), cache);
+                item.addToPhaserCache(editor.getGame(), cache);
 
-                    if (item instanceof pack.core.ImageAssetPackItem) {
+                if (item instanceof pack.core.ImageAssetPackItem) {
 
-                        newKeys = { key: item.getKey() };
+                    newKeys = { key: item.getKey() };
 
-                    } else {
+                } else {
 
-                        newKeys = { key: item.getKey(), frame: frame.getName() };
-                    }
+                    newKeys = { key: item.getKey(), frame: frame.getName() };
+                }
 
-                    editor
-                        .getUndoManager().add(new ChangeTextureOperation(
-                            editor,
-                            objects as ITextureLikeObject[],
-                            newKeys)
-                        );
-                }, atlasKey);
+                editor
+                    .getUndoManager().add(new ChangeTextureOperation(
+                        editor,
+                        objects as ITextureLikeObject[],
+                        newKeys)
+                    );
+            };
+
+            if (atlasKey) {
+
+                TextureFrameSelectionDialog.createDialog(
+                    finder,
+                    selectedFrames as (pack.core.AssetPackImageFrame)[],
+                    callback,
+                    atlasKey);
+
+            } else {
+
+                TextureSelectionDialog.createDialog(
+                    finder,
+                    selectedFrames as (pack.core.AssetPackImageFrame)[],
+                    callback);
+            }
         }
 
         constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: ITextureKeys) {
