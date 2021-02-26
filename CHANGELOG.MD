@@ -22,7 +22,7 @@
 * Allows adding the selected object to a new object list.
 * Asset Pack Editor: Blocks are grouped by folder.
 * [#109](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/109): Double click a folder to expand.
-* Viewer: default context menu.
+* Viewer: default context menu and three dots button.
 
 ### Fixed
 
