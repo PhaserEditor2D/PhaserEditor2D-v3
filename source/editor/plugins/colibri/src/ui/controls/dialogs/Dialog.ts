@@ -38,6 +38,11 @@ namespace colibri.ui.controls.dialogs {
 
                             if (dlg.isCloseWithEscapeKey()) {
 
+                                if (Menu.getActiveMenu()) {
+
+                                    Menu.getActiveMenu().closeAll();
+                                }
+
                                 e.preventDefault();
                                 e.stopImmediatePropagation();
 
@@ -146,13 +151,13 @@ namespace colibri.ui.controls.dialogs {
             });
         }
 
-        addButton(text: string, callback: () => void) {
+        addButton(text: string, callback: (e?:MouseEvent) => void) {
 
             const btn = document.createElement("button");
 
             btn.innerText = text;
 
-            btn.addEventListener("click", e => callback());
+            btn.addEventListener("click", e => callback(e));
 
             this._buttonPaneElement.appendChild(btn);
 

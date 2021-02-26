@@ -1,6 +1,29 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
+
+    const GROUP_BY_TYPE = "type";
+    const GROUP_BY_PACK_FILE = "pack";
+    const GROUP_BY_LOCATION = "location";
+    const ALL_GROUP_BY = [
+        GROUP_BY_TYPE,
+        GROUP_BY_PACK_FILE,
+        GROUP_BY_LOCATION,
+    ]
+
+    const GROUP_BY_LABEL_MAP = {
+        "type": "Type",
+        "pack": "Asset Pack File",
+        "location": "Location"
+    };
+
+    const TYPES = [
+        pack.core.IMAGE_TYPE,
+        pack.core.SVG_TYPE,
+        pack.core.ATLAS_TYPE,
+        pack.core.SPRITESHEET_TYPE
+    ];
 
     export class TextureSelectionDialog extends controls.dialogs.ViewerDialog {
 
@@ -43,10 +66,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const viewer = this.getViewer();
 
-            viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
-            viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
+            viewer.setLabelProvider(new (class extends pack.ui.viewers.AssetPackLabelProvider {
+
+                getLabel(obj: any) {
+
+                    if (obj instanceof io.FilePath) {
+
+                        return obj.getProjectRelativeName().substring(1);
+                    }
+
+                    return super.getLabel(obj);
+                }
+            })());
+
+            viewer.setTreeRenderer(new (class extends pack.ui.viewers.AssetPackTreeViewerRenderer {
+
+                isObjectSection(obj: any) {
+
+                    return super.isObjectSection(obj) || obj instanceof pack.core.AssetPack || obj instanceof io.FilePath;
+                }
+
+            })(viewer, false));
+
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
-            viewer.setContentProvider(new TextureContentProvider(this._finder));
+            viewer.setContentProvider(new TypeGroupingContentProvider(this._finder));
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
 
             let input: any;
@@ -66,12 +109,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             } else {
 
-                input = [
-                    pack.core.IMAGE_TYPE,
-                    pack.core.SVG_TYPE,
-                    pack.core.ATLAS_TYPE,
-                    pack.core.SPRITESHEET_TYPE
-                ];
+                input = TYPES;
             }
 
             viewer.setInput(input);
@@ -100,10 +138,197 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.eventOpenItem.addListener(() => btn.click());
 
             this.addButton("Cancel", () => this.close());
+
+            if (!this._atlasKey) {
+
+                this.addElementToButtonPanel(this.createGroupByButton());
+
+                this.updateFromGroupingType();
+            }
+        }
+
+        private getGroupingType() {
+
+            return window.localStorage["phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog.groupBy"] || GROUP_BY_TYPE;
+        }
+
+        private setGroupingType(type: string) {
+
+            window.localStorage["phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog.groupBy"] = type;
+        }
+
+        private typeBtn: HTMLButtonElement;
+
+        private updateFromGroupingType() {
+
+            const type = this.getGroupingType();
+
+            this.typeBtn.textContent = "Group By " + GROUP_BY_LABEL_MAP[type];
+
+            const viewer = this.getViewer();
+
+            switch (type) {
+
+                case GROUP_BY_TYPE:
+
+                    viewer.setContentProvider(new TypeGroupingContentProvider(this._finder));
+                    viewer.setInput(TYPES);
+
+                    break;
+
+                case GROUP_BY_PACK_FILE:
+
+                    viewer.setContentProvider(new PackGroupingContentProvider(this._finder));
+                    viewer.setInput(this._finder.getPacks());
+
+                    break;
+
+                case GROUP_BY_LOCATION:
+
+                    viewer.setContentProvider(new LocationGroupingContentProvider(this._finder));
+                    viewer.setInput(this._finder.getPacks());
+
+                    break;
+            }
+
+            viewer.repaint();
+            viewer.expandRoots();
+        }
+
+        private createGroupByButton(): HTMLElement {
+
+            this.typeBtn = this.addButton("Group By " + GROUP_BY_LABEL_MAP[this.getGroupingType()], e => {
+
+                const selectedType = this.getGroupingType();
+
+                const menu = new controls.Menu();
+
+                for (const type of ALL_GROUP_BY) {
+
+                    menu.addAction({
+                        text: "Group By " + GROUP_BY_LABEL_MAP[type],
+                        selected: type === selectedType,
+                        callback: () => {
+
+                            this.setGroupingType(type);
+                            this.updateFromGroupingType();
+                        }
+                    });
+                }
+
+                menu.createWithEvent(e);
+            });
+
+            this.typeBtn.style.float = "left";
+            this.typeBtn.style.marginLeft = "0px";
+
+            return this.typeBtn;
         }
     }
 
-    class TextureContentProvider extends pack.ui.viewers.AssetPackContentProvider {
+    class LocationGroupingContentProvider extends pack.ui.viewers.AssetPackContentProvider {
+
+        static getFolders(finder: pack.core.PackFinder) {
+
+            const folderSet: Set<io.FilePath> = new Set();
+
+            for (const packFile of finder.getPacks()) {
+
+                for (const item of packFile.getItems()) {
+
+                    const folder = LocationGroupingContentProvider.getParentFolder(item);
+
+                    if (folder) {
+
+                        folderSet.add(folder);
+                    }
+                }
+            }
+
+            const folders = [...folderSet].sort((a, b) => a.getFullName().localeCompare(b.getFullName()));
+
+            return folders;
+        }
+
+        private static getParentFolder(item: pack.core.AssetPackItem) {
+
+            const data = item.getData();
+
+            let file = pack.core.AssetPackUtils.getFileFromPackUrl(data["url"]);
+
+            if (!file) {
+
+                file = pack.core.AssetPackUtils.getFileFromPackUrl(data["atlasURL"]);
+            }
+
+            if (file) {
+
+                return file.getParent();
+            }
+
+            return null;
+        }
+
+        private _finder: pack.core.PackFinder;
+
+        constructor(finder: pack.core.PackFinder) {
+            super();
+
+            this._finder = finder;
+        }
+
+        getRoots(input: any): any[] {
+
+            return LocationGroupingContentProvider.getFolders(this._finder);
+        }
+
+        getChildren(parent: any) {
+
+            if (parent instanceof io.FilePath) {
+
+                return this._finder.getPacks().flatMap(p => p.getItems()).filter(item => {
+
+                    const folder = LocationGroupingContentProvider.getParentFolder(item);
+
+                    return folder && folder === parent;
+
+                }).filter(i => pack.core.AssetPackUtils.isAtlasType(i.getType()) || TYPES.indexOf(i.getType()) >= 0);
+            }
+
+            return super.getChildren(parent);
+        }
+    }
+
+    class PackGroupingContentProvider extends pack.ui.viewers.AssetPackContentProvider {
+
+        private _finder: pack.core.PackFinder;
+
+        constructor(finder: pack.core.PackFinder) {
+            super();
+
+            this._finder = finder;
+        }
+
+        getRoots(input: any): any[] {
+
+            return this._finder.getPacks();
+        }
+
+        getChildren(parent: any) {
+
+            if (parent instanceof pack.core.AssetPack) {
+
+                return parent.getItems().filter(i => {
+
+                    return pack.core.AssetPackUtils.isAtlasType(i.getType()) || TYPES.indexOf(i.getType()) >= 0
+                });
+            }
+
+            return super.getChildren(parent);
+        }
+    }
+
+    class TypeGroupingContentProvider extends pack.ui.viewers.AssetPackContentProvider {
 
         private _finder: pack.core.PackFinder;
 
