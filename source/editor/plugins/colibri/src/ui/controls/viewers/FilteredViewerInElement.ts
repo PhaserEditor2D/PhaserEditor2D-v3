@@ -1,6 +1,6 @@
 namespace colibri.ui.controls.viewers {
 
-    export class FilteredViewerInElement<T extends Viewer> extends FilteredViewer<T> {
+    export class FilteredViewerInElement<T extends TreeViewer> extends FilteredViewer<T> {
 
         constructor(viewer: T, showZoomControls: boolean, ...classList: string[]) {
             super(viewer, showZoomControls, ...classList);

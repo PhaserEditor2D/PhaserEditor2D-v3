@@ -41,13 +41,11 @@ namespace phasereditor2d.files.ui.views {
 
             menu.add(new actions.DeleteFilesAction(this));
 
+            menu.add(new actions.UploadFilesAction(this));
+
             menu.addSeparator();
 
             menu.addExtension(FilesView.MENU_ID);
-
-            menu.addSeparator();
-
-            menu.add(new actions.UploadFilesAction(this));
         }
 
         createOpenWithMenu(): controls.Menu {

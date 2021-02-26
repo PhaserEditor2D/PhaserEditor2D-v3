@@ -27,24 +27,27 @@ namespace colibri.ui.ide {
                 this.setSelection(sel as any);
             });
 
-            this._viewer.getElement().addEventListener("contextmenu", e => this.onMenu(e));
+            const view = this;
+
+            // this._viewer.getElement().addEventListener("contextmenu", e => this.onMenu(e));
+            this._filteredViewer.setMenuProvider(new (class implements controls.viewers.IViewerMenuProvider {
+
+                fillMenu(viewer: controls.viewers.TreeViewer, menu: controls.Menu) {
+
+                    view.fillContextMenu(menu);
+
+                    const viewerMenu = new controls.Menu("Viewer");
+
+                    new controls.viewers.DefaultViewerMenuProvider().fillMenu(viewer, viewerMenu);
+
+                    menu.addSeparator();
+                    menu.addMenu(viewerMenu);
+                }
+            })());
         }
 
         protected fillContextMenu(menu: controls.Menu) {
             // nothing
-        }
-
-        private onMenu(e: MouseEvent) {
-
-            e.preventDefault();
-
-            this._viewer.onMouseUp(e);
-
-            const menu = new controls.Menu();
-
-            this.fillContextMenu(menu);
-
-            menu.createWithEvent(e);
         }
 
         getViewer() {
