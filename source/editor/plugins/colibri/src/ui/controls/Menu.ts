@@ -90,7 +90,7 @@ namespace colibri.ui.controls {
             return this._activeMenu;
         }
 
-        create(x: number, y: number, modal?: boolean) {
+        create(x: number, y: number, modal?: boolean, openLeft?: boolean) {
 
             if (this._items.length === 0) {
                 return;
@@ -266,7 +266,7 @@ namespace colibri.ui.controls {
                 y = window.innerHeight - rect.height - 10;
             }
 
-            if (x + rect.width > window.innerWidth) {
+            if (x + rect.width > window.innerWidth || openLeft) {
 
                 x -= rect.width;
             }
@@ -289,11 +289,11 @@ namespace colibri.ui.controls {
             }
         }
 
-        createWithEvent(e: MouseEvent) {
+        createWithEvent(e: MouseEvent, openLeft = false) {
 
             e.preventDefault();
 
-            this.create(e.clientX, e.clientY, true);
+            this.create(e.clientX, e.clientY, true, openLeft);
         }
 
         getText() {

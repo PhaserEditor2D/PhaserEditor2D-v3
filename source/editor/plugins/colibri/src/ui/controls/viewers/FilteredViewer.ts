@@ -1,20 +1,39 @@
 namespace colibri.ui.controls.viewers {
 
-    class FilterControl extends Control {
-        private _filterElement: HTMLInputElement;
+    export class FilterControl extends Control {
 
-        constructor() {
+        private _filterElement: HTMLInputElement;
+        private _menuIcon: IconControl;
+        private _filteredViewer: FilteredViewer<any>;
+
+        constructor(filterViewer: FilteredViewer<any>) {
             super("div", "FilterControl");
+
+            this._filteredViewer = filterViewer;
+
             this.setLayoutChildren(false);
 
             this._filterElement = document.createElement("input");
             this.getElement().appendChild(this._filterElement);
+
+            this._menuIcon = new IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_SMALL_MENU));
+            this.getElement().appendChild(this._menuIcon.getCanvas());
+        }
+
+        getFilteredViewer() {
+
+            return this._filteredViewer;
         }
 
         getFilterElement() {
+
             return this._filterElement;
         }
 
+        getMenuIcon() {
+
+            return this._menuIcon;
+        }
     }
 
     export class ViewerContainer extends controls.Control {
@@ -116,7 +135,7 @@ namespace colibri.ui.controls.viewers {
 
             this._viewer = viewer;
 
-            this._filterControl = new FilterControl();
+            this._filterControl = new FilterControl(this);
             this.add(this._filterControl);
 
             this._viewerContainer = new ViewerContainer(this, showZoomControls);
@@ -136,21 +155,27 @@ namespace colibri.ui.controls.viewers {
 
             this._menuProvider = new DefaultViewerMenuProvider();
 
-            this._viewer.getElement().addEventListener("contextmenu", e => {
+            const makeListener = (openLeft: boolean) => {
 
-                if (!this._menuProvider) {
+                return (e: MouseEvent) => {
 
-                    return;
+                    if (!this._menuProvider) {
+
+                        return;
+                    }
+
+                    this._viewer.onMouseUp(e);
+
+                    const menu = new Menu();
+
+                    this._menuProvider.fillMenu(this._viewer, menu);
+
+                    menu.createWithEvent(e, openLeft);
                 }
+            };
 
-                this._viewer.onMouseUp(e);
-
-                const menu = new Menu();
-
-                this._menuProvider.fillMenu(this._viewer, menu);
-
-                menu.createWithEvent(e);
-            });
+            this._viewer.getElement().addEventListener("contextmenu", makeListener(false));
+            this._filterControl.getMenuIcon().getCanvas().addEventListener("click", makeListener(true));
         }
 
         getMenuProvider() {
