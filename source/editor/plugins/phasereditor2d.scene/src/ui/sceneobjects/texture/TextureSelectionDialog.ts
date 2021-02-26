@@ -127,13 +127,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             window.localStorage["phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog.groupBy"] = type;
         }
 
-        private typeBtn: HTMLButtonElement;
-
         private updateFromGroupingType() {
 
             const type = this.getGroupingType();
-
-            this.typeBtn.textContent = "Group By " + GROUP_BY_LABEL_MAP[type];
 
             const viewer = this.getViewer();
 
