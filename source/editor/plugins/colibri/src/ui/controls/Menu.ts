@@ -291,6 +291,8 @@ namespace colibri.ui.controls {
 
         createWithEvent(e: MouseEvent) {
 
+            e.preventDefault();
+
             this.create(e.clientX, e.clientY, true);
         }
 

@@ -56,6 +56,41 @@ namespace colibri.ui.controls.viewers {
             });
         }
 
+        async expandCollapseBranch() {
+
+            const obj = this.getSelectionFirstElement();
+
+            if (obj) {
+
+                const children = this.getContentProvider().getChildren(obj);
+
+                if (children.length > 0) {
+
+                    this.setExpanded(obj, !this.isExpanded(obj));
+
+                    this.repaint();
+
+                } else {
+
+                    const path = this.getObjectPath(obj);
+
+                    // pop obj
+                    path.pop();
+
+                    // pop parent
+                    const parent = path.pop();
+
+                    if (parent) {
+
+                        await this.reveal(parent);
+
+                        this.setExpanded(parent, false);
+
+                        this.setSelection([parent]);
+                    }
+                }
+            }
+        }
 
         getTreeRenderer() {
 

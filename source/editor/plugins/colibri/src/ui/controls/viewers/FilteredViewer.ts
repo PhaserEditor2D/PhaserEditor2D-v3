@@ -22,6 +22,7 @@ namespace colibri.ui.controls.viewers {
         private _zoomControl: ZoomControl;
         private _filteredViewer: FilteredViewer<any>;
         private _mouseOverZoomControl: boolean;
+        private _menuProvider: IViewerMenuProvider;
 
         constructor(filteredViewer: FilteredViewer<any>, zoom = true) {
             super("div", "ViewerContainer");
@@ -37,6 +38,37 @@ namespace colibri.ui.controls.viewers {
             }
 
             requestAnimationFrame(() => this.layout());
+
+            this.registerContextMenu();
+        }
+
+        protected registerContextMenu() {
+
+            this._menuProvider = new DefaultViewerMenuProvider();
+
+            this._viewer.getElement().addEventListener("contextmenu", e => {
+
+                if (!this._menuProvider) {
+
+                    return;
+                }
+
+                const menu = new Menu();
+
+                this._menuProvider.fillMenu(this.getViewer() as viewers.TreeViewer, menu);
+
+                menu.createWithEvent(e);
+            });
+        }
+
+        getMenuProvider() {
+
+            return this._menuProvider;
+        }
+
+        setMenuProvider(menuProvider: IViewerMenuProvider) {
+
+            this._menuProvider = menuProvider;
         }
 
         private addZoomControl() {

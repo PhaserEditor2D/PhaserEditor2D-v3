@@ -243,7 +243,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addCommandHelper({
                 id: CMD_EXPAND_COLLAPSE_BRANCH,
-                name: "Expand/Collapse the tree branch",
+                name: "Expand/Collapse Branch",
                 tooltip: "Expand or collapse a branch of the select element",
                 category: CAT_GENERAL
             });
@@ -257,38 +257,7 @@ namespace colibri.ui.ide.actions {
 
                     const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.TreeViewer;
 
-                    const obj = viewer.getSelectionFirstElement();
-
-                    if (obj) {
-
-                        const children = viewer.getContentProvider().getChildren(obj);
-
-                        if (children.length > 0) {
-
-                            viewer.setExpanded(obj, !viewer.isExpanded(obj));
-
-                            viewer.repaint();
-
-                        } else {
-
-                            const path = viewer.getObjectPath(obj);
-
-                            // pop obj
-                            path.pop();
-
-                            // pop parent
-                            const parent = path.pop();
-
-                            if (parent) {
-
-                                await viewer.reveal(parent);
-
-                                viewer.setExpanded(parent, false);
-
-                                viewer.setSelection([parent]);
-                            }
-                        }
-                    }
+                    viewer.expandCollapseBranch();
                 }
             );
 
