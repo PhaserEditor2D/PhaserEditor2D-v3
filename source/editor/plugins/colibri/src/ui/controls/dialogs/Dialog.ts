@@ -41,12 +41,14 @@ namespace colibri.ui.controls.dialogs {
                                 if (Menu.getActiveMenu()) {
 
                                     Menu.getActiveMenu().closeAll();
+
+                                } else {
+
+                                    e.preventDefault();
+                                    e.stopImmediatePropagation();
+
+                                    dlg.close();
                                 }
-
-                                e.preventDefault();
-                                e.stopImmediatePropagation();
-
-                                dlg.close();
                             }
                         }
                     }
@@ -151,7 +153,7 @@ namespace colibri.ui.controls.dialogs {
             });
         }
 
-        addButton(text: string, callback: (e?:MouseEvent) => void) {
+        addButton(text: string, callback: (e?: MouseEvent) => void) {
 
             const btn = document.createElement("button");
 
