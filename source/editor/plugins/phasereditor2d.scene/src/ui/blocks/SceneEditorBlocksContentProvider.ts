@@ -57,34 +57,13 @@ namespace phasereditor2d.scene.ui.blocks {
 
                     return [
                         BUILTIN_SECTION,
-                        ...this.distinct([
+                        ...colibri.ui.ide.FileUtils.distinct([
                             ...this.getSceneFiles().map(f => f.getParent()),
                             ...grouping.getAssetsFolders(this._getPacks())])
                     ]
             }
 
             return [];
-        }
-
-        private distinct(folders: io.FilePath[]) {
-
-            return this.sorted([...new Set(folders)]);
-        }
-
-        private sorted(folders: io.FilePath[]) {
-
-            return folders.sort((a, b) => {
-
-                const aa = a.getFullName().split("/").length;
-                const bb = b.getFullName().split("/").length;
-
-                if (aa === bb) {
-
-                    return a.getName().localeCompare(b.getName());
-                }
-
-                return aa - bb;
-            });
         }
 
         getSceneFiles() {
