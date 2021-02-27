@@ -16,6 +16,7 @@
 * Adds key-binding (`Ctrl+Alt+E`) for the command to open the output file in the configured external editor. This command is available in the Scene Editor and the User Components Editor.
 * Scene Editor: new command to open a scene file (`Ctrl+Alt+O`).
 * Asset Pack Editor: allows setting the scale of the SVG assets.
+* Animations Editor: allows grouping the blocks by type, pack, and location.
 * Viewer: advanced filtering by default. Allows matching different words.
 * Viewer: filtering isn't triggered at every key.
 * [#103](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/103): Close editor's tab with the mouse middle button.
