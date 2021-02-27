@@ -3,20 +3,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    const GROUP_BY_TYPE = "type";
-    const GROUP_BY_PACK_FILE = "pack";
-    const GROUP_BY_LOCATION = "location";
-    const ALL_GROUP_BY = [
-        GROUP_BY_TYPE,
-        GROUP_BY_PACK_FILE,
-        GROUP_BY_LOCATION,
-    ]
-
-    const GROUP_BY_LABEL_MAP = {
-        "type": "Type",
-        "pack": "Asset Pack File",
-        "location": "Location"
-    };
+    const grouping = pack.ui.viewers.AssetPackGrouping;
 
     const TYPES = [
         pack.core.IMAGE_TYPE,
@@ -27,14 +14,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TextureSelectionDialog extends controls.dialogs.ViewerDialog {
 
-        private _finder: pack.core.PackFinder;
-
         static async createDialog(
-            finder: pack.core.PackFinder, selected: pack.core.AssetPackImageFrame[],
+            editor: editor.SceneEditor, selected: pack.core.AssetPackImageFrame[],
             callback: (selection: pack.core.AssetPackImageFrame[]) => void
         ) {
 
-            const dlg = new TextureSelectionDialog(finder, callback);
+            const dlg = new TextureSelectionDialog(editor, callback);
 
             dlg.create();
 
@@ -45,14 +30,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private _callback: (selection: pack.core.AssetPackImageFrame[]) => void;
+        private _editor: editor.SceneEditor;
 
         private constructor(
-            finder: pack.core.PackFinder,
+            editor: ui.editor.SceneEditor,
             callback: (selection: pack.core.AssetPackImageFrame[]) => void
         ) {
             super(new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog"), true);
 
-            this._finder = finder;
+            this._editor = editor;
             this._callback = callback;
 
             this.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
@@ -62,11 +48,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const viewer = this.getViewer();
 
-            viewer.setLabelProvider(new  pack.ui.viewers.AssetPackLabelProvider());
+            viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
             viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
 
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
-            viewer.setContentProvider(new TypeGroupingContentProvider(this._finder));
+
+            viewer.setContentProvider(new (class extends ui.blocks.SceneEditorBlocksContentProvider {
+
+                getRoots(input: any) {
+
+                    return input;
+                }
+            })(this._editor, () => this._editor.getPackFinder().getPacks()));
+
             viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
             viewer.setInput(TYPES);
 
@@ -98,43 +92,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.updateFromGroupingType();
         }
 
-        private getGroupingType() {
-
-            return window.localStorage["phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog.groupBy"] || GROUP_BY_TYPE;
-        }
-
-        private setGroupingType(type: string) {
-
-            window.localStorage["phasereditor2d.scene.ui.sceneobjects.TextureSelectionDialog.groupBy"] = type;
-        }
-
         private updateFromGroupingType() {
 
-            const type = this.getGroupingType();
+            const type = grouping.getGroupingPreference();
 
             const viewer = this.getViewer();
 
             switch (type) {
 
-                case GROUP_BY_TYPE:
+                case grouping.GROUP_ASSETS_BY_TYPE:
 
-                    viewer.setContentProvider(new TypeGroupingContentProvider(this._finder));
                     viewer.setInput(TYPES);
-
                     break;
 
-                case GROUP_BY_PACK_FILE:
+                case grouping.GROUP_ASSETS_BY_PACK:
 
-                    viewer.setContentProvider(new PackGroupingContentProvider(this._finder));
-                    viewer.setInput(this._finder.getPacks());
-
+                    viewer.setInput(this._editor.getPackFinder().getPacks());
                     break;
 
-                case GROUP_BY_LOCATION:
+                case grouping.GROUP_ASSETS_BY_LOCATION:
 
-                    viewer.setContentProvider(new LocationGroupingContentProvider(this._finder));
-                    viewer.setInput(this._finder.getPacks());
-
+                    viewer.setInput(grouping.getAssetsFolders(this._editor.getPackFinder().getPacks()));
                     break;
             }
 
@@ -144,162 +122,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         fillContextMenu(menu: controls.Menu) {
 
-            const selectedType = this.getGroupingType();
+            const selectedType = grouping.getGroupingPreference();
 
-            for (const type of ALL_GROUP_BY) {
+            for (const type of grouping.GROUP_ASSET_TYPES) {
 
                 menu.addAction({
-                    text: "Group By " + GROUP_BY_LABEL_MAP[type],
+                    text: "Group By " + grouping.GROUP_ASSET_TYPE_LABEL_MAP[type],
                     selected: type === selectedType,
                     callback: () => {
 
-                        this.setGroupingType(type);
+                        grouping.setGroupingPreference(type);
                         this.updateFromGroupingType();
                     }
                 });
             }
-        }
-    }
-
-    class LocationGroupingContentProvider extends pack.ui.viewers.AssetPackContentProvider {
-
-        static getFolders(finder: pack.core.PackFinder) {
-
-            const folderSet: Set<io.FilePath> = new Set();
-
-            for (const packFile of finder.getPacks()) {
-
-                for (const item of packFile.getItems()) {
-
-                    const folder = LocationGroupingContentProvider.getParentFolder(item);
-
-                    if (folder) {
-
-                        folderSet.add(folder);
-                    }
-                }
-            }
-
-            const folders = [...folderSet].sort((a, b) => a.getFullName().localeCompare(b.getFullName()));
-
-            return folders;
-        }
-
-        private static getParentFolder(item: pack.core.AssetPackItem) {
-
-            const data = item.getData();
-
-            let file = pack.core.AssetPackUtils.getFileFromPackUrl(data["url"]);
-
-            if (!file) {
-
-                file = pack.core.AssetPackUtils.getFileFromPackUrl(data["atlasURL"]);
-            }
-
-            if (file) {
-
-                return file.getParent();
-            }
-
-            return null;
-        }
-
-        private _finder: pack.core.PackFinder;
-
-        constructor(finder: pack.core.PackFinder) {
-            super();
-
-            this._finder = finder;
-        }
-
-        getRoots(input: any): any[] {
-
-            return LocationGroupingContentProvider.getFolders(this._finder);
-        }
-
-        getChildren(parent: any) {
-
-            if (parent instanceof io.FilePath) {
-
-                return this._finder.getPacks().flatMap(p => p.getItems()).filter(item => {
-
-                    const folder = LocationGroupingContentProvider.getParentFolder(item);
-
-                    return folder && folder === parent;
-
-                }).filter(i => pack.core.AssetPackUtils.isAtlasType(i.getType()) || TYPES.indexOf(i.getType()) >= 0);
-            }
-
-            return super.getChildren(parent);
-        }
-    }
-
-    class PackGroupingContentProvider extends pack.ui.viewers.AssetPackContentProvider {
-
-        private _finder: pack.core.PackFinder;
-
-        constructor(finder: pack.core.PackFinder) {
-            super();
-
-            this._finder = finder;
-        }
-
-        getRoots(input: any): any[] {
-
-            return this._finder.getPacks();
-        }
-
-        getChildren(parent: any) {
-
-            if (parent instanceof pack.core.AssetPack) {
-
-                return parent.getItems().filter(i => {
-
-                    return pack.core.AssetPackUtils.isAtlasType(i.getType()) || TYPES.indexOf(i.getType()) >= 0
-                });
-            }
-
-            return super.getChildren(parent);
-        }
-    }
-
-    class TypeGroupingContentProvider extends pack.ui.viewers.AssetPackContentProvider {
-
-        private _finder: pack.core.PackFinder;
-
-        constructor(finder: pack.core.PackFinder) {
-            super();
-
-            this._finder = finder;
-        }
-
-        getRoots(input: any): any[] {
-
-            // the sections
-            return input;
-        }
-
-        getPackItems() {
-
-            return this._finder.getPacks().flatMap(p => p.getItems());
-        }
-
-        getChildren(parent: any) {
-
-            switch (parent) {
-
-                case pack.core.ATLAS_TYPE:
-
-                    return this.getPackItems().filter(i => pack.core.AssetPackUtils.isAtlasType(i.getType()));
-
-                case pack.core.IMAGE_TYPE:
-                case pack.core.SVG_TYPE:
-                case pack.core.SPRITESHEET_TYPE:
-
-                    return this.getPackItems().filter(i => i.getType() === parent);
-            }
-
-            return super.getChildren(parent);
         }
     }
 }

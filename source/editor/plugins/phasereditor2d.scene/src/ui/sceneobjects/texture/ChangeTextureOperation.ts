@@ -11,8 +11,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static runDialog(editor: editor.SceneEditor, atlasKey?: string) {
 
-            const finder = editor.getPackFinder();
-
             const cache = editor.getScene().getPackCache();
 
             const objects = editor.getSelectedGameObjects().filter(obj => this.canChangeTextureOf(obj));
@@ -55,7 +53,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (atlasKey) {
 
                 TextureFrameSelectionDialog.createDialog(
-                    finder,
+                    editor.getPackFinder(),
                     selectedFrames as (pack.core.AssetPackImageFrame)[],
                     callback,
                     atlasKey);
@@ -63,7 +61,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             } else {
 
                 TextureSelectionDialog.createDialog(
-                    finder,
+                    editor,
                     selectedFrames as (pack.core.AssetPackImageFrame)[],
                     callback);
             }
