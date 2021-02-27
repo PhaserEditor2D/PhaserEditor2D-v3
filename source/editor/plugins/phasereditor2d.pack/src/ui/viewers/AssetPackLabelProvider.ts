@@ -1,6 +1,7 @@
 namespace phasereditor2d.pack.ui.viewers {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     const ASSET_PACK_TYPE_DISPLAY_NAME = {
         image: "Image",
@@ -37,11 +38,21 @@ namespace phasereditor2d.pack.ui.viewers {
 
         getLabel(obj: any): string {
 
+            if (obj instanceof io.FilePath) {
+
+                if (obj.isFolder()) {
+
+                    return obj.getProjectRelativeName().substring(1);
+                }
+            }
+
             if (obj instanceof core.AssetPack) {
-                return obj.getFile().getName();
+
+                return obj.getFile().getProjectRelativeName().substring(1);
             }
 
             if (obj instanceof core.AssetPackItem) {
+
                 return obj.getKey();
             }
 

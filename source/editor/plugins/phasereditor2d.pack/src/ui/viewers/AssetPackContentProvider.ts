@@ -9,14 +9,17 @@ namespace phasereditor2d.pack.ui.viewers {
         getChildren(parent: any): any[] {
 
             if (parent instanceof core.AssetPack) {
+
                 return parent.getItems();
             }
 
             if (parent instanceof core.ImageAssetPackItem) {
+
                 return [];
             }
 
             if (parent instanceof core.ImageFrameContainerAssetPackItem) {
+
                 return parent.getFrames();
             }
 

@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getLabel(obj: any) {
 
-            if (obj instanceof core.io.FilePath) {
+            if (obj instanceof core.io.FilePath && !obj.isFolder()) {
 
                 return obj.getNameWithoutExtension();
 

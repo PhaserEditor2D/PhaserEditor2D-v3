@@ -104,6 +104,5 @@ namespace phasereditor2d.pack.core {
 
             return null;
         }
-
     }
 }

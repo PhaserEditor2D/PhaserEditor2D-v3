@@ -62,27 +62,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const viewer = this.getViewer();
 
-            viewer.setLabelProvider(new (class extends pack.ui.viewers.AssetPackLabelProvider {
-
-                getLabel(obj: any) {
-
-                    if (obj instanceof io.FilePath) {
-
-                        return obj.getProjectRelativeName().substring(1);
-                    }
-
-                    return super.getLabel(obj);
-                }
-            })());
-
-            viewer.setTreeRenderer(new (class extends pack.ui.viewers.AssetPackTreeViewerRenderer {
-
-                isObjectSection(obj: any) {
-
-                    return super.isObjectSection(obj) || obj instanceof pack.core.AssetPack || obj instanceof io.FilePath;
-                }
-
-            })(viewer, false));
+            viewer.setLabelProvider(new  pack.ui.viewers.AssetPackLabelProvider());
+            viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
 
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
             viewer.setContentProvider(new TypeGroupingContentProvider(this._finder));

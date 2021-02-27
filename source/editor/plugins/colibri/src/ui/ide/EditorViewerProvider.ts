@@ -48,7 +48,7 @@ namespace colibri.ui.ide {
             // nothing
         }
 
-        repaint() {
+        repaint(resetScroll = false) {
 
             if (this._viewer) {
 
@@ -58,7 +58,14 @@ namespace colibri.ui.ide {
 
                 this._viewer.setState(state);
 
-                this._viewer.repaint();
+                if (resetScroll) {
+
+                    this._viewer.setScrollY(0);
+
+                } else {
+
+                    this._viewer.repaint();
+                }
             }
         }
 
