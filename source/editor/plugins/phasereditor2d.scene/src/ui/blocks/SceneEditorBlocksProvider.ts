@@ -41,23 +41,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
         fillContextMenu(menu: controls.Menu) {
 
-            const grouping = pack.ui.viewers.AssetPackGrouping;
-
-            const currentType = grouping.getGroupingPreference();
-
-            for (const type of grouping.GROUP_ASSET_TYPES) {
-
-                menu.addAction({
-                    text: "Group Assets By " + grouping.GROUP_ASSET_TYPE_LABEL_MAP[type],
-                    callback: () => {
-
-                        grouping.setGroupingPreference(type);
-
-                        this.repaint(true);
-                    },
-                    selected: type === currentType
-                });
-            }
+            pack.ui.viewers.AssetPackGrouping.fillMenu(menu, () => this.repaint(true));
         }
 
         async preload(complete?: boolean) {

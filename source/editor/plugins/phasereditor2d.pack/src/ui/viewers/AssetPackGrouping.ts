@@ -1,6 +1,6 @@
 namespace phasereditor2d.pack.ui.viewers {
 
-    import io = colibri.core.io;
+    import controls = colibri.ui.controls;
 
     export class AssetPackGrouping {
 
@@ -56,6 +56,25 @@ namespace phasereditor2d.pack.ui.viewers {
                 packs.flatMap(p => p.getItems())
                     .map(item => this.getItemFolder(item)))]
                 .sort((a, b) => a.getFullName().length - b.getFullName().length);
+        }
+
+        static fillMenu(menu: controls.Menu, callback: (type?: string) => void) {
+
+            const currentType = this.getGroupingPreference();
+
+            for (const type of this.GROUP_ASSET_TYPES) {
+
+                menu.addAction({
+                    text: "Group Assets By " + this.GROUP_ASSET_TYPE_LABEL_MAP[type],
+                    callback: () => {
+
+                        this.setGroupingPreference(type);
+
+                        callback(type);
+                    },
+                    selected: type === currentType
+                });
+            }
         }
     }
 }
