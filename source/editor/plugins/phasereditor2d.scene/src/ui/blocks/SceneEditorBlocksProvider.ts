@@ -3,6 +3,15 @@ namespace phasereditor2d.scene.ui.blocks {
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
 
+    export const TAB_SECTION_BUILT_IN = "Built-In";
+    export const TAB_SECTION_PREFABS = "Prefabs";
+    export const TAB_SECTION_ASSETS = "Assets";
+    export const TAB_SECTIONS = [
+        TAB_SECTION_BUILT_IN,
+        TAB_SECTION_PREFABS,
+        TAB_SECTION_ASSETS,
+    ]
+
     export class SceneEditorBlocksProvider extends ide.EditorViewerProvider {
 
         private _editor: editor.SceneEditor;
@@ -13,6 +22,21 @@ namespace phasereditor2d.scene.ui.blocks {
 
             this._editor = editor;
             this._packs = [];
+        }
+
+        getEditor() {
+
+            return this._editor;
+        }
+
+        allowsTabSections() {
+
+            return true;
+        }
+
+        getTabSections() {
+
+            return TAB_SECTIONS;
         }
 
         fillContextMenu(menu: controls.Menu) {

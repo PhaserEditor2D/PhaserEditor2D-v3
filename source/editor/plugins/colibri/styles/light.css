@@ -103,6 +103,11 @@ Important:
     background: #cacaca;
 }
 
+.light .TabPane.activePart .TabPaneLabelSection.selected {
+    border-bottom-color: #4242ff !important;
+    color: #4242ff;
+}
+
 .light .ViewerPart .FilteredViewer {
     background: #dadada;
 }

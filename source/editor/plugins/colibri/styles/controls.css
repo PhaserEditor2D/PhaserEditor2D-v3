@@ -126,15 +126,34 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .TabPaneLabel {
     float: left;
-    display: grid;
-    grid-template-columns: min-content 1fr min-content;
+    display: inline-grid;
     align-items: center;
+    box-sizing: border-box;
+    grid-template-columns: min-content 1fr auto min-content;
     border-radius: 2px 2px 0 0;
-    padding: 5px 10px 5px 5px;
+    /* padding: 5px 10px 5px 5px; */
+    padding: 8px;
+    padding-bottom: 5px;    
 }
 
+
 .TabPaneLabel span {
-    margin-left: 5px;
+    margin: 3px;
+}
+
+.TabPaneLabelSections {
+    display: flex;
+}
+
+.TabPaneLabelSection {
+    margin-left: 10px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: transparent;
+}
+
+.TabPaneLabelSection.selected {
+    border-bottom-color: black;
 }
 
 .TabPaneContentArea {

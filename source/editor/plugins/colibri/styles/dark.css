@@ -106,6 +106,16 @@ Important:
     text-shadow: 1px 1px #0e0e0e;
 }
 
+.dark .TabPaneLabelSection.selected {
+    border-bottom-color: inherit;
+    color: inherit;
+}
+
+.dark .TabPane.activePart .TabPaneLabelSection.selected {
+    border-bottom-color: #f59c5c !important;
+    color: #f59c5c;
+}
+
 /* Part */
 
 .dark .TabPane.activePart .TabPaneLabel.selected {

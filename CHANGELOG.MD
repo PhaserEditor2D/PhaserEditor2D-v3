@@ -5,6 +5,7 @@
 ## Added
 
 * Scene Editor: command `V` toggles the visibility of the selected objects.
+* Scene Editor: non-visible objects are shown with a "hidden" suffix in the Outline view labels.
 * Scene Editor: the Change Texture dialog groups the items by type.
 * Scene Editor: support SVG assets in the Blocks view.
 * Scene Editor: show option to open an object's texture in the Asset Pack Editor.
@@ -15,6 +16,7 @@
 * [#105](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/105) Scene Editor: the Select Texture dialog allows grouping the assets by type, asset pack, or location.
 * Adds key-binding (`Ctrl+Alt+E`) for the command to open the output file in the configured external editor. This command is available in the Scene Editor and the User Components Editor.
 * Scene Editor: new command to open a scene file (`Ctrl+Alt+O`).
+* Scene Editor: Blocks content filtering via view's tab-sections.
 * Asset Pack Editor: allows setting the scale of the SVG assets.
 * Animations Editor: allows grouping the blocks by type, pack, and location.
 * Viewer: advanced filtering by default. Allows matching different words.
