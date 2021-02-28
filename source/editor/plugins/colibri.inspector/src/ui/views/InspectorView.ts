@@ -39,17 +39,6 @@ namespace colibri.inspector.ui.views {
 
             ide.Workbench.getWorkbench()
                 .eventPartActivated.addListener(() => this.onWorkbenchPartActivate());
-
-
-            setTimeout(() => {
-
-                const folder = this.getPartFolder();
-
-                const label = folder.getLabelFromContent(this);
-
-                folder.addTabSection(label, "Details");
-
-            }, 1000);
         }
 
         private onWorkbenchPartActivate() {

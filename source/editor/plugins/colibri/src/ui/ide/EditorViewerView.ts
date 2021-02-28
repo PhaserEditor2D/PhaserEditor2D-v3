@@ -9,11 +9,16 @@ namespace colibri.ui.ide {
         private _currentEditor: EditorPart;
         private _currentViewerProvider: EditorViewerProvider;
         private _viewerStateMap: Map<EditorPart, viewers.ViewerState>;
+        private _tabSectionListener: (section: string) => void;
 
         constructor(id: string) {
             super(id);
 
             this._viewerStateMap = new Map();
+            this._tabSectionListener = section => {
+
+                this.onTabSectionSelected(section);
+            }
         }
 
         protected createViewer(): viewers.TreeViewer {
@@ -78,6 +83,13 @@ namespace colibri.ui.ide {
                 }
             }
 
+            const tabsPane = this.getPartFolder();
+            const tabLabel = tabsPane.getLabelFromContent(this);
+
+            tabsPane.eventTabSectionSelected.removeListener(this._tabSectionListener);
+
+            tabsPane.removeAllSections(tabLabel);
+
             if (provider) {
 
                 await provider.preload();
@@ -118,6 +130,18 @@ namespace colibri.ui.ide {
                     }
                 }
 
+                if (provider.allowsTabSections()) {
+
+                    for (const section of provider.getTabSections()) {
+
+                        tabsPane.addTabSection(tabLabel, section);
+                    }
+
+                    console.log("selected " + provider.getSelectedTabSection());
+
+                    tabsPane.selectTabSection(tabLabel, provider.getSelectedTabSection());
+                }
+
             } else {
 
                 this._viewer.setInput(null);
@@ -128,6 +152,19 @@ namespace colibri.ui.ide {
             this._currentEditor = editor;
 
             this._viewer.repaint();
+
+            if (provider.allowsTabSections()) {
+
+                tabsPane.eventTabSectionSelected.addListener(this._tabSectionListener);
+            }
+        }
+
+        private onTabSectionSelected(section: string) {
+
+            if (this._currentViewerProvider) {
+
+                this._currentViewerProvider.tabSectionChanged(section);
+            }
         }
 
         getPropertyProvider() {

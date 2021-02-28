@@ -7,15 +7,19 @@ namespace phasereditor2d.scene.ui.blocks {
 
     export const PREFAB_SECTION = "Prefab";
 
-    export const BLOCKS_SECTIONS = [
-
-        BUILTIN_SECTION,
-        PREFAB_SECTION,
+    export const BLOCKS_ASSET_SECTIONS = [
         pack.core.IMAGE_TYPE,
         pack.core.SVG_TYPE,
         pack.core.ATLAS_TYPE,
         pack.core.SPRITESHEET_TYPE,
         pack.core.BITMAP_FONT_TYPE
+    ]
+
+    export const BLOCKS_SECTIONS = [
+
+        BUILTIN_SECTION,
+        PREFAB_SECTION,
+        ...BLOCKS_ASSET_SECTIONS
     ];
 
     export class SceneEditorBlocksTreeRendererProvider extends pack.ui.viewers.AssetPackTreeViewerRenderer {

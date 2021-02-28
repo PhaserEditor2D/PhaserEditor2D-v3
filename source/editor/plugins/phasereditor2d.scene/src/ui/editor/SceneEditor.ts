@@ -757,6 +757,11 @@ namespace phasereditor2d.scene.ui.editor {
             return null;
         }
 
+        getBlocksProvider() {
+
+            return this._blocksProvider;
+        }
+
         getOutlineProvider() {
             return this._outlineProvider;
         }

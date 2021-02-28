@@ -204,6 +204,44 @@ namespace colibri.ui.controls {
             colibri.Platform.getWorkbench().eventThemeChanged.addListener(this._themeListener);
         }
 
+        private findSectionElement(label: HTMLElement, section: string) {
+
+            const sectionElements = label.querySelectorAll(".TabPaneLabelSection");
+
+            for (let i = 0; i < sectionElements.length; i++) {
+
+                const element = sectionElements.item(i) as HTMLDivElement;
+
+                if (element.id === "section-" + section) {
+
+                    return element;
+                }
+            }
+
+            return undefined;
+        }
+
+        removeTabSection(label: HTMLElement, section: string) {
+
+            const element = this.findSectionElement(label, section);
+
+            if (element) {
+
+                element.remove();
+
+                this.eventTabSectionSelected.fire(undefined);
+            }
+        }
+
+        removeAllSections(label: HTMLElement) {
+
+            const sectionsElement = label.querySelectorAll(".TabPaneLabelSections")[0] as HTMLDivElement;
+
+            sectionsElement.innerHTML = "";
+
+            this.eventTabSectionSelected.fire(undefined);
+        }
+
         addTabSection(label: HTMLElement, section: string) {
 
             const sectionsElement = label.querySelectorAll(".TabPaneLabelSections")[0] as HTMLDivElement;
@@ -211,6 +249,7 @@ namespace colibri.ui.controls {
             const sectionElement = document.createElement("div");
 
             sectionElement.classList.add("TabPaneLabelSection");
+            sectionElement.id = "section-" + section;
 
             sectionElement.innerHTML = section;
 
@@ -237,6 +276,29 @@ namespace colibri.ui.controls {
                     this.eventTabSectionSelected.fire(section);
                 }
             });
+        }
+
+        selectTabSection(label: HTMLElement, section: string) {
+
+            const sectionElements = label.querySelectorAll(".TabPaneLabelSection");
+
+            let found = false;
+
+            for (let i = 0; i < sectionElements.length; i++) {
+
+                const element = sectionElements.item(i) as HTMLDivElement;
+
+                element.classList.remove("selected");
+
+                if (section && element.id === "section-" + section) {
+
+                    element.classList.add("selected");
+
+                    found = true;
+                }
+            }
+
+            this.eventTabSectionSelected.fire(found ? section : undefined);
         }
 
         addTab(label: string, icon: IImage, content: Control, closeable = false, selectIt = true): void {

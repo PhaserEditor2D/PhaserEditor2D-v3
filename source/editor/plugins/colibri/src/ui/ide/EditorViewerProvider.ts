@@ -6,6 +6,7 @@ namespace colibri.ui.ide {
 
         private _viewer: controls.viewers.TreeViewer;
         private _initialSelection: any[];
+        private _selectedTabSection: string;
 
         constructor() {
             this._viewer = null;
@@ -93,6 +94,28 @@ namespace colibri.ui.ide {
         abstract preload(complete?: boolean): Promise<void>;
 
         abstract getUndoManager();
+
+        getTabSections() {
+
+            return [];
+        }
+
+        tabSectionChanged(section: string) {
+
+            this._selectedTabSection = section;
+
+            this.repaint(true);
+        }
+
+        getSelectedTabSection() {
+
+            return this._selectedTabSection;
+        }
+
+        allowsTabSections() {
+
+            return false;
+        }
 
         fillContextMenu(menu: controls.Menu) {
             // nothing

@@ -19,23 +19,5 @@ namespace phasereditor2d.blocks.ui.views {
 
             return editor.getEditorViewerProvider(BlocksView.EDITOR_VIEWER_PROVIDER_KEY);
         }
-
-        createPart() {
-
-            super.createPart();
-
-            setTimeout(() => {
-
-                const folder = this.getPartFolder();
-
-                const label = folder.getLabelFromContent(this);
-
-                folder.addTabSection(label, "Built-In");
-                folder.addTabSection(label, "Prefabs");
-                folder.addTabSection(label, "Assets");
-                folder.addTabSection(label, "Folder");
-
-            }, 1000);
-        }
     }
 }
