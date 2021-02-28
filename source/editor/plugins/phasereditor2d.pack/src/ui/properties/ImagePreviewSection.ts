@@ -29,7 +29,8 @@ namespace phasereditor2d.pack.ui.properties {
         }
 
         canEdit(obj: any): boolean {
-            return obj instanceof core.AssetPackItem && obj.getType() === "image" || obj instanceof controls.ImageFrame;
+
+            return obj instanceof core.ImageAssetPackItem || obj instanceof controls.ImageFrame;
         }
     }
 }

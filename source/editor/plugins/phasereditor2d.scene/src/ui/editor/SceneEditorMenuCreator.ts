@@ -19,6 +19,10 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addSeparator();
 
+            menu.addMenu(this.createAddObjectMenu())
+
+            menu.addSeparator();
+
             menu.addMenu(this.createPrefabMenu());
 
             menu.addMenu(this.createTypeMenu());
@@ -42,6 +46,44 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createSceneMenu());
 
             menu.addMenu(this.createCompilerMenu());
+        }
+
+        private createAddObjectMenu() {
+
+            const blocksProvider = this._editor.getEditorViewerProvider(phasereditor2d.blocks.ui.views.BlocksView.EDITOR_VIEWER_PROVIDER_KEY);
+            const contentProvider = blocksProvider.getContentProvider();
+            const labelProvider = blocksProvider.getLabelProvider();
+            const cellRendererProvider = blocksProvider.getCellRendererProvider();
+
+            const menu = new controls.Menu("Add Object");
+
+            menu.addCommand(commands.CMD_ADD_OBJECT, {
+                text: "Add..."
+            });
+
+            for (const cat of SCENE_OBJECT_CATEGORIES) {
+
+                const menu2 = new controls.Menu(cat);
+
+                const list = contentProvider.getChildren(cat);
+
+                for (const obj of list) {
+
+                    menu2.addAction({
+                        text: labelProvider.getLabel(obj),
+                        icon: new controls.viewers.ImageFromCellRenderer(
+                            obj, cellRendererProvider.getCellRenderer(obj), controls.ICON_SIZE, controls.ICON_SIZE),
+                        callback: () => {
+
+                            this._editor.getDropManager().dropDataAtCenter([obj]);
+                        }
+                    });
+                }
+
+                menu.addMenu(menu2);
+            }
+
+            return menu;
         }
 
         private createSceneMenu() {
@@ -243,6 +285,39 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE);
             menu.addCommand(commands.CMD_REPLACE_TEXTURE);
+            menu.addCommand(commands.CMD_REPLACE_TEXTURE_FRAME);
+
+            const obj = this._editor.getSelectedGameObjects()[0];
+
+            if (obj) {
+
+                if (obj.getEditorSupport().hasComponent(sceneobjects.TextureComponent)) {
+
+                    const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent) as sceneobjects.TextureComponent;
+
+                    const keys = comp.getTextureKeys();
+
+                    if (keys) {
+
+                        const item = this._editor.getScene().getMaker().getPackFinder().findAssetPackItem(keys.key);
+
+                        if (item) {
+
+                            menu.addAction({
+                                text: "Show Texture In Asset Pack Editor",
+                                callback: () => {
+
+                                    const file = item.getPack().getFile();
+
+                                    const editor = colibri.Platform.getWorkbench().openEditor(file) as pack.ui.editor.AssetPackEditor;
+
+                                    editor.revealKey(item.getKey());
+                                }
+                            })
+                        }
+                    }
+                }
+            }
         }
     }
 }

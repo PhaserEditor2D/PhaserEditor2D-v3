@@ -207,5 +207,28 @@ namespace colibri.ui.ide {
             return Workbench.getWorkbench().getProjectRoot();
         }
 
+        static distinct(folders: io.FilePath[]) {
+
+            return this.sorted([...new Set(folders)]);
+        }
+
+        static compareFiles(a: io.FilePath, b: io.FilePath) {
+
+            const aa = a.getFullName().split("/").length;
+            const bb = b.getFullName().split("/").length;
+
+            if (aa === bb) {
+
+                return a.getName().localeCompare(b.getName());
+            }
+
+            return aa - bb;
+        }
+
+        static sorted(folders: io.FilePath[]) {
+
+            return folders.sort((a, b) => this.compareFiles(a, b));
+        }
+
     }
 }

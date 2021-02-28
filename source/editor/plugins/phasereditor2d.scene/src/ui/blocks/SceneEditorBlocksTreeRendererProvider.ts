@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.blocks {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
     export const BUILTIN_SECTION = "Built-In";
 
@@ -11,6 +12,7 @@ namespace phasereditor2d.scene.ui.blocks {
         BUILTIN_SECTION,
         PREFAB_SECTION,
         pack.core.IMAGE_TYPE,
+        pack.core.SVG_TYPE,
         pack.core.ATLAS_TYPE,
         pack.core.SPRITESHEET_TYPE,
         pack.core.BITMAP_FONT_TYPE
@@ -24,7 +26,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
         isObjectSection(obj: any) {
 
-            return BLOCKS_SECTIONS.indexOf(obj) >= 0;
+            return BLOCKS_SECTIONS.indexOf(obj) >= 0 || obj instanceof pack.core.AssetPack || obj instanceof io.FilePath && obj.isFolder();
         }
 
         isShadowAsChild(obj: any) {

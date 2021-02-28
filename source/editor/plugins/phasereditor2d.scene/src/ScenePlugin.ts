@@ -317,7 +317,13 @@ namespace phasereditor2d.scene {
         }
 
         getSceneFinder() {
+
             return this._sceneFinder;
+        }
+
+        isSceneContentType(file: colibri.core.io.FilePath) {
+
+            return !file.isFolder() && colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file) === core.CONTENT_TYPE_SCENE;
         }
 
         getPlainObjectExtensions() {

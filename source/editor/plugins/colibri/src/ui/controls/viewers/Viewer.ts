@@ -566,7 +566,7 @@ namespace colibri.ui.controls.viewers {
 
         private updateScrollPane() {
 
-            const pane = this.getContainer().getContainer();
+            const pane = this.getContainer()?.getContainer();
 
             if (pane instanceof ScrollPane) {
 

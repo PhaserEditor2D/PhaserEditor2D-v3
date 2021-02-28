@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onMouseDown(e: MouseEvent): void {
 
-            if (e.button === 1) {
+            if (e.button === 1 || e.button === 0 && e.shiftKey) {
 
                 const camera = this.getCamera();
 
@@ -57,7 +57,9 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private onMouseMove(e: MouseEvent): void {
+
             if (this._dragStartPoint === null) {
+
                 return;
             }
 

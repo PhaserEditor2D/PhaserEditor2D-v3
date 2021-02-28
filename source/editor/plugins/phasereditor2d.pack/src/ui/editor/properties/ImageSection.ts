@@ -9,10 +9,12 @@ namespace phasereditor2d.pack.ui.editor.properties {
         }
 
         canEdit(obj: any, n: number) {
-            return obj instanceof core.ImageAssetPackItem && super.canEdit(obj, n);
+
+            return obj instanceof core.ImageAssetPackItem && !(obj instanceof core.SvgAssetPackItem) && super.canEdit(obj, n);
         }
 
         createForm(parent: HTMLDivElement) {
+
             const comp = this.createGridElement(parent, 3);
 
             comp.style.gridTemplateColumns = "auto 1fr auto";

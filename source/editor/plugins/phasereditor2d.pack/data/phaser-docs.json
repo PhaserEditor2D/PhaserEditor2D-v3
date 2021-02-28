@@ -42,6 +42,7 @@
   "Phaser.Loader.LoaderPlugin.svg(url)": "The absolute or relative URL to load this file from. If undefined or `null` it will be set to `<key>.svg`, i.e. if `key` was \"alien\" then the URL will be \"alien.svg\".",
   "Phaser.Types.Loader.FileTypes.SVGSizeConfig.width": "An optional width. The SVG will be resized to this size before being rendered to a texture.",
   "Phaser.Types.Loader.FileTypes.SVGSizeConfig.height": "An optional height. The SVG will be resized to this size before being rendered to a texture.",
+  "Phaser.Types.Loader.FileTypes.SVGSizeConfig.scale": "An optional scale. If given it overrides the width / height properties. The SVG is scaled by the scale factor before being rendered to a texture.",
   "Phaser.Loader.LoaderPlugin.tilemapCSV(url)": "The absolute or relative URL to load this file from. If undefined or `null` it will be set to `<key>.csv`, i.e. if `key` was \"alien\" then the URL will be \"alien.csv\".",
   "Phaser.Loader.LoaderPlugin.tilemapImpact(url)": "The absolute or relative URL to load this file from. If undefined or `null` it will be set to `<key>.json`, i.e. if `key` was \"alien\" then the URL will be \"alien.json\".",
   "Phaser.Loader.LoaderPlugin.tilemapTiledJSON(url)": "The absolute or relative URL to load this file from. If undefined or `null` it will be set to `<key>.json`, i.e. if `key` was \"alien\" then the URL will be \"alien.json\". Or, a well formed JSON object.",

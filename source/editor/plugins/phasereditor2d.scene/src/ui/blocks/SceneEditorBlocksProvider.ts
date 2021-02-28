@@ -15,6 +15,27 @@ namespace phasereditor2d.scene.ui.blocks {
             this._packs = [];
         }
 
+        fillContextMenu(menu: controls.Menu) {
+
+            const grouping = pack.ui.viewers.AssetPackGrouping;
+
+            const currentType = grouping.getGroupingPreference();
+
+            for (const type of grouping.GROUP_ASSET_TYPES) {
+
+                menu.addAction({
+                    text: "Group Assets By " + grouping.GROUP_ASSET_TYPE_LABEL_MAP[type],
+                    callback: () => {
+
+                        grouping.setGroupingPreference(type);
+
+                        this.repaint(true);
+                    },
+                    selected: type === currentType
+                });
+            }
+        }
+
         async preload(complete?: boolean) {
 
             let finder: pack.core.PackFinder;
@@ -52,7 +73,16 @@ namespace phasereditor2d.scene.ui.blocks {
 
             for (const obj of items) {
 
-                if (obj instanceof pack.core.AssetPackItem) {
+                if (obj instanceof pack.core.AssetPack) {
+
+                    const pack = this._packs.find(p => p.getFile() === obj.getFile());
+
+                    if (pack) {
+
+                        set.add(pack);
+                    }
+
+                } else if (obj instanceof pack.core.AssetPackItem) {
 
                     const item = this.getFreshItem(obj);
 

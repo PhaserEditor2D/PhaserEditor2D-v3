@@ -301,10 +301,10 @@ namespace phasereditor2d.ide {
 
         openProjectInVSCode() {
 
-            this.openFileInVSCode(colibri.ui.ide.FileUtils.getRoot());
+            this.openFileExternalEditor(colibri.ui.ide.FileUtils.getRoot());
         }
 
-        async openFileInVSCode(file: io.FilePath) {
+        async openFileExternalEditor(file: io.FilePath) {
 
             const resp = await colibri.core.io.apiRequest("OpenVSCode", { location: file.getFullName() });
 

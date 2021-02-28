@@ -229,7 +229,9 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
                 const data = this.getSelection()[0].getData();
 
-                text.value = colibri.core.json.getDataValue(data, field);
+                const value = colibri.core.json.getDataValue(data, field);
+
+                text.value = value === undefined ? 0 : value;
             });
 
             return text;

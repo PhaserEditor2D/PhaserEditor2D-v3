@@ -44,6 +44,7 @@ namespace phasereditor2d.pack.ui.viewers {
                 switch (type) {
 
                     case core.IMAGE_TYPE:
+                    case core.SVG_TYPE:
                         return new ImageAssetPackItemCellRenderer();
 
                     case core.MULTI_ATLAS_TYPE:

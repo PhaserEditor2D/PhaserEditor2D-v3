@@ -34,6 +34,18 @@ namespace colibri.ui.controls {
             return element["__control"];
         }
 
+        static getParentControl(element: HTMLElement) {
+
+            if (element) {
+
+                const control = this.getControlOf(element);
+
+                return control || this.getParentControl(element.parentElement);
+            }
+
+            return null;
+        }
+
         isHandlePosition() {
 
             return this._handlePosition;

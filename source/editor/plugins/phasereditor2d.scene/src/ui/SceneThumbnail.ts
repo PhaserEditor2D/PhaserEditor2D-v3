@@ -266,6 +266,8 @@ namespace phasereditor2d.scene.ui {
 
             return new Promise<HTMLImageElement>((resolve, reject) => {
 
+                console.log(this._file.getFullName());
+
                 const content = ide.FileUtils.getFileString(this._file);
 
                 const data: core.json.ISceneData = JSON.parse(content);

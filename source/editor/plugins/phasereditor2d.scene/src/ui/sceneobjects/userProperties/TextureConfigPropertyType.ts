@@ -110,6 +110,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return [
                 pack.core.IMAGE_TYPE,
+                pack.core.SVG_TYPE,
                 pack.core.ATLAS_TYPE,
                 pack.core.SPRITESHEET_TYPE];
         }

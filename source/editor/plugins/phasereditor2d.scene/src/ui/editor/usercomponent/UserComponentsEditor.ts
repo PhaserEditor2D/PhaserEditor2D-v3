@@ -135,12 +135,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             if (ide.IDEPlugin.getInstance().isDesktopMode()) {
 
+                const editorName = ide.IDEPlugin.getInstance().getExternalEditorName();
+
                 manager.add({
                     command: {
                         id: CMD_OPEN_COMPONENT_OUTPUT_FILE_IN_VSCODE,
-                        name: "Open Component Output File in VS Code",
+                        name: "Open Component Output File in " + editorName,
                         category: CAT_USER_COMPONENTS_EDITOR,
-                        tooltip: "Open the compiler output file in Visual Studio Code"
+                        tooltip: "Open the compiler output file in the configured external editor (" + editorName + ")"
                     },
                     handler: {
                         testFunc: args => {
@@ -164,13 +166,18 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                             if (file) {
 
-                                ide.IDEPlugin.getInstance().openFileInVSCode(file);
+                                ide.IDEPlugin.getInstance().openFileExternalEditor(file);
 
                             } else {
 
-                                alert(`Output file "${file.getProjectRelativeName()}" not found.`);
+                                alert(`Output from "${component.getName()}" not found.`);
                             }
                         }
+                    },
+                    keys: {
+                        control: true,
+                        alt: true,
+                        key: "E"
                     }
                 });
             }

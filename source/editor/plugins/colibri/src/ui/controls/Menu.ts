@@ -66,22 +66,31 @@ namespace colibri.ui.controls {
         }
 
         addSeparator() {
+
             this._items.push(null);
         }
 
         isEmpty() {
+
             return this._items.length === 0;
         }
 
         getElement() {
+
             return this._element;
         }
 
         static getActiveMenu() {
+
+            if (this._activeMenu && !this._activeMenu._element.isConnected) {
+
+                this._activeMenu = undefined;
+            }
+
             return this._activeMenu;
         }
 
-        create(x: number, y: number, modal?: boolean) {
+        create(x: number, y: number, modal?: boolean, openLeft?: boolean) {
 
             if (this._items.length === 0) {
                 return;
@@ -194,11 +203,14 @@ namespace colibri.ui.controls {
 
                         subMenu.create(subMenuX - 5, subMenuY + itemElement.offsetTop, false);
 
-                        const subMenuRect = subMenu._element.getClientRects()[0];
+                        if (subMenu._element) {
 
-                        if (Math.floor(subMenuRect.left) < Math.floor(menuRect.right) - 5) {
+                            const subMenuRect = subMenu._element.getClientRects()[0];
 
-                            subMenu._element.style.left = menuRect.left - subMenuRect.width + 5 + "px";
+                            if (Math.floor(subMenuRect.left) < Math.floor(menuRect.right) - 5) {
+
+                                subMenu._element.style.left = menuRect.left - subMenuRect.width + 5 + "px";
+                            }
                         }
 
                         this._subMenu = subMenu;
@@ -254,7 +266,7 @@ namespace colibri.ui.controls {
                 y = window.innerHeight - rect.height - 10;
             }
 
-            if (x + rect.width > window.innerWidth) {
+            if (x + rect.width > window.innerWidth || openLeft) {
 
                 x -= rect.width;
             }
@@ -277,9 +289,11 @@ namespace colibri.ui.controls {
             }
         }
 
-        createWithEvent(e: MouseEvent) {
+        createWithEvent(e: MouseEvent, openLeft = false) {
 
-            this.create(e.clientX, e.clientY, true);
+            e.preventDefault();
+
+            this.create(e.clientX, e.clientY, true, openLeft);
         }
 
         getText() {
@@ -294,9 +308,13 @@ namespace colibri.ui.controls {
                 this._bgElement.remove();
             }
 
-            this._element.remove();
+            if (this._element) {
+
+                this._element.remove();
+            }
 
             if (this._menuCloseCallback) {
+
                 this._menuCloseCallback();
             }
 
@@ -311,6 +329,7 @@ namespace colibri.ui.controls {
             if (this._parentMenu) {
 
                 this._parentMenu.closeAll();
+                this._parentMenu = undefined;
             }
 
             this.close();

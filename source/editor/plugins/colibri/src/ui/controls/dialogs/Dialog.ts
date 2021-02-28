@@ -38,10 +38,17 @@ namespace colibri.ui.controls.dialogs {
 
                             if (dlg.isCloseWithEscapeKey()) {
 
-                                e.preventDefault();
-                                e.stopImmediatePropagation();
+                                if (Menu.getActiveMenu()) {
 
-                                dlg.close();
+                                    Menu.getActiveMenu().closeAll();
+
+                                } else {
+
+                                    e.preventDefault();
+                                    e.stopImmediatePropagation();
+
+                                    dlg.close();
+                                }
                             }
                         }
                     }
@@ -146,13 +153,13 @@ namespace colibri.ui.controls.dialogs {
             });
         }
 
-        addButton(text: string, callback: () => void) {
+        addButton(text: string, callback: (e?: MouseEvent) => void) {
 
             const btn = document.createElement("button");
 
             btn.innerText = text;
 
-            btn.addEventListener("click", e => callback());
+            btn.addEventListener("click", e => callback(e));
 
             this._buttonPaneElement.appendChild(btn);
 

@@ -14,7 +14,9 @@ namespace phasereditor2d.pack.ui.viewers {
 
         protected isObjectSection(obj: any) {
 
-            return core.TYPES_SET.has(obj);
+            return core.TYPES_SET.has(obj)
+                || obj instanceof pack.core.AssetPack
+                || (obj instanceof colibri.core.io.FilePath && obj.isFolder());
         }
 
         isShadowAsChild(obj: any) {

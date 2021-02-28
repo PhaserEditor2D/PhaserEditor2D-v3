@@ -91,6 +91,11 @@ namespace phasereditor2d.pack.core {
         resetCache() {
             // empty
         }
+
+        getPackItem() {
+
+            return this;
+        }
     }
 
 }

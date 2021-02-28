@@ -43,6 +43,55 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
+        setExpandWhenOpenParentItem() {
+
+            this.eventOpenItem.addListener(obj => {
+
+                if (this.getContentProvider().getChildren(obj).length > 0) {
+
+                    this.setExpanded(obj, !this.isExpanded(obj));
+
+                    this.repaint();
+                }
+            });
+        }
+
+        async expandCollapseBranch() {
+
+            const obj = this.getSelectionFirstElement();
+
+            if (obj) {
+
+                const children = this.getContentProvider().getChildren(obj);
+
+                if (children.length > 0) {
+
+                    this.setExpanded(obj, !this.isExpanded(obj));
+
+                    this.repaint();
+
+                } else {
+
+                    const path = this.getObjectPath(obj);
+
+                    // pop obj
+                    path.pop();
+
+                    // pop parent
+                    const parent = path.pop();
+
+                    if (parent) {
+
+                        await this.reveal(parent);
+
+                        this.setExpanded(parent, false);
+
+                        this.setSelection([parent]);
+                    }
+                }
+            }
+        }
+
         getTreeRenderer() {
 
             return this._treeRenderer;

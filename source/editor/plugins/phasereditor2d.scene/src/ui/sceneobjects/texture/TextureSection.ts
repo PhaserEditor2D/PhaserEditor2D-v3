@@ -2,7 +2,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
-    import core = colibri.core;
 
     export class TextureSection extends SceneGameObjectSection<ITextureLikeObject> {
 

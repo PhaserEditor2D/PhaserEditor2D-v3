@@ -23,6 +23,9 @@ namespace phasereditor2d.pack.ui.editor.properties {
             this.createFileField(comp, "URL", "url", webContentTypes.core.CONTENT_TYPE_SVG,
                 "Phaser.Loader.LoaderPlugin.svg(url)");
 
+                this.createSimpleIntegerField(comp, "Scale", "svgConfig.scale",
+                "Phaser.Types.Loader.FileTypes.SVGSizeConfig.scale");
+
             this.createSimpleIntegerField(comp, "Width", "svgConfig.width",
                 "Phaser.Types.Loader.FileTypes.SVGSizeConfig.width");
 

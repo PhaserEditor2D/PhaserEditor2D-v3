@@ -229,12 +229,12 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .FilterControl {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
     grid-template-rows: 1fr;
     align-items: center;
-    justify-items: center;
+    column-gap: 0px;
     box-sizing: border-box;
-    padding: 5px 6px 5px 6px;
+    padding: 5px 0px 5px 6px;
 }
 
 .FilterControl input {
