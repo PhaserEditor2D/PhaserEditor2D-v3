@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
                 case TAB_SECTION_BUILT_IN:
 
-                    return [BUILTIN_SECTION];
+                    return SCENE_OBJECT_CATEGORIES;
 
                 case TAB_SECTION_PREFABS:
 

@@ -161,7 +161,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getTreeViewerRenderer(viewer: controls.viewers.TreeViewer) {
             // TODO: we should implements the Favorites section
-            return new SceneEditorBlocksTreeRendererProvider(viewer);
+            return new SceneEditorBlocksTreeRendererProvider(this, viewer);
         }
 
         getUndoManager() {

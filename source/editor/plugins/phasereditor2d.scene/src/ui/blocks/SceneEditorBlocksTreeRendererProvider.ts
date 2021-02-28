@@ -23,17 +23,39 @@ namespace phasereditor2d.scene.ui.blocks {
     ];
 
     export class SceneEditorBlocksTreeRendererProvider extends pack.ui.viewers.AssetPackTreeViewerRenderer {
+        private _blocksProvider: SceneEditorBlocksProvider;
 
-        constructor(viewer: controls.viewers.TreeViewer) {
+        constructor(provider: SceneEditorBlocksProvider, viewer: controls.viewers.TreeViewer) {
             super(viewer, false);
+
+            this._blocksProvider = provider;
         }
 
         isObjectSection(obj: any) {
 
-            return BLOCKS_SECTIONS.indexOf(obj) >= 0 || obj instanceof pack.core.AssetPack || obj instanceof io.FilePath && obj.isFolder();
+            if (typeof obj === "string") {
+
+                if (this._blocksProvider.getSelectedTabSection() === TAB_SECTION_BUILT_IN
+                    && SCENE_OBJECT_CATEGORIES.indexOf(obj) >= 0) {
+
+                    return true;
+                }
+
+                if (BLOCKS_SECTIONS.indexOf(obj) >= 0) {
+
+                    return true;
+                }
+            }
+
+            return obj instanceof pack.core.AssetPack || obj instanceof io.FilePath && obj.isFolder();
         }
 
         isShadowAsChild(obj: any) {
+
+            if (this._blocksProvider.getSelectedTabSection() === TAB_SECTION_BUILT_IN) {
+
+                return false;
+            }
 
             if (obj instanceof ui.sceneobjects.SceneObjectExtension || obj === ui.sceneobjects.ObjectList) {
 
