@@ -126,7 +126,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .TabPaneLabel {
     float: left;
-    display: inline-grid;
+    display: grid;
     align-items: center;
     box-sizing: border-box;
     grid-template-columns: min-content 1fr auto min-content;
@@ -143,6 +143,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .TabPaneLabelSections {
     display: flex;
+    padding-top: 1px;
 }
 
 .TabPaneLabelSection {
