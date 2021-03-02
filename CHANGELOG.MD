@@ -12,7 +12,7 @@
 * Scene Editor: allows changing texture's frame of an object (`M`).
 * [#90](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/90) Scene Editor: shows the Add Object sub-menu in the context menu.
 * [#90](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/90) Scene Editor: shows the Add Object dialog. You can open it with the `A` shortcut.
-* Scene Editor: allows panning the scene by pressing `Shift+MouseLeftButton`.
+* Scene Editor: allows panning the scene by pressing `Alt+MouseLeftButton`.
 * [#105](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/105) Scene Editor: the Select Texture dialog allows grouping the assets by type, asset pack, or location.
 * Adds key-binding (`Ctrl+Alt+E`) for the command to open the output file in the configured external editor. This command is available in the Scene Editor and the User Components Editor.
 * Scene Editor: new command to open a scene file (`Ctrl+Alt+O`).
