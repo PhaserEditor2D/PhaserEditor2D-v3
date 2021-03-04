@@ -153,7 +153,7 @@ namespace colibri.ui.ide {
 
             this._viewer.repaint();
 
-            if (provider.allowsTabSections()) {
+            if (provider && provider.allowsTabSections()) {
 
                 tabsPane.eventTabSectionSelected.addListener(this._tabSectionListener);
             }
