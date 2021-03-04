@@ -171,6 +171,7 @@ namespace colibri.ui.controls.viewers {
                 const children = viewer.getContentProvider().getChildren(obj);
                 const expanded = viewer.isExpanded(obj);
                 const isSection = this.isSection(obj);
+                const canPaintChildren = isSection || !this._flat;
                 let newParentPaintItem: PaintItem = null;
 
                 if (viewer.isFilterIncluded(obj)) {
@@ -290,7 +291,7 @@ namespace colibri.ui.controls.viewers {
                             this.renderGridCell(args, renderer, depth, obj === lastObj);
 
                             // render tree icon
-                            if (children.length > 0 && !this._flat) {
+                            if (children.length > 0 && canPaintChildren) {
 
                                 const iconY = y + (cellSize - TREE_ICON_SIZE) / 2;
 
@@ -318,7 +319,7 @@ namespace colibri.ui.controls.viewers {
                     }
                 }
 
-                if (expanded) {
+                if (expanded && canPaintChildren) {
 
                     const result = this.paintGrid(
                         children, treeIconList, paintItems, newParentPaintItem, x, y, offset, depth + 1, sectionStart, sectionEnd);
