@@ -85,20 +85,23 @@ namespace phasereditor2d.pack.core.parsers {
             const end = endFrame < 0 ? Number.MAX_VALUE : endFrame;
 
             let i = 0;
-            let row = 0;
-            let column = 0;
+            // let row = 0;
+            // let column = 0;
             let x = margin;
             let y = margin;
+            const imageHeight = image.getHeight();
+            const imageWidth = image.getWidth();
 
             while (true) {
 
-                if (i > end || y >= image.getHeight() || i > 1000) {
+                if (i > end || y >= imageHeight || i > 1000) {
+
                     break;
                 }
 
-                if (i >= start) {
+                if (x + w + spacing <= imageWidth) {
 
-                    if (x + w <= image.getWidth() && y + h <= image.getHeight()) {
+                    if (i >= start) {
 
                         const fd = new controls.FrameData(i,
                             new controls.Rect(x, y, w, h),
@@ -109,20 +112,17 @@ namespace phasereditor2d.pack.core.parsers {
                         frames.push(new AssetPackImageFrame(
                             this.getPackItem() as ImageFrameContainerAssetPackItem, i, image, fd));
                     }
-                }
 
-                column++;
+                    i++;
+                }
 
                 x += w + spacing;
 
-                if (x >= image.getWidth()) {
+                if (x >= imageWidth) {
+
                     x = margin;
                     y += h + spacing;
-                    column = 0;
-                    row++;
                 }
-
-                i++;
             }
 
             return frames;
