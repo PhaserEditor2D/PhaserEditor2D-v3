@@ -34,9 +34,11 @@
 * Scene Editor: keep same origin when change the texture.
 * Scene Editor: uses `Array<any>` as type for an empty ObjectList.
 * Scene Editor: fixes code generation of the Text's `lineSpacing` property.
-* Scene Editor: fixes change texture command. Doesn't apply to non-texture objects. Fixes when selecting a new image (instead of atlas frame).
+* Scene Editor: fixes change texture command. D*oesn't apply to non-texture objects. Fixes when selecting a new image (instead of atlas frame).
 * Viewer: fixes Collapse All command, when the viewer is scrolled.
 * Viewer: fixes Collapse/Expand branch command, when the viewer is scrolled.
+* [#112](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/112) Asset Pack: skipping frames from spritesheets.
+
 
 ## v3.10.2 - Jan 17, 2021
 
