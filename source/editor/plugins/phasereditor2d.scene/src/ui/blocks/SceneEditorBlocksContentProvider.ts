@@ -116,6 +116,11 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getChildren(parent: any): any[] {
 
+            if (parent instanceof pack.core.AssetPack) {
+
+                return parent.getItems().filter(i => SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES.has(i.getType()));
+            }
+
             if (typeof (parent) === "string") {
 
                 if (SCENE_OBJECT_CATEGORY_SET.has(parent)) {
