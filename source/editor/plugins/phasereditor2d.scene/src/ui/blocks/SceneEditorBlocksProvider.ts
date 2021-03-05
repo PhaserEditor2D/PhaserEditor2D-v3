@@ -3,6 +3,15 @@ namespace phasereditor2d.scene.ui.blocks {
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
 
+    export const TAB_SECTION_BUILT_IN = "Built-In";
+    export const TAB_SECTION_PREFABS = "Prefabs";
+    export const TAB_SECTION_ASSETS = "Assets";
+    export const TAB_SECTIONS = [
+        TAB_SECTION_BUILT_IN,
+        TAB_SECTION_PREFABS,
+        TAB_SECTION_ASSETS,
+    ]
+
     export class SceneEditorBlocksProvider extends ide.EditorViewerProvider {
 
         private _editor: editor.SceneEditor;
@@ -13,6 +22,26 @@ namespace phasereditor2d.scene.ui.blocks {
 
             this._editor = editor;
             this._packs = [];
+        }
+
+        getEditor() {
+
+            return this._editor;
+        }
+
+        allowsTabSections() {
+
+            return true;
+        }
+
+        getTabSections() {
+
+            return TAB_SECTIONS;
+        }
+
+        fillContextMenu(menu: controls.Menu) {
+
+            pack.ui.viewers.AssetPackGrouping.fillMenu(menu, () => this.repaint(true));
         }
 
         async preload(complete?: boolean) {
@@ -52,7 +81,16 @@ namespace phasereditor2d.scene.ui.blocks {
 
             for (const obj of items) {
 
-                if (obj instanceof pack.core.AssetPackItem) {
+                if (obj instanceof pack.core.AssetPack) {
+
+                    const pack = this._packs.find(p => p.getFile() === obj.getFile());
+
+                    if (pack) {
+
+                        set.add(pack);
+                    }
+
+                } else if (obj instanceof pack.core.AssetPackItem) {
 
                     const item = this.getFreshItem(obj);
 
@@ -107,7 +145,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getTreeViewerRenderer(viewer: controls.viewers.TreeViewer) {
             // TODO: we should implements the Favorites section
-            return new SceneEditorBlocksTreeRendererProvider(viewer);
+            return new SceneEditorBlocksTreeRendererProvider(this, viewer);
         }
 
         getUndoManager() {

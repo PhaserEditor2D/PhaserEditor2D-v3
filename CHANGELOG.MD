@@ -1,5 +1,45 @@
 # Change Log
 
+## v3.11.0 - Mar 5, 2021
+
+## Added
+
+* Scene Editor: command `V` toggles the visibility of the selected objects.
+* Scene Editor: non-visible objects are shown with a "hidden" suffix in the Outline view labels.
+* Scene Editor: the Change Texture dialog groups the items by type.
+* Scene Editor: support SVG assets in the Blocks view.
+* Scene Editor: show option to open an object's texture in the Asset Pack Editor.
+* Scene Editor: allows changing texture's frame of an object (`M`).
+* [#90](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/90) Scene Editor: shows the Add Object sub-menu in the context menu.
+* [#90](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/90) Scene Editor: shows the Add Object dialog. You can open it with the `A` shortcut.
+* Scene Editor: allows panning the scene by pressing `Alt+MouseLeftButton`.
+* [#105](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/105) Scene Editor: the Select Texture dialog allows grouping the assets by type, asset pack, or location.
+* Adds key-binding (`Ctrl+Alt+E`) for the command to open the output file in the configured external editor. This command is available in the Scene Editor and the User Components Editor.
+* Scene Editor: new command to open a scene file (`Ctrl+Alt+O`).
+* Scene Editor: Blocks content filtering via view's tab-sections.
+* Asset Pack Editor: allows setting the scale of the SVG assets.
+* Animations Editor: allows grouping the blocks by type, pack, and location.
+* Viewer: advanced filtering by default. Allows matching different words.
+* Viewer: filtering isn't triggered at every key.
+* [#103](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/103): Close editor's tab with the mouse middle button.
+* Allows adding the selected object to a new object list.
+* Asset Pack Editor: Blocks are grouped by folder.
+* [#109](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/109): Double click a folder to expand.
+* Viewer: default context menu and three dots button.
+
+### Fixed
+
+* Scene Editor: Change Texture dialog allows selecting a texture with double-click.
+* Scene Editor: `Text.lineSpacing` is ignored in code generation when it has the default value (`0`).
+* Scene Editor: keep same origin when change the texture.
+* Scene Editor: uses `Array<any>` as type for an empty ObjectList.
+* Scene Editor: fixes code generation of the Text's `lineSpacing` property.
+* Scene Editor: fixes change texture command. D*oesn't apply to non-texture objects. Fixes when selecting a new image (instead of atlas frame).
+* Viewer: fixes Collapse All command, when the viewer is scrolled.
+* Viewer: fixes Collapse/Expand branch command, when the viewer is scrolled.
+* [#112](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/112) Asset Pack: skipping frames from spritesheets.
+
+
 ## v3.10.2 - Jan 17, 2021
 
 * Scene Editor: Improve error handling when creating an object from JSON data.

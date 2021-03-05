@@ -64,6 +64,8 @@ namespace phasereditor2d.pack.core {
         XML_TYPE
     ];
 
+    export const TYPES_SET = new Set(TYPES);
+
     export class AssetPack {
 
         private _file: core.io.FilePath;

@@ -17,7 +17,8 @@ Important:
 
 /* input */
 
-.light input, .light textarea {
+.light input,
+.light textarea {
     background: #f0f0f0;
     border: solid 1px #a0a0a0;
 }
@@ -26,13 +27,15 @@ Important:
     display: none;
 }
 
-.light input:focus, .light textarea:focus {
+.light input:focus,
+.light textarea:focus {
     background: #f6f6f6;
     border-color: #4242ff;
     outline-style: none;
 }
 
-.light input:read-only, .light textarea:read-only {
+.light input:read-only,
+.light textarea:read-only {
     background: #d6d6d6;
 }
 
@@ -100,6 +103,11 @@ Important:
     background: #cacaca;
 }
 
+.light .TabPane.activePart .TabPaneLabelSection.selected {
+    border-bottom-color: #4242ff !important;
+    color: #4242ff;
+}
+
 .light .ViewerPart .FilteredViewer {
     background: #dadada;
 }
@@ -141,17 +149,18 @@ Important:
 
 /* Property Page */
 
-
+/* 
 .light .PropertyTitleArea {
-    background: #a2a2a2;    
-}
+} */
 
-.light .PropertyTitleArea label {
-    /* color: rgba(0, 0, 0, 0.75); */
-}
+/* .light .PropertyTitleArea label {
+    color: rgba(0, 0, 0, 0.75);
+} */
 
 .light .PropertySectionPane {
-    /* background: #d5d5d5; */
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
 }
 
 /* Toolbar */
@@ -214,7 +223,8 @@ Important:
     background: #b0b0b0;
 }
 
-.light .MenuItem:hover, .light .MenuItemSelected {
+.light .MenuItem:hover,
+.light .MenuItemSelected {
     background: #4242ff;
     color: #f0f0f0;
 }

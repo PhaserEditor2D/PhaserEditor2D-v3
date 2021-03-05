@@ -27,10 +27,10 @@ namespace phasereditor2d.scene {
 
     export const SCENE_OBJECT_CATEGORIES = [
         SCENE_OBJECT_IMAGE_CATEGORY,
-        SCENE_OBJECT_TEXT_CATEGORY,
         SCENE_OBJECT_GROUPING_CATEGORY,
-        SCENE_OBJECT_TILEMAP_CATEGORY,
+        SCENE_OBJECT_TEXT_CATEGORY,
         SCENE_OBJECT_SHAPE_CATEGORY,
+        SCENE_OBJECT_TILEMAP_CATEGORY,
     ];
 
     export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
@@ -317,7 +317,13 @@ namespace phasereditor2d.scene {
         }
 
         getSceneFinder() {
+
             return this._sceneFinder;
+        }
+
+        isSceneContentType(file: colibri.core.io.FilePath) {
+
+            return !file.isFolder() && colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file) === core.CONTENT_TYPE_SCENE;
         }
 
         getPlainObjectExtensions() {

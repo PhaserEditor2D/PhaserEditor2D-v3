@@ -2,18 +2,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ChangeTextureOperation extends SceneGameObjectOperation<ITextureLikeObject> {
 
-        static runDialog(editor: editor.SceneEditor) {
+        static canChangeTextureOf(obj: ISceneGameObject) {
 
-            const finder = editor.getPackFinder();
+            return GameObjectEditorSupport.hasObjectComponent(obj, TextureComponent)
+                && (!obj.getEditorSupport().isPrefabInstance()
+                    || obj.getEditorSupport().isUnlockedProperty(TextureComponent.texture))
+        }
+
+        static runDialog(editor: editor.SceneEditor, atlasKey?: string) {
 
             const cache = editor.getScene().getPackCache();
 
-            const objects = editor.getSelectedGameObjects()
-
-                .filter(obj => GameObjectEditorSupport.hasObjectComponent(obj, TextureComponent))
-
-                .filter(obj => !obj.getEditorSupport().isPrefabInstance()
-                    || obj.getEditorSupport().isUnlockedProperty(TextureComponent.texture));
+            const objects = editor.getSelectedGameObjects().filter(obj => this.canChangeTextureOf(obj));
 
             const objectKeys = objects
 
@@ -23,35 +23,48 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const selectedFrames = objectKeys.map(k => cache.getImage(k.key, k.frame));
 
-            TextureSelectionDialog.createDialog(
-                finder,
-                selectedFrames as pack.core.AssetPackImageFrame[],
-                async (sel) => {
+            const callback = async (sel) => {
 
-                    const frame = sel[0];
+                const frame = sel[0];
 
-                    let newKeys: ITextureKeys;
+                let newKeys: ITextureKeys;
 
-                    const item = frame.getPackItem();
+                const item = frame.getPackItem();
 
-                    item.addToPhaserCache(editor.getGame(), cache);
+                item.addToPhaserCache(editor.getGame(), cache);
 
-                    if (item instanceof pack.core.ImageAssetPackItem) {
+                if (item instanceof pack.core.ImageAssetPackItem) {
 
-                        newKeys = { key: item.getKey() };
+                    newKeys = { key: item.getKey() };
 
-                    } else {
+                } else {
 
-                        newKeys = { key: item.getKey(), frame: frame.getName() };
-                    }
+                    newKeys = { key: item.getKey(), frame: frame.getName() };
+                }
 
-                    editor
-                        .getUndoManager().add(new ChangeTextureOperation(
-                            editor,
-                            objects as ITextureLikeObject[],
-                            newKeys)
-                        );
-                });
+                editor
+                    .getUndoManager().add(new ChangeTextureOperation(
+                        editor,
+                        objects as ITextureLikeObject[],
+                        newKeys)
+                    );
+            };
+
+            if (atlasKey) {
+
+                TextureFrameSelectionDialog.createDialog(
+                    editor.getPackFinder(),
+                    selectedFrames as (pack.core.AssetPackImageFrame)[],
+                    callback,
+                    atlasKey);
+
+            } else {
+
+                TextureSelectionDialog.createDialog(
+                    editor,
+                    selectedFrames as (pack.core.AssetPackImageFrame)[],
+                    callback);
+            }
         }
 
         constructor(editor: editor.SceneEditor, objects: ITextureLikeObject[], value: ITextureKeys) {

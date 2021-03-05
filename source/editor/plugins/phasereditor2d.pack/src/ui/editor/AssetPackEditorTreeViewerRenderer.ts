@@ -10,11 +10,9 @@ namespace phasereditor2d.pack.ui.editor {
         private _editor: AssetPackEditor;
 
         constructor(editor: AssetPackEditor, viewer: controls.viewers.TreeViewer) {
-            super(viewer, false);
+            super(viewer, true);
 
             this._editor = editor;
-
-            this.setSections([]);
         }
 
         isChild(file: io.FilePath) {

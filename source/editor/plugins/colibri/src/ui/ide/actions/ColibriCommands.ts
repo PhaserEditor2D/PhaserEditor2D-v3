@@ -28,17 +28,27 @@ namespace colibri.ui.ide.actions {
 
     function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
+        return getViewer(args) !== null;
+    }
+
+    function getViewer(args: colibri.ui.ide.commands.HandlerArgs): controls.viewers.TreeViewer {
+
         if (args.activeElement) {
 
-            const control = controls.Control.getControlOf(args.activeElement);
+            let control = controls.Control.getParentControl(args.activeElement);
+
+            if (control instanceof controls.viewers.FilterControl) {
+
+                control = control.getFilteredViewer().getViewer();
+            }
 
             if (control && control instanceof controls.viewers.Viewer) {
 
-                return true;
+                return control as controls.viewers.TreeViewer;
             }
         }
 
-        return false;
+        return null;
     }
 
     export class ColibriCommands {
@@ -206,7 +216,7 @@ namespace colibri.ui.ide.actions {
                 handler: {
                     testFunc: isViewerScope,
                     executeFunc: args => {
-                        const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
+                        const viewer = getViewer(args);
                         viewer.collapseAll();
                         viewer.repaint();
                     }
@@ -228,7 +238,7 @@ namespace colibri.ui.ide.actions {
             manager.addHandlerHelper(CMD_SELECT_ALL,
                 isViewerScope,
                 args => {
-                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
+                    const viewer = getViewer(args);
                     viewer.selectAll();
                     viewer.repaint();
                 }
@@ -241,35 +251,27 @@ namespace colibri.ui.ide.actions {
 
             // collapse expand branch
 
-            manager.addCommandHelper({
-                id: CMD_EXPAND_COLLAPSE_BRANCH,
-                name: "Expand/Collapse the tree branch",
-                tooltip: "Expand or collapse a branch of the select element",
-                category: CAT_GENERAL
-            });
+            manager.add({
+                command: {
+                    id: CMD_EXPAND_COLLAPSE_BRANCH,
+                    name: "Expand/Collapse Branch",
+                    tooltip: "Expand or collapse a branch of the select element",
+                    category: CAT_GENERAL
+                },
+                handler: {
+                    testFunc: isViewerScope,
 
-            manager.addHandlerHelper(CMD_EXPAND_COLLAPSE_BRANCH,
+                    executeFunc: args => {
 
-                args => args.activeElement !== null
-                    && controls.Control.getControlOf(args.activeElement) instanceof controls.viewers.Viewer,
+                        const viewer = getViewer(args);
 
-                args => {
-                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
-
-                    const parents = [];
-
-                    for (const obj of viewer.getSelection()) {
-                        const objParents = viewer.expandCollapseBranch(obj);
-                        parents.push(...objParents);
+                        viewer.expandCollapseBranch();
                     }
-
-                    viewer.setSelection(parents);
+                },
+                keys: {
+                    key: "Space"
                 }
-            );
-
-            manager.addKeyBinding(CMD_EXPAND_COLLAPSE_BRANCH, new KeyMatcher({
-                key: "Space"
-            }));
+            })
 
             // escape
 
@@ -289,7 +291,7 @@ namespace colibri.ui.ide.actions {
             manager.addHandlerHelper(CMD_ESCAPE,
                 isViewerScope,
                 args => {
-                    const viewer = controls.Control.getControlOf(args.activeElement) as controls.viewers.Viewer;
+                    const viewer = getViewer(args);
                     viewer.escape();
                 }
             );

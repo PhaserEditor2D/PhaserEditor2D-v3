@@ -17,6 +17,15 @@ namespace colibri.ui.controls.dialogs {
             this.add(this.getFilteredViewer());
 
             this.getFilteredViewer().getFilterControl().getFilterElement().focus();
+
+            this.getFilteredViewer().setMenuProvider(new controls.viewers.DefaultViewerMenuProvider((viewer, menu) => {
+
+                this.fillContextMenu(menu);
+            }));
+        }
+
+        protected fillContextMenu(menu: controls.Menu): void {
+            // nothing
         }
     }
 }

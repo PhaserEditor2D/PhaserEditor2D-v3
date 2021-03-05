@@ -133,7 +133,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         sprite.y = worldPoint.y;
                     }
 
-                    displayList.add(sprite);
+                    displayList.add(sprite, true);
                 }
             }
         }

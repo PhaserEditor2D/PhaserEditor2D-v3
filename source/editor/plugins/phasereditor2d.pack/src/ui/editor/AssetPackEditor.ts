@@ -86,10 +86,11 @@ namespace phasereditor2d.pack.ui.editor {
 
             const viewer = new controls.viewers.TreeViewer("phasereditor2d.pack.ui.editor.AssetPackEditor");
 
-            viewer.setContentProvider(new AssetPackEditorContentProvider(this, true));
+            viewer.setContentProvider(new AssetPackEditorContentProvider(this));
             viewer.setLabelProvider(new viewers.AssetPackLabelProvider());
             viewer.setCellRendererProvider(new viewers.AssetPackCellRendererProvider("grid"));
-            viewer.setTreeRenderer(new viewers.AssetPackTreeViewerRenderer(viewer, true));
+            const treeRenderer = new AssetPackEditorTreeViewerRenderer(this, viewer);
+            viewer.setTreeRenderer(treeRenderer);
             viewer.setCellSize(96 * controls.DEVICE_PIXEL_RATIO);
             viewer.setInput(this);
 
@@ -108,6 +109,8 @@ namespace phasereditor2d.pack.ui.editor {
             super.createPart();
 
             this.updateContent();
+
+            this.getViewer().expandRoots();
         }
 
         private async updateContent() {
@@ -229,6 +232,7 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         getPropertyProvider() {
+
             return this._propertyProvider;
         }
 

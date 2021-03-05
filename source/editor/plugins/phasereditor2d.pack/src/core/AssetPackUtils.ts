@@ -13,8 +13,22 @@ namespace phasereditor2d.pack.core {
 
     export class AssetPackUtils {
 
+        static distinct(packs: AssetPack[]) {
+
+            return [...new Set(packs)].sort((a, b) => {
+
+                return ide.FileUtils.compareFiles(a.getFile(), b.getFile());
+            });
+        }
+
         static isAtlasType(type: string) {
+
             return ATLAS_TYPES.has(type);
+        }
+
+        static isImageFrameOrImage(obj: any) {
+
+            return obj instanceof core.AssetPackImageFrame || obj instanceof core.ImageAssetPackItem;
         }
 
         static async getAllPacks() {
@@ -99,6 +113,5 @@ namespace phasereditor2d.pack.core {
 
             return null;
         }
-
     }
 }

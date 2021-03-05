@@ -4,12 +4,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
     import io = colibri.core.io;
 
     export const CAT_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.SceneEditor";
+    export const CMD_ADD_OBJECT = "phasereditor2d.scene.ui.editor.commands.AddObject";
     export const CMD_JOIN_IN_CONTAINER = "phasereditor2d.scene.ui.editor.commands.JoinInContainer";
     export const CMD_JOIN_IN_LAYER = "phasereditor2d.scene.ui.editor.commands.JoinInLayer";
     export const CMD_BREAK_PARENT = "phasereditor2d.scene.ui.editor.commands.BreakContainer";
     export const CMD_TRIM_CONTAINER = "phasereditor2d.scene.ui.editor.commands.TrimContainer";
     export const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
     export const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
+    export const CMD_TOGGLE_VISIBLE = "phasereditor2d.scene.ui.editor.commands.ToggleVisibility";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
     export const CMD_TRANSLATE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.MoveSceneObject";
@@ -25,6 +27,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_CONVERT_TO_TILE_SPRITE_OBJECTS = "phasereditor2d.scene.ui.editor.commands.ConvertToTileSprite";
     export const CMD_SELECT_ALL_OBJECTS_SAME_TEXTURE = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameTexture";
     export const CMD_REPLACE_TEXTURE = "phasereditor2d.scene.ui.editor.commands.ReplaceTexture";
+    export const CMD_REPLACE_TEXTURE_FRAME = "phasereditor2d.scene.ui.editor.commands.ReplaceTextureFrame";
     export const CMD_OPEN_PREFAB = "phasereditor2d.scene.ui.editor.commands.OpenPrefab";
     export const CMD_CREATE_PREFAB_WITH_OBJECT = "phasereditor2d.scene.ui.editor.commands.CreatePrefabWithObject";
     export const CMD_QUICK_EDIT_OUTPUT_FILE = "phasereditor2d.scene.ui.editor.commands.QuickEditOutputFile";
@@ -36,6 +39,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_FIX_SCENE_FILES_ID = "phasereditor2d.scene.ui.editor.commands.FixSceneFilesID";
     export const CMD_DUPLICATE_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.DuplicateSceneFile";
     export const CMD_CLEAR_SCENE_THUMBNAIL_CACHE = "phasereditor2d.scene.ui.editor.commands.ClearSceneThumbnailCache";
+    export const CMD_OPEN_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.OpenSceneFile";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -88,7 +92,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             SceneEditorCommands.registerEditCommands(manager);
 
+            SceneEditorCommands.registerAddObjectCommands(manager);
+
             SceneEditorCommands.registerSceneCommands(manager);
+
+            SceneEditorCommands.registerVisibilityCommands(manager);
 
             SceneEditorCommands.registerSelectionCommands(manager);
 
@@ -109,6 +117,29 @@ namespace phasereditor2d.scene.ui.editor.commands {
             SceneEditorCommands.registerTextureCommands(manager);
 
             SceneEditorCommands.registerSnappingCommands(manager);
+        }
+
+        static registerAddObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_ADD_OBJECT,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Add Object",
+                    tooltip: "Add a built-in object to the scene."
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const dlg = new dialogs.AddObjectDialog(args.activeEditor as editor.SceneEditor);
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    key: "A"
+                }
+            })
         }
 
         static registerGlobalCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -205,7 +236,31 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         ui.SceneThumbnailCache.clearCache();
                     }
                 }
-            })
+            });
+
+            // open scene file
+
+            manager.add({
+                command: {
+                    id: CMD_OPEN_SCENE_FILE,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Go To Scene",
+                    tooltip: "Quick dialog to open a scene file."
+                },
+                handler: {
+                    testFunc: args => colibri.Platform.getWorkbench().getActiveWindow() instanceof ide.ui.DesignWindow,
+                    executeFunc: args => {
+
+                        const dlg = new dialogs.OpenSceneFileDialog();
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    control: true,
+                    alt: true,
+                    key: "O"
+                }
+            });
         }
 
         static registerSnappingCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -328,7 +383,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 handler: {
 
-                    testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection().length > 0
+                        && args.activeEditor.getSelection()
+                            .filter(obj => sceneobjects.ChangeTextureOperation.canChangeTextureOf(obj))
+                            .length > 0,
 
                     executeFunc: args => {
                         sceneobjects.ChangeTextureOperation.runDialog(args.activeEditor as SceneEditor);
@@ -336,6 +395,37 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "X"
+                }
+            });
+
+            // change texture frame
+
+            manager.add({
+                command: {
+                    id: CMD_REPLACE_TEXTURE_FRAME,
+                    name: "Replace Texture Frame",
+                    tooltip: "Change the texture's frame of the selected objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection().length > 0
+                        && args.activeEditor.getSelection()
+                            .filter(obj => sceneobjects.ChangeTextureOperation.canChangeTextureOf(obj))
+                            .length === 1,
+
+                    executeFunc: args => {
+
+                        const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneGameObject;
+                        const comp = obj.getEditorSupport().getComponent(sceneobjects.TextureComponent) as sceneobjects.TextureComponent;
+                        const keys = comp.getTextureKeys();
+
+                        sceneobjects.ChangeTextureOperation.runDialog(args.activeEditor as SceneEditor, keys.key);
+                    }
+                },
+                keys: {
+                    key: "M"
                 }
             });
         }
@@ -964,12 +1054,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             if (ide.IDEPlugin.getInstance().isDesktopMode()) {
 
+                const editorName = ide.IDEPlugin.getInstance().getExternalEditorName();
+
                 manager.add({
                     command: {
                         id: CMD_OPEN_OUTPUT_FILE_IN_VSCODE,
-                        name: "Open Output File in VS Code",
+                        name: "Open Output File in " + editorName,
                         category: CAT_SCENE_EDITOR,
-                        tooltip: "Open the compiler output file in Visual Studio Code"
+                        tooltip: "Open the compiler output file in the configured external editor (" + editorName + ")"
                     },
                     handler: {
                         testFunc: args => args.activeEditor instanceof SceneEditor,
@@ -981,13 +1073,17 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             if (file) {
 
-                                ide.IDEPlugin.getInstance().openFileInVSCode(file);
+                                ide.IDEPlugin.getInstance().openFileExternalEditor(file);
 
                             } else {
 
-                                alert(`Output file "${file.getProjectRelativeName()}" not found.`);
+                                alert(`Output from "${editor.getInput().getProjectRelativeName()}" not found.`);
                             }
                         }
+                    }, keys: {
+                        control: true,
+                        alt: true,
+                        key: "E"
                     }
                 });
             }
@@ -1156,6 +1252,65 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "Z"
+                }
+            });
+        }
+
+        private static registerVisibilityCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_TOGGLE_VISIBLE,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Toggle Visibility",
+                    tooltip: "Toggle the visible property of the object"
+                },
+                handler: {
+                    testFunc: e => {
+
+                        if (!isSceneScope(e)) {
+
+                            return false;
+                        }
+
+                        const sel = e.activeEditor.getSelection();
+
+                        for (const obj of sel) {
+
+                            if (!sceneobjects.GameObjectEditorSupport.hasObjectComponent(obj, sceneobjects.VisibleComponent)) {
+
+                                return false;
+                            }
+                        }
+
+                        return sel.length > 0;
+                    },
+                    executeFunc: e => {
+
+                        let visible = false;
+
+                        const sel = e.activeEditor.getSelection();
+
+                        for (const obj of sel) {
+
+                            const objVisible = sceneobjects.VisibleComponent.visible.getValue(obj);
+
+                            if (objVisible) {
+
+                                visible = true;
+                                break;
+                            }
+                        }
+
+                        const editor = e.activeEditor as ui.editor.SceneEditor;
+
+                        editor.getUndoManager().add(
+                            new sceneobjects.SimpleOperation(
+                                editor, sel, sceneobjects.VisibleComponent.visible, !visible));
+                    }
+                },
+                keys: {
+                    key: "V"
                 }
             });
         }

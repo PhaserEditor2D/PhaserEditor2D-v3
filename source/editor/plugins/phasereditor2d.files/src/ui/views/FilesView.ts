@@ -41,13 +41,11 @@ namespace phasereditor2d.files.ui.views {
 
             menu.add(new actions.DeleteFilesAction(this));
 
+            menu.add(new actions.UploadFilesAction(this));
+
             menu.addSeparator();
 
             menu.addExtension(FilesView.MENU_ID);
-
-            menu.addSeparator();
-
-            menu.add(new actions.UploadFilesAction(this));
         }
 
         createOpenWithMenu(): controls.Menu {
@@ -70,7 +68,10 @@ namespace phasereditor2d.files.ui.views {
                 factories.push(registeredFactory);
             }
 
-            factories.push(defaultFactory);
+            if (defaultFactory) {
+
+                factories.push(defaultFactory);
+            }
 
             factories.push(...reg.getFactories().filter(f => f !== defaultFactory && f !== registeredFactory));
 
@@ -149,6 +150,10 @@ namespace phasereditor2d.files.ui.views {
             viewer.eventOpenItem.addListener((file: io.FilePath) => {
 
                 if (file.isFolder()) {
+
+                    viewer.setExpanded(file, !viewer.isExpanded(file));
+
+                    viewer.repaint();
 
                     return;
                 }

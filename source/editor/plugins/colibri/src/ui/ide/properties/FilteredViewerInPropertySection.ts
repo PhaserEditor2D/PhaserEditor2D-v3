@@ -1,6 +1,6 @@
 namespace colibri.ui.ide.properties {
 
-    export class FilteredViewerInPropertySection<T extends controls.viewers.Viewer>
+    export class FilteredViewerInPropertySection<T extends controls.viewers.TreeViewer>
         extends controls.viewers.FilteredViewer<T> {
 
         constructor(page: controls.properties.PropertyPage, viewer: T, showZoomControls: boolean, ...classList: string[]) {

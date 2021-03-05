@@ -6,6 +6,7 @@ namespace colibri.ui.ide {
 
         private _viewer: controls.viewers.TreeViewer;
         private _initialSelection: any[];
+        private _selectedTabSection: string;
 
         constructor() {
             this._viewer = null;
@@ -48,7 +49,7 @@ namespace colibri.ui.ide {
             // nothing
         }
 
-        repaint() {
+        repaint(resetScroll = false) {
 
             if (this._viewer) {
 
@@ -58,7 +59,14 @@ namespace colibri.ui.ide {
 
                 this._viewer.setState(state);
 
-                this._viewer.repaint();
+                if (resetScroll) {
+
+                    this._viewer.setScrollY(0);
+
+                } else {
+
+                    this._viewer.repaint();
+                }
             }
         }
 
@@ -69,6 +77,11 @@ namespace colibri.ui.ide {
         abstract getContentProvider(): viewers.ITreeContentProvider;
 
         abstract getLabelProvider(): viewers.ILabelProvider;
+
+        getStyledLabelProvider(): viewers.IStyledLabelProvider {
+
+            return undefined;
+        }
 
         abstract getCellRendererProvider(): viewers.ICellRendererProvider;
 
@@ -81,6 +94,28 @@ namespace colibri.ui.ide {
         abstract preload(complete?: boolean): Promise<void>;
 
         abstract getUndoManager();
+
+        getTabSections() {
+
+            return [];
+        }
+
+        tabSectionChanged(section: string) {
+
+            this._selectedTabSection = section;
+
+            this.repaint(true);
+        }
+
+        getSelectedTabSection() {
+
+            return this._selectedTabSection;
+        }
+
+        allowsTabSections() {
+
+            return false;
+        }
 
         fillContextMenu(menu: controls.Menu) {
             // nothing

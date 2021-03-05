@@ -23,11 +23,40 @@ namespace phasereditor2d.pack.ui.editor {
             await this._ignoreFileSet.updateIgnoreFileSet_async();
         }
 
+        getFolders(parent: io.FilePath, folders: io.FilePath[]) {
+
+            for (const file of parent.getFiles()) {
+
+                if (file.isFile() && this.acceptFile(file)) {
+
+                    if (folders.indexOf(parent) < 0) {
+
+                        folders.push(parent);
+                        break;
+                    }
+                }
+
+                this.getFolders(file, folders);
+            }
+        }
+
         getRoots(input: any): any[] {
 
-            return super.getRoots(input)
+            const folders = [];
 
-                .filter(obj => this.acceptFile(obj));
+            if (input instanceof io.FilePath && input.isFolder()) {
+
+                folders.push(input);
+            }
+
+            const roots = super.getRoots(input);
+
+            for(const file of roots) {
+
+                this.getFolders(file, folders);
+            }
+
+            return folders;
         }
 
         getChildren(parent: any): any[] {
@@ -44,17 +73,12 @@ namespace phasereditor2d.pack.ui.editor {
                 // TODO: we should create an extension point to know
                 // what files are created by the editor and are not
                 // intended to be imported in the asset pack.
-                if (parent.getExtension() === "scene") {
+                if (parent.getExtension() === "scene" || parent.getExtension() === "components") {
+
                     return false;
                 }
 
                 return true;
-            }
-
-            for (const file of parent.getFiles()) {
-                if (this.acceptFile(file)) {
-                    return true;
-                }
             }
 
             return false;

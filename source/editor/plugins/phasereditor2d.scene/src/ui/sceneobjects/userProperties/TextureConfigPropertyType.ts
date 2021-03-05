@@ -92,10 +92,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const viewer = super.createViewer(finder);
 
-            viewer.setContentProvider(new TextureContentProvider());
-            const renderer = new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false);
-            renderer.setSections([]);
-            viewer.setTreeRenderer(renderer);
+            viewer.setContentProvider(new TextureContentProvider(finder));
+            viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
             viewer.setCellSize(72, true);
 
             return viewer;
@@ -104,31 +102,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     class TextureContentProvider implements controls.viewers.ITreeContentProvider {
 
+        constructor(private finder: pack.core.PackFinder) {
+
+        }
+
         getRoots(input: any): any[] {
 
-            const packs = input as pack.core.AssetPack[];
+            return [
+                pack.core.IMAGE_TYPE,
+                pack.core.SVG_TYPE,
+                pack.core.ATLAS_TYPE,
+                pack.core.SPRITESHEET_TYPE];
+        }
 
-            const result = [];
+        private getItems(type: string) {
 
-            for (const pack1 of packs) {
-
-                for (const item of pack1.getItems()) {
-
-                    if (item instanceof pack.core.AssetPackImageFrame) {
-
-                        result.push(item);
-
-                    } else if (item instanceof pack.core.ImageFrameContainerAssetPackItem) {
-
-                        result.push(item);
-                    }
-                }
-            }
-
-            return result;
+            return this.finder.getPacks()
+                .flatMap(p => p.getItems())
+                .filter(item => item.getType() === type || type === pack.core.ATLAS_TYPE &&
+                    pack.core.AssetPackUtils.isAtlasType(item.getType()));
         }
 
         getChildren(parent: any): any[] {
+
+            if (typeof parent === "string") {
+
+                return this.getItems(parent);
+            }
 
             if (parent instanceof pack.core.ImageFrameContainerAssetPackItem) {
 

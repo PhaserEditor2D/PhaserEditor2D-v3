@@ -127,14 +127,34 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 .TabPaneLabel {
     float: left;
     display: grid;
-    grid-template-columns: min-content 1fr min-content;
     align-items: center;
+    box-sizing: border-box;
+    grid-template-columns: min-content 1fr auto min-content;
     border-radius: 2px 2px 0 0;
-    padding: 5px 10px 5px 5px;
+    /* padding: 5px 10px 5px 5px; */
+    padding: 8px;
+    padding-bottom: 5px;    
 }
 
+
 .TabPaneLabel span {
-    margin-left: 5px;
+    margin: 3px;
+}
+
+.TabPaneLabelSections {
+    display: flex;
+    padding-top: 1px;
+}
+
+.TabPaneLabelSection {
+    margin-left: 10px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: transparent;
+}
+
+.TabPaneLabelSection.selected {
+    border-bottom-color: black;
 }
 
 .TabPaneContentArea {
@@ -210,12 +230,12 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .FilterControl {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
     grid-template-rows: 1fr;
     align-items: center;
-    justify-items: center;
+    column-gap: 0px;
     box-sizing: border-box;
-    padding: 5px 6px 5px 6px;
+    padding: 5px 0px 5px 6px;
 }
 
 .FilterControl input {
@@ -252,7 +272,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     padding: 5px;
     width: 100%;
     height: 100%;
-    row-gap: 5px;
+    row-gap: 6px;
     overflow-y: auto;
 }
 
@@ -269,7 +289,6 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     display: inline-grid;
     grid-template-columns: 20px 1fr auto;
     padding: 5px;
-    border-radius: 3px;
 }
 
 .PropertyTitleArea .IconControlCanvas {

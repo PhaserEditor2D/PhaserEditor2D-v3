@@ -285,9 +285,10 @@ namespace colibri.ui.controls {
 
         static drawRoundedRect(
             ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number,
-            topLeft = 5, topRight = 5, bottomRight = 5, bottomLeft = 5) {
+            stroke = false, topLeft = 5, topRight = 5, bottomRight = 5, bottomLeft = 5) {
 
             ctx.save();
+
             ctx.beginPath();
             ctx.moveTo(x + topLeft, y);
             ctx.lineTo(x + w - topRight, y);
@@ -298,10 +299,14 @@ namespace colibri.ui.controls {
             ctx.quadraticCurveTo(x, y + h, x, y + h - bottomLeft);
             ctx.lineTo(x, y + topLeft);
             ctx.quadraticCurveTo(x, y, x + topLeft, y);
-            ctx.closePath();
             ctx.fill();
+
+            if (stroke) {
+
+                ctx.stroke();
+            }
+
             ctx.restore();
         }
-
     }
 }

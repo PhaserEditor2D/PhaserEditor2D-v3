@@ -7,25 +7,55 @@ namespace phasereditor2d.scene.ui.blocks {
 
     export const PREFAB_SECTION = "Prefab";
 
+    export const BLOCKS_ASSET_SECTIONS = [
+        pack.core.IMAGE_TYPE,
+        pack.core.SVG_TYPE,
+        pack.core.ATLAS_TYPE,
+        pack.core.SPRITESHEET_TYPE,
+        pack.core.BITMAP_FONT_TYPE
+    ]
+
     export const BLOCKS_SECTIONS = [
 
         BUILTIN_SECTION,
         PREFAB_SECTION,
-        pack.core.IMAGE_TYPE,
-        pack.core.ATLAS_TYPE,
-        pack.core.SPRITESHEET_TYPE,
-        pack.core.BITMAP_FONT_TYPE
+        ...BLOCKS_ASSET_SECTIONS
     ];
 
     export class SceneEditorBlocksTreeRendererProvider extends pack.ui.viewers.AssetPackTreeViewerRenderer {
+        private _blocksProvider: SceneEditorBlocksProvider;
 
-        constructor(viewer: controls.viewers.TreeViewer) {
+        constructor(provider: SceneEditorBlocksProvider, viewer: controls.viewers.TreeViewer) {
             super(viewer, false);
 
-            this.setSections(BLOCKS_SECTIONS);
+            this._blocksProvider = provider;
+        }
+
+        isObjectSection(obj: any) {
+
+            if (typeof obj === "string") {
+
+                if (this._blocksProvider.getSelectedTabSection() === TAB_SECTION_BUILT_IN
+                    && SCENE_OBJECT_CATEGORIES.indexOf(obj) >= 0) {
+
+                    return true;
+                }
+
+                if (BLOCKS_SECTIONS.indexOf(obj) >= 0) {
+
+                    return true;
+                }
+            }
+
+            return obj instanceof pack.core.AssetPack || obj instanceof io.FilePath && obj.isFolder();
         }
 
         isShadowAsChild(obj: any) {
+
+            if (this._blocksProvider.getSelectedTabSection() === TAB_SECTION_BUILT_IN) {
+
+                return false;
+            }
 
             if (obj instanceof ui.sceneobjects.SceneObjectExtension || obj === ui.sceneobjects.ObjectList) {
 

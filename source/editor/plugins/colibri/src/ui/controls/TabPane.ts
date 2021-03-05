@@ -154,6 +154,7 @@ namespace colibri.ui.controls {
         public eventTabClosed = new ListenerList();
         public eventTabSelected = new ListenerList();
         public eventTabLabelResized = new ListenerList();
+        public eventTabSectionSelected = new ListenerList();
 
         private _titleBarElement: HTMLElement;
         private _contentAreaElement: HTMLElement;
@@ -203,6 +204,103 @@ namespace colibri.ui.controls {
             colibri.Platform.getWorkbench().eventThemeChanged.addListener(this._themeListener);
         }
 
+        private findSectionElement(label: HTMLElement, section: string) {
+
+            const sectionElements = label.querySelectorAll(".TabPaneLabelSection");
+
+            for (let i = 0; i < sectionElements.length; i++) {
+
+                const element = sectionElements.item(i) as HTMLDivElement;
+
+                if (element.id === "section-" + section) {
+
+                    return element;
+                }
+            }
+
+            return undefined;
+        }
+
+        removeTabSection(label: HTMLElement, section: string) {
+
+            const element = this.findSectionElement(label, section);
+
+            if (element) {
+
+                element.remove();
+
+                this.eventTabSectionSelected.fire(undefined);
+            }
+        }
+
+        removeAllSections(label: HTMLElement) {
+
+            const sectionsElement = label.querySelectorAll(".TabPaneLabelSections")[0] as HTMLDivElement;
+
+            sectionsElement.innerHTML = "";
+
+            this.eventTabSectionSelected.fire(undefined);
+        }
+
+        addTabSection(label: HTMLElement, section: string) {
+
+            const sectionsElement = label.querySelectorAll(".TabPaneLabelSections")[0] as HTMLDivElement;
+
+            const sectionElement = document.createElement("div");
+
+            sectionElement.classList.add("TabPaneLabelSection");
+            sectionElement.id = "section-" + section;
+
+            sectionElement.innerHTML = section;
+
+            sectionsElement.appendChild(sectionElement);
+
+            sectionElement.addEventListener("click", e => {
+
+                if (sectionElement.classList.contains("selected")) {
+
+                    sectionElement.classList.remove("selected");
+
+                    this.eventTabSectionSelected.fire(undefined);
+
+                } else {
+
+                    for (let i = 0; i < sectionsElement.children.length; i++) {
+
+                        const elem = sectionsElement.children.item(i);
+                        elem.classList.remove("selected");
+                    }
+
+                    sectionElement.classList.add("selected");
+
+                    this.eventTabSectionSelected.fire(section);
+                }
+            });
+        }
+
+        selectTabSection(label: HTMLElement, section: string) {
+
+            const sectionElements = label.querySelectorAll(".TabPaneLabelSection");
+
+            let found = false;
+
+            for (let i = 0; i < sectionElements.length; i++) {
+
+                const element = sectionElements.item(i) as HTMLDivElement;
+
+                element.classList.remove("selected");
+
+                if (section && element.id === "section-" + section) {
+
+                    element.classList.add("selected");
+
+                    found = true;
+                }
+            }
+
+            this.eventTabSectionSelected.fire(found ? section : undefined);
+        }
+
         addTab(label: string, icon: IImage, content: Control, closeable = false, selectIt = true): void {
 
             const labelElement = this.makeLabel(label, icon, closeable);
@@ -224,6 +322,22 @@ namespace colibri.ui.controls {
                 this.selectTab(labelElement);
             });
 
+            if (closeable) {
+
+                labelElement.addEventListener("mouseup", e => {
+
+                    if (e.button === 1) {
+
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+
+                        this.closeTabLabel(labelElement);
+
+                        return;
+                    }
+                });
+            }
+
             const contentArea = new Control("div", "ContentArea");
             contentArea.add(content);
             this._contentAreaElement.appendChild(contentArea.getElement());
@@ -233,6 +347,7 @@ namespace colibri.ui.controls {
             if (selectIt) {
 
                 if (this._titleBarElement.childElementCount === 1) {
+
                     this.selectTab(labelElement);
                 }
             }
@@ -261,6 +376,7 @@ namespace colibri.ui.controls {
         }
 
         incrementTabIconSize(amount: number) {
+
             this.setTabIconSize(this._iconSize + amount);
         }
 
@@ -275,6 +391,10 @@ namespace colibri.ui.controls {
             const textElement = document.createElement("span");
             textElement.innerHTML = label;
             labelElement.appendChild(textElement);
+
+            const sectionsElement = document.createElement("div");
+            sectionsElement.classList.add("TabPaneLabelSections");
+            labelElement.appendChild(sectionsElement);
 
             if (closeable) {
 

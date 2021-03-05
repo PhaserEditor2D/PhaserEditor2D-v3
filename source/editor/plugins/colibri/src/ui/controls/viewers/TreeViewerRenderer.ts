@@ -180,7 +180,59 @@ namespace colibri.ui.controls.viewers {
 
             this.renderLabel(args, x, y);
 
+            if (args.viewer.isHighlightMatches() && args.viewer.getFilterText().length > 0) {
+
+                this.defaultRenderMatchHighlight(args, x, y);
+            }
+
             ctx.restore();
+        }
+
+        protected renderMatchHighlight(args: RenderCellArgs, x: number, y: number, label: string) {
+
+            const result = args.viewer.getMatchesResult(label);
+
+            if (result && result.matches) {
+
+                const start = this.measureText(args, result.measureStart);
+                const width = this.measureText(args, result.measureMatch);
+                const cellRight = args.x + args.w;
+
+                if (x + start > cellRight) {
+
+                    return;
+                }
+
+                const ctx = args.canvasContext;
+
+                ctx.save();
+
+                const selected = args.viewer.isSelected(args.obj);
+
+                const theme = controls.Controls.getTheme();
+
+                ctx.strokeStyle = selected ? theme.viewerSelectionForeground : theme.viewerForeground;
+                ctx.lineWidth = 1;
+
+                ctx.beginPath();
+
+                ctx.moveTo(x + start, y + 2 + 0.5);
+
+                ctx.lineTo(Math.min(cellRight - 2,  x + start + width), y + 2 + 0.5);
+
+                ctx.stroke();
+
+                ctx.closePath();
+
+                ctx.restore();
+            }
+        }
+
+        private defaultRenderMatchHighlight(args: RenderCellArgs, x: number, y: number) {
+
+            const label = args.viewer.getLabelProvider().getLabel(args.obj);
+
+            this.renderMatchHighlight(args, x, y, label);
         }
 
         protected renderLabel(args: RenderCellArgs, x: number, y: number) {
@@ -224,12 +276,17 @@ namespace colibri.ui.controls.viewers {
 
                 ctx.fillText(part.text, cursor, y);
 
-                const metrics = ctx.measureText(part.text);
+                const width = this.measureText(args, part.text);
 
-                cursor += metrics.width;
+                cursor += width;
             }
 
             ctx.restore();
+        }
+
+        protected measureText(args: RenderCellArgs, text: string): number {
+
+            return args.canvasContext.measureText(text).width;
         }
 
         protected prepareContextForRenderCell(args: RenderCellArgs) {

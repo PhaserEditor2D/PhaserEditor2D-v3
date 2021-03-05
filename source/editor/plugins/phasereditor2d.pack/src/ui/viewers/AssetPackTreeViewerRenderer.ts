@@ -2,15 +2,21 @@ namespace phasereditor2d.pack.ui.viewers {
 
     import controls = colibri.ui.controls;
 
-    export class AssetPackTreeViewerRenderer extends controls.viewers.ShadowGridTreeViewerRenderer {
+    export class AssetPackTreeViewerRenderer extends controls.viewers.GridTreeViewerRenderer {
 
         constructor(viewer: controls.viewers.TreeViewer, flat: boolean) {
             super(viewer, flat, false);
 
-            const types = core.TYPES.filter(
-                type => type === core.ATLAS_TYPE || type.toLowerCase().indexOf("atlas") < 0);
+            this.setSectionCriteria(obj => this.isObjectSection(obj));
+            this.setPaintItemShadow(true);
+            this.setShadowChildCriteria(obj => this.isShadowAsChild(obj));
+        }
 
-            this.setSections(types);
+        protected isObjectSection(obj: any) {
+
+            return core.TYPES_SET.has(obj)
+                || obj instanceof pack.core.AssetPack
+                || (obj instanceof colibri.core.io.FilePath && obj.isFolder());
         }
 
         isShadowAsChild(obj: any) {

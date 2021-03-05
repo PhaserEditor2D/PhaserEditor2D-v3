@@ -1,8 +1,13 @@
 namespace phasereditor2d.animations.ui.editors {
 
-    const SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES = new Set(
+    const grouping = pack.ui.viewers.AssetPackGrouping;
+
+    import io = colibri.core.io;
+
+    const PACK_ITEM_TYPES = new Set(
         [
             pack.core.IMAGE_TYPE,
+            pack.core.SVG_TYPE,
             pack.core.ATLAS_TYPE,
             pack.core.ATLAS_XML_TYPE,
             pack.core.MULTI_ATLAS_TYPE,
@@ -28,35 +33,72 @@ namespace phasereditor2d.animations.ui.editors {
 
             return this._getPacks()
 
-                .flatMap(pack => pack.getItems())
-
-                .filter(item => SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES.has(item.getType()));
+                .flatMap(pack => this.filterItems(pack))
         }
 
-        getRoots(input: any): any[] {
+        private filterItems(pack: pack.core.AssetPack) {
 
-            return this.getPackItems();
+            return pack.getItems().filter(i => PACK_ITEM_TYPES.has(i.getType()));
+        }
+
+        getRoots_(input: any): any[] {
+
+            return [
+                pack.core.ATLAS_TYPE,
+                pack.core.SPRITESHEET_TYPE,
+                pack.core.IMAGE_TYPE,
+            ];
+        }
+
+        getRoots(input: any) {
+
+            const type = grouping.getGroupingPreference();
+
+            switch (type) {
+
+                case grouping.GROUP_ASSETS_BY_TYPE:
+
+                    return [
+                        pack.core.ATLAS_TYPE,
+                        pack.core.SPRITESHEET_TYPE,
+                        pack.core.IMAGE_TYPE,
+                        pack.core.SVG_TYPE
+                    ];
+
+                case grouping.GROUP_ASSETS_BY_PACK:
+
+                    return pack.core.AssetPackUtils.distinct(this.getPackItems().map(i => i.getPack()));
+
+                case grouping.GROUP_ASSETS_BY_LOCATION:
+
+                    return colibri.ui.ide.FileUtils.distinct([
+                        ...grouping.getAssetsFolders(this.getPackItems().map(i => i.getPack()))])
+            }
+
+            return [];
         }
 
         getChildren(parent: any): any[] {
 
-            if (typeof (parent) === "string") {
+            if (parent === pack.core.ATLAS_TYPE) {
 
-                switch (parent) {
-                    case pack.core.ATLAS_TYPE:
-                        return this.getPackItems()
-                            .filter(item => item instanceof pack.core.BaseAtlasAssetPackItem);
+                return this.getPackItems()
+                    .filter(item => pack.core.AssetPackUtils.isAtlasType(item.getType()));
+            }
 
-                    case pack.core.SPRITESHEET_TYPE:
-                        return this.getPackItems()
-                            .filter(item => item instanceof pack.core.SpritesheetAssetPackItem);
-                }
+            if (PACK_ITEM_TYPES.has(parent)) {
 
                 return this.getPackItems()
                     .filter(item => item.getType() === parent);
             }
 
-            return super.getChildren(parent);
+            if (parent instanceof io.FilePath) {
+
+                return this.getPackItems().filter(i => grouping.getItemFolder(i) === parent);
+            }
+
+            return super.getChildren(parent)
+                .filter(obj => !(obj instanceof pack.core.AssetPackItem) || PACK_ITEM_TYPES.has(obj.getType()));
         }
     }
 }

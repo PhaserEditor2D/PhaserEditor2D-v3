@@ -22,36 +22,42 @@ Important:
 
 /* input */
 
-.dark input, .dark textarea {
+.dark input,
+.dark textarea {
     background: #2e2e2e;
     color: #f0f0f0;
     border-style: solid;
     border-width: 1px;
-    border-color: #4e4e4e;
+    border-color: #646464;
 }
 
 .dark input[type="file"] {
     display: none;
 }
 
-.dark input:focus, .dark textarea:focus {
+.dark input:focus,
+.dark textarea:focus {
     background: #2a2a2a;
     border-color: #f59c5c;
     outline-style: none;
 }
 
-.dark input:read-only, .dark textarea:read-only {
-    background: #4a4a4a;
+.dark input:read-only,
+.dark textarea:read-only {
+    background: rgba(0, 0, 0, 0.05);
 }
 
 /* button */
 
 .dark button,
-.dark input[type="submit"] {
-    background: #323232;
+.dark input[type="submit"]
+
+/* , .dark .ToolbarItem */
+    {
+    background: #5f5f5f;
     border-color: #646464;
     color: #f0f0f0;
-    text-shadow: 1px 1px #0e0e0e;    
+    text-shadow: 1px 1px #0e0e0e;
     border-style: solid;
     border-width: 1px;
     border-radius: 3px;
@@ -63,16 +69,18 @@ Important:
     text-shadow: 1px 1px rgba(255, 255, 255, 0.4);
 }
 
-.dark button:hover {
-    background: #3b3b3b;
+.dark button:hover,
+.dark .ToolbarItem:hover {
+    background: #747474;
 }
 
 .dark button[disabled]:hover {
-    background: #353535;
+    background: #5f5f5f;
 }
 
-.dark button:active {
-    background: #343434;
+.dark button:active,
+.dark .ToolbarItem.active {
+    background: #4f4f4f;
 }
 
 /* Tooltip */
@@ -96,6 +104,16 @@ Important:
 
 .dark .TabPaneLabel.selected {
     text-shadow: 1px 1px #0e0e0e;
+}
+
+.dark .TabPaneLabelSection.selected {
+    border-bottom-color: inherit;
+    color: inherit;
+}
+
+.dark .TabPane.activePart .TabPaneLabelSection.selected {
+    border-bottom-color: #f59c5c !important;
+    color: #f59c5c;
 }
 
 /* Part */
@@ -150,41 +168,34 @@ Important:
 
 /* Property Page */
 
+.dark .PropertySectionPane {
+    background: rgba(255, 255, 255, 0.05);
+}
+
 .dark .PropertyTitleArea {
-    background: #20202088;    
+    color: #b0b0b0;
 }
 
 .dark .PropertyTitleArea label,
 .dark .PropertySubTitleLabel {
-    font-weight: bold;
+    /* text-shadow: 1px 1px #0e0e0e; */
 }
 
 /* Toolbar */
 
 .dark .ToolbarItem {
-    background: #323232;
-    border-color: #646464;
-    border-style: solid;
     text-shadow: 1px 1px #0e0e0e;
+    border-color: transparent;
 }
 
-.dark .ToolbarItem:hover,
-.dark .IconButton:hover {
-    background: #424242;
-    border-color: #757575;
-}
 
-.dark .ToolbarItem:active,
 .dark .ToolbarItem.ActionSelected {
-    background: rgba(255, 255, 255, 0.3);
+    background: #3f3f3f;
+    border-color: #858585;
 }
 
 .dark .IconButton:hover {
     background: rgba(255, 255, 255, 0.1);
-}
-
-.dark .ToolbarItem.ActionSelected {
-    border-color: #858585;
 }
 
 /* Zoom controls */
@@ -217,19 +228,21 @@ Important:
 
 .dark .Menu {
     list-style-type: none;
-    background: #2f2f2f;
+    background: #525252;
     padding: 0px;
     margin: 0px;
     border-style: solid;
     border-width: 1px;
-    border-color: #4f4f4f;
+    border-color: #6f6f6f;
+    padding: 1px;
 }
 
 .dark .MenuItemSeparator {
-    background: #3f3f3f;
+    background: rgba(255, 255, 255, 0.1);
 }
 
-.dark .MenuItem:hover, .dark .MenuItemSelected {
+.dark .MenuItem:hover,
+.dark .MenuItemSelected {
     background: #f0a050;
     color: #0e0e0e;
 }

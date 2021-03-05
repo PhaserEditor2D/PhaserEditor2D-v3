@@ -54,7 +54,16 @@ namespace phasereditor2d.pack.ui.viewers {
 
             for (const obj of items) {
 
-                if (obj instanceof pack.core.AssetPackItem) {
+                if (obj instanceof pack.core.AssetPack) {
+
+                    const pack = this._packs.find(p => p.getFile() === obj.getFile());
+
+                    if (pack) {
+
+                        set.add(pack);
+                    }
+
+                } else if (obj instanceof pack.core.AssetPackItem) {
 
                     const item = this.getFreshItem(obj);
 
