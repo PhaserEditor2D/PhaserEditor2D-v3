@@ -138,7 +138,8 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 
 .TabPaneLabel span {
-    margin: 3px;
+    margin: 3px 0px 0px 3px;
+    align-self: center;
 }
 
 .TabPaneLabelSections {
@@ -148,6 +149,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .TabPaneLabelSection {
     margin-left: 10px;
+    margin-top: 3px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: transparent;
