@@ -21,7 +21,7 @@ namespace phasereditor2d.blocks {
             reg.addExtension(
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_BLOCKS
-                ], true)
+                ])
             );
         }
 
