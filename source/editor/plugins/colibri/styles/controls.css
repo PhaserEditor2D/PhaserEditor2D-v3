@@ -301,6 +301,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     white-space: nowrap;
     word-break: break-all;
     text-overflow: ellipsis;
+    align-self: center;
 }
 
 .PropertyFormArea {
