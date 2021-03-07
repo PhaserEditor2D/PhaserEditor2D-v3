@@ -40,13 +40,6 @@ namespace colibri {
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
 
-            // // common icons
-
-            // reg.addExtension(
-            //     colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-            //     ], true)
-            // );
-
             // theme icons
 
             reg.addExtension(
