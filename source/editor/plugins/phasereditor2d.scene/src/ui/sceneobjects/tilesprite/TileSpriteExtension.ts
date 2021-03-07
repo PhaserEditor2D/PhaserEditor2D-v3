@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 phaserTypeName: "Phaser.GameObjects.TileSprite",
                 typeName: "TileSprite",
                 category: SCENE_OBJECT_IMAGE_CATEGORY,
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_IMAGE_TYPE)
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_TILESPRITE_TYPE)
             });
         }
 
