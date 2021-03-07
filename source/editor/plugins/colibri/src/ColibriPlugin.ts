@@ -19,6 +19,8 @@ namespace colibri {
     export const ICON_COLOR = "color";
     export const ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
     export const ICON_CONTROL_TREE_EXPAND = "tree-expand";
+    export const ICON_CONTROL_TREE_EXPAND_LEFT = "tree-expand-left";
+    export const ICON_CONTROL_TREE_COLLAPSE_LEFT = "tree-collapse-left";
     export const ICON_CONTROL_SECTION_COLLAPSE = "section-collapse";
     export const ICON_CONTROL_SECTION_EXPAND = "section-expand";
     export const ICON_CONTROL_CLOSE = "close";
@@ -66,6 +68,8 @@ namespace colibri {
                     ICON_CONTROL_CLOSE,
                     ICON_CONTROL_TREE_COLLAPSE,
                     ICON_CONTROL_TREE_EXPAND,
+                    ICON_CONTROL_TREE_EXPAND_LEFT,
+                    ICON_CONTROL_TREE_COLLAPSE_LEFT,
                     ICON_CONTROL_SECTION_COLLAPSE,
                     ICON_CONTROL_SECTION_EXPAND,
                 ])

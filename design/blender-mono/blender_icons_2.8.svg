@@ -14,9 +14,9 @@
    height="640"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
    version="1.0"
-   sodipodi:docname="blender_icons 2.81 - SMALL.svg"
+   sodipodi:docname="blender_icons_2.8.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    style="display:inline;enable-background:new"
    inkscape:export-filename="C:\Users\Andrzej Ambroż\Desktop\ICONS - no backdrop.png"
@@ -6930,16 +6930,16 @@
      objecttolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="96.895184"
-     inkscape:cy="497.95432"
+     inkscape:zoom="1"
+     inkscape:cx="414.31513"
+     inkscape:cy="45.861768"
      inkscape:document-units="px"
      inkscape:current-layer="layer8"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1051"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:window-width="1864"
+     inkscape:window-height="1016"
+     inkscape:window-x="56"
+     inkscape:window-y="27"
      inkscape:snap-nodes="true"
      inkscape:snap-bbox="true"
      showguides="false"
@@ -23619,6 +23619,69 @@
            id="path28215" />
       </g>
     </g>
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.60000002;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:new"
+       d="M 284.5 681.75 C 280.0912 681.75 276.5 685.3412 276.5 689.75 C 276.5 694.1588 280.0912 697.75 284.5 697.75 C 288.9088 697.75 292.5 694.1588 292.5 689.75 C 292.5 685.3412 288.9088 681.75 284.5 681.75 z M 282.48633 685.24414 A 0.50005 0.50005 0 0 1 282.84961 686.10352 L 279.70312 689.25 L 290.49609 689.25 A 0.50005 0.50005 0 1 1 290.49609 690.25 L 279.70312 690.25 L 282.84961 693.39648 A 0.50005 0.50005 0 1 1 282.14258 694.10352 L 278.14258 690.10352 A 0.50005 0.50005 0 0 1 278.14258 689.39648 L 282.14258 685.39648 A 0.50005 0.50005 0 0 1 282.48633 685.24414 z "
+       id="circle13982-6"
+       inkscape:export-filename="./tree-expand-left.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.60000002;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:new"
+       d="m 324.56201,681.49748 c 4.4088,0 8,3.5912 8,8 0,4.4088 -3.5912,8 -8,8 -4.4088,0 -8,-3.5912 -8,-8 0,-4.4088 3.5912,-8 8,-8 z m 2.01367,3.49414 a 0.50005,0.50005 0 0 0 -0.36328,0.85938 l 3.14649,3.14648 h -10.79297 a 0.50005,0.50005 0 1 0 0,1 h 10.79297 l -3.14649,3.14648 a 0.50005,0.50005 0 1 0 0.70703,0.70704 l 4,-4 a 0.50005,0.50005 0 0 0 0,-0.70704 l -4,-4 a 0.50005,0.50005 0 0 0 -0.34375,-0.15234 z"
+       id="circle13982-6-1"
+       inkscape:export-filename="./tree-collapse-left.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.60000002;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:new"
+       d="m 280.469,730.62626 c -8.8176,0 -16,7.1824 -16,16 0,8.8176 7.1824,16 16,16 8.8176,0 16,-7.1824 16,-16 0,-8.8176 -7.1824,-16 -16,-16 z m -4.02734,6.98828 a 1.0001,1.0001 0 0 1 0.72656,1.71876 l -6.29298,6.29296 h 21.58594 a 1.0001,1.0001 0 1 1 0,2 h -21.58594 l 6.29298,6.29296 a 1.0001,1.0001 0 1 1 -1.41406,1.41408 l -8,-8 a 1.0001,1.0001 0 0 1 0,-1.41408 l 8,-8 a 1.0001,1.0001 0 0 1 0.6875,-0.30468 z"
+       id="circle13982-6-7"
+       inkscape:export-filename="./tree-expand-left@2x.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.60000002;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:new"
+       d="m 332.03101,730.87374 c 8.8176,0 16,7.1824 16,16 0,8.8176 -7.1824,16 -16,16 -8.8176,0 -16,-7.1824 -16,-16 0,-8.8176 7.1824,-16 16,-16 z m 4.02734,6.98828 a 1.0001,1.0001 0 0 0 -0.72656,1.71876 l 6.29298,6.29296 h -21.58594 a 1.0001,1.0001 0 1 0 0,2 h 21.58594 l -6.29298,6.29296 a 1.0001,1.0001 0 1 0 1.41406,1.41408 l 8,-8 a 1.0001,1.0001 0 0 0 0,-1.41408 l -8,-8 a 1.0001,1.0001 0 0 0 -0.6875,-0.30468 z"
+       id="circle13982-6-1-5"
+       inkscape:export-filename="./tree-collapse-left@2x.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.6;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:new"
+       d="m 580.25,725.56439 c -4.4088,0 -8,3.5912 -8,8 0,4.4088 3.5912,8 8,8 4.4088,0 8,-3.5912 8,-8 0,-4.4088 -3.5912,-8 -8,-8 z m -2.01367,3.49414 a 0.50005,0.50005 0 0 1 0.36328,0.85938 l -3.14649,3.14648 h 10.79297 a 0.50005,0.50005 0 1 1 0,1 h -10.79297 l 3.14649,3.14648 a 0.50005,0.50005 0 1 1 -0.70703,0.70704 l -4,-4 a 0.50005,0.50005 0 0 1 0,-0.70704 l 4,-4 a 0.50005,0.50005 0 0 1 0.34375,-0.15234 z"
+       id="circle13982-6-5"
+       inkscape:export-filename="./tree-expand-left.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.6;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:new"
+       d="m 620.31201,725.31187 c 4.4088,0 8,3.5912 8,8 0,4.4088 -3.5912,8 -8,8 -4.4088,0 -8,-3.5912 -8,-8 0,-4.4088 3.5912,-8 8,-8 z m 2.01367,3.49414 a 0.50005,0.50005 0 0 0 -0.36328,0.85938 l 3.14649,3.14648 h -10.79297 a 0.50005,0.50005 0 1 0 0,1 h 10.79297 l -3.14649,3.14648 a 0.50005,0.50005 0 1 0 0.70703,0.70704 l 4,-4 a 0.50005,0.50005 0 0 0 0,-0.70704 l -4,-4 a 0.50005,0.50005 0 0 0 -0.34375,-0.15234 z"
+       id="circle13982-6-1-7"
+       inkscape:export-filename="./tree-collapse-left.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.6;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:new"
+       d="m 576.219,774.44065 c -8.8176,0 -16,7.1824 -16,16 0,8.8176 7.1824,16 16,16 8.8176,0 16,-7.1824 16,-16 0,-8.8176 -7.1824,-16 -16,-16 z m -4.02734,6.98828 a 1.0001,1.0001 0 0 1 0.72656,1.71876 l -6.29298,6.29296 h 21.58594 a 1.0001,1.0001 0 1 1 0,2 h -21.58594 l 6.29298,6.29296 a 1.0001,1.0001 0 1 1 -1.41406,1.41408 l -8,-8 a 1.0001,1.0001 0 0 1 0,-1.41408 l 8,-8 a 1.0001,1.0001 0 0 1 0.6875,-0.30468 z"
+       id="circle13982-6-7-4"
+       inkscape:export-filename="./tree-expand-left@2x.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.6;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:new"
+       d="m 627.78101,774.68813 c 8.8176,0 16,7.1824 16,16 0,8.8176 -7.1824,16 -16,16 -8.8176,0 -16,-7.1824 -16,-16 0,-8.8176 7.1824,-16 16,-16 z m 4.02734,6.98828 a 1.0001,1.0001 0 0 0 -0.72656,1.71876 l 6.29298,6.29296 h -21.58594 a 1.0001,1.0001 0 1 0 0,2 h 21.58594 l -6.29298,6.29296 a 1.0001,1.0001 0 1 0 1.41406,1.41408 l 8,-8 a 1.0001,1.0001 0 0 0 0,-1.41408 l -8,-8 a 1.0001,1.0001 0 0 0 -0.6875,-0.30468 z"
+       id="circle13982-6-1-5-1"
+       inkscape:export-filename="./tree-collapse-left@2x.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
   <g
      inkscape:groupmode="layer"
