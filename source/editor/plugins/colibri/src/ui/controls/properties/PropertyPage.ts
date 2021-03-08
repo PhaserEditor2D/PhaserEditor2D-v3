@@ -129,7 +129,7 @@ namespace colibri.ui.controls.properties {
 
         private updateExpandIcon() {
 
-            const icon = this.isExpanded() ? colibri.ICON_CONTROL_TREE_COLLAPSE : colibri.ICON_CONTROL_TREE_EXPAND;
+            const icon = this.isExpanded() ? colibri.ICON_CONTROL_SECTION_COLLAPSE : colibri.ICON_CONTROL_SECTION_EXPAND;
 
             const image = ColibriPlugin.getInstance().getIcon(icon);
 

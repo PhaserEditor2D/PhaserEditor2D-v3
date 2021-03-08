@@ -36,7 +36,7 @@ namespace phasereditor2d.webContentTypes {
                     ICON_FILE_SCRIPT,
                     ICON_FILE_TEXT,
                     ICON_FILE_FONT
-                ], true)
+                ])
             );
 
             // content types

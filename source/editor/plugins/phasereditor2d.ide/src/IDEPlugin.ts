@@ -49,7 +49,7 @@ namespace phasereditor2d.ide {
             reg.addExtension(
                 colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_PLAY
-                ], true));
+                ]));
 
             // keys
 

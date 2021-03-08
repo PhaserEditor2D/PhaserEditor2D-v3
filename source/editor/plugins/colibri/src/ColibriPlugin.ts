@@ -19,6 +19,10 @@ namespace colibri {
     export const ICON_COLOR = "color";
     export const ICON_CONTROL_TREE_COLLAPSE = "tree-collapse";
     export const ICON_CONTROL_TREE_EXPAND = "tree-expand";
+    export const ICON_CONTROL_TREE_EXPAND_LEFT = "tree-expand-left";
+    export const ICON_CONTROL_TREE_COLLAPSE_LEFT = "tree-collapse-left";
+    export const ICON_CONTROL_SECTION_COLLAPSE = "section-collapse";
+    export const ICON_CONTROL_SECTION_EXPAND = "section-expand";
     export const ICON_CONTROL_CLOSE = "close";
     export const ICON_CONTROL_DIRTY = "dirty";
 
@@ -30,40 +34,37 @@ namespace colibri {
             return this._instance ?? (this._instance = new ColibriPlugin());
         }
 
-        private _openingProject: boolean;
-
         private constructor() {
             super("colibri");
-
-            this._openingProject = false;
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
 
-            reg.addExtension(
-                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_FILE,
-                    ICON_PLUS,
-                    ICON_FOLDER,
-                    ICON_MINUS,
-                    ICON_DELETE,
-                    ICON_KEYMAP,
-                    ICON_COLOR,
-                    ICON_CONTROL_TREE_COLLAPSE,
-                    ICON_CONTROL_TREE_EXPAND,
-                    ICON_CONTROL_CLOSE,
-                    ICON_CONTROL_DIRTY
-                ], true)
-            );
+            // theme icons
 
             reg.addExtension(
                 colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
+                    ICON_KEYMAP,
+                    ICON_CONTROL_DIRTY,
+                    ICON_PLUS,
+                    ICON_MINUS,
+                    ICON_DELETE,
+                    ICON_COLOR,
+                    ICON_FILE,
+                    ICON_FOLDER,
                     ICON_ZOOM_RESET,
                     ICON_ZOOM_IN,
                     ICON_ZOOM_OUT,
                     ICON_MENU,
                     ICON_SMALL_MENU,
-                    ICON_CHECKED
+                    ICON_CHECKED,
+                    ICON_CONTROL_CLOSE,
+                    ICON_CONTROL_TREE_COLLAPSE,
+                    ICON_CONTROL_TREE_EXPAND,
+                    ICON_CONTROL_TREE_EXPAND_LEFT,
+                    ICON_CONTROL_TREE_COLLAPSE_LEFT,
+                    ICON_CONTROL_SECTION_COLLAPSE,
+                    ICON_CONTROL_SECTION_EXPAND,
                 ])
             );
 

@@ -334,7 +334,7 @@ namespace colibri.ui.controls.viewers {
                     sectionStart = result.sectionStart;
                     sectionEnd = result.sectionEnd;
 
-                } 
+                }
                 // else {
 
                 //     if (isSection && depth === 0) {
@@ -355,11 +355,12 @@ namespace colibri.ui.controls.viewers {
         private paintIcon(ctx: CanvasRenderingContext2D, obj: any, x: number, y: number, expanded: boolean, treeIconList: TreeIconInfo[]) {
 
             const viewer = this.getViewer();
-            const cellSize = viewer.getCellSize();
+
+            const isSection = this.isSection(obj);
 
             const themeIcon = ColibriPlugin.getInstance().getIcon(expanded ?
-                ICON_CONTROL_TREE_COLLAPSE
-                : ICON_CONTROL_TREE_EXPAND);
+                (isSection ? ICON_CONTROL_SECTION_COLLAPSE : ICON_CONTROL_TREE_COLLAPSE_LEFT)
+                : (isSection ? ICON_CONTROL_SECTION_EXPAND : ICON_CONTROL_TREE_EXPAND_LEFT));
 
             let icon: IImage = themeIcon;
 
@@ -370,7 +371,17 @@ namespace colibri.ui.controls.viewers {
 
             ctx.save();
 
-            const iconX = x + 5;
+            let iconX: number;
+
+            if (isSection) {
+
+                iconX = x + 5;
+
+            } else {
+
+                const cellSize = this.getViewer().getCellSize();
+                iconX = x + cellSize - RENDER_ICON_SIZE + 5;
+            }
 
             icon.paint(ctx, iconX, y, RENDER_ICON_SIZE, RENDER_ICON_SIZE, false);
 

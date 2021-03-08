@@ -21,9 +21,8 @@ namespace colibri.inspector {
             reg.addExtension(
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_INSPECTOR
-                ], true)
+                ])
             );
-
         }
     }
 

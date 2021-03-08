@@ -43,7 +43,7 @@ namespace phasereditor2d.pack {
                     ICON_ANIMATIONS,
                     ICON_TILEMAP,
                     ICON_TILEMAP_LAYER
-                ], true)
+                ])
             );
 
             // content type resolvers
