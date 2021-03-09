@@ -6,7 +6,6 @@
 * View: the tab sections are collapsible.
 * Viewer: improved cell renderer. It is always square by default.
 
-
 ## v3.11.0 - Mar 5, 2021
 
 ## Added
