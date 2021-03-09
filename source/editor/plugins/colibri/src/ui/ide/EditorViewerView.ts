@@ -137,8 +137,6 @@ namespace colibri.ui.ide {
                         tabsPane.addTabSection(tabLabel, section);
                     }
 
-                    console.log("selected " + provider.getSelectedTabSection());
-
                     tabsPane.selectTabSection(tabLabel, provider.getSelectedTabSection());
                 }
 

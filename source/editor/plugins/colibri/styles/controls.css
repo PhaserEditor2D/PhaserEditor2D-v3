@@ -147,6 +147,11 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     padding-top: 1px;
 }
 
+.TabPaneLabelSections .IconControlCanvas {
+    margin-top: 3px;
+    margin-left: 10px;
+}
+
 .TabPaneLabelSection {
     margin-left: 10px;
     margin-top: 3px;

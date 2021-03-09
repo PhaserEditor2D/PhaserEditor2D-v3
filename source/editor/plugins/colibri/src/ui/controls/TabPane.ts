@@ -246,6 +246,38 @@ namespace colibri.ui.controls {
 
             const sectionsElement = label.querySelectorAll(".TabPaneLabelSections")[0] as HTMLDivElement;
 
+            if (sectionsElement.children.length === 0) {
+
+                const expandIcon = ColibriPlugin.getInstance().getIcon(ICON_CONTROL_SECTION_EXPAND);
+                const collapseIcon = ColibriPlugin.getInstance().getIcon(ICON_CONTROL_SECTION_COLLAPSE_LEFT);
+
+                const iconControl = new IconControl(expandIcon);
+
+                sectionsElement.appendChild(iconControl.getCanvas());
+
+                iconControl.getCanvas().addEventListener("mousedown", e => {
+
+                    if (iconControl.getIcon() === expandIcon) {
+
+                        iconControl.setIcon(collapseIcon);
+
+                    } else {
+
+                        iconControl.setIcon(expandIcon);
+                    }
+
+                    const visible = iconControl.getIcon() === expandIcon;
+
+                    const sections = sectionsElement.querySelectorAll(".TabPaneLabelSection");
+                    for (let i = 0; i < sections.length; i++) {
+
+                        const elem = sections.item(i) as HTMLElement;
+
+                        elem.style.display = visible ? "block" : "none";
+                    }
+                });
+            }
+
             const sectionElement = document.createElement("div");
 
             sectionElement.classList.add("TabPaneLabelSection");
