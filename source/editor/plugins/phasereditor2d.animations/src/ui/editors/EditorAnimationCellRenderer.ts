@@ -11,6 +11,11 @@ namespace phasereditor2d.animations.ui.editors {
             this._editor = editor;
         }
 
+        get layout(): "full-width" {
+
+            return "full-width";
+        }
+
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
             const anim = args.obj as Phaser.Animations.Animation;
