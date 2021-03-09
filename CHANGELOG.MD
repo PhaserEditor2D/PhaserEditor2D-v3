@@ -2,6 +2,7 @@
 
 ## dev
 
+* Get latest Phaser v3.53.1.
 * View: the tab sections are collapsible.
 * Viewer: improved cell renderer. It is always square by default.
 
