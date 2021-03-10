@@ -2,9 +2,18 @@
 
 ## dev
 
+## Added
+
 * Get latest Phaser v3.53.1.
 * View: the tab sections are collapsible.
-* Viewer: improved cell renderer. It is always square by default.
+
+## Updated
+
+* Viewer: improves cell renderer. It is always square by default.
+
+## Fixes
+
+* Asset Pack Editor: fixes duplicate context menu.
 
 ## v3.11.0 - Mar 5, 2021
 
