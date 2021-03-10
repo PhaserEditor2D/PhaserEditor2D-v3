@@ -4,13 +4,13 @@
 
 ## Added
 
-* Get latest Phaser v3.53.1.
 * View: the tab sections are collapsible.
-* Assets Viewer: improves BitmapFont cell renderer.
 
 ## Updated
 
+* Get latest Phaser v3.53.1.
 * Viewer: improves cell renderer. It is always square by default.
+* Assets Viewer: improves BitmapFont cell renderer.
 
 ## Fixes
 
