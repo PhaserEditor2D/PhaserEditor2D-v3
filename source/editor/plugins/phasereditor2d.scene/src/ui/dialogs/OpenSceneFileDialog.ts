@@ -102,29 +102,7 @@ namespace phasereditor2d.scene.ui.dialogs {
             if (parent instanceof viewers.PhaserTypeSymbol) {
 
                 return this.finder.getSceneFiles()
-                    .filter(file => {
-
-                        const data = this.finder.getSceneData(file);
-
-                        if (data.sceneType === core.json.SceneType.SCENE) {
-
-                            return parent.getPhaserType() === "Phaser.Scene";
-                        }
-
-                        const id = this.finder.getPrefabId(file);
-
-                        if (id) {
-
-                            const prefabData = this.finder.getPrefabData(id);
-
-                            const serializer = new core.json.Serializer(prefabData);
-                            const type = serializer.getPhaserType();
-
-                            return type === parent.getPhaserType();
-                        }
-
-                        return false;
-                    });
+                    .filter(file => this.finder.getScenePhaserType(file) === parent.getPhaserType());
             }
 
             if (parent instanceof io.FilePath && parent.isFolder()) {
