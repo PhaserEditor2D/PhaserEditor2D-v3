@@ -14,6 +14,8 @@
 ## Fixes
 
 * Asset Pack Editor: fixes duplicate context menu.
+* Scene Editor: panning with Alt key is selecting object under cursor. Fixed.
+* Blocks view sections: collapsing sections changes the tab's label height. Fixed.
 
 ## v3.11.0 - Mar 5, 2021
 
