@@ -5,6 +5,8 @@ namespace phasereditor2d.pack.core {
 
     export class BitmapFontAssetPackItem extends AssetPackItem {
 
+        private _fontData: IBitmapFontData;
+
         constructor(pack: AssetPack, data: any) {
             super(pack, data);
         }
@@ -19,11 +21,25 @@ namespace phasereditor2d.pack.core {
 
                 if (file) {
 
-                    return colibri.ui.ide.FileUtils.preloadFileString(file);
+                    const result = await colibri.ui.ide.FileUtils.preloadFileString(file);
+
+                    if (this._fontData === undefined || result === controls.PreloadResult.RESOURCES_LOADED) {
+
+                        const str = colibri.ui.ide.FileUtils.getFileString(file);
+
+                        this._fontData = parseFontData(str);
+                    }
+
+                    return result;
                 }
             }
 
             return controls.Controls.resolveNothingLoaded();
+        }
+
+        getFontData(): IBitmapFontData {
+
+            return this._fontData;
         }
 
         private createImageAsset() {
@@ -100,5 +116,48 @@ namespace phasereditor2d.pack.core {
 
             cache.addAsset(this);
         }
+    }
+
+    function getValue(node: Element, attribute: string) {
+
+        return parseInt(node.getAttribute(attribute), 10);
+    }
+
+    function parseFontData(xmlContent: string) {
+
+        const data: IBitmapFontData = {
+            chars: new Map()
+        };
+
+        try {
+
+            const xml = new DOMParser().parseFromString(xmlContent, "text/xml");
+
+            const letters = xml.getElementsByTagName('char');
+
+            // tslint:disable-next-line:prefer-for-of
+            for (let i = 0; i < letters.length; i++) {
+
+                const node = letters[i];
+
+                const charCode = getValue(node, 'id');
+                const gx = getValue(node, 'x');
+                const gy = getValue(node, 'y');
+                const gw = getValue(node, 'width');
+                const gh = getValue(node, 'height');
+
+                data.chars.set(charCode, {
+                    x: gx,
+                    y: gy,
+                    width: gw,
+                    height: gh,
+                });
+            }
+        } catch (e) {
+
+            console.error(e);
+        }
+
+        return data;
     }
 }
