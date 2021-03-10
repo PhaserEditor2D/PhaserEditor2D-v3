@@ -17,6 +17,10 @@ namespace phasereditor2d.scene.ui.blocks {
             } else if (obj === sceneobjects.ObjectList) {
 
                 return "List";
+
+            } else if (obj instanceof viewers.PhaserTypeSymbol) {
+
+                return obj.getDisplayName();
             }
 
             return super.getLabel(obj);

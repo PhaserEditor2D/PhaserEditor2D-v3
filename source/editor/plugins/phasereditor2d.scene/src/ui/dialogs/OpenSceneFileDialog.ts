@@ -74,7 +74,8 @@ namespace phasereditor2d.scene.ui.dialogs {
             super(viewer);
 
             this.setPaintItemShadow(true);
-            this.setSectionCriteria(obj => typeof obj === "string" || obj instanceof io.FilePath && obj.isFolder());
+            this.setSectionCriteria(obj => typeof obj === "string"
+                || obj instanceof io.FilePath && obj.isFolder() || obj instanceof viewers.PhaserTypeSymbol);
         }
     }
 
@@ -90,13 +91,42 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             if (type === grouping.GROUP_ASSETS_BY_TYPE) {
 
-                return ["Scenes", "Prefabs"];
+                return viewers.PhaserTypeSymbol.getSymbols().filter(s => this.getChildren(s).length > 0);
             }
 
             return colibri.ui.ide.FileUtils.distinct(this.finder.getSceneFiles().map(f => f.getParent()));
         }
 
         getChildren(parent: any): any[] {
+
+            if (parent instanceof viewers.PhaserTypeSymbol) {
+
+                return this.finder.getSceneFiles()
+                    .filter(file => {
+
+                        const data = this.finder.getSceneData(file);
+
+                        if (data.sceneType === core.json.SceneType.SCENE) {
+
+                            return parent.getPhaserType() === "Phaser.Scene";
+                        }
+
+                        const id = this.finder.getPrefabId(file);
+
+                        if (id) {
+
+                            const prefabData = this.finder.getPrefabData(id);
+
+                            const serializer = new core.json.Serializer(prefabData);
+                            const type = serializer.getPhaserType();
+
+                            return type === parent.getPhaserType();
+                        }
+
+                        return false;
+                    });
+            }
+
 
             switch (parent) {
 
