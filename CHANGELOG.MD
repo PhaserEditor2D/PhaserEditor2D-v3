@@ -6,6 +6,7 @@
 
 * Get latest Phaser v3.53.1.
 * View: the tab sections are collapsible.
+* Assets Viewer: improves BitmapFont cell renderer.
 
 ## Updated
 
