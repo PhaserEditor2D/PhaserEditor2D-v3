@@ -5,6 +5,8 @@
 ## Added
 
 * View: the tab sections are collapsible.
+* Go To Scene dialog: scene files are grouped by the Phaser type.
+* Scene Editor Blocks: when Prefabs tab-section is selected, the prefabs are grouped by Phaser type.
 
 ## Updated
 
