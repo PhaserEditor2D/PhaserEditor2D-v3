@@ -364,7 +364,7 @@ namespace colibri.ui.controls.viewers {
 
             let icon: IImage = themeIcon;
 
-            if (viewer.isSelected(obj)) {
+            if (!isSection && viewer.isSelected(obj)) {
 
                 icon = themeIcon.getNegativeThemeImage();
             }
