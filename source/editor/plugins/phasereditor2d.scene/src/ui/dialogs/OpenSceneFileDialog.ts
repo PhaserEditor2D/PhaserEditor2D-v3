@@ -127,20 +127,6 @@ namespace phasereditor2d.scene.ui.dialogs {
                     });
             }
 
-
-            switch (parent) {
-
-                case "Scenes":
-
-                    const prefabs = new Set(this.finder.getPrefabFiles());
-
-                    return this.finder.getSceneFiles().filter(f => !prefabs.has(f));
-
-                case "Prefabs":
-
-                    return this.finder.getPrefabFiles();
-            }
-
             if (parent instanceof io.FilePath && parent.isFolder()) {
 
                 return this.finder.getSceneFiles().filter(f => f.getParent() === parent);
