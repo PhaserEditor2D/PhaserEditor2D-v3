@@ -6,7 +6,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page,
-                "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent", false, true);
+                "phasereditor2d.scene.ui.sceneobjects.ParentSection", "Parent", false, true,
+                editor.properties.TAB_SECTION_DETAILS);
         }
 
         getSectionHelpPath() {

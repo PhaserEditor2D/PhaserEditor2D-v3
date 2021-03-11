@@ -2,14 +2,21 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     import controls = colibri.ui.controls;
 
+    export const TAB_SECTION_DETAILS = "Details";
+
     export class SceneEditorSectionProvider extends controls.properties.PropertySectionProvider {
 
         private _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
-            super();
+            super("phasereditor2d.scene.ui.editor.properties.SceneEditorSectionProvider");
 
             this._editor = editor;
+        }
+
+        getTabSections() {
+
+            return [TAB_SECTION_DETAILS];
         }
 
         getEmptySelectionObject() {

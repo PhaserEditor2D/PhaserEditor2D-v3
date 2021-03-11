@@ -3,7 +3,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class VisibleSection extends SceneGameObjectSection<sceneobjects.IVisibleLikeObject> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.VisibleSection", "Visible", false, true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.VisibleSection", "Visible", false, true,
+                editor.properties.TAB_SECTION_DETAILS);
         }
 
         getSectionHelpPath() {

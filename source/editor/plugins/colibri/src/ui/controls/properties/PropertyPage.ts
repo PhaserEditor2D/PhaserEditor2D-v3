@@ -211,7 +211,7 @@ namespace colibri.ui.controls.properties {
             }
         }
 
-        private updateWithSelection(): void {
+        public updateWithSelection(): void {
 
             if (!this._sectionProvider) {
                 return;
@@ -224,6 +224,7 @@ namespace colibri.ui.controls.properties {
             const sectionIdSet = new Set<string>();
 
             for (const section of list) {
+
                 sectionIdSet.add(section.getId());
             }
 
@@ -254,15 +255,15 @@ namespace colibri.ui.controls.properties {
 
             this._selection = selection;
 
+            const tabSection = this._sectionProvider.getSelectedTabSection();
+
             for (const pane of this._sectionPanes) {
 
                 const section = pane.getSection();
 
-                let show = false;
+                let show = section.canShowInTabSection(tabSection) && section.canEditNumber(n);
 
-                if (section.canEditNumber(n)) {
-
-                    show = true;
+                if (show) {
 
                     for (const obj of selection) {
 
