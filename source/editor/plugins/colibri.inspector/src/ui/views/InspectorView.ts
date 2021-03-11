@@ -122,7 +122,7 @@ namespace colibri.inspector.ui.views {
 
                     for (const tabSection of tabSections) {
 
-                        partFolder.addTabSection(tabLabel, tabSection);
+                        partFolder.addTabSection(tabLabel, tabSection, this.getId());
                     }
 
                     const selected = provider.getSelectedTabSection();

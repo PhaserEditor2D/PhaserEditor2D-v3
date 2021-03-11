@@ -245,20 +245,34 @@ namespace colibri.ui.controls {
             }
         }
 
-        addTabSection(label: HTMLElement, section: string) {
+        addTabSection(label: HTMLElement, section: string, tabId?: string) {
 
             const sectionsElement = label.querySelectorAll(".TabPaneLabelSections")[0] as HTMLDivElement;
+
+            let visible = true;
 
             if (sectionsElement.children.length === 0) {
 
                 const expandIcon = ColibriPlugin.getInstance().getIcon(ICON_CONTROL_SECTION_EXPAND);
                 const collapseIcon = ColibriPlugin.getInstance().getIcon(ICON_CONTROL_SECTION_COLLAPSE_LEFT);
 
-                const iconControl = new IconControl(expandIcon);
+                const storageKey = `TabPane[${tabId}].expanded`;
+                let icon = expandIcon;
+
+                if (tabId) {
+
+                    visible = (localStorage.getItem(storageKey) || "expanded") === "expanded";
+
+                    icon = visible ? expandIcon : collapseIcon;
+                }
+
+                const iconControl = new IconControl(icon);
+                iconControl.getCanvas().classList.add("CollapseIcon");
+                iconControl["__expanded"] = visible;
 
                 sectionsElement.appendChild(iconControl.getCanvas());
 
-                iconControl.getCanvas().addEventListener("mousedown", e => {
+                iconControl.getCanvas().addEventListener("click", e => {
 
                     if (iconControl.getIcon() === expandIcon) {
 
@@ -269,22 +283,35 @@ namespace colibri.ui.controls {
                         iconControl.setIcon(expandIcon);
                     }
 
-                    const visible = iconControl.getIcon() === expandIcon;
+                    visible = iconControl.getIcon() === expandIcon;
+                    iconControl["__expanded"] = visible;
 
                     const sections = sectionsElement.querySelectorAll(".TabPaneLabelSection");
+
                     for (let i = 0; i < sections.length; i++) {
 
                         const elem = sections.item(i) as HTMLElement;
 
                         elem.style.display = visible ? "block" : "none";
                     }
+
+                    if (tabId) {
+
+                        localStorage.setItem(storageKey, visible ? "expanded" : "collapsed");
+                    }
                 });
+
+            } else {
+
+                const iconControl = IconControl.getIconControlOf(sectionsElement.firstChild as HTMLElement);
+                visible = iconControl["__expanded"];
             }
 
             const sectionElement = document.createElement("div");
 
             sectionElement.classList.add("TabPaneLabelSection");
             sectionElement.id = "section-" + section;
+            sectionElement.style.display = visible ? "block" : "none";
 
             sectionElement.innerHTML = section;
 

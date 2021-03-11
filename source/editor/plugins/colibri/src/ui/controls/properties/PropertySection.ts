@@ -23,7 +23,6 @@ namespace colibri.ui.controls.properties {
 
             const localTabSection = localStorage.getItem(this.localStorageKey("tabSection"));
             this._tabSection = localTabSection || tabSectionByDefault;
-            console.log(this._tabSection);
         }
 
         abstract createForm(parent: HTMLDivElement);
