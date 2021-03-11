@@ -213,7 +213,9 @@ namespace colibri.ui.controls {
             viewerForeground: "#f0f0f0",
         };
 
-        static _theme: ITheme = Controls.DARK_THEME;
+        static DEFAULT_THEME = Controls.DARK_THEME;
+
+        static _theme: ITheme = Controls.DEFAULT_THEME;
 
         static switchTheme(): ITheme {
 
@@ -245,7 +247,7 @@ namespace colibri.ui.controls {
 
             if (!id) {
 
-                id = "light";
+                id = Controls.DEFAULT_THEME.id;
             }
 
             let tokens = [id];
@@ -276,7 +278,7 @@ namespace colibri.ui.controls {
                     .find(t => t.id === id);
             }
 
-            controls.Controls.setTheme(theme ?? controls.Controls.LIGHT_THEME);
+            controls.Controls.setTheme(theme ?? controls.Controls.DEFAULT_THEME);
         }
 
         static getTheme() {
