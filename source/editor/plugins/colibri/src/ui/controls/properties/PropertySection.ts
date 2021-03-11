@@ -22,7 +22,18 @@ namespace colibri.ui.controls.properties {
             this._updaters = [];
 
             const localTabSection = localStorage.getItem(this.localStorageKey("tabSection"));
-            this._tabSection = localTabSection || tabSectionByDefault;
+
+            if (localTabSection) {
+
+                if (localTabSection !== "undefined") {
+
+                    this._tabSection = localTabSection;
+                }
+
+            } else {
+
+                this._tabSection = tabSectionByDefault;
+            }
         }
 
         abstract createForm(parent: HTMLDivElement);
@@ -38,14 +49,7 @@ namespace colibri.ui.controls.properties {
 
             this._tabSection = tabSection;
 
-            if (tabSection) {
-
-                localStorage.setItem(this.localStorageKey("tabSection"), tabSection);
-
-            } else {
-
-                localStorage.removeItem(this.localStorageKey("tabSection"));
-            }
+            localStorage.setItem(this.localStorageKey("tabSection"), tabSection || "undefined");
         }
 
         private localStorageKey(prop: string) {
