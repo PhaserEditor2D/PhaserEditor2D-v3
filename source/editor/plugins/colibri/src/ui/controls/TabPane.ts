@@ -233,13 +233,16 @@ namespace colibri.ui.controls {
             }
         }
 
-        removeAllSections(label: HTMLElement) {
+        removeAllSections(label: HTMLElement, notify = true) {
 
             const sectionsElement = label.querySelectorAll(".TabPaneLabelSections")[0] as HTMLDivElement;
 
             sectionsElement.innerHTML = "";
 
-            this.eventTabSectionSelected.fire(undefined);
+            if (notify) {
+
+                this.eventTabSectionSelected.fire(undefined);
+            }
         }
 
         addTabSection(label: HTMLElement, section: string) {
