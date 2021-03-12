@@ -86,5 +86,4 @@ namespace colibri.ui.ide {
             return this.getContentList() as Part[];
         }
     }
-
 }

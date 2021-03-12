@@ -260,6 +260,19 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.SelectionRegionTool(),
                 new ui.sceneobjects.PanTool(),
             ));
+
+            // files view sections
+
+            reg.addExtension(new phasereditor2d.files.ui.views.ContentTypeSectionExtension(
+                {
+                    section: phasereditor2d.files.ui.views.TAB_SECTION_DESIGN,
+                    contentType: core.CONTENT_TYPE_SCENE
+                },
+                {
+                    section: phasereditor2d.files.ui.views.TAB_SECTION_DESIGN,
+                    contentType: core.CONTENT_TYPE_USER_COMPONENTS
+                }
+            ));
         }
 
         getTools() {

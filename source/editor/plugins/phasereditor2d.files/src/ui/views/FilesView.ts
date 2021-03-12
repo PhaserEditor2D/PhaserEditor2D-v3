@@ -5,6 +5,10 @@ namespace phasereditor2d.files.ui.views {
     import ide = colibri.ui.ide;
     import io = colibri.core.io;
 
+    export const TAB_SECTION_DESIGN = "Design";
+    export const TAB_SECTION_ASSETS = "Assets";
+    export const TAB_SECTIONS = [TAB_SECTION_DESIGN, TAB_SECTION_ASSETS];
+
     export class FilesView extends ide.ViewerView {
 
         static ID = "phasereditor2d.files.ui.views.FilesView";
@@ -18,6 +22,36 @@ namespace phasereditor2d.files.ui.views {
             this.setTitle("Files");
 
             this.setIcon(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FOLDER));
+        }
+
+        onPartAdded() {
+
+            super.onPartActivated();
+
+            const folder = this.getPartFolder();
+            const label = folder.getLabelFromContent(this);
+
+            for (const section of TAB_SECTIONS) {
+
+                folder.addTabSection(label, section, this.getId());
+            }
+
+            folder.eventTabSectionSelected.addListener(async (section: string) => {
+
+                const provider = section ? new FilteredContentProvider(section)
+                    : new viewers.FileTreeContentProvider();
+
+                // await colibri.Platform.getWorkbench().getFileStorage().getRoot().visitAsync(async (file) => {
+
+                //     if (file.isFile()) {
+
+                //         await colibri.Platform.getWorkbench().getContentTypeRegistry().preload(file);
+                //     }
+                // });
+
+                this.getViewer().setContentProvider(provider);
+                this.getViewer().setScrollY(0);
+            });
         }
 
         protected createViewer() {
@@ -213,6 +247,57 @@ namespace phasereditor2d.files.ui.views {
 
         getIcon() {
             return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
+        }
+    }
+
+    class FilteredContentProvider extends viewers.FileTreeContentProvider {
+
+        private _section: string;
+        private static _cache = new Map<string, string>();
+
+        constructor(section: string) {
+            super();
+
+            this._section = section;
+        }
+
+        private isFileIncluded(file: io.FilePath) {
+
+            const contentType = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
+
+            const supported = this.isContentTypeSupportedBySection(contentType, this._section);
+
+            return supported;
+        }
+
+        private isContentTypeSupportedBySection(contentType: string, section) {
+
+            const extensions = colibri.Platform.getExtensions(ContentTypeSectionExtension.POINT_ID) as ContentTypeSectionExtension[];
+
+            for (const ext of extensions) {
+
+                if (ext.isContentTypeSupportedBySection(contentType, section)) {
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        getChildren(parent: io.FilePath): any[] {
+
+            const children = super.getChildren(parent);
+
+            return children.filter((file: io.FilePath) => {
+
+                if (file.isFolder()) {
+
+                    return this.getChildren(file).length > 0;
+                }
+
+                return this.isFileIncluded(file);
+            });
         }
     }
 }

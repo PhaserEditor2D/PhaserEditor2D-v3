@@ -47,6 +47,26 @@ namespace phasereditor2d.files {
                 page => new ui.views.ManyImageFileSection(page),
                 page => new ui.views.UploadSection(page),
             ));
+
+            // sections
+
+            reg.addExtension(new ui.views.ContentTypeSectionExtension(
+                {
+                    contentType: webContentTypes.core.CONTENT_TYPE_AUDIO,
+                    section: ui.views.TAB_SECTION_ASSETS
+                },
+                {
+                    contentType: webContentTypes.core.CONTENT_TYPE_IMAGE,
+                    section: ui.views.TAB_SECTION_ASSETS
+                },
+                {
+                    contentType: webContentTypes.core.CONTENT_TYPE_SVG,
+                    section: ui.views.TAB_SECTION_ASSETS
+                },
+                {
+                    contentType: webContentTypes.core.CONTENT_TYPE_VIDEO,
+                    section: ui.views.TAB_SECTION_ASSETS
+                }));
         }
     }
 
