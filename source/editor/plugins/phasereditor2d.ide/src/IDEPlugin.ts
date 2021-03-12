@@ -319,7 +319,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.11.0-next";
+    export const VER = "3.12.0";
 
     async function main() {
 
