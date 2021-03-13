@@ -7,7 +7,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class GameObjectListSection extends SceneGameObjectSection<ISceneGameObjectLike> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectListSection", "Lists", false, true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.GameObjectListSection", "Lists", false, true,
+                editor.properties.TAB_SECTION_DETAILS);
         }
 
         getSectionHelpPath() {

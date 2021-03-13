@@ -138,19 +138,30 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 
 .TabPaneLabel span {
-    margin: 3px;
+    margin: 3px 0px 0px 3px;
+    align-self: center;
 }
 
 .TabPaneLabelSections {
     display: flex;
-    padding-top: 1px;
+}
+
+.TabPaneLabelSections .IconControlCanvas {
+    margin-top: 3px;
+    padding: 0 5px 0 5px;
 }
 
 .TabPaneLabelSection {
     margin-left: 10px;
+    margin-top: 3px;
+    margin-bottom: -1px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: transparent;
+}
+
+.TabPaneLabelSection:nth-child(2) {
+    margin-left: 0px;
 }
 
 .TabPaneLabelSection.selected {
@@ -301,6 +312,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     white-space: nowrap;
     word-break: break-all;
     text-overflow: ellipsis;
+    align-self: center;
 }
 
 .PropertyFormArea {

@@ -3,7 +3,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class AlphaSingleSection extends SceneGameObjectSection<sceneobjects.IAlphaLikeObject> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.AlphaSingleSection", "Alpha", false, true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.AlphaSingleSection", "Alpha", false, true,
+                editor.properties.TAB_SECTION_DETAILS);
         }
 
         getSectionHelpPath() {

@@ -57,7 +57,7 @@ namespace phasereditor2d.scene.ui.blocks {
                         return colibri.ui.ide.FileUtils.distinct(this.getSceneFiles("prefabs").map(f => f.getParent()));
                     }
 
-                    return [PREFAB_SECTION];
+                    return viewers.PhaserTypeSymbol.getSymbols();
             }
 
 
@@ -115,6 +115,13 @@ namespace phasereditor2d.scene.ui.blocks {
         }
 
         getChildren(parent: any): any[] {
+
+            if (parent instanceof viewers.PhaserTypeSymbol) {
+
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                return this.getSceneFiles().filter(file => finder.getScenePhaserType(file) === parent.getPhaserType());
+            }
 
             if (parent instanceof pack.core.AssetPack) {
 

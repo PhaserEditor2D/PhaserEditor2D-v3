@@ -1,7 +1,6 @@
 namespace phasereditor2d.outline {
 
     import ide = colibri.ui.ide;
-    import controls = colibri.ui.controls;
 
     export const ICON_OUTLINE = "outline";
 
@@ -22,11 +21,9 @@ namespace phasereditor2d.outline {
             reg.addExtension(
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_OUTLINE
-                ], true)
+                ])
             );
-
         }
-
     }
 
     colibri.Platform.addPlugin(OutlinePlugin.getInstance());

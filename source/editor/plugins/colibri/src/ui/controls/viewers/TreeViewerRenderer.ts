@@ -156,11 +156,27 @@ namespace colibri.ui.controls.viewers {
 
                 y += 15;
 
-            } else {
+            } else if (renderer.layout === "full-width") {
 
                 args2 = new RenderCellArgs(
                     args.canvasContext, args.x, args.y, args.w, args.h - 20, args.obj, args.viewer);
+
                 y += args2.h + 15;
+
+            } else {
+
+                args2 = new RenderCellArgs(
+                    args.canvasContext, args.x, args.y, args.h, args.h, args.obj, args.viewer);
+
+                if (renderCell) {
+
+                    x += args.h + 4;
+                    y += args.h / 2 + FONT_HEIGHT / 2;
+
+                } else {
+
+                    y += 15;
+                }
             }
 
             ctx.save();
@@ -218,7 +234,7 @@ namespace colibri.ui.controls.viewers {
 
                 ctx.moveTo(x + start, y + 2 + 0.5);
 
-                ctx.lineTo(Math.min(cellRight - 2,  x + start + width), y + 2 + 0.5);
+                ctx.lineTo(Math.min(cellRight - 2, x + start + width), y + 2 + 0.5);
 
                 ctx.stroke();
 

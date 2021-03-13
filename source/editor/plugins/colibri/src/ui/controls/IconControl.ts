@@ -43,12 +43,17 @@ namespace colibri.ui.controls {
 
                         const elem = result.item(i);
 
-                        const control = elem["__IconControl"] as IconControl;
+                        const control = IconControl.getIconControlOf(elem as HTMLElement);
 
                         control.repaint();
                     }
                 });
             }
+        }
+
+        static getIconControlOf(element: HTMLElement) {
+
+            return element["__IconControl"] as IconControl;
         }
 
         repaint() {

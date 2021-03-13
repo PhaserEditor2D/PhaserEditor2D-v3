@@ -336,6 +336,34 @@ namespace phasereditor2d.scene.core.json {
             return this._sceneFilename_Data_Map.get(file.getFullName());
         }
 
+        getScenePhaserType(file: io.FilePath) {
+
+            const data = this.getSceneData(file);
+
+            if (data.sceneType === core.json.SceneType.SCENE) {
+
+                return "Phaser.Scene";
+            }
+
+            const prefabId = this.getPrefabId(file);
+
+            if (prefabId) {
+
+                const prefabData = this.getPrefabData(prefabId);
+
+                if (prefabData) {
+
+                    const serializer = new core.json.Serializer(prefabData);
+
+                    const type = serializer.getPhaserType();
+
+                    return type;
+                }
+            }
+
+            return undefined;
+        }
+
         getAllSceneData() {
 
             return this.getSceneFiles().map(file => this.getSceneData(file));

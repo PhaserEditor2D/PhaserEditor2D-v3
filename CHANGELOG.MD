@@ -1,8 +1,30 @@
 # Change Log
 
+## v3.12.0 - Mar 12, 2021
+
+### Added
+
+* View: the tab sections are collapsible.
+* Go To Scene dialog: scene files are grouped by the Phaser type.
+* Scene Editor Blocks: when Prefabs tab-section is selected, the prefabs are grouped by Phaser type.
+* Files view: the Design and Assets section.
+
+### Updated
+
+* Get latest Phaser v3.53.1.
+* Viewer: improves cell renderer. It is always square by default.
+* Assets Viewer: improves BitmapFont cell renderer.
+* Set dark theme by default.
+
+### Fixes
+
+* Asset Pack Editor: fixes duplicate context menu.
+* Scene Editor: panning with Alt key is selecting object under cursor. Fixed.
+* Blocks view sections: collapsing sections changes the tab's label height. Fixed.
+
 ## v3.11.0 - Mar 5, 2021
 
-## Added
+### Added
 
 * Scene Editor: command `V` toggles the visibility of the selected objects.
 * Scene Editor: non-visible objects are shown with a "hidden" suffix in the Outline view labels.
@@ -38,7 +60,6 @@
 * Viewer: fixes Collapse All command, when the viewer is scrolled.
 * Viewer: fixes Collapse/Expand branch command, when the viewer is scrolled.
 * [#112](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/112) Asset Pack: skipping frames from spritesheets.
-
 
 ## v3.10.2 - Jan 17, 2021
 

@@ -41,6 +41,26 @@ namespace colibri.inspector.ui.views {
                 .eventPartActivated.addListener(() => this.onWorkbenchPartActivate());
         }
 
+        onPartAdded() {
+
+            super.onPartAdded();
+
+            this.getPartFolder().eventTabSectionSelected.addListener((tabSection: string) => {
+
+                if (this._propertyPage) {
+
+                    const provider = this._propertyPage.getSectionProvider();
+
+                    if (provider) {
+
+                        provider.setSelectedTabSection(tabSection);
+
+                        this._propertyPage.updateWithSelection();
+                    }
+                }
+            });
+        }
+
         private onWorkbenchPartActivate() {
 
             const part = ide.Workbench.getWorkbench().getActivePart();
@@ -69,6 +89,8 @@ namespace colibri.inspector.ui.views {
 
                     this._propertyPage.setSectionProvider(null);
                 }
+
+                this.updateUpdateTabSections();
             }
         }
 
@@ -81,6 +103,32 @@ namespace colibri.inspector.ui.views {
             this._propertyPage.setSectionProvider(provider);
 
             this._propertyPage.setSelection(sel);
+        }
+
+        private updateUpdateTabSections() {
+
+            const partFolder = this.getPartFolder();
+            const tabLabel = partFolder.getLabelFromContent(this);
+
+            partFolder.removeAllSections(tabLabel, false);
+
+            if (this._currentPart) {
+
+                const provider = this._currentPart.getPropertyProvider();
+
+                if (provider) {
+
+                    const tabSections = provider.getTabSections();
+
+                    for (const tabSection of tabSections) {
+
+                        partFolder.addTabSection(tabLabel, tabSection, this.getId());
+                    }
+
+                    const selected = provider.getSelectedTabSection();
+                    partFolder.selectTabSection(tabLabel, selected);
+                }
+            }
         }
 
         getUndoManager() {

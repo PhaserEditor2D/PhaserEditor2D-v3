@@ -43,7 +43,7 @@ namespace phasereditor2d.pack {
                     ICON_ANIMATIONS,
                     ICON_TILEMAP,
                     ICON_TILEMAP_LAYER
-                ], true)
+                ])
             );
 
             // content type resolvers
@@ -198,6 +198,24 @@ namespace phasereditor2d.pack {
 
             reg.addExtension(new files.ui.views.FilePropertySectionExtension(
                 page => new ui.properties.AddFileToPackFileSection(page)
+            ));
+
+            // files view sections
+
+            reg.addExtension(phasereditor2d.files.ui.views.ContentTypeSectionExtension.withSection(
+                phasereditor2d.files.ui.views.TAB_SECTION_DESIGN,
+                core.contentTypes.CONTENT_TYPE_ASSET_PACK,
+                core.contentTypes.CONTENT_TYPE_ANIMATIONS
+            ));
+
+            reg.addExtension(phasereditor2d.files.ui.views.ContentTypeSectionExtension.withSection(
+                phasereditor2d.files.ui.views.TAB_SECTION_ASSETS,
+                core.contentTypes.CONTENT_TYPE_ASSET_PACK,
+                core.contentTypes.CONTENT_TYPE_ANIMATIONS,
+                core.contentTypes.CONTENT_TYPE_ATLAS,
+                core.contentTypes.CONTENT_TYPE_ATLAS_XML,
+                core.contentTypes.CONTENT_TYPE_MULTI_ATLAS,
+                core.contentTypes.CONTENT_TYPE_UNITY_ATLAS
             ));
         }
 

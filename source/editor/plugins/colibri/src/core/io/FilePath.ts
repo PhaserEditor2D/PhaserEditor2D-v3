@@ -219,6 +219,16 @@ namespace colibri.core.io {
             }
         }
 
+        async visitAsync(visitor: (file: FilePath) => Promise<void>) {
+
+            await visitor(this);
+
+            for (const file of this._files) {
+
+                await file.visitAsync(visitor);
+            }
+        }
+
         _add(file: FilePath) {
 
             file._remove();

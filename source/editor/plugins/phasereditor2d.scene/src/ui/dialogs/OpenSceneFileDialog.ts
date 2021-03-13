@@ -74,7 +74,8 @@ namespace phasereditor2d.scene.ui.dialogs {
             super(viewer);
 
             this.setPaintItemShadow(true);
-            this.setSectionCriteria(obj => typeof obj === "string" || obj instanceof io.FilePath && obj.isFolder());
+            this.setSectionCriteria(obj => typeof obj === "string"
+                || obj instanceof io.FilePath && obj.isFolder() || obj instanceof viewers.PhaserTypeSymbol);
         }
     }
 
@@ -90,7 +91,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             if (type === grouping.GROUP_ASSETS_BY_TYPE) {
 
-                return ["Scenes", "Prefabs"];
+                return viewers.PhaserTypeSymbol.getSymbols().filter(s => this.getChildren(s).length > 0);
             }
 
             return colibri.ui.ide.FileUtils.distinct(this.finder.getSceneFiles().map(f => f.getParent()));
@@ -98,17 +99,10 @@ namespace phasereditor2d.scene.ui.dialogs {
 
         getChildren(parent: any): any[] {
 
-            switch (parent) {
+            if (parent instanceof viewers.PhaserTypeSymbol) {
 
-                case "Scenes":
-
-                    const prefabs = new Set(this.finder.getPrefabFiles());
-
-                    return this.finder.getSceneFiles().filter(f => !prefabs.has(f));
-
-                case "Prefabs":
-
-                    return this.finder.getPrefabFiles();
+                return this.finder.getSceneFiles()
+                    .filter(file => this.finder.getScenePhaserType(file) === parent.getPhaserType());
             }
 
             if (parent instanceof io.FilePath && parent.isFolder()) {

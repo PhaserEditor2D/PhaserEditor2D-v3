@@ -47,7 +47,8 @@ namespace phasereditor2d.scene.ui.blocks {
                 }
             }
 
-            return obj instanceof pack.core.AssetPack || obj instanceof io.FilePath && obj.isFolder();
+            return obj instanceof pack.core.AssetPack
+                || obj instanceof io.FilePath && obj.isFolder() || obj instanceof viewers.PhaserTypeSymbol;
         }
 
         isShadowAsChild(obj: any) {

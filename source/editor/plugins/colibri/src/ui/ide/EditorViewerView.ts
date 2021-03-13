@@ -134,10 +134,8 @@ namespace colibri.ui.ide {
 
                     for (const section of provider.getTabSections()) {
 
-                        tabsPane.addTabSection(tabLabel, section);
+                        tabsPane.addTabSection(tabLabel, section, this.getId());
                     }
-
-                    console.log("selected " + provider.getSelectedTabSection());
 
                     tabsPane.selectTabSection(tabLabel, provider.getSelectedTabSection());
                 }

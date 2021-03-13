@@ -111,5 +111,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return super["removeAllListeners"](event);
         }
+
+        // tslint:disable-next-line:ban-types
+        addToDisplayList(displayList?: Phaser.GameObjects.Layer | Phaser.GameObjects.DisplayList): this {
+
+            return super["addToDisplayList"](displayList);
+        }
+
+        // tslint:disable-next-line:ban-types
+        addToUpdateList(): this {
+
+            return super["addToUpdateList"]();
+        }
+
+        // tslint:disable-next-line:ban-types
+        removeFromDisplayList(): this {
+
+            return super["removeFromDisplayList"]();
+        }
+
+        // tslint:disable-next-line:ban-types
+        removeFromUpdateList(): this {
+
+            return super["removeFromUpdateList"];
+        }
     }
 }

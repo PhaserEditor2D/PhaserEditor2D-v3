@@ -7,5 +7,7 @@ namespace colibri.ui.controls.viewers {
         cellHeight(args: RenderCellArgs): number;
 
         preload(args: PreloadCellArgs): Promise<PreloadResult>;
+
+        layout?:"square"|"full-width";
     }
 }
