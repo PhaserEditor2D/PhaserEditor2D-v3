@@ -2,6 +2,10 @@
 
 ## dev
 
+### Updated
+
+* Inspector view: improves style of color buttons in Dark theme.
+
 ## v3.12.0 - Mar 12, 2021
 
 ### Added
