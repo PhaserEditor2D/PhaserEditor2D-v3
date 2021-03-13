@@ -83,6 +83,10 @@ Important:
     background: #4f4f4f;
 }
 
+.dark .ColorButton canvas {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 /* Tooltip */
 
 .dark .Tooltip {
