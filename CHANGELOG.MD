@@ -2,6 +2,10 @@
 
 ## dev
 
+### Added
+
+* Code editor: enables ES modules.
+
 ### Updated
 
 * Inspector view: improves style of color buttons in Dark theme.
