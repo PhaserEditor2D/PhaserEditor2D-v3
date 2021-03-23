@@ -6,6 +6,7 @@
 
 * Code editor: enables ES modules.
 * The new "public root" concept. You can configure different public folders inside the project. Now an url of a pack file is computed based on the public root containing the pack file.
+* Files view: highlights "publicroot" files and the container folder.
 
 ### Updated
 
