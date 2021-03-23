@@ -13,6 +13,7 @@ namespace phasereditor2d.pack.ui.viewers {
         private getIconRenderer(icon: controls.IImage) {
 
             if (this._layout === "grid") {
+
                 return new controls.viewers.IconGridCellRenderer(icon);
             }
 
@@ -39,11 +40,9 @@ namespace phasereditor2d.pack.ui.viewers {
             iconRenderer.renderCell(args);
         }
 
-        private getSceneFile(obj: core.AssetPackItem | string) {
+        private getSceneFile(obj: core.AssetPackItem) {
 
-            const url = obj instanceof core.AssetPackItem ? obj.getData().url : obj;
-
-            const file = core.AssetPackUtils.getFileFromPackUrl(url);
+            const file = obj.getFileFromAssetUrl(obj.getData().url);
 
             if (file) {
 

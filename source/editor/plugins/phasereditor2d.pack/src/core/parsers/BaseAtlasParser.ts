@@ -24,10 +24,10 @@ namespace phasereditor2d.pack.core.parsers {
             if (!game.textures.exists(item.getKey())) {
 
                 const atlasURL = item.getData().atlasURL;
-                const atlasData = AssetPackUtils.getFileJSONFromPackUrl(atlasURL);
+                const atlasData = AssetPackUtils.getFileJSONFromPackUrl(item.getPack(), atlasURL);
                 const textureURL = item.getData().textureURL;
 
-                const image = AssetPackUtils.getImageFromPackUrl(textureURL) as controls.DefaultImage;
+                const image = AssetPackUtils.getImageFromPackUrl(item.getPack(), textureURL) as controls.DefaultImage;
 
                 if (image) {
 
@@ -43,17 +43,20 @@ namespace phasereditor2d.pack.core.parsers {
 
         async preloadFrames(): Promise<controls.PreloadResult> {
 
-            const data = this.getPackItem().getData();
+            const item = this.getPackItem();
 
-            const dataFile = AssetPackUtils.getFileFromPackUrl(data.atlasURL);
+            const data = item.getData();
+
+            const dataFile = item.getFileFromAssetUrl(data.atlasURL);
 
             if (!dataFile) {
+
                 return controls.Controls.resolveNothingLoaded();
             }
 
             let result1 = await ide.FileUtils.preloadFileString(dataFile);
 
-            const imageFile = AssetPackUtils.getFileFromPackUrl(data.textureURL);
+            const imageFile = item.getFileFromAssetUrl(data.textureURL);
 
             if (this._preloadImageSize) {
 
@@ -70,9 +73,10 @@ namespace phasereditor2d.pack.core.parsers {
 
             const list: AssetPackImageFrame[] = [];
 
-            const data = this.getPackItem().getData();
-            const dataFile = AssetPackUtils.getFileFromPackUrl(data.atlasURL);
-            const imageFile = AssetPackUtils.getFileFromPackUrl(data.textureURL);
+            const item = this.getPackItem();
+            const data = item.getData();
+            const dataFile = item.getFileFromAssetUrl(data.atlasURL);
+            const imageFile = item.getFileFromAssetUrl(data.textureURL);
             const image = ide.FileUtils.getImage(imageFile);
 
             if (dataFile) {

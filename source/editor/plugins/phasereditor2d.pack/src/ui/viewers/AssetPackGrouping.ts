@@ -35,11 +35,11 @@ namespace phasereditor2d.pack.ui.viewers {
 
             const data = item.getData();
 
-            let file = pack.core.AssetPackUtils.getFileFromPackUrl(data["url"]);
+            let file = item.getFileFromAssetUrl(data.url);
 
             if (!file) {
 
-                file = pack.core.AssetPackUtils.getFileFromPackUrl(data["atlasURL"]);
+                file = item.getFileFromAssetUrl(data.atlasURL);
             }
 
             if (!file) {

@@ -143,14 +143,14 @@ namespace colibri.ui.ide {
             return cache.preload(file);
         }
 
-        static getRootDir(folder: io.FilePath) {
+        static getPublicRoot(folder: io.FilePath): io.FilePath {
 
-            if (folder.getFile("rootdir") || folder.isRoot()) {
+            if (folder.getFile("publicroot") || folder.isRoot()) {
 
                 return folder;
             }
 
-            return this.getRootDir(folder.getParent());
+            return this.getPublicRoot(folder.getParent());
         }
 
         static getFileFromPath(path: string, parent?: io.FilePath): io.FilePath {

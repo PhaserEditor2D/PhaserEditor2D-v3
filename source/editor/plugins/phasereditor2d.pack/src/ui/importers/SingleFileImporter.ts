@@ -23,9 +23,9 @@ namespace phasereditor2d.pack.ui.importers {
             return fileContentType === this.getContentType();
         }
 
-        createItemData(file: io.FilePath): any {
+        createItemData(pack: core.AssetPack, file: io.FilePath): any {
 
-            const url = core.AssetPackUtils.getFilePackUrl(file);
+            const url = pack.getUrlFromAssetFile(file);
 
             const data = {
                 url: this._urlIsArray ? [url] : url

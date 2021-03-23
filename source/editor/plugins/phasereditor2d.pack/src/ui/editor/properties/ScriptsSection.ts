@@ -62,13 +62,15 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
                 this.browseFile_onlyContentType("Scripts", webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, files => {
 
+                    const pack = this.getPack();
+
                     this.performChanges(urls => {
 
                         const used = new Set(urls);
 
                         const newUrls = files
 
-                            .map(file => core.AssetPackUtils.getFilePackUrl(file))
+                            .map(file => pack.getUrlFromAssetFile(file))
 
                             .filter(url => !used.has(url));
 

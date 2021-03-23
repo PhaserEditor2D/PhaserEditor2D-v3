@@ -25,7 +25,7 @@ namespace phasereditor2d.pack.core {
 
             const url = this.getUrl();
 
-            const file = pack.core.AssetPackUtils.getFileFromPackUrl(url);
+            const file = this.getFileFromAssetUrl(url);
 
             if (file) {
 
@@ -84,7 +84,7 @@ namespace phasereditor2d.pack.core {
 
         addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
 
-            const file = pack.core.AssetPackUtils.getFileFromPackUrl(this.getUrl());
+            const file = this.getFileFromAssetUrl(this.getUrl());
 
             if (file) {
 

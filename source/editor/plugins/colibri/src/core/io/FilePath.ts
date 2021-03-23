@@ -114,6 +114,7 @@ namespace colibri.core.io {
         getFullName(): string {
 
             if (this._parent) {
+
                 return this._parent.getFullName() + "/" + this._name;
             }
 

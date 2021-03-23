@@ -13,14 +13,15 @@ namespace phasereditor2d.pack.ui.properties {
 
         protected getSelectedImage() {
 
-            const obj = this.getSelection()[0];
+            const obj = this.getSelection()[0] as core.BitmapFontAssetPackItem;
 
-            const img = core.AssetPackUtils.getImageFromPackUrl(obj.getData().textureURL);
+            const img = core.AssetPackUtils.getImageFromPackUrl(obj.getPack(), obj.getData().textureURL);
 
             return img;
         }
 
         canEdit(obj: any): boolean {
+
             return obj instanceof core.BitmapFontAssetPackItem;
         }
     }

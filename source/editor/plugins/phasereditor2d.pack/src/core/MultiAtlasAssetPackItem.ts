@@ -21,7 +21,11 @@ namespace phasereditor2d.pack.core {
 
                 const urlSet: Set<string> = new Set();
 
-                const atlasFile = core.AssetPackUtils.getFileFromPackUrl(this.getData().url);
+                const atlasUrl = this.getData().url as string;
+                const atlasFile = this.getFileFromAssetUrl(atlasUrl);
+                const atlasUrlElements = atlasUrl.split("/");
+                atlasUrlElements.pop();
+                const atlasUrlParent = atlasUrlElements.join("/");
 
                 if (atlasFile) {
 
@@ -31,20 +35,21 @@ namespace phasereditor2d.pack.core {
 
                     for (const texture of data.textures) {
 
-                        const url = core.AssetPackUtils.getFilePackUrl(atlasFile.getSibling(texture.image));
+                        const url = atlasUrlParent + "/" + texture.image;
 
                         urlSet.add(url);
                     }
 
                     for (const url of urlSet) {
 
-                        const file = core.AssetPackUtils.getFileFromPackUrl(url);
+                        const file = this.getFileFromAssetUrl(url);
 
                         files.add(file);
                     }
                 }
 
             } catch (e) {
+
                 console.error(e);
             }
         }

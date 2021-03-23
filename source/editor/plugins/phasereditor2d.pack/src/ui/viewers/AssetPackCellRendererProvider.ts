@@ -21,15 +21,10 @@ namespace phasereditor2d.pack.ui.viewers {
 
                 return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK));
 
-            } else if (typeof (element) === "string") {
+            } else if (typeof (element) === "string" && core.TYPES.indexOf(element) >= 0) {
 
-                if (core.TYPES.indexOf(element) >= 0) {
-
-                    return new controls.viewers.IconImageCellRenderer(
-                        colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
-                }
-
-                return this.getScriptUrlCellRenderer(element);
+                return new controls.viewers.IconImageCellRenderer(
+                    colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
             } if (element instanceof io.FilePath) {
 
@@ -64,9 +59,7 @@ namespace phasereditor2d.pack.ui.viewers {
                     case core.SCRIPT_TYPE:
                     case core.SCENE_FILE_TYPE:
 
-                        const url = element.getData().url;
-
-                        return this.getScriptUrlCellRenderer(url);
+                        return this.getScriptUrlCellRenderer(element);
 
                     case core.SCRIPTS_TYPE:
 
@@ -117,9 +110,9 @@ namespace phasereditor2d.pack.ui.viewers {
             return this.getIconRenderer(ide.Workbench.getWorkbench().getWorkbenchIcon(colibri.ICON_FILE));
         }
 
-        private getScriptUrlCellRenderer(url: any) {
+        private getScriptUrlCellRenderer(item: core.ScriptAssetPackItem) {
 
-            const file = core.AssetPackUtils.getFileFromPackUrl(url);
+            const file = item.getFileFromAssetUrl(item.getData().url);
 
             if (file) {
 

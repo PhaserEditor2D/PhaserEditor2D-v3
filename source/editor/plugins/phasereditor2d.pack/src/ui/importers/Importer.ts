@@ -29,7 +29,7 @@ namespace phasereditor2d.pack.ui.importers {
 
         abstract acceptFile(file: io.FilePath): boolean;
 
-        abstract createItemData(file: io.FilePath | io.FilePath[]);
+        abstract createItemData(pack: core.AssetPack, file: io.FilePath | io.FilePath[]);
 
         async autoImport(pack: core.AssetPack, files: io.FilePath[]) {
 
@@ -56,7 +56,7 @@ namespace phasereditor2d.pack.ui.importers {
 
             computer.update(pack.getItems());
 
-            const data = this.createItemData(file);
+            const data = this.createItemData(pack, file);
 
             const firstFile = Array.isArray(file) ? file[0] : file;
 
@@ -78,7 +78,7 @@ namespace phasereditor2d.pack.ui.importers {
 
             computer.update(pack.getItems());
 
-            const data = this.createItemData(files);
+            const data = this.createItemData(pack, files);
 
             data.type = this.getType();
             data.key = computer.makeName(files[0].getNameWithoutExtension());

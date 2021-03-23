@@ -19,8 +19,8 @@ namespace phasereditor2d.pack.core.parsers {
             if (!game.textures.exists(item.getKey())) {
 
                 const packItemData = item.getData();
-                const atlasDataFile = AssetPackUtils.getFileFromPackUrl(packItemData.url);
-                const atlasData = AssetPackUtils.getFileJSONFromPackUrl(packItemData.url);
+                const atlasDataFile = item.getFileFromAssetUrl(packItemData.url);
+                const atlasData = AssetPackUtils.getFileJSONFromPackUrl(item.getPack(), packItemData.url);
 
                 if (atlasData && atlasDataFile) {
 
@@ -50,10 +50,12 @@ namespace phasereditor2d.pack.core.parsers {
 
         async preloadFrames(): Promise<controls.PreloadResult> {
 
-            const data = this.getPackItem().getData();
-            const dataFile = AssetPackUtils.getFileFromPackUrl(data.url);
+            const item = this.getPackItem();
+            const data = item.getData();
+            const dataFile = item.getFileFromAssetUrl(data.url);
 
             if (dataFile) {
+
                 return await ide.FileUtils.preloadFileString(dataFile);
             }
 
@@ -63,8 +65,9 @@ namespace phasereditor2d.pack.core.parsers {
         parseFrames(): AssetPackImageFrame[] {
             const list: AssetPackImageFrame[] = [];
 
-            const data = this.getPackItem().getData();
-            const dataFile = AssetPackUtils.getFileFromPackUrl(data.url);
+            const item = this.getPackItem();
+            const data = item.getData();
+            const dataFile = item.getFileFromAssetUrl(data.url);
 
             if (dataFile) {
 

@@ -2,12 +2,25 @@ namespace phasereditor2d.pack.ui.properties {
 
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
-    import ide = colibri.ui.ide;
 
     export class AddFileToPackFileSection extends controls.properties.PropertySection<io.FilePath> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.pack.ui.properties.AddFileToPackFileSection", "Asset Pack File", false);
+        }
+
+        private async getPackItems(finder: core.PackFinder) {
+
+            const packItems: core.AssetPackItem[] = [];
+
+            for (const file of this.getSelection()) {
+
+                const items = await finder.findPackItemsFor(file);
+
+                packItems.push(...items);
+            }
+
+            return packItems;
         }
 
         createForm(parent: HTMLDivElement) {
@@ -20,14 +33,7 @@ namespace phasereditor2d.pack.ui.properties {
 
                 await finder.preload();
 
-                const packItems: core.AssetPackItem[] = [];
-
-                for (const file of this.getSelection()) {
-
-                    const items = await finder.findPackItemsFor(file);
-
-                    packItems.push(...items);
-                }
+                const packItems = await this.getPackItems(finder);
 
                 comp.innerHTML = "";
 
@@ -80,8 +86,17 @@ namespace phasereditor2d.pack.ui.properties {
 
                             for (const pack of packs) {
 
+                                const validFiles = importData.files
+                                    .filter(file => {
+
+                                        const publicRoot = colibri.ui.ide.FileUtils.getPublicRoot(pack.getFile().getParent());
+
+                                        return file.getFullName().startsWith(publicRoot.getFullName())
+                                    });
+
                                 menu.add(new controls.Action({
                                     text: "Add To " + pack.getFile().getProjectRelativeName(),
+                                    enabled: validFiles.length > 0,
                                     callback: () => {
 
                                         this.importWithImporter(importData, pack);
