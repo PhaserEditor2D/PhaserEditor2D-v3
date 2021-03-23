@@ -41,6 +41,8 @@ namespace phasereditor2d.scene.core.code {
                 const clsName = this._file.getNameWithoutExtension();
                 const clsDecl = new ClassDeclCodeDOM(clsName);
 
+                clsDecl.setExportClass(settings.exportClass);
+
                 let superCls: string;
 
                 if (this._isPrefabScene) {

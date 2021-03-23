@@ -30,6 +30,8 @@ namespace phasereditor2d.scene.ui.dialogs {
                     id: Phaser.Utils.String.UUID(),
                     settings: {
                         compilerOutputLanguage: settings.compilerOutputLanguage,
+                        exportClass: settings.exportClass,
+                        autoImport: settings.autoImport,
                         compilerInsertSpaces: settings.compilerInsertSpaces,
                         compilerTabSize: settings.compilerTabSize,
                         borderWidth: settings.borderWidth,

@@ -46,6 +46,11 @@ namespace phasereditor2d.scene.core.code {
 
         private generateClass(clsDecl: ClassDeclCodeDOM) {
 
+            if (clsDecl.isExportClass()) {
+
+                this.append("export ");
+            }
+
             this.append("class " + clsDecl.getName() + " ");
 
             if (clsDecl.getSuperClass() && clsDecl.getSuperClass().trim().length > 0) {

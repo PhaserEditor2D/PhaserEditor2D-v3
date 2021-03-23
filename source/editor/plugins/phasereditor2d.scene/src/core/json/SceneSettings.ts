@@ -18,6 +18,8 @@ namespace phasereditor2d.scene.core.json {
             public preloadPackFiles: string[] = [],
             public createMethodName = "create",
             public sceneKey = "",
+            public exportClass = false,
+            public autoImport = false,
             public compilerOutputLanguage = SourceLang.JAVA_SCRIPT,
             public scopeBlocksToFolder: boolean = false,
             public borderX = 0,

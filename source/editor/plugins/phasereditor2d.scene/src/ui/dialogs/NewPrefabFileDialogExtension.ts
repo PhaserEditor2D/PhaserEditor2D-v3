@@ -14,6 +14,8 @@ namespace phasereditor2d.scene.ui.dialogs {
                         createMethodName: "",
                         preloadMethodName: "",
                         compilerOutputLanguage: settings.compilerOutputLanguage,
+                        exportClass: settings.exportClass,
+                        autoImport: settings.autoImport,
                         compilerInsertSpaces: settings.compilerInsertSpaces,
                         compilerTabSize: settings.compilerTabSize,
                         borderWidth: settings.borderWidth,
