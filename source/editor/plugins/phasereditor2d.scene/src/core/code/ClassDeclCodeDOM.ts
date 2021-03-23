@@ -8,12 +8,19 @@ namespace phasereditor2d.scene.core.code {
         private _body: MemberDeclCodeDOM[];
         private _constructor: MethodDeclCodeDOM;
         private _superClass: string;
+        private _imports: ImportCodeDOM[];
 
         constructor(name: string) {
             super(name);
 
             this._body = [];
             this._exportClass = false;
+            this._imports = [];
+        }
+
+        getImports() {
+
+            return this._imports;
         }
 
         isExportClass() {

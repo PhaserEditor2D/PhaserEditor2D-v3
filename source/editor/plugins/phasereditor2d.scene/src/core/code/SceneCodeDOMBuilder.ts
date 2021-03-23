@@ -41,6 +41,8 @@ namespace phasereditor2d.scene.core.code {
                 const clsName = this._file.getNameWithoutExtension();
                 const clsDecl = new ClassDeclCodeDOM(clsName);
 
+                this.buildImports(clsDecl, this._scene.getDisplayListChildren());
+
                 clsDecl.setExportClass(settings.exportClass);
 
                 let superCls: string;
@@ -122,6 +124,30 @@ namespace phasereditor2d.scene.core.code {
             }
 
             return unit;
+        }
+
+        private buildImports(clsDecl: ClassDeclCodeDOM, objects: ISceneGameObject[]) {
+
+            for (const obj of objects) {
+
+                const support = obj.getEditorSupport();
+
+                if (support.isPrefabInstance()) {
+
+                    const name = support.getPrefabFile().getNameWithoutExtension();
+
+                    const filePath = getImportPath(this._file, support.getPrefabFile());
+
+                    clsDecl.getImports().push(new ImportCodeDOM(name, filePath));
+
+                } else {
+
+                    if (obj instanceof Phaser.GameObjects.Container || obj instanceof Phaser.GameObjects.Layer) {
+
+                        this.buildImports(clsDecl, obj.list as ISceneGameObject[])
+                    }
+                }
+            }
         }
 
         buildPrefabPropertiesFields(fields: MemberDeclCodeDOM[]) {

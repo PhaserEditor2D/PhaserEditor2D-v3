@@ -31,6 +31,8 @@ namespace phasereditor2d.scene.core.code {
 
             if (elem instanceof ClassDeclCodeDOM) {
 
+                this.generateImports(elem as ClassDeclCodeDOM);
+
                 this.generateClass(elem as ClassDeclCodeDOM);
 
             } else if (elem instanceof MethodDeclCodeDOM) {
@@ -41,7 +43,19 @@ namespace phasereditor2d.scene.core.code {
 
                 this.line();
             }
+        }
 
+        private generateImports(clsDecl: ClassDeclCodeDOM) {
+
+            for (const importDom of clsDecl.getImports()) {
+
+                this.line(`import { ${importDom.getElementName()} } from "${importDom.getFilePath()}";`)
+            }
+
+            if (clsDecl.getImports().length > 0) {
+
+                this.line();
+            }
         }
 
         private generateClass(clsDecl: ClassDeclCodeDOM) {

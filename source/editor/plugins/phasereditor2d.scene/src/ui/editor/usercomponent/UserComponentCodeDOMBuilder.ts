@@ -1,14 +1,17 @@
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     import code = core.code;
+    import io = colibri.core.io;
 
     export class UserComponentCodeDOMBuilder {
 
         private _component: UserComponent;
+        private _file: io.FilePath;
 
-        constructor(component: UserComponent) {
+        constructor(component: UserComponent, file: io.FilePath) {
 
             this._component = component;
+            this._file = file;
         }
 
         build(): code.UnitCodeDOM {
