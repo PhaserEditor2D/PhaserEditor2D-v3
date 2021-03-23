@@ -205,7 +205,8 @@ namespace phasereditor2d.pack {
             reg.addExtension(phasereditor2d.files.ui.views.ContentTypeSectionExtension.withSection(
                 phasereditor2d.files.ui.views.TAB_SECTION_DESIGN,
                 core.contentTypes.CONTENT_TYPE_ASSET_PACK,
-                core.contentTypes.CONTENT_TYPE_ANIMATIONS
+                core.contentTypes.CONTENT_TYPE_ANIMATIONS,
+                colibri.core.CONTENT_TYPE_PUBLIC_ROOT
             ));
 
             reg.addExtension(phasereditor2d.files.ui.views.ContentTypeSectionExtension.withSection(
@@ -215,7 +216,8 @@ namespace phasereditor2d.pack {
                 core.contentTypes.CONTENT_TYPE_ATLAS,
                 core.contentTypes.CONTENT_TYPE_ATLAS_XML,
                 core.contentTypes.CONTENT_TYPE_MULTI_ATLAS,
-                core.contentTypes.CONTENT_TYPE_UNITY_ATLAS
+                core.contentTypes.CONTENT_TYPE_UNITY_ATLAS,
+                colibri.core.CONTENT_TYPE_PUBLIC_ROOT
             ));
         }
 
