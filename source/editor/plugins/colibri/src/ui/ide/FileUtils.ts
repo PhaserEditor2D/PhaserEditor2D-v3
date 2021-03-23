@@ -143,39 +143,37 @@ namespace colibri.ui.ide {
             return cache.preload(file);
         }
 
+        static getRootDir(folder: io.FilePath) {
+
+            if (folder.getFile("rootdir") || folder.isRoot()) {
+
+                return folder;
+            }
+
+            return this.getRootDir(folder.getParent());
+        }
+
         static getFileFromPath(path: string, parent?: io.FilePath): io.FilePath {
-
-            const names = path.split("/");
-
-            // const root = Workbench.getWorkbench().getProjectRoot();
-
-            // const firstName = names.shift();
-
-            // if (root.getName() !== firstName) {
-            //     return null;
-            // }
-
-            // let result = root;
 
             let result = parent;
 
+            const names = path.split("/");
+
+            if (!result) {
+
+                result = Workbench.getWorkbench().getProjectRoot();
+
+                const name = names.shift();
+
+                if (name !== result.getName()) {
+
+                    return null;
+                }
+            }
+
             for (const name of names) {
 
-                let child: io.FilePath;
-
-                if (!result) {
-
-                    child = Workbench.getWorkbench().getProjectRoot();
-
-                    if (name !== child.getName()) {
-
-                        return null;
-                    }
-
-                } else {
-
-                    child = result.getFile(name);
-                }
+                const child = result.getFile(name);
 
                 if (child) {
 

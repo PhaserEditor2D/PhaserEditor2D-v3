@@ -197,6 +197,11 @@ namespace colibri.core.io {
             return !this.isFile();
         }
 
+        isRoot() {
+
+            return this._parent === null || this._parent === undefined;
+        }
+
         getFiles() {
             return this._files;
         }
