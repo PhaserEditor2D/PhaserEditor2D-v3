@@ -10,10 +10,10 @@ namespace phasereditor2d.pack.ui.importers {
             this.setMultipleFiles(true);
         }
 
-        createItemData(files: io.FilePath[]): any {
+        createItemData(pack: core.AssetPack, files: io.FilePath[]): any {
 
             const data = {
-                url: files.map(file => core.AssetPackUtils.getFilePackUrl(file))
+                url: files.map(file => pack.getUrlFromAssetFile(file))
             };
 
             return data;

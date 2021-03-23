@@ -8,9 +8,9 @@ namespace phasereditor2d.pack.ui.importers {
             super(webContentTypes.core.CONTENT_TYPE_IMAGE, core.SPRITESHEET_TYPE);
         }
 
-        createItemData(file: io.FilePath) {
+        createItemData(pack: core.AssetPack, file: io.FilePath) {
 
-            const data = super.createItemData(file);
+            const data = super.createItemData(pack, file);
 
             data.frameConfig = {
                 frameWidth: 32,

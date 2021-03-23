@@ -6,10 +6,10 @@ namespace phasereditor2d.pack.ui.importers {
             super(core.contentTypes.CONTENT_TYPE_BITMAP_FONT, core.BITMAP_FONT_TYPE);
         }
 
-        createItemData(file: colibri.core.io.FilePath) {
+        createItemData(pack: core.AssetPack, file: colibri.core.io.FilePath) {
             return {
-                textureURL: core.AssetPackUtils.getFilePackUrlWithNewExtension(file, "png"),
-                fontDataURL: core.AssetPackUtils.getFilePackUrl(file)
+                textureURL: core.AssetPackUtils.getFilePackUrlWithNewExtension(pack, file, "png"),
+                fontDataURL: pack.getUrlFromAssetFile(file)
             };
         }
     }

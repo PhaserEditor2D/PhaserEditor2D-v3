@@ -174,7 +174,7 @@ namespace phasereditor2d.files.ui.views {
 
             const viewer = this._viewer;
 
-            viewer.setLabelProvider(new viewers.FileLabelProvider());
+            viewer.setStyledLabelProvider(new viewers.StyledFileLabelProvider());
             viewer.setContentProvider(new viewers.FileTreeContentProvider());
             viewer.setCellRendererProvider(new viewers.FileCellRendererProvider());
             viewer.setInput(root);

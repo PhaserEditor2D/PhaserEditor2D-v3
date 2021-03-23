@@ -50,7 +50,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
             const url = item.getData().textureURL;
 
-            const img = core.AssetPackUtils.getImageFromPackUrl(url);
+            const img = core.AssetPackUtils.getImageFromPackUrl(item.getPack(), url);
 
             return img;
         }

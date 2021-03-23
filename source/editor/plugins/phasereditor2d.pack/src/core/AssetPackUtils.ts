@@ -50,33 +50,41 @@ namespace phasereditor2d.pack.core {
             return packs;
         }
 
-        static getFileFromPackUrl(url: string): io.FilePath {
+        static getUrlFromAssetFile(packOrFolder: AssetPack | io.FilePath, file: io.FilePath) {
 
-            const url2 = ide.FileUtils.getRoot().getName() + "/" + url;
+            const packFolder = packOrFolder instanceof AssetPack ? packOrFolder.getFile().getParent() : packOrFolder;
 
-            return ide.FileUtils.getFileFromPath(url2);
-        }
+            const root = ide.FileUtils.getPublicRoot(packFolder);
+            const rootPath = root.getFullName();
+            const filePath = file.getFullName();
 
-        static getFilePackUrl(file: io.FilePath) {
+            if (filePath.startsWith(rootPath)) {
 
-            if (file.getParent()) {
-
-                return `${this.getFilePackUrl(file.getParent())}${file.getName()}${file.isFolder() ? "/" : ""}`;
+                return filePath.substring(rootPath.length + 1);
             }
 
-            return "";
+            return file.getProjectRelativeName();
         }
 
-        static getFilePackUrlWithNewExtension(file: io.FilePath, ext: string) {
+        static getFileFromPackUrl(packOrFolder: AssetPack | io.FilePath, url: string): io.FilePath {
 
-            const url = this.getFilePackUrl(file.getParent());
+            const folder = packOrFolder instanceof AssetPack ? packOrFolder.getFile().getParent() : packOrFolder;
 
-            return `${url}${file.getNameWithoutExtension()}.${ext}`;
+            const pubRoot = ide.FileUtils.getPublicRoot(folder);
+
+            return ide.FileUtils.getFileFromPath(url, pubRoot);
         }
 
-        static getFileStringFromPackUrl(url: string): string {
+        static getFilePackUrlWithNewExtension(pack: core.AssetPack, file: io.FilePath, ext: string) {
 
-            const file = this.getFileFromPackUrl(url);
+            const url = pack.getUrlFromAssetFile(file.getParent());
+
+            return `${url}/${file.getNameWithoutExtension()}.${ext}`;
+        }
+
+        static getFileStringFromPackUrl(packOrFolder: AssetPack | io.FilePath, url: string): string {
+
+            const file = this.getFileFromPackUrl(packOrFolder, url);
 
             if (!file) {
 
@@ -88,26 +96,28 @@ namespace phasereditor2d.pack.core {
             return str;
         }
 
-        static getFileJSONFromPackUrl(url: string): any {
+        static getFileJSONFromPackUrl(packOrFolder: AssetPack | io.FilePath, url: string): any {
 
-            const str = this.getFileStringFromPackUrl(url);
+            const str = this.getFileStringFromPackUrl(packOrFolder, url);
 
             return JSON.parse(str);
         }
 
-        static getFileXMLFromPackUrl(url: string): Document {
+        static getFileXMLFromPackUrl(packOrFolder: AssetPack | io.FilePath, url: string): Document {
 
-            const str = this.getFileStringFromPackUrl(url);
+            const str = this.getFileStringFromPackUrl(packOrFolder, url);
+
             const parser = new DOMParser();
 
             return parser.parseFromString(str, "text/xml");
         }
 
-        static getImageFromPackUrl(url: string): colibri.ui.ide.FileImage {
+        static getImageFromPackUrl(packOrFolder: AssetPack | io.FilePath, url: string): colibri.ui.ide.FileImage {
 
-            const file = this.getFileFromPackUrl(url);
+            const file = this.getFileFromPackUrl(packOrFolder, url);
 
             if (file) {
+
                 return ide.Workbench.getWorkbench().getFileImage(file);
             }
 

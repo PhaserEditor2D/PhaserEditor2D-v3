@@ -18,7 +18,7 @@ namespace phasereditor2d.pack.ui.properties {
 
             if (obj instanceof core.AssetPackItem) {
 
-                img = core.AssetPackUtils.getImageFromPackUrl(obj.getData().url);
+                img = core.AssetPackUtils.getImageFromPackUrl(obj.getPack(), obj.getData().url);
 
             } else {
 

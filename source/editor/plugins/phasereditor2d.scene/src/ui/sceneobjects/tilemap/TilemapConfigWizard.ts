@@ -257,7 +257,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (item) {
 
-                    return new controls.viewers.ImageCellRenderer(pack.core.AssetPackUtils.getImageFromPackUrl(item.getUrl()))
+                    return new controls.viewers.ImageCellRenderer(pack.core.AssetPackUtils.getImageFromPackUrl(item.getPack(), item.getUrl()))
                 }
 
                 return new controls.viewers.EmptyCellRenderer(false);

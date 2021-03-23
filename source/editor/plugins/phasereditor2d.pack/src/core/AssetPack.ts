@@ -244,5 +244,10 @@ namespace phasereditor2d.pack.core {
         getFile() {
             return this._file;
         }
+
+        getUrlFromAssetFile(file: io.FilePath) {
+
+            return AssetPackUtils.getUrlFromAssetFile(this, file);
+        }
     }
 }

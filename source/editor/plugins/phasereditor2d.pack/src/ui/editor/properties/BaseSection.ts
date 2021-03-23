@@ -14,6 +14,11 @@ namespace phasereditor2d.pack.ui.editor.properties {
             this._assetType = assetType;
         }
 
+        getPack() {
+
+            return (this.getSelectionFirstElement() as core.AssetPackItem).getPack();
+        }
+
         getAssetType() {
             return null;
         }
@@ -153,7 +158,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
                     const file = files[0];
 
-                    const url = core.AssetPackUtils.getFilePackUrl(file);
+                    const url = this.getPack().getUrlFromAssetFile(file);
 
                     this.changeItemField(fieldKey, url, true);
                 });
@@ -178,7 +183,9 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
                 this.browseFile_onlyContentType("Select Files", contentType, (files) => {
 
-                    const urls = files.map(file => core.AssetPackUtils.getFilePackUrl(file));
+                    const pack = this.getPack();
+
+                    const urls = files.map(file => pack.getUrlFromAssetFile(file));
 
                     this.changeItemField(fieldKey, urls, true);
                 });
