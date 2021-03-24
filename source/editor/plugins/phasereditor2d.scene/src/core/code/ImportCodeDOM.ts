@@ -1,26 +1,19 @@
 namespace phasereditor2d.scene.core.code {
 
     export class ImportCodeDOM extends CodeDOM {
-        private _elements: string[];
+        private _elementName: string;
         private _filePath: string;
-        private _brackets: boolean;
 
-        constructor(elementName: string, filePath: string, brackets: boolean) {
+        constructor(elementName: string, filePath: string) {
             super();
 
-            this._elements = [elementName];
+            this._elementName = elementName;
             this._filePath = filePath;
-            this._brackets = brackets;
         }
 
-        isBrackets() {
+        getElementName() {
 
-            return this._brackets;
-        }
-
-        getElements() {
-
-            return this._elements;
+            return this._elementName;
         }
 
         getFilePath() {

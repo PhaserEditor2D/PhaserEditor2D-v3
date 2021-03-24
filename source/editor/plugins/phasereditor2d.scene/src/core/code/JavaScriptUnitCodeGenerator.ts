@@ -51,17 +51,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const importDom of imports) {
 
-                for (const name of importDom.getElements()) {
-
-                    if (importDom.isBrackets()) {
-
-                        this.line(`import { ${name} } from "${importDom.getFilePath()}";`);
-
-                    } else {
-
-                        this.line(`import ${name} from "${importDom.getFilePath()}";`);
-                    }
-                }
+                this.line(`import ${importDom.getElementName()} from "${importDom.getFilePath()}";`);
             }
 
             if (imports.length > 0) {
@@ -74,7 +64,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (clsDecl.isExportClass()) {
 
-                this.append("export ");
+                this.append("export default ");
             }
 
             this.append("class " + clsDecl.getName() + " ");

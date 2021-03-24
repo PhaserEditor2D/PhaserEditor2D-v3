@@ -4,11 +4,13 @@ namespace phasereditor2d.scene.core.code {
 
         private _body: CodeDOM[];
         private _imports: ImportCodeDOM[];
+        private _used: Set<string>;
 
         constructor(elements: CodeDOM[]) {
 
             this._body = elements;
             this._imports = [];
+            this._used = new Set();
         }
 
         removeImports() {
@@ -21,21 +23,17 @@ namespace phasereditor2d.scene.core.code {
             return this._imports;
         }
 
-        addImport(elementName: string, filePath: string, brackets: boolean) {
+        addImport(elementName: string, filePath: string) {
 
-            const importDom = this._imports.find(i => i.getFilePath() === filePath);
+            const key = elementName + " form " + filePath;
 
-            if (importDom) {
+            if (this._used.has(key)) {
 
-                if (importDom.getElements().indexOf(elementName) < 0) {
-
-                    importDom.getElements().push(elementName);
-                }
-
-            } else {
-
-                this._imports.push(new ImportCodeDOM(elementName, filePath, brackets))
+                return;
             }
+
+            this._used.add(key);
+            this._imports.push(new ImportCodeDOM(elementName, filePath));
         }
 
         getBody() {

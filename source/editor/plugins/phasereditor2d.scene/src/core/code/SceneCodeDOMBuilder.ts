@@ -81,7 +81,7 @@ namespace phasereditor2d.scene.core.code {
 
                 if (superCls.startsWith("Phaser.")) {
 
-                    unit.addImport("Phaser", "phaser", false);
+                    unit.addImport("Phaser", "phaser");
                 }
 
                 if (this._isPrefabScene) {
@@ -472,7 +472,7 @@ namespace phasereditor2d.scene.core.code {
                     });
 
                     const filePath = code.getImportPath(this._sceneFile, objSupport.getPrefabFile());
-                    this._unit.addImport(clsName, filePath, true);
+                    this._unit.addImport(clsName, filePath);
 
                 } else {
 

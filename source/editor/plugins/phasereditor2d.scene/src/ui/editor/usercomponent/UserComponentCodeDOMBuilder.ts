@@ -106,7 +106,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 if (type.startsWith("Phaser.")) {
 
-                    this._unitDom.addImport("Phaser", "phaser", false);
+                    this._unitDom.addImport("Phaser", "phaser");
 
                 } else if (this._typeFileMap.has(type)) {
 
@@ -114,7 +114,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     const importPath = code.getImportPath(this._modelFile, importFile);
 
-                    this._unitDom.addImport(type, importPath, true);
+                    this._unitDom.addImport(type, importPath);
                 }
             }
         }
