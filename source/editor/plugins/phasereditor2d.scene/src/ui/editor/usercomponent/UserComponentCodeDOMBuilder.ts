@@ -7,6 +7,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         private _component: UserComponent;
         private _model: UserComponentsModel;
+        // TODO: will be used for the "import" syntax
         private _file: io.FilePath;
 
         constructor(component: UserComponent, model: UserComponentsModel, file: io.FilePath) {
@@ -59,6 +60,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 body.push(new code.RawCodeDOM(""));
             }
 
+            const initGameObjDom = new code.AssignPropertyCodeDOM("gameObject", "this");
+            initGameObjDom.value("gameObject");
+            body.push(initGameObjDom);
+
             const setCompDom = new code.RawCodeDOM(`gameObject["__${clsDom.getName()}"] = this;`);
             body.push(setCompDom);
 
@@ -70,7 +75,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             // gameObject field
 
             const gameObjDeclDom = new code.FieldDeclCodeDOM("gameObject", this._component.getGameObjectType());
-            gameObjDeclDom.setInitialValueExpr("gameObject");
+            gameObjDeclDom.setInitInConstructor(true);
             clsDom.getBody().push(gameObjDeclDom);
 
             // props fields

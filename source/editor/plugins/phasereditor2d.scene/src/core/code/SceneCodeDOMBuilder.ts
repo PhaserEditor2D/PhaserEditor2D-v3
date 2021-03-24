@@ -173,9 +173,10 @@ namespace phasereditor2d.scene.core.code {
             for (const obj of children) {
 
                 const support = obj.getEditorSupport();
-                const scope = support.getScope();
+                const isMethodScope = support.getScope() === ui.sceneobjects.ObjectScope.METHOD;
+                const isPrefabObj = this._scene.isPrefabSceneType() && this._scene.getPrefabObject() === obj;
 
-                if (scope !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (!isMethodScope && !isPrefabObj) {
 
                     const varName = code.formatToValidVarName(support.getLabel());
 
