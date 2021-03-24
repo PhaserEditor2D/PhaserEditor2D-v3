@@ -51,7 +51,17 @@ namespace phasereditor2d.scene.core.code {
 
             for (const importDom of imports) {
 
-                this.line(`import { ${importDom.getElements().join(", ")} } from "${importDom.getFilePath()}";`);
+                for (const name of importDom.getElements()) {
+
+                    if (importDom.isBrackets()) {
+
+                        this.line(`import { ${name} } from "${importDom.getFilePath()}";`);
+
+                    } else {
+
+                        this.line(`import ${name} from "${importDom.getFilePath()}";`);
+                    }
+                }
             }
 
             if (imports.length > 0) {

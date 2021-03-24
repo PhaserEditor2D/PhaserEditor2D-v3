@@ -79,6 +79,11 @@ namespace phasereditor2d.scene.core.code {
 
                 clsDecl.setSuperClass(superCls);
 
+                if (superCls.startsWith("Phaser.")) {
+
+                    unit.addImport("Phaser", "phaser", false);
+                }
+
                 if (this._isPrefabScene) {
 
                     // prefab constructor
@@ -466,7 +471,7 @@ namespace phasereditor2d.scene.core.code {
                     });
 
                     const filePath = code.getImportPath(this._sceneFile, objSupport.getPrefabFile());
-                    this._unit.addImport(clsName, filePath);
+                    this._unit.addImport(clsName, filePath, true);
 
                 } else {
 

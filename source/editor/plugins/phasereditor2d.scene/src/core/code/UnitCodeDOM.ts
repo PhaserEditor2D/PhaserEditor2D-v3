@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.core.code {
             return this._imports;
         }
 
-        addImport(elementName: string, filePath: string) {
+        addImport(elementName: string, filePath: string, brackets: boolean) {
 
             const importDom = this._imports.find(i => i.getFilePath() === filePath);
 
@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.core.code {
 
             } else {
 
-                this._imports.push(new ImportCodeDOM(elementName, filePath))
+                this._imports.push(new ImportCodeDOM(elementName, filePath, brackets))
             }
         }
 

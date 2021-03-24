@@ -246,7 +246,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         children: []
                     }));
 
-                    args.unit.addImport(compName, filePath)
+                    args.unit.addImport(compName, filePath, true);
                 }
             }
 
@@ -278,7 +278,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             children: []
                         }));
 
-                        args.unit.addImport(compName, filePath)
+                        args.unit.addImport(compName, filePath, true);
                     }
                 }
             }
