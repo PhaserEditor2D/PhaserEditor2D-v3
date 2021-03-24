@@ -464,7 +464,7 @@ namespace colibri.core.io {
                 modTime: 0
             });
 
-            const path = container.getFullName() + "/" + folderName;
+            const path = FilePath.join(container.getFullName(), folderName);
 
             const data = await apiRequest("CreateFolder", {
                 path
@@ -592,7 +592,7 @@ namespace colibri.core.io {
 
             const data = await apiRequest("RenameFile", {
                 oldPath: file.getFullName(),
-                newPath: file.getParent().getFullName() + "/" + newName
+                newPath: FilePath.join(file.getParent().getFullName(), newName)
             });
 
             if (data.error) {
@@ -634,7 +634,7 @@ namespace colibri.core.io {
 
             const data = await apiRequest("CopyFile", {
                 fromPath: fromFile.getFullName(),
-                toPath: toFolder.getFullName() + "/" + newName
+                toPath: FilePath.join(toFolder.getFullName(), newName)
             });
 
             if (data.error) {
@@ -669,7 +669,7 @@ namespace colibri.core.io {
             const records = movingFiles.map(file => {
                 return {
                     from: file.getFullName(),
-                    to: moveTo.getFullName() + "/" + file.getName()
+                    to: FilePath.join(moveTo.getFullName(), file.getName())
                 };
             });
 

@@ -40,6 +40,27 @@ namespace colibri.core.io {
             }
         }
 
+        static join(path1: string, path2: string) {
+
+            let result = path1;
+
+            if (!path1.endsWith("/")) {
+
+                result += "/"
+            }
+
+            if (path2.startsWith("/")) {
+
+                result += path2.substring(1);
+
+            } else {
+
+                result += path2;
+            }
+
+            return result;
+        }
+
         _sort() {
             this._files.sort((a, b) => {
 

@@ -15,11 +15,12 @@ namespace phasereditor2d.pack.ui.importers {
         }
 
         createItemData(pack: core.AssetPack, file: io.FilePath) {
+
             let textureURL: string;
 
             if (file.getNameWithoutExtension().endsWith(".png")) {
 
-                textureURL = pack.getUrlFromAssetFile(file.getParent()) + "/" + file.getNameWithoutExtension();
+                textureURL = io.FilePath.join(pack.getUrlFromAssetFile(file.getParent()), file.getNameWithoutExtension());
 
             } else {
 

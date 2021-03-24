@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.core.code {
         const parent = file.getParent();
         const parentPath = parent.getFullName();
         const parentElements = parentPath.split("/");
-        const importFilePath = importFile.getParent().getFullName() + "/" + importFile.getNameWithoutExtension();
+        const importFilePath = io.FilePath.join(importFile.getParent().getFullName(), importFile.getNameWithoutExtension());
         const importFileElements = importFilePath.split("/");
 
         if (parent === importFile.getParent()) {

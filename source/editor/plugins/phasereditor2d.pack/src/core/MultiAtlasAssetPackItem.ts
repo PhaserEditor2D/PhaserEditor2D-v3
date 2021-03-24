@@ -35,7 +35,7 @@ namespace phasereditor2d.pack.core {
 
                     for (const texture of data.textures) {
 
-                        const url = atlasUrlParent + "/" + texture.image;
+                        const url = io.FilePath.join(atlasUrlParent, texture.image);
 
                         urlSet.add(url);
                     }
