@@ -6,11 +6,13 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export class UserComponentCodeDOMBuilder {
 
         private _component: UserComponent;
+        private _model: UserComponentsModel;
         private _file: io.FilePath;
 
-        constructor(component: UserComponent, file: io.FilePath) {
+        constructor(component: UserComponent, model: UserComponentsModel, file: io.FilePath) {
 
             this._component = component;
+            this._model = model;
             this._file = file;
         }
 
@@ -29,6 +31,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const clsDom = new code.ClassDeclCodeDOM(this._component.getName());
 
+            clsDom.setExportClass(this._model.isExportClass());
             clsDom.setSuperClass(this._component.getBaseClass());
 
             this.buildConstructor(clsDom);

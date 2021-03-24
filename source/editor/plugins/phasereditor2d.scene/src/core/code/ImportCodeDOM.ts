@@ -1,19 +1,19 @@
 namespace phasereditor2d.scene.core.code {
 
     export class ImportCodeDOM extends CodeDOM {
-        private _elementName: string;
+        private _elements: string[];
         private _filePath: string;
 
         constructor(elementName: string, filePath: string) {
             super();
 
-            this._elementName = elementName;
+            this._elements = [elementName];
             this._filePath = filePath;
         }
 
-        getElementName() {
+        getElements() {
 
-            return this._elementName;
+            return this._elements;
         }
 
         getFilePath() {

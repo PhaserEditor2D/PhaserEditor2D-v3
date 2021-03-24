@@ -20,9 +20,6 @@ namespace phasereditor2d.scene.core.code {
             return "./" + importFileElements.slice(parentElements.length).join("/");
         }
 
-        // a/b/c
-        // a/x/y
-
         while(parentElements.length > 0) {
 
             const parentFirst = parentElements.shift();

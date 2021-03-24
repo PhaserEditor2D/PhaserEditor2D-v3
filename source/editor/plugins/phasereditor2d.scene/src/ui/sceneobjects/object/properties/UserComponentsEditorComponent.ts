@@ -217,15 +217,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const compName of this._compNames) {
 
-                const info = finder.getUserComponentByName(compName);
+                const compInfo = finder.getUserComponentByName(compName);
 
-                if (info) {
+                if (compInfo) {
 
                     const compVarName = args.objectVarName + compName;
 
                     const compPropsStart = args.lazyStatements.length;
 
-                    this.buildSetObjectPropertiesCodeDOM2(info.component, compName, compVarName, args);
+                    this.buildSetObjectPropertiesCodeDOM2(compInfo.component, compName, compVarName, args);
 
                     args.lazyStatements.splice(compPropsStart, 0,
 
@@ -237,12 +237,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                                 : `const ${compVarName} = new ${compName}(${args.objectVarName});`
                         ));
+
+                    const filePath = code.getImportPath(args.sceneFile, new io.FilePath(compInfo.file.getParent(), {
+                        isFile: true,
+                        modTime: 0,
+                        name: compName,
+                        size: 0,
+                        children: []
+                    }));
+
+                    args.unit.addImport(compName, filePath)
                 }
             }
 
-            for (const info of this.getPrefabUserComponents()) {
+            for (const prefabUserComps of this.getPrefabUserComponents()) {
 
-                for (const comp of info.components) {
+                for (const comp of prefabUserComps.components) {
 
                     const compName = comp.getName();
 
@@ -257,6 +267,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         args.lazyStatements.splice(prefabPropsStart, 0,
                             new code.RawCodeDOM(
                                 `const ${compVarName} = ${compName}.getComponent(${args.objectVarName});`));
+
+                        const compInfo = finder.getUserComponentByName(compName);
+
+                        const filePath = code.getImportPath(args.sceneFile, new io.FilePath(compInfo.file.getParent(), {
+                            isFile: true,
+                            modTime: 0,
+                            name: compName,
+                            size: 0,
+                            children: []
+                        }));
+
+                        args.unit.addImport(compName, filePath)
                     }
                 }
             }

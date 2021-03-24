@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
+    import io = colibri.core.io;
     import read = colibri.core.json.read;
     import write = colibri.core.json.write;
 
@@ -9,6 +10,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         lazyStatements: core.code.CodeDOM[];
         objectVarName: string;
         prefabSerializer: core.json.Serializer;
+        unit: core.code.UnitCodeDOM;
+        sceneFile: io.FilePath
     }
 
     export abstract class Component<T> implements core.json.ISerializable {

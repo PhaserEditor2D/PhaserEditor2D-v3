@@ -6,6 +6,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export interface IUserComponentsModelData {
         components: any[],
         outputLang?: core.json.SourceLang,
+        exportClass?: boolean,
+        autoImport?: boolean,
         insertSpaces?: boolean,
         tabSize?: number,
         meta: {
@@ -21,6 +23,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         private _outputLang: core.json.SourceLang;
         private _insertSpaces: boolean;
         private _tabSize: number;
+        private _exportClass: boolean;
+        private _autoImport: boolean;
 
         constructor() {
 
@@ -28,6 +32,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._outputLang = core.json.SourceLang.JAVA_SCRIPT;
             this._insertSpaces = false;
             this._tabSize = 4;
+            this._exportClass = false;
+            this._autoImport = false;
         }
 
         getTabSize() {
@@ -50,6 +56,26 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._insertSpaces = insertSpaces;
         }
 
+        isExportClass() {
+
+            return this._exportClass;
+        }
+
+        setExportClass(exportClass: boolean) {
+
+            this._exportClass = exportClass;
+        }
+
+        isAutoImport() {
+
+            return this._autoImport;
+        }
+
+        setAutoImport(autoImport: boolean) {
+
+            this._autoImport = autoImport;
+        }
+
         toJSON(): IUserComponentsModelData {
 
             const data = {
@@ -64,6 +90,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             write(data, "outputLang", this._outputLang, core.json.SourceLang.JAVA_SCRIPT);
             write(data, "insertSpaces", this._insertSpaces, false);
             write(data, "tabSize", this._tabSize, 4);
+            write(data, "exportClass", this._exportClass, false);
+            write(data, "autoImport", this._autoImport, false);
 
             return data;
         }
@@ -73,6 +101,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._outputLang = read(data, "outputLang", core.json.SourceLang.JAVA_SCRIPT);
             this._insertSpaces = read(data, "insertSpaces", false);
             this._tabSize = read(data, "tabSize", 4);
+            this._exportClass = read(data, "exportClass", false);
+            this._autoImport = read(data, "autoImport", false);
 
             this._components = data.components.map(
                 userCompData => {

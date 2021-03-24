@@ -28,6 +28,7 @@ namespace colibri.core.io {
                 this._files = [];
 
                 for (const child of fileData.children) {
+
                     this._files.push(new FilePath(this, child));
                 }
 
@@ -36,7 +37,6 @@ namespace colibri.core.io {
             } else {
 
                 this._files = [];
-
             }
         }
 

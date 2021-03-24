@@ -55,6 +55,44 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             }
 
             {
+                // Export Class
+
+                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Export Class (ES module)", "Export the class."));
+
+                checkbox.addEventListener("change", e => {
+
+                    this.getEditor().runOperation(model => {
+
+                        model.setExportClass(checkbox.checked);
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    checkbox.checked = this.getSelectionFirstElement().isExportClass();
+                });
+            }
+
+            {
+                // Auto Import
+
+                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Auto Import (ES module)", "Auto import types used in the component."));
+
+                checkbox.addEventListener("change", e => {
+
+                    this.getEditor().runOperation(model => {
+
+                        model.setAutoImport(checkbox.checked);
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    checkbox.checked = this.getSelectionFirstElement().isAutoImport();
+                });
+            }
+
+            {
                 // Insert Spaces
 
                 const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Insert Spaces", "Use spaces for indentation."));

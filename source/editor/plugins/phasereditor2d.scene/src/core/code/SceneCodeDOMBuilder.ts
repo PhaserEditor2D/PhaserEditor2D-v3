@@ -11,12 +11,13 @@ namespace phasereditor2d.scene.core.code {
 
         private _scene: ui.Scene;
         private _isPrefabScene: boolean;
-        private _file: io.FilePath;
+        private _sceneFile: io.FilePath;
+        private _unit: UnitCodeDOM;
 
         constructor(scene: ui.Scene, file: io.FilePath) {
 
             this._scene = scene;
-            this._file = file;
+            this._sceneFile = file;
             this._isPrefabScene = this._scene.isPrefabSceneType();
         }
 
@@ -28,6 +29,8 @@ namespace phasereditor2d.scene.core.code {
 
             const unit = new UnitCodeDOM([]);
 
+            this._unit = unit;
+
             if (settings.onlyGenerateMethods) {
 
                 const createMethodDecl = this.buildCreateMethod();
@@ -38,10 +41,8 @@ namespace phasereditor2d.scene.core.code {
 
             } else {
 
-                const clsName = this._file.getNameWithoutExtension();
+                const clsName = this._sceneFile.getNameWithoutExtension();
                 const clsDecl = new ClassDeclCodeDOM(clsName);
-
-                this.buildImports(clsDecl, this._scene.getDisplayListChildren());
 
                 clsDecl.setExportClass(settings.exportClass);
 
@@ -123,31 +124,12 @@ namespace phasereditor2d.scene.core.code {
                 unit.getBody().push(clsDecl);
             }
 
-            return unit;
-        }
+            if (!settings.autoImport) {
 
-        private buildImports(clsDecl: ClassDeclCodeDOM, objects: ISceneGameObject[]) {
-
-            for (const obj of objects) {
-
-                const support = obj.getEditorSupport();
-
-                if (support.isPrefabInstance()) {
-
-                    const name = support.getPrefabFile().getNameWithoutExtension();
-
-                    const filePath = getImportPath(this._file, support.getPrefabFile());
-
-                    clsDecl.getImports().push(new ImportCodeDOM(name, filePath));
-
-                } else {
-
-                    if (obj instanceof Phaser.GameObjects.Container || obj instanceof Phaser.GameObjects.Layer) {
-
-                        this.buildImports(clsDecl, obj.list as ISceneGameObject[])
-                    }
-                }
+                unit.removeImports();
             }
+
+            return unit;
         }
 
         buildPrefabPropertiesFields(fields: MemberDeclCodeDOM[]) {
@@ -483,6 +465,9 @@ namespace phasereditor2d.scene.core.code {
                         prefabSerializer
                     });
 
+                    const filePath = code.getImportPath(this._sceneFile, objSupport.getPrefabFile());
+                    this._unit.addImport(clsName, filePath);
+
                 } else {
 
                     throw new Error(`Cannot find prefab with id ${objSupport.getPrefabId()}.`);
@@ -604,7 +589,9 @@ namespace phasereditor2d.scene.core.code {
                     statements,
                     lazyStatements,
                     objectVarName: varname,
-                    prefabSerializer: prefabSerializer
+                    prefabSerializer: prefabSerializer,
+                    unit: this._unit,
+                    sceneFile: this._sceneFile
                 });
             }
 

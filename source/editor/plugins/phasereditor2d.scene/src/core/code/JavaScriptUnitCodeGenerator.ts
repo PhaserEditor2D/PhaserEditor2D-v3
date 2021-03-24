@@ -29,9 +29,9 @@ namespace phasereditor2d.scene.core.code {
 
         private generateUnitElement(elem: object) {
 
-            if (elem instanceof ClassDeclCodeDOM) {
+            this.generateImports();
 
-                this.generateImports(elem as ClassDeclCodeDOM);
+            if (elem instanceof ClassDeclCodeDOM) {
 
                 this.generateClass(elem as ClassDeclCodeDOM);
 
@@ -45,14 +45,16 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
-        private generateImports(clsDecl: ClassDeclCodeDOM) {
+        private generateImports() {
 
-            for (const importDom of clsDecl.getImports()) {
+            const imports = this._unit.getImports();
 
-                this.line(`import { ${importDom.getElementName()} } from "${importDom.getFilePath()}";`)
+            for (const importDom of imports) {
+
+                this.line(`import { ${importDom.getElements().join(", ")} } from "${importDom.getFilePath()}";`);
             }
 
-            if (clsDecl.getImports().length > 0) {
+            if (imports.length > 0) {
 
                 this.line();
             }
