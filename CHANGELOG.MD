@@ -11,6 +11,7 @@
 ### Updated
 
 * Inspector view: improves style of color buttons in Dark theme.
+* Code generator: always use class fields. Init all fields in the declaration. Init in constructor is not used anymore.
 
 ## v3.12.0 - Mar 12, 2021
 
