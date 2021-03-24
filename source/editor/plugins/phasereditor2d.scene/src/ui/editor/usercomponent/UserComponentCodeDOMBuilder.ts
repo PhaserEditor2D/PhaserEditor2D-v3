@@ -8,24 +8,44 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         private _component: UserComponent;
         private _model: UserComponentsModel;
         // TODO: will be used for the "import" syntax
-        private _file: io.FilePath;
+        private _modelFile: io.FilePath;
+        private _unitDom: code.UnitCodeDOM;
+        private _typeFileMap: Map<string, io.FilePath>;
 
         constructor(component: UserComponent, model: UserComponentsModel, file: io.FilePath) {
 
             this._component = component;
             this._model = model;
-            this._file = file;
+            this._modelFile = file;
         }
 
         build(): code.UnitCodeDOM {
 
-            const unitDom = new code.UnitCodeDOM([]);
+            if (this._model.isAutoImport()) {
+
+                this.buildFilesMap();
+            }
+
+            this._unitDom = new code.UnitCodeDOM([]);
 
             const clsDom = this.createClass();
 
-            unitDom.getBody().push(clsDom);
+            this._unitDom.getBody().push(clsDom);
 
-            return unitDom;
+            return this._unitDom;
+        }
+
+        private buildFilesMap() {
+
+            this._typeFileMap = new Map();
+
+            colibri.ui.ide.FileUtils.visitProject(file => {
+
+                if (file.getExtension() === "ts" || file.getExtension() === "js") {
+
+                    this._typeFileMap.set(file.getNameWithoutExtension(), file);
+                }
+            });
         }
 
         private createClass() {
@@ -34,6 +54,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             clsDom.setExportClass(this._model.isExportClass());
             clsDom.setSuperClass(this._component.getBaseClass());
+
+            this.addImportForType(clsDom.getSuperClass());
 
             this.buildConstructor(clsDom);
 
@@ -49,6 +71,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const ctrDeclDom = new code.MethodDeclCodeDOM("constructor");
 
             ctrDeclDom.arg("gameObject", this._component.getGameObjectType());
+
+            this.addImportForType(this._component.getGameObjectType());
 
             const body = ctrDeclDom.getBody();
 
@@ -70,6 +94,31 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             clsDom.getBody().push(ctrDeclDom);
         }
 
+        addImportForType(type: string) {
+
+            if (!this._model.isAutoImport()) {
+
+                return;
+            }
+
+            if (type) {
+
+
+                if (type.startsWith("Phaser.")) {
+
+                    this._unitDom.addImport("Phaser", "phaser", false);
+
+                } else if (this._typeFileMap.has(type)) {
+
+                    const importFile = this._typeFileMap.get(type);
+
+                    const importPath = code.getImportPath(this._modelFile, importFile);
+
+                    this._unitDom.addImport(type, importPath, true);
+                }
+            }
+        }
+
         private buildFields(clsDom: code.ClassDeclCodeDOM) {
 
             // gameObject field
@@ -87,6 +136,16 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 const decls = prop.buildDeclarationsCode();
 
                 clsDom.getBody().push(...decls);
+            }
+
+            // add imports for fields
+
+            for (const elem of clsDom.getBody()) {
+
+                if (elem instanceof code.FieldDeclCodeDOM) {
+
+                    this.addImportForType(elem.getType());
+                }
             }
         }
 

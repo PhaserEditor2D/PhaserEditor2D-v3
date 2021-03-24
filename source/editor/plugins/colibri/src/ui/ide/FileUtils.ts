@@ -4,6 +4,21 @@ namespace colibri.ui.ide {
 
     export class FileUtils {
 
+        static visit(folder: io.FilePath, visitor: (file: io.FilePath) => void) {
+
+            visitor(folder);
+
+            for (const file of folder.getFiles()) {
+
+                this.visit(file, visitor);
+            }
+        }
+
+        static visitProject(visitor: (file: io.FilePath) => void) {
+
+            this.visit(this.getRoot(), visitor);
+        }
+
         static getFileNameWithoutExtension(filename: string) {
 
             const i = filename.lastIndexOf(".");
