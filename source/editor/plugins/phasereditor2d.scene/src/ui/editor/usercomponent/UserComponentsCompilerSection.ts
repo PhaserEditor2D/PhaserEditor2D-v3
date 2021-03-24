@@ -63,13 +63,13 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     this.getEditor().runOperation(model => {
 
-                        model.setExportClass(checkbox.checked);
+                        model.exportClass = checkbox.checked;
                     });
                 });
 
                 this.addUpdater(() => {
 
-                    checkbox.checked = this.getSelectionFirstElement().isExportClass();
+                    checkbox.checked = this.getSelectionFirstElement().exportClass;
                 });
             }
 
@@ -82,13 +82,13 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     this.getEditor().runOperation(model => {
 
-                        model.setAutoImport(checkbox.checked);
+                        model.autoImport = checkbox.checked;
                     });
                 });
 
                 this.addUpdater(() => {
 
-                    checkbox.checked = this.getSelectionFirstElement().isAutoImport();
+                    checkbox.checked = this.getSelectionFirstElement().autoImport;
                 });
             }
 
@@ -101,13 +101,13 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     this.getEditor().runOperation(model => {
 
-                        model.setInsetSpaces(checkbox.checked);
+                        model.insertSpaces = checkbox.checked;
                     });
                 });
 
                 this.addUpdater(() => {
 
-                    checkbox.checked = this.getSelectionFirstElement().isInsertSpaces();
+                    checkbox.checked = this.getSelectionFirstElement().insertSpaces;
                 });
             }
 
@@ -130,14 +130,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                         this.getEditor().runOperation(model => {
 
-                            model.setTabSize(n);
+                            model.tabSize = n;
                         });
                     }
                 });
 
                 this.addUpdater(() => {
 
-                    text.value = this.getSelectionFirstElement().getTabSize().toString();
+                    text.value = this.getSelectionFirstElement().tabSize.toString();
                 });
             }
         }

@@ -28,9 +28,9 @@ namespace phasereditor2d.scene.ui.dialogs {
 
                 const sceneSettings = ScenePlugin.getInstance().getDefaultSceneSettings();
 
-                model.setInsetSpaces(sceneSettings.compilerInsertSpaces);
-                model.setTabSize(sceneSettings.compilerTabSize);
-                model.setOutputLang(sceneSettings.compilerOutputLanguage);
+                model.insertSpaces = sceneSettings.compilerInsertSpaces;
+                model.tabSize = sceneSettings.compilerTabSize;
+                model.outputLang = sceneSettings.compilerOutputLanguage;
 
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
@@ -42,9 +42,9 @@ namespace phasereditor2d.scene.ui.dialogs {
 
                     const lastModel = models[models.length - 1];
 
-                    model.setOutputLang(lastModel.model.getOutputLang());
-                    model.setTabSize(lastModel.model.getTabSize());
-                    model.setInsetSpaces(lastModel.model.isInsertSpaces());
+                    model.outputLang = lastModel.model.outputLang;
+                    model.tabSize = lastModel.model.tabSize;
+                    model.insertSpaces = lastModel.model.insertSpaces;
                 }
 
                 const data = model.toJSON();

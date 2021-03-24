@@ -25,79 +25,77 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             {
                 // Name
 
-                this.createLabel(comp, "Name", "Name of the component. In the compiled code, it is used as file name and class name.");
-
-                const text = this.createText(comp);
-
-                text.addEventListener("change", e => {
-
-                    this.getEditor().runOperation(() => {
-
-                        for (const comp1 of this.getSelection()) {
-
-                            comp1.setName(text.value);
-                        }
-                    });
-                });
+                const text = this.stringProp(comp, "Name", "Name",
+                    "Name of the component. In the compiled code, it is used as file name and class name.");
 
                 this.addUpdater(() => {
-
-                    text.value = this.flatValues_StringOneOrNothing(
-                        this.getSelection().map(c => c.getName()));
 
                     text.readOnly = this.getSelection().length > 1;
                 });
             }
 
-            {
-                // Game Object Type
+            this.stringProp(comp, "GameObjectType", "Game Object Type",
+                "Name of the type of the Game Object that this component can be added on.");
 
-                this.createLabel(comp, "Game Object Type", "Name of the type of the Game Object that this component can be added on.");
+            this.stringProp(comp, "BaseClass", "Super Class", "Name of the super class of the component. It is optional.");
 
-                const text = this.createText(comp);
+            this.booleanProp(comp,
+                "ListenStart", "Listen Start Event", "Listen the `start()` event. Requires `UserComponent` as super-class.");
 
-                text.addEventListener("change", e => {
+            this.booleanProp(comp,
+                "ListenUpdate", "Listen Update Event", "Listen the `update()` event. Requires `UserComponent` as super-class.");
 
-                    this.getEditor().runOperation(() => {
+            this.booleanProp(comp,
+                "ListenDestroy", "Listen Destroy Event",
+                "Listen the `destroy()` event. Fired when the game object is destroyed. Requires `UserComponent` as super-class.");
+        }
 
-                        for (const comp1 of this.getSelection()) {
+        private stringProp(comp: HTMLElement, prop: string, propName: string, propHelp: string) {
 
-                            comp1.setGameObjectType(text.value);
-                        }
-                    });
+            this.createLabel(comp, propName, propHelp);
+
+            const text = this.createText(comp);
+
+            text.addEventListener("change", e => {
+
+                this.getEditor().runOperation(() => {
+
+                    for (const comp1 of this.getSelection()) {
+
+                        comp1["set" + prop](text.value);
+                    }
                 });
+            });
 
-                this.addUpdater(() => {
+            this.addUpdater(() => {
 
-                    text.value = this.flatValues_StringOneOrNothing(
-                        this.getSelection().map(c => c.getGameObjectType()));
+                text.value = this.flatValues_StringOneOrNothing(
+                    this.getSelection().map(c => c["get" + prop]()));
+            });
+
+            return text;
+        }
+
+        private booleanProp(comp: HTMLElement, prop: string, propName: string, propHelp: string) {
+
+            const checkbox = this.createCheckbox(comp, this.createLabel(comp, propName, propHelp));
+
+            checkbox.addEventListener("change", e => {
+
+                this.getEditor().runOperation(() => {
+
+                    for (const comp1 of this.getSelection()) {
+
+                        comp1["set" + prop](checkbox.checked);
+                    }
                 });
-            }
+            });
 
-            {
-                // Super Class
+            this.addUpdater(() => {
 
-                this.createLabel(comp, "Super Class", "Name of the super class of the component. It is optional.");
-
-                const text = this.createText(comp);
-
-                text.addEventListener("change", e => {
-
-                    this.getEditor().runOperation(() => {
-
-                        for (const comp1 of this.getSelection()) {
-
-                            comp1.setBaseClass(text.value);
-                        }
-                    });
-                });
-
-                this.addUpdater(() => {
-
-                    text.value = this.flatValues_StringOneOrNothing(
-                        this.getSelection().map(c => c.getBaseClass()));
-                });
-            }
+                checkbox.checked = this.flatValues_BooleanAnd(
+                    this.getSelection().map(c => c["is" + prop]()));
+            });
         }
 
         getEditor() {

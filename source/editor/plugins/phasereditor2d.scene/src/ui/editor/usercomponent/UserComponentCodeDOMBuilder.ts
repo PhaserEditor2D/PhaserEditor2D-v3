@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         build(): code.UnitCodeDOM {
 
-            if (this._model.isAutoImport()) {
+            if (this._model.autoImport) {
 
                 this.buildFilesMap();
             }
@@ -52,7 +52,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const clsDom = new code.ClassDeclCodeDOM(this._component.getName());
 
-            clsDom.setExportClass(this._model.isExportClass());
+            clsDom.setExportClass(this._model.exportClass);
             clsDom.setSuperClass(this._component.getBaseClass());
 
             this.addImportForType(clsDom.getSuperClass());
@@ -96,7 +96,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         addImportForType(type: string) {
 
-            if (!this._model.isAutoImport()) {
+            if (!this._model.autoImport) {
 
                 return;
             }

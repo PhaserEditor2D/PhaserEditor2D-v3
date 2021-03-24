@@ -35,9 +35,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 let output = generator.generate(replace);
 
-                if (this._model.isInsertSpaces()) {
+                if (this._model.insertSpaces) {
 
-                    const tabs = " ".repeat(Math.max(1, this._model.getTabSize()));
+                    const tabs = " ".repeat(Math.max(1, this._model.tabSize));
 
                     output = output.replace(/\t/g, tabs);
                 }
