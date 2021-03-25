@@ -51,6 +51,16 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._listenDestroy = listenDestroy;
         }
 
+        isListeningAnyEvents() {
+
+            return this._listenStart || this._listenUpdate || this._listenDestroy;
+        }
+
+        getListeningEvents() {
+
+            return { start: this._listenStart, update: this._listenUpdate, destroy: this._listenDestroy };
+        }
+
         toJSON(): any {
 
             const propsData = [];
