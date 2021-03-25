@@ -4,11 +4,10 @@ namespace phasereditor2d.scene.ui.viewers {
 
     export class ObjectExtensionAndPrefabViewer extends controls.viewers.TreeViewer {
 
-        static BUILT_IN_SECTION = "Built-In";
         static PREFAB_SECTION = "User Prefab";
 
         static SECTIONS = [
-            ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION,
+            ...SCENE_OBJECT_CATEGORIES,
             ObjectExtensionAndPrefabViewer.PREFAB_SECTION,
         ];
 
@@ -39,9 +38,9 @@ namespace phasereditor2d.scene.ui.viewers {
 
             const plugin = ScenePlugin.getInstance();
 
-            if (parent === ObjectExtensionAndPrefabViewer.BUILT_IN_SECTION) {
+            if (SCENE_OBJECT_CATEGORY_SET.has(parent)) {
 
-                return plugin.getGameObjectExtensions();
+                return plugin.getGameObjectExtensions().filter(ext => ext.getCategory() === parent);
 
             } else if (parent === ObjectExtensionAndPrefabViewer.PREFAB_SECTION) {
 
