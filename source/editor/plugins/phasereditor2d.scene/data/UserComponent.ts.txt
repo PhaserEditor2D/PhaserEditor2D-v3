@@ -7,7 +7,7 @@ class UserComponent {
      * @param listenDestroy Call the `destroy()` method when the entity is destroyed.
      */
     constructor(gameObject: Phaser.GameObjects.GameObject,
-        listenStart: boolean, listenUpdate: boolean, listenDestroy: boolean) {
+        listenStart?: boolean, listenUpdate?: boolean, listenDestroy?: boolean) {
 
         this.scene = gameObject.scene;
 
