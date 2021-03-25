@@ -1,0 +1,52 @@
+class UserComponent {
+
+    /**
+     * @param {Phaser.GameObjects.GameObject} gameObject The entity.
+     * @param {boolean} listenStart Call the `start()` method in the first tick.
+     * @param {boolean} listenUpdate Call the `update()` method at every tick.
+     * @param {boolean} listenDestroy Call the `destroy()` method when the entity is destroyed.
+     */
+    constructor(gameObject, listenStart, listenUpdate, listenDestroy) {
+
+        this.scene = gameObject.scene;
+
+        if (listenStart) {
+
+            this.scene.events.once(Phaser.Scenes.Events.UPDATE, this.start, this);
+        }
+
+        if (listenUpdate) {
+
+            this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
+        }
+
+        if (listenStart || listenUpdate || listenDestroy) {
+
+            gameObject.on(Phaser.GameObjects.Events.DESTROY, () => {
+
+                this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.start, this);
+                this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+
+                if (listenDestroy) {
+
+                    this.destroy();
+                }
+            });
+        }
+    }
+
+    /** @type {Phaser.Scene} */
+    scene;
+
+    start() {
+
+    }
+
+    update() {
+
+    }
+
+    destroy() {
+
+    }
+}

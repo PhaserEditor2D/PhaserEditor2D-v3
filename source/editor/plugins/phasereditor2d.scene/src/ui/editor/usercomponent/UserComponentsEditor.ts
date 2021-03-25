@@ -266,6 +266,42 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             menu.addSeparator();
 
+            const resourceMenu = new controls.Menu("Resources");
+
+            for (const mod of [false, true]) {
+
+                for (const ext of ["js", "ts"]) {
+
+                    resourceMenu.addAction({
+                        text: `Create UserComponent.${ext}${mod ? " (ES Module)" : ""}`,
+                        icon: webContentTypes.WebContentTypesPlugin
+                            .getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
+                        callback: async () => {
+
+                            const resources = UserComponentCodeResources.getInstance();
+                            const id = "usercomponent" + (mod ? ".module" : "") + "." + ext;
+                            const parent = this.getInput().getParent();
+                            const name = "UserComponent." + ext
+
+
+                            if (parent.getFile(name)) {
+
+                                if (!confirm("The file already exists, do you want to overwrite it?")) {
+
+                                    return;
+                                }
+                            }
+
+                            const file = await resources.createFile(id, parent, name);
+
+                            colibri.Platform.getWorkbench().openEditor(file);
+                        }
+                    });
+                }
+            }
+
+            menu.addMenu(resourceMenu);
+
             const compilerMenu = new controls.Menu("Compiler");
 
             compilerMenu.addCommand(CMD_COMPILE_FILE);

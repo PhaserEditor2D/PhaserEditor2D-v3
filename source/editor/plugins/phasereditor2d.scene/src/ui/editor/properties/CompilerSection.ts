@@ -62,12 +62,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this.createBooleanField(comp, "exportClass",
 
-                this.createLabel(comp, "Export Class (ES module)", "Export the generated class.")
+                this.createLabel(comp, "Export Class (ES Module)", "Export the generated class.")
             );
 
             this.createBooleanField(comp, "autoImport",
 
-                this.createLabel(comp, "Auto Import (ES module)", "Automatic import used classes like prefabs and user components.")
+                this.createLabel(comp, "Auto Import (ES Module)", "Automatic import used classes like prefabs and user components.")
             );
 
             this.createStringField(

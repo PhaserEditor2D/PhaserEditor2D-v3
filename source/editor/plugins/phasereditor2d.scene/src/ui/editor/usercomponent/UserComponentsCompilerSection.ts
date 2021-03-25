@@ -57,7 +57,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             {
                 // Export Class
 
-                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Export Class (ES module)", "Export the class."));
+                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Export Class (ES Module)", "Export the class."));
 
                 checkbox.addEventListener("change", e => {
 
@@ -76,7 +76,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             {
                 // Auto Import
 
-                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Auto Import (ES module)", "Auto import types used in the component."));
+                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Auto Import (ES Module)", "Auto import types used in the component."));
 
                 checkbox.addEventListener("change", e => {
 

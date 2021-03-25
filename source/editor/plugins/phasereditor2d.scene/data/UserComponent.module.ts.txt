@@ -1,0 +1,54 @@
+import Phaser from "phaser";
+
+export default class UserComponent {
+
+    /**
+     * @param gameObject The entity.
+     * @param listenStart Call the `start()` method in the first tick.
+     * @param listenUpdate Call the `update()` method at every tick.
+     * @param listenDestroy Call the `destroy()` method when the entity is destroyed.
+     */
+    constructor(gameObject: Phaser.GameObjects.GameObject,
+        listenStart: boolean, listenUpdate: boolean, listenDestroy: boolean) {
+
+        this.scene = gameObject.scene;
+
+        if (listenStart) {
+
+            this.scene.events.once(Phaser.Scenes.Events.UPDATE, this.start, this);
+        }
+
+        if (listenUpdate) {
+
+            this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
+        }
+
+        if (listenStart || listenUpdate || listenDestroy) {
+
+            gameObject.on(Phaser.GameObjects.Events.DESTROY, () => {
+
+                this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.start, this);
+                this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+
+                if (listenDestroy) {
+
+                    this.destroy();
+                }
+            });
+        }
+    }
+
+    scene: Phaser.Scene;
+
+    start() {
+        // override this
+    }
+
+    update() {
+        // override this
+    }
+
+    destroy() {
+        // override this
+    }
+}
