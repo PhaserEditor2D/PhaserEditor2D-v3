@@ -7,6 +7,7 @@
 * Code editor: enables ES modules (exportClass, autoImport settings and code generation).
 * The new "public root" concept. You can configure different public folders inside the project. Now an url of a pack file is computed based on the public root containing the pack file.
 * Files view: highlights "publicroot" files and the container folder.
+* User Components: the event flags (`listenStart`, `listenUpdate`, `listenDestroy`) compilation.
 
 ### Updated
 
