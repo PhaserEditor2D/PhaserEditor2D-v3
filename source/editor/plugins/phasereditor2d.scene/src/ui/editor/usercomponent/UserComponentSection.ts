@@ -96,6 +96,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 checkbox.checked = this.flatValues_BooleanAnd(
                     this.getSelection().map(c => c["is" + prop]()));
             });
+
+            return checkbox;
         }
 
         getEditor() {

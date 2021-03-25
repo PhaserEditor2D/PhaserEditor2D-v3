@@ -72,7 +72,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             ctrDeclDom.arg("gameObject", this._component.getGameObjectType());
 
-            this.addImportForType(this._component.getGameObjectType());
+            if (this.isTypeScriptOutput()) {
+
+                this.addImportForType(this._component.getGameObjectType());
+            }
 
             const body = ctrDeclDom.getBody();
 
@@ -155,15 +158,23 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 clsDom.getBody().push(...decls);
             }
 
-            // add imports for fields
+            if (this.isTypeScriptOutput()) {
 
-            for (const elem of clsDom.getBody()) {
+                // add imports for field declarations
 
-                if (elem instanceof code.FieldDeclCodeDOM) {
+                for (const elem of clsDom.getBody()) {
 
-                    this.addImportForType(elem.getType());
+                    if (elem instanceof code.FieldDeclCodeDOM) {
+
+                        this.addImportForType(elem.getType());
+                    }
                 }
             }
+        }
+
+        private isTypeScriptOutput() {
+
+            return this._model.outputLang === core.json.SourceLang.TYPE_SCRIPT;
         }
 
         private buildAccessorMethods(clsDom: code.ClassDeclCodeDOM) {
