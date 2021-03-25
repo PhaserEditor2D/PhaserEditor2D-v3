@@ -83,12 +83,16 @@ namespace colibri.ui.ide {
 
                 await this.setFileString_async(file, content);
 
+                await Platform.getWorkbench().getContentTypeRegistry().preload(file);
+
                 return file;
             }
 
             const storage = this.getFileStorage();
 
             file = await storage.createFile(folder, fileName, content);
+
+            await Platform.getWorkbench().getContentTypeRegistry().preload(file);
 
             return file;
         }
@@ -217,6 +221,7 @@ namespace colibri.ui.ide {
             const files = this.getAllFiles();
 
             for (const file of files) {
+
                 await reg.preload(file);
             }
 
