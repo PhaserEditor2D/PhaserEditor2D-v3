@@ -126,6 +126,29 @@ namespace phasereditor2d.scene.core.code {
                 clsDecl.getBody().push(...methods);
                 clsDecl.getBody().push(...fields);
 
+                if (this._isPrefabScene) {
+
+                    clsDecl.getBody().push(new UserSectionCodeDOM(
+                        "/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t"));
+
+                } else {
+
+                    const defaultContent = [
+                        "",
+                        "",
+                        "// Write your code here",
+                        "",
+                        "create() {",
+                        "",
+                        "\tthis.editorCreate();",
+                        "}",
+                        "",
+                        ""].join("\n\t");
+
+                    clsDecl.getBody().push(new UserSectionCodeDOM(
+                        "/* START-USER-CODE */", "/* END-USER-CODE */", defaultContent));
+                }
+
                 unit.getBody().push(clsDecl);
             }
 

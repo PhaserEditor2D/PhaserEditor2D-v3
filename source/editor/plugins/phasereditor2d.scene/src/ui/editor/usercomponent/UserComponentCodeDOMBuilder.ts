@@ -111,6 +111,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const setCompDom = new code.RawCodeDOM(`gameObject["__${clsDom.getName()}"] = this;`);
             body.push(setCompDom);
 
+            clsDom.getBody().push(new code.UserSectionCodeDOM(
+                "/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t"));
+
             clsDom.getBody().push(ctrDeclDom);
         }
 

@@ -109,7 +109,13 @@ namespace phasereditor2d.scene.core.code {
 
             // user section
 
-            this.section("/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t");
+            for (const memberDecl of body) {
+
+                if (memberDecl instanceof UserSectionCodeDOM) {
+
+                    this.section(memberDecl.getOpenTag(), memberDecl.getCloseTag(), memberDecl.getDefaultContent());
+                }
+            }
 
             // close body
 
