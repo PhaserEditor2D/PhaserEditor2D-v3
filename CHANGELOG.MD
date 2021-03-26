@@ -16,6 +16,7 @@
 * Code generator: always use class fields. Init all fields in the declaration. Init in constructor is not used anymore.
 * Default User Components File has the "Game" name.
 * Replace Type dialog: groups built-in types in sections: Texture, String, Shapes...
+* By default, a new scene has `editorCreate()` as name of the "Create Method". The user code is generator calling `editorCreate()` within a handwritten `create()` method.
 
 ## v3.12.0 - Mar 12, 2021
 
