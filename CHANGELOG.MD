@@ -15,7 +15,7 @@
 * Update to Phaser v3.54.0.
 * Inspector view: improves style of color buttons in Dark theme.
 * Code generator: always use class fields. Init all fields in the declaration. Init in constructor is not used anymore.
-* Default User Components File has the "Game" name.
+* Default User Components File has the `Behaviors.components` name.
 * Replace Type dialog: groups built-in types in sections: Texture, String, Shapes...
 * By default, a new scene has `editorCreate()` as name of the "Create Method". The user code is generator calling `editorCreate()` within a handwritten `create()` method.
 * User Component compiler: fixes TypeScript error when `strict` mode is enabled.
