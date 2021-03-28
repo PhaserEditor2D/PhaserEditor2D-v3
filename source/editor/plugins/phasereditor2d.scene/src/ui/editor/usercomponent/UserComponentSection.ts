@@ -39,16 +39,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 "Name of the type of the Game Object that this component can be added on.", () => this.createGameObjectTypeOptions());
 
             this.stringProp(comp, "BaseClass", "Super Class", "Name of the super class of the component. It is optional.", () => this.createSuperClassOptions());
-
-            this.booleanProp(comp,
-                "ListenStart", "Listen Start Event", "Listen the `start()` event. Requires `UserComponent` as super-class.");
-
-            this.booleanProp(comp,
-                "ListenUpdate", "Listen Update Event", "Listen the `update()` event. Requires `UserComponent` as super-class.");
-
-            this.booleanProp(comp,
-                "ListenDestroy", "Listen Destroy Event",
-                "Listen the `destroy()` event. Fired when the game object is destroyed. Requires `UserComponent` as super-class.");
         }
 
         private createSuperClassOptions(): string[] {

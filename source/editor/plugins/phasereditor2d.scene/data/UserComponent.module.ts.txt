@@ -4,14 +4,20 @@ export default class UserComponent {
 
     /**
      * @param gameObject The entity.
-     * @param listenStart Call the `start()` method in the first tick.
-     * @param listenUpdate Call the `update()` method at every tick.
-     * @param listenDestroy Call the `destroy()` method when the entity is destroyed.
      */
-    constructor(gameObject: Phaser.GameObjects.GameObject,
-        listenStart?: boolean, listenUpdate?: boolean, listenDestroy?: boolean) {
+    constructor(gameObject: Phaser.GameObjects.GameObject) {
 
         this.scene = gameObject.scene;
+
+        const listenAwake = this.awake !== UserComponent.prototype.awake;
+        const listenStart = this.start !== UserComponent.prototype.start;
+        const listenUpdate = this.update !== UserComponent.prototype.update;
+        const listenDestroy = this.destroy !== UserComponent.prototype.destroy;
+        
+        if (listenAwake) {
+
+            gameObject.once("components-awake", this.awake, this);
+        }
 
         if (listenStart) {
 
@@ -40,15 +46,19 @@ export default class UserComponent {
 
     scene: Phaser.Scene;
 
-    start() {
+    protected awake() {
         // override this
     }
 
-    update() {
+    protected start() {
         // override this
     }
 
-    destroy() {
+    protected update() {
+        // override this
+    }
+
+    protected destroy() {
         // override this
     }
 }

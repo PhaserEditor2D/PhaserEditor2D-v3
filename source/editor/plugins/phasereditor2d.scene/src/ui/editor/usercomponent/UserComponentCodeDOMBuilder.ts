@@ -83,24 +83,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             if (superClass && superClass.trim() !== "") {
 
-                if (this._component.isListeningAnyEvents()) {
-
-                    const { start, update, destroy } = this._component.getListeningEvents();
-
-                    const e1 = start ? "start()" : "";
-                    const e2 = update ? "update()" : "";
-                    const e3 = destroy ? "destroy()" : "";
-
-                    const events = [e1, e2, e3].filter(e => e !== "").join(", ");
-
-                    body.push(new code.RawCodeDOM(`// listen events: ${events}`));
-                    body.push(new code.RawCodeDOM(`super(gameObject, ${start}, ${update}, ${destroy});`));
-
-                } else {
-
-                    body.push(new code.RawCodeDOM("super(gameObject);"));
-                }
-
+                body.push(new code.RawCodeDOM("super(gameObject);"));
                 body.push(new code.RawCodeDOM(""));
             }
 

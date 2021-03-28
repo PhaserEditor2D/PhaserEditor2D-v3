@@ -3,14 +3,21 @@ import Phaser from "phaser";
 export default class UserComponent {
 
     /**
-     * @param {Phaser.GameObjects.GameObject} gameObject The entity.
-     * @param {boolean} listenStart Call the `start()` method in the first tick.
-     * @param {boolean} listenUpdate Call the `update()` method at every tick.
-     * @param {boolean} listenDestroy Call the `destroy()` method when the entity is destroyed.
+     * @param {Phaser.GameObjects.GameObject} gameObject The entity.     
      */
-    constructor(gameObject, listenStart, listenUpdate, listenDestroy) {
+    constructor(gameObject) {
 
         this.scene = gameObject.scene;
+
+        const listenAwake = this.awake !== UserComponent.prototype.awake;
+        const listenStart = this.start !== UserComponent.prototype.start;
+        const listenUpdate = this.update !== UserComponent.prototype.update;
+        const listenDestroy = this.destroy !== UserComponent.prototype.destroy;
+        
+        if (listenAwake) {
+
+            gameObject.once("components-awake", this.awake, this);
+        }
 
         if (listenStart) {
 
@@ -40,15 +47,19 @@ export default class UserComponent {
     /** @type {Phaser.Scene} */
     scene;
 
-    start() {
+    awake() {
+        // override this
+    }
 
+    start() {
+        // override this
     }
 
     update() {
-
+        // override this
     }
 
     destroy() {
-
+        // override this
     }
 }
