@@ -108,7 +108,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             initGameObjDom.value("gameObject");
             body.push(initGameObjDom);
 
-            const setCompDom = new code.RawCodeDOM(`gameObject["__${clsDom.getName()}"] = this;`);
+            const setCompDom = new code.RawCodeDOM(this.isTypeScriptOutput() ?
+                `(gameObject as any)["__${clsDom.getName()}"] = this;`
+                : `gameObject["__${clsDom.getName()}"] = this;`);
             body.push(setCompDom);
 
             clsDom.getBody().push(new code.UserSectionCodeDOM(
@@ -189,7 +191,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 declDom.arg("gameObject", this._component.getGameObjectType());
                 declDom.setReturnType(clsDom.getName());
 
-                const returnDom = new code.RawCodeDOM(`return gameObject["__${clsDom.getName()}"];`)
+                const returnDom = new code.RawCodeDOM(this.isTypeScriptOutput() ?
+                    `return (gameObject as any)["__${clsDom.getName()}"];`
+                    : `return gameObject["__${clsDom.getName()}"];`)
 
                 declDom.getBody().push(returnDom);
                 clsDom.getBody().push(declDom);

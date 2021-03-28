@@ -12,6 +12,7 @@
 
 ### Updated
 
+* Update to Phaser v3.54.0.
 * Inspector view: improves style of color buttons in Dark theme.
 * Code generator: always use class fields. Init all fields in the declaration. Init in constructor is not used anymore.
 * Default User Components File has the "Game" name.
