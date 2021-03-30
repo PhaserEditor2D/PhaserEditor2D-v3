@@ -9,6 +9,7 @@
 * Files view: highlights "publicroot" files and the container folder.
 * User components: options button for the component's **Game Object Type** & **Super Class** fields.
 * User components: the new `UserComponent.(js|ts)` class generator.
+* Webpack project templates for JavaScript and TypeScript.
 
 ### Updated
 
