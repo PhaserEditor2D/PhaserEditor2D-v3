@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.13.0 - Apr 2, 2021
 
 ### Added
 
