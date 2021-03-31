@@ -10,6 +10,7 @@
 * User components: options button for the component's **Game Object Type** & **Super Class** fields.
 * User components: the new `UserComponent.(js|ts)` class generator.
 * Webpack project templates for JavaScript and TypeScript.
+* Parcel project templates for JavaScript and TypeScript.
 
 ### Updated
 
@@ -20,6 +21,7 @@
 * Replace Type dialog: groups built-in types in sections: Texture, String, Shapes...
 * By default, a new scene has `editorCreate()` as name of the "Create Method". The user code is generator calling `editorCreate()` within a handwritten `create()` method.
 * User Component compiler: fixes TypeScript error when `strict` mode is enabled.
+* Organize New Project dialog. It shows new categories: **Basic**, **Game Demos**, **Parcel**, and **Webpack**.
 
 ## v3.12.0 - Mar 12, 2021
 
