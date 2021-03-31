@@ -22,6 +22,7 @@
 * By default, a new scene has `editorCreate()` as name of the "Create Method". The user code is generator calling `editorCreate()` within a handwritten `create()` method.
 * User Component compiler: fixes TypeScript error when `strict` mode is enabled.
 * Organize New Project dialog. It shows new categories: **Basic**, **Game Demos**, **Parcel**, and **Webpack**.
+* Updated the basic project templates with a similar behavior to the webpack and parcel templates.
 
 ## v3.12.0 - Mar 12, 2021
 
