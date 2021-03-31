@@ -1,0 +1,152 @@
+{
+    "section1": {
+        "files": [
+            {
+                "url": "assets/dino.png",
+                "type": "image",
+                "key": "dino"
+            },
+            {
+                "url": "assets/scenes/Level.js",
+                "type": "sceneFile",
+                "key": "Level"
+            },
+            {
+                "atlasURL": "assets/atlas/volcano.json",
+                "textureURL": "assets/atlas/volcano.png",
+                "type": "atlas",
+                "key": "volcano"
+            },
+            {
+                "url": "assets/Background/Volcano Level Set_Background - Layer 00.png",
+                "type": "image",
+                "key": "Volcano Level Set_Background - Layer 00"
+            },
+            {
+                "url": "assets/Background/Volcano Level Set_Background - Layer 01.png",
+                "type": "image",
+                "key": "Volcano Level Set_Background - Layer 01"
+            },
+            {
+                "url": "assets/prefabs/MovingPlatform2.js",
+                "type": "script",
+                "key": "MovingPlatform2"
+            },
+            {
+                "url": "assets/prefabs/MovingPlatform1.js",
+                "type": "script",
+                "key": "MovingPlatform1"
+            },
+            {
+                "url": "assets/components/PlatformPhysics.js",
+                "type": "script",
+                "key": "PlatformPhysics"
+            },
+            {
+                "url": "assets/components/HorizontalMove.js",
+                "type": "script",
+                "key": "HorizontalMove"
+            },
+            {
+                "url": "assets/components/FollowObject.js",
+                "type": "script",
+                "key": "FollowObject"
+            },
+            {
+                "atlasURL": "assets/atlas/player.json",
+                "textureURL": "assets/atlas/player.png",
+                "type": "atlas",
+                "key": "player"
+            },
+            {
+                "url": "assets/prefabs/Player.js",
+                "type": "script",
+                "key": "Player"
+            },
+            {
+                "url": "assets/prefabs/Ladder.js",
+                "type": "script",
+                "key": "Ladder"
+            },
+            {
+                "url": "assets/animations.json",
+                "type": "animation",
+                "key": "animations"
+            },
+            {
+                "url": [
+                    "assets/audio/dead.mp3"
+                ],
+                "type": "audio",
+                "key": "dead"
+            },
+            {
+                "url": [
+                    "assets/audio/fly.mp3"
+                ],
+                "type": "audio",
+                "key": "fly"
+            },
+            {
+                "url": [
+                    "assets/audio/jump.mp3"
+                ],
+                "type": "audio",
+                "key": "jump"
+            },
+            {
+                "url": [
+                    "assets/audio/fall-stop.mp3"
+                ],
+                "type": "audio",
+                "key": "fall-stop"
+            },
+            {
+                "url": [
+                    "assets/audio/walk.mp3"
+                ],
+                "type": "audio",
+                "key": "walk"
+            },
+            {
+                "url": "assets/prefabs/FoodItem.js",
+                "type": "script",
+                "key": "FoodItem"
+            },
+            {
+                "atlasURL": "assets/atlas/ui.json",
+                "textureURL": "assets/atlas/ui.png",
+                "type": "atlas",
+                "key": "ui"
+            },
+            {
+                "url": "assets/components/ScrollFactor.js",
+                "type": "script",
+                "key": "ScrollFactor"
+            },
+            {
+                "url": "assets/prefabs/PlayerButton.js",
+                "type": "script",
+                "key": "PlayerButton"
+            },
+            {
+                "url": "assets/components/PlayerController.js",
+                "type": "script",
+                "key": "PlayerController"
+            },
+            {
+                "url": [
+                    "assets/audio/eat.mp3"
+                ],
+                "type": "audio",
+                "key": "eat"
+            }
+        ]
+    },
+    "meta": {
+        "app": "Phaser Editor 2D - Asset Pack Editor",
+        "contentType": "phasereditor2d.pack.core.AssetContentType",
+        "url": "https://phasereditor2d.com",
+        "version": 2
+    }
+}

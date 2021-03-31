@@ -1,0 +1,28 @@
+{
+    "id": "ad30b4e1-19b5-4a8c-8b9b-bdecec788df1",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": ""
+    },
+    "displayList": [
+        {
+            "type": "Image",
+            "id": "24f38418-ec72-447a-9019-ef0caf3bb994",
+            "label": "meet1",
+            "components": [],
+            "texture": {
+                "key": "volcano",
+                "frame": "Volcano Level Set_Collectable Object - Meat.png"
+            },
+            "x": 72,
+            "y": 70
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

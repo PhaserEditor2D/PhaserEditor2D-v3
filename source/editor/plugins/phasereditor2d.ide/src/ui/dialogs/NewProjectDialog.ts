@@ -26,6 +26,8 @@ namespace phasereditor2d.ide.ui.dialogs {
             this._workspacePath = workspacePath;
             this._projectNames = new Set();
             this._cancellable = true;
+
+            this.setSize(window.innerWidth / 4, window.innerHeight / 2);
         }
 
         setCancellable(cancellable: boolean) {

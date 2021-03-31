@@ -1,0 +1,133 @@
+{
+    "components": [
+        {
+            "name": "HorizontalMove",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "horizVelocity",
+                    "label": "Horizontal Velocity",
+                    "tooltip": "The velocity of the object.",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                },
+                {
+                    "name": "minX",
+                    "label": "Min Position X",
+                    "tooltip": "Min X",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                },
+                {
+                    "name": "maxX",
+                    "label": "Max Position X",
+                    "tooltip": "Max X",
+                    "defValue": 3070,
+                    "type": {
+                        "id": "number"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "PlatformPhysics",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "bodyY",
+                    "label": "Body Y",
+                    "tooltip": "Body Y",
+                    "defValue": 8,
+                    "type": {
+                        "id": "number"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "FollowObject",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "target",
+                    "label": "Target Object",
+                    "tooltip": "The object to follow",
+                    "defValue": "",
+                    "type": {
+                        "id": "expression",
+                        "expressionType": "Phaser.GameObjects.Components.Transform"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ScrollFactor",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "x",
+                    "label": "X",
+                    "tooltip": "X",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                },
+                {
+                    "name": "y",
+                    "label": "Y",
+                    "tooltip": "Y",
+                    "defValue": 0,
+                    "type": {
+                        "id": "number"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "PlayerController",
+            "baseClass": "EventComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "player",
+                    "label": "Player",
+                    "tooltip": "Player",
+                    "defValue": "",
+                    "type": {
+                        "id": "expression",
+                        "expressionType": "Player"
+                    }
+                },
+                {
+                    "name": "direction",
+                    "label": "Direction",
+                    "tooltip": "Direction",
+                    "defValue": "left",
+                    "type": {
+                        "id": "option",
+                        "options": [
+                            "left",
+                            "right",
+                            "up"
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "outputLang": "JAVA_SCRIPT",
+    "meta": {
+        "app": "Phaser Editor 2D - Object Script Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "id": "3168bc06-abd4-4154-bd16-8450e14d1012",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": ""
+    },
+    "displayList": [
+        {
+            "type": "Sprite",
+            "id": "67cb30f0-fa85-405f-95cd-54eaf563eea6",
+            "label": "idle_001",
+            "components": [],
+            "texture": {
+                "key": "player",
+                "frame": "Idle_001"
+            },
+            "x": 136,
+            "y": 177,
+            "originX": 0.5045282703122486,
+            "originY": 0.8054902070420497
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    },
+    "prefabProperties": [
+        {
+            "name": "platforms",
+            "label": "Platforms",
+            "tooltip": "The objects where the player jumps.",
+            "defValue": "[]",
+            "type": {
+                "id": "expression",
+                "expressionType": "Phaser.GameObjects.GameObject[]"
+            }
+        },
+        {
+            "name": "foodItems",
+            "label": "Food Items",
+            "tooltip": "List of FoodItem",
+            "defValue": "[]",
+            "type": {
+                "id": "expression",
+                "expressionType": "FoodItem[]"
+            }
+        }
+    ]
+}

@@ -1,0 +1,56 @@
+{
+    "id": "4067c8d7-b512-4e73-897d-f33aa7713a53",
+    "sceneType": "PREFAB",
+    "settings": {
+        "snapWidth": 128,
+        "snapHeight": 128,
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": ""
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "e7ff105b-0b60-40c8-baee-d80cb17a582f",
+            "label": "container_1",
+            "components": [
+                "PlatformPhysics",
+                "HorizontalMove"
+            ],
+            "HorizontalMove.horizVelocity": 50,
+            "allowPickChildren": false,
+            "list": [
+                {
+                    "type": "Image",
+                    "id": "ee4acc1c-9183-4c3e-86c0-92c0a1db60c7",
+                    "label": "p2",
+                    "components": [],
+                    "texture": {
+                        "key": "volcano",
+                        "frame": "Volcano Level Set_Platformer - Ground 10.png"
+                    },
+                    "originX": 0,
+                    "originY": 0
+                },
+                {
+                    "type": "Image",
+                    "id": "cf91a524-5ad8-4f47-96dd-a65b38bc1d3f",
+                    "label": "p1",
+                    "components": [],
+                    "texture": {
+                        "key": "volcano",
+                        "frame": "Volcano Level Set_Platformer - Ground 12.png"
+                    },
+                    "x": 128,
+                    "originX": 0,
+                    "originY": 0
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}
