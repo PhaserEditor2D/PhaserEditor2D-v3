@@ -38,6 +38,8 @@ namespace colibri.ui.controls.dialogs {
 
             const page = this.getActivePage();
 
+            page.saveState();
+
             this._pageArea.innerHTML = "";
 
             page.createElements(this._pageArea);

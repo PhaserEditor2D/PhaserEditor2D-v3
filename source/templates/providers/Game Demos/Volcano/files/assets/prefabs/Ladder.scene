@@ -1,0 +1,31 @@
+{
+    "id": "37217272-2539-426e-97ba-49812099c17b",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": ""
+    },
+    "displayList": [
+        {
+            "type": "Image",
+            "id": "c2321382-e9f1-48a2-800e-feccdc697613",
+            "label": "ladder1",
+            "components": [
+                "PlatformPhysics"
+            ],
+            "PlatformPhysics.bodyY": 80,
+            "texture": {
+                "key": "volcano",
+                "frame": "Volcano Level Set_Platformer - Ladder.png"
+            },
+            "originX": 0,
+            "originY": 0
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

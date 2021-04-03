@@ -28,7 +28,7 @@ Important:
     color: #f0f0f0;
     border-style: solid;
     border-width: 1px;
-    border-color: #646464;
+    border-color: #ffffff20;
 }
 
 .dark input[type="file"] {
@@ -81,6 +81,10 @@ Important:
 .dark button:active,
 .dark .ToolbarItem.active {
     background: #4f4f4f;
+}
+
+.dark .ColorButton canvas {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* Tooltip */

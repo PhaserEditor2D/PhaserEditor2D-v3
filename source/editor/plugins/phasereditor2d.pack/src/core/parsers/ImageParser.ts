@@ -18,7 +18,7 @@ namespace phasereditor2d.pack.core.parsers {
 
                 const url = item.getData().url;
 
-                const image = AssetPackUtils.getImageFromPackUrl(url) as controls.DefaultImage;
+                const image = AssetPackUtils.getImageFromPackUrl(item.getPack(), url) as controls.DefaultImage;
 
                 if (image) {
 
@@ -31,9 +31,10 @@ namespace phasereditor2d.pack.core.parsers {
 
         async preloadFrames(): Promise<controls.PreloadResult> {
 
-            const url = this.getPackItem().getData().url;
+            const item = this.getPackItem();
+            const url = item.getData().url;
 
-            const img = AssetPackUtils.getImageFromPackUrl(url);
+            const img = AssetPackUtils.getImageFromPackUrl(item.getPack(), url);
 
             if (img) {
 
@@ -45,8 +46,9 @@ namespace phasereditor2d.pack.core.parsers {
 
         parseFrames(): AssetPackImageFrame[] {
 
-            const url = this.getPackItem().getData().url;
-            const img = AssetPackUtils.getImageFromPackUrl(url);
+            const item = this.getPackItem();
+            const url = item.getData().url;
+            const img = AssetPackUtils.getImageFromPackUrl(item.getPack(), url);
 
             let fd: controls.FrameData;
 

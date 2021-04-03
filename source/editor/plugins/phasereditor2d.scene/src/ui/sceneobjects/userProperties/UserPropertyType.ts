@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._id;
         }
 
-        abstract getName();
+        abstract getName(): string;
 
         getDefaultValue() {
 

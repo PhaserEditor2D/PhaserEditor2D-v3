@@ -1,5 +1,29 @@
 # Change Log
 
+## v3.13.0 - Apr 2, 2021
+
+### Added
+
+* Code editor: enables ES modules (exportClass, autoImport settings and code generation).
+* The new "public root" concept. You can configure different public folders inside the project. Now an url of a pack file is computed based on the public root containing the pack file.
+* Files view: highlights "publicroot" files and the container folder.
+* User components: options button for the component's **Game Object Type** & **Super Class** fields.
+* User components: the new `UserComponent.(js|ts)` class generator.
+* Webpack project templates for JavaScript and TypeScript.
+* Parcel project templates for JavaScript and TypeScript.
+
+### Updated
+
+* Update to Phaser v3.54.0.
+* Inspector view: improves style of color buttons in Dark theme.
+* Code generator: always use class fields. Init all fields in the declaration. Init in constructor is not used anymore.
+* Default User Components File has the `Behaviors.components` name.
+* Replace Type dialog: groups built-in types in sections: Texture, String, Shapes...
+* By default, a new scene has `editorCreate()` as name of the "Create Method". The user code is generator calling `editorCreate()` within a handwritten `create()` method.
+* User Component compiler: fixes TypeScript error when `strict` mode is enabled.
+* Organize New Project dialog. It shows new categories: **Basic**, **Game Demos**, **Parcel**, and **Webpack**.
+* Updated the basic project templates with a similar behavior to the webpack and parcel templates.
+
 ## v3.12.0 - Mar 12, 2021
 
 ### Added

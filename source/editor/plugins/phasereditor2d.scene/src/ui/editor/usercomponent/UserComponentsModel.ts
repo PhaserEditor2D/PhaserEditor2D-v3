@@ -6,6 +6,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export interface IUserComponentsModelData {
         components: any[],
         outputLang?: core.json.SourceLang,
+        exportClass?: boolean,
+        autoImport?: boolean,
         insertSpaces?: boolean,
         tabSize?: number,
         meta: {
@@ -18,36 +20,20 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export class UserComponentsModel {
 
         private _components: UserComponent[];
-        private _outputLang: core.json.SourceLang;
-        private _insertSpaces: boolean;
-        private _tabSize: number;
+        public outputLang: core.json.SourceLang;
+        public insertSpaces: boolean;
+        public tabSize: number;
+        public exportClass: boolean;
+        public autoImport: boolean;
 
         constructor() {
 
             this._components = [];
-            this._outputLang = core.json.SourceLang.JAVA_SCRIPT;
-            this._insertSpaces = false;
-            this._tabSize = 4;
-        }
-
-        getTabSize() {
-
-            return this._tabSize;
-        }
-
-        setTabSize(tabSize: number) {
-
-            this._tabSize = tabSize;
-        }
-
-        isInsertSpaces() {
-
-            return this._insertSpaces;
-        }
-
-        setInsetSpaces(insertSpaces: boolean) {
-
-            this._insertSpaces = insertSpaces;
+            this.outputLang = core.json.SourceLang.JAVA_SCRIPT;
+            this.insertSpaces = false;
+            this.tabSize = 4;
+            this.exportClass = false;
+            this.autoImport = false;
         }
 
         toJSON(): IUserComponentsModelData {
@@ -61,18 +47,22 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 }
             };
 
-            write(data, "outputLang", this._outputLang, core.json.SourceLang.JAVA_SCRIPT);
-            write(data, "insertSpaces", this._insertSpaces, false);
-            write(data, "tabSize", this._tabSize, 4);
+            write(data, "outputLang", this.outputLang, core.json.SourceLang.JAVA_SCRIPT);
+            write(data, "insertSpaces", this.insertSpaces, false);
+            write(data, "tabSize", this.tabSize, 4);
+            write(data, "exportClass", this.exportClass, false);
+            write(data, "autoImport", this.autoImport, false);
 
             return data;
         }
 
         readJSON(data: IUserComponentsModelData) {
 
-            this._outputLang = read(data, "outputLang", core.json.SourceLang.JAVA_SCRIPT);
-            this._insertSpaces = read(data, "insertSpaces", false);
-            this._tabSize = read(data, "tabSize", 4);
+            this.outputLang = read(data, "outputLang", core.json.SourceLang.JAVA_SCRIPT);
+            this.insertSpaces = read(data, "insertSpaces", false);
+            this.tabSize = read(data, "tabSize", 4);
+            this.exportClass = read(data, "exportClass", false);
+            this.autoImport = read(data, "autoImport", false);
 
             this._components = data.components.map(
                 userCompData => {
@@ -87,12 +77,12 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         getOutputLang() {
 
-            return this._outputLang;
+            return this.outputLang;
         }
 
         setOutputLang(outputLang: core.json.SourceLang) {
 
-            this._outputLang = outputLang;
+            this.outputLang = outputLang;
         }
 
         getComponents() {

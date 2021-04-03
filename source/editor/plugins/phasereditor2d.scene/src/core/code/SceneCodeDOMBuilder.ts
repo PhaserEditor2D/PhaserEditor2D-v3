@@ -11,12 +11,13 @@ namespace phasereditor2d.scene.core.code {
 
         private _scene: ui.Scene;
         private _isPrefabScene: boolean;
-        private _file: io.FilePath;
+        private _sceneFile: io.FilePath;
+        private _unit: UnitCodeDOM;
 
         constructor(scene: ui.Scene, file: io.FilePath) {
 
             this._scene = scene;
-            this._file = file;
+            this._sceneFile = file;
             this._isPrefabScene = this._scene.isPrefabSceneType();
         }
 
@@ -28,6 +29,8 @@ namespace phasereditor2d.scene.core.code {
 
             const unit = new UnitCodeDOM([]);
 
+            this._unit = unit;
+
             if (settings.onlyGenerateMethods) {
 
                 const createMethodDecl = this.buildCreateMethod();
@@ -38,8 +41,10 @@ namespace phasereditor2d.scene.core.code {
 
             } else {
 
-                const clsName = this._file.getNameWithoutExtension();
+                const clsName = this._sceneFile.getNameWithoutExtension();
                 const clsDecl = new ClassDeclCodeDOM(clsName);
+
+                clsDecl.setExportClass(settings.exportClass);
 
                 let superCls: string;
 
@@ -73,6 +78,11 @@ namespace phasereditor2d.scene.core.code {
                 }
 
                 clsDecl.setSuperClass(superCls);
+
+                if (superCls.startsWith("Phaser.")) {
+
+                    unit.addImport("Phaser", "phaser");
+                }
 
                 if (this._isPrefabScene) {
 
@@ -116,7 +126,35 @@ namespace phasereditor2d.scene.core.code {
                 clsDecl.getBody().push(...methods);
                 clsDecl.getBody().push(...fields);
 
+                if (this._isPrefabScene) {
+
+                    clsDecl.getBody().push(new UserSectionCodeDOM(
+                        "/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t"));
+
+                } else {
+
+                    const defaultContent = [
+                        "",
+                        "",
+                        "// Write your code here",
+                        "",
+                        "create() {",
+                        "",
+                        "\tthis.editorCreate();",
+                        "}",
+                        "",
+                        ""].join("\n\t");
+
+                    clsDecl.getBody().push(new UserSectionCodeDOM(
+                        "/* START-USER-CODE */", "/* END-USER-CODE */", defaultContent));
+                }
+
                 unit.getBody().push(clsDecl);
+            }
+
+            if (!settings.autoImport) {
+
+                unit.removeImports();
             }
 
             return unit;
@@ -158,9 +196,10 @@ namespace phasereditor2d.scene.core.code {
             for (const obj of children) {
 
                 const support = obj.getEditorSupport();
-                const scope = support.getScope();
+                const isMethodScope = support.getScope() === ui.sceneobjects.ObjectScope.METHOD;
+                const isPrefabObj = this._scene.isPrefabSceneType() && this._scene.getPrefabObject() === obj;
 
-                if (scope !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (!isMethodScope && !isPrefabObj) {
 
                     const varName = code.formatToValidVarName(support.getLabel());
 
@@ -455,6 +494,9 @@ namespace phasereditor2d.scene.core.code {
                         prefabSerializer
                     });
 
+                    const filePath = code.getImportPath(this._sceneFile, objSupport.getPrefabFile());
+                    this._unit.addImport(clsName, filePath);
+
                 } else {
 
                     throw new Error(`Cannot find prefab with id ${objSupport.getPrefabId()}.`);
@@ -576,7 +618,9 @@ namespace phasereditor2d.scene.core.code {
                     statements,
                     lazyStatements,
                     objectVarName: varname,
-                    prefabSerializer: prefabSerializer
+                    prefabSerializer: prefabSerializer,
+                    unit: this._unit,
+                    sceneFile: this._sceneFile
                 });
             }
 

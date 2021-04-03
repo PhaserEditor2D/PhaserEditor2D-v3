@@ -240,8 +240,9 @@ namespace phasereditor2d.code {
             const opts = monaco.languages.typescript.javascriptDefaults.getCompilerOptions();
 
             opts.target = monaco.languages.typescript.ScriptTarget.ESNext;
+            opts.module = monaco.languages.typescript.ModuleKind.ESNext;
 
-            this.registerAssetPackCompletions();
+            //this.registerAssetPackCompletions();
 
             this.customizeCodeServiceImpl();
         }

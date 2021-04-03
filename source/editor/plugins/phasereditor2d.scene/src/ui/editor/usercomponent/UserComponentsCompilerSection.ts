@@ -55,6 +55,44 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             }
 
             {
+                // Export Class
+
+                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Export Class (ES Module)", "Export the class."));
+
+                checkbox.addEventListener("change", e => {
+
+                    this.getEditor().runOperation(model => {
+
+                        model.exportClass = checkbox.checked;
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    checkbox.checked = this.getSelectionFirstElement().exportClass;
+                });
+            }
+
+            {
+                // Auto Import
+
+                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Auto Import (ES Module)", "Auto import types used in the component."));
+
+                checkbox.addEventListener("change", e => {
+
+                    this.getEditor().runOperation(model => {
+
+                        model.autoImport = checkbox.checked;
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    checkbox.checked = this.getSelectionFirstElement().autoImport;
+                });
+            }
+
+            {
                 // Insert Spaces
 
                 const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Insert Spaces", "Use spaces for indentation."));
@@ -63,13 +101,13 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     this.getEditor().runOperation(model => {
 
-                        model.setInsetSpaces(checkbox.checked);
+                        model.insertSpaces = checkbox.checked;
                     });
                 });
 
                 this.addUpdater(() => {
 
-                    checkbox.checked = this.getSelectionFirstElement().isInsertSpaces();
+                    checkbox.checked = this.getSelectionFirstElement().insertSpaces;
                 });
             }
 
@@ -92,14 +130,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                         this.getEditor().runOperation(model => {
 
-                            model.setTabSize(n);
+                            model.tabSize = n;
                         });
                     }
                 });
 
                 this.addUpdater(() => {
 
-                    text.value = this.getSelectionFirstElement().getTabSize().toString();
+                    text.value = this.getSelectionFirstElement().tabSize.toString();
                 });
             }
         }

@@ -33,7 +33,7 @@ namespace phasereditor2d.pack.core {
 
             try {
 
-                const file = AssetPackUtils.getFileFromPackUrl(this.getUrl());
+                const file = this.getFileFromAssetUrl(this.getUrl());
 
                 if (file) {
 

@@ -18,11 +18,11 @@ namespace phasereditor2d.pack.core.parsers {
 
                 const atlasURL = item.getData().atlasURL;
 
-                const atlasData = AssetPackUtils.getFileStringFromPackUrl(atlasURL);
+                const atlasData = AssetPackUtils.getFileStringFromPackUrl(item.getPack(), atlasURL);
 
                 const textureURL = item.getData().textureURL;
 
-                const image = AssetPackUtils.getImageFromPackUrl(textureURL) as controls.DefaultImage;
+                const image = AssetPackUtils.getImageFromPackUrl(item.getPack(), textureURL) as controls.DefaultImage;
 
                 if (image && atlasData) {
 

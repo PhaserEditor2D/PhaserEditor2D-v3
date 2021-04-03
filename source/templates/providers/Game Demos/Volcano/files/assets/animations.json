@@ -1,0 +1,247 @@
+{
+  "anims": [
+    {
+      "key": "player-Hurt",
+      "frameRate": 24,
+      "repeat": -1,
+      "frames": [
+        {
+          "key": "player",
+          "frame": "Hurt_000"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_001"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_002"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_003"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_004"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_005"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_006"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_007"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_008"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_009"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_010"
+        },
+        {
+          "key": "player",
+          "frame": "Hurt_011"
+        }
+      ]
+    },
+    {
+      "key": "player-Idle",
+      "frameRate": 24,
+      "repeat": -1,
+      "frames": [
+        {
+          "key": "player",
+          "frame": "Idle_000"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_001"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_002"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_003"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_004"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_005"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_006"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_007"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_008"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_009"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_010"
+        },
+        {
+          "key": "player",
+          "frame": "Idle_011"
+        }
+      ]
+    },
+    {
+      "key": "player-Jump Loop",
+      "frameRate": 24,
+      "repeat": -1,
+      "frames": [
+        {
+          "key": "player",
+          "frame": "Jump Loop_000"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Loop_001"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Loop_002"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Loop_003"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Loop_004"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Loop_005"
+        }
+      ]
+    },
+    {
+      "key": "player-Jump Start",
+      "frameRate": 24,
+      "repeat": 0,
+      "frames": [
+        {
+          "key": "player",
+          "frame": "Jump Start_000"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Start_001"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Start_002"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Start_003"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Start_004"
+        },
+        {
+          "key": "player",
+          "frame": "Jump Start_005"
+        }
+      ]
+    },
+    {
+      "key": "player-Running",
+      "frameRate": 24,
+      "repeat": -1,
+      "frames": [
+        {
+          "key": "player",
+          "frame": "Running_000"
+        },
+        {
+          "key": "player",
+          "frame": "Running_001"
+        },
+        {
+          "key": "player",
+          "frame": "Running_002"
+        },
+        {
+          "key": "player",
+          "frame": "Running_003"
+        },
+        {
+          "key": "player",
+          "frame": "Running_004"
+        },
+        {
+          "key": "player",
+          "frame": "Running_005"
+        },
+        {
+          "key": "player",
+          "frame": "Running_006"
+        },
+        {
+          "key": "player",
+          "frame": "Running_007"
+        },
+        {
+          "key": "player",
+          "frame": "Running_008"
+        },
+        {
+          "key": "player",
+          "frame": "Running_009"
+        },
+        {
+          "key": "player",
+          "frame": "Running_010"
+        },
+        {
+          "key": "player",
+          "frame": "Running_011"
+        },
+        {
+          "key": "player",
+          "frame": "Running_012"
+        },
+        {
+          "key": "player",
+          "frame": "Running_013"
+        },
+        {
+          "key": "player",
+          "frame": "Running_014"
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "app": "Phaser Editor v2",
+    "contentType": "Phaser v3 Animations"
+  }
+}

@@ -29,6 +29,8 @@ namespace phasereditor2d.scene.core.code {
 
         private generateUnitElement(elem: object) {
 
+            this.generateImports();
+
             if (elem instanceof ClassDeclCodeDOM) {
 
                 this.generateClass(elem as ClassDeclCodeDOM);
@@ -41,10 +43,29 @@ namespace phasereditor2d.scene.core.code {
 
                 this.line();
             }
+        }
 
+        private generateImports() {
+
+            const imports = this._unit.getImports();
+
+            for (const importDom of imports) {
+
+                this.line(`import ${importDom.getElementName()} from "${importDom.getFilePath()}";`);
+            }
+
+            if (imports.length > 0) {
+
+                this.line();
+            }
         }
 
         private generateClass(clsDecl: ClassDeclCodeDOM) {
+
+            if (clsDecl.isExportClass()) {
+
+                this.append("export default ");
+            }
 
             this.append("class " + clsDecl.getName() + " ");
 
@@ -59,57 +80,62 @@ namespace phasereditor2d.scene.core.code {
 
             const body = CodeDOM.removeBlankLines(clsDecl.getBody());
 
+            // methods
+
             for (const memberDecl of body) {
 
-                this.generateMemberDecl(clsDecl, memberDecl);
+                if (memberDecl instanceof MethodDeclCodeDOM) {
+
+                    this.generateMethodDecl(clsDecl, memberDecl, false);
+
+                    this.line();
+                }
             }
 
-            this.lineIfNeeded();
+            // fields
 
-            this.section("/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t");
+            for (const memberDecl of body) {
+
+                if (memberDecl instanceof FieldDeclCodeDOM) {
+
+                    this.generateFieldDecl(memberDecl);
+                }
+            }
+
+            if (body.find(m => m instanceof FieldDeclCodeDOM)) {
+
+                this.line();
+            }
+
+            // user section
+
+            for (const memberDecl of body) {
+
+                if (memberDecl instanceof UserSectionCodeDOM) {
+
+                    this.section(memberDecl.getOpenTag(), memberDecl.getCloseTag(), memberDecl.getDefaultContent());
+                }
+            }
+
+            // close body
 
             this.closeIndent("}");
 
             this.line();
         }
 
-        protected generateMemberDecl(classDecl: ClassDeclCodeDOM, memberDecl: MemberDeclCodeDOM) {
-
-            if (memberDecl instanceof MethodDeclCodeDOM) {
-
-                this.generateMethodDecl(classDecl, memberDecl, false);
-
-                this.line();
-
-            } else if (memberDecl instanceof FieldDeclCodeDOM) {
-
-                const o = this.getOffset();
-
-                this.generateFieldDecl(memberDecl);
-
-                if (o !== this.getOffset()) {
-
-                    this.line();
-                }
-            }
-        }
-
         protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM) {
 
-            // We comment this off because Safari does not support field declarations (issue #45)
+            this.line(`/** @type {${fieldDecl.getType()}} */`);
 
-            // this.line(`/** @type {${fieldDecl.getType()}} */`);
+            if (fieldDecl.isInitialized()) {
 
-            // if (fieldDecl.isInitialized()) {
+                this.line(fieldDecl.getName() + " = " + fieldDecl.getInitialValueExpr() + ";");
 
-            //     this.line(fieldDecl.getName() + " = " + fieldDecl.getInitialValueExpr() + ";");
+            } else {
 
-            // } else {
-
-            //     this.line(fieldDecl.getName() + ";");
-            // }
-
-            // this.line();
+                this.line(fieldDecl.getName() + ";");
+            }
         }
 
         private generateMethodDecl(classDecl: ClassDeclCodeDOM, methodDecl: MethodDeclCodeDOM, isFunction: boolean) {
@@ -164,7 +190,8 @@ namespace phasereditor2d.scene.core.code {
 
             if (methodDecl.getName() === "constructor") {
 
-                this.generateFieldInitInConstructor(classDecl, methodDecl);
+                // I comment this because fields are init as class fields
+                // this.generateFieldInitInConstructor(classDecl, methodDecl);
 
                 this.line();
                 this.section("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t");

@@ -88,6 +88,10 @@ namespace colibri {
             // editor inputs
 
             reg.addExtension(new colibri.ui.ide.FileEditorInputExtension());
+
+            // content types
+
+            reg.addExtension(new colibri.core.ContentTypeExtension([new core.PublicRootContentTypeResolver()]));
         }
     }
 

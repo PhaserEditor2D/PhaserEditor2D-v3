@@ -14,26 +14,28 @@ namespace phasereditor2d.pack.ui.importers {
             return contentType === this.getContentType();
         }
 
-        createItemData(file: io.FilePath) {
+        createItemData(pack: core.AssetPack, file: io.FilePath) {
+
             let textureURL: string;
 
             if (file.getNameWithoutExtension().endsWith(".png")) {
 
-                textureURL = core.AssetPackUtils.getFilePackUrl(file.getParent()) + file.getNameWithoutExtension();
+                textureURL = io.FilePath.join(pack.getUrlFromAssetFile(file.getParent()), file.getNameWithoutExtension());
 
             } else {
 
-                textureURL = core.AssetPackUtils.getFilePackUrlWithNewExtension(file, "png");
+                textureURL = core.AssetPackUtils.getFilePackUrlWithNewExtension(pack, file, "png");
             }
 
             const altTextureFile = file.getParent().getFile(file.getName() + ".png");
 
             if (altTextureFile) {
-                textureURL = core.AssetPackUtils.getFilePackUrl(altTextureFile);
+
+                textureURL = pack.getUrlFromAssetFile(altTextureFile);
             }
 
             return {
-                atlasURL: core.AssetPackUtils.getFilePackUrl(file),
+                atlasURL: pack.getUrlFromAssetFile(file),
                 textureURL: textureURL
             };
         }

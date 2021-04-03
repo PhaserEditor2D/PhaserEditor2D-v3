@@ -147,6 +147,13 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
+        line(line = "") {
+
+            this.append(line);
+            this.append("\n");
+            this.append(this.getIndentTabs());
+        }
+
         lineIfNeeded() {
 
             if (!this.lastIsEmptyLine()) {
@@ -155,11 +162,29 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
-        line(line = "") {
+        lastIsEmptyLine() {
 
-            this.append(line);
-            this.append("\n");
-            this.append(this.getIndentTabs());
+            let i = this._text.length - 1;
+            let n = 0;
+
+            while (i > 0) {
+
+                const c = this._text[i];
+
+                if (c === "\n") {
+
+                    n++;
+                }
+
+                if (c.trim().length > 0) {
+
+                    break;
+                }
+
+                i--;
+            }
+
+            return n > 1;
         }
 
         static escapeStringLiterals(str: string) {
@@ -170,20 +195,6 @@ namespace phasereditor2d.scene.core.code {
 
             this._indent++;
             this.line(line);
-        }
-
-        lastIsEmptyLine() {
-
-            const i = this._text.lastIndexOf("\n");
-
-            if (i >= 0) {
-
-                const last = this._text.substring(i);
-
-                return last.trim() === "";
-            }
-
-            return false;
         }
 
         closeIndent(str = "") {

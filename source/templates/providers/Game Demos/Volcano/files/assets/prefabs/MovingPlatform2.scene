@@ -1,0 +1,70 @@
+{
+    "id": "164dfa03-f3fa-4cc3-89ae-164be0665e68",
+    "sceneType": "PREFAB",
+    "settings": {
+        "snapWidth": 128,
+        "snapHeight": 32,
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": ""
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "b0b395a5-9d33-43b5-83f2-9780cb719713",
+            "label": "container_2",
+            "components": [
+                "PlatformPhysics",
+                "HorizontalMove"
+            ],
+            "PlatformPhysics.bodyY": 8,
+            "HorizontalMove.horizVelocity": 100,
+            "allowPickChildren": false,
+            "list": [
+                {
+                    "type": "Image",
+                    "id": "a47f9e03-4774-4bc4-99ec-1d334f32c91f",
+                    "label": "p3",
+                    "components": [],
+                    "texture": {
+                        "key": "volcano",
+                        "frame": "Volcano Level Set_Platformer - Wooden Bridge.png"
+                    },
+                    "originX": 0,
+                    "originY": 0
+                },
+                {
+                    "type": "Image",
+                    "id": "25b6127d-e20a-4b7b-8a35-4f5c75da1a78",
+                    "label": "p2",
+                    "components": [],
+                    "texture": {
+                        "key": "volcano",
+                        "frame": "Volcano Level Set_Platformer - Wooden Bridge.png"
+                    },
+                    "x": 128,
+                    "originX": 0,
+                    "originY": 0
+                },
+                {
+                    "type": "Image",
+                    "id": "e66a6d68-843d-432e-b511-e6179261fd2b",
+                    "label": "p1",
+                    "components": [],
+                    "texture": {
+                        "key": "volcano",
+                        "frame": "Volcano Level Set_Platformer - Wooden Bridge.png"
+                    },
+                    "x": 256,
+                    "originX": 0,
+                    "originY": 0
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

@@ -1,32 +1,61 @@
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     import code = core.code;
+    import io = colibri.core.io;
 
     export class UserComponentCodeDOMBuilder {
 
         private _component: UserComponent;
+        private _model: UserComponentsModel;
+        // TODO: will be used for the "import" syntax
+        private _modelFile: io.FilePath;
+        private _unitDom: code.UnitCodeDOM;
+        private _typeFileMap: Map<string, io.FilePath>;
 
-        constructor(component: UserComponent) {
+        constructor(component: UserComponent, model: UserComponentsModel, file: io.FilePath) {
 
             this._component = component;
+            this._model = model;
+            this._modelFile = file;
         }
 
         build(): code.UnitCodeDOM {
 
-            const unitDom = new code.UnitCodeDOM([]);
+            if (this._model.autoImport) {
+
+                this.buildFilesMap();
+            }
+
+            this._unitDom = new code.UnitCodeDOM([]);
 
             const clsDom = this.createClass();
 
-            unitDom.getBody().push(clsDom);
+            this._unitDom.getBody().push(clsDom);
 
-            return unitDom;
+            return this._unitDom;
+        }
+
+        private buildFilesMap() {
+
+            this._typeFileMap = new Map();
+
+            colibri.ui.ide.FileUtils.visitProject(file => {
+
+                if (file.getExtension() === "ts" || file.getExtension() === "js") {
+
+                    this._typeFileMap.set(file.getNameWithoutExtension(), file);
+                }
+            });
         }
 
         private createClass() {
 
             const clsDom = new code.ClassDeclCodeDOM(this._component.getName());
 
+            clsDom.setExportClass(this._model.exportClass);
             clsDom.setSuperClass(this._component.getBaseClass());
+
+            this.addImportForType(clsDom.getSuperClass());
 
             this.buildConstructor(clsDom);
 
@@ -43,6 +72,11 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             ctrDeclDom.arg("gameObject", this._component.getGameObjectType());
 
+            if (this.isTypeScriptOutput()) {
+
+                this.addImportForType(this._component.getGameObjectType());
+            }
+
             const body = ctrDeclDom.getBody();
 
             const superClass = this._component.getBaseClass();
@@ -53,10 +87,44 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 body.push(new code.RawCodeDOM(""));
             }
 
-            const setCompDom = new code.RawCodeDOM(`gameObject["__${clsDom.getName()}"] = this;`);
+            const initGameObjDom = new code.AssignPropertyCodeDOM("gameObject", "this");
+            initGameObjDom.value("gameObject");
+            body.push(initGameObjDom);
+
+            const setCompDom = new code.RawCodeDOM(this.isTypeScriptOutput() ?
+                `(gameObject as any)["__${clsDom.getName()}"] = this;`
+                : `gameObject["__${clsDom.getName()}"] = this;`);
             body.push(setCompDom);
 
+            clsDom.getBody().push(new code.UserSectionCodeDOM(
+                "/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t"));
+
             clsDom.getBody().push(ctrDeclDom);
+        }
+
+        addImportForType(type: string) {
+
+            if (!this._model.autoImport) {
+
+                return;
+            }
+
+            if (type) {
+
+
+                if (type.startsWith("Phaser.")) {
+
+                    this._unitDom.addImport("Phaser", "phaser");
+
+                } else if (this._typeFileMap.has(type)) {
+
+                    const importFile = this._typeFileMap.get(type);
+
+                    const importPath = code.getImportPath(this._modelFile, importFile);
+
+                    this._unitDom.addImport(type, importPath);
+                }
+            }
         }
 
         private buildFields(clsDom: code.ClassDeclCodeDOM) {
@@ -64,7 +132,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             // gameObject field
 
             const gameObjDeclDom = new code.FieldDeclCodeDOM("gameObject", this._component.getGameObjectType());
-            gameObjDeclDom.setInitialValueExpr("gameObject");
+            gameObjDeclDom.setInitInConstructor(true);
             clsDom.getBody().push(gameObjDeclDom);
 
             // props fields
@@ -77,6 +145,24 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 clsDom.getBody().push(...decls);
             }
+
+            if (this.isTypeScriptOutput()) {
+
+                // add imports for field declarations
+
+                for (const elem of clsDom.getBody()) {
+
+                    if (elem instanceof code.FieldDeclCodeDOM) {
+
+                        this.addImportForType(elem.getType());
+                    }
+                }
+            }
+        }
+
+        private isTypeScriptOutput() {
+
+            return this._model.outputLang === core.json.SourceLang.TYPE_SCRIPT;
         }
 
         private buildAccessorMethods(clsDom: code.ClassDeclCodeDOM) {
@@ -88,7 +174,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 declDom.arg("gameObject", this._component.getGameObjectType());
                 declDom.setReturnType(clsDom.getName());
 
-                const returnDom = new code.RawCodeDOM(`return gameObject["__${clsDom.getName()}"];`)
+                const returnDom = new code.RawCodeDOM(this.isTypeScriptOutput() ?
+                    `return (gameObject as any)["__${clsDom.getName()}"];`
+                    : `return gameObject["__${clsDom.getName()}"];`)
 
                 declDom.getBody().push(returnDom);
                 clsDom.getBody().push(declDom);

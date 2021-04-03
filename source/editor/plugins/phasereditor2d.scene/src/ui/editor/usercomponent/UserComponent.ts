@@ -1,5 +1,8 @@
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
+    import read = colibri.core.json.read;
+    import write = colibri.core.json.write;
+
     export class UserComponent {
 
         private _name: string;
@@ -20,19 +23,21 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const propsData = [];
             this._properties.writeJSON(propsData);
 
-            return {
+            const data = {
                 name: this._name,
                 baseClass: this._baseClass,
                 gameObjectType: this._gameObjectType,
                 properties: propsData
-            }
+            };
+
+            return data;
         }
 
         readJSON(data: any) {
 
             this._name = data.name;
-            this._baseClass = data.baseClass || "";
-            this._gameObjectType = data.gameObjectType || "Phaser.GameObjects.Image";
+            this._baseClass = read(data, "baseClass", "");
+            this._gameObjectType = read(data, "gameObjectType", "Phaser.GameObjects.Image");
             this._properties.readJSON(data.properties);
         }
 

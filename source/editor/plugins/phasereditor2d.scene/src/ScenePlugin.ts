@@ -70,7 +70,15 @@ namespace phasereditor2d.scene {
             // preload docs
 
             reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
+
                 await ScenePlugin.getInstance().getPhaserDocs().preload();
+            }));
+
+            // preload UserComponent files
+
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
+
+                await ui.editor.usercomponent.UserComponentCodeResources.getInstance().preload();
             }));
 
             // preload project

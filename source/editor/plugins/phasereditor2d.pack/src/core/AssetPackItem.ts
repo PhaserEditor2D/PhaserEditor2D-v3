@@ -14,6 +14,11 @@ namespace phasereditor2d.pack.core {
             this._editorData = {};
         }
 
+        getFileFromAssetUrl(url: string) {
+
+            return AssetPackUtils.getFileFromPackUrl(this.getPack(), url);
+        }
+
         computeUsedFiles(files: Set<io.FilePath>) {
 
             this.addFilesFromDataKey(files, "url");
@@ -47,7 +52,7 @@ namespace phasereditor2d.pack.core {
 
             for (const url of urls) {
 
-                const file = AssetPackUtils.getFileFromPackUrl(url);
+                const file = this.getFileFromAssetUrl(url);
 
                 if (file) {
 

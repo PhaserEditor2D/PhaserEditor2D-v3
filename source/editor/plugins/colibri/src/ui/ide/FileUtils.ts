@@ -4,6 +4,21 @@ namespace colibri.ui.ide {
 
     export class FileUtils {
 
+        static visit(folder: io.FilePath, visitor: (file: io.FilePath) => void) {
+
+            visitor(folder);
+
+            for (const file of folder.getFiles()) {
+
+                this.visit(file, visitor);
+            }
+        }
+
+        static visitProject(visitor: (file: io.FilePath) => void) {
+
+            this.visit(this.getRoot(), visitor);
+        }
+
         static getFileNameWithoutExtension(filename: string) {
 
             const i = filename.lastIndexOf(".");
@@ -68,12 +83,16 @@ namespace colibri.ui.ide {
 
                 await this.setFileString_async(file, content);
 
+                await Platform.getWorkbench().getContentTypeRegistry().preload(file);
+
                 return file;
             }
 
             const storage = this.getFileStorage();
 
             file = await storage.createFile(folder, fileName, content);
+
+            await Platform.getWorkbench().getContentTypeRegistry().preload(file);
 
             return file;
         }
@@ -143,19 +162,33 @@ namespace colibri.ui.ide {
             return cache.preload(file);
         }
 
-        static getFileFromPath(path: string): io.FilePath {
+        static getPublicRoot(folder: io.FilePath): io.FilePath {
 
-            const root = Workbench.getWorkbench().getProjectRoot();
+            if (folder.getFile("publicroot") || folder.isRoot()) {
+
+                return folder;
+            }
+
+            return this.getPublicRoot(folder.getParent());
+        }
+
+        static getFileFromPath(path: string, parent?: io.FilePath): io.FilePath {
+
+            let result = parent;
 
             const names = path.split("/");
 
-            const firstName = names.shift();
+            if (!result) {
 
-            if (root.getName() !== firstName) {
-                return null;
+                result = Workbench.getWorkbench().getProjectRoot();
+
+                const name = names.shift();
+
+                if (name !== result.getName()) {
+
+                    return null;
+                }
             }
-
-            let result = root;
 
             for (const name of names) {
 
@@ -188,6 +221,7 @@ namespace colibri.ui.ide {
             const files = this.getAllFiles();
 
             for (const file of files) {
+
                 await reg.preload(file);
             }
 

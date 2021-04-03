@@ -349,6 +349,7 @@ namespace colibri.ui.controls.properties {
 
             const btn = document.createElement("button");
             // btn.textContent = "...";
+            btn.classList.add("ColorButton");
             btn.appendChild(
                 new IconControl(ColibriPlugin.getInstance().getIcon(colibri.ICON_COLOR)).getCanvas());
 

@@ -60,5 +60,9 @@ namespace colibri.ui.controls.dialogs {
 
             return true;
         }
+
+        saveState() {
+            // nothing
+        }
     }
 }

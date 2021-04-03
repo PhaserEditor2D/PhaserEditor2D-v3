@@ -60,6 +60,16 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 "compilerOutputLanguage", "Output Language",
                 "The scene compiler output language.");
 
+            this.createBooleanField(comp, "exportClass",
+
+                this.createLabel(comp, "Export Class (ES Module)", "Export the generated class.")
+            );
+
+            this.createBooleanField(comp, "autoImport",
+
+                this.createLabel(comp, "Auto Import (ES Module)", "Automatic import used classes like prefabs and user components.")
+            );
+
             this.createStringField(
                 comp, "superClassName", "Super Class",
                 "The super class used for the scene. If it is blank (no-value) then use default value.");

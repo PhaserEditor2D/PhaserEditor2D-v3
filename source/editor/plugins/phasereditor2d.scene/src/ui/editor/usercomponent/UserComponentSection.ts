@@ -20,84 +20,143 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElement(parent, 2);
+            const comp = this.createGridElement(parent, 3);
+            comp.style.gridTemplateColumns = "auto 1fr auto";
 
             {
                 // Name
 
-                this.createLabel(comp, "Name", "Name of the component. In the compiled code, it is used as file name and class name.");
-
-                const text = this.createText(comp);
-
-                text.addEventListener("change", e => {
-
-                    this.getEditor().runOperation(() => {
-
-                        for (const comp1 of this.getSelection()) {
-
-                            comp1.setName(text.value);
-                        }
-                    });
-                });
+                const text = this.stringProp(comp, "Name", "Name",
+                    "Name of the component. In the compiled code, it is used as file name and class name.");
 
                 this.addUpdater(() => {
-
-                    text.value = this.flatValues_StringOneOrNothing(
-                        this.getSelection().map(c => c.getName()));
 
                     text.readOnly = this.getSelection().length > 1;
                 });
             }
 
-            {
-                // Game Object Type
+            this.stringProp(comp, "GameObjectType", "Game Object Type",
+                "Name of the type of the Game Object that this component can be added on.", () => this.createGameObjectTypeOptions());
 
-                this.createLabel(comp, "Game Object Type", "Name of the type of the Game Object that this component can be added on.");
+            this.stringProp(comp, "BaseClass", "Super Class", "Name of the super class of the component. It is optional.", () => this.createSuperClassOptions());
+        }
 
-                const text = this.createText(comp);
+        private createSuperClassOptions(): string[] {
 
-                text.addEventListener("change", e => {
+            const options = new Set(ScenePlugin.getInstance().getSceneFinder()
+                .getUserComponentsModels()
+                .flatMap(model => model.model.getComponents())
+                .map(comp => comp.getBaseClass())
+                .filter(name => name !== undefined && name !== null && name.trim().length > 0));
 
-                    this.getEditor().runOperation(() => {
+            options.delete("UserComponent");
 
-                        for (const comp1 of this.getSelection()) {
+            return ["UserComponent", ...([...options].sort())];
+        }
 
-                            comp1.setGameObjectType(text.value);
-                        }
-                    });
-                });
+        private createGameObjectTypeOptions(): string[] {
 
-                this.addUpdater(() => {
+            const options = new Set(ScenePlugin.getInstance().getSceneFinder()
+                .getUserComponentsModels()
+                .flatMap(model => model.model.getComponents())
+                .map(comp => comp.getGameObjectType()));
 
-                    text.value = this.flatValues_StringOneOrNothing(
-                        this.getSelection().map(c => c.getGameObjectType()));
-                });
+            for (const option of ScenePlugin.getInstance()
+                .getGameObjectExtensions()
+                .map(e => e.getPhaserTypeName())) {
+
+                options.add(option);
             }
 
-            {
-                // Super Class
+            return [...options].sort();
+        }
 
-                this.createLabel(comp, "Super Class", "Name of the super class of the component. It is optional.");
+        private stringProp(comp: HTMLElement, prop: string, propName: string, propHelp: string, options?: () => string[]) {
 
-                const text = this.createText(comp);
+            this.createLabel(comp, propName, propHelp);
 
-                text.addEventListener("change", e => {
+            const text = this.createText(comp);
 
-                    this.getEditor().runOperation(() => {
+            text.addEventListener("change", e => {
 
-                        for (const comp1 of this.getSelection()) {
+                this.getEditor().runOperation(() => {
 
-                            comp1.setBaseClass(text.value);
-                        }
-                    });
+                    for (const comp1 of this.getSelection()) {
+
+                        comp1["set" + prop](text.value);
+                    }
+                });
+            });
+
+            this.addUpdater(() => {
+
+                text.value = this.flatValues_StringOneOrNothing(
+                    this.getSelection().map(c => c["get" + prop]()));
+            });
+
+            if (options) {
+
+                const btn = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE), true);
+                btn.getCanvas().style.alignSelf = "center";
+                comp.appendChild(btn.getCanvas());
+
+                btn.getCanvas().addEventListener("click", e => {
+
+                    const menu = new controls.Menu();
+
+                    for (const option of options()) {
+
+                        menu.addAction({
+                            text: option,
+                            callback: () => {
+
+                                text.value = option;
+
+                                this.getEditor().runOperation(() => {
+
+                                    for (const comp1 of this.getSelection()) {
+
+                                        comp1["set" + prop](text.value);
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    menu.createWithEvent(e, true);
                 });
 
-                this.addUpdater(() => {
+            } else {
 
-                    text.value = this.flatValues_StringOneOrNothing(
-                        this.getSelection().map(c => c.getBaseClass()));
-                });
+                text.style.gridColumn = "2 / span 2";
             }
+
+            return text;
+        }
+
+        private booleanProp(comp: HTMLElement, prop: string, propName: string, propHelp: string) {
+
+            const checkbox = this.createCheckbox(comp, this.createLabel(comp, propName, propHelp));
+            checkbox.style.gridColumn = "2 / span 2";
+
+            checkbox.addEventListener("change", e => {
+
+                this.getEditor().runOperation(() => {
+
+                    for (const comp1 of this.getSelection()) {
+
+                        comp1["set" + prop](checkbox.checked);
+                    }
+                });
+            });
+
+            this.addUpdater(() => {
+
+                checkbox.checked = this.flatValues_BooleanAnd(
+                    this.getSelection().map(c => c["is" + prop]()));
+            });
+
+            return checkbox;
         }
 
         getEditor() {

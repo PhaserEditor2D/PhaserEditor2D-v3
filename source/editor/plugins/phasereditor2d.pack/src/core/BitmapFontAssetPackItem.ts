@@ -17,7 +17,7 @@ namespace phasereditor2d.pack.core {
 
             if (dataUrl) {
 
-                const file = pack.core.AssetPackUtils.getFileFromPackUrl(dataUrl);
+                const file = this.getFileFromAssetUrl(dataUrl);
 
                 if (file) {
 
@@ -82,7 +82,7 @@ namespace phasereditor2d.pack.core {
 
             imageAsset.addToPhaserCache(game, cache);
 
-            const xmlFile = pack.core.AssetPackUtils.getFileFromPackUrl(this.getData().fontDataURL);
+            const xmlFile = this.getFileFromAssetUrl(this.getData().fontDataURL);
 
             if (!xmlFile) {
 

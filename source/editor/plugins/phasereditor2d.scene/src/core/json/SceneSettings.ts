@@ -18,6 +18,8 @@ namespace phasereditor2d.scene.core.json {
             public preloadPackFiles: string[] = [],
             public createMethodName = "create",
             public sceneKey = "",
+            public exportClass = false,
+            public autoImport = false,
             public compilerOutputLanguage = SourceLang.JAVA_SCRIPT,
             public scopeBlocksToFolder: boolean = false,
             public borderX = 0,
@@ -39,6 +41,8 @@ namespace phasereditor2d.scene.core.json {
             write(data, "snapWidth", this.snapWidth, 16);
             write(data, "snapHeight", this.snapHeight, 16);
             write(data, "onlyGenerateMethods", this.onlyGenerateMethods, false);
+            write(data, "exportClass", this.exportClass, false);
+            write(data, "autoImport", this.autoImport, false);
             write(data, "superClassName", this.superClassName, "");
             write(data, "preloadMethodName", this.preloadMethodName, "preload");
             write(data, "preloadPackFiles", this.preloadPackFiles, []);
@@ -63,6 +67,8 @@ namespace phasereditor2d.scene.core.json {
             this.snapWidth = read(data, "snapWidth", 16);
             this.snapHeight = read(data, "snapHeight", 16);
             this.onlyGenerateMethods = read(data, "onlyGenerateMethods", false);
+            this.exportClass = read(data, "exportClass", false);
+            this.autoImport = read(data, "autoImport", false);
             this.superClassName = read(data, "superClassName", "");
             this.preloadMethodName = read(data, "preloadMethodName", "preload");
             this.preloadPackFiles = read(data, "preloadPackFiles", []);
