@@ -6,9 +6,12 @@ namespace colibri.ui.ide {
 
         protected _filteredViewer: controls.viewers.FilteredViewer<any>;
         protected _viewer: controls.viewers.TreeViewer;
+        private _showZoomControls: boolean;
 
-        constructor(id: string) {
+        constructor(id: string, showZoomControls: boolean = true) {
             super(id);
+
+            this._showZoomControls = showZoomControls;
         }
 
         protected abstract createViewer(): controls.viewers.TreeViewer;
@@ -19,7 +22,7 @@ namespace colibri.ui.ide {
 
             this.addClass("ViewerPart");
 
-            this._filteredViewer = new controls.viewers.FilteredViewer(this._viewer, true);
+            this._filteredViewer = new controls.viewers.FilteredViewer(this._viewer, this._showZoomControls);
             this.add(this._filteredViewer);
 
             this._viewer.eventSelectionChanged.addListener(sel => {
