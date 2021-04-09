@@ -3,6 +3,7 @@ namespace colibri.ui.controls.viewers {
     export class TreeViewerRenderer {
 
         private _viewer: TreeViewer;
+        protected _contentHeight: number;
 
         constructor(viewer: TreeViewer, cellSize: number = ROW_HEIGHT) {
 
@@ -33,18 +34,19 @@ namespace colibri.ui.controls.viewers {
             const treeIconList: TreeIconInfo[] = [];
             const paintItems: PaintItem[] = [];
 
+            this._contentHeight = Number.MIN_VALUE;
+
             this.paintItems(roots, treeIconList, paintItems, null, x, y);
 
-            let contentHeight = Number.MIN_VALUE;
+            // for (const paintItem of paintItems) {
 
-            for (const paintItem of paintItems) {
-                contentHeight = Math.max(paintItem.y + paintItem.h, contentHeight);
-            }
+            //     contentHeight = Math.max(paintItem.y + paintItem.h, contentHeight);
+            // }
 
-            contentHeight -= viewer.getScrollY();
+            this._contentHeight -= viewer.getScrollY();
 
             return {
-                contentHeight: contentHeight,
+                contentHeight: this._contentHeight,
                 treeIconList: treeIconList,
                 paintItems: paintItems
             };
@@ -110,11 +112,17 @@ namespace colibri.ui.controls.viewers {
                         this.renderTreeCell(args, renderer);
                     }
 
-                    const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
-                    item.set(args.x, args.y, args.w, args.h);
-                    paintItems.push(item);
+                    if (isItemVisible) {
 
-                    newParentPaintItem = item;
+                        const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
+                        item.set(args.x, args.y, args.w, args.h);
+                        paintItems.push(item);
+
+                        newParentPaintItem = item;
+
+                    }
+
+                    this._contentHeight = Math.max(this._contentHeight, args.y + args.h);
 
                     y += cellHeight;
 

@@ -115,7 +115,6 @@ namespace colibri.ui.controls.viewers {
         protected paintItems(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number) {
-
             const viewer = this.getViewer();
 
             let cellSize = viewer.getCellSize();
@@ -145,7 +144,9 @@ namespace colibri.ui.controls.viewers {
                 Math.floor(b.width % (viewer.getCellSize() + TREE_RENDERER_GRID_PADDING) / 2)
                 : (this._isSectionCriteria === undefined ? TREE_RENDERER_GRID_PADDING : TREE_RENDERER_GRID_PADDING * 3);
 
-            return this.paintGrid(
+            this._contentHeight = Number.MIN_VALUE;
+
+            this.paintGrid(
                 objects, treeIconList, paintItems, null, x + offset, y + TREE_RENDERER_GRID_PADDING, offset, 0, undefined, undefined);
         }
 
@@ -299,13 +300,18 @@ namespace colibri.ui.controls.viewers {
                             }
                         }
 
-                        const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
+                        if (isItemVisible) {
 
-                        item.set(args.x, args.y, args.w, args.h);
+                            const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
 
-                        paintItems.push(item);
+                            item.set(args.x, args.y, args.w, args.h);
 
-                        newParentPaintItem = item;
+                            paintItems.push(item);
+
+                            newParentPaintItem = item;
+                        }
+
+                        this._contentHeight = Math.max(this._contentHeight, args.y + args.h);
 
                         x += cellSize + TREE_RENDERER_GRID_PADDING;
 

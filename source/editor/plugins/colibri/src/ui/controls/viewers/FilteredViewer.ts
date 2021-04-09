@@ -159,6 +159,9 @@ namespace colibri.ui.controls.viewers {
 
                 return (e: MouseEvent) => {
 
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+
                     if (!this._menuProvider) {
 
                         return;
@@ -251,7 +254,7 @@ namespace colibri.ui.controls.viewers {
 
             this._viewer.setFilterText(value);
 
-            this._viewer.repaint();
+            // this._viewer.repaint();
         }
 
         filterText(value: string) {

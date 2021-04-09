@@ -327,10 +327,7 @@ namespace colibri.ui.controls.viewers {
 
             super.setFilterText(filter);
 
-            if (filter.length > 0) {
-
-                this.maybeFilter();
-            }
+            this.maybeFilter();
         }
 
         private _filterTime = 0;
