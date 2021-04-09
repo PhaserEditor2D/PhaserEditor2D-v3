@@ -288,17 +288,6 @@ namespace phasereditor2d.ide {
             return this._openingProject;
         }
 
-        setTheme(theme: controls.ITheme) {
-
-            controls.Controls.setTheme(theme);
-
-            const prefs = colibri.Platform.getWorkbench().getGlobalPreferences();
-
-            prefs.setValue("phasereditor2d.ide.theme", {
-                theme: theme.id
-            });
-        }
-
         openProjectInVSCode() {
 
             this.openFileExternalEditor(colibri.ui.ide.FileUtils.getRoot());

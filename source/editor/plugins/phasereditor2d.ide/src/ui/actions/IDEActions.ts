@@ -5,7 +5,6 @@ namespace phasereditor2d.ide.ui.actions {
     export const CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
     export const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     export const CMD_COMPILE_PROJECT = "phasereditor2d.ide.ui.actions.CompileProject";
-    export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
     export const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
     export const CMD_QUICK_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.QuickPlayProject";
     export const CMD_OPEN_VSCODE = "phasereditor2d.ide.ui.actions.OpenVSCode";
@@ -218,27 +217,6 @@ namespace phasereditor2d.ide.ui.actions {
                     }
                 });
             }
-
-            // theme dialog
-
-            manager.addCommandHelper({
-                id: CMD_CHANGE_THEME,
-                name: "Select Color Theme",
-                tooltip: "Select the color theme of the IDE.",
-                category: colibri.ui.ide.actions.CAT_GENERAL
-            });
-
-            manager.addHandlerHelper(CMD_CHANGE_THEME,
-                actions.OpenThemeDialogHandler.test,
-                actions.OpenThemeDialogHandler
-            );
-
-            manager.addKeyBinding(CMD_CHANGE_THEME, new commands.KeyMatcher({
-                control: true,
-                key: "Digit2",
-                keyLabel: "2",
-                filterInputElements: false
-            }));
         }
     }
 }

@@ -25,6 +25,7 @@ namespace colibri.ui.ide.actions {
     export const CMD_CUT = "colibri.ui.ide.actions.Cut";
     export const CMD_PASTE = "colibri.ui.ide.actions.Paste";
     export const CMD_SHOW_COMMENT_DIALOG = "colibri.ui.ide.actions.ShowCommentDialog";
+    export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
 
     function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -76,6 +77,48 @@ namespace colibri.ui.ide.actions {
             ColibriCommands.initPalette(manager);
 
             ColibriCommands.initCommentDialog(manager);
+
+            ColibriCommands.initTheme(manager);
+        }
+
+        private static initTheme(manager: commands.CommandManager) {
+
+            // theme dialog
+
+            manager.add({
+                command: {
+                    id: CMD_CHANGE_THEME,
+                    name: "Select Color Theme",
+                    tooltip: "Select the color theme of the IDE.",
+                    category: CAT_GENERAL
+                },
+                handler: {
+                    executeFunc: args => {
+                        const dlg = new ui.controls.dialogs.ThemesDialog();
+
+                        dlg.create();
+
+                        dlg.getViewer().setSelection([controls.Controls.getTheme()]);
+
+                        dlg.getViewer().eventSelectionChanged.addListener(() => {
+
+                            const theme = dlg.getViewer().getSelectionFirstElement() as controls.ITheme;
+
+                            if (theme) {
+
+                                ui.controls.Controls.setTheme(theme);
+                            }
+                        });
+                    },
+                    testFunc: args => !(args.activeDialog instanceof controls.dialogs.ThemesDialog)
+                },
+                keys: {
+                    control: true,
+                    key: "Digit2",
+                    keyLabel: "2",
+                    filterInputElements: false
+                }
+            })
         }
 
         private static initCommentDialog(manager: commands.CommandManager) {

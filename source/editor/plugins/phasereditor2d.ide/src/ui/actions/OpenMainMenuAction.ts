@@ -32,13 +32,13 @@ namespace phasereditor2d.ide.ui.actions {
 
             menu.addSeparator();
 
-            menu.addCommand(actions.CMD_CHANGE_THEME);
+            menu.addCommand(colibri.ui.ide.actions.CMD_CHANGE_THEME);
+
+            menu.addCommand(colibri.ui.ide.actions.CMD_SHOW_COMMAND_PALETTE);
 
             menu.addExtension(DesignWindow.MENU_MAIN);
 
             menu.addSeparator();
-
-            menu.addCommand(colibri.ui.ide.actions.CMD_SHOW_COMMAND_PALETTE);
 
             if (IDEPlugin.getInstance().isDesktopMode()) {
 

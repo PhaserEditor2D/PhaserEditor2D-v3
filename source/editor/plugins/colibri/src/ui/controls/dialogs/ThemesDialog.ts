@@ -1,4 +1,6 @@
-namespace phasereditor2d.ide.ui.dialogs {
+/// <reference path="../viewers/TreeViewer.ts"/>
+/// <reference path="../viewers/LabelProvider.ts"/>
+namespace colibri.ui.controls.dialogs {
 
     import controls = colibri.ui.controls;
 
@@ -20,7 +22,7 @@ namespace phasereditor2d.ide.ui.dialogs {
         }
     }
 
-    class ThemeViewer extends controls.viewers.TreeViewer {
+    class ThemeViewer extends viewers.TreeViewer {
 
         constructor() {
             super("ThemeViewer");
