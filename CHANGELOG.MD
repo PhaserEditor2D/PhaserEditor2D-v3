@@ -1,5 +1,11 @@
 # Change Log
 
+## dev
+
+### Updated
+
+* Viewers: optimize internal structure with paint information. Rendering is now way faster.
+
 ## v3.13.0 - Apr 2, 2021
 
 ### Added
