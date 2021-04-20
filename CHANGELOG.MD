@@ -6,6 +6,10 @@
 
 * Viewers: optimize internal structure with paint information. Rendering is now way faster.
 
+### Fixes
+
+* Method `removeFromDisplayList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
+
 ## v3.13.0 - Apr 2, 2021
 
 ### Added

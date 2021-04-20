@@ -127,7 +127,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         // tslint:disable-next-line:ban-types
         removeFromDisplayList(): this {
 
-            return super["removeFromDisplayList"]();
+            // not implemented in Phaser.GameObjects.Layer
+            // return super["removeFromDisplayList"]();
+
+            return this;
         }
 
         // tslint:disable-next-line:ban-types
