@@ -109,6 +109,13 @@ namespace colibri.ui.controls.viewers {
             return icon === null;
         }
 
+        async revealAndSelect(...objects: any[]): Promise<void> {
+
+            await this.reveal(...objects);
+
+            this.setSelection(objects);
+        }
+
         async reveal(...objects: any[]): Promise<void> {
 
             for (const obj of objects) {
@@ -128,7 +135,7 @@ namespace colibri.ui.controls.viewers {
 
             const scrollPane = this.getContainer().getContainer() as ScrollPane;
 
-            await this.repaint();
+            const paintResult = this.getTreeRenderer().paint(true);
 
             const objSet = new Set(objects);
 
@@ -138,7 +145,7 @@ namespace colibri.ui.controls.viewers {
 
             const b = this.getBounds();
 
-            const items = [...this._paintItems];
+            const items = paintResult.paintItems;
 
             items.sort((i1, i2) => i1.y - i2.y);
 
@@ -296,9 +303,9 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        protected paint(): void {
+        protected paint(fullPaint: boolean): void {
 
-            const result = this._treeRenderer.paint();
+            const result = this._treeRenderer.paint(fullPaint);
 
             this._contentHeight = result.contentHeight;
             this._paintItems = result.paintItems;

@@ -103,9 +103,9 @@ namespace colibri.ui.controls.viewers {
             return this._flat;
         }
 
-        paint() {
+        paint(fullPaint: boolean) {
 
-            const result = super.paint();
+            const result = super.paint(fullPaint);
 
             result.contentHeight += 10;
 
@@ -115,6 +115,7 @@ namespace colibri.ui.controls.viewers {
         protected paintItems(
             objects: any[], treeIconList: TreeIconInfo[], paintItems: PaintItem[],
             parentPaintItem: PaintItem, x: number, y: number) {
+
             const viewer = this.getViewer();
 
             let cellSize = viewer.getCellSize();
@@ -241,8 +242,9 @@ namespace colibri.ui.controls.viewers {
                             sectionStart = rectY + rectHeight;
                             sectionEnd = sectionStart;
 
-                            const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
+                            const item = new PaintItem(this._itemIndex, obj, parentPaintItem, isItemVisible);
                             item.set(0, rectY, b.width, rectHeight);
+                            this._itemIndex++;
 
                             paintItems.push(item);
                             newParentPaintItem = item;
@@ -300,9 +302,9 @@ namespace colibri.ui.controls.viewers {
                             }
                         }
 
-                        if (isItemVisible) {
+                        if (isItemVisible || this._fullPaint) {
 
-                            const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
+                            const item = new PaintItem(this._itemIndex, obj, parentPaintItem, isItemVisible);
 
                             item.set(args.x, args.y, args.w, args.h);
 
@@ -310,6 +312,8 @@ namespace colibri.ui.controls.viewers {
 
                             newParentPaintItem = item;
                         }
+
+                        this._itemIndex++;
 
                         this._contentHeight = Math.max(this._contentHeight, args.y + args.h);
 

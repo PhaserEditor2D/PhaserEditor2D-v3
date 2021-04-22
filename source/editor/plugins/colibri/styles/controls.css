@@ -19,7 +19,8 @@ button {
     font-size: 14px;
 }
 
-input, textarea {
+input,
+textarea {
     min-width: 0px;
     border-radius: 3px;
     padding: 3px;
@@ -133,7 +134,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     border-radius: 2px 2px 0 0;
     /* padding: 5px 10px 5px 5px; */
     padding: 8px;
-    padding-bottom: 5px;    
+    padding-bottom: 5px;
 }
 
 
@@ -582,6 +583,18 @@ div.TabPaneTitleBar::-webkit-scrollbar {
     margin-right: 5px;
 }
 
+.NegativeMenuItemIcon {
+    display: none;
+}
+
+.MenuItem:hover .NegativeMenuItemIcon {
+    display: block;
+}
+
+.MenuItem:hover .ThemeMenuItemIcon {
+    display: none;
+}
+
 .MenuItemText {
     grid-column-start: 3;
 }
@@ -626,6 +639,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
         opacity: 1;
     }
 }
+
 @keyframes fadeout {
     from {
         opacity: 1;

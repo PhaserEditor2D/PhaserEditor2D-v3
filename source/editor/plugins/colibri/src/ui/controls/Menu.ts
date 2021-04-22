@@ -140,9 +140,17 @@ namespace colibri.ui.controls {
 
                     if (item.getIcon()) {
 
-                        const iconControl = new controls.IconControl(item.getIcon());
-                        iconControl.getCanvas().classList.add("MenuItemIcon");
-                        itemElement.appendChild(iconControl.getCanvas());
+                        {
+                            const iconControl = new controls.IconControl(item.getIcon());
+                            iconControl.getCanvas().classList.add("MenuItemIcon", "ThemeMenuItemIcon");
+                            itemElement.appendChild(iconControl.getCanvas());
+                        }
+
+                        {
+                            const iconControl = new controls.IconControl((item.getIcon() as IconImage).getNegativeThemeImage());
+                            iconControl.getCanvas().classList.add("MenuItemIcon", "NegativeMenuItemIcon");
+                            itemElement.appendChild(iconControl.getCanvas());
+                        }
 
                         hasIcon = true;
                     }

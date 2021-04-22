@@ -4,6 +4,8 @@ namespace colibri.ui.controls.viewers {
 
         private _viewer: TreeViewer;
         protected _contentHeight: number;
+        protected _fullPaint: boolean;
+        protected _itemIndex: number;
 
         constructor(viewer: TreeViewer, cellSize: number = ROW_HEIGHT) {
 
@@ -18,12 +20,14 @@ namespace colibri.ui.controls.viewers {
             return this._viewer;
         }
 
-        paint(): {
+        paint(fullPaint: boolean): {
             contentHeight: number,
             paintItems: PaintItem[],
             treeIconList: TreeIconInfo[]
         } {
             const viewer = this._viewer;
+            this._fullPaint = fullPaint;
+            this._itemIndex = 0;
 
             const x = 0;
             const y = viewer.getScrollY();
@@ -109,18 +113,20 @@ namespace colibri.ui.controls.viewers {
                         }
 
                         isItemVisible = true;
+
                         this.renderTreeCell(args, renderer);
                     }
 
-                    if (isItemVisible) {
+                    if (isItemVisible || this._fullPaint) {
 
-                        const item = new PaintItem(paintItems.length, obj, parentPaintItem, isItemVisible);
+                        const item = new PaintItem(this._itemIndex, obj, parentPaintItem, isItemVisible);
                         item.set(args.x, args.y, args.w, args.h);
                         paintItems.push(item);
 
                         newParentPaintItem = item;
-
                     }
+
+                    this._itemIndex++;
 
                     this._contentHeight = Math.max(this._contentHeight, args.y + args.h);
 

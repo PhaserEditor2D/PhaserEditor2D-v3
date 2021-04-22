@@ -338,7 +338,9 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        abstract reveal(...objects: any[]): void;
+        abstract reveal(...objects: any[]): Promise<void>;
+
+        abstract revealAndSelect(...objects: any[]): Promise<void>;
 
         private fireSelectionChanged() {
 
@@ -417,19 +419,19 @@ namespace colibri.ui.controls.viewers {
 
                 if (e.button === 2) {
 
-                    if (!this._selectedObjects.has(data)) {
-
-                        this._selectedObjects.add(data);
-                        selChanged = true;
-                    }
+                    this._selectedObjects = new Set([data]);
+                    selChanged = true;
 
                 } else {
 
                     if (e.ctrlKey || e.metaKey) {
 
                         if (this._selectedObjects.has(data)) {
+
                             this._selectedObjects.delete(data);
+
                         } else {
+
                             this._selectedObjects.add(data);
                         }
 
@@ -441,6 +443,8 @@ namespace colibri.ui.controls.viewers {
 
                             const start = Math.min(this._lastSelectedItemIndex, item.index);
                             const end = Math.max(this._lastSelectedItemIndex, item.index);
+
+                            this.repaintNow(true);
 
                             for (let i = start; i <= end; i++) {
 
@@ -541,14 +545,14 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        async repaint() {
+        async repaint(fullRepaint = false) {
 
             if (this._filterOnRepaintEnabled) {
 
-                this.prepareFiltering(false);
+                this.prepareFiltering(fullRepaint);
             }
 
-            this.repaint2();
+            this.repaintNow(fullRepaint);
 
             if (this._preloadEnabled) {
 
@@ -556,7 +560,7 @@ namespace colibri.ui.controls.viewers {
 
                     if (result === PreloadResult.RESOURCES_LOADED) {
 
-                        this.repaint2();
+                        this.repaintNow(fullRepaint);
                     }
                 });
             }
@@ -574,7 +578,7 @@ namespace colibri.ui.controls.viewers {
             }
         }
 
-        private repaint2(): void {
+        protected repaintNow(fullRepaint: boolean): void {
 
             this._paintItems = [];
 
@@ -584,7 +588,7 @@ namespace colibri.ui.controls.viewers {
 
             if (this._cellRendererProvider && this._contentProvider && this._input !== null) {
 
-                this.paint();
+                this.paint(fullRepaint);
 
             } else {
 
@@ -697,7 +701,7 @@ namespace colibri.ui.controls.viewers {
             this.repaint();
         }
 
-        protected abstract paint(): void;
+        protected abstract paint(fullPaint: boolean): void;
 
         getCanvas(): HTMLCanvasElement {
 
@@ -784,6 +788,9 @@ namespace colibri.ui.controls.viewers {
         }
 
         selectAll() {
+
+            // first, compute all paintItems
+            this.repaintNow(true);
 
             this.setSelection(this._paintItems.map(item => item.data));
         }

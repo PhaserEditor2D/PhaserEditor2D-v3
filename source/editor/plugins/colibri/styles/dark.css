@@ -147,7 +147,7 @@ Important:
 
 .dark {
     /* firefox */
-    scrollbar-color: #4b4b4b #858585;
+    scrollbar-color: #858585 #4b4b4b;
 }
 
 .dark .ScrollBar,
