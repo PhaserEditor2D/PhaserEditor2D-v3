@@ -242,7 +242,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .FilterControl {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
     grid-template-rows: 1fr;
     align-items: center;
     column-gap: 0px;
@@ -252,6 +252,16 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .FilterControl input {
     width: 100%;
+}
+
+.FilterControlInputIcon {
+    margin-left: -20px;
+    opacity: 0.5;
+    display: none;
+}
+
+.FilterControlInputIcon:hover {
+    opacity: 1;
 }
 
 .FilteredViewer>.ScrollPane {

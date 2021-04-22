@@ -5,6 +5,7 @@ namespace colibri.ui.controls.viewers {
         private _filterElement: HTMLInputElement;
         private _menuIcon: IconControl;
         private _filteredViewer: FilteredViewer<any>;
+        private _inputIcon: IconControl;
 
         constructor(filterViewer: FilteredViewer<any>) {
             super("div", "FilterControl");
@@ -16,8 +17,26 @@ namespace colibri.ui.controls.viewers {
             this._filterElement = document.createElement("input");
             this.getElement().appendChild(this._filterElement);
 
+            this._inputIcon = new IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE));
+            this._inputIcon.getCanvas().classList.add("FilterControlInputIcon");
+            this._filterElement.addEventListener("keyup", () => this.updateInputIcon());
+            this._filterElement.addEventListener("change", () => this.updateInputIcon());
+            this._inputIcon.getCanvas().addEventListener("click", () => this.clearFilter());
+            this.getElement().appendChild(this._inputIcon.getCanvas());
+
             this._menuIcon = new IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_SMALL_MENU));
             this.getElement().appendChild(this._menuIcon.getCanvas());
+        }
+
+        private clearFilter() {
+
+            this.getFilteredViewer().clearFilter();
+            this.updateInputIcon();
+        }
+
+        private updateInputIcon() {
+
+            this._inputIcon.getCanvas().style.display = this._filterElement.value === "" ? "none" : "block";
         }
 
         getFilteredViewer() {
@@ -246,6 +265,15 @@ namespace colibri.ui.controls.viewers {
                     }
                 }
             });
+        }
+
+        clearFilter() {
+
+            this._filterControl.getFilterElement().value = "";
+
+            this.onFilterInput();
+
+            this.getViewer().reveal(...this.getViewer().getSelection());
         }
 
         private onFilterInput(e?: Event) {

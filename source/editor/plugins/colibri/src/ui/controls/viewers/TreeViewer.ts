@@ -118,6 +118,11 @@ namespace colibri.ui.controls.viewers {
 
         async reveal(...objects: any[]): Promise<void> {
 
+            if (objects.length === 0) {
+
+                return;
+            }
+
             for (const obj of objects) {
 
                 const path = this.getObjectPath(obj);
