@@ -384,7 +384,10 @@ namespace colibri.ui.controls.viewers {
 
             this.prepareFiltering(true);
 
-            this.expandFilteredParents(this.getContentProvider().getRoots(this.getInput()));
+            if (this.getFilterText().length > 0) {
+
+                this.expandFilteredParents(this.getContentProvider().getRoots(this.getInput()));
+            }
 
             this.repaint();
         }
