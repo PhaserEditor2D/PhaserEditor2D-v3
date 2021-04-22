@@ -9,7 +9,7 @@
 
 ### Fixes
 
-* Method `removeFromDisplayList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
+* Method `removeFromDisplayList()` and `removeFromUpdateList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
 
 ## v3.13.0 - Apr 2, 2021
 
