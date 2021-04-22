@@ -127,16 +127,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         // tslint:disable-next-line:ban-types
         removeFromDisplayList(): this {
 
-            // not implemented in Phaser.GameObjects.Layer
-            // return super["removeFromDisplayList"]();
-
-            return this;
+            return Phaser.GameObjects.GameObject.prototype.removeFromDisplayList.call(this);
         }
 
         // tslint:disable-next-line:ban-types
         removeFromUpdateList(): this {
 
-            return super["removeFromUpdateList"];
+            return Phaser.GameObjects.GameObject.prototype.removeFromUpdateList.call(this);
         }
     }
 }
