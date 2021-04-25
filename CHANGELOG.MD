@@ -6,6 +6,7 @@
 
 * Viewers: optimize internal structure with paint information. Rendering is now way faster.
 * Menu: items show the negative icon on mouse hover.
+* Menu: fixes positioning on buttons and similar elements.
 
 ### Fixes
 
