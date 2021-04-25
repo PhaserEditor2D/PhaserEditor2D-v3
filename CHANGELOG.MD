@@ -8,6 +8,7 @@
 * Menu: items show the negative icon on mouse hover.
 * Menu: fixes positioning on buttons and similar elements.
 * Menu: fixes color of "checked" icon on mouse hover.
+* Main menu: shows Unofficial Phaser Help Center option.
 
 ### Fixes
 
