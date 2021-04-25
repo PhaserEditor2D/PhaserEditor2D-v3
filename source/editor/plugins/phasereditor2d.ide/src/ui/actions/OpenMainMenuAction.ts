@@ -68,6 +68,11 @@ namespace phasereditor2d.ide.ui.actions {
             }
 
             menu.add(new controls.Action({
+                text: "Unofficial Phaser Help Center",
+                callback: () => controls.Controls.openUrlInNewPage("https://helpcenter.phasereditor2d.com")
+            }));
+
+            menu.add(new controls.Action({
                 text: "Help",
                 callback: () => controls.Controls.openUrlInNewPage("https://help.phasereditor2d.com")
             }));
