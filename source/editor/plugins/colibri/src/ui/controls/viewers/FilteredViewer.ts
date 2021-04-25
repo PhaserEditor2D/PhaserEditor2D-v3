@@ -25,6 +25,7 @@ namespace colibri.ui.controls.viewers {
             this.getElement().appendChild(this._inputIcon.getCanvas());
 
             this._menuIcon = new IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_SMALL_MENU));
+            this._menuIcon.getCanvas().classList.add("IconButton");
             this.getElement().appendChild(this._menuIcon.getCanvas());
         }
 

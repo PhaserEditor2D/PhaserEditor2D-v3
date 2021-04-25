@@ -297,11 +297,57 @@ namespace colibri.ui.controls {
             }
         }
 
-        createWithEvent(e: MouseEvent, openLeft = false) {
+        createWithEvent(e: MouseEvent, openLeft = false, alignToElement = false) {
 
             e.preventDefault();
 
-            this.create(e.clientX, e.clientY, true, openLeft);
+            let x = e.clientX;
+            let y = e.clientY;
+
+            let element = e.target as HTMLElement;
+
+            const isToolbarItem = ToolbarManager.isToolbarItem(element);
+
+            if (isToolbarItem) {
+
+                element = ToolbarManager.findToolbarItem(element);
+            }
+
+            alignToElement = element instanceof HTMLButtonElement
+                || isToolbarItem
+                || element.classList.contains("IconButton")
+                || alignToElement;
+
+
+            const targetRect = element.getBoundingClientRect();
+
+            if (alignToElement) {
+
+                x = targetRect.x;
+                y = targetRect.bottom + 2;
+            }
+
+            this.create(x, y, true, openLeft);
+
+            if (alignToElement && this._element) {
+
+                const menuRect = this._element.getBoundingClientRect();
+
+                if (menuRect.width < targetRect.width) {
+
+                    this._element.style.width = targetRect.width + "px";
+                }
+
+                if (menuRect.width > window.innerWidth - x || openLeft) {
+
+                    this._element.style.left = targetRect.right - menuRect.width + "px";
+                }
+
+                if (menuRect.height > window.innerHeight - y) {
+
+                    this._element.style.top = targetRect.top - menuRect.height - 2 + "px";
+                }
+            }
         }
 
         getText() {

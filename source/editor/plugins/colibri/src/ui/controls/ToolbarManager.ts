@@ -16,6 +16,27 @@ namespace colibri.ui.controls {
             this._actionDataMap = new Map();
         }
 
+        static isToolbarItem(element: HTMLElement) {
+
+
+            return this.findToolbarItem(element) !== undefined;
+        }
+
+        static findToolbarItem(element: HTMLElement) {
+
+            if (!element) {
+
+                return undefined;
+            }
+
+            if (element.classList.contains("ToolbarItem")) {
+
+                return element;
+            }
+
+            return this.findToolbarItem(element.parentElement);
+        }
+
         addCommand(commandId: string, config: IActionConfig = {}) {
             config.commandId = commandId;
             this.add(new Action(config));

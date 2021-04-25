@@ -198,10 +198,6 @@ Important:
     border-color: #858585;
 }
 
-.dark .IconButton:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
 /* Zoom controls */
 
 .ZoomControl {
