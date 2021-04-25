@@ -130,12 +130,10 @@ namespace colibri.ui.controls {
 
                     if (item.isSelected()) {
 
-                        const iconControl = new controls.IconControl(
-                            Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_CHECKED));
-
-                        iconControl.getCanvas().classList.add("MenuItemCheckedIcon");
-
-                        itemElement.appendChild(iconControl.getCanvas());
+                        const checkElement = document.createElement("span");
+                        checkElement.innerHTML = "&check;";
+                        checkElement.classList.add("MenuItemCheckedIcon");
+                        itemElement.appendChild(checkElement)
                     }
 
                     if (item.getIcon()) {
