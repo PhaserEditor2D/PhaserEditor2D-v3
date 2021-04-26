@@ -6,6 +6,8 @@
 
 * [#89](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/89) Scene Editor: remembers last selected objects when opens.
 * Scene Editor: adds the Settings option in the Scene menu of the context menu.
+* Asset Pack Editor: adds the Blocks property section. It shows an option for displaying all files in the Blocks view.
+* Asset Pack Editor: shows a Settings option in the context menu.
 
 ### Updated
 
