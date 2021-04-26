@@ -198,10 +198,10 @@ Important:
     border-color: #858585;
 }
 
-/* Zoom controls */
+/* Icon buttons */
 
-.ZoomControl {
-    opacity: 0.2;
+.dark .IconButton:hover {
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* ProgressBar */
