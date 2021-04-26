@@ -2,6 +2,10 @@
 
 ## dev
 
+### Added
+
+* [#89](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/89) Scene Editor: remembers last selected objects when opens.
+
 ### Updated
 
 * Viewers: optimize internal structure with paint information. Rendering is now way faster.
