@@ -32,6 +32,10 @@ namespace phasereditor2d.pack.ui.editor {
 
             menu.addCommand(CMD_ASSET_PACK_EDITOR_ADD_FILE);
             menu.addCommand(ide.actions.CMD_DELETE);
+            menu.addAction({
+                text: "Settings",
+                callback: () => this.setSelection([])
+            });
         }
 
         static isEditorScope(args: ide.commands.HandlerArgs) {
