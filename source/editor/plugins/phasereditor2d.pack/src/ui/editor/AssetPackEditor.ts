@@ -20,7 +20,7 @@ namespace phasereditor2d.pack.ui.editor {
         private _pack: core.AssetPack;
         private _outlineProvider = new AssetPackEditorOutlineProvider(this);
         private _blocksProvider = new AssetPackEditorBlocksProvider(this);
-        private _propertyProvider = new properties.AssetPackEditorPropertyProvider();
+        private _propertyProvider = new properties.AssetPackEditorPropertyProvider(this);
 
         constructor() {
             super("phasereditor2d.pack.ui.AssetPackEditor", AssetPackEditor.getFactory());
@@ -141,6 +141,8 @@ namespace phasereditor2d.pack.ui.editor {
 
                 this._revealKey = null;
             }
+
+            this.setSelection(this.getSelection());
         }
 
         async doSave() {
@@ -391,7 +393,7 @@ namespace phasereditor2d.pack.ui.editor {
             this.getUndoManager().add(new undo.AssetPackEditorOperation(this, before, after));
         }
 
-        private async updateBlocks() {
+        async updateBlocks() {
 
             if (!this._pack) {
                 return;

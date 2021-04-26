@@ -4,8 +4,14 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
     export class AssetPackEditorPropertyProvider extends controls.properties.PropertySectionProvider {
 
+        constructor(private editor: AssetPackEditor) {
+            super("phasereditor2d.pack.ui.editor.properties.AssetPackEditorPropertyProvider");
+        }
+
         addSections(page: controls.properties.PropertyPage,
             sections: Array<controls.properties.PropertySection<any>>): void {
+
+            sections.push(new BlocksSection(page));
 
             sections.push(new ItemSection(page));
 
@@ -137,6 +143,11 @@ namespace phasereditor2d.pack.ui.editor.properties {
             sections.push(new ui.properties.ImagePreviewSection(page));
 
             sections.push(new ui.properties.ManyImagePreviewSection(page));
+        }
+
+        getEmptySelectionObject() {
+
+            return this.editor.getPack();
         }
 
     }

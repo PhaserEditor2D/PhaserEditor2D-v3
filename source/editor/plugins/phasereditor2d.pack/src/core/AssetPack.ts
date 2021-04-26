@@ -70,6 +70,7 @@ namespace phasereditor2d.pack.core {
 
         private _file: core.io.FilePath;
         private _items: AssetPackItem[];
+        private _showAllFilesInBlocks: boolean;
 
         constructor(file: core.io.FilePath, content: string) {
             this._file = file;
@@ -83,12 +84,27 @@ namespace phasereditor2d.pack.core {
 
                     this.fromJSON(data);
 
+                    if (data.meta) {
+
+                        this._showAllFilesInBlocks = data.meta.showAllFilesInBlocks || false;
+                    }
+
                 } catch (e) {
 
                     console.error(e);
                     alert(e.message);
                 }
             }
+        }
+
+        isShowAllFilesInBlocks() {
+
+            return this._showAllFilesInBlocks;
+        }
+
+        setShowAllFilesInBlocks(showAllFilesInBlocks) {
+
+            this._showAllFilesInBlocks = showAllFilesInBlocks;
         }
 
         computeUsedFiles(files: Set<io.FilePath> = new Set()) {
@@ -112,7 +128,8 @@ namespace phasereditor2d.pack.core {
                     app: "Phaser Editor 2D - Asset Pack Editor",
                     contentType: pack.core.contentTypes.CONTENT_TYPE_ASSET_PACK,
                     url: "https://phasereditor2d.com",
-                    version: 2
+                    version: 2,
+                    showAllFilesInBlocks: this._showAllFilesInBlocks
                 }
             };
         }

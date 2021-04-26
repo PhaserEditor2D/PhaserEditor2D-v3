@@ -42,6 +42,13 @@ namespace phasereditor2d.pack.ui.editor {
 
         getRoots(input: any): any[] {
 
+            const pack = this._editor.getPack();
+
+            if (pack && pack.isShowAllFilesInBlocks()) {
+
+                input = colibri.Platform.getWorkbench().getFileStorage().getRoot();
+            }
+
             const folders = [];
 
             if (input instanceof io.FilePath && input.isFolder()) {
@@ -51,7 +58,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             const roots = super.getRoots(input);
 
-            for(const file of roots) {
+            for (const file of roots) {
 
                 this.getFolders(file, folders);
             }

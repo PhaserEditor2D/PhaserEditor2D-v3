@@ -80,6 +80,11 @@ namespace phasereditor2d.pack.ui.editor {
 
             if (obj.isFolder()) {
 
+                if (obj.isRoot()) {
+
+                    return "/";
+                }
+
                 return obj.getProjectRelativeName().substring(1);
             }
 
