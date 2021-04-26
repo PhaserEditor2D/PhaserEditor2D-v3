@@ -7,9 +7,9 @@ namespace phasereditor2d.scene.ui.editor {
     import FileUtils = colibri.ui.ide.FileUtils;
 
     interface IEditorState {
-
         cameraState: ICameraState;
         toolsState: tools.ISceneToolsState;
+        selectionState: string[];
     }
 
     export class SceneEditor extends colibri.ui.ide.FileEditor {
@@ -194,6 +194,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             state.cameraState = this._cameraManager.getState();
             state.toolsState = this._toolsManager.getState();
+            state.selectionState = this._selectionManager.getState();
         }
 
         restoreState(state: IEditorState) {
@@ -780,16 +781,17 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (this._editorState) {
 
-                    if (this._editorState) {
+                    this._cameraManager.setState(this._editorState.cameraState);
+                    this._selectionManager.setState(this._editorState.selectionState)
 
-                        this._cameraManager.setState(this._editorState.cameraState);
-                    }
+                } else {
 
-                    this._editorState = null;
+                    this.setSelection([]);
                 }
 
-                this._currentRefreshHash = await this.buildDependenciesHash();
+                this._editorState = null;
 
+                this._currentRefreshHash = await this.buildDependenciesHash();
             }
 
             this.layout();
