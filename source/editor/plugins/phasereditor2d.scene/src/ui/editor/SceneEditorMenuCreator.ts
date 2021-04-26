@@ -98,6 +98,11 @@ namespace phasereditor2d.scene.ui.editor {
                 text: "Duplicate Scene"
             });
 
+            menu.addAction({
+                text: "Settings",
+                callback: () => this._editor.setSelection([])
+            });
+
             return menu;
         }
 

@@ -5,6 +5,7 @@
 ### Added
 
 * [#89](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/89) Scene Editor: remembers last selected objects when opens.
+* Scene Editor: adds the Settings option in the Scene menu of the context menu.
 
 ### Updated
 
