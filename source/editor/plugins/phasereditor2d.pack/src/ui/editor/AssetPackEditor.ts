@@ -34,7 +34,10 @@ namespace phasereditor2d.pack.ui.editor {
             menu.addCommand(ide.actions.CMD_DELETE);
             menu.addAction({
                 text: "Settings",
-                callback: () => this.setSelection([])
+                callback: () => {
+
+                    this.getViewer().setSelection([]);
+                }
             });
         }
 
