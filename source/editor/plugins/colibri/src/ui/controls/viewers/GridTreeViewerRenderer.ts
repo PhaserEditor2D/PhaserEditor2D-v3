@@ -347,14 +347,6 @@ namespace colibri.ui.controls.viewers {
                     sectionStart = result.sectionStart;
                     sectionEnd = result.sectionEnd;
                 }
-
-                // else {
-
-                //     if (isSection && depth === 0) {
-
-                //         this.drawPanelBottom(ctx, 5, sectionEnd, b.width - 10);
-                //     }
-                // }
             }
 
             return {
