@@ -152,7 +152,7 @@ Important:
 
 .dark .ScrollBar,
 .dark ::-webkit-scrollbar-track {
-    background: #ffffff08;
+    /*background: #ffffff08;*/
 }
 
 .dark .ScrollHandler,

@@ -1,660 +1,674 @@
-/*
-
-Rules to layout controls.
-
-Important:
-    - Don't provide colors here. The colors are provided by the dark.css and light.css files.
-
-*/
-
-body,
-html {
-    margin: 0px;
-    padding: 0px;
-}
-
-body,
-button {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-}
-
-input,
-textarea {
-    min-width: 0px;
-    border-radius: 3px;
-    padding: 3px;
-    outline: none;
-    border-style: none;
-}
-
-label {
-    min-width: 0px;
-}
-
-* {
-    user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-.UserSelectText * {
-    user-select: text !important;
-    -webkit-touch-callout: text !important;
-    -webkit-user-select: text !important;
-    -khtml-user-select: text !important;
-    -moz-user-select: text !important;
-    -ms-user-select: text !important;
-}
-
-body {
-    overflow-y: hidden;
-}
-
-input {
-    -webkit-user-select: text !important;
-    -khtml-user-select: text !important;
-    -moz-user-select: text !important;
-    -o-user-select: text !important;
-    user-select: text !important;
-    box-sizing: border-box;
-}
-
-button {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    height: 2em;
-    min-height: 2em;
-}
-
-button:active,
-button:focus {
-    outline-width: 1px;
-    outline-color: rgba(255, 255, 255, 0.1);
-}
-
-button.alignLeft {
-    text-align: left;
-}
-
-canvas {
-    outline: none;
-    image-rendering: crisp-edges;
-}
-
-.Control {
-    position: absolute;
-    box-sizing: border-box;
-}
-
-.ImageControl {
-    position: fixed;
-}
-
-/* Tooltip */
-
-.Tooltip {
-    position: fixed;
-    border-width: 1px;
-    border-style: solid;
-    padding: 5px;
-}
-
-.TooltipKeyString {
-    font-family: monospace;
-}
-
-/* TabPane */
-
-.TabPane {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-}
-
-.TabPaneTitleBar {
-    display: flex;
-    overflow-x: auto;
-}
-
-div.TabPaneTitleBar::-webkit-scrollbar {
-    height: 7px;
-}
-
-.TabPaneLabel {
-    float: left;
-    display: grid;
-    align-items: center;
-    box-sizing: border-box;
-    grid-template-columns: min-content 1fr auto min-content;
-    border-radius: 2px 2px 0 0;
-    /* padding: 5px 10px 5px 5px; */
-    padding: 8px;
-    padding-bottom: 5px;
-}
-
-
-.TabPaneLabel span {
-    margin: 3px 0px 0px 3px;
-    align-self: center;
-}
-
-.TabPaneLabelSections {
-    display: flex;
-}
-
-.TabPaneLabelSections .IconControlCanvas {
-    margin-top: 3px;
-    padding: 0 5px 0 5px;
-}
-
-.TabPaneLabelSection {
-    margin-left: 10px;
-    margin-top: 3px;
-    margin-bottom: -1px;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: transparent;
-}
-
-.TabPaneLabelSection:nth-child(2) {
-    margin-left: 0px;
-}
-
-.TabPaneLabelSection.selected {
-    border-bottom-color: black;
-}
-
-.TabPaneContentArea {
-    border-radius: 0 3px 3px 3px;
-}
-
-.TabPaneContentArea .ContentArea {
-    display: none;
-}
-
-.TabPaneContentArea .ContentArea.selected {
-    display: block;
-}
-
-.TabPaneContentArea,
-.TabPaneContentArea .ContentArea {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-
-/* ScrollPane */
-
-::-webkit-scrollbar {
-    width: 15px;
-}
-
-.ScrollBar,
-.ScrollHandler {
-    position: relative;
-}
-
-.ScrollHandler,
-::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-}
-
-.ScrollPane.hideScrollBar {
-    /* grid-template-columns: 1fr 0px !important; */
-}
-
-.ScrollPane.hideScrollBar .ScrollBar {
-    display: none;
-}
-
-/* Zoom */
-
-.ZoomControl {
-    position: absolute;
-    right: 20px;
-    bottom: 5px;
-    padding: 2px;
-    border-radius: 3px;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    column-gap: 2px;
-    opacity: 0.3;
-    z-index: 3;
-}
-
-.ZoomControl:hover {
-    opacity: 0.9;
-}
-
-/* Viewer */
-
-.FilteredViewer {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-}
-
-.FilterControl {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    grid-template-rows: 1fr;
-    align-items: center;
-    column-gap: 0px;
-    box-sizing: border-box;
-    padding: 5px 0px 5px 6px;
-}
-
-.FilterControl input {
-    width: 100%;
-}
-
-.FilterControlInputIcon {
-    margin-left: -20px;
-    opacity: 0.5;
-    display: none;
-}
-
-.FilterControlInputIcon:hover {
-    opacity: 1;
-}
-
-.FilteredViewer>.ScrollPane {
-    position: static;
-    display: grid;
-    grid-template-columns: 1fr 15px;
-    grid-template-rows: 1fr;
-}
-
-.FilteredViewer .FilterControl {
-    position: relative;
-    width: 100%;
-}
-
-.FilteredViewer .ViewerContainer {
-    position: static;
-}
-
-.ViewerContainer .Viewer {
-    position: fixed;
-}
-
-/* PropertyPage */
-
-.PropertyPage {
-    display: grid;
-    grid-template-columns: 100%;
-    align-items: start;
-    position: relative;
-    padding: 5px;
-    width: 100%;
-    height: 100%;
-    row-gap: 6px;
-    overflow-y: auto;
-}
-
-.PropertySectionPane {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    position: initial;
-    height: 100%;
-    margin: 0px;
-    border-radius: 3px;
-}
-
-.PropertyTitleArea {
-    display: inline-grid;
-    grid-template-columns: 20px 1fr auto;
-    padding: 5px;
-}
-
-.PropertyTitleArea .IconControlCanvas {
-    align-self: center;
-    justify-self: center;
-}
-
-.PropertyTitleArea label {
-    overflow: hidden;
-    white-space: nowrap;
-    word-break: break-all;
-    text-overflow: ellipsis;
-    align-self: center;
-}
-
-.PropertyFormArea {
-    display: grid;
-    padding: 10px 0px 10px 0px;
-}
-
-.PropertyButtonPanel {
-    width: 100%;
-    display: block;
-}
-
-.PropertyButtonPanel button {
-    float: right;
-    margin-left: 5px;
-    font-size: small;
-}
-
-.PropertySubTitlePanel {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-column: 1 / span 2;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.1);
-    padding: 3px;
-    border-radius: 3px;
-}
-
-.PropertySubTitleLabel {
-    width: 100%;
-}
-
-.formSimpleProps {
-    padding: 5px;
-}
-
-.formLabel {
-    justify-self: self-end;
-}
-
-.StringDialogField {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 5px;
-    align-items: center;
-}
-
-.StringDialogField textarea {
-    resize: none;
-    overflow: hidden;
-}
-
-/* Toolbar */
-
-.IconButton {
-    border-radius: 3px;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0);
-    border-width: 1px;
-}
-
-.IconButton:hover {
-    border-color: rgba(0, 0, 0, 0.2);
-}
-
-.ToolbarItem {
-    display: flex;
-    float: left;
-    margin-right: 5px;
-    padding: 5px;
-    border-radius: 3px;
-    border-style: solid;
-    border-width: 1px;
-}
-
-.ToolbarItemHasTextAndIcon canvas {
-    margin-right: 3px;
-}
-
-.ToolbarItemHideText .ToolbarItemText {
-    display: none;
-}
-
-/* ProgressBar */
-
-.ProgressBar {
-    height: 10px;
-}
-
-/* Dialog & Notification */
-
-.Notification {
-    z-index: 10000;
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    padding: 20px;
-    border-radius: 3px;
-}
-
-.Dialog,
-.Notification {
-    border-radius: 5px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.5);
-    box-shadow:
-        -12px -5px 22px rgba(0, 0, 0, 0.2),
-        12px 12px 22px rgba(0, 0, 0, 0.2),
-        -12px 12px 22px rgba(0, 0, 0, 0.2),
-        12px -5px 22px rgba(0, 0, 0, 0.2);
-
-}
-
-.DialogContainer {
-    position: absolute;
-    z-index: 1000;
-    left: 0px;
-    right: 0px;
-    width: 100%;
-    height: 100%;
-}
-
-.Dialog {
-    position: absolute;
-    z-index: 1001;
-}
-
-.Dialog {
-    display: grid;
-    grid-template-columns: 5px 1fr 5px;
-    grid-template-rows: 5px auto 5px 1fr 5px auto 5px;
-}
-
-.DialogHalfScreenHeight {
-    height: 50%;
-}
-
-.Dialog .DialogTitlePane {
-    width: 100%;
-    grid-column-start: 2;
-    grid-row-start: 2;
-    font-size: small;
-    text-align: center;
-}
-
-.Dialog .DialogClientArea {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    grid-column-start: 2;
-    grid-row-start: 4;
-    box-sizing: content-box;
-}
-
-.Dialog .FilteredViewer,
-.Dialog .DialogSection {
-    border-radius: 3px;
-}
-
-.Dialog .DialogSection {
-    padding: 5px;
-    box-sizing: border-box;
-}
-
-.Dialog .DialogButtonPane {
-    grid-row-start: 6;
-    grid-column-start: 2;
-    display: block;
-}
-
-.Dialog .DialogButtonPane button {
-    float: right;
-    margin-left: 5px;
-}
-
-.WizardDialog .DialogClientArea {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr;
-    row-gap: 5px;
-}
-
-.WizardDialog .PageTitleLabel {
-    font-weight: bold;
-    margin-left: 5px;
-}
-
-.WizardDialog .PageDescArea {
-    padding: 0.5em 0 0.5em 0;
-    font-style: italic;
-    margin-left: 5px;
-}
-
-.WizardDialog .PageArea {
-    height: 100%;
-}
-
-/* AlertDialog */
-
-.AlertDialog {
-    height: auto !important;
-}
-
-.AlertDialog .DialogClientArea {
-    padding: 10px;
-}
-
-.AlertDialog .DialogClientArea pre {
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    margin: 5px 0px;
-}
-
-/* InputDialog */
-
-.InputDialog {
-    height: auto !important;
-}
-
-.InputDialogLabel {
-    padding: 1em 0px;
-}
-
-/* ProgressDialog */
-
-.ProgressDialog {
-    height: auto !important;
-}
-
-.ProgressDialog .ProgressBar {
-    border-radius: 3px;
-}
-
-/* Upload Dialog */
-
-.FilesDragEnter {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-/* Menu */
-
-.Menu {
-    position: fixed;
-    z-index: 2001;
-}
-
-.MenuItem {
-    display: grid;
-    grid-template-columns: 30px 20px 1fr auto;
-    padding: 5px 10px 5px 0px;
-}
-
-.MenuNoIcon .MenuItem {
-    grid-template-columns: 30px 0px 1fr auto;
-}
-
-.MenuItemCheckedIcon {
-    grid-column-start: 1;
-    justify-self: center;
-}
-
-.MenuItemIcon {
-    grid-column-start: 2;
-    justify-self: center;
-    margin-right: 5px;
-}
-
-.NegativeMenuItemIcon {
-    display: none;
-}
-
-.MenuItem:hover .NegativeMenuItemIcon {
-    display: block;
-}
-
-.MenuItem:hover .ThemeMenuItemIcon {
-    display: none;
-}
-
-.MenuItemText {
-    grid-column-start: 3;
-}
-
-.MenuItemKeyString {
-    font-family: monospace;
-    margin-left: 3em;
-    grid-column-start: 4;
-}
-
-.MenuContainer {
-    z-index: 2000;
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    width: 100%;
-    height: 100%;
-}
-
-.MenuItemSeparator {
-    height: 1px;
-}
-
-/* Effects */
-
-.FadeInEffect {
-    animation: fadein 2s;
-}
-
-.FadeOutEffect {
-    animation: fadeout 2s;
-    opacity: 0;
-}
-
-
-@keyframes fadein {
-    from {
+    /*
+
+    Rules to layout controls.
+
+    Important:
+        - Don't provide colors here. The colors are provided by the dark.css and light.css files.
+
+    */
+
+    body,
+    html {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    body,
+    button {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    input,
+    textarea {
+        min-width: 0px;
+        border-radius: 3px;
+        padding: 3px;
+        outline: none;
+        border-style: none;
+    }
+
+    label {
+        min-width: 0px;
+    }
+
+    * {
+        user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .UserSelectText * {
+        user-select: text !important;
+        -webkit-touch-callout: text !important;
+        -webkit-user-select: text !important;
+        -khtml-user-select: text !important;
+        -moz-user-select: text !important;
+        -ms-user-select: text !important;
+    }
+
+    body {
+        overflow-y: hidden;
+    }
+
+    input {
+        -webkit-user-select: text !important;
+        -khtml-user-select: text !important;
+        -moz-user-select: text !important;
+        -o-user-select: text !important;
+        user-select: text !important;
+        box-sizing: border-box;
+    }
+
+    button {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        height: 2em;
+        min-height: 2em;
+    }
+
+    button:active,
+    button:focus {
+        outline-width: 1px;
+        outline-color: rgba(255, 255, 255, 0.1);
+    }
+
+    button.alignLeft {
+        text-align: left;
+    }
+
+    canvas {
+        outline: none;
+        image-rendering: crisp-edges;
+    }
+
+    .Control {
+        position: absolute;
+        box-sizing: border-box;
+    }
+
+    .ImageControl {
+        position: fixed;
+    }
+
+    /* Tooltip */
+
+    .Tooltip {
+        position: fixed;
+        border-width: 1px;
+        border-style: solid;
+        padding: 5px;
+    }
+
+    .TooltipKeyString {
+        font-family: monospace;
+    }
+
+    /* TabPane */
+
+    .TabPane {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .TabPaneTitleBar {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    div.TabPaneTitleBar::-webkit-scrollbar {
+        height: 7px;
+    }
+
+    .TabPaneLabel {
+        float: left;
+        display: grid;
+        align-items: center;
+        box-sizing: border-box;
+        grid-template-columns: min-content 1fr auto min-content;
+        border-radius: 2px 2px 0 0;
+        /* padding: 5px 10px 5px 5px; */
+        padding: 8px;
+        padding-bottom: 5px;
+    }
+
+
+    .TabPaneLabel span {
+        margin: 3px 0px 0px 3px;
+        align-self: center;
+    }
+
+    .TabPaneLabelSections {
+        display: flex;
+    }
+
+    .TabPaneLabelSections .IconControlCanvas {
+        margin-top: 3px;
+        padding: 0 5px 0 5px;
+    }
+
+    .TabPaneLabelSection {
+        margin-left: 10px;
+        margin-top: 3px;
+        margin-bottom: -1px;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-bottom-color: transparent;
+    }
+
+    .TabPaneLabelSection:nth-child(2) {
+        margin-left: 0px;
+    }
+
+    .TabPaneLabelSection.selected {
+        border-bottom-color: black;
+    }
+
+    .TabPaneContentArea {
+        border-radius: 0 3px 3px 3px;
+    }
+
+    .TabPaneContentArea .ContentArea {
+        display: none;
+    }
+
+    .TabPaneContentArea .ContentArea.selected {
+        display: block;
+    }
+
+    .TabPaneContentArea,
+    .TabPaneContentArea .ContentArea {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+
+    /* ScrollPane */
+
+    .ScrollPane {
+        position: static;
+        display: grid;
+        grid-template-columns: 1fr 0px;
+        grid-template-rows: 1fr;
+    }
+
+    .ScrollHandler {
+        display: block;
         opacity: 0;
     }
 
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeout {
-    from {
+    /*.ScrollPane */.FilteredViewer:hover .ScrollHandler:not(:active) {
         opacity: 1;
     }
 
-    to {
+    .ScrollHandler:active {
+        opacity: 1 !important;
+    }
+
+    ::-webkit-scrollbar {
+        width: 15px;
+    }
+
+    .ScrollBar,
+    .ScrollHandler {
+        position: relative;
+        width: 15px;
+    }
+
+    .ScrollBar {
+        left: -15px;
+    }
+
+    .ScrollHandler,
+    ::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+    }
+
+    .ScrollPane.hideScrollBar .ScrollBar {
         opacity: 0;
     }
-}
+
+    /* Zoom */
+
+    .ZoomControl {
+        position: absolute;
+        right: 20px;
+        bottom: 5px;
+        padding: 2px;
+        border-radius: 3px;
+        display: grid;
+        grid-template-columns: auto auto auto;
+        column-gap: 2px;
+        opacity: 0.3;
+        z-index: 3;
+    }
+
+    .ZoomControl:hover {
+        opacity: 0.9;
+    }
+
+    /* Viewer */
+
+    .FilteredViewer {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .FilterControl {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        grid-template-rows: 1fr;
+        align-items: center;
+        column-gap: 0px;
+        box-sizing: border-box;
+        padding: 5px 0px 5px 6px;
+    }
+
+    .FilterControl input {
+        width: 100%;
+    }
+
+    .FilterControlInputIcon {
+        margin-left: -20px;
+        opacity: 0.5;
+        display: none;
+    }
+
+    .FilterControlInputIcon:hover {
+        opacity: 1;
+    }
+
+    .FilteredViewer .FilterControl {
+        position: relative;
+        width: 100%;
+    }
+
+    .FilteredViewer .ViewerContainer {
+        position: static;
+    }
+
+    .ViewerContainer .Viewer {
+        position: fixed;
+    }
+
+    /* PropertyPage */
+
+    .PropertyPage {
+        display: grid;
+        grid-template-columns: 100%;
+        align-items: start;
+        position: relative;
+        padding: 5px;
+        width: 100%;
+        height: 100%;
+        row-gap: 6px;
+        overflow-y: auto;
+    }
+
+    .PropertySectionPane {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        position: initial;
+        height: 100%;
+        margin: 0px;
+        border-radius: 3px;
+    }
+
+    .PropertyTitleArea {
+        display: inline-grid;
+        grid-template-columns: 20px 1fr auto;
+        padding: 5px;
+    }
+
+    .PropertyTitleArea .IconControlCanvas {
+        align-self: center;
+        justify-self: center;
+    }
+
+    .PropertyTitleArea label {
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        align-self: center;
+    }
+
+    .PropertyFormArea {
+        display: grid;
+        padding: 10px 0px 10px 0px;
+    }
+
+    .PropertyButtonPanel {
+        width: 100%;
+        display: block;
+    }
+
+    .PropertyButtonPanel button {
+        float: right;
+        margin-left: 5px;
+        font-size: small;
+    }
+
+    .PropertySubTitlePanel {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-column: 1 / span 2;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.1);
+        padding: 3px;
+        border-radius: 3px;
+    }
+
+    .PropertySubTitleLabel {
+        width: 100%;
+    }
+
+    .formSimpleProps {
+        padding: 5px;
+    }
+
+    .formLabel {
+        justify-self: self-end;
+    }
+
+    .StringDialogField {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 5px;
+        align-items: center;
+    }
+
+    .StringDialogField textarea {
+        resize: none;
+        overflow: hidden;
+    }
+
+    /* Toolbar */
+
+    .IconButton {
+        border-radius: 3px;
+        border-style: solid;
+        border-color: rgba(0, 0, 0, 0);
+        border-width: 1px;
+    }
+
+    .IconButton:hover {
+        border-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .ToolbarItem {
+        display: flex;
+        float: left;
+        margin-right: 5px;
+        padding: 5px;
+        border-radius: 3px;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    .ToolbarItemHasTextAndIcon canvas {
+        margin-right: 3px;
+    }
+
+    .ToolbarItemHideText .ToolbarItemText {
+        display: none;
+    }
+
+    /* ProgressBar */
+
+    .ProgressBar {
+        height: 10px;
+    }
+
+    /* Dialog & Notification */
+
+    .Notification {
+        z-index: 10000;
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        padding: 20px;
+        border-radius: 3px;
+    }
+
+    .Dialog,
+    .Notification {
+        border-radius: 5px;
+        border-width: 1px;
+        border-color: rgba(0, 0, 0, 0.5);
+        box-shadow:
+            -12px -5px 22px rgba(0, 0, 0, 0.2),
+            12px 12px 22px rgba(0, 0, 0, 0.2),
+            -12px 12px 22px rgba(0, 0, 0, 0.2),
+            12px -5px 22px rgba(0, 0, 0, 0.2);
+
+    }
+
+    .DialogContainer {
+        position: absolute;
+        z-index: 1000;
+        left: 0px;
+        right: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .Dialog {
+        position: absolute;
+        z-index: 1001;
+    }
+
+    .Dialog {
+        display: grid;
+        grid-template-columns: 5px 1fr 5px;
+        grid-template-rows: 5px auto 5px 1fr 5px auto 5px;
+    }
+
+    .DialogHalfScreenHeight {
+        height: 50%;
+    }
+
+    .Dialog .DialogTitlePane {
+        width: 100%;
+        grid-column-start: 2;
+        grid-row-start: 2;
+        font-size: small;
+        text-align: center;
+    }
+
+    .Dialog .DialogClientArea {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        grid-column-start: 2;
+        grid-row-start: 4;
+        box-sizing: content-box;
+    }
+
+    .Dialog .FilteredViewer,
+    .Dialog .DialogSection {
+        border-radius: 3px;
+    }
+
+    .Dialog .DialogSection {
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    .Dialog .DialogButtonPane {
+        grid-row-start: 6;
+        grid-column-start: 2;
+        display: block;
+    }
+
+    .Dialog .DialogButtonPane button {
+        float: right;
+        margin-left: 5px;
+    }
+
+    .WizardDialog .DialogClientArea {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        row-gap: 5px;
+    }
+
+    .WizardDialog .PageTitleLabel {
+        font-weight: bold;
+        margin-left: 5px;
+    }
+
+    .WizardDialog .PageDescArea {
+        padding: 0.5em 0 0.5em 0;
+        font-style: italic;
+        margin-left: 5px;
+    }
+
+    .WizardDialog .PageArea {
+        height: 100%;
+    }
+
+    /* AlertDialog */
+
+    .AlertDialog {
+        height: auto !important;
+    }
+
+    .AlertDialog .DialogClientArea {
+        padding: 10px;
+    }
+
+    .AlertDialog .DialogClientArea pre {
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin: 5px 0px;
+    }
+
+    /* InputDialog */
+
+    .InputDialog {
+        height: auto !important;
+    }
+
+    .InputDialogLabel {
+        padding: 1em 0px;
+    }
+
+    /* ProgressDialog */
+
+    .ProgressDialog {
+        height: auto !important;
+    }
+
+    .ProgressDialog .ProgressBar {
+        border-radius: 3px;
+    }
+
+    /* Upload Dialog */
+
+    .FilesDragEnter {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Menu */
+
+    .Menu {
+        position: fixed;
+        z-index: 2001;
+    }
+
+    .MenuItem {
+        display: grid;
+        grid-template-columns: 30px 20px 1fr auto;
+        padding: 5px 10px 5px 0px;
+    }
+
+    .MenuNoIcon .MenuItem {
+        grid-template-columns: 30px 0px 1fr auto;
+    }
+
+    .MenuItemCheckedIcon {
+        grid-column-start: 1;
+        justify-self: center;
+    }
+
+    .MenuItemIcon {
+        grid-column-start: 2;
+        justify-self: center;
+        margin-right: 5px;
+    }
+
+    .NegativeMenuItemIcon {
+        display: none;
+    }
+
+    .MenuItem:hover .NegativeMenuItemIcon {
+        display: block;
+    }
+
+    .MenuItem:hover .ThemeMenuItemIcon {
+        display: none;
+    }
+
+    .MenuItemText {
+        grid-column-start: 3;
+    }
+
+    .MenuItemKeyString {
+        font-family: monospace;
+        margin-left: 3em;
+        grid-column-start: 4;
+    }
+
+    .MenuContainer {
+        z-index: 2000;
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .MenuItemSeparator {
+        height: 1px;
+    }
+
+    /* Effects */
+
+    .FadeInEffect {
+        animation: fadein 2s;
+    }
+
+    .FadeOutEffect {
+        animation: fadeout 2s;
+        opacity: 0;
+    }
+
+
+    @keyframes fadein {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeout {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }

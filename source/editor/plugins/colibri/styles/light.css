@@ -129,17 +129,17 @@ Important:
 
 .light .ScrollBar,
 .light ::-webkit-scrollbar-track {
-    background: #e5e5e5;
+    /* background: #e5e5e5; */
 }
 
 .light .ScrollHandler,
 .light ::-webkit-scrollbar-thumb {
-    background: #b7b7b7;
+    background: #a7a7a7;
 }
 
 .light .ScrollHandler:hover,
 .light ::-webkit-scrollbar-thumb:hover {
-    background: #a7a7a7;
+    background: #a0a0a0;
 }
 
 .light .ScrollHandler:active,

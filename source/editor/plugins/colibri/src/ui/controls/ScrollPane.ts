@@ -2,12 +2,12 @@ namespace colibri.ui.controls {
 
     export class ScrollPane extends Control {
 
-        private _clientControl: Control;
+        private _clientControl: viewers.ViewerContainer;
         private _scrollBar: HTMLDivElement;
         private _scrollHandler: HTMLDivElement;
         private _clientContentHeight: number = 0;
 
-        constructor(clientControl: Control) {
+        constructor(clientControl: viewers.ViewerContainer) {
             super("div", "ScrollPane");
 
             this._clientControl = clientControl;
@@ -44,12 +44,7 @@ namespace colibri.ui.controls {
 
         getViewer() {
 
-            if (this._clientControl instanceof viewers.ViewerContainer) {
-
-                return this._clientControl.getViewer();
-            }
-
-            return this._clientControl;
+            return this._clientControl.getViewer();
         }
 
         updateScroll(clientContentHeight: number) {
@@ -70,7 +65,8 @@ namespace colibri.ui.controls {
             } else if (clientContentHeight !== this._clientContentHeight) {
 
                 this._clientContentHeight = clientContentHeight;
-                this.layout();
+                //this.getViewer().repaint();
+                this.layout(false);
             }
         }
 
@@ -153,7 +149,7 @@ namespace colibri.ui.controls {
             return { x: 0, y: 0, width: b.width, height: b.height };
         }
 
-        layout() {
+        layout(forceClientLayout = true) {
 
             const b = this.getBounds();
 
@@ -175,7 +171,13 @@ namespace colibri.ui.controls {
                 this.addClass("hideScrollBar");
             }
 
+            if (forceClientLayout) {
+
                 this._clientControl.layout();
+
+            } else {
+                this._clientControl.getViewer().repaint();
+            }
         }
     }
 
