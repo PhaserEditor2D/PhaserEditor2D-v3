@@ -67,8 +67,6 @@ namespace phasereditor2d.scene.ui.editor {
 
                 this._editor.setSelection([]);
             }
-
-            console.log(this._editor.getSelection());
         }
 
         clearSelection() {
