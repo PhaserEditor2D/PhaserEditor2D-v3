@@ -206,7 +206,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 }
 
 .ScrollPane.hideScrollBar {
-    grid-template-columns: 1fr 0px !important;
+    /* grid-template-columns: 1fr 0px !important; */
 }
 
 .ScrollPane.hideScrollBar .ScrollBar {
@@ -217,7 +217,7 @@ div.TabPaneTitleBar::-webkit-scrollbar {
 
 .ZoomControl {
     position: absolute;
-    right: 5px;
+    right: 20px;
     bottom: 5px;
     padding: 2px;
     border-radius: 3px;

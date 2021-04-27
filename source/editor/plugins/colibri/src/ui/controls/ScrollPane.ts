@@ -153,7 +153,7 @@ namespace colibri.ui.controls {
             return { x: 0, y: 0, width: b.width, height: b.height };
         }
 
-        layout(): void {
+        layout() {
 
             const b = this.getBounds();
 
@@ -175,7 +175,7 @@ namespace colibri.ui.controls {
                 this.addClass("hideScrollBar");
             }
 
-            this._clientControl.layout();
+                this._clientControl.layout();
         }
     }
 
