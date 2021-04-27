@@ -333,8 +333,11 @@ namespace colibri.ui.controls.viewers {
 
                     const result = this.paintGrid(
                         children, treeIconList, paintItems, newParentPaintItem, x, y, offset, depth + 1, sectionStart, sectionEnd);
+
                     y = result.y;
                     x = result.x;
+
+                    this._contentHeight = Math.max(this._contentHeight, y);
 
                     if (sectionEnd !== result.sectionEnd && depth === 0) {
 
@@ -343,8 +346,8 @@ namespace colibri.ui.controls.viewers {
 
                     sectionStart = result.sectionStart;
                     sectionEnd = result.sectionEnd;
-
                 }
+
                 // else {
 
                 //     if (isSection && depth === 0) {
