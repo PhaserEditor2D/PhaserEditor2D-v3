@@ -11,7 +11,8 @@
 
 ### Updated
 
-* Viewers: optimize internal structure with paint information. Rendering is now way faster.
+* Viewer: optimize internal structure with paint information. Rendering is now way faster.
+* Viewer: auto-hide scrollbar.
 * Menu: items show the negative icon on mouse hover.
 * Menu: fixes positioning on buttons and similar elements.
 * Menu: fixes color of "checked" icon on mouse hover.
