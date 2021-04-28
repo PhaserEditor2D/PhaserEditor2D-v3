@@ -70,7 +70,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (lockedObjects.length > 0) {
 
                 controls.dialogs.ConfirmDialog.show(
-                    `The  property ${propLabel} is locked in ${lockedObjects.length} objects. Do you want to unlock it?`, "Unlock")
+                    `The ${propLabel} property is locked in ${lockedObjects.length} objects. Do you want to unlock it?`, "Unlock")
                     .then(ok => {
 
                         if (ok) {
