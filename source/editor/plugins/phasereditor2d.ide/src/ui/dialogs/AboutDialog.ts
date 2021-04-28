@@ -21,11 +21,11 @@ namespace phasereditor2d.ide.ui.dialogs {
 
             <p>
                 <p>@PhaserEditor2D</p>
-                <a href="https://phasereditor2d.com" target="_blank">phasereditor2d.com</a>
-                <a href="https://www.twitter.com/PhaserEditor2D" target="_blank">Twitter</a>
-                <a href="https://www.facebook.com/PhaserEditor2D" target="_blank">Facebook</a>
-                <a href="https://github.com/PhaserEditor2D/PhaserEditor" target="_blank">GitHub</a>
-                <a href="https://www.youtube.com/c/PhaserEditor2D" target="_blank">YouTube</a> <br>
+                <a href="https://phasereditor2d.com" rel="noopener" target="_blank">phasereditor2d.com</a>
+                <a href="https://www.twitter.com/PhaserEditor2D" rel="noopener" target="_blank">Twitter</a>
+                <a href="https://www.facebook.com/PhaserEditor2D" rel="noopener" target="_blank">Facebook</a>
+                <a href="https://github.com/PhaserEditor2D/PhaserEditor" rel="noopener" target="_blank">GitHub</a>
+                <a href="https://www.youtube.com/c/PhaserEditor2D" rel="noopener" target="_blank">YouTube</a> <br>
             </p>
 
             <p>
