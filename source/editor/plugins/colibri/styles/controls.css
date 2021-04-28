@@ -537,15 +537,18 @@
 
     /* AlertDialog */
 
-    .AlertDialog {
+    .AlertDialog,
+    .ConfirmDialog {
         height: auto !important;
     }
 
-    .AlertDialog .DialogClientArea {
+    .AlertDialog .DialogClientArea,
+    .ConfirmDialog .DialogClientArea {
         padding: 10px;
     }
 
-    .AlertDialog .DialogClientArea pre {
+    .AlertDialog .DialogClientArea pre,
+    .ConfirmDialog .DialogClientArea pre {
         overflow-x: auto;
         white-space: pre-wrap;
         word-wrap: break-word;

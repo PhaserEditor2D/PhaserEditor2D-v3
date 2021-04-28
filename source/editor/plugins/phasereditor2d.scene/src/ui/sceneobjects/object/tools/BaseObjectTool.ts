@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import controls = colibri.ui.controls;
+
     export class BaseObjectTool extends editor.tools.SceneTool {
 
         private _properties: Array<IProperty<any>>;
@@ -48,6 +50,38 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return false;
+        }
+
+        confirmUnlockProperty(props: Array<IProperty<any>>, propLabel: string, sectionId: string, args: editor.tools.ISceneToolContextArgs) {
+
+            const lockedObjects = args.objects.filter(obj => {
+
+                for (const prop of props) {
+
+                    if (!obj.getEditorSupport().isUnlockedProperty(prop)) {
+
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
+
+            if (lockedObjects.length > 0) {
+
+                controls.dialogs.ConfirmDialog.show(
+                    `The  property ${propLabel} is locked in ${lockedObjects.length} objects. Do you want to unlock it?`, "Unlock")
+                    .then(ok => {
+
+                        if (ok) {
+
+                            args.editor.getUndoManager()
+                                .add(new PropertyUnlockOperation(args.editor, args.objects, props, true));
+
+                            args.editor.updateInspectorViewSection(sectionId);
+                        }
+                    });
+            }
         }
     }
 }

@@ -2,6 +2,8 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import controls = colibri.ui.controls;
+
     export class RotateTool extends BaseObjectTool {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.RotateTool";
@@ -18,6 +20,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new editor.tools.CenterPointToolItem(RotateToolItem.COLOR),
                 new RotateToolItem()
             );
+        }
+
+        onActivated(args: editor.tools.ISceneToolContextArgs) {
+
+            super.onActivated(args);
+
+            this.confirmUnlockProperty([sceneobjects.TransformComponent.angle], "angle", TransformSection.SECTION_ID, args);
         }
     }
 }

@@ -56,5 +56,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return super.canRender(obj);
         }
+
+        onActivated(args: editor.tools.ISceneToolContextArgs) {
+
+            super.onActivated(args);
+
+            this.confirmUnlockProperty([sceneobjects.OriginComponent.originX, sceneobjects.OriginComponent.originY],
+                "origin", OriginSection.SECTION_ID, args);
+        }
     }
 }
