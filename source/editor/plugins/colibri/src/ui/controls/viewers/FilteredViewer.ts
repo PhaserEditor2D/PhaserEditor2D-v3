@@ -125,7 +125,6 @@ namespace colibri.ui.controls.viewers {
 
         private layoutZoomControl() {
 
-            /*
             if (this._zoomControl) {
 
                 if (!this._mouseOverZoomControl) {
@@ -140,7 +139,6 @@ namespace colibri.ui.controls.viewers {
                     }
                 }
             }
-            */
         }
     }
 
