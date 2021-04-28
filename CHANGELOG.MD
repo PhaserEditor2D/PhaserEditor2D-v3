@@ -8,6 +8,7 @@
 * Scene Editor: adds the Settings option in the Scene menu of the context menu.
 * Asset Pack Editor: adds the Blocks property section. It shows an option for displaying all files in the Blocks view.
 * Asset Pack Editor: shows a Settings option in the context menu.
+* Scene Editor: when enable a tool (like the Scale Tool), it asks for unlocking the scale properties of the selected objects. This applies to Rotate Tool, Scale Tool, Origin Tool, and Size Tool.
 
 ### Updated
 
