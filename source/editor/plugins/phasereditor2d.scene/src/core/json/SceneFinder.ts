@@ -125,13 +125,20 @@ namespace phasereditor2d.scene.core.json {
             await this.preloadComponentsFiles(monitor);
         }
 
-        private async preloadComponentsFiles(monitor: controls.IProgressMonitor): Promise<void> {
+        async preloadFiles(files: io.FilePath[]) {
+
+            await this.preloadComponentsFiles(colibri.ui.controls.EMPTY_PROGRESS_MONITOR, files)
+            await this.preloadSceneFiles(colibri.ui.controls.EMPTY_PROGRESS_MONITOR, files);
+        }
+
+        private async preloadComponentsFiles(monitor: controls.IProgressMonitor,
+            optFiles?:io.FilePath[]): Promise<void> {
 
             const compFiles = [];
             const compFilename_Data_Map = new Map();
             const compModels: IUserComponentsModelInfo[] = [];
 
-            const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS);
+            const files = optFiles || await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS);
 
             for (const file of files) {
 
@@ -173,7 +180,9 @@ namespace phasereditor2d.scene.core.json {
             return this._enabled;
         }
 
-        private async preloadSceneFiles(monitor: controls.IProgressMonitor): Promise<void> {
+        private async preloadSceneFiles(monitor: controls.IProgressMonitor,
+            lookupFiles?: io.FilePath[]): Promise<void> {
+
             const sceneIdSet = new Set<string>();
             const prefabObjectId_ObjectData_Map = new Map<string, IObjectData>();
             const sceneFilename_Data_Map = new Map<string, ISceneData>();
@@ -181,7 +190,7 @@ namespace phasereditor2d.scene.core.json {
             const sceneFiles = [];
             const prefabFiles = [];
 
-            const files = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+            const files = lookupFiles || await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
 
             files.sort((a, b) => b.getModTime() - a.getModTime());
 

@@ -8,7 +8,5 @@
         "composite": true,
         "declaration": true,
         "declarationMap": true,
-        "disableSourceOfProjectReferenceRedirect": true
     },
-   
 }

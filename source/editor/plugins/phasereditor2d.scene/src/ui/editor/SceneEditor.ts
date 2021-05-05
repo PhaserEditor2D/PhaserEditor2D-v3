@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor {
         selectionState: string[];
     }
 
-    export class SceneEditor extends colibri.ui.ide.FileEditor {
+    export class SceneEditor extends colibri.ui.ide.FileEditor /*implements colibri.problems.ui.IEditorWithProblems*/ {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
         private _menuCreator: SceneEditorMenuCreator;

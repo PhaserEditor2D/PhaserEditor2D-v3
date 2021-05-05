@@ -1,10 +1,10 @@
 {
     "extends": "../../../tsconfig-base.json",
     "compilerOptions": {
-        "outFile": "../_out/phasereditor2d.blocks.js"
+        "outFile": "../_out/colibri.problems.js"
     },
     "references": [{
-        "path": "../../colibri/src",
+        "path": "../../colibri/src"
     }],
     "exclude": ["../_out/"]
 }

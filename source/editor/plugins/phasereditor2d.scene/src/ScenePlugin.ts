@@ -281,6 +281,10 @@ namespace phasereditor2d.scene {
                     contentType: core.CONTENT_TYPE_USER_COMPONENTS
                 }
             ));
+
+            // problems builder
+
+            reg.addExtension(core.problems.createSceneProblemsBuilder());
         }
 
         getTools() {

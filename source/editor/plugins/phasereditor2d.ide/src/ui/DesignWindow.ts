@@ -14,6 +14,7 @@ namespace phasereditor2d.ide.ui {
         private _filesView: files.ui.views.FilesView;
         private _inspectorView: colibri.inspector.ui.views.InspectorView;
         private _blocksView: blocks.ui.views.BlocksView;
+        private _problemsView: colibri.problems.ui.views.ProblemsView;
         private _editorArea: ide.EditorArea;
         private _split_Files_Blocks: controls.SplitPanel;
         private _split_Editor_FilesBlocks: controls.SplitPanel;
@@ -59,10 +60,11 @@ namespace phasereditor2d.ide.ui {
             this._filesView = new files.ui.views.FilesView();
             this._inspectorView = new colibri.inspector.ui.views.InspectorView();
             this._blocksView = new blocks.ui.views.BlocksView();
+            this._problemsView = new colibri.problems.ui.views.ProblemsView();
             this._editorArea = new ide.EditorArea();
 
             this._split_Files_Blocks = new controls.SplitPanel(
-                this.createViewFolder(this._filesView), this.createViewFolder(this._blocksView));
+                this.createViewFolder(this._filesView), this.createViewFolder(this._blocksView, this._problemsView));
 
             this._split_Editor_FilesBlocks = new controls.SplitPanel(this._editorArea, this._split_Files_Blocks, false);
 

@@ -8,6 +8,9 @@
             "path": "../../colibri/src"
         },
         {
+            "path": "../../colibri.problems/src"
+        },
+        {
             "path": "../../phasereditor2d.phaser/src"
         },
         {
@@ -35,5 +38,7 @@
             "path": "../../phasereditor2d.webContentTypes/src"
         }
     ],
-    "exclude": ["../_out/"]
+    "exclude": [
+        "../_out/"
+    ]
 }

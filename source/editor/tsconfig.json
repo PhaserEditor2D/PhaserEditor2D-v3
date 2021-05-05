@@ -2,6 +2,9 @@
     "references": [        
         {
             "path": "./plugins/colibri/src"
+        },        
+        {
+            "path": "./plugins/colibri.problems/src"
         },
         {
             "path": "./plugins/colibri.inspector/src"
