@@ -127,12 +127,26 @@ namespace phasereditor2d.scene.core.json {
 
         async preloadFiles(files: io.FilePath[]) {
 
-            await this.preloadComponentsFiles(colibri.ui.controls.EMPTY_PROGRESS_MONITOR, files)
-            await this.preloadSceneFiles(colibri.ui.controls.EMPTY_PROGRESS_MONITOR, files);
+            const reg = colibri.Platform.getWorkbench().getContentTypeRegistry();
+
+            for (const file of files) {
+
+                await reg.preload(file);
+            }
+
+            const userComponentFiles =
+                files.filter(f => reg.getCachedContentType(f) === core.CONTENT_TYPE_USER_COMPONENTS);
+
+            const sceneFiles =
+                files.filter(f => reg.getCachedContentType(f) === core.CONTENT_TYPE_SCENE);
+
+            await this.preloadComponentsFiles(colibri.ui.controls.EMPTY_PROGRESS_MONITOR, userComponentFiles)
+
+            await this.preloadSceneFiles(colibri.ui.controls.EMPTY_PROGRESS_MONITOR, sceneFiles);
         }
 
         private async preloadComponentsFiles(monitor: controls.IProgressMonitor,
-            optFiles?:io.FilePath[]): Promise<void> {
+            optFiles?: io.FilePath[]): Promise<void> {
 
             const compFiles = [];
             const compFilename_Data_Map = new Map();
@@ -159,7 +173,9 @@ namespace phasereditor2d.scene.core.json {
                     compFiles.push(file);
 
                 } catch (e) {
+
                     console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
+                    console.log(e);
                 }
 
                 monitor.step();
