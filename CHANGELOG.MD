@@ -2,6 +2,10 @@
 
 ## dev
 
+### Fixed
+
+* Fixed null-pointer on context menu item with no bitmap icon.
+
 ### Added
 
 * [#89](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/89) Scene Editor: remembers last selected objects when opens.

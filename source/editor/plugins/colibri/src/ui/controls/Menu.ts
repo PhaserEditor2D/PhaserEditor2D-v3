@@ -145,7 +145,14 @@ namespace colibri.ui.controls {
                         }
 
                         {
-                            const iconControl = new controls.IconControl((item.getIcon() as IconImage).getNegativeThemeImage());
+                            let icon = item.getIcon();
+
+                            if (icon instanceof IconImage) {
+
+                                icon = icon.getNegativeThemeImage()
+                            }
+
+                            const iconControl = new controls.IconControl(icon);
                             iconControl.getCanvas().classList.add("MenuItemIcon", "NegativeMenuItemIcon");
                             itemElement.appendChild(iconControl.getCanvas());
                         }
