@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
+    import UserComponent = editor.usercomponent.UserComponent;
 
     export class UserComponentInstancePropertySection extends SceneGameObjectSection<ISceneGameObject> {
 
@@ -88,7 +89,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const info = finder.getUserComponentByName(compName);
 
-                        const editor = colibri.Platform.getWorkbench().openEditor(info.file) as ui.editor.usercomponent.UserComponentsEditor;
+                        const editor = colibri.Platform.getWorkbench().openEditor(info.file) as editor.usercomponent.UserComponentsEditor;
 
                         editor.revealComponent(compName);
 
@@ -170,7 +171,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                                 const info = finder.getUserComponentByName(userComp.getName());
 
-                                const editor = colibri.Platform.getWorkbench().openEditor(info.file) as ui.editor.usercomponent.UserComponentsEditor;
+                                const editor = colibri.Platform.getWorkbench().openEditor(info.file) as editor.usercomponent.UserComponentsEditor;
 
                                 editor.revealComponent(userComp.getName());
                             });
@@ -198,50 +199,109 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 // Add Components button
 
-                const used = new Set(
-                    [...editorCompList
-                        .flatMap(editorComp => editorComp.getUserComponents())
-                        .map(info => info.component.getName()),
+                const btn = this.createButton(this._propArea, "Add Component", () => {
 
-                    ...editorCompList.flatMap(editorComp => editorComp.getPrefabUserComponents())
-                        .flatMap(info => info.components)
-                        .map(c => c.getName())
-                    ]
-                );
+                    const used = new Set(
+                        [...editorCompList
+                            .flatMap(editorComp => editorComp.getUserComponents())
+                            .map(info => info.component.getName()),
 
-                const items = finder.getUserComponentsModels()
+                        ...editorCompList.flatMap(editorComp => editorComp.getPrefabUserComponents())
+                            .flatMap(info => info.components)
+                            .map(c => c.getName())
+                        ]
+                    );
 
-                    .flatMap(info => info.model.getComponents())
+                    class ContentProvider implements controls.viewers.ITreeContentProvider {
 
-                    .filter(c => !used.has(c.getName()))
+                        getRoots(input: any): any[] {
 
-                    .map(c => ({
-                        name: c.getName(),
-                        value: c.getName(),
-                        icon: ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT)
-                    }));
+                            return finder.getUserComponentsModels()
+                                .filter(info => info.model.getComponents().filter(c => !used.has(c.getName())).length > 0);
+                        }
 
-                const btn = this.createMenuButton(this._propArea, "Add Component", items, (value: string) => {
+                        getChildren(parentObj: core.json.IUserComponentsModelInfo | UserComponent): any[] {
 
-                    const compInfo = finder.getUserComponentByName(value);
+                            if (parentObj instanceof UserComponent) {
 
-                    if (compInfo) {
-
-                        this.runOperation(() => {
-
-                            for (const editorComp of editorCompList) {
-
-                                editorComp.addUserComponent(value);
+                                return [];
                             }
-                        });
 
-                        this.updateWithSelection();
+                            return parentObj.model.getComponents().filter(c => !used.has(c.getName()));
+                        }
                     }
+
+                    const viewer = new controls.viewers.TreeViewer("UserComponentInstancePropertySection.addComponentDialogViewer");
+
+                    viewer.setStyledLabelProvider({
+                        getStyledTexts: (obj: UserComponent | core.json.IUserComponentsModelInfo, dark) => {
+
+                            const theme = controls.Controls.getTheme();
+
+                            if (obj instanceof UserComponent) {
+
+                                return [{
+                                    text: obj.getName(),
+                                    color: theme.viewerForeground
+                                }];
+                            }
+
+                            return [{
+                                text: obj.file.getNameWithoutExtension(),
+                                color: theme.viewerForeground
+                            }, {
+                                text: " - " + obj.file.getParent().getProjectRelativeName()
+                                    .split("/").filter(s => s !== "").reverse().join("/"),
+                                color: theme.viewerForeground + "90"
+                            }];
+                        }
+                    });
+
+                    viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
+                        (obj: core.json.IUserComponentsModelInfo | UserComponent) =>
+                            new controls.viewers.IconImageCellRenderer(
+                                obj instanceof UserComponent ?
+                                    ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT)
+                                    : colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER))));
+
+                    viewer.setContentProvider(new ContentProvider());
+
+                    viewer.setInput([]);
+
+                    viewer.expandRoots(false);
+
+                    const dlg = new controls.dialogs.ViewerDialog(viewer, false);
+
+                    dlg.setSize(undefined, Math.floor(window.innerHeight * 0.4));
+
+                    dlg.create();
+
+                    dlg.setTitle("User Component");
+
+                    dlg.enableButtonOnlyWhenOneElementIsSelected(dlg.addOpenButton("Add", () => {
+
+                        const selComp = viewer.getSelectionFirstElement() as UserComponent;
+
+                        if (selComp) {
+
+                            this.runOperation(() => {
+
+                                for (const editorComp of editorCompList) {
+
+                                    editorComp.addUserComponent(selComp.getName());
+                                }
+                            });
+
+                            this.updateWithSelection();
+                        }
+                    }), obj => obj instanceof UserComponent);
+
+                    dlg.addCancelButton();
                 });
+
                 btn.style.width = "100%";
                 btn.style.justifySelf = "self-center";
                 btn.style.marginTop = "10px";
-                btn.disabled = items.length === 0;
             });
         }
 
