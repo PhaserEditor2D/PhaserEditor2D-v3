@@ -8,6 +8,7 @@
 
 ### Added
 
+* Scene Editor: **Add Component** button opens a dialog. Components are grouped by the container file.
 * [#89](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/89) Scene Editor: remembers last selected objects when opens.
 * Scene Editor: adds the Settings option in the Scene menu of the context menu.
 * Asset Pack Editor: adds the Blocks property section. It shows an option for displaying all files in the Blocks view.
