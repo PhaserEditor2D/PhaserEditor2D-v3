@@ -262,6 +262,8 @@ namespace colibri.ui.controls.viewers {
                             x = offset;
                         }
 
+                        this._contentHeight = y;
+
                         // end drawing section
 
                     } else {
