@@ -360,7 +360,14 @@ namespace phasereditor2d.pack.ui.editor {
             }
 
             dlg.addButton("Show All Files", () => {
-                viewer.setInput(this.getInput().getParent().flatTree([], false));
+
+                const input = this.getPack().isShowAllFilesInBlocks ?
+
+                    colibri.Platform.getWorkbench().getProjectRoot() :
+
+                    this.getInput().getParent();
+
+                viewer.setInput(input.flatTree([], false));
                 viewer.repaint();
             });
 
