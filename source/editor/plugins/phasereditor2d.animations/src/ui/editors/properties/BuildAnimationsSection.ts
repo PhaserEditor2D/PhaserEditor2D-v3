@@ -8,7 +8,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
     export class BuildAnimationsSection extends controls.properties.PropertySection<BuildAnimationElement> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "id", "Auto Build Animations", false, false);
+            super(page, "phasereditor2d.animations.ui.editors.properties.BuildAnimationsSection", "Auto Build Animations", false, false);
         }
 
         private getEditor() {

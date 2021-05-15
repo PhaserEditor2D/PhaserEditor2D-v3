@@ -783,8 +783,15 @@ namespace colibri.ui.controls.viewers {
             this._expandedObjects = state.expandedObjects;
             this._selectedObjects = state.selectedObjects;
 
-            this.setFilterText(state.filterText);
-            this.setCellSize(state.cellSize);
+            if (state.filterText !== this.getFilterText()) {
+
+                this.setFilterText(state.filterText);
+            }
+
+            if (state.cellSize !== this.getCellSize()) {
+
+                this.setCellSize(state.cellSize);
+            }
         }
 
         selectAll() {

@@ -10,10 +10,11 @@ namespace phasereditor2d.ide.ui.dialogs {
 
             this.setTitle("Unlock Phaser Editor 2D");
             this.setMessage("Enter the License Key");
-            // https://gum.co/axjH
             const btn = this.addButton("Get License Key", () => {
-                // TODO
+
+                controls.Controls.openUrlInNewPage("https://gumroad.com/l/phasereditor");
             });
+
             btn.style.float = "left";
 
             this.getAcceptButton().innerText = "Unlock";

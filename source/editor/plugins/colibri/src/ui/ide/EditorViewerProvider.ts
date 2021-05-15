@@ -37,6 +37,7 @@ namespace colibri.ui.ide {
                 }
 
             } else {
+
                 this._initialSelection = selection;
             }
         }

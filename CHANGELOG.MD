@@ -5,6 +5,9 @@
 ### Fixed
 
 * Fixed null-pointer on context menu item with no bitmap icon.
+* Viewer: fixes scrolls when all sections are collapsed.
+* Asset Pack Editor: Add Asset dialog shows all files if the flag is enabled.
+* Fixed Get License button from the Unlock Dialog.
 
 ### Added
 
