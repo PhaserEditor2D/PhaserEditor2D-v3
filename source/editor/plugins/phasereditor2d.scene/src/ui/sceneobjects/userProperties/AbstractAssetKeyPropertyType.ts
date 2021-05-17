@@ -278,6 +278,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     class AnimationCellRenderer implements controls.viewers.ICellRenderer {
 
         private _finder: pack.core.PackFinder;
+        public layout: "square" | "full-width" = "full-width";
 
         constructor(finder: pack.core.PackFinder) {
 
@@ -349,9 +350,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async preload(args: controls.viewers.PreloadCellArgs) {
 
-            return controls.PreloadResult.NOTHING_LOADED;
-        }
+            let result = controls.PreloadResult.NOTHING_LOADED;
 
+            const anim = args.obj as pack.core.AnimationConfigInPackItem;
+
+            for (const frame of anim.getFrames()) {
+
+                const obj = this._finder.getAssetPackItemOrFrame(frame.getTextureKey(), frame.getFrameKey());
+
+                if (obj) {
+
+                    const objResult = await obj.preload();
+
+                    result = Math.max(result, objResult);
+                }
+            }
+
+            return result;
+        }
     }
 
     class AssetKeyContentProvider implements controls.viewers.ITreeContentProvider {
