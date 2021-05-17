@@ -8,6 +8,7 @@
 * Viewer: fixes scrolls when all sections are collapsed.
 * Asset Pack Editor: Add Asset dialog shows all files if the flag is enabled.
 * Fixed Get License button from the Unlock Dialog.
+* Asset Key property: fixes rendering of animations in the selection dialog.
 
 ### Added
 
