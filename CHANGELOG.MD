@@ -32,6 +32,7 @@
 
 * Scene Editor: method `removeFromDisplayList()` and `removeFromUpdateList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
 * Scene Editor: fixes copy/paste layer objects.
+* Scene compiler: fixes "components-awake" event emitting of prefab's children.
 
 ## v3.13.0 - Apr 2, 2021
 
