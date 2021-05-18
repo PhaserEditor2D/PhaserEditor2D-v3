@@ -40,7 +40,15 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                if (sprite.getWorldTransformMatrix) {
+
+                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+
+                } else {
+
+                    // the case of Layer
+                    p.set(0, 0);
+                }
 
                 minX = Math.min(minX, p.x);
                 minY = Math.min(minY, p.y);
@@ -54,7 +62,15 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
-                sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                if (sprite.getWorldTransformMatrix) {
+
+                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+
+                } else {
+
+                    // the case of Layer
+                    p.set(0, 0);
+                }
 
                 p.x -= minX;
                 p.y -= minY;
