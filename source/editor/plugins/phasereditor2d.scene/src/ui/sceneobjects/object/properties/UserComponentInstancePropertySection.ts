@@ -278,7 +278,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     dlg.setTitle("User Component");
 
-                    dlg.enableButtonOnlyWhenOneElementIsSelected(dlg.addOpenButton("Add", () => {
+                    dlg.enableButtonOnlyWhenOneElementIsSelected(dlg.addOpenButton("Add Component", () => {
 
                         const selComp = viewer.getSelectionFirstElement() as UserComponent;
 
