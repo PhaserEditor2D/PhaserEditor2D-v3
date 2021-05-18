@@ -284,9 +284,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            const isPrefabScene = this.getObject().getEditorSupport().getScene().isPrefabSceneType();
+            const isScenePrefabObject = this.getObject().getEditorSupport().isScenePrefabObject();
             const hasUserComponents = this._compNames.length > 0 || prefabUserComponents.length > 0;
-            const emitAwake = !isPrefabScene && hasUserComponents;
+            const emitAwake = !isScenePrefabObject && hasUserComponents;
 
 
             if (allPropsStart !== args.lazyStatements.length || emitAwake) {
