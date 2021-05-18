@@ -30,7 +30,8 @@
 
 ### Fixes
 
-* Method `removeFromDisplayList()` and `removeFromUpdateList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
+* Scene Editor: method `removeFromDisplayList()` and `removeFromUpdateList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
+* Scene Editor: fixes copy/paste layer objects.
 
 ## v3.13.0 - Apr 2, 2021
 
