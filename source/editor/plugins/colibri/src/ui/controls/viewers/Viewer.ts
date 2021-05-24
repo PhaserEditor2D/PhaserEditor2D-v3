@@ -417,14 +417,20 @@ namespace colibri.ui.controls.viewers {
 
                 const data = item.data;
 
-                if (e.button === 2) {
+                if (e.button === 2 && this._selectedObjects.size === 1) {
 
                     this._selectedObjects = new Set([data]);
                     selChanged = true;
 
                 } else {
 
-                    if (e.ctrlKey || e.metaKey) {
+                    if (e.button === 2) {
+
+                        this._selectedObjects.add(data);
+
+                        selChanged = true;
+
+                    } else if (e.ctrlKey || e.metaKey) {
 
                         if (this._selectedObjects.has(data)) {
 
