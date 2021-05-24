@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 if (obj.getEditorSupport().isPrefabInstance()) {
 
-                    args.canvasContext.font = `italic ${controls.FONT_HEIGHT}px ${controls.FONT_FAMILY}`;
+                    args.canvasContext.font = `italic ${controls.getCanvasFontHeight()}px ${controls.FONT_FAMILY}`;
                 }
             }
 

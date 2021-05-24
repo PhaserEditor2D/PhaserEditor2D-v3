@@ -26,6 +26,8 @@ namespace colibri.ui.ide.actions {
     export const CMD_PASTE = "colibri.ui.ide.actions.Paste";
     export const CMD_SHOW_COMMENT_DIALOG = "colibri.ui.ide.actions.ShowCommentDialog";
     export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
+    export const CMD_INCR_CANVAS_FONT_HEIGHT = "phasereditor2d.ide.ui.actions.IncrementCanvasFontHeight";
+    export const CMD_DECR_CANVAS_FONT_HEIGHT = "phasereditor2d.ide.ui.actions.DecrementCanvasFontHeight";
 
     function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -79,6 +81,41 @@ namespace colibri.ui.ide.actions {
             ColibriCommands.initCommentDialog(manager);
 
             ColibriCommands.initTheme(manager);
+
+            ColibriCommands.initFontSize(manager);
+        }
+
+        static initFontSize(manager: commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_INCR_CANVAS_FONT_HEIGHT,
+                    category: CAT_GENERAL,
+                    name: "Increment Viewer Font Size",
+                    tooltip: "Increments the font size of viewers"
+                },
+                handler: {
+                    executeFunc: args => {
+
+                        controls.incrementFontHeight(1);
+                    }
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_INCR_CANVAS_FONT_HEIGHT,
+                    category: CAT_GENERAL,
+                    name: "Decrement Viewer Font Size",
+                    tooltip: "Decrement the font size of viewers"
+                },
+                handler: {
+                    executeFunc: args => {
+
+                        controls.incrementFontHeight(-1);
+                    }
+                }
+            });
         }
 
         private static initTheme(manager: commands.CommandManager) {

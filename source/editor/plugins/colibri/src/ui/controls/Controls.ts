@@ -59,7 +59,7 @@ namespace colibri.ui.controls {
 
         static measureTextWidth(context: CanvasRenderingContext2D, label: string) {
 
-            const font = FONT_FAMILY + FONT_HEIGHT;
+            const font = FONT_FAMILY + controls.getCanvasFontHeight();
 
             const textKey = font + "@" + label;
 

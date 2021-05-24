@@ -185,7 +185,7 @@ namespace colibri.ui.controls.viewers {
                 if (renderCell) {
 
                     x += args.h + 4;
-                    y += args.h / 2 + FONT_HEIGHT / 2;
+                    y += args.h / 2 + controls.getCanvasFontHeight() / 2;
 
                 } else {
 
@@ -278,7 +278,10 @@ namespace colibri.ui.controls.viewers {
             } else {
 
                 this.renderPlainLabel(args, x, y);
+
             }
+
+            console.log(args.canvasContext.font);
         }
 
         protected renderPlainLabel(args: RenderCellArgs, x: number, y: number) {
@@ -324,6 +327,8 @@ namespace colibri.ui.controls.viewers {
         }
 
         protected prepareContextForText(args: RenderCellArgs) {
+
+            args.canvasContext.font = getCanvasFontHeight() + "px " + FONT_FAMILY;
 
             if (args.viewer.isSelected(args.obj)) {
 

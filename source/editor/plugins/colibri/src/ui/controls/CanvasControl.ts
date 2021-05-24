@@ -67,7 +67,7 @@ namespace colibri.ui.controls {
 
             this._context = this.getCanvas().getContext("2d");
             this._context.imageSmoothingEnabled = false;
-            this._context.font = `${controls.FONT_HEIGHT}px sans-serif`;
+            this._context.font = `${controls.getCanvasFontHeight()}px sans-serif`;
         }
 
         protected abstract paint(): void;

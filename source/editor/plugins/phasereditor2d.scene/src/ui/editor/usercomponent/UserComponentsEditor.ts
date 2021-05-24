@@ -479,7 +479,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     super.prepareContextForText(args)
 
-                    args.canvasContext.font = controls.FONT_HEIGHT + "px Monospace";
+                    args.canvasContext.font = controls.getCanvasFontHeight() + "px Monospace";
                 }
             });
             viewer.setInput([]);
