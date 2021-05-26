@@ -32,6 +32,6 @@
 		"watcherGlob": "**"
 	},
 	"dependencies": {
-		"phaser": "^3.54.0"
+		"phaser": "^3.55.0"
 	}
 }

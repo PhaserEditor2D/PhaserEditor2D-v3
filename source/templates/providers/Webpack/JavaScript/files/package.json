@@ -11,7 +11,7 @@
   "author": "Arian Fornaris <developers@phasereditor2d.com> (https://phasereditor2d.com/)",
   "license": "MIT",
   "dependencies": {
-    "phaser": "^3.54.0"
+    "phaser": "^3.55.0"
   },
   "devDependencies": {
     "@babel/core": "^7.13.13",
