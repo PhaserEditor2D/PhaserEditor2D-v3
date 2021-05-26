@@ -9,6 +9,11 @@
 * Asset Pack Editor: Add Asset dialog shows all files if the flag is enabled.
 * Fixed Get License button from the Unlock Dialog.
 * Asset Key property: fixes rendering of animations in the selection dialog.
+* Scene Editor: method `removeFromDisplayList()` and `removeFromUpdateList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
+* Scene Editor: fixes copy/paste layer objects.
+* Scene compiler: fixes "components-awake" event emitting of prefab's children.
+* Scene compiler: fixes asset pack file url when a `publicroot` file is present.
+* Inspector: fixed the many images viewer.
 
 ### Added
 
@@ -27,13 +32,6 @@
 * Menu: fixes positioning on buttons and similar elements.
 * Menu: fixes color of "checked" icon on mouse hover.
 * Main menu: shows Unofficial Phaser Help Center option.
-
-### Fixes
-
-* Scene Editor: method `removeFromDisplayList()` and `removeFromUpdateList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
-* Scene Editor: fixes copy/paste layer objects.
-* Scene compiler: fixes "components-awake" event emitting of prefab's children.
-* Inspector: fixed the many images viewer.
 
 ## v3.13.0 - Apr 2, 2021
 
