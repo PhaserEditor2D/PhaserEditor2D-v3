@@ -14,15 +14,15 @@ namespace colibri.ui.controls {
 
     let fontHeight = (() => {
 
-        try {
 
-            return Number.parseInt(window.localStorage.getItem("canvasFontSize"), 10);
+        const size = Number.parseInt(window.localStorage.getItem("canvasFontSize"), 10);
 
-        } catch (e) {
-            // nothing
+        if (isNaN(size)) {
+
+            return DEFAULT_FONT_HEIGHT;
         }
 
-        return DEFAULT_FONT_HEIGHT;
+        return size;
 
     })();
 
