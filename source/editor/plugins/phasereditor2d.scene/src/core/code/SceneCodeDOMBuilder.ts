@@ -680,10 +680,17 @@ namespace phasereditor2d.scene.core.code {
 
                 const key = namePart.substring(0, namePart.length - 5);
 
-                const relativeName = parts.slice(1).join("/");
+                const file = colibri.ui.ide.FileUtils.getFileFromPath(fileName);
+
+                let fileUrl = parts.slice(1).join("/");
+
+                if (file) {
+
+                    fileUrl = pack.core.AssetPackUtils.getUrlFromAssetFile(file.getParent(), file);
+                }
 
                 call.argLiteral(key);
-                call.argLiteral(relativeName);
+                call.argLiteral(fileUrl);
 
                 preloadDom.getBody().push(call);
             }
