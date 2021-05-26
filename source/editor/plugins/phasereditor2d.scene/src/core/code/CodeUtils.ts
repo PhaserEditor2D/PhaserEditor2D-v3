@@ -36,7 +36,7 @@ namespace phasereditor2d.scene.core.code {
         return "";
     }
 
-    export function isAlphaNumeric(c: string) {
+    function isAlphaNumeric(c: string) {
 
         const n = c.charCodeAt(0);
 
@@ -45,12 +45,41 @@ namespace phasereditor2d.scene.core.code {
             || (n > 96 && n < 123); // A-Z
     }
 
+    const validCharsMap: Map<string, boolean> = new Map();
+
+    function isValidChar(c: string) {
+
+        if (validCharsMap.has(c)) {
+
+            return validCharsMap.get(c);
+        }
+
+        let result = true;
+
+        try {
+
+            // tslint:disable
+            eval("() => {  function pe" + c + "pe() {} }");
+
+        } catch (e) {
+
+            result = false;
+
+            return false;
+        }
+
+        validCharsMap.set(c, result);
+
+        return result;
+    }
+
     export function formatToValidVarName(name: string) {
 
         let s = "";
 
         for (const c of name) {
 
+            // TODO: use isValidChar, but first we have to ask to the user if he wants to do it.
             if (isAlphaNumeric(c)) {
 
                 s += (s.length === 0 ? c.toLowerCase() : c);
