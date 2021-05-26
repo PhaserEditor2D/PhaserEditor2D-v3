@@ -12,6 +12,7 @@ namespace colibri.ui.controls {
 
             this._element = element;
             this._tooltip = tooltip;
+            this._element["__TooltipManager"] = this;
 
             this._token = 0;
 
@@ -42,6 +43,21 @@ namespace colibri.ui.controls {
                     this.start();
                 }
             });
+        }
+
+        getTooltipMessage() {
+
+            return this._tooltip;
+        }
+
+        setTooltipMessage(tooltip: string) {
+
+            this._tooltip = tooltip;
+        }
+
+        static getTooltipManager(element: HTMLElement): TooltipManager {
+
+            return element["__TooltipManager"];
         }
 
         private start() {
@@ -109,6 +125,15 @@ namespace colibri.ui.controls {
 
         static tooltip(element: HTMLElement, tooltip: string) {
 
+            const manager = TooltipManager.getTooltipManager(element);
+
+            if (manager) {
+
+                manager.setTooltipMessage(tooltip);
+
+                return;
+            }
+
             // tslint:disable-next-line:no-unused-expression
             new TooltipManager(element, tooltip);
         }
@@ -116,6 +141,7 @@ namespace colibri.ui.controls {
         static tooltipWithKey(element: HTMLElement, keyString, tooltip: string) {
 
             if (keyString) {
+
                 return this.tooltip(element, this.renderTooltip(keyString, tooltip));
             }
 
