@@ -278,10 +278,7 @@ namespace colibri.ui.controls.viewers {
             } else {
 
                 this.renderPlainLabel(args, x, y);
-
             }
-
-            console.log(args.canvasContext.font);
         }
 
         protected renderPlainLabel(args: RenderCellArgs, x: number, y: number) {

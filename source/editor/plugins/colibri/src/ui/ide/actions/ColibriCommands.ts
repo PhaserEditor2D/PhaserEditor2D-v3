@@ -28,6 +28,7 @@ namespace colibri.ui.ide.actions {
     export const CMD_CHANGE_THEME = "phasereditor2d.ide.ui.actions.SwitchTheme";
     export const CMD_INCR_CANVAS_FONT_HEIGHT = "phasereditor2d.ide.ui.actions.IncrementCanvasFontHeight";
     export const CMD_DECR_CANVAS_FONT_HEIGHT = "phasereditor2d.ide.ui.actions.DecrementCanvasFontHeight";
+    export const CMD_RESET_CANVAS_FONT_HEIGHT = "phasereditor2d.ide.ui.actions.ResetCanvasFontHeight";
 
     function isViewerScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -104,7 +105,7 @@ namespace colibri.ui.ide.actions {
 
             manager.add({
                 command: {
-                    id: CMD_INCR_CANVAS_FONT_HEIGHT,
+                    id: CMD_DECR_CANVAS_FONT_HEIGHT,
                     category: CAT_GENERAL,
                     name: "Decrement Viewer Font Size",
                     tooltip: "Decrement the font size of viewers"
@@ -113,6 +114,21 @@ namespace colibri.ui.ide.actions {
                     executeFunc: args => {
 
                         controls.incrementFontHeight(-1);
+                    }
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_RESET_CANVAS_FONT_HEIGHT,
+                    category: CAT_GENERAL,
+                    name: "Reset Viewer Font Size",
+                    tooltip: "Reset the font size of viewers"
+                },
+                handler: {
+                    executeFunc: args => {
+
+                        controls.resetFontHeight();
                     }
                 }
             });

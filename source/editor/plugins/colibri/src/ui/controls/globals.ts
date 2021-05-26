@@ -3,7 +3,16 @@ namespace colibri.ui.controls {
 
     export const CONTROL_PADDING = 3;
     export const ROW_HEIGHT = 20;
-    export const DEFAULT_FONT_HEIGHT = (() => {
+    export const FONT_OFFSET = 2;
+    export const FONT_FAMILY = "Arial, Helvetica, sans-serif";
+    export const ACTION_WIDTH = 20;
+    export const PANEL_BORDER_SIZE = 5;
+    export const PANEL_TITLE_HEIGHT = 22;
+    export const FILTERED_VIEWER_FILTER_HEIGHT = 30;
+    export const SPLIT_OVER_ZONE_WIDTH = 6;
+    const DEFAULT_FONT_HEIGHT = 14;
+
+    let fontHeight = (() => {
 
         try {
 
@@ -13,18 +22,9 @@ namespace colibri.ui.controls {
             // nothing
         }
 
-        return 14
+        return DEFAULT_FONT_HEIGHT;
 
     })();
-    export const FONT_OFFSET = 2;
-    export const FONT_FAMILY = "Arial, Helvetica, sans-serif";
-    export const ACTION_WIDTH = 20;
-    export const PANEL_BORDER_SIZE = 5;
-    export const PANEL_TITLE_HEIGHT = 22;
-    export const FILTERED_VIEWER_FILTER_HEIGHT = 30;
-    export const SPLIT_OVER_ZONE_WIDTH = 6;
-
-    let fontHeight = DEFAULT_FONT_HEIGHT;
 
     export function getCanvasFontHeight() {
 
@@ -34,6 +34,15 @@ namespace colibri.ui.controls {
     export function incrementFontHeight(delta: number) {
 
         fontHeight = Math.max(DEFAULT_FONT_HEIGHT, fontHeight + delta);
+
+        localStorage.setItem("canvasFontSize", fontHeight.toString());
+
+        colibri.Platform.getWorkbench().eventThemeChanged.fire(controls.Controls.getTheme());
+    }
+
+    export function resetFontHeight() {
+
+        fontHeight = DEFAULT_FONT_HEIGHT;
 
         localStorage.setItem("canvasFontSize", fontHeight.toString());
 
