@@ -55,9 +55,13 @@ namespace phasereditor2d.scene.ui.editor.undo {
                     data["y"] = data["y"] + y;
 
                     const obj = maker.createObject(data);
-                    sprites.push(obj);
 
-                    sel.push(obj);
+                    if (obj) {
+
+                        sprites.push(obj);
+
+                        sel.push(obj);
+                    }
                 }
             }
 
@@ -72,7 +76,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             if (data.type === sceneobjects.ContainerExtension.getInstance().getTypeName()) {
 
-                for(const data2 of (data as any).list) {
+                for (const data2 of (data as any).list) {
 
                     this.setNewObjectId(data2);
                 }

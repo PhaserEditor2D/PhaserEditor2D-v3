@@ -92,20 +92,23 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     const newObj = maker.createObject(objData);
 
-                    scene.sys.displayList.remove(newObj);
+                    if (newObj) {
 
-                    if (objSnapshot.parentId) {
+                        scene.sys.displayList.remove(newObj);
 
-                        const parent = scene.getByEditorId(objSnapshot.parentId) as sceneobjects.Container | sceneobjects.Layer;
+                        if (objSnapshot.parentId) {
 
-                        if (parent) {
+                            const parent = scene.getByEditorId(objSnapshot.parentId) as sceneobjects.Container | sceneobjects.Layer;
 
-                            parent.replace(oldObj, newObj);
+                            if (parent) {
+
+                                parent.replace(oldObj, newObj);
+                            }
+
+                        } else {
+
+                            scene.sys.displayList.replace(oldObj, newObj);
                         }
-
-                    } else {
-
-                        scene.sys.displayList.replace(oldObj, newObj);
                     }
 
                     (oldObj as ISceneObject).getEditorSupport().destroy();

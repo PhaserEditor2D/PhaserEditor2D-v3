@@ -104,6 +104,7 @@ namespace phasereditor2d.scene.core.json {
         }
 
         getProjectPreloader() {
+
             return new SceneFinderPreloader(this);
         }
 
