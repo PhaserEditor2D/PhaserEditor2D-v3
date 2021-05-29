@@ -2,19 +2,6 @@
 
 ## v3.14.0 - May 27, 2021
 
-### Fixed
-
-* Fixed null-pointer on context menu item with no bitmap icon.
-* Viewer: fixes scrolls when all sections are collapsed.
-* Asset Pack Editor: Add Asset dialog shows all files if the flag is enabled.
-* Fixed Get License button from the Unlock Dialog.
-* Asset Key property: fixes rendering of animations in the selection dialog.
-* Scene Editor: method `removeFromDisplayList()` and `removeFromUpdateList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
-* Scene Editor: fixes copy/paste layer objects.
-* Scene compiler: fixes "components-awake" event emitting of prefab's children.
-* Scene compiler: fixes asset pack file url when a `publicroot` file is present.
-* Inspector: fixed the many images viewer.
-
 ### Added
 
 * Scene Editor: **Add Component** button opens a dialog. Components are grouped by the container file.
@@ -29,8 +16,18 @@
 * Viewer: auto-hide scrollbar.
 * Main menu: shows Unofficial Phaser Help Center option.
 
-### Fixes
+### Fixed
 
+* Fixed null-pointer on context menu item with no bitmap icon.
+* Viewer: fixes scrolls when all sections are collapsed.
+* Asset Pack Editor: Add Asset dialog shows all files if the flag is enabled.
+* Fixed Get License button from the Unlock Dialog.
+* Asset Key property: fixes rendering of animations in the selection dialog.
+* Scene Editor: method `removeFromDisplayList()` and `removeFromUpdateList()` is not present in `Phaser.GameObjects.Layer`. Skip it.
+* Scene Editor: fixes copy/paste layer objects.
+* Scene compiler: fixes "components-awake" event emitting of prefab's children.
+* Scene compiler: fixes asset pack file url when a `publicroot` file is present.
+* Inspector: fixed the many images viewer.
 * [#89](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/89) Scene Editor: remembers last selected objects when opens.
 * Menu: items show the negative icon on mouse hover.
 * Menu: fixes positioning on buttons and similar elements.
