@@ -18,7 +18,6 @@
 ### Added
 
 * Scene Editor: **Add Component** button opens a dialog. Components are grouped by the container file.
-* [#89](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/89) Scene Editor: remembers last selected objects when opens.
 * Scene Editor: adds the Settings option in the Scene menu of the context menu.
 * Asset Pack Editor: adds the Blocks property section. It shows an option for displaying all files in the Blocks view.
 * Asset Pack Editor: shows a Settings option in the context menu.
@@ -28,10 +27,14 @@
 
 * Viewer: optimize internal structure with paint information. Rendering is now way faster.
 * Viewer: auto-hide scrollbar.
+* Main menu: shows Unofficial Phaser Help Center option.
+
+### Fixes
+
+* [#89](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/89) Scene Editor: remembers last selected objects when opens.
 * Menu: items show the negative icon on mouse hover.
 * Menu: fixes positioning on buttons and similar elements.
 * Menu: fixes color of "checked" icon on mouse hover.
-* Main menu: shows Unofficial Phaser Help Center option.
 
 ## v3.13.0 - Apr 2, 2021
 
