@@ -21,6 +21,8 @@ namespace phasereditor2d.scene.core.json {
 
                 } else {
 
+                    finder.printDebugInfo();
+
                     throw new Error(`[${this._data.label}] Cannot find scene prefab with id "${this._data.prefabId}".`);
                 }
             }
@@ -87,7 +89,7 @@ namespace phasereditor2d.scene.core.json {
                 // check if it is a local component property
                 if (this._data.components) {
 
-                    for(const compName of this._data.components) {
+                    for (const compName of this._data.components) {
 
                         if (name.startsWith(compName + ".")) {
                             return true;
