@@ -369,5 +369,21 @@ namespace phasereditor2d.scene.core.json {
 
             return this.getSceneFiles().map(file => this.getSceneData(file));
         }
+
+        printDebugInfo() {
+
+            console.log("Scene Prefab Finder debug:")
+
+            for(const prefab of this._prefabFiles) {
+
+                console.log("prefab file " + prefab.getFullName());
+            }
+
+            for(const id of this._prefabObjectId_ObjectData_Map.keys()) {
+
+                console.log("Data of prefab " + id + ":");
+                console.log(this._prefabObjectId_ObjectData_Map.get(id));
+            }
+        }
     }
 }
