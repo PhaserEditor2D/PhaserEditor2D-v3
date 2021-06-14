@@ -197,9 +197,18 @@ namespace colibri.ui.ide {
 
             console.log("Workbench: fetching required project resources.");
 
-            await this.preloadProjectResources(monitor);
+            try {
 
-            this.eventProjectOpened.fire(projectName);
+                await this.preloadProjectResources(monitor);
+
+                this.eventProjectOpened.fire(projectName);
+
+            } catch (e) {
+
+                console.log("Error loading project resources");
+                alert("Error: loading project resources. " + e.message);
+                console.log(e.message);
+            }
         }
 
         private async preloadProjectResources(monitor: controls.IProgressMonitor) {
