@@ -262,7 +262,7 @@ namespace colibri.ui.controls.viewers {
                             x = offset;
                         }
 
-                        this._contentHeight = y;
+                        this._contentHeight = Math.max(this._contentHeight, y);
 
                         // end drawing section
 
