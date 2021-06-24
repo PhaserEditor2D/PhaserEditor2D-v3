@@ -32,7 +32,7 @@ namespace phasereditor2d.code.ui {
 
                     monaco.editor.createModel(content, "javascript", CodePlugin.fileUri(file.getFullName()));
                 }
-
+                
                 monitor.step();
             }
         }

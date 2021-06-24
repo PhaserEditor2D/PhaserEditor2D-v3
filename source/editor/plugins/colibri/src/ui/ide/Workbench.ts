@@ -235,7 +235,7 @@ namespace colibri.ui.ide {
 
                 } catch (e) {
 
-                    console.log(e);
+                    console.error(e);
                     alert("Preload error: " + e.message);
                 }
             }
