@@ -9,6 +9,7 @@
   "author": "Arian Fornaris <developers@phasereditor2d.com> (https://phasereditor2d.com)",
   "license": "MIT",
   "dependencies": {
+    "monaco-editor": "^0.25.2",
     "typescript": "^4.3.2"
   }
 }

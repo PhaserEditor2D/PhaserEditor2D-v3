@@ -1,14 +1,14 @@
 {
     "id": "phasereditor2d.code",
     "styles": [
-        "scripts/monaco-editor-0.20.0/min/vs/editor/editor.main.css",
+        "scripts/monaco-editor-0.25.2/min/vs/editor/editor.main.css",
         "styles/MonacoEditor.css"
     ],
     "scripts": [
         "_out/phasereditor2d.code.js",
-        "scripts/monaco-editor-0.20.0/defineRequire.js",
-        "scripts/monaco-editor-0.20.0/min/vs/loader.js",
-        "scripts/monaco-editor-0.20.0/min/vs/editor/editor.main.nls.js",
-        "scripts/monaco-editor-0.20.0/min/vs/editor/editor.main.js"
+        "scripts/monaco-editor-0.25.2/defineRequire.js",
+        "scripts/monaco-editor-0.25.2/min/vs/loader.js",
+        "scripts/monaco-editor-0.25.2/min/vs/editor/editor.main.nls.js",
+        "scripts/monaco-editor-0.25.2/min/vs/editor/editor.main.js"
     ]
 }
