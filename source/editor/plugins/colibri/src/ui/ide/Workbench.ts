@@ -229,7 +229,14 @@ namespace colibri.ui.ide {
 
             for (const extension of extensions) {
 
-                await extension.preload(monitor);
+                try {
+
+                    await extension.preload(monitor);
+
+                } catch (e) {
+
+                    alert("Preload error: " + e.message);
+                }
             }
         }
 

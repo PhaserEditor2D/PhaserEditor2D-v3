@@ -17,6 +17,5 @@ namespace phasereditor2d.code.ui {
 
             monitor.step();
         }
-
     }
 }
