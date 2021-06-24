@@ -10,6 +10,7 @@
 ### Added
 
 * Updates Monaco Editor to v0.25.2.
+* Includes *.ts.map files for debugging.
 
 ## v3.14.0 - May 29, 2021
 
