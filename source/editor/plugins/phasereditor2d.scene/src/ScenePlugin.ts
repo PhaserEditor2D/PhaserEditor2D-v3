@@ -223,6 +223,10 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.TilemapExtension.getInstance()
             );
 
+            // align extensions
+
+            reg.addExtension(...ui.editor.layout.DefaultLayoutExtensions.ALL);
+
             // property sections
 
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
@@ -394,6 +398,13 @@ namespace phasereditor2d.scene {
             return colibri.Platform
                 .getExtensions<ui.editor.outline.SceneEditorOutlineExtension>(
                     ui.editor.outline.SceneEditorOutlineExtension.POINT_ID);
+        }
+
+        getAlignExtensions() {
+
+            return colibri.Platform
+                .getExtensions<ui.editor.layout.LayoutExtension>(
+                    ui.editor.layout.LayoutExtension.POINT_ID);
         }
 
         getLoaderUpdaterForAsset(asset: any) {

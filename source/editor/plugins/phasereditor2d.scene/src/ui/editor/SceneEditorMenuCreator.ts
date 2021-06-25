@@ -17,6 +17,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createCoordsMenu());
 
+            menu.addMenu(this.createLayoutMenu());
+
             menu.addSeparator();
 
             menu.addMenu(this.createAddObjectMenu())
@@ -31,7 +33,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createTextureMenu());
 
-            menu.addMenu(this.createContainerMenu());
+            menu.addMenu(this.createParentMenu());
 
             menu.addMenu(this.createDepthMenu());
 
@@ -196,6 +198,35 @@ namespace phasereditor2d.scene.ui.editor {
             return menu;
         }
 
+        private createLayoutMenu() {
+
+            const menu = new controls.Menu("Layout");
+
+            const extensions = ScenePlugin.getInstance().getAlignExtensions()
+            const groups = [...new Set(extensions.map(e => e.getConfig().group))].sort();
+
+            for (const group of groups) {
+
+                const groupMenu = new controls.Menu(group);
+
+                menu.addMenu(groupMenu);
+
+                const groupExtensions = extensions.filter(e => e.getConfig().group === group);
+
+                for (const ext of groupExtensions) {
+
+                    const config = ext.getConfig();
+
+                    groupMenu.addAction({
+                        text: config.name,
+                        callback: () => ext.performAlign(this._editor)
+                    });
+                }
+            }
+
+            return menu;
+        }
+
         private createToolsMenu(): controls.Menu {
 
             const menu = new controls.Menu("Tools");
@@ -242,7 +273,7 @@ namespace phasereditor2d.scene.ui.editor {
             return menu;
         }
 
-        private createContainerMenu(): controls.Menu {
+        private createParentMenu(): controls.Menu {
 
             const menu = new controls.Menu("Parent");
 

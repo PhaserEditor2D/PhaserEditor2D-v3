@@ -13,6 +13,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
         protected async performModification() {
 
             this._action();
+
+            delete this._action;
         }
     }
 }
