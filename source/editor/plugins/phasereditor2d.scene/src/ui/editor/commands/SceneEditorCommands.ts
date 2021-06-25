@@ -11,6 +11,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_TRIM_CONTAINER = "phasereditor2d.scene.ui.editor.commands.TrimContainer";
     export const CMD_MOVE_TO_PARENT = "phasereditor2d.scene.ui.editor.commands.MoveToParent";
     export const CMD_SELECT_PARENT = "phasereditor2d.scene.ui.editor.commands.SelectParent";
+    export const CMD_SELECT_CHILDREN = "phasereditor2d.scene.ui.editor.commands.SelectChildren";
     export const CMD_TOGGLE_VISIBLE = "phasereditor2d.scene.ui.editor.commands.ToggleVisibility";
     export const CMD_OPEN_COMPILED_FILE = "phasereditor2d.scene.ui.editor.commands.OpenCompiledFile";
     export const CMD_COMPILE_SCENE_EDITOR = "phasereditor2d.scene.ui.editor.commands.CompileSceneEditor";
@@ -808,6 +809,39 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "P"
+                }
+            });
+
+            // select children
+
+            manager.add({
+                command: {
+                    id: CMD_SELECT_CHILDREN,
+                    name: "Select Children",
+                    tooltip: "Select the children",
+                    category: CAT_SCENE_EDITOR,
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args) && (args.activeEditor as SceneEditor)
+
+                        .getSelection()
+
+                        .length > 0,
+
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const sel = editor.getSelection()
+
+                            .flatMap(obj => sceneobjects.GameObjectEditorSupport.getObjectChildren(obj))
+
+                        editor.setSelection(sel);
+                    }
+                },
+                keys: {
+                    key: "N"
                 }
             });
 

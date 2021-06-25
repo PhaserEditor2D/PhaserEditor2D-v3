@@ -254,6 +254,7 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addCommand(commands.CMD_BREAK_PARENT);
             menu.addCommand(commands.CMD_MOVE_TO_PARENT);
             menu.addCommand(commands.CMD_SELECT_PARENT);
+            menu.addCommand(commands.CMD_SELECT_CHILDREN);
 
             return menu;
         }

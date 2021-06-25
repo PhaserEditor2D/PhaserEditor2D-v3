@@ -62,6 +62,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
+        static getObjectChildren(obj: ISceneGameObject): ISceneGameObject[] {
+
+            if (obj instanceof Container
+                || obj instanceof Layer
+                || obj instanceof Phaser.GameObjects.DisplayList) {
+
+                return obj.list as ISceneGameObject[];
+            }
+
+            return [];
+        }
+
         abstract setInteractive(): void;
 
         protected computeContentHashWithProperties(obj: ISceneGameObject, ...properties: Array<IProperty<any>>) {
