@@ -10,7 +10,7 @@
 ### Added
 
 * Updates Monaco Editor to v0.25.2.
-* Includes *.ts.map files for debugging.
+* Scene Editor: Select Children command.
 
 ## v3.14.0 - May 29, 2021
 
