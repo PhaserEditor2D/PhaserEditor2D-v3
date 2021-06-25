@@ -36,14 +36,31 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                 .filter(obj => obj.getEditorSupport().hasComponent(transform)) as any[]
 
-            const positions = sprites.map(sprite => ({
-                x: sprite.x - sprite.originX * sprite.displayWidth,
-                y: sprite.y - sprite.originY * sprite.displayHeight,
-                size: {
-                    x: sprite.displayWidth,
-                    y: sprite.displayHeight
+            const positions = sprites.map(sprite => {
+
+                if (sprite instanceof sceneobjects.Container) {
+
+                    const b = sprite.getBounds();
+
+                    return {
+                        x: sprite.x,
+                        y: sprite.y,
+                        size: {
+                            x: b.width,
+                            y: b.height
+                        }
+                    }
                 }
-            }));
+
+                return {
+                    x: sprite.x - sprite.originX * sprite.displayWidth,
+                    y: sprite.y - sprite.originY * sprite.displayHeight,
+                    size: {
+                        x: sprite.displayWidth,
+                        y: sprite.displayHeight
+                    }
+                }
+            });
 
             const settings = editor.getScene().getSettings();
 
