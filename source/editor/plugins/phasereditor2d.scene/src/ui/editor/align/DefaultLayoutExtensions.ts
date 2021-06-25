@@ -83,7 +83,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
     export class DefaultLayoutExtensions {
 
-        // align 
+        // align
 
         static ALIGN_LEFT = new LayoutExtension({
             name: "Left",
@@ -125,37 +125,37 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
         static SHIFT_LEFT = new LayoutExtension({
             name: "Border Left",
-            group: "Shift To",
+            group: "Shift To Border",
             action: makeShiftAction("x", 0)
         });
 
         static SHIFT_CENTER = new LayoutExtension({
             name: "Border Center",
-            group: "Shift To",
+            group: "Shift To Border",
             action: makeShiftAction("x", 0.5)
         });
 
         static SHIFT_RIGHT = new LayoutExtension({
             name: "Border Right",
-            group: "Shift To",
+            group: "Shift To Border",
             action: makeShiftAction("x", 1)
         });
 
         static SHIFT_TOP = new LayoutExtension({
             name: "Border Top",
-            group: "Shift To",
+            group: "Shift To Border",
             action: makeShiftAction("y", 0)
         });
 
         static SHIFT_MIDDLE = new LayoutExtension({
             name: "Border Middle",
-            group: "Shift To",
+            group: "Shift To Border",
             action: makeShiftAction("y", 0.5)
         });
 
         static SHIFT_BOTTOM = new LayoutExtension({
             name: "Border Bottom",
-            group: "Shift To",
+            group: "Shift To Border",
             action: makeShiftAction("y", 1)
         });
 
