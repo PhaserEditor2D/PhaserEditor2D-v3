@@ -123,39 +123,39 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
         // Shift To
 
-        static SHIFT_LEFT = new LayoutExtension({
+        static DOCK_LEFT = new LayoutExtension({
             name: "Border Left",
-            group: "Shift To Border",
+            group: "Dock To Border",
             action: makeShiftAction("x", 0)
         });
 
-        static SHIFT_CENTER = new LayoutExtension({
+        static DOCK_CENTER = new LayoutExtension({
             name: "Border Center",
-            group: "Shift To Border",
+            group: "Dock To Border",
             action: makeShiftAction("x", 0.5)
         });
 
-        static SHIFT_RIGHT = new LayoutExtension({
+        static DOCK_RIGHT = new LayoutExtension({
             name: "Border Right",
-            group: "Shift To Border",
+            group: "Dock To Border",
             action: makeShiftAction("x", 1)
         });
 
-        static SHIFT_TOP = new LayoutExtension({
+        static DOCK_TOP = new LayoutExtension({
             name: "Border Top",
-            group: "Shift To Border",
+            group: "Dock To Border",
             action: makeShiftAction("y", 0)
         });
 
-        static SHIFT_MIDDLE = new LayoutExtension({
+        static DOCK_MIDDLE = new LayoutExtension({
             name: "Border Middle",
-            group: "Shift To Border",
+            group: "Dock To Border",
             action: makeShiftAction("y", 0.5)
         });
 
-        static SHIFT_BOTTOM = new LayoutExtension({
+        static DOCK_BOTTOM = new LayoutExtension({
             name: "Border Bottom",
-            group: "Shift To Border",
+            group: "Dock To Border",
             action: makeShiftAction("y", 1)
         });
 
@@ -302,12 +302,12 @@ namespace phasereditor2d.scene.ui.editor.layout {
             DefaultLayoutExtensions.ALIGN_TOP,
             DefaultLayoutExtensions.ALIGN_MIDDLE,
             DefaultLayoutExtensions.ALIGN_BOTTOM,
-            DefaultLayoutExtensions.SHIFT_LEFT,
-            DefaultLayoutExtensions.SHIFT_CENTER,
-            DefaultLayoutExtensions.SHIFT_RIGHT,
-            DefaultLayoutExtensions.SHIFT_TOP,
-            DefaultLayoutExtensions.SHIFT_MIDDLE,
-            DefaultLayoutExtensions.SHIFT_BOTTOM,
+            DefaultLayoutExtensions.DOCK_LEFT,
+            DefaultLayoutExtensions.DOCK_CENTER,
+            DefaultLayoutExtensions.DOCK_RIGHT,
+            DefaultLayoutExtensions.DOCK_TOP,
+            DefaultLayoutExtensions.DOCK_MIDDLE,
+            DefaultLayoutExtensions.DOCK_BOTTOM,
             DefaultLayoutExtensions.STACK_HORIZONTAL,
             DefaultLayoutExtensions.STACK_VERTICAL,
             DefaultLayoutExtensions.ROWS_AND_COLUMNS
