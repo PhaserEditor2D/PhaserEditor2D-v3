@@ -231,10 +231,6 @@ namespace phasereditor2d.scene.ui.editor.layout {
             name: "Rows & Columns",
             group: "Grid",
             params: [{
-                name: "rows",
-                label: "Rows",
-                defaultValue: 3
-            }, {
                 name: "cols",
                 label: "Columns",
                 defaultValue: 3
@@ -258,7 +254,6 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 const minY = minValue(args.positions.map(p => p.y));
 
                 let cols = args.params.cols as number;
-                let rows = args.params.rows as number;
                 let cellWidth = args.params.cellWidth;
                 let cellHeight = args.params.cellHeight;
                 const padding = args.params.padding;
@@ -275,17 +270,6 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                 cellWidth += padding;
                 cellHeight += padding;
-
-                const len = args.positions.length;
-
-                if (rows === 0) {
-
-                    rows = Math.max(Math.floor(len / cols), 1);
-
-                } else if (cols === 0) {
-
-                    cols = Math.max(Math.floor(len / rows), 1);
-                }
 
                 let x = minX;
                 let y = minY;
