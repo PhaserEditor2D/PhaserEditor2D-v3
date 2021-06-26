@@ -59,10 +59,14 @@
 
 .SceneEditor .LayoutPane {
     position: absolute;
+    bottom: 5px;
     justify-content: center;
-    margin-top: -50px;
-    top: 100%;
     width: 100%;
+}
+
+.light .SceneEditor .LayoutPane,
+.lightBlue .SceneEditor .LayoutPane {
+    bottom: 10px;
 }
 
 .SceneEditor .LayoutPane .Toolbar {
@@ -74,6 +78,5 @@
 
 .light .SceneEditor .ToolbarItem,
 .lightBlue .SceneEditor .ToolbarItem {
-    ---background: transparent;
     border-style: none;
 }
