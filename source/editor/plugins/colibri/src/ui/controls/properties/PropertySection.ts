@@ -1,8 +1,9 @@
+/// <reference path="./FormBuilder.ts" />
 namespace colibri.ui.controls.properties {
 
     export declare type Updater = () => void;
 
-    export abstract class PropertySection<T> {
+    export abstract class PropertySection<T> extends FormBuilder {
 
         private _id: string;
         private _title: string;
@@ -13,6 +14,7 @@ namespace colibri.ui.controls.properties {
         private _tabSection: string;
 
         constructor(page: PropertyPage, id: string, title: string, fillSpace = false, collapsedByDefault = false, tabSectionByDefault?: string) {
+            super();
 
             this._page = page;
             this._id = id;
