@@ -123,39 +123,39 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
         // Shift To
 
-        static DOCK_LEFT = new LayoutExtension({
+        static ALIGN_BORDER_LEFT = new LayoutExtension({
             name: "Border Left",
-            group: "Dock To Border",
+            group: "Align To Border",
             action: makeShiftAction("x", 0)
         });
 
-        static DOCK_CENTER = new LayoutExtension({
+        static ALIGN_BORDER_CENTER = new LayoutExtension({
             name: "Border Center",
-            group: "Dock To Border",
+            group: "Align To Border",
             action: makeShiftAction("x", 0.5)
         });
 
-        static DOCK_RIGHT = new LayoutExtension({
+        static ALIGN_BORDER_RIGHT = new LayoutExtension({
             name: "Border Right",
-            group: "Dock To Border",
+            group: "Align To Border",
             action: makeShiftAction("x", 1)
         });
 
-        static DOCK_TOP = new LayoutExtension({
+        static ALIGN_BORDER_TOP = new LayoutExtension({
             name: "Border Top",
-            group: "Dock To Border",
+            group: "Align To Border",
             action: makeShiftAction("y", 0)
         });
 
-        static DOCK_MIDDLE = new LayoutExtension({
+        static ALIGN_BORDER_MIDDLE = new LayoutExtension({
             name: "Border Middle",
-            group: "Dock To Border",
+            group: "Align To Border",
             action: makeShiftAction("y", 0.5)
         });
 
-        static DOCK_BOTTOM = new LayoutExtension({
+        static ALIGN_BORDER_BOTTOM = new LayoutExtension({
             name: "Border Bottom",
-            group: "Dock To Border",
+            group: "Align To Border",
             action: makeShiftAction("y", 1)
         });
 
@@ -302,12 +302,12 @@ namespace phasereditor2d.scene.ui.editor.layout {
             DefaultLayoutExtensions.ALIGN_TOP,
             DefaultLayoutExtensions.ALIGN_MIDDLE,
             DefaultLayoutExtensions.ALIGN_BOTTOM,
-            DefaultLayoutExtensions.DOCK_LEFT,
-            DefaultLayoutExtensions.DOCK_CENTER,
-            DefaultLayoutExtensions.DOCK_RIGHT,
-            DefaultLayoutExtensions.DOCK_TOP,
-            DefaultLayoutExtensions.DOCK_MIDDLE,
-            DefaultLayoutExtensions.DOCK_BOTTOM,
+            DefaultLayoutExtensions.ALIGN_BORDER_LEFT,
+            DefaultLayoutExtensions.ALIGN_BORDER_CENTER,
+            DefaultLayoutExtensions.ALIGN_BORDER_RIGHT,
+            DefaultLayoutExtensions.ALIGN_BORDER_TOP,
+            DefaultLayoutExtensions.ALIGN_BORDER_MIDDLE,
+            DefaultLayoutExtensions.ALIGN_BORDER_BOTTOM,
             DefaultLayoutExtensions.STACK_HORIZONTAL,
             DefaultLayoutExtensions.STACK_VERTICAL,
             DefaultLayoutExtensions.ROWS_AND_COLUMNS
