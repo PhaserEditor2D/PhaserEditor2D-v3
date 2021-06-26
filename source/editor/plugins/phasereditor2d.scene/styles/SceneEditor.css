@@ -56,3 +56,24 @@
 .dark .SceneEditor {
     padding: 0px !important;
 }
+
+.SceneEditor .LayoutPane {
+    position: absolute;
+    display: grid;
+    grid-template-columns: auto;
+    row-gap: 5px;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px;
+    margin: 10px;
+    font-size: small;
+    font-family: monospace;
+}
+
+.SceneEditor .LayoutPane .Row {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+}

@@ -263,6 +263,36 @@ namespace phasereditor2d.scene.ui.editor {
             this._clipboardManager = new ClipboardManager(this);
 
             this._overlayLayer.getCanvas().addEventListener("contextmenu", e => this.onMenu(e));
+
+            this.createAlignPane();
+        }
+
+        private createAlignPane() {
+
+            const pane = document.createElement("div");
+            pane.classList.add("LayoutPane");
+
+            const extsByGroup = ScenePlugin.getInstance().getLayoutExtensionsByGroup();
+
+            for (const groupSet of extsByGroup) {
+
+                const rowElement = document.createElement("div");
+                rowElement.classList.add("Row");
+                pane.appendChild(rowElement);
+
+                const label = document.createElement("label");
+                label.textContent = groupSet.group;
+                rowElement.appendChild(label);
+
+                for (const ext of groupSet.extensions) {
+
+                    const btn = document.createElement("button");
+                    btn.textContent = ext.getConfig().name.substring(0, 1);
+                    rowElement.appendChild(btn);
+                }
+            }
+
+            this._canvasContainer.appendChild(pane);
         }
 
         getCanvasContainer() {

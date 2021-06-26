@@ -88,36 +88,42 @@ namespace phasereditor2d.scene.ui.editor.layout {
         static ALIGN_LEFT = new LayoutExtension({
             name: "Left",
             group: "Align",
+            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_LEFT),
             action: makeAlignAction("x", minValue, 0)
         });
 
         static ALIGN_CENTER = new LayoutExtension({
             name: "Center",
             group: "Align",
+            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_CENTER),
             action: makeAlignAction("x", avgValue, 0.5)
         });
 
         static ALIGN_RIGHT = new LayoutExtension({
             name: "Right",
             group: "Align",
+            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_RIGHT),
             action: makeAlignAction("x", maxValue, 1)
         });
 
         static ALIGN_TOP = new LayoutExtension({
             name: "Top",
             group: "Align",
+            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_TOP),
             action: makeAlignAction("y", minValue, 0)
         });
 
         static ALIGN_MIDDLE = new LayoutExtension({
             name: "Middle",
             group: "Align",
+            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_MIDDLE),
             action: makeAlignAction("y", avgValue, 0.5)
         });
 
         static ALIGN_BOTTOM = new LayoutExtension({
             name: "Bottom",
             group: "Align",
+            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_BOTTOM),
             action: makeAlignAction("y", maxValue, 1)
         });
 
@@ -126,36 +132,42 @@ namespace phasereditor2d.scene.ui.editor.layout {
         static ALIGN_BORDER_LEFT = new LayoutExtension({
             name: "Border Left",
             group: "Align To Border",
+            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_LEFT),
             action: makeShiftAction("x", 0)
         });
 
         static ALIGN_BORDER_CENTER = new LayoutExtension({
             name: "Border Center",
             group: "Align To Border",
+            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_CENTER),
             action: makeShiftAction("x", 0.5)
         });
 
         static ALIGN_BORDER_RIGHT = new LayoutExtension({
             name: "Border Right",
             group: "Align To Border",
+            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_RIGHT),
             action: makeShiftAction("x", 1)
         });
 
         static ALIGN_BORDER_TOP = new LayoutExtension({
             name: "Border Top",
             group: "Align To Border",
+            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_TOP),
             action: makeShiftAction("y", 0)
         });
 
         static ALIGN_BORDER_MIDDLE = new LayoutExtension({
             name: "Border Middle",
             group: "Align To Border",
+            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_MIDDLE),
             action: makeShiftAction("y", 0.5)
         });
 
         static ALIGN_BORDER_BOTTOM = new LayoutExtension({
             name: "Border Bottom",
             group: "Align To Border",
+            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_BOTTOM),
             action: makeShiftAction("y", 1)
         });
 
@@ -169,6 +181,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 label: "Padding",
                 defaultValue: 0
             }],
+            icon: ScenePlugin.getInstance().getIcon(ICON_ROW),
             action: args => {
 
                 const padding = args.params.padding;
@@ -195,6 +208,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 label: "Padding",
                 defaultValue: 0
             }],
+            icon: ScenePlugin.getInstance().getIcon(ICON_COLUMN),
             action: args => {
 
                 const padding = args.params.padding;
@@ -228,7 +242,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 name: "padding",
                 label: "Padding",
                 defaultValue: 0
-            },{
+            }, {
                 name: "cellWidth",
                 label: "Cell Width",
                 defaultValue: 0
@@ -237,6 +251,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 label: "Cell Height",
                 defaultValue: 0
             }],
+            icon: ScenePlugin.getInstance().getIcon(ICON_GRID),
             action: args => {
 
                 const minX = minValue(args.positions.map(p => p.x));
@@ -246,7 +261,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 let rows = args.params.rows as number;
                 let cellWidth = args.params.cellWidth;
                 let cellHeight = args.params.cellHeight;
-                let padding = args.params.padding;
+                const padding = args.params.padding;
 
                 if (cellWidth === 0) {
 

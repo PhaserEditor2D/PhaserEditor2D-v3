@@ -20,6 +20,21 @@ namespace phasereditor2d.scene {
     export const ICON_TEXT_TYPE = "text-type";
     export const ICON_BITMAP_FONT_TYPE = "bitmapfont-type";
     export const ICON_LAYER = "layer";
+    export const ICON_ALIGN_LEFT = "align-left";
+    export const ICON_ALIGN_CENTER = "align-center";
+    export const ICON_ALIGN_RIGHT = "align-right";
+    export const ICON_ALIGN_TOP = "align-top";
+    export const ICON_ALIGN_MIDDLE = "align-middle";
+    export const ICON_ALIGN_BOTTOM = "align-bottom";
+    export const ICON_BORDER_LEFT = "border-left";
+    export const ICON_BORDER_CENTER = "border-center";
+    export const ICON_BORDER_RIGHT = "border-right";
+    export const ICON_BORDER_TOP = "border-top";
+    export const ICON_BORDER_MIDDLE = "border-middle";
+    export const ICON_BORDER_BOTTOM = "border-bottom";
+    export const ICON_GRID = "grid";
+    export const ICON_COLUMN = "column";
+    export const ICON_ROW = "row";
 
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
@@ -130,7 +145,22 @@ namespace phasereditor2d.scene {
                     ICON_IMAGE_TYPE,
                     ICON_GROUP,
                     ICON_BUILD,
-                    ICON_LAYER
+                    ICON_LAYER,
+                    ICON_ALIGN_LEFT,
+                    ICON_ALIGN_CENTER,
+                    ICON_ALIGN_RIGHT,
+                    ICON_ALIGN_TOP,
+                    ICON_ALIGN_MIDDLE,
+                    ICON_ALIGN_BOTTOM,
+                    ICON_BORDER_LEFT,
+                    ICON_BORDER_CENTER,
+                    ICON_BORDER_RIGHT,
+                    ICON_BORDER_TOP,
+                    ICON_BORDER_MIDDLE,
+                    ICON_BORDER_BOTTOM,
+                    ICON_GRID,
+                    ICON_COLUMN,
+                    ICON_ROW
                 ])
             );
 
@@ -400,11 +430,35 @@ namespace phasereditor2d.scene {
                     ui.editor.outline.SceneEditorOutlineExtension.POINT_ID);
         }
 
-        getAlignExtensions() {
+        getLayoutExtensions() {
 
             return colibri.Platform
                 .getExtensions<ui.editor.layout.LayoutExtension>(
                     ui.editor.layout.LayoutExtension.POINT_ID);
+        }
+
+        getLayoutExtensionsByGroup() {
+
+            const allExtensions = ScenePlugin.getInstance().getLayoutExtensions()
+            const groups: string[] = [];
+
+            for (const ext of allExtensions) {
+
+                if (groups.indexOf(ext.getConfig().group) < 0) {
+
+                    groups.push(ext.getConfig().group);
+                }
+            }
+
+            const result: Array<{ group: string, extensions: ui.editor.layout.LayoutExtension[] }> = [];
+
+            for (const group of groups) {
+
+                const extensions = allExtensions.filter(e => e.getConfig().group === group);
+                result.push({ group, extensions });
+            }
+
+            return result;
         }
 
         getLoaderUpdaterForAsset(asset: any) {

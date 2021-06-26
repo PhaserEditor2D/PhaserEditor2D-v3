@@ -202,23 +202,21 @@ namespace phasereditor2d.scene.ui.editor {
 
             const menu = new controls.Menu("Layout");
 
-            const extensions = ScenePlugin.getInstance().getAlignExtensions()
-            const groups = [...new Set(extensions.map(e => e.getConfig().group))].sort();
+            const extsByGroup = ScenePlugin.getInstance().getLayoutExtensionsByGroup();
 
-            for (const group of groups) {
+            for (const groupSet of extsByGroup) {
 
-                const groupMenu = new controls.Menu(group);
+                const groupMenu = new controls.Menu(groupSet.group);
 
                 menu.addMenu(groupMenu);
 
-                const groupExtensions = extensions.filter(e => e.getConfig().group === group);
-
-                for (const ext of groupExtensions) {
+                for (const ext of groupSet.extensions) {
 
                     const config = ext.getConfig();
 
                     groupMenu.addAction({
                         text: config.name,
+                        icon: config.icon,
                         callback: () => ext.performAlign(this._editor)
                     });
                 }

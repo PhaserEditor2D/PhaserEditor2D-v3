@@ -19,6 +19,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
         group: string;
         action?: (args: IAlignActionArgs) => void;
         params?: IAlignActionParam[];
+        icon: controls.IconImage
     }
 
     export class LayoutExtension extends colibri.Extension {
