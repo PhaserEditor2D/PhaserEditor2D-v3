@@ -159,6 +159,34 @@ namespace phasereditor2d.scene.ui.editor.layout {
             action: makeShiftAction("y", 1)
         });
 
+        // grid
+
+        static STACK_HORIZONTAL = new LayoutExtension({
+            name: "Stack Horizontal",
+            group: "Grid",
+            params: [{
+                name: "padding",
+                label: "Padding",
+                defaultValue: 0
+            }],
+            action: args => {
+
+                const padding = args.params.padding;
+                const minX = minValue(args.positions.map(p => p.x));
+                const minY = avgValue(args.positions.map(p => p.y));
+
+                let x = 0;
+
+                for (const pos of args.positions) {
+
+                    pos.x = minX + x;
+                    pos.y = minY;
+
+                    x += pos.size.x + padding;
+                }
+            }
+        });
+
         static ALL = [
             DefaultLayoutExtensions.ALIGN_LEFT,
             DefaultLayoutExtensions.ALIGN_CENTER,
@@ -171,7 +199,8 @@ namespace phasereditor2d.scene.ui.editor.layout {
             DefaultLayoutExtensions.SHIFT_RIGHT,
             DefaultLayoutExtensions.SHIFT_TOP,
             DefaultLayoutExtensions.SHIFT_MIDDLE,
-            DefaultLayoutExtensions.SHIFT_BOTTOM
+            DefaultLayoutExtensions.SHIFT_BOTTOM,
+            DefaultLayoutExtensions.STACK_HORIZONTAL
         ];
     }
 }
