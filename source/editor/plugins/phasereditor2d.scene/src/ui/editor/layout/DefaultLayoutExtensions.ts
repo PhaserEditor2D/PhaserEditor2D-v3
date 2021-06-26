@@ -162,7 +162,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
         // grid
 
         static STACK_HORIZONTAL = new LayoutExtension({
-            name: "Stack Horizontal",
+            name: "Row",
             group: "Grid",
             params: [{
                 name: "padding",
@@ -173,16 +173,124 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                 const padding = args.params.padding;
                 const minX = minValue(args.positions.map(p => p.x));
-                const minY = avgValue(args.positions.map(p => p.y));
+                const avgY = avgValue(args.positions.map(p => p.y));
 
-                let x = 0;
+                let x = minX;
 
                 for (const pos of args.positions) {
 
-                    pos.x = minX + x;
-                    pos.y = minY;
+                    pos.x = x;
+                    pos.y = avgY;
 
                     x += pos.size.x + padding;
+                }
+            }
+        });
+
+        static STACK_VERTICAL = new LayoutExtension({
+            name: "Column",
+            group: "Grid",
+            params: [{
+                name: "padding",
+                label: "Padding",
+                defaultValue: 0
+            }],
+            action: args => {
+
+                const padding = args.params.padding;
+                const avgX = avgValue(args.positions.map(p => p.x));
+                const minY = minValue(args.positions.map(p => p.y));
+
+                let y = minY;
+
+                for (const pos of args.positions) {
+
+                    pos.x = avgX;
+                    pos.y = y;
+
+                    y += pos.size.y + padding;
+                }
+            }
+        });
+
+        static ROWS_AND_COLUMNS = new LayoutExtension({
+            name: "Rows & Columns",
+            group: "Grid",
+            params: [{
+                name: "rows",
+                label: "Rows",
+                defaultValue: 3
+            }, {
+                name: "cols",
+                label: "Columns",
+                defaultValue: 3
+            }, {
+                name: "padding",
+                label: "Padding",
+                defaultValue: 0
+            },{
+                name: "cellWidth",
+                label: "Cell Width",
+                defaultValue: 0
+            }, {
+                name: "cellHeight",
+                label: "Cell Height",
+                defaultValue: 0
+            }],
+            action: args => {
+
+                const minX = minValue(args.positions.map(p => p.x));
+                const minY = minValue(args.positions.map(p => p.y));
+
+                let cols = args.params.cols as number;
+                let rows = args.params.rows as number;
+                let cellWidth = args.params.cellWidth;
+                let cellHeight = args.params.cellHeight;
+                let padding = args.params.padding;
+
+                if (cellWidth === 0) {
+
+                    cellWidth = maxValue(args.positions.map(p => p.size.x));
+                }
+
+                if (cellHeight === 0) {
+
+                    cellHeight = maxValue(args.positions.map(p => p.size.y));
+                }
+
+                cellWidth += padding;
+                cellHeight += padding;
+
+                const len = args.positions.length;
+
+                if (rows === 0) {
+
+                    rows = Math.max(Math.floor(len / cols), 1);
+
+                } else if (cols === 0) {
+
+                    cols = Math.max(Math.floor(len / rows), 1);
+                }
+
+                let x = minX;
+                let y = minY;
+
+                let i = 0;
+
+                for (const pos of args.positions) {
+
+                    pos.x = x + cellWidth / 2 - pos.size.x / 2;
+                    pos.y = y + cellHeight / 2 - pos.size.y / 2;
+
+                    x += cellWidth;
+                    i++;
+
+                    if (i === cols) {
+
+                        i = 0;
+                        x = minX;
+                        y += cellHeight;
+                    }
                 }
             }
         });
@@ -200,7 +308,9 @@ namespace phasereditor2d.scene.ui.editor.layout {
             DefaultLayoutExtensions.SHIFT_TOP,
             DefaultLayoutExtensions.SHIFT_MIDDLE,
             DefaultLayoutExtensions.SHIFT_BOTTOM,
-            DefaultLayoutExtensions.STACK_HORIZONTAL
+            DefaultLayoutExtensions.STACK_HORIZONTAL,
+            DefaultLayoutExtensions.STACK_VERTICAL,
+            DefaultLayoutExtensions.ROWS_AND_COLUMNS
         ];
     }
 }

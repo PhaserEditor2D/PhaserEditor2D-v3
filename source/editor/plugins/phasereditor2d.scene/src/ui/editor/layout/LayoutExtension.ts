@@ -49,6 +49,8 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
             dlg.create();
 
+            const btn: HTMLButtonElement[] = [null];
+
             dlg.setTitle(this._config.group + " - " + this._config.name);
 
             const form = dlg.getBuilder();
@@ -61,23 +63,36 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                 const text = form.createText();
 
-                text.value = param.defaultValue.toString();
+                const memo = window.localStorage.getItem(this.getLocalStorageKey(param.name));
+
+                text.value = memo || param.defaultValue.toString();
+
+                text.addEventListener("keypress", e => {
+
+                    if (e.code === "Enter" || e.code === "NumpadEnter") {
+
+                        btn[0].click();
+                    }
+                })
 
                 elementMap.set(param.name, text);
             }
 
             return new Promise((resolve, reject) => {
 
-                dlg.addButton("Apply", () => {
+                btn[0] = dlg.addButton("Apply", () => {
 
                     const result = {};
 
-                    for (const key of elementMap.keys()) {
+                    for (const paramName of elementMap.keys()) {
 
-                        const text = elementMap.get(key);
+                        const text = elementMap.get(paramName);
+
+                        window.localStorage.setItem(this.getLocalStorageKey(paramName), text.value);
+
                         const val = Number.parseFloat(text.value);
 
-                        result[key] = val;
+                        result[paramName] = val;
                     }
 
                     resolve(result);
@@ -91,6 +106,11 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 });
             });
 
+        }
+
+        private getLocalStorageKey(key: string): string {
+
+            return "LayoutExtension.parameters." + this._config.group + "." + this._config.name + "." + key;
         }
 
         async performAlign(editor: SceneEditor) {
