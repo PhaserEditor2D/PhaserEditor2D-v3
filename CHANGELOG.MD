@@ -11,7 +11,7 @@
 
 * Updates Monaco Editor to v0.25.2.
 * Scene Editor: Select Children command.
-* Scene Editor: Layout actions: Align, Dock To Border, Grid.
+* Scene Editor: Layout actions: Align, Align To Border, Grid.
 
 ## v3.14.0 - May 29, 2021
 
