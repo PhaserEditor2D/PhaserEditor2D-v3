@@ -114,7 +114,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
             return "LayoutExtension.parameters." + this._config.group + "." + this._config.name + "." + key;
         }
 
-        async performAlign(editor: SceneEditor) {
+        async performLayout(editor: SceneEditor) {
 
             const params = await this.requestParameters();
 

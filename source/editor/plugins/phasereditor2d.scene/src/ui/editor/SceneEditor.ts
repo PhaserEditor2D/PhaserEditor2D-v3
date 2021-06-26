@@ -264,10 +264,10 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._overlayLayer.getCanvas().addEventListener("contextmenu", e => this.onMenu(e));
 
-            this.createAlignPane();
+            this.createLayoutPane();
         }
 
-        private createAlignPane() {
+        private createLayoutPane() {
 
             const pane = document.createElement("div");
             pane.classList.add("LayoutPane");
@@ -276,19 +276,26 @@ namespace phasereditor2d.scene.ui.editor {
 
             for (const groupSet of extsByGroup) {
 
+                const label = document.createElement("label");
+                label.textContent = groupSet.group;
+                pane.appendChild(label);
+
                 const rowElement = document.createElement("div");
                 rowElement.classList.add("Row");
                 pane.appendChild(rowElement);
 
-                const label = document.createElement("label");
-                label.textContent = groupSet.group;
-                rowElement.appendChild(label);
+                const toolbar = new controls.ToolbarManager(rowElement);
 
                 for (const ext of groupSet.extensions) {
 
-                    const btn = document.createElement("button");
-                    btn.textContent = ext.getConfig().name.substring(0, 1);
-                    rowElement.appendChild(btn);
+                    const config = ext.getConfig();
+
+                    toolbar.addAction({
+                        text: config.name,
+                        icon: config.icon,
+                        showText: false,
+                        callback: () => ext.performLayout(this)
+                    });
                 }
             }
 

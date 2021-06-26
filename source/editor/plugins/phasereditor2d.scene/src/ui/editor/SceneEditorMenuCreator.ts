@@ -217,7 +217,7 @@ namespace phasereditor2d.scene.ui.editor {
                     groupMenu.addAction({
                         text: config.name,
                         icon: config.icon,
-                        callback: () => ext.performAlign(this._editor)
+                        callback: () => ext.performLayout(this._editor)
                     });
                 }
             }

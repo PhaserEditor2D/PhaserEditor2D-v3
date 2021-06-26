@@ -62,14 +62,15 @@
     display: grid;
     grid-template-columns: auto;
     row-gap: 5px;
-    border-color: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    border-width: 1px;
-    border-style: solid;
     padding: 5px;
-    margin: 10px;
-    font-size: small;
+    margin: 25px 20px 0px 70px;
     font-family: monospace;
+}
+
+.light .SceneEditor .ToolbarItem,
+.lightBlue .SceneEditor .ToolbarItem {
+    background: transparent;
+    border-style: none;
 }
 
 .SceneEditor .LayoutPane .Row {
