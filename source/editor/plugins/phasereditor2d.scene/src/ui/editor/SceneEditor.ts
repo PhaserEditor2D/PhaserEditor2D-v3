@@ -17,6 +17,7 @@ namespace phasereditor2d.scene.ui.editor {
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
         private _menuCreator: SceneEditorMenuCreator;
         private _canvasContainer: HTMLDivElement;
+        private _layoutPane: HTMLDivElement;
 
         static getFactory() {
 
@@ -272,19 +273,15 @@ namespace phasereditor2d.scene.ui.editor {
             const pane = document.createElement("div");
             pane.classList.add("LayoutPane");
 
+            const toolbarElement = document.createElement("div");
+            toolbarElement.classList.add("Toolbar", "Pane");
+            pane.appendChild(toolbarElement);
+
+            const toolbar = new controls.ToolbarManager(toolbarElement);
+
             const extsByGroup = ScenePlugin.getInstance().getLayoutExtensionsByGroup();
 
             for (const groupSet of extsByGroup) {
-
-                const label = document.createElement("label");
-                label.textContent = groupSet.group;
-                pane.appendChild(label);
-
-                const rowElement = document.createElement("div");
-                rowElement.classList.add("Row");
-                pane.appendChild(rowElement);
-
-                const toolbar = new controls.ToolbarManager(rowElement);
 
                 for (const ext of groupSet.extensions) {
 
@@ -300,6 +297,32 @@ namespace phasereditor2d.scene.ui.editor {
             }
 
             this._canvasContainer.appendChild(pane);
+            this._layoutPane = pane;
+
+            this.setLayoutPaneVisible(window.localStorage.getItem("phasereditor2d.scene.ui.editor.layoutPaneVisible") === "true");
+        }
+
+        private _layoutPaneVisible: boolean;
+
+        setLayoutPaneVisible(visible: boolean) {
+
+            this._layoutPaneVisible = visible;
+
+            if (visible) {
+
+                this._layoutPane.style.display = "flex";
+
+            } else {
+
+                this._layoutPane.style.display = "none";
+            }
+
+            window.localStorage.setItem("phasereditor2d.scene.ui.editor.layoutPaneVisible", visible ? "true" : "false");
+        }
+
+        isLayoutPaneVisible() {
+
+            return this._layoutPaneVisible;
         }
 
         getCanvasContainer() {

@@ -189,6 +189,12 @@ Important:
     background: #4242ff;
 }
 
+/* Pane */
+
+.light .Pane {
+    background: #cacaca;
+}
+
 /* Dialog */
 
 .light .DarkDialogContainer {

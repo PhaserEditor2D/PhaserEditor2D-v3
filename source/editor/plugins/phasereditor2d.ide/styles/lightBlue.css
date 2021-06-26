@@ -161,6 +161,12 @@
     background: #4242ff;
 }
 
+/* Pane */
+
+.lightBlue .Pane {
+    background: #dde5f0;
+}
+
 /* Dialog */
 
 .lightBlue .DarkDialogContainer {

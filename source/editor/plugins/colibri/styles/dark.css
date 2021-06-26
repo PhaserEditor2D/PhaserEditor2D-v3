@@ -210,6 +210,12 @@ Important:
     background: #f0a050;
 }
 
+/* Pane */
+
+.dark .Pane {
+    background: #2f2f2f;
+}
+
 /* Dialog */
 
 .dark .darkDialogContainer {

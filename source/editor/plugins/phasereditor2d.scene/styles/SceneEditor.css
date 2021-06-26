@@ -59,22 +59,21 @@
 
 .SceneEditor .LayoutPane {
     position: absolute;
-    display: grid;
-    grid-template-columns: auto;
+    justify-content: center;
+    margin-top: -50px;
+    top: 100%;
+    width: 100%;
+}
+
+.SceneEditor .LayoutPane .Toolbar {
+    display: flex;
     row-gap: 5px;
     padding: 5px;
-    margin: 25px 20px 0px 70px;
-    font-family: monospace;
+    border-radius: 5px;
 }
 
 .light .SceneEditor .ToolbarItem,
 .lightBlue .SceneEditor .ToolbarItem {
-    background: transparent;
+    ---background: transparent;
     border-style: none;
-}
-
-.SceneEditor .LayoutPane .Row {
-    display: flex;
-    align-items: center;
-    column-gap: 5px;
 }
