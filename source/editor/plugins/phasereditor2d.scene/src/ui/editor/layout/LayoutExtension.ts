@@ -45,86 +45,9 @@ namespace phasereditor2d.scene.ui.editor.layout {
             return this._config;
         }
 
-        protected async requestParameters(editor: SceneEditor) {
-
-            return await editor.getLayoutToolsManager().showParametersPane(this);
-
-            if (!this._config.params || this._config.params.length === 0) {
-
-                return;
-            }
-
-            const dlg = new controls.dialogs.FormDialog();
-
-            dlg.create();
-
-            const btn: HTMLButtonElement[] = [null];
-
-            dlg.setTitle(this._config.group + " - " + this._config.name);
-
-            const form = dlg.getBuilder();
-
-            const elementMap: Map<string, HTMLInputElement> = new Map();
-
-            for (const param of this._config.params) {
-
-                form.createLabel(param.label);
-
-                const text = form.createText();
-
-                const memo = window.localStorage.getItem(this.getLocalStorageKey(param.name));
-
-                text.value = memo || param.defaultValue.toString();
-
-                text.addEventListener("keypress", e => {
-
-                    if (e.code === "Enter" || e.code === "NumpadEnter") {
-
-                        btn[0].click();
-                    }
-                })
-
-                elementMap.set(param.name, text);
-            }
-
-            return new Promise((resolve, reject) => {
-
-                btn[0] = dlg.addButton("Apply", () => {
-
-                    const result = {};
-
-                    for (const paramName of elementMap.keys()) {
-
-                        const text = elementMap.get(paramName);
-
-                        window.localStorage.setItem(this.getLocalStorageKey(paramName), text.value);
-
-                        const val = Number.parseFloat(text.value);
-
-                        result[paramName] = val;
-                    }
-
-                    resolve(result);
-
-                    dlg.close();
-                });
-
-                dlg.addCancelButton(() => {
-
-                    resolve(null);
-                });
-            });
-
-        }
-
-        private getLocalStorageKey(key: string): string {
-
-            return "LayoutExtension.parameters." + this._config.group + "." + this._config.name + "." + key;
-        }
-
         async performLayout(editor: SceneEditor) {
 
-            const params = await this.requestParameters(editor);
+            const params = await editor.getLayoutToolsManager().showParametersPane(this);
 
             const transform = sceneobjects.TransformComponent;
 
