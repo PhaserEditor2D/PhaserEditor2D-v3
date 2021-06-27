@@ -118,8 +118,34 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const form = new controls.properties.EasyFormBuilder(formParent);
 
-                const titleElement = form.createLabel(ext.getConfig().name);
-                titleElement.classList.add("Title");
+                const titlePane = document.createElement("div");
+                titlePane.classList.add("Title");
+                formParent.appendChild(titlePane);
+
+                const titleLabel = document.createElement("label");
+                titleLabel.textContent = ext.getConfig().name;
+                titlePane.appendChild(titleLabel);
+
+                const buttonPane = document.createElement("div");
+                buttonPane.classList.add("Buttons");
+                titlePane.appendChild(buttonPane);
+
+                const applyIcon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CHECKED));
+                applyIcon.getCanvas().classList.add("IconButton");
+                applyIcon.getCanvas().addEventListener("click", () => {
+
+                    applyResult();
+                });
+                buttonPane.appendChild(applyIcon.getCanvas());
+
+                const closeIcon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE));
+                closeIcon.getCanvas().classList.add("IconButton");
+                closeIcon.getCanvas().addEventListener("click", () => {
+
+                    this.clearParameters();
+                    resolve(null);
+                });
+                buttonPane.appendChild(closeIcon.getCanvas());
 
                 const elementMap: Map<string, HTMLInputElement> = new Map();
 
@@ -168,38 +194,6 @@ namespace phasereditor2d.scene.ui.editor {
 
                     elementMap.set(param.name, text);
                 }
-
-                const buttonsElement = document.createElement("div");
-                buttonsElement.classList.add("FormButtons");
-
-                if (params.length % 2 === 1) {
-
-                    buttonsElement.style.gridColumn = "3 / span 2";
-                }
-
-                formParent.appendChild(buttonsElement);
-
-                const toolbar = new controls.ToolbarManager(buttonsElement);
-
-                toolbar.addAction({
-                    icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CHECKED),
-                    tooltip: "Apply",
-                    showText: false,
-                    callback: () => applyResult()
-                });
-
-                toolbar.addAction({
-                    icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE),
-                    tooltip: "Close",
-                    showText: false,
-                    callback: () => {
-
-                        this.clearParameters();
-
-                        resolve(null);
-                    }
-                });
-
             });
         }
 

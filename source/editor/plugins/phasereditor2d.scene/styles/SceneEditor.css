@@ -81,10 +81,20 @@
 }
 
 .SceneEditor .LayoutPane .Title {
-    font-size: small;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
     grid-column: 1 / span 4;
-    justify-self: start;
+}
+
+.SceneEditor .LayoutPane .Title label {
+    font-size: small;
     opacity: 0.5;
+}
+
+.SceneEditor .LayoutPane .Title .Buttons {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .SceneEditor .LayoutPane .Form {
@@ -94,22 +104,6 @@
     row-gap: 5px;
     align-items: center;
     padding: 5px;
-}
-
-.SceneEditor .LayoutPane .FormButtons {
-    display: flex;
-    flex-direction: row;
-    column-gap: 5px;
-    grid-column: 1 / span 4;
-    justify-content: flex-end;
-    height: 100%;
-    align-items: center;
-    width: 100%;
-}
-
-.SceneEditor .LayoutPane .FormButtons button {
-    font-size: xx-small;
-    text-transform: uppercase;
 }
 
 .SceneEditor .LayoutPane .Toolbar {
