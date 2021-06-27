@@ -2,8 +2,14 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
     import controls = colibri.ui.controls;
 
+    export interface ILayoutIPosition {
+        x: number;
+        y: number;
+        size: { x: number, y: number };
+    }
+
     export interface IAlignActionArgs {
-        positions: Array<{ x: number, y: number, size: { x: number, y: number } }>,
+        positions: ILayoutIPosition[],
         border: { x: number, y: number, size: { x: number, y: number } },
         params: any;
     }
@@ -150,6 +156,13 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 }
             });
 
+            const spritePosMap = new Map<any, ILayoutIPosition>();
+
+            for (let i = 0; i < sprites.length; i++) {
+
+                spritePosMap.set(sprites[i], positions[i]);
+            }
+
             const settings = editor.getScene().getSettings();
 
             const border = {
@@ -165,10 +178,9 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                 this._config.action({ border, positions, params });
 
-                for (let i = 0; i < sprites.length; i++) {
+                for (const sprite of sprites) {
 
-                    const sprite = sprites[i];
-                    const pos = positions[i];
+                    const pos = spritePosMap.get(sprite);
                     sprite.x = pos.x + sprite.originX * sprite.displayWidth;
                     sprite.y = pos.y + sprite.originY * sprite.displayHeight;
                 }

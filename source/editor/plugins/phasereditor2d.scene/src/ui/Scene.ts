@@ -27,6 +27,40 @@ namespace phasereditor2d.scene.ui {
             this._prefabProperties = new sceneobjects.PrefabUserProperties();
         }
 
+        sortObjectsByIndex(objects: Phaser.GameObjects.GameObject[]) {
+
+            const map: Map<any, number> = new Map();
+
+            this.buildSortingMap(map, this.getDisplayListChildren(), 0);
+
+            objects.sort((a, b) => {
+
+                const aa = map.get(a);
+                const bb = map.get(b);
+
+                return aa - bb;
+            });
+        }
+
+        private buildSortingMap(map: Map<any, number>, list: Phaser.GameObjects.GameObject[], index: number) {
+
+            for (const obj of list) {
+
+                index++;
+
+                map.set(obj, index);
+
+                if (!(obj as sceneobjects.ISceneGameObject).getEditorSupport().isPrefabInstance()) {
+
+                    const children = sceneobjects.GameObjectEditorSupport.getObjectChildren(obj as any);
+
+                    index = this.buildSortingMap(map, children, index);
+                }
+            }
+
+            return index;
+        }
+
         readPlainObjects(list: core.json.IScenePlainObjectData[]) {
 
             this._plainObjects = [];

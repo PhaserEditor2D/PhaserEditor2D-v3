@@ -184,6 +184,8 @@ namespace phasereditor2d.scene.ui.editor.layout {
             icon: ScenePlugin.getInstance().getIcon(ICON_ROW),
             action: args => {
 
+                args.positions.sort((a, b) => a.x - b.x);
+
                 const padding = args.params.padding;
                 const minX = minValue(args.positions.map(p => p.x));
                 const avgY = avgValue(args.positions.map(p => p.y));
@@ -210,6 +212,8 @@ namespace phasereditor2d.scene.ui.editor.layout {
             }],
             icon: ScenePlugin.getInstance().getIcon(ICON_COLUMN),
             action: args => {
+
+                args.positions.sort((a, b) => a.y - b.y);
 
                 const padding = args.params.padding;
                 const avgX = avgValue(args.positions.map(p => p.x));
