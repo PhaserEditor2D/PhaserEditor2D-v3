@@ -278,19 +278,49 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 let x = minX;
                 let y = minY;
 
-                let i = 0;
+                let currentCol = 0;
 
-                for (const pos of args.positions) {
+                const processed = new Set();
+
+                const findCloserPosition = (x: number, y: number) => {
+
+                    let result: ILayoutIPosition;
+                    let min = Number.MAX_VALUE;
+
+                    for (const pos of args.positions) {
+
+                        if (processed.has(pos)) {
+
+                            continue;
+                        }
+
+                        const d = Phaser.Math.Distance.Between(x, y, pos.x + pos.size.x / 2, pos.y + pos.size.y / 2);
+
+                        if (d < min) {
+
+                            result = pos;
+                            min = d;
+                        }
+                    }
+
+                    return result;
+                }
+
+                while (processed.size < args.positions.length) {
+
+                    const pos = findCloserPosition(x + cellWidth / 2, y + cellHeight / 2);
+
+                    processed.add(pos);
 
                     pos.x = x + cellWidth / 2 - pos.size.x / 2;
                     pos.y = y + cellHeight / 2 - pos.size.y / 2;
 
                     x += cellWidth;
-                    i++;
+                    currentCol++;
 
-                    if (i === cols) {
+                    if (currentCol === cols) {
 
-                        i = 0;
+                        currentCol = 0;
                         x = minX;
                         y += cellHeight;
                     }
