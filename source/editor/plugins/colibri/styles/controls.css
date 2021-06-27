@@ -359,7 +359,7 @@
     .PropertySubTitlePanel {
         display: grid;
         grid-template-columns: auto 1fr auto;
-        grid-column: 1 / span 2;
+        grid-column: 1 / span 4;
         align-items: center;
         background: rgba(0, 0, 0, 0.1);
         padding: 3px;

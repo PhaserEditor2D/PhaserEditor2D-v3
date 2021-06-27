@@ -45,7 +45,9 @@ namespace phasereditor2d.scene.ui.editor.layout {
             return this._config;
         }
 
-        protected async requestParameters() {
+        protected async requestParameters(editor: SceneEditor) {
+
+            return await editor.getLayoutToolsManager().showParametersPane(this);
 
             if (!this._config.params || this._config.params.length === 0) {
 
@@ -122,7 +124,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
         async performLayout(editor: SceneEditor) {
 
-            const params = await this.requestParameters();
+            const params = await this.requestParameters(editor);
 
             const transform = sceneobjects.TransformComponent;
 

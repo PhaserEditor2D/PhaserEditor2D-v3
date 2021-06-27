@@ -59,6 +59,8 @@
 
 .SceneEditor .LayoutPane {
     position: absolute;
+    display: grid;
+    grid-template-columns: auto;
     bottom: 5px;
     justify-content: center;
     width: 100%;
@@ -69,15 +71,51 @@
     bottom: 10px;
 }
 
+.SceneEditor .LayoutPane .CenterPane {
+    display: grid;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 3px 3px 3px #0003;
+}
+
+.SceneEditor .LayoutPane .Title {
+    font-size: small;
+    grid-column: 1 / span 4;
+    justify-self: start;
+    opacity: 0.5;
+}
+
+.SceneEditor .LayoutPane .Form {
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr;
+    column-gap: 5px;
+    row-gap: 5px;
+    align-items: center;
+    padding: 5px;
+}
+
+.SceneEditor .LayoutPane .FormButtons {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    grid-column: 1 / span 4;
+    justify-content: flex-end;
+    height: 100%;
+    align-items: center;
+    width: 100%;
+}
+
+.SceneEditor .LayoutPane .FormButtons button {
+    font-size: xx-small;
+    text-transform: uppercase;
+}
+
 .SceneEditor .LayoutPane .Toolbar {
     display: flex;
     row-gap: 5px;
     padding: 5px;
-    border-radius: 5px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgba(255, 255,255, 0.2);
-    box-shadow: 3px 3px 3px #0003;
 }
 
 .light .SceneEditor .ToolbarItem,

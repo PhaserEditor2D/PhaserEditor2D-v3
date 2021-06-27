@@ -204,8 +204,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addAction({
                 text: "Show Layout Bar",
-                callback: () => this._editor.setLayoutPaneVisible(!this._editor.isLayoutPaneVisible()),
-                selected: this._editor.isLayoutPaneVisible()
+                callback: () => this._editor.getLayoutToolsManager().togglePaneVisible(),
+                selected: this._editor.getLayoutToolsManager().isPaneVisible()
             });
 
             const extsByGroup = ScenePlugin.getInstance().getLayoutExtensionsByGroup();

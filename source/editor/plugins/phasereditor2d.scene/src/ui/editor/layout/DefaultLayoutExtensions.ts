@@ -232,7 +232,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
         });
 
         static ROWS_AND_COLUMNS = new LayoutExtension({
-            name: "Rows & Columns",
+            name: "Grid",
             group: "Grid",
             params: [{
                 name: "cols",
