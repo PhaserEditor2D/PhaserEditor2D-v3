@@ -1458,29 +1458,36 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                                 .filter(obj =>
                                     sceneobjects.GameObjectEditorSupport.hasObjectComponent(
-                                        obj, sceneobjects.OriginComponent)
-                                    && (obj as sceneobjects.ISceneGameObject)
-                                        .getEditorSupport().isUnlockedProperty(sceneobjects.OriginComponent.originX))
+                                        obj, sceneobjects.OriginComponent))
                                 .length;
 
                             return len > 0 && len === sel.length;
                         },
-                        executeFunc: args => {
+                        executeFunc: async (args) => {
 
-                            const objects = args.activeEditor.getSelection()
+                            const editor = args.activeEditor as SceneEditor;
+
+                            const objects = editor.getSelectedGameObjects()
                                 .filter(obj => sceneobjects.GameObjectEditorSupport
-                                    .hasObjectComponent(obj, sceneobjects.TransformComponent));
+                                    .hasObjectComponent(obj, sceneobjects.OriginComponent));
 
+                            const unlocked = await editor.confirmUnlockProperty([
+                                sceneobjects.OriginComponent.originX,
+                                sceneobjects.OriginComponent.originY
+                            ], "Origin", sceneobjects.OriginSection.SECTION_ID);
 
-                            args.activeEditor.getUndoManager().add(
-                                new sceneobjects.SimpleOperation(
-                                    args.activeEditor as SceneEditor,
-                                    objects,
-                                    originProperty,
-                                    {
-                                        x: data.x,
-                                        y: data.y
-                                    }));
+                            if (unlocked) {
+
+                                editor.getUndoManager().add(
+                                    new sceneobjects.SimpleOperation(
+                                        args.activeEditor as SceneEditor,
+                                        objects,
+                                        originProperty,
+                                        {
+                                            x: data.x,
+                                            y: data.y
+                                        }));
+                            }
                         }
                     },
                 });
