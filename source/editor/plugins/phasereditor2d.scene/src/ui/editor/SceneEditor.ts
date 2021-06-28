@@ -79,6 +79,45 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
+        async confirmUnlockProperty(props: Array<sceneobjects.IProperty<any>>, propLabel: string, sectionId: string): Promise<boolean> {
+
+            const lockedObjects = this.getSelectedGameObjects().filter(obj => {
+
+                for (const prop of props) {
+
+                    if (!obj.getEditorSupport().isUnlockedProperty(prop)) {
+
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
+
+            if (lockedObjects.length > 0) {
+
+                return new Promise((resolve, _) => {
+
+                    controls.dialogs.ConfirmDialog.show(
+                        `The ${propLabel} property is locked in ${lockedObjects.length} objects. Do you want to unlock it?`, "Unlock")
+                        .then(ok => {
+
+                            if (ok) {
+
+                                this.getUndoManager()
+                                    .add(new sceneobjects.PropertyUnlockOperation(this, lockedObjects, props, true));
+
+                                this.updateInspectorViewSection(sectionId);
+                            }
+
+                            resolve(ok);
+                        });
+                });
+            }
+
+            return true;
+        }
+
         openSourceFileInEditor(): void {
 
             const lang = this._scene.getSettings().compilerOutputLanguage;

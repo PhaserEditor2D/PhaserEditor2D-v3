@@ -1319,7 +1319,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         return sel.length > 0;
                     },
-                    executeFunc: e => {
+                    executeFunc: async (e) => {
 
                         let visible = false;
 
@@ -1338,9 +1338,15 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const editor = e.activeEditor as ui.editor.SceneEditor;
 
-                        editor.getUndoManager().add(
-                            new sceneobjects.SimpleOperation(
-                                editor, sel, sceneobjects.VisibleComponent.visible, !visible));
+                        const unlocked = await editor.confirmUnlockProperty([sceneobjects.VisibleComponent.visible],
+                            "Visible", sceneobjects.VisibleSection.SECTION_ID);
+
+                        if (unlocked) {
+
+                            editor.getUndoManager().add(
+                                new sceneobjects.SimpleOperation(
+                                    editor, sel, sceneobjects.VisibleComponent.visible, !visible));
+                        }
                     }
                 },
                 keys: {

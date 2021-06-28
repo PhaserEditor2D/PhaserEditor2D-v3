@@ -12,6 +12,7 @@
 * Updates Monaco Editor to v0.25.2.
 * Scene Editor: Select Children command.
 * Scene Editor: Layout actions: Align, Align To Border, Grid.
+* Scene Editor: Toggle Visibility command auto unlock prefab's visible property.
 
 ## v3.14.0 - May 29, 2021
 
