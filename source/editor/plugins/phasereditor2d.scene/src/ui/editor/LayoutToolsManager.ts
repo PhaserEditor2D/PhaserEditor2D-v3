@@ -79,7 +79,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._pane = pane;
 
-            this.setPaneVisible(window.localStorage.getItem("phasereditor2d.scene.ui.editor.layoutPaneVisible") === "true");
+            {
+                const item = window.localStorage.getItem("phasereditor2d.scene.ui.editor.layoutPaneVisible");
+
+                this.setPaneVisible(item !== "false");
+            }
         }
 
         private clearParameters() {
