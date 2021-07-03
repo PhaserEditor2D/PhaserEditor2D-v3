@@ -59,7 +59,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
                 });
             }
 
-            this.createNumberProperty(comp, "frameRate", "Frame Rate", 24);
+            this.createNumberProperty(comp, "frameRate", "Frame Rate", 24, false);
 
             this.createNumberProperty(comp, "delay", "Delay", 0);
 
@@ -96,7 +96,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
             })
         }
 
-        private createNumberProperty(parent: HTMLElement, field: string, labelText: string, defValue: number) {
+        private createNumberProperty(parent: HTMLElement, field: string, labelText: string, defValue: number, integer = true) {
 
             this.createLabel(parent, labelText, this.help(field));
 
@@ -104,7 +104,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
             text.addEventListener("change", e => {
 
-                let value = Number.parseInt(text.value, 10);
+                let value = integer ? Number.parseInt(text.value, 10) : Number.parseFloat(text.value);
 
                 if (isNaN(value)) {
 

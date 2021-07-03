@@ -6,6 +6,7 @@
 
 * Catches project resources preloader errors.
 * [#127](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/127) Fixed: the scroll height is wrong when a section is opened by default.
+* Animations editor: allows setting a float value to the `frameRate`.
 
 ### Added
 
