@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         label: string;
         tooltip: string;
         type: UserPropertyType<any>;
+        generateCode: boolean;
     }
 
     export declare type TComponentPropertyBuilder = (userProp: UserProperty) => IProperty<any>;
@@ -62,12 +63,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._info.defValue;
         }
 
+        isGenerateCode() {
+
+            return this._info.generateCode;
+        }
+
         writeJSON(data: any) {
 
             data.name = this._info.name;
             data.label = this._info.label;
             data.tooltip = this._info.tooltip;
             data.defValue = this._info.defValue;
+            data.generateCode = this._info.generateCode;
             data.type = {};
 
             this._info.type.writeJSON(data.type);
@@ -85,6 +92,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 label: data.label,
                 tooltip: data.tooltip,
                 defValue: data.defValue,
+                generateCode: data.generateCode === undefined ? true : data.generateCode,
                 type: propType
             };
 
@@ -94,9 +102,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        buildDeclarationsCode() {
+        buildDeclarationsCode(): core.code.MemberDeclCodeDOM[] {
 
-            return this.getType().buildDeclarePropertyCodeDOM(this, this._info.defValue);
+            if (this.isGenerateCode()) {
+
+                return this.getType().buildDeclarePropertyCodeDOM(this, this._info.defValue);
+            }
+
+            return [];
         }
     }
 }

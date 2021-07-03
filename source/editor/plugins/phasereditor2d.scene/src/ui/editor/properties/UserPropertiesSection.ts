@@ -113,6 +113,23 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                         propEditor.update();
                     }
+
+                    {
+
+                        const check = this.createCheckbox(propPane,
+                            this.createLabel(propPane, "Generate Code", "Generate the property declaration's code."));
+
+                        check.checked = prop.isGenerateCode();
+
+                        check.addEventListener("change", e => {
+
+                            this.runOperation(() => {
+
+                                prop.getInfo().generateCode = check.checked;
+
+                            }, false);
+                        });
+                    }
                 }
             });
         }
