@@ -117,15 +117,15 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     {
 
                         const check = this.createCheckbox(propPane,
-                            this.createLabel(propPane, "Generate Code", "Generate the property declaration's code."));
+                            this.createLabel(propPane, "Custom Definition", "The compiler delegates the property's definition to the user."));
 
-                        check.checked = prop.isGenerateCode();
+                        check.checked = prop.isCustomDefinition();
 
                         check.addEventListener("change", e => {
 
                             this.runOperation(() => {
 
-                                prop.getInfo().generateCode = check.checked;
+                                prop.getInfo().customDefinition = check.checked;
 
                             }, false);
                         });

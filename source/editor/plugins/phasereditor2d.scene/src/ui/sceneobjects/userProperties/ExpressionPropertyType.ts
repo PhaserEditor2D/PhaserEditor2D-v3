@@ -70,7 +70,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             };
         }
 
-        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.MemberDeclCodeDOM[] {
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM[] {
 
             return [this.buildExpressionFieldCode(prop, this._expressionType, value)];
         }

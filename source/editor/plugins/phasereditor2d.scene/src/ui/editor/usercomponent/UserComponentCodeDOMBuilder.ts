@@ -132,7 +132,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             // gameObject field
 
             const gameObjDeclDom = new code.FieldDeclCodeDOM("gameObject", this._component.getGameObjectType());
-            gameObjDeclDom.setInitInConstructor(true);
             clsDom.getBody().push(gameObjDeclDom);
 
             // props fields
@@ -154,7 +153,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     if (elem instanceof code.FieldDeclCodeDOM) {
 
-                        this.addImportForType(elem.getType());
+                        if (!elem.isInitInConstructor()) {
+
+                            this.addImportForType(elem.getType());
+                        }
                     }
                 }
             }

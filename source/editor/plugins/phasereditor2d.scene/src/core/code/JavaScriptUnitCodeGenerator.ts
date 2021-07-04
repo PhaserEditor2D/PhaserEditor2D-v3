@@ -86,6 +86,22 @@ namespace phasereditor2d.scene.core.code {
 
                 if (memberDecl instanceof MethodDeclCodeDOM) {
 
+                    if (memberDecl.getName() === "constructor") {
+
+                        for (const fieldDecl of body) {
+
+                            if (fieldDecl instanceof FieldDeclCodeDOM) {
+
+                                if (fieldDecl.isInitInConstructor()) {
+
+                                    const assign = new AssignPropertyCodeDOM(fieldDecl.getName(), "this");
+                                    assign.value(fieldDecl.getInitialValueExpr());
+                                    memberDecl.getBody().push(assign);
+                                }
+                            }
+                        }
+                    }
+
                     this.generateMethodDecl(clsDecl, memberDecl, false);
 
                     this.line();
@@ -98,7 +114,10 @@ namespace phasereditor2d.scene.core.code {
 
                 if (memberDecl instanceof FieldDeclCodeDOM) {
 
-                    this.generateFieldDecl(memberDecl);
+                    if (!memberDecl.isInitInConstructor()) {
+
+                        this.generateFieldDecl(memberDecl);
+                    }
                 }
             }
 

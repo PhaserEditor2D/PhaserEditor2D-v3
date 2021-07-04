@@ -20,9 +20,7 @@ namespace phasereditor2d.scene.core.code {
 
             } else {
 
-                const undefinedType = fieldDecl.isInitInConstructor()? "" : "|undefined";
-
-                this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()}${undefinedType};`);
+                this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()};`);
             }
         }
 
