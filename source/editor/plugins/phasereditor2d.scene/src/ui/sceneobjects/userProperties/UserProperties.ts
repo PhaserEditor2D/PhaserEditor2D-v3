@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 label: "Property " + i,
                 name: "property" + i,
                 tooltip: "Property " + i,
-                customDefinition: true,
+                customDefinition: false,
                 type: propType
             });
 
