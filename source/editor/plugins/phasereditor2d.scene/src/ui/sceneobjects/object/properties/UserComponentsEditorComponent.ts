@@ -249,6 +249,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     args.unit.addImport(compName, filePath);
                 }
             }
+
             const prefabUserComponents = this.getPrefabUserComponents();
 
             for (const prefabUserComps of prefabUserComponents) {
@@ -286,17 +287,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const isScenePrefabObject = this.getObject().getEditorSupport().isScenePrefabObject();
             const hasUserComponents = this._compNames.length > 0 || prefabUserComponents.length > 0;
-            const emitAwake = !isScenePrefabObject && hasUserComponents;
+            const emitComponentsAwake = !isScenePrefabObject && hasUserComponents;
 
-
-            if (allPropsStart !== args.lazyStatements.length || emitAwake) {
+            if (allPropsStart !== args.lazyStatements.length || emitComponentsAwake) {
 
                 args.lazyStatements.splice(allPropsStart, 0,
                     new code.RawCodeDOM(""),
                     new code.RawCodeDOM(`// ${args.objectVarName} (components)`));
             }
 
-            if (emitAwake) {
+            if (emitComponentsAwake) {
 
                 const stmt = new code.MethodCallCodeDOM("emit", args.objectVarName);
                 stmt.argLiteral("components-awake");
