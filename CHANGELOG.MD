@@ -14,6 +14,8 @@
 * Scene Editor: Select Children command.
 * Scene Editor: Layout actions: Align, Align To Border, Grid.
 * Scene Editor: Toggle Visibility command auto unlock prefab's visible property.
+* [#132](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/132) Scene Editor: custom property definition.
+* Scene compiler: emits the "prefab-awake" event in prefab instances.
 
 ## v3.14.0 - May 29, 2021
 
