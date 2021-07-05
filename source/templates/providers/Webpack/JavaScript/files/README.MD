@@ -44,6 +44,24 @@ The `/static` folder contains the assets (images, audio, atlases) used by the ga
 
 By default, Phaser Editor 2D uses the project's root as the start path for the assets. You can change it by creating an empty `publicroot` file. That is the case of the `/static/publicroot` file, which allows adding files to the Asset Pack file (`/static/assets/asset-pack.json`) using correct URLs.
 
+### Asset Pack content hash
+
+Webpack is configured to include the content hash of a file defined in an asset pack editor:
+
+* For loading a pack file in code, import it as a resource:
+    ```javascript
+    import assetPackUrl from "../static/assets/asset-pack.json";
+    ...
+    this.load.pack("pack1", assetPackUrl);
+    ```
+    Webpack will add the `asset-pack.json` file into the distribution files, in the folder `dist/asset-packs/`.
+
+* Because Webpack automatically imports the pack files, those are excluded in the **CopyPlugin** configuration. By convention, name the pack files like this `[any name]-pack.json`.
+
+* The NPM `build` script calls the `phaser-asset-pack-hashing` tool. It parses all pack files in the `dist/` folder and transform the internal URL, adding the content-hash to the query string. It also parses files referenced by the pack. For example, a multi-atlas file is parsed and the name of the image's file will be changed to use a content-hash.
+
+Learn more about the [phaser-asset-pack-hashing](https://www.npmjs.com/package/phaser-asset-pack-hashing) tool.
+
 ### Coding
 
 The `/src` folder contains all the JavaScript code, including the scene and user component files, in addition to the Phaser Editor 2D compilers output.

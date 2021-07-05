@@ -20,13 +20,17 @@ module.exports = {
                         plugins: ["@babel/plugin-proposal-class-properties"]
                     }
                 }
+            },
+            {
+                test: /\.json/,
+                type: "asset/resource"
             }
         ]
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
         filename: "[name]-[contenthash].bundle.js",
-
+        assetModuleFilename: "asset-packs/[name]-[hash][ext][query]"
     },
     devServer: {
         historyApiFallback: true,
@@ -46,7 +50,8 @@ module.exports = {
                 {
                     from: "static",
                     globOptions: {
-                        ignore: ["**/publicroot"]
+                        // asset pack files are imported in code as modules
+                        ignore: ["**/publicroot", "**/*-pack.json"]
                     }
                 }
             ]
