@@ -98,6 +98,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             // maxLines
             this.createPropertyFloatRow(comp, TextComponent.maxLines).style.gridColumn = "3 / span 4";
+
+            // wordWrapWidth
+            this.createPropertyFloatRow(comp, TextComponent.wordWrapWidth).style.gridColumn = "3 / span 4";
+
+            // useAdvancedWrap
+            this.createPropertyBoolean(comp, TextComponent.useAdvancedWrap)
+                .checkElement.style.gridColumn = "3 / span 4";
         }
 
         canEdit(obj: any, n: number): boolean {

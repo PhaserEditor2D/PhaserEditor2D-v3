@@ -252,6 +252,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setValue: (obj, value) => obj.setMaxLines(value)
         };
 
+        static wordWrapWidth: IProperty<Text> = {
+            name: "wordWrapWidth",
+            label: "Word Wrap Width",
+            tooltip: "phaser:Phaser.GameObjects.Text.setWordWrapWidth(width)",
+            defValue: 0,
+            getValue: obj => obj.style.wordWrapWidth,
+            setValue: (obj, value) => obj.setWordWrapWidth(value, obj.style.wordWrapUseAdvanced === true)
+        }
+
+        static useAdvancedWrap: IProperty<Text> = {
+            name: "wordWrapUseAdvanced",
+            label: "Advanced Wrap",
+            tooltip: "phaser:Phaser.GameObjects.Text.setWordWrapWidth(useAdvancedWrap)",
+            defValue: false,
+            getValue: obj => obj.style.wordWrapUseAdvanced || false,
+            setValue: (obj, value) => obj.setWordWrapWidth(obj.style.wordWrapWidth || 0, value)
+        }
+
         constructor(obj: Text) {
             super(obj, [
                 TextComponent.fixedWidth,
@@ -277,7 +295,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 TextComponent.shadowBlur,
                 TextComponent.baselineX,
                 TextComponent.baselineY,
-                TextComponent.maxLines
+                TextComponent.maxLines,
+                TextComponent.wordWrapWidth,
+                TextComponent.useAdvancedWrap
             ]);
         }
 
@@ -426,6 +446,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const dom = new code.MethodCallCodeDOM("setLineSpacing", args.objectVarName);
 
                     dom.arg(value);
+
+                    args.statements.push(dom);
+                }
+            }
+
+            {
+                // wordWrapWidth
+
+                const widthProp = TextComponent.wordWrapWidth;
+                const advancedProp = TextComponent.useAdvancedWrap;
+
+                const widthValue = widthProp.getValue(obj);
+                const advancedValue = advancedProp.getValue(obj);
+
+                const dom = new code.MethodCallCodeDOM("setWordWrapWidth", args.objectVarName);
+                let addDom = false;
+
+                if (support.isUnlockedProperty(widthProp)) {
+
+                    addDom = true;
+                    dom.arg(widthValue);
+
+                } else {
+
+                    dom.arg(args.objectVarName + ".style.wordWrapWidth");
+                }
+
+                if (support.isUnlockedProperty(advancedProp)) {
+
+                    addDom = true;
+                    dom.arg(advancedValue);
+                }
+
+                if (addDom) {
 
                     args.statements.push(dom);
                 }
