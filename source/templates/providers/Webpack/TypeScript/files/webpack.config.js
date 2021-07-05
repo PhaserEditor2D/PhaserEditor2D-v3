@@ -10,7 +10,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
-        filename: "[name]-[contenthash].bundle.js"
+        filename: "[name]-[contenthash].bundle.js",
+        assetModuleFilename: "asset-packs/[name]-[hash][ext][query]"
     },
     module: {
         rules: [
@@ -19,6 +20,10 @@ module.exports = {
                 use: "ts-loader",
                 exclude: /node_modules/,
             },
+            {
+                test: /\.json/,
+                type: "asset/resource"
+            }
         ],
     },
     resolve: {
@@ -42,7 +47,8 @@ module.exports = {
                 {
                     from: "static",
                     globOptions: {
-                        ignore: ["**/publicroot"]
+                        // asset pack files are imported in code as modules
+                        ignore: ["**/publicroot", "**/*-pack.json"]
                     }
                 }
             ]
