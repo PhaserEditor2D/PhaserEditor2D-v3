@@ -150,6 +150,8 @@ utils.makeHelpFile([
     "Phaser.GameObjects.TextStyle.baselineX",
     "Phaser.GameObjects.TextStyle.baselineY",
     "Phaser.GameObjects.Text.setMaxLines",
+    "Phaser.GameObjects.Text.setWordWrapWidth(useAdvancedWrap)",
+    "Phaser.GameObjects.Text.setWordWrapWidth(width)",
 
     "Phaser.GameObjects.BitmapText",
     "Phaser.GameObjects.BitmapText.setFont",
