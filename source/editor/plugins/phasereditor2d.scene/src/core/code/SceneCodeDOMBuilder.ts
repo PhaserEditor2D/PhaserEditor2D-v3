@@ -166,7 +166,9 @@ namespace phasereditor2d.scene.core.code {
 
                 .getProperties()
 
-                .flatMap(prop => prop.buildDeclarationsCode());
+                .filter(prop => !prop.isCustomDefinition())
+
+                .flatMap(prop => prop.buildFieldDeclarationCode());
 
             fields.push(...decls);
         }
@@ -291,9 +293,38 @@ namespace phasereditor2d.scene.core.code {
 
             body.push(...lazyStatements);
 
+            this.buildCustomPropertiesInit(body);
+
             this.addFieldInitCode(body);
 
             return ctrDecl;
+        }
+
+        private buildCustomPropertiesInit(body: code.CodeDOM[]) {
+
+            const userProps = this._scene.getPrefabUserProperties();
+
+            const assignDomList = userProps.getProperties()
+
+                .filter(prop => prop.isCustomDefinition())
+
+                .map(prop => {
+
+                    const fieldDecl = prop.buildFieldDeclarationCode();
+
+                    const assignDom = new code.AssignPropertyCodeDOM(fieldDecl.getName(), "this");
+                    assignDom.value(fieldDecl.getInitialValueExpr());
+
+                    return assignDom;
+                });
+
+            if (assignDomList.length > 0) {
+
+                body.push(new code.RawCodeDOM(""));
+                body.push(new code.RawCodeDOM("// custom definition props"));
+            }
+
+            body.push(...assignDomList);
         }
 
         private buildCreateMethod() {

@@ -14,7 +14,8 @@
             "label": "dino",
             "scope": "CLASS",
             "components": [
-                "PushOnClick"
+                "PushOnClick",
+                "Tint"
             ],
             "PushOnClick.pushScale": 0.8,
             "texture": {
@@ -39,13 +40,14 @@
             "prefabId": "280fd0ee-2787-46a5-8832-a38b3ef81d08",
             "id": "1758e6d4-21b2-4ece-8338-193c5d0b73e2",
             "unlock": [
-                "rotating",
-                "origin"
+                "rotating"
             ],
             "label": "dino_1",
             "rotating": true,
-            "origin": "bottom",
-            "components": [],
+            "components": [
+                "Tint"
+            ],
+            "Tint.tint": "blue",
             "x": 186,
             "y": 160
         },

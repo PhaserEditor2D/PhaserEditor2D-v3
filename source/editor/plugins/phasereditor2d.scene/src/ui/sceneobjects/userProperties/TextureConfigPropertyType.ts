@@ -67,9 +67,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp.buildSetObjectPropertyCodeDOM_StringVerbatimProperty(args, userProp.getComponentProperty());
         }
 
-        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM[] {
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM {
 
-            return [this.buildExpressionFieldCode(prop, "{key:string,frame?:string|number}", value)];
+            return this.buildExpressionFieldCode(prop, "{key:string,frame?:string|number}", value);
         }
 
         formatKeyFrame(key: string, frame: string | number) {

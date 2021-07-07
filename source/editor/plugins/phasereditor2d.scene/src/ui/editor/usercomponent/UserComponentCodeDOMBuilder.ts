@@ -96,13 +96,42 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 : `gameObject["__${clsDom.getName()}"] = this;`);
             body.push(setCompDom);
 
+            this.buildCustomPropertiesInit(body);
+
             clsDom.getBody().push(new code.UserSectionCodeDOM(
                 "/* START-USER-CODE */", "/* END-USER-CODE */", "\n\n\t// Write your code here.\n\n\t"));
 
             clsDom.getBody().push(ctrDeclDom);
         }
 
-        addImportForType(type: string) {
+        private buildCustomPropertiesInit(body: code.CodeDOM[]) {
+
+            const userProps = this._component.getUserProperties();
+
+            const assignDomList = userProps.getProperties()
+
+                .filter(prop => prop.isCustomDefinition())
+
+                .map(prop => {
+
+                    const fieldDecl = prop.buildFieldDeclarationCode();
+
+                    const assignDom = new code.AssignPropertyCodeDOM(fieldDecl.getName(), "this");
+                    assignDom.value(fieldDecl.getInitialValueExpr());
+
+                    return assignDom;
+                });
+
+            if (assignDomList.length > 0) {
+
+                body.push(new code.RawCodeDOM(""));
+                body.push(new code.RawCodeDOM("// custom definition props"));
+            }
+
+            body.push(...assignDomList);
+        }
+
+        private addImportForType(type: string) {
 
             if (!this._model.autoImport) {
 
@@ -141,9 +170,12 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             for (const prop of userProps.getProperties()) {
 
-                const decls = prop.buildDeclarationsCode();
+                if (!prop.isCustomDefinition()) {
 
-                clsDom.getBody().push(...decls);
+                    const fieldDecl = prop.buildFieldDeclarationCode();
+
+                    clsDom.getBody().push(fieldDecl);
+                }
             }
 
             if (this.isTypeScriptOutput()) {
@@ -154,10 +186,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     if (elem instanceof code.FieldDeclCodeDOM) {
 
-                        if (!elem.isInitInConstructor()) {
-
-                            this.addImportForType(elem.getType());
-                        }
+                        this.addImportForType(elem.getType());
                     }
                 }
             }

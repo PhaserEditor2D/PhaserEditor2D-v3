@@ -96,11 +96,45 @@ class PushOnClick extends UserComponent {
 // You can write more code here
 // You can write more code here
 /* START OF COMPILED CODE */
+class Tint extends UserComponent {
+    constructor(gameObject) {
+        super(gameObject);
+        this.gameObject = gameObject;
+        gameObject["__Tint"] = this;
+        // custom definition props
+        this.tint = "red";
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    static getComponent(gameObject) {
+        return gameObject["__Tint"];
+    }
+    /* START-USER-CODE */
+    set tint(tint) {
+        switch (tint) {
+            case "red":
+                this.gameObject.setTint(0xff0000);
+                break;
+            case "green":
+                this.gameObject.setTint(0x00ff00);
+                break;
+            case "blue":
+                this.gameObject.setTint(0x0000ff);
+                break;
+        }
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
 class DinoPrefab extends Phaser.GameObjects.Image {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture || "dino", frame);
         this.rotating = false;
-        this.origin = "center";
+        // custom definition props
+        this.origin = "top";
         /* START-USER-CTR-CODE */
         this.once("prefab-awake", () => {
             if (this.rotating) {
@@ -143,11 +177,17 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
         dinoLeft.emit("prefab-awake");
         // dinoRight (prefab fields)
         dinoRight.emit("prefab-awake");
+        // custom definition props
+        this.ghost = true;
         this.dinoLeft = dinoLeft;
         this.dinoRight = dinoRight;
         /* START-USER-CTR-CODE */
         // Write your code here.
         /* END-USER-CTR-CODE */
+    }
+    /* START-USER-CODE */
+    set ghost(ghost) {
+        this.alpha = ghost ? 0.5 : 1;
     }
 }
 /* END OF COMPILED CODE */
@@ -179,11 +219,15 @@ class Level extends Phaser.Scene {
         // dino (components)
         const dinoPushOnClick = new PushOnClick(dino);
         dinoPushOnClick.pushScale = 0.8;
+        new Tint(dino);
         dino.emit("components-awake");
         // dino_1 (prefab fields)
         dino_1.rotating = true;
-        dino_1.origin = "bottom";
         dino_1.emit("prefab-awake");
+        // dino_1 (components)
+        const dino_1Tint = new Tint(dino_1);
+        dino_1Tint.tint = "blue";
+        dino_1.emit("components-awake");
         // container_1 (prefab fields)
         container_1.emit("prefab-awake");
         this.dino = dino;

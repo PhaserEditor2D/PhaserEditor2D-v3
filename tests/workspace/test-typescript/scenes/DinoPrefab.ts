@@ -8,7 +8,8 @@ class DinoPrefab extends Phaser.GameObjects.Image {
 	constructor(scene: Phaser.Scene, x: number, y: number, texture?: string, frame?: number | string) {
 		super(scene, x, y, texture || "dino", frame);
 		
-		this.origin = "center";
+		// custom definition props
+		this.origin = "top";
 		
 		/* START-USER-CTR-CODE */
 

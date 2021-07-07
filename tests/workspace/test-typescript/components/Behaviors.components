@@ -16,6 +16,28 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Tint",
+            "baseClass": "UserComponent",
+            "gameObjectType": "Phaser.GameObjects.Image",
+            "properties": [
+                {
+                    "name": "tint",
+                    "label": "Tint",
+                    "tooltip": "Tint",
+                    "defValue": "red",
+                    "customDefinition": true,
+                    "type": {
+                        "id": "option",
+                        "options": [
+                            "red",
+                            "green",
+                            "blue"
+                        ]
+                    }
+                }
+            ]
         }
     ],
     "meta": {

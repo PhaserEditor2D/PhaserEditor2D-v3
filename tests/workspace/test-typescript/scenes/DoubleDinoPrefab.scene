@@ -38,5 +38,17 @@
         "app": "Phaser Editor 2D - Scene Editor",
         "url": "https://phasereditor2d.com",
         "contentType": "phasereditor2d.core.scene.SceneContentType"
-    }
+    },
+    "prefabProperties": [
+        {
+            "name": "ghost",
+            "label": "Ghost",
+            "tooltip": "Is it transparent?",
+            "defValue": true,
+            "customDefinition": true,
+            "type": {
+                "id": "boolean"
+            }
+        }
+    ]
 }

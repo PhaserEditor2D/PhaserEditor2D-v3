@@ -5,8 +5,6 @@ namespace phasereditor2d.scene.core.code {
         private _type: string;
         private _publicScope: boolean;
         private _initialValueExpr: string;
-        private _initInConstructor: boolean;
-        private _classField: boolean;
         private _allowUndefined: boolean;
 
         constructor(name: string, type: string, publicScope: boolean = false) {
@@ -15,8 +13,6 @@ namespace phasereditor2d.scene.core.code {
             this._type = type;
             this._publicScope = publicScope;
             this._initialValueExpr = null;
-            this._initInConstructor = false;
-            this._classField = true;
             this._allowUndefined = false;
         }
 
@@ -28,16 +24,6 @@ namespace phasereditor2d.scene.core.code {
         setAllowUndefined(allowUndefined: boolean) {
 
             this._allowUndefined = allowUndefined;
-        }
-
-        setInitInConstructor(initInConstructor: boolean) {
-
-            this._initInConstructor = initInConstructor;
-        }
-
-        isInitInConstructor() {
-
-            return this._initInConstructor;
         }
 
         isInitialized() {

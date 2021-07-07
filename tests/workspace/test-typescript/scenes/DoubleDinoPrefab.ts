@@ -22,6 +22,9 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
 		// dinoRight (prefab fields)
 		dinoRight.emit("prefab-awake");
 		
+		// custom definition props
+		this.ghost = true;
+		
 		this.dinoLeft = dinoLeft;
 		this.dinoRight = dinoRight;
 		
@@ -35,7 +38,10 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
 	
 	/* START-USER-CODE */
 
-	// Write your code here.
+	set ghost(ghost: boolean) {
+
+		this.alpha = ghost ? 0.5 : 1;
+	}
 
 	/* END-USER-CODE */
 }

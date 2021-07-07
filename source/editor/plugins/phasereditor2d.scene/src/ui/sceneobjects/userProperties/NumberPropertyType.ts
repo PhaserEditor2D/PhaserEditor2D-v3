@@ -26,9 +26,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp.buildSetObjectPropertyCodeDOM_FloatProperty(args, userProp.getComponentProperty());
         }
 
-        buildDeclarePropertyCodeDOM(prop: UserProperty, value: number): code.FieldDeclCodeDOM[] {
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: number): code.FieldDeclCodeDOM {
 
-            return [this.buildNumberFieldCode(prop, value)];
+            return this.buildNumberFieldCode(prop, value);
         }
 
         renderValue(value: number): string {

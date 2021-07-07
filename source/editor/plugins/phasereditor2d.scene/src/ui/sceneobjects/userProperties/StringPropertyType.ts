@@ -15,9 +15,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             section.createPropertyStringDialogRow(parent, userProp.getComponentProperty(), lockIcon);
         }
 
-        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): code.FieldDeclCodeDOM[] {
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): code.FieldDeclCodeDOM {
 
-            return [this.buildStringFieldCode(prop, value)];
+            return this.buildStringFieldCode(prop, value);
         }
 
         buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {

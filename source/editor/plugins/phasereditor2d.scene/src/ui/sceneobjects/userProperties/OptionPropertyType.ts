@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp.buildSetObjectPropertyCodeDOM_StringProperty(args, userProp.getComponentProperty());
         }
 
-        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): code.FieldDeclCodeDOM[] {
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): code.FieldDeclCodeDOM {
 
             const decl = this.buildStringFieldCode(prop, value);
 
@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             decl.setType(typeName);
 
-            return [decl];
+            return decl;
         }
 
         getOptions() {

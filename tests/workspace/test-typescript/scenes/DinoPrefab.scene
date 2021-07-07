@@ -41,7 +41,7 @@
             "name": "origin",
             "label": "Origin",
             "tooltip": "Origin",
-            "defValue": "center",
+            "defValue": "top",
             "customDefinition": true,
             "type": {
                 "id": "option",

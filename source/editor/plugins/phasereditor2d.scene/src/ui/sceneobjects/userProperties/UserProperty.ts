@@ -102,19 +102,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        buildDeclarationsCode(): core.code.MemberDeclCodeDOM[] {
+        buildFieldDeclarationCode(): core.code.FieldDeclCodeDOM {
 
-            const fieldDecls = this.getType().buildDeclarePropertyCodeDOM(this, this._info.defValue);
-
-            if (this.isCustomDefinition()) {
-
-                for (const decl of fieldDecls) {
-
-                    decl.setInitInConstructor(true);
-                }
-            }
-
-            return fieldDecls;
+            return this.getType().buildDeclarePropertyCodeDOM(this, this._info.defValue);
         }
     }
 }

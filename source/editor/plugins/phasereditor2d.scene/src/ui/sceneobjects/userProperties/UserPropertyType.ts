@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor;
 
-        abstract buildDeclarePropertyCodeDOM(prop: UserProperty, value: TValue): code.FieldDeclCodeDOM[];
+        abstract buildDeclarePropertyCodeDOM(prop: UserProperty, value: TValue): code.FieldDeclCodeDOM;
 
         abstract buildSetObjectPropertyCodeDOM(
             comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void;

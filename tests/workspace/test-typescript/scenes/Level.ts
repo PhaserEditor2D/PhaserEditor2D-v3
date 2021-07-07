@@ -36,12 +36,17 @@ class Level extends Phaser.Scene {
 		// dino (components)
 		const dinoPushOnClick = new PushOnClick(dino);
 		dinoPushOnClick.pushScale = 0.8;
+		new Tint(dino);
 		dino.emit("components-awake");
 		
 		// dino_1 (prefab fields)
 		dino_1.rotating = true;
-		dino_1.origin = "bottom";
 		dino_1.emit("prefab-awake");
+		
+		// dino_1 (components)
+		const dino_1Tint = new Tint(dino_1);
+		dino_1Tint.tint = "blue";
+		dino_1.emit("components-awake");
 		
 		// container_1 (prefab fields)
 		container_1.emit("prefab-awake");

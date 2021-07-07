@@ -26,9 +26,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp.buildSetObjectPropertyCodeDOM_BooleanProperty(args, userProp.getComponentProperty());
         }
 
-        buildDeclarePropertyCodeDOM(prop: UserProperty, value: boolean): code.FieldDeclCodeDOM[] {
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: boolean): code.FieldDeclCodeDOM {
 
-            return [this.buildBooleanFieldCode(prop, value)];
+            return this.buildBooleanFieldCode(prop, value);
         }
 
         renderValue(value: boolean): string {

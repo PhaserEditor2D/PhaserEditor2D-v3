@@ -70,9 +70,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             };
         }
 
-        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM[] {
+        buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM {
 
-            return [this.buildExpressionFieldCode(prop, this._expressionType, value)];
+            return this.buildExpressionFieldCode(prop, this._expressionType, value);
         }
 
         buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
