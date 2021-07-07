@@ -198,6 +198,7 @@ namespace phasereditor2d.scene.core.code {
                 const support = obj.getEditorSupport();
                 const isMethodScope = support.getScope() === ui.sceneobjects.ObjectScope.METHOD;
                 const isPrefabObj = this._scene.isPrefabSceneType() && this._scene.getPrefabObject() === obj;
+                const isPrefabScene = this._scene.isPrefabSceneType();
 
                 if (!isMethodScope && !isPrefabObj) {
 
@@ -210,6 +211,9 @@ namespace phasereditor2d.scene.core.code {
                     const isPublic = support.getScope() === ui.sceneobjects.ObjectScope.PUBLIC;
 
                     const field = new FieldDeclCodeDOM(varName, type, isPublic);
+                    // Allow undefined if the object is part of a scene.
+                    // In a prefab, the objects are created in the constructor
+                    field.setAllowUndefined(!isPrefabScene);
 
                     fields.push(field);
                 }

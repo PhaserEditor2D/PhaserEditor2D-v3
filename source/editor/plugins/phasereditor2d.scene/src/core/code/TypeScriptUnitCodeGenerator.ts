@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.core.code {
 
             } else {
 
-                this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()};`);
+                this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getStrictType()};`);
             }
         }
 

@@ -131,8 +131,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             // gameObject field
 
-            const gameObjDeclDom = new code.FieldDeclCodeDOM("gameObject", this._component.getGameObjectType());
-            clsDom.getBody().push(gameObjDeclDom);
+            const gameObjectFieldDecl = new code.FieldDeclCodeDOM("gameObject", this._component.getGameObjectType());
+            gameObjectFieldDecl.setAllowUndefined(false);
+            clsDom.getBody().push(gameObjectFieldDecl);
 
             // props fields
 
