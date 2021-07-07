@@ -1,0 +1,56 @@
+{
+    "id": "280fd0ee-2787-46a5-8832-a38b3ef81d08",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Image",
+            "id": "dd494496-e0c6-479b-98ed-25ff529caa6f",
+            "label": "dino_1",
+            "components": [],
+            "texture": {
+                "key": "dino"
+            },
+            "x": 408,
+            "y": 207
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    },
+    "prefabProperties": [
+        {
+            "name": "rotating",
+            "label": "Rotating",
+            "tooltip": "rotating",
+            "defValue": false,
+            "customDefinition": false,
+            "type": {
+                "id": "boolean"
+            }
+        },
+        {
+            "name": "origin",
+            "label": "Origin",
+            "tooltip": "Origin",
+            "defValue": "center",
+            "customDefinition": true,
+            "type": {
+                "id": "option",
+                "options": [
+                    "top",
+                    "center",
+                    "bottom"
+                ]
+            }
+        }
+    ]
+}
