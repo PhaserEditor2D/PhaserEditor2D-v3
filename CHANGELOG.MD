@@ -10,7 +10,7 @@
 
 ### Added
 
-* Updates Monaco Editor to v0.25.2.
+* Updates Monaco Editor to v0.25.2. Improves JavaScript worker loading.
 * Scene Editor: Select Children command.
 * Scene Editor: Layout actions: Align, Align To Border, Grid.
 * Scene Editor: Toggle Visibility command auto unlock prefab's visible property.
