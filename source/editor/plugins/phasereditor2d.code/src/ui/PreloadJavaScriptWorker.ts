@@ -9,11 +9,14 @@ namespace phasereditor2d.code.ui {
 
         async preload(monitor: colibri.ui.controls.IProgressMonitor) {
 
-            const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
+            try {
 
-            const worker = await getWorker();
+                await CodePlugin.getInstance().getJavaScriptWorker();
 
-            CodePlugin.getInstance().setJavaScriptWorker(worker);
+            } catch (e) {
+
+                console.error(e);
+            }
 
             monitor.step();
         }

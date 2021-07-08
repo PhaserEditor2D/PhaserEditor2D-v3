@@ -152,14 +152,18 @@ namespace phasereditor2d.code {
             return result;
         }
 
-        getJavaScriptWorker() {
+        async getJavaScriptWorker() {
+
+            if (this._javaScriptWorker) {
+
+                return this._javaScriptWorker;
+            }
+
+            const getWorker = await monaco.languages.typescript.getJavaScriptWorker();
+
+            this._javaScriptWorker = await getWorker();
 
             return this._javaScriptWorker;
-        }
-
-        setJavaScriptWorker(worker: monaco.languages.typescript.TypeScriptWorker) {
-
-            this._javaScriptWorker = worker;
         }
 
         static fileUri(file: io.FilePath | string) {

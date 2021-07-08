@@ -235,8 +235,10 @@ namespace colibri.ui.ide {
 
                 } catch (e) {
 
+                    console.log("Error with extension:")
+                    console.log(extension);
                     console.error(e);
-                    alert("Preload error: " + e.message);
+                    alert(`[${extension.constructor.name}] Preload error: ${(e.message || e)}`);
                 }
             }
         }

@@ -181,7 +181,7 @@ namespace phasereditor2d.code.ui.editors {
 
         private async getDocItemAtPosition(pos: monaco.IPosition) {
 
-            const worker = CodePlugin.getInstance().getJavaScriptWorker();
+            const worker = await CodePlugin.getInstance().getJavaScriptWorker();
 
             const offs = this.getMonacoEditor().getModel().getOffsetAt(pos);
 
@@ -226,8 +226,8 @@ namespace phasereditor2d.code.ui.editors {
 
                 if (model) {
 
-                    const items = await CodePlugin.getInstance().getJavaScriptWorker()
-                        .getNavigationBarItems(model.uri.toString());
+                    const worker = await CodePlugin.getInstance().getJavaScriptWorker();
+                    const items = await worker.getNavigationBarItems(model.uri.toString());
 
                     return items.filter(i => i.text !== "<global>");
                 }
