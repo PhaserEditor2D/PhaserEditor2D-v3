@@ -293,9 +293,9 @@ namespace phasereditor2d.scene.core.code {
 
             body.push(...lazyStatements);
 
-            this.buildCustomPropertiesInit(body);
-
             this.addFieldInitCode(body);
+
+            this.buildCustomPropertiesInit(body);
 
             return ctrDecl;
         }
