@@ -160,8 +160,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (sprite instanceof sceneobjects.Container) {
 
-                    let minX = Number.MAX_VALUE;
-                    let minY = Number.MAX_VALUE;
+                    let minX = Number.MAX_SAFE_INTEGER;
+                    let minY = Number.MAX_SAFE_INTEGER;
 
                     for (const obj2 of sprite.list) {
 

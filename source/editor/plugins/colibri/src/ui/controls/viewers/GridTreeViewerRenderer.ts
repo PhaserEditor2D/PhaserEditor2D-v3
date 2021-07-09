@@ -145,7 +145,7 @@ namespace colibri.ui.controls.viewers {
                 Math.floor(b.width % (viewer.getCellSize() + TREE_RENDERER_GRID_PADDING) / 2)
                 : (this._isSectionCriteria === undefined ? TREE_RENDERER_GRID_PADDING : TREE_RENDERER_GRID_PADDING * 3);
 
-            this._contentHeight = Number.MIN_VALUE;
+            this._contentHeight = Number.MIN_SAFE_INTEGER;
 
             this.paintGrid(
                 objects, treeIconList, paintItems, null, x + offset, y + TREE_RENDERER_GRID_PADDING, offset, 0, undefined, undefined);

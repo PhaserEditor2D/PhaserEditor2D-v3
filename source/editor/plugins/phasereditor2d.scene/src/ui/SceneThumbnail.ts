@@ -157,10 +157,10 @@ namespace phasereditor2d.scene.ui {
 
             const camera = this.getCamera();
 
-            let minX = Number.MAX_VALUE;
-            let minY = Number.MAX_VALUE;
-            let maxX = Number.MIN_VALUE;
-            let maxY = Number.MIN_VALUE;
+            let minX = Number.MAX_SAFE_INTEGER;
+            let minY = Number.MAX_SAFE_INTEGER;
+            let maxX = Number.MIN_SAFE_INTEGER;
+            let maxY = Number.MIN_SAFE_INTEGER;
 
             for (const obj of this.getDisplayListChildren()) {
 

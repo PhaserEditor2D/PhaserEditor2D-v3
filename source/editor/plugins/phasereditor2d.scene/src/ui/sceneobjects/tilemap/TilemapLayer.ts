@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setOrigin(0, 0);
 
             // we do this to prevent a wrong culling when the camera is scrolled and zoomed.
-            this.setCullPadding(Number.MAX_VALUE, Number.MAX_VALUE);
+            this.setCullPadding(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
 
             this._editorSupport = new TilemapLayerEditorSupport(this, scene);
         }

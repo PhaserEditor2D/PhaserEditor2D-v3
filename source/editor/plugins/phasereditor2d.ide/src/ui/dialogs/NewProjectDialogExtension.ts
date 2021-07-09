@@ -10,7 +10,7 @@ namespace phasereditor2d.ide.ui.dialogs {
                 dialogIconDescriptor: files.FilesPlugin.getInstance().getIconDescriptor(files.ICON_PROJECT)
             });
 
-            this.setPriority(Number.MAX_VALUE);
+            this.setPriority(Number.MAX_SAFE_INTEGER);
         }
 
         createDialog(args: {

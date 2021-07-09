@@ -128,8 +128,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return [];
             }
 
-            const minPoint = new Phaser.Math.Vector2(Number.MAX_VALUE, Number.MAX_VALUE);
-            const maxPoint = new Phaser.Math.Vector2(Number.MIN_VALUE, Number.MIN_VALUE);
+            const minPoint = new Phaser.Math.Vector2(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+            const maxPoint = new Phaser.Math.Vector2(Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER);
 
             const points: Phaser.Math.Vector2[] = [];
 
@@ -173,8 +173,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
-            let minX = Number.MAX_VALUE;
-            let minY = Number.MAX_VALUE;
+            let minX = Number.MAX_SAFE_INTEGER;
+            let minY = Number.MAX_SAFE_INTEGER;
 
             for (const child of container.list) {
 

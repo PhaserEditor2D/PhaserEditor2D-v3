@@ -84,7 +84,7 @@ namespace phasereditor2d.pack.core.parsers {
             }
 
             const start = startFrame < 0 ? 0 : startFrame;
-            const end = endFrame < 0 ? Number.MAX_VALUE : endFrame;
+            const end = endFrame < 0 ? Number.MAX_SAFE_INTEGER : endFrame;
 
             let i = 0;
             // let row = 0;

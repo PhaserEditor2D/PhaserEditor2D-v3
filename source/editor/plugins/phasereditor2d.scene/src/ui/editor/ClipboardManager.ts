@@ -31,8 +31,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             ClipboardManager._clipboard = [];
 
-            let minX = Number.MAX_VALUE;
-            let minY = Number.MAX_VALUE;
+            let minX = Number.MAX_SAFE_INTEGER;
+            let minY = Number.MAX_SAFE_INTEGER;
 
             const p = new Phaser.Math.Vector2();
 

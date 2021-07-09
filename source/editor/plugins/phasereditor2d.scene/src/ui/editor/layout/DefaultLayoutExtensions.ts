@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
     export function minValue(values: number[]) {
 
-        let min = Number.MAX_VALUE;
+        let min = Number.MAX_SAFE_INTEGER;
 
         for (const v of values) {
 
@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
     export function maxValue(values: number[]) {
 
-        let max = Number.MIN_VALUE;
+        let max = Number.MIN_SAFE_INTEGER;
 
         for (const v of values) {
 
@@ -285,7 +285,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 const findCloserPosition = (x: number, y: number) => {
 
                     let result: ILayoutIPosition;
-                    let min = Number.MAX_VALUE;
+                    let min = Number.MAX_SAFE_INTEGER;
 
                     for (const pos of args.positions) {
 

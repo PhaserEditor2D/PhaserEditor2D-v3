@@ -38,7 +38,7 @@ namespace colibri.ui.controls.viewers {
             const treeIconList: TreeIconInfo[] = [];
             const paintItems: PaintItem[] = [];
 
-            this._contentHeight = Number.MIN_VALUE;
+            this._contentHeight = Number.MIN_SAFE_INTEGER;
 
             this.paintItems(roots, treeIconList, paintItems, null, x, y);
 
