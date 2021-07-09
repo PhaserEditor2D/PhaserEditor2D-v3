@@ -257,7 +257,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Word Wrap Width",
             tooltip: "phaser:Phaser.GameObjects.Text.setWordWrapWidth(width)",
             defValue: 0,
-            getValue: obj => obj.style.wordWrapWidth,
+            getValue: obj => obj.style.wordWrapWidth || 0,
             setValue: (obj, value) => obj.setWordWrapWidth(value, obj.style.wordWrapUseAdvanced === true)
         }
 
@@ -463,7 +463,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const dom = new code.MethodCallCodeDOM("setWordWrapWidth", args.objectVarName);
                 let addDom = false;
 
-                if (support.isUnlockedProperty(widthProp)) {
+                if (support.isUnlockedProperty(widthProp) && widthValue !== 0) {
 
                     addDom = true;
                     dom.arg(widthValue);
@@ -473,7 +473,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     dom.arg(args.objectVarName + ".style.wordWrapWidth");
                 }
 
-                if (support.isUnlockedProperty(advancedProp)) {
+                if (support.isUnlockedProperty(advancedProp) && advancedValue) {
 
                     addDom = true;
                     dom.arg(advancedValue);

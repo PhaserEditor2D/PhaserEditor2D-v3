@@ -1,0 +1,33 @@
+{
+    "id": "a6fe1e67-f29a-4e38-8704-b4a2ced1e191",
+    "sceneType": "SCENE",
+    "settings": {
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "TextWordWrapScene",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Text",
+            "id": "bfbe4120-f555-4b9d-853a-1efef9ce72d1",
+            "label": "text",
+            "components": [],
+            "x": 114,
+            "y": 110,
+            "originX": 0,
+            "originY": 0,
+            "text": "New   long text   !",
+            "fontFamily": "arial",
+            "fontSize": "40px",
+            "wordWrapWidth": 100,
+            "wordWrapUseAdvanced": true
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

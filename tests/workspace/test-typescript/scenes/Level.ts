@@ -23,7 +23,6 @@ class Level extends Phaser.Scene {
 		text_1.setOrigin(0.5, 0);
 		text_1.text = "Phaser 3 + Phaser Editor 2D + TypeScript";
 		text_1.setStyle({"fontFamily":"arial","fontSize":"3em"});
-		text_1.setWordWrapWidth(0, false);
 		
 		// dino_1
 		const dino_1 = new DinoPrefab(this, 186, 160);
