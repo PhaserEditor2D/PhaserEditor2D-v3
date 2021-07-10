@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.15.0 - Jul 11, 2021
 
 ### Fixed
 
