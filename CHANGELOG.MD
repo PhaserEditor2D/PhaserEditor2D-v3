@@ -20,6 +20,7 @@
 ## Update
 
 * Updates Monaco Editor to v0.25.2. Improves JavaScript worker loading.
+* Updates the Webpack project template. Now it uses the [Phaser Asset Pack Hashing tool](https://github.com/PhaserEditor2D/phaser-asset-pack-hashing) for distribute the files.
 
 ## v3.14.0 - May 29, 2021
 
