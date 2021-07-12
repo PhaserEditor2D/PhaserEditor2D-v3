@@ -20,11 +20,14 @@ class TestListFieldScene extends Phaser.Scene {
 		
 		// lists
 		const list = [dino]
+		const emptyList: Array<any> = []
 		
 		this.list = list;
+		this.emptyList = emptyList;
 	}
 	
 	private list: Phaser.GameObjects.Image[]|undefined;
+	private emptyList: Array<any>|undefined;
 	
 	/* START-USER-CODE */
 	

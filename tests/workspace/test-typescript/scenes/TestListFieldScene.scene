@@ -33,6 +33,10 @@
             "objectIds": [
                 "265d24ae-28ca-444f-bc02-4dd480fbc0a5"
             ]
+        },
+        {
+            "id": "c8e01bf2-0cdb-4a22-8c2a-ac7f9e561cf1",
+            "label": "emptyList"
         }
     ]
 }

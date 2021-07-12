@@ -261,7 +261,9 @@ class TestListFieldScene extends Phaser.Scene {
         const dino = this.add.image(337, 193, "dino");
         // lists
         const list = [dino];
+        const emptyList = [];
         this.list = list;
+        this.emptyList = emptyList;
     }
     /* START-USER-CODE */
     // Write your code here
