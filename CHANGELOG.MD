@@ -3,7 +3,8 @@
 ## dev
 
 * [#134](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/134) Creating a list in the editor results in an initialized array in the generated code.
-
+* [#135](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/135) 
+Word wrap width does not behave correctly
 
 ## v3.15.0 - Jul 11, 2021
 
