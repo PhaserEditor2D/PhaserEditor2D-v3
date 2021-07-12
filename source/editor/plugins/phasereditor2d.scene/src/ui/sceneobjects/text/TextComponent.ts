@@ -258,7 +258,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             tooltip: "phaser:Phaser.GameObjects.Text.setWordWrapWidth(width)",
             defValue: 0,
             getValue: obj => obj.style.wordWrapWidth || 0,
-            setValue: (obj, value) => obj.setWordWrapWidth(value, obj.style.wordWrapUseAdvanced === true)
+            setValue: (obj, value) => {
+
+                try {
+
+                    obj.setWordWrapWidth(value, obj.style.wordWrapUseAdvanced === true)
+
+                } catch (e) {
+
+                    alert(e.message);
+                }
+            }
         }
 
         static useAdvancedWrap: IProperty<Text> = {

@@ -310,6 +310,11 @@ class TextWordWrapScene extends Phaser.Scene {
         text.text = "New   long text   !";
         text.setStyle({ "fontFamily": "arial", "fontSize": "40px" });
         text.setWordWrapWidth(100, true);
+        // text_1
+        const text_1 = this.add.text(413, 166, "", {});
+        text_1.text = "New text";
+        text_1.setStyle({ "fontSize": "80px" });
+        text_1.setWordWrapWidth(1, true);
     }
     /* START-USER-CODE */
     // Write your code here
