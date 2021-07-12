@@ -16,6 +16,9 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
 		const dinoRight = new DinoPrefab(scene, 90, 166);
 		this.add(dinoRight);
 		
+		// lists
+		const testListInPrefab = [dinoRight, dinoLeft]
+		
 		// dinoLeft (prefab fields)
 		dinoLeft.emit("prefab-awake");
 		
@@ -24,6 +27,7 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
 		
 		this.dinoLeft = dinoLeft;
 		this.dinoRight = dinoRight;
+		this.testListInPrefab = testListInPrefab;
 		
 		// custom definition props
 		this.ghost = true;
@@ -35,6 +39,7 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
 	
 	private dinoLeft: DinoPrefab;
 	private dinoRight: DinoPrefab;
+	private testListInPrefab: DinoPrefab[];
 	
 	/* START-USER-CODE */
 

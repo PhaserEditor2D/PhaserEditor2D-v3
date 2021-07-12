@@ -188,6 +188,8 @@ namespace phasereditor2d.scene.core.code {
                         listType,
                         list.getScope() === ui.sceneobjects.ObjectScope.PUBLIC);
 
+                    dom.setAllowUndefined(!this._scene.isPrefabSceneType());
+
                     fields.push(dom);
                 }
             }

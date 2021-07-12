@@ -173,14 +173,17 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
         // dinoRight
         const dinoRight = new DinoPrefab(scene, 90, 166);
         this.add(dinoRight);
+        // lists
+        const testListInPrefab = [dinoRight, dinoLeft];
         // dinoLeft (prefab fields)
         dinoLeft.emit("prefab-awake");
         // dinoRight (prefab fields)
         dinoRight.emit("prefab-awake");
-        // custom definition props
-        this.ghost = true;
         this.dinoLeft = dinoLeft;
         this.dinoRight = dinoRight;
+        this.testListInPrefab = testListInPrefab;
+        // custom definition props
+        this.ghost = true;
         /* START-USER-CTR-CODE */
         // Write your code here.
         /* END-USER-CTR-CODE */
@@ -209,7 +212,6 @@ class Level extends Phaser.Scene {
         text_1.setOrigin(0.5, 0);
         text_1.text = "Phaser 3 + Phaser Editor 2D + TypeScript";
         text_1.setStyle({ "fontFamily": "arial", "fontSize": "3em" });
-        text_1.setWordWrapWidth(0, false);
         // dino_1
         const dino_1 = new DinoPrefab(this, 186, 160);
         this.add.existing(dino_1);
@@ -247,6 +249,30 @@ class Level extends Phaser.Scene {
 // You can write more code here
 // You can write more code here
 /* START OF COMPILED CODE */
+class TestListFieldScene extends Phaser.Scene {
+    constructor() {
+        super("TestListFieldScene");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // dino
+        const dino = this.add.image(337, 193, "dino");
+        // lists
+        const list = [dino];
+        this.list = list;
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
 class TestOneObjectScene extends Phaser.Scene {
     constructor() {
         super("TestOneObjectScene");
@@ -258,6 +284,30 @@ class TestOneObjectScene extends Phaser.Scene {
         // dino
         const dino = this.add.image(482, 178, "dino");
         this.dino = dino;
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class TextWordWrapScene extends Phaser.Scene {
+    constructor() {
+        super("TextWordWrapScene");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // text
+        const text = this.add.text(114, 110, "", {});
+        text.text = "New   long text   !";
+        text.setStyle({ "fontFamily": "arial", "fontSize": "40px" });
+        text.setWordWrapWidth(100, true);
     }
     /* START-USER-CODE */
     // Write your code here
