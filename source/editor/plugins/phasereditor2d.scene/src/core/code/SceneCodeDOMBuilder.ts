@@ -404,7 +404,17 @@ namespace phasereditor2d.scene.core.code {
 
                 const varname = formatToValidVarName(list.getLabel());
 
-                const dom = new RawCodeDOM(`const ${varname} = [${objectVarnames.join(", ")}]`);
+                let dom: RawCodeDOM;
+                const isTsOutput = this._scene.getSettings().compilerOutputLanguage === "TYPE_SCRIPT";
+
+                if (isTsOutput && objectVarnames.length === 0) {
+
+                    dom = new RawCodeDOM(`const ${varname}: Array<any> = [${objectVarnames.join(", ")}]`);
+
+                } else {
+
+                    dom = new RawCodeDOM(`const ${varname} = [${objectVarnames.join(", ")}]`);
+                }
 
                 body.push(dom);
             }
