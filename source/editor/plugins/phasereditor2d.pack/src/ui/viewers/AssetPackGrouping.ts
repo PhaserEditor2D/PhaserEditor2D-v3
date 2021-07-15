@@ -35,7 +35,12 @@ namespace phasereditor2d.pack.ui.viewers {
 
             const data = item.getData();
 
-            let file = item.getFileFromAssetUrl(data.url);
+            let file: colibri.core.io.FilePath;
+
+            if (typeof data.url === "string") {
+
+                file = item.getFileFromAssetUrl(data.url);
+            }
 
             if (!file) {
 
