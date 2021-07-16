@@ -28,9 +28,14 @@ class Level extends Phaser.Scene {
 		const dino_1 = new DinoPrefab(this, 186, 160);
 		this.add.existing(dino_1);
 		
-		// container_1
-		const container_1 = new DoubleDinoPrefab(this, 666, 35);
-		this.add.existing(container_1);
+		// doubleDinoPrefab
+		const doubleDinoPrefab = new DoubleDinoPrefab(this, 666, 35);
+		this.add.existing(doubleDinoPrefab);
+		
+		// withAwakeEventPrefab
+		const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 415, 505);
+		this.add.existing(withAwakeEventPrefab);
+		withAwakeEventPrefab.setOrigin(0.5, 0.5);
 		
 		// dino (components)
 		const dinoPushOnClick = new PushOnClick(dino);
@@ -47,8 +52,11 @@ class Level extends Phaser.Scene {
 		dino_1Tint.tint = "blue";
 		dino_1.emit("components-awake");
 		
-		// container_1 (prefab fields)
-		container_1.emit("prefab-awake");
+		// doubleDinoPrefab (prefab fields)
+		doubleDinoPrefab.emit("prefab-awake");
+		
+		// withAwakeEventPrefab (prefab fields)
+		withAwakeEventPrefab.emit("prefab-awake");
 		
 		this.dino = dino;
 	}

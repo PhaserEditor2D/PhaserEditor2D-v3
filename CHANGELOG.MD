@@ -6,6 +6,7 @@
 * [#135](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/135) 
 Word wrap width does not behave correctly
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: constructor ordering of custom definition props and START-USER-CTR-CODE.
+* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: `generateAwakeEvent` and `generateAwakeHandler`.
 
 ## v3.15.0 - Jul 11, 2021
 

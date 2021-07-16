@@ -1,0 +1,34 @@
+{
+    "id": "1aa55bca-2112-4889-a67d-feb47b5d89e7",
+    "sceneType": "SCENE",
+    "settings": {
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "PrefabAwakeTest",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "prefabId": "2b173e75-6baa-445d-9ac4-91c85eef7dda",
+            "id": "fed884bd-0d94-4601-ac02-0acdfa5947cc",
+            "label": "withoutAwakeEventPrefab",
+            "components": [],
+            "x": 59,
+            "y": 79
+        },
+        {
+            "prefabId": "67273ad8-1b79-4edb-ac29-ca5abefe6603",
+            "id": "488a1ae4-6a26-4fca-9839-1ca299761ba3",
+            "label": "withAwakeEventPrefab",
+            "components": [],
+            "x": 99,
+            "y": 197
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

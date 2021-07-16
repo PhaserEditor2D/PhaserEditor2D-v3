@@ -43,6 +43,7 @@ namespace phasereditor2d.scene.core.json {
 
         private _prefabObjectId_ObjectData_Map: Map<string, IObjectData>;
         private _sceneFilename_Data_Map: Map<string, ISceneData>;
+        private _sceneFilename_Settings_Map: Map<string, SceneSettings>;
         private _prefabId_File_Map: Map<string, io.FilePath>;
         private _sceneFiles: io.FilePath[];
         private _prefabFiles: io.FilePath[];
@@ -55,6 +56,7 @@ namespace phasereditor2d.scene.core.json {
 
             this._prefabObjectId_ObjectData_Map = new Map();
             this._sceneFilename_Data_Map = new Map();
+            this._sceneFilename_Settings_Map = new Map();
             this._prefabId_File_Map = new Map();
             this._sceneFiles = [];
             this._prefabFiles = [];
@@ -178,6 +180,7 @@ namespace phasereditor2d.scene.core.json {
             const sceneIdSet = new Set<string>();
             const prefabObjectId_ObjectData_Map = new Map<string, IObjectData>();
             const sceneFilename_Data_Map = new Map<string, ISceneData>();
+            const sceneFilename_Settings_Map = new Map<string, SceneSettings>();
             const prefabId_File_Map = new Map<string, io.FilePath>();
             const sceneFiles = [];
             const prefabFiles = [];
@@ -195,6 +198,11 @@ namespace phasereditor2d.scene.core.json {
                     const data = JSON.parse(content) as ISceneData;
 
                     sceneFilename_Data_Map.set(file.getFullName(), data);
+                    {
+                        const settings = new SceneSettings();
+                        settings.readJSON(data.settings);
+                        sceneFilename_Settings_Map.set(file.getFullName(), settings);
+                    }
 
                     if (data.id) {
 
@@ -235,6 +243,7 @@ namespace phasereditor2d.scene.core.json {
 
             this._prefabObjectId_ObjectData_Map = prefabObjectId_ObjectData_Map;
             this._sceneFilename_Data_Map = sceneFilename_Data_Map;
+            this._sceneFilename_Settings_Map = sceneFilename_Settings_Map;
             this._prefabId_File_Map = prefabId_File_Map;
             this._sceneFiles = sceneFiles;
             this._prefabFiles = prefabFiles;
@@ -337,6 +346,11 @@ namespace phasereditor2d.scene.core.json {
             return this._sceneFilename_Data_Map.get(file.getFullName());
         }
 
+        getSceneSettings(file: io.FilePath) {
+
+            return this._sceneFilename_Settings_Map.get(file.getFullName());
+        }
+
         getScenePhaserType(file: io.FilePath) {
 
             const data = this.getSceneData(file);
@@ -374,12 +388,12 @@ namespace phasereditor2d.scene.core.json {
 
             console.log("Scene Finder debug:")
 
-            for(const prefab of this._prefabFiles) {
+            for (const prefab of this._prefabFiles) {
 
                 console.log("Prefab file '" + prefab.getFullName() + "'");
             }
 
-            for(const id of this._prefabObjectId_ObjectData_Map.keys()) {
+            for (const id of this._prefabObjectId_ObjectData_Map.keys()) {
 
                 console.log("Prefab data " + id + ":");
                 console.log(this._prefabObjectId_ObjectData_Map.get(id));

@@ -32,6 +32,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 new BorderSection(page),
                 new CompilerSection(page),
                 new SceneCompilerSection(page),
+                new PrefabCompilerSection(page),
                 new PrefabPropertiesSection(page),
             );
 

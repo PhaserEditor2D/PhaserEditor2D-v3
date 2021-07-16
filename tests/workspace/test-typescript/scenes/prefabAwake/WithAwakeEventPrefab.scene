@@ -1,0 +1,30 @@
+{
+    "id": "67273ad8-1b79-4edb-ac29-ca5abefe6603",
+    "sceneType": "PREFAB",
+    "settings": {
+        "generateAwakeHandler": true,
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Text",
+            "id": "3f5cf790-f9d4-44f1-a5c9-d114fe9d7945",
+            "label": "text",
+            "components": [],
+            "x": 276.5,
+            "y": 19,
+            "text": "Prefab with awake event",
+            "fontSize": "40px",
+            "backgroundColor": "#db68f7ff"
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}
