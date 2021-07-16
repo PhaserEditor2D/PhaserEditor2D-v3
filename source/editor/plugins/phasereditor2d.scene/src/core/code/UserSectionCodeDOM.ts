@@ -1,13 +1,13 @@
 namespace phasereditor2d.scene.core.code {
 
-    export class UserSectionCodeDOM extends MemberDeclCodeDOM {
+    export class UserSectionCodeDOM extends CodeDOM {
 
         private _openTag: string;
         private _closeTag: string;
         private _defaultContent: string;
 
         constructor(openTag: string, closeTag: string, userContent: string) {
-            super("");
+            super();
 
             this._openTag = openTag;
             this._closeTag = closeTag;

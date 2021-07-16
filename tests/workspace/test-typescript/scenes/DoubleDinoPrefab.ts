@@ -29,12 +29,12 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
 		this.dinoRight = dinoRight;
 		this.testListInPrefab = testListInPrefab;
 		
-		// custom definition props
-		this.ghost = true;
-		
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
+
+		// custom definition props
+		this.ghost = true;
 	}
 	
 	private dinoLeft: DinoPrefab;

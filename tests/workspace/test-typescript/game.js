@@ -101,11 +101,11 @@ class Tint extends UserComponent {
         super(gameObject);
         this.gameObject = gameObject;
         gameObject["__Tint"] = this;
-        // custom definition props
-        this.tint = "red";
         /* START-USER-CTR-CODE */
         // Write your code here.
         /* END-USER-CTR-CODE */
+        // custom definition props
+        this.tint = "red";
     }
     static getComponent(gameObject) {
         return gameObject["__Tint"];
@@ -133,17 +133,11 @@ class DinoPrefab extends Phaser.GameObjects.Image {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture || "dino", frame);
         this.rotating = false;
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
         // custom definition props
         this.origin = "top";
-        /* START-USER-CTR-CODE */
-        this.once("prefab-awake", () => {
-            if (this.rotating) {
-                this.scene.events.on("update", () => {
-                    this.angle += 1;
-                });
-            }
-        });
-        /* END-USER-CTR-CODE */
     }
     /* START-USER-CODE */
     set origin(origin) {
@@ -182,11 +176,11 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
         this.dinoLeft = dinoLeft;
         this.dinoRight = dinoRight;
         this.testListInPrefab = testListInPrefab;
-        // custom definition props
-        this.ghost = true;
         /* START-USER-CTR-CODE */
         // Write your code here.
         /* END-USER-CTR-CODE */
+        // custom definition props
+        this.ghost = true;
     }
     /* START-USER-CODE */
     set ghost(ghost) {
@@ -309,12 +303,11 @@ class TextWordWrapScene extends Phaser.Scene {
         const text = this.add.text(114, 110, "", {});
         text.text = "New   long text   !";
         text.setStyle({ "fontFamily": "arial", "fontSize": "40px" });
-        text.setWordWrapWidth(100, true);
+        text.setWordWrapWidth(60, true);
         // text_1
-        const text_1 = this.add.text(413, 166, "", {});
+        const text_1 = this.add.text(274, 142, "", {});
         text_1.text = "New text";
         text_1.setStyle({ "fontSize": "80px" });
-        text_1.setWordWrapWidth(1, true);
     }
     /* START-USER-CODE */
     // Write your code here

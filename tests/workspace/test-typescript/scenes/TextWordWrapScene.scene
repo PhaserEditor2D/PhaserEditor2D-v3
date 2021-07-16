@@ -20,7 +20,7 @@
             "text": "New   long text   !",
             "fontFamily": "arial",
             "fontSize": "40px",
-            "wordWrapWidth": 100,
+            "wordWrapWidth": 60,
             "wordWrapUseAdvanced": true
         },
         {
@@ -28,14 +28,12 @@
             "id": "503dbe20-47c9-4e14-ba7c-ce12e1a6faa2",
             "label": "text_1",
             "components": [],
-            "x": 413,
-            "y": 166,
+            "x": 274,
+            "y": 142,
             "originX": 0,
             "originY": 0,
             "text": "New text",
-            "fontSize": "80px",
-            "wordWrapWidth": 1,
-            "wordWrapUseAdvanced": true
+            "fontSize": "80px"
         }
     ],
     "plainObjects": [],

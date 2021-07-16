@@ -297,6 +297,9 @@ namespace phasereditor2d.scene.core.code {
 
             this.addFieldInitCode(body);
 
+            body.push(new RawCodeDOM(""));
+            body.push(new UserSectionCodeDOM("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t"))
+
             this.buildCustomPropertiesInit(body);
 
             return ctrDecl;
@@ -322,7 +325,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (assignDomList.length > 0) {
 
-                body.push(new code.RawCodeDOM(""));
+                body.push(new code.RawCodeDOM("\n"));
                 body.push(new code.RawCodeDOM("// custom definition props"));
             }
 
@@ -697,7 +700,12 @@ namespace phasereditor2d.scene.core.code {
 
             superCall.argLiteral(sceneKey);
 
-            methodDecl.getBody().push(superCall);
+            const body = methodDecl.getBody();
+
+            body.push(superCall);
+
+            body.push(new RawCodeDOM(""));
+            body.push(new UserSectionCodeDOM("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t"))
 
             return methodDecl;
         }

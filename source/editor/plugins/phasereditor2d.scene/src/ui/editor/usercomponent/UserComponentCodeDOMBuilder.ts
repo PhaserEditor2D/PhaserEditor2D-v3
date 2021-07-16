@@ -96,6 +96,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 : `gameObject["__${clsDom.getName()}"] = this;`);
             body.push(setCompDom);
 
+            body.push(new code.RawCodeDOM(""));
+            body.push(new code.UserSectionCodeDOM("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t"))
+
             this.buildCustomPropertiesInit(body);
 
             clsDom.getBody().push(new code.UserSectionCodeDOM(
@@ -124,7 +127,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             if (assignDomList.length > 0) {
 
-                body.push(new code.RawCodeDOM(""));
+                body.push(new code.RawCodeDOM("\n"));
                 body.push(new code.RawCodeDOM("// custom definition props"));
             }
 

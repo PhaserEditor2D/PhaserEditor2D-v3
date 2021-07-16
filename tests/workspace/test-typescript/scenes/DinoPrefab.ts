@@ -8,23 +8,12 @@ class DinoPrefab extends Phaser.GameObjects.Image {
 	constructor(scene: Phaser.Scene, x: number, y: number, texture?: string, frame?: number | string) {
 		super(scene, x, y, texture || "dino", frame);
 		
+		/* START-USER-CTR-CODE */
+		// Write your code here.
+		/* END-USER-CTR-CODE */
+
 		// custom definition props
 		this.origin = "top";
-		
-		/* START-USER-CTR-CODE */
-
-		this.once("prefab-awake", () => {
-
-			if (this.rotating) {
-
-				this.scene.events.on("update", () => {
-
-					this.angle += 1;
-				});
-			}
-		});
-
-		/* END-USER-CTR-CODE */
 	}
 	
 	public rotating: boolean = false;

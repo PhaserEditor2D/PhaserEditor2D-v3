@@ -113,7 +113,7 @@ namespace phasereditor2d.scene.core.code {
 
                 if (memberDecl instanceof UserSectionCodeDOM) {
 
-                    this.section(memberDecl.getOpenTag(), memberDecl.getCloseTag(), memberDecl.getDefaultContent());
+                    this.generateSection(memberDecl);
                 }
             }
 
@@ -193,8 +193,8 @@ namespace phasereditor2d.scene.core.code {
                 // I comment this because fields are init as class fields
                 // this.generateFieldInitInConstructor(classDecl, methodDecl);
 
-                this.line();
-                this.section("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t");
+                // this.line();
+                // this.section("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t");
             }
 
             this.closeIndent("}");
@@ -275,7 +275,16 @@ namespace phasereditor2d.scene.core.code {
             } else if (instr instanceof AssignPropertyCodeDOM) {
 
                 this.generateAssignProperty(instr);
+
+            } else if (instr instanceof UserSectionCodeDOM) {
+
+                this.generateSection(instr);
             }
+        }
+
+        private generateSection(section: UserSectionCodeDOM) {
+
+            this.section(section.getOpenTag(), section.getCloseTag(), section.getDefaultContent());
         }
 
         private generateAssignProperty(assign: AssignPropertyCodeDOM) {

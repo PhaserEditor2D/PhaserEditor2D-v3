@@ -11,12 +11,12 @@ class Tint extends UserComponent {
 		this.gameObject = gameObject;
 		(gameObject as any)["__Tint"] = this;
 		
-		// custom definition props
-		this.tint = "red";
-		
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
+
+		// custom definition props
+		this.tint = "red";
 	}
 	
 	static getComponent(gameObject: Phaser.GameObjects.Image): Tint {
