@@ -297,6 +297,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const result = finder.getUserComponentByName(compName);
                     generateAwakeEvent = generateAwakeEvent || result.component.isGenerateAwakeEvent();
+
+                    if (generateAwakeEvent) {
+
+                        break;
+                    }
                 }
 
                 if (!generateAwakeEvent) {
