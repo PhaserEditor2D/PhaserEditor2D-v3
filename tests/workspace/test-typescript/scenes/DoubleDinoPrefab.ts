@@ -22,8 +22,14 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
 		// dinoLeft (prefab fields)
 		dinoLeft.emit("prefab-awake");
 		
+		// dinoLeft (components)
+		dinoLeft.emit("components-awake");
+		
 		// dinoRight (prefab fields)
 		dinoRight.emit("prefab-awake");
+		
+		// dinoRight (components)
+		dinoRight.emit("components-awake");
 		
 		this.dinoLeft = dinoLeft;
 		this.dinoRight = dinoRight;

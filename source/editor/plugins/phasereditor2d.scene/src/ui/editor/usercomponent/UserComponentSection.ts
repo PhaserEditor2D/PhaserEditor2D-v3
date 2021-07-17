@@ -39,6 +39,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 "Name of the type of the Game Object that this component can be added on.", () => this.createGameObjectTypeOptions());
 
             this.stringProp(comp, "BaseClass", "Super Class", "Name of the super class of the component. It is optional.", () => this.createSuperClassOptions());
+
+            this.booleanProp(comp, "GenerateAwakeEvent", "Generate Awake Event", "Generate the 'components-awake' event." +
+                + " If changed, requires a build of all scenes using this component.")
         }
 
         private createSuperClassOptions(): string[] {

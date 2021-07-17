@@ -42,12 +42,9 @@
             "unlock": [
                 "rotating"
             ],
-            "label": "dino_1",
+            "label": "dinoPrefab",
             "rotating": true,
-            "components": [
-                "Tint"
-            ],
-            "Tint.tint": "blue",
+            "components": [],
             "x": 186,
             "y": 160
         },

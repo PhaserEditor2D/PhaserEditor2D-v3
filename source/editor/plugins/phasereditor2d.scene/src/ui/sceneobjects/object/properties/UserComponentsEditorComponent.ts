@@ -286,17 +286,39 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             const isScenePrefabObject = this.getObject().getEditorSupport().isScenePrefabObject();
-            const hasUserComponents = this._compNames.length > 0 || prefabUserComponents.length > 0;
-            const emitComponentsAwake = !isScenePrefabObject && hasUserComponents;
 
-            if (allPropsStart !== args.lazyStatements.length || emitComponentsAwake) {
+            // generate the awake event?
+
+            let generateAwakeEvent = false;
+
+            if (!isScenePrefabObject) {
+
+                for (const compName of this._compNames) {
+
+                    const result = finder.getUserComponentByName(compName);
+                    generateAwakeEvent = generateAwakeEvent || result.component.isGenerateAwakeEvent();
+                }
+
+                if (!generateAwakeEvent) {
+
+                    for (const prefabComp of prefabUserComponents) {
+
+                        for (const comp of prefabComp.components) {
+
+                            generateAwakeEvent = generateAwakeEvent || comp.isGenerateAwakeEvent();
+                        }
+                    }
+                }
+            }
+
+            if (allPropsStart !== args.lazyStatements.length || generateAwakeEvent) {
 
                 args.lazyStatements.splice(allPropsStart, 0,
                     new code.RawCodeDOM(""),
                     new code.RawCodeDOM(`// ${args.objectVarName} (components)`));
             }
 
-            if (emitComponentsAwake) {
+            if (generateAwakeEvent) {
 
                 const stmt = new code.MethodCallCodeDOM("emit", args.objectVarName);
                 stmt.argLiteral("components-awake");

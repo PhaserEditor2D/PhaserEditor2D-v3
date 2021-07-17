@@ -12,7 +12,10 @@
             "type": "Image",
             "id": "dd494496-e0c6-479b-98ed-25ff529caa6f",
             "label": "dino_1",
-            "components": [],
+            "components": [
+                "Tint",
+                "PushOnClick"
+            ],
             "texture": {
                 "key": "dino"
             },

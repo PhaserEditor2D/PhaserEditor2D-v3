@@ -8,6 +8,10 @@ class DinoPrefab extends Phaser.GameObjects.Image {
 	constructor(scene: Phaser.Scene, x: number, y: number, texture?: string, frame?: number | string) {
 		super(scene, x, y, texture || "dino", frame);
 		
+		// this (components)
+		new Tint(this);
+		new PushOnClick(this);
+		
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
