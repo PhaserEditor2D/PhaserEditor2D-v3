@@ -129,7 +129,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     category: CAT_SCENE_EDITOR,
                     name: "Disable Awake Event By Default In All Prefabs",
-                    id: "id",
+                    id: CMD_DISABLE_AWAKE_EVENT_PREFABS,
                     tooltip: "Disables the awake event in all prefabs, where it is not set explicity."
                 },
                 handler: {
