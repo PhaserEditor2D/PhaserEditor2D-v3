@@ -196,10 +196,10 @@ namespace phasereditor2d.scene {
             // commands
 
             reg.addExtension(
-                new ide.commands.CommandExtension(ui.editor.commands.SceneEditorCommands.registerCommands));
+                new ide.commands.CommandExtension(m => ui.editor.commands.SceneEditorCommands.registerCommands(m)));
 
             reg.addExtension(
-                new ide.commands.CommandExtension(ui.editor.usercomponent.UserComponentsEditor.registerCommands));
+                new ide.commands.CommandExtension(m => ui.editor.usercomponent.UserComponentsEditor.registerCommands(m)));
 
 
             // compile project

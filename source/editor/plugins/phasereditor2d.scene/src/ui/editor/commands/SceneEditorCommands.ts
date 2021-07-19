@@ -41,6 +41,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_DUPLICATE_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.DuplicateSceneFile";
     export const CMD_CLEAR_SCENE_THUMBNAIL_CACHE = "phasereditor2d.scene.ui.editor.commands.ClearSceneThumbnailCache";
     export const CMD_OPEN_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.OpenSceneFile";
+    export const CMD_DISABLE_AWAKE_EVENT_PREFABS = "phasereditor2d.scene.ui.editor.commands.DisableAwakeEventPrefabs";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -89,35 +90,93 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 name: "Scene Editor"
             });
 
-            SceneEditorCommands.registerGlobalCommands(manager);
+            this.registerGlobalCommands(manager);
 
-            SceneEditorCommands.registerEditCommands(manager);
+            this.registerEditCommands(manager);
 
-            SceneEditorCommands.registerAddObjectCommands(manager);
+            this.registerAddObjectCommands(manager);
 
-            SceneEditorCommands.registerSceneCommands(manager);
+            this.registerSceneCommands(manager);
 
-            SceneEditorCommands.registerVisibilityCommands(manager);
+            this.registerVisibilityCommands(manager);
 
-            SceneEditorCommands.registerSelectionCommands(manager);
+            this.registerSelectionCommands(manager);
 
-            SceneEditorCommands.registerParentCommands(manager);
+            this.registerParentCommands(manager);
 
-            SceneEditorCommands.registerCompilerCommands(manager);
+            this.registerCompilerCommands(manager);
 
-            SceneEditorCommands.registerToolsCommands(manager);
+            this.registerToolsCommands(manager);
 
-            SceneEditorCommands.registerOriginCommands(manager);
+            this.registerOriginCommands(manager);
 
-            SceneEditorCommands.registerDepthCommands(manager);
+            this.registerDepthCommands(manager);
 
-            SceneEditorCommands.registerTypeCommands(manager);
+            this.registerTypeCommands(manager);
 
-            SceneEditorCommands.registerMoveObjectCommands(manager);
+            this.registerMoveObjectCommands(manager);
 
-            SceneEditorCommands.registerTextureCommands(manager);
+            this.registerTextureCommands(manager);
 
-            SceneEditorCommands.registerSnappingCommands(manager);
+            this.registerSnappingCommands(manager);
+
+            this.registerPrefabAwakeCommands(manager);
+        }
+
+        private static registerPrefabAwakeCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    category: CAT_SCENE_EDITOR,
+                    name: "Disable Awake Event By Default In All Prefabs",
+                    id: "id",
+                    tooltip: "Disables the awake event in all prefabs, where it is not set explicity."
+                },
+                handler: {
+                    testFunc: args => args.activeWindow instanceof ide.ui.DesignWindow,
+                    executeFunc: async args => {
+
+                        const editors = args.activeWindow.getEditorArea().getEditors();
+
+                        if (editors.length > 0) {
+
+                            alert("For executing this command, please, close all the editors.")
+
+                            return;
+                        }
+
+                        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                        const dlg = new controls.dialogs.ProgressDialog();
+                        dlg.create();
+                        dlg.setTitle("Disabling Awake Event In Prefabs");
+
+                        const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
+
+                        const prefabs = finder.getPrefabFiles();
+
+                        monitor.addTotal(prefabs.length);
+
+                        for (const prefabFile of prefabs) {
+
+                            const data = finder.getSceneData(prefabFile);
+
+                            if (!("generateAwakeEvent" in data.settings)) {
+
+                                data.settings["generateAwakeEvent"] = false;
+
+                                dlg.setTitle("Precessing " + prefabFile.getName());
+
+                                await colibri.ui.ide.FileUtils.setFileString_async(prefabFile, JSON.stringify(data, null, 4));
+
+                                monitor.step();
+                            }
+                        }
+
+                        dlg.close();
+                    }
+                }
+            })
         }
 
         static registerAddObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
