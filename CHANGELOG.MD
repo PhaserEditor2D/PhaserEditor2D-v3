@@ -2,13 +2,22 @@
 
 ## dev
 
-* [#134](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/134) Creating a list in the editor results in an initialized array in the generated code.
-* [#135](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/135) 
-Word wrap width does not behave correctly
-* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: constructor ordering of custom definition props and START-USER-CTR-CODE.
+### Added
+
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: `generateAwakeEvent` and `generateAwakeHandler`.
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) User components: the `generateAwakeEvent` flag.
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) A commands for disabling the Awake event in all prefabs. But ony it is not set explicitly in the prefab.
+
+### Updated
+
+* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: constructor ordering of custom definition props and START-USER-CTR-CODE.
+
+### Fixed
+
+* [#134](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/134) Creating a list in the editor results in an initialized array in the generated code.
+* [#135](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/135) 
+Word wrap width does not behave correctly
+* Scene Editor: fixes Move To Parent dialog in context of prefab scenes.
 
 ## v3.15.0 - Jul 11, 2021
 
