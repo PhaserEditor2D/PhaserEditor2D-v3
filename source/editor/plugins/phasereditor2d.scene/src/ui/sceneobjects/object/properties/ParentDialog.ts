@@ -19,7 +19,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setCellRendererProvider(new editor.outline.SceneEditorOutlineRendererProvider());
             viewer.setContentProvider(new ParentContentProvider(this._editor));
 
-            viewer.setInput(this._editor.getScene().sys.displayList);
+            if (this._editor.getScene().isPrefabSceneType()) {
+
+                const obj = this._editor.getScene().getPrefabObject();
+
+                if (obj instanceof Phaser.GameObjects.Container || obj instanceof Phaser.GameObjects.Layer) {
+
+                    viewer.setInput(obj);
+
+                } else {
+
+                    viewer.setInput([]);
+                }
+
+            } else {
+
+                viewer.setInput(this._editor.getScene().sys.displayList);
+            }
 
             viewer.setExpanded(viewer.getInput(), true);
 
@@ -64,6 +80,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getChildren(parent: any): any[] {
 
             if (parent instanceof Phaser.Structs.List) {
+
+                return this.filterList(parent.list);
+            }
+
+            if (parent instanceof Phaser.GameObjects.DisplayList) {
 
                 return this.filterList(parent.list);
             }
