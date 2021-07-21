@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     "Compiles the scene into code."));
 
             this.createMenuField(
-                comp, [
+                comp, () => [
                 {
                     name: "JavaScript",
                     value: core.json.SourceLang.JAVA_SCRIPT,

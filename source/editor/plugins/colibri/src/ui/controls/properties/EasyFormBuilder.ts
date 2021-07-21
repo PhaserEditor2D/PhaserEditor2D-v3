@@ -22,10 +22,10 @@ namespace colibri.ui.controls.properties {
 
         createMenuButton(
             text: string,
-            items: Array<{ name: string, value: any, icon?: controls.IImage }>,
+            getItems: () => Array<{ name: string, value: any, icon?: controls.IImage }>,
             callback: (value: any) => void) {
 
-            return this._formBuilder.createMenuButton(this._parent, text, items, callback);
+            return this._formBuilder.createMenuButton(this._parent, text, getItems, callback);
         }
 
         createText(readOnly?: boolean) {

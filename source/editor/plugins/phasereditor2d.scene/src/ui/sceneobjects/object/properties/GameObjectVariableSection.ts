@@ -79,7 +79,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 // Scope
 
                 this.createLabel(comp, "Scope", "The lexical scope of this object's variable, in code.");
-                this.createEnumField(comp, VariableComponent.scope, false);
+                this.createEnumField(comp, VariableComponent.scope, false, scope => {
+
+                    if (this.getEditor().getScene().isPrefabSceneType()) {
+
+                        return true;
+                    }
+
+                    return scope !== ObjectScope.PREFAB_PUBLIC;
+                });
             }
         }
 

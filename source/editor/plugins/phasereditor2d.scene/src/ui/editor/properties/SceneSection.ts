@@ -100,12 +100,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         createMenuField(
             comp: HTMLElement,
-            items: Array<{ name: string, value: any }>,
+            getItems: () => Array<{ name: string, value: any }>,
             name: string, label: string, tooltip: string) {
 
             this.createLabel(comp, label, tooltip);
 
-            const btn = this.createMenuButton(comp, "-", items, value => {
+            const btn = this.createMenuButton(comp, "-", getItems, value => {
 
                 const editor = this.getEditor();
 
@@ -121,7 +121,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this.addUpdater(() => {
 
-                const item = items.find(i => i.value === this.getSettings()[name]);
+                const item = getItems().find(i => i.value === this.getSettings()[name]);
 
                 btn.textContent = item ? item.name : "-";
             });

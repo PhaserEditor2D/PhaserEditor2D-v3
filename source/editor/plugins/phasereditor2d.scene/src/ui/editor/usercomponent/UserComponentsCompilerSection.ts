@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 this.createLabel(comp, "Output Language", "The components code output language.");
 
-                const btn = this.createMenuButton(comp, "", [{
+                const btn = this.createMenuButton(comp, "", () => [{
                     name: "JavaScript",
                     value: core.json.SourceLang.JAVA_SCRIPT
                 }, {

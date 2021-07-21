@@ -6,7 +6,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         METHOD = "METHOD",
         CLASS = "CLASS",
-        PUBLIC = "PUBLIC"
+        PUBLIC = "PUBLIC",
+        PREFAB_PUBLIC = "PREFAB_PUBLIC"
     }
 
     export abstract class EditorSupport<T> {
@@ -80,6 +81,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getScope() {
 
             return this._scope;
+        }
+
+        isPublic() {
+
+            return this._scope === ObjectScope.PUBLIC
+                || this._scope === ObjectScope.PREFAB_PUBLIC;
         }
 
         setScope(scope: ObjectScope) {

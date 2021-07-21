@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     value: ObjectScope.PUBLIC
                 }];
 
-                const btn = this.createMenuButton(comp, "", items, scope => {
+                const btn = this.createMenuButton(comp, "", () => items, scope => {
 
                     this.performChange(list => {
 
