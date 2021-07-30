@@ -376,6 +376,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return list;
         }
 
+        getSizeProperties() {
+
+            if (this.hasComponent(SizeComponent)) {
+
+                return [SizeComponent.width, SizeComponent.height];
+            }
+
+            return [];
+        }
+
+        getSizeSectionId() {
+
+            return SizeSection.SECTION_ID;
+        }
+
         isDescendentOf(parent: Container | Layer) {
 
             const set = new Set(this.getAllParents());

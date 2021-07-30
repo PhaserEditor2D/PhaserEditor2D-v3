@@ -1,7 +1,5 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import controls = colibri.ui.controls;
-
     export class BaseObjectTool extends editor.tools.SceneTool {
 
         private _properties: Array<IProperty<any>>;
@@ -12,13 +10,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._properties = properties;
         }
 
+        protected getProperties(obj: any) {
+
+            return this._properties;
+        }
+
         canEdit(obj: unknown): boolean {
 
             if (sceneobjects.isGameObject(obj)) {
 
                 const support = (obj as unknown as ISceneGameObject).getEditorSupport();
 
-                for (const prop of this._properties) {
+                const props = this.getProperties(obj);
+
+                for (const prop of props) {
 
                     if (!support.hasProperty(prop)) {
                         return false;
@@ -41,7 +46,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const support = (obj as unknown as ISceneGameObject).getEditorSupport();
 
-                for (const prop of this._properties) {
+                const props = this.getProperties(obj);
+
+                for (const prop of props) {
 
                     if (support.hasProperty(prop)) {
                         return true;
@@ -52,9 +59,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        confirmUnlockProperty(props: Array<IProperty<any>>, propLabel: string, sectionId: string, args: editor.tools.ISceneToolContextArgs) {
+        confirmUnlockProperty(args: editor.tools.ISceneToolContextArgs, props: Array<IProperty<any>>, propLabel: string, ...sectionId: string[]) {
 
-            args.editor.confirmUnlockProperty(props, propLabel, sectionId);
+            args.editor.confirmUnlockProperty(props, propLabel, ...sectionId);
         }
     }
 }

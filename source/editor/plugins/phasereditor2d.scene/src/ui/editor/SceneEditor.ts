@@ -79,7 +79,7 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
-        async confirmUnlockProperty(props: Array<sceneobjects.IProperty<any>>, propLabel: string, sectionId: string): Promise<boolean> {
+        async confirmUnlockProperty(props: Array<sceneobjects.IProperty<any>>, propLabel: string, ...sectionId: string[]): Promise<boolean> {
 
             const lockedObjects = this.getSelectedGameObjects().filter(obj => {
 
@@ -107,7 +107,10 @@ namespace phasereditor2d.scene.ui.editor {
                                 this.getUndoManager()
                                     .add(new sceneobjects.PropertyUnlockOperation(this, lockedObjects, props, true));
 
-                                this.updateInspectorViewSection(sectionId);
+                                for (const id of sectionId) {
+
+                                    this.updateInspectorViewSection(id);
+                                }
                             }
 
                             resolve(ok);
