@@ -78,7 +78,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.writeJSON(containerData);
 
-            if (!this.isPrefabInstance()) {
+            if (this.isPrefabInstance()) {
+
+                containerData.nestedPrefabs = this.getObject().getChildren()
+
+                    .filter(obj => obj.getEditorSupport().isPrefabInstance())
+
+                    .map(obj => {
+
+                        const objData = {} as json.IObjectData;
+
+                        obj.getEditorSupport().writeJSON(objData);
+
+                        return objData as json.IObjectData;
+                    });
+
+            } else {
 
                 containerData.list = this.getObject().getChildren().map(obj => {
 

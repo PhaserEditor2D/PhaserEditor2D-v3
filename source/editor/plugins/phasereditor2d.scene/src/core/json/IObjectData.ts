@@ -9,5 +9,6 @@ namespace phasereditor2d.scene.core.json {
         unlock?: string[];
         scope?: ui.sceneobjects.ObjectScope;
         list?: IObjectData[];
+        nestedPrefabs?: IObjectData[];
     }
 }
