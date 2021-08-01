@@ -119,19 +119,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const changeX = this._x === 1 && this._y === 0.5 || changeAll;
                 const changeY = this._x === 0.5 && this._y === 1 || changeAll;
 
+                const [widthProp, heightProp] = sprite.getEditorSupport().getSizeProperties();
+
                 if (changeX) {
 
-                    sprite.setSize(Math.floor(width), sprite.height);
-                    sprite.updateDisplayOrigin();
+                    widthProp.setValue(sprite, Math.floor(width));
                 }
 
                 if (changeY) {
 
-                    sprite.setSize(sprite.width, Math.floor(height));
-                    sprite.updateDisplayOrigin();
+                    heightProp.setValue(sprite, Math.floor(height));
                 }
 
-                args.editor.updateInspectorViewSection(SizeSection.SECTION_ID);
+                args.editor.updateInspectorViewSection(obj.getEditorSupport().getSizeSectionId());
             }
         }
 

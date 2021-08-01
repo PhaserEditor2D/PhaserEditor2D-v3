@@ -9,11 +9,13 @@ namespace phasereditor2d.scene.core.code {
 
     export class CodeResources {
 
+        private _plugin: colibri.Plugin;
         private _resources: IResource[];
         private _resDataMap: Map<string, string>;
 
-        constructor() {
+        constructor(plugin: colibri.Plugin) {
 
+            this._plugin = plugin;
             this._resources = [];
             this._resDataMap = new Map();
         }
@@ -25,11 +27,9 @@ namespace phasereditor2d.scene.core.code {
 
         async preload(): Promise<void> {
 
-            const plugin = ScenePlugin.getInstance();
-
             for (const res of this._resources) {
 
-                const data = await plugin.getString(res.path);
+                const data = await this._plugin.getString(res.path);
 
                 this._resDataMap.set(res.id, data);
             }
