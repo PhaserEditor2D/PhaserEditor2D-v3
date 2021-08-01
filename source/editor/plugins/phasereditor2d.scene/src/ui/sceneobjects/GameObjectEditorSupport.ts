@@ -2,6 +2,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
+    export function isNestedPrefab(obj: any) {
+
+        const support = GameObjectEditorSupport.getEditorSupport(obj);
+
+        if (support) {
+
+            return support.isNestedPrefab();
+        }
+
+        return false;
+    }
+
     export function isGameObject(obj: any) {
 
         return GameObjectEditorSupport.hasEditorSupport(obj);
