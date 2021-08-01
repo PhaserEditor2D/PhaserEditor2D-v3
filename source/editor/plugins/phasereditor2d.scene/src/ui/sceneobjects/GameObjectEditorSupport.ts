@@ -629,5 +629,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 s.readJSON(ser);
             }
         }
+
+        protected readNestedPrefabData(objData: json.IObjectData) {
+
+            const list = objData.nestedPrefabs || [];
+
+            const map = new Map<string, json.IObjectData>();
+
+            for (const data of list) {
+
+                map.set(data.prefabId, data);
+            }
+
+            return map;
+        }
     }
 }

@@ -114,6 +114,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const list = ser.read("list", []) as json.IObjectData[];
 
+            const nestedPrefabMap = this.readNestedPrefabData(containerData);
+
             const maker = this.getScene().getMaker();
 
             const container = this.getObject();
@@ -122,7 +124,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const objData of list) {
 
-                const sprite = maker.createObject(objData, undefined, container);
+                let sprite:ISceneGameObject;
+
+                if (nestedPrefabMap.has(objData.id)) {
+
+                    const prefabData = nestedPrefabMap.get(objData.id);
+
+                    sprite = maker.createObject(prefabData);
+
+                } else {
+
+                    sprite = maker.createObject(objData, undefined, container);
+                }
 
                 if (sprite) {
 

@@ -477,7 +477,7 @@ namespace phasereditor2d.scene.ui {
                     data = {
                         id: Phaser.Utils.String.UUID(),
                         prefabId: data.id,
-                        label: data.label
+                        label: data.label,
                     };
                 }
 
