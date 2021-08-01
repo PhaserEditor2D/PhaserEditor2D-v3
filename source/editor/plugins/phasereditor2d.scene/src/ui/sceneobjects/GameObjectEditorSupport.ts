@@ -2,13 +2,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export function isNestedPrefab(obj: any) {
+    export function isNestedPrefabInstance(obj: any) {
 
         const support = GameObjectEditorSupport.getEditorSupport(obj);
 
         if (support) {
 
-            return support.isNestedPrefab();
+            return support.isPrefabInstance();
         }
 
         return false;
@@ -370,6 +370,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return undefined;
         }
 
+        isNestedPreabInstance() {
+
+            return this.isPrefabInstance() && this.getOwnerPrefabInstance() !== this.getObject();
+        }
+
         isPrefabInstance() {
             return typeof this._prefabId === "string";
         }
@@ -434,18 +439,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.isPrefabInstance() && this.getOwnerPrefabInstance() !== this.getObject();
         }
 
-        isNestedPrefab() {
-
-            const owner = this.getOwnerPrefabInstance();
-
-            if (owner && owner !== this.getObject()) {
-
-                return this.getScope() === ObjectScope.PREFAB_PUBLIC;
-            }
-
-            return false;
-        }
-
         getNestedPrefabs(): ISceneGameObject[] {
 
             const obj = this.getObject();
@@ -456,7 +449,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 for (const child of obj.getChildren()) {
 
-                    if (child.getEditorSupport().isNestedPrefab()) {
+                    if (child.getEditorSupport().isPrefabInstance()) {
 
                         result.push(child);
                     }

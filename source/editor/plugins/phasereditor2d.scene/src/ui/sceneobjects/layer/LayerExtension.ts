@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (originalObject instanceof Container) {
 
-                const containerData = serializer.getData() as IContainerData;
+                const containerData = serializer.getData();
 
                 const children = originalObject.getChildren();
 
@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.createLayerObject(args.scene, []);
 
-            container.getEditorSupport().readJSON(args.data as IContainerData);
+            container.getEditorSupport().readJSON(args.data);
 
             return container;
         }

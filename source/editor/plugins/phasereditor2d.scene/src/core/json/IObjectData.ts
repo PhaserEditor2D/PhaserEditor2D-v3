@@ -7,5 +7,7 @@ namespace phasereditor2d.scene.core.json {
         components?: string[],
         label: string;
         unlock?: string[];
+        scope?: ui.sceneobjects.ObjectScope;
+        list?: IObjectData[];
     }
 }

@@ -2,11 +2,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export interface IContainerData extends json.IObjectData {
-
-        list: json.IObjectData[];
-    }
-
     export class ContainerExtension extends SceneGameObjectExtension {
 
         private static _instance: ContainerExtension;
@@ -72,7 +67,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
-            container.getEditorSupport().readJSON(args.data as IContainerData);
+            container.getEditorSupport().readJSON(args.data);
 
             return container;
         }

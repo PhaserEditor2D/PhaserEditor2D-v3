@@ -3,10 +3,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = phasereditor2d.scene.core.json;
 
-    export interface ILayerData extends json.IObjectData {
-        list: json.IObjectData[];
-    }
-
     export class LayerEditorSupport extends GameObjectEditorSupport<Layer> {
 
         constructor(obj: Layer, scene: Scene) {
@@ -62,7 +58,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LAYER));
         }
 
-        writeJSON(layerData: ILayerData) {
+        writeJSON(layerData: json.IObjectData) {
 
             super.writeJSON(layerData);
 
@@ -79,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        readJSON(layerData: ILayerData) {
+        readJSON(layerData: json.IObjectData) {
 
             super.readJSON(layerData);
 

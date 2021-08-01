@@ -3,10 +3,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = core.json;
 
-    export interface IContainerData extends json.IObjectData {
-        list: json.IObjectData[];
-    }
-
     export class ContainerEditorSupport extends GameObjectEditorSupport<Container> {
 
         private _allowPickChildren: boolean;
@@ -78,7 +74,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
         }
 
-        writeJSON(containerData: IContainerData) {
+        writeJSON(containerData: json.IObjectData) {
 
             super.writeJSON(containerData);
 
@@ -95,7 +91,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        readJSON(containerData: IContainerData) {
+        readJSON(containerData: json.IObjectData) {
 
             super.readJSON(containerData);
 
@@ -111,7 +107,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const objData of list) {
 
-                const sprite = maker.createObject(objData);
+                const sprite = maker.createObject(objData, undefined, container);
 
                 if (sprite) {
 

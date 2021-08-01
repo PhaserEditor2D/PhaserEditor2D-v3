@@ -467,9 +467,19 @@ namespace phasereditor2d.scene.ui {
             return newObjects;
         }
 
-        createObject(data: json.IObjectData, errors?: string[]) {
+        createObject(data: json.IObjectData, errors?: string[], parent?: sceneobjects.ISceneGameObject) {
 
             try {
+
+                if (parent && parent.getEditorSupport().isPrefabInstance()
+                    && data.scope === sceneobjects.ObjectScope.PREFAB_PUBLIC) {
+
+                    data = {
+                        id: Phaser.Utils.String.UUID(),
+                        prefabId: data.id,
+                        label: data.label
+                    };
+                }
 
                 const ser = this.getSerializer(data);
 

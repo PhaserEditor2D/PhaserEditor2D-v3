@@ -95,7 +95,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return GameObjectEditorSupport.hasObjectComponent(obj, VariableComponent)
                 && !this.isPrefabSceneObject(obj)
-                && !isNestedPrefab(obj);
+                && !isNestedPrefabInstance(obj);
         }
 
         canEditNumber(n: number): boolean {
