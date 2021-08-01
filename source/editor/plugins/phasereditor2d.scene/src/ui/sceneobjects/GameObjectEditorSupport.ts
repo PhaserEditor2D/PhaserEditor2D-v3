@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         if (support) {
 
-            return support.isPrefabInstance();
+            return support.isNestedPrefabInstance();
         }
 
         return false;
@@ -370,7 +370,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return undefined;
         }
 
-        isNestedPreabInstance() {
+        isNestedPrefabInstance() {
 
             return this.isPrefabInstance() && this.getOwnerPrefabInstance() !== this.getObject();
         }
