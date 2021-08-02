@@ -82,6 +82,12 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 const type = ser.getType();
                 const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
+                if (obj.getEditorSupport().isUnlockedProperty(sceneobjects.TransformComponent.x)) {
+
+                    ser.setUnlocked(sceneobjects.TransformComponent.x.name, true);
+                    ser.setUnlocked(sceneobjects.TransformComponent.y.name, true);
+                }
+
                 ext.adaptDataAfterTypeConversion(ser, obj, this._extraData);
 
                 result.objects.push({

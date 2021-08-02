@@ -22,5 +22,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 y
             );
         }
+
+        onActivated(args: editor.tools.ISceneToolContextArgs) {
+
+            super.onActivated(args);
+
+            this.confirmUnlockProperty(args, [sceneobjects.TransformComponent.x, sceneobjects.TransformComponent.y],
+                "position", TransformSection.SECTION_ID);
+        }
     }
 }

@@ -147,12 +147,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return !this.isUnlockedProperty(property);
         }
 
+        isUnlockedPropertyXY(property: IPropertyXY) {
+
+            return this.isUnlockedProperty(property.x) && this.isUnlockedProperty(property.y);
+        }
+
         isUnlockedProperty(property: IProperty<any>) {
-
-            if (property === TransformComponent.x || property === TransformComponent.y) {
-
-                return true;
-            }
 
             if (this.isPrefabInstance()) {
 

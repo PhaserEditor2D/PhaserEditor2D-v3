@@ -1,5 +1,10 @@
 # Change Log
 
+## dev
+
+* Nested prefabs:
+    * Uses nullish operator (`??`) in prefab constructors.
+
 ## v3.16.0-alpha.1
 
 ### Added

@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
 
-            this.createPropertyXYRow(comp, TransformComponent.position, false);
+            this.createPropertyXYRow(comp, TransformComponent.position);
 
             this.createPropertyXYRow(comp, TransformComponent.scale);
 

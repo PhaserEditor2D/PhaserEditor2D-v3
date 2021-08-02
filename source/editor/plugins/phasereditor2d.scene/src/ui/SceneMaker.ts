@@ -246,12 +246,9 @@ namespace phasereditor2d.scene.ui {
                     label: "temporal"
                 });
 
-                const { x, y } = this.getCanvasCenterPoint();
+                if (obj.getEditorSupport().isUnlockedProperty(sceneobjects.TransformComponent.x)) {
 
-                const transformComponent = obj.getEditorSupport()
-                    .getComponent(sceneobjects.TransformComponent) as sceneobjects.TransformComponent;
-
-                if (transformComponent) {
+                    const { x, y } = this.getCanvasCenterPoint();
 
                     const sprite = obj as unknown as sceneobjects.ITransformLikeObject;
 

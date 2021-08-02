@@ -19,21 +19,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs) {
 
-            const obj = args.obj as Text;
             const call = args.methodCallDOM;
 
             call.arg(args.sceneExpr);
-            call.argFloat(obj.x);
-            call.argFloat(obj.y);
+
+            this.buildCreatePrefabInstanceCodeDOM_XY_Arguments(args);
         }
 
         buildPrefabConstructorDeclarationSupperCallCodeDOM(
             args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
 
-            const call = args.superMethodCallCodeDOM;
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
 
-            call.arg("x");
-            call.arg("y");
+            const call = args.superMethodCallCodeDOM;
 
             if (!args.prefabObj.getEditorSupport().isPrefabInstance()) {
 
@@ -46,8 +44,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const ctr = args.ctrDeclCodeDOM;
 
-            ctr.arg("x", "number");
-            ctr.arg("y", "number");
+            ctr.arg("x", "number", true);
+            ctr.arg("y", "number", true);
         }
     }
 }

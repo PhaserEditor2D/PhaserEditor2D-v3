@@ -13,8 +13,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TransformComponent extends Component<ITransformLikeObject> {
 
-        static x = SimpleProperty("x", 0, "X", "phaser:Phaser.GameObjects.Components.Transform.x", true);
-        static y = SimpleProperty("y", 0, "Y", "phaser:Phaser.GameObjects.Components.Transform.y", true);
+        static x = SimpleProperty("x", 0, "X", "phaser:Phaser.GameObjects.Components.Transform.x");
+        static y = SimpleProperty("y", 0, "Y", "phaser:Phaser.GameObjects.Components.Transform.y");
 
         static position: IPropertyXY = {
             label: "Position",

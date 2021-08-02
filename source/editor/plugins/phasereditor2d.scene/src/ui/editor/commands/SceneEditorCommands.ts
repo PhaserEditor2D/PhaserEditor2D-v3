@@ -1090,7 +1090,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneGameObject;
 
-                        const objData: core.json.IObjectData = {} as any;
+                        const objData: core.json.IObjectData = {
+                            unlock: ["x", "y"]
+                        } as any;
 
                         obj.getEditorSupport().writeJSON(objData);
 

@@ -15,26 +15,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const call = args.methodCallDOM;
 
             call.arg(args.sceneExpr);
-            call.argFloat(obj.x);
-            call.argFloat(obj.y);
 
-            if (support.isUnlockedProperty(SizeComponent.width)) {
+            this.buildCreatePrefabInstanceCodeDOM_XY_Arguments(args);
 
-                call.argFloat(obj.x1);
-                call.argFloat(obj.y1);
-                call.argFloat(obj.x2);
-                call.argFloat(obj.y2);
-                call.argFloat(obj.x3);
-                call.argFloat(obj.y3);
+            for (const p of [TriangleComponent.p1, TriangleComponent.p2, TriangleComponent.p3]) {
 
-            } else {
+                if (support.isUnlockedPropertyXY(p)) {
 
-                call.arg("undefined");
-                call.arg("undefined");
-                call.arg("undefined");
-                call.arg("undefined");
-                call.arg("undefined");
-                call.arg("undefined");
+                    call.argFloat(p.x.getValue(obj));
+                    call.argFloat(p.y.getValue(obj));
+
+                } else {
+
+                    call.arg("undefined");
+                    call.arg("undefined");
+                }
             }
         }
 
@@ -42,8 +37,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const ctr = args.ctrDeclCodeDOM;
 
-            ctr.arg("x", "number");
-            ctr.arg("y", "number");
+            ctr.arg("x", "number", true);
+            ctr.arg("y", "number", true);
             ctr.arg("x1", "number", true);
             ctr.arg("y1", "number", true);
             ctr.arg("x2", "number", true);
@@ -60,26 +55,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const call = args.superMethodCallCodeDOM;
 
-            call.arg("x");
-            call.arg("y");
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
 
-            if (support.isUnlockedProperty(SizeComponent.width)) {
+            for (const p of [TriangleComponent.p1, TriangleComponent.p2, TriangleComponent.p3]) {
 
-                call.arg("typeof x1 === \"number\" ? x1 : " + obj.x1);
-                call.arg("typeof y1 === \"number\" ? y1 : " + obj.y1);
-                call.arg("typeof x2 === \"number\" ? x2 : " + obj.x2);
-                call.arg("typeof y2 === \"number\" ? y2 : " + obj.y2);
-                call.arg("typeof x3 === \"number\" ? x3 : " + obj.x3);
-                call.arg("typeof y3 === \"number\" ? y3 : " + obj.y3);
+                if (support.isUnlockedPropertyXY(p)) {
 
-            } else {
+                    call.arg(`${p.x.name} ?? ${p.x.getValue(obj)}`);
+                    call.arg(`${p.y.name} ?? ${p.y.getValue(obj)}`);
 
-                call.arg("x1");
-                call.arg("y1");
-                call.arg("x2");
-                call.arg("y2");
-                call.arg("x3");
-                call.arg("y3");
+                } else {
+
+                    call.arg("undefined");
+                    call.arg("undefined");
+                }
             }
         }
 
