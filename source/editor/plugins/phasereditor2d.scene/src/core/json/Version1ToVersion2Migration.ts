@@ -7,8 +7,6 @@ namespace phasereditor2d.scene.core.json {
             console.log("Migrating: unlock position by default");
 
             this.migrateUnlockPosition(data.displayList);
-
-            console.log(data);
         }
 
         private migrateUnlockPosition(list?: IObjectData[]) {
