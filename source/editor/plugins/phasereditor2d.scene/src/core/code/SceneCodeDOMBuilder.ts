@@ -292,7 +292,7 @@ namespace phasereditor2d.scene.core.code {
 
             body.push(...result.statements);
 
-            if ((prefabObj instanceof Container || prefabObj instanceof Layer) && !prefabObj.getEditorSupport().isPrefabInstance()) {
+            if (prefabObj instanceof Container || prefabObj instanceof Layer) {
 
                 this.addChildrenObjects({
                     createMethodDecl: ctrDecl,
@@ -363,10 +363,17 @@ namespace phasereditor2d.scene.core.code {
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
-                body.push(new RawCodeDOM(""));
-                body.push(new RawCodeDOM("// " + obj.getEditorSupport().getLabel()));
+                if (obj.getEditorSupport().isNestedPrefabInstance()) {
 
-                this.addCreateObjectCode(obj, createMethodDecl, lazyStatements);
+                    this.addCreateObjectCodeOfNestedPrefab(obj, createMethodDecl, lazyStatements);
+
+                } else {
+
+                    body.push(new RawCodeDOM(""));
+                    body.push(new RawCodeDOM("// " + obj.getEditorSupport().getLabel()));
+
+                    this.addCreateObjectCode(obj, createMethodDecl, lazyStatements);
+                }
             }
 
             this.addCreateListsCode(body);
@@ -525,6 +532,28 @@ namespace phasereditor2d.scene.core.code {
                 mainCreateMethodCall.setReturnToVar(varname);
             }
         }
+        private addCreateObjectCodeOfNestedPrefab(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
+
+            const varname = this.getPrefabInstanceVarName(obj);
+
+            const result = this.buildSetObjectProperties({
+                obj,
+                varname
+            });
+
+            lazyStatements.push(...result.lazyStatements);
+
+            createMethodDecl.getBody().push(...result.statements);
+
+            if (obj instanceof Container || obj instanceof Layer) {
+
+                this.addChildrenObjects({
+                    createMethodDecl,
+                    obj,
+                    lazyStatements
+                });
+            }
+        }
 
         private addCreateObjectCode(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
 
@@ -578,6 +607,7 @@ namespace phasereditor2d.scene.core.code {
 
             const objParent = ui.sceneobjects.getObjectParent(obj);
 
+
             createMethodDecl.getBody().push(createObjectMethodCall);
 
             if (objSupport.isPrefabInstance()) {
@@ -596,6 +626,7 @@ namespace phasereditor2d.scene.core.code {
                 obj,
                 varname
             });
+
 
             if (result.statements.length + result.lazyStatements.length > 0) {
 
@@ -623,7 +654,7 @@ namespace phasereditor2d.scene.core.code {
                 createMethodDecl.getBody().push(addToParentCall);
             }
 
-            if ((obj instanceof Container || obj instanceof Layer) && !objSupport.isPrefabInstance()) {
+            if (obj instanceof Container || obj instanceof Layer) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
 
@@ -653,6 +684,22 @@ namespace phasereditor2d.scene.core.code {
 
                 createObjectMethodCall.setReturnToVar(varname);
             }
+        }
+
+        private getPrefabInstanceVarName(obj: ISceneGameObject) {
+
+            const support = obj.getEditorSupport();
+
+            const varName = formatToValidVarName(support.getLabel());
+
+            if (support.isNestedPrefabInstance()) {
+
+                const parentVarName = this.getPrefabInstanceVarName(ui.sceneobjects.getObjectParent(obj));
+
+                return parentVarName + "." + varName;
+            }
+
+            return varName;
         }
 
         private buildSetObjectProperties(args: {
@@ -695,12 +742,21 @@ namespace phasereditor2d.scene.core.code {
             lazyStatements: CodeDOM[]
         }) {
 
+            const body = args.createMethodDecl.getBody();
+
             for (const child of args.obj.getChildren()) {
 
-                args.createMethodDecl.getBody().push(new RawCodeDOM(""));
-                args.createMethodDecl.getBody().push(new RawCodeDOM("// " + child.getEditorSupport().getLabel()));
+                if (child.getEditorSupport().isNestedPrefabInstance()) {
 
-                this.addCreateObjectCode(child, args.createMethodDecl, args.lazyStatements);
+                    this.addCreateObjectCodeOfNestedPrefab(child, args.createMethodDecl, args.lazyStatements);
+
+                } else {
+
+                    body.push(new RawCodeDOM(""));
+                    body.push(new RawCodeDOM("// " + child.getEditorSupport().getLabel()));
+
+                    this.addCreateObjectCode(child, args.createMethodDecl, args.lazyStatements);
+                }
             }
         }
 
