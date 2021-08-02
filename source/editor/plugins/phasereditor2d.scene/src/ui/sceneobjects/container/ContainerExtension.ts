@@ -29,8 +29,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const list = [];
 
             const children = args.serializer.read("list", []) as json.IObjectData[];
+            const nestedPrefabs = args.serializer.getData().nestedPrefabs ?? [];
 
-            for (const objData of children) {
+            for (const objData of [...children, ...nestedPrefabs]) {
 
                 const ser = args.serializer.getSerializer(objData);
 
