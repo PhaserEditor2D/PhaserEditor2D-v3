@@ -330,6 +330,11 @@ namespace phasereditor2d.scene.core.json {
             return this._prefabFiles;
         }
 
+        existsPrefab(prefabId: string) {
+
+            return this._prefabObjectId_ObjectData_Map.has(prefabId);
+        }
+
         getPrefabData(prefabId: string): IObjectData {
 
             return this._prefabObjectId_ObjectData_Map.get(prefabId);

@@ -632,13 +632,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected readNestedPrefabData(objData: json.IObjectData) {
 
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
             const list = objData.nestedPrefabs || [];
 
             const map = new Map<string, json.IObjectData>();
 
             for (const data of list) {
 
-                map.set(data.prefabId, data);
+                if (finder.existsPrefab(data.prefabId)) {
+
+                    map.set(data.prefabId, data);
+                }
             }
 
             return map;
