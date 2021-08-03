@@ -54,6 +54,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 ));
     }
 
+    function noNestedPrefabSelected(args: colibri.ui.ide.commands.HandlerArgs) {
+
+        return args.activeEditor.getSelection()
+            .filter(obj => ui.sceneobjects.isGameObject(obj))
+            .filter((obj: ui.sceneobjects.ISceneGameObject) => obj.getEditorSupport().isNestedPrefabInstance())
+            .length === 0;
+    }
+
     function isOnlyContainerSelected(args: colibri.ui.ide.commands.HandlerArgs) {
 
         return isSceneScope(args) && editorHasSelection(args)
@@ -602,7 +610,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
 
-                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0 && noNestedPrefabSelected(args),
 
                 args => args.activeEditor.getUndoManager()
                     .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
