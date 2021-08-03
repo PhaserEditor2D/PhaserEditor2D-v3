@@ -78,11 +78,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.writeJSON(containerData);
 
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
             if (this.isPrefabInstance()) {
 
                 containerData.nestedPrefabs = this.getObject().getChildren()
 
                     .filter(obj => obj.getEditorSupport().isPrefabInstance())
+
+                    .filter(obj => finder.existsPrefab(obj.getEditorSupport().getPrefabId()))
 
                     .map(obj => {
 

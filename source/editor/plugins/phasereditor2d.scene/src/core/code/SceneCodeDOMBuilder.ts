@@ -743,6 +743,7 @@ namespace phasereditor2d.scene.core.code {
         }) {
 
             const body = args.createMethodDecl.getBody();
+            const parentIsPrefab = args.obj.getEditorSupport().isPrefabInstance();
 
             for (const child of args.obj.getChildren()) {
 
@@ -750,7 +751,7 @@ namespace phasereditor2d.scene.core.code {
 
                     this.addCreateObjectCodeOfNestedPrefab(child, args.createMethodDecl, args.lazyStatements);
 
-                } else {
+                } else if (!parentIsPrefab) {
 
                     body.push(new RawCodeDOM(""));
                     body.push(new RawCodeDOM("// " + child.getEditorSupport().getLabel()));
