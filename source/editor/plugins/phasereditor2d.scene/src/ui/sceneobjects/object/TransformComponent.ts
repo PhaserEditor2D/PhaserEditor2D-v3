@@ -46,6 +46,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
+            const obj = this.getObject();
+            const support = obj.getEditorSupport();
+            const prop = TransformComponent.position;
+
+            if (support.isNestedPrefabInstance()
+                && support.isUnlockedPropertyXY(prop)) {
+
+                const dom = new core.code.MethodCallCodeDOM("setPosition", args.objectVarName);
+                dom.argFloat(prop.x.getValue(obj));
+                dom.argFloat(prop.y.getValue(obj));
+                args.statements.push(dom);
+            }
+
             this.buildSetObjectPropertyCodeDOM_FloatProperty(
                 args,
                 TransformComponent.scaleX,

@@ -39,7 +39,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs) {
 
-            // nothing
+            const obj = this.getObject();
+            const support = obj.getEditorSupport();
+
+            if (support.isNestedPrefabInstance() &&
+                (support.isUnlockedPropertyXY(TriangleComponent.p1)
+                    || support.isUnlockedPropertyXY(TriangleComponent.p2)
+                    || support.isUnlockedPropertyXY(TriangleComponent.p3))) {
+
+                const dom = new core.code.MethodCallCodeDOM("setTo", args.objectVarName);
+                dom.argFloat(obj.x1);
+                dom.argFloat(obj.y1);
+                dom.argFloat(obj.x2);
+                dom.argFloat(obj.y2);
+                dom.argFloat(obj.x3);
+                dom.argFloat(obj.y3);
+                args.statements.push(dom);
+            }
         }
     }
 }

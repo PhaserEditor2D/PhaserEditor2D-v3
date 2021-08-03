@@ -46,11 +46,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(obj, [
                 TextureComponent.texture
             ]);
+
             this._textureKeys = {};
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
-            // nothing, the properties are set when the object is created.
+
+            const obj = this.getObject();
+            const support = obj.getEditorSupport();
+            const prop = TextureComponent.texture;
+
+            if (support.isNestedPrefabInstance()
+                && support.isUnlockedProperty(prop)) {
+
+                    const dom = new core.code.MethodCallCodeDOM("setTexture", args.objectVarName);
+                    const keys = prop.getValue(obj) as ITextureKeys;
+                    dom.argLiteral(keys.key);
+                    dom.argStringOrFloat(keys.frame);
+                    args.statements.push(dom);
+            }
         }
 
         getTextureKeys(): ITextureKeys {

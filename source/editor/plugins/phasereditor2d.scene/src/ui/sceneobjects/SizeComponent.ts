@@ -29,7 +29,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
-            // this.buildSetObjectPropertyCodeDOM_FloatProperty(args, SizeComponent.width, SizeComponent.height);
+            const obj = this.getObject();
+            const support = obj.getEditorSupport();
+            const prop = SizeComponent.size;
+
+            if (support.isNestedPrefabInstance()
+                && support.isUnlockedPropertyXY(prop)) {
+
+                const dom = new core.code.MethodCallCodeDOM("setSize", args.objectVarName);
+                dom.argFloat(prop.x.getValue(obj));
+                dom.argFloat(prop.y.getValue(obj));
+                args.statements.push(dom);
+                args.statements.push(
+                    new core.code.MethodCallCodeDOM("updateDisplayOrigin", args.objectVarName));
+            }
         }
     }
 }
