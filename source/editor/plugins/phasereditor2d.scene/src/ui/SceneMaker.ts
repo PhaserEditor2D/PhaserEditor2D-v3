@@ -474,7 +474,7 @@ namespace phasereditor2d.scene.ui {
             try {
 
                 if (parent && parent.getEditorSupport().isPrefabInstance()
-                    && data.scope === sceneobjects.ObjectScope.PREFAB_PUBLIC) {
+                    && data.scope === sceneobjects.ObjectScope.NESTED_PREFAB) {
 
                     data = {
                         id: Phaser.Utils.String.UUID(),

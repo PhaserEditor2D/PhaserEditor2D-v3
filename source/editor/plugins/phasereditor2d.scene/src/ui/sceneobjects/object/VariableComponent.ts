@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             local: true,
             getValue: obj => obj.getEditorSupport().getScope(),
             setValue: (obj, value) => obj.getEditorSupport().setScope(value),
-            values: [ObjectScope.METHOD, ObjectScope.CLASS, ObjectScope.PUBLIC, ObjectScope.PREFAB_PUBLIC],
+            values: [ObjectScope.METHOD, ObjectScope.CLASS, ObjectScope.PUBLIC, ObjectScope.NESTED_PREFAB],
             getValueLabel: value => value.split("_").map(v => v[0] + v.substring(1).toLowerCase()).join(" ")
         };
 

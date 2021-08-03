@@ -86,7 +86,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         return true;
                     }
 
-                    return scope !== ObjectScope.PREFAB_PUBLIC;
+                    return scope !== ObjectScope.NESTED_PREFAB;
                 });
             }
         }
