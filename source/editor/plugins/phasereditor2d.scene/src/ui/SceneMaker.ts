@@ -481,6 +481,7 @@ namespace phasereditor2d.scene.ui {
                         id: Phaser.Utils.String.UUID(),
                         prefabId: data.id,
                         isNestedPrefab: true,
+                        nestedPrefabs: data.nestedPrefabs,
                         label: data.label,
                     };
                 }

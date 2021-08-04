@@ -372,6 +372,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return undefined;
         }
 
+        isAccessibleNestedPrefab() {
+
+            if (this.isNestedPrefabInstance()) {
+
+                const parent = getObjectParent(this.getObject()) as ISceneGameObject;
+
+                return parent.getEditorSupport().isNestedPrefabInstance()
+                    || parent.getEditorSupport().isPrefabInstanceRoot();
+            }
+
+            return false;
+        }
+
+        isPrefabInstanceRoot() {
+
+            if (this.isPrefabInstance() && !this.isNestedPrefabInstance()) {
+
+                const parent = getObjectParent(this.getObject());
+
+                if (!parent || !parent.getEditorSupport().isPrefabInstance()) {
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         isNestedPrefabInstance() {
 
             return this._isNestedPrefabInstance;
