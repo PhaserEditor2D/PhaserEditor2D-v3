@@ -420,11 +420,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return typeof this._prefabId === "string";
         }
 
-        _setPrefabId(prefabId: string) {
-
-            this._prefabId = prefabId;
-        }
-
         getAllParents() {
 
             const list: Array<Container | Layer> = [];

@@ -266,7 +266,20 @@ namespace phasereditor2d.scene.core.json {
 
                         prefabObjectId_ObjectData_Map.set(c.id, c);
                         prefabId_File_Map.set(c.id, file);
+
+                        this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, file, c);
                     }
+                }
+            }
+
+            if (objData.nestedPrefabs && objData.scope === ui.sceneobjects.ObjectScope.NESTED_PREFAB) {
+
+                for (const c of objData.nestedPrefabs) {
+
+                    prefabObjectId_ObjectData_Map.set(c.id, c);
+                    prefabId_File_Map.set(c.id, file);
+
+                    this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, file, c);
                 }
             }
         }
