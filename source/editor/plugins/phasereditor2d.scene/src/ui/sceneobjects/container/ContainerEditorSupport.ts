@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 containerData.nestedPrefabs = this.getObject().getChildren()
 
-                    .filter(obj => obj.getEditorSupport().isNestedPrefabInstance())
+                    .filter(obj => obj.getEditorSupport().isActiveNestedPrefab())
 
                     .filter(obj => finder.existsPrefab(obj.getEditorSupport().getPrefabId()))
 
@@ -130,7 +130,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 let sprite: ISceneGameObject;
 
-                if (nestedPrefabMap.has(objData.id)) {
+                if (objData.scope === ObjectScope.NESTED_PREFAB
+                    && nestedPrefabMap.has(objData.id)) {
 
                     const prefabData = nestedPrefabMap.get(objData.id);
 

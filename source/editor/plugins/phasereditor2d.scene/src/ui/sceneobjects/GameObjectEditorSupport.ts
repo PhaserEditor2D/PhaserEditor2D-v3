@@ -372,19 +372,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return undefined;
         }
 
-        isAccessibleNestedPrefab() {
+        /**
+         * Checks if it is a nested prefab instance that can be modified (published to the scene,
+         * accessible from the prefab instance's root).
+         *
+         * @returns If active.
+         */
+        isActiveNestedPrefab() {
 
             if (this.isNestedPrefabInstance()) {
 
                 const parent = getObjectParent(this.getObject()) as ISceneGameObject;
+                const parentSupport = parent.getEditorSupport();
 
-                return parent.getEditorSupport().isNestedPrefabInstance()
-                    || parent.getEditorSupport().isPrefabInstanceRoot();
+                return parentSupport.isNestedPrefabInstance()
+                    || parentSupport.isPrefabInstanceRoot();
             }
 
             return false;
         }
-
+        /**
+         * Checks if the object is a prefab instance and the parent isn't a prefab instance.
+         *
+         * @returns If it is the root.
+         */
         isPrefabInstanceRoot() {
 
             if (this.isPrefabInstance() && !this.isNestedPrefabInstance()) {
