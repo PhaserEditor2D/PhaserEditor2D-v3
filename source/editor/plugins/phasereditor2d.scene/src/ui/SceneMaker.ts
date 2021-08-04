@@ -233,6 +233,7 @@ namespace phasereditor2d.scene.ui {
             const content = await FileUtils.preloadAndGetFileString(file);
 
             if (!content) {
+
                 return null;
             }
 
@@ -479,6 +480,7 @@ namespace phasereditor2d.scene.ui {
                     data = {
                         id: Phaser.Utils.String.UUID(),
                         prefabId: data.id,
+                        isNestedPrefab: true,
                         label: data.label,
                     };
                 }

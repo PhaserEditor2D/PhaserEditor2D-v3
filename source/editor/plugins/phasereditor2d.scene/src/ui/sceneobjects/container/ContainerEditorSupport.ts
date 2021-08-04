@@ -128,7 +128,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const objData of list) {
 
-                let sprite:ISceneGameObject;
+                let sprite: ISceneGameObject;
 
                 if (nestedPrefabMap.has(objData.id)) {
 
