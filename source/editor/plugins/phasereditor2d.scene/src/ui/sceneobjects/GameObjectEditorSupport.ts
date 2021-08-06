@@ -19,6 +19,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return GameObjectEditorSupport.hasEditorSupport(obj);
     }
 
+    export function getObjectChildren(obj: ISceneGameObject) {
+
+        if (obj instanceof Layer || obj instanceof Container) {
+
+            return obj.getChildren();
+        }
+
+        return [];
+    }
+
     export function getObjectParent(obj: ISceneGameObject) {
 
         return GameObjectEditorSupport.getObjectParent(obj);
@@ -186,6 +196,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._unlockedProperties.delete(property.name);
             }
+        }
+
+        _clearUnlockProperties() {
+
+            this._unlockedProperties.clear();
         }
 
         private static async buildPrefabDependencyHash(builder: ide.core.MultiHashBuilder, prefabId: string) {
@@ -416,6 +431,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._isNestedPrefabInstance;
         }
 
+        setIsNestedPrefabInstance(isNestedPrefabImage: boolean) {
+
+            this._isNestedPrefabInstance = isNestedPrefabImage;
+        }
+
         isPrefabInstance() {
             return typeof this._prefabId === "string";
         }
@@ -525,6 +545,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getPrefabId() {
 
             return this._prefabId;
+        }
+
+        setPrefabId(id: string) {
+
+            this._prefabId = id;
         }
 
         getPrefabName() {
@@ -659,7 +684,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setId(data.id);
 
             this._prefabId = data.prefabId;
-            this._isNestedPrefabInstance = data.isNestedPrefab ?? false;
             this._unlockedProperties = new Set(data["unlock"] ?? []);
 
             for (const s of this._serializables) {
@@ -668,24 +692,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected readNestedPrefabData(objData: json.IObjectData) {
+        static readNestedPrefabData(objData: json.IObjectData, map?: Map<string, json.IObjectData>, foreignPrefab = false) {
+
+            map = map ?? new Map();
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
             const list = objData.nestedPrefabs || [];
 
-            const map = new Map<string, json.IObjectData>();
-
             for (const data of list) {
 
-                if (finder.existsPrefab(data.prefabId)) {
+                const id = finder.getOriginalPrefabId(data.prefabId);
 
-                    const copy = colibri.core.json.copy(data) as core.json.IObjectData;
+                if (id && !map.has(id)) {
 
-                    copy.isNestedPrefab = true;
+                    if (foreignPrefab) {
 
-                    map.set(data.prefabId, copy);
+                        const copy = colibri.core.json.copy(data);
+                        copy.prefabId = data.id;
+                        copy.id = Phaser.Utils.String.UUID();
+
+                        map.set(id, copy);
+
+                    } else {
+
+                        map.set(id, data);
+                    }
                 }
+            }
+
+            if (objData.prefabId) {
+
+                const prefabData = finder.getPrefabData(objData.prefabId);
+
+                this.readNestedPrefabData(prefabData, map, true);
             }
 
             return map;

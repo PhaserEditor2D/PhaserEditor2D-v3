@@ -272,7 +272,7 @@ namespace phasereditor2d.scene.core.json {
                 }
             }
 
-            if (objData.nestedPrefabs && objData.scope === ui.sceneobjects.ObjectScope.NESTED_PREFAB) {
+            if (objData.nestedPrefabs) {
 
                 for (const c of objData.nestedPrefabs) {
 
@@ -283,7 +283,6 @@ namespace phasereditor2d.scene.core.json {
                 }
             }
         }
-
 
         getUserComponentsFiles() {
 
@@ -341,6 +340,23 @@ namespace phasereditor2d.scene.core.json {
 
         getPrefabFiles() {
             return this._prefabFiles;
+        }
+
+        getOriginalPrefabId(prefabId: string): string | undefined {
+
+            const objData = this.getPrefabData(prefabId);
+
+            if (!objData) {
+
+                return undefined;
+            }
+
+            if (objData.prefabId) {
+
+                return this.getOriginalPrefabId(objData.prefabId);
+            }
+
+            return prefabId;
         }
 
         existsPrefab(prefabId: string) {

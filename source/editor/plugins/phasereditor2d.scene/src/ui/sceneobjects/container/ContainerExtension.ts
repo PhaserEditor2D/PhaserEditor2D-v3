@@ -26,14 +26,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static async getAssetsFromNestedData(args: IGetAssetsFromObjectArgs) {
 
-            const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
-
             const list = [];
             const children = args.serializer.read("list", []) as json.IObjectData[];
-            const nestedPrefabs = (args.serializer.getData().nestedPrefabs ?? [])
-                .filter(data => sceneFinder.existsPrefab(data.prefabId));
+            // const nestedPrefabs = (args.serializer.getData().nestedPrefabs ?? [])
+            //     .filter(data => sceneFinder.existsPrefab(data.prefabId));
 
-            for (const objData of [...children, ...nestedPrefabs]) {
+            const nestedPrefabs = GameObjectEditorSupport.readNestedPrefabData(args.serializer.getData());
+
+            for (const objData of [...children, ...nestedPrefabs.values()]) {
 
                 const ser = args.serializer.getSerializer(objData);
 

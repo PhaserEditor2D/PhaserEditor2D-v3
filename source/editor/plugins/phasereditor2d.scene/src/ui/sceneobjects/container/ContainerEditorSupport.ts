@@ -118,7 +118,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const list = ser.read("list", []) as json.IObjectData[];
 
-            const nestedPrefabMap = this.readNestedPrefabData(containerData);
+            const nestedPrefabMap = GameObjectEditorSupport.readNestedPrefabData(containerData);
 
             const maker = this.getScene().getMaker();
 
@@ -130,16 +130,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 let sprite: ISceneGameObject;
 
-                if (objData.scope === ObjectScope.NESTED_PREFAB
-                    && nestedPrefabMap.has(objData.id)) {
+                if (objData.scope === ObjectScope.NESTED_PREFAB && nestedPrefabMap.has(objData.id)) {
 
                     const prefabData = nestedPrefabMap.get(objData.id);
 
                     sprite = maker.createObject(prefabData);
+                    sprite.getEditorSupport().setIsNestedPrefabInstance(true);
 
                 } else {
 
-                    sprite = maker.createObject(objData, undefined, container);
+                    if (this.isPrefabInstance() && objData.scope === ObjectScope.NESTED_PREFAB) {
+
+                        const copy = colibri.core.json.copy(objData) as core.json.IObjectData;
+
+                        copy.prefabId = objData.id;
+                        copy.id = Phaser.Utils.String.UUID();
+
+                        sprite = maker.createObject(copy);
+
+                        sprite.getEditorSupport().setIsNestedPrefabInstance(true);
+
+                    } else {
+
+                        sprite = maker.createObject(objData);
+                    }
                 }
 
                 if (sprite) {
