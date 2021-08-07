@@ -247,8 +247,6 @@ namespace phasereditor2d.scene.ui {
                     label: "temporal"
                 });
 
-                this.postProcessingOfNestedPrefabs(obj);
-
                 if (obj.getEditorSupport().isUnlockedProperty(sceneobjects.TransformComponent.x)) {
 
                     const { x, y } = this.getCanvasCenterPoint();
@@ -266,34 +264,6 @@ namespace phasereditor2d.scene.ui {
                 console.error(e);
 
                 return null;
-            }
-        }
-
-        private postProcessingOfNestedPrefabs(obj: sceneobjects.ISceneGameObject) {
-
-            const support = obj.getEditorSupport();
-
-            if (support.getScope() === sceneobjects.ObjectScope.NESTED_PREFAB) {
-
-                support.setPrefabId(support.getId());
-                support.setIsNestedPrefabInstance(true);
-                support.setId(Phaser.Utils.String.UUID());
-                support.setScope(sceneobjects.ObjectScope.METHOD);
-
-            } else {
-
-                if (support.isActiveNestedPrefab()) {
-
-                    support.setPrefabId(support.getId());
-                    support.setId(Phaser.Utils.String.UUID());
-                }
-            }
-
-            const list = sceneobjects.getObjectChildren(obj);
-
-            for(const child of list) {
-
-                // this.postProcessingOfNestedPrefabs(child);
             }
         }
 

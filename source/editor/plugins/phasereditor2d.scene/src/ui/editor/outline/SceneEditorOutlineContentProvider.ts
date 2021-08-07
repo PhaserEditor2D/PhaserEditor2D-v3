@@ -50,7 +50,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 if (parent.getEditorSupport().isPrefabInstance()) {
 
-                    return parent.getEditorSupport().getNestedPrefabs();
+                    return parent.getEditorSupport().getNestedActivePrefabInstances();
                 }
 
                 const list = [...parent.getChildren()];
