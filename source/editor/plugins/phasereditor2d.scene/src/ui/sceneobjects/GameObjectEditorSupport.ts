@@ -47,6 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         // tslint:disable-next-line:ban-types
         private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
+        private _mutableNestedPrefab: boolean;
 
         constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene) {
             super(obj, extension.getTypeName().toLowerCase(), scene);
@@ -55,6 +56,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._unlockedProperties = new Set();
             this._serializables = [];
             this._componentMap = new Map();
+            this._mutableNestedPrefab = false;
 
             obj.setDataEnabled();
 
@@ -396,20 +398,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @returns If active.
          */
-        isActiveNestedPrefab() {
+        isMutableNestedPrefab() {
 
-            if (this.isNestedPrefabInstance()) {
+            if (this._mutableNestedPrefab) {
 
-                const parent = getObjectParent(this.getObject()) as ISceneGameObject;
-                const parentSupport = parent.getEditorSupport();
+                const parentSupport = (getObjectParent(this.getObject()) as ISceneGameObject).getEditorSupport();
 
-                return parentSupport.isNestedPrefabInstance()
-                    || parentSupport.isPrefabInstanceRoot();
+                return parentSupport.isMutableNestedPrefab() || parentSupport.isPrefabInstanceRoot();
             }
 
             return false;
+        }
 
-            // return this.isNestedPrefabInstance() && this.getScope() === sceneobjects.ObjectScope.NESTED_PREFAB;
+        _setMutableNestedPrefab(b: boolean) {
+
+            this._mutableNestedPrefab = b;
         }
         /**
          * Checks if the object is a prefab instance and the parent isn't a prefab instance.
@@ -503,7 +506,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const children = sceneobjects.getObjectChildren(this.getObject());
 
                 return children
-                    .filter(obj => obj.getEditorSupport().isActiveNestedPrefab());
+                    .filter(obj => obj.getEditorSupport().isMutableNestedPrefab());
             }
 
             return [];

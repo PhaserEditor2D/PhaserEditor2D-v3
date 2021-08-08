@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 containerData.nestedPrefabs = this.getObject().getChildren()
 
-                    .filter(obj => obj.getEditorSupport().isActiveNestedPrefab())
+                    .filter(obj => obj.getEditorSupport().isMutableNestedPrefab())
 
                     .filter(obj => finder.existsPrefab(obj.getEditorSupport().getPrefabId()))
 
@@ -129,6 +129,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const children = containerData.prefabId ?
                 ContainerEditorSupport.buildPrefabChildrenData(containerData, originalChildren) : originalChildren;
 
+            let i = 0;
+
             for (const objData of children) {
 
                 const sprite = maker.createObject(objData);
@@ -136,15 +138,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 if (sprite) {
 
                     this.getObject().add(sprite);
+
+                    const originalData = originalChildren[i];
+
+                    if (originalData.scope === sceneobjects.ObjectScope.NESTED_PREFAB) {
+
+                        sprite.getEditorSupport()._setMutableNestedPrefab(true);
+                    }
                 }
+
+                i++;
             }
         }
 
         static buildPrefabChildrenData(objData: core.json.IObjectData, originalPrefabChildren: core.json.IObjectData[]) {
 
             const result: json.IObjectData[] = [];
-
-            const finder = ScenePlugin.getInstance().getSceneFinder();
 
             const localNestedPrefabs = objData.nestedPrefabs ?? [];
 
@@ -224,78 +233,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return result;
         }
 
-        static buildPrefabChildrenData__orig(objData: core.json.IObjectData, originalPrefabChildren: core.json.IObjectData[]) {
-
-            const result: json.IObjectData[] = [];
-
-            const finder = ScenePlugin.getInstance().getSceneFinder();
-
-            const localNestedPrefabs = objData.nestedPrefabs ?? [];
-
-            for (const originalChild of originalPrefabChildren) {
-
-                if (originalChild.scope !== sceneobjects.ObjectScope.NESTED_PREFAB) {
-
-                    result.push(originalChild);
-
-                } else {
-
-                    let localNestedPrefab: json.IObjectData;
-
-                    for (const local of localNestedPrefabs) {
-
-                        const remoteNestedPrefab = this.findRemoteNestedPrefab(objData.prefabId, finder.getOriginalPrefabId(local.prefabId));
-
-                        if (!remoteNestedPrefab || remoteNestedPrefab.id === originalChild.id) {
-
-                            localNestedPrefab = local;
-                            break;
-                        }
-                    }
-
-                    if (localNestedPrefab) {
-
-                        const nestedPrefab = this.reconnectWithRemoteNestedPrefab(objData.prefabId, localNestedPrefab);
-
-                        if (nestedPrefab) {
-
-                            result.push(nestedPrefab);
-
-                        }
-
-                    } else {
-
-                        const remoteNestedPrefab = this.findRemoteNestedPrefab(objData.prefabId, originalChild.id);
-
-                        if (remoteNestedPrefab) {
-
-                            const nestedPrefab: core.json.IObjectData = {
-                                id: Phaser.Utils.String.UUID(),
-                                prefabId: remoteNestedPrefab.id,
-                                label: remoteNestedPrefab.label,
-                            };
-
-                            result.push(nestedPrefab);
-
-                        } else {
-
-                            // ok, create one connecting with the original child
-
-                            const nestedPrefab: core.json.IObjectData = {
-                                id: Phaser.Utils.String.UUID(),
-                                prefabId: originalChild.id,
-                                label: originalChild.label,
-                            };
-
-                            result.push(nestedPrefab);
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
         private static findRemoteNestedPrefab(parentPrefabId: string, originalNestedPrefabId: string): json.IObjectData {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
@@ -325,44 +262,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return null;
-        }
-
-        private static reconnectWithRemoteNestedPrefab(parentPrefabId: string, nestedPrefabData: core.json.IObjectData) {
-
-            const finder = ScenePlugin.getInstance().getSceneFinder();
-
-            const origNestedPrefabId = finder.getOriginalPrefabId(nestedPrefabData.prefabId);
-
-            if (!origNestedPrefabId) {
-
-                return null;
-            }
-
-            if (parentPrefabId === finder.getOriginalPrefabId(parentPrefabId)
-                && nestedPrefabData.prefabId && origNestedPrefabId) {
-
-                // is pointing directly to the original object
-                return nestedPrefabData;
-            }
-
-            const pointedPrefabData = finder.getPrefabData(parentPrefabId);
-
-            if (!pointedPrefabData) {
-
-                return null;
-            }
-
-            const pointedNestedPrefab = (pointedPrefabData.nestedPrefabs ?? [])
-                .find(obj => origNestedPrefabId === finder.getOriginalPrefabId(obj.prefabId));
-
-            if (pointedNestedPrefab) {
-
-                nestedPrefabData.prefabId = pointedNestedPrefab.id;
-
-                return nestedPrefabData;
-            }
-
-            return this.reconnectWithRemoteNestedPrefab(pointedPrefabData.prefabId, nestedPrefabData);
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
