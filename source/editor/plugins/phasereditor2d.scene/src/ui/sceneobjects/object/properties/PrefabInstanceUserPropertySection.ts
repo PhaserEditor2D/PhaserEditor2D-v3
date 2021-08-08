@@ -41,6 +41,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const obj = this.getSelectionFirstElement() as ISceneGameObject;
 
+                if (obj.getEditorSupport().isNestedPrefabInstance()) {
+
+                    const file = obj.getEditorSupport().getPrefabFile();
+
+                    this.createPrefabLink(file, `Root Prefab: ${file.getNameWithoutExtension()}`);
+                }
+
                 const userPropsComponent = GameObjectEditorSupport
                     .getObjectComponent(obj, PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
 
@@ -51,20 +58,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const prefabFile = propsByPrefab.prefabFile;
                     const prefabName = prefabFile.getNameWithoutExtension();
 
-                    const headerDiv = document.createElement("div");
-                    headerDiv.classList.add("PrefabLink");
-                    headerDiv.style.gridColumn = "1 / span 3";
-                    headerDiv.style.width = "100%";
-                    this._propArea.appendChild(headerDiv);
+                    const headerDiv = this.createPrefabLink(prefabFile);
 
-                    const prefabBtn = document.createElement("a");
-                    prefabBtn.href = "#";
-                    prefabBtn.innerHTML = prefabName;
-                    headerDiv.appendChild(prefabBtn);
+                    // const headerDiv = document.createElement("div");
+                    // headerDiv.classList.add("PrefabLink");
+                    // headerDiv.style.gridColumn = "1 / span 3";
+                    // headerDiv.style.width = "100%";
+                    // this._propArea.appendChild(headerDiv);
 
-                    const openFileCallback = () => colibri.Platform.getWorkbench().openEditor(propsByPrefab.prefabFile);
+                    // const prefabBtn = document.createElement("a");
+                    // prefabBtn.href = "#";
+                    // prefabBtn.innerHTML = prefabName;
+                    // headerDiv.appendChild(prefabBtn);
 
-                    prefabBtn.addEventListener("click", openFileCallback);
+                    // const openFileCallback = () => colibri.Platform.getWorkbench().openEditor(propsByPrefab.prefabFile);
+
+                    // prefabBtn.addEventListener("click", openFileCallback);
 
                     this.createMenuIcon(headerDiv, () => {
 
@@ -102,7 +111,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         menu.addAction({
                             text: `Open ${prefabName} File`,
-                            callback: openFileCallback
+                            callback: () => colibri.Platform.getWorkbench().openEditor(prefabFile)
                         })
 
                         return menu;
@@ -114,6 +123,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
                 }
             });
+        }
+
+        private createPrefabLink(file: colibri.core.io.FilePath, btnText?:string) {
+
+            const headerDiv = document.createElement("div");
+            headerDiv.classList.add("PrefabLink");
+            headerDiv.style.gridColumn = "1 / span 3";
+            headerDiv.style.width = "100%";
+            this._propArea.appendChild(headerDiv);
+
+            const prefabBtn = document.createElement("a");
+            prefabBtn.href = "#";
+            prefabBtn.innerHTML = btnText ?? file.getNameWithoutExtension();
+            headerDiv.appendChild(prefabBtn);
+
+            prefabBtn.addEventListener("click", () => colibri.Platform.getWorkbench().openEditor(file));
+
+            return headerDiv;
         }
 
         canEdit(obj: any, n: number): boolean {

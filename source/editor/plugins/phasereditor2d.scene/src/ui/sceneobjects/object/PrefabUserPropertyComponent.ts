@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (editorSupport.isPrefabInstance()) {
 
-                const prefabFile = this.getObject().getEditorSupport().getPrefabFile();
+                const prefabFile = this.getObject().getEditorSupport().getPrefabOrNestedPrefabFile();
 
                 if (prefabFile) {
 

@@ -51,10 +51,12 @@ namespace phasereditor2d.scene.core.json {
         private _compFilename_Data_Map: Map<string, usercomponent.UserComponentsModel>;
         private _compModelsInfo: IUserComponentsModelInfo[];
         private _enabled: boolean;
+        private _nestedPrefabIds: Set<string>;
 
         constructor() {
 
             this._prefabObjectId_ObjectData_Map = new Map();
+            this._nestedPrefabIds = new Set();
             this._sceneFilename_Data_Map = new Map();
             this._sceneFilename_Settings_Map = new Map();
             this._prefabId_File_Map = new Map();
@@ -179,6 +181,7 @@ namespace phasereditor2d.scene.core.json {
         private async preloadSceneFiles(monitor: controls.IProgressMonitor): Promise<void> {
             const sceneIdSet = new Set<string>();
             const prefabObjectId_ObjectData_Map = new Map<string, IObjectData>();
+            const nestedPrefabIds = new Set<string>();
             const sceneFilename_Data_Map = new Map<string, ISceneData>();
             const sceneFilename_Settings_Map = new Map<string, SceneSettings>();
             const prefabId_File_Map = new Map<string, io.FilePath>();
@@ -226,7 +229,7 @@ namespace phasereditor2d.scene.core.json {
                             prefabId_File_Map.set(data.id, file);
 
                             this.mapNestedPrefabData(
-                                prefabObjectId_ObjectData_Map, prefabId_File_Map, file, objData);
+                                prefabObjectId_ObjectData_Map, prefabId_File_Map, nestedPrefabIds, file, objData);
                         }
 
                         if (data.sceneType === SceneType.PREFAB) {
@@ -245,6 +248,7 @@ namespace phasereditor2d.scene.core.json {
             }
 
             this._prefabObjectId_ObjectData_Map = prefabObjectId_ObjectData_Map;
+            this._nestedPrefabIds = nestedPrefabIds;
             this._sceneFilename_Data_Map = sceneFilename_Data_Map;
             this._sceneFilename_Settings_Map = sceneFilename_Settings_Map;
             this._prefabId_File_Map = prefabId_File_Map;
@@ -255,6 +259,7 @@ namespace phasereditor2d.scene.core.json {
         private mapNestedPrefabData(
             prefabObjectId_ObjectData_Map: Map<string, IObjectData>,
             prefabId_File_Map: Map<string, io.FilePath>,
+            nestedPrefabIds: Set<string>,
             file: io.FilePath,
             objData: IObjectData) {
 
@@ -266,8 +271,9 @@ namespace phasereditor2d.scene.core.json {
 
                         prefabObjectId_ObjectData_Map.set(c.id, c);
                         prefabId_File_Map.set(c.id, file);
+                        nestedPrefabIds.add(c.id);
 
-                        this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, file, c);
+                        this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, nestedPrefabIds, file, c);
                     }
                 }
             }
@@ -279,7 +285,7 @@ namespace phasereditor2d.scene.core.json {
                     prefabObjectId_ObjectData_Map.set(c.id, c);
                     prefabId_File_Map.set(c.id, file);
 
-                    this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, file, c);
+                    this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, nestedPrefabIds, file, c);
                 }
             }
         }
@@ -357,6 +363,11 @@ namespace phasereditor2d.scene.core.json {
             }
 
             return prefabId;
+        }
+
+        isNestedPrefab(prefabId: string) {
+
+            return this._nestedPrefabIds.has(prefabId);
         }
 
         existsPrefab(prefabId: string) {
