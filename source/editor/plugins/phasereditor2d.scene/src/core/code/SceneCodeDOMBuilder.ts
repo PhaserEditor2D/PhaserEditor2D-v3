@@ -269,18 +269,6 @@ namespace phasereditor2d.scene.core.code {
                 body.push(new RawCodeDOM(""));
             }
 
-            {
-                // prefab awake handler
-                const settings = this._scene.getSettings();
-
-                if (settings.generateAwakeHandler) {
-
-                    body.push(new RawCodeDOM("// awake handler"));
-                    body.push(new RawCodeDOM("this.scene.events.once(\"scene-awake\", () => this.awake());"));
-                    body.push(new RawCodeDOM(""));
-                }
-            }
-
             const lazyStatements: CodeDOM[] = [];
 
             const result = this.buildSetObjectProperties({
@@ -308,6 +296,18 @@ namespace phasereditor2d.scene.core.code {
             body.push(...lazyStatements);
 
             this.addFieldInitCode(body);
+
+            {
+                // prefab awake handler
+                const settings = this._scene.getSettings();
+
+                if (settings.generateAwakeHandler) {
+
+                    body.push(new RawCodeDOM("// awake handler"));
+                    body.push(new RawCodeDOM("this.scene.events.once(\"scene-awake\", () => this.awake());"));
+                    body.push(new RawCodeDOM(""));
+                }
+            }
 
             body.push(new RawCodeDOM(""));
             body.push(new UserSectionCodeDOM("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t"))
