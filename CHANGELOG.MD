@@ -7,6 +7,7 @@
     * Allows unlock the position of prefab instances. This change introduces a new scene format that is not compatible with previous versions of the editor.
 * Good bye `prefab-awake` & `components-awake` events. Welcome `scene-awake`.
     * Updates `UserComponent.js` templates.
+* Scene Editor: replaces the Container section by the Children section, and applies for Layer objects too.
 
 ## v3.16.0-alpha.1
 
