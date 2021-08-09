@@ -18,10 +18,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         isAllowPickChildren() {
+
             return this._allowPickChildren;
         }
 
         setAllowPickChildren(childrenPickable: boolean) {
+
             this._allowPickChildren = childrenPickable;
         }
 
