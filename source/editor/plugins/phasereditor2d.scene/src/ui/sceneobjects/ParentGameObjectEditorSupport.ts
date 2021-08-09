@@ -6,7 +6,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export abstract class ParentGameObjectEditorSupport<T extends Layer | Container>
         extends GameObjectEditorSupport<T> {
 
-        private _allowPickChildren: boolean = true;
+        private _allowPickChildren = true;
+        private _showChildrenInOutline = true;
+
+        isAllowPickChildren() {
+
+            return this._allowPickChildren;
+        }
+
+        setAllowPickChildren(childrenPickable: boolean) {
+
+            this._allowPickChildren = childrenPickable;
+        }
+
+        isShowChildrenInOutline() {
+
+            return this._showChildrenInOutline;
+        }
+
+        setShowChildrenInOutline(showChildrenInOutline: boolean) {
+
+            this._showChildrenInOutline = showChildrenInOutline;
+        }
 
         setInteractive() {
             // nothing
@@ -266,16 +287,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     obj.getEditorSupport().buildDependencyHash(args);
                 }
             }
-        }
-
-        isAllowPickChildren() {
-
-            return this._allowPickChildren;
-        }
-
-        setAllowPickChildren(childrenPickable: boolean) {
-
-            this._allowPickChildren = childrenPickable;
         }
     }
 }

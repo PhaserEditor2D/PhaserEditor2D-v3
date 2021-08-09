@@ -20,6 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const comp = this.createGridElement(parent, 2);
 
             this.createBooleanField(comp, ChildrenComponent.allowPickChildren, false);
+            this.createBooleanField(comp, ChildrenComponent.showChildrenInOutline, false);
         }
 
         canEdit(obj: any, n: number): boolean {
