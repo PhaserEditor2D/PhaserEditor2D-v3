@@ -693,11 +693,15 @@ namespace phasereditor2d.scene.core.code {
 
             const support = obj.getEditorSupport();
 
-            const varName = formatToValidVarName(support.getLabel());
+            const parent = ui.sceneobjects.getObjectParent(obj);
+
+            const varName = support.isScenePrefabObject()
+                ? "this"
+                : formatToValidVarName(support.getLabel());
 
             if (support.isNestedPrefabInstance()) {
 
-                const parentVarName = this.getPrefabInstanceVarName(ui.sceneobjects.getObjectParent(obj));
+                const parentVarName = this.getPrefabInstanceVarName(parent);
 
                 return parentVarName + "." + varName;
             }
