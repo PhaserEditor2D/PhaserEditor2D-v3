@@ -4,6 +4,7 @@
 
 * Nested prefabs:
     * Uses nullish operator (`??`) in prefab constructors.
+* Scene Editor: allows unlock the position of prefab instances. This change introduces a new scene format that is not compatible with previous versions of the editor.
 * Good bye `prefab-awake` & `components-awake` events. Welcome `scene-awake`.
 
 ## v3.16.0-alpha.1
