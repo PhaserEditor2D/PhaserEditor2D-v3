@@ -8,7 +8,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         private _baseClass: string;
         private _gameObjectType: string;
         private _properties: sceneobjects.UserProperties;
-        private _generateAwakeEvent: boolean;
 
         constructor(name: string) {
 
@@ -16,7 +15,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._baseClass = "";
             this._gameObjectType = "Phaser.GameObjects.Image";
             this._properties = new UserComponentProperties(this);
-            this._generateAwakeEvent = false;
         }
 
         toJSON(): any {
@@ -28,8 +26,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 name: this._name,
                 baseClass: this._baseClass,
                 gameObjectType: this._gameObjectType,
-                properties: propsData,
-                generateAwakeEvent: this._generateAwakeEvent
+                properties: propsData
             };
 
             return data;
@@ -41,17 +38,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._baseClass = read(data, "baseClass", "");
             this._gameObjectType = read(data, "gameObjectType", "Phaser.GameObjects.Image");
             this._properties.readJSON(data.properties);
-            this._generateAwakeEvent = read(data, "generateAwakeEvent", true);
-        }
-
-        isGenerateAwakeEvent() {
-
-            return this._generateAwakeEvent;
-        }
-
-        setGenerateAwakeEvent(generateAwakeEvent: boolean) {
-
-            this._generateAwakeEvent = generateAwakeEvent;
         }
 
         getName() {

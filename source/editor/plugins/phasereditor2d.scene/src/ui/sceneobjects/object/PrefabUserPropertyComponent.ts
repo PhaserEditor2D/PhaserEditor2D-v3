@@ -113,19 +113,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
             }
 
-            if (this.getObject().getEditorSupport().isPrefabInstance()) {
-
-                const settings = this.getObject().getEditorSupport().getPrefabSettings();
-
-                if (settings && settings.generateAwakeEvent) {
-
-                    const stmt = new core.code.MethodCallCodeDOM("emit", args.objectVarName);
-                    stmt.argLiteral("prefab-awake");
-
-                    args.lazyStatements.push(stmt);
-                }
-            }
-
             args.statements = temp;
 
             if (args.lazyStatements.length > mark) {

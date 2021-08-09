@@ -273,10 +273,10 @@ namespace phasereditor2d.scene.core.code {
                 // prefab awake handler
                 const settings = this._scene.getSettings();
 
-                if (settings.generateAwakeEvent && settings.generateAwakeHandler) {
+                if (settings.generateAwakeHandler) {
 
                     body.push(new RawCodeDOM("// awake handler"));
-                    body.push(new RawCodeDOM("this.once(\"prefab-awake\", () => this.awake());"));
+                    body.push(new RawCodeDOM("this.scene.events.once(\"scene-awake\", () => this.awake());"));
                     body.push(new RawCodeDOM(""));
                 }
             }
@@ -381,6 +381,9 @@ namespace phasereditor2d.scene.core.code {
             body.push(...lazyStatements);
 
             this.addFieldInitCode(body);
+
+            body.push(new RawCodeDOM(""));
+            body.push(new RawCodeDOM(`this.events.emit("scene-awake");`));
 
             return createMethodDecl;
         }

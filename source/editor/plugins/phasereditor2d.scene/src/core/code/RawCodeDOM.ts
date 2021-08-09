@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.core.code {
             return codes.map(code => new RawCodeDOM(code));
         }
 
-        constructor(code: string) {
+        constructor(code = "") {
             super();
 
             this._code = code;
