@@ -398,13 +398,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @returns If active.
          */
-        isMutableNestedPrefab() {
+        isMutableNestedPrefabInstance() {
 
             if (this._mutableNestedPrefab) {
 
                 const parentSupport = (getObjectParent(this.getObject()) as ISceneGameObject).getEditorSupport();
 
-                return parentSupport.isMutableNestedPrefab() || parentSupport.isPrefabInstanceRoot();
+                return parentSupport.isMutableNestedPrefabInstance() || parentSupport.isPrefabInstanceRoot();
             }
 
             return false;
@@ -414,6 +414,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._mutableNestedPrefab = b;
         }
+
+        isRootPrefabDefined() {
+
+            if (this.isPrefabInstance()) {
+
+                return !this.isNestedPrefabDefined();
+            }
+
+            return false;
+        }
+
+        isNestedPrefabDefined() {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            if (this.isPrefabInstance()) {
+
+                const id = finder.getOriginalPrefabId(this.getPrefabId());
+
+                return finder.isNestedPrefab(id);
+            }
+
+            return false;
+        }
+
         /**
          * Checks if the object is a prefab instance and the parent isn't a prefab instance.
          *
@@ -506,7 +531,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const children = sceneobjects.getObjectChildren(this.getObject());
 
                 return children
-                    .filter(obj => obj.getEditorSupport().isMutableNestedPrefab());
+                    .filter(obj => obj.getEditorSupport().isMutableNestedPrefabInstance());
             }
 
             return [];

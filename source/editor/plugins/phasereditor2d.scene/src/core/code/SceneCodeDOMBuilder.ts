@@ -363,7 +363,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
-                if (obj.getEditorSupport().isMutableNestedPrefab()) {
+                if (obj.getEditorSupport().isMutableNestedPrefabInstance()) {
 
                     this.addCreateObjectCodeOfNestedPrefab(obj, createMethodDecl, lazyStatements);
 
@@ -747,7 +747,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const child of args.obj.getChildren()) {
 
-                if (child.getEditorSupport().isMutableNestedPrefab()) {
+                if (child.getEditorSupport().isMutableNestedPrefabInstance()) {
 
                     this.addCreateObjectCodeOfNestedPrefab(child, args.createMethodDecl, args.lazyStatements);
 

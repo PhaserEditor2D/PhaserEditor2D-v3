@@ -83,6 +83,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._scope;
         }
 
+        isNestedPrefabScope() {
+
+            return this._scope === ObjectScope.NESTED_PREFAB;
+        }
+
         isPublic() {
 
             return this._scope === ObjectScope.PUBLIC

@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 containerData.nestedPrefabs = this.getObject().getChildren()
 
-                    .filter(obj => obj.getEditorSupport().isMutableNestedPrefab())
+                    .filter(obj => obj.getEditorSupport().isMutableNestedPrefabInstance())
 
                     .filter(obj => finder.existsPrefab(obj.getEditorSupport().getPrefabId()))
 

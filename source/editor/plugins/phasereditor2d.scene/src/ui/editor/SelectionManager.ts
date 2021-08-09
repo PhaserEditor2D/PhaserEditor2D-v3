@@ -143,7 +143,7 @@ namespace phasereditor2d.scene.ui.editor {
                     const owner = objSupport.getOwnerPrefabInstance();
 
                     if (owner instanceof sceneobjects.Container
-                        && objSupport.isMutableNestedPrefab()
+                        && objSupport.isMutableNestedPrefabInstance()
                         && owner.getEditorSupport().isAllowPickChildren()) {
                         // ok, it can be selected
                     } else {
