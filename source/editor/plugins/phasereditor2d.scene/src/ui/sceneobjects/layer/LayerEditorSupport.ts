@@ -62,42 +62,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.writeJSON(layerData);
 
-            if (!this.isPrefabInstance()) {
-
-                layerData.list = this.getObject().getChildren().map(obj => {
-
-                    const objData = {} as json.IObjectData;
-
-                    obj.getEditorSupport().writeJSON(objData);
-
-                    return objData as json.IObjectData;
-                });
-            }
+            ContainerEditorSupport.writeJSON_children(this.getObject(), layerData);
         }
 
         readJSON(layerData: json.IObjectData) {
 
             super.readJSON(layerData);
 
-            const ser = this.getSerializer(layerData);
-
-            const list = ser.read("list", []) as json.IObjectData[];
-
-            const maker = this.getScene().getMaker();
-
-            const layer = this.getObject();
-
-            layer.removeAll(true);
-
-            for (const objData of list) {
-
-                const sprite = maker.createObject(objData);
-
-                if (sprite) {
-
-                    layer.add(sprite);
-                }
-            }
+            ContainerEditorSupport.readJSON_children(this.getObject(), layerData);
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {

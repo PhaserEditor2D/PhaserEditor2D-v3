@@ -78,11 +78,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.writeJSON(containerData);
 
+            ContainerEditorSupport.writeJSON_children(this.getObject(), containerData);
+        }
+
+        readJSON(containerData: json.IObjectData) {
+
+            super.readJSON(containerData);
+
+            ContainerEditorSupport.readJSON_children(this.getObject(), containerData);
+        }
+
+        static writeJSON_children(container: Container | Layer, containerData: json.IObjectData) {
+
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            if (this.isPrefabInstance()) {
+            const support = container.getEditorSupport();
 
-                containerData.nestedPrefabs = this.getObject().getChildren()
+            if (support.isPrefabInstance()) {
+
+                containerData.nestedPrefabs = container.getChildren()
 
                     .filter(obj => obj.getEditorSupport().isMutableNestedPrefabInstance())
 
@@ -101,7 +115,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             } else {
 
-                containerData.list = this.getObject().getChildren().map(obj => {
+                containerData.list = container.getChildren().map(obj => {
 
                     const objData = {} as json.IObjectData;
 
@@ -112,38 +126,36 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        readJSON(containerData: json.IObjectData) {
+        static readJSON_children(container: Container | Layer, containerData: json.IObjectData) {
 
-            super.readJSON(containerData);
+            const support = container.getEditorSupport();
 
-            const ser = this.getSerializer(containerData);
+            const ser = support.getSerializer(containerData);
 
             const originalChildren = ser.read("list", []) as json.IObjectData[];
 
-            const maker = this.getScene().getMaker();
-
-            const container = this.getObject();
+            const maker = support.getScene().getMaker();
 
             container.removeAll(true);
 
             const children = containerData.prefabId ?
-                ContainerEditorSupport.buildPrefabChildrenData(containerData, originalChildren) : originalChildren;
+                this.buildPrefabChildrenData(containerData, originalChildren) : originalChildren;
 
             let i = 0;
 
-            for (const objData of children) {
+            for (const childData of children) {
 
                 // creates an empty object
                 const sprite = maker.createObject({
-                    id: objData.id,
-                    prefabId: objData.prefabId,
-                    type: objData.type,
-                    label: objData.label,
+                    id: childData.id,
+                    prefabId: childData.prefabId,
+                    type: childData.type,
+                    label: childData.label,
                 });
 
                 if (sprite) {
 
-                    this.getObject().add(sprite);
+                    container.add(sprite);
 
                     const originalData = originalChildren[i];
 
@@ -153,7 +165,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
 
                     // updates the object with the final data
-                    sprite.getEditorSupport().readJSON(objData);
+                    sprite.getEditorSupport().readJSON(childData);
                 }
 
                 i++;
