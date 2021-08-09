@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = phasereditor2d.scene.core.json;
 
-    export class LayerEditorSupport extends GameObjectEditorSupport<Layer> {
+    export class LayerEditorSupport extends ParentGameObjectEditorSupport<Layer> {
 
         constructor(obj: Layer, scene: Scene) {
             super(LayerExtension.getInstance(), obj, scene);
@@ -12,65 +12,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new VisibleComponent(obj),
                 new AlphaSingleComponent(obj)
             );
-        }
-
-        setInteractive(): void {
-            // nothing
-        }
-
-        async buildDependencyHash(args: IBuildDependencyHashArgs) {
-
-            super.buildDependencyHash(args);
-
-            if (!this.isPrefabInstance()) {
-
-                for (const obj of this.getObject().getChildren()) {
-
-                    obj.getEditorSupport().buildDependencyHash(args);
-                }
-            }
-        }
-
-        isAllowPickChildren() {
-
-            return (!this.isPrefabInstance() || this.getNestedActivePrefabInstances().length > 0)
-                && this.getObject().visible;
-        }
-
-        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
-
-            if (this.isPrefabInstance()) {
-
-                const finder = ScenePlugin.getInstance().getSceneFinder();
-
-                const file = finder.getPrefabFile(this.getPrefabId());
-
-                if (file) {
-
-                    const image = SceneThumbnailCache.getInstance().getContent(file);
-
-                    if (image) {
-
-                        return new controls.viewers.ImageCellRenderer(image);
-                    }
-                }
-            }
-
-            return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LAYER));
-        }
-
-        writeJSON(layerData: json.IObjectData) {
-
-            super.writeJSON(layerData);
-
-            ContainerEditorSupport.writeJSON_children(this.getObject(), layerData);
-        }
-
-        readJSON(layerData: json.IObjectData) {
-
-            super.readJSON(layerData);
-
-            ContainerEditorSupport.readJSON_children(this.getObject(), layerData);
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
