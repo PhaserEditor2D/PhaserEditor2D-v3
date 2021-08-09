@@ -4,6 +4,7 @@
 
 * Nested prefabs:
     * Uses nullish operator (`??`) in prefab constructors.
+* Good bye `prefab-awake` & `components-awake` events. Welcome `scene-awake`.
 
 ## v3.16.0-alpha.1
 
