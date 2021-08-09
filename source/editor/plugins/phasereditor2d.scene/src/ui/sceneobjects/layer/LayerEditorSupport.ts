@@ -10,7 +10,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(
                 new VisibleComponent(obj),
-                new AlphaSingleComponent(obj)
+                new AlphaSingleComponent(obj),
+                new ChildrenComponent(obj)
             );
         }
 

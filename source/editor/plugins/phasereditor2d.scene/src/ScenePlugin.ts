@@ -266,7 +266,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ParentSection(page),
-                page => new ui.sceneobjects.ContainerSection(page),
+                page => new ui.sceneobjects.ChildrenSection(page),
                 page => new ui.sceneobjects.TransformSection(page),
                 page => new ui.sceneobjects.OriginSection(page),
                 page => new ui.sceneobjects.FlipSection(page),

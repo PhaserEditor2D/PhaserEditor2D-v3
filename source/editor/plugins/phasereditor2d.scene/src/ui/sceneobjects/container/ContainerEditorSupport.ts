@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(new TransformComponent(obj));
             this.addComponent(new VisibleComponent(obj));
-            this.addComponent(new ContainerComponent(obj));
+            this.addComponent(new ChildrenComponent(obj));
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
