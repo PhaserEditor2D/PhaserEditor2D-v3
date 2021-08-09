@@ -133,7 +133,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const objData of children) {
 
-                const sprite = maker.createObject(objData);
+                // creates an empty object
+                const sprite = maker.createObject({
+                    id: objData.id,
+                    prefabId: objData.prefabId,
+                    type: objData.type,
+                    label: objData.label,
+                });
 
                 if (sprite) {
 
@@ -145,6 +151,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         sprite.getEditorSupport()._setMutableNestedPrefab(true);
                     }
+
+                    // updates the object with the final data
+                    sprite.getEditorSupport().readJSON(objData);
                 }
 
                 i++;
