@@ -106,7 +106,8 @@ namespace phasereditor2d.scene.ui {
 
                 if (sprites.length > 0) {
 
-                    if (prefabObj instanceof sceneobjects.Container || prefabObj instanceof sceneobjects.Layer) {
+                    if (!prefabObj.getEditorSupport().isPrefabInstance()
+                        && (prefabObj instanceof sceneobjects.Container || prefabObj instanceof sceneobjects.Layer)) {
 
                         parent = prefabObj;
 
