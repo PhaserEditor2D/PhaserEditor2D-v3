@@ -10,6 +10,7 @@
 * Scene Editor: replaces the Container section by the Children section, and applies for Layer objects too.
 * Scene Editor: new Show Children In Outline parameter in the Children section.
 * Scene Editor (BitmapText): fixes error when the font data isn't available in the cache.
+* Removes Parcel templates.
 
 ## v3.16.0-alpha.1
 
