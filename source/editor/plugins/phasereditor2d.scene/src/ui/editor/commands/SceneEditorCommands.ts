@@ -858,6 +858,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             .flatMap(obj => sceneobjects.GameObjectEditorSupport.getObjectChildren(obj))
 
+                            .filter(obj => !obj.getEditorSupport().isPrefabInstance() ||
+                                obj.getEditorSupport().isMutableNestedPrefabInstance())
+
                         editor.setSelection(sel);
                     }
                 },
