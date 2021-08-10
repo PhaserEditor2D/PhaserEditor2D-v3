@@ -886,6 +886,12 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                                 if (sceneobjects.isGameObject(obj)) {
 
+                                    if ((obj as sceneobjects.ISceneGameObject)
+                                        .getEditorSupport().isNestedPrefabInstance()) {
+
+                                        return false;
+                                    }
+
                                     if (obj instanceof sceneobjects.Layer) {
 
                                         return false;
