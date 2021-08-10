@@ -73,17 +73,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 .length === args.activeEditor.getSelection().length;
     }
 
-    function isOnlyContainerOrLayerSelected(args: colibri.ui.ide.commands.HandlerArgs) {
-
-        return isSceneScope(args) && editorHasSelection(args)
-
-            && (args.activeEditor as SceneEditor).getSelectedGameObjects()
-
-                .filter(obj => obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer)
-
-                .length === args.activeEditor.getSelection().length;
-    }
-
     function editorHasSelection(args: colibri.ui.ide.commands.HandlerArgs) {
 
         return args.activeEditor && args.activeEditor.getSelection().length > 0;
@@ -782,7 +771,18 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
-                    testFunc: isOnlyContainerOrLayerSelected,
+                    testFunc: args => {
+
+                        return isSceneScope(args) && editorHasSelection(args)
+
+                            && (args.activeEditor as SceneEditor).getSelectedGameObjects()
+
+                                .filter(obj => obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer)
+
+                                .filter(obj => !obj.getEditorSupport().isPrefabInstance())
+
+                                .length === args.activeEditor.getSelection().length;
+                    },
 
                     executeFunc: args => args.activeEditor.getUndoManager().add(
                         new ui.sceneobjects.BreakParentOperation(args.activeEditor as SceneEditor)
