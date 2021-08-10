@@ -258,7 +258,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const compName = comp.getName();
 
-                    const compVarName = args.objectVarName + compName;
+                    const compVarName = (args.objectVarName + compName).replaceAll(".", "_");
 
                     const prefabPropsStart = args.lazyStatements.length;
 
