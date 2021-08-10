@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return false;
             }
 
-            if (targetParent.getEditorSupport().isPrefabInstance() || targetParent.getEditorSupport().isPrefabInstanceElement()) {
+            if (targetParent.getEditorSupport().isPrefabInstance() || targetParent.getEditorSupport().isNestedPrefabInstance()) {
 
                 return false;
             }

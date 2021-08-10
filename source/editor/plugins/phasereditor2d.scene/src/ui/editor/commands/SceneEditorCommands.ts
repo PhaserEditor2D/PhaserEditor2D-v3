@@ -681,6 +681,13 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
+                                const editorSupport = obj.getEditorSupport();
+
+                                if (editorSupport.isNestedPrefabInstance()) {
+
+                                    return false;
+                                }
+
                                 if (obj instanceof sceneobjects.Layer) {
 
                                     return false;
@@ -716,6 +723,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             const editor = args.activeEditor as editor.SceneEditor;
 
                             for (const obj of editor.getSelectedGameObjects()) {
+
+                                if (obj.getEditorSupport().isNestedPrefabInstance()) {
+
+                                    return false;
+                                }
 
                                 if (obj instanceof sceneobjects.Layer) {
 
