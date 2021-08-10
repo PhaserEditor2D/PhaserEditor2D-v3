@@ -26,7 +26,8 @@ class Level extends Phaser.Scene {
 		
 		// dino (components)
 		new PushOnClick(dino);
-		dino.emit("components-awake");
+		
+		this.events.emit("scene-awake");
 	}
 	
 	/* START-USER-CODE */
