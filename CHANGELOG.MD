@@ -1,18 +1,28 @@
 # Change Log
 
-## dev
+## Pre-release v3.20.0-alpha.1 - Aug 10, 2021
+
+### Added
 
 * Nested prefabs:
     * Uses nullish operator (`??`) in prefab constructors.
     * Allows unlock the position of prefab instances. This change introduces a new scene format that is not compatible with previous versions of the editor.
 * Good bye `prefab-awake` & `components-awake` events. Welcome `scene-awake`.
     * Updates `UserComponent.js` templates.
-* Scene Editor: replaces the Container section by the Children section, and applies for Layer objects too.
 * Scene Editor: new Show Children In Outline parameter in the Children section.
+
+### Updated
+* Scene Editor: replaces the Container section by the Children section, and applies for Layer objects too.
+
+### Fixed
+
 * Scene Editor (BitmapText): fixes error when the font data isn't available in the cache.
+
+### Removed
+
 * Removes Parcel templates.
 
-## v3.16.0-alpha.1
+## Pre-release v3.16.0-alpha.1
 
 ### Added
 
