@@ -858,8 +858,22 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             .flatMap(obj => sceneobjects.GameObjectEditorSupport.getObjectChildren(obj))
 
-                            .filter(obj => !obj.getEditorSupport().isPrefabInstance() ||
-                                obj.getEditorSupport().isMutableNestedPrefabInstance())
+                            .filter(obj => {
+
+                                const editorSupport = obj.getEditorSupport();
+
+                                if (editorSupport.isMutableNestedPrefabInstance()) {
+
+                                    return true;
+                                }
+
+                                if (editorSupport.isPrefabInstanceElement()) {
+
+                                    return false;
+                                }
+
+                                return true;
+                            })
 
                         editor.setSelection(sel);
                     }

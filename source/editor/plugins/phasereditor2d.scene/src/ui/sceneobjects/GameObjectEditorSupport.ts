@@ -469,6 +469,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._prefabId !== undefined && this._prefabId !== null;
         }
 
+        /**
+         * Checks if the object is a child or nested child of prefab instance.
+         *
+         * @returns If it is element.
+         */
+        isPrefabInstanceElement() {
+
+            const owner = this.getOwnerPrefabInstance();
+
+            if (owner) {
+
+                return owner !== this.getObject();
+            }
+
+            return false;
+        }
+
         getAllParents() {
 
             const list: Array<Container | Layer> = [];
