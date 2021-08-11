@@ -5,6 +5,7 @@
 ### Added
 
 * Nested prefabs:
+    * Nested prefabs support.
     * Uses nullish operator (`??`) in prefab constructors.
     * Allows unlock the position of prefab instances. This change introduces a new scene format that is not compatible with previous versions of the editor.
 * Good bye `prefab-awake` & `components-awake` events. Welcome `scene-awake`.
