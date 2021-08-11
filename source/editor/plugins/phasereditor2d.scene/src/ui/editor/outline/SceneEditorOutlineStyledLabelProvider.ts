@@ -76,6 +76,38 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 }
             }
 
+            if (sceneobjects.isGameObject(obj)) {
+
+                const support = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
+
+                if (support.isNestedPrefabInstance()) {
+
+                    return [
+                        {
+                            text: baseLabel,
+                            color: theme.viewerForeground
+                        },
+                        {
+                            text: ":nested",
+                            color: theme.viewerForeground + "90"
+                        }
+                    ];
+
+                } else if (support.isPrefabInstance()) {
+
+                    return [
+                        {
+                            text: baseLabel,
+                            color: theme.viewerForeground
+                        },
+                        {
+                            text: ":prefab",
+                            color: theme.viewerForeground + "90"
+                        }
+                    ];
+                }
+            }
+
             return [{
                 text: baseLabel,
                 color: theme.viewerForeground
