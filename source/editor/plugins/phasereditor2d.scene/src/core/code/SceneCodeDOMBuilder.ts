@@ -212,7 +212,7 @@ namespace phasereditor2d.scene.core.code {
                         ? support.getPrefabName()
                         : support.getPhaserType();
 
-                    const isPublic = support.getScope() === ui.sceneobjects.ObjectScope.PUBLIC;
+                    const isPublic = support.isPublic();
 
                     const field = new FieldDeclCodeDOM(varName, type, isPublic);
                     // Allow undefined if the object is part of a scene.
