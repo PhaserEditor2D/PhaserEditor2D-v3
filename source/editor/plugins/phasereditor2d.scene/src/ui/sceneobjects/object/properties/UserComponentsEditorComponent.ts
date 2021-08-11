@@ -209,6 +209,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new Set(properties);
         }
 
+        private formatComponentVarName(name: string) {
+
+            return name.replaceAll(".", "_");
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const allPropsStart = args.lazyStatements.length;
@@ -221,7 +226,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (compInfo) {
 
-                    const compVarName = args.objectVarName + compName;
+                    const compVarName = this.formatComponentVarName(args.objectVarName + compName);
 
                     const compPropsStart = args.lazyStatements.length;
 
@@ -258,7 +263,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const compName = comp.getName();
 
-                    const compVarName = (args.objectVarName + compName).replaceAll(".", "_");
+                    const compVarName = this.formatComponentVarName(args.objectVarName + compName);
 
                     const prefabPropsStart = args.lazyStatements.length;
 

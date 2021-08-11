@@ -102,7 +102,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         return objData as json.IObjectData;
                     })
 
-                    .filter(data => (data.nestedPrefabs ?? []).length > 0 || (data.unlock ?? []).length > 0);
+                    .filter(data =>
+                        (data.nestedPrefabs ?? []).length > 0
+                        || (data.unlock ?? []).length > 0
+                        || (data.components ?? []).length > 0);
 
             } else {
 
