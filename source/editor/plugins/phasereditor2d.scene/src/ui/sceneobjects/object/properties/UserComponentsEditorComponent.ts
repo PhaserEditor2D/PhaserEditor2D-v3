@@ -136,13 +136,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getPrefabUserComponents() {
 
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
             const result: IUserComponentAndPrefab[] = [];
 
             const support = this.getObject().getEditorSupport();
 
             if (support.isPrefabInstance()) {
 
-                const objData = support.getPrefabData();
+                const objData = finder.getPrefabData(support.getPrefabId());
 
                 if (objData) {
 
@@ -180,6 +182,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         result.push({ prefabFile, components })
                     }
+                }
+
+                if (objData.prefabId) {
+
+                    this.getUserComponentsOfPrefab(objData.prefabId, result);
                 }
             }
         }
