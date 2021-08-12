@@ -349,6 +349,7 @@ namespace phasereditor2d.scene.core.code {
             const settings = this._scene.getSettings();
 
             const createMethodDecl = new MethodDeclCodeDOM(settings.createMethodName);
+            createMethodDecl.setReturnType("void");
 
             if (settings.onlyGenerateMethods && this._scene.isPrefabSceneType()) {
 
@@ -796,6 +797,7 @@ namespace phasereditor2d.scene.core.code {
             }
 
             const preloadDom = new MethodDeclCodeDOM(settings.preloadMethodName);
+            preloadDom.setReturnType("void");
 
             preloadDom.getBody().push(new RawCodeDOM(""));
 

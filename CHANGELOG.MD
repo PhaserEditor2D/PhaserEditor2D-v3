@@ -13,7 +13,9 @@
 * Scene Editor: new Show Children In Outline parameter in the Children section.
 
 ### Updated
+
 * Scene Editor: replaces the Container section by the Children section, and applies for Layer objects too.
+* [#139](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/139)[Feature Request] add type for method in typescript.
 
 ### Fixed
 

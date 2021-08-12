@@ -151,6 +151,7 @@ namespace phasereditor2d.scene.core.code {
             }
 
             if (isFunction) {
+
                 this.append("function ");
             }
 
