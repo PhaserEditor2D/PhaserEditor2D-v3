@@ -2,6 +2,10 @@
 
 ## dev
 
+### Updated
+
+* [#140](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/140) Scene compiler generates code with a format compatible with VS Code. It doesn't create unneeded git diffs.
+
 ### Added
 
 * Compiler: adds the **Fields In Constructor (JS)** flag. Allows generating field initialization code in the constructor and no as class fields. Some transpilers don't support class fields.
