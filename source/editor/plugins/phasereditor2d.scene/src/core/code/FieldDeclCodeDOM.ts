@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (this.isAllowUndefined()) {
 
-                return this._type + "|undefined";
+                return this._type + " | undefined";
             }
 
             return this._type;
