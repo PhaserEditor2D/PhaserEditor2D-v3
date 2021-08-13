@@ -9,9 +9,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     || obj.getEditorSupport().isUnlockedProperty(TextureComponent.texture))
         }
 
-        static runDialog(editor: editor.SceneEditor, atlasKey?: string) {
+        static async runDialog(editor: editor.SceneEditor, atlasKey?: string) {
 
             const cache = editor.getScene().getPackCache();
+
+            const lockedObjects = editor.getSelectedGameObjects().filter(obj => obj.getEditorSupport().isLockedProperty(TextureComponent.texture));
+
+            if (lockedObjects.length > 0) {
+
+                const ok = await editor.confirmUnlockProperty([TextureComponent.texture], "texture", TextureSection.SECTION_ID);
+
+                if (!ok) {
+
+                    return;
+                }
+            }
 
             const objects = editor.getSelectedGameObjects().filter(obj => this.canChangeTextureOf(obj));
 

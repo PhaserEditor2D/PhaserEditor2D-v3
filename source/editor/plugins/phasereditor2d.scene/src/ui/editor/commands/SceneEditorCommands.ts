@@ -385,7 +385,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     testFunc: args => isSceneScope(args)
                         && args.activeEditor.getSelection().length > 0
                         && args.activeEditor.getSelection()
-                            .filter(obj => sceneobjects.ChangeTextureOperation.canChangeTextureOf(obj))
+                            .filter(obj => sceneobjects.GameObjectEditorSupport.hasObjectComponent(
+                                obj, sceneobjects.TextureComponent))
                             .length > 0,
 
                     executeFunc: args => {
@@ -411,7 +412,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     testFunc: args => isSceneScope(args)
                         && args.activeEditor.getSelection().length > 0
                         && args.activeEditor.getSelection()
-                            .filter(obj => sceneobjects.ChangeTextureOperation.canChangeTextureOf(obj))
+                            .filter(obj => sceneobjects.GameObjectEditorSupport.hasObjectComponent(obj, sceneobjects.TextureComponent))
                             .length === 1,
 
                     executeFunc: args => {

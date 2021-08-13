@@ -4,9 +4,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import ide = colibri.ui.ide;
 
     export class TextureSection extends SceneGameObjectSection<ITextureLikeObject> {
+        static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.TextureSection";
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.TextureSection", "Texture", false, true);
+            super(page, TextureSection.SECTION_ID, "Texture", false, true);
         }
 
         getSectionHelpPath() {
