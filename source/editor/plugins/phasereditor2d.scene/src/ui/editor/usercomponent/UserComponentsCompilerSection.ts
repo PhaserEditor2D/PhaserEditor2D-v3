@@ -53,6 +53,24 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                         "JavaScript" : "TypeScript";
                 });
             }
+            {
+                // Fields In Constructor
+
+                const checkbox = this.createCheckbox(comp, this.createLabel(comp, "Fields In Constructor (JS)", "Generate the initialization of the fields in the constructor. This is valid only when the output is JavaScript."));
+
+                checkbox.addEventListener("change", e => {
+
+                    this.getEditor().runOperation(model => {
+
+                        model.javaScriptInitFieldsInConstructor = checkbox.checked;
+                    });
+                });
+
+                this.addUpdater(() => {
+
+                    checkbox.checked = this.getSelectionFirstElement().javaScriptInitFieldsInConstructor;
+                });
+            }
 
             {
                 // Export Class

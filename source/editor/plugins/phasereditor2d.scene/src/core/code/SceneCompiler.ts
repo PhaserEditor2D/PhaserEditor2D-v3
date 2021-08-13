@@ -52,6 +52,8 @@ namespace phasereditor2d.scene.core.code {
                 new core.code.JavaScriptUnitCodeGenerator(unit)
                 : new core.code.TypeScriptUnitCodeGenerator(unit);
 
+            generator.setInitFieldInConstructor(settings.javaScriptInitFieldsInConstructor);
+
             const fileExt = compileToJS ? "js" : "ts";
             const fileName = this._sceneFile.getNameWithoutExtension() + "." + fileExt;
 

@@ -83,7 +83,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             if (superClass && superClass.trim() !== "") {
 
-                body.push(new code.RawCodeDOM("super(gameObject);"));
+                const superCall = new code.MethodCallCodeDOM("super");
+                superCall.arg("gameObject");
+                body.push(superCall);
                 body.push(new code.RawCodeDOM(""));
             }
 

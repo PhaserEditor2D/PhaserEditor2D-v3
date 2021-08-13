@@ -29,6 +29,7 @@ namespace phasereditor2d.scene.ui.dialogs {
                 const sceneSettings = ScenePlugin.getInstance().getDefaultSceneSettings();
 
                 model.insertSpaces = sceneSettings.compilerInsertSpaces;
+                model.javaScriptInitFieldsInConstructor = sceneSettings.javaScriptInitFieldsInConstructor;
                 model.tabSize = sceneSettings.compilerTabSize;
                 model.outputLang = sceneSettings.compilerOutputLanguage;
 

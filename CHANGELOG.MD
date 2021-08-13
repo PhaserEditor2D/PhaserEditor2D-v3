@@ -1,5 +1,11 @@
 # Change Log
 
+## dev
+
+### Added
+
+* Compiler: adds the **Fields In Constructor (JS)** flag. Allows generating field initialization code in the constructor and no as class fields. Some transpilers don't support class fields.
+
 ## Pre-release v3.20.0-alpha.1 - Aug 10, 2021
 
 ### Added
