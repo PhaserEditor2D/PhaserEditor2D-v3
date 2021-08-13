@@ -24,7 +24,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     new code.JavaScriptUnitCodeGenerator(unitDom) :
                     new code.TypeScriptUnitCodeGenerator(unitDom);
 
-                generator.setInitFieldInConstructor(this._model.javaScriptInitFieldsInConstructor);
+                if (this.isJavaScriptOutput()) {
+
+                    generator.setInitFieldInConstructor(this._model.javaScriptInitFieldsInConstructor);
+                }
 
                 let replace = "";
 
