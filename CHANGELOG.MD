@@ -5,6 +5,7 @@
 ### Updated
 
 * [#140](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/140) Scene compiler generates code with a format compatible with VS Code. It doesn't create unneeded git diffs.
+* Scene Editor: the Change Texture command  can unlock the texture property.
 
 ### Added
 
