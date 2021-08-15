@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
         defaultValue: number;
     }
 
-    export interface IAlignExtensionConfig {
+    export interface ILayoutExtensionConfig {
         name: string;
         group: string;
         action?: (args: IAlignActionArgs) => void;
@@ -32,9 +32,9 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
         static POINT_ID = "phasereditor2d.scene.ui.editor.layout.LayoutExtension"
 
-        private _config: IAlignExtensionConfig;
+        private _config: ILayoutExtensionConfig;
 
-        constructor(config: IAlignExtensionConfig) {
+        constructor(config: ILayoutExtensionConfig) {
             super(LayoutExtension.POINT_ID);
 
             this._config = config;
@@ -51,25 +51,37 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
             const transform = sceneobjects.TransformComponent;
 
-            const sprites: Phaser.GameObjects.Sprite[] = editor.getSelectedGameObjects()
+            const sprites: sceneobjects.ISceneGameObject[] = editor.getSelectedGameObjects()
 
-                .filter(obj => obj.getEditorSupport().hasComponent(transform)) as any[]
+                .filter(obj => obj.getEditorSupport().hasComponent(transform)) as any[];
 
-            const positions = sprites.map(sprite => {
+            const unlocked = await editor.confirmUnlockProperty([
+                transform.x,
+                transform.y,
+            ], "position", sceneobjects.TransformSection.SECTION_ID);
 
-                if (sprite instanceof sceneobjects.Container) {
+            if (!unlocked) {
 
-                    const b = sprite.getBounds();
+                return;
+            }
+
+            const positions = sprites.map(obj => {
+
+                if (obj instanceof sceneobjects.Container) {
+
+                    const b = obj.getBounds();
 
                     return {
-                        x: sprite.x,
-                        y: sprite.y,
+                        x: obj.x,
+                        y: obj.y,
                         size: {
                             x: b.width,
                             y: b.height
                         }
                     }
                 }
+
+                const sprite = obj as sceneobjects.Sprite;
 
                 return {
                     x: sprite.x - sprite.originX * sprite.displayWidth,
@@ -103,7 +115,9 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                 this._config.action({ border, positions, params });
 
-                for (const sprite of sprites) {
+                for (const obj of sprites) {
+
+                    const sprite = obj as sceneobjects.Sprite;
 
                     const pos = spritePosMap.get(sprite);
                     sprite.x = pos.x + sprite.originX * sprite.displayWidth;
