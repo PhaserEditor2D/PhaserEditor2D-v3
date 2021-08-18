@@ -1,17 +1,6 @@
 # Change Log
 
-## dev
-
-### Updated
-
-* [#140](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/140) Scene compiler generates code with a format compatible with VS Code. It doesn't create unneeded git diffs.
-* Scene Editor: the Change Texture command  can unlock the texture property.
-
-### Added
-
-* Compiler: adds the **Fields In Constructor (JS)** flag. Allows generating field initialization code in the constructor and no as class fields. Some transpilers don't support class fields.
-
-## Pre-release v3.20.0-alpha.1 - Aug 10, 2021
+## v3.20.0 - Aug 19, 2021
 
 ### Added
 
@@ -22,39 +11,32 @@
 * Good bye `prefab-awake` & `components-awake` events. Welcome `scene-awake`.
     * Updates `UserComponent.js` templates.
 * Scene Editor: new Show Children In Outline parameter in the Children section.
-
-### Updated
-
-* Scene Editor: replaces the Container section by the Children section, and applies for Layer objects too.
-* [#139](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/139)[Feature Request] add type for method in typescript.
-
-### Fixed
-
-* Scene Editor (BitmapText): fixes error when the font data isn't available in the cache.
-
-### Removed
-
-* Removes Parcel templates.
-
-## Pre-release v3.16.0-alpha.1
-
-### Added
-
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: `generateAwakeEvent` and `generateAwakeHandler`.
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) User components: the `generateAwakeEvent` flag.
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) A commands for disabling the Awake event in all prefabs. But ony it is not set explicitly in the prefab.
+* Compiler: adds the **Fields In Constructor (JS)** flag. Allows generating field initialization code in the constructor and no as class fields. Some transpilers don't support class fields.
 
 ### Updated
 
+* [#140](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/140) Scene compiler generates code with a format compatible with VS Code. It doesn't create unneeded git diffs.
+* Scene Editor: the Change Texture command allows auto unlocking the texture property.
+* Scene Editor: the Layout operations allows auto unlocking of the texture property.
+* Scene Editor: replaces the Container section by the Children section, and applies for Layer objects too.
+* [#139](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/139)[Feature Request] add type for method in typescript.
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: constructor ordering of custom definition props and START-USER-CTR-CODE.
 
 ### Fixed
 
+* Scene Editor (BitmapText): fixes error when the font data isn't available in the cache.
 * [#134](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/134) Creating a list in the editor results in an initialized array in the generated code.
 * [#135](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/135) 
 Word wrap width does not behave correctly
 * Scene Editor: fixes Move To Parent dialog in context of prefab scenes.
 * Scene Editor: fixes Scene section layout when shows a prefab's instance.
+
+### Removed
+
+* Removes Parcel templates.
 
 ## v3.15.0 - Jul 11, 2021
 
