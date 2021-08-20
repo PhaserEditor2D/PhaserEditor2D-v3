@@ -19,6 +19,18 @@ namespace colibri.inspector.ui.views {
             this.setIcon(InspectorPlugin.getInstance().getIcon(ICON_INSPECTOR));
         }
 
+        static updateInspectorView(selection: any[]) {
+
+            const win = Platform.getWorkbench().getActiveWindow();
+
+            const view = win.getView(InspectorView.VIEW_ID) as InspectorView;
+
+            if (view) {
+
+                view.getPropertyPage().setSelection(selection);
+            }
+        }
+
         layout() {
 
             this._propertyPage.dispatchLayoutEvent();

@@ -118,7 +118,6 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
                         anim[field] = value;
                     }
-
                 });
             });
 
