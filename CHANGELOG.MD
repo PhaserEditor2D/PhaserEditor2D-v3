@@ -33,6 +33,7 @@
 Word wrap width does not behave correctly
 * Scene Editor: fixes Move To Parent dialog in context of prefab scenes.
 * Scene Editor: fixes Scene section layout when shows a prefab's instance.
+* [#142](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/142) Animations Editor: fixes changing multiple properties of the same animation.
 
 ### Removed
 
