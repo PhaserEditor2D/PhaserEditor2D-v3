@@ -11,9 +11,7 @@
 * Good bye `prefab-awake` & `components-awake` events. Welcome `scene-awake`.
     * Updates `UserComponent.js` templates.
 * Scene Editor: new Show Children In Outline parameter in the Children section.
-* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: `generateAwakeEvent` and `generateAwakeHandler`.
-* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) User components: the `generateAwakeEvent` flag.
-* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) A commands for disabling the Awake event in all prefabs. But ony it is not set explicitly in the prefab.
+* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: `generateAwakeHandler`.
 * Compiler: adds the **Fields In Constructor (JS)** flag. Allows generating field initialization code in the constructor and no as class fields. Some transpilers don't support class fields.
 
 ### Updated
