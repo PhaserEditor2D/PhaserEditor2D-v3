@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (editorSupport.isPrefabInstance()) {
 
-                const prefabFile = this.getObject().getEditorSupport().getPrefabFile();
+                const prefabFile = this.getObject().getEditorSupport().getPrefabOrNestedPrefabFile();
 
                 if (prefabFile) {
 
@@ -111,14 +111,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const userProp = (prop as PrefabUserPropertyWrapper).getUserProperty();
 
                 userProp.getType().buildSetObjectPropertyCodeDOM(this, args, userProp);
-            }
-
-            if (this.getObject().getEditorSupport().isPrefabInstance()) {
-
-                const stmt = new core.code.MethodCallCodeDOM("emit", args.objectVarName);
-                stmt.argLiteral("prefab-awake");
-
-                args.lazyStatements.push(stmt);
             }
 
             args.statements = temp;

@@ -255,9 +255,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createEnumField<TValue>(
-            parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked = true) {
+            parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked = true, filter?: (v: TValue) => boolean) {
 
-            const items = property.values
+            const getItems = () => property.values
+                .filter(v => !filter || filter(v))
                 .map(value => {
                     return {
                         name: property.getValueLabel(value),
@@ -265,7 +266,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     };
                 });
 
-            const btn = this.createMenuButton(parent, "", items, value => {
+            const btn = this.createMenuButton(parent, "", getItems, value => {
 
                 this.getEditor().getUndoManager().add(
                     new SimpleOperation(this.getEditor(), this.getSelection(), property, value));

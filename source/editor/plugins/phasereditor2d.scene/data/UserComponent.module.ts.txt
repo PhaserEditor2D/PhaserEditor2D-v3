@@ -16,7 +16,7 @@ export default class UserComponent {
         
         if (listenAwake) {
 
-            gameObject.once("components-awake", this.awake, this);
+            this.scene.events.once("scene-awake", this.awake, this);
         }
 
         if (listenStart) {
@@ -46,19 +46,19 @@ export default class UserComponent {
 
     scene: Phaser.Scene;
 
-    protected awake() {
+    protected awake(): void {
         // override this
     }
 
-    protected start() {
+    protected start(): void {
         // override this
     }
 
-    protected update() {
+    protected update(): void {
         // override this
     }
 
-    protected destroy() {
+    protected destroy(): void {
         // override this
     }
 }

@@ -7,18 +7,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return SizeToolItem.getInitialSize(obj);
         }
 
-        getFinalValue(obj: any): { x: number; y: number; } {
+        getFinalValue(obj: ISceneGameObject): { x: number; y: number; } {
 
-            const sprite = obj as TileSprite;
+            const [w, h] = obj.getEditorSupport().getSizeProperties();
 
-            return { x: sprite.width, y: sprite.height };
+            return { x: w.getValue(obj), y: h.getValue(obj) };
         }
 
-        setValue(obj: any, value: { x: number; y: number; }) {
+        setValue(obj: ISceneGameObject, value: { x: number; y: number; }) {
 
-            const sprite = obj as TileSprite;
+            const [w, h] = obj.getEditorSupport().getSizeProperties();
 
-            sprite.setSize(value.x, value.y);
+            w.setValue(obj, value.x);
+            h.setValue(obj, value.y);
         }
     }
 }

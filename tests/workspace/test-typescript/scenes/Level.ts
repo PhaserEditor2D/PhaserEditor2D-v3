@@ -24,13 +24,18 @@ class Level extends Phaser.Scene {
 		text_1.text = "Phaser 3 + Phaser Editor 2D + TypeScript";
 		text_1.setStyle({"fontFamily":"arial","fontSize":"3em"});
 		
-		// dino_1
-		const dino_1 = new DinoPrefab(this, 186, 160);
-		this.add.existing(dino_1);
+		// dinoPrefab
+		const dinoPrefab = new DinoPrefab(this, 186, 160);
+		this.add.existing(dinoPrefab);
 		
-		// container_1
-		const container_1 = new DoubleDinoPrefab(this, 666, 35);
-		this.add.existing(container_1);
+		// doubleDinoPrefab
+		const doubleDinoPrefab = new DoubleDinoPrefab(this, 666, 35);
+		this.add.existing(doubleDinoPrefab);
+		
+		// withAwakeEventPrefab
+		const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 415, 505);
+		this.add.existing(withAwakeEventPrefab);
+		withAwakeEventPrefab.setOrigin(0.5, 0.5);
 		
 		// dino (components)
 		const dinoPushOnClick = new PushOnClick(dino);
@@ -38,17 +43,18 @@ class Level extends Phaser.Scene {
 		new Tint(dino);
 		dino.emit("components-awake");
 		
-		// dino_1 (prefab fields)
-		dino_1.rotating = true;
-		dino_1.emit("prefab-awake");
+		// dinoPrefab (prefab fields)
+		dinoPrefab.rotating = true;
+		dinoPrefab.emit("prefab-awake");
 		
-		// dino_1 (components)
-		const dino_1Tint = new Tint(dino_1);
-		dino_1Tint.tint = "blue";
-		dino_1.emit("components-awake");
+		// dinoPrefab (components)
+		dinoPrefab.emit("components-awake");
 		
-		// container_1 (prefab fields)
-		container_1.emit("prefab-awake");
+		// doubleDinoPrefab (prefab fields)
+		doubleDinoPrefab.emit("prefab-awake");
+		
+		// withAwakeEventPrefab (prefab fields)
+		withAwakeEventPrefab.emit("prefab-awake");
 		
 		this.dino = dino;
 	}

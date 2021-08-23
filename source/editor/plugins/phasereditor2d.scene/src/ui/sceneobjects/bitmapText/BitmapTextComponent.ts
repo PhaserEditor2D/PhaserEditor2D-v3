@@ -70,6 +70,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
+            const support = this.getObject().getEditorSupport();
+
+            if (support.isUnlockedProperty(BitmapTextComponent.font) && support.isNestedPrefabInstance()) {
+
+                const dom = new core.code.MethodCallCodeDOM("setFont", args.objectVarName);
+                dom.argLiteral(this.getObject().font);
+                args.statements.push(dom);
+            }
+
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args,
                 BitmapTextComponent.fontSize,
                 BitmapTextComponent.align,

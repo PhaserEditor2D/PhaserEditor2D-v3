@@ -2,11 +2,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export interface IContainerData extends json.IObjectData {
-
-        list: json.IObjectData[];
-    }
-
     export class ContainerExtension extends SceneGameObjectExtension {
 
         private static _instance: ContainerExtension;
@@ -32,10 +27,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static async getAssetsFromNestedData(args: IGetAssetsFromObjectArgs) {
 
             const list = [];
-
             const children = args.serializer.read("list", []) as json.IObjectData[];
 
-            for (const objData of children) {
+            const nestedPrefabs = ParentGameObjectEditorSupport.buildPrefabChildrenData(args.serializer.getData(), children);
+
+            for (const objData of [...children, ...nestedPrefabs]) {
 
                 const ser = args.serializer.getSerializer(objData);
 
@@ -72,7 +68,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.createContainerObject(args.scene, 0, 0, []);
 
-            container.getEditorSupport().readJSON(args.data as IContainerData);
+            container.getEditorSupport().readJSON(args.data);
 
             return container;
         }

@@ -764,12 +764,17 @@ namespace phasereditor2d.animations.ui.editors {
         reset(animsData: Phaser.Types.Animations.JSONAnimations, useAnimationIndexAsKey: boolean) {
 
             let selectedIndexes: number[];
+            let selectedKeys: string[];
 
             if (useAnimationIndexAsKey) {
 
                 const allAnimations = this.getAnimations();
 
                 selectedIndexes = this.getSelectedAnimations().map(anim => allAnimations.indexOf(anim));
+
+            } else {
+
+                selectedKeys = this.getSelectedAnimations().map(anim => anim.key);
             }
 
             const scene = this.getScene();
@@ -790,15 +795,23 @@ namespace phasereditor2d.animations.ui.editors {
 
             } else {
 
-                this.setSelection(this._selectedAnimations.map(obj => {
+                const newAnimations = selectedKeys.map(key => {
 
-                    return this.getAnimation(obj.key);
+                    return this.getAnimation(key);
 
                 }).filter(o => {
 
                     return o !== undefined && o !== null
-                }));
+                });
+
+                this.setSelection(newAnimations);
             }
+
+            // I do this here because the Inspector view at this moment
+            // is not listening the selection changes.
+            // It is like that because the active view is the Inspector
+            // view itself but the selection changed in the editor
+            colibri.inspector.ui.views.InspectorView.updateInspectorView(this.getSelection());
         }
     }
 }

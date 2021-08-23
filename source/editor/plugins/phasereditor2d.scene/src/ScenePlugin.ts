@@ -196,10 +196,10 @@ namespace phasereditor2d.scene {
             // commands
 
             reg.addExtension(
-                new ide.commands.CommandExtension(ui.editor.commands.SceneEditorCommands.registerCommands));
+                new ide.commands.CommandExtension(m => ui.editor.commands.SceneEditorCommands.registerCommands(m)));
 
             reg.addExtension(
-                new ide.commands.CommandExtension(ui.editor.usercomponent.UserComponentsEditor.registerCommands));
+                new ide.commands.CommandExtension(m => ui.editor.usercomponent.UserComponentsEditor.registerCommands(m)));
 
 
             // compile project
@@ -266,7 +266,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ParentSection(page),
-                page => new ui.sceneobjects.ContainerSection(page),
+                page => new ui.sceneobjects.ChildrenSection(page),
                 page => new ui.sceneobjects.TransformSection(page),
                 page => new ui.sceneobjects.OriginSection(page),
                 page => new ui.sceneobjects.FlipSection(page),

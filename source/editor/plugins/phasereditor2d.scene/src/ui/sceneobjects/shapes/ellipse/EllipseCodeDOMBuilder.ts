@@ -10,32 +10,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs) {
 
-            const obj = args.obj as TileSprite;
-            const support = obj.getEditorSupport();
-            const call = args.methodCallDOM;
+            args.methodCallDOM.arg(args.sceneExpr);
 
-            call.arg(args.sceneExpr);
-            call.argFloat(obj.x);
-            call.argFloat(obj.y);
-
-            if (support.isUnlockedProperty(SizeComponent.width)) {
-
-                call.argFloat(obj.width);
-                call.argFloat(obj.height);
-
-            } else {
-
-                call.arg("undefined");
-                call.arg("undefined");
-            }
+            this.buildCreatePrefabInstanceCodeDOM_XY_Arguments(args);
+            this.buildCreatePrefabInstanceCodeDOM_Size_Arguments(args);
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
 
             const ctr = args.ctrDeclCodeDOM;
 
-            ctr.arg("x", "number");
-            ctr.arg("y", "number");
+            ctr.arg("x", "number", true);
+            ctr.arg("y", "number", true);
             ctr.arg("width", "number", true);
             ctr.arg("height", "number", true);
         }
@@ -48,8 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const call = args.superMethodCallCodeDOM;
 
-            call.arg("x");
-            call.arg("y");
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
 
             if (support.isUnlockedProperty(SizeComponent.width)) {
 

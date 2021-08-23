@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 id: SizeTool.ID,
                 command: editor.commands.CMD_RESIZE_SCENE_OBJECT,
-            }, SizeComponent.width, SizeComponent.height);
+            });
 
             this.addItems(
                 new SizeToolItem(1, 0.5),
@@ -17,24 +17,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
-        canEdit(obj: unknown) {
+        getProperties(obj: ISceneGameObject) {
 
-            const support = GameObjectEditorSupport.getEditorSupport(obj);
-
-            if (support.hasComponent(SizeComponent)) {
-
-                return support.isUnlockedProperty(SizeComponent.width);
-            }
-
-            return false;
+            return obj.getEditorSupport().getSizeProperties();
         }
 
         onActivated(args: editor.tools.ISceneToolContextArgs) {
 
             super.onActivated(args);
 
-            this.confirmUnlockProperty([sceneobjects.SizeComponent.width, sceneobjects.SizeComponent.height],
-                "size", SizeSection.SECTION_ID, args);
+            const props = args.objects.flatMap(obj => obj.getEditorSupport().getSizeProperties());
+
+            const sections = args.objects.flatMap(obj => obj.getEditorSupport().getSizeSectionId());
+
+            this.confirmUnlockProperty(args, props, "size", ...sections);
         }
     }
 }

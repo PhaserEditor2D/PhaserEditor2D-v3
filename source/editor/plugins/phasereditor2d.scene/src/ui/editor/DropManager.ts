@@ -135,14 +135,11 @@ namespace phasereditor2d.scene.ui.editor {
 
                         const sprite = await sceneMaker.createPrefabInstanceWithFile(data);
 
-                        const transformComp = sprite.getEditorSupport()
-                            .getComponent(sceneobjects.TransformComponent) as sceneobjects.TransformComponent;
+                        if (sprite.getEditorSupport().hasComponent(sceneobjects.TransformComponent)) {
 
-                        if (transformComp) {
-
-                            const obj = transformComp.getObject();
-                            obj.x = x;
-                            obj.y = y;
+                            sprite.getEditorSupport().setUnlockedProperty(sceneobjects.TransformComponent.x, true);
+                            sprite.getEditorSupport().setUnlockedProperty(sceneobjects.TransformComponent.y, true);
+                            (sprite as any as Phaser.GameObjects.Image).setPosition(x, y);
                         }
 
                         if (sprite) {

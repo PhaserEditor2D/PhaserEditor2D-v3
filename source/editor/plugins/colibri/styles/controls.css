@@ -342,7 +342,7 @@
 
     .PropertyFormArea {
         display: grid;
-        padding: 10px 0px 10px 0px;
+        padding: 2px 0px 10px 0px;
     }
 
     .PropertyButtonPanel {

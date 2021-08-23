@@ -16,6 +16,11 @@ namespace phasereditor2d.pack.core {
 
         getFileFromAssetUrl(url: string) {
 
+            if (!url) {
+
+                return undefined;
+            }
+
             return AssetPackUtils.getFileFromPackUrl(this.getPack(), url);
         }
 

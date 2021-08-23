@@ -136,13 +136,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getPrefabUserComponents() {
 
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
             const result: IUserComponentAndPrefab[] = [];
 
             const support = this.getObject().getEditorSupport();
 
             if (support.isPrefabInstance()) {
 
-                const objData = support.getPrefabData();
+                const objData = finder.getPrefabData(support.getPrefabId());
 
                 if (objData) {
 
@@ -181,6 +183,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         result.push({ prefabFile, components })
                     }
                 }
+
+                if (objData.prefabId) {
+
+                    this.getUserComponentsOfPrefab(objData.prefabId, result);
+                }
             }
         }
 
@@ -209,6 +216,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new Set(properties);
         }
 
+        private formatComponentVarName(name: string) {
+
+            return name.replaceAll(".", "_");
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const allPropsStart = args.lazyStatements.length;
@@ -221,7 +233,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (compInfo) {
 
-                    const compVarName = args.objectVarName + compName;
+                    const compVarName = this.formatComponentVarName(args.objectVarName + compName);
 
                     const compPropsStart = args.lazyStatements.length;
 
@@ -258,7 +270,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const compName = comp.getName();
 
-                    const compVarName = args.objectVarName + compName;
+                    const compVarName = this.formatComponentVarName(args.objectVarName + compName);
 
                     const prefabPropsStart = args.lazyStatements.length;
 
@@ -285,23 +297,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            const isScenePrefabObject = this.getObject().getEditorSupport().isScenePrefabObject();
-            const hasUserComponents = this._compNames.length > 0 || prefabUserComponents.length > 0;
-            const emitComponentsAwake = !isScenePrefabObject && hasUserComponents;
-
-            if (allPropsStart !== args.lazyStatements.length || emitComponentsAwake) {
+            if (allPropsStart !== args.lazyStatements.length) {
 
                 args.lazyStatements.splice(allPropsStart, 0,
                     new code.RawCodeDOM(""),
                     new code.RawCodeDOM(`// ${args.objectVarName} (components)`));
-            }
-
-            if (emitComponentsAwake) {
-
-                const stmt = new code.MethodCallCodeDOM("emit", args.objectVarName);
-                stmt.argLiteral("components-awake");
-
-                args.lazyStatements.push(stmt);
             }
         }
 

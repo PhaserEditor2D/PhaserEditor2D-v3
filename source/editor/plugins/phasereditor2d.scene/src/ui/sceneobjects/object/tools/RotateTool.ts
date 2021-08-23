@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.onActivated(args);
 
-            this.confirmUnlockProperty([sceneobjects.TransformComponent.angle], "angle", TransformSection.SECTION_ID, args);
+            this.confirmUnlockProperty(args, [sceneobjects.TransformComponent.angle], "angle", TransformSection.SECTION_ID);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
 
-            const btn = this.createMenuButton(comp, "Add Property", propTypes.map(t => ({
+            const btn = this.createMenuButton(comp, "Add Property", () => propTypes.map(t => ({
                 name: t.getName() + " Property",
                 value: t.getId()
             })), (typeId: string) => {

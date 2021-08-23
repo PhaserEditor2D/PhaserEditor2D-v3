@@ -42,22 +42,27 @@
             "unlock": [
                 "rotating"
             ],
-            "label": "dino_1",
+            "label": "dinoPrefab",
             "rotating": true,
-            "components": [
-                "Tint"
-            ],
-            "Tint.tint": "blue",
+            "components": [],
             "x": 186,
             "y": 160
         },
         {
             "prefabId": "f09cbbd7-3019-4f77-b666-386ed906ee51",
             "id": "66e3a017-d561-4cb8-a3fb-e8e50765ccc8",
-            "label": "container_1",
+            "label": "doubleDinoPrefab",
             "components": [],
             "x": 666,
             "y": 35
+        },
+        {
+            "prefabId": "67273ad8-1b79-4edb-ac29-ca5abefe6603",
+            "id": "2dbdc536-0cee-4d90-b0b2-f474c7015fe6",
+            "label": "withAwakeEventPrefab",
+            "components": [],
+            "x": 415,
+            "y": 505
         }
     ],
     "plainObjects": [],

@@ -2,9 +2,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
+    export function isNestedPrefabInstance(obj: any) {
+
+        const support = GameObjectEditorSupport.getEditorSupport(obj);
+
+        if (support) {
+
+            return support.isNestedPrefabInstance();
+        }
+
+        return false;
+    }
+
     export function isGameObject(obj: any) {
 
         return GameObjectEditorSupport.hasEditorSupport(obj);
+    }
+
+    export function getObjectChildren(obj: ISceneGameObject) {
+
+        if (obj instanceof Layer || obj instanceof Container) {
+
+            return obj.getChildren();
+        }
+
+        return [];
     }
 
     export function getObjectParent(obj: ISceneGameObject) {
@@ -25,6 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         // tslint:disable-next-line:ban-types
         private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
+        private _mutableNestedPrefab: boolean;
 
         constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene) {
             super(obj, extension.getTypeName().toLowerCase(), scene);
@@ -33,6 +56,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._unlockedProperties = new Set();
             this._serializables = [];
             this._componentMap = new Map();
+            this._mutableNestedPrefab = false;
 
             obj.setDataEnabled();
 
@@ -130,17 +154,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
+        hasUnlockedProperties() {
+
+            return this._unlockedProperties.size > 0;
+        }
+
         isLockedProperty(property: IProperty<any>) {
 
             return !this.isUnlockedProperty(property);
         }
 
+        isUnlockedPropertyXY(property: IPropertyXY) {
+
+            return this.isUnlockedProperty(property.x) && this.isUnlockedProperty(property.y);
+        }
+
         isUnlockedProperty(property: IProperty<any>) {
-
-            if (property === TransformComponent.x || property === TransformComponent.y) {
-
-                return true;
-            }
 
             if (this.isPrefabInstance()) {
 
@@ -172,6 +201,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._unlockedProperties.delete(property.name);
             }
+        }
+
+        _clearUnlockProperties() {
+
+            this._unlockedProperties.clear();
         }
 
         private static async buildPrefabDependencyHash(builder: ide.core.MultiHashBuilder, prefabId: string) {
@@ -358,22 +392,122 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return undefined;
         }
 
-        isPrefabInstance() {
-            return typeof this._prefabId === "string";
+        /**
+         * Checks if it is a nested prefab instance that can be modified (published to the scene,
+         * accessible from the prefab instance's root).
+         *
+         * @returns If active.
+         */
+        isMutableNestedPrefabInstance() {
+
+            if (this._mutableNestedPrefab) {
+
+                const parentSupport = (getObjectParent(this.getObject()) as ISceneGameObject).getEditorSupport();
+
+                return parentSupport.isMutableNestedPrefabInstance() || parentSupport.isPrefabInstanceRoot();
+            }
+
+            return false;
         }
 
-        _setPrefabId(prefabId: string) {
+        _setMutableNestedPrefab(b: boolean) {
 
-            this._prefabId = prefabId;
+            this._mutableNestedPrefab = b;
+        }
+
+        isRootPrefabDefined() {
+
+            if (this.isPrefabInstance()) {
+
+                return !this.isNestedPrefabDefined();
+            }
+
+            return false;
+        }
+
+        isNestedPrefabDefined() {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            if (this.isPrefabInstance()) {
+
+                const id = finder.getOriginalPrefabId(this.getPrefabId());
+
+                return finder.isNestedPrefab(id);
+            }
+
+            return false;
+        }
+
+        /**
+         * Checks if the object is a prefab instance and the parent isn't a prefab instance.
+         *
+         * @returns If it is the root.
+         */
+        isPrefabInstanceRoot() {
+
+            if (this.isPrefabInstance() && !this.isNestedPrefabInstance()) {
+
+                const parent = getObjectParent(this.getObject());
+
+                if (!parent || !parent.getEditorSupport().isPrefabInstance()) {
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        isNestedPrefabInstance() {
+
+            return this.isPrefabInstance() && this.getOwnerPrefabInstance() !== this.getObject();
+        }
+
+        isPrefabInstance() {
+
+            return this._prefabId !== undefined && this._prefabId !== null;
+        }
+
+        /**
+         * Checks if the object is a child or nested child of prefab instance.
+         *
+         * @returns If it is element.
+         */
+        isPrefabInstanceElement() {
+
+            const owner = this.getOwnerPrefabInstance();
+
+            if (owner) {
+
+                return owner !== this.getObject();
+            }
+
+            return false;
         }
 
         getAllParents() {
 
             const list: Array<Container | Layer> = [];
 
-            this.getAllParents2(list);
+            this.getAllParents2(this.getObject(), list);
 
             return list;
+        }
+
+        getSizeProperties() {
+
+            if (this.hasComponent(SizeComponent)) {
+
+                return [SizeComponent.width, SizeComponent.height];
+            }
+
+            return [];
+        }
+
+        getSizeSectionId() {
+
+            return SizeSection.SECTION_ID;
         }
 
         isDescendentOf(parent: Container | Layer) {
@@ -383,15 +517,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return set.has(parent);
         }
 
-        private getAllParents2(list: Array<Container | Layer>) {
-
-            const obj = this.getObject();
+        private getAllParents2(obj: ISceneGameObject, list: Array<Container | Layer>) {
 
             const objParent = GameObjectEditorSupport.getObjectParent(obj);
 
             if (objParent) {
 
                 list.push(objParent);
+
+                this.getAllParents2(objParent, list);
             }
 
             return list;
@@ -402,30 +536,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.getScene().isPrefabSceneType() && this.getScene().getPrefabObject() === this.getObject();
         }
 
-        isPrefabInstanceElement() {
+        getNestedActivePrefabInstances(): ISceneGameObject[] {
 
-            return this.isPrefabInstance() && this.getOwnerPrefabInstance() !== this.getObject();
+            if (this.isPrefabInstance()) {
+
+                const children = sceneobjects.getObjectChildren(this.getObject());
+
+                return children
+                    .filter(obj => obj.getEditorSupport().isMutableNestedPrefabInstance());
+            }
+
+            return [];
         }
 
         getOwnerPrefabInstance(): ISceneGameObject {
 
-            const obj = this.getObject();
+            const parents = this.getAllParents().reverse();
 
-            if (obj.parentContainer) {
+            for (const parent of parents) {
 
-                const parent = obj.parentContainer as unknown as ISceneGameObject;
+                if (parent.getEditorSupport().isPrefabInstance()) {
 
-                const owner = parent.getEditorSupport().getOwnerPrefabInstance();
-
-                if (owner) {
-
-                    return owner;
+                    return parent;
                 }
             }
 
-            if (obj.getEditorSupport().isPrefabInstance()) {
+            if (this.isPrefabInstance()) {
 
-                return obj;
+                return this.getObject();
             }
 
             return null;
@@ -434,6 +572,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getPrefabId() {
 
             return this._prefabId;
+        }
+
+        setPrefabId(id: string) {
+
+            this._prefabId = id;
         }
 
         getPrefabName() {
@@ -463,6 +606,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
+        getPrefabOrNestedPrefabFile() {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            if (this.isNestedPrefabInstance()) {
+
+                const originalId = finder.getOriginalPrefabId(this._prefabId);
+
+                if (finder.isNestedPrefab(originalId)) {
+
+                    return null;
+
+                } else {
+
+                    return finder.getPrefabFile(originalId);
+                }
+            }
+
+            return this.getPrefabFile();
+        }
+
         getPrefabData() {
 
             if (this._prefabId) {
@@ -472,6 +636,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const data = finder.getPrefabData(this._prefabId);
 
                 return data;
+            }
+
+            return null;
+        }
+
+        getPrefabSettings() {
+
+            if (this._prefabId) {
+
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                const file = finder.getPrefabFile(this._prefabId);
+
+                if (file) {
+
+                    return finder.getSceneSettings(file);
+                }
             }
 
             return null;

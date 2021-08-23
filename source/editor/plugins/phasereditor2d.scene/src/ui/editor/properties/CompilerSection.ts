@@ -48,17 +48,22 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     "Compiles the scene into code."));
 
             this.createMenuField(
-                comp, [
-                {
-                    name: "JavaScript",
-                    value: core.json.SourceLang.JAVA_SCRIPT,
-                },
-                {
-                    name: "TypeScript",
-                    value: core.json.SourceLang.TYPE_SCRIPT
-                }],
+                comp, () => [
+                    {
+                        name: "JavaScript",
+                        value: core.json.SourceLang.JAVA_SCRIPT,
+                    },
+                    {
+                        name: "TypeScript",
+                        value: core.json.SourceLang.TYPE_SCRIPT
+                    }],
                 "compilerOutputLanguage", "Output Language",
                 "The scene compiler output language.");
+
+            this.createBooleanField(comp, "javaScriptInitFieldsInConstructor",
+
+                this.createLabel(comp, "Fields In Constructor (JS)", "Generate the initialization of the fields in the constructor. This is valid only when the output is JavaScript.")
+            );
 
             this.createBooleanField(comp, "exportClass",
 

@@ -30,6 +30,7 @@ namespace phasereditor2d.scene.ui.dialogs {
                     id: Phaser.Utils.String.UUID(),
                     settings: {
                         compilerOutputLanguage: settings.compilerOutputLanguage,
+                        javaScriptInitFieldsInConstructor: settings.javaScriptInitFieldsInConstructor,
                         exportClass: settings.exportClass,
                         autoImport: settings.autoImport,
                         createMethodName: "editorCreate",

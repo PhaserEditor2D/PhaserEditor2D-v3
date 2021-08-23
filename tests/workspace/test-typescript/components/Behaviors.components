@@ -15,7 +15,8 @@
                         "id": "number"
                     }
                 }
-            ]
+            ],
+            "generateAwakeEvent": true
         },
         {
             "name": "Tint",
@@ -37,7 +38,8 @@
                         ]
                     }
                 }
-            ]
+            ],
+            "generateAwakeEvent": false
         }
     ],
     "meta": {

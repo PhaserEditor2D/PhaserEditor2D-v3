@@ -1,5 +1,42 @@
 # Change Log
 
+## v3.20.0 - Aug 23, 2021
+
+### Added
+
+* Nested prefabs:
+    * Nested prefabs support.
+    * Uses nullish operator (`??`) in prefab constructors.
+    * Allows unlock the position of prefab instances. This change introduces a new scene format that is not compatible with previous versions of the editor.
+* Good bye `prefab-awake` & `components-awake` events. Welcome `scene-awake`.
+    * Updates `UserComponent.js` templates.
+* Scene Editor: new Show Children In Outline parameter in the Children section.
+* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: `generateAwakeHandler`.
+* Compiler: adds the **Fields In Constructor (JS)** flag. Allows generating field initialization code in the constructor and no as class fields. Some transpilers don't support class fields.
+* NinePatch game object support, as part of the Phaser Editor 2D Extras project.
+
+### Updated
+
+* [#140](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/140) Scene compiler generates code with a format compatible with VS Code. It doesn't create unneeded git diffs.
+* Scene Editor: the Change Texture command allows auto unlocking the texture property.
+* Scene Editor: the Layout operations allows auto unlocking of the texture property.
+* Scene Editor: replaces the Container section by the Children section, and applies for Layer objects too.
+* [#139](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/139)[Feature Request] add type for method in typescript.
+* [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: constructor ordering of custom definition props and START-USER-CTR-CODE.
+
+### Fixed
+
+* Scene Editor (BitmapText): fixes error when the font data isn't available in the cache.
+* [#134](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/134) Creating a list in the editor results in an initialized array in the generated code.
+* [#135](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/135) Word wrap width does not behave correctly
+* Scene Editor: fixes Move To Parent dialog in context of prefab scenes.
+* Scene Editor: fixes Scene section layout when shows a prefab's instance.
+* [#142](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/142) Animations Editor: fixes changing multiple properties of the same animation.
+
+### Removed
+
+* Removes Parcel templates.
+
 ## v3.15.0 - Jul 11, 2021
 
 ### Fixed

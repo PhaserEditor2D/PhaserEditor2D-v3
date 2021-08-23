@@ -101,11 +101,11 @@ class Tint extends UserComponent {
         super(gameObject);
         this.gameObject = gameObject;
         gameObject["__Tint"] = this;
-        // custom definition props
-        this.tint = "red";
         /* START-USER-CTR-CODE */
         // Write your code here.
         /* END-USER-CTR-CODE */
+        // custom definition props
+        this.tint = "red";
     }
     static getComponent(gameObject) {
         return gameObject["__Tint"];
@@ -133,17 +133,14 @@ class DinoPrefab extends Phaser.GameObjects.Image {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture || "dino", frame);
         this.rotating = false;
+        // this (components)
+        new Tint(this);
+        new PushOnClick(this);
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
         // custom definition props
         this.origin = "top";
-        /* START-USER-CTR-CODE */
-        this.once("prefab-awake", () => {
-            if (this.rotating) {
-                this.scene.events.on("update", () => {
-                    this.angle += 1;
-                });
-            }
-        });
-        /* END-USER-CTR-CODE */
     }
     /* START-USER-CODE */
     set origin(origin) {
@@ -173,17 +170,24 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
         // dinoRight
         const dinoRight = new DinoPrefab(scene, 90, 166);
         this.add(dinoRight);
+        // lists
+        const testListInPrefab = [dinoRight, dinoLeft];
         // dinoLeft (prefab fields)
         dinoLeft.emit("prefab-awake");
+        // dinoLeft (components)
+        dinoLeft.emit("components-awake");
         // dinoRight (prefab fields)
         dinoRight.emit("prefab-awake");
-        // custom definition props
-        this.ghost = true;
+        // dinoRight (components)
+        dinoRight.emit("components-awake");
         this.dinoLeft = dinoLeft;
         this.dinoRight = dinoRight;
+        this.testListInPrefab = testListInPrefab;
         /* START-USER-CTR-CODE */
         // Write your code here.
         /* END-USER-CTR-CODE */
+        // custom definition props
+        this.ghost = true;
     }
     /* START-USER-CODE */
     set ghost(ghost) {
@@ -209,27 +213,30 @@ class Level extends Phaser.Scene {
         text_1.setOrigin(0.5, 0);
         text_1.text = "Phaser 3 + Phaser Editor 2D + TypeScript";
         text_1.setStyle({ "fontFamily": "arial", "fontSize": "3em" });
-        text_1.setWordWrapWidth(0, false);
-        // dino_1
-        const dino_1 = new DinoPrefab(this, 186, 160);
-        this.add.existing(dino_1);
-        // container_1
-        const container_1 = new DoubleDinoPrefab(this, 666, 35);
-        this.add.existing(container_1);
+        // dinoPrefab
+        const dinoPrefab = new DinoPrefab(this, 186, 160);
+        this.add.existing(dinoPrefab);
+        // doubleDinoPrefab
+        const doubleDinoPrefab = new DoubleDinoPrefab(this, 666, 35);
+        this.add.existing(doubleDinoPrefab);
+        // withAwakeEventPrefab
+        const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 415, 505);
+        this.add.existing(withAwakeEventPrefab);
+        withAwakeEventPrefab.setOrigin(0.5, 0.5);
         // dino (components)
         const dinoPushOnClick = new PushOnClick(dino);
         dinoPushOnClick.pushScale = 0.8;
         new Tint(dino);
         dino.emit("components-awake");
-        // dino_1 (prefab fields)
-        dino_1.rotating = true;
-        dino_1.emit("prefab-awake");
-        // dino_1 (components)
-        const dino_1Tint = new Tint(dino_1);
-        dino_1Tint.tint = "blue";
-        dino_1.emit("components-awake");
-        // container_1 (prefab fields)
-        container_1.emit("prefab-awake");
+        // dinoPrefab (prefab fields)
+        dinoPrefab.rotating = true;
+        dinoPrefab.emit("prefab-awake");
+        // dinoPrefab (components)
+        dinoPrefab.emit("components-awake");
+        // doubleDinoPrefab (prefab fields)
+        doubleDinoPrefab.emit("prefab-awake");
+        // withAwakeEventPrefab (prefab fields)
+        withAwakeEventPrefab.emit("prefab-awake");
         this.dino = dino;
     }
     /* START-USER-CODE */
@@ -241,6 +248,32 @@ class Level extends Phaser.Scene {
         if (this.dino) {
             this.dino.y -= 1;
         }
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class TestListFieldScene extends Phaser.Scene {
+    constructor() {
+        super("TestListFieldScene");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // dino
+        const dino = this.add.image(337, 193, "dino");
+        // lists
+        const list = [dino];
+        const emptyList = [];
+        this.list = list;
+        this.emptyList = emptyList;
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
     }
 }
 /* END OF COMPILED CODE */
@@ -263,6 +296,169 @@ class TestOneObjectScene extends Phaser.Scene {
     // Write your code here
     create() {
         this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class TextWordWrapScene extends Phaser.Scene {
+    constructor() {
+        super("TextWordWrapScene");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // text
+        const text = this.add.text(114, 110, "", {});
+        text.text = "New   long text   !";
+        text.setStyle({ "fontFamily": "arial", "fontSize": "40px" });
+        text.setWordWrapWidth(60, true);
+        // text_1
+        const text_1 = this.add.text(274, 142, "", {});
+        text_1.text = "New text";
+        text_1.setStyle({ "fontSize": "80px" });
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class ComponentWithAwake {
+    constructor(gameObject) {
+        this.gameObject = gameObject;
+        gameObject["__ComponentWithAwake"] = this;
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    static getComponent(gameObject) {
+        return gameObject["__ComponentWithAwake"];
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class ComponentWithoutAwake {
+    constructor(gameObject) {
+        this.gameObject = gameObject;
+        gameObject["__ComponentWithoutAwake"] = this;
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    static getComponent(gameObject) {
+        return gameObject["__ComponentWithoutAwake"];
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class TestComponentsAwakeEvent extends Phaser.Scene {
+    constructor() {
+        super("TestComponentsAwakeEvent");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // hasComponentsAwake
+        const hasComponentsAwake = this.add.text(126, 183, "", {});
+        hasComponentsAwake.text = "Has components-awake";
+        hasComponentsAwake.setStyle({ "fontSize": "40px" });
+        // doesntHaveComponentsAwake
+        const doesntHaveComponentsAwake = this.add.text(130, 275, "", {});
+        doesntHaveComponentsAwake.text = "Doesn't have components-awake";
+        doesntHaveComponentsAwake.setStyle({ "fontSize": "40px" });
+        // dinoPrefab
+        const dinoPrefab = new DinoPrefab(this, 370, 475);
+        this.add.existing(dinoPrefab);
+        // hasComponentsAwake (components)
+        new ComponentWithAwake(hasComponentsAwake);
+        hasComponentsAwake.emit("components-awake");
+        // doesntHaveComponentsAwake (components)
+        new ComponentWithoutAwake(doesntHaveComponentsAwake);
+        // dinoPrefab (prefab fields)
+        dinoPrefab.emit("prefab-awake");
+        // dinoPrefab (components)
+        dinoPrefab.emit("components-awake");
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class PrefabAwakeTest extends Phaser.Scene {
+    constructor() {
+        super("PrefabAwakeTest");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // withoutAwakeEventPrefab
+        const withoutAwakeEventPrefab = new WithoutAwakeEventPrefab(this, 59, 79);
+        this.add.existing(withoutAwakeEventPrefab);
+        // withAwakeEventPrefab
+        const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 99, 197);
+        this.add.existing(withAwakeEventPrefab);
+        withAwakeEventPrefab.setOrigin(0.5, 0.5);
+        // withAwakeEventPrefab (prefab fields)
+        withAwakeEventPrefab.emit("prefab-awake");
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class WithAwakeEventPrefab extends Phaser.GameObjects.Text {
+    constructor(scene, x, y) {
+        super(scene, x, y, "", {});
+        // awake handler
+        this.once("prefab-awake", () => this.awake());
+        this.setOrigin(0.5, 0.5);
+        this.text = "Prefab with awake event";
+        this.setStyle({ "backgroundColor": "#db68f7ff", "fontSize": "40px" });
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    /* START-USER-CODE */
+    awake() {
+        this.angle = -10;
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class WithoutAwakeEventPrefab extends Phaser.GameObjects.Text {
+    constructor(scene, x, y) {
+        super(scene, x, y, "", {});
+        this.text = "Prefab Without Awake Event";
+        this.setStyle({ "backgroundColor": "#1e87a1ff", "fontSize": "40px" });
+        this.setPadding({ "left": 10, "top": 10, "right": 10, "bottom": 10 });
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
     }
 }
 /* END OF COMPILED CODE */

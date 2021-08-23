@@ -3,11 +3,22 @@ namespace phasereditor2d.scene.core.code {
     export class JavaScriptUnitCodeGenerator extends BaseCodeGenerator {
 
         private _unit: UnitCodeDOM;
+        private _initFieldsInConstructor: boolean;
 
         constructor(unit: UnitCodeDOM) {
             super();
 
             this._unit = unit;
+        }
+
+        setInitFieldInConstructor(initFieldInConstructor: boolean) {
+
+            this._initFieldsInConstructor = initFieldInConstructor;
+        }
+
+        isInitFieldInConstructor() {
+
+            return this._initFieldsInConstructor;
         }
 
         protected internalGenerate(): void {
@@ -113,7 +124,7 @@ namespace phasereditor2d.scene.core.code {
 
                 if (memberDecl instanceof UserSectionCodeDOM) {
 
-                    this.section(memberDecl.getOpenTag(), memberDecl.getCloseTag(), memberDecl.getDefaultContent());
+                    this.generateSection(memberDecl);
                 }
             }
 
@@ -125,6 +136,11 @@ namespace phasereditor2d.scene.core.code {
         }
 
         protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM) {
+
+            if (this._initFieldsInConstructor) {
+
+                return;
+            }
 
             this.line(`/** @type {${fieldDecl.getType()}} */`);
 
@@ -151,6 +167,7 @@ namespace phasereditor2d.scene.core.code {
             }
 
             if (isFunction) {
+
                 this.append("function ");
             }
 
@@ -162,7 +179,21 @@ namespace phasereditor2d.scene.core.code {
 
             this.openIndent(")" + methodReturnDeclText + "{");
 
-            const body = CodeDOM.removeBlankLines(methodDecl.getBody());
+            let body = CodeDOM.removeBlankLines(methodDecl.getBody());
+
+            if (this._initFieldsInConstructor && methodDecl.getName() === "constructor") {
+
+                const superCall = body.find(instr => instr instanceof MethodCallCodeDOM && instr.getMethodName() === "super");
+
+                if (superCall) {
+
+                    this.generateMethodCall(superCall);
+
+                    body = body.filter(instr => instr !== superCall);
+                }
+
+                this.generateFieldInitInConstructor(classDecl, methodDecl);
+            }
 
             // never add a blank line at the end of a method body
 
@@ -188,15 +219,6 @@ namespace phasereditor2d.scene.core.code {
                 }
             }
 
-            if (methodDecl.getName() === "constructor") {
-
-                // I comment this because fields are init as class fields
-                // this.generateFieldInitInConstructor(classDecl, methodDecl);
-
-                this.line();
-                this.section("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t");
-            }
-
             this.closeIndent("}");
         }
 
@@ -210,31 +232,11 @@ namespace phasereditor2d.scene.core.code {
             return " ";
         }
 
-        protected generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM, ctrDecl: MethodDeclCodeDOM) {
+        private generateFieldInitInConstructor(classDecl: ClassDeclCodeDOM, ctrDecl: MethodDeclCodeDOM) {
 
-            const fields = classDecl.getBody()
+            const fields: FieldDeclCodeDOM[] = classDecl.getBody()
 
-                .filter(obj => obj instanceof FieldDeclCodeDOM)
-
-                .map(obj => obj as FieldDeclCodeDOM)
-
-                .filter(field => {
-
-                    // skip fields already initialized
-
-                    for (const instr of ctrDecl.getBody()) {
-
-                        if (instr instanceof AssignPropertyCodeDOM) {
-
-                            if (instr.getPropertyName() === field.getName()) {
-
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
-                });
+                .filter(obj => obj instanceof FieldDeclCodeDOM) as any;
 
             if (fields.length > 0) {
 
@@ -248,6 +250,8 @@ namespace phasereditor2d.scene.core.code {
 
                     this.generateAssignProperty(assign);
                 }
+
+                this.line();
             }
         }
 
@@ -275,7 +279,16 @@ namespace phasereditor2d.scene.core.code {
             } else if (instr instanceof AssignPropertyCodeDOM) {
 
                 this.generateAssignProperty(instr);
+
+            } else if (instr instanceof UserSectionCodeDOM) {
+
+                this.generateSection(instr);
             }
+        }
+
+        private generateSection(section: UserSectionCodeDOM) {
+
+            this.section(section.getOpenTag(), section.getCloseTag(), section.getDefaultContent());
         }
 
         private generateAssignProperty(assign: AssignPropertyCodeDOM) {
@@ -324,6 +337,7 @@ namespace phasereditor2d.scene.core.code {
             }
 
             if (call.isConstructor()) {
+
                 this.append("new ");
             }
 

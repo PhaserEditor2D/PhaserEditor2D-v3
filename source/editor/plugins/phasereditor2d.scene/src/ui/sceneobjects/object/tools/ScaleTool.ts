@@ -23,8 +23,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.onActivated(args);
 
-            this.confirmUnlockProperty([sceneobjects.TransformComponent.scale.x, sceneobjects.TransformComponent.scale.y],
-                "scale", TransformSection.SECTION_ID, args);
+            this.confirmUnlockProperty(args, [sceneobjects.TransformComponent.scale.x, sceneobjects.TransformComponent.scale.y],
+                "scale", TransformSection.SECTION_ID);
         }
     }
 }

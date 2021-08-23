@@ -31,6 +31,50 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         abstract buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void;
 
         /**
+         * Adds the X and Y arguments to the prefab's instance creation.
+         *
+         * @param args This method args.
+         */
+        protected buildCreatePrefabInstanceCodeDOM_XY_Arguments(args: IBuildPrefabConstructorCodeDOMArgs) {
+
+            const obj = args.obj as any as ITransformLikeObject;
+            const call = args.methodCallDOM;
+
+            if (obj.getEditorSupport().isUnlockedPropertyXY(TransformComponent.position)) {
+
+                call.argFloat(obj.x);
+                call.argFloat(obj.y);
+
+            } else {
+
+                call.arg("undefined");
+                call.arg("undefined");
+            }
+        }
+
+        /**
+         * Adds the Width and Height arguments to the prefab's instance creation.
+         *
+         * @param args This method args.
+         */
+         protected buildCreatePrefabInstanceCodeDOM_Size_Arguments(args: IBuildPrefabConstructorCodeDOMArgs) {
+
+            const obj = args.obj as any as ISizeLikeObject;
+            const call = args.methodCallDOM;
+
+            if (obj.getEditorSupport().isUnlockedPropertyXY(SizeComponent.size)) {
+
+                call.argFloat(obj.width);
+                call.argFloat(obj.height);
+
+            } else {
+
+                call.arg("undefined");
+                call.arg("undefined");
+            }
+        }
+
+        /**
          * Build the CodeDOM of the prefab class constructor.
          *
          * This method is used by the Scene compiler.
@@ -48,5 +92,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          */
         abstract buildPrefabConstructorDeclarationSupperCallCodeDOM(
             args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void;
+
+        /**
+         * Adds the X and Y parameters to the `super` statement of a prefab constructor.
+         *
+         * @param args Method args
+         */
+        protected buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs) {
+
+            const obj = args.prefabObj;
+            const call = args.superMethodCallCodeDOM;
+
+            if (obj.getEditorSupport().isUnlockedPropertyXY(TransformComponent.position)) {
+
+                call.arg(`x ?? ${TransformComponent.x.getValue(obj)}`);
+                call.arg(`y ?? ${TransformComponent.y.getValue(obj)}`);
+
+            } else {
+
+                call.arg("x");
+                call.arg("x");
+            }
+        }
     }
 }

@@ -3,105 +3,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = phasereditor2d.scene.core.json;
 
-    export interface ILayerData extends json.IObjectData {
-        list: json.IObjectData[];
-    }
-
-    export class LayerEditorSupport extends GameObjectEditorSupport<Layer> {
+    export class LayerEditorSupport extends ParentGameObjectEditorSupport<Layer> {
 
         constructor(obj: Layer, scene: Scene) {
             super(LayerExtension.getInstance(), obj, scene);
 
             this.addComponent(
                 new VisibleComponent(obj),
-                new AlphaSingleComponent(obj)
+                new AlphaSingleComponent(obj),
+                new ChildrenComponent(obj)
             );
-        }
-
-        setInteractive(): void {
-            // nothing
-        }
-
-        async buildDependencyHash(args: IBuildDependencyHashArgs) {
-
-            super.buildDependencyHash(args);
-
-            if (!this.isPrefabInstance()) {
-
-                for (const obj of this.getObject().getChildren()) {
-
-                    obj.getEditorSupport().buildDependencyHash(args);
-                }
-            }
-        }
-
-        isAllowPickChildren() {
-
-            return !this.isPrefabInstance() && this.getObject().visible;
-        }
-
-        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
-
-            if (this.isPrefabInstance()) {
-
-                const finder = ScenePlugin.getInstance().getSceneFinder();
-
-                const file = finder.getPrefabFile(this.getPrefabId());
-
-                if (file) {
-
-                    const image = SceneThumbnailCache.getInstance().getContent(file);
-
-                    if (image) {
-
-                        return new controls.viewers.ImageCellRenderer(image);
-                    }
-                }
-            }
-
-            return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LAYER));
-        }
-
-        writeJSON(layerData: ILayerData) {
-
-            super.writeJSON(layerData);
-
-            if (!this.isPrefabInstance()) {
-
-                layerData.list = this.getObject().getChildren().map(obj => {
-
-                    const objData = {} as json.IObjectData;
-
-                    obj.getEditorSupport().writeJSON(objData);
-
-                    return objData as json.IObjectData;
-                });
-            }
-        }
-
-        readJSON(layerData: ILayerData) {
-
-            super.readJSON(layerData);
-
-            const ser = this.getSerializer(layerData);
-
-            const list = ser.read("list", []) as json.IObjectData[];
-
-            const maker = this.getScene().getMaker();
-
-            const layer = this.getObject();
-
-            layer.removeAll(true);
-
-            for (const objData of list) {
-
-                const sprite = maker.createObject(objData);
-
-                if (sprite) {
-
-                    layer.add(sprite);
-                }
-            }
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {

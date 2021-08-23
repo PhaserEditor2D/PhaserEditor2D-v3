@@ -106,7 +106,8 @@ namespace phasereditor2d.scene.ui {
 
                 if (sprites.length > 0) {
 
-                    if (prefabObj instanceof sceneobjects.Container || prefabObj instanceof sceneobjects.Layer) {
+                    if (!prefabObj.getEditorSupport().isPrefabInstance()
+                        && (prefabObj instanceof sceneobjects.Container || prefabObj instanceof sceneobjects.Layer)) {
 
                         parent = prefabObj;
 
@@ -233,6 +234,7 @@ namespace phasereditor2d.scene.ui {
             const content = await FileUtils.preloadAndGetFileString(file);
 
             if (!content) {
+
                 return null;
             }
 
@@ -246,12 +248,9 @@ namespace phasereditor2d.scene.ui {
                     label: "temporal"
                 });
 
-                const { x, y } = this.getCanvasCenterPoint();
+                if (obj.getEditorSupport().isUnlockedProperty(sceneobjects.TransformComponent.x)) {
 
-                const transformComponent = obj.getEditorSupport()
-                    .getComponent(sceneobjects.TransformComponent) as sceneobjects.TransformComponent;
-
-                if (transformComponent) {
+                    const { x, y } = this.getCanvasCenterPoint();
 
                     const sprite = obj as unknown as sceneobjects.ITransformLikeObject;
 
@@ -274,6 +273,11 @@ namespace phasereditor2d.scene.ui {
         }
 
         createScene(sceneData: json.ISceneData, errors?: string[]) {
+
+            if (sceneData.meta.version === undefined || sceneData.meta.version === 1) {
+                // old version, perform unlock x & y migration
+                new json.Version1ToVersion2Migration().migrate(sceneData);
+            }
 
             if (sceneData.settings) {
 
@@ -467,7 +471,7 @@ namespace phasereditor2d.scene.ui {
             return newObjects;
         }
 
-        createObject(data: json.IObjectData, errors?: string[]) {
+        createObject(data: json.IObjectData, errors?: string[], parent?: sceneobjects.ISceneGameObject) {
 
             try {
 

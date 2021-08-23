@@ -74,11 +74,19 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             data.id = Phaser.Utils.String.UUID();
 
-            if (data.type === sceneobjects.ContainerExtension.getInstance().getTypeName()) {
+            if (data.list) {
 
-                for (const data2 of (data as any).list) {
+                for (const child of data.list) {
 
-                    this.setNewObjectId(data2);
+                    this.setNewObjectId(child);
+                }
+            }
+
+            if (data.nestedPrefabs) {
+
+                for (const child of data.nestedPrefabs) {
+
+                    this.setNewObjectId(child);
                 }
             }
         }

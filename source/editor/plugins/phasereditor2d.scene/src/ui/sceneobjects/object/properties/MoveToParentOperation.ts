@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return false;
             }
 
-            if (targetParent.getEditorSupport().isPrefabInstance() || targetParent.getEditorSupport().isPrefabInstanceElement()) {
+            if (targetParent.getEditorSupport().isPrefabInstance() || targetParent.getEditorSupport().isNestedPrefabInstance()) {
 
                 return false;
             }
@@ -73,9 +73,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of this.getEditor().getSelectedGameObjects()) {
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+                const sprite = obj as unknown as Sprite;
 
-                const hasPosition = obj.getEditorSupport().hasComponent(TransformComponent);
+                const hasPosition = obj.getEditorSupport().isUnlockedProperty(TransformComponent.x);
 
                 const currentParent = getObjectParent(obj);
 

@@ -34,14 +34,14 @@ namespace colibri.ui.controls.properties {
 
         createMenuButton(
             parent: HTMLElement, text: string,
-            items: Array<{ name: string, value: any, icon?: controls.IImage }>,
+            getItems: () => Array<{ name: string, value: any, icon?: controls.IImage }>,
             callback: (value: any) => void) {
 
             const btn = this.createButton(parent, text, e => {
 
                 const menu = new controls.Menu();
 
-                for (const item of items) {
+                for (const item of getItems()) {
 
                     menu.add(new Action({
                         text: item.name,

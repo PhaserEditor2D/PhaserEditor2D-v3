@@ -29,7 +29,8 @@ export default class Level extends Phaser.Scene {
 		
 		// fufuSuperDino (components)
 		new PushOnClick(fufuSuperDino);
-		fufuSuperDino.emit("components-awake");
+		
+		this.events.emit("scene-awake");
 	}
 	
 	/* START-USER-CODE */

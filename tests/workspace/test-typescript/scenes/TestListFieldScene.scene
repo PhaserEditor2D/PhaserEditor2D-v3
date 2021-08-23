@@ -1,0 +1,42 @@
+{
+    "id": "ace62e16-b3a5-4b59-a23f-6b83152f7164",
+    "sceneType": "SCENE",
+    "settings": {
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "TestListFieldScene",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Image",
+            "id": "265d24ae-28ca-444f-bc02-4dd480fbc0a5",
+            "label": "dino",
+            "components": [],
+            "texture": {
+                "key": "dino"
+            },
+            "x": 337,
+            "y": 193
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    },
+    "lists": [
+        {
+            "id": "9cf3a8c7-01d2-4618-b9af-c3575fa7f8df",
+            "label": "list",
+            "objectIds": [
+                "265d24ae-28ca-444f-bc02-4dd480fbc0a5"
+            ]
+        },
+        {
+            "id": "c8e01bf2-0cdb-4a22-8c2a-ac7f9e561cf1",
+            "label": "emptyList"
+        }
+    ]
+}

@@ -21,12 +21,34 @@ namespace phasereditor2d.scene.core.code {
 
             this.internalGenerate();
 
+            this.cleanCode();
+
             return this._text;
         }
 
         protected abstract internalGenerate(): void;
 
+
+        protected cleanCode() {
+
+            // clean the empty lines
+
+            const lines = this._text.split("\n").map(line => {
+
+                if (line.trim() === "") {
+
+                    return "";
+                }
+
+                return line;
+            });
+
+            this._text = lines.join("\n");
+        }
+
+
         length() {
+
             return this._text.length;
         }
 

@@ -214,6 +214,7 @@ namespace colibri.ui.controls.properties {
         public updateWithSelection(): void {
 
             if (!this._sectionProvider) {
+
                 return;
             }
 

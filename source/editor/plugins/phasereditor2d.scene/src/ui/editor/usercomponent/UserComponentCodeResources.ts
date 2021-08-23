@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         }
 
         private constructor() {
-            super();
+            super(ScenePlugin.getInstance());
 
             this.addResource("usercomponent.js", "data/UserComponent.js.txt");
             this.addResource("usercomponent.module.js", "data/UserComponent.module.js.txt");

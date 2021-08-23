@@ -9,6 +9,5 @@
         "declaration": true,
         "declarationMap": true,
         "disableSourceOfProjectReferenceRedirect": true
-    },
-   
+    }
 }

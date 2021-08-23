@@ -1,0 +1,54 @@
+{
+    "id": "26f2bbb7-6dfb-4799-8fe8-f597aa26dd14",
+    "sceneType": "SCENE",
+    "settings": {
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "TestComponentsAwakeEvent",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Text",
+            "id": "611241a7-356a-4a98-9d62-a14559d4abdd",
+            "label": "hasComponentsAwake",
+            "components": [
+                "ComponentWithAwake"
+            ],
+            "x": 126,
+            "y": 183,
+            "originX": 0,
+            "originY": 0,
+            "text": "Has components-awake",
+            "fontSize": "40px"
+        },
+        {
+            "type": "Text",
+            "id": "26867206-bc49-47e9-920a-62aa075c8869",
+            "label": "doesntHaveComponentsAwake",
+            "components": [
+                "ComponentWithoutAwake"
+            ],
+            "x": 130,
+            "y": 275,
+            "originX": 0,
+            "originY": 0,
+            "text": "Doesn't have components-awake",
+            "fontSize": "40px"
+        },
+        {
+            "prefabId": "280fd0ee-2787-46a5-8832-a38b3ef81d08",
+            "id": "8f86a518-c8e7-44cd-b7e0-b5d1221151e4",
+            "label": "dinoPrefab",
+            "components": [],
+            "x": 370,
+            "y": 475
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

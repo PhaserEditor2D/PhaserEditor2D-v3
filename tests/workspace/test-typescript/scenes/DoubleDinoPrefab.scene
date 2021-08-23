@@ -39,6 +39,16 @@
         "url": "https://phasereditor2d.com",
         "contentType": "phasereditor2d.core.scene.SceneContentType"
     },
+    "lists": [
+        {
+            "id": "56539516-52f3-45c1-ad1f-2a1a4a013728",
+            "label": "testListInPrefab",
+            "objectIds": [
+                "b682a48e-e4f2-4cb5-979c-3a1394199491",
+                "91b97011-4230-4e8b-a7ca-087cd4e834bc"
+            ]
+        }
+    ],
     "prefabProperties": [
         {
             "name": "ghost",

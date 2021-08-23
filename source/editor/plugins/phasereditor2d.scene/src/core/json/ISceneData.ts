@@ -18,7 +18,8 @@ namespace phasereditor2d.scene.core.json {
         meta: {
             app: string,
             url: string,
-            contentType: string
+            contentType: string,
+            version?: number
         };
     }
 

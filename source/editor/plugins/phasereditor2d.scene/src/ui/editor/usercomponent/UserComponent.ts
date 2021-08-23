@@ -1,7 +1,6 @@
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     import read = colibri.core.json.read;
-    import write = colibri.core.json.write;
 
     export class UserComponent {
 

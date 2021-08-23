@@ -83,7 +83,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             if (superClass && superClass.trim() !== "") {
 
-                body.push(new code.RawCodeDOM("super(gameObject);"));
+                const superCall = new code.MethodCallCodeDOM("super");
+                superCall.arg("gameObject");
+                body.push(superCall);
                 body.push(new code.RawCodeDOM(""));
             }
 
@@ -95,6 +97,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 `(gameObject as any)["__${clsDom.getName()}"] = this;`
                 : `gameObject["__${clsDom.getName()}"] = this;`);
             body.push(setCompDom);
+
+            body.push(new code.RawCodeDOM(""));
+            body.push(new code.UserSectionCodeDOM("/* START-USER-CTR-CODE */", "/* END-USER-CTR-CODE */", "\n\t\t// Write your code here.\n\t\t"))
 
             this.buildCustomPropertiesInit(body);
 
@@ -124,7 +129,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             if (assignDomList.length > 0) {
 
-                body.push(new code.RawCodeDOM(""));
+                body.push(new code.RawCodeDOM("\n"));
                 body.push(new code.RawCodeDOM("// custom definition props"));
             }
 

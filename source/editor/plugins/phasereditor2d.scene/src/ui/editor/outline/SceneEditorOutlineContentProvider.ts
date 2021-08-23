@@ -48,9 +48,16 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             } else if (parent instanceof sceneobjects.Container || parent instanceof sceneobjects.Layer) {
 
-                if (parent.getEditorSupport().isPrefabInstance()) {
+                const editorSupport = parent.getEditorSupport();
+
+                if (!editorSupport.isShowChildrenInOutline()) {
 
                     return [];
+                }
+
+                if (editorSupport.isPrefabInstance()) {
+
+                    return editorSupport.getNestedActivePrefabInstances();
                 }
 
                 const list = [...parent.getChildren()];

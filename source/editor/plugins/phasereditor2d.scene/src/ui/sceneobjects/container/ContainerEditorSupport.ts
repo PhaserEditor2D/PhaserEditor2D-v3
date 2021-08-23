@@ -1,123 +1,17 @@
+/// <reference path="../ParentGameObjectEditorSupport.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
     import json = core.json;
 
-    export interface IContainerData extends json.IObjectData {
-        list: json.IObjectData[];
-    }
-
-    export class ContainerEditorSupport extends GameObjectEditorSupport<Container> {
-
-        private _allowPickChildren: boolean;
+    export class ContainerEditorSupport extends ParentGameObjectEditorSupport<Container> {
 
         constructor(obj: Container, scene: Scene) {
             super(ContainerExtension.getInstance(), obj, scene);
 
-            this._allowPickChildren = true;
-
             this.addComponent(new TransformComponent(obj));
             this.addComponent(new VisibleComponent(obj));
-            this.addComponent(new ContainerComponent(obj));
-        }
-
-        isAllowPickChildren() {
-            return this._allowPickChildren;
-        }
-
-        setAllowPickChildren(childrenPickable: boolean) {
-            this._allowPickChildren = childrenPickable;
-        }
-
-        setInteractive() {
-            // nothing
-        }
-
-        destroy() {
-
-            for (const obj of this.getObject().getChildren()) {
-
-                obj.getEditorSupport().destroy();
-            }
-
-            super.destroy();
-        }
-
-        async buildDependencyHash(args: IBuildDependencyHashArgs) {
-
-            super.buildDependencyHash(args);
-
-            if (!this.isPrefabInstance()) {
-
-                for (const obj of this.getObject().getChildren()) {
-
-                    obj.getEditorSupport().buildDependencyHash(args);
-                }
-            }
-        }
-
-        getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
-
-            if (this.isPrefabInstance()) {
-
-                const finder = ScenePlugin.getInstance().getSceneFinder();
-
-                const file = finder.getPrefabFile(this.getPrefabId());
-
-                if (file) {
-
-                    const image = SceneThumbnailCache.getInstance().getContent(file);
-
-                    if (image) {
-
-                        return new controls.viewers.ImageCellRenderer(image);
-                    }
-                }
-            }
-
-            return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
-        }
-
-        writeJSON(containerData: IContainerData) {
-
-            super.writeJSON(containerData);
-
-            if (!this.isPrefabInstance()) {
-
-                containerData.list = this.getObject().getChildren().map(obj => {
-
-                    const objData = {} as json.IObjectData;
-
-                    obj.getEditorSupport().writeJSON(objData);
-
-                    return objData as json.IObjectData;
-                });
-            }
-        }
-
-        readJSON(containerData: IContainerData) {
-
-            super.readJSON(containerData);
-
-            const ser = this.getSerializer(containerData);
-
-            const list = ser.read("list", []) as json.IObjectData[];
-
-            const maker = this.getScene().getMaker();
-
-            const container = this.getObject();
-
-            container.removeAll(true);
-
-            for (const objData of list) {
-
-                const sprite = maker.createObject(objData);
-
-                if (sprite) {
-
-                    container.add(sprite);
-                }
-            }
+            this.addComponent(new ChildrenComponent(obj));
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {

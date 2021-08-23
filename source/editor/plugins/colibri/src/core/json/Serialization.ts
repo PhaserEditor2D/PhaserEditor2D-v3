@@ -18,6 +18,11 @@ namespace colibri.core.json {
         return defaultValue;
     }
 
+    export function copy(data: any) {
+
+        return JSON.parse(JSON.stringify(data));
+    }
+
     export function getDataValue(data: any, key: string) {
 
         let result = data;

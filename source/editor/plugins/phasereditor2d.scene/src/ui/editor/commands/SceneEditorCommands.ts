@@ -41,6 +41,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_DUPLICATE_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.DuplicateSceneFile";
     export const CMD_CLEAR_SCENE_THUMBNAIL_CACHE = "phasereditor2d.scene.ui.editor.commands.ClearSceneThumbnailCache";
     export const CMD_OPEN_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.OpenSceneFile";
+    export const CMD_DISABLE_AWAKE_EVENT_PREFABS = "phasereditor2d.scene.ui.editor.commands.DisableAwakeEventPrefabs";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -53,6 +54,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 ));
     }
 
+    function noNestedPrefabSelected(args: colibri.ui.ide.commands.HandlerArgs) {
+
+        return args.activeEditor.getSelection()
+            .filter(obj => ui.sceneobjects.isGameObject(obj))
+            .filter((obj: ui.sceneobjects.ISceneGameObject) => obj.getEditorSupport().isNestedPrefabInstance())
+            .length === 0;
+    }
+
     function isOnlyContainerSelected(args: colibri.ui.ide.commands.HandlerArgs) {
 
         return isSceneScope(args) && editorHasSelection(args)
@@ -60,17 +69,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
             && (args.activeEditor as SceneEditor).getSelectedGameObjects()
 
                 .filter(obj => obj instanceof sceneobjects.Container)
-
-                .length === args.activeEditor.getSelection().length;
-    }
-
-    function isOnlyContainerOrLayerSelected(args: colibri.ui.ide.commands.HandlerArgs) {
-
-        return isSceneScope(args) && editorHasSelection(args)
-
-            && (args.activeEditor as SceneEditor).getSelectedGameObjects()
-
-                .filter(obj => obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer)
 
                 .length === args.activeEditor.getSelection().length;
     }
@@ -89,35 +87,35 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 name: "Scene Editor"
             });
 
-            SceneEditorCommands.registerGlobalCommands(manager);
+            this.registerGlobalCommands(manager);
 
-            SceneEditorCommands.registerEditCommands(manager);
+            this.registerEditCommands(manager);
 
-            SceneEditorCommands.registerAddObjectCommands(manager);
+            this.registerAddObjectCommands(manager);
 
-            SceneEditorCommands.registerSceneCommands(manager);
+            this.registerSceneCommands(manager);
 
-            SceneEditorCommands.registerVisibilityCommands(manager);
+            this.registerVisibilityCommands(manager);
 
-            SceneEditorCommands.registerSelectionCommands(manager);
+            this.registerSelectionCommands(manager);
 
-            SceneEditorCommands.registerParentCommands(manager);
+            this.registerParentCommands(manager);
 
-            SceneEditorCommands.registerCompilerCommands(manager);
+            this.registerCompilerCommands(manager);
 
-            SceneEditorCommands.registerToolsCommands(manager);
+            this.registerToolsCommands(manager);
 
-            SceneEditorCommands.registerOriginCommands(manager);
+            this.registerOriginCommands(manager);
 
-            SceneEditorCommands.registerDepthCommands(manager);
+            this.registerDepthCommands(manager);
 
-            SceneEditorCommands.registerTypeCommands(manager);
+            this.registerTypeCommands(manager);
 
-            SceneEditorCommands.registerMoveObjectCommands(manager);
+            this.registerMoveObjectCommands(manager);
 
-            SceneEditorCommands.registerTextureCommands(manager);
+            this.registerTextureCommands(manager);
 
-            SceneEditorCommands.registerSnappingCommands(manager);
+            this.registerSnappingCommands(manager);
         }
 
         static registerAddObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -387,7 +385,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     testFunc: args => isSceneScope(args)
                         && args.activeEditor.getSelection().length > 0
                         && args.activeEditor.getSelection()
-                            .filter(obj => sceneobjects.ChangeTextureOperation.canChangeTextureOf(obj))
+                            .filter(obj => sceneobjects.GameObjectEditorSupport.hasObjectComponent(
+                                obj, sceneobjects.TextureComponent))
                             .length > 0,
 
                     executeFunc: args => {
@@ -413,7 +412,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     testFunc: args => isSceneScope(args)
                         && args.activeEditor.getSelection().length > 0
                         && args.activeEditor.getSelection()
-                            .filter(obj => sceneobjects.ChangeTextureOperation.canChangeTextureOf(obj))
+                            .filter(obj => sceneobjects.GameObjectEditorSupport.hasObjectComponent(obj, sceneobjects.TextureComponent))
                             .length === 1,
 
                     executeFunc: args => {
@@ -543,7 +542,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
 
-                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0 && noNestedPrefabSelected(args),
 
                 args => args.activeEditor.getUndoManager()
                     .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
@@ -672,6 +671,13 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
+                                const editorSupport = obj.getEditorSupport();
+
+                                if (editorSupport.isNestedPrefabInstance()) {
+
+                                    return false;
+                                }
+
                                 if (obj instanceof sceneobjects.Layer) {
 
                                     return false;
@@ -707,6 +713,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             const editor = args.activeEditor as editor.SceneEditor;
 
                             for (const obj of editor.getSelectedGameObjects()) {
+
+                                if (obj.getEditorSupport().isNestedPrefabInstance()) {
+
+                                    return false;
+                                }
 
                                 if (obj instanceof sceneobjects.Layer) {
 
@@ -761,7 +772,18 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     category: CAT_SCENE_EDITOR
                 },
                 handler: {
-                    testFunc: isOnlyContainerOrLayerSelected,
+                    testFunc: args => {
+
+                        return isSceneScope(args) && editorHasSelection(args)
+
+                            && (args.activeEditor as SceneEditor).getSelectedGameObjects()
+
+                                .filter(obj => obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer)
+
+                                .filter(obj => !obj.getEditorSupport().isPrefabInstance())
+
+                                .length === args.activeEditor.getSelection().length;
+                    },
 
                     executeFunc: args => args.activeEditor.getUndoManager().add(
                         new ui.sceneobjects.BreakParentOperation(args.activeEditor as SceneEditor)
@@ -837,6 +859,23 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             .flatMap(obj => sceneobjects.GameObjectEditorSupport.getObjectChildren(obj))
 
+                            .filter(obj => {
+
+                                const editorSupport = obj.getEditorSupport();
+
+                                if (editorSupport.isMutableNestedPrefabInstance()) {
+
+                                    return true;
+                                }
+
+                                if (editorSupport.isPrefabInstanceElement()) {
+
+                                    return false;
+                                }
+
+                                return true;
+                            })
+
                         editor.setSelection(sel);
                     }
                 },
@@ -864,6 +903,12 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             for (const obj of editor.getSelection()) {
 
                                 if (sceneobjects.isGameObject(obj)) {
+
+                                    if ((obj as sceneobjects.ISceneGameObject)
+                                        .getEditorSupport().isNestedPrefabInstance()) {
+
+                                        return false;
+                                    }
 
                                     if (obj instanceof sceneobjects.Layer) {
 
@@ -1031,7 +1076,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const obj = args.activeEditor.getSelection()[0] as sceneobjects.ISceneGameObject;
 
-                        const objData: core.json.IObjectData = {} as any;
+                        const objData: core.json.IObjectData = {
+                            unlock: ["x", "y"]
+                        } as any;
 
                         obj.getEditorSupport().writeJSON(objData);
 

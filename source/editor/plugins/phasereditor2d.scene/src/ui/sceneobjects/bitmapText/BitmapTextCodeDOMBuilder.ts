@@ -27,8 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.arg(args.sceneExpr);
 
-            call.argFloat(obj.x);
-            call.argFloat(obj.y);
+            this.buildCreatePrefabInstanceCodeDOM_XY_Arguments(args);
 
             if (support.isUnlockedProperty(BitmapTextComponent.font)) {
 
@@ -44,8 +43,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const ctr = args.ctrDeclCodeDOM;
 
-            ctr.arg("x", "number");
-            ctr.arg("y", "number");
+            ctr.arg("x", "number", true);
+            ctr.arg("y", "number", true);
             ctr.arg("font", "string", true);
         }
 
@@ -57,8 +56,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const call = args.superMethodCallCodeDOM;
 
-            call.arg("x");
-            call.arg("y");
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
 
             if (support.isLockedProperty(BitmapTextComponent.font)) {
 
@@ -66,7 +64,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             } else {
 
-                call.arg("font || " + code.CodeDOM.quote(obj.font));
+                call.arg("font ?? " + code.CodeDOM.quote(obj.font));
             }
         }
     }

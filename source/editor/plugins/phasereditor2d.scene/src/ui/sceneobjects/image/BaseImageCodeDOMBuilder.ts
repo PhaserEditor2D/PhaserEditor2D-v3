@@ -19,8 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const call = args.superMethodCallCodeDOM;
 
-            call.arg("x");
-            call.arg("y");
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
 
             this.buildPrefabConstructorDeclarationSupperCallCodeDOM_TextureParameters(args, call);
         }
@@ -58,7 +57,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (frameCode) {
 
-                    call.arg("frame !== undefined && frame !== null ? frame : " + frameCode);
+                    call.arg("frame ?? " + frameCode);
 
                 } else {
 
@@ -71,8 +70,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const ctr = args.ctrDeclCodeDOM;
 
-            ctr.arg("x", "number");
-            ctr.arg("y", "number");
+            ctr.arg("x", "number", true);
+            ctr.arg("y", "number", true);
             ctr.arg("texture", "string", true);
             ctr.arg("frame", "number | string", true);
         }
@@ -84,8 +83,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const call = args.methodCallDOM;
 
             call.arg(args.sceneExpr);
-            call.argFloat(obj.x);
-            call.argFloat(obj.y);
+
+            this.buildCreatePrefabInstanceCodeDOM_XY_Arguments(args);
 
             if (support.isUnlockedProperty(TextureComponent.texture)) {
 

@@ -19,7 +19,8 @@ namespace phasereditor2d.scene.core.json {
                 meta: {
                     app: "Phaser Editor 2D - Scene Editor",
                     url: "https://phasereditor2d.com",
-                    contentType: core.CONTENT_TYPE_SCENE
+                    contentType: core.CONTENT_TYPE_SCENE,
+                    version: 2
                 }
             };
 

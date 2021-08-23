@@ -43,6 +43,7 @@ namespace phasereditor2d.scene.core.json {
 
         private _prefabObjectId_ObjectData_Map: Map<string, IObjectData>;
         private _sceneFilename_Data_Map: Map<string, ISceneData>;
+        private _sceneFilename_Settings_Map: Map<string, SceneSettings>;
         private _prefabId_File_Map: Map<string, io.FilePath>;
         private _sceneFiles: io.FilePath[];
         private _prefabFiles: io.FilePath[];
@@ -50,11 +51,14 @@ namespace phasereditor2d.scene.core.json {
         private _compFilename_Data_Map: Map<string, usercomponent.UserComponentsModel>;
         private _compModelsInfo: IUserComponentsModelInfo[];
         private _enabled: boolean;
+        private _nestedPrefabIds: Set<string>;
 
         constructor() {
 
             this._prefabObjectId_ObjectData_Map = new Map();
+            this._nestedPrefabIds = new Set();
             this._sceneFilename_Data_Map = new Map();
+            this._sceneFilename_Settings_Map = new Map();
             this._prefabId_File_Map = new Map();
             this._sceneFiles = [];
             this._prefabFiles = [];
@@ -177,7 +181,9 @@ namespace phasereditor2d.scene.core.json {
         private async preloadSceneFiles(monitor: controls.IProgressMonitor): Promise<void> {
             const sceneIdSet = new Set<string>();
             const prefabObjectId_ObjectData_Map = new Map<string, IObjectData>();
+            const nestedPrefabIds = new Set<string>();
             const sceneFilename_Data_Map = new Map<string, ISceneData>();
+            const sceneFilename_Settings_Map = new Map<string, SceneSettings>();
             const prefabId_File_Map = new Map<string, io.FilePath>();
             const sceneFiles = [];
             const prefabFiles = [];
@@ -195,6 +201,11 @@ namespace phasereditor2d.scene.core.json {
                     const data = JSON.parse(content) as ISceneData;
 
                     sceneFilename_Data_Map.set(file.getFullName(), data);
+                    {
+                        const settings = new SceneSettings();
+                        settings.readJSON(data.settings);
+                        sceneFilename_Settings_Map.set(file.getFullName(), settings);
+                    }
 
                     if (data.id) {
 
@@ -216,6 +227,9 @@ namespace phasereditor2d.scene.core.json {
 
                             prefabObjectId_ObjectData_Map.set(data.id, objData);
                             prefabId_File_Map.set(data.id, file);
+
+                            this.mapNestedPrefabData(
+                                prefabObjectId_ObjectData_Map, prefabId_File_Map, nestedPrefabIds, file, objData);
                         }
 
                         if (data.sceneType === SceneType.PREFAB) {
@@ -234,10 +248,46 @@ namespace phasereditor2d.scene.core.json {
             }
 
             this._prefabObjectId_ObjectData_Map = prefabObjectId_ObjectData_Map;
+            this._nestedPrefabIds = nestedPrefabIds;
             this._sceneFilename_Data_Map = sceneFilename_Data_Map;
+            this._sceneFilename_Settings_Map = sceneFilename_Settings_Map;
             this._prefabId_File_Map = prefabId_File_Map;
             this._sceneFiles = sceneFiles;
             this._prefabFiles = prefabFiles;
+        }
+
+        private mapNestedPrefabData(
+            prefabObjectId_ObjectData_Map: Map<string, IObjectData>,
+            prefabId_File_Map: Map<string, io.FilePath>,
+            nestedPrefabIds: Set<string>,
+            file: io.FilePath,
+            objData: IObjectData) {
+
+            if (objData.list) {
+
+                for (const c of objData.list) {
+
+                    if (c.scope === ui.sceneobjects.ObjectScope.NESTED_PREFAB) {
+
+                        prefabObjectId_ObjectData_Map.set(c.id, c);
+                        prefabId_File_Map.set(c.id, file);
+                        nestedPrefabIds.add(c.id);
+
+                        this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, nestedPrefabIds, file, c);
+                    }
+                }
+            }
+
+            if (objData.nestedPrefabs) {
+
+                for (const c of objData.nestedPrefabs) {
+
+                    prefabObjectId_ObjectData_Map.set(c.id, c);
+                    prefabId_File_Map.set(c.id, file);
+
+                    this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, nestedPrefabIds, file, c);
+                }
+            }
         }
 
         getUserComponentsFiles() {
@@ -298,6 +348,33 @@ namespace phasereditor2d.scene.core.json {
             return this._prefabFiles;
         }
 
+        getOriginalPrefabId(prefabId: string): string | undefined {
+
+            const objData = this.getPrefabData(prefabId);
+
+            if (!objData) {
+
+                return undefined;
+            }
+
+            if (objData.prefabId) {
+
+                return this.getOriginalPrefabId(objData.prefabId);
+            }
+
+            return prefabId;
+        }
+
+        isNestedPrefab(prefabId: string) {
+
+            return this._nestedPrefabIds.has(prefabId);
+        }
+
+        existsPrefab(prefabId: string) {
+
+            return this._prefabObjectId_ObjectData_Map.has(prefabId);
+        }
+
         getPrefabData(prefabId: string): IObjectData {
 
             return this._prefabObjectId_ObjectData_Map.get(prefabId);
@@ -337,6 +414,11 @@ namespace phasereditor2d.scene.core.json {
             return this._sceneFilename_Data_Map.get(file.getFullName());
         }
 
+        getSceneSettings(file: io.FilePath) {
+
+            return this._sceneFilename_Settings_Map.get(file.getFullName());
+        }
+
         getScenePhaserType(file: io.FilePath) {
 
             const data = this.getSceneData(file);
@@ -374,12 +456,12 @@ namespace phasereditor2d.scene.core.json {
 
             console.log("Scene Finder debug:")
 
-            for(const prefab of this._prefabFiles) {
+            for (const prefab of this._prefabFiles) {
 
                 console.log("Prefab file '" + prefab.getFullName() + "'");
             }
 
-            for(const id of this._prefabObjectId_ObjectData_Map.keys()) {
+            for (const id of this._prefabObjectId_ObjectData_Map.keys()) {
 
                 console.log("Prefab data " + id + ":");
                 console.log(this._prefabObjectId_ObjectData_Map.get(id));
