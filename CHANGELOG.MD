@@ -13,6 +13,7 @@
 * Scene Editor: new Show Children In Outline parameter in the Children section.
 * [#136](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/136) Prefabs: `generateAwakeHandler`.
 * Compiler: adds the **Fields In Constructor (JS)** flag. Allows generating field initialization code in the constructor and no as class fields. Some transpilers don't support class fields.
+* NinePatch game object support, as part of the Phaser Editor 2D Extras project.
 
 ### Updated
 
