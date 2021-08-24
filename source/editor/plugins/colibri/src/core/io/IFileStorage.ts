@@ -30,7 +30,7 @@ namespace colibri.core.io {
 
         getProjects(workspacePath?: string): Promise<IProjectsData>;
 
-        openProject(projectName: string): Promise<FilePath>;
+        openProject(): Promise<FilePath>;
 
         isValidAccount(): Promise<string>;
 

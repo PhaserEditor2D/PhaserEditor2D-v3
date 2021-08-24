@@ -178,22 +178,21 @@ namespace colibri.ui.ide {
             this._editorSessionStateRegistry.clear();
         }
 
-        async openProject(projectName: string, workspacePath: string, monitor: controls.IProgressMonitor) {
+        async openProject(monitor: controls.IProgressMonitor) {
 
-            this.eventBeforeOpenProject.fire(projectName);
-
-            this._projectPreferences = new core.preferences.Preferences("__project__" + projectName);
+            this.eventBeforeOpenProject.fire("");
 
             this.resetCache();
 
-            console.log(`Workbench: opening project ${projectName}.`);
+            console.log(`Workbench: opening project.`);
 
-            if (workspacePath) {
+            await this._fileStorage.openProject();
 
-                await this._fileStorage.changeWorkspace(workspacePath);
-            }
+            const projectName =this._fileStorage.getRoot().getName();
 
-            await this._fileStorage.openProject(projectName);
+            console.log(`Workbench: project ${projectName} loaded.`);
+
+            this._projectPreferences = new core.preferences.Preferences("__project__" + projectName);
 
             console.log("Workbench: fetching required project resources.");
 

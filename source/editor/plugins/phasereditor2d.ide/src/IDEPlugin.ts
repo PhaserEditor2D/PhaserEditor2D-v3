@@ -38,12 +38,6 @@ namespace phasereditor2d.ide {
                 )
             );
 
-            reg.addExtension(
-                new colibri.ui.ide.WindowExtension(
-                    () => new ui.WelcomeWindow()
-                )
-            );
-
             // icons
 
             reg.addExtension(
@@ -80,10 +74,6 @@ namespace phasereditor2d.ide {
                 viewerSelectionForeground: controls.Controls.LIGHT_THEME.viewerSelectionForeground,
                 viewerSelectionBackground: controls.Controls.LIGHT_THEME.viewerSelectionBackground,
             }));
-
-            // new dialogs
-
-            reg.addExtension(new ui.dialogs.NewProjectDialogExtension());
 
             // files view menu
 
@@ -176,46 +166,7 @@ namespace phasereditor2d.ide {
             });
         }
 
-        async openFirstWindow() {
-
-            const wb = colibri.Platform.getWorkbench();
-
-            wb.eventProjectOpened.addListener(() => {
-
-                wb.getGlobalPreferences().setValue("defaultProjectData", {
-                    projectName: wb.getFileStorage().getRoot().getName()
-                });
-            });
-
-            const prefs = wb.getGlobalPreferences();
-
-            const defaultProjectData = prefs.getValue("defaultProjectData");
-
-            let win: ui.DesignWindow = null;
-
-            if (defaultProjectData) {
-
-                const projectName = defaultProjectData["projectName"];
-
-                const { projects } = await wb.getFileStorage().getProjects();
-
-                if (projects.indexOf(projectName) >= 0) {
-
-                    await this.ideOpenProject(projectName);
-
-                    return;
-                }
-            }
-
-            win = wb.activateWindow(ui.WelcomeWindow.ID) as ui.DesignWindow;
-
-            if (win) {
-
-                win.restoreState(wb.getProjectPreferences());
-            }
-        }
-
-        async ideOpenProject(projectName: string, workspacePath?: string) {
+        async ideOpenProject() {
 
             this._openingProject = true;
 
@@ -223,7 +174,7 @@ namespace phasereditor2d.ide {
 
             const dlg = new ui.dialogs.OpeningProjectDialog();
             dlg.create();
-            dlg.setTitle("Opening " + projectName);
+            dlg.setTitle("Opening project");
             dlg.setProgress(0);
 
             const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
@@ -241,25 +192,9 @@ namespace phasereditor2d.ide {
                     }
                 }
 
-                console.log(`IDEPlugin: opening project ${projectName}`);
+                console.log(`IDEPlugin: opening project`);
 
-                colibri.Platform.onElectron(async () => {
-
-                    let ws = workspacePath;
-
-                    if (!ws) {
-
-                        const result = await colibri.Platform.getWorkbench().getFileStorage().getProjects();
-
-                        ws = result.workspacePath;
-                    }
-
-                    document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"} (${ws})`;
-
-                }, () => {
-
-                    document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"}`;
-                });
+                document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"}`;
 
                 const designWindow = wb.activateWindow(ui.DesignWindow.ID) as ui.DesignWindow;
 
@@ -267,7 +202,7 @@ namespace phasereditor2d.ide {
 
                 editorArea.closeAllEditors();
 
-                await wb.openProject(projectName, workspacePath, monitor);
+                await wb.openProject(monitor);
 
                 dlg.setProgress(1);
 
@@ -275,6 +210,10 @@ namespace phasereditor2d.ide {
 
                     designWindow.restoreState(wb.getProjectPreferences());
                 }
+
+                const projectName = wb.getFileStorage().getRoot().getName();
+
+                document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"} ${projectName}`;
 
             } finally {
 
@@ -328,7 +267,7 @@ namespace phasereditor2d.ide {
 
         await colibri.Platform.start();
 
-        await IDEPlugin.getInstance().openFirstWindow();
+        await IDEPlugin.getInstance().ideOpenProject();
 
         await IDEPlugin.getInstance().requestUpdateAvailable();
     }

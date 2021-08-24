@@ -51,7 +51,6 @@ namespace colibri.core.io {
 
         private _root: FilePath;
         private _changeListeners: ChangeListenerFunc[];
-        private _projectName: string;
         private _hash: string;
 
         constructor() {
@@ -96,14 +95,7 @@ namespace colibri.core.io {
 
         private async updateWithServerChanges() {
 
-            if (!this._projectName) {
-
-                return;
-            }
-
-            const hashData = await apiRequest("GetProjectFilesHash", {
-                project: this._projectName
-            });
+            const hashData = await apiRequest("GetProjectFilesHash", {});
 
             if (hashData.error) {
 
@@ -122,9 +114,7 @@ namespace colibri.core.io {
 
             this._hash = hash;
 
-            const data = await apiRequest("GetProjectFiles", {
-                project: this._projectName
-            }) as IGetProjectFilesData;
+            const data = await apiRequest("GetProjectFiles", {}) as IGetProjectFilesData;
 
             if (data.error) {
 
@@ -292,11 +282,9 @@ namespace colibri.core.io {
             return this._root;
         }
 
-        async openProject(projectName: string): Promise<FilePath> {
+        async openProject(): Promise<FilePath> {
 
             this._root = null;
-
-            this._projectName = projectName;
 
             this._hash = "";
 
@@ -355,16 +343,14 @@ namespace colibri.core.io {
 
         async reload(): Promise<void> {
 
-            const data = await apiRequest("GetProjectFiles", {
-                project: this._projectName
-            }) as IGetProjectFilesData;
+            const data = await apiRequest("GetProjectFiles", {}) as IGetProjectFilesData;
 
             let newRoot: FilePath;
 
             if (data.projectNumberOfFiles > data.maxNumberOfFiles) {
 
                 newRoot = new FilePath(null, {
-                    name: this._projectName,
+                    name: "Unavailable",
                     modTime: 0,
                     size: 0,
                     children: [],

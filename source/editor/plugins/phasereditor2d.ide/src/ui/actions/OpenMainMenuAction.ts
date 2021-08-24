@@ -17,8 +17,6 @@ namespace phasereditor2d.ide.ui.actions {
 
             const menu = new controls.Menu();
 
-            menu.addCommand(actions.CMD_OPEN_PROJECTS_DIALOG);
-
             menu.addCommand(actions.CMD_RELOAD_PROJECT);
 
             menu.addCommand(actions.CMD_COMPILE_PROJECT);
