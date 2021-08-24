@@ -26,15 +26,7 @@ namespace colibri.core.io {
 
         reload(): Promise<void>;
 
-        changeWorkspace(serverPath: string): Promise<void>
-
-        getProjects(workspacePath?: string): Promise<IProjectsData>;
-
         openProject(): Promise<FilePath>;
-
-        isValidAccount(): Promise<string>;
-
-        getProjectTemplates(): Promise<ProjectTemplatesData>;
 
         createProject(templatePath: string, projectName: string): Promise<boolean>;
 
@@ -66,5 +58,4 @@ namespace colibri.core.io {
 
         removeChangeListener(listener: ChangeListenerFunc): void;
     }
-
 }

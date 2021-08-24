@@ -301,29 +301,6 @@ namespace colibri.core.io {
             return root;
         }
 
-        async isValidAccount(): Promise<string> {
-
-            const data = await apiRequest("GetIsValidAccount", {});
-
-            return data.message;
-        }
-
-        async getProjectTemplates(): Promise<ProjectTemplatesData> {
-
-            const data = await apiRequest("GetProjectTemplates", {});
-
-            if (data.error) {
-
-                alert("Cannot get the project templates");
-
-                return {
-                    providers: []
-                };
-            }
-
-            return data["templatesData"];
-        }
-
         async createProject(templatePath: string, projectName: string): Promise<boolean> {
 
             const data = await apiRequest("CreateProject", {
@@ -386,34 +363,6 @@ namespace colibri.core.io {
                     console.error(e);
                 }
             }
-        }
-
-        async changeWorkspace(path: string) {
-
-            const data = await apiRequest("ChangeWorkspace", { path });
-
-            if (data.error) {
-
-                alert(`Cannot get the projects list`);
-
-                throw new Error(data.error);
-            }
-        }
-
-        async getProjects(workspacePath?: string): Promise<IProjectsData> {
-
-            const data = await apiRequest("GetProjects", {
-                workspace: workspacePath
-            });
-
-            if (data.error) {
-
-                alert(`Cannot get the projects list`);
-
-                throw new Error(data.error);
-            }
-
-            return { projects: data.projects, workspacePath: data.workspace };
         }
 
         async createFile(folder: FilePath, fileName: string, content: string): Promise<FilePath> {

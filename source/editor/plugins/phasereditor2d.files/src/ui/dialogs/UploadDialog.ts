@@ -16,18 +16,6 @@ namespace phasereditor2d.files.ui.dialogs {
 
         async create() {
 
-            const uploadDialog = this;
-
-            colibri.Platform.getWorkbench().getFileStorage().isValidAccount().then(msg => {
-
-                if (msg) {
-
-                    uploadDialog.close();
-
-                    alert(msg);
-                }
-            });
-
             const filesViewer = this.getViewer();
             filesViewer.setLabelProvider(new viewers.InputFileLabelProvider());
             filesViewer.setCellRendererProvider(new viewers.InputFileCellRendererProvider());
