@@ -37,22 +37,16 @@ namespace phasereditor2d.code.ui.editors {
 
             let model: monaco.editor.ITextModel;
 
-            if (CodePlugin.getInstance().isAdvancedJSEditor()) {
 
-                const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+            const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
 
-                const uri = CodePlugin.fileUri(file.getFullName());
+            const uri = CodePlugin.fileUri(file.getFullName());
 
-                model = monaco.editor.getModel(uri);
+            model = monaco.editor.getModel(uri);
 
-                if (content !== model.getValue()) {
+            if (content !== model.getValue()) {
 
-                    model.setValue(content);
-                }
-
-            } else {
-
-                model = await super.createModel(file);
+                model.setValue(content);
             }
 
             this._finder.preload();
@@ -123,11 +117,6 @@ namespace phasereditor2d.code.ui.editors {
 
             super.registerModelListeners(model);
 
-            if (!CodePlugin.getInstance().isAdvancedJSEditor()) {
-
-                return;
-            }
-
             const editor = this.getMonacoEditor();
 
             if (this.isInEditorArea()) {
@@ -196,41 +185,32 @@ namespace phasereditor2d.code.ui.editors {
 
         protected disposeModel() {
 
-            if (CodePlugin.getInstance().isAdvancedJSEditor()) {
 
-                // the model is disposed by the ModelsManager.
-                // but we should update it with the file content if the editor is dirty
+            // the model is disposed by the ModelsManager.
+            // but we should update it with the file content if the editor is dirty
 
-                if (this.isDirty()) {
+            if (this.isDirty()) {
 
-                    const content = colibri.ui.ide.FileUtils.getFileString(this.getInput());
+                const content = colibri.ui.ide.FileUtils.getFileString(this.getInput());
 
-                    const model = this.getMonacoEditor().getModel();
+                const model = this.getMonacoEditor().getModel();
 
-                    model.setValue(content);
-                }
-
-                this.removeModelListeners();
-
-            } else {
-
-                super.disposeModel();
+                model.setValue(content);
             }
+
+            this.removeModelListeners();
         }
 
         async requestOutlineItems() {
 
-            if (CodePlugin.getInstance().isAdvancedJSEditor()) {
+            const model = this.getMonacoEditor().getModel();
 
-                const model = this.getMonacoEditor().getModel();
+            if (model) {
 
-                if (model) {
+                const worker = await CodePlugin.getInstance().getJavaScriptWorker();
+                const items = await worker.getNavigationBarItems(model.uri.toString());
 
-                    const worker = await CodePlugin.getInstance().getJavaScriptWorker();
-                    const items = await worker.getNavigationBarItems(model.uri.toString());
-
-                    return items.filter(i => i.text !== "<global>");
-                }
+                return items.filter(i => i.text !== "<global>");
             }
 
             return [];

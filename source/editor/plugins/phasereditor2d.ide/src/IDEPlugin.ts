@@ -13,7 +13,6 @@ namespace phasereditor2d.ide {
 
         private _openingProject: boolean;
         private _desktopMode: boolean;
-        private _advancedJSEditor: boolean;
         private _licenseActivated: boolean;
         private _externalEditorName: string;
 
@@ -114,7 +113,6 @@ namespace phasereditor2d.ide {
             const data = await colibri.core.io.apiRequest("GetServerMode");
 
             this._desktopMode = data.desktop === true;
-            this._advancedJSEditor = data.advancedJSEditor === true;
             this._licenseActivated = data.unlocked === true;
             this._externalEditorName = data.externalEditorName || "Alien";
         }
@@ -149,10 +147,6 @@ namespace phasereditor2d.ide {
 
         isDesktopMode() {
             return this._desktopMode;
-        }
-
-        isAdvancedJSEditor() {
-            return this._advancedJSEditor;
         }
 
         createHelpMenuItem(menu: controls.Menu, helpPath: string) {
