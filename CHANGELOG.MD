@@ -10,6 +10,9 @@
 
 * The Monaco editor always runs on advanced mode.
 
+### Remove
+
+* Removes all features related to create and load projects. It now shows a single project at the time.
 
 ## v3.20.0 - Aug 23, 2021
 
