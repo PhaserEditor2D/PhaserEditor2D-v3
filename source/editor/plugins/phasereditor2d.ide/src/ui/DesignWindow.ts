@@ -2,13 +2,13 @@ namespace phasereditor2d.ide.ui {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
-    import core = colibri.core;
 
     export class DesignWindow extends ide.WorkbenchWindow {
 
         static ID = "phasereditor2d.ide.ui.DesignWindow";
 
-        static MENU_MAIN = "phasereditor2d.ide.ui.MainMenu";
+        static MENU_MAIN_START = "phasereditor2d.ide.ui.MainMenu.start";
+        static MENU_MAIN_END = "phasereditor2d.ide.ui.MainMenu.end";
 
         private _outlineView: outline.ui.views.OutlineView;
         private _filesView: files.ui.views.FilesView;

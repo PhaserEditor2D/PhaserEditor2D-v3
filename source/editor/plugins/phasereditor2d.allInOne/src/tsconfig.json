@@ -6,7 +6,10 @@
     "references": [
         {
             "path": "../../colibri/src"
-        }       
+        },
+        {
+            "path": "../../phasereditor2d.ide/src"
+        }        
     ],
     "exclude": ["../_out/"]
 }

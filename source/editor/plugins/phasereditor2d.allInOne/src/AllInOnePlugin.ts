@@ -40,6 +40,11 @@ namespace phasereditor2d.allInOne {
                                 method: "open-project"
                             });
                         }
+                    },
+                    keys: {
+                        control: true,
+                        alt: true,
+                        key: "J"
                     }
                 });
 
@@ -57,9 +62,24 @@ namespace phasereditor2d.allInOne {
                                 method: "close-project"
                             });
                         }
+                    },
+                    keys: {
+                        control: true,
+                        alt: true,
+                        key: "C"
                     }
                 });
-            }))
+            }));
+
+            reg.addExtension(new colibri.ui.controls.MenuExtension(
+                phasereditor2d.ide.ui.DesignWindow.MENU_MAIN_START,
+                {
+                    command: CMD_OPEN_PROJECT,
+                },
+                {
+                    command: CMD_CLOSE_PROJECT,
+                }));
+
         }
     }
 

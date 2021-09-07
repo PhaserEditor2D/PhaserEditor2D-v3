@@ -17,6 +17,8 @@ namespace phasereditor2d.ide.ui.actions {
 
             const menu = new controls.Menu();
 
+            menu.addExtension(DesignWindow.MENU_MAIN_START);
+
             menu.addCommand(actions.CMD_RELOAD_PROJECT);
 
             menu.addCommand(actions.CMD_COMPILE_PROJECT);
@@ -34,7 +36,7 @@ namespace phasereditor2d.ide.ui.actions {
 
             menu.addCommand(colibri.ui.ide.actions.CMD_SHOW_COMMAND_PALETTE);
 
-            menu.addExtension(DesignWindow.MENU_MAIN);
+            menu.addExtension(DesignWindow.MENU_MAIN_END);
 
             menu.addSeparator();
 
