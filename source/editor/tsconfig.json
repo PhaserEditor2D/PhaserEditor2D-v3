@@ -41,6 +41,9 @@
         },
         {
             "path": "./plugins/phasereditor2d.animations/src"
+        },
+        {
+            "path": "./plugins/phasereditor2d.allInOne/src"
         }
     ],
     "files": []
