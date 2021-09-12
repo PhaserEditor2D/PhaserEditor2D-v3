@@ -5,6 +5,7 @@
 ### Added
 
 * The CodeMirror text editors.
+* The allInOne commands: Open project, Close project.
 
 ### Updated
 
