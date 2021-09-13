@@ -3,6 +3,7 @@ namespace phasereditor2d.allInOne {
     export const CMD_CAT_ALL_IN_ONE = "phasereditor2d.allInOne";
     export const CMD_OPEN_PROJECT = "phasereditor2d.allInOne.openProject";
     export const CMD_CLOSE_PROJECT = "phasereditor2d.allInOne.closeProject";
+    export const CMD_NEW_WINDOW = "phasereditor2d.allInOne.newWindow";
 
     export class AllInOnePlugin extends colibri.Plugin {
 
@@ -69,6 +70,23 @@ namespace phasereditor2d.allInOne {
                         key: "C"
                     }
                 });
+
+                manager.add({
+                    command: {
+                        category: CMD_CAT_ALL_IN_ONE,
+                        id: CMD_NEW_WINDOW,
+                        name: "New Window",
+                        tooltip: "Open a new window.",
+                    },
+                    handler: {
+                        executeFunc: args => {
+
+                            colibri.Platform.getElectron().sendMessage({
+                                method: "new-window"
+                            });
+                        }
+                    }
+                });
             }));
 
             reg.addExtension(new colibri.ui.controls.MenuExtension(
@@ -78,6 +96,15 @@ namespace phasereditor2d.allInOne {
                 },
                 {
                     command: CMD_CLOSE_PROJECT,
+                },
+                {
+                    separator: true
+                },
+                {
+                    command: CMD_NEW_WINDOW
+                },
+                {
+                    separator: true
                 }));
 
         }
