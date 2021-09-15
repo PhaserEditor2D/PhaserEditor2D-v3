@@ -1,2 +1,2 @@
 #!/bin/bash
-./node_modules/.bin/tsc -b -w
+npm run watch

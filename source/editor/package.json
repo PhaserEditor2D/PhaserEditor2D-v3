@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Phaser Editor 2D IDE.",
   "repository": "github:PhaserEditor2D/PhaserEditor2D-v3",
+  "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -b -w",
+    "tsver": "tsc -v"
+  },
   "devDependencies": {
     "tslint": "^6.1.3",
     "typescript": "^4.3.2"
