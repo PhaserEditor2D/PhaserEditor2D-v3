@@ -10,6 +10,7 @@
 ### Updated
 
 * The Monaco editor always runs on advanced mode.
+* Update to latest Phaser 3.55.2.
 
 ### Remove
 
