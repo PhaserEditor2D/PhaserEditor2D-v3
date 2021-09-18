@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.30.0 - Sep 8, 2020
 
 ### Added
 
