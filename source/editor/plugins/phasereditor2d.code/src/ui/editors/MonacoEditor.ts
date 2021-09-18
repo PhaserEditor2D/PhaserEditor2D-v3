@@ -306,12 +306,9 @@ namespace phasereditor2d.code.ui.editors {
 
         protected async onEditorInputContentChangedByExternalEditor() {
 
-            if (CodePlugin.getInstance().isAdvancedJSEditor()) {
-
-                if (ModelManager.handleFileName(this.getInput().getName())) {
-                    // do nothing, the model manager will handle this!
-                    return;
-                }
+            if (ModelManager.handleFileName(this.getInput().getName())) {
+                // do nothing, the model manager will handle this!
+                return;
             }
 
             const model = this.getModel();

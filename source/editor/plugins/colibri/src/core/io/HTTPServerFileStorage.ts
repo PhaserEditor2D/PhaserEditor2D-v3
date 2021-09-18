@@ -51,7 +51,6 @@ namespace colibri.core.io {
 
         private _root: FilePath;
         private _changeListeners: ChangeListenerFunc[];
-        private _projectName: string;
         private _hash: string;
 
         constructor() {
@@ -96,14 +95,7 @@ namespace colibri.core.io {
 
         private async updateWithServerChanges() {
 
-            if (!this._projectName) {
-
-                return;
-            }
-
-            const hashData = await apiRequest("GetProjectFilesHash", {
-                project: this._projectName
-            });
+            const hashData = await apiRequest("GetProjectFilesHash", {});
 
             if (hashData.error) {
 
@@ -122,9 +114,7 @@ namespace colibri.core.io {
 
             this._hash = hash;
 
-            const data = await apiRequest("GetProjectFiles", {
-                project: this._projectName
-            }) as IGetProjectFilesData;
+            const data = await apiRequest("GetProjectFiles", {}) as IGetProjectFilesData;
 
             if (data.error) {
 
@@ -292,11 +282,9 @@ namespace colibri.core.io {
             return this._root;
         }
 
-        async openProject(projectName: string): Promise<FilePath> {
+        async openProject(): Promise<FilePath> {
 
             this._root = null;
-
-            this._projectName = projectName;
 
             this._hash = "";
 
@@ -311,29 +299,6 @@ namespace colibri.core.io {
             this.fireChange(change);
 
             return root;
-        }
-
-        async isValidAccount(): Promise<string> {
-
-            const data = await apiRequest("GetIsValidAccount", {});
-
-            return data.message;
-        }
-
-        async getProjectTemplates(): Promise<ProjectTemplatesData> {
-
-            const data = await apiRequest("GetProjectTemplates", {});
-
-            if (data.error) {
-
-                alert("Cannot get the project templates");
-
-                return {
-                    providers: []
-                };
-            }
-
-            return data["templatesData"];
         }
 
         async createProject(templatePath: string, projectName: string): Promise<boolean> {
@@ -355,16 +320,14 @@ namespace colibri.core.io {
 
         async reload(): Promise<void> {
 
-            const data = await apiRequest("GetProjectFiles", {
-                project: this._projectName
-            }) as IGetProjectFilesData;
+            const data = await apiRequest("GetProjectFiles", {}) as IGetProjectFilesData;
 
             let newRoot: FilePath;
 
             if (data.projectNumberOfFiles > data.maxNumberOfFiles) {
 
                 newRoot = new FilePath(null, {
-                    name: this._projectName,
+                    name: "Unavailable",
                     modTime: 0,
                     size: 0,
                     children: [],
@@ -400,34 +363,6 @@ namespace colibri.core.io {
                     console.error(e);
                 }
             }
-        }
-
-        async changeWorkspace(path: string) {
-
-            const data = await apiRequest("ChangeWorkspace", { path });
-
-            if (data.error) {
-
-                alert(`Cannot get the projects list`);
-
-                throw new Error(data.error);
-            }
-        }
-
-        async getProjects(workspacePath?: string): Promise<IProjectsData> {
-
-            const data = await apiRequest("GetProjects", {
-                workspace: workspacePath
-            });
-
-            if (data.error) {
-
-                alert(`Cannot get the projects list`);
-
-                throw new Error(data.error);
-            }
-
-            return { projects: data.projects, workspacePath: data.workspace };
         }
 
         async createFile(folder: FilePath, fileName: string, content: string): Promise<FilePath> {

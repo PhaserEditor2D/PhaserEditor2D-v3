@@ -154,32 +154,19 @@ namespace colibri.core.io {
 
         getUrl(): string {
 
-            if (this._parent) {
+            let relName = this.getProjectRelativeName();
 
-                const url = this._parent.getUrl() + "/" + this._name;
+            if (this.isFile()) {
 
-                if (this.isFile()) {
-
-                    return url + "?m=" + this._modTime;
-                }
-
-                return url;
+                relName += "?m=" + this.getModTime()
             }
 
-            const projectName = this.getProject().getName();
-
-            return `./project/${projectName}`;
+            return `./project${relName}`;
         }
 
         getExternalUrl() {
 
-            if (this._parent) {
-                return this._parent.getExternalUrl() + "/" + this._name;
-            }
-
-            const projectName = this.getProject().getName();
-
-            return `./external/${projectName}`;
+            return `./external${this.getProjectRelativeName()}`;
         }
 
         getProject(): FilePath {

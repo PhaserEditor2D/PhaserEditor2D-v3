@@ -134,20 +134,6 @@ namespace colibri.ui.ide {
             return await storage.copyFile(fromFile, toFile);
         }
 
-        static async getProjects_async(workspacePath?: string) {
-
-            const storage = Workbench.getWorkbench().getFileStorage();
-
-            return storage.getProjects(workspacePath);
-        }
-
-        static async getProjectTemplates_async() {
-
-            const storage = Workbench.getWorkbench().getFileStorage();
-
-            return storage.getProjectTemplates();
-        }
-
         static async createProject_async(templatePath: string, projectName: string) {
 
             const storage = Workbench.getWorkbench().getFileStorage();

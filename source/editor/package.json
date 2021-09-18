@@ -4,12 +4,9 @@
   "description": "Phaser Editor 2D IDE.",
   "repository": "github:PhaserEditor2D/PhaserEditor2D-v3",
   "devDependencies": {
-    "tslint": "^6.1.3"
+    "tslint": "^6.1.3",
+    "typescript": "^4.3.2"
   },
   "author": "Arian Fornaris <developers@phasereditor2d.com> (https://phasereditor2d.com)",
-  "license": "MIT",
-  "dependencies": {
-    "monaco-editor": "^0.25.2",
-    "typescript": "^4.3.2"
-  }
+  "license": "MIT"
 }
