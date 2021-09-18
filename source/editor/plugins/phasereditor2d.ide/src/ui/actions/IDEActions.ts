@@ -2,7 +2,6 @@ namespace phasereditor2d.ide.ui.actions {
 
     export const CAT_PROJECT = "phasereditor2d.ide.ui.actions.ProjectCategory";
     export const CMD_LOCATE_FILE = "phasereditor2d.ide.ui.actions.LocateFile";
-    export const CMD_OPEN_PROJECTS_DIALOG = "phasereditor2d.ide.ui.actions.OpenProjectsDialog";
     export const CMD_RELOAD_PROJECT = "phasereditor2d.ide.ui.actions.ReloadProjectAction";
     export const CMD_COMPILE_PROJECT = "phasereditor2d.ide.ui.actions.CompileProject";
     export const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
@@ -13,8 +12,10 @@ namespace phasereditor2d.ide.ui.actions {
     import commands = colibri.ui.ide.commands;
     import io = colibri.core.io;
 
+    // TODO: Remove
     export function isNotWelcomeWindowScope(args: commands.HandlerArgs): boolean {
-        return !(args.activeWindow instanceof ui.WelcomeWindow);
+
+        return true;
     }
 
     export class IDEActions {
@@ -25,26 +26,6 @@ namespace phasereditor2d.ide.ui.actions {
                 id: CAT_PROJECT,
                 name: "Project"
             });
-
-            // open project
-
-            manager.addCommandHelper({
-                id: CMD_OPEN_PROJECTS_DIALOG,
-                name: "Open Project",
-                tooltip: "Open other project or create a new one.",
-                category: CAT_PROJECT
-            });
-
-            manager.addHandlerHelper(CMD_OPEN_PROJECTS_DIALOG,
-                args => isNotWelcomeWindowScope(args) && !args.activeDialog,
-                OpenProjectHandler);
-
-            manager.addKeyBinding(CMD_OPEN_PROJECTS_DIALOG, new commands.KeyMatcher({
-                control: true,
-                alt: true,
-                key: "P",
-                filterInputElements: false
-            }));
 
             // play game
 
@@ -112,9 +93,7 @@ namespace phasereditor2d.ide.ui.actions {
                 handler: {
                     testFunc: isNotWelcomeWindowScope,
                     executeFunc:
-                        args => IDEPlugin.getInstance().ideOpenProject(
-                            colibri.Platform.getWorkbench().getProjectRoot().getName()
-                        )
+                        args => IDEPlugin.getInstance().ideOpenProject()
                 },
                 keys: {
                     control: true,

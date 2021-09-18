@@ -69,87 +69,11 @@ namespace phasereditor2d.code {
 
             // extra libs loader
 
-            if (this.isAdvancedJSEditor()) {
+            monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
 
-                console.log("CodePlugin: Enable advanced JavaScript coding tools.");
-
-                monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-
-                // reg.addExtension(new ui.PreloadExtraLibsExtension());
-                reg.addExtension(new ui.PreloadModelsExtension());
-                reg.addExtension(new ui.PreloadJavaScriptWorkerExtension());
-            }
-        }
-
-        private registerAssetPackCompletions() {
-
-            monaco.languages.registerCompletionItemProvider("javascript", {
-
-                // disable this, it breaks the literal completions,
-                // for example, of types like "one"|"two"|"three".
-                /*triggerCharacters: ['"', "'", "`"],*/
-
-                provideCompletionItems: async (model, pos) => {
-
-                    return {
-                        suggestions: await this.computeCompletions(),
-                    };
-                },
-            });
-        }
-
-        private async computeCompletions() {
-
-            const result: monaco.languages.CompletionItem[] = [];
-
-            // TODO: missing preload finder, but we need to compute the completions async,
-            // we should look in the monaco docs.
-            const finder = new pack.core.PackFinder();
-
-            await finder.preload();
-
-            const packs = finder.getPacks();
-
-            for (const pack2 of packs) {
-
-                const packName = pack2.getFile().getName();
-
-                for (const item of pack2.getItems()) {
-
-                    result.push({
-                        label: `${item.getKey()}`,
-                        kind: monaco.languages.CompletionItemKind.File,
-                        documentation:
-                        {
-                            value:
-                                `Asset Pack key of type \`${item.getType()}\`, defined in the pack file \`${packName}\`.` +
-                                "\n```\n" + JSON.stringify(item.getData(), null, 2) + "\n```"
-                        },
-                        detail: item.getType(),
-                        insertText: item.getKey(),
-                    } as any);
-
-                    if (item instanceof pack.core.ImageFrameContainerAssetPackItem
-                        && !(item instanceof pack.core.SpritesheetAssetPackItem)
-                        && !(item instanceof pack.core.ImageAssetPackItem)) {
-
-                        for (const frame of item.getFrames()) {
-
-                            result.push({
-                                label: `${frame.getName()}`,
-                                kind: monaco.languages.CompletionItemKind.Text,
-                                detail: item.getType() + " frame",
-                                documentation: {
-                                    value: `A frame of the \`${item.getType()}\` with key \`${item.getKey()}\`. Defined in pack file \`${packName}\`.`
-                                },
-                                insertText: frame.getName(),
-                            } as any);
-                        }
-                    }
-                }
-            }
-
-            return result;
+            // reg.addExtension(new ui.PreloadExtraLibsExtension());
+            reg.addExtension(new ui.PreloadModelsExtension());
+            reg.addExtension(new ui.PreloadJavaScriptWorkerExtension());
         }
 
         async getJavaScriptWorker() {
@@ -176,11 +100,6 @@ namespace phasereditor2d.code {
             return monaco.Uri.file(file);
         }
 
-        isAdvancedJSEditor() {
-
-            return phasereditor2d.ide.IDEPlugin.getInstance().isAdvancedJSEditor();
-        }
-
         getModelManager() {
 
             return this._modelManager;
@@ -188,10 +107,7 @@ namespace phasereditor2d.code {
 
         async starting() {
 
-            if (this.isAdvancedJSEditor()) {
-
-                this._modelManager = new ui.ModelManager();
-            }
+            this._modelManager = new ui.ModelManager();
 
             // theme
 
@@ -233,10 +149,7 @@ namespace phasereditor2d.code {
                 monaco.editor.setTheme(monacoTheme);
             });
 
-            if (this.isAdvancedJSEditor()) {
-
-                this.customizeMonaco();
-            }
+            this.customizeMonaco();
         }
 
         private customizeMonaco() {
@@ -245,8 +158,6 @@ namespace phasereditor2d.code {
 
             opts.target = monaco.languages.typescript.ScriptTarget.ESNext;
             opts.module = monaco.languages.typescript.ModuleKind.ESNext;
-
-            //this.registerAssetPackCompletions();
 
             this.customizeCodeServiceImpl();
         }

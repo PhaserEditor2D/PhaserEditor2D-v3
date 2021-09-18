@@ -24,15 +24,6 @@ namespace phasereditor2d.files.ui.actions {
 
         async run() {
 
-            const msg = await colibri.Platform.getWorkbench().getFileStorage().isValidAccount();
-
-            if (msg) {
-
-                alert(msg);
-
-                return;
-            }
-
             const viewer = new controls.viewers.TreeViewer("phasereditor2d.files.ui.actions.OpenNewFileDialogAction");
 
             viewer.setLabelProvider(new WizardLabelProvider());

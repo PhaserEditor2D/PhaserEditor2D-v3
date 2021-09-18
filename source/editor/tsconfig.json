@@ -34,10 +34,16 @@
             "path": "./plugins/phasereditor2d.code/src"
         },
         {
+            "path": "./plugins/phasereditor2d.codemirror/src"
+        },
+        {
             "path": "./plugins/phasereditor2d.webContentTypes/src"
         },
         {
             "path": "./plugins/phasereditor2d.animations/src"
+        },
+        {
+            "path": "./plugins/phasereditor2d.allInOne/src"
         }
     ],
     "files": []

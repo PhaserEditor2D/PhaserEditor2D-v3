@@ -7,9 +7,9 @@ namespace colibri.ui.ide {
 
         private _name: string;
         private _contentType: string;
-        private _newEditor?: () => EditorPart;
+        private _newEditor?: (factory?: ContentTypeEditorFactory) => EditorPart;
 
-        constructor(name:string, contentType: string, newEditor: () => EditorPart) {
+        constructor(name: string, contentType: string, newEditor: (factory?: ContentTypeEditorFactory) => EditorPart) {
             super();
 
             this._name = name;
@@ -36,7 +36,8 @@ namespace colibri.ui.ide {
         }
 
         createEditor() {
-            return this._newEditor();
+
+            return this._newEditor(this);
         }
     }
 }
