@@ -1,0 +1,41 @@
+{
+    "id": "2bdd30b0-e379-4943-9d6b-ed6cb2ba5b0a",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "borderWidth": 288,
+        "borderHeight": 192
+    },
+    "displayList": [
+        {
+            "type": "Sprite",
+            "id": "7510685d-e1b6-4e60-9ac0-d57acec2b000",
+            "label": "player_climb_player_climb_1",
+            "components": [
+                "Physics",
+                "PhysicsBody",
+                "StartAnimation"
+            ],
+            "Physics.bodyGravity": 500,
+            "PhysicsBody.bodyX": 12,
+            "PhysicsBody.bodyY": 16,
+            "PhysicsBody.bodyWidth": 8,
+            "PhysicsBody.bodyHeight": 16,
+            "StartAnimation.animationKey": "player/idle/player-idle",
+            "texture": {
+                "key": "atlas",
+                "frame": "player/idle/player-idle-2"
+            },
+            "x": 78,
+            "y": 37
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType"
+    }
+}

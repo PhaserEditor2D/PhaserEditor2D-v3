@@ -4,7 +4,7 @@
   "description": "Phaser Editor 2D IDE.",
   "repository": "github:PhaserEditor2D/PhaserEditor2D-v3",
   "scripts": {
-    "editor": "phasereditor2d-launcher -project ../../tests/workspace/test-typescript -editor ."
+    "editor": "phasereditor2d-launcher -project ../../tests/workspace/demo-game -editor ."
   },
   "devDependencies": {
     "phasereditor2d-launcher": "^3.30.0",

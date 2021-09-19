@@ -1,0 +1,33 @@
+{
+  "name": "starter-template-basic-javascript",
+  "version": "1.0.0",
+  "description": "Basic JavaScript project template for Phaser Editor 2D.",
+  "main": "main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "editor": "phasereditor2d-launcher -project . -port 1959",
+    "editor-remote": "phasereditor2d-launcher -project . -disable-open-browser -public -port 1959"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhaserEditor2D/starter-template-basic-javascript.git"
+  },
+  "keywords": [
+    "phaser",
+    "phasereditor2d",
+    "html5",
+    "video-game"
+  ],
+  "author": "Arian Fornaris <developers@phasereditor2d.com> (https://phasereditor2d.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PhaserEditor2D/starter-template-basic-javascript/issues"
+  },
+  "homepage": "https://github.com/PhaserEditor2D/starter-template-basic-javascript#readme",
+  "dependencies": {
+    "phasereditor2d-launcher": "^3.30.0-beta.1"
+  }
+}

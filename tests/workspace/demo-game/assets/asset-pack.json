@@ -1,0 +1,95 @@
+{
+    "section1": {
+        "files": [
+            {
+                "url": "assets/animations.json",
+                "type": "animation",
+                "key": "animations"
+            },
+            {
+                "atlasURL": "assets/atlas/atlas.json",
+                "textureURL": "assets/atlas/atlas.png",
+                "type": "atlas",
+                "key": "atlas"
+            },
+            {
+                "atlasURL": "assets/atlas/atlas-props.json",
+                "textureURL": "assets/atlas/atlas-props.png",
+                "type": "atlas",
+                "key": "atlas-props"
+            },
+            {
+                "url": "assets/environment/back.png",
+                "type": "image",
+                "key": "back"
+            },
+            {
+                "url": "assets/environment/collision.png",
+                "type": "image",
+                "key": "collision"
+            },
+            {
+                "url": "assets/sprites/credits-text.png",
+                "type": "image",
+                "key": "credits-text"
+            },
+            {
+                "url": "assets/dino.png",
+                "type": "image",
+                "key": "dino"
+            },
+            {
+                "url": "assets/sprites/instructions.png",
+                "type": "image",
+                "key": "instructions"
+            },
+            {
+                "url": "assets/buttons/jump-button.png",
+                "type": "image",
+                "key": "jump-button"
+            },
+            {
+                "url": "assets/buttons/left-button.png",
+                "type": "image",
+                "key": "left-button"
+            },
+            {
+                "url": "assets/maps/map.json",
+                "type": "tilemapTiledJSON",
+                "key": "map"
+            },
+            {
+                "url": "assets/environment/middle.png",
+                "type": "image",
+                "key": "middle"
+            },
+            {
+                "url": "assets/sprites/press-enter-text.png",
+                "type": "image",
+                "key": "press-enter-text"
+            },
+            {
+                "url": "assets/buttons/right-button.png",
+                "type": "image",
+                "key": "right-button"
+            },
+            {
+                "url": "assets/environment/tileset.png",
+                "type": "image",
+                "key": "tileset"
+            },
+            {
+                "url": "assets/sprites/title-screen.png",
+                "type": "image",
+                "key": "title-screen"
+            }
+        ]
+    },
+    "meta": {
+        "app": "Phaser Editor 2D - Asset Pack Editor",
+        "contentType": "phasereditor2d.pack.core.AssetContentType",
+        "url": "https://phasereditor2d.com",
+        "version": 2,
+        "showAllFilesInBlocks": false
+    }
+}

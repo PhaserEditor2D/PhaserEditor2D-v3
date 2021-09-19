@@ -1,0 +1,495 @@
+{
+    "anims": [
+        {
+            "key": "cherry/cherry",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "cherry/cherry-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "cherry/cherry-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "cherry/cherry-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "cherry/cherry-4",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "cherry/cherry-5",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "cherry/cherry-6",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "cherry/cherry-7",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 12,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "eagle/eagle-attack",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "eagle/eagle-attack-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "eagle/eagle-attack-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "eagle/eagle-attack-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "eagle/eagle-attack-4",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "enemy-death/enemy-death",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "enemy-death/enemy-death-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "enemy-death/enemy-death-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "enemy-death/enemy-death-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "enemy-death/enemy-death-4",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "enemy-death/enemy-death-5",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "enemy-death/enemy-death-6",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "hideOnComplete": true
+        },
+        {
+            "key": "frog/idle/frog-idle",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "frog/idle/frog-idle-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "frog/idle/frog-idle-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "frog/idle/frog-idle-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "frog/idle/frog-idle-4",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "gem/gem",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "gem/gem-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "gem/gem-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "gem/gem-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "gem/gem-4",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "gem/gem-5",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "item-feedback/item-feedback",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "item-feedback/item-feedback-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "item-feedback/item-feedback-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "item-feedback/item-feedback-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "item-feedback/item-feedback-4",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "hideOnComplete": true
+        },
+        {
+            "key": "opossum/opossum",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "opossum/opossum-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "opossum/opossum-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "opossum/opossum-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "opossum/opossum-4",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "opossum/opossum-5",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "opossum/opossum-6",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "player/climb/player-climb",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "player/climb/player-climb-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/climb/player-climb-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/climb/player-climb-3",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "player/crouch/player-crouch",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "player/crouch/player-crouch-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/crouch/player-crouch-2",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "player/hurt/player-hurt",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "player/hurt/player-hurt-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/hurt/player-hurt-2",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "player/idle/player-idle",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "player/idle/player-idle-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/idle/player-idle-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/idle/player-idle-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/idle/player-idle-4",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 12,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "player/jump/player-jump-1",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "player/jump/player-jump-1",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 1,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "player/run/player-run",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "player/run/player-run-1",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/run/player-run-2",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/run/player-run-3",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/run/player-run-4",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/run/player-run-5",
+                    "duration": 0,
+                    "keyframe": false
+                },
+                {
+                    "key": "atlas",
+                    "frame": "player/run/player-run-6",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 15,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "player/jump/player-jump-2",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "player/jump/player-jump-2",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 1,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "frog/frog-jump",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "frog/jump/frog-jump-1",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 24,
+            "skipMissedFrames": true,
+            "repeat": -1
+        },
+        {
+            "key": "frog/frog-fall",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "atlas",
+                    "frame": "frog/jump/frog-jump-2",
+                    "duration": 0,
+                    "keyframe": false
+                }
+            ],
+            "frameRate": 24,
+            "skipMissedFrames": true,
+            "repeat": -1
+        }
+    ],
+    "globalTimeScale": 1,
+    "meta": {
+        "app": "Phaser Editor 2D v3",
+        "contentType": "Phaser v3 Animations"
+    }
+}
