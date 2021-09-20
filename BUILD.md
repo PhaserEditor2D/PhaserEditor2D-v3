@@ -8,13 +8,15 @@ The client is the bigger part and contains all the graphical user interface.
 
 This repository contains all the client code. This means that you can modify it and build it.
 
-The main two reasons you may find to build the client code are: you are contributing to the code or you want to try the in-development version.
+The main two reasons you may find to build the client code are: 
 
-([In this repo](https://github.com/PhaserEditor2D/PhaserEditor2D-v3-build-develop) we provide a script to perform the following steps automatically)
+* You are contributing to the code.
+* You want to try the in-development version.
+
 
 ## 1) Download the source code
 
-First, you have to clone this repo to get the source code (you need a [Git client](https://git-scm.com/) installed).
+First, you have to clone this repo to get the source code:
 
 ```
 $ git clone https://github.com/PhaserEditor2D/PhaserEditor2D-v3.git
@@ -30,7 +32,7 @@ If you want to contribute your modifications, you should create a pull request a
 
 ## 2) Install dependencies
 
-Dependencies are managed with [NPM](https://www.npmjs.com/), you have to install it first.
+Dependencies are managed with [NPM](https://www.npmjs.com/), you have to install it first:
 
 ```
 $ cd PhaserEditor2D-v3/source/editor
@@ -45,26 +47,29 @@ $ ./build.sh
 ```
 
 It should run the TypeScript compiler (installed in the `node_modules`) to compile the client's source code.
-
-## 4) Download the latest Phaser Editor 2D binaries
-
-Ok, you have the code of the client, but you need the server. The server is closed so you need to download the full latest version of the Phaser Editor 2D binaries.
-
-It is available in the [Phaser Editor 2D downloads page](https://phasereditor2d.com/downloads).
-
-It is distributed as a ZIP file. Unzip it.
-
-## 5) Run the server with the new client
-
-Now you can run the server but configure a new client. Look in the binaries you downloaded, there is a `PhaserEditor2D` executable file. Run it this way:
+If you want to build the project each time you modify a file, you can run the `watch` script:
 
 ```
-$ ./PhaserEditor2D -editor /path/to/PhaserEditor2D-v3/source/editor
+$ ./watch.sh
+```
+ 
+## 4) Run the server with the new client
+
+Phaser Editor 2D Core allows running the server with a different client. It is what you need to do here, to run the latest stable server but loading this client:
+
+```
+$ npm phasereditor2d-launcher -editor . -dev -project path/to/game
 ```
 
-The `-editor` option configures a new location of the client code. So, you have to write the full path to the `source/editor` folder of the repository you cloned.
+The [phasereditor2d-launcher](https://www.npmjs.com/package/phasereditor2d-launcher) is a cli-based node module. It launches the latest version of Phaser Editor 2D Core.
 
-## 6) Open the browser and run the IDE
+The `-editor` option configures a new location of the client code.
+
+The `-dev` option disables the browser cache, so it always fetches a fresh version of the files. In any case, you can disable the browser cache manually in the DevTools of the browser.
+
+The `-project` flag indicates the path to the game project. It is mandatory.
+
+## 5) Open the browser and run the IDE
 
 Open this address in a browser:
 

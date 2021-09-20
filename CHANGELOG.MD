@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.30.0 - Sep 8, 2020
+## v3.30.0 - Sep 18, 2020
 
 ### Added
 
