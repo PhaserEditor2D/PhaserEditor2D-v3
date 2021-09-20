@@ -58,7 +58,7 @@ $ ./watch.sh
 Phaser Editor 2D Core allows running the server with a different client. It is what you need to do here, to run the latest stable server but loading this client:
 
 ```
-$ npm phasereditor2d-launcher -editor . -dev -project path/to/game
+$ npx phasereditor2d-launcher -editor . -dev -project path/to/game
 ```
 
 The [phasereditor2d-launcher](https://www.npmjs.com/package/phasereditor2d-launcher) is a cli-based node module. It launches the latest version of Phaser Editor 2D Core.
