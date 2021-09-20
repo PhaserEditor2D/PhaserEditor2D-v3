@@ -25,6 +25,7 @@ $ git clone https://github.com/PhaserEditor2D/PhaserEditor2D-v3.git
 By default, the current branch is `master`. It shows the latest, public version of the editor. To try the latest in-development changes, you should switch to the `develop` branch:
 
 ```
+$ cd PhaserEditor2D-v3/source/editor
 $ git checkout develop
 ```
 
@@ -35,7 +36,6 @@ If you want to contribute your modifications, you should create a pull request a
 Dependencies are managed with [NPM](https://www.npmjs.com/), you have to install it first:
 
 ```
-$ cd PhaserEditor2D-v3/source/editor
 $ npm install
 
 ```
