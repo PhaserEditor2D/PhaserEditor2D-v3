@@ -50,6 +50,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setValue: (obj, value) => obj.setLetterSpacing(value)
         };
 
+        static maxWidth: IProperty<BitmapText> = {
+            name: "maxWidth",
+            label: "Max Width",
+            tooltip: "phaser:Phaser.GameObjects.BitmapText.maxWidth",
+            defValue: 0,
+            getValue: obj => obj.maxWidth,
+            setValue: (obj, value) => obj.setMaxWidth(value)
+        };
+
         static dropShadowX = SimpleProperty("dropShadowX", 0, "Drop Shadow X", "phaser:Phaser.GameObjects.BitmapText.dropShadowX");
         static dropShadowY = SimpleProperty("dropShadowY", 0, "Drop Shadow Y", "phaser:Phaser.GameObjects.BitmapText.dropShadowY");
         static dropShadowAlpha = SimpleProperty("dropShadowAlpha", 0.5, "Drop Shadow Alpha", "phaser:Phaser.GameObjects.BitmapText.dropShadowAlpha");
@@ -61,6 +70,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 BitmapTextComponent.align,
                 BitmapTextComponent.fontSize,
                 BitmapTextComponent.letterSpacing,
+                BitmapTextComponent.maxWidth,
                 BitmapTextComponent.dropShadowX,
                 BitmapTextComponent.dropShadowY,
                 BitmapTextComponent.dropShadowAlpha,
@@ -83,6 +93,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 BitmapTextComponent.fontSize,
                 BitmapTextComponent.align,
                 BitmapTextComponent.letterSpacing,
+                BitmapTextComponent.maxWidth,
                 BitmapTextComponent.dropShadowX,
                 BitmapTextComponent.dropShadowY,
                 BitmapTextComponent.dropShadowAlpha,

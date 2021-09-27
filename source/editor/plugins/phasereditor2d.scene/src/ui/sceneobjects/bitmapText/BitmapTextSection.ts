@@ -72,6 +72,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createPropertyFloatRow(comp, BitmapTextComponent.letterSpacing);
 
+            this.createPropertyFloatRow(comp, BitmapTextComponent.maxWidth);
+
             this.createPropertyFloatRow(comp, BitmapTextComponent.dropShadowX);
 
             this.createPropertyFloatRow(comp, BitmapTextComponent.dropShadowY);
