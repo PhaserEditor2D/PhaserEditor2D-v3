@@ -3,6 +3,7 @@
 ## dev
 
 * [#143](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/143) Fixes bitmap font loading when pasting a bitmap text object from other scene.
+* [#145](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/145): BitmapText: adds support for `maxWidth` property.
 
 ## v3.30.0 - Sep 18, 2020
 
