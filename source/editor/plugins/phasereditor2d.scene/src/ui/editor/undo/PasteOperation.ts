@@ -54,6 +54,13 @@ namespace phasereditor2d.scene.ui.editor.undo {
                     data["x"] = data["x"] + x;
                     data["y"] = data["y"] + y;
 
+                    const loaders = ScenePlugin.getInstance().getLoaderUpdaters();
+
+                    for(const loader of loaders) {
+
+                        await loader.updateLoaderWithObjData(this.getScene(), data);
+                    }
+
                     const obj = maker.createObject(data);
 
                     if (obj) {

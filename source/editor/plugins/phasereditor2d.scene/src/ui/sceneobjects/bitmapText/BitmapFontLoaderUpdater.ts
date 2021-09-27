@@ -29,5 +29,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             font.addToPhaserCache(scene.game, scene.getPackCache());
         }
+
+        async updateLoaderWithObjData(scene: BaseScene, data: core.json.IObjectData): Promise<void> {
+
+            if (data.type === BitmapTextExtension.getInstance().getTypeName()) {
+
+                const font = (data as any).font;
+
+                if (font) {
+
+                    const finder = scene.getMaker().getPackFinder();
+
+                    const asset = finder.findAssetPackItem(font);
+
+                    if (asset && asset instanceof pack.core.BitmapFontAssetPackItem) {
+
+                        await this.updateLoader(scene, asset);
+                    }
+                }
+            }
+        }
     }
 }

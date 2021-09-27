@@ -54,5 +54,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 imageFrameContainerPackItem.addToPhaserCache(scene.game, scene.getPackCache());
             }
         }
+
+        async updateLoaderWithObjData(scene: BaseScene, data: core.json.IObjectData): Promise<void> {
+            // nothing
+        }
     }
 }
