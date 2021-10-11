@@ -42,6 +42,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_CLEAR_SCENE_THUMBNAIL_CACHE = "phasereditor2d.scene.ui.editor.commands.ClearSceneThumbnailCache";
     export const CMD_OPEN_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.OpenSceneFile";
     export const CMD_DISABLE_AWAKE_EVENT_PREFABS = "phasereditor2d.scene.ui.editor.commands.DisableAwakeEventPrefabs";
+    export const CMD_SET_DEFAULT_RENDER_TYPE_TO_CANVAS = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToCanvas";
+    export const CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToWebGL";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -143,6 +145,40 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
         static registerGlobalCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
+            // set default renderer type
+
+            manager.add({
+                command: {
+                    id: CMD_SET_DEFAULT_RENDER_TYPE_TO_CANVAS,
+                    name: "Set Default Render Type To CANVAS",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Set the default render type of the scenes to Phaser.CANVAS"
+                },
+                handler: {
+                    testFunc: phasereditor2d.ide.ui.actions.isNotWelcomeWindowScope,
+                    executeFunc: args => {
+
+                        ScenePlugin.getInstance().setDefaultRenderType("canvas");
+                    }
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL,
+                    name: "Set Default Render Type To WEBGL",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Set the default render type of the scenes to Phaser.WEBGL"
+                },
+                handler: {
+                    testFunc: phasereditor2d.ide.ui.actions.isNotWelcomeWindowScope,
+                    executeFunc: args => {
+
+                        ScenePlugin.getInstance().setDefaultRenderType("webgl");
+                    }
+                }
+            });
+
             // fix scene id
 
             manager.add({
@@ -222,6 +258,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             });
 
             // clear scene thumbnail database
+
             manager.add({
                 command: {
                     id: CMD_CLEAR_SCENE_THUMBNAIL_CACHE,

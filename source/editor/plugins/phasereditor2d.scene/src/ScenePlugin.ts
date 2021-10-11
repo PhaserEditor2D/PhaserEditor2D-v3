@@ -74,6 +74,23 @@ namespace phasereditor2d.scene {
             this._docs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json");
         }
 
+        async starting() {
+
+            const type = window.localStorage.getItem("phasereditor2d.scene.RENDER_TYPE");
+
+            console.log("ScenePlugin: default render type: " + (type === "canvas" ? "Phaser.CANVAS" : "Phaser.WEBGL"));
+
+            this.setDefaultRenderType(type as any);
+        }
+
+        setDefaultRenderType(type?: "canvas" | "webgl") {
+
+            window.localStorage.setItem("phasereditor2d.scene.RENDER_TYPE", type);
+
+            ScenePlugin.DEFAULT_CANVAS_CONTEXT = type === "canvas" ? Phaser.CANVAS : Phaser.WEBGL;
+            ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT = ScenePlugin.DEFAULT_CANVAS_CONTEXT;
+        }
+
         getPhaserDocs() {
             return this._docs;
         }
