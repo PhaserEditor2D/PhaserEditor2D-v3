@@ -40,6 +40,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     sel.push(sprite);
 
                     parent.remove(sprite);
+
+                    displayList.remove(sprite);
+
                     sprite.displayList = null;
 
                     if (parent.parentContainer) {
@@ -56,7 +59,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         } else {
 
-                            displayList.add(sprite);
+                            const i = displayList.getIndex(parent);
+
+                            displayList.addAt(sprite, i, true);
                         }
                     }
 
