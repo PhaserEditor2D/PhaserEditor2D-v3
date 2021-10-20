@@ -114,5 +114,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 call.arg("x");
             }
         }
+
+        /**
+         * Adds the Width and Height parameters to the `super` statement of a prefab constructor.
+         *
+         * @param args Method args
+         */
+         protected buildPrefabConstructorDeclarationSupperCallCodeDOM_SizeParameters(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs) {
+
+            const obj = args.prefabObj as ISizeLikeObject;
+            const call = args.superMethodCallCodeDOM;
+
+            if (obj.getEditorSupport().isUnlockedProperty(SizeComponent.width)) {
+
+                call.arg("width ?? " + obj.width);
+                call.arg("height ?? " + obj.height);
+
+            } else {
+
+                call.arg("width");
+                call.arg("height");
+            }
+        }
     }
 }
