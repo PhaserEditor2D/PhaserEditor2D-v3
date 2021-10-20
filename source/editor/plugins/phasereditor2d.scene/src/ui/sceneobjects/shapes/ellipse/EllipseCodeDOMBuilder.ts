@@ -30,22 +30,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
 
             const obj = args.prefabObj as TileSprite;
-            const support = obj.getEditorSupport();
-
-            const call = args.superMethodCallCodeDOM;
 
             this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
 
-            if (support.isUnlockedProperty(SizeComponent.width)) {
-
-                call.arg("typeof width === \"number\" ? width : " + obj.width);
-                call.arg("typeof height === \"number\" ? height : " + obj.height);
-
-            } else {
-
-                call.arg("width");
-                call.arg("height");
-            }
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_SizeParameters(args);
         }
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
