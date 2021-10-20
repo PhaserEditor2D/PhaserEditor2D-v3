@@ -4,18 +4,38 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         width: number;
         height: number;
         setSize(width: number, height: number): void;
-    }
-
-    function updateDisplayOrigin(obj: Phaser.GameObjects.Sprite) {
-
-        obj.setSize(obj.width, obj.height);
-        obj.updateDisplayOrigin();
+        updateDisplayOrigin();
     }
 
     export class SizeComponent extends Component<ISizeLikeObject> {
 
-        static width = SimpleProperty("width", 0, "Width", "The object's width.", false, updateDisplayOrigin);
-        static height = SimpleProperty("height", 0, "Height", "The object's height.", false, updateDisplayOrigin);
+        // static width = SimpleProperty("width", 0, "Width", "The object's width.", false, updateDisplayOrigin);
+        // static height = SimpleProperty("height", 0, "Height", "The object's height.", false, updateDisplayOrigin);
+        static width: IProperty<ISizeLikeObject> = {
+            name: "width",
+            defValue: 0,
+            tooltip: "The object's width.",
+            local: false,
+            getValue: obj => obj.width,
+            setValue: (obj, value) => {
+
+                obj.setSize(value, obj.height);
+                obj.updateDisplayOrigin();
+            }
+        };
+
+        static height: IProperty<ISizeLikeObject> = {
+            name: "height",
+            defValue: 0,
+            tooltip: "The object's height.",
+            local: false,
+            getValue: obj => obj.height,
+            setValue: (obj, value) => {
+
+                obj.setSize(obj.width, value);
+                obj.updateDisplayOrigin();
+            }
+        };
 
         static size: IPropertyXY = {
             label: "Size",
