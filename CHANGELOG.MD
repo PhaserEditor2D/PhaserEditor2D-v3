@@ -6,6 +6,7 @@
 * [#145](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/145): BitmapText: adds support for `maxWidth` property.
 * Scene editor: commands for setting default render type.
 * Scene editor: fixes Break Parent command.
+* [#154](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/154) Incorrect position values passed to super call in derived class of nested prefab.
 
 ## v3.30.0 - Sep 18, 2020
 

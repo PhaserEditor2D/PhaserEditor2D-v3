@@ -4,13 +4,13 @@
 /* START OF COMPILED CODE */
 
 class Tint extends UserComponent {
-	
+
 	constructor(gameObject: Phaser.GameObjects.Image) {
 		super(gameObject);
-		
+
 		this.gameObject = gameObject;
 		(gameObject as any)["__Tint"] = this;
-		
+
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
@@ -18,13 +18,13 @@ class Tint extends UserComponent {
 		// custom definition props
 		this.tint = "red";
 	}
-	
+
 	static getComponent(gameObject: Phaser.GameObjects.Image): Tint {
 		return (gameObject as any)["__Tint"];
 	}
-	
+
 	private gameObject: Phaser.GameObjects.Image;
-	
+
 	/* START-USER-CODE */
 
 	set tint(tint: "red" | "green" | "blue") {

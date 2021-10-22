@@ -111,7 +111,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             } else {
 
                 call.arg("x");
-                call.arg("x");
+                call.arg("y");
             }
         }
 

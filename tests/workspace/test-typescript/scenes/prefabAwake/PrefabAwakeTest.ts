@@ -4,39 +4,38 @@
 /* START OF COMPILED CODE */
 
 class PrefabAwakeTest extends Phaser.Scene {
-	
+
 	constructor() {
 		super("PrefabAwakeTest");
-		
+
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
 	}
-	
-	editorCreate() {
-		
+
+	editorCreate(): void {
+
 		// withoutAwakeEventPrefab
 		const withoutAwakeEventPrefab = new WithoutAwakeEventPrefab(this, 59, 79);
 		this.add.existing(withoutAwakeEventPrefab);
-		
+
 		// withAwakeEventPrefab
 		const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 99, 197);
 		this.add.existing(withAwakeEventPrefab);
 		withAwakeEventPrefab.setOrigin(0.5, 0.5);
-		
-		// withAwakeEventPrefab (prefab fields)
-		withAwakeEventPrefab.emit("prefab-awake");
+
+		this.events.emit("scene-awake");
 	}
-	
+
 	/* START-USER-CODE */
-	
+
 	// Write your code here
-	
+
 	create() {
-	
+
 		this.editorCreate();
 	}
-	
+
 	/* END-USER-CODE */
 }
 

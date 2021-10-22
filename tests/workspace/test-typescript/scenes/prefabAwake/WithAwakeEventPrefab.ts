@@ -4,22 +4,21 @@
 /* START OF COMPILED CODE */
 
 class WithAwakeEventPrefab extends Phaser.GameObjects.Text {
-	
-	constructor(scene: Phaser.Scene, x: number, y: number) {
-		super(scene, x, y, "", {});
-		
-		// awake handler
-		this.once("prefab-awake", () => this.awake());
-		
+
+	constructor(scene: Phaser.Scene, x?: number, y?: number) {
+		super(scene, x ?? 276.5, y ?? 19, "", {});
+
 		this.setOrigin(0.5, 0.5);
 		this.text = "Prefab with awake event";
 		this.setStyle({"backgroundColor":"#db68f7ff","fontSize":"40px"});
-		
+		// awake handler
+		this.scene.events.once("scene-awake", () => this.awake());
+
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
 	}
-	
+
 	/* START-USER-CODE */
 
 	awake() {

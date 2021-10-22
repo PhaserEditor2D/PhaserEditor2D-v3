@@ -3,14 +3,10 @@
 
 /* START OF COMPILED CODE */
 
-class WithoutAwakeEventPrefab extends Phaser.GameObjects.Text {
+class DerivedContainer1Prefab extends BaseContainerPrefab {
 
 	constructor(scene: Phaser.Scene, x?: number, y?: number) {
-		super(scene, x ?? 0, y ?? 0, "", {});
-
-		this.text = "Prefab Without Awake Event";
-		this.setStyle({"backgroundColor":"#1e87a1ff","fontSize":"40px"});
-		this.setPadding({"left":10,"top":10,"right":10,"bottom":10});
+		super(scene, x, y);
 
 		/* START-USER-CTR-CODE */
 		// Write your code here.
