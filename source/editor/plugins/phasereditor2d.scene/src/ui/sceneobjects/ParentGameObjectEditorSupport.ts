@@ -261,7 +261,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const nestedPrefab = (prefabData.nestedPrefabs ?? []).find(obj => {
 
-                const thisOriginalId = finder.getOriginalPrefabId(obj.prefabId);
+                const thisOriginalId = finder.getOriginalNestedPrefabId(obj.prefabId);
 
                 return thisOriginalId === originalNestedPrefabId
             });
