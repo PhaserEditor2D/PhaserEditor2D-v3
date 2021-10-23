@@ -415,6 +415,32 @@ namespace phasereditor2d.scene.ui {
             return obj;
         }
 
+        debugFindDuplicatedEditorId(list?: sceneobjects.ISceneGameObject[], set?: Set<any>) {
+
+            set = set ?? new Set();
+
+            for (const obj of (list ?? this.getDisplayListChildren())) {
+
+                const id = obj.getEditorSupport().getId();
+
+                if (set.has(id)) {
+
+                    console.error("Duplicated " + obj.getEditorSupport().getLabel() + " id " + id);
+
+                } else {
+
+                    console.log("New " + obj.getEditorSupport().getLabel() + " id " + id);
+
+                    set.add(id);
+                }
+
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
+
+                    this.debugFindDuplicatedEditorId(obj.list as any, set);
+                }
+            }
+        }
+
         static findByEditorId(list: sceneobjects.ISceneGameObject[], id: string) {
 
             for (const obj of list) {
