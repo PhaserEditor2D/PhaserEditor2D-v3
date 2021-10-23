@@ -190,7 +190,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         if (localOriginalIdOfNestedPrefab === originalChild.id) {
 
-                            localNestedPrefab = local;
+                            const remoteNestedPrefab = this.findRemoteNestedPrefab(objData.prefabId, originalChild.id);
+
+                            if (remoteNestedPrefab) {
+
+                                localNestedPrefab = colibri.core.json.copy(local) as json.IObjectData;
+                                localNestedPrefab.prefabId = remoteNestedPrefab.id;
+
+                            } else {
+
+                                localNestedPrefab = local;
+                            }
 
                             break;
                         }
