@@ -284,6 +284,7 @@ namespace phasereditor2d.scene.core.json {
 
                     prefabObjectId_ObjectData_Map.set(c.id, c);
                     prefabId_File_Map.set(c.id, file);
+                    nestedPrefabIds.add(c.id);
 
                     this.mapNestedPrefabData(prefabObjectId_ObjectData_Map, prefabId_File_Map, nestedPrefabIds, file, c);
                 }
