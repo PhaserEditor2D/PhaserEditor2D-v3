@@ -121,13 +121,17 @@ namespace phasereditor2d.scene.core.json {
 
             const total = (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE)).length
 
-                + (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS)).length;
+                + (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS)).length
+
+                + 1;
 
             monitor.addTotal(total);
 
             await this.preloadSceneFiles(monitor);
 
             await this.preloadComponentsFiles(monitor);
+
+            monitor.step();
         }
 
         private async preloadComponentsFiles(monitor: controls.IProgressMonitor): Promise<void> {
@@ -199,6 +203,8 @@ namespace phasereditor2d.scene.core.json {
                 try {
 
                     const data = JSON.parse(content) as ISceneData;
+
+                    await ScenePlugin.getInstance().runSceneDataMigrations(data);
 
                     sceneFilename_Data_Map.set(file.getFullName(), data);
                     {

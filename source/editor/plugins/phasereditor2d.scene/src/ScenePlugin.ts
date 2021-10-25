@@ -532,6 +532,24 @@ namespace phasereditor2d.scene {
 
             dlg.close();
         }
+
+        async runSceneDataMigrations(sceneData: core.json.ISceneData) {
+
+            const migrations = colibri.Platform.getExtensionRegistry()
+                .getExtensions<ui.SceneDataMigrationExtension>(ui.SceneDataMigrationExtension.POINT_ID);
+
+            for (const migration of migrations) {
+
+                try {
+
+                    await migration.migrate(sceneData);
+
+                } catch (e) {
+
+                    console.error(e);
+                }
+            }
+        }
     }
 
     colibri.Platform.addPlugin(ScenePlugin.getInstance());
