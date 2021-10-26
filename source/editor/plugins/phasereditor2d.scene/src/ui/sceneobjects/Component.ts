@@ -177,17 +177,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const prop of properties) {
 
                 this.buildSetObjectPropertyCodeDOM_Float(
+                    args,
                     prop.name,
                     prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
                     prop.defValue,
-                    args
+                    prop.valueToCodeConverter
                 );
             }
         }
 
-        buildSetObjectPropertyCodeDOM_Float(
-            fieldName: string, fieldCodeName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs): void {
+        buildSetObjectPropertyCodeDOM_Float(args: ISetObjectPropertiesCodeDOMArgs,
+            fieldName: string, fieldCodeName: string, value: number, defValue: number,
+            converter?: IValueToCodeConverter): void {
 
             const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
 
@@ -195,7 +197,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (add) {
 
-                dom.valueFloat(value);
+                const codeValue = converter ? converter(value) : value;
+
+                dom.valueFloat(codeValue);
+
                 args.statements.push(dom);
             }
         }

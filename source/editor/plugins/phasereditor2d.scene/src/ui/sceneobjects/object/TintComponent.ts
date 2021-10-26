@@ -2,6 +2,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
+    function colorStringToColorNumberConverter(value: string) {
+
+        if (typeof (value) === "string" && value.trim() === "") {
+
+            value = "#ffffff";
+        }
+
+        // update the real object tint property
+
+        try {
+
+            const rgba = controls.Colors.parseColor(value);
+
+            const color = Phaser.Display.Color.GetColor(rgba.r, rgba.g, rgba.b);
+
+            return color;
+
+        } catch (e) {
+
+            // possible color syntax error.
+
+            console.log(e);
+        }
+
+        return 0;
+    }
+
     function TintProperty(
         name: string, label?: string): IProperty<any> {
 
@@ -19,68 +46,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             },
             setValue: (obj, value: string) => {
 
-                if (typeof (value) === "string" && value.trim() === "") {
+                const validColor = colorStringToColorNumberConverter(value);
 
-                    value = "#ffffff";
-                }
+                obj[name] = validColor;
 
-                // update the real object tint property
+                // store the original, string color value in the object
 
-                try {
-
-                    const rgba = controls.Colors.parseColor(value);
-
-                    const color = Phaser.Display.Color.GetColor(rgba.r, rgba.g, rgba.b);
-
-                    obj[name] = color;
-
-                    // store the original value in the object
-
-                    obj["tint_" + name] = value;
-
-                } catch (e) {
-
-                    // possible color syntax error.
-
-                    console.log(e);
-                }
-            }
+                obj["tint_" + name] = value;
+            },
+            valueToCodeConverter: colorStringToColorNumberConverter
         };
     }
-
-    function TintPropertyCodeDomAdapter(p: IProperty<any>): IProperty<any> {
-
-        const name = p.name;
-
-        return {
-            name: name,
-            defValue: 0xffffff,
-            label: p.label,
-            tooltip: p.tooltip,
-            local: p.local,
-            getValue: obj => {
-
-                const val = obj["tint_" + name];
-
-                if (val === undefined) {
-
-                    return 0xffffff;
-                }
-
-                const rgb = controls.Colors.parseColor(val);
-
-                const color = Phaser.Display.Color.GetColor(rgb.r, rgb.g, rgb.b);
-
-                return color;
-            },
-
-            setValue: (obj, value) => {
-
-                throw new Error("Unreachable code!");
-            }
-        }
-    }
-
 
     export class TintComponent extends Component<ISceneGameObject> {
 
@@ -103,10 +79,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, TintComponent.tintFill);
-            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintPropertyCodeDomAdapter(TintComponent.tintTopLeft));
-            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintPropertyCodeDomAdapter(TintComponent.tintTopRight));
-            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintPropertyCodeDomAdapter(TintComponent.tintBottomLeft));
-            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintPropertyCodeDomAdapter(TintComponent.tintBottomRight));
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintComponent.tintTopLeft);
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintComponent.tintTopRight);
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintComponent.tintBottomLeft);
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, TintComponent.tintBottomRight);
         }
     }
 }
