@@ -25,13 +25,13 @@ namespace colibri.ui.controls.properties {
 
                 this._titleArea = document.createElement("div");
                 this._titleArea.classList.add("PropertyTitleArea");
-                this._titleArea.addEventListener("mouseup", () => this.toggleSection());
+                this._titleArea.addEventListener("click", () => this.toggleSection());
 
                 this._expandIconControl = new IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_TREE_COLLAPSE));
 
                 this._expandIconControl.getCanvas().classList.add("expanded");
 
-                this._expandIconControl.getCanvas().addEventListener("mouseup", e => {
+                this._expandIconControl.getCanvas().addEventListener("click", e => {
 
                     e.stopImmediatePropagation();
 
