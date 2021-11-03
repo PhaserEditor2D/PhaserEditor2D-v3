@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const prefabSer = support.getPrefabSerializer();
 
-                        const propValue = prefabSer.read(prop.name, prop.defValue);
+                        const propValue = prefabSer.read(prop.name, support.getPropertyDefaultValue(prop));
 
                         prop.setValue(obj, propValue);
                     }

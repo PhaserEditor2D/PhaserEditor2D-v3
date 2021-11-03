@@ -22,7 +22,6 @@ class PrefabAwakeTest extends Phaser.Scene {
 		// withAwakeEventPrefab
 		const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 99, 197);
 		this.add.existing(withAwakeEventPrefab);
-		withAwakeEventPrefab.setOrigin(0.5, 0.5);
 
 		this.events.emit("scene-awake");
 	}

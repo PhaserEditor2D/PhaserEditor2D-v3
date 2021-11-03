@@ -108,5 +108,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._scene = scene;
         }
+
+        getPropertyDefaultValue(prop: IProperty<T>) {
+
+            return prop.defValue;
+        }
     }
 }

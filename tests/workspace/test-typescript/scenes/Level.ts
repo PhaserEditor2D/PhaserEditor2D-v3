@@ -20,7 +20,6 @@ class Level extends Phaser.Scene {
 
 		// text_1
 		const text_1 = this.add.text(400, 406, "", {});
-		text_1.setOrigin(0.5, 0);
 		text_1.text = "Phaser 3 + Phaser Editor 2D + TypeScript";
 		text_1.setStyle({"fontFamily":"arial","fontSize":"3em"});
 
@@ -35,7 +34,6 @@ class Level extends Phaser.Scene {
 		// withAwakeEventPrefab
 		const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 415, 505);
 		this.add.existing(withAwakeEventPrefab);
-		withAwakeEventPrefab.setOrigin(0.5, 0.5);
 
 		// dino (components)
 		const dinoPushOnClick = new PushOnClick(dino);

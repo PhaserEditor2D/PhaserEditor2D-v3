@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         sceneFile: io.FilePath
     }
 
-    export abstract class Component<T> implements core.json.ISerializable {
+    export abstract class Component<T extends ISceneGameObjectLike> implements core.json.ISerializable {
 
         private _obj: T;
         private _properties: Set<IProperty<any>>;
@@ -26,18 +26,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getProperties() {
+
             return this._properties;
         }
 
         getObject() {
+
             return this._obj;
+        }
+
+        getEditorSupport() {
+
+            return this._obj.getEditorSupport();
+        }
+
+        getPropertyDefaultValue(prop: IProperty<any>) {
+
+            return this.getEditorSupport().getPropertyDefaultValue(prop);
         }
 
         write(ser: core.json.Serializer, ...properties: Array<IProperty<T>>) {
 
             for (const prop of properties) {
 
-                ser.write(prop.name, prop.getValue(this._obj), prop.defValue);
+                ser.write(prop.name, prop.getValue(this._obj), this.getPropertyDefaultValue(prop));
             }
         }
 
@@ -45,7 +57,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of properties) {
 
-                const value = ser.read(prop.name, prop.defValue);
+                const value = ser.read(prop.name, this.getPropertyDefaultValue(prop));
 
                 prop.setValue(this._obj, value);
             }
@@ -55,7 +67,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of properties) {
 
-                write(ser.getData(), prop.name, prop.getValue(this._obj), prop.defValue);
+                write(ser.getData(), prop.name, prop.getValue(this._obj), this.getPropertyDefaultValue(prop));
             }
         }
 
@@ -63,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of properties) {
 
-                const value = read(ser.getData(), prop.name, prop.defValue);
+                const value = read(ser.getData(), prop.name, this.getPropertyDefaultValue(prop));
 
                 prop.setValue(this._obj, value);
             }
@@ -109,7 +121,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     prop.name,
                     prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
-                    prop.defValue,
+                    this.getPropertyDefaultValue(prop),
                     args
                 );
             }
@@ -125,7 +137,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     prop.name,
                     prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
-                    prop.defValue,
+                    this.getPropertyDefaultValue(prop),
                     args,
                     true
                 );
@@ -142,7 +154,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     prop.name,
                     prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
-                    prop.defValue,
+                    this.getPropertyDefaultValue(prop),
                     args
                 );
             }
@@ -181,7 +193,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     prop.name,
                     prop.codeName || prop.name,
                     prop.getValue(this.getObject()),
-                    prop.defValue,
+                    this.getPropertyDefaultValue(prop),
                     prop.valueToCodeConverter
                 );
             }

@@ -99,6 +99,10 @@ namespace phasereditor2d.scene {
 
             this._sceneFinder = new core.json.SceneFinder();
 
+            // migrations
+
+            reg.addExtension(new core.migrations.OriginMigration_v2_to_v3());
+
             // preload docs
 
             reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {

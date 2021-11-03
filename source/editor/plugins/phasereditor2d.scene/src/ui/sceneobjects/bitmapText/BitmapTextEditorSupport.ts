@@ -36,5 +36,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.getObject().setInteractive(interactive_getAlpha_RenderTexture);
         }
+
+        getPropertyDefaultValue(prop: IProperty<any>) {
+
+            if (prop === OriginComponent.originX || prop === OriginComponent.originY) {
+
+                return 0;
+            }
+
+            return super.getPropertyDefaultValue(prop);
+        }
     }
 }

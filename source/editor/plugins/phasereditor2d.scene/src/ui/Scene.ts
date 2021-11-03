@@ -3,6 +3,8 @@ namespace phasereditor2d.scene.ui {
 
     export class Scene extends BaseScene {
 
+        static CURRENT_VERSION = 3;
+
         private _id: string;
         private _sceneType: core.json.SceneType;
         private _editor: editor.SceneEditor;
@@ -10,6 +12,7 @@ namespace phasereditor2d.scene.ui {
         private _prefabProperties: sceneobjects.PrefabUserProperties;
         private _objectLists: sceneobjects.ObjectLists;
         private _plainObjects: sceneobjects.IScenePlainObject[];
+        private _version: number;
 
         constructor(editor?: editor.SceneEditor) {
             super("ObjectScene");
@@ -25,6 +28,18 @@ namespace phasereditor2d.scene.ui {
             this._plainObjects = [];
 
             this._prefabProperties = new sceneobjects.PrefabUserProperties();
+
+            this._version = Scene.CURRENT_VERSION;
+        }
+
+        getVersion() {
+
+            return this._version;
+        }
+
+        setVersion(version: number) {
+
+            this._version = version;
         }
 
         sortObjectsByIndex(objects: Phaser.GameObjects.GameObject[]) {
