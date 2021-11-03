@@ -13,6 +13,7 @@ window.addEventListener('load', function () {
 	});
 	
 	game.scene.add("Level", Level);
+    game.scene.add("OriginMigration", OriginMigration);
     game.scene.add("Boot", Boot, true);
 
 });
@@ -26,7 +27,7 @@ class Boot extends Phaser.Scene {
 
 	create() {
 		
-        this.scene.start("Level");
+        this.scene.start("OriginMigration");
 	}
 
 }

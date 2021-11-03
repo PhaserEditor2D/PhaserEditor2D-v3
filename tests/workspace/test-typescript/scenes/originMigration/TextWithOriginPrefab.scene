@@ -1,8 +1,7 @@
 {
-    "id": "67273ad8-1b79-4edb-ac29-ca5abefe6603",
+    "id": "a77b7ae7-d7d5-4f27-b21b-81b58bbbefa4",
     "sceneType": "PREFAB",
     "settings": {
-        "generateAwakeHandler": true,
         "preloadMethodName": "",
         "preloadPackFiles": [],
         "createMethodName": "",
@@ -11,14 +10,19 @@
     "displayList": [
         {
             "type": "Text",
-            "id": "3f5cf790-f9d4-44f1-a5c9-d114fe9d7945",
+            "id": "27790c5e-ef17-4264-9c5e-7f127ae90ea8",
             "label": "text",
             "components": [],
-            "x": 276.5,
-            "y": 19,
-            "text": "Prefab with awake event",
+            "x": 407,
+            "y": 224,
+            "originX": 0.5,
+            "originY": 0.5,
+            "text": "Text Prefab Origin 0.5",
+            "fontFamily": "serif",
             "fontSize": "40px",
-            "backgroundColor": "#db68f7ff"
+            "stroke": "#000000ff",
+            "strokeThickness": 2,
+            "backgroundColor": "#7bfb6eff"
         }
     ],
     "plainObjects": [],
@@ -26,6 +30,6 @@
         "app": "Phaser Editor 2D - Scene Editor",
         "url": "https://phasereditor2d.com",
         "contentType": "phasereditor2d.core.scene.SceneContentType",
-        "version": 2
+        "version": 3
     }
 }

@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.core.json {
                     app: "Phaser Editor 2D - Scene Editor",
                     url: "https://phasereditor2d.com",
                     contentType: core.CONTENT_TYPE_SCENE,
-                    version: 2
+                    version: ui.Scene.CURRENT_VERSION
                 }
             };
 

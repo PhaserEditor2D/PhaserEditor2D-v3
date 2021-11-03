@@ -21,9 +21,10 @@ namespace phasereditor2d.scene.core.json {
             return 0;
         }
 
-        preload(monitor: controls.IProgressMonitor) {
+        async preload(monitor: controls.IProgressMonitor) {
 
-            return this._finder.preload(monitor);
+            await this._finder.preload(monitor);
+            await this._finder.runMigrations();
         }
     }
 
@@ -134,6 +135,14 @@ namespace phasereditor2d.scene.core.json {
             monitor.step();
         }
 
+        async runMigrations() {
+
+            for (const data of this._sceneFilename_Data_Map.values()) {
+
+                await ScenePlugin.getInstance().runSceneDataMigrations(data);
+            }
+        }
+
         private async preloadComponentsFiles(monitor: controls.IProgressMonitor): Promise<void> {
 
             const compFiles = [];
@@ -204,7 +213,7 @@ namespace phasereditor2d.scene.core.json {
 
                     const data = JSON.parse(content) as ISceneData;
 
-                    await ScenePlugin.getInstance().runSceneDataMigrations(data);
+                    // await ScenePlugin.getInstance().runSceneDataMigrations(data);
 
                     sceneFilename_Data_Map.set(file.getFullName(), data);
                     {
