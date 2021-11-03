@@ -137,7 +137,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const fieldCodeName = prop.codeName ?? prop.name;
                 const value = prop.getValue(this.getObject());
-                const defValue = this.getPropertyDefaultValue(prop);
 
                 if (this.getEditorSupport().isPrefabInstance()) {
 
@@ -147,6 +146,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
 
                 } else {
+
+                    const defValue = this.getPropertyDefaultValue(prop);
 
                     if (value !== defValue) {
 

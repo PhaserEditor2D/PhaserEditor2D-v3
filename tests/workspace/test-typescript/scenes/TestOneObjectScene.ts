@@ -17,7 +17,6 @@ class TestOneObjectScene extends Phaser.Scene {
 
 		// dino
 		const dino = this.add.image(482, 178, "dino");
-		dino.setOrigin(0.5, 0.5);
 
 		this.dino = dino;
 

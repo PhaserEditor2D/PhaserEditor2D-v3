@@ -134,7 +134,6 @@ class DinoPrefab extends Phaser.GameObjects.Image {
     constructor(scene, x, y, texture, frame) {
         super(scene, x ?? 408, y ?? 207, texture || "dino", frame);
         this.rotating = false;
-        this.setOrigin(0.5, 0.5);
         // this (components)
         new Tint(this);
         new PushOnClick(this);
@@ -202,10 +201,9 @@ class Level extends Phaser.Scene {
     editorCreate() {
         // dino
         const dino = this.add.image(400, 245.50984430371858, "dino");
-        dino.setOrigin(0.5, 0.5);
         // text_1
         const text_1 = this.add.text(400, 406, "", {});
-        text_1.setOrigin(0, 0);
+        text_1.setOrigin(0.5, 0);
         text_1.text = "Phaser 3 + Phaser Editor 2D + TypeScript";
         text_1.setStyle({ "fontFamily": "arial", "fontSize": "3em" });
         // dinoPrefab
@@ -251,7 +249,6 @@ class TestListFieldScene extends Phaser.Scene {
     editorCreate() {
         // dino
         const dino = this.add.image(337, 193, "dino");
-        dino.setOrigin(0.5, 0.5);
         // lists
         const list = [dino];
         const emptyList = [];
@@ -279,7 +276,6 @@ class TestOneObjectScene extends Phaser.Scene {
     editorCreate() {
         // dino
         const dino = this.add.image(482, 178, "dino");
-        dino.setOrigin(0.5, 0.5);
         this.dino = dino;
         this.events.emit("scene-awake");
     }
@@ -303,13 +299,11 @@ class TextWordWrapScene extends Phaser.Scene {
     editorCreate() {
         // text
         const text = this.add.text(114, 110, "", {});
-        text.setOrigin(0, 0);
         text.text = "New   long text   !";
         text.setStyle({ "fontFamily": "arial", "fontSize": "40px" });
         text.setWordWrapWidth(60, true);
         // text_1
         const text_1 = this.add.text(274, 142, "", {});
-        text_1.setOrigin(0, 0);
         text_1.text = "New text";
         text_1.setStyle({ "fontSize": "80px" });
         this.events.emit("scene-awake");
@@ -366,12 +360,10 @@ class TestComponentsAwakeEvent extends Phaser.Scene {
     editorCreate() {
         // hasComponentsAwake
         const hasComponentsAwake = this.add.text(126, 183, "", {});
-        hasComponentsAwake.setOrigin(0, 0);
         hasComponentsAwake.text = "Has components-awake";
         hasComponentsAwake.setStyle({ "fontSize": "40px" });
         // doesntHaveComponentsAwake
         const doesntHaveComponentsAwake = this.add.text(130, 275, "", {});
-        doesntHaveComponentsAwake.setOrigin(0, 0);
         doesntHaveComponentsAwake.text = "Doesn't have components-awake";
         doesntHaveComponentsAwake.setStyle({ "fontSize": "40px" });
         // dinoPrefab
@@ -404,7 +396,6 @@ class BaseContainerPrefab extends Phaser.GameObjects.Container {
         this.add(rectangle);
         // text
         const text = scene.add.text(38, 40, "", {});
-        text.setOrigin(0, 0);
         text.text = "base container prefab";
         text.setStyle({ "color": "#fae1afff", "fontSize": "40px", "fontStyle": "bold" });
         this.add(text);
@@ -422,7 +413,6 @@ class BaseContainerPrefab extends Phaser.GameObjects.Container {
 class DerivedContainer1Prefab extends BaseContainerPrefab {
     constructor(scene, x, y) {
         super(scene, x ?? 95, y ?? 47);
-        this.rectangle.setOrigin(0, 0);
         this.text.setPosition(220, 70);
         this.text.text = "derived prefab";
         this.text.setStyle({ "color": "#f75bb1ff", "strokeThickness": 4 });
@@ -446,7 +436,6 @@ class Issue154 extends Phaser.Scene {
         // derivedContainer1Prefab
         const derivedContainer1Prefab = new DerivedContainer1Prefab(this, 134, 96);
         this.add.existing(derivedContainer1Prefab);
-        derivedContainer1Prefab.rectangle.setOrigin(0, 0);
         this.events.emit("scene-awake");
     }
     /* START-USER-CODE */
@@ -528,7 +517,7 @@ class PrefabAwakeTest extends Phaser.Scene {
 class WithAwakeEventPrefab extends Phaser.GameObjects.Text {
     constructor(scene, x, y) {
         super(scene, x ?? 276.5, y ?? 19, "", {});
-        this.setOrigin(0, 0);
+        this.setOrigin(0.5, 0.5);
         this.text = "Prefab with awake event";
         this.setStyle({ "backgroundColor": "#db68f7ff", "fontSize": "40px" });
         // awake handler
@@ -549,7 +538,6 @@ class WithAwakeEventPrefab extends Phaser.GameObjects.Text {
 class WithoutAwakeEventPrefab extends Phaser.GameObjects.Text {
     constructor(scene, x, y) {
         super(scene, x ?? 0, y ?? 0, "", {});
-        this.setOrigin(0, 0);
         this.text = "Prefab Without Awake Event";
         this.setStyle({ "backgroundColor": "#1e87a1ff", "fontSize": "40px" });
         this.setPadding({ "left": 10, "top": 10, "right": 10, "bottom": 10 });

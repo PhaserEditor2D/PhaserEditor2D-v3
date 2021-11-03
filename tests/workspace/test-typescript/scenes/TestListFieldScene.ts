@@ -17,7 +17,6 @@ class TestListFieldScene extends Phaser.Scene {
 
 		// dino
 		const dino = this.add.image(337, 193, "dino");
-		dino.setOrigin(0.5, 0.5);
 
 		// lists
 		const list = [dino]
