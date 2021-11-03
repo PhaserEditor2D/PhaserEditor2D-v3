@@ -92,6 +92,7 @@ namespace phasereditor2d.scene.core.json {
                     for (const compName of this._data.components) {
 
                         if (name.startsWith(compName + ".")) {
+
                             return true;
                         }
                     }
@@ -140,9 +141,10 @@ namespace phasereditor2d.scene.core.json {
 
                 if (this.isUnlocked(name)) {
 
-                    const defValue2 = this.getDefaultValue(name, defValue);
+                    // const defValue2 = this.getDefaultValue(name, defValue);
 
-                    colibri.core.json.write(this._data, name, value, defValue2);
+                    // colibri.core.json.write(this._data, name, value, defValue2);
+                    this._data[name] = value;
                 }
 
             } else {

@@ -8,7 +8,7 @@ class DerivedContainer1Prefab extends BaseContainerPrefab {
 	constructor(scene: Phaser.Scene, x?: number, y?: number) {
 		super(scene, x ?? 95, y ?? 47);
 
-		this.rectangle.fillColor = 10214835;
+		this.rectangle.setOrigin(0, 0);
 		this.text.setPosition(220, 70);
 		this.text.text = "derived prefab";
 		this.text.setStyle({"color":"#f75bb1ff","strokeThickness":4});

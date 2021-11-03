@@ -17,11 +17,13 @@ class TestComponentsAwakeEvent extends Phaser.Scene {
 
 		// hasComponentsAwake
 		const hasComponentsAwake = this.add.text(126, 183, "", {});
+		hasComponentsAwake.setOrigin(0, 0);
 		hasComponentsAwake.text = "Has components-awake";
 		hasComponentsAwake.setStyle({"fontSize":"40px"});
 
 		// doesntHaveComponentsAwake
 		const doesntHaveComponentsAwake = this.add.text(130, 275, "", {});
+		doesntHaveComponentsAwake.setOrigin(0, 0);
 		doesntHaveComponentsAwake.text = "Doesn't have components-awake";
 		doesntHaveComponentsAwake.setStyle({"fontSize":"40px"});
 

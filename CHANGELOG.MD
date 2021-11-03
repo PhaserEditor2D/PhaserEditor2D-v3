@@ -7,6 +7,9 @@
 * Scene editor: commands for setting default render type.
 * Scene editor: fixes Break Parent command.
 * [#154](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/154) Incorrect position values passed to super call in derived class of nested prefab.
+* #[150](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/150) Incorrect editor representation: Unlocked nested prefab properties aren't applied to instances of the prefab.
+* Fixes serialization of default origin values in Text and BitmapText objects. It now uses `(0, 0)` in those cases.
+* Always include the value of an unlocked property in the scene serialization and the code generation.
 
 ## v3.30.0 - Sep 18, 2020
 

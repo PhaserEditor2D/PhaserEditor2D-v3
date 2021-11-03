@@ -16,15 +16,9 @@ class OriginMigration extends Phaser.Scene {
 	editorCreate(): void {
 
 		// textWithOriginPrefab
-		const textWithOriginPrefab = new TextWithOriginPrefab(this, 0, 186);
+		const textWithOriginPrefab = new TextWithOriginPrefab(this, 205, 269);
 		this.add.existing(textWithOriginPrefab);
-
-		// text
-		const text = this.add.text(182, 174, "", {});
-		text.setOrigin(0.5, 0.5);
-		text.text = "hello";
-		text.setStyle({"backgroundColor":"#00ccffff","fontSize":"40px"});
-		text.setPadding({"left":10,"top":10,"right":10,"bottom":10});
+		textWithOriginPrefab.setOrigin(0.5, 0.5);
 
 		this.events.emit("scene-awake");
 	}
