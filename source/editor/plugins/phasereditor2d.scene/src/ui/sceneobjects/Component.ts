@@ -138,14 +138,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const fieldCodeName = prop.codeName ?? prop.name;
                 const value = prop.getValue(this.getObject());
 
+                let local = true;
+
                 if (this.getEditorSupport().isPrefabInstance()) {
 
-                    if (this.getEditorSupport().isUnlockedProperty(prop)) {
+                    local = false;
 
-                        codeDomBuilder({ prop, fieldCodeName, value });
+                    if (prop instanceof UserComponentPropertyWrapper) {
+
+                        local = this.getEditorSupport().isLocalUserProperty(prop);
                     }
 
-                } else {
+                    if (!local) {
+
+                        if (this.getEditorSupport().isUnlockedProperty(prop)) {
+
+                            codeDomBuilder({ prop, fieldCodeName, value });
+                        }
+                    }
+
+                }
+
+                if (local) {
 
                     const defValue = this.getPropertyDefaultValue(prop);
 
@@ -185,14 +199,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of this.getProperties()) {
 
-                if (prop.local) {
+                this.writeProperty(ser, prop);
+            }
+        }
 
-                    this.writeLocal(ser, prop);
+        protected writeProperty(ser: core.json.Serializer, prop: IProperty<T>, local?: boolean) {
 
-                } else {
+            local = local ?? prop.local;
 
-                    this.write(ser, prop);
-                }
+            if (local) {
+
+                this.writeLocal(ser, prop);
+
+            } else {
+
+                this.write(ser, prop);
             }
         }
 
