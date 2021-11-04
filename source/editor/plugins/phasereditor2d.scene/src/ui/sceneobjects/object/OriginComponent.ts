@@ -47,12 +47,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
+            const obj = this.getObject();
 
-            this.buildSetObjectPropertyCodeDOM([
-                OriginComponent.originX
-            ], args2 => {
+            let add = false;
 
-                const obj = this.getObject();
+            if (this.getEditorSupport().isPrefabInstance()) {
+
+                if (this.getEditorSupport().isUnlockedPropertyXY(OriginComponent.origin)) {
+
+                    add = true;
+                }
+
+            } else {
+
+                const defaultOriginX = this.getPropertyDefaultValue(OriginComponent.originX);
+                const defaultOriginY = this.getPropertyDefaultValue(OriginComponent.originY);
+
+                if (defaultOriginX !== obj.originX || defaultOriginY !== obj.originY) {
+
+                    add = true;
+                }
+            }
+
+
+            if (add) {
 
                 const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
 
@@ -60,7 +78,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 dom.argFloat(obj.originY);
 
                 args.statements.push(dom);
-            });
+            }
         }
     }
 }
