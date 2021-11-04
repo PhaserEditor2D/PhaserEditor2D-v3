@@ -111,7 +111,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
 
-            this.helperBuildSetObjectPropertyCodeDOM_StringProperty(args, properties, false);
+            this.helperBuildSetObjectPropertyCodeDOM_StringProperty(args, properties, true);
         }
 
         buildSetObjectPropertyCodeDOM_BooleanProperty(
