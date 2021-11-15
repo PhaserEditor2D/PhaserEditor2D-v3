@@ -427,12 +427,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isRootPrefabDefined() {
 
-            if (this.isPrefabInstance()) {
-
-                return !this.isNestedPrefabDefined();
-            }
-
-            return false;
+            return this.isPrefabInstance() && !this.isNestedPrefabDefined();
         }
 
         isNestedPrefabDefined() {

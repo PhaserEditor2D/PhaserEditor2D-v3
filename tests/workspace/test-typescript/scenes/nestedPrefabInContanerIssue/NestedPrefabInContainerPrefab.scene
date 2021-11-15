@@ -1,0 +1,73 @@
+{
+    "id": "0af548e2-20ec-4b0c-a216-2dc598698b2f",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "6b3513cb-8932-4f92-8d25-ca3527b6eb5d",
+            "label": "container_1",
+            "components": [],
+            "x": 223,
+            "y": 114,
+            "list": [
+                {
+                    "prefabId": "62361060-1303-4a68-b8e6-3ade0fa1d41c",
+                    "id": "7ded07a7-ca39-4205-ba79-17d83981bffc",
+                    "unlock": [
+                        "x",
+                        "y"
+                    ],
+                    "label": "multicolor",
+                    "scope": "NESTED_PREFAB",
+                    "components": [],
+                    "x": 282,
+                    "y": 188,
+                    "nestedPrefabs": []
+                },
+                {
+                    "type": "Text",
+                    "id": "1cb1cf7e-9994-4337-b100-e9c8ff0e25ba",
+                    "label": "nestedText",
+                    "scope": "NESTED_PREFAB",
+                    "components": [],
+                    "text": "nested text 1",
+                    "fontFamily": "courier",
+                    "fontSize": "40px"
+                },
+                {
+                    "type": "Container",
+                    "id": "03d1273c-8f27-4154-93c1-96c4ce4df0c5",
+                    "label": "containerOfNested",
+                    "scope": "NESTED_PREFAB",
+                    "components": [],
+                    "y": 98,
+                    "list": [
+                        {
+                            "type": "Text",
+                            "id": "24c92083-aa88-4a46-9ed9-e6e0d189af5d",
+                            "label": "nestedTextInsideContainer",
+                            "scope": "NESTED_PREFAB",
+                            "components": [],
+                            "text": "nested text inside container",
+                            "fontFamily": "courier",
+                            "fontSize": "40px"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 3
+    }
+}
