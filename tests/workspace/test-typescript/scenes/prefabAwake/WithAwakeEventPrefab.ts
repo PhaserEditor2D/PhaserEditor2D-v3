@@ -8,6 +8,7 @@ class WithAwakeEventPrefab extends Phaser.GameObjects.Text {
 	constructor(scene: Phaser.Scene, x?: number, y?: number) {
 		super(scene, x ?? 276.5, y ?? 19, "", {});
 
+		this.setOrigin(0.5, 0.5);
 		this.text = "Prefab with awake event";
 		this.setStyle({"backgroundColor":"#db68f7ff","fontSize":"40px"});
 		// awake handler

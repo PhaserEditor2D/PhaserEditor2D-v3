@@ -51,18 +51,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             let add = false;
 
-            const originXDefault = this.getPropertyDefaultValue(OriginComponent.originX);
-            const originYDefault = this.getPropertyDefaultValue(OriginComponent.originY);
+            if (this.getEditorSupport().isPrefabInstance()) {
 
-            if (args.prefabSerializer) {
+                if (this.getEditorSupport().isUnlockedPropertyXY(OriginComponent.origin)) {
 
-                add = obj.originX !== args.prefabSerializer.read("originX", originXDefault)
-                    || obj.originY !== args.prefabSerializer.read("originY", originYDefault);
+                    add = true;
+                }
 
             } else {
 
-                add = obj.originX !== originXDefault || obj.originY !== originYDefault;
+                const defaultOriginX = this.getPropertyDefaultValue(OriginComponent.originX);
+                const defaultOriginY = this.getPropertyDefaultValue(OriginComponent.originY);
+
+                if (defaultOriginX !== obj.originX || defaultOriginY !== obj.originY) {
+
+                    add = true;
+                }
             }
+
 
             if (add) {
 

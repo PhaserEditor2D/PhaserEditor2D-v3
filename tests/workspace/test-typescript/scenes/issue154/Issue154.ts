@@ -18,7 +18,6 @@ class Issue154 extends Phaser.Scene {
 		// derivedContainer1Prefab
 		const derivedContainer1Prefab = new DerivedContainer1Prefab(this, 134, 96);
 		this.add.existing(derivedContainer1Prefab);
-		derivedContainer1Prefab.rectangle.fillColor = 10214835;
 
 		this.events.emit("scene-awake");
 	}

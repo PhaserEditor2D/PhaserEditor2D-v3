@@ -9,8 +9,9 @@ class TextWithOriginPrefab extends Phaser.GameObjects.Text {
 		super(scene, x ?? 407, y ?? 224, "", {});
 
 		this.setOrigin(0.5, 0.5);
-		this.text = "Text Prefab Origin 0.5";
+		this.text = "Text Prefab\nOrigin 0.5";
 		this.setStyle({"backgroundColor":"#7bfb6eff","fontFamily":"serif","fontSize":"40px","stroke":"#000000ff","strokeThickness":2});
+		this.setLineSpacing(20);
 
 		/* START-USER-CTR-CODE */
 		// Write your code here.

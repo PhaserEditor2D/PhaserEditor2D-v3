@@ -175,11 +175,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (property instanceof UserComponentPropertyWrapper) {
 
-                    const userComp = property.getUserComponent();
-
-                    const editorUserComp = this.getComponent(UserComponentsEditorComponent) as UserComponentsEditorComponent;
-
-                    if (editorUserComp.hasLocalUserComponent(userComp.getName())) {
+                    if (this.isLocalUserProperty(property)) {
 
                         return true;
                     }
@@ -189,6 +185,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return true;
+        }
+
+        isLocalUserProperty(property: UserComponentPropertyWrapper) {
+
+            const userComp = property.getUserComponent();
+
+            const editorUserComp = this.getComponent(UserComponentsEditorComponent) as UserComponentsEditorComponent;
+
+            if (editorUserComp.hasLocalUserComponent(userComp.getName())) {
+
+                return true;
+            }
+
+            return false;
         }
 
         setUnlockedProperty(property: IProperty<any>, unlock: boolean) {

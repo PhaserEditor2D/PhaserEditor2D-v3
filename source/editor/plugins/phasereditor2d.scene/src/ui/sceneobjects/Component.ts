@@ -81,104 +81,93 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        buildSetObjectPropertyCodeDOM_String(
-            fieldName: string, fieldCodeName: string, value: string, defValue: string, args: ISetObjectPropertiesCodeDOMArgs, verbatim = false): void {
+        helperBuildSetObjectPropertyCodeDOM_StringProperty(
+            args: ISetObjectPropertiesCodeDOMArgs, properties: Array<IProperty<T>>, verbatim: boolean) {
 
-            const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
-            let add = false;
+            this.buildSetObjectPropertyCodeDOM(properties, args2 => {
 
-            if (args.prefabSerializer) {
-
-                add = value !== args.prefabSerializer.read(fieldName, defValue);
-
-            } else {
-
-                add = value !== defValue;
-            }
-
-            if (add) {
+                const dom = new code.AssignPropertyCodeDOM(args2.fieldCodeName, args.objectVarName);
 
                 if (verbatim) {
 
-                    dom.value(value);
+                    dom.value(args2.value);
 
                 } else {
 
-                    dom.valueLiteral(value);
+                    dom.valueLiteral(args2.value);
                 }
 
                 args.statements.push(dom);
-            }
+            });
         }
 
         buildSetObjectPropertyCodeDOM_StringProperty(
-
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
 
-            for (const prop of properties) {
-
-                this.buildSetObjectPropertyCodeDOM_String(
-                    prop.name,
-                    prop.codeName || prop.name,
-                    prop.getValue(this.getObject()),
-                    this.getPropertyDefaultValue(prop),
-                    args
-                );
-            }
+            this.helperBuildSetObjectPropertyCodeDOM_StringProperty(args, properties, false);
         }
 
         buildSetObjectPropertyCodeDOM_StringVerbatimProperty(
 
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
 
-            for (const prop of properties) {
-
-                this.buildSetObjectPropertyCodeDOM_String(
-                    prop.name,
-                    prop.codeName || prop.name,
-                    prop.getValue(this.getObject()),
-                    this.getPropertyDefaultValue(prop),
-                    args,
-                    true
-                );
-            }
+            this.helperBuildSetObjectPropertyCodeDOM_StringProperty(args, properties, true);
         }
 
         buildSetObjectPropertyCodeDOM_BooleanProperty(
 
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
 
-            for (const prop of properties) {
+            this.buildSetObjectPropertyCodeDOM(properties, args2 => {
 
-                this.buildSetObjectPropertyCodeDOM_Boolean(
-                    prop.name,
-                    prop.codeName || prop.name,
-                    prop.getValue(this.getObject()),
-                    this.getPropertyDefaultValue(prop),
-                    args
-                );
-            }
+                const dom = new code.AssignPropertyCodeDOM(args2.fieldCodeName, args.objectVarName);
+
+                dom.valueBool(args2.value);
+
+                args.statements.push(dom);
+
+            });
         }
 
-        buildSetObjectPropertyCodeDOM_Boolean(
-            fieldName: string, fieldCodeName: string, value: boolean, defValue: boolean, args: ISetObjectPropertiesCodeDOMArgs): void {
+        buildSetObjectPropertyCodeDOM(
+            properties: Array<IProperty<T>>,
+            codeDomBuilder: (builderArgs: { prop: IProperty<T>, fieldCodeName: string, value: any }) => void) {
 
-            const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
-            let add = false;
+            for (const prop of properties) {
 
-            if (args.prefabSerializer) {
+                const fieldCodeName = prop.codeName ?? prop.name;
+                const value = prop.getValue(this.getObject());
 
-                add = value !== args.prefabSerializer.read(fieldName, defValue);
+                let local = true;
 
-            } else {
+                if (this.getEditorSupport().isPrefabInstance()) {
 
-                add = value !== defValue;
-            }
+                    local = false;
 
-            if (add) {
+                    if (prop instanceof UserComponentPropertyWrapper) {
 
-                dom.valueBool(value);
-                args.statements.push(dom);
+                        local = this.getEditorSupport().isLocalUserProperty(prop);
+                    }
+
+                    if (!local) {
+
+                        if (this.getEditorSupport().isUnlockedProperty(prop)) {
+
+                            codeDomBuilder({ prop, fieldCodeName, value });
+                        }
+                    }
+
+                }
+
+                if (local) {
+
+                    const defValue = this.getPropertyDefaultValue(prop);
+
+                    if (value !== defValue) {
+
+                        codeDomBuilder({ prop, fieldCodeName, value });
+                    }
+                }
             }
         }
 
@@ -186,48 +175,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             args: ISetObjectPropertiesCodeDOMArgs, ...properties: Array<IProperty<T>>) {
 
-            for (const prop of properties) {
+            this.buildSetObjectPropertyCodeDOM(properties, args2 => {
 
-                this.buildSetObjectPropertyCodeDOM_Float(
-                    args,
-                    prop.name,
-                    prop.codeName || prop.name,
-                    prop.getValue(this.getObject()),
-                    this.getPropertyDefaultValue(prop),
-                    prop.valueToCodeConverter
-                );
-            }
-        }
+                const dom = new code.AssignPropertyCodeDOM(args2.fieldCodeName, args.objectVarName);
 
-        buildSetObjectPropertyCodeDOM_Float(args: ISetObjectPropertiesCodeDOMArgs,
-            fieldName: string, fieldCodeName: string, value: number, defValue: number,
-            converter?: IValueToCodeConverter): void {
-
-            const dom = new code.AssignPropertyCodeDOM(fieldCodeName, args.objectVarName);
-
-            const add = this.hasValueForIncludeInCode(fieldName, value, defValue, args);
-
-            if (add) {
-
-                const codeValue = converter ? converter(value) : value;
+                const codeValue = args2.prop.valueToCodeConverter ? args2.prop.valueToCodeConverter(args2.value) : args2.value;
 
                 dom.valueFloat(codeValue);
 
                 args.statements.push(dom);
-            }
-        }
 
-        hasValueForIncludeInCode(fieldName: string, value: number, defValue: number, args: ISetObjectPropertiesCodeDOMArgs) {
-
-            if (args.prefabSerializer) {
-
-                const prefabValue = args.prefabSerializer.read(fieldName, defValue);
-
-                return value !== prefabValue;
-
-            }
-
-            return value !== defValue;
+            });
         }
 
         async buildDependenciesHash(args: IBuildDependencyHashArgs) {
@@ -241,14 +199,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of this.getProperties()) {
 
-                if (prop.local) {
+                this.writeProperty(ser, prop);
+            }
+        }
 
-                    this.writeLocal(ser, prop);
+        protected writeProperty(ser: core.json.Serializer, prop: IProperty<T>, local?: boolean) {
 
-                } else {
+            local = local ?? prop.local;
 
-                    this.write(ser, prop);
-                }
+            if (local) {
+
+                this.writeLocal(ser, prop);
+
+            } else {
+
+                this.write(ser, prop);
             }
         }
 

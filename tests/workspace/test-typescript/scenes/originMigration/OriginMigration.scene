@@ -13,28 +13,16 @@
             "id": "ca14c44c-9d49-4c8c-b141-5eb02fd6713a",
             "unlock": [
                 "x",
-                "y"
+                "y",
+                "originX",
+                "originY"
             ],
             "label": "textWithOriginPrefab",
             "components": [],
-            "y": 186
-        },
-        {
-            "type": "Text",
-            "id": "17882ed0-e335-41aa-8dd6-9eb3efd283a6",
-            "label": "text",
-            "components": [],
-            "x": 182,
-            "y": 174,
+            "x": 205,
+            "y": 269,
             "originX": 0.5,
-            "originY": 0.5,
-            "text": "hello",
-            "paddingLeft": 10,
-            "paddingTop": 10,
-            "paddingRight": 10,
-            "paddingBottom": 10,
-            "fontSize": "40px",
-            "backgroundColor": "#00ccffff"
+            "originY": 0.5
         }
     ],
     "plainObjects": [],
