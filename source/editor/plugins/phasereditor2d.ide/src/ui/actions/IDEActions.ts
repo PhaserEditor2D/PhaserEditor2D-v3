@@ -34,7 +34,7 @@ namespace phasereditor2d.ide.ui.actions {
                 command: {
                     id: CMD_PLAY_PROJECT,
                     name: "Play Project",
-                    tooltip: "Run this project in other tab",
+                    tooltip: "Run this project in the browser.",
                     icon: IDEPlugin.getInstance().getIcon(ICON_PLAY),
                     category: CAT_PROJECT
                 },
@@ -47,7 +47,14 @@ namespace phasereditor2d.ide.ui.actions {
 
                         const url = colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
 
-                        controls.Controls.openUrlInNewPage(url);
+                        colibri.Platform.onElectron(electron => {
+
+                            colibri.core.io.apiRequest("OpenBrowser", {});
+
+                        }, () => {
+
+                            controls.Controls.openUrlInNewPage(url);
+                        });
                     }
                 },
                 keys: {
