@@ -12,6 +12,7 @@
 * Always include the value of an unlocked property in the scene serialization and the code generation.
 * Scene Editor: allows changing the origin of a container prefab instance with unlocked position.
 * Scene Editor: fixes var name of nested prefabs.
+* AllInOne: the Play Project command opens the default browser.
 
 ## v3.30.0 - Sep 18, 2020
 
