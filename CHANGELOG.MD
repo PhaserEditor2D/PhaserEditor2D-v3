@@ -13,6 +13,7 @@
 * Scene Editor: allows changing the origin of a container prefab instance with unlocked position.
 * Scene Editor: fixes var name of nested prefabs.
 * AllInOne: the Play Project command opens the default browser.
+* Scene compiler: formats Text style JSON with a VSCode similar formatting.
 
 ## v3.30.0 - Sep 18, 2020
 
