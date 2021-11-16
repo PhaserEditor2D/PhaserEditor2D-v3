@@ -18,7 +18,7 @@ class BaseContainerPrefab extends Phaser.GameObjects.Container {
 		// text
 		const text = scene.add.text(38, 40, "", {});
 		text.text = "base container prefab";
-		text.setStyle({"color":"#fae1afff","fontSize":"40px","fontStyle":"bold"});
+		text.setStyle({ "color": "#fae1afff", "fontSize": "40px", "fontStyle": "bold" });
 		this.add(text);
 
 		this.rectangle = rectangle;

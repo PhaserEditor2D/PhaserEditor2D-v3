@@ -448,6 +448,32 @@ class Issue154 extends Phaser.Scene {
 // You can write more code here
 // You can write more code here
 /* START OF COMPILED CODE */
+class AnotherPrefabPrefab extends Phaser.GameObjects.Container {
+    constructor(scene, x, y) {
+        super(scene, x ?? 0, y ?? -16.506139428920388);
+        // coloredBlue
+        const coloredBlue = scene.add.text(0, 16.506139428920388, "", {});
+        coloredBlue.setOrigin(0.5, 0.5);
+        coloredBlue.text = "This is another prefab";
+        coloredBlue.setStyle({ "backgroundColor": "#00ccffff", "color": "#a93005ff", "fontSize": "40px" });
+        this.add(coloredBlue);
+        // coloredYellow
+        const coloredYellow = scene.add.text(-6, 71, "", {});
+        coloredYellow.setOrigin(0.5, 0.5);
+        coloredYellow.text = "This is another prefab";
+        coloredYellow.setStyle({ "backgroundColor": "#f4ff00ff", "color": "#a93005ff", "fontSize": "40px" });
+        this.add(coloredYellow);
+        this.coloredBlue = coloredBlue;
+        this.coloredYellow = coloredYellow;
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
 class NestedInsideContainerPrefabInstanceScene extends Phaser.Scene {
     constructor() {
         super("NestedInsideContainerPrefabInstanceScene");
@@ -456,10 +482,11 @@ class NestedInsideContainerPrefabInstanceScene extends Phaser.Scene {
         /* END-USER-CTR-CODE */
     }
     editorCreate() {
-        // nestedPrefabInContainerPrefab
-        const nestedPrefabInContainerPrefab = new NestedPrefabInContainerPrefab(this, 124, 170);
-        this.add.existing(nestedPrefabInContainerPrefab);
-        nestedPrefabInContainerPrefab.nestedTextInsideContainer.text = "nested text inside container (modified)";
+        // obj1
+        const obj1 = new NestedPrefabInContainerPrefab(this, 66, 107);
+        this.add.existing(obj1);
+        obj1.multicolor.coloredBlue.setStyle({ "backgroundColor": "#001dffff", "color": "#f7f5f4ff" });
+        obj1.nestedTextInsideContainer.text = "nested text inside container (updated)";
         this.events.emit("scene-awake");
     }
     /* START-USER-CODE */
@@ -475,6 +502,9 @@ class NestedInsideContainerPrefabInstanceScene extends Phaser.Scene {
 class NestedPrefabInContainerPrefab extends Phaser.GameObjects.Container {
     constructor(scene, x, y) {
         super(scene, x ?? 223, y ?? 114);
+        // multicolor
+        const multicolor = new AnotherPrefabPrefab(scene, 282, 188);
+        this.add(multicolor);
         // nestedText
         const nestedText = scene.add.text(0, 0, "", {});
         nestedText.text = "nested text 1";
@@ -488,6 +518,7 @@ class NestedPrefabInContainerPrefab extends Phaser.GameObjects.Container {
         nestedTextInsideContainer.text = "nested text inside container";
         nestedTextInsideContainer.setStyle({ "fontFamily": "courier", "fontSize": "40px" });
         containerOfNested.add(nestedTextInsideContainer);
+        this.multicolor = multicolor;
         this.nestedText = nestedText;
         this.containerOfNested = containerOfNested;
         this.nestedTextInsideContainer = nestedTextInsideContainer;

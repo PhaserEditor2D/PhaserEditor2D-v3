@@ -368,6 +368,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return data;
         }
 
+        private stringify(style: any) {
+
+            let s = JSON.stringify(style);
+
+            s = s.replaceAll("\":\"", "\": \"")
+                .replaceAll("{\"", "{ \"")
+                .replaceAll("\"}", "\" }")
+                .replaceAll("\",", "\", ");
+
+            return s;
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const obj = this.getObject();
@@ -378,7 +390,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const style = this.styleToJson();
 
-                const literal = JSON.stringify(style);
+                const literal = this.stringify(style);
 
                 if (literal !== "{}") {
 

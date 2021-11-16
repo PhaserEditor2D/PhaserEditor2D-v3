@@ -18,7 +18,7 @@ class NestedInsideContainerPrefabInstanceScene extends Phaser.Scene {
 		// obj1
 		const obj1 = new NestedPrefabInContainerPrefab(this, 66, 107);
 		this.add.existing(obj1);
-		obj1.multicolor.coloredBlue.setStyle({"backgroundColor":"#001dffff","color":"#f7f5f4ff"});
+		obj1.multicolor.coloredBlue.setStyle({ "backgroundColor": "#001dffff", "color": "#f7f5f4ff" });
 		obj1.nestedTextInsideContainer.text = "nested text inside container (updated)";
 
 		this.events.emit("scene-awake");

@@ -10,7 +10,7 @@ class DerivedContainer1Prefab extends BaseContainerPrefab {
 
 		this.text.setPosition(220, 70);
 		this.text.text = "derived prefab";
-		this.text.setStyle({"color":"#f75bb1ff","strokeThickness":4});
+		this.text.setStyle({ "color": "#f75bb1ff", "strokeThickness":4});
 
 		/* START-USER-CTR-CODE */
 		// Write your code here.

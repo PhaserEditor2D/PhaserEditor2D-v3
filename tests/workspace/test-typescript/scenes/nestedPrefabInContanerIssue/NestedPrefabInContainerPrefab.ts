@@ -15,7 +15,7 @@ class NestedPrefabInContainerPrefab extends Phaser.GameObjects.Container {
 		// nestedText
 		const nestedText = scene.add.text(0, 0, "", {});
 		nestedText.text = "nested text 1";
-		nestedText.setStyle({"fontFamily":"courier","fontSize":"40px"});
+		nestedText.setStyle({ "fontFamily": "courier", "fontSize": "40px" });
 		this.add(nestedText);
 
 		// containerOfNested
@@ -25,7 +25,7 @@ class NestedPrefabInContainerPrefab extends Phaser.GameObjects.Container {
 		// nestedTextInsideContainer
 		const nestedTextInsideContainer = scene.add.text(0, 0, "", {});
 		nestedTextInsideContainer.text = "nested text inside container";
-		nestedTextInsideContainer.setStyle({"fontFamily":"courier","fontSize":"40px"});
+		nestedTextInsideContainer.setStyle({ "fontFamily": "courier", "fontSize": "40px" });
 		containerOfNested.add(nestedTextInsideContainer);
 
 		this.multicolor = multicolor;
