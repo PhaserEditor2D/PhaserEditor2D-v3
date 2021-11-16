@@ -35,6 +35,11 @@ namespace phasereditor2d.scene.core.migrations {
 
                     await this.migrateList(obj.list);
                 }
+
+                if (obj.nestedPrefabs) {
+
+                    await this.migrateList(obj.nestedPrefabs);
+                }
             }
         }
     }
