@@ -435,11 +435,11 @@ namespace phasereditor2d.scene.core.code {
 
                 if (isTsOutput && objectVarnames.length === 0) {
 
-                    dom = new RawCodeDOM(`const ${varname}: Array<any> = [${objectVarnames.join(", ")}]`);
+                    dom = new RawCodeDOM(`const ${varname}: Array<any> = [${objectVarnames.join(", ")}];`);
 
                 } else {
 
-                    dom = new RawCodeDOM(`const ${varname} = [${objectVarnames.join(", ")}]`);
+                    dom = new RawCodeDOM(`const ${varname} = [${objectVarnames.join(", ")}];`);
                 }
 
                 body.push(dom);
