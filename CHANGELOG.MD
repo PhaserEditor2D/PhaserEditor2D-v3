@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.31.0-beta - Nov 24, 2021
+## v3.31.0 - Nov 29, 2021
 
 ### Added
 
