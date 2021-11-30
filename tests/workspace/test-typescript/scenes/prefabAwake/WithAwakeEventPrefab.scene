@@ -16,6 +16,8 @@
             "components": [],
             "x": 276.5,
             "y": 19,
+            "originX": 0.5,
+            "originY": 0.5,
             "text": "Prefab with awake event",
             "fontSize": "40px",
             "backgroundColor": "#db68f7ff"
@@ -25,6 +27,7 @@
     "meta": {
         "app": "Phaser Editor 2D - Scene Editor",
         "url": "https://phasereditor2d.com",
-        "contentType": "phasereditor2d.core.scene.SceneContentType"
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 3
     }
 }

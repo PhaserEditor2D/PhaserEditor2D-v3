@@ -368,6 +368,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return data;
         }
 
+        private stringify(style: any) {
+
+            let s = JSON.stringify(style);
+
+            s = s.replaceAll("\":\"", "\": \"")
+                .replaceAll("{\"", "{ \"")
+                .replaceAll("\"}", "\" }")
+                .replaceAll("\",", "\", ");
+
+            return s;
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const obj = this.getObject();
@@ -378,7 +390,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const style = this.styleToJson();
 
-                const literal = JSON.stringify(style);
+                const literal = this.stringify(style);
 
                 if (literal !== "{}") {
 
@@ -445,20 +457,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 // lineSpacing
 
-                const prop = TextComponent.lineSpacing;
-
-                const value = prop.getValue(obj);
-
-                const isNotDefault = this.hasValueForIncludeInCode(prop.name, value, prop.defValue, args);
-
-                if (support.isUnlockedProperty(prop) && isNotDefault) {
+                this.buildSetObjectPropertyCodeDOM([TextComponent.lineSpacing], args2 => {
 
                     const dom = new code.MethodCallCodeDOM("setLineSpacing", args.objectVarName);
 
-                    dom.arg(value);
+                    dom.arg(args2.value);
 
                     args.statements.push(dom);
-                }
+                });
             }
 
             {

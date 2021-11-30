@@ -274,7 +274,11 @@ namespace phasereditor2d.scene.ui {
 
         createScene(sceneData: json.ISceneData, errors?: string[]) {
 
-            if (sceneData.meta.version === undefined || sceneData.meta.version === 1) {
+            const version = sceneData.meta.version ?? 1;
+
+            this._editorScene.setVersion(version);
+
+            if (version === 1) {
                 // old version, perform unlock x & y migration
                 new json.Version1ToVersion2Migration().migrate(sceneData);
             }

@@ -91,16 +91,23 @@ namespace phasereditor2d.scene.ui.editor {
 
                 render.draw(sprite, renderX, renderY);
 
-                render.snapshot(imgElement => {
+                try {
 
-                    const img = new controls.ImageWrapper(imgElement as HTMLImageElement);
+                    render.snapshot(imgElement => {
 
-                    this._hashMap.set(objId, hash);
-                    this._imageMap.set(objId, img);
-                    this._promiseMap.delete(objId);
+                        const img = new controls.ImageWrapper(imgElement as HTMLImageElement);
 
-                    resolve(controls.PreloadResult.RESOURCES_LOADED);
-                });
+                        this._hashMap.set(objId, hash);
+                        this._imageMap.set(objId, img);
+                        this._promiseMap.delete(objId);
+
+                        resolve(controls.PreloadResult.RESOURCES_LOADED);
+                    });
+
+                } catch (e) {
+
+                    console.error(obj.getEditorSupport().getLabel() + ": " + e.message);
+                }
 
                 sprite.setAngle(angle);
                 sprite.setOrigin(originX, originY);

@@ -80,10 +80,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
-            for (const prop of this.getProperties()) {
-
-                this.buildSetObjectPropertyCodeDOM_FloatProperty(args, prop);
-            }
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, ...this.getProperties());
         }
     }
 }

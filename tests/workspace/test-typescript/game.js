@@ -11,6 +11,7 @@ window.addEventListener('load', function () {
         }
     });
     game.scene.add("Level", Level);
+    game.scene.add("OriginMigration", OriginMigration);
     game.scene.add("Boot", Boot, true);
 });
 class Boot extends Phaser.Scene {
@@ -18,7 +19,7 @@ class Boot extends Phaser.Scene {
         this.load.pack("pack", "assets/asset-pack.json");
     }
     create() {
-        this.scene.start("Level");
+        this.scene.start("OriginMigration");
     }
 }
 class UserComponent {
@@ -131,7 +132,7 @@ class Tint extends UserComponent {
 /* START OF COMPILED CODE */
 class DinoPrefab extends Phaser.GameObjects.Image {
     constructor(scene, x, y, texture, frame) {
-        super(scene, x, y, texture || "dino", frame);
+        super(scene, x ?? 408, y ?? 207, texture || "dino", frame);
         this.rotating = false;
         // this (components)
         new Tint(this);
@@ -163,7 +164,7 @@ class DinoPrefab extends Phaser.GameObjects.Image {
 /* START OF COMPILED CODE */
 class DoubleDinoPrefab extends Phaser.GameObjects.Container {
     constructor(scene, x, y) {
-        super(scene, x, y);
+        super(scene, x ?? 0, y ?? 0);
         // dinoLeft
         const dinoLeft = new DinoPrefab(scene, 0, 0);
         this.add(dinoLeft);
@@ -172,14 +173,6 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
         this.add(dinoRight);
         // lists
         const testListInPrefab = [dinoRight, dinoLeft];
-        // dinoLeft (prefab fields)
-        dinoLeft.emit("prefab-awake");
-        // dinoLeft (components)
-        dinoLeft.emit("components-awake");
-        // dinoRight (prefab fields)
-        dinoRight.emit("prefab-awake");
-        // dinoRight (components)
-        dinoRight.emit("components-awake");
         this.dinoLeft = dinoLeft;
         this.dinoRight = dinoRight;
         this.testListInPrefab = testListInPrefab;
@@ -222,22 +215,14 @@ class Level extends Phaser.Scene {
         // withAwakeEventPrefab
         const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 415, 505);
         this.add.existing(withAwakeEventPrefab);
-        withAwakeEventPrefab.setOrigin(0.5, 0.5);
         // dino (components)
         const dinoPushOnClick = new PushOnClick(dino);
         dinoPushOnClick.pushScale = 0.8;
         new Tint(dino);
-        dino.emit("components-awake");
         // dinoPrefab (prefab fields)
         dinoPrefab.rotating = true;
-        dinoPrefab.emit("prefab-awake");
-        // dinoPrefab (components)
-        dinoPrefab.emit("components-awake");
-        // doubleDinoPrefab (prefab fields)
-        doubleDinoPrefab.emit("prefab-awake");
-        // withAwakeEventPrefab (prefab fields)
-        withAwakeEventPrefab.emit("prefab-awake");
         this.dino = dino;
+        this.events.emit("scene-awake");
     }
     /* START-USER-CODE */
     // Write your code here.
@@ -269,6 +254,7 @@ class TestListFieldScene extends Phaser.Scene {
         const emptyList = [];
         this.list = list;
         this.emptyList = emptyList;
+        this.events.emit("scene-awake");
     }
     /* START-USER-CODE */
     // Write your code here
@@ -291,6 +277,7 @@ class TestOneObjectScene extends Phaser.Scene {
         // dino
         const dino = this.add.image(482, 178, "dino");
         this.dino = dino;
+        this.events.emit("scene-awake");
     }
     /* START-USER-CODE */
     // Write your code here
@@ -319,6 +306,7 @@ class TextWordWrapScene extends Phaser.Scene {
         const text_1 = this.add.text(274, 142, "", {});
         text_1.text = "New text";
         text_1.setStyle({ "fontSize": "80px" });
+        this.events.emit("scene-awake");
     }
     /* START-USER-CODE */
     // Write your code here
@@ -383,18 +371,200 @@ class TestComponentsAwakeEvent extends Phaser.Scene {
         this.add.existing(dinoPrefab);
         // hasComponentsAwake (components)
         new ComponentWithAwake(hasComponentsAwake);
-        hasComponentsAwake.emit("components-awake");
         // doesntHaveComponentsAwake (components)
         new ComponentWithoutAwake(doesntHaveComponentsAwake);
-        // dinoPrefab (prefab fields)
-        dinoPrefab.emit("prefab-awake");
-        // dinoPrefab (components)
-        dinoPrefab.emit("components-awake");
+        this.events.emit("scene-awake");
     }
     /* START-USER-CODE */
     // Write your code here
     create() {
         this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class BaseContainerPrefab extends Phaser.GameObjects.Container {
+    constructor(scene, x, y) {
+        super(scene, x ?? 42, y ?? 47);
+        // rectangle
+        const rectangle = scene.add.rectangle(0, 0, 575, 128);
+        rectangle.setOrigin(0, 0);
+        rectangle.isFilled = true;
+        rectangle.fillColor = 10214835;
+        this.add(rectangle);
+        // text
+        const text = scene.add.text(38, 40, "", {});
+        text.text = "base container prefab";
+        text.setStyle({ "color": "#fae1afff", "fontSize": "40px", "fontStyle": "bold" });
+        this.add(text);
+        this.rectangle = rectangle;
+        this.text = text;
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class DerivedContainer1Prefab extends BaseContainerPrefab {
+    constructor(scene, x, y) {
+        super(scene, x ?? 95, y ?? 47);
+        this.text.setPosition(220, 70);
+        this.text.text = "derived prefab";
+        this.text.setStyle({ "color": "#f75bb1ff", "strokeThickness": 4 });
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class Issue154 extends Phaser.Scene {
+    constructor() {
+        super("Issue154");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // derivedContainer1Prefab
+        const derivedContainer1Prefab = new DerivedContainer1Prefab(this, 134, 96);
+        this.add.existing(derivedContainer1Prefab);
+        this.events.emit("scene-awake");
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class AnotherPrefabPrefab extends Phaser.GameObjects.Container {
+    constructor(scene, x, y) {
+        super(scene, x ?? 0, y ?? -16.506139428920388);
+        // coloredBlue
+        const coloredBlue = scene.add.text(0, 16.506139428920388, "", {});
+        coloredBlue.setOrigin(0.5, 0.5);
+        coloredBlue.text = "This is another prefab";
+        coloredBlue.setStyle({ "backgroundColor": "#00ccffff", "color": "#a93005ff", "fontSize": "40px" });
+        this.add(coloredBlue);
+        // coloredYellow
+        const coloredYellow = scene.add.text(-6, 71, "", {});
+        coloredYellow.setOrigin(0.5, 0.5);
+        coloredYellow.text = "This is another prefab";
+        coloredYellow.setStyle({ "backgroundColor": "#f4ff00ff", "color": "#a93005ff", "fontSize": "40px" });
+        this.add(coloredYellow);
+        this.coloredBlue = coloredBlue;
+        this.coloredYellow = coloredYellow;
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class NestedInsideContainerPrefabInstanceScene extends Phaser.Scene {
+    constructor() {
+        super("NestedInsideContainerPrefabInstanceScene");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // obj1
+        const obj1 = new NestedPrefabInContainerPrefab(this, 66, 107);
+        this.add.existing(obj1);
+        obj1.multicolor.coloredBlue.setStyle({ "backgroundColor": "#001dffff", "color": "#f7f5f4ff" });
+        obj1.nestedTextInsideContainer.text = "nested text inside container (updated)";
+        this.events.emit("scene-awake");
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class NestedPrefabInContainerPrefab extends Phaser.GameObjects.Container {
+    constructor(scene, x, y) {
+        super(scene, x ?? 223, y ?? 114);
+        // multicolor
+        const multicolor = new AnotherPrefabPrefab(scene, 282, 188);
+        this.add(multicolor);
+        // nestedText
+        const nestedText = scene.add.text(0, 0, "", {});
+        nestedText.text = "nested text 1";
+        nestedText.setStyle({ "fontFamily": "courier", "fontSize": "40px" });
+        this.add(nestedText);
+        // containerOfNested
+        const containerOfNested = scene.add.container(0, 98);
+        this.add(containerOfNested);
+        // nestedTextInsideContainer
+        const nestedTextInsideContainer = scene.add.text(0, 0, "", {});
+        nestedTextInsideContainer.text = "nested text inside container";
+        nestedTextInsideContainer.setStyle({ "fontFamily": "courier", "fontSize": "40px" });
+        containerOfNested.add(nestedTextInsideContainer);
+        this.multicolor = multicolor;
+        this.nestedText = nestedText;
+        this.containerOfNested = containerOfNested;
+        this.nestedTextInsideContainer = nestedTextInsideContainer;
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class OriginMigration extends Phaser.Scene {
+    constructor() {
+        super("OriginMigration");
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
+    }
+    editorCreate() {
+        // textWithOriginPrefab
+        const textWithOriginPrefab = new TextWithOriginPrefab(this, 205, 269);
+        this.add.existing(textWithOriginPrefab);
+        textWithOriginPrefab.setOrigin(0.5, 0.5);
+        this.events.emit("scene-awake");
+    }
+    /* START-USER-CODE */
+    // Write your code here
+    create() {
+        this.editorCreate();
+    }
+}
+/* END OF COMPILED CODE */
+// You can write more code here
+// You can write more code here
+/* START OF COMPILED CODE */
+class TextWithOriginPrefab extends Phaser.GameObjects.Text {
+    constructor(scene, x, y) {
+        super(scene, x ?? 407, y ?? 224, "", {});
+        this.setOrigin(0.5, 0.5);
+        this.text = "Text Prefab\nOrigin 0.5";
+        this.setStyle({ "backgroundColor": "#7bfb6eff", "fontFamily": "serif", "fontSize": "40px", "stroke": "#000000ff", "strokeThickness": 2 });
+        this.setLineSpacing(20);
+        /* START-USER-CTR-CODE */
+        // Write your code here.
+        /* END-USER-CTR-CODE */
     }
 }
 /* END OF COMPILED CODE */
@@ -415,9 +585,7 @@ class PrefabAwakeTest extends Phaser.Scene {
         // withAwakeEventPrefab
         const withAwakeEventPrefab = new WithAwakeEventPrefab(this, 99, 197);
         this.add.existing(withAwakeEventPrefab);
-        withAwakeEventPrefab.setOrigin(0.5, 0.5);
-        // withAwakeEventPrefab (prefab fields)
-        withAwakeEventPrefab.emit("prefab-awake");
+        this.events.emit("scene-awake");
     }
     /* START-USER-CODE */
     // Write your code here
@@ -431,12 +599,12 @@ class PrefabAwakeTest extends Phaser.Scene {
 /* START OF COMPILED CODE */
 class WithAwakeEventPrefab extends Phaser.GameObjects.Text {
     constructor(scene, x, y) {
-        super(scene, x, y, "", {});
-        // awake handler
-        this.once("prefab-awake", () => this.awake());
+        super(scene, x ?? 276.5, y ?? 19, "", {});
         this.setOrigin(0.5, 0.5);
         this.text = "Prefab with awake event";
         this.setStyle({ "backgroundColor": "#db68f7ff", "fontSize": "40px" });
+        // awake handler
+        this.scene.events.once("scene-awake", () => this.awake());
         /* START-USER-CTR-CODE */
         // Write your code here.
         /* END-USER-CTR-CODE */
@@ -452,7 +620,7 @@ class WithAwakeEventPrefab extends Phaser.GameObjects.Text {
 /* START OF COMPILED CODE */
 class WithoutAwakeEventPrefab extends Phaser.GameObjects.Text {
     constructor(scene, x, y) {
-        super(scene, x, y, "", {});
+        super(scene, x ?? 0, y ?? 0, "", {});
         this.text = "Prefab Without Awake Event";
         this.setStyle({ "backgroundColor": "#1e87a1ff", "fontSize": "40px" });
         this.setPadding({ "left": 10, "top": 10, "right": 10, "bottom": 10 });

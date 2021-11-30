@@ -516,7 +516,9 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const content = FileUtils.getFileString(file);
 
-                const data = JSON.parse(content);
+                const data = JSON.parse(content) as core.json.ISceneData;
+
+                await ScenePlugin.getInstance().runSceneDataMigrations(data);
 
                 if (SceneMaker.isValidSceneDataFormat(data)) {
 
@@ -528,6 +530,7 @@ namespace phasereditor2d.scene.ui.editor {
                     await maker.updateSceneLoader(data, this._overlayLayer.createLoadingMonitor());
 
                     const errors = [];
+
                     maker.createScene(data, errors);
 
                     this._overlayLayer.setLoading(false);

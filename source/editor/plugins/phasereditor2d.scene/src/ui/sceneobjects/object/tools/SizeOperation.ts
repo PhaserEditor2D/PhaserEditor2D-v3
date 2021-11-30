@@ -7,14 +7,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return SizeToolItem.getInitialSize(obj);
         }
 
-        getFinalValue(obj: ISceneGameObject): { x: number; y: number; } {
+        getFinalValue(obj: ISizeLikeObject): { x: number; y: number; } {
 
             const [w, h] = obj.getEditorSupport().getSizeProperties();
 
             return { x: w.getValue(obj), y: h.getValue(obj) };
         }
 
-        setValue(obj: ISceneGameObject, value: { x: number; y: number; }) {
+        setValue(obj: ISizeLikeObject, value: { x: number; y: number; }) {
 
             const [w, h] = obj.getEditorSupport().getSizeProperties();
 

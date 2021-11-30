@@ -180,30 +180,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 } else {
 
-
                     // find a local nested prefab
 
                     let localNestedPrefab: json.IObjectData;
 
                     for (const local of localNestedPrefabs) {
 
-                        const remoteNestedPrefab = this.findRemoteNestedPrefab(objData.prefabId, originalChild.id);
+                        const localOriginalIdOfNestedPrefab = this.findOriginalIdOfNestedPrefab(local);
 
-                        if (remoteNestedPrefab) {
+                        if (localOriginalIdOfNestedPrefab === originalChild.id) {
 
-                            localNestedPrefab = colibri.core.json.copy(local) as json.IObjectData;
-                            localNestedPrefab.prefabId = remoteNestedPrefab.id;
+                            const remoteNestedPrefab = this.findRemoteNestedPrefab(objData.prefabId, originalChild.id);
 
-                            break;
+                            if (remoteNestedPrefab) {
 
-                        } else {
+                                localNestedPrefab = colibri.core.json.copy(local) as json.IObjectData;
+                                localNestedPrefab.prefabId = remoteNestedPrefab.id;
 
-                            if (local.prefabId === originalChild.id) {
+                            } else {
 
                                 localNestedPrefab = local;
-
-                                break;
                             }
+
+                            break;
                         }
                     }
 
@@ -261,7 +260,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const nestedPrefab = (prefabData.nestedPrefabs ?? []).find(obj => {
 
-                const thisOriginalId = finder.getOriginalPrefabId(obj.prefabId);
+                // const thisOriginalId = finder.getOriginalPrefabId(obj.prefabId);
+                const thisOriginalId = this.findOriginalIdOfNestedPrefab(obj);
 
                 return thisOriginalId === originalNestedPrefabId
             });
@@ -277,6 +277,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return null;
+        }
+
+        private static findOriginalIdOfNestedPrefab(obj: json.IObjectData) {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            if (obj.prefabId && finder.isNestedPrefab(obj.prefabId)) {
+
+                const prefabData = finder.getPrefabData(obj.prefabId);
+
+                return this.findOriginalIdOfNestedPrefab(prefabData);
+            }
+
+            return obj.id;
         }
 
         async buildDependencyHash(args: IBuildDependencyHashArgs) {

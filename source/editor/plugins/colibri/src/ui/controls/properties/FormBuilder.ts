@@ -230,5 +230,51 @@ namespace colibri.ui.controls.properties {
 
             return text;
         }
+        
+        private static NEXT_ID = 0;
+
+        createCheckbox(parent: HTMLElement, label?: HTMLLabelElement) {
+
+            const check = document.createElement("input");
+
+            if (label) {
+
+                const id = (PropertySection.NEXT_ID++).toString();
+
+                label.htmlFor = id;
+
+                check.setAttribute("id", id);
+            }
+
+            check.type = "checkbox";
+            check.classList.add("formCheckbox");
+
+            parent.appendChild(check);
+
+            return check;
+        }
+
+        createMenuIcon(parent: HTMLElement, menuProvider: () => Menu, alignRight = true) {
+
+            const icon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_SMALL_MENU));
+
+            icon.getCanvas().classList.add("IconButton");
+
+            parent.appendChild(icon.getCanvas());
+
+            icon.getCanvas().addEventListener("click", e => {
+
+                const menu = menuProvider();
+
+                menu.createWithEvent(e);
+            });
+
+            if (alignRight) {
+
+                icon.getCanvas().style.float = "right";
+            }
+
+            return icon;
+        }
     }
 }

@@ -3,6 +3,8 @@ namespace phasereditor2d.scene.ui {
 
     export class Scene extends BaseScene {
 
+        static CURRENT_VERSION = 3;
+
         private _id: string;
         private _sceneType: core.json.SceneType;
         private _editor: editor.SceneEditor;
@@ -10,6 +12,7 @@ namespace phasereditor2d.scene.ui {
         private _prefabProperties: sceneobjects.PrefabUserProperties;
         private _objectLists: sceneobjects.ObjectLists;
         private _plainObjects: sceneobjects.IScenePlainObject[];
+        private _version: number;
 
         constructor(editor?: editor.SceneEditor) {
             super("ObjectScene");
@@ -25,6 +28,18 @@ namespace phasereditor2d.scene.ui {
             this._plainObjects = [];
 
             this._prefabProperties = new sceneobjects.PrefabUserProperties();
+
+            this._version = Scene.CURRENT_VERSION;
+        }
+
+        getVersion() {
+
+            return this._version;
+        }
+
+        setVersion(version: number) {
+
+            this._version = version;
         }
 
         sortObjectsByIndex(objects: Phaser.GameObjects.GameObject[]) {
@@ -413,6 +428,32 @@ namespace phasereditor2d.scene.ui {
             }
 
             return obj;
+        }
+
+        debugFindDuplicatedEditorId(list?: sceneobjects.ISceneGameObject[], set?: Set<any>) {
+
+            set = set ?? new Set();
+
+            for (const obj of (list ?? this.getDisplayListChildren())) {
+
+                const id = obj.getEditorSupport().getId();
+
+                if (set.has(id)) {
+
+                    console.error("Duplicated " + obj.getEditorSupport().getLabel() + " id " + id);
+
+                } else {
+
+                    console.log("New " + obj.getEditorSupport().getLabel() + " id " + id);
+
+                    set.add(id);
+                }
+
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
+
+                    this.debugFindDuplicatedEditorId(obj.list as any, set);
+                }
+            }
         }
 
         static findByEditorId(list: sceneobjects.ISceneGameObject[], id: string) {

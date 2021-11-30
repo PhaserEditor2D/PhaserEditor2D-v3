@@ -1,0 +1,51 @@
+{
+    "id": "8e6a7af4-f79a-4489-b68f-a2781eeddba0",
+    "sceneType": "SCENE",
+    "settings": {
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "Issue147",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Image",
+            "id": "27b01757-3172-41ce-a2c5-47d2f348701f",
+            "label": "dino",
+            "components": [],
+            "texture": {
+                "key": "dino"
+            },
+            "x": 392,
+            "y": 213
+        },
+        {
+            "type": "Image",
+            "id": "96ca80e2-1677-4309-86b9-c77b4aada8f3",
+            "label": "dino_1",
+            "components": [],
+            "texture": {
+                "key": "dino"
+            },
+            "x": 620,
+            "y": 202
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 3
+    },
+    "lists": [
+        {
+            "id": "bec711be-a6f5-4a91-9da6-034d6652e1b4",
+            "label": "dinoList",
+            "objectIds": [
+                "27b01757-3172-41ce-a2c5-47d2f348701f",
+                "96ca80e2-1677-4309-86b9-c77b4aada8f3"
+            ]
+        }
+    ]
+}

@@ -17,5 +17,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         label?: string;
 
         tooltip?: string;
+
+        valueToCodeConverter?: IValueToCodeConverter;
     }
+
+    export declare type IValueToCodeConverter = (value: any) => any;
 }

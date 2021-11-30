@@ -27,6 +27,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.writeJSON(ser);
         }
 
+        writeProperty(ser: core.json.Serializer, prop: IProperty<any>) {
+
+            if (prop instanceof UserComponentPropertyWrapper) {
+
+                // This may happen when you add a user component to a prefab instance.
+                // in that case, the properties are local.
+                // But if the user property is inherited from the prefab, then it is not local.
+                const local = this.getEditorSupport().isLocalUserProperty(prop);
+
+                super.writeProperty(ser, prop, local);
+
+                return;
+            }
+
+            super.writeProperty(ser, prop);
+        }
+
         readJSON(ser: core.json.Serializer) {
 
             this._compNames = ser.getData()["components"] || [];

@@ -1,0 +1,57 @@
+{
+    "id": "62361060-1303-4a68-b8e6-3ade0fa1d41c",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "e057c641-ab5b-400c-90d2-cac0e47b2104",
+            "label": "container_1",
+            "components": [],
+            "y": -16.506139428920388,
+            "list": [
+                {
+                    "type": "Text",
+                    "id": "48c07a59-c1a9-48f5-b136-95b99af5daaf",
+                    "label": "coloredBlue",
+                    "scope": "NESTED_PREFAB",
+                    "components": [],
+                    "y": 16.506139428920388,
+                    "originX": 0.5,
+                    "originY": 0.5,
+                    "text": "This is another prefab",
+                    "fontSize": "40px",
+                    "color": "#a93005ff",
+                    "backgroundColor": "#00ccffff"
+                },
+                {
+                    "type": "Text",
+                    "id": "0579624d-1b2c-49a9-9057-d95e9203f455",
+                    "label": "coloredYellow",
+                    "scope": "NESTED_PREFAB",
+                    "components": [],
+                    "x": -6,
+                    "y": 71,
+                    "originX": 0.5,
+                    "originY": 0.5,
+                    "text": "This is another prefab",
+                    "fontSize": "40px",
+                    "color": "#a93005ff",
+                    "backgroundColor": "#f4ff00ff"
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 3
+    }
+}

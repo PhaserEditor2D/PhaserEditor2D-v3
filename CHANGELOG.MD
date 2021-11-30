@@ -1,6 +1,29 @@
 # Change Log
 
-## v3.30.0 - Sep 18, 2020
+## v3.31.0 - Nov 29, 2021
+
+### Added
+
+* [#145](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/145): BitmapText: adds support for `maxWidth` property.
+* Scene editor: commands for setting default render type.
+
+### Changed
+
+* AllInOne: the Play Project command opens the default browser.
+* Scene compiler: formats Text style JSON with a VSCode similar formatting.
+
+### Fixed
+
+* Scene editor: fixes Break Parent command.
+* [#143](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/143) Fixes bitmap font loading when pasting a bitmap text object from other scene.
+* [#154](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/154) Incorrect position values passed to super call in derived class of nested prefab.
+* [150](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/150) Incorrect editor representation: Unlocked nested prefab properties aren't applied to instances of the prefab.
+* Fixes serialization of default origin values in Text and BitmapText objects. It now uses `(0, 0)` in those cases.
+* Always include the value of an unlocked property in the scene serialization and the code generation.
+* Scene Editor: allows changing the origin of a container prefab instance with unlocked position.
+* Scene Editor: fixes var name of nested prefabs.
+
+## v3.30.0 - Sep 18, 2021
 
 ### Added
 
@@ -45,7 +68,7 @@
 * Scene Editor (BitmapText): fixes error when the font data isn't available in the cache.
 * [#134](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/134) Creating a list in the editor results in an initialized array in the generated code.
 * [#135](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/135) Word wrap width does not behave correctly
-* Scene Editor: fixes Move To Parent dialog in context of prefab s\cenes.
+* Scene Editor: fixes Move To Parent dialog in context of prefab scenes.
 * Scene Editor: fixes Scene section layout when shows a prefab's instance.
 * [#142](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/142) Animations Editor: fixes changing multiple properties of the same animation.
 

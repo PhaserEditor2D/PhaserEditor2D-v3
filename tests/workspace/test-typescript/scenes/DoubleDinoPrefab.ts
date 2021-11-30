@@ -4,37 +4,25 @@
 /* START OF COMPILED CODE */
 
 class DoubleDinoPrefab extends Phaser.GameObjects.Container {
-	
-	constructor(scene: Phaser.Scene, x: number, y: number) {
-		super(scene, x, y);
-		
+
+	constructor(scene: Phaser.Scene, x?: number, y?: number) {
+		super(scene, x ?? 0, y ?? 0);
+
 		// dinoLeft
 		const dinoLeft = new DinoPrefab(scene, 0, 0);
 		this.add(dinoLeft);
-		
+
 		// dinoRight
 		const dinoRight = new DinoPrefab(scene, 90, 166);
 		this.add(dinoRight);
-		
+
 		// lists
 		const testListInPrefab = [dinoRight, dinoLeft]
-		
-		// dinoLeft (prefab fields)
-		dinoLeft.emit("prefab-awake");
-		
-		// dinoLeft (components)
-		dinoLeft.emit("components-awake");
-		
-		// dinoRight (prefab fields)
-		dinoRight.emit("prefab-awake");
-		
-		// dinoRight (components)
-		dinoRight.emit("components-awake");
-		
+
 		this.dinoLeft = dinoLeft;
 		this.dinoRight = dinoRight;
 		this.testListInPrefab = testListInPrefab;
-		
+
 		/* START-USER-CTR-CODE */
 		// Write your code here.
 		/* END-USER-CTR-CODE */
@@ -42,11 +30,11 @@ class DoubleDinoPrefab extends Phaser.GameObjects.Container {
 		// custom definition props
 		this.ghost = true;
 	}
-	
+
 	private dinoLeft: DinoPrefab;
 	private dinoRight: DinoPrefab;
 	private testListInPrefab: DinoPrefab[];
-	
+
 	/* START-USER-CODE */
 
 	set ghost(ghost: boolean) {

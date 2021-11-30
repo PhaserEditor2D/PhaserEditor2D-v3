@@ -1,0 +1,71 @@
+{
+    "id": "d515cde9-e16e-408c-8dd8-ea2eb66f0e01",
+    "sceneType": "SCENE",
+    "settings": {
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "NestedInsideContainerPrefabInstanceScene",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "prefabId": "0af548e2-20ec-4b0c-a216-2dc598698b2f",
+            "id": "ec22ee75-fe74-49f7-b552-bff66cd6f610",
+            "unlock": [
+                "x",
+                "y"
+            ],
+            "label": "obj1",
+            "components": [],
+            "x": 66,
+            "y": 107,
+            "nestedPrefabs": [
+                {
+                    "prefabId": "7ded07a7-ca39-4205-ba79-17d83981bffc",
+                    "id": "4d4ece64-9fec-40eb-99fc-e5a3faf50526",
+                    "label": "multicolor",
+                    "components": [],
+                    "nestedPrefabs": [
+                        {
+                            "prefabId": "48c07a59-c1a9-48f5-b136-95b99af5daaf",
+                            "id": "38edb1ea-37eb-415a-b82f-67ed5046c9ae",
+                            "unlock": [
+                                "backgroundColor",
+                                "color"
+                            ],
+                            "label": "coloredBlue",
+                            "components": [],
+                            "color": "#f7f5f4ff",
+                            "backgroundColor": "#001dffff"
+                        }
+                    ]
+                },
+                {
+                    "prefabId": "03d1273c-8f27-4154-93c1-96c4ce4df0c5",
+                    "id": "bb425e98-589a-444f-a8f2-3317f956e015",
+                    "label": "containerOfNested",
+                    "components": [],
+                    "nestedPrefabs": [
+                        {
+                            "prefabId": "24c92083-aa88-4a46-9ed9-e6e0d189af5d",
+                            "id": "7c771b2e-0863-49c5-87eb-f688449d8853",
+                            "unlock": [
+                                "text"
+                            ],
+                            "label": "nestedTextInsideContainer",
+                            "components": [],
+                            "text": "nested text inside container (updated)"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 3
+    }
+}

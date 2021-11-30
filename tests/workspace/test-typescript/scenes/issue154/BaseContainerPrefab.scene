@@ -1,0 +1,57 @@
+{
+    "id": "ff655d3a-5788-448d-a43a-508b716df366",
+    "sceneType": "PREFAB",
+    "settings": {
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "8a6260f5-41cc-4317-b862-2c49c34ba837",
+            "label": "container_1",
+            "components": [],
+            "x": 42,
+            "y": 47,
+            "list": [
+                {
+                    "type": "Rectangle",
+                    "id": "4c327af7-0f36-46da-8103-6b52abca1942",
+                    "label": "rectangle",
+                    "scope": "NESTED_PREFAB",
+                    "components": [],
+                    "originX": 0,
+                    "originY": 0,
+                    "isFilled": true,
+                    "fillColor": "#9bddb3",
+                    "width": 575,
+                    "height": 128
+                },
+                {
+                    "type": "Text",
+                    "id": "933a50ce-834a-4f1e-b358-b07b98ffc15d",
+                    "label": "text",
+                    "scope": "NESTED_PREFAB",
+                    "components": [],
+                    "x": 38,
+                    "y": 40,
+                    "originX": 0,
+                    "originY": 0,
+                    "text": "base container prefab",
+                    "fontSize": "40px",
+                    "fontStyle": "bold",
+                    "color": "#fae1afff"
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 2
+    }
+}
