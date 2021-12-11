@@ -44,9 +44,9 @@ Eventually, we share videos, screenshots, and thoughts about the editor's develo
 
 You can get the binaries in the [website downloads](https://phasereditor2d.com/downloads).
 
-## Play Phaser Editor 2D
+## Quick start
 
-The [Play Phaser Editor 2D](https://play.phasereditor2d.com) is a service hosted in our servers to create Phaser Editor 2D v3 projects online. It is a very nice way to try the editor because it does not requires any download or installation process.
+Check the [starter templates](https://phasereditor2d.com/start).
 
 ### Build and run
 
