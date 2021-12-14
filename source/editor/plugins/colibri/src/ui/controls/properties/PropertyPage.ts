@@ -47,8 +47,9 @@ namespace colibri.ui.controls.properties {
                 this._menuIcon = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_SMALL_MENU));
                 this._menuIcon.getCanvas().classList.add("IconButton");
                 this._menuIcon.getCanvas().style.visibility = this._section.hasMenu() ? "visible" : "hidden";
-                this._menuIcon.getCanvas().addEventListener("mouseup", e => {
+                this._menuIcon.getCanvas().addEventListener("click", e => {
 
+                    e.stopPropagation();
                     e.stopImmediatePropagation();
 
                     if (this._section.hasMenu()) {
