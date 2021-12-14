@@ -1,5 +1,13 @@
 # Change Log
 
+## dev
+
+### Fixes
+
+* Starter templates: webpack split chunks.
+* Fixes webpack build of A day in the beach example.
+* Monaco editor loads Phaser built-in type defs. It doesn't require to read the `.d.ts` files from the project.
+
 ## v3.31.0 - Nov 29, 2021
 
 ### Added

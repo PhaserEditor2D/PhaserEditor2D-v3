@@ -2,9 +2,11 @@ namespace phasereditor2d.code.ui {
 
     export class PreloadModelsExtension extends colibri.ui.ide.PreloadProjectResourcesExtension {
 
+        private static PHASER_DEFS = ["data/matter.d.ts", "data/phaser.d.ts", "phaser-fixes.d.ts"];
+
         async computeTotal(): Promise<number> {
 
-            return this.getFiles().length;
+            return this.getFiles().length + PreloadModelsExtension.PHASER_DEFS.length;
         }
 
         private getFiles() {
@@ -35,7 +37,17 @@ namespace phasereditor2d.code.ui {
 
                 monitor.step();
             }
-        }
 
+            // preload phaser defs
+
+            for (const path of PreloadModelsExtension.PHASER_DEFS) {
+
+                const content = await CodePlugin.getInstance().getString(path);
+
+                monaco.editor.createModel(content, "javascript", CodePlugin.fileUri(path));
+
+                monitor.step();
+            }
+        }
     }
 }
