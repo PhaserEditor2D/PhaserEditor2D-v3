@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.31.1 - Dec 14, 2021
 
 ### Fixes
 
