@@ -1,5 +1,18 @@
 # Change Log
 
+## v3.31.2 - Dec 14, 2021
+
+* Update version.
+
+## v3.31.1 - Dec 14, 2021
+
+### Fixes
+
+* Starter templates: webpack split chunks.
+* Fixes webpack build of A day in the beach example.
+* Monaco editor loads Phaser built-in type defs. It doesn't require to read the `.d.ts` files from the project.
+* Property section: fixes show three-dots menu and collapsing.
+
 ## v3.31.0 - Nov 29, 2021
 
 ### Added
