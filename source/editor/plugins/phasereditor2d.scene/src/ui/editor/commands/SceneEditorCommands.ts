@@ -47,6 +47,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
+        if (colibri.Platform.getWorkbench().getActiveDialog()) {
+
+            return false;
+        }
+
         return args.activePart instanceof SceneEditor
 
             || (args.activeEditor instanceof SceneEditor &&
