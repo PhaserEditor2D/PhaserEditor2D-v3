@@ -252,12 +252,14 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_EDITOR_TABS_SIZE_DOWN, new commands.KeyMatcher({
                 control: true,
-                key: "3"
+                key: "Digit3",
+                keyLabel: "3",
             }));
 
             manager.addKeyBinding(CMD_EDITOR_TABS_SIZE_UP, new commands.KeyMatcher({
                 control: true,
-                key: "4"
+                key: "Digit4",
+                keyLabel: "4",
             }));
 
             // close editor
