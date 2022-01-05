@@ -6,7 +6,7 @@ namespace phasereditor2d.pack.ui.properties {
     export class AddFileToPackFileSection extends controls.properties.PropertySection<io.FilePath> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.properties.AddFileToPackFileSection", "Asset Pack File", false);
+            super(page, "phasereditor2d.pack.ui.properties.AddFileToPackFileSection", "Asset Pack Entry", false);
         }
 
         private async getPackItems(finder: core.PackFinder) {
@@ -76,7 +76,7 @@ namespace phasereditor2d.pack.ui.properties {
 
                         const btn = document.createElement("button");
 
-                        btn.innerText = `Import ${importData.importer.getType()} (${importData.files.length})`;
+                        btn.innerText = `Import as ${importData.importer.getType()} (${importData.files.length})`;
 
                         btn.addEventListener("click", async (e) => {
 
