@@ -58,14 +58,16 @@ $ ./watch.sh
 Phaser Editor 2D Core allows running the server with a different client. It is what you need to do here, to run the latest stable server but loading this client:
 
 ```
-$ npx phasereditor2d-launcher -editor . -dev -project path/to/game
+$ npx phasereditor2d-launcher -editor . -dev -disable-plugins phasereditor2d.code -project path/to/game
 ```
 
 The [phasereditor2d-launcher](https://www.npmjs.com/package/phasereditor2d-launcher) is a cli-based node module. It launches the latest version of Phaser Editor 2D Core.
 
 The `-editor` option configures a new location of the client code.
 
-The `-dev` option disables the browser cache, so it always fetches a fresh version of the files. In any case, you can disable the browser cache manually in the DevTools of the browser.
+The `-dev` option disables the browser cache, so it always fetches a fresh version of the files.  **Note:** You will also need to manually disable your browser cache in your browser's Developer Tools.
+
+The `-disable-plugins` option disables the [Advanced Javascript Editor](https://help.phasereditor2d.com/v3/code-editor/index.html), which is used in Phaser Editor 2D All-in-One but not in Core.
 
 The `-project` flag indicates the path to the game project. It is mandatory.
 
@@ -79,8 +81,6 @@ http://127.0.0.1:1959/editor
 
 Please, use a modern and updated browser.
 
-If you used a previous version of the editor, it would be highly recommendable that you clean the browser cache while you load the new code.
-
-Check in the Developer Console of the browser the version of the IDE.
+If you used a previous version of the editor, be sure to clear your browser cache in your browser's Developer Tools before loading the new code.
 
 If you have any issues, please, open an issue in this repository or contact us at `developers@phasereditor2d.com`. 
