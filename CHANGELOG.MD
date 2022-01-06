@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* [#168](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/168) Down Arrow in Command Palette closes palette, moves select Image in Scene Editor.
+
 ## v3.31.2 - Dec 14, 2021
 
 * Update version.
