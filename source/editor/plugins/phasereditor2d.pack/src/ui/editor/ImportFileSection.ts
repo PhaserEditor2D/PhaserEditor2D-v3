@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.ui.editor {
     export class ImportFileSection extends controls.properties.PropertySection<io.FilePath> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.pack.ui.editor.ImportFileSection", "Import File", false);
+            super(page, "phasereditor2d.pack.ui.editor.ImportFileSection", "Asset Pack Entry", false);
         }
 
         createForm(parent: HTMLDivElement) {
@@ -38,7 +38,7 @@ namespace phasereditor2d.pack.ui.editor {
 
                     const btn = document.createElement("button");
 
-                    btn.innerText = `Import ${importData.importer.getType()} (${importData.files.length})`;
+                    btn.innerText = `Import as ${importData.importer.getType()} (${importData.files.length})`;
 
                     btn.addEventListener("click", async (e) => {
 

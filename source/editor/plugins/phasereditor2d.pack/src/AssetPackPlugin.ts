@@ -177,8 +177,8 @@ namespace phasereditor2d.pack {
                         command: {
                             id: CMD_ASSET_PACK_EDITOR_ADD_FILE,
                             icon: colibri.Platform.getWorkbench().getWorkbenchIcon(colibri.ICON_PLUS),
-                            name: "Add File",
-                            tooltip: "Add new file configuration",
+                            name: "Import File",
+                            tooltip: "Import a new file into the project by adding an entry for it to this Asset Pack.",
                             category: CAT_ASSET_PACK
                         },
                         handler: {
