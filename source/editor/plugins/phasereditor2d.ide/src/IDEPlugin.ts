@@ -117,6 +117,13 @@ namespace phasereditor2d.ide {
             this._externalEditorName = data.externalEditorName || "Alien";
         }
 
+        async requestProjectConfig() {
+
+            const data = await colibri.core.io.apiRequest("GetProjectConfig");
+
+            return data;
+        }
+
         getExternalEditorName() {
 
             return this._externalEditorName;
