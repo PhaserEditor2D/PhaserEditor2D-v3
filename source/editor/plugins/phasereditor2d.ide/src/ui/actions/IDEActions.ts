@@ -51,7 +51,7 @@ namespace phasereditor2d.ide.ui.actions {
 
                         colibri.Platform.onElectron(electron => {
 
-                            colibri.core.io.apiRequest("OpenBrowser", {});
+                            colibri.core.io.apiRequest("OpenBrowser", { url: config.playUrl });
 
                         }, () => {
 
