@@ -1,5 +1,12 @@
 # Change Log
 
+## v3.32.0 - Jan 12, 2022
+
+* Customize the editor with the new `phasereditor2d.config.json` file.
+* [#168](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/168) Down Arrow in Command Palette closes palette, moves select Image in Scene Editor.
+* [#171](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/pull/171) Consistent use of "Import" throughout editors.
+* [#169](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/pull/169) Ctrl+Digit2 -> Ctrl+2 to look like Ctrl+3 and Ctrl+4
+
 ## v3.31.2 - Dec 14, 2021
 
 * Update version.

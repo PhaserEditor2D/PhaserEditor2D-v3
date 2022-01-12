@@ -250,7 +250,8 @@ namespace phasereditor2d.pack.ui.editor {
             const manager = new controls.ToolbarManager(parent);
 
             manager.addAction({
-                text: "Add File",
+                text: "Import File",
+				tooltip: "Import a new file into the project by adding an entry for it to this Asset Pack.",
                 icon: colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_PLUS),
                 callback: () => this.openAddFileDialog()
             });

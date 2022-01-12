@@ -43,13 +43,15 @@ namespace phasereditor2d.ide.ui.actions {
 
                     testFunc: isNotWelcomeWindowScope,
 
-                    executeFunc: args => {
+                    executeFunc: async (args) => {
 
-                        const url = colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
+                        const config = await IDEPlugin.getInstance().requestProjectConfig();
+
+                        const url = config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
 
                         colibri.Platform.onElectron(electron => {
 
-                            colibri.core.io.apiRequest("OpenBrowser", {});
+                            colibri.core.io.apiRequest("OpenBrowser", { url: config.playUrl });
 
                         }, () => {
 
@@ -76,9 +78,12 @@ namespace phasereditor2d.ide.ui.actions {
 
                     testFunc: isNotWelcomeWindowScope,
 
-                    executeFunc: args => {
+                    executeFunc: async (args) => {
 
-                        const url = colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
+                        const config = await IDEPlugin.getInstance().requestProjectConfig();
+
+                        const url = config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
+
                         const dlg = new dialogs.PlayDialog(url);
                         dlg.create();
                     }
