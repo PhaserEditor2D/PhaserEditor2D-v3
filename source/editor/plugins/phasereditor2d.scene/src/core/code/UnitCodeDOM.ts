@@ -13,11 +13,6 @@ namespace phasereditor2d.scene.core.code {
             this._used = new Set();
         }
 
-        removeImports() {
-
-            this._imports = [];
-        }
-
         getImports() {
 
             return this._imports;

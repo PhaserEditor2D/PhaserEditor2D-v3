@@ -152,11 +152,6 @@ namespace phasereditor2d.scene.core.code {
                 unit.getBody().push(clsDecl);
             }
 
-            if (!settings.autoImport) {
-
-                unit.removeImports();
-            }
-
             return unit;
         }
 
