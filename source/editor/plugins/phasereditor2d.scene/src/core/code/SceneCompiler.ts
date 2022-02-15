@@ -57,10 +57,7 @@ namespace phasereditor2d.scene.core.code {
                 generator.setInitFieldInConstructor(settings.javaScriptInitFieldsInConstructor);
             }
 
-            if (settings.autoImport) {
-
-                generator.setGenerateImports(settings.autoImport);
-            }
+            generator.setGenerateImports(settings.autoImport);
 
             const fileExt = compileToJS ? "js" : "ts";
             const fileName = this._sceneFile.getNameWithoutExtension() + "." + fileExt;
