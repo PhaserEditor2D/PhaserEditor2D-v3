@@ -43,14 +43,14 @@ $ npm install
 ## 3) Run the build script
 
 ```
-$ ./build.sh
+$ npm run build
 ```
 
 It should run the TypeScript compiler (installed in the `node_modules`) to compile the client's source code.
 If you want to build the project each time you modify a file, you can run the `watch` script:
 
 ```
-$ ./watch.sh
+$ npm start
 ```
  
 ## 4) Run the server with the new client

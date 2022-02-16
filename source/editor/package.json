@@ -5,7 +5,8 @@
   "repository": "github:PhaserEditor2D/PhaserEditor2D-v3",
   "scripts": {
     "start": "tsc -b -w",
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "clean": "tsc -b -clean"
   },
   "devDependencies": {
     "tslint": "^6.1.3",
