@@ -4,6 +4,7 @@
 
 * [#190](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/190) Structuring the generated code so that vscode doesn't add imports to the section that gets overwritten.
 * [#185](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/185) Your project exceeded the maximum number of files allowed.
+* [#183](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/183) Component Option Type Scroll Issue.
 
 ## v3.32.0 - Jan 12, 2022
 
