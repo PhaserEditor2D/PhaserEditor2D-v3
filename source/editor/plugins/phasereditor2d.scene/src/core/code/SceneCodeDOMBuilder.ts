@@ -13,15 +13,25 @@ namespace phasereditor2d.scene.core.code {
         private _isPrefabScene: boolean;
         private _sceneFile: io.FilePath;
         private _unit: UnitCodeDOM;
+        private _fileNameMap: Map<string, io.FilePath>;
 
         constructor(scene: ui.Scene, file: io.FilePath) {
 
             this._scene = scene;
             this._sceneFile = file;
             this._isPrefabScene = this._scene.isPrefabSceneType();
+            this._fileNameMap = new Map();
         }
 
         async build(): Promise<UnitCodeDOM> {
+
+            colibri.ui.ide.Workbench.getWorkbench().getFileStorage().getRoot().visit(file => {
+
+                if (file.isFile()) {
+
+                    this._fileNameMap.set(file.getNameWithoutExtension(), file);
+                }
+            });
 
             const settings = this._scene.getSettings();
 
@@ -82,6 +92,17 @@ namespace phasereditor2d.scene.core.code {
                 if (superCls.startsWith("Phaser.")) {
 
                     unit.addImport("Phaser", "phaser");
+
+                } else {
+
+                    const superClsFile = this._fileNameMap.get(superCls);
+
+                    if (superClsFile) {
+
+                        const filePath = code.getImportPath(this._sceneFile, superClsFile);
+
+                        unit.addImport(superCls, filePath);
+                    }
                 }
 
                 if (this._isPrefabScene) {
@@ -150,11 +171,6 @@ namespace phasereditor2d.scene.core.code {
                 }
 
                 unit.getBody().push(clsDecl);
-            }
-
-            if (!settings.autoImport) {
-
-                unit.removeImports();
             }
 
             return unit;

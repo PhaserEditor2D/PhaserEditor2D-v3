@@ -125,7 +125,7 @@ namespace colibri.core.io {
 
             if (data.projectNumberOfFiles > data.maxNumberOfFiles) {
 
-                alert(`Your project exceeded the maximum number of files allowed (${data.projectNumberOfFiles} > ${data.maxNumberOfFiles})`);
+                this.showMaxNumberOfFilesDialog(data.projectNumberOfFiles, data.maxNumberOfFiles);
 
                 return;
 
@@ -261,6 +261,16 @@ namespace colibri.core.io {
             this.fireChange(change);
         }
 
+        private showMaxNumberOfFilesDialog(projectNumberOfFiles: number, maxNumberOfFiles: number) {
+
+            alert(`
+                    Your project exceeded the maximum number of files allowed (${projectNumberOfFiles} > ${maxNumberOfFiles}).
+                    Please, check the
+                    <a href="https://help.phasereditor2d.com/v3/misc/resources-filtering.html" target="_blank">Resources Filtering</a>
+                    documentation.
+                `);
+        }
+
         addChangeListener(listener: ChangeListenerFunc) {
 
             this._changeListeners.push(listener);
@@ -334,7 +344,7 @@ namespace colibri.core.io {
                     isFile: false
                 });
 
-                alert(`Your project exceeded the maximum number of files allowed (${data.projectNumberOfFiles} > ${data.maxNumberOfFiles})`);
+                this.showMaxNumberOfFilesDialog(data.projectNumberOfFiles, data.maxNumberOfFiles);
 
             } else {
 

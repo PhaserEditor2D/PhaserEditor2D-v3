@@ -4,11 +4,13 @@ namespace phasereditor2d.scene.core.code {
 
         private _unit: UnitCodeDOM;
         private _initFieldsInConstructor: boolean;
+        private _generateImports: boolean;
 
         constructor(unit: UnitCodeDOM) {
             super();
 
             this._unit = unit;
+            this._generateImports = true;
         }
 
         setInitFieldInConstructor(initFieldInConstructor: boolean) {
@@ -19,6 +21,16 @@ namespace phasereditor2d.scene.core.code {
         isInitFieldInConstructor() {
 
             return this._initFieldsInConstructor;
+        }
+
+        setGenerateImports(generateImports: boolean) {
+
+            this._generateImports = generateImports;
+        }
+
+        isGenerateImports() {
+
+            return this._generateImports;
         }
 
         protected internalGenerate(): void {
@@ -40,7 +52,10 @@ namespace phasereditor2d.scene.core.code {
 
         private generateUnitElement(elem: object) {
 
-            this.generateImports();
+            if (this._generateImports) {
+
+                this.generateImports();
+            }
 
             if (elem instanceof ClassDeclCodeDOM) {
 
@@ -65,10 +80,10 @@ namespace phasereditor2d.scene.core.code {
                 this.line(`import ${importDom.getElementName()} from "${importDom.getFilePath()}";`);
             }
 
-            if (imports.length > 0) {
+            this.section("/* START-USER-IMPORTS */", "/* END-USER-IMPORTS */", "\n");
 
-                this.line();
-            }
+            this.line();
+            this.line();
         }
 
         private generateClass(clsDecl: ClassDeclCodeDOM) {

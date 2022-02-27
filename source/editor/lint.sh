@@ -2,8 +2,11 @@
 
 for project_file in `ls plugins/*/src/tsconfig.json`
 do
+	
 	echo Linting project \"$project_file\"
-	./node_modules/.bin/tslint -c tslint.json -p $project_file
+
+	npx tslint -c tslint.json -p $project_file
+	
 	if [ $? -gt 0 ]
 	then
 		echo
@@ -17,4 +20,5 @@ do
 		echo Project in excelent shape! :\)
 		echo
 	fi
+
 done
