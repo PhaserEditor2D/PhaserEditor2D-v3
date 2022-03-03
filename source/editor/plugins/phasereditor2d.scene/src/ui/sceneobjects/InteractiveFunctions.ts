@@ -60,9 +60,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         const colorArray: Phaser.Display.Color[] = [];
 
-        renderTexture.snapshotPixel(0, 0, (c: Phaser.Display.Color) => {
-            colorArray[0] = c;
-        });
+        // catches an error caused by a Phaser bug.
+        try {
+
+            renderTexture.snapshotPixel(0, 0, (c: Phaser.Display.Color) => {
+                colorArray[0] = c;
+            });
+
+        } catch (e) {
+
+            console.log(e);
+
+            return x >= 0 && y >= 0 && x <= sprite.width && y <= sprite.height;
+        }
 
         renderTexture.destroy();
 
