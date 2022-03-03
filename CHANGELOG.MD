@@ -2,6 +2,10 @@
 
 ## development
 
+* Fixes TileSprite hit area computation in CANVAS mode. A work around Phaser's bug in RenderTexture.shapnshotPixel method.
+
+## v3.32.1 - Feb 27, 2022
+
 * Scene compiler: generates the import of the super class of a scene if it is also a scene.
 * [#190](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/190) Structuring the generated code so that vscode doesn't add imports to the section that gets overwritten.
 * [#185](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/185) Your project exceeded the maximum number of files allowed.

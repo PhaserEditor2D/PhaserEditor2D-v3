@@ -137,6 +137,16 @@ namespace phasereditor2d.scene.ui {
 
             for (const obj of list) {
 
+                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
+
+                    if (!obj.visible || obj.alpha === 0) {
+
+                        obj.destroy();
+
+                        continue;
+                    }
+                }
+
                 if (obj instanceof sceneobjects.Container) {
 
                     sceneobjects.BreakParentOperation.breakParent(this, [obj]);
