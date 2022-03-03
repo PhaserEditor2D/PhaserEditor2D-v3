@@ -81,8 +81,8 @@ namespace phasereditor2d.scene.ui.editor {
                     }
                 }
 
-                renderWidth = Math.min(1024, renderWidth);
-                renderHeight = Math.min(1024, renderHeight);
+                renderWidth = Math.max(1, Math.min(1024, renderWidth));
+                renderHeight = Math.max(1, Math.min(1024, renderHeight));
 
                 const scene = sprite.getEditorSupport().getScene();
 

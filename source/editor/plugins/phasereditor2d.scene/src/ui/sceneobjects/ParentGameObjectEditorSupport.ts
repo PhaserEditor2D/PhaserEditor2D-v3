@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
-            if (this.isPrefabInstance()) {
+            if (this.isPrefabInstance() && !this.isNestedPrefabInstance()) {
 
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
