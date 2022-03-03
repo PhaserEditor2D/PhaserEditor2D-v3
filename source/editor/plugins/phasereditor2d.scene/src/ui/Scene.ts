@@ -265,7 +265,10 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    this.getInputSortedObjects2(result, obj.getChildren());
+                    if (obj.visible && obj.alpha > 0) {
+
+                        this.getInputSortedObjects2(result, obj.getChildren());
+                    }
 
                 } else {
 
