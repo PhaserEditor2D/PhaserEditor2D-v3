@@ -5,8 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.VisibleSection";
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
-            super(page, VisibleSection.SECTION_ID, "Visible", false, true,
-                editor.properties.TAB_SECTION_DETAILS);
+            super(page, VisibleSection.SECTION_ID, "Visible", false, true);
         }
 
         getSectionHelpPath() {

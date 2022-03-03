@@ -4,13 +4,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class SceneGameObjectSection<T extends ISceneGameObjectLike> extends editor.properties.BaseSceneSection<T> {
 
-        createMenu(menu: controls.Menu) {
-
-            super.createMenu(menu);
-
-            this.createTabSectionMenuItem(menu, editor.properties.TAB_SECTION_DETAILS);
-        }
-
         isPrefabSceneObject(obj: any) {
 
             const support = GameObjectEditorSupport.getEditorSupport(obj);

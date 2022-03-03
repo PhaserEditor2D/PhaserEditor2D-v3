@@ -5,8 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class TintSection extends SceneGameObjectSection<IOriginLikeObject> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.TintSection", "Tint", false, true,
-                editor.properties.TAB_SECTION_DETAILS);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.TintSection", "Tint", false, true);
         }
 
         getSectionHelpPath() {
