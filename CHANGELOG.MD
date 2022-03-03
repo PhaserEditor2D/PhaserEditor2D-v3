@@ -3,6 +3,7 @@
 ## development
 
 * Fixes TileSprite hit area computation in CANVAS mode. A work around Phaser's bug in RenderTexture.shapnshotPixel method.
+* Fixes the scene thumbnail maker. Invisible containers/layers are not included in the thumbnail.
 
 ## v3.32.1 - Feb 27, 2022
 
