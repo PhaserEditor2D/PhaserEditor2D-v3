@@ -67,11 +67,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async performModification() {
 
-            const map = this.getScene().buildObjectIdMap();
+            const scene = this.getScene();
 
-            const displayList = this.getScene().sys.displayList;
+            const map = scene.buildObjectIdMap();
 
-            for (const obj of this.getEditor().getSelectedGameObjects()) {
+            const displayList = scene.sys.displayList;
+
+            const objects = this.getEditor().getSelectedGameObjects();
+
+            scene.sortObjectsByIndex(objects);
+
+            for (const obj of objects) {
 
                 const sprite = obj as unknown as Sprite;
 
