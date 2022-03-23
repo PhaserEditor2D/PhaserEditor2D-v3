@@ -95,9 +95,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             e.preventDefault();
 
-            const delta: number = e.deltaY;
-
-            this.zoom(delta, e.offsetX, e.offsetY);
+            this.zoom(e.deltaY, e.offsetX, e.offsetY);
         }
 
         private zoom(delta: number, offsetX: number, offsetY: number) {

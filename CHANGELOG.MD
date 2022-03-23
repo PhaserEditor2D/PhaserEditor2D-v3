@@ -2,6 +2,7 @@
 
 ## development
 
+* Scene Editor: prevents scrolling the whole page on macOS with scrolling inertia enabled.
 * Scene Editor: the Reset Zoom button restores the zoom and position (0, 0) of the camera. 
 * Scene Editor: fixes TileSprite hit area computation in CANVAS mode. A work around Phaser's bug in RenderTexture.shapnshotPixel method.
 * Scene Editor: fixes the scene thumbnail maker. Invisible containers/layers are not included in the thumbnail.
