@@ -73,6 +73,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getMousePosition() {
+            
             return this._mousePosition;
         }
 

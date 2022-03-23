@@ -102,6 +102,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             const zoomDelta = (delta > 0 ? 0.9 : 1.1);
 
+            console.log("zoom delta " + zoomDelta);
+
             const scene = this._editor.getScene();
 
             const camera = scene.getCamera();
@@ -110,12 +112,17 @@ namespace phasereditor2d.scene.ui.editor {
 
             if (delta === 0) {
 
+                // this is the case the Reset button (of the Zoom control) is pressed
+
                 camera.zoom = 1;
 
             } else {
 
-                camera.zoom *= zoomDelta;
+                let zoom = camera.zoom * zoomDelta;
+                camera.zoom = zoom;
             }
+
+            console.log("zoom " + camera.zoom);
 
             // update the camera matrix
             (camera as any).preRender();
@@ -135,9 +142,27 @@ namespace phasereditor2d.scene.ui.editor {
 
         private controlZoom(z: number) {
 
-            const b = this._editor.getCanvasContainer().getBoundingClientRect();
+            if (z === 0) {
 
-            this.zoom(-z, b.width / 2, b.height / 2);
+                // reset zoom
+
+                const { borderX, borderY } = this._editor.getScene().getSettings();
+
+                const camera = this.getCamera();
+                camera.scrollX = borderX;
+                camera.scrollY = borderY;
+                camera.zoom = 1;
+
+                this.updateState();
+
+                this._editor.repaint();
+
+            } else {
+
+                const b = this._editor.getCanvasContainer().getBoundingClientRect();
+
+                this.zoom(-z, b.width / 2, b.height / 2);
+            }
         }
 
         getState() {
