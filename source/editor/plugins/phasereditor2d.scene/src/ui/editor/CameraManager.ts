@@ -93,6 +93,8 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onWheel(e: WheelEvent): void {
 
+            e.preventDefault();
+
             const delta: number = e.deltaY;
 
             this.zoom(delta, e.offsetX, e.offsetY);
@@ -102,27 +104,14 @@ namespace phasereditor2d.scene.ui.editor {
 
             const zoomDelta = (delta > 0 ? 0.9 : 1.1);
 
-            console.log("zoom delta " + zoomDelta);
-
             const scene = this._editor.getScene();
 
             const camera = scene.getCamera();
 
             const point1 = camera.getWorldPoint(offsetX, offsetY);
 
-            if (delta === 0) {
-
-                // this is the case the Reset button (of the Zoom control) is pressed
-
-                camera.zoom = 1;
-
-            } else {
-
-                let zoom = camera.zoom * zoomDelta;
-                camera.zoom = zoom;
-            }
-
-            console.log("zoom " + camera.zoom);
+            let zoom = camera.zoom * zoomDelta;
+            camera.zoom = zoom;
 
             // update the camera matrix
             (camera as any).preRender();
