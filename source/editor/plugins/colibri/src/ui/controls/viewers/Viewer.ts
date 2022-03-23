@@ -358,7 +358,10 @@ namespace colibri.ui.controls.viewers {
 
         private onWheel(e: WheelEvent): void {
 
+            e.preventDefault();
+
             if (!e.shiftKey) {
+
                 return;
             }
 
