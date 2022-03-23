@@ -2,14 +2,15 @@
 
 ## development
 
-* Scene Editor: prevents scrolling the whole page on macOS with scrolling inertia enabled.
-* Scene Editor: the Reset Zoom button restores the zoom and position (0, 0) of the camera. 
 * Scene Editor: fixes TileSprite hit area computation in CANVAS mode. A work around Phaser's bug in RenderTexture.shapnshotPixel method.
 * Scene Editor: fixes the scene thumbnail maker. Invisible containers/layers are not included in the thumbnail.
 * Scene Editor: fixes viewer rendering of objects with 0 width/height. Like a Text game object with a `""` value.
 * Scene Editor: fixes picking of objects under hidden parents.
 * Scene Editor: fixes ordering of objects when moving to a new parent.
 * Scene Editor: removes the Details sub-tab from the Inspector view.
+* Scene Editor: the Reset Zoom button restores the zoom and position (0, 0) of the camera. 
+* Prevents intertia scrolling in Viewers.
+* Scene Editor: prevents scrolling the whole page on macOS with scrolling inertia enabled.
 
 ## v3.32.1 - Feb 27, 2022
 
