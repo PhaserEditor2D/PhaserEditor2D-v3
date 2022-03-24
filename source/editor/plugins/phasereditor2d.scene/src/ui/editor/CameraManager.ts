@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const zoomIcon = new controls.ZoomControl({ showReset: true });
 
-            zoomIcon.setCallback(z => this.controlZoom(z));
+            zoomIcon.setCallback(z => this.controlZoom(z * 100));
 
             this._editor.getCanvasContainer().appendChild(zoomIcon.getElement());
         }
@@ -98,9 +98,7 @@ namespace phasereditor2d.scene.ui.editor {
             this.zoom(e.deltaY, e.offsetX, e.offsetY);
         }
 
-        private zoom(delta: number, offsetX: number, offsetY: number) {
-
-            const zoomDelta = (delta > 0 ? 0.9 : 1.1);
+        private zoom(deltaY: number, offsetX: number, offsetY: number) {
 
             const scene = this._editor.getScene();
 
@@ -108,8 +106,15 @@ namespace phasereditor2d.scene.ui.editor {
 
             const point1 = camera.getWorldPoint(offsetX, offsetY);
 
-            let zoom = camera.zoom * zoomDelta;
-            camera.zoom = zoom;
+            const scrollWidth = Math.abs(deltaY) * 2;
+
+            const screenWidth = this._editor.getElement().getBoundingClientRect().width;
+
+            const zoomDelta = scrollWidth / (screenWidth + scrollWidth);
+
+            const zoomFactor = (deltaY > 0 ? 1 - zoomDelta : 1 + zoomDelta);
+
+            camera.zoom = camera.zoom * zoomFactor;
 
             // update the camera matrix
             (camera as any).preRender();
