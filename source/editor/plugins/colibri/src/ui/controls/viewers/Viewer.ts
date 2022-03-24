@@ -365,14 +365,19 @@ namespace colibri.ui.controls.viewers {
                 return;
             }
 
-            if (e.deltaY < 0) {
+            this.setCellSize(this.getCellSize() - e.deltaY / 2);
 
-                this.setCellSize(this.getCellSize() + ROW_HEIGHT);
+            // if (e.deltaY < 0) {
 
-            } else if (this._cellSize > ICON_SIZE) {
+            //     // this.setCellSize(this.getCellSize() + ROW_HEIGHT);
+            //     this.setCellSize(this.getCellSize() + Math.abs(e.deltaY));
+            
 
-                this.setCellSize(this.getCellSize() - ROW_HEIGHT);
-            }
+            // } else if (this._cellSize > ICON_SIZE) {
+
+            //     // this.setCellSize(this.getCellSize() - ROW_HEIGHT);
+            //     this.setCellSize(this.getCellSize() - Math.abs(e.deltaY));
+            // }
 
             this.saveCellSize();
 
