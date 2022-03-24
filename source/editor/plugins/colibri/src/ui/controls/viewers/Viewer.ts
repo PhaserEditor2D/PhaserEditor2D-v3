@@ -369,14 +369,11 @@ namespace colibri.ui.controls.viewers {
 
             // if (e.deltaY < 0) {
 
-            //     // this.setCellSize(this.getCellSize() + ROW_HEIGHT);
-            //     this.setCellSize(this.getCellSize() + Math.abs(e.deltaY));
-            
+            //    this.setCellSize(this.getCellSize() + ROW_HEIGHT);
 
             // } else if (this._cellSize > ICON_SIZE) {
 
-            //     // this.setCellSize(this.getCellSize() - ROW_HEIGHT);
-            //     this.setCellSize(this.getCellSize() - Math.abs(e.deltaY));
+            //     this.setCellSize(this.getCellSize() - ROW_HEIGHT);
             // }
 
             this.saveCellSize();
