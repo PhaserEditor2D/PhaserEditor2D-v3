@@ -575,6 +575,11 @@ namespace phasereditor2d.scene.ui.editor {
             return this.getSelection().filter(obj => sceneobjects.ScenePlainObjectEditorSupport.hasEditorSupport(obj));
         }
 
+        getCameraManager() {
+
+            return this._cameraManager;
+        }
+
         getDropManager() {
 
             return this._dropManager;

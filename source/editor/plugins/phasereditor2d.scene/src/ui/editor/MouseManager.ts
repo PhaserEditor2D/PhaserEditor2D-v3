@@ -36,7 +36,8 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onMouseDown(e: MouseEvent) {
 
-            if (e.button !== 0) {
+            if (e.button !== 0 || this._editor.getCameraManager().isPanning()) {
+
                 return;
             }
 
