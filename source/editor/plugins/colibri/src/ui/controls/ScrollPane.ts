@@ -91,7 +91,7 @@ namespace colibri.ui.controls {
 
             let y = this.getViewer().getScrollY();
 
-            y += e.deltaY < 0 ? 30 : -30;
+            y -= e.deltaY;
 
             this.setClientScrollY(y);
         }
