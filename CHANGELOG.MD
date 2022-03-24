@@ -11,6 +11,7 @@
 * Scene Editor: the Reset Zoom button restores the zoom and position (0, 0) of the camera. 
 * Prevents intertia scrolling in Viewers.
 * Scene Editor: prevents scrolling the whole page on macOS with scrolling inertia enabled.
+* Scene Editor: fixes panning with ALT key when the pointer is close to the Translate tool handlers.
 
 ## v3.32.1 - Feb 27, 2022
 
