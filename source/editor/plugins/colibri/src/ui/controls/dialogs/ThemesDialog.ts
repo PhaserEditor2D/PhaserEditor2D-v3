@@ -9,7 +9,7 @@ namespace colibri.ui.controls.dialogs {
         constructor() {
             super(new ThemeViewer(), false);
 
-            this.setSize(200, 300, true);
+            this.setSize(400, 400, true);
         }
 
         create() {

@@ -24,8 +24,6 @@ namespace phasereditor2d.scene.ui.dialogs {
             super(AddObjectDialog.createViewer(editor), true);
 
             this._editor = editor;
-
-            this.setSize(undefined, window.innerHeight / 2);
         }
 
         create() {

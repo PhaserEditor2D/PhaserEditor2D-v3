@@ -29,6 +29,7 @@ namespace colibri.ui.controls.dialogs {
         }
 
         setProgress(progress: number) {
+
             this._progressElement.style.width = progress * 100 + "%";
         }
     }

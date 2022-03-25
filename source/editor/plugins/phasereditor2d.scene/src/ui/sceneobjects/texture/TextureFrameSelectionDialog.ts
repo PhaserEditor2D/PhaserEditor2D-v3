@@ -36,7 +36,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._callback = callback;
             this._atlasKey = atlasKey;
 
-            this.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
+            this.setSize(900, 500, true);
         }
 
         create() {

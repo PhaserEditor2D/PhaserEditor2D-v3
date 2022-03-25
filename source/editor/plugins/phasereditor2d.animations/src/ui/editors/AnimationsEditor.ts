@@ -255,7 +255,7 @@ namespace phasereditor2d.animations.ui.editors {
             viewer.expandRoots();
 
             const dlg = new controls.dialogs.ViewerDialog(viewer, true);
-            dlg.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
+            dlg.setSize(1000, 700);
             dlg.create();
             dlg.setTitle("Select Frames");
             dlg.addOpenButton("Select", sel => {

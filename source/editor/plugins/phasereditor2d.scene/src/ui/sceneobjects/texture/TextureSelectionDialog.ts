@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editor = editor;
             this._callback = callback;
 
-            this.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
+            this.setSize(900, 500, true);
         }
 
         create() {

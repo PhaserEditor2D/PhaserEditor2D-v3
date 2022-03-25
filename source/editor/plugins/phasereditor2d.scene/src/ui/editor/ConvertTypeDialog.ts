@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._editor = editor;
 
-            this.setSize(window.innerWidth * 2 / 3, window.innerHeight * 2 / 3);
+            this.setSize(900, 500, true);
         }
 
         static canConvert(editor: SceneEditor) {

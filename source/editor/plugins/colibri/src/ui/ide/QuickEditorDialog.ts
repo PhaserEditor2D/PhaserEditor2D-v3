@@ -29,7 +29,7 @@ namespace colibri.ui.ide {
             this._file = file;
             this._editorState = editorState;
 
-            this.setSize(Math.floor(window.innerWidth * 0.5), Math.floor(window.innerHeight * 0.5));
+            this.setSize(1100, 800, true);
         }
 
         goFront() {

@@ -271,7 +271,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const dlg = new controls.dialogs.ViewerDialog(viewer, false);
 
-                    dlg.setSize(undefined, Math.floor(window.innerHeight * 0.4));
+                    dlg.setSize(undefined, 400, true);
 
                     dlg.create();
 

@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._finder = finder;
 
-            this.setSize(undefined, window.innerHeight * 0.5);
+            this.setSize(undefined, 500, true);
         }
 
         getFinder() {

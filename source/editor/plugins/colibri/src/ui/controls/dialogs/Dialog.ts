@@ -19,7 +19,7 @@ namespace colibri.ui.controls.dialogs {
 
             this._closeWithEscapeKey = true;
 
-            this.setSize(400 * controls.DEVICE_PIXEL_RATIO, 300 * controls.DEVICE_PIXEL_RATIO);
+            this.setSize(400, 300, true);
 
             this._parentDialog = Dialog._dialogs.length === 0 ?
                 null : Dialog._dialogs[Dialog._dialogs.length - 1];
@@ -198,16 +198,30 @@ namespace colibri.ui.controls.dialogs {
             });
         }
 
-        setSize(width: number, height: number, adjustToDPR = false) {
+        setSize(width: number, height: number, keep1080pRatio = false) {
 
             if (width !== undefined) {
 
-                this._width = Math.floor(width * (adjustToDPR ? controls.DEVICE_PIXEL_RATIO : 1));
+                if (keep1080pRatio) {
+
+                    this._width = Math.max(width, Math.floor(width / 1920 * window.innerWidth));
+
+                } else {
+
+                    this._width = width;
+                }
             }
 
             if (height !== undefined) {
 
-                this._height = Math.floor(height * (adjustToDPR ? controls.DEVICE_PIXEL_RATIO : 1));
+                if (keep1080pRatio) {
+
+                    this._height = Math.max(height, Math.floor(height / 1080 * window.innerHeight));
+
+                } else {
+
+                    this._height = height;
+                }
             }
 
             const margin = window.innerHeight * 0.2;

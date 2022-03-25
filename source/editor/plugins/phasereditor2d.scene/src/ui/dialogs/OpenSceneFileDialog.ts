@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.dialogs {
         constructor() {
             super(new controls.viewers.TreeViewer("phasereditor2d.scene.ui.dialogs.OpenSceneFileDialog"), true);
 
-            this.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
+            this.setSize(900, 500, true);
         }
 
         create() {
