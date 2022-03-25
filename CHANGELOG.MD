@@ -13,6 +13,7 @@
 * Scene Editor: prevents scrolling the whole page on macOS with scrolling inertia enabled.
 * Scene Editor: fixes panning with ALT key when the pointer is close to the Translate tool handlers.
 * Scene Editor: fixes selection changed when panning with the ALT key.
+* Scene Editor: fixes command for opening a scene file in macOS (⌘+⌥+O).
 
 ## v3.32.1 - Feb 27, 2022
 
