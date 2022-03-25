@@ -299,10 +299,10 @@ namespace phasereditor2d.scene.ui.editor {
             // init managers and factories
 
             this._dropManager = new DropManager(this);
-            this._cameraManager = new CameraManager(this);
             this._selectionManager = new SelectionManager(this);
             this._toolsManager = new tools.SceneToolsManager(this);
             this._mouseManager = new MouseManager(this);
+            this._cameraManager = new CameraManager(this);
             this._clipboardManager = new ClipboardManager(this);
             this._layoutToolsManager = new LayoutToolsManager(this);
 

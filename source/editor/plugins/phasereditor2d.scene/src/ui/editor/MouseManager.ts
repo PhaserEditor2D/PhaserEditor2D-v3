@@ -36,7 +36,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onMouseDown(e: MouseEvent) {
 
-            if (e.button !== 0 || this._editor.getCameraManager().isPanning()) {
+            if (e.button !== 0 || e.altKey) {
 
                 return;
             }
@@ -88,6 +88,11 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onMouseMove(e: MouseEvent) {
 
+            if (e.button !== 0 || this._editor.getCameraManager().isAltPanning()) {
+
+                return;
+            }
+
             this._mousePosition.x = e.offsetX;
             this._mousePosition.y = e.offsetY;
 
@@ -104,6 +109,11 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private onMouseUp(e: MouseEvent) {
+
+            if (e.button !== 0 || e.altKey) {
+
+                return;
+            }
 
             const toolsManager = this._editor.getToolsManager();
 

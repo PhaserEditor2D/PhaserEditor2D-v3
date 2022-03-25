@@ -40,12 +40,8 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private getCamera() {
+
             return this._editor.getScene().getCamera();
-        }
-
-        isPanning() {
-
-            return this._dragStartPoint ? true : false;
         }
 
         private onMouseDown(e: MouseEvent): void {
@@ -92,7 +88,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private onMouseUp(e: MouseEvent) {
-            
+
             this._dragStartPoint = null;
             this._dragStartCameraScroll = null;
         }
