@@ -215,7 +215,7 @@ namespace colibri.ui.ide.actions {
                 },
                 keys: {
                     control: true,
-                    key: "K"
+                    key: "KeyK"
                 }
             });
         }
@@ -277,7 +277,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_EDITOR_CLOSE, new KeyMatcher({
                 control: true,
-                key: "Q"
+                key: "KeyQ"
             }));
 
             // close all editors
@@ -296,7 +296,7 @@ namespace colibri.ui.ide.actions {
             manager.addKeyBinding(CMD_EDITOR_CLOSE_ALL, new KeyMatcher({
                 control: true,
                 shift: true,
-                key: "Q"
+                key: "KeyQ"
             }));
         }
 
@@ -320,7 +320,7 @@ namespace colibri.ui.ide.actions {
                     }
                 },
                 keys: {
-                    key: "C"
+                    key: "KeyC"
                 }
             })
 
@@ -344,7 +344,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_SELECT_ALL, new KeyMatcher({
                 control: true,
-                key: "A"
+                key: "KeyA"
             }));
 
             // collapse expand branch
@@ -419,7 +419,7 @@ namespace colibri.ui.ide.actions {
 
             manager.addKeyBinding(CMD_UNDO, new KeyMatcher({
                 control: true,
-                key: "Z"
+                key: "KeyZ"
             }));
 
             // redo
@@ -440,7 +440,7 @@ namespace colibri.ui.ide.actions {
             manager.addKeyBinding(CMD_REDO, new KeyMatcher({
                 control: true,
                 shift: true,
-                key: "Z"
+                key: "KeyZ"
             }));
 
             // update current editor
@@ -455,7 +455,7 @@ namespace colibri.ui.ide.actions {
             manager.addKeyBinding(CMD_UPDATE_CURRENT_EDITOR, new KeyMatcher({
                 control: true,
                 alt: true,
-                key: "U"
+                key: "KeyU"
             }));
         }
 
@@ -485,7 +485,7 @@ namespace colibri.ui.ide.actions {
                 },
                 keys: {
                     control: true,
-                    key: "S",
+                    key: "KeyS",
                     filterInputElements: false
                 }
             });
@@ -531,7 +531,7 @@ namespace colibri.ui.ide.actions {
                 },
                 keys: {
                     control: true,
-                    key: "C"
+                    key: "KeyC"
                 }
             });
 
@@ -544,7 +544,7 @@ namespace colibri.ui.ide.actions {
                 },
                 keys: {
                     control: true,
-                    key: "X"
+                    key: "KeyX"
                 }
             });
 
@@ -557,7 +557,7 @@ namespace colibri.ui.ide.actions {
                 },
                 keys: {
                     control: true,
-                    key: "V"
+                    key: "KeyV"
                 }
             });
         }

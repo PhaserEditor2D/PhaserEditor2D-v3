@@ -37,7 +37,7 @@ namespace phasereditor2d.files.ui.actions {
             manager.addKeyBinding(CMD_NEW_FILE, new colibri.ui.ide.commands.KeyMatcher({
                 control: true,
                 alt: true,
-                key: "N",
+                key: "KeyN",
                 filterInputElements: false
             }));
 
@@ -72,7 +72,7 @@ namespace phasereditor2d.files.ui.actions {
                 },
                 keys: {
                     control: true,
-                    key: "P"
+                    key: "KeyP"
                 },
                 handler: {
                     executeFunc: args => {

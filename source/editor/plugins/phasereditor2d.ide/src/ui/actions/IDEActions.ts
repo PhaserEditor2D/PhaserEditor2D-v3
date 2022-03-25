@@ -110,7 +110,7 @@ namespace phasereditor2d.ide.ui.actions {
                 keys: {
                     control: true,
                     alt: true,
-                    key: "R"
+                    key: "KeyR"
                 }
             });
 
@@ -131,7 +131,7 @@ namespace phasereditor2d.ide.ui.actions {
                 keys: {
                     control: true,
                     alt: true,
-                    key: "B"
+                    key: "KeyB"
                 }
             });
 
@@ -147,7 +147,7 @@ namespace phasereditor2d.ide.ui.actions {
                         tooltip: "Open the selected file (or project root) in the OS file manager."
                     },
                     keys: {
-                        key: "L",
+                        key: "KeyL",
                         control: true,
                         alt: true
                     },
@@ -201,7 +201,7 @@ namespace phasereditor2d.ide.ui.actions {
                     keys: {
                         control: true,
                         alt: true,
-                        key: "U"
+                        key: "KeyU"
                     },
                     handler: {
                         executeFunc: args => IDEPlugin.getInstance().openProjectInVSCode()

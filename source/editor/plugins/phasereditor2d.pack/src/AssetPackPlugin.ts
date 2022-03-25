@@ -186,7 +186,7 @@ namespace phasereditor2d.pack {
                             executeFunc: args => (args.activeEditor as ui.editor.AssetPackEditor).openAddFileDialog()
                         },
                         keys: {
-                            key: "A"
+                            key: "KeyA"
                         }
                     });
                 }));

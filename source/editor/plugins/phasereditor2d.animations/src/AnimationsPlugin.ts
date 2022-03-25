@@ -105,7 +105,7 @@ namespace phasereditor2d.animations {
                     }
                 },
                 keys: {
-                    key: "A"
+                    key: "KeyA"
                 }
             });
 

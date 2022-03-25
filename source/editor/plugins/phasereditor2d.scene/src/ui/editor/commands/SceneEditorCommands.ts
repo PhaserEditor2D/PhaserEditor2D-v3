@@ -143,7 +143,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "A"
+                    key: "KeyA"
                 }
             })
         }
@@ -325,7 +325,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "E"
+                    key: "KeyE"
                 }
             });
 
@@ -347,7 +347,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "W"
+                    key: "KeyW"
                 }
             });
         }
@@ -436,7 +436,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "X"
+                    key: "KeyX"
                 }
             });
 
@@ -467,7 +467,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "M"
+                    key: "KeyM"
                 }
             });
         }
@@ -778,7 +778,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     )
                 },
                 keys: {
-                    key: "J"
+                    key: "KeyJ"
                 }
             });
 
@@ -799,7 +799,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     )
                 },
                 keys: {
-                    key: "T",
+                    key: "KeyT",
                     shift: true
                 }
             });
@@ -832,7 +832,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     )
                 },
                 keys: {
-                    key: "B",
+                    key: "KeyB",
                     shift: true
                 }
             });
@@ -872,7 +872,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "P"
+                    key: "KeyP"
                 }
             });
 
@@ -922,7 +922,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "N"
+                    key: "KeyN"
                 }
             });
 
@@ -978,7 +978,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     shift: true,
-                    key: "P"
+                    key: "KeyP"
                 }
             });
 
@@ -1029,7 +1029,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "L"
+                    key: "KeyL"
                 }
             });
 
@@ -1082,7 +1082,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "F"
+                    key: "KeyF"
                 }
             });
 
@@ -1171,7 +1171,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "Q"
+                    key: "KeyQ"
                 }
             });
 
@@ -1206,7 +1206,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }, keys: {
                         control: true,
                         alt: true,
-                        key: "E"
+                        key: "KeyE"
                     }
                 });
             }
@@ -1263,7 +1263,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         .getToolsManager().swapTool(ui.sceneobjects.TranslateTool.ID)
                 },
                 keys: {
-                    key: "T"
+                    key: "KeyT"
                 }
             });
 
@@ -1281,7 +1281,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         .getToolsManager().swapTool(ui.sceneobjects.RotateTool.ID)
                 },
                 keys: {
-                    key: "R"
+                    key: "KeyR"
                 }
             });
 
@@ -1299,7 +1299,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         .getToolsManager().swapTool(ui.sceneobjects.ScaleTool.ID)
                 },
                 keys: {
-                    key: "S"
+                    key: "KeyS"
                 }
             });
 
@@ -1317,7 +1317,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         .getToolsManager().swapTool(ui.sceneobjects.OriginTool.ID)
                 },
                 keys: {
-                    key: "O"
+                    key: "KeyO"
                 }
             });
 
@@ -1336,7 +1336,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     shift: true,
-                    key: "S"
+                    key: "KeyS"
                 }
             });
 
@@ -1374,7 +1374,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         .getToolsManager().swapTool(ui.sceneobjects.SizeTool.ID)
                 },
                 keys: {
-                    key: "Z"
+                    key: "KeyZ"
                 }
             });
         }
@@ -1439,7 +1439,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "V"
+                    key: "KeyV"
                 }
             });
         }

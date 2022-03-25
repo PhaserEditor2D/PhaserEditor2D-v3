@@ -55,7 +55,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     }
                 },
                 keys: {
-                    key: "A"
+                    key: "KeyA"
                 }
             });
 
@@ -129,7 +129,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     }
                 },
                 keys: {
-                    key: "Q"
+                    key: "KeyQ"
                 }
             });
 
@@ -177,7 +177,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     keys: {
                         control: true,
                         alt: true,
-                        key: "E"
+                        key: "KeyE"
                     }
                 });
             }

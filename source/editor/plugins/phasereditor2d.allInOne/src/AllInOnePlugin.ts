@@ -45,7 +45,7 @@ namespace phasereditor2d.allInOne {
                     keys: {
                         control: true,
                         alt: true,
-                        key: "J"
+                        key: "KeyJ"
                     }
                 });
 
@@ -67,7 +67,7 @@ namespace phasereditor2d.allInOne {
                     keys: {
                         control: true,
                         alt: true,
-                        key: "C"
+                        key: "KeyC"
                     }
                 });
 
