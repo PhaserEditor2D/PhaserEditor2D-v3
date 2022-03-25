@@ -299,7 +299,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 keys: {
                     control: true,
                     alt: true,
-                    key: "O"
+                    key: "KeyO"
                 }
             });
         }

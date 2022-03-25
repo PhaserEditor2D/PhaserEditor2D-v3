@@ -66,6 +66,7 @@ namespace colibri.ui.ide.commands {
         private onKeyDown(event: KeyboardEvent): void {
 
             if (event.isComposing) {
+
                 return;
             }
 
