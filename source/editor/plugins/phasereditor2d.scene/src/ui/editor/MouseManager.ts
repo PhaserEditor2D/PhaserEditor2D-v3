@@ -88,7 +88,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private onMouseMove(e: MouseEvent) {
 
-            if (e.button !== 0 || this._editor.getCameraManager().isAltPanning()) {
+            if (e.button !== 0 || e.altKey) {
 
                 return;
             }
