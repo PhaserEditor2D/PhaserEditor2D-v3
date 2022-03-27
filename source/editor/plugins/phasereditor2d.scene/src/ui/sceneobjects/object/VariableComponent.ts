@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import code = scene.core.code;
+
     export class VariableComponent extends Component<ISceneGameObjectLike> {
 
         static label: IProperty<ISceneGameObjectLike> = {
@@ -9,6 +11,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             local: true,
             getValue: obj => obj.getEditorSupport().getLabel(),
             setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
+        };
+
+        static useGameObjectName: IProperty<ISceneGameObject> = {
+            name: "useGameObjectName",
+            label: "GO Name",
+            tooltip: "Also set the Game Object's name",
+            defValue: false,
+            local: true,
+            getValue: obj => obj.getEditorSupport().isUseGameObjectName(),
+            setValue: (obj, value) => obj.getEditorSupport().setUseGameObjectName(value)
         };
 
         static scope: IEnumProperty<ISceneGameObjectLike, ObjectScope> = {
@@ -25,12 +37,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: ISceneGameObjectLike) {
             super(obj, [
                 VariableComponent.label,
+                VariableComponent.useGameObjectName,
                 VariableComponent.scope
             ]);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
-            // nothing
+
+            if (this.getEditorSupport().isUseGameObjectName()) {
+
+                const dom = new code.AssignPropertyCodeDOM("name", args.objectVarName);
+ 
+                dom.valueLiteral(this.getEditorSupport().getLabel());
+
+                args.statements.push(dom);
+            }
         }
     }
 }

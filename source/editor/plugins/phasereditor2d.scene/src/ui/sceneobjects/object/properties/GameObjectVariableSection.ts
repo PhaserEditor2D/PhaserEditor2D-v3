@@ -43,6 +43,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             {
+                // GameObject name
+
+                this.createBooleanField(comp, VariableComponent.useGameObjectName, false);
+            }
+
+            {
                 // Type
 
                 this.createLabel(comp, "Type", "The type of the object.");

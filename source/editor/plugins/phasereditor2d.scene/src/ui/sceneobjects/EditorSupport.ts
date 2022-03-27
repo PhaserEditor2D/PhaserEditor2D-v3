@@ -14,6 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _object: T;
         private _label: string;
+        private _useGameObjectName: boolean;
         private _scope: ObjectScope;
         private _scene: Scene;
 
@@ -22,6 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._object = obj;
             this._scene = scene;
             this._label = label;
+            this._useGameObjectName = false;
             this._scope = ObjectScope.METHOD;
 
             this.setId(Phaser.Utils.String.UUID());
@@ -76,6 +78,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         setLabel(label: string) {
 
             this._label = label;
+        }
+
+        isUseGameObjectName() {
+
+            return this._useGameObjectName;
+        }
+
+        setUseGameObjectName(useGameObjectName: boolean) {
+
+            this._useGameObjectName = useGameObjectName;
         }
 
         getScope() {

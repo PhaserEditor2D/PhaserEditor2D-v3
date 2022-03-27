@@ -1,3 +1,4 @@
 *.tsbuildinfo
 node_modules/
 plugins/*/_out/**
+.vscode
