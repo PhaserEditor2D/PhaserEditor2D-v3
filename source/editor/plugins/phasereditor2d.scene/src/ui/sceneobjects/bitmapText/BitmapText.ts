@@ -43,5 +43,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return this._editorSupport;
         }
+
+        /**
+         * For compatibility with other game objects. It is used for LayoutExtension.
+         */
+        get displayWidth() {
+
+            return this.width * this.scaleX;
+        }
+
+        /**
+         * For compatibility with other game objects. It is used for LayoutExtension.
+         */
+        get displayHeight() {
+
+            return this.height * this.scaleY;
+        }
     }
 }
