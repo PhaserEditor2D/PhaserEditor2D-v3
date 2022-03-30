@@ -49,10 +49,20 @@ namespace phasereditor2d.scene.core.json {
         getPhaserType(): string {
 
             if (this._prefabSer) {
+
                 return this._prefabSer.getPhaserType();
             }
 
             const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(this._data.type);
+
+            if (!ext) {
+
+                const msg = `Cannot find extension for ObjectType '${this._data.type}'`;
+
+                alert(msg);
+                
+                throw new Error(msg);
+            }
 
             return ext.getPhaserTypeName();
         }
