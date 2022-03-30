@@ -17,6 +17,7 @@
 * [#200](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/200) BitmapText aligned cause NaN position.
 * [#195](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/195) The new GO Name parameter.
 * [#182](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/182) macOS error: exec: "code": Executable file not found in $PATH.
+* Scene Editor: fixes Text Content's textarea parameter in Inspector view.
 
 ## v3.32.1 - Feb 27, 2022
 
