@@ -33,8 +33,8 @@ namespace colibri.ui.controls {
         private render() {
 
             const ctx = this._ctx;
-            const w = this._canvas.width;
-            const h = this._canvas.height;
+            const w = this._canvas.width / (window.devicePixelRatio || 1);
+            const h = this._canvas.height / (window.devicePixelRatio || 1);
             const margin = w * 0.4;
             const y = h * 0.5;
             const f = Math.min(1, this._progress / this._total);
