@@ -19,6 +19,7 @@
 * [#182](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/182) macOS error: exec: "code": Executable file not found in $PATH.
 * Scene Editor: fixes Text Content's textarea parameter in Inspector view.
 * Scene Editor: adjusts the loading message position to the DPR.
+* Scene Editor: adds missing `light/bitmapfont-type@2x.png` icon.
 
 ## v3.32.1 - Feb 27, 2022
 
