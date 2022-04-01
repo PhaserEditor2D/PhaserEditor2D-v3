@@ -101,6 +101,7 @@ namespace colibri.ui.controls {
             let canvas = document.getElementById("__drag__canvas") as HTMLCanvasElement;
 
             if (!canvas) {
+
                 canvas = document.createElement("canvas");
                 canvas.setAttribute("id", "__drag__canvas");
                 canvas.style.imageRendering = "crisp-edges";
@@ -109,7 +110,7 @@ namespace colibri.ui.controls {
                 canvas.style.width = canvas.width + "px";
                 canvas.style.height = canvas.height + "px";
                 canvas.style.position = "fixed";
-                canvas.style.left = -100 + "px";
+                canvas.style.left = "-1000px";
                 document.body.appendChild(canvas);
             }
 
@@ -119,7 +120,26 @@ namespace colibri.ui.controls {
 
             render(ctx, canvas.width, canvas.height);
 
-            e.dataTransfer.setDragImage(canvas, 10, 10);
+            if (this.isSafariBrowser()) {
+
+                const image = document.createElement("img");
+                image.style.position = "fixed";
+                image.style.left = "-1000px";
+                image.src = canvas.toDataURL();
+
+                e.dataTransfer.setDragImage(image, 10, 10);
+
+            } else {
+
+                e.dataTransfer.setDragImage(canvas, 10, 10);
+            }
+        }
+
+        private static _isSafari = navigator.vendor.toLowerCase().indexOf("apple") >= 0;
+
+        static isSafariBrowser() {
+
+            return this._isSafari;
         }
 
         static getApplicationDragData() {
@@ -133,6 +153,7 @@ namespace colibri.ui.controls {
         }
 
         static setApplicationDragData(data: any[]) {
+
             this._applicationDragData = data;
         }
 
