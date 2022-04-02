@@ -28,6 +28,22 @@ namespace colibri.ui.controls {
             this.initDragCanvas();
         }
 
+        static addTabStop() {
+
+            // this prevents Safari to include the address bar in the tab order.
+
+            const tabStop = document.createElement("input");
+            tabStop.style.position = "fixed";
+            tabStop.style.left = "-1000px";
+            tabStop.onfocus = () => {
+
+                console.log("catch last tabIndex, focus first element");
+                (document.getElementsByTagName("input")[0] as HTMLElement).focus();
+            };
+
+            document.body.appendChild(tabStop);
+        }
+
         static getMouseDownElement() {
 
             return this._mouseDownElement;

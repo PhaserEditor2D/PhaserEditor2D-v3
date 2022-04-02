@@ -150,6 +150,8 @@ namespace colibri.ui.ide {
 
             this.initEvents();
 
+            ui.controls.Controls.addTabStop();
+
             console.log("%cWorkbench: started.", "color:green");
 
             for (const plugin of Platform.getPlugins()) {
