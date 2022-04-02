@@ -20,6 +20,7 @@
 * Scene Editor: fixes Text Content's textarea parameter in Inspector view.
 * Scene Editor: adjusts the loading message position to the DPR.
 * Scene Editor: adds missing `light/bitmapfont-type@2x.png` icon.
+* Viewer: fixes drag image on Safari.
 
 ## v3.32.1 - Feb 27, 2022
 
