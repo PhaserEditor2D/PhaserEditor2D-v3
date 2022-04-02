@@ -16,13 +16,16 @@ namespace colibri.ui.controls {
         private static _images: Map<string, IImage> = new Map();
         private static _applicationDragData: any[] = null;
         private static _mouseDownElement: HTMLElement;
+        private static _dragCanvas: HTMLCanvasElement;
 
-        static initEvents() {
+        static init() {
 
             window.addEventListener("mousedown", e => {
 
                 this._mouseDownElement = e.target as any;
             });
+
+            this.initDragCanvas();
         }
 
         static getMouseDownElement() {
@@ -98,21 +101,7 @@ namespace colibri.ui.controls {
 
         static setDragEventImage(e: DragEvent, render: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {
 
-            let canvas = document.getElementById("__drag__canvas") as HTMLCanvasElement;
-
-            if (!canvas) {
-
-                canvas = document.createElement("canvas");
-                canvas.setAttribute("id", "__drag__canvas");
-                canvas.style.imageRendering = "crisp-edges";
-                canvas.width = 64;
-                canvas.height = 64;
-                canvas.style.width = canvas.width + "px";
-                canvas.style.height = canvas.height + "px";
-                canvas.style.position = "fixed";
-                canvas.style.left = "-1000px";
-                document.body.appendChild(canvas);
-            }
+            const canvas = this._dragCanvas;
 
             const ctx = canvas.getContext("2d");
 
@@ -120,19 +109,23 @@ namespace colibri.ui.controls {
 
             render(ctx, canvas.width, canvas.height);
 
-            if (this.isSafariBrowser()) {
+            e.dataTransfer.setDragImage(canvas, 10, 10);
+        }
 
-                const image = document.createElement("img");
-                image.style.position = "fixed";
-                image.style.left = "-1000px";
-                image.src = canvas.toDataURL();
+        private static initDragCanvas() {
 
-                e.dataTransfer.setDragImage(image, 10, 10);
+            const canvas = document.createElement("canvas");
+            canvas.setAttribute("id", "__drag__canvas");
+            canvas.style.imageRendering = "crisp-edges";
+            canvas.width = 64;
+            canvas.height = 64;
+            canvas.style.width = canvas.width + "px";
+            canvas.style.height = canvas.height + "px";
+            canvas.style.position = "fixed";
+            canvas.style.left = "0px";
+            document.body.appendChild(canvas);
 
-            } else {
-
-                e.dataTransfer.setDragImage(canvas, 10, 10);
-            }
+            this._dragCanvas = canvas;
         }
 
         private static _isSafari = navigator.vendor.toLowerCase().indexOf("apple") >= 0;

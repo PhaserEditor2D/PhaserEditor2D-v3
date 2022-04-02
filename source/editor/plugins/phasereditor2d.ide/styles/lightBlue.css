@@ -1,4 +1,4 @@
-.lightBlue body {
+.lightBlue body, .lightBlue .Window {
     background: #b2c3dd;
     color: #0e0e0e;
 }

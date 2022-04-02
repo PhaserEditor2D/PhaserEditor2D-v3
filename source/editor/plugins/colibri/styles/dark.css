@@ -9,7 +9,7 @@ Important:
 
 */
 
-.dark body {
+.dark body, .dark .Window {
     background: #202020 !important;
     color: #e0e0e0;
 }
