@@ -22,6 +22,7 @@
 * Scene Editor: adds missing `light/bitmapfont-type@2x.png` icon.
 * Viewer: fixes drag image on Safari.
 * Workbench: prevents Safari to include the address bar in the tab/focus order.
+* [#149](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/149) Renames children when pasting a container. Fixes trimming of numbering in new names.
 
 ## v3.32.1 - Feb 27, 2022
 
