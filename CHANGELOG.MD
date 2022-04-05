@@ -23,6 +23,7 @@
 * Workbench: prevents Safari to include the address bar in the tab/focus order.
 * [#149](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/149) Renames children when pasting a container. Fixes trimming of numbering in new names.
 * [#185](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/185) Allows uploading files with more than 10MB using the Upload dialog.
+* Scene Editor: fixes Scene Tool manipulators for Container objects.
 
 ## v3.32.1 - Feb 27, 2022
 
