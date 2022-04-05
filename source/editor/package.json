@@ -7,7 +7,7 @@
     "start": "tsc -b -w",
     "build": "tsc -b",
     "clean": "tsc -b -clean",
-    "editor-dev": "PhaserEditor2D -editor . -project $PHASEREDITOR_DEMO_PROJECT -dev -disable-plugins phasereditor2d.codemirror"
+    "editor-dev": "PhaserEditor2D -editor . -project \"$PHASEREDITOR_DEMO_PROJECT\" -dev -disable-plugins phasereditor2d.codemirror"
   },
   "devDependencies": {
     "tslint": "^6.1.3",
