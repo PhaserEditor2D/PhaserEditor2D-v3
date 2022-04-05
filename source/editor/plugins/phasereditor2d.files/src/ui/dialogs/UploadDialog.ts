@@ -162,36 +162,14 @@ namespace phasereditor2d.files.ui.dialogs {
         }
 
         private prepareFilesForUpload(files: FileList) {
+            
             const newFiles = [];
-            const skippedFiles = [];
 
             for (let i = 0; i < files.length; i++) {
 
                 const file = files.item(i);
 
-                const sizeInMB = file.size / 1048576;
-
-                if (sizeInMB > 10) {
-
-                    skippedFiles.push(file);
-                    continue;
-                }
-
                 newFiles.push(file);
-            }
-
-            if (skippedFiles.length > 0) {
-
-                alert("The following files are ignored. Only files with a size below <code>10MB</code> are allowed:"
-
-                    + "<ul>"
-
-                    + skippedFiles
-                        .map(file => "<li><code>" + file.name + " (" + filesize(file.size) + ")</code></li>")
-                        .join("")
-
-                    + "</ul>"
-                );
             }
 
             const input = this.getViewer().getInput() as any[];

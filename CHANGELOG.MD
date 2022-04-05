@@ -9,7 +9,6 @@
 * Scene Editor: fixes ordering of objects when moving to a new parent.
 * Scene Editor: removes the Details sub-tab from the Inspector view.
 * Scene Editor: the Reset Zoom button restores the zoom and position (0, 0) of the camera. 
-* Prevents intertia scrolling in Viewers.
 * Scene Editor: prevents scrolling the whole page on macOS with scrolling inertia enabled.
 * Scene Editor: fixes panning with ALT key when the pointer is close to the Translate tool handlers.
 * Scene Editor: fixes selection changed when panning with the ALT key.
