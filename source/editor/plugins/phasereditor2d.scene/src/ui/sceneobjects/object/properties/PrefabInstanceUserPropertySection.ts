@@ -87,7 +87,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                                 const sel = [];
 
-                                this.getEditor().getScene().visit(obj2 => {
+                                this.getEditor().getScene().visitAll(obj2 => {
 
                                     if (GameObjectEditorSupport.hasEditorSupport(obj2)) {
 

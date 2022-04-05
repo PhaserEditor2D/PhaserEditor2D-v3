@@ -98,6 +98,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return [];
         }
 
+        getChildren() {
+
+            return GameObjectEditorSupport.getObjectChildren(this.getObject());
+        }
+
         abstract setInteractive(): void;
 
         protected computeContentHashWithProperties(obj: ISceneGameObject, ...properties: Array<IProperty<any>>) {

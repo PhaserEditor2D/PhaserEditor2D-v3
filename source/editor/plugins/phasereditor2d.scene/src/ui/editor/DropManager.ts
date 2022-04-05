@@ -83,7 +83,7 @@ namespace phasereditor2d.scene.ui.editor {
                 return (obj as sceneobjects.ISceneObject).getEditorSupport().getLabel();
             });
 
-            scene.visit(obj => nameMaker.update([obj]));
+            scene.visitAll(obj => nameMaker.update([obj]));
             nameMaker.update(scene.getPlainObjects());
             nameMaker.update(scene.getObjectLists().getLists());
 

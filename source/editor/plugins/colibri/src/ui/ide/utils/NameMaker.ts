@@ -22,22 +22,34 @@ namespace colibri.ui.ide.utils {
             }
         }
 
+        trimNumbering(name: string) {
+
+            return name.replace(/[0-9 _-]+$/, "")
+        }
+
         makeName(baseName: string) {
 
-            let name: string;
+            if (this._nameSet.has(baseName)) {
 
-            let i = 0;
+                baseName = this.trimNumbering(baseName);
 
-            do {
+                let name: string;
 
-                name = baseName + (i === 0 ? "" : "_" + i);
-                i++;
+                let i = 0;
 
-            } while (this._nameSet.has(name));
+                do {
 
-            this._nameSet.add(name);
+                    name = baseName + (i === 0 ? "" : "_" + i);
+                    i++;
 
-            return name;
+                } while (this._nameSet.has(name));
+
+                this._nameSet.add(name);
+
+                return name;
+            }
+
+            return baseName;
         }
     }
 

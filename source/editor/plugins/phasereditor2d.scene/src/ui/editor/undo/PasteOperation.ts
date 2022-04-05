@@ -25,17 +25,11 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const sel = [];
 
-            const nameMaker = new colibri.ui.ide.utils.NameMaker(
-                (obj: sceneobjects.ISceneGameObject) => obj.getEditorSupport().getLabel());
+            const scene = this._editor.getScene();
 
-            this.getScene().visitAskChildren(obj => {
+            const nameMaker = scene.createNameMaker();
 
-                nameMaker.update([obj]);
-
-                return !obj.getEditorSupport().isPrefabInstance();
-            });
-
-            const prefabObj = this._editor.getScene().getPrefabObject();
+            const prefabObj = scene.getPrefabObject();
 
             const sprites: sceneobjects.ISceneGameObject[] = [];
 
@@ -47,8 +41,6 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     this.setNewObjectId(data);
 
-                    data.label = nameMaker.makeName(data.label);
-
                     const { x, y } = this.getEditor().getMouseManager().getDropPosition();
 
                     data["x"] = data["x"] + x;
@@ -56,7 +48,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     const loaders = ScenePlugin.getInstance().getLoaderUpdaters();
 
-                    for(const loader of loaders) {
+                    for (const loader of loaders) {
 
                         await loader.updateLoaderWithObjData(this.getScene(), data);
                     }
@@ -71,6 +63,16 @@ namespace phasereditor2d.scene.ui.editor.undo {
                     }
                 }
             }
+
+            scene.visitAskChildren(obj => {
+
+                const support = obj.getEditorSupport();
+
+                support.setLabel(nameMaker.makeName(support.getLabel()));
+
+                return !obj.getEditorSupport().isPrefabInstance();
+
+            }, sprites);
 
             maker.afterDropObjects(prefabObj, sprites);
 

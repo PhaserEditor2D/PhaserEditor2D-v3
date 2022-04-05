@@ -106,7 +106,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const result: IResultItem[] = [];
 
             // TODO: don't enter in prefab objects
-            scene.visitAskChildren(obj => {
+            scene.visitAllAskChildren(obj => {
 
                 if (GameObjectEditorSupport.hasObjectComponent(obj, TransformComponent)) {
 

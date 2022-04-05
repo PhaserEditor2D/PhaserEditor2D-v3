@@ -451,19 +451,9 @@ namespace phasereditor2d.scene.ui {
                 extraData
             });
 
-            const nameMaker = new ide.utils.NameMaker(obj => {
-                return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
-            });
+            const nameMaker = this._editorScene.createNameMaker();
 
             for (const newObject of newObjects) {
-
-                this._editorScene.visit(obj => {
-
-                    if (obj !== newObject) {
-
-                        nameMaker.update([obj]);
-                    }
-                });
 
                 const oldLabel = newObject.getEditorSupport().getLabel();
 

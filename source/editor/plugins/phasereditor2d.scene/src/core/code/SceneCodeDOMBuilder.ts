@@ -466,7 +466,7 @@ namespace phasereditor2d.scene.core.code {
 
             const fields: CodeDOM[] = [];
 
-            this._scene.visitAskChildren(obj => {
+            this._scene.visitAllAskChildren(obj => {
 
                 const support = obj.getEditorSupport();
 

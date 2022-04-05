@@ -279,12 +279,12 @@ namespace phasereditor2d.scene.ui {
             return result;
         }
 
-        visit(visitor: (obj: sceneobjects.ISceneGameObject) => void) {
+        visitAll(visitor: (obj: sceneobjects.ISceneGameObject) => void) {
 
-            this.visit2(visitor, this.getDisplayListChildren());
+            this.visit(visitor, this.getDisplayListChildren());
         }
 
-        private visit2(visitor: (obj: sceneobjects.ISceneGameObject) => void, children: sceneobjects.ISceneGameObject[]) {
+        visit(visitor: (obj: sceneobjects.ISceneGameObject) => void, children: sceneobjects.ISceneGameObject[]) {
 
             for (const obj of children) {
 
@@ -292,17 +292,17 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    this.visit2(visitor, obj.getChildren());
+                    this.visit(visitor, obj.getChildren());
                 }
             }
         }
 
-        visitAskChildren(visitor: (obj: sceneobjects.ISceneGameObject) => boolean) {
+        visitAllAskChildren(visitor: (obj: sceneobjects.ISceneGameObject) => boolean) {
 
-            this.visitAskChildren2(visitor, this.getDisplayListChildren());
+            this.visitAskChildren(visitor, this.getDisplayListChildren());
         }
 
-        private visitAskChildren2(
+        visitAskChildren(
             visitor: (obj: sceneobjects.ISceneGameObject) => boolean, children: sceneobjects.ISceneGameObject[]) {
 
             for (const obj of children) {
@@ -313,13 +313,20 @@ namespace phasereditor2d.scene.ui {
 
                     if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                        this.visitAskChildren2(visitor, obj.getChildren());
+                        this.visitAskChildren(visitor, obj.getChildren());
                     }
                 }
             }
         }
 
         makeNewName(baseName: string) {
+
+            const nameMaker = this.createNameMaker();
+
+            return nameMaker.makeName(baseName);
+        }
+
+        createNameMaker() {
 
             const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: any) => {
 
@@ -331,7 +338,7 @@ namespace phasereditor2d.scene.ui {
                 return (obj as sceneobjects.ObjectList).getLabel();
             });
 
-            this.visitAskChildren(obj => {
+            this.visitAllAskChildren(obj => {
 
                 nameMaker.update([obj]);
 
@@ -343,7 +350,7 @@ namespace phasereditor2d.scene.ui {
                 nameMaker.update([list]);
             }
 
-            return nameMaker.makeName(baseName);
+            return nameMaker;
         }
 
         /**
@@ -394,7 +401,7 @@ namespace phasereditor2d.scene.ui {
 
             const map = new Map<string, sceneobjects.ISceneGameObject>();
 
-            this.visit(obj => {
+            this.visitAll(obj => {
 
                 map.set(obj.getEditorSupport().getId(), obj);
             });

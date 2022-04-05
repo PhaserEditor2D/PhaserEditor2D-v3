@@ -391,7 +391,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const sel = [];
 
-                        editor.getScene().visit(obj => {
+                        editor.getScene().visitAll(obj => {
 
                             const textureComponent = sceneobjects.GameObjectEditorSupport
                                 .getObjectComponent(
