@@ -135,23 +135,9 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
 
-            const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+            const sprite = obj as unknown as sceneobjects.Sprite;
 
-            let width;
-            let height;
-
-            if (sprite instanceof sceneobjects.Container) {
-
-                const b = sprite.getBounds();
-
-                width = b.width;
-                height = b.height;
-
-            } else {
-
-                width = sprite.width;
-                height = sprite.height;
-            }
+            const { width, height } = sprite.getEditorSupport().computeSize();
 
             const x = width * fx;
             const y = height * fy;
@@ -259,8 +245,8 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         protected getAvgScreenPointOfObjects(
             args: ISceneToolContextArgs,
-            fx: (ob: Phaser.GameObjects.Sprite) => number = obj => 0,
-            fy: (ob: Phaser.GameObjects.Sprite) => number = obj => 0) {
+            fx: (ob: sceneobjects.Image) => number = obj => 0,
+            fy: (ob: sceneobjects.Image) => number = obj => 0) {
 
             let avgY = 0;
             let avgX = 0;

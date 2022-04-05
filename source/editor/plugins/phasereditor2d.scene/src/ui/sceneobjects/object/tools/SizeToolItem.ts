@@ -18,9 +18,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return this.getAvgScreenPointOfObjects(args,
 
-                (sprite: Phaser.GameObjects.Sprite) => this._x - sprite.originX,
+                (sprite: sceneobjects.Image) => this._x - sprite.getEditorSupport().computeOrigin().originX,
 
-                (sprite: Phaser.GameObjects.Sprite) => this._y - sprite.originY
+                (sprite: sceneobjects.Image) => this._y - sprite.getEditorSupport().computeOrigin().originY
             );
         }
 

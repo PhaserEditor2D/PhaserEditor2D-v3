@@ -1,9 +1,6 @@
 /// <reference path="../ParentGameObjectEditorSupport.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    import controls = colibri.ui.controls;
-    import json = core.json;
-
     export class ContainerEditorSupport extends ParentGameObjectEditorSupport<Container> {
 
         constructor(obj: Container, scene: Scene) {
@@ -12,6 +9,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new TransformComponent(obj));
             this.addComponent(new VisibleComponent(obj));
             this.addComponent(new ChildrenComponent(obj));
+        }
+
+        computeSize(): { width: any; height: any; } {
+
+            const obj = this.getObject();
+
+            const b = obj.getBounds();
+
+            return {
+                width: b.width / obj.scaleX,
+                height: b.height / obj.scaleY
+            };
+        }
+
+        computeOrigin() {
+
+            const obj = this.getObject();
+
+            const b = obj.getBounds();
+
+            const originX = (obj.x - b.x) / b.width;
+            const originY = (obj.y - b.y) / b.height;
+
+            return { originX, originY };
         }
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {

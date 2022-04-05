@@ -20,24 +20,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return this.getAvgScreenPointOfObjects(args,
 
-                (sprite: Phaser.GameObjects.Sprite) => {
+                (sprite: sceneobjects.Image) => {
 
-                    if (sprite instanceof sceneobjects.Container) {
+                    const originX = sprite.getEditorSupport().computeOrigin().originX;
 
-                        return this._x;
-                    }
-
-                    return this._x - sprite.originX;
+                    return this._x - originX;
                 },
 
-                (sprite: Phaser.GameObjects.Sprite) => {
+                (sprite: sceneobjects.Image) => {
 
-                    if (sprite instanceof sceneobjects.Container) {
+                    const originY = sprite.getEditorSupport().computeOrigin().originY;
 
-                        return this._y;
-                    }
-
-                    return this._y - sprite.originY;
+                    return this._y - originY;
                 }
             );
         }
@@ -80,7 +74,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+                const sprite = obj as unknown as sceneobjects.Sprite;
 
                 const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
 
@@ -90,21 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 worldTx.applyInverse(point.x, point.y, initLocalPos);
 
-                let width;
-                let height;
-
-                if (sprite instanceof sceneobjects.Container) {
-
-                    const b = sprite.getBounds();
-
-                    width = b.width;
-                    height = b.height;
-
-                } else {
-
-                    width = sprite.width;
-                    height = sprite.height;
-                }
+                const { width, height } = sprite.getEditorSupport().computeSize();
 
                 sprite.setData("ScaleToolItem", {
                     initScaleX: sprite.scaleX,
@@ -132,7 +112,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+                const sprite = obj as unknown as sceneobjects.Sprite;
 
                 const data = sprite.data.get("ScaleToolItem");
 
@@ -148,6 +128,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 let flipY = sprite.flipY ? -1 : 1;
 
                 if (sprite instanceof Phaser.GameObjects.TileSprite) {
+
                     flipX = 1;
                     flipY = 1;
                 }
@@ -155,43 +136,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const dx = (localPos.x - initLocalPos.x) * flipX / args.camera.zoom;
                 const dy = (localPos.y - initLocalPos.y) * flipY / args.camera.zoom;
 
-                let width;
-                let height;
+                const { displayOriginX, displayOriginY } = sprite.getEditorSupport()
+                    .computeDisplayOrigin();
 
-                if (sprite instanceof sceneobjects.Container) {
-
-                    let minX = Number.MAX_SAFE_INTEGER;
-                    let minY = Number.MAX_SAFE_INTEGER;
-
-                    for (const obj2 of sprite.list) {
-
-                        const child = obj2 as any as Phaser.GameObjects.Sprite;
-
-                        minX = Math.min(child.x, minX);
-                        minY = Math.min(child.y, minY);
-                    }
-
-                    let displayOriginX = 0;
-                    let displayOriginY = 0;
-
-                    if (minX < 0) {
-
-                        displayOriginX = -minX;
-                    }
-
-                    if (minY < 0) {
-
-                        displayOriginY = -minY;
-                    }
-
-                    width = data.initWidth - displayOriginX;
-                    height = data.initHeight - displayOriginY;
-
-                } else {
-
-                    width = data.initWidth - sprite.displayOriginX;
-                    height = data.initHeight - sprite.displayOriginY;
-                }
+                let width = data.initWidth - displayOriginX;
+                let height = data.initHeight - displayOriginY;
 
                 if (width === 0) {
 

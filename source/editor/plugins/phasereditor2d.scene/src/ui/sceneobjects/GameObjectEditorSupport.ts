@@ -283,7 +283,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 h = h / sprite.scaleY;
             }
 
-            const { originX, originY } = this.getScreenBoundsOrigin();
+            const { originX, originY } = this.computeOrigin();
 
             const x = -w * originX;
             const y = -h * originY;
@@ -298,11 +298,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return points.map(p => camera.getScreenPoint(p.x, p.y));
         }
 
-        protected getScreenBoundsOrigin(): { originX: number, originY: number } {
+        computeOrigin(): { originX: number, originY: number } {
 
             const { originX, originY } = this.getObject() as any;
 
             return { originX, originY };
+        }
+
+        computeDisplayOrigin() {
+
+            const { width, height } = this.computeSize();
+            const { originX, originY } = this.computeOrigin();
+
+            return {
+                displayOriginX: width * originX,
+                displayOriginY: height * originY
+            };
+        }
+
+        computeSize() {
+
+            const obj = this.getObject() as any;
+
+            return { width: obj.width, height: obj.height };
         }
 
         // tslint:disable-next-line:ban-types

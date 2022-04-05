@@ -21,14 +21,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setLabel(obj.layer.name);
         }
 
-        getScreenBoundsOrigin() {
+        computeOrigin() {
 
             if (this.getOrientation() === Phaser.Tilemaps.Orientation.ISOMETRIC) {
 
                 return { originX: 0.5, originY: 0 };
             }
 
-            return super.getScreenBoundsOrigin();
+            return super.computeOrigin();
         }
 
         isUnlockedProperty(property: IProperty<any>) {
