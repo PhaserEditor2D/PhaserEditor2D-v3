@@ -71,9 +71,12 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                     const b = obj.getBounds();
 
+                    const originX = (obj.x - b.x) / b.width;
+                    const originY = (obj.y - b.y) / b.height;
+
                     return {
-                        x: obj.x,
-                        y: obj.y,
+                        x: obj.x - originX * b.width,
+                        y: obj.y - originY * b.height,
                         size: {
                             x: b.width,
                             y: b.height
@@ -117,11 +120,24 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                 for (const obj of sprites) {
 
-                    const sprite = obj as sceneobjects.Sprite;
+                    const pos = spritePosMap.get(obj);
 
-                    const pos = spritePosMap.get(sprite);
-                    sprite.x = pos.x + sprite.originX * sprite.displayWidth;
-                    sprite.y = pos.y + sprite.originY * sprite.displayHeight;
+                    if (obj instanceof sceneobjects.Container) {
+
+                        const b = obj.getBounds();
+
+                        const originX = (obj.x - b.x) / b.width;
+                        const originY = (obj.y - b.y) / b.height;
+                        obj.x = pos.x + originX * b.width;
+                        obj.y = pos.y + originY * b.height;
+
+                    } else {
+
+                        const sprite = obj as sceneobjects.Sprite;
+
+                        sprite.x = pos.x + sprite.originX * sprite.displayWidth;
+                        sprite.y = pos.y + sprite.originY * sprite.displayHeight;
+                    }
                 }
             });
 
