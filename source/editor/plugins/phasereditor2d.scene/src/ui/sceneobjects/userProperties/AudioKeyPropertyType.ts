@@ -21,9 +21,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return size;
         }
 
-        createViewer(finder: pack.core.PackFinder) {
+        protected async createViewer() {
 
-            const viewer = super.createViewer(finder);
+            const viewer = await super.createViewer();
 
             viewer.setContentProvider(new AudioKeyContentProvider());
 

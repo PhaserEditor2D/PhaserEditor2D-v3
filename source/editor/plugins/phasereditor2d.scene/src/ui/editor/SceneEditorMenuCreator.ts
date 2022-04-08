@@ -74,7 +74,7 @@ namespace phasereditor2d.scene.ui.editor {
                     menu2.addAction({
                         text: labelProvider.getLabel(obj),
                         icon: new controls.viewers.ImageFromCellRenderer(
-                            obj, cellRendererProvider.getCellRenderer(obj), controls.ICON_SIZE, controls.ICON_SIZE),
+                            obj, cellRendererProvider.getCellRenderer(obj), controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE),
                         callback: () => {
 
                             this._editor.getDropManager().dropDataAtCenter([obj]);

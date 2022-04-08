@@ -88,10 +88,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return JSON.stringify(data);
         }
 
-        createViewer(finder: pack.core.PackFinder) {
+        async createViewer() {
 
-            const viewer = super.createViewer(finder);
-
+            const finder = new pack.core.PackFinder();
+            
+            const viewer = await super.createViewer();
             viewer.setContentProvider(new TextureContentProvider(finder));
             viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
             viewer.setCellSize(72, true);

@@ -44,12 +44,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
-        protected createViewer(finder: pack.core.PackFinder) {
+        protected async createViewer() {
 
-            const viewer = super.createViewer(finder);
-
+            const viewer = await super.createViewer();
             viewer.setCellSize(64, true);
-
             viewer.setContentProvider(new AnimationKeyContentProvider());
 
             return viewer;

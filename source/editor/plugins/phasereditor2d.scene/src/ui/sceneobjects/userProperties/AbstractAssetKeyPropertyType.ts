@@ -1,105 +1,12 @@
 /// <reference path="./StringPropertyType.ts" />
+/// <reference path="./AbstractDialogPropertyType.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export abstract class AbstractAssetKeyPropertyType extends StringPropertyType {
+    export abstract class AbstractAssetKeyPropertyType extends AbstractDialogPropertyType {
 
-
-        private _name: string;
-        private _hasCustomIcon: boolean;
-        private _dialogTitle: string;
-
-        protected constructor(config: {
-            id: string,
-            name: string,
-            dialogTitle: string,
-            hasCustomIcon?: boolean
-        }) {
-            super(config.id);
-
-            this._name = config.name;
-            this._dialogTitle = config.dialogTitle;
-            this._hasCustomIcon = config.hasCustomIcon === undefined ? false : config.hasCustomIcon;
-        }
-
-        getName() {
-
-            return this._name;
-        }
-
-        createInspectorPropertyEditor(
-            section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
-
-            const prop = userProp.getComponentProperty();
-
-            if (lockIcon) {
-
-                section.createLock(parent, prop);
-            }
-
-            const label = section.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
-            label.style.gridColumn = "2";
-
-            const comp = this.createEditorComp();
-            parent.appendChild(comp);
-
-            const text = section.createStringField(comp, prop);
-
-            const btn = this.createSearchButton(() => prop.getValue(section.getSelectionFirstElement()), value => {
-
-                text.value = value;
-
-                const editor = section.getEditor();
-
-                editor.getUndoManager().add(
-                    new SimpleOperation(editor, section.getSelection(), prop, value));
-            });
-
-            section.addUpdater(() => {
-
-                btn.disabled = !section.isUnlocked(prop);
-            });
-
-            comp.appendChild(btn);
-        }
-
-        private createEditorComp() {
-
-            const comp = document.createElement("div");
-            comp.style.display = "grid";
-            comp.style.gridTemplateColumns = "1fr auto";
-            comp.style.gridGap = "5px";
-            comp.style.alignItems = "center";
-
-            return comp;
-        }
-
-        private createSearchButton(getValue: () => any, callback: (value: string) => void) {
-
-            const iconControl = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
-
-            const btn = document.createElement("button");
-            btn.appendChild(iconControl.getCanvas());
-
-            btn.addEventListener("click", async (e) => {
-
-                const value = getValue();
-
-                this.createSearchDialog(value, callback);
-            });
-
-
-            if (this._hasCustomIcon) {
-
-                this.updateIcon(iconControl, getValue());
-            }
-
-
-            return btn;
-        }
-
-        private async updateIcon(iconControl: controls.IconControl, value: any) {
+        protected async updateIcon(iconControl: controls.IconControl, value: any) {
 
             const finder = new pack.core.PackFinder();
 
@@ -113,17 +20,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected hasCustomIcon() {
-
-            return false;
-        }
-
         protected getIcon(finder: pack.core.PackFinder, value: string): controls.IImage {
 
             return null;
         }
 
-        protected createViewer(finder: pack.core.PackFinder) {
+        protected async createViewer() {
+
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
 
             const viewer = new controls.viewers.TreeViewer(
                 "phasereditor2d.scene.ui.sceneobjects.SelectAssetDialog." + this.getId());
@@ -136,59 +42,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return viewer;
         }
 
-        protected getDialogTitle() {
-
-            return this._dialogTitle;
-        }
-
-        protected getDialogSize(): { width?: number, height?: number } {
-
-            return {
-                width: undefined,
-                height: window.innerHeight * 2 / 3
-            };
-        }
-
-        private async createSearchDialog(revealValue: string, callback: (value: string) => void) {
+        protected async loadViewerInput(viewer: controls.viewers.TreeViewer) {
 
             const finder = new pack.core.PackFinder();
-
-            const viewer = this.createViewer(finder);
-
-            viewer.setInput([]);
-
-            const dlg = new controls.dialogs.ViewerDialog(viewer, true);
-
-            const size = this.getDialogSize();
-
-            dlg.setSize(size.width, size.height);
-
-            dlg.create();
-
-            dlg.setTitle(this.getDialogTitle());
-
-            dlg.enableButtonOnlyWhenOneElementIsSelected(
-                dlg.addOpenButton("Select", sel => {
-
-                    const selected = sel[0];
-
-                    let value: string;
-
-                    if (selected instanceof pack.core.AssetPackImageFrame) {
-
-                        value = this.formatKeyFrame(selected.getPackItem().getKey(), selected.getName());
-
-                    } else {
-
-                        const key = viewer.getLabelProvider().getLabel(selected);
-
-                        value = this.formatKeyFrame(key);
-                    }
-
-                    callback(value);
-                }));
-
-            dlg.addCancelButton();
 
             await finder.preload();
 
@@ -198,49 +54,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 viewer.setExpanded(pack, true);
             }
-
-            this.revealValue(viewer, revealValue);
-
-            controls.viewers.GridTreeViewerRenderer.expandSections(viewer);
         }
 
-        protected revealValue(viewer: controls.viewers.TreeViewer, value: string) {
+        protected valueToString(viewer: controls.viewers.TreeViewer, selected: any): string {
 
-            const found = viewer.findElementByLabel(value);
+            if (selected instanceof pack.core.AssetPackImageFrame) {
 
-            if (found) {
+                return this.formatKeyFrame(selected.getPackItem().getKey(), selected.getName());
 
-                viewer.setSelection([found]);
-                viewer.reveal(found);
             }
-        }
 
-        createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor {
+            const key = viewer.getLabelProvider().getLabel(selected);
 
-            const comp = this.createEditorComp();
-
-            const inputElement = document.createElement("input");
-            comp.appendChild(inputElement);
-            inputElement.type = "text";
-            inputElement.classList.add("formText");
-
-            inputElement.addEventListener("change", e => {
-
-                setValue(inputElement.value);
-            });
-
-            const update = () => {
-
-                inputElement.value = getValue();
-            };
-
-            const btn = this.createSearchButton(getValue, setValue);
-            comp.appendChild(btn);
-
-            return {
-                element: comp,
-                update
-            };
+            return this.formatKeyFrame(key);
         }
 
         protected formatKeyFrame(key: string, frame?: string | number) {
