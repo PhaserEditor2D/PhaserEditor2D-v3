@@ -24,6 +24,7 @@
 * [#149](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/149) Renames children when pasting a container. Fixes trimming of numbering in new names.
 * [#185](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/185) Allows uploading files with more than 10MB using the Upload dialog.
 * Editor tab label: fixes cursor type in Safari.
+* [#144](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/144) Scene Editor: allows paste in place.
 
 ## v3.32.1 - Feb 27, 2022
 
