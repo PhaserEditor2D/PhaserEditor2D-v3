@@ -141,6 +141,7 @@
     .TabPaneLabel span {
         margin: 3px 0px 0px 3px;
         align-self: center;
+        cursor: default;
     }
 
     .TabPaneLabelSections {
