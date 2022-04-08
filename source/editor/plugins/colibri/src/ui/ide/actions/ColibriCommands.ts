@@ -451,12 +451,6 @@ namespace colibri.ui.ide.actions {
                 tooltip: "Refresh the current editor's content.",
                 category: CAT_EDIT
             });
-
-            manager.addKeyBinding(CMD_UPDATE_CURRENT_EDITOR, new KeyMatcher({
-                control: true,
-                alt: true,
-                key: "KeyU"
-            }));
         }
 
         private static initEdit(manager: commands.CommandManager) {
