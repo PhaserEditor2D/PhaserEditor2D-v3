@@ -6,8 +6,12 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
     export class PasteOperation extends SceneSnapshotOperation {
 
-        constructor(editor: SceneEditor) {
+        private _pasteInPlace: boolean;
+
+        constructor(editor: SceneEditor, pasteInPlace: boolean) {
             super(editor);
+
+            this._pasteInPlace = pasteInPlace;
         }
 
         async execute() {
@@ -41,10 +45,13 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     this.setNewObjectId(data);
 
-                    const { x, y } = this.getEditor().getMouseManager().getDropPosition();
+                    if (!this._pasteInPlace) {
 
-                    data["x"] = data["x"] + x;
-                    data["y"] = data["y"] + y;
+                        const { x, y } = this.getEditor().getMouseManager().getDropPosition();
+
+                        data["x"] = data["__shiftLeft_x"] + x;
+                        data["y"] = data["__shiftLeft_y"] + y;
+                    }
 
                     const loaders = ScenePlugin.getInstance().getLoaderUpdaters();
 

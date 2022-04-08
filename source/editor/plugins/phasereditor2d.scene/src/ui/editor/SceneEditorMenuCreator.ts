@@ -153,6 +153,7 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addCommand(colibri.ui.ide.actions.CMD_CUT);
             menu.addCommand(colibri.ui.ide.actions.CMD_COPY);
             menu.addCommand(colibri.ui.ide.actions.CMD_PASTE);
+            menu.addCommand(commands.CMD_PASTE_IN_PLACE);
 
             return menu;
         }

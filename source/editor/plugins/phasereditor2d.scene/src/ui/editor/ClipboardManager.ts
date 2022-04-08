@@ -75,8 +75,8 @@ namespace phasereditor2d.scene.ui.editor {
                 p.x -= minX;
                 p.y -= minY;
 
-                objData["x"] = p.x;
-                objData["y"] = p.y;
+                objData["__shiftLeft_x"] = p.x;
+                objData["__shiftLeft_y"] = p.y;
 
                 ClipboardManager._clipboard.push({
                     type: "ISceneObject",
@@ -96,11 +96,11 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
-        paste() {
+        paste(pasteInPlace: boolean) {
 
             if (ClipboardManager._clipboard.length > 0) {
 
-                this._editor.getUndoManager().add(new undo.PasteOperation(this._editor));
+                this._editor.getUndoManager().add(new undo.PasteOperation(this._editor, pasteInPlace));
             }
         }
 

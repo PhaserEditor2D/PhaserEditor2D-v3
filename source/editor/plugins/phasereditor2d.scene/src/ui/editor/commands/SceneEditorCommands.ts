@@ -44,6 +44,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_DISABLE_AWAKE_EVENT_PREFABS = "phasereditor2d.scene.ui.editor.commands.DisableAwakeEventPrefabs";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_CANVAS = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToCanvas";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToWebGL";
+    export const CMD_PASTE_IN_PLACE = "phasereditor2d.scene.ui.editor.commands.PasteInPlace";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -567,8 +568,27 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 args => isSceneScope(args),
 
                 args => {
-                    (args.activeEditor as SceneEditor).getClipboardManager().paste();
+                    (args.activeEditor as SceneEditor).getClipboardManager().paste(false);
                 });
+
+            manager.add({
+                command: {
+                    id: CMD_PASTE_IN_PLACE,
+                    category: colibri.ui.ide.actions.CAT_EDIT,
+                    name: "Paste In Place",
+                    tooltip: "Paste the objects in destiny at the same original locations.",
+                },
+                handler: {
+                    testFunc: args => isSceneScope(args),
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getClipboardManager().paste(true),
+                },
+                keys: {
+                    control: true,
+                    shift: true,
+                    key: "KeyV"
+                }
+            })
 
             // cut
 
