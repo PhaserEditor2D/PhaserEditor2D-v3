@@ -19,7 +19,7 @@
 * Scene Editor: fixes Text Content's textarea parameter in Inspector view.
 * Scene Editor: adjusts the loading message position to the DPR.
 * Scene Editor: adds missing `light/bitmapfont-type@2x.png` icon.
-* Viewer: fixes drag image on Safari.
+* [#29](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/29) Fixes drag & drop image in Safari.
 * Workbench: prevents Safari to include the address bar in the tab/focus order.
 * [#149](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/149) Renames children when pasting a container. Fixes trimming of numbering in new names.
 * [#185](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/185) Allows uploading files with more than 10MB using the Upload dialog.
