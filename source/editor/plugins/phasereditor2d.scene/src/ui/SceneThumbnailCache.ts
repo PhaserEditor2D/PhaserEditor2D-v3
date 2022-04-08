@@ -55,6 +55,11 @@ namespace phasereditor2d.scene.ui {
 
                                 const imgElement = createImageFromBlob(blob);
 
+                                await new Promise((resolver, reject) => {
+
+                                    imgElement.addEventListener("load", () => resolver(undefined));
+                                });
+
                                 return new controls.ImageWrapper(imgElement);
                             }
                         }

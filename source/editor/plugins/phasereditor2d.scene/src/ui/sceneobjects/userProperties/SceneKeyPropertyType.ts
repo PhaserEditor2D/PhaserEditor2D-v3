@@ -26,10 +26,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (file) {
 
-                const icon = new controls.viewers.ImageFromCellRenderer(file,
-                    new viewers.SceneFileCellRenderer(), controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE);
+                const cache = SceneThumbnailCache.getInstance();
 
-                iconControl.setIcon(icon, true);
+                await cache.preload(file);
+                
+                const img = cache.getContent(file);
+                
+                if (img) {
+
+                    await img.preloadSize();
+                    await img.preload();
+
+                    iconControl.setIcon(img);
+                }
             }
         }
 
