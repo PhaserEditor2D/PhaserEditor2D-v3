@@ -27,6 +27,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._name;
         }
 
+        getEditor(): editor.SceneEditor {
+
+            return colibri.Platform.getWorkbench()
+                .getActiveWindow().getEditorArea()
+                .getSelectedEditor() as editor.SceneEditor;
+        }
+
         createInspectorPropertyEditor(
             section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 

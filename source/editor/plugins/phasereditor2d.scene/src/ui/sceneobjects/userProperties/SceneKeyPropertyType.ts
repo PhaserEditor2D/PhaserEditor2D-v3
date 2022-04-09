@@ -29,15 +29,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const cache = SceneThumbnailCache.getInstance();
 
                 await cache.preload(file);
-                
+
                 const img = cache.getContent(file);
-                
+
                 if (img) {
 
                     await img.preloadSize();
                     await img.preload();
 
                     iconControl.setIcon(img);
+
+                } else {
+
+                    iconControl.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
                 }
             }
         }

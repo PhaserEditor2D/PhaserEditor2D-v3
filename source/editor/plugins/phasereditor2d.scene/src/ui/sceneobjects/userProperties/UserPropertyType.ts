@@ -13,11 +13,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _id: string;
         private _defValue: TValue;
+        private _expressionType: string;
 
         constructor(id: string, defValue: TValue) {
 
             this._id = id;
             this._defValue = defValue;
+            this._expressionType = "any";
+        }
+
+        getExpressionType() {
+
+            return this._expressionType;
+        }
+
+        setExpressionType(expressionType: string) {
+
+            this._expressionType = expressionType;
+        }
+
+        hasCustomPropertyType() {
+
+            return false;
         }
 
         getId() {
@@ -35,10 +52,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         writeJSON(data: any) {
 
             data.id = this._id;
+
+            if (this.hasCustomPropertyType()) {
+
+                data.expressionType = this.getExpressionType();
+            }
         }
 
         readJSON(data: any) {
-            // nothing
+            
+            if (this.hasCustomPropertyType()) {
+
+                this._expressionType = data.expressionType || "any";
+            }
         }
 
         abstract renderValue(value: any): string;

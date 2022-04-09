@@ -55,6 +55,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(data: any) {
 
+            super.readJSON(data);
+            
             this._options = data.options;
         }
 

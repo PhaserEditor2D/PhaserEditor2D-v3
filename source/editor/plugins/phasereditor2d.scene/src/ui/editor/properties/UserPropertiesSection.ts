@@ -87,7 +87,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                         this.createOptionsField(propPane, prop);
 
-                    } else if (prop.getType() instanceof sceneobjects.ExpressionPropertyType) {
+                    } else if (prop.getType().hasCustomPropertyType()) {
 
                         this.createExpressionTypeField(propPane, prop);
                     }
@@ -294,7 +294,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         private createExpressionTypeField(parent: HTMLDivElement, prop: sceneobjects.UserProperty) {
 
-            const type = prop.getType() as sceneobjects.ExpressionPropertyType;
+            const type = prop.getType();
 
             this.createLabel(
                 parent, "Expression Type", "The type of the expression. Like <code>'ICustomType'</code> or <code>'() => void'</code>.");
