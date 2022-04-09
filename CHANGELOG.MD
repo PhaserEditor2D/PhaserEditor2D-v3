@@ -26,6 +26,7 @@
 * Editor tab label: fixes cursor type in Safari.
 * [#144](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/144) Scene Editor: allows paste in place.
 * Scene Editor: supports new Scene Key user property type.
+* Scene Editor: supports new Object Variable user property type.
 
 ## v3.32.1 - Feb 27, 2022
 
