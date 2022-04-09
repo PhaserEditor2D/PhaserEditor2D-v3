@@ -170,6 +170,7 @@ namespace phasereditor2d.scene.core.json {
                     compFiles.push(file);
 
                 } catch (e) {
+                    
                     console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
                 }
 
@@ -357,10 +358,12 @@ namespace phasereditor2d.scene.core.json {
         }
 
         getSceneFiles() {
+
             return this._sceneFiles;
         }
 
         getPrefabFiles() {
+
             return this._prefabFiles;
         }
 

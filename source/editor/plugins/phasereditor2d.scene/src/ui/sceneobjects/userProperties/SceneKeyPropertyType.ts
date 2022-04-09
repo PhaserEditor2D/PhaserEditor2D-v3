@@ -46,6 +46,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        protected getDialogSize() {
+            
+            return {
+                width: window.innerWidth / 2,
+                height: window.innerHeight / 2
+            };
+        }
+
         protected async createViewer() {
 
             const viewer = new controls.viewers.TreeViewer(this.getId());
@@ -57,8 +65,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 return label;
             }));
-
-            viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
+            viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
 
             return viewer;
@@ -66,7 +73,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async loadViewerInput(viewer: controls.viewers.TreeViewer) {
 
-            viewer.setInput(ScenePlugin.getInstance().getSceneFinder().getSceneFiles());
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const prefabs = new Set(finder.getPrefabFiles());
+            
+            viewer.setInput(finder.getSceneFiles().filter(f => !prefabs.has(f)));
         }
 
         protected valueToString(viewer: controls.viewers.TreeViewer, selected: io.FilePath): string {

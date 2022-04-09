@@ -29,7 +29,7 @@ namespace colibri.ui.controls.viewers {
         constructor(viewer: TreeViewer, flat: boolean = false, center: boolean = false) {
             super(viewer);
 
-            viewer.setCellSize(128 * controls.DEVICE_PIXEL_RATIO);
+            viewer.setCellSize(128);
 
             viewer.restoreCellSize();
 
