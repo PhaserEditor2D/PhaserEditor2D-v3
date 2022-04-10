@@ -75,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const comp = document.createElement("div");
             comp.style.display = "grid";
             comp.style.gridTemplateColumns = "1fr auto";
-            comp.style.gridGap = "5px";
+            comp.style.gap = "5px";
             comp.style.alignItems = "center";
 
             return comp;

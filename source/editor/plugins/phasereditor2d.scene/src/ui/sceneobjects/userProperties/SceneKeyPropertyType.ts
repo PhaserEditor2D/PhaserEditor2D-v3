@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor() {
             super({
-                id: "phasereditor2d.scene.ui.sceneobjects.userProperties.SceneKeyDialog",
+                id: "scene-key",
                 dialogTitle: "Select Scene Key",
                 name: "Scene Key",
                 hasCustomIcon: true

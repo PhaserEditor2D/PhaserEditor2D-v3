@@ -6,8 +6,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class NumberPropertyType extends UserPropertyType<number> {
 
-        constructor() {
-            super("number", 0);
+        constructor(typeId = "number") {
+            super(typeId, 0);
         }
 
         createInspectorPropertyEditor(section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {

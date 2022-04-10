@@ -110,7 +110,7 @@ namespace colibri.ui.controls.properties {
             return { container, text, btn };
         }
 
-        createColor(parent: HTMLElement, readOnly = false, allowAlpha = true) {
+        createColor(parent?: HTMLElement, readOnly = false, allowAlpha = true) {
 
             const text = document.createElement("input");
 
@@ -127,12 +127,15 @@ namespace colibri.ui.controls.properties {
             const colorElement = document.createElement("div");
             colorElement.style.display = "grid";
             colorElement.style.gridTemplateColumns = "1fr auto";
-            colorElement.style.gridGap = "5px";
+            colorElement.style.gap = "5px";
             colorElement.style.alignItems = "center";
             colorElement.appendChild(text);
             colorElement.appendChild(btn);
 
-            parent.appendChild(colorElement);
+            if (parent) {
+
+                parent.appendChild(colorElement);
+            }
 
             btn.addEventListener("mousedown", e => {
 
@@ -158,7 +161,7 @@ namespace colibri.ui.controls.properties {
                 picker.setOptions({
                     popup: "left",
                     editor: false,
-                    alpha: false,
+                    alpha: allowAlpha,
                     onClose: () => {
 
                         ColorPickerManager.closeActive();

@@ -5,8 +5,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class StringPropertyType extends UserPropertyType<string> {
 
-        constructor(typeId: string = "string") {
-            super(typeId, "");
+        constructor(typeId: string = "string", defValue = "") {
+            super(typeId, defValue);
         }
 
         createInspectorPropertyEditor(
