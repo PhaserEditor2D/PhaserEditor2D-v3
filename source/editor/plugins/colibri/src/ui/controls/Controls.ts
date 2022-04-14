@@ -230,7 +230,7 @@ namespace colibri.ui.controls {
             dark: false,
             viewerSelectionBackground: "#4242ff",
             viewerSelectionForeground: "#f0f0f0",
-            viewerForeground: "#000000",
+            viewerForeground: "#2f2f2f",
         };
 
         static DARK_THEME: ITheme = {
