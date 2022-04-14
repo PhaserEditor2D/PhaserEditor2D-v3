@@ -116,7 +116,7 @@ namespace phasereditor2d.ide.ui {
 
         private initialLayout() {
 
-            this._split_Files_Blocks.setSplitFactor(0.2);
+            this._split_Files_Blocks.setSplitFactor(0.3);
             this._split_Editor_FilesBlocks.setSplitFactor(0.6);
             this._split_Outline_EditorFilesBlocks.setSplitFactor(0.15);
             this._split_OutlineEditorFilesBlocks_Inspector.setSplitFactor(0.8);
