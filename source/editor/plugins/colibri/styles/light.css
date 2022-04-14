@@ -10,7 +10,7 @@ Important:
 
 */
 
-.light body {
+.light body, .light .Window {
     background: #a2a2a2;
     color: #0e0e0e;
 }
