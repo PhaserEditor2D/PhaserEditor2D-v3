@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.viewers {
             this.setTreeRenderer(treeRenderer);
             this.setInput(ObjectExtensionAndPrefabViewer.SECTIONS);
 
-            this.setCellSize(78 * controls.DEVICE_PIXEL_RATIO, true);
+            this.setCellSize(78, true);
         }
     }
 

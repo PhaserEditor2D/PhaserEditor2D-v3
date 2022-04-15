@@ -61,7 +61,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             })(this._editor, () => this._editor.getPackFinder().getPacks()));
 
-            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
+            viewer.setCellSize(64, true);
             viewer.setInput(TYPES);
 
             viewer.expandRoots();

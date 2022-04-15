@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp.style.gridTemplateRows = "1fr auto";
 
             const viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.ListSection");
-            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
+            viewer.setCellSize(64, true);
             viewer.setLabelProvider(new editor.outline.SceneEditorOutlineLabelProvider());
             viewer.setCellRendererProvider(new editor.outline.SceneEditorOutlineRendererProvider());
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());

@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     dlg.create();
                     dlg.setTitle("Select Bitmap Font");
-                    dlg.getViewer().setCellSize(128 * controls.DEVICE_PIXEL_RATIO, true);
+                    dlg.getViewer().setCellSize(128, true);
                     dlg.getViewer().setInput(input);
                     dlg.getViewer().repaint();
                     dlg.setSelectionCallback(async (sel) => {

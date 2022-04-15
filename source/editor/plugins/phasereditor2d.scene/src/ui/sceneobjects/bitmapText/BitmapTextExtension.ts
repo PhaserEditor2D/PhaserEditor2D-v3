@@ -70,7 +70,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     .flatMap(pack => pack.getItems())
                     .filter(item => item instanceof pack.core.BitmapFontAssetPackItem));
 
-            dlg.getViewer().setCellSize(128 * colibri.ui.controls.DEVICE_PIXEL_RATIO, true);
+            dlg.getViewer().setCellSize(128, true);
 
             dlg.setTitle("Select Bitmap Font");
 

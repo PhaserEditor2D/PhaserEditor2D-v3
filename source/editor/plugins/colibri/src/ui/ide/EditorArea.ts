@@ -11,7 +11,7 @@ namespace colibri.ui.ide {
         constructor() {
             super("EditorArea");
 
-            this.setTabIconSize(controls.ICON_SIZE * 3);
+            this.setTabIconSize(controls.RENDER_ICON_SIZE * 3);
         }
 
         activateEditor(editor: EditorPart): void {

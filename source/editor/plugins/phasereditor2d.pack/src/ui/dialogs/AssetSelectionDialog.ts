@@ -72,7 +72,7 @@ namespace phasereditor2d.pack.ui.dialogs {
 
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider(this._viewerLayout));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
+            viewer.setCellSize(64, true);
             viewer.setInput([]);
 
             super.create(hideParentDialog);

@@ -60,7 +60,7 @@ namespace colibri.ui.controls.viewers {
 
             this._paintItemShadow = paintShadow;
 
-            this.getViewer().setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
+            this.getViewer().setCellSize(64, true);
 
             return this;
         }
@@ -122,7 +122,7 @@ namespace colibri.ui.controls.viewers {
 
             if (this._flat) {
 
-                const limit = 64 * controls.DEVICE_PIXEL_RATIO;
+                const limit = 64;
 
                 if (cellSize < limit) {
 

@@ -47,7 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
             viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-            viewer.setCellSize(64 * controls.DEVICE_PIXEL_RATIO, true);
+            viewer.setCellSize(64, true);
 
             let input: any;
 
