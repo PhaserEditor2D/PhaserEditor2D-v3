@@ -28,6 +28,7 @@
 * Scene Editor: supports new Scene Key user property type.
 * Scene Editor: supports new Object Variable user property type.
 * [#181](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/181) Scene Editor: supports new Color user property type.
+* Fixes cell size of viewers in screens with DPR > 1.
 
 ## v3.32.1 - Feb 27, 2022
 
