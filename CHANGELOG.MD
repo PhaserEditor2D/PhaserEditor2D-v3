@@ -1,33 +1,41 @@
 # Change Log
 
-## development
+## v3.33.0 - April 18, 2020
+
+### Added
+
+* [#195](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/195) The new GO Name parameter.
+* [#144](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/144) Scene Editor: allows paste in place.
+* Scene Editor: supports new Scene Key user property type.
+* Scene Editor: supports new Object Variable user property type.
+* [#181](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/181) Scene Editor: supports new Color user property type.
+
+### Changed
+
+* Scene Editor: removes the Details sub-tab from the Inspector view.
+* Scene Editor: the Reset Zoom button restores the zoom and position (0, 0) of the camera. 
+* [#182](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/182) macOS error: exec: "code": Executable file not found in $PATH.
+* [#185](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/185) Allows uploading files with more than 10MB using the Upload dialog.
+
+### Fixes
 
 * Scene Editor: fixes TileSprite hit area computation in CANVAS mode. A work around Phaser's bug in RenderTexture.shapnshotPixel method.
 * Scene Editor: fixes the scene thumbnail maker. Invisible containers/layers are not included in the thumbnail.
 * Scene Editor: fixes viewer rendering of objects with 0 width/height. Like a Text game object with a `""` value.
 * Scene Editor: fixes picking of objects under hidden parents.
 * Scene Editor: fixes ordering of objects when moving to a new parent.
-* Scene Editor: removes the Details sub-tab from the Inspector view.
-* Scene Editor: the Reset Zoom button restores the zoom and position (0, 0) of the camera. 
 * Scene Editor: prevents scrolling the whole page on macOS with scrolling inertia enabled.
 * Scene Editor: fixes panning with ALT key when the pointer is close to the Translate tool handlers.
 * Scene Editor: fixes selection changed when panning with the ALT key.
 * Scene Editor: fixes command for opening a scene file in macOS (⌘+⌥+O).
 * [#200](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/200) BitmapText aligned cause NaN position.
-* [#195](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/195) The new GO Name parameter.
-* [#182](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/182) macOS error: exec: "code": Executable file not found in $PATH.
 * Scene Editor: fixes Text Content's textarea parameter in Inspector view.
 * Scene Editor: adjusts the loading message position to the DPR.
 * Scene Editor: adds missing `light/bitmapfont-type@2x.png` icon.
 * [#29](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/29) Fixes drag & drop image in Safari.
 * Workbench: prevents Safari to include the address bar in the tab/focus order.
 * [#149](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/149) Renames children when pasting a container. Fixes trimming of numbering in new names.
-* [#185](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/185) Allows uploading files with more than 10MB using the Upload dialog.
 * Editor tab label: fixes cursor type in Safari.
-* [#144](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/144) Scene Editor: allows paste in place.
-* Scene Editor: supports new Scene Key user property type.
-* Scene Editor: supports new Object Variable user property type.
-* [#181](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/181) Scene Editor: supports new Color user property type.
 * Fixes cell size of viewers in screens with DPR > 1.
 
 ## v3.32.1 - Feb 27, 2022
