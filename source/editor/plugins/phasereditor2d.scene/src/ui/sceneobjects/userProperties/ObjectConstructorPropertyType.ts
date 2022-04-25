@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM {
 
-            return this.buildExpressionFieldCode(prop, "FunctionConstructor", value);
+            return this.buildExpressionFieldCode(prop, "any", value);
         }
 
         buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {
