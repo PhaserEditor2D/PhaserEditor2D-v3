@@ -11,7 +11,6 @@ namespace colibri.ui.controls.properties {
         private _updaters: Updater[];
         private _fillSpace: boolean;
         private _collapsedByDefault: boolean;
-        private _tabSection: string;
 
         constructor(page: PropertyPage, id: string, title: string, fillSpace = false, collapsedByDefault = false, tabSectionByDefault?: string) {
             super();
@@ -24,55 +23,16 @@ namespace colibri.ui.controls.properties {
             this._updaters = [];
 
             const localTabSection = localStorage.getItem(this.localStorageKey("tabSection"));
-
-            if (localTabSection) {
-
-                if (localTabSection !== "undefined") {
-
-                    this._tabSection = localTabSection;
-                }
-
-            } else {
-
-                this._tabSection = tabSectionByDefault;
-            }
         }
 
         abstract createForm(parent: HTMLDivElement);
 
         abstract canEdit(obj: any, n: number): boolean;
 
-        canShowInTabSection(tabSection: string) {
-
-            return this._tabSection === tabSection;
-        }
-
-        private setTabSection(tabSection: string) {
-
-            this._tabSection = tabSection;
-
-            localStorage.setItem(this.localStorageKey("tabSection"), tabSection || "undefined");
-        }
-
         private localStorageKey(prop: string) {
 
             return "PropertySection[" + this._id + "]." + prop;
         }
-
-        protected createTabSectionMenuItem(menu: controls.Menu, tabSection: string) {
-
-            menu.addAction({
-                text: "Show In " + tabSection,
-                selected: this._tabSection === tabSection,
-                callback: () => {
-
-                    this.setTabSection(this._tabSection === tabSection ? undefined : tabSection);
-
-                    this.getPage().updateWithSelection();
-                }
-            });
-        }
-
 
         abstract canEditNumber(n: number): boolean;
 

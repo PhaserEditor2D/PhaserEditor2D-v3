@@ -257,13 +257,11 @@ namespace colibri.ui.controls.properties {
 
             this._selection = selection;
 
-            const tabSection = this._sectionProvider.getSelectedTabSection();
-
             for (const pane of this._sectionPanes) {
 
                 const section = pane.getSection();
 
-                let show = section.canShowInTabSection(tabSection) && section.canEditNumber(n);
+                let show = section.canEditNumber(n);
 
                 if (show) {
 
