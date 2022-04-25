@@ -28,10 +28,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async updateIcon(iconControl: controls.IconControl, value: string) {
 
+            let icon: controls.IImage = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
+
             if (value.startsWith("Phaser.GameObjects.")) {
 
-                // find the extension and set the icon from the extension
-                
+                icon = this.findIcon(value) || icon;
+
             } else {
 
                 const finder = ScenePlugin.getInstance().getSceneFinder();
@@ -54,14 +56,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         await img.preloadSize();
                         await img.preload();
 
-                        iconControl.setIcon(img);
-
-                    } else {
-
-                        iconControl.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+                        icon = img;
                     }
                 }
             }
+
+            iconControl.setIcon(icon);
         }
 
         protected getDialogSize() {
@@ -72,19 +72,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             };
         }
 
+        private findIcon(type: string) {
+
+            const ext = ScenePlugin.getInstance().getGameObjectExtensions().find(ext => ext.getPhaserTypeName() === type);
+
+            if (ext) {
+
+                return ext.getIcon();
+            }
+
+            return undefined;
+        }
+
         protected async createViewer() {
 
             const viewer = new controls.viewers.TreeViewer(this.getId());
 
-            viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(() => new viewers.SceneFileCellRenderer()));
-            viewer.setLabelProvider(new controls.viewers.LabelProvider((file: io.FilePath) => {
+            viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider((element) => {
 
-                const label = this.valueToString(viewer, file);
+                if (element instanceof io.FilePath) {
+
+                    return new viewers.SceneFileCellRenderer();
+                }
+
+                const icon = this.findIcon(element);
+
+                if (icon) {
+
+                    return new controls.viewers.IconImageCellRenderer(icon);
+                }
+
+                return new controls.viewers.EmptyCellRenderer();
+            }));
+
+            viewer.setLabelProvider(new controls.viewers.LabelProvider((element: io.FilePath | string) => {
+
+                const label = this.valueToString(viewer, element);
 
                 return label;
             }));
-            viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer));
+            // viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+
+            viewer.setCellSize(32);
 
             return viewer;
         }
@@ -93,14 +123,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            viewer.setInput(finder.getPrefabFiles());
+            const types = ScenePlugin.getInstance().getGameObjectExtensions().map(ext => ext.getPhaserTypeName());
+
+            viewer.setInput([...finder.getPrefabFiles(), ...types]);
         }
 
-        protected valueToString(viewer: controls.viewers.TreeViewer, selected: io.FilePath): string {
+        protected valueToString(viewer: controls.viewers.TreeViewer, selected: io.FilePath | string): string {
 
-            const data = ScenePlugin.getInstance().getSceneFinder().getSceneData(selected);
+            if (selected instanceof io.FilePath) {
 
-            return data?.settings?.sceneKey || selected.getNameWithoutExtension();
+                return selected.getNameWithoutExtension();
+            }
+
+            return selected;
         }
     }
 }
