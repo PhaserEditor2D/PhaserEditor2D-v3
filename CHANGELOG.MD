@@ -3,6 +3,7 @@
 ## dev
 
 * [#210](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/210) Missing Variable Pane. Removes everythign related to the Inspector view sections.
+* Removes "Property" suffix in menu for adding a new user property.
 
 ## v3.33.0 - April 18, 2020
 

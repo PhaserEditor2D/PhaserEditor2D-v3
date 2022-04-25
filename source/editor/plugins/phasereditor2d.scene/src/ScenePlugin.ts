@@ -386,6 +386,7 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.ExpressionPropertyType(),
                 new ui.sceneobjects.OptionPropertyType(),
                 new ui.sceneobjects.ObjectVarPropertyType(),
+                new ui.sceneobjects.ObjectConstructorPropertyType(),
                 new ui.sceneobjects.TextureConfigPropertyType(),
                 new ui.sceneobjects.AnimationKeyPropertyType(),
                 new ui.sceneobjects.AudioKeyPropertyType(),
