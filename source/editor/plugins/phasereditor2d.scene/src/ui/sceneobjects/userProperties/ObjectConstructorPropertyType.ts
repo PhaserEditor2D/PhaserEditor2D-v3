@@ -14,11 +14,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 name: "Object Constructor",
                 hasCustomIcon: true
             });
+
+            this.setExpressionType("any");
+        }
+
+        hasCustomPropertyType(): boolean {
+
+            return true;
+        }
+
+        getName(): string {
+
+            return "Object Constructor";
         }
 
         buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM {
 
-            return this.buildExpressionFieldCode(prop, "any", value);
+            return this.buildExpressionFieldCode(prop, this.getExpressionType(), value);
         }
 
         buildSetObjectPropertyCodeDOM(comp: Component<any>, args: ISetObjectPropertiesCodeDOMArgs, userProp: UserProperty): void {

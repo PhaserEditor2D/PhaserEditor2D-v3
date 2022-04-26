@@ -91,7 +91,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         protected buildExpressionFieldCode(prop: UserProperty, type: string, value: string) {
 
             const decl = new code.FieldDeclCodeDOM(prop.getInfo().name, type, true);
-
+            
+            decl.setAllowUndefined(true);
             decl.setInitialValueExpr(value);
 
             return decl;
