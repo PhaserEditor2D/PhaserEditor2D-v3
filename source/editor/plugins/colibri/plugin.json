@@ -1,5 +1,6 @@
 {
     "id": "colibri",
+    "priority": -100,
     "styles": [
         "styles/controls.css",
         "styles/dark.css",
