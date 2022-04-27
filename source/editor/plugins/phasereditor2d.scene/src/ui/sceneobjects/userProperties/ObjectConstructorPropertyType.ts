@@ -76,14 +76,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             iconControl.setIcon(icon);
         }
 
-        protected getDialogSize() {
-
-            return {
-                width: window.innerWidth / 2,
-                height: window.innerHeight / 2
-            };
-        }
-
         private findIcon(type: string) {
 
             const ext = ScenePlugin.getInstance().getGameObjectExtensions().find(ext => ext.getPhaserTypeName() === type);
