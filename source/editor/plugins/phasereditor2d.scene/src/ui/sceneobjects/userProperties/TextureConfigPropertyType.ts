@@ -91,6 +91,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         async createViewer() {
 
             const finder = new pack.core.PackFinder();
+            await finder.preload();
             
             const viewer = await super.createViewer();
             viewer.setContentProvider(new TextureContentProvider(finder));
