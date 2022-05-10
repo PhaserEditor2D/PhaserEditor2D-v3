@@ -1,12 +1,12 @@
 # Change Log
 
-## dev
+## v3.33.1 - May 10, 2022
 
 * [#210](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/210) Missing Variable Pane. Removes everythign related to the Inspector view sections.
 * [#212](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/212) The new Object Constructor user property type.
 * [#216](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/216) No Textures are Available to Select from the Select Texture Window When Using Components.
 
-## v3.33.0 - April 18, 2020
+## v3.33.0 - April 18, 2022
 
 ### Added
 
