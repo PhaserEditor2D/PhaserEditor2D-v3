@@ -118,9 +118,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this.addUpdater(() => {
 
-                btn.textContent = this.getSettings().preloadPackFiles.length + " selected";
+                const settings = this.getSettings();
 
-                const files = this.getEditor().getScene().getSettings().preloadPackFiles;
+                btn.textContent = settings.preloadPackFiles.length + " selected";
+
+                const files = settings.preloadPackFiles;
 
                 const tooltip = files.length === 0 ? "Click to select the Asset Pack files."
                     : files.map(f => `<code>${f}</code>`)
