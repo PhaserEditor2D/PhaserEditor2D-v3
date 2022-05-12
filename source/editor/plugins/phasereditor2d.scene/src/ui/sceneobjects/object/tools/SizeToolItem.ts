@@ -60,20 +60,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const point = this.getPoint(args);
 
-            const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
-
             for (const obj of args.objects) {
 
                 const sprite = obj as unknown as TileSprite;
 
+                const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
+
                 const initLocalPos = new Phaser.Math.Vector2();
+
                 sprite.getWorldTransformMatrix(worldTx);
+
                 worldTx.applyInverse(point.x, point.y, initLocalPos);
 
                 sprite.setData("SizeTool", {
                     initWidth: sprite.width,
                     initHeight: sprite.height,
-                    initLocalPos: initLocalPos
+                    initLocalPos: initLocalPos,
+                    initWorldTx: worldTx
                 });
             }
         }
@@ -93,27 +96,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const camera = args.camera;
 
-            const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
-
             for (const obj of args.objects) {
 
                 const sprite = obj as Sprite;
                 const data = sprite.data.get("SizeTool");
                 const initLocalPos: Phaser.Math.Vector2 = data.initLocalPos;
+                const worldTx: Phaser.GameObjects.Components.TransformMatrix = data.initWorldTx;
 
                 const localPos = new Phaser.Math.Vector2();
-                sprite.getWorldTransformMatrix(worldTx);
+
                 worldTx.applyInverse(args.x, args.y, localPos);
 
                 const flipX = sprite.flipX ? -1 : 1;
                 const flipY = sprite.flipY ? -1 : 1;
 
+                const { originX, originY } = sprite.getEditorSupport()
+                    .computeOrigin();
+
                 const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
                 const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
 
+                const dw = dx / (1 - (originX === 1 ? 0 : originX));
+                const dh = dy / (1 - (originY === 1 ? 0 : originY));
+
                 const { x: width, y: height } = args.editor.getScene().snapPoint(
-                    data.initWidth + dx,
-                    data.initHeight + dy);
+                    data.initWidth + dw,
+                    data.initHeight + dh
+                );
 
                 const changeAll = this._x === 1 && this._y === 1;
                 const changeX = this._x === 1 && this._y === 0.5 || changeAll;
