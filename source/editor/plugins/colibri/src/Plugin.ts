@@ -58,7 +58,8 @@ namespace colibri {
         }
 
         getResourceURL(pathInPlugin: string) {
-            return `app/plugins/${this.getId()}/${pathInPlugin}?v=${CACHE_VERSION}`;
+
+            return `app/plugins/${this.getId()}/${pathInPlugin}?v=${Date.now()}`;
         }
 
         async getJSON(pathInPlugin: string) {
