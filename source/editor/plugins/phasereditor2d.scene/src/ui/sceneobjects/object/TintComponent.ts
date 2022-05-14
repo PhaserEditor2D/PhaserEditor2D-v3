@@ -29,14 +29,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return 0;
     }
 
-    function TintProperty(
-        name: string, label?: string): IProperty<any> {
+    export function TintProperty(
+        name: string, label?: string, tooltip?: string): IProperty<any> {
 
         return {
             name,
             defValue: "#ffffff",
             label,
-            tooltip: "phaser:Phaser.GameObjects.Components.Tint." + name,
+            tooltip: tooltip ?? "phaser:Phaser.GameObjects.Components.Tint." + name,
             local: false,
             getValue: obj => {
 
