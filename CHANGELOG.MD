@@ -4,6 +4,7 @@
 
 * Improves Size tool modifiers.
 * Avoids caching of plugin resources.
+* Scene Editor: skips refreshing the scene after the paste operation. Fixes object's loader extensions. 
 
 ## v3.33.1 - May 10, 2022
 
