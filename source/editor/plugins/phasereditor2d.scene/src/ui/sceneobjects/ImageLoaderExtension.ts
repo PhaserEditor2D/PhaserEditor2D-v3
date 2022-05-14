@@ -2,7 +2,7 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ImageLoaderUpdater extends LoaderUpdaterExtension {
+    export class ImageLoaderExtension extends LoaderUpdaterExtension {
 
         clearCache(game: Phaser.Game): void {
 
@@ -56,7 +56,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         async updateLoaderWithObjData(scene: BaseScene, data: core.json.IObjectData): Promise<void> {
-            // nothing
+
+            const serializer = new core.json.Serializer(data);
+
+            const textureKeys = serializer.read("texture") as ITextureKeys;
+
+            if (textureKeys) {
+
+                const { key, frame } = textureKeys;
+
+                if (key) {
+
+                    const finder = scene.getMaker().getPackFinder();
+
+                    const asset = finder.getAssetPackItemImage(key, frame);
+
+                    if (asset) {
+
+                        if (this.acceptAsset(asset)) {
+
+                            await this.updateLoader(scene, asset);
+                        }
+                    }
+                }
+            }
         }
     }
 }

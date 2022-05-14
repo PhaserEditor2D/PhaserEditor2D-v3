@@ -203,7 +203,7 @@ namespace phasereditor2d.scene {
             // loader updates
 
             reg.addExtension(
-                new ui.sceneobjects.ImageLoaderUpdater(),
+                new ui.sceneobjects.ImageLoaderExtension(),
                 new ui.sceneobjects.BitmapFontLoaderUpdater(),
                 new ui.sceneobjects.TilemapLoaderUpdater()
             );

@@ -12,6 +12,7 @@ namespace phasereditor2d.pack.core {
         }
 
         protected createParser(): parsers.ImageFrameParser {
+
             return new parsers.ImageParser(this);
         }
     }

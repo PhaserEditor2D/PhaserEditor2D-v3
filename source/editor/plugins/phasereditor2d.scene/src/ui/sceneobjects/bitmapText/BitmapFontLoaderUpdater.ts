@@ -32,9 +32,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async updateLoaderWithObjData(scene: BaseScene, data: core.json.IObjectData): Promise<void> {
 
-            if (data.type === BitmapTextExtension.getInstance().getTypeName()) {
+            const serializer = new core.json.Serializer(data);
+            const type = serializer.getType();
 
-                const font = (data as any).font;
+            if (type === BitmapTextExtension.getInstance().getTypeName()) {
+
+                const font = serializer.read("font");
 
                 if (font) {
 

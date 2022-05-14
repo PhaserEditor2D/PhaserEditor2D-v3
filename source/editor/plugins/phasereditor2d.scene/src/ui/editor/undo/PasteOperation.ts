@@ -14,12 +14,16 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._pasteInPlace = pasteInPlace;
         }
 
-        async execute() {
+        // TODO: keep an eye on this. I did a full refreshScene() for loading all the required assets,
+        // but I'm now using the data loaders in the performModification() method.
+        // So I'm commenting this, but let's see if it doesn't introduce regressions.
 
-            await super.execute();
+        // async execute() {
 
-            await this.getEditor().refreshScene();
-        }
+        //     await super.execute();
+
+        //     await this.getEditor().refreshScene();
+        // }
 
         protected async performModification() {
 

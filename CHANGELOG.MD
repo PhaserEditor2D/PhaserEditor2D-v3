@@ -3,6 +3,7 @@
 ## dev
 
 * Improves Size tool modifiers.
+* Avoids caching of plugin resources.
 
 ## v3.33.1 - May 10, 2022
 
