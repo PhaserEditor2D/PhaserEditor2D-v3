@@ -87,7 +87,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             obj.setTexture(keys.key || null, keys.frame);
 
-            obj.setOrigin(ox, oy);
+            if (obj.getEditorSupport().hasComponent(OriginComponent)) {
+                
+                obj.setOrigin(ox, oy);
+            }
         }
 
         removeTexture() {
