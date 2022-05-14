@@ -119,7 +119,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             } else {
 
-                call.argLiteral("__DEFAULT");
+                call.argLiteral("_MISSING");
             }
         }
     }
