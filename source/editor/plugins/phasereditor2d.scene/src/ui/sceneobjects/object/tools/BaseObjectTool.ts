@@ -51,6 +51,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 for (const prop of props) {
 
                     if (support.hasProperty(prop)) {
+
                         return true;
                     }
                 }

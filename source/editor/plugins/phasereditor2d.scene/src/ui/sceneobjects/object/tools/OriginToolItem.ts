@@ -27,7 +27,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isValidFor(objects: sceneobjects.ISceneGameObject[]) {
 
-            return objects.length === 1 && objects[0].getEditorSupport().supportsOrigin();
+            return objects.length === 1
+                && objects[0].getEditorSupport().supportsOrigin();
         }
 
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean {
@@ -100,7 +101,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._position_1.y
             );
 
-            args.editor.updateInspectorViewSection(OriginSection.SECTION_ID);
+            args.editor.updateInspectorViewSection(sprite.getEditorSupport().getOriginSectionId());
         }
 
         static simpleChangeOriginKeepPosition(

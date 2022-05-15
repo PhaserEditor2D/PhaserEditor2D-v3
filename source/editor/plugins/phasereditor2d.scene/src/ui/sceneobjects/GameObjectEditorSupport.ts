@@ -305,12 +305,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getOriginProperties() {
 
-            return [OriginComponent.originX, OriginComponent.originY];
+            if (this.hasComponent(OriginComponent)) {
+
+                return [OriginComponent.originX, OriginComponent.originY];
+            }
+
+            return [];
         }
 
         supportsOrigin() {
 
-            return this.hasComponent(OriginComponent);
+            return this.getOriginProperties().length > 0;
         }
 
         computeOrigin(): { originX: number, originY: number } {

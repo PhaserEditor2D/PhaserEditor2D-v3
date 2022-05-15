@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return true;
             }
 
-            return obj.getEditorSupport().supportsOrigin();
+            return super.canRender(obj);
         }
 
         onActivated(args: editor.tools.ISceneToolContextArgs) {
