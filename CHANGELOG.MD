@@ -6,6 +6,7 @@
 * Avoids caching of plugin resources.
 * Scene Editor: skips refreshing the scene after the paste operation. Fixes object's loader extensions. 
 * Exports Tint properties to plugins.
+* Origin tool allows custom origin properties (like in in a NinePatchContainer).
 
 
 ## v3.33.1 - May 10, 2022
