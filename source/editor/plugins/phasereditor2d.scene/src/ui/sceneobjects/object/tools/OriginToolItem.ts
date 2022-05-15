@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isValidFor(objects: sceneobjects.ISceneGameObject[]) {
 
-            return objects.length === 1 && objects[0].getEditorSupport().hasComponent(OriginComponent);
+            return objects.length === 1 && objects[0].getEditorSupport().supportsOrigin();
         }
 
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean {
@@ -51,18 +51,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const tx = sprite.getWorldTransformMatrix();
                 tx.transformPoint(0, 0, worldPoint);
 
+                const { originX, originY } = sprite.getEditorSupport().computeOrigin();
+                const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+
                 this._spriteWorldPosition_1 = worldPoint;
                 this._spriteWorldTx_1 = tx;
                 this._localTx_1 = sprite.getLocalTransformMatrix();
-                this._displayOrigin_1 = new Phaser.Math.Vector2(sprite.displayOriginX, sprite.displayOriginY);
-                this._origin_1 = new Phaser.Math.Vector2(sprite.originX, sprite.originY);
+                this._displayOrigin_1 = new Phaser.Math.Vector2(displayOriginX, displayOriginY);
+                this._origin_1 = new Phaser.Math.Vector2(originX, originY);
                 this._position_1 = new Phaser.Math.Vector2(sprite.x, sprite.y);
             }
         }
 
         private getSprite(args: editor.tools.ISceneToolDragEventArgs) {
 
-            return args.objects[0] as unknown as Phaser.GameObjects.Sprite;
+            return args.objects[0] as Sprite;
         }
 
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
@@ -101,14 +104,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         static simpleChangeOriginKeepPosition(
-            sprite: Phaser.GameObjects.Sprite,
+            sprite: Sprite,
             newOriginX: number,
             newOriginY: number
         ) {
+
+            const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+
             this.changeOriginKeepPosition(
                 sprite,
-                sprite.displayOriginX,
-                sprite.displayOriginY,
+                displayOriginX,
+                displayOriginY,
                 newOriginX,
                 newOriginY,
                 sprite.getLocalTransformMatrix(),
@@ -118,7 +124,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         static changeOriginKeepPosition(
-            sprite: Phaser.GameObjects.Sprite,
+            sprite: Sprite,
             displayOriginX_1: number,
             displayOriginY_1: number,
             originX_2: number,
@@ -130,8 +136,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             sprite.setOrigin(originX_2, originY_2);
 
-            const displayOriginDx = sprite.displayOriginX - displayOriginX_1;
-            const displayOriginDy = sprite.displayOriginY - displayOriginY_1;
+            const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+
+            const displayOriginDx = displayOriginX - displayOriginX_1;
+            const displayOriginDy = displayOriginY - displayOriginY_1;
 
             const displayOriginDelta = new Phaser.Math.Vector2(
                 displayOriginDx,
@@ -152,13 +160,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return obj.getData("OriginTool.initData") as IOriginToolSpriteData;
         }
 
-        static createFinalData(sprite: Phaser.GameObjects.Sprite) {
+        static createFinalData(sprite: Sprite) {
+
+            const { originX, originY } = sprite.getEditorSupport().computeOrigin();
 
             return {
                 x: sprite.x,
                 y: sprite.y,
-                originX: sprite.originX,
-                originY: sprite.originY
+                originX: originX,
+                originY: originY
             };
         }
 

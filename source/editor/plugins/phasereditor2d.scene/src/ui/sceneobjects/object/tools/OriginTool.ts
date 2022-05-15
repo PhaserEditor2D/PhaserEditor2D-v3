@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 id: OriginTool.ID,
                 command: editor.commands.CMD_SET_ORIGIN_SCENE_OBJECT,
-            }, OriginComponent.originX, OriginComponent.originY);
+            });
 
             const x = new OriginToolItem("x");
             const y = new OriginToolItem("y");
@@ -32,13 +32,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
+        protected getProperties(obj: ISceneGameObject) {
+
+            return obj.getEditorSupport().getOriginProperties();
+        }
+
         canEdit(obj: ISceneGameObject) {
 
             if (obj instanceof Container) {
 
                 if (obj.getEditorSupport().isPrefabInstance()) {
 
-                    for(const test of [obj, ...obj.getChildren()]) {
+                    for (const test of [obj, ...obj.getChildren()]) {
 
                         if (!test.getEditorSupport().isUnlockedPropertyXY(TransformComponent.position)) {
 
@@ -60,15 +65,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return true;
             }
 
-            return super.canRender(obj);
+            return obj.getEditorSupport().supportsOrigin();
         }
 
         onActivated(args: editor.tools.ISceneToolContextArgs) {
 
             super.onActivated(args);
 
-            this.confirmUnlockProperty(args, [sceneobjects.OriginComponent.originX, sceneobjects.OriginComponent.originY],
-                "origin", OriginSection.SECTION_ID);
+            const props = args.objects.flatMap(obj => obj.getEditorSupport().getOriginProperties());
+
+            const sections = args.objects.flatMap(obj => obj.getEditorSupport().getOriginSectionId());
+
+            this.confirmUnlockProperty(args, props, "origin", ...sections);
         }
     }
 }

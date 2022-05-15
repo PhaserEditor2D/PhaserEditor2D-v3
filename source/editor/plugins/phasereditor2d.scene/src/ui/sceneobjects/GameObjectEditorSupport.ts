@@ -298,6 +298,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return points.map(p => camera.getScreenPoint(p.x, p.y));
         }
 
+        getOriginSectionId() {
+
+            return OriginSection.SECTION_ID;
+        }
+
+        getOriginProperties() {
+
+            return [OriginComponent.originX, OriginComponent.originY];
+        }
+
+        supportsOrigin() {
+
+            return this.hasComponent(OriginComponent);
+        }
+
         computeOrigin(): { originX: number, originY: number } {
 
             const { originX, originY } = this.getObject() as any;
