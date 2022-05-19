@@ -14,6 +14,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._factoryMethodName = factoryMethodName;
         }
 
+        getFactoryMethodName() {
+
+            return this._factoryMethodName;
+        }
+
         buildPrefabConstructorDeclarationSupperCallCodeDOM(
             args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
 
