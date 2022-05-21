@@ -11,6 +11,8 @@ namespace colibri.ui.controls {
     export const ICON_SIZE = DEVICE_PIXEL_RATIO > 1 ? 32 : 16;
     export const RENDER_ICON_SIZE = 16;
 
+    export type IImageOrCanvas = HTMLImageElement|HTMLCanvasElement;
+
     export class Controls {
 
         private static _images: Map<string, IImage> = new Map();

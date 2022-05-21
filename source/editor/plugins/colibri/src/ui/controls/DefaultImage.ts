@@ -97,11 +97,11 @@ namespace colibri.ui.controls {
         }
 
         static paintImageElement(
-            context: CanvasRenderingContext2D, image: HTMLImageElement,
+            context: CanvasRenderingContext2D, image: IImageOrCanvas,
             x: number, y: number, w: number, h: number, center: boolean) {
 
-            const naturalWidth = image.naturalWidth;
-            const naturalHeight = image.naturalHeight;
+            const naturalWidth = image instanceof HTMLImageElement ? image.naturalWidth : image.width;
+            const naturalHeight = image instanceof HTMLImageElement ? image.naturalHeight : image.height;
 
             const renderHeight = h;
             const renderWidth = w;
@@ -147,7 +147,7 @@ namespace colibri.ui.controls {
         }
 
         static paintImageElementFrame(
-            context: CanvasRenderingContext2D, image: HTMLImageElement,
+            context: CanvasRenderingContext2D, image: CanvasImageSource,
             srcX: number, srcY: number, scrW: number, srcH: number,
             dstX: number, dstY: number, dstW: number, dstH: number): void {
 

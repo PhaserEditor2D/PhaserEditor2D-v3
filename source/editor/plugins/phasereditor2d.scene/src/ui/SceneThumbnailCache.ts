@@ -89,20 +89,29 @@ namespace phasereditor2d.scene.ui {
         }
     }
 
-    async function createBlobFromImage(img: HTMLImageElement): Promise<Blob> {
+    async function createBlobFromImage(img: controls.IImageOrCanvas): Promise<Blob> {
 
         return new Promise((resolve, reject) => {
 
-            const canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            canvas.style.width = img.width + "px";
-            canvas.style.height = img.height + "px";
+            let canvas: HTMLCanvasElement;
 
-            const ctx = canvas.getContext("2d");
-            ctx.imageSmoothingEnabled = false;
+            if (img instanceof HTMLCanvasElement) {
 
-            ctx.drawImage(img, 0, 0);
+                canvas = img;
+
+            } else {
+
+                canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.style.width = img.width + "px";
+                canvas.style.height = img.height + "px";
+
+                const ctx = canvas.getContext("2d");
+                ctx.imageSmoothingEnabled = false;
+
+                ctx.drawImage(img, 0, 0);
+            }
 
             canvas.toBlob((blob) => {
 
