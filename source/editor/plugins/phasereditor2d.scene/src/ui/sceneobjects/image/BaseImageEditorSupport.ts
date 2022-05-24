@@ -2,12 +2,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class BaseImageEditorSupport<T extends ISceneGameObject> extends GameObjectEditorSupport<T> {
 
-        constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene) {
+        constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene, includeTextureComponent = true) {
             super(extension, obj, scene);
 
-            this.addComponent(
+            if (includeTextureComponent) {
 
-                new TextureComponent(obj as unknown as ITextureLikeObject),
+                this.addComponent(new TextureComponent(obj as unknown as ITextureLikeObject));
+            }
+
+            this.addComponent(
                 new TransformComponent(obj as unknown as ITransformLikeObject),
                 new OriginComponent(obj as unknown as IOriginLikeObject),
                 new FlipComponent(obj as unknown as IFlipLikeObject),
