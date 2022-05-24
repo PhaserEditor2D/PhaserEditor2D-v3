@@ -6,31 +6,35 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _properties: IProperty<ISceneGameObject>[];
         private _values: any[];
 
-        constructor(obj: ISceneGameObject,) {
+        constructor(obj: ISceneGameObject) {
 
             this._object = obj;
             this._properties = [];
+            this._values = [];
         }
 
         start(redrawCallback: () => void) {
 
-            this._values = this._properties.map(p => p.getValue(this._object));
+            this._object.scene.events.once("update", () => {
 
-            redrawCallback();
+                this._values = this._properties.map(p => p.getValue(this._object));
 
-            const listener = () => {
+                redrawCallback();
 
-                if (this.isDirty()) {
+                const listener = () => {
 
-                    redrawCallback();
-                }
-            };
+                    if (this.isDirty()) {
 
-            this._object.scene.events.on("update", listener);
+                        redrawCallback();
+                    }
+                };
 
-            this._object.once("destroy", () => {
+                this._object.scene.events.on("update", listener);
 
-                this._object.scene.events.off("update", listener);
+                this._object.once("destroy", () => {
+
+                    this._object.scene.events.off("update", listener);
+                });
             });
         }
 
@@ -53,7 +57,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const name = this._object.getEditorSupport().getExtension().getTypeName();
 
-            return `${name}[${this._values.map(v => "" + v).join(",")}]`;
+            return `${name}[${this._values.map(v => JSON.stringify(v)).join(",")}]`;
         }
 
         isDirty() {
