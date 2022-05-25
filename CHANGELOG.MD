@@ -1,12 +1,13 @@
 # Change Log
 
-## dev
+## v3.33.2-beta.0
 
 * Improves Size tool modifiers.
 * Avoids caching of plugin resources.
 * Scene Editor: skips refreshing the scene after the paste operation. Fixes object's loader extensions. 
 * Exports Tint properties to plugins.
 * Origin tool allows custom origin properties (like in in a NinePatchContainer).
+* Improves support for third-party game object plugins.
 
 
 ## v3.33.1 - May 10, 2022
