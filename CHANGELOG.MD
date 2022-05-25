@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.33.2-beta.0
+## v3.33.2-beta.1 - May 25, 2022
 
 * Improves Size tool modifiers.
 * Avoids caching of plugin resources.
