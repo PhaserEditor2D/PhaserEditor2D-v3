@@ -8,6 +8,7 @@
 * Exports Tint properties to plugins.
 * Origin tool allows custom origin properties (like in in a NinePatchContainer).
 * Improves support for third-party game object plugins.
+* Adds Alpha component to the Container game object.
 
 
 ## v3.33.1 - May 10, 2022
