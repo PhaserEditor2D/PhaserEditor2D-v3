@@ -15,26 +15,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         start(redrawCallback: () => void) {
 
-            this._object.scene.events.once("update", () => {
+            const updateListener = () => {
+
+                if (this.isDirty()) {
+
+                    redrawCallback();
+                }
+            };
+
+            const awakeListener = () => {
 
                 this._values = this._properties.map(p => p.getValue(this._object));
 
                 redrawCallback();
 
-                const listener = () => {
+                this._object.scene.events.on("update", updateListener);
+            };
 
-                    if (this.isDirty()) {
+            this._object.scene.events.once("update", awakeListener);
 
-                        redrawCallback();
-                    }
-                };
+            this._object.once("destroy", () => {
 
-                this._object.scene.events.on("update", listener);
-
-                this._object.once("destroy", () => {
-
-                    this._object.scene.events.off("update", listener);
-                });
+                this._object.scene.events.off("update", awakeListener);
+                this._object.scene.events.off("update", updateListener);
             });
         }
 
