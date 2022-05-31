@@ -9,6 +9,7 @@
 * Origin tool allows custom origin properties (like in in a NinePatchContainer).
 * Improves support for third-party game object plugins.
 * Adds Alpha component to the Container game object.
+* Fixes layout commands for objects with custom origin.
 
 
 ## v3.33.1 - May 10, 2022
