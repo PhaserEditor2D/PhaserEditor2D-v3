@@ -137,6 +137,7 @@ namespace phasereditor2d.scene.core.code {
                 const fields: MemberDeclCodeDOM[] = [];
 
                 this.buildObjectClassFields(fields, this._scene.getDisplayListChildren());
+                this.buildPlainObjectsClassFields(fields);
                 this.buildListClassFields(fields);
 
                 if (this._isPrefabScene) {
@@ -187,6 +188,29 @@ namespace phasereditor2d.scene.core.code {
                 .flatMap(prop => prop.buildFieldDeclarationCode());
 
             fields.push(...decls);
+        }
+
+        private buildPlainObjectsClassFields(fields: MemberDeclCodeDOM[]) {
+
+            for (const obj of this._scene.getPlainObjects()) {
+
+                const editorSupport = obj.getEditorSupport();
+                const scope = editorSupport.getScope();
+
+                if (scope !== ui.sceneobjects.ObjectScope.METHOD) {
+
+                    const objType = editorSupport.getPhaserType();
+
+                    const dom = new FieldDeclCodeDOM(
+                        formatToValidVarName(editorSupport.getLabel()),
+                        objType,
+                        scope === ui.sceneobjects.ObjectScope.PUBLIC);
+
+                    dom.setAllowUndefined(!this._scene.isPrefabSceneType());
+
+                    fields.push(dom);
+                }
+            }
         }
 
         private buildListClassFields(fields: MemberDeclCodeDOM[]) {
