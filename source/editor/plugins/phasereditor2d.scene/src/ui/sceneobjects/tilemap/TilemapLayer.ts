@@ -58,7 +58,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         destroy() {
 
-            super.destroy(false);
+            super.destroy(true);
         }
 
 

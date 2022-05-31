@@ -882,6 +882,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             } catch (e) {
 
+                console.log(e);
+                
                 alert(e.message);
             }
         }
