@@ -12,7 +12,6 @@
 * Fixes layout commands for objects with custom origin.
 * Fixes tilemap's filed code generation.
 
-
 ## v3.33.1 - May 10, 2022
 
 * [#210](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/210) Missing Variable Pane. Removes everythign related to the Inspector view sections.
