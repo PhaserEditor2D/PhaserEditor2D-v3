@@ -10,7 +10,8 @@
 * Improves support for third-party game object plugins.
 * Adds Alpha component to the Container game object.
 * Fixes layout commands for objects with custom origin.
-* Fixes tilemap's filed code generation.
+* Fixes tilemap's field code generation.
+* Fixes tilemap's layer selection in scene.
 
 ## v3.33.1 - May 10, 2022
 
