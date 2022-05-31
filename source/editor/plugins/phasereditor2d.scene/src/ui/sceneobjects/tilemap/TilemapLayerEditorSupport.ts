@@ -82,7 +82,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (x >= -layer.width && y >= -layer.height && x <= layer.width && y <= layer.height) {
 
-                let worldToTile: (worldX: number, worldY: number, layer: Phaser.Tilemaps.LayerData) => { tileX: number, tileY: number };
+                let worldToTile: (worldX: number, worldY: number, layer2: TilemapLayer) => { tileX: number, tileY: number };
 
                 const orientation = layer.tilemap.orientation as any as number;
 
@@ -95,7 +95,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     worldToTile = TilemapLayerEditorSupport.worldToTileXY;
                 }
 
-                const { tileX, tileY } = worldToTile(x, y, layer.tilemap.layer);
+                const { tileX, tileY } = worldToTile(x, y, layer);
 
                 const tile = layer.getTileAt(tileX, tileY);
 
@@ -105,21 +105,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        private static worldToTileXY(worldX: number, worldY: number, layer: Phaser.Tilemaps.LayerData) {
+        private static worldToTileXY(worldX: number, worldY: number, tilemapLayer: TilemapLayer) {
 
-            const tilemapLayer = layer.tilemapLayer;
+            const layerData = tilemapLayer.layer;
 
-            const tileX = Math.floor(worldX / layer.baseTileWidth * tilemapLayer.scaleX);
-            const tileY = Math.floor(worldY / layer.baseTileHeight * tilemapLayer.scaleY)
+            const tileX = Math.floor(worldX / layerData.baseTileWidth * tilemapLayer.scaleX);
+            const tileY = Math.floor(worldY / layerData.baseTileHeight * tilemapLayer.scaleY)
 
             return { tileX, tileY };
         };
 
-        private static isometricWorldToTileXY(worldX: number, worldY: number, layer: Phaser.Tilemaps.LayerData) {
+        private static isometricWorldToTileXY(worldX: number, worldY: number, tilemapLayer: TilemapLayer) {
 
-            let tileWidth = layer.baseTileWidth;
-            let tileHeight = layer.baseTileHeight;
-            const tilemapLayer = layer.tilemapLayer;
+            const layerData = tilemapLayer.layer;
+
+            let tileWidth = layerData.baseTileWidth;
+            let tileHeight = layerData.baseTileHeight;
 
             tileHeight *= tilemapLayer.scaleY;
             tileWidth *= tilemapLayer.scaleX;
