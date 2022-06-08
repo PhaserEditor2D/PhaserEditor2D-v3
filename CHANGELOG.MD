@@ -1,5 +1,10 @@
 # Change Log
 
+## dev
+
+* Fixes assets preloading when paste a layer/container prefab from another scene.
+
+
 ## v3.33.2 - May 31, 2022
 
 * Improves Size tool modifiers.
