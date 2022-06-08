@@ -316,13 +316,18 @@ namespace phasereditor2d.scene.ui {
 
         async updateSceneLoader(sceneData: json.ISceneData, monitor?: controls.IProgressMonitor) {
 
+            await this.updateLoaderWithData(sceneData.plainObjects, sceneData.displayList, monitor);
+        }
+
+        async updateLoaderWithData(plainObjects: json.IScenePlainObjectData[], displayObjects: json.IObjectData[], monitor?: controls.IProgressMonitor) {
+
             const finder = new pack.core.PackFinder();
 
             await finder.preload();
 
-            await this.updateSceneLoaderWithGameObjectDataList(finder, sceneData.displayList, monitor);
+            await this.updateSceneLoaderWithGameObjectDataList(finder, displayObjects, monitor);
 
-            await this.updateSceneLoaderWithPlainObjDataList(finder, sceneData.plainObjects, monitor);
+            await this.updateSceneLoaderWithPlainObjDataList(finder, plainObjects, monitor);
         }
 
         async updateSceneLoaderWithPlainObjDataList(finder: pack.core.PackFinder, list: json.IScenePlainObjectData[], monitor?: controls.IProgressMonitor) {

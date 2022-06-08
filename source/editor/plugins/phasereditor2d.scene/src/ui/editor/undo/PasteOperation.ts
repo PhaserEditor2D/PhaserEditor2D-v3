@@ -41,6 +41,10 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const sprites: sceneobjects.ISceneGameObject[] = [];
 
+            const displayList = items.filter(i => i.type === "ISceneObject").map(i => i.data as json.IObjectData);
+
+            await scene.getMaker().updateLoaderWithData([], displayList);
+
             for (const item of items) {
 
                 if (item.type === "ISceneObject") {
