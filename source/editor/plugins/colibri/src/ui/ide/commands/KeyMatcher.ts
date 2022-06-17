@@ -48,11 +48,16 @@ namespace colibri.ui.ide.commands {
             }
 
             if (this._key) {
-
-                keys.push(this._key);
+                
+                keys.push(this.clearKeyCode(this._key));
             }
 
             return keys.join("+");
+        }
+
+        private clearKeyCode(keyCode: string) {
+
+            return keyCode.replace("Key", "").replace("Digit", "");
         }
 
         matchesKeys(event: KeyboardEvent) {
