@@ -4,6 +4,7 @@
 
 * Fixes assets preloading when paste a layer/container prefab from another scene.
 * Removes the `Key` and `Digit` prefixes from the label of cammands.
+* Fixes layout operations with scaled images.
 
 ## v3.33.2 - May 31, 2022
 
