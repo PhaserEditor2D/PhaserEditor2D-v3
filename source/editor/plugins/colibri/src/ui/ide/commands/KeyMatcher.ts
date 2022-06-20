@@ -57,7 +57,7 @@ namespace colibri.ui.ide.commands {
 
         private clearKeyCode(keyCode: string) {
 
-            return keyCode.replace("Key", "").replace("Digit", "");
+            return keyCode.replace("Key", "").replace("Digit", "").replace("Arrow", "");
         }
 
         matchesKeys(event: KeyboardEvent) {
