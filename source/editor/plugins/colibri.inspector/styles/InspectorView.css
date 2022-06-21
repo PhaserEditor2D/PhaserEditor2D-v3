@@ -18,6 +18,10 @@
     grid-template-columns: auto 1fr;
 }
 
+.formGrid-cols-3 {
+    grid-template-columns: auto auto 1fr;
+}
+
 .formGrid-cols-4 {
     grid-template-columns: auto 1fr auto 1fr;
 }

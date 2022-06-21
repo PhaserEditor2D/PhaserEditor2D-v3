@@ -10,9 +10,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElementWithPropertiesXY(parent);
+            const comp = this.createGridElement(parent, 3);
 
-            this.createPropertyStringRow(comp, PolygonComponent.points);
+            this.createPropertyStringDialogRow(comp, PolygonComponent.points);
         }
 
         canEdit(obj: any, n: number): boolean {
