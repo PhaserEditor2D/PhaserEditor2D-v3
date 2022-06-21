@@ -52,26 +52,74 @@ namespace phasereditor2d.scene.ui.editor {
             this._parametersElement.classList.add("Parameters");
             centerPane.appendChild(this._parametersElement);
 
-            const toolbarElement = document.createElement("div");
-            toolbarElement.classList.add("Toolbar");
-            centerPane.appendChild(toolbarElement);
+            const groupItemsToolbarElement = document.createElement("div");
+            groupItemsToolbarElement.classList.add("Toolbar");
+            centerPane.appendChild(groupItemsToolbarElement);
+            groupItemsToolbarElement.style.display = "none";
 
-            const toolbar = new controls.ToolbarManager(toolbarElement);
+            const groupToolbarElement = document.createElement("div");
+            groupToolbarElement.classList.add("Toolbar");
+            centerPane.appendChild(groupToolbarElement);
 
             const extsByGroup = ScenePlugin.getInstance().getLayoutExtensionsByGroup();
 
-            for (const groupSet of extsByGroup) {
+            const groupToolbar = new controls.ToolbarManager(groupToolbarElement);
 
-                for (const ext of groupSet.extensions) {
+            const actions: controls.Action[] = [];
 
-                    const config = ext.getConfig();
+            for (const group of extsByGroup) {
 
-                    toolbar.addAction({
-                        text: config.name,
-                        icon: config.icon,
+                if (group.extensions.length <= 3) {
+
+                    for (const ext of group.extensions) {
+
+                        const config = ext.getConfig();
+
+                        const action = groupToolbar.addAction({
+                            text: config.name,
+                            icon: config.icon,
+                            showText: false,
+                            callback: (e, action) => {
+
+                                this.clearParameters();
+
+                                groupItemsToolbarElement.style.display = "none";
+                                this.clearHtmlElementChildren(groupItemsToolbarElement);
+
+                                for (const a of actions) {
+
+                                    a.setSelected(false);
+                                }
+
+                                action.setSelected(true);
+
+                                ext.performLayout(this._editor)
+                            }
+                        });
+
+                        actions.push(action);
+                    }
+
+                } else {
+
+                    const action = groupToolbar.addAction({
+                        text: group.group,
                         showText: false,
-                        callback: () => ext.performLayout(this._editor)
+                        icon: group.extensions[0].getConfig().icon,
+                        callback: (e, action: controls.Action) => {
+
+                            for (const a of actions) {
+
+                                a.setSelected(false);
+                            }
+
+                            action.setSelected(true);
+
+                            this.showGroupToolbar(groupItemsToolbarElement, group.group, group.extensions);
+                        }
                     });
+
+                    actions.push(action);
                 }
             }
 
@@ -86,6 +134,63 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
+        private clearHtmlElementChildren(parent: HTMLElement) {
+
+            while (parent.firstChild) {
+
+                parent.removeChild(parent.firstChild)
+            }
+        }
+
+        private showGroupToolbar(parent: HTMLDivElement, group: string, extensions: layout.LayoutExtension<layout.ILayoutExtensionConfig>[]): void {
+
+            this.clearParameters();
+
+            this.clearHtmlElementChildren(parent);
+
+            parent.style.display = "initial";
+
+            // the title pane
+
+            const titlePane = document.createElement("div");
+            titlePane.classList.add("Title");
+            parent.appendChild(titlePane);
+
+            const titleLabel = document.createElement("label");
+            titleLabel.textContent = group;
+            titlePane.appendChild(titleLabel);
+
+            const buttonPane = document.createElement("div");
+            buttonPane.classList.add("Buttons");
+            titlePane.appendChild(buttonPane);
+
+            const closeIcon = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_CONTROL_CLOSE));
+            closeIcon.getCanvas().classList.add("IconButton");
+            closeIcon.getCanvas().addEventListener("click", () => {
+
+                parent.style.display = "none";
+                this.clearHtmlElementChildren(parent);
+            });
+
+            buttonPane.appendChild(closeIcon.getCanvas());
+
+            // the toolbar
+
+            const toolbar = new controls.ToolbarManager(parent);
+
+            for (const ext of extensions) {
+
+                const config = ext.getConfig();
+
+                toolbar.addAction({
+                    text: config.name,
+                    icon: config.icon,
+                    showText: false,
+                    callback: () => ext.performLayout(this._editor)
+                });
+            }
+        }
+
         private clearParameters() {
 
             while (this._parametersElement.firstChild) {
@@ -94,7 +199,7 @@ namespace phasereditor2d.scene.ui.editor {
             }
         }
 
-        async showParametersPane(ext: layout.LayoutExtension) {
+        async showParametersPane(ext: layout.TransformLayoutExtension) {
 
             const paneWasVisible = this.isPaneVisible();
 
@@ -201,7 +306,7 @@ namespace phasereditor2d.scene.ui.editor {
             });
         }
 
-        private getLocalStorageKey(ext: layout.LayoutExtension, key: string): string {
+        private getLocalStorageKey(ext: layout.TransformLayoutExtension, key: string): string {
 
             const config = ext.getConfig();
 

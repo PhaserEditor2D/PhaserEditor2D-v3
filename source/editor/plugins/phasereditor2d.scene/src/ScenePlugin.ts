@@ -35,6 +35,15 @@ namespace phasereditor2d.scene {
     export const ICON_GRID = "grid";
     export const ICON_COLUMN = "column";
     export const ICON_ROW = "row";
+    export const ICON_ORIGIN_TOP_LEFT = "origin-topleft";
+    export const ICON_ORIGIN_TOP_CENTER = "origin-topcenter";
+    export const ICON_ORIGIN_TOP_RIGHT = "origin-topright";
+    export const ICON_ORIGIN_MIDDLE_LEFT = "origin-middleleft";
+    export const ICON_ORIGIN_MIDDLE_CENTER = "origin-middlecenter";
+    export const ICON_ORIGIN_MIDDLE_RIGHT = "origin-middleright";
+    export const ICON_ORIGIN_BOTTOM_LEFT = "origin-bottomleft";
+    export const ICON_ORIGIN_BOTTOM_CENTER = "origin-bottomcenter";
+    export const ICON_ORIGIN_BOTTOM_RIGHT = "origin-bottomright";
 
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
@@ -181,7 +190,16 @@ namespace phasereditor2d.scene {
                     ICON_BORDER_BOTTOM,
                     ICON_GRID,
                     ICON_COLUMN,
-                    ICON_ROW
+                    ICON_ROW,
+                    ICON_ORIGIN_TOP_LEFT,
+                    ICON_ORIGIN_TOP_CENTER,
+                    ICON_ORIGIN_TOP_RIGHT,
+                    ICON_ORIGIN_MIDDLE_LEFT,
+                    ICON_ORIGIN_MIDDLE_CENTER,
+                    ICON_ORIGIN_MIDDLE_RIGHT,
+                    ICON_ORIGIN_BOTTOM_LEFT,
+                    ICON_ORIGIN_BOTTOM_CENTER,
+                    ICON_ORIGIN_BOTTOM_RIGHT
                 ])
             );
 
@@ -458,7 +476,7 @@ namespace phasereditor2d.scene {
         getLayoutExtensions() {
 
             return colibri.Platform
-                .getExtensions<ui.editor.layout.LayoutExtension>(
+                .getExtensions<ui.editor.layout.LayoutExtension<any>>(
                     ui.editor.layout.LayoutExtension.POINT_ID);
         }
 
@@ -475,7 +493,7 @@ namespace phasereditor2d.scene {
                 }
             }
 
-            const result: Array<{ group: string, extensions: ui.editor.layout.LayoutExtension[] }> = [];
+            const result: Array<{ group: string, extensions: ui.editor.layout.LayoutExtension<ui.editor.layout.ILayoutExtensionConfig>[] }> = [];
 
             for (const group of groups) {
 

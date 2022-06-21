@@ -44,7 +44,11 @@ namespace colibri.ui.controls {
 
         addAction(config: IActionConfig) {
 
-            this.add(new Action(config));
+            const action = new Action(config);
+
+            this.add(action);
+
+            return action;
         }
 
         add(action: Action) {
