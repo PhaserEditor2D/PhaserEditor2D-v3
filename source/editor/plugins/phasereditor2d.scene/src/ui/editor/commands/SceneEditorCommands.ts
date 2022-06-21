@@ -1497,6 +1497,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
         static computeOriginCommandData(): Array<{
             command: string,
             name: string,
+            icon: string,
             key: string,
             keyLabel: string,
             x: number,
@@ -1519,6 +1520,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 return {
                     command: "phasereditor2d.scene.ui.editor.commands.SetOrigin_" + value.n + "_ToObject",
                     name: "Set Origin To " + value.n,
+                    icon: "origin-" + value.n.replace("/", "").toLowerCase(),
                     x: value.x,
                     y: value.y,
                     key: "Numpad" + value.k,
@@ -1547,6 +1549,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         id: data.command,
                         name: data.name,
                         tooltip: `Set the origin of the object to (${data.x},${data.y})`,
+                        icon: ScenePlugin.getInstance().getIcon(data.icon),
                         category: CAT_SCENE_EDITOR
                     },
                     keys: {
