@@ -4,8 +4,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class PolygonSection extends SceneGameObjectSection<Triangle> {
 
+        static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.PolygonSection";
+
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.PolygonSection", "Polygon", false, true);
+            super(page, PolygonSection.SECTION_ID, "Polygon", false, true);
         }
 
         createForm(parent: HTMLDivElement) {

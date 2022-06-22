@@ -30,12 +30,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         get points() {
 
-            return this.getPolygonGeom().points.map(p => `${p.x} ${p.y}`).join(" ");
+            if (this.getPolygonGeom()) {
+
+                return this.getPolygonGeom().points.map(p => `${p.x} ${p.y}`).join(" ");
+            }
+
+            return "";
         }
 
         set points(points: string) {
-
-            console.log("set points " + points)
 
             this.getPolygonGeom().setTo(points);
 
@@ -44,7 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             (this as any).setSize(bounds.width, bounds.height);
 
             this.updateDisplayOrigin();
-            
+
             (this as any).updateData();
 
             this.updateDisplayOrigin();

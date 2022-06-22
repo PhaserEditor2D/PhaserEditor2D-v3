@@ -60,6 +60,11 @@ namespace phasereditor2d.scene.ui.editor.tools {
             this._items.push(...items);
         }
 
+        clearItems() {
+
+            this._items = [];
+        }
+        
         abstract canEdit(obj: unknown): boolean;
 
         abstract canRender(obj: unknown): boolean;
