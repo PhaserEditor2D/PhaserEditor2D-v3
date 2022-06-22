@@ -116,12 +116,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (this.isCursorOnPoint(cursor.x, cursor.y, point)) {
 
+                    polygon.setData("PolygonToolItem", {
+                        initPoints: polygon.points
+                    });
+
                     this._draggingIndex = i;
                     this._dragging = true;
 
                     break;
                 }
             }
+        }
+
+        static getInitialPoints(polygon: Polygon) {
+
+            return polygon.getData("PolygonToolItem").initPoints;
         }
 
 
@@ -160,7 +169,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._dragging) {
 
-                // args.editor.getUndoManager().add(new ScaleOperation(args));
+                args.editor.getUndoManager().add(new PolygonOperation(args));
 
                 this._dragging = false;
             }
