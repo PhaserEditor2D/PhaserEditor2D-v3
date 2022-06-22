@@ -6,13 +6,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.PolygonTool";
 
+        private _toolItem: PolygonToolItem;
+
         constructor() {
             super({
                 id: PolygonTool.ID,
                 command: editor.commands.CMD_EDIT_POLYGON_OBJECT,
             }, PolygonComponent.points);
 
-            this.addItems(new PolygonToolItem());
+            this._toolItem = new PolygonToolItem();
+            this.addItems(this._toolItem);
+        }
+
+        handleDeleteCommand(args: editor.tools.ISceneToolContextArgs): boolean {
+    
+            return this._toolItem.handleDeleteCommand(args);
         }
 
         requiresRepaintOnMouseMove() {

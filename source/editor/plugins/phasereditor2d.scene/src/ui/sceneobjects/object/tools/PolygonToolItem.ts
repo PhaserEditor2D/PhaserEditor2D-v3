@@ -2,14 +2,45 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class PolygonToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
-
         private _dragging: boolean;
         private _draggingIndex: number;
         private _newPoint: Phaser.Math.Vector2;
         private _newPointIndex: number;
+        private _highlightPointIndex = -1;
 
         constructor() {
             super();
+        }
+
+        handleDeleteCommand(args: editor.tools.ISceneToolContextArgs): boolean {
+
+            if (this._highlightPointIndex >= 0) {
+
+                const polygon = args.objects[0] as Polygon;
+
+                const points = polygon.getPolygonGeom().points;
+
+                if (points.length <= 3) {
+
+                    return true;
+                }
+
+                const newPoints = [];
+
+                for(let i = 0; i < points.length; i++) {
+
+                    if (i !== this._highlightPointIndex) {
+
+                        newPoints.push(points[i]);
+                    }
+                }
+
+                polygon.points = newPoints.map(p => `${p.x} ${p.y}`).join(" ");
+
+                return true;
+            }
+
+            return false;
         }
 
         getPoint(args: editor.tools.ISceneToolContextArgs): { x: number; y: number; } {
@@ -38,12 +69,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // find highlihting point
 
             let highlightPoint: Phaser.Math.Vector2;
+            let highlightPointIndex = -1;
 
-            for (const point of points) {
+            for (let i = 0; i < points.length; i++) {
+
+                const point = points[i];
 
                 if (this.isCursorOnPoint(cursor.x, cursor.y, point)) {
 
                     highlightPoint = point;
+                    highlightPointIndex = i;
 
                     break;
                 }
@@ -154,6 +189,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._newPoint = nearPoint ? this.getPolygonLocalPoint(polygon, nearPoint) : undefined;
             this._newPointIndex = nearPointIndex;
+            this._highlightPointIndex = highlightPointIndex;
         }
 
         private getPolygonScreenPoints(polygon: Polygon) {
@@ -183,8 +219,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             point = camera.getWorldPoint2(point.x, point.y);
 
             const localPoint = polygon.getWorldTransformMatrix().applyInverse(point.x, point.y);
-            localPoint.x -= polygon.displayOriginX;
-            localPoint.y -= polygon.displayOriginY;
+            localPoint.x += polygon.displayOriginX;
+            localPoint.y += polygon.displayOriginY;
 
             return localPoint;
         }
@@ -221,9 +257,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._newPoint) {
 
-                console.log("add point!!!");
-                console.log(this._newPoint);
-
                 const points = polygon.getPolygonGeom().points;
 
                 let newPoints: { x: number, y: number }[] = [];
@@ -241,8 +274,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
 
                 polygon.points = newPoints.map(p => `${p.x} ${p.y}`).join(" ");
-
-                console.log(polygon.points);
             }
 
             const cursor = args.editor.getMouseManager().getMousePosition();
@@ -315,5 +346,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._dragging = false;
             }
         }
+
     }
 }

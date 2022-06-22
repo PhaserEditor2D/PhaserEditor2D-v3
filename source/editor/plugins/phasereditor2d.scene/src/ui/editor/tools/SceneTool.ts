@@ -1,7 +1,6 @@
 namespace phasereditor2d.scene.ui.editor.tools {
 
     import ISceneObject = ui.sceneobjects.ISceneGameObject;
-    import controls = colibri.ui.controls;
 
     export interface ISceneToolContextArgs {
 
@@ -41,6 +40,11 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             this._config = config;
             this._items = [];
+        }
+
+        handleDeleteCommand(args: editor.tools.ISceneToolContextArgs): boolean {
+
+            return false;
         }
 
         getId() {
