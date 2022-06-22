@@ -5,6 +5,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _dragging: boolean;
         private _draggingIndex: number;
+        private _newPoint: Phaser.Math.Vector2;
+        private _newPointIndex: number;
 
         constructor() {
             super();
@@ -22,6 +24,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
+            let nearPoint: Phaser.Geom.Point;
+            let nearPointIndex: number;
+
             const polygon = args.objects[0] as Polygon;
 
             const points = this.getPolygonScreenPoints(polygon);
@@ -29,6 +34,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const ctx = args.canvasContext;
 
             const cursor = args.editor.getMouseManager().getMousePosition();
+
+            // find highlihting point
 
             let highlightPoint: Phaser.Math.Vector2;
 
@@ -41,6 +48,92 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     break;
                 }
             }
+
+
+            if (!highlightPoint) {
+
+                // paint near line
+
+                let nearLine: Phaser.Geom.Line;
+                let nearLineDistance = Number.MAX_VALUE;
+
+                const line = new Phaser.Geom.Line();
+                const tempPoint = new Phaser.Geom.Point();
+
+                for (let i = 0; i < points.length; i++) {
+
+                    const p1 = points[i];
+                    const p2 = points[(i + 1) % points.length];
+
+                    line.setTo(p1.x, p1.y, p2.x, p2.y);
+
+                    Phaser.Geom.Line.GetNearestPoint(line, new Phaser.Geom.Point(cursor.x, cursor.y), tempPoint);
+
+                    const d = Phaser.Math.Distance.BetweenPoints(cursor, tempPoint);
+
+                    if (d < 10 && d < nearLineDistance) {
+
+                        const lineLength = Phaser.Geom.Line.Length(line);
+                        const length1 = Phaser.Math.Distance.BetweenPoints(p1, tempPoint);
+                        const length2 = Phaser.Math.Distance.BetweenPoints(p2, tempPoint);
+
+                        // check the point is inside the segment
+                        if (length1 <= lineLength && length2 <= lineLength) {
+
+                            nearLineDistance = d;
+                            nearPointIndex = i;
+
+                            if (nearLine) {
+
+                                nearLine.setTo(line.x1, line.y1, line.x2, line.y2);
+                                nearPoint.setTo(tempPoint.x, tempPoint.y);
+
+                            } else {
+
+                                nearLine = new Phaser.Geom.Line(line.x1, line.y1, line.x2, line.y2);
+                                nearPoint = new Phaser.Geom.Point(tempPoint.x, tempPoint.y);
+                            }
+                        }
+                    }
+                }
+
+                if (nearLine) {
+
+                    const color = args.canEdit ? "#fff" : editor.tools.SceneTool.COLOR_CANNOT_EDIT;
+
+                    // draw near line
+
+                    ctx.save();
+
+                    ctx.translate(nearLine.x1, nearLine.y1);
+
+                    const angle = this.globalAngle(polygon);
+
+                    ctx.rotate(Phaser.Math.DegToRad(angle));
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(nearLine.x2 - nearLine.x1, nearLine.y2 - nearLine.y1);
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+
+                    ctx.restore();
+
+                    // draw near point
+
+                    ctx.save();
+
+                    ctx.translate(nearPoint.x, nearPoint.y);
+                    ctx.rotate(Phaser.Math.DegToRad(this.globalAngle(polygon)));
+
+                    this.drawRect(ctx, color);
+
+                    ctx.restore();
+                }
+            }
+
+            // paint highlight point
 
             for (const point of points) {
 
@@ -58,6 +151,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 ctx.restore();
             }
+
+            this._newPoint = nearPoint ? this.getPolygonLocalPoint(polygon, nearPoint) : undefined;
+            this._newPointIndex = nearPointIndex;
         }
 
         private getPolygonScreenPoints(polygon: Polygon) {
@@ -81,7 +177,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return points;
         }
 
+        getPolygonLocalPoint(polygon: Polygon, point: { x: number, y: number }) {
+
+            const camera = polygon.scene.cameras.main;
+            point = camera.getWorldPoint2(point.x, point.y);
+
+            const localPoint = polygon.getWorldTransformMatrix().applyInverse(point.x, point.y);
+            localPoint.x -= polygon.displayOriginX;
+            localPoint.y -= polygon.displayOriginY;
+
+            return localPoint;
+        }
+
         containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean {
+
+            if (this._newPoint) {
+
+                return true;
+            }
 
             const points = this.getPolygonScreenPoints(args.objects[0] as Polygon);
 
@@ -105,6 +218,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
             const polygon = args.objects[0] as Polygon;
+
+            if (this._newPoint) {
+
+                console.log("add point!!!");
+                console.log(this._newPoint);
+
+                const points = polygon.getPolygonGeom().points;
+
+                let newPoints: { x: number, y: number }[] = [];
+
+                for (let i = 0; i < points.length; i++) {
+
+                    const point = points[i];
+
+                    newPoints.push(point);
+
+                    if (this._newPointIndex === i) {
+
+                        newPoints.push(this._newPoint);
+                    }
+                }
+
+                polygon.points = newPoints.map(p => `${p.x} ${p.y}`).join(" ");
+
+                console.log(polygon.points);
+            }
 
             const cursor = args.editor.getMouseManager().getMousePosition();
 
@@ -166,6 +305,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
+
+            this._newPoint = undefined;
 
             if (this._dragging) {
 

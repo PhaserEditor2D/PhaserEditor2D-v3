@@ -102,7 +102,10 @@ namespace phasereditor2d.scene.ui.editor {
 
             if (tool && tool.requiresRepaintOnMouseMove()) {
 
-                this._editor.getOverlayLayer().render();
+                if (this._editor.getScene().cameras) {
+                    
+                    this._editor.getOverlayLayer().render();
+                }
             }
 
             if (tool && this._toolInAction) {
