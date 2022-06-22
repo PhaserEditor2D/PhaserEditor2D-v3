@@ -30,6 +30,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const cursor = args.editor.getMouseManager().getMousePosition();
 
+            let highlightPoint: Phaser.Math.Vector2;
+
+            for (const point of points) {
+
+                if (this.isCursorOnPoint(cursor.x, cursor.y, point)) {
+
+                    highlightPoint = point;
+
+                    break;
+                }
+            }
+
             for (const point of points) {
 
                 ctx.save();
@@ -40,7 +52,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 ctx.rotate(Phaser.Math.DegToRad(angle));
 
-                const color = this.isCursorOnPoint(cursor.x, cursor.y, point) ? "#f00" : "#fff";
+                const color = point === highlightPoint ? "#f00" : "#fff";
 
                 this.drawRect(ctx, args.canEdit ? color : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
