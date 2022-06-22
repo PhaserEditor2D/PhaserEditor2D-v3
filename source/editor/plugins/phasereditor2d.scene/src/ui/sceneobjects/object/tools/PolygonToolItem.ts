@@ -98,7 +98,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private isCursorOnPoint(cursorX: number, cursorY: number, point: { x: number, y: number }) {
 
-            return Phaser.Math.Distance.Between(cursorX, cursorY, point.x, point.y) < 20
+            return cursorX >= point.x - 5 && cursorX <= point.x + 5
+                && cursorY >= point.y - 5 && cursorY <= point.y + 5;
         }
 
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void {
