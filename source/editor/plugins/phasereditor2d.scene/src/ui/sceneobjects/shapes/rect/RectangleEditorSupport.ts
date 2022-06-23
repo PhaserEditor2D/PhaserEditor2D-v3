@@ -11,5 +11,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new SizeComponent(obj)
             );
         }
+
+        computeContentHash(): string {
+            
+            let hash = super.computeContentHash();
+
+            hash += this.computeContentHashWithComponent(this.getObject(), SizeComponent);
+            
+            return hash;
+        }
     }
 }

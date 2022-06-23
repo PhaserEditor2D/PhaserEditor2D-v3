@@ -9,5 +9,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(new TriangleComponent(obj));
         }
+
+        computeContentHash(): string {
+            
+            let hash = super.computeContentHash();
+
+            hash += this.computeContentHashWithComponent(this.getObject(), TriangleComponent);
+            
+            return hash;
+        }
     }
 }

@@ -43,5 +43,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ];
         }
 
+
+        computeContentHash(): string {
+            
+            let hash = super.computeContentHash();
+
+            hash += this.computeContentHashWithComponent(this.getObject(), PolygonComponent);
+            
+            return hash;
+        }
     }
 }

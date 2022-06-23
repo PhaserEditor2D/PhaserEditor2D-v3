@@ -39,7 +39,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
-            return new ObjectCellRenderer();
+            // return new ObjectCellRenderer();
+
+            return this.getExtension().getBlockCellRenderer();
         }
 
         setInteractive() {
@@ -49,11 +51,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         computeContentHash() {
 
-            const json = this.getObject().toJSON();
-
-            const hash = JSON.stringify(json);
-
-            return hash;
+            return this.computeContentHashWithComponent(this.getObject(), ShapeComponent);
         }
     }
 }
