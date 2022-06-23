@@ -76,6 +76,16 @@ namespace phasereditor2d.scene.ui.editor.tools {
             this._editor.repaint();
         }
 
+        handleDeleteCommand() {
+
+            if (this._activeTool) {
+
+                return this._activeTool.handleDeleteCommand(this.createToolArgs());
+            }
+
+            return false;
+        }
+
         private createToolArgs(): ISceneToolContextArgs {
             return {
                 camera: null,

@@ -9,6 +9,12 @@ namespace phasereditor2d.scene.ui.editor.undo {
         protected async performModification() {
 
             const editor = this._editor;
+
+            if (editor.getToolsManager().handleDeleteCommand()) {
+
+                return;
+            }
+
             const scene = this._editor.getScene();
             const lists = scene.getObjectLists();
 

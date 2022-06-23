@@ -12,5 +12,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new EllipseComponent(obj)
             );
         }
+
+        computeContentHash(): string {
+            
+            let hash = super.computeContentHash();
+
+            hash += this.computeContentHashWithComponent(this.getObject(), EllipseComponent);
+            
+            return hash;
+        }
     }
 }

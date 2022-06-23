@@ -100,6 +100,14 @@ namespace phasereditor2d.scene.ui.editor {
 
             const tool = toolsManager.getActiveTool();
 
+            if (tool && tool.requiresRepaintOnMouseMove()) {
+
+                if (this._editor.getScene().cameras) {
+                    
+                    this._editor.getOverlayLayer().render();
+                }
+            }
+
             if (tool && this._toolInAction) {
 
                 const args = this.createArgs(e);

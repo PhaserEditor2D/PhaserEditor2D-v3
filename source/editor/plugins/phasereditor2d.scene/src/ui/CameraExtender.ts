@@ -13,9 +13,6 @@ namespace phasereditor2d.scene.ui {
 
     Phaser.Cameras.Scene2D.Camera.prototype.getScreenPoint = function(worldX: number, worldY: number) {
 
-        // const x = worldX * this.zoom - this.scrollX * this.zoom;
-        // const y = worldY * this.zoom - this.scrollY * this.zoom;
-
         const x = (worldX - this.scrollX) * this.zoom;
         const y = (worldY - this.scrollY) * this.zoom;
 

@@ -182,10 +182,12 @@ namespace colibri.ui.controls.properties {
             div.classList.add("formGrid");
 
             if (cols > 0) {
+
                 div.classList.add("formGrid-cols-" + cols);
             }
 
             if (simpleProps) {
+                
                 div.classList.add("formSimpleProps");
             }
 

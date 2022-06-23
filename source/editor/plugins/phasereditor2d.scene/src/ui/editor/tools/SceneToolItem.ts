@@ -167,7 +167,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             return { x, y };
         }
 
-        protected globalAngle(sprite: Phaser.GameObjects.Sprite) {
+        protected globalAngle(sprite: Phaser.GameObjects.GameObject & {angle: number}) {
 
             let a = sprite.angle;
 
@@ -175,7 +175,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             if (parent) {
 
-                a += this.globalAngle(parent as unknown as Phaser.GameObjects.Sprite);
+                a += this.globalAngle(parent);
             }
 
             return a;

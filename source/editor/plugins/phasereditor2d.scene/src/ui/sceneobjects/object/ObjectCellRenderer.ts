@@ -4,13 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ObjectCellRenderer implements controls.viewers.ICellRenderer {
 
-        private _maxWidth: number;
-        private _maxHeight: number;
+        constructor() {
 
-        constructor(maxWidth = 1024, maxHeight = 1024) {
-
-            this._maxWidth = maxWidth;
-            this._maxHeight = maxHeight;
         }
 
         renderCell(args: controls.viewers.RenderCellArgs): void {
@@ -18,8 +13,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const obj = args.obj as Image;
 
             const cache = obj.getEditorSupport().getScene().getEditor().getCellRendererCache();
-
-            // const cached = obj.getData("__renderer_image") as controls.IImage;
 
             const cached = cache.getImage(obj);
 
