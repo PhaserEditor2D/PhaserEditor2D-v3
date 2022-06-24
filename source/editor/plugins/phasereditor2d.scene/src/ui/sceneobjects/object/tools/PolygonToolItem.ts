@@ -12,6 +12,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super();
         }
 
+        handleDoubleClick(args: editor.tools.ISceneToolContextArgs): boolean {
+
+            if (this._highlightPointIndex >= 0) {
+
+                const op = new editor.undo.SceneSnapshotOperation(args.editor, async () => {
+
+                    this.handleDeleteCommand(args);
+                });
+
+                args.editor.getUndoManager().add(op);
+
+                return true;
+            }
+
+            return false;
+        }
+
         handleDeleteCommand(args: editor.tools.ISceneToolContextArgs): boolean {
 
             if (this._highlightPointIndex >= 0) {
@@ -27,7 +44,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const newPoints = [];
 
-                for(let i = 0; i < points.length; i++) {
+                for (let i = 0; i < points.length; i++) {
 
                     if (i !== this._highlightPointIndex) {
 
@@ -162,7 +179,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     ctx.translate(nearPoint.x, nearPoint.y);
                     ctx.rotate(Phaser.Math.DegToRad(this.globalAngle(polygon)));
 
-                    this.drawRect(ctx, color);
+                    this.drawRect(ctx, args.canEdit ? "#faa" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
                     ctx.restore();
                 }
@@ -251,7 +268,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 && cursorY >= point.y - 5 && cursorY <= point.y + 5;
         }
 
+        private _startDragTime = 0;
+
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void {
+
+            this._startDragTime = Date.now();
 
             const polygon = args.objects[0] as Polygon;
 
@@ -341,7 +362,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._dragging) {
 
-                args.editor.getUndoManager().add(new PolygonOperation(args));
+                if (Date.now() - this._startDragTime > 300) {
+
+                    args.editor.getUndoManager().add(new PolygonOperation(args));
+
+                }
 
                 this._dragging = false;
             }

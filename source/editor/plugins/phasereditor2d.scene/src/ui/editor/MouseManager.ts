@@ -16,6 +16,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             this._mousePosition = { x: 0, y: 0 };
 
+            canvas.addEventListener("dblclick", e => this.onDoubleClick(e))
             canvas.addEventListener("click", e => this.onClick(e));
             canvas.addEventListener("mousedown", e => this.onMouseDown(e));
             canvas.addEventListener("mouseup", e => this.onMouseUp(e));
@@ -32,6 +33,15 @@ namespace phasereditor2d.scene.ui.editor {
                 y: e.offsetY,
                 event: e
             };
+        }
+
+        private onDoubleClick(e: MouseEvent) {
+
+            if (this._editor.getToolsManager().handleDoubleClick()) {
+
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            }
         }
 
         private onMouseDown(e: MouseEvent) {
@@ -74,7 +84,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getMousePosition() {
-            
+
             return this._mousePosition;
         }
 
@@ -103,7 +113,7 @@ namespace phasereditor2d.scene.ui.editor {
             if (tool && tool.requiresRepaintOnMouseMove()) {
 
                 if (this._editor.getScene().cameras) {
-                    
+
                     this._editor.getOverlayLayer().render();
                 }
             }

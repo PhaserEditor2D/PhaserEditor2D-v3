@@ -18,6 +18,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addItems(this._toolItem);
         }
 
+        handleDoubleClick(args: editor.tools.ISceneToolContextArgs): boolean {
+    
+            return this._toolItem.handleDoubleClick(args);
+        }
+
         handleDeleteCommand(args: editor.tools.ISceneToolContextArgs): boolean {
     
             return this._toolItem.handleDeleteCommand(args);
