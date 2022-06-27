@@ -139,13 +139,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const childData of children) {
 
-                // creates an empty object
-                const sprite = maker.createObject({
+                let initObjData: any = {
                     id: childData.id,
                     prefabId: childData.prefabId,
                     type: childData.type,
                     label: childData.label,
-                });
+                };
+
+                // This is a very very ugly solution for this issue:
+                // https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/229
+                // but making a bigger change in serialization at this moment could introduce a lot of bugs
+                // and the TilemapLayer is a unique case in Phaser & the editor.
+                // For example, you cannot create a prefab instance of a TilemapLayer
+                if (childData.type === "TilemapLayer") {
+
+                    initObjData = childData;
+                }
+
+                // creates an empty object
+                const sprite = maker.createObject(initObjData);
 
                 if (sprite) {
 
