@@ -14,6 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getEditorSupport(): GameObjectEditorSupport<ISceneGameObject> {
+            
             return this._editorSupport;
         }
     }

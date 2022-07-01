@@ -71,11 +71,12 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                 const sprite = obj as sceneobjects.Sprite;
 
-                const {displayOriginX, displayOriginY} = obj.getEditorSupport().computeDisplayOrigin()
+                const { displayOriginX, displayOriginY } = obj.getEditorSupport().computeDisplayOrigin();
+                const {scaleX, scaleY} = sprite;
 
                 return {
-                    x: sprite.x - displayOriginX,
-                    y: sprite.y - displayOriginY,
+                    x: sprite.x - displayOriginX * scaleX,
+                    y: sprite.y - displayOriginY * scaleY,
                     size: {
                         x: sprite.displayWidth,
                         y: sprite.displayHeight
@@ -122,10 +123,11 @@ namespace phasereditor2d.scene.ui.editor.layout {
 
                         const sprite = obj as sceneobjects.Sprite;
 
-                        const {displayOriginX, displayOriginY} = sprite.getEditorSupport().computeDisplayOrigin();
+                        const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+                        const { scaleX, scaleY } = sprite;
 
-                        sprite.x = pos.x + displayOriginX;
-                        sprite.y = pos.y + displayOriginY;
+                        sprite.x = pos.x + displayOriginX * scaleX;
+                        sprite.y = pos.y + displayOriginY * scaleY;
                     }
                 }
             });

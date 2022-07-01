@@ -34,12 +34,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.getObject().setInteractive(interactive_getAlpha_SharedTexture);
         }
-
-        computeSize() {
-
-            const obj = this.getObject() as any as Phaser.GameObjects.Image;
-
-            return { width: obj.displayWidth, height: obj.displayHeight };
-        }
     }
 }
