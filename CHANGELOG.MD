@@ -7,6 +7,7 @@
 * Scene Editor: fixes layout operations with scaled images.
 * Scene Editor: improves layout toolbar. Adds origin actions.
 * [#229](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/229) Fixes serialization of tilemap layers as children of containers and layers.
+* [#227](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/227) Adds the Polygon shape game object.
 
 ## v3.33.2 - May 31, 2022
 
