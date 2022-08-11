@@ -3,7 +3,7 @@
 ## dev
 
 * Fixes assets preloading when paste a layer/container prefab from another scene.
-* Removes the `Key` and `Digit` prefixes from the label of cammands.
+* Removes the `Key` and `Digit` prefixes from the label of commands.
 * Scene Editor: fixes layout operations with scaled images.
 * Scene Editor: improves layout toolbar. Adds origin actions.
 * [#229](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/229) Fixes serialization of tilemap layers as children of containers and layers.
