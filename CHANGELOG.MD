@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.34.0 - Aug 12, 2022
 
 * Fixes assets preloading when paste a layer/container prefab from another scene.
 * Removes the `Key` and `Digit` prefixes from the label of commands.
