@@ -269,6 +269,7 @@ namespace phasereditor2d.scene.ui {
         }
 
         getSerializer(data: json.IObjectData) {
+            
             return new json.Serializer(data);
         }
 

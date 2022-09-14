@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _allowPickChildren = true;
         private _showChildrenInOutline = true;
+        private _countPrefabChildren = 0;
 
         isAllowPickChildren() {
 
@@ -27,6 +28,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         setShowChildrenInOutline(showChildrenInOutline: boolean) {
 
             this._showChildrenInOutline = showChildrenInOutline;
+        }
+
+        getAppendedChildren() {
+
+            const children = this.getObject().getChildren();
+
+            const appended = children.slice(this._countPrefabChildren);
+
+            return appended;
         }
 
         setInteractive() {
@@ -87,6 +97,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (support.isPrefabInstance()) {
 
+                // write nested prefabs
+
                 containerData.nestedPrefabs = container.getChildren()
 
                     .filter(obj => obj.getEditorSupport().isMutableNestedPrefabInstance())
@@ -107,6 +119,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         || (data.unlock ?? []).length > 0
                         || (data.components ?? []).length > 0);
 
+                // write appended objects
+
+                containerData.list = support.getAppendedChildren().map(obj => {
+
+                    const objData = {} as json.IObjectData;
+
+                    obj.getEditorSupport().writeJSON(objData);
+
+                    return objData as json.IObjectData;
+                });
+
             } else {
 
                 containerData.list = container.getChildren().map(obj => {
@@ -120,20 +143,72 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        private static readPrefabChildren(serializer: core.json.Serializer, list: json.IObjectData[]) {
+
+            if (serializer.isPrefabInstance()) {
+
+                this.readPrefabChildren(serializer.getPrefabSerializer(), list);
+            }
+
+            const localList = serializer.getData()["list"] || [];
+
+            list.push(...localList);
+        }
+
+        static buildRawChildrenData(containerData: json.IObjectData) {
+
+            const serializer = new json.Serializer(containerData);
+
+            const isPrefabContainer = serializer.isPrefabInstance();
+
+            /**
+             * The orginal children of the container's prefab.
+             * It means, it doesn't include the appended children.
+             */
+            let prefabChildren: json.IObjectData[] = [];
+
+            /**
+             * All the final children to be added to the container.
+             */
+            let children: json.IObjectData[];
+
+            /**
+             * Just the children added explicity to this container (without looking to the prefab).
+             */
+            const localChildren = containerData.list || [];
+
+            if (isPrefabContainer) {
+
+                prefabChildren = [];
+
+                this.readPrefabChildren(serializer.getPrefabSerializer(), prefabChildren);
+
+                const updatedPrefabChildren = ParentGameObjectEditorSupport
+                    .buildUpdatedPrefabChildrenDataWithNestedPrefab(containerData, prefabChildren);
+
+                children = [...updatedPrefabChildren, ...localChildren];
+
+            } else {
+
+                // it is not a prefab, just get the local children
+                children = localChildren;
+            }
+
+            return { prefabChildren, children };
+        }
+
         private readJSON_children(container: Container | Layer, containerData: json.IObjectData) {
 
-            const support = container.getEditorSupport();
+            const containerSupport = container.getEditorSupport();
 
-            const ser = support.getSerializer(containerData);
+            const { children, prefabChildren } = ParentGameObjectEditorSupport
+                .buildRawChildrenData(containerData);
 
-            const originalChildren = ser.read("list", []) as json.IObjectData[];
+            containerSupport._countPrefabChildren = prefabChildren.length;
 
-            const maker = support.getScene().getMaker();
+            const maker = containerSupport.getScene().getMaker();
 
             container.removeAll(true);
-
-            const children = containerData.prefabId ?
-                ParentGameObjectEditorSupport.buildPrefabChildrenData(containerData, originalChildren) : originalChildren;
 
             let i = 0;
 
@@ -163,11 +238,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     container.add(sprite);
 
-                    const originalData = originalChildren[i];
+                    // if it is not an appended child
+                    if (i < prefabChildren.length) {
 
-                    if (originalData.scope === sceneobjects.ObjectScope.NESTED_PREFAB) {
+                        const prefabData = prefabChildren[i];
 
-                        sprite.getEditorSupport()._setMutableNestedPrefab(true);
+                        if (prefabData.scope === sceneobjects.ObjectScope.NESTED_PREFAB) {
+
+                            sprite.getEditorSupport()._setMutableNestedPrefab(true);
+                        }
                     }
 
                     // updates the object with the final data
@@ -178,7 +257,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        static buildPrefabChildrenData(objData: core.json.IObjectData, originalPrefabChildren: core.json.IObjectData[]) {
+        /**
+         * Build the children data but modified by the nested prefab info.
+         * 
+         * @param objData The container data
+         * @param originalPrefabChildren The container's prefab children
+         * @returns The children but modified by the nested prefabs
+         */
+        static buildUpdatedPrefabChildrenDataWithNestedPrefab(objData: core.json.IObjectData, originalPrefabChildren: core.json.IObjectData[]) {
 
             const result: json.IObjectData[] = [];
 

@@ -517,6 +517,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._prefabId !== undefined && this._prefabId !== null;
         }
 
+        isPrefabOpenToAppendChildren() {
+
+            // TODO: should implement this flag as parameter in the Inspector view.
+            
+            return true;
+        }
+
         /**
          * Checks if the object is a child or nested child of prefab instance.
          *

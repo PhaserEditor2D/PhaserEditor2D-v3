@@ -30,10 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return false;
             }
 
-            if (targetParent.getEditorSupport().isPrefabInstance() || targetParent.getEditorSupport().isNestedPrefabInstance()) {
-
-                return false;
-            }
+            const targetParentSupport = targetParent.getEditorSupport();
 
             const objParent = getObjectParent(obj);
 
@@ -49,7 +46,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     return false;
                 }
 
-                const parents = new Set(targetParent.getEditorSupport().getAllParents());
+                const parents = new Set(targetParentSupport.getAllParents());
 
                 if (parents.has(obj)) {
 
@@ -57,6 +54,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
 
                 if (obj instanceof Layer && targetParent instanceof Container) {
+
+                    return false;
+                }
+
+                if (targetParentSupport.isPrefabInstance() && !targetParentSupport.isPrefabOpenToAppendChildren()) {
 
                     return false;
                 }

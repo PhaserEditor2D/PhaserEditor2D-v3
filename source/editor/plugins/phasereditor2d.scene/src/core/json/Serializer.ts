@@ -29,10 +29,12 @@ namespace phasereditor2d.scene.core.json {
         }
 
         getSerializer(data: IObjectData) {
+
             return new Serializer(data);
         }
 
         getData() {
+
             return this._data;
         }
 
@@ -67,6 +69,11 @@ namespace phasereditor2d.scene.core.json {
             return ext.getPhaserTypeName();
         }
 
+        getPrefabSerializer() {
+
+            return this._prefabSer;
+        }
+
         private getDefaultValue(name: string, defaultValue?: any) {
 
             if (this.isPrefabInstance()) {
@@ -86,6 +93,7 @@ namespace phasereditor2d.scene.core.json {
             const localValue = this._data[name];
 
             if (localValue === undefined) {
+
                 return defaultValue;
             }
 

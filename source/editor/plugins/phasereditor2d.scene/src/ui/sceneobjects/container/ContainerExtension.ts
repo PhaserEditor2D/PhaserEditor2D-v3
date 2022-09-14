@@ -27,11 +27,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static async getAssetsFromNestedData(args: IGetAssetsFromObjectArgs) {
 
             const list = [];
-            const children = args.serializer.read("list", []) as json.IObjectData[];
 
-            const nestedPrefabs = ParentGameObjectEditorSupport.buildPrefabChildrenData(args.serializer.getData(), children);
+            const { children } = ParentGameObjectEditorSupport.buildRawChildrenData(args.serializer.getData());
 
-            for (const objData of [...children, ...nestedPrefabs]) {
+            for (const objData of children) {
 
                 const ser = args.serializer.getSerializer(objData);
 
