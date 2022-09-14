@@ -47,7 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         // tslint:disable-next-line:ban-types
         private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
-        private _mutableNestedPrefab: boolean;
+        private _isNestedPrefabInstance: boolean;
 
         constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene) {
             super(obj, extension.getTypeName().toLowerCase(), scene);
@@ -56,7 +56,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._unlockedProperties = new Set();
             this._serializables = [];
             this._componentMap = new Map();
-            this._mutableNestedPrefab = false;
+            this._isNestedPrefabInstance = undefined;
 
             obj.setDataEnabled();
 
@@ -69,6 +69,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setInteractive();
 
             scene.sys.displayList.add(obj as Phaser.GameObjects.GameObject);
+        }
+
+        static isParentObject(obj: ISceneGameObject) {
+
+            return obj instanceof Layer || obj instanceof Container;
         }
 
         static getObjectParent(obj: ISceneGameObject): Container | Layer {
@@ -416,6 +421,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected setNewId(sprite: sceneobjects.ISceneGameObject) {
+
             this.setId(Phaser.Utils.String.UUID());
         }
 
@@ -446,34 +452,44 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         /**
-         * Checks if it is a nested prefab instance that can be modified (published to the scene,
-         * accessible from the prefab instance's root).
+         * Checks if it is a nested prefab instance that can be modified.
+         * It means, if there is a path from a root prefab 
+         * walking thought nested prefabs until reach this object.
          *
-         * @returns If active.
+         * @returns If it is reachable.
          */
         isMutableNestedPrefabInstance() {
 
-            if (this._mutableNestedPrefab) {
+            if (this.isNestedPrefabInstance()) {
 
-                const parentSupport = (getObjectParent(this.getObject()) as ISceneGameObject).getEditorSupport();
+                const parentSupport = (getObjectParent(this.getObject()) as ISceneGameObject)
+                    .getEditorSupport();
 
-                return parentSupport.isMutableNestedPrefabInstance() || parentSupport.isPrefabInstanceRoot();
+                return parentSupport.isMutableNestedPrefabInstance()
+                    || parentSupport.isPrefabInstanceRoot();
             }
 
             return false;
         }
 
-        _setMutableNestedPrefab(b: boolean) {
-
-            this._mutableNestedPrefab = b;
-        }
-
-        isRootPrefabDefined() {
+        /**
+         * If it is a prefab instance that was first defined as root prefab.
+         * It maybe pointing to a nested prefab, but it then will point to a root prefab.
+         * 
+         * @returns If it is.
+         */
+         isRootPrefabDefined() {
 
             return this.isPrefabInstance() && !this.isNestedPrefabDefined();
         }
 
-        isNestedPrefabDefined() {
+        /**
+         * If it's first definition as prefab is a nested prefab.
+         * It means, in any case, it isn't an instance of a root prefab.
+         * 
+         * @returns Is it defined as nested prefab?
+         */
+        private isNestedPrefabDefined() {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
@@ -489,7 +505,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         /**
          * Checks if the object is a prefab instance and the parent isn't a prefab instance.
-         *
+         * It is a prefab instance added to the scene, it is not part of a bigger prefab.
+         * It is the bigger prefab.
+         * But ok, it is possible it is also a child appended to a prefab instance.
+         * 
          * @returns If it is the root.
          */
         isPrefabInstanceRoot() {
@@ -509,7 +528,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isNestedPrefabInstance() {
 
-            return this.isPrefabInstance() && this.getOwnerPrefabInstance() !== this.getObject();
+            return this._isNestedPrefabInstance;
+        }
+
+        _setNestedPrefabInstance(isNestedPrefabInstace: boolean) {
+
+            this._isNestedPrefabInstance = isNestedPrefabInstace;
         }
 
         isPrefabInstance() {
@@ -520,8 +544,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         isPrefabOpenToAppendChildren() {
 
             // TODO: should implement this flag as parameter in the Inspector view.
-            
+
             return true;
+        }
+
+        isPrefeabInstanceAppendedChild() {
+
+            const parent = GameObjectEditorSupport.getObjectParent(this.getObject());
+
+            if (parent && parent.getEditorSupport().isPrefabInstance()) {
+
+                const parentSupport = (parent.getEditorSupport() as ParentGameObjectEditorSupport<any>);
+
+                const countPrefabChildren = parentSupport.getCountPrefabChildren();
+
+                const index = parent.getChildren().indexOf(this.getObject());
+
+                return index >= countPrefabChildren;
+            }
+
+            return false;
         }
 
         /**

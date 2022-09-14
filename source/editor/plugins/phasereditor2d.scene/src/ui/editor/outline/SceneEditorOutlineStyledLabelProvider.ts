@@ -57,22 +57,15 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             const baseLabel = this.getLabel(obj);
 
+            let hintText = "";
+
             if (sceneobjects.GameObjectEditorSupport.hasObjectComponent(obj, sceneobjects.VisibleComponent)) {
 
                 const visible = sceneobjects.VisibleComponent.visible.getValue(obj);
 
                 if (!visible) {
 
-                    return [
-                        {
-                            text: baseLabel,
-                            color: theme.viewerForeground
-                        },
-                        {
-                            text: " (hidden)",
-                            color: theme.viewerForeground + "90"
-                        }
-                    ];
+                    hintText += "(hidden)";
                 }
             }
 
@@ -80,38 +73,35 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 const support = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 
-                if (support.isNestedPrefabInstance()) {
+                if (support.isMutableNestedPrefabInstance()) {
 
-                    return [
-                        {
-                            text: baseLabel,
-                            color: theme.viewerForeground
-                        },
-                        {
-                            text: ":nested",
-                            color: theme.viewerForeground + "90"
-                        }
-                    ];
+                    hintText += "(nested)";
 
                 } else if (support.isPrefabInstance()) {
 
-                    return [
-                        {
-                            text: baseLabel,
-                            color: theme.viewerForeground
-                        },
-                        {
-                            text: ":prefab",
-                            color: theme.viewerForeground + "90"
-                        }
-                    ];
+                    hintText += "(prefab)"
                 }
             }
 
-            return [{
-                text: baseLabel,
-                color: theme.viewerForeground
-            }];
+            if (hintText === "") {
+
+                return [
+                    {
+                        text: baseLabel,
+                        color: theme.viewerForeground
+                    }];
+            }
+
+            return [
+                {
+                    text: baseLabel,
+                    color: theme.viewerForeground
+                },
+                {
+                    text: " " + hintText,
+                    color: theme.viewerForeground + "90"
+                }
+            ];
         }
     }
 }

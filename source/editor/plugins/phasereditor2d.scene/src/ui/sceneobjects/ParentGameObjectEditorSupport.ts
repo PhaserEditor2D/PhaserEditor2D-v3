@@ -10,6 +10,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _showChildrenInOutline = true;
         private _countPrefabChildren = 0;
 
+
+        getCountPrefabChildren() {
+
+            return this._countPrefabChildren;
+        }
+
         isAllowPickChildren() {
 
             return this._allowPickChildren;
@@ -245,7 +251,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         if (prefabData.scope === sceneobjects.ObjectScope.NESTED_PREFAB) {
 
-                            sprite.getEditorSupport()._setMutableNestedPrefab(true);
+                            sprite.getEditorSupport()._setNestedPrefabInstance(true);
                         }
                     }
 
