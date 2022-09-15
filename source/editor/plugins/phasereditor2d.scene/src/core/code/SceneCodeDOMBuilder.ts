@@ -239,20 +239,20 @@ namespace phasereditor2d.scene.core.code {
 
             for (const obj of children) {
 
-                const support = obj.getEditorSupport();
-                const isMethodScope = support.getScope() === ui.sceneobjects.ObjectScope.METHOD;
+                const objES = obj.getEditorSupport();
+                const isMethodScope = objES.getScope() === ui.sceneobjects.ObjectScope.METHOD;
                 const isPrefabObj = this._scene.isPrefabSceneType() && this._scene.getPrefabObject() === obj;
                 const isPrefabScene = this._scene.isPrefabSceneType();
 
                 if (!isMethodScope && !isPrefabObj) {
 
-                    const varName = code.formatToValidVarName(support.getLabel());
+                    const varName = code.formatToValidVarName(objES.getLabel());
 
-                    const type = support.isPrefabInstance()
-                        ? support.getPrefabName()
-                        : support.getPhaserType();
+                    const type = objES.isPrefabInstance()
+                        ? objES.getPrefabName()
+                        : objES.getPhaserType();
 
-                    const isPublic = support.isPublic();
+                    const isPublic = objES.isPublic();
 
                     const field = new FieldDeclCodeDOM(varName, type, isPublic);
                     // Allow undefined if the object is part of a scene.
@@ -262,12 +262,45 @@ namespace phasereditor2d.scene.core.code {
                     fields.push(field);
                 }
 
-                if ((obj instanceof Container || obj instanceof Layer)
-                    && !obj.getEditorSupport().isPrefabInstance()) {
+                const children = this.getWalkingChildren(obj);
 
-                    this.buildObjectClassFields(fields, obj.getChildren());
+                if (children) {
+
+                    this.buildObjectClassFields(fields, children);
                 }
             }
+        }
+
+        private getWalkingChildren(obj: ISceneGameObject) {
+
+            let children: ISceneGameObject[];
+
+            if (obj instanceof Container || obj instanceof Layer) {
+
+                const objES = obj.getEditorSupport();
+
+                if (objES.isPrefabInstance()) {
+
+                    if (objES.isPrefeabInstanceAppendedChild()) {
+
+                        children = objES.getChildren();
+
+                    } else if (objES.isMutableNestedPrefabInstance()) {
+
+                        children = objES.getMutableNestedPrefabChildren();
+
+                    } else {
+
+                        children = obj.getEditorSupport().getAppendedChildren();
+                    }
+
+                } else {
+
+                    children = objES.getChildren();
+                }
+            }
+
+            return children;
         }
 
         private buildPrefabConstructorMethod() {
@@ -486,19 +519,15 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
-        private addFieldInitCode(body: CodeDOM[]) {
+        private addFieldInitCode_GameObjects(fields: CodeDOM[], prefabObj: ISceneGameObject, children: ISceneGameObject[]) {
 
-            const fields: CodeDOM[] = [];
+            for (const obj of children) {
 
-            this._scene.visitAllAskChildren(obj => {
+                const objES = obj.getEditorSupport();
 
-                const support = obj.getEditorSupport();
+                if (!objES.isMethodScope() && prefabObj !== obj) {
 
-                const prefabObj = this._scene.isPrefabSceneType() ? this._scene.getPrefabObject() : null;
-
-                if (!support.isMethodScope() && prefabObj !== obj) {
-
-                    const varname = formatToValidVarName(support.getLabel());
+                    const varname = formatToValidVarName(objES.getLabel());
 
                     const dom = new AssignPropertyCodeDOM(varname, "this");
                     dom.value(varname);
@@ -506,8 +535,22 @@ namespace phasereditor2d.scene.core.code {
                     fields.push(dom);
                 }
 
-                return !support.isPrefabInstance();
-            });
+                const walkingChildren = this.getWalkingChildren(obj);
+
+                if (walkingChildren) {
+
+                    this.addFieldInitCode_GameObjects(fields, prefabObj, walkingChildren);
+                }
+            }
+        }
+
+        private addFieldInitCode(body: CodeDOM[]) {
+
+            const fields: CodeDOM[] = [];
+
+            const prefabObj = this._scene.isPrefabSceneType() ? this._scene.getPrefabObject() : null;
+
+            this.addFieldInitCode_GameObjects(fields, prefabObj, this._scene.getDisplayListChildren());
 
             for (const obj of this._scene.getPlainObjects()) {
 

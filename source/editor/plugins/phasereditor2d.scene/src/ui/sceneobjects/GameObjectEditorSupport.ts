@@ -638,7 +638,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.getScene().isPrefabSceneType() && this.getScene().getPrefabObject() === this.getObject();
         }
 
-        getNestedActivePrefabInstances(): ISceneGameObject[] {
+        getMutableNestedPrefabChildren(): ISceneGameObject[] {
 
             if (this.isPrefabInstance()) {
 
