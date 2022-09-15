@@ -9,11 +9,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _allowPickChildren = true;
         private _showChildrenInOutline = true;
         private _countPrefabChildren = 0;
-
+        private _allowAppendChildren = false;
 
         getCountPrefabChildren() {
 
             return this._countPrefabChildren;
+        }
+
+        isAllowAppendChildren() {
+
+            return this._allowAppendChildren;
+        }
+
+        setAllowAppendChildren(allowAppendChild: boolean) {
+
+            this._allowAppendChildren = allowAppendChild;
         }
 
         isAllowPickChildren() {

@@ -129,7 +129,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createLock(parent, prop);
             }
 
-            const elements = this.createBooleanField(parent, prop);
+            const elements = this.createBooleanField(parent, prop, lockIcon);
             elements.labelElement.style.gridColumn = "2 / auto";
 
             return elements;

@@ -17,10 +17,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElement(parent, 2);
+            const comp = this.createGridElement(parent);
+            comp.style.gridTemplateColumns = "auto auto 1fr";
 
-            this.createBooleanField(comp, ChildrenComponent.allowPickChildren, false);
-            this.createBooleanField(comp, ChildrenComponent.showChildrenInOutline, false);
+            this.createPropertyBoolean(comp, ChildrenComponent.allowPickChildren, false);
+
+            this.createPropertyBoolean(comp, ChildrenComponent.showChildrenInOutline, false);
+
+            {
+                const label = this.createLabel(comp, "Prefab Instances:");
+                label.style.gridColumn = "2 / span 2";
+                label.style.opacity = "0.5";
+                label.style.fontWeight = "bold";
+                label.style.justifySelf = "left";
+            }
+
+            this.createPropertyBoolean(comp, ChildrenComponent.allowAppendChildren, true);
         }
 
         canEdit(obj: any, n: number): boolean {

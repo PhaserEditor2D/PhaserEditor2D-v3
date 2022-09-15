@@ -23,10 +23,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setValue: (obj, value) => obj.getEditorSupport().setShowChildrenInOutline(value)
         };
 
+        static allowAppendChildren: IProperty<Container> = {
+            name: "allowAppendChildren",
+            label: "Allow Append Children",
+            tooltip: "If allow appending children to the prefab instances of this object.",
+            defValue: false,
+            local: false,
+            getValue: obj => obj.getEditorSupport().isAllowAppendChildren(),
+            setValue: (obj, value) => obj.getEditorSupport().setAllowAppendChildren(value)
+        };
+
         constructor(obj: Container | Layer) {
             super(obj, [
                 ChildrenComponent.allowPickChildren,
-                ChildrenComponent.showChildrenInOutline]);
+                ChildrenComponent.showChildrenInOutline,
+                ChildrenComponent.allowAppendChildren]);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {

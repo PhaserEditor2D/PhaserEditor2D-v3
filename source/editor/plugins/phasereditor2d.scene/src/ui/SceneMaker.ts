@@ -27,7 +27,9 @@ namespace phasereditor2d.scene.ui {
 
                 if (objES.isPrefabInstanceElement()) {
 
-                    if (!objES.isAllowAppendChild() && !objES.isMutableNestedPrefabInstance()) {
+                    const allowAppendChildren = objES instanceof sceneobjects.ParentGameObjectEditorSupport && objES.isAllowAppendChildren();
+
+                    if (!allowAppendChildren && !objES.isMutableNestedPrefabInstance()) {
 
                         return this.findDropTargetParent(parent);
                     }

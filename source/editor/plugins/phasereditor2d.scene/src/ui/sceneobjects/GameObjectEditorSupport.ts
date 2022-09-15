@@ -546,13 +546,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._prefabId !== undefined && this._prefabId !== null;
         }
 
-        isAllowAppendChild() {
-
-            // TODO: should implement this flag as parameter in the Inspector view.
-
-            return true;
-        }
-
         isPrefeabInstanceAppendedChild() {
 
             const parent = GameObjectEditorSupport.getObjectParent(this.getObject());

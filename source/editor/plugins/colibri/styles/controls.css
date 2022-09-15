@@ -376,7 +376,7 @@
     }
 
     .formLabel {
-        justify-self: self-end;
+        justify-self: self-start;
     }
 
     .StringDialogField {
