@@ -79,15 +79,14 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 }
             }
 
-            scene.visitAskChildren(obj => {
+            for (const newObj of sprites) {
 
-                const support = obj.getEditorSupport();
+                const oldLabel = newObj.getEditorSupport().getLabel();
 
-                support.setLabel(nameMaker.makeName(support.getLabel()));
+                const newLabel = nameMaker.makeName(oldLabel);
 
-                return !obj.getEditorSupport().isPrefabInstance();
-
-            }, sprites);
+                newObj.getEditorSupport().setLabel(newLabel);
+            }
 
             maker.afterDropObjects(prefabObj, sprites);
 

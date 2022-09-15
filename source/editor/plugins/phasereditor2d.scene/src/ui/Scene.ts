@@ -342,7 +342,10 @@ namespace phasereditor2d.scene.ui {
 
                 nameMaker.update([obj]);
 
-                return !obj.getEditorSupport().isPrefabInstance();
+                const objES = obj.getEditorSupport();
+
+                return !objES.isPrefabInstance() || objES.isMutableNestedPrefabInstance()
+                    || objES.isPrefeabInstanceAppendedChild;;
             });
 
             for (const list of this._objectLists.getLists()) {
