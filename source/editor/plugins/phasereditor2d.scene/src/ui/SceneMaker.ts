@@ -19,19 +19,24 @@ namespace phasereditor2d.scene.ui {
 
         private findDropTargetParent(obj: sceneobjects.ISceneGameObject) {
 
-            const objES = obj.getEditorSupport();
-
             const parent = sceneobjects.getObjectParent(obj);
 
-            if (sceneobjects.isGameObjectParent(obj)) {
+            if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                if (objES.isPrefabInstanceElement()) {
+                const objES = obj.getEditorSupport();
 
-                    const allowAppendChildren = objES instanceof sceneobjects.ParentGameObjectEditorSupport && objES.isAllowAppendChildren();
+                if (objES.isPrefabInstanceElement() || objES.isPrefabInstance()) {
 
-                    if (!allowAppendChildren && !objES.isMutableNestedPrefabInstance()) {
+                    if (!objES.isAllowAppendChildren() && !objES.isMutableNestedPrefabInstance()) {
 
-                        return this.findDropTargetParent(parent);
+                        if (parent) {
+
+                            return this.findDropTargetParent(parent);
+
+                        } else {
+
+                            return undefined;
+                        }
                     }
                 }
 
@@ -55,22 +60,23 @@ namespace phasereditor2d.scene.ui {
 
                 let sprite2 = sprite;
 
-                sprite2 = this.findDropTargetParent(sprite2) || sprite2;
+                const dropTarget = this.findDropTargetParent(sprite2);
 
-                if (sprite2) {
+                if (dropTarget) {
 
-                    if (sprite2 instanceof sceneobjects.Container) {
+                    if (dropTarget instanceof sceneobjects.Container) {
 
-                        container = sprite2;
+                        container = dropTarget;
 
-                    } else if (sprite2 instanceof sceneobjects.Layer) {
+                    } else if (dropTarget instanceof sceneobjects.Layer) {
 
-                        layer = sprite2;
+                        layer = dropTarget;
 
-                    } else if (sprite2.displayList instanceof sceneobjects.Layer) {
+                    } else if (dropTarget.displayList instanceof sceneobjects.Layer) {
 
-                        layer = sprite2.displayList;
+                        layer = dropTarget.displayList;
                     }
+
                 }
             }
 
