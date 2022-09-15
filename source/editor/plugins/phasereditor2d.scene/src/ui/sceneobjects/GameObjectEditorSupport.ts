@@ -19,6 +19,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return GameObjectEditorSupport.hasEditorSupport(obj);
     }
 
+    export function isGameObjectParent(obj: any) {
+
+        return obj instanceof Container || obj instanceof Layer;
+    }
+
     export function getObjectChildren(obj: ISceneGameObject) {
 
         if (obj instanceof Layer || obj instanceof Container) {

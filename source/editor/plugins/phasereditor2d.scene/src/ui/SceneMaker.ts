@@ -17,6 +17,33 @@ namespace phasereditor2d.scene.ui {
             this._editorScene = scene;
         }
 
+        private findDropTargetParent(obj: sceneobjects.ISceneGameObject) {
+
+            const objES = obj.getEditorSupport();
+
+            const parent = sceneobjects.getObjectParent(obj);
+
+            if (sceneobjects.isGameObjectParent(obj)) {
+
+                if (objES.isPrefabInstanceElement()) {
+
+                    if (!objES.isAllowAppendChild() && !objES.isMutableNestedPrefabInstance()) {
+
+                        return this.findDropTargetParent(parent);
+                    }
+                }
+
+                return obj;
+            }
+
+            if (parent) {
+
+                return this.findDropTargetParent(parent);
+            }
+
+            return undefined;
+        }
+
         afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
 
             let container: sceneobjects.Container;
@@ -26,20 +53,13 @@ namespace phasereditor2d.scene.ui {
 
                 let sprite2 = sprite;
 
-                if (sprite2.getEditorSupport().isPrefabInstance()) {
-
-                    sprite2 = sceneobjects.getObjectParent(sprite2.getEditorSupport().getOwnerPrefabInstance());
-                }
+                sprite2 = this.findDropTargetParent(sprite2) || sprite2;
 
                 if (sprite2) {
 
                     if (sprite2 instanceof sceneobjects.Container) {
 
                         container = sprite2;
-
-                    } else if (sprite2.parentContainer) {
-
-                        container = sprite2.parentContainer as sceneobjects.Container;
 
                     } else if (sprite2 instanceof sceneobjects.Layer) {
 
@@ -269,7 +289,7 @@ namespace phasereditor2d.scene.ui {
         }
 
         getSerializer(data: json.IObjectData) {
-            
+
             return new json.Serializer(data);
         }
 
