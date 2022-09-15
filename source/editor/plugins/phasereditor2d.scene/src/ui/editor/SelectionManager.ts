@@ -122,6 +122,57 @@ namespace phasereditor2d.scene.ui.editor {
             provider.repaint();
         }
 
+        private canPickObject(obj: sceneobjects.ISceneGameObject) {
+
+            const objES = obj.getEditorSupport();
+
+            if (objES.isPrefabInstanceElement()) {
+
+                if (objES.isPrefeabInstanceAppendedChild() || objES.isMutableNestedPrefabInstance()) {
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            return this.parentsAllowPickingChildren(obj);
+        }
+
+        private parentsAllowPickingChildren(obj: sceneobjects.ISceneGameObject) {
+
+            const parent = sceneobjects.getObjectParent(obj);
+
+            if (parent) {
+
+                return parent.getEditorSupport().isAllowPickChildren() && this.canPickObject(parent);
+            }
+
+            return true;
+        }
+
+        private findPickableObject(obj: sceneobjects.ISceneGameObject) {
+
+            const objES = obj.getEditorSupport();
+
+            if (objES.isPrefabInstanceElement()) {
+
+                if (objES.isMutableNestedPrefabInstance() || objES.isPrefeabInstanceAppendedChild()) {
+
+                    if (this.parentsAllowPickingChildren(obj)) {
+
+                        return obj;
+                    }
+                }
+
+                const parent = sceneobjects.getObjectParent(obj);
+
+                return this.findPickableObject(parent);
+            }
+
+            return obj;
+        }
+
         onMouseClick(e: MouseEvent): void {
 
             const result = this.hitTestOfActivePointer();
@@ -136,20 +187,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (selected) {
 
-                    const obj = selected as sceneobjects.ISceneGameObject;
-
-                    const objSupport = obj.getEditorSupport();
-
-                    const owner = objSupport.getOwnerPrefabInstance();
-
-                    if ((owner instanceof sceneobjects.Container || owner instanceof sceneobjects.Layer)
-                        && objSupport.isMutableNestedPrefabInstance()
-                        && owner.getEditorSupport().isAllowPickChildren()) {
-                        // ok, it can be selected
-                    } else {
-
-                        selected = owner ?? selected;
-                    }
+                    selected = this.findPickableObject(selected);
                 }
 
                 if (selected) {

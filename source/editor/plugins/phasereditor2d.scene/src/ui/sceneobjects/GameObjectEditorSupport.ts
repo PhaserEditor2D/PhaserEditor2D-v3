@@ -56,7 +56,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._unlockedProperties = new Set();
             this._serializables = [];
             this._componentMap = new Map();
-            this._isNestedPrefabInstance = undefined;
+            this._isNestedPrefabInstance = false;
 
             obj.setDataEnabled();
 
@@ -541,7 +541,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._prefabId !== undefined && this._prefabId !== null;
         }
 
-        isPrefabOpenToAppendChildren() {
+        isAllowAppendChild() {
 
             // TODO: should implement this flag as parameter in the Inspector view.
 
@@ -648,7 +648,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getOwnerPrefabInstance(): ISceneGameObject {
 
-            const parents = this.getAllParents().reverse();
+            const parents = this.getAllParents();
 
             for (const parent of parents) {
 

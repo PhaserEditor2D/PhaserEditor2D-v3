@@ -58,7 +58,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     return false;
                 }
 
-                if (targetParentSupport.isPrefabInstance() && !targetParentSupport.isPrefabOpenToAppendChildren()) {
+                if (targetParentSupport.isPrefabInstance() && !targetParentSupport.isAllowAppendChild()) {
 
                     return false;
                 }
