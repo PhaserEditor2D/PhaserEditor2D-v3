@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Allows append objects to a prefab instance.
+
 ## v3.34.0 - Aug 12, 2022
 
 * Fixes assets preloading when paste a layer/container prefab from another scene.
