@@ -123,7 +123,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     .filter(data =>
                         (data.nestedPrefabs ?? []).length > 0
                         || (data.unlock ?? []).length > 0
-                        || (data.components ?? []).length > 0);
+                        || (data.components ?? []).length > 0
+                        || (data.list ?? []).length > 0);
 
                 // write appended objects
 

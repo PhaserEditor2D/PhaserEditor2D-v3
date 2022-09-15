@@ -576,6 +576,7 @@ namespace phasereditor2d.scene.core.code {
                 mainCreateMethodCall.setReturnToVar(varname);
             }
         }
+
         private addCreateObjectCodeOfNestedPrefab(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
 
             const varname = this.getPrefabInstanceVarName(obj);
@@ -651,7 +652,6 @@ namespace phasereditor2d.scene.core.code {
 
             const objParent = ui.sceneobjects.getObjectParent(obj);
 
-
             createMethodDecl.getBody().push(createObjectMethodCall);
 
             if (objSupport.isPrefabInstance()) {
@@ -689,7 +689,7 @@ namespace phasereditor2d.scene.core.code {
                     && objParent === this._scene.getPrefabObject();
 
                 const parentVarname = parentIsPrefabObject ? "this"
-                    : formatToValidVarName(objParent.getEditorSupport().getLabel());
+                    : this.getPrefabInstanceVarName(objParent);
 
                 const addToParentCall = new MethodCallCodeDOM("add", parentVarname);
 
@@ -810,14 +810,16 @@ namespace phasereditor2d.scene.core.code {
 
             for (const child of args.obj.getChildren()) {
 
-                if (child.getEditorSupport().isMutableNestedPrefabInstance()) {
+                const childES = child.getEditorSupport();
+
+                if (childES.isMutableNestedPrefabInstance()) {
 
                     this.addCreateObjectCodeOfNestedPrefab(child, args.createMethodDecl, args.lazyStatements);
 
-                } else if (!parentIsPrefab) {
+                } else if (!parentIsPrefab || childES.isPrefeabInstanceAppendedChild()) {
 
                     body.push(new RawCodeDOM(""));
-                    body.push(new RawCodeDOM("// " + child.getEditorSupport().getLabel()));
+                    body.push(new RawCodeDOM("// " + childES.getLabel()));
 
                     this.addCreateObjectCode(child, args.createMethodDecl, args.lazyStatements);
                 }
