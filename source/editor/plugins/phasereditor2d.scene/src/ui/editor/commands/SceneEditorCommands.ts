@@ -1484,7 +1484,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
         private static registerDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
-            for (const tuple of [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]]) {
+            const moves: [undo.DepthMove, string][] = [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]];
+
+            for (const tuple of moves) {
 
                 const move = tuple[0];
                 const key = tuple[1];
@@ -1499,10 +1501,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     },
 
                     handler: {
-                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0,
+                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                            && undo.DepthOperation.allow(args.activeEditor as any, move),
 
                         executeFunc: args => args.activeEditor.getUndoManager().add(
-                            new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move as any))
+                            new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move))
                     },
 
                     keys: {

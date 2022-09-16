@@ -12,13 +12,51 @@ namespace phasereditor2d.scene.ui.editor.undo {
             this._depthMove = depthMove;
         }
 
-        protected async performModification() {
+        static allow(editor: SceneEditor, move: DepthMove) {
 
-            const objects = this.getEditor().getSelectedGameObjects();
+            const sel = this.sortedSelection(editor);
 
-            const displayList = this.getScene().sys.displayList;
+            for (const obj of sel) {
 
-            objects.sort((a, b) => {
+                const parent = sceneobjects.getObjectParentOrDisplayList(obj);
+
+                const index = parent.getIndex(obj);
+
+                let bottomIndex = 0;
+                const len = parent.list.length;
+
+                if (parent instanceof Phaser.GameObjects.GameObject) {
+
+                    const parentES: sceneobjects.ParentGameObjectEditorSupport<any>
+                        = (parent as sceneobjects.ISceneGameObject).getEditorSupport() as any;
+
+                    bottomIndex = parentES.getCountPrefabChildren();
+                }
+
+                if (move === "Top" || move === "Up") {
+
+                    if (index === len - 1) {
+
+                        return false;
+                    }
+
+                } else { // Bottom || Down
+
+                    if (index === bottomIndex) {
+
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private static sortedSelection(editor: SceneEditor) {
+
+            const sel = editor.getSelectedGameObjects();
+
+            sel.sort((a, b) => {
 
                 const aParent = sceneobjects.getObjectParentOrDisplayList(a);
                 const bParent = sceneobjects.getObjectParentOrDisplayList(a);
@@ -29,11 +67,18 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 return aa - bb;
             });
 
+            return sel;
+        }
+
+        protected async performModification() {
+
+            const sel = DepthOperation.sortedSelection(this.getEditor());
+
             switch (this._depthMove) {
 
                 case "Top":
 
-                    for (const obj of objects) {
+                    for (const obj of sel) {
 
                         sceneobjects.getObjectParentOrDisplayList(obj).bringToTop(obj);
                     }
@@ -42,20 +87,43 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 case "Bottom":
 
-                    for (let i = 0; i < objects.length; i++) {
+                    for (let i = 0; i < sel.length; i++) {
 
-                        const obj = objects[objects.length - i - 1];
+                        const obj = sel[sel.length - i - 1];
 
-                        sceneobjects.getObjectParentOrDisplayList(obj).sendToBack(obj);
+                        const parent = sceneobjects.getObjectParentOrDisplayList(obj);
+
+                        let bottomIndex = 0;
+
+                        if (sceneobjects.isGameObject(parent)) {
+
+                            const parentES = (parent as sceneobjects.Container).getEditorSupport();
+
+                            bottomIndex = parentES.getCountPrefabChildren();
+                        }
+
+                        if (bottomIndex === 0) {
+
+                            parent.sendToBack(obj);
+
+                        } else {
+
+                            let i = parent.getIndex(obj);
+                            
+                            for(; i > bottomIndex; i--) {
+                                
+                                parent.moveDown(obj);
+                            }
+                        }
                     }
 
                     break;
 
                 case "Up":
 
-                    for (let i = 0; i < objects.length; i++) {
+                    for (let i = 0; i < sel.length; i++) {
 
-                        const obj = objects[objects.length - i - 1];
+                        const obj = sel[sel.length - i - 1];
 
                         sceneobjects.getObjectParentOrDisplayList(obj).moveUp(obj);
                     }
@@ -64,7 +132,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 case "Down":
 
-                    for (const obj of objects) {
+                    for (const obj of sel) {
 
                         sceneobjects.getObjectParentOrDisplayList(obj).moveDown(obj);
                     }
