@@ -27,16 +27,15 @@ namespace phasereditor2d.scene.ui {
 
                 if (objES.isPrefabInstanceElement() || objES.isPrefabInstance()) {
 
-                    if (!objES.isAllowAppendChildren() && !objES.isMutableNestedPrefabInstance()) {
+                    if (!objES.isAllowAppendChildren() || !objES.isMutableNestedPrefabInstance()) {
 
                         if (parent) {
 
                             return this.findDropTargetParent(parent);
 
-                        } else {
-
-                            return undefined;
                         }
+
+                        return undefined;
                     }
                 }
 
