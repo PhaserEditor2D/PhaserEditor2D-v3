@@ -43,9 +43,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const data = {
                 components: this._components.map(comp => comp.toJSON()),
                 meta: {
-                    app: "Phaser Editor 2D - Object Script Editor",
+                    app: "Phaser Editor 2D - User Components Editor",
                     url: "https://phasereditor2d.com",
-                    contentType: scene.core.CONTENT_TYPE_SCENE
+                    contentType: scene.core.CONTENT_TYPE_USER_COMPONENTS
                 }
             };
 
