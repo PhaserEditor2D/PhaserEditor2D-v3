@@ -32,7 +32,6 @@ namespace phasereditor2d.scene.ui {
                         if (parent) {
 
                             return this.findDropTargetParent(parent);
-
                         }
 
                         return undefined;
