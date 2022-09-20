@@ -18,8 +18,8 @@ namespace phasereditor2d.pack.ui.editor {
 
         getRoots(input: any) {
 
-            const types = core.TYPES.filter(
-                type => type === core.ATLAS_TYPE || type.toLowerCase().indexOf("atlas") < 0);
+            const types = AssetPackPlugin.getInstance().getAssetPackItemTypes()
+                .filter(type => type === core.ATLAS_TYPE || type.toLowerCase().indexOf("atlas") < 0);
 
             return types;
         }

@@ -16,6 +16,9 @@ namespace phasereditor2d.pack {
     export class AssetPackPlugin extends colibri.Plugin {
 
         private static _instance = new AssetPackPlugin();
+        private _extensions: ui.AssetPackExtension[];
+        private _assetPackItemTypes: string[];
+        private _assetPackItemTypeSet: Set<string>;
 
         static getInstance() {
             return this._instance;
@@ -23,6 +26,33 @@ namespace phasereditor2d.pack {
 
         private constructor() {
             super("phasereditor2d.pack");
+        }
+
+        getExtensions() {
+
+            return this._extensions ??
+                (this._extensions = colibri.Platform.getExtensions(ui.AssetPackExtension.POINT_ID));
+        }
+
+        getAssetPackItemTypes() {
+
+            if (!this._assetPackItemTypes) {
+
+                this._assetPackItemTypes = this.getExtensions()
+                    .flatMap(ext => ext.getAssetPackItemTypes());
+            }
+
+            return this._assetPackItemTypes;
+        }
+
+        isAssetPackItemType(type: string) {
+
+            if (!this._assetPackItemTypeSet) {
+
+                this._assetPackItemTypeSet = new Set(this.getAssetPackItemTypes());
+            }
+
+            return this._assetPackItemTypeSet.has(type);
         }
 
         async started() {
@@ -45,6 +75,10 @@ namespace phasereditor2d.pack {
                     ICON_TILEMAP_LAYER
                 ])
             );
+
+            // asset pack extensions
+
+            reg.addExtension(new ui.DefaultAssetPackExtension());
 
             // content type resolvers
 
@@ -150,6 +184,7 @@ namespace phasereditor2d.pack {
                 ]));
 
             // commands
+
             reg.addExtension(
                 new ide.commands.CommandExtension(manager => {
 
