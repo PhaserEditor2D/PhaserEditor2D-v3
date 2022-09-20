@@ -33,39 +33,6 @@ namespace phasereditor2d.pack.core {
     export const VIDEO_TYPE = "video";
     export const XML_TYPE = "xml";
 
-    export const TYPES = [
-        IMAGE_TYPE,
-        SVG_TYPE,
-        ATLAS_TYPE,
-        ATLAS_XML_TYPE,
-        UNITY_ATLAS_TYPE,
-        MULTI_ATLAS_TYPE,
-        SPRITESHEET_TYPE,
-        ANIMATION_TYPE,
-        BITMAP_FONT_TYPE,
-        TILEMAP_CSV_TYPE,
-        TILEMAP_IMPACT_TYPE,
-        TILEMAP_TILED_JSON_TYPE,
-        PLUGIN_TYPE,
-        SCENE_FILE_TYPE,
-        SCENE_PLUGIN_TYPE,
-        SCRIPT_TYPE,
-        SCRIPTS_TYPE,
-        AUDIO_TYPE,
-        AUDIO_SPRITE_TYPE,
-        VIDEO_TYPE,
-        TEXT_TYPE,
-        CSS_TYPE,
-        GLSL_TYPE,
-        HTML_TYPE,
-        HTML_TEXTURE_TYPE,
-        BINARY_TYPE,
-        JSON_TYPE,
-        XML_TYPE
-    ];
-
-    export const TYPES_SET = new Set(TYPES);
-
     export class AssetPack {
 
         private _file: core.io.FilePath;

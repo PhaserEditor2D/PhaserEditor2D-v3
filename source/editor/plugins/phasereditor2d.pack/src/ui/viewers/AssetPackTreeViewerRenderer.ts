@@ -14,7 +14,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
         protected isObjectSection(obj: any) {
 
-            return core.TYPES_SET.has(obj)
+            return AssetPackPlugin.getInstance().isAssetPackItemType(obj)
                 || obj instanceof pack.core.AssetPack
                 || (obj instanceof colibri.core.io.FilePath && obj.isFolder());
         }
