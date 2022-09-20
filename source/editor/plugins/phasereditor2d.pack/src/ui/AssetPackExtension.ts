@@ -10,9 +10,11 @@ namespace phasereditor2d.pack.ui {
             super(AssetPackExtension.POINT_ID);
         }
 
-        abstract getAssetPackItemTypes(): string[];
+        abstract getAssetPackItemTypes(): { type: string, displayName: string }[];
 
         abstract createImporters(): importers.Importer[];
+
+        abstract createAssetPackItem(type: string, data: any, pack: core.AssetPack): core.AssetPackItem;
 
         abstract getCellRenderer(element: any, layout: "grid" | "tree"): controls.viewers.ICellRenderer | undefined;
 

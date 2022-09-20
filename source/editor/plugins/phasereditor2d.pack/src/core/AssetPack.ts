@@ -136,63 +136,13 @@ namespace phasereditor2d.pack.core {
 
             const type = data.type;
 
-            switch (type) {
-                case IMAGE_TYPE:
-                    return new ImageAssetPackItem(this, data);
-                case SVG_TYPE:
-                    return new SvgAssetPackItem(this, data);
-                case ATLAS_TYPE:
-                    return new AtlasAssetPackItem(this, data);
-                case ATLAS_XML_TYPE:
-                    return new AtlasXMLAssetPackItem(this, data);
-                case UNITY_ATLAS_TYPE:
-                    return new UnityAtlasAssetPackItem(this, data);
-                case MULTI_ATLAS_TYPE:
-                    return new MultiatlasAssetPackItem(this, data);
-                case SPRITESHEET_TYPE:
-                    return new SpritesheetAssetPackItem(this, data);
-                case ANIMATION_TYPE:
-                    return new AnimationsAssetPackItem(this, data);
-                case BITMAP_FONT_TYPE:
-                    return new BitmapFontAssetPackItem(this, data);
-                case TILEMAP_CSV_TYPE:
-                    return new TilemapCSVAssetPackItem(this, data);
-                case TILEMAP_IMPACT_TYPE:
-                    return new TilemapImpactAssetPackItem(this, data);
-                case TILEMAP_TILED_JSON_TYPE:
-                    return new TilemapTiledJSONAssetPackItem(this, data);
-                case PLUGIN_TYPE:
-                    return new PluginAssetPackItem(this, data);
-                case SCENE_FILE_TYPE:
-                    return new SceneFileAssetPackItem(this, data);
-                case SCENE_PLUGIN_TYPE:
-                    return new ScenePluginAssetPackItem(this, data);
-                case SCRIPT_TYPE:
-                    return new ScriptAssetPackItem(this, data);
-                case SCRIPTS_TYPE:
-                    return new ScriptsAssetPackItem(this, data);
-                case AUDIO_TYPE:
-                    return new AudioAssetPackItem(this, data);
-                case AUDIO_SPRITE_TYPE:
-                    return new AudioSpriteAssetPackItem(this, data);
-                case VIDEO_TYPE:
-                    return new VideoAssetPackItem(this, data);
-                case TEXT_TYPE:
-                    return new TextAssetPackItem(this, data);
-                case CSS_TYPE:
-                    return new CssAssetPackItem(this, data);
-                case GLSL_TYPE:
-                    return new GlslAssetPackItem(this, data);
-                case HTML_TYPE:
-                    return new HTMLAssetPackItem(this, data);
-                case HTML_TEXTURE_TYPE:
-                    return new HTMLTextureAssetPackItem(this, data);
-                case BINARY_TYPE:
-                    return new BinaryAssetPackItem(this, data);
-                case JSON_TYPE:
-                    return new JSONAssetPackItem(this, data);
-                case XML_TYPE:
-                    return new XMLAssetPackItem(this, data);
+            const ext = AssetPackPlugin.getInstance().getExtensionByType(type);
+            
+            const item = ext.createAssetPackItem(type, data, this);
+
+            if (item) {
+
+                return item;
             }
 
             throw new Error(`Unknown file type ${type}`);

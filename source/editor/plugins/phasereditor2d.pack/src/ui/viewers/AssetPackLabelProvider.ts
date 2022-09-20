@@ -3,36 +3,7 @@ namespace phasereditor2d.pack.ui.viewers {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    const ASSET_PACK_TYPE_DISPLAY_NAME = {
-        image: "Image",
-        svg: "SVG",
-        atlas: "Atlas",
-        atlasXML: "Atlas XML",
-        unityAtlas: "Unity Atlas",
-        multiatlas: "Multiatlas",
-        spritesheet: "Spritesheet",
-        animation: "Animation",
-        bitmapFont: "Bitmap Font",
-        tilemapCSV: "Tilemap CSV",
-        tilemapImpact: "Tilemap Impact",
-        tilemapTiledJSON: "Tilemap Tiled JSON",
-        plugin: "Plugin",
-        sceneFile: "Scene File",
-        scenePlugin: "Scene Plugin",
-        script: "Script",
-        scripts: "Scripts (Predictable Order)",
-        audio: "Audio",
-        audioSprite: "Audio Sprite",
-        video: "Video",
-        text: "Text",
-        css: "CSS",
-        glsl: "GLSL",
-        html: "HTML",
-        htmlTexture: "HTML Texture",
-        binary: "Binary",
-        json: "JSON",
-        xml: "XML"
-    };
+    
 
     export class AssetPackLabelProvider implements controls.viewers.ILabelProvider {
 
@@ -104,12 +75,9 @@ namespace phasereditor2d.pack.ui.viewers {
 
             if (typeof (obj) === "string") {
 
-                if (obj in ASSET_PACK_TYPE_DISPLAY_NAME) {
+                const name = AssetPackPlugin.getInstance().getAssetPackItemTypeDisplayName(obj);
 
-                    return ASSET_PACK_TYPE_DISPLAY_NAME[obj];
-                }
-
-                return obj;
+                return name || obj;
             }
 
             return "";

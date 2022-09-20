@@ -33,7 +33,130 @@ namespace phasereditor2d.pack.ui {
         core.XML_TYPE
     ];
 
+    const ASSET_PACK_TYPE_DISPLAY_NAME = {
+        image: "Image",
+        svg: "SVG",
+        atlas: "Atlas",
+        atlasXML: "Atlas XML",
+        unityAtlas: "Unity Atlas",
+        multiatlas: "Multiatlas",
+        spritesheet: "Spritesheet",
+        animation: "Animation",
+        bitmapFont: "Bitmap Font",
+        tilemapCSV: "Tilemap CSV",
+        tilemapImpact: "Tilemap Impact",
+        tilemapTiledJSON: "Tilemap Tiled JSON",
+        plugin: "Plugin",
+        sceneFile: "Scene File",
+        scenePlugin: "Scene Plugin",
+        script: "Script",
+        scripts: "Scripts (Predictable Order)",
+        audio: "Audio",
+        audioSprite: "Audio Sprite",
+        video: "Video",
+        text: "Text",
+        css: "CSS",
+        glsl: "GLSL",
+        html: "HTML",
+        htmlTexture: "HTML Texture",
+        binary: "Binary",
+        json: "JSON",
+        xml: "XML"
+    };
+
     export class DefaultAssetPackExtension extends AssetPackExtension {
+
+        createAssetPackItem(type: string, data: any, pack: core.AssetPack): core.AssetPackItem {
+
+            switch (type) {
+
+                case core.IMAGE_TYPE:
+                    return new core.ImageAssetPackItem(pack, data);
+
+                case core.SVG_TYPE:
+                    return new core.SvgAssetPackItem(pack, data);
+
+                case core.ATLAS_TYPE:
+                    return new core.AtlasAssetPackItem(pack, data);
+
+                case core.ATLAS_XML_TYPE:
+                    return new core.AtlasXMLAssetPackItem(pack, data);
+
+                case core.UNITY_ATLAS_TYPE:
+                    return new core.UnityAtlasAssetPackItem(pack, data);
+
+                case core.MULTI_ATLAS_TYPE:
+                    return new core.MultiatlasAssetPackItem(pack, data);
+
+                case core.SPRITESHEET_TYPE:
+                    return new core.SpritesheetAssetPackItem(pack, data);
+
+                case core.ANIMATION_TYPE:
+                    return new core.AnimationsAssetPackItem(pack, data);
+
+                case core.BITMAP_FONT_TYPE:
+                    return new core.BitmapFontAssetPackItem(pack, data);
+
+                case core.TILEMAP_CSV_TYPE:
+                    return new core.TilemapCSVAssetPackItem(pack, data);
+
+                case core.TILEMAP_IMPACT_TYPE:
+                    return new core.TilemapImpactAssetPackItem(pack, data);
+
+                case core.TILEMAP_TILED_JSON_TYPE:
+                    return new core.TilemapTiledJSONAssetPackItem(pack, data);
+
+                case core.PLUGIN_TYPE:
+                    return new core.PluginAssetPackItem(pack, data);
+
+                case core.SCENE_FILE_TYPE:
+                    return new core.SceneFileAssetPackItem(pack, data);
+
+                case core.SCENE_PLUGIN_TYPE:
+                    return new core.ScenePluginAssetPackItem(pack, data);
+
+                case core.SCRIPT_TYPE:
+                    return new core.ScriptAssetPackItem(pack, data);
+
+                case core.SCRIPTS_TYPE:
+                    return new core.ScriptsAssetPackItem(pack, data);
+
+                case core.AUDIO_TYPE:
+                    return new core.AudioAssetPackItem(pack, data);
+
+                case core.AUDIO_SPRITE_TYPE:
+                    return new core.AudioSpriteAssetPackItem(pack, data);
+
+                case core.VIDEO_TYPE:
+                    return new core.VideoAssetPackItem(pack, data);
+
+                case core.TEXT_TYPE:
+                    return new core.TextAssetPackItem(pack, data);
+
+                case core.CSS_TYPE:
+                    return new core.CssAssetPackItem(pack, data);
+
+                case core.GLSL_TYPE:
+                    return new core.GlslAssetPackItem(pack, data);
+
+                case core.HTML_TYPE:
+                    return new core.HTMLAssetPackItem(pack, data);
+
+                case core.HTML_TEXTURE_TYPE:
+                    return new core.HTMLTextureAssetPackItem(pack, data);
+
+                case core.BINARY_TYPE:
+                    return new core.BinaryAssetPackItem(pack, data);
+
+                case core.JSON_TYPE:
+                    return new core.JSONAssetPackItem(pack, data);
+                    
+                case core.XML_TYPE:
+                    return new core.XMLAssetPackItem(pack, data);
+            }
+
+            return undefined;
+        }
 
         createEditorPropertySections(page: controls.properties.PropertyPage): controls.properties.PropertySection<any>[] {
 
@@ -174,9 +297,12 @@ namespace phasereditor2d.pack.ui {
             ];
         }
 
-        getAssetPackItemTypes(): string[] {
+        getAssetPackItemTypes(): { type: string, displayName: string }[] {
 
-            return DEFAULT_TYPES;
+            return DEFAULT_TYPES.map(type => ({
+                type,
+                displayName: ASSET_PACK_TYPE_DISPLAY_NAME[type]
+            }));
         }
 
         getCellRenderer(element: any, layout: "grid" | "tree"): controls.viewers.ICellRenderer | undefined {

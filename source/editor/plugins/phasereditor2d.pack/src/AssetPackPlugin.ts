@@ -19,6 +19,8 @@ namespace phasereditor2d.pack {
         private _extensions: ui.AssetPackExtension[];
         private _assetPackItemTypes: string[];
         private _assetPackItemTypeSet: Set<string>;
+        private _assetPackItemTypeDisplayNameMap: Map<string, string>;
+        private _assetPackExtensionByTypeMap: Map<string, ui.AssetPackExtension>;
 
         static getInstance() {
             return this._instance;
@@ -34,25 +36,45 @@ namespace phasereditor2d.pack {
                 (this._extensions = colibri.Platform.getExtensions(ui.AssetPackExtension.POINT_ID));
         }
 
+        getAssetPackItemTypeDisplayName(type: string) {
+
+            return this._assetPackItemTypeDisplayNameMap.get(type);
+        }
+
         getAssetPackItemTypes() {
-
-            if (!this._assetPackItemTypes) {
-
-                this._assetPackItemTypes = this.getExtensions()
-                    .flatMap(ext => ext.getAssetPackItemTypes());
-            }
 
             return this._assetPackItemTypes;
         }
 
         isAssetPackItemType(type: string) {
 
-            if (!this._assetPackItemTypeSet) {
-
-                this._assetPackItemTypeSet = new Set(this.getAssetPackItemTypes());
-            }
-
             return this._assetPackItemTypeSet.has(type);
+        }
+
+        getExtensionByType(assetPackItemType: string) {
+
+            return this._assetPackExtensionByTypeMap.get(assetPackItemType);
+        }
+
+        async starting(): Promise<void> {
+
+            await super.starting();
+
+            this._assetPackItemTypes = [];
+            this._assetPackItemTypeSet = new Set();
+            this._assetPackItemTypeDisplayNameMap = new Map();
+            this._assetPackExtensionByTypeMap = new Map();
+
+            for (const ext of this.getExtensions()) {
+
+                for (const { type, displayName } of ext.getAssetPackItemTypes()) {
+
+                    this._assetPackItemTypes.push(type);
+                    this._assetPackItemTypeDisplayNameMap.set(type, displayName);
+                    this._assetPackItemTypeSet.add(type);
+                    this._assetPackExtensionByTypeMap.set(type, ext);
+                }
+            }
         }
 
         async started() {
