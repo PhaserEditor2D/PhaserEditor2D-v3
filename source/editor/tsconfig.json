@@ -31,9 +31,6 @@
             "path": "./plugins/phasereditor2d.scene/src"
         },
         {
-            "path": "./plugins/phasereditor2d.code/src"
-        },
-        {
             "path": "./plugins/phasereditor2d.codemirror/src"
         },
         {
