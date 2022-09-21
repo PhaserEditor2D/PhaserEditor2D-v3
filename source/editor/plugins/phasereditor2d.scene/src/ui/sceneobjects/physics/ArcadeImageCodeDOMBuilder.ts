@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getFactoryMethodName(obj: ArcadeImage): string {
-            
+
             if (ArcadeComponent.bodyType.getValue(obj) === Phaser.Physics.Arcade.DYNAMIC_BODY) {
 
                 return "image";

@@ -48,6 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export interface IBuildPrefabConstructorDeclarationCodeDOM {
 
         ctrDeclCodeDOM: code.MethodDeclCodeDOM;
+        prefabObj: ISceneGameObject;
     }
 
     export interface IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {

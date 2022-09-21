@@ -325,7 +325,8 @@ namespace phasereditor2d.scene.core.code {
             ctrDecl.arg("scene", "Phaser.Scene");
 
             objBuilder.buildPrefabConstructorDeclarationCodeDOM({
-                ctrDeclCodeDOM: ctrDecl
+                ctrDeclCodeDOM: ctrDecl,
+                prefabObj
             });
 
             {
