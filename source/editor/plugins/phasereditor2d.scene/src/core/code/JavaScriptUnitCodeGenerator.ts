@@ -13,6 +13,11 @@ namespace phasereditor2d.scene.core.code {
             this._generateImports = true;
         }
 
+        getUnit() {
+
+            return this._unit;
+        }
+
         setInitFieldInConstructor(initFieldInConstructor: boolean) {
 
             this._initFieldsInConstructor = initFieldInConstructor;
@@ -42,6 +47,13 @@ namespace phasereditor2d.scene.core.code {
 
             const body = CodeDOM.removeBlankLines(this._unit.getBody());
 
+            if (this._generateImports) {
+
+                this.generateImports();
+            }
+
+            this.generateExtraUnitCode();
+
             for (const elem of body) {
 
                 this.generateUnitElement(elem);
@@ -50,12 +62,7 @@ namespace phasereditor2d.scene.core.code {
             this.sectionEnd("/* END OF COMPILED CODE */", "\n\n// You can write more code here\n");
         }
 
-        private generateUnitElement(elem: object) {
-
-            if (this._generateImports) {
-
-                this.generateImports();
-            }
+        protected generateUnitElement(elem: CodeDOM) {
 
             if (elem instanceof ClassDeclCodeDOM) {
 
@@ -68,7 +75,18 @@ namespace phasereditor2d.scene.core.code {
                 this.generateMethodDecl(null, elem as MethodDeclCodeDOM, true);
 
                 this.line();
+
+            } else if (elem instanceof RawCodeDOM) {
+
+                this.line();
+                this.line(elem.getCode());
+                this.line();
             }
+        }
+
+        protected generateExtraUnitCode() {
+
+            // nothing, used by the TypeScript generator
         }
 
         private generateImports() {

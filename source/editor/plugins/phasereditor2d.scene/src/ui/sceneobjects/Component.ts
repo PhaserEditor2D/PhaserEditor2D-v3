@@ -184,7 +184,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 dom.valueFloat(codeValue);
 
                 args.statements.push(dom);
-
             });
         }
 

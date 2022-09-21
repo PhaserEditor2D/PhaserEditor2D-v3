@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.core.code {
 
             } else {
 
-                const clsName = this._sceneFile.getNameWithoutExtension();
+                const clsName = this.getClassName();
                 const clsDecl = new ClassDeclCodeDOM(clsName);
 
                 clsDecl.setExportClass(settings.exportClass);
@@ -175,6 +175,11 @@ namespace phasereditor2d.scene.core.code {
             }
 
             return unit;
+        }
+
+        private getClassName() {
+
+            return this._sceneFile.getNameWithoutExtension();
         }
 
         buildPrefabPropertiesFields(fields: MemberDeclCodeDOM[]) {
@@ -321,6 +326,12 @@ namespace phasereditor2d.scene.core.code {
             const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
             const objBuilder = ext.getCodeDOMBuilder();
+
+            objBuilder.buildPrefabExtraTypeScriptDefinitionsCodeDOM({
+                unit: this._unit,
+                prefabObj,
+                clsName: this.getClassName()
+            });
 
             ctrDecl.arg("scene", "Phaser.Scene");
 

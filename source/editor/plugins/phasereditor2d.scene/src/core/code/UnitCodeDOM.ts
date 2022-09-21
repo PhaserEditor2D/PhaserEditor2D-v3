@@ -3,14 +3,21 @@ namespace phasereditor2d.scene.core.code {
     export class UnitCodeDOM {
 
         private _body: CodeDOM[];
+        private _typeScriptExtraDefs: CodeDOM[];
         private _imports: ImportCodeDOM[];
         private _used: Set<string>;
 
         constructor(elements: CodeDOM[]) {
 
             this._body = elements;
+            this._typeScriptExtraDefs = [];
             this._imports = [];
             this._used = new Set();
+        }
+
+        getTypeScriptExtraDefs() {
+
+            return this._typeScriptExtraDefs;
         }
 
         getImports() {

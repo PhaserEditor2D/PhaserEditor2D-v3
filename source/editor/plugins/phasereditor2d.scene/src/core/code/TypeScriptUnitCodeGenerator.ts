@@ -6,6 +6,14 @@ namespace phasereditor2d.scene.core.code {
             super(unit);
         }
 
+        protected generateExtraUnitCode(): void {
+            
+            for(const codeDom of this.getUnit().getTypeScriptExtraDefs()) {
+
+                this.generateUnitElement(codeDom);
+            }
+        }
+
         generateMethodReturnTypeJSDoc(methodDecl: MethodDeclCodeDOM) {
             // nothing, it is made in signature
         }

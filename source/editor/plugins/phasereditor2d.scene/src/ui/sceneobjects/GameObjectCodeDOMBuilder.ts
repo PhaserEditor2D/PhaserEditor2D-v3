@@ -9,7 +9,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
      * Each object extension provides an instance of this class, that is used by the Scene compiler.
      */
     export abstract class GameObjectCodeDOMBuilder {
-
+        
+        
         private _chainToFactory: string;
 
         /**
@@ -26,6 +27,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getChainToFactory() {
 
             return this._chainToFactory;
+        }
+
+        /**
+         * Build extra typescript definitions at the top of the file.
+         * 
+         * @param args This method args.
+         */
+        buildPrefabExtraTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs) {
+            
+            // nothing
         }
 
         /**

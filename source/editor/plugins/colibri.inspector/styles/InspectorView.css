@@ -31,7 +31,8 @@
 }
 
 .formCheckbox {
-    max-width: 2em;
+    justify-self: start;
+    margin: 0px;
 }
 
 .ImagePreviewFormArea {
