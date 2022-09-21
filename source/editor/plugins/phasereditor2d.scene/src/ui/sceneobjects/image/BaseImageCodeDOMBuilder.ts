@@ -8,13 +8,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _factoryMethodName: string;
 
-        constructor(factoryMethodName: string) {
-            super();
+        constructor(factoryMethodName: string, chainToFactory?:string) {
+            super(chainToFactory);
 
             this._factoryMethodName = factoryMethodName;
         }
 
-        getFactoryMethodName() {
+        getFactoryMethodName(obj: ISceneGameObject) {
 
             return this._factoryMethodName;
         }
@@ -101,7 +101,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
             const obj = args.obj as Image;
-            const call = new code.MethodCallCodeDOM(this._factoryMethodName, args.gameObjectFactoryExpr);
+            const call = new code.MethodCallCodeDOM(this.getFactoryMethodName(obj), args.gameObjectFactoryExpr);
 
             call.argFloat(obj.x);
             call.argFloat(obj.y);

@@ -48,15 +48,17 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
     export const SCENE_OBJECT_GROUPING_CATEGORY = "Grouping";
-    export const SCENE_OBJECT_TILEMAP_CATEGORY = "Tile Map";
     export const SCENE_OBJECT_SHAPE_CATEGORY = "Shape";
-
+    export const SCENE_OBJECT_TILEMAP_CATEGORY = "Tile Map";
+    export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
+    
     export const SCENE_OBJECT_CATEGORIES = [
         SCENE_OBJECT_IMAGE_CATEGORY,
         SCENE_OBJECT_GROUPING_CATEGORY,
         SCENE_OBJECT_TEXT_CATEGORY,
+        SCENE_OBJECT_ARCADE_CATEGORY,
         SCENE_OBJECT_SHAPE_CATEGORY,
-        SCENE_OBJECT_TILEMAP_CATEGORY,
+        SCENE_OBJECT_TILEMAP_CATEGORY
     ];
 
     export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
@@ -284,7 +286,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.RectangleExtension.getInstance(),
                 ui.sceneobjects.EllipseExtension.getInstance(),
                 ui.sceneobjects.TriangleExtension.getInstance(),
-                ui.sceneobjects.PolygonExtension.getInstance()
+                ui.sceneobjects.PolygonExtension.getInstance(),
+                ui.sceneobjects.ArcadeImageExtension.getInstance()
             );
 
             // scene plain object extensions
@@ -316,6 +319,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TintSection(page),
                 page => new ui.sceneobjects.SizeSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),
+                page => new ui.sceneobjects.ArcadeSection(page),
                 page => new ui.sceneobjects.TextureSection(page),
                 page => new ui.sceneobjects.TextContentSection(page),
                 page => new ui.sceneobjects.TextSection(page),

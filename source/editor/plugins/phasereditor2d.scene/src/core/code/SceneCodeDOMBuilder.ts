@@ -685,8 +685,11 @@ namespace phasereditor2d.scene.core.code {
 
                 const builder = objSupport.getExtension().getCodeDOMBuilder();
 
+                const factoryVarname = builder.getChainToFactory();
+
                 createObjectMethodCall = builder.buildCreateObjectWithFactoryCodeDOM({
-                    gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene.add" : "this.add",
+                    gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? 
+                    `scene.${factoryVarname}` : `this.${factoryVarname}`,
                     obj: obj
                 });
             }
