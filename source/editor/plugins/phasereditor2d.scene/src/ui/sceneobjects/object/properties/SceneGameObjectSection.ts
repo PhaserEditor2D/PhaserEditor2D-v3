@@ -229,6 +229,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
 
+            const inputElements: HTMLInputElement[] = [];
+
             if (lockIcon) {
 
                 this.createLock(parent, propXY.x, propXY.y);
@@ -243,8 +245,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const prop of [propXY.x, propXY.y]) {
 
                 this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
-                this.createFloatField(parent, prop);
+                const input = this.createFloatField(parent, prop);
+                inputElements.push(input);
             }
+
+            return inputElements;
         }
 
         createEnumField<TValue>(
@@ -313,7 +318,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(() => {
 
-                text.readOnly = !this.isUnlocked(property);
+                text.disabled = !this.isUnlocked(property);
 
                 text.value = this.flatValues_Number(
 
