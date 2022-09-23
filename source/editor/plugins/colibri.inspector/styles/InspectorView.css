@@ -35,6 +35,31 @@
     margin: 0px;
 }
 
+.label-axis-x,
+.label-axis-y {
+    justify-self: self-end;
+    padding: 4px;
+    margin-right: -4px;
+    z-index: 2;
+    border-radius: 3px 0px 0px 3px;
+    font-size: smaller;
+    color: #fff;
+    text-shadow: -1px 1px 1px #0005;
+}
+
+.input-axis-x,
+.input-axis-y {
+    border-radius: 0px 3px 3px 0px;
+}
+
+.label-axis-x {
+    background-color: darkred;
+}
+
+.label-axis-y {
+    background-color: green;
+}
+
 .ImagePreviewFormArea {
     padding: 10px;
 }

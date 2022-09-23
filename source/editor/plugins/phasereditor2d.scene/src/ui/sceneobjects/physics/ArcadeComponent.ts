@@ -100,7 +100,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         return {
             name: "bodyGeometry",
-            label: "Body Geometry",
+            label: "Geometry",
             values: [GEOM_CIRCLE, GEOM_RECT],
             getValue: obj => (obj.body["__isCircle"] ? GEOM_CIRCLE : GEOM_RECT),
             setValue: (obj, value) => {
