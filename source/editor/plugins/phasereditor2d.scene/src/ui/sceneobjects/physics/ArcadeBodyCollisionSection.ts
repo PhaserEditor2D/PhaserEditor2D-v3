@@ -23,6 +23,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createPropertyXYRow(comp, ArcadeComponent.bounce);
 
             this.createPropertyXYRow(comp, ArcadeComponent.friction);
+
+            this.createPropertyXYRow(comp, ArcadeComponent.overlap);
+
+            this.createPropertyFloatRow(comp, ArcadeComponent.overlapR).style.gridColumn = "span 4";
         }
 
         canEdit(obj: any, n: number): boolean {

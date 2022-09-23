@@ -12,7 +12,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElementWithPropertiesBoolXY(parent);
 
+            this.createPropertyBoolean(comp, ArcadeComponent.moves).checkElement.style.gridColumn = "span 4";
+
             this.createPropertyXYRow(comp, ArcadeComponent.velocity);
+
+            this.createPropertyXYRow(comp, ArcadeComponent.maxVelocity);
+
+            this.createPropertyFloatRow(comp, ArcadeComponent.maxSpeed).style.gridColumn = "span 4";
 
             this.createPropertyBoolean(comp, ArcadeComponent.allowGravity).checkElement.style.gridColumn = "span 4";
 
@@ -21,6 +27,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createPropertyXYRow(comp, ArcadeComponent.acceleration);
 
             this.createPropertyBoolean(comp, ArcadeComponent.useDamping).checkElement.style.gridColumn = "span 4";
+
+            this.createPropertyBoolean(comp, ArcadeComponent.allowDrag).checkElement.style.gridColumn = "span 4";
 
             this.createPropertyXYRow(comp, ArcadeComponent.drag);
 
@@ -31,6 +39,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createPropertyFloatRow(comp, ArcadeComponent.angularAcceleration).style.gridColumn = "span 4";
 
             this.createPropertyFloatRow(comp, ArcadeComponent.angularDrag).style.gridColumn = "span 4";
+
+            this.createPropertyFloatRow(comp, ArcadeComponent.maxAngular).style.gridColumn = "span 4";
         }
 
         canEdit(obj: any, n: number): boolean {

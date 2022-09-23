@@ -146,12 +146,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static enabled = SimpleBodyProperty("enable", true, "Enable", "__enable");
         static bodyType = bodyTypeProperty();
+        static moves = SimpleBodyProperty("moves", true, "Moves");
         static velocity = SimpleBodyVectorProperty("velocity", "Velocity", 0);
+        static maxVelocity = SimpleBodyVectorProperty("maxVelocity", "Max Velocity", 10000);
+        static maxSpeed = SimpleBodyProperty("maxSpeed", -1, "Max Speed");
         static friction = SimpleBodyVectorProperty("friction", "Friction", 0);
         static allowGravity = SimpleBodyProperty("allowGravity", true, "Allow Gravity");
         static gravity = SimpleBodyVectorProperty("gravity", "Gravity", 0);
         static acceleration = SimpleBodyVectorProperty("acceleration", "Acceleration", 0);
         static useDamping = SimpleBodyProperty("useDamping", false, "Use Dumping");
+        static allowDrag = SimpleBodyProperty("allowDrag", true, "Allow Drag");
         static drag = SimpleBodyVectorProperty("drag", "Drag", 0);
         static bounce = SimpleBodyVectorProperty("bounce", "Bounce", 0);
         static collideWorldBounds = SimpleBodyProperty("collideWorldBounds", false, "Collide World Bounds");
@@ -159,8 +163,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static angularVelocity = SimpleBodyProperty("angularVelocity", 0, "Angular Velocity");
         static angularAcceleration = SimpleBodyProperty("angularAcceleration", 0, "Angular Acceleration");
         static angularDrag = SimpleBodyProperty("angularDrag", 0, "Angular Drag");
+        static maxAngular = SimpleBodyProperty("maxAngular", 1000, "Max Angular");
         static pushable = SimpleBodyProperty("pushable", true, "Pushable");
         static immovable = SimpleBodyProperty("immovable", false, "Immovable");
+        static overlap: IPropertyXY = {
+            label: "Overlap",
+            tooltip: "The amount of horizontal/vertical overlap (before separation), if this Body is colliding with another.",
+            x: SimpleBodyProperty("overlapX", 0, "X"),
+            y: SimpleBodyProperty("overlapY", 0, "Y"),
+        };
+        static overlapR = SimpleBodyProperty("overlapR", 0, "Overlap R");
         static mass = SimpleBodyProperty("mass", 1, "Mass");
         static geometry = geometryProperty();
         static radius = SimpleBodyProperty("radius", 64, "Radius", "__radius");
@@ -187,8 +199,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(obj, [
                 ArcadeComponent.bodyType,
                 ArcadeComponent.enabled,
+                ArcadeComponent.moves,
                 ArcadeComponent.velocity.x,
                 ArcadeComponent.velocity.y,
+                ArcadeComponent.maxSpeed,
+                ArcadeComponent.maxVelocity.x,
+                ArcadeComponent.maxVelocity.y,
                 ArcadeComponent.friction.x,
                 ArcadeComponent.friction.y,
                 ArcadeComponent.gravity.x,
@@ -201,11 +217,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.bounce.x,
                 ArcadeComponent.bounce.y,
                 ArcadeComponent.collideWorldBounds,
+                ArcadeComponent.overlap.x,
+                ArcadeComponent.overlap.y,
+                ArcadeComponent.overlapR,
                 ArcadeComponent.useDamping,
+                ArcadeComponent.allowDrag,
                 ArcadeComponent.allowRotation,
                 ArcadeComponent.angularAcceleration,
                 ArcadeComponent.angularDrag,
                 ArcadeComponent.angularVelocity,
+                ArcadeComponent.maxAngular,
                 ArcadeComponent.pushable,
                 ArcadeComponent.immovable,
                 ArcadeComponent.mass,
@@ -230,6 +251,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.velocity.x,
                 ArcadeComponent.velocity.y,
 
+                ArcadeComponent.maxVelocity.x,
+                ArcadeComponent.maxVelocity.y,
+
+                ArcadeComponent.maxSpeed,
+
                 ArcadeComponent.gravity.x,
                 ArcadeComponent.gravity.y,
 
@@ -245,19 +271,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.bounce.x,
                 ArcadeComponent.bounce.y,
 
+                ArcadeComponent.overlap.x,
+                ArcadeComponent.overlap.y,
+                ArcadeComponent.overlapR,
+
                 ArcadeComponent.mass,
 
                 ArcadeComponent.angularAcceleration,
                 ArcadeComponent.angularDrag,
                 ArcadeComponent.angularVelocity,
+                ArcadeComponent.maxAngular
             );
 
             // boolean properties
 
             this.buildSetObjectPropertyCodeDOM_BooleanProperty(args,
                 ArcadeComponent.enabled,
+                ArcadeComponent.moves,
                 ArcadeComponent.allowGravity,
                 ArcadeComponent.useDamping,
+                ArcadeComponent.allowDrag,
                 ArcadeComponent.allowRotation,
                 ArcadeComponent.collideWorldBounds,
                 ArcadeComponent.pushable,
@@ -304,7 +337,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         const dom = new code.MethodCallCodeDOM("setBodySize", args.objectVarName);
 
                         const center = ArcadeComponent.center.getValue(obj);
-                        
+
                         dom.argFloat(body.width);
                         dom.argFloat(body.height);
                         dom.argBool(center);
