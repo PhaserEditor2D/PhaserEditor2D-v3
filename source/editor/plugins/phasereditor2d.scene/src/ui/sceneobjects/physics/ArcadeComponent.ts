@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     }
 
     function SimpleBodyProperty(
-        name: string, defValue: any, label: string, editorField?: string): IProperty<any> {
+        name: string, defValue: any, label: string, editorField?: string, tooptip?: string): IProperty<any> {
 
         editorField = editorField ?? name;
 
@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             codeName: `body.${name}`,
             defValue,
             label,
-            tooltip: PhaserHelp(`Phaser.Physics.Arcade.Body.${name}`),
+            tooltip: tooptip ?? PhaserHelp(`Phaser.Physics.Arcade.Body.${name}`),
             getValue: obj => obj.body[editorField] ?? defValue,
             setValue: (obj, value) => {
 
@@ -66,7 +66,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const width = obj.frame ? obj.frame.realWidth : obj.width;
             const height = obj.frame ? obj.frame.realHeight : obj.height;
 
-            obj.setBodySize(width, height);
+            const center = ArcadeComponent.center.getValue(obj);
+
+            obj.setBodySize(width, height, center);
         }
     }
 
@@ -117,19 +119,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         return {
             name: `body.${axis}`,
-            label: axis === "width" ? "Width" : "Height",
+            label: axis === "width" ? "W" : "H",
             getValue: obj => obj.body[axis],
             setValue: (obj, value) => {
 
                 const body = obj.body;
 
+                const center = ArcadeComponent.center.getValue(obj);
+
                 if (axis === "width") {
 
-                    obj.body.setSize(value, body.height);
+                    obj.body.setSize(value, body.height, center);
 
                 } else {
 
-                    obj.body.setSize(body.width, value);
+                    obj.body.setSize(body.width, value, center);
                 }
             },
             defValue: 0
@@ -161,6 +165,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static geometry = geometryProperty();
         static radius = SimpleBodyProperty("radius", 64, "Radius", "__radius");
         static offset = SimpleBodyVectorProperty("offset", "Offset", 0);
+        static center = SimpleBodyProperty("center", true, "Center", "__center", "Automatically center the body when resize it.\nAvailable only for the RECTANGLE geometry.");
         static size: IPropertyXY = {
             label: "Size",
             tooltip: "Size",
@@ -206,6 +211,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.mass,
                 ArcadeComponent.geometry,
                 ArcadeComponent.radius,
+                ArcadeComponent.center,
                 ArcadeComponent.size.x,
                 ArcadeComponent.size.y,
                 ArcadeComponent.offset.x,
@@ -297,8 +303,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const dom = new code.MethodCallCodeDOM("setBodySize", args.objectVarName);
 
+                        const center = ArcadeComponent.center.getValue(obj);
+                        
                         dom.argFloat(body.width);
                         dom.argFloat(body.height);
+                        dom.argBool(center);
 
                         args.statements.push(dom);
 

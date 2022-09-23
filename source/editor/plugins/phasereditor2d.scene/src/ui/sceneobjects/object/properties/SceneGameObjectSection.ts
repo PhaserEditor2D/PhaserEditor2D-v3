@@ -24,6 +24,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
+        createSeparatorForXYGrid(parent: HTMLElement, text: string) {
+
+            const label = this.createSeparator(parent, text);
+
+            label.style.gridColumn = "span 6";
+
+            return label;
+        }
+
         createGridElementWithPropertiesXY(parent: HTMLElement) {
 
             const comp = this.createGridElement(parent);

@@ -14,6 +14,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createPropertyEnumRow(comp, ArcadeComponent.geometry, false).style.gridColumn = "span 4";
 
+            this.createPropertyXYRow(comp, ArcadeComponent.offset);
+
+            this.createSeparatorForXYGrid(comp, "Circle");
+
             {
                 const row = this.createPropertyFloatRow(comp, ArcadeComponent.radius, false);
                 row.style.gridColumn = "span 4";
@@ -26,8 +30,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 });
             }
 
+            this.createSeparatorForXYGrid(comp, "Rectangle");
+
             {
+                const centerElement = this.createPropertyBoolean(comp, ArcadeComponent.center);
+                centerElement.checkElement.style.gridColumn = "span 4";
+
                 const elements = this.createPropertyXYRow(comp, ArcadeComponent.size, false);
+
+                elements.push(centerElement.checkElement);
 
                 this.addUpdater(() => {
 
@@ -40,8 +51,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
                 });
             }
-
-            this.createPropertyXYRow(comp, ArcadeComponent.offset);
         }
 
         canEdit(obj: any, n: number): boolean {

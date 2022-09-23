@@ -2,6 +2,16 @@ namespace colibri.ui.controls.properties {
 
     export class FormBuilder {
 
+        createSeparator(parent: HTMLElement, text: string) {
+
+            const label = document.createElement("label");
+            label.classList.add("formSeparator");
+            label.innerText = text;
+
+            parent.appendChild(label);
+
+            return label;
+        }
 
         createLabel(parent: HTMLElement, text = "", tooltip = "") {
 

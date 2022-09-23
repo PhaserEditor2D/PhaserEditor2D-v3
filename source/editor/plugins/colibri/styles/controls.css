@@ -379,6 +379,14 @@
         justify-self: self-start;
     }
 
+    .formSeparator {
+        opacity: 0.5;
+        font-size: smaller;
+        justify-self: start;
+        text-transform: uppercase;
+        margin: 5px;
+    }
+
     .StringDialogField {
         display: grid;
         grid-template-columns: 1fr auto;
