@@ -30,7 +30,7 @@ Important:
 .light input:focus,
 .light textarea:focus {
     background: #f6f6f6;
-    border-color: #4242ff;
+    border-color: #4242ff !important;
     outline-style: none;
 }
 

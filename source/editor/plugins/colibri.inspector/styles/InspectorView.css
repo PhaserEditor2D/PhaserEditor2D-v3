@@ -38,9 +38,8 @@
 .label-axis-x,
 .label-axis-y {
     justify-self: self-end;
-    padding: 4px;
-    margin-right: -4px;
-    z-index: 2;
+    padding: 5px;
+    margin-right: -5px;
     border-radius: 3px 0px 0px 3px;
     font-size: smaller;
     color: #fff;
@@ -50,6 +49,14 @@
 .input-axis-x,
 .input-axis-y {
     border-radius: 0px 3px 3px 0px;
+}
+
+.input-axis-x {
+    border-color: darkred !important;
+}
+
+.input-axis-y {
+    border-color: green !important;
 }
 
 .label-axis-x {

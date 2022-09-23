@@ -227,7 +227,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return btn;
         }
 
-        createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
+        createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true, colorAxis = true) {
 
             const inputElements: HTMLInputElement[] = [];
 
@@ -244,14 +244,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const i of [{ prop: propXY.x, axis: "x" }, { prop: propXY.y, axis: "y" }]) {
 
-                const { prop, axis } = i;
+                let { prop, axis } = i;
 
                 const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
-                label.classList.add("label-axis-" + axis);
 
                 const input = this.createFloatField(parent, prop);
-                input.classList.add("input-axis-" + axis);
                 inputElements.push(input);
+
+                if (colorAxis) {
+
+                    label.classList.add("label-axis-" + axis);
+                    input.classList.add("input-axis-" + axis);
+                }
             }
 
             return inputElements;

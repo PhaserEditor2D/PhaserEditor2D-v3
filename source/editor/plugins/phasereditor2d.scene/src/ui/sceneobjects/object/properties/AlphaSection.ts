@@ -18,9 +18,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createNumberPropertyRow(comp, AlphaComponent.alpha, true);
 
-            this.createPropertyXYRow(comp, AlphaComponent.alphaTop);
+            this.createPropertyXYRow(comp, AlphaComponent.alphaTop, true, false);
 
-            this.createPropertyXYRow(comp, AlphaComponent.alphaBottom);
+            this.createPropertyXYRow(comp, AlphaComponent.alphaBottom, true, false);
         }
 
         canEdit(obj: any, n: number): boolean {
