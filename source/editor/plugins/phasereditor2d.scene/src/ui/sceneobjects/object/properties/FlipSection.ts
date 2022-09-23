@@ -18,11 +18,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
-            comp.style.gridTemplateColumns = "auto auto auto auto auto";
+            comp.style.gridTemplateColumns = "auto auto auto auto 1fr";
 
             this.createLock(comp, FlipComponent.flipX, FlipComponent.flipY);
 
-            this.createBooleanField(comp, FlipComponent.flipX);
+            this.createBooleanField(comp, FlipComponent.flipX).checkElement.style.marginRight = "10px";
 
             this.createBooleanField(comp, FlipComponent.flipY);
         }
