@@ -347,6 +347,7 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.ScaleTool(),
                 new ui.sceneobjects.OriginTool(),
                 new ui.sceneobjects.SizeTool(),
+                new ui.sceneobjects.ArcadeBodyTool(),
                 new ui.sceneobjects.PolygonTool(),
                 new ui.sceneobjects.SelectionRegionTool(),
                 new ui.sceneobjects.PanTool(),

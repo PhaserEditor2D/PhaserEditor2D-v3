@@ -4,8 +4,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ArcadeGeometrySection extends SceneGameObjectSection<ArcadeObject> {
 
+        static ID = "phasereditor2d.scene.ui.sceneobjects.ArcadeGeometrySection";
+
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.ArcadeGeometrySection", "Arcade Body Geometry");
+            super(page, ArcadeGeometrySection.ID, "Arcade Body Geometry");
         }
 
         createForm(parent: HTMLDivElement) {
