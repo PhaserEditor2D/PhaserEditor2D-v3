@@ -14,6 +14,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new ArcadeBodySizeToolItem(1, 0.5),
                 new ArcadeBodySizeToolItem(1, 1),
                 new ArcadeBodySizeToolItem(0.5, 1),
+                new ArcadeBodyOffsetToolItem(0, 0),
+                new ArcadeBodyOffsetToolItem(0.5, 0),
+                new ArcadeBodyOffsetToolItem(0, 0.5),
             );
         }
 

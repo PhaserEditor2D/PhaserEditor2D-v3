@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ArcadeBodySizeToolItem
+    export class ArcadeBodyOffsetToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
         private _x: IScaleAxis;
@@ -70,7 +70,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // const angle = this.globalAngle(args.objects[0] as any);
             // ctx.rotate(Phaser.Math.DegToRad(angle));
 
-            this.drawRect(ctx, args.canEdit ? "purple" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+            this.drawRect(ctx, args.canEdit ? "maroon" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
             ctx.restore();
         }
@@ -104,22 +104,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 worldTx.applyInverse(point.x, point.y, initLocalPos);
 
-                const { width, height } = this.computeSize(sprite);
-
-                sprite.setData("ArcadeBodySizeToolItem", {
-                    initWidth: width,
-                    initHeight: height,
+                sprite.setData("ArcadeBodyOffsetToolItem", {
                     initLocalPos: initLocalPos,
+                    initLocalOffset: sprite.body.offset.clone(),
                     initWorldTx: worldTx
                 });
             }
         }
 
-        static getInitialSize(obj: any): { x: number, y: number } {
+        static getInitialOffset(obj: any): { x: number, y: number } {
 
-            const data = obj.getData("ArcadeBodySizeToolItem");
+            const data = obj.getData("ArcadeBodyOffsetToolItem");
 
-            return { x: data.initWidth, y: data.initHeight };
+            return data.initLocalPos;
         }
 
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
@@ -133,7 +130,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const obj of args.objects) {
 
                 const sprite = obj as Sprite;
-                const data = sprite.data.get("ArcadeBodySizeToolItem");
+                const data = sprite.data.get("ArcadeBodyOffsetToolItem");
                 const initLocalPos: Phaser.Math.Vector2 = data.initLocalPos;
                 const worldTx: Phaser.GameObjects.Components.TransformMatrix = data.initWorldTx;
 
@@ -144,35 +141,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const flipX = sprite.flipX ? -1 : 1;
                 const flipY = sprite.flipY ? -1 : 1;
 
-                const { originX, originY } = sprite.getEditorSupport()
-                    .computeOrigin();
-
                 const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
                 const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
 
-                const dw = dx / (1 - (originX === 1 ? 0 : originX));
-                const dh = dy / (1 - (originY === 1 ? 0 : originY));
+                const x = data.initLocalOffset.x + dx;
+                const y = data.initLocalOffset.y + dy;
 
-                const { x: width, y: height } = args.editor.getScene().snapPoint(
-                    data.initWidth + dw,
-                    data.initHeight + dh
-                );
+                const changeAll = this._x === 0 && this._y === 0;
+                const changeX = this._x === 0 && this._y === 0.5 || changeAll;
+                const changeY = this._x === 0.5 && this._y === 0 || changeAll;
 
-                const changeAll = this._x === 1 && this._y === 1;
-                const changeX = this._x === 1 && this._y === 0.5 || changeAll;
-                const changeY = this._x === 0.5 && this._y === 1 || changeAll;
-
-                const widthProp = ArcadeComponent.size.x;
-                const heightProp = ArcadeComponent.size.y;
+                const xProp = ArcadeComponent.offset.x;
+                const yProp = ArcadeComponent.offset.y;
 
                 if (changeX) {
 
-                    widthProp.setValue(sprite, Math.floor(width));
+                    xProp.setValue(sprite, Math.floor(x));
                 }
 
                 if (changeY) {
 
-                    heightProp.setValue(sprite, Math.floor(height));
+                    yProp.setValue(sprite, Math.floor(y));
                 }
 
                 args.editor.updateInspectorViewSection(ArcadeGeometrySection.ID);
@@ -183,7 +172,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._dragging) {
 
-                args.editor.getUndoManager().add(new BodySizeOperation(args));
+                // args.editor.getUndoManager().add(new BodySizeOperation(args));
 
                 this._dragging = false;
             }
