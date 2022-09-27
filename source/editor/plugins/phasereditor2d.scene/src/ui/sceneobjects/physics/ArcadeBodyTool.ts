@@ -3,6 +3,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class ArcadeBodyTool extends BaseObjectTool {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.ArcadeBodyTool";
+        static BODY_TOOL_COLOR = "pink";
 
         constructor() {
             super({
@@ -48,9 +49,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ctx.save();
 
-            ctx.strokeStyle = "purple";
-            ctx.lineWidth = 3;
-
             const body = obj.body;
 
             let pos = body.position;
@@ -68,8 +66,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const p = new Phaser.Math.Vector2();
 
-                let x1 = pos.x + body.offset.x;
-                let y1 = pos.y + body.offset.y;
+                const origin = obj.getEditorSupport().computeDisplayOrigin();
+
+                let x1 = pos.x + body.offset.x - origin.displayOriginX;
+                let y1 = pos.y + body.offset.y - origin.displayOriginY;
                 let x2 = x1 + body.width;
                 let y2 = y1 + body.height;
 
@@ -87,6 +87,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const p1 = args.camera.getScreenPoint(x1, y1);
                 const p2 = args.camera.getScreenPoint(x2, y2);
 
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 3;
+                ctx.strokeRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+
+                ctx.strokeStyle = ArcadeBodyTool.BODY_TOOL_COLOR;
+                ctx.lineWidth = 1;
                 ctx.strokeRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
             }
 

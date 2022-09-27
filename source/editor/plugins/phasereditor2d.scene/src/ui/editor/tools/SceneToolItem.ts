@@ -229,7 +229,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             ctx.stroke();
         }
 
-        protected drawRect(ctx: CanvasRenderingContext2D, color: string) {
+        protected drawRect(ctx: CanvasRenderingContext2D, color: string, borderColor = "#000") {
 
             ctx.save();
 
@@ -238,7 +238,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             ctx.rect(0, 0, 10, 10);
 
             ctx.fillStyle = color;
-            ctx.strokeStyle = "#000";
+            ctx.strokeStyle = borderColor;
 
             ctx.fill();
             ctx.stroke();

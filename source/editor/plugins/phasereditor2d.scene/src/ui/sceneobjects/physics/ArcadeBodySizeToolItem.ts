@@ -18,9 +18,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return this.getAvgScreenPointOfObjects(args,
 
-                (sprite: sceneobjects.Image) => this._x - sprite.getEditorSupport().computeOrigin().originX,
+                (sprite: sceneobjects.Image) => this._x,
 
-                (sprite: sceneobjects.Image) => this._y - sprite.getEditorSupport().computeOrigin().originY,
+                (sprite: sceneobjects.Image) => this._y,
 
                 // remove rotation, not supported by the arcade body
                 true
@@ -33,8 +33,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { width, height } = this.computeSize(sprite);
 
-            const x = width * fx + sprite.body.offset.x;
-            const y = height * fy + sprite.body.offset.y;
+            const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+
+            const pos = sprite.body.position;
+
+            const x = pos.x + sprite.body.offset.x - displayOriginX + fx * width;
+            const y = pos.y + sprite.body.offset.y - displayOriginY + fy * height;
 
             const tx = sprite.getWorldTransformMatrix();
 
@@ -70,7 +74,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // const angle = this.globalAngle(args.objects[0] as any);
             // ctx.rotate(Phaser.Math.DegToRad(angle));
 
-            this.drawRect(ctx, args.canEdit ? "purple" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+            this.drawRect(ctx, args.canEdit ?
+                ArcadeBodyTool.BODY_TOOL_COLOR : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
             ctx.restore();
         }
@@ -144,8 +149,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const flipX = sprite.flipX ? -1 : 1;
                 const flipY = sprite.flipY ? -1 : 1;
 
-                const { originX, originY } = sprite.getEditorSupport()
-                    .computeOrigin();
+                let originX = 0;
+                let originY = 0;
+
+                if (ArcadeComponent.center.getValue(obj)) {
+
+                    const origin = sprite.getEditorSupport().computeOrigin();
+                    originX = origin.originX;
+                    originY = origin.originY;
+                }
 
                 const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
                 const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;

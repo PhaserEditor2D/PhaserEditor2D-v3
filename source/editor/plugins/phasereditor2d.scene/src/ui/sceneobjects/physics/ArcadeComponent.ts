@@ -332,7 +332,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         defHeight = obj.frame.realHeight;
                     }
 
-                    if (body.width !== defWidth || obj.height !== defHeight) {
+                    if (body.width !== defWidth || body.height !== defHeight) {
 
                         const dom = new code.MethodCallCodeDOM("setBodySize", args.objectVarName);
 
