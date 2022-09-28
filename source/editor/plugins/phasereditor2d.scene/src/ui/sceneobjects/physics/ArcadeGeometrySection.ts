@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.addUpdater(() => {
 
                     const isCircle = this.flatValues_BooleanAnd(
-                        this.getSelection().map(obj => obj.body.isCircle));
+                        this.getSelection().map(obj => ArcadeComponent.isCircleBody(obj)));
 
                     row.disabled = row.disabled || !isCircle;
                 });
