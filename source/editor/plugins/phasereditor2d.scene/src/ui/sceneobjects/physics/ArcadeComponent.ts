@@ -39,12 +39,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
     }
 
-    function SimpleBodyVectorProperty(vectorName: string, label: string, defValue: number): IPropertyXY {
+    function SimpleBodyVectorProperty(vectorName: string, label: string, defValueX: number, defValueY?: number): IPropertyXY {
 
         return {
             label,
-            x: simpleBodyVectorProperty(vectorName, "x", defValue),
-            y: simpleBodyVectorProperty(vectorName, "y", defValue)
+            x: simpleBodyVectorProperty(vectorName, "x", defValueX),
+            y: simpleBodyVectorProperty(vectorName, "y", defValueY ?? defValueX)
         };
     }
 
@@ -150,7 +150,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static velocity = SimpleBodyVectorProperty("velocity", "Velocity", 0);
         static maxVelocity = SimpleBodyVectorProperty("maxVelocity", "Max Velocity", 10000);
         static maxSpeed = SimpleBodyProperty("maxSpeed", -1, "Max Speed");
-        static friction = SimpleBodyVectorProperty("friction", "Friction", 0);
+        static friction = SimpleBodyVectorProperty("friction", "Friction", 1, 0);
         static allowGravity = SimpleBodyProperty("allowGravity", true, "Allow Gravity");
         static gravity = SimpleBodyVectorProperty("gravity", "Gravity", 0);
         static acceleration = SimpleBodyVectorProperty("acceleration", "Acceleration", 0);
