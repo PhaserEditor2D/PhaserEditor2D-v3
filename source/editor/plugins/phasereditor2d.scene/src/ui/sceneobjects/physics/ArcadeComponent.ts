@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             codeName: `body.${name}`,
             defValue,
             label,
-            tooltip: tooptip ?? PhaserHelp(`Phaser.Physics.Arcade.Body.${name}`),
+            tooltip: tooptip ?? `phaser:Phaser.Physics.Arcade.Body.${name}`,
             getValue: obj => obj.body[editorField] ?? defValue,
             setValue: (obj, value) => {
 
@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             defValue: defValue,
             getValue: obj => obj.body[vectorName][axis],
             setValue: (obj, value) => obj.body[vectorName][axis] = value,
-            tooltip: PhaserHelp(`Phaser.Physics.Arcade.Body.${vectorName}.${axis}`)
+            tooltip: `phaser:Phaser.Physics.Arcade.Body.${vectorName}`
         }
     }
 
@@ -43,6 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         return {
             label,
+            tooltip: "phaser:Phaser.Physics.Arcade.Body." + vectorName,
             x: simpleBodyVectorProperty(vectorName, "x", defValueX),
             y: simpleBodyVectorProperty(vectorName, "y", defValueY ?? defValueX)
         };
@@ -103,6 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return {
             name: "bodyGeometry",
             label: "Geometry",
+            tooltip: "Select the body geometry. It may change the offset, size, or radius properties.",
             values: [GEOM_CIRCLE, GEOM_RECT],
             getValue: obj => (obj.body["__isCircle"] ? GEOM_CIRCLE : GEOM_RECT),
             setValue: (obj, value) => {
@@ -120,6 +122,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return {
             name: `body.${axis}`,
             label: axis === "width" ? "W" : "H",
+            tooltip: "The size of the body, if it is rectangular.",
             getValue: obj => obj.body[axis],
             setValue: (obj, value) => {
 
@@ -144,7 +147,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         // properties
 
-        static enabled = SimpleBodyProperty("enable", true, "Enable", "__enable");
+        static enable = SimpleBodyProperty("enable", true, "Enable", "__enable");
         static bodyType = bodyTypeProperty();
         static moves = SimpleBodyProperty("moves", true, "Moves");
         static velocity = SimpleBodyVectorProperty("velocity", "Velocity", 0);
@@ -154,7 +157,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static allowGravity = SimpleBodyProperty("allowGravity", true, "Allow Gravity");
         static gravity = SimpleBodyVectorProperty("gravity", "Gravity", 0);
         static acceleration = SimpleBodyVectorProperty("acceleration", "Acceleration", 0);
-        static useDamping = SimpleBodyProperty("useDamping", false, "Use Dumping");
+        static useDamping = SimpleBodyProperty("useDamping", false, "Use Damping");
         static allowDrag = SimpleBodyProperty("allowDrag", true, "Allow Drag");
         static drag = SimpleBodyVectorProperty("drag", "Drag", 0);
         static bounce = SimpleBodyVectorProperty("bounce", "Bounce", 0);
@@ -198,7 +201,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: ArcadeObject) {
             super(obj, [
                 ArcadeComponent.bodyType,
-                ArcadeComponent.enabled,
+                ArcadeComponent.enable,
                 ArcadeComponent.moves,
                 ArcadeComponent.velocity.x,
                 ArcadeComponent.velocity.y,
@@ -286,7 +289,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // boolean properties
 
             this.buildSetObjectPropertyCodeDOM_BooleanProperty(args,
-                ArcadeComponent.enabled,
+                ArcadeComponent.enable,
                 ArcadeComponent.moves,
                 ArcadeComponent.allowGravity,
                 ArcadeComponent.useDamping,
