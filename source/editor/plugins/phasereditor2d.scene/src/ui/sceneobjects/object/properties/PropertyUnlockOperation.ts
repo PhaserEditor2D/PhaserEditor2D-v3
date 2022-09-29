@@ -2,14 +2,14 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class PropertyUnlockOperation extends SceneGameObjectOperation<ISceneGameObjectLike> {
+    export class PropertyUnlockOperation extends SceneGameObjectOperation<ISceneGameObject> {
 
-        private _properties: Array<IProperty<ISceneGameObjectLike>>;
+        private _properties: Array<IProperty<ISceneGameObject>>;
 
         constructor(
             editor: editor.SceneEditor,
-            objects: ISceneGameObjectLike[],
-            properties: Array<IProperty<ISceneGameObjectLike>>,
+            objects: ISceneGameObject[],
+            properties: Array<IProperty<ISceneGameObject>>,
             unlocked: boolean) {
 
             super(editor, objects, unlocked);
@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._properties = properties;
         }
 
-        getValue(obj: ISceneGameObjectLike) {
+        getValue(obj: ISceneGameObject) {
 
             for (const prop of this._properties) {
 
@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return true;
         }
 
-        setValue(obj: ISceneGameObjectLike, unlocked: any): void {
+        setValue(obj: ISceneGameObject, unlocked: any): void {
 
             for (const prop of this._properties) {
 

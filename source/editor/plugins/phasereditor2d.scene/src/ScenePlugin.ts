@@ -44,6 +44,7 @@ namespace phasereditor2d.scene {
     export const ICON_ORIGIN_BOTTOM_LEFT = "origin-bottomleft";
     export const ICON_ORIGIN_BOTTOM_CENTER = "origin-bottomcenter";
     export const ICON_ORIGIN_BOTTOM_RIGHT = "origin-bottomright";
+    export const ICON_ARCADE_COLLIDER = "collider";
 
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
@@ -201,7 +202,8 @@ namespace phasereditor2d.scene {
                     ICON_ORIGIN_MIDDLE_RIGHT,
                     ICON_ORIGIN_BOTTOM_LEFT,
                     ICON_ORIGIN_BOTTOM_CENTER,
-                    ICON_ORIGIN_BOTTOM_RIGHT
+                    ICON_ORIGIN_BOTTOM_RIGHT,
+                    ICON_ARCADE_COLLIDER
                 ])
             );
 
@@ -288,7 +290,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.TriangleExtension.getInstance(),
                 ui.sceneobjects.PolygonExtension.getInstance(),
                 ui.sceneobjects.ArcadeImageExtension.getInstance(),
-                ui.sceneobjects.ArcadeSpriteExtension.getInstance()
+                ui.sceneobjects.ArcadeSpriteExtension.getInstance(),
+                ui.sceneobjects.ColliderExtension.getInstance()
             );
 
             // scene plain object extensions
@@ -337,7 +340,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ShapeSection(page),
                 page => new ui.sceneobjects.EllipseSection(page),
                 page => new ui.sceneobjects.TriangleSection(page),
-                page => new ui.sceneobjects.PolygonSection(page)
+                page => new ui.sceneobjects.PolygonSection(page),
+                page => new ui.sceneobjects.ColliderSection(page)
             ));
 
             // scene tools

@@ -434,9 +434,10 @@ namespace phasereditor2d.scene.ui {
 
         getByEditorId(id: string) {
 
-            const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
+            let obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
 
             if (!obj) {
+                
                 console.error(`Object with id=${id} not found.`);
             }
 

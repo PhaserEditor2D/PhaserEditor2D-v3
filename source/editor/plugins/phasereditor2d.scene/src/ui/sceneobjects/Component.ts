@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         sceneFile: io.FilePath
     }
 
-    export abstract class Component<T extends ISceneGameObjectLike> implements core.json.ISerializable {
+    export abstract class Component<T extends ISceneGameObject> implements core.json.ISerializable {
 
         private _obj: T;
         private _properties: Set<IProperty<any>>;

@@ -2,9 +2,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = scene.core.code;
 
-    export class VariableComponent extends Component<ISceneGameObjectLike> {
+    export class VariableComponent extends Component<ISceneGameObject> {
 
-        static label: IProperty<ISceneGameObjectLike> = {
+        static label: IProperty<ISceneGameObject> = {
             name: "label",
             tooltip: "The variable name of the object.",
             defValue: undefined,
@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setValue: (obj, value) => obj.getEditorSupport().setUseGameObjectName(value)
         };
 
-        static scope: IEnumProperty<ISceneGameObjectLike, ObjectScope> = {
+        static scope: IEnumProperty<ISceneGameObject, ObjectScope> = {
             name: "scope",
             tooltip: "The variable lexical scope.",
             defValue: ObjectScope.METHOD,
@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             getValueLabel: value => value.split("_").map(v => v[0] + v.substring(1).toLowerCase()).join(" ")
         };
 
-        constructor(obj: ISceneGameObjectLike) {
+        constructor(obj: ISceneGameObject) {
             super(obj, [
                 VariableComponent.label,
                 VariableComponent.useGameObjectName,
