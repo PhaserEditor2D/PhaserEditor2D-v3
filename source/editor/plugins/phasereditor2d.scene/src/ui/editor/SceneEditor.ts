@@ -340,6 +340,9 @@ namespace phasereditor2d.scene.ui.editor {
                 audio: {
                     noAudio: true
                 },
+                physics: {
+                    default: "arcade"
+                },
                 scene: this._scene,
             });
 

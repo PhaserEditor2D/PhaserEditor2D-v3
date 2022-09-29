@@ -53,7 +53,6 @@ namespace phasereditor2d.scene.ui.editor.tools {
                 worldDelta.add(worldDeltaVector);
 
                 return worldDeltaVector;
-
             }
 
             return new Phaser.Math.Vector2(worldDx * xAxis, worldDy * yAxis);
@@ -131,21 +130,34 @@ namespace phasereditor2d.scene.ui.editor.tools {
             }
         }
 
-        protected getScreenPointOfObject(args: ISceneToolContextArgs, obj: any, fx: number, fy: number) {
+        protected getScreenPointOfObject(args: ISceneToolContextArgs, obj: any, fx: number, fy: number, removeRotation = false) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
 
             const sprite = obj as unknown as sceneobjects.Sprite;
 
-            const { width, height } = sprite.getEditorSupport().computeSize();
+            const { width, height } = this.computeSize(sprite);
 
             const x = width * fx;
             const y = height * fy;
 
-            sprite.getWorldTransformMatrix().transformPoint(x, y, worldPoint);
+            const tx = sprite.getWorldTransformMatrix();
+
+            if (removeRotation) {
+
+                tx.rotate(-tx.rotation);
+            }
+
+            tx.transformPoint(x, y, worldPoint);
 
             return args.camera.getScreenPoint(worldPoint.x, worldPoint.y);
+        }
 
+        protected computeSize(obj: ui.sceneobjects.ISceneGameObject) {
+
+            const size = obj.getEditorSupport().computeSize();
+
+            return size;
         }
 
         protected getScreenToObjectScale(args: ISceneToolContextArgs, obj: any) {
@@ -167,7 +179,12 @@ namespace phasereditor2d.scene.ui.editor.tools {
             return { x, y };
         }
 
-        protected globalAngle(sprite: Phaser.GameObjects.GameObject & {angle: number}) {
+        protected globalAngle(sprite: Phaser.GameObjects.GameObject & { angle: number }) {
+
+            return SceneToolItem.getGlobalAngle(sprite);
+        }
+
+        static getGlobalAngle(sprite: Phaser.GameObjects.GameObject & { angle: number }) {
 
             let a = sprite.angle;
 
@@ -175,7 +192,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             if (parent) {
 
-                a += this.globalAngle(parent);
+                a += this.getGlobalAngle(parent);
             }
 
             return a;
@@ -212,7 +229,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             ctx.stroke();
         }
 
-        protected drawRect(ctx: CanvasRenderingContext2D, color: string) {
+        protected drawRect(ctx: CanvasRenderingContext2D, color: string, borderColor = "#000") {
 
             ctx.save();
 
@@ -221,7 +238,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
             ctx.rect(0, 0, 10, 10);
 
             ctx.fillStyle = color;
-            ctx.strokeStyle = "#000";
+            ctx.strokeStyle = borderColor;
 
             ctx.fill();
             ctx.stroke();
@@ -246,14 +263,15 @@ namespace phasereditor2d.scene.ui.editor.tools {
         protected getAvgScreenPointOfObjects(
             args: ISceneToolContextArgs,
             fx: (ob: sceneobjects.Image) => number = obj => 0,
-            fy: (ob: sceneobjects.Image) => number = obj => 0) {
+            fy: (ob: sceneobjects.Image) => number = obj => 0,
+            removeRotation = false) {
 
             let avgY = 0;
             let avgX = 0;
 
             for (const obj of args.objects) {
 
-                const point = this.getScreenPointOfObject(args, obj, fx(obj as any), fy(obj as any));
+                const point = this.getScreenPointOfObject(args, obj, fx(obj as any), fy(obj as any), removeRotation);
 
                 avgX += point.x;
                 avgY += point.y;

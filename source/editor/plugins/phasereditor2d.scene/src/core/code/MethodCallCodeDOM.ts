@@ -101,6 +101,11 @@ namespace phasereditor2d.scene.core.code {
             this._args.push(Math.floor(n) + "");
         }
 
+        argBool(b: boolean) {
+
+            this.arg(b ? "true" : "false");
+        }
+
         getMethodName() {
             return this._methodName;
         }

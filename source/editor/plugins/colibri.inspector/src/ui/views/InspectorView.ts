@@ -90,9 +90,15 @@ namespace colibri.inspector.ui.views {
 
             const provider = this._currentPart.getPropertyProvider();
 
+            this._propertyPage.setSelection(sel, false);
+
             this._propertyPage.setSectionProvider(provider);
 
-            this._propertyPage.setSelection(sel);
+            // Commented on Sept 28, 2022. 
+            // The page.updateWithSelection() is always called
+            // the page.setSectionProvider(provider)
+            //
+            // this._propertyPage.setSelection(sel);
         }
 
         getUndoManager() {

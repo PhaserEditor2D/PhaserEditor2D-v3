@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.core.code {
 
             } else {
 
-                const clsName = this._sceneFile.getNameWithoutExtension();
+                const clsName = this.getClassName();
                 const clsDecl = new ClassDeclCodeDOM(clsName);
 
                 clsDecl.setExportClass(settings.exportClass);
@@ -175,6 +175,11 @@ namespace phasereditor2d.scene.core.code {
             }
 
             return unit;
+        }
+
+        private getClassName() {
+
+            return this._sceneFile.getNameWithoutExtension();
         }
 
         buildPrefabPropertiesFields(fields: MemberDeclCodeDOM[]) {
@@ -322,10 +327,17 @@ namespace phasereditor2d.scene.core.code {
 
             const objBuilder = ext.getCodeDOMBuilder();
 
+            objBuilder.buildPrefabExtraTypeScriptDefinitionsCodeDOM({
+                unit: this._unit,
+                prefabObj,
+                clsName: this.getClassName()
+            });
+
             ctrDecl.arg("scene", "Phaser.Scene");
 
             objBuilder.buildPrefabConstructorDeclarationCodeDOM({
-                ctrDeclCodeDOM: ctrDecl
+                ctrDeclCodeDOM: ctrDecl,
+                prefabObj
             });
 
             {
@@ -685,8 +697,11 @@ namespace phasereditor2d.scene.core.code {
 
                 const builder = objSupport.getExtension().getCodeDOMBuilder();
 
+                const factoryVarname = builder.getChainToFactory();
+
                 createObjectMethodCall = builder.buildCreateObjectWithFactoryCodeDOM({
-                    gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene.add" : "this.add",
+                    gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? 
+                    `scene.${factoryVarname}` : `this.${factoryVarname}`,
                     obj: obj
                 });
             }

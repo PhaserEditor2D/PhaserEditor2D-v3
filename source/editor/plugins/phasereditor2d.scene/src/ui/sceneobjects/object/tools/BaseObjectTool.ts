@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._properties = properties;
         }
 
-        protected getProperties(obj: any) {
+        protected getProperties(obj?: any) {
 
             return this._properties;
         }

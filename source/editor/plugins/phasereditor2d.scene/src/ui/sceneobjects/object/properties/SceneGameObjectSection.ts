@@ -24,6 +24,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
+        createSeparatorForXYGrid(parent: HTMLElement, text: string) {
+
+            const label = this.createSeparator(parent, text);
+
+            label.style.gridColumn = "span 6";
+
+            return label;
+        }
+
         createGridElementWithPropertiesXY(parent: HTMLElement) {
 
             const comp = this.createGridElement(parent);
@@ -227,7 +236,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return btn;
         }
 
-        createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true) {
+        createPropertyXYRow(parent: HTMLElement, propXY: IPropertyXY, lockIcon: boolean = true, colorAxis = true) {
+
+            const inputElements: HTMLInputElement[] = [];
 
             if (lockIcon) {
 
@@ -240,11 +251,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 label.style.gridColumn = "2";
             }
 
-            for (const prop of [propXY.x, propXY.y]) {
+            for (const i of [{ prop: propXY.x, axis: "x" }, { prop: propXY.y, axis: "y" }]) {
 
-                this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
-                this.createFloatField(parent, prop);
+                let { prop, axis } = i;
+
+                const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
+
+                const input = this.createFloatField(parent, prop);
+                inputElements.push(input);
+
+                if (colorAxis) {
+
+                    label.classList.add("label-axis-" + axis);
+                    input.classList.add("input-axis-" + axis);
+                }
             }
+
+            return inputElements;
         }
 
         createEnumField<TValue>(
@@ -313,7 +336,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(() => {
 
-                text.readOnly = !this.isUnlocked(property);
+                text.disabled = !this.isUnlocked(property);
 
                 text.value = this.flatValues_Number(
 

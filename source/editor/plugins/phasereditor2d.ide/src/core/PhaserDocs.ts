@@ -16,6 +16,8 @@ namespace phasereditor2d.ide.core {
 
             if (!this._data) {
 
+                console.log("Loading jsdoc " + this._plugin.getId() + ": " + this._filePath);
+
                 this._data = await this._plugin.getJSON(this._filePath);
 
                 const converter = new showdown.Converter();
@@ -30,9 +32,10 @@ namespace phasereditor2d.ide.core {
             }
         }
 
-        getDoc(helpKey): string {
+        getDoc(helpKey: string): string {
 
             if (helpKey in this._data) {
+
                 return `<small>${helpKey}</small> <br><br> <div style="max-width:60em">${this._data[helpKey]}</div>`;
             }
 

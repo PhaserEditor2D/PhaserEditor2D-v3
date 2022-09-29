@@ -37,6 +37,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         gameObjectFactoryExpr: string;
     }
 
+    export interface IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs {
+        unit: code.UnitCodeDOM;
+        clsName: string;
+        prefabObj: ISceneGameObject
+    }
+
     export interface IBuildPrefabConstructorCodeDOMArgs {
 
         obj: ISceneGameObject;
@@ -48,6 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export interface IBuildPrefabConstructorDeclarationCodeDOM {
 
         ctrDeclCodeDOM: code.MethodDeclCodeDOM;
+        prefabObj: ISceneGameObject;
     }
 
     export interface IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {

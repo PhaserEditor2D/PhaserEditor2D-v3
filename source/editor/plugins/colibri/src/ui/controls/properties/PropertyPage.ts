@@ -206,9 +206,9 @@ namespace colibri.ui.controls.properties {
             } else {
 
                 for (const pane of this._sectionPanes) {
+                    
                     pane.getElement().style.display = "none";
                 }
-
             }
         }
 
@@ -334,11 +334,14 @@ namespace colibri.ui.controls.properties {
             return this._selection;
         }
 
-        setSelection(sel: any[]): any {
+        setSelection(sel: any[], update = true): any {
 
             this._selection = sel;
 
-            this.updateWithSelection();
+            if (update) {
+
+                this.updateWithSelection();
+            }
         }
 
         setSectionProvider(provider: PropertySectionProvider): void {
