@@ -9,7 +9,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 id: ArcadeBodyTool.ID,
                 command: editor.commands.CMD_EDIT_ARCADE_BODY
-            }, ArcadeComponent.size.x, ArcadeComponent.size.y);
+            },
+                ArcadeComponent.size.x,
+                ArcadeComponent.size.y,
+                ArcadeComponent.radius);
 
             this.addItems(
                 new ArcadeBodySizeToolItem(1, 0.5),
@@ -18,7 +21,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new ArcadeBodyOffsetToolItem(0, 0),
                 new ArcadeBodyOffsetToolItem(0.5, 0),
                 new ArcadeBodyOffsetToolItem(0, 0.5),
-                new ArcadeBodyCircleOffsetToolItem()
+                new ArcadeBodyCircleOffsetToolItem(),
+                new ArcadeBodyRadiusToolItem()
             );
         }
 
@@ -62,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private renderRect(obj: ArcadeImage, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
-            
+
             const body = obj.body;
 
             const p = new Phaser.Math.Vector2();
@@ -98,7 +102,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private renderCircle(obj: ArcadeImage, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
-            
+
             const body = obj.body;
 
             const p = new Phaser.Math.Vector2();

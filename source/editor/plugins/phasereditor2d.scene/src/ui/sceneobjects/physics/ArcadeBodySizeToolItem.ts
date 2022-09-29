@@ -1,66 +1,12 @@
+/// <reference path="./BaseArcadeBodySizeToolItem.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ArcadeBodySizeToolItem
-        extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        extends BaseArcadeBodySizeToolItem {
 
-        private _x: IScaleAxis;
-        private _y: IScaleAxis;
-        private _dragging: boolean;
+        isValidFor(objects: ISceneGameObject[]): boolean {
 
-        constructor(x: IScaleAxis, y: IScaleAxis) {
-            super();
-
-            this._x = x;
-            this._y = y;
-        }
-
-        getPoint(args: editor.tools.ISceneToolContextArgs): { x: number; y: number; } {
-
-            return this.getAvgScreenPointOfObjects(args,
-
-                (sprite: sceneobjects.Image) => this._x,
-
-                (sprite: sceneobjects.Image) => this._y,
-
-                // remove rotation, not supported by the arcade body
-                true
-            );
-        }
-
-        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: ArcadeObject, fx: number, fy: number, removeRotation = false) {
-
-            const worldPoint = new Phaser.Geom.Point(0, 0);
-
-            const { width, height } = this.computeSize(sprite);
-
-            const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
-
-            const x = sprite.body.offset.x - displayOriginX + fx * width;
-            const y = sprite.body.offset.y - displayOriginY + fy * height;
-
-            const tx = sprite.getWorldTransformMatrix();
-
-            if (removeRotation) {
-
-                tx.rotate(-tx.rotation);
-            }
-
-            tx.transformPoint(x, y, worldPoint);
-
-            return args.camera.getScreenPoint(worldPoint.x, worldPoint.y);
-        }
-
-        protected computeSize(obj: ISceneGameObject) {
-
-            return {
-                width: ArcadeComponent.size.x.getValue(obj),
-                height: ArcadeComponent.size.y.getValue(obj)
-            };
-        }
-
-        render(args: editor.tools.ISceneToolRenderArgs) {
-
-            for (const obj of args.objects) {
+            for (const obj of objects) {
 
                 if (ArcadeComponent.isCircleBody(obj as ArcadeObject)) {
 
@@ -68,143 +14,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            const point = this.getPoint(args);
-
-            const ctx = args.canvasContext;
-
-            ctx.save();
-
-            ctx.translate(point.x, point.y);
-
-            // remove totation, not supported by the Arcade body
-            // const angle = this.globalAngle(args.objects[0] as any);
-            // ctx.rotate(Phaser.Math.DegToRad(angle));
-
-            this.drawRect(ctx, args.canEdit ?
-                ArcadeBodyTool.BODY_TOOL_COLOR : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
-
-            ctx.restore();
+            return true;
         }
 
-        containsPoint(args: editor.tools.ISceneToolDragEventArgs): boolean {
+        protected onDragValues(sprite: Sprite, changeX: boolean, changeY: boolean, width: number, height: number) {
 
-            const point = this.getPoint(args);
+            const widthProp = ArcadeComponent.size.x;
+            const heightProp = ArcadeComponent.size.y;
 
-            return Phaser.Math.Distance.Between(args.x, args.y, point.x, point.y) < 20;
-        }
+            if (changeX) {
 
-        onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void {
-
-            if (!this.containsPoint(args)) {
-                return;
+                widthProp.setValue(sprite, Math.floor(width));
             }
 
-            this._dragging = true;
+            if (changeY) {
 
-            const point = this.getPoint(args);
-
-            for (const obj of args.objects) {
-
-                const sprite = obj as unknown as ArcadeImage;
-
-                const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
-
-                const initLocalPos = new Phaser.Math.Vector2();
-
-                sprite.getWorldTransformMatrix(worldTx);
-
-                worldTx.applyInverse(point.x, point.y, initLocalPos);
-
-                const { width, height } = this.computeSize(sprite);
-
-                sprite.setData("ArcadeBodySizeToolItem", {
-                    initWidth: width,
-                    initHeight: height,
-                    initLocalPos: initLocalPos,
-                    initWorldTx: worldTx
-                });
+                heightProp.setValue(sprite, Math.floor(height));
             }
         }
 
-        static getInitialSize(obj: any): { x: number, y: number } {
+        protected getDataKey(): string {
 
-            const data = obj.getData("ArcadeBodySizeToolItem");
-
-            return { x: data.initWidth, y: data.initHeight };
+            return "ArcadeBodySizeToolItem";
         }
 
-        onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
+        protected createStopDragOperation(args: editor.tools.ISceneToolDragEventArgs): colibri.ui.ide.undo.Operation {
 
-            if (!this._dragging) {
-                return;
-            }
-
-            const camera = args.camera;
-
-            for (const obj of args.objects) {
-
-                const sprite = obj as Sprite;
-                const data = sprite.data.get("ArcadeBodySizeToolItem");
-                const initLocalPos: Phaser.Math.Vector2 = data.initLocalPos;
-                const worldTx: Phaser.GameObjects.Components.TransformMatrix = data.initWorldTx;
-
-                const localPos = new Phaser.Math.Vector2();
-
-                worldTx.applyInverse(args.x, args.y, localPos);
-
-                const flipX = sprite.flipX ? -1 : 1;
-                const flipY = sprite.flipY ? -1 : 1;
-
-                let originX = 0;
-                let originY = 0;
-
-                if (ArcadeComponent.center.getValue(obj)) {
-
-                    const origin = sprite.getEditorSupport().computeOrigin();
-                    originX = origin.originX;
-                    originY = origin.originY;
-                }
-
-                const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
-                const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
-
-                const dw = dx / (1 - (originX === 1 ? 0 : originX));
-                const dh = dy / (1 - (originY === 1 ? 0 : originY));
-
-                const { x: width, y: height } = args.editor.getScene().snapPoint(
-                    data.initWidth + dw,
-                    data.initHeight + dh
-                );
-
-                const changeAll = this._x === 1 && this._y === 1;
-                const changeX = this._x === 1 && this._y === 0.5 || changeAll;
-                const changeY = this._x === 0.5 && this._y === 1 || changeAll;
-
-                const widthProp = ArcadeComponent.size.x;
-                const heightProp = ArcadeComponent.size.y;
-
-                if (changeX) {
-
-                    widthProp.setValue(sprite, Math.floor(width));
-                }
-
-                if (changeY) {
-
-                    heightProp.setValue(sprite, Math.floor(height));
-                }
-
-                args.editor.updateInspectorViewSection(ArcadeGeometrySection.ID);
-            }
-        }
-
-        onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
-
-            if (this._dragging) {
-
-                args.editor.getUndoManager().add(new BodySizeOperation(args));
-
-                this._dragging = false;
-            }
+            return new BodySizeOperation(args, obj => this.getInitialSize(obj));
         }
     }
 }

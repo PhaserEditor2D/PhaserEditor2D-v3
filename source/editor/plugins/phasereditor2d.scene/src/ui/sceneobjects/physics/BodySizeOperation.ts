@@ -2,11 +2,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class BodySizeOperation extends editor.tools.SceneToolOperation<{ x: number, y: number }> {
 
-        getInitialValue(obj: ArcadeObject): { x: number; y: number; } {
+        constructor(
+            toolArgs: editor.tools.ISceneToolContextArgs,
+            private getInitialSize: (obj: ISceneGameObject) => { x: number, y: number }) {
 
-            return ArcadeBodySizeToolItem.getInitialSize(obj);
+            super(toolArgs);
         }
 
+        getInitialValue(obj: ArcadeObject): { x: number; y: number; } {
+
+            return this.getInitialSize(obj);
+        }
+    
         getFinalValue(obj: ArcadeObject): { x: number; y: number; } {
 
             return {
