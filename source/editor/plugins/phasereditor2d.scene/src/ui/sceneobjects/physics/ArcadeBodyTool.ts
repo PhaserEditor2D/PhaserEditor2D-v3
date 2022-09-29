@@ -65,7 +65,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.restore();
         }
 
-        private renderRect(obj: ArcadeImage, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
+        private renderRect(obj: ArcadeObject, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
 
             const body = obj.body;
 
@@ -101,7 +101,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.strokeRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
         }
 
-        private renderCircle(obj: ArcadeImage, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
+        private renderCircle(obj: ArcadeObject, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
 
             const body = obj.body;
 

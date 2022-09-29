@@ -287,7 +287,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.EllipseExtension.getInstance(),
                 ui.sceneobjects.TriangleExtension.getInstance(),
                 ui.sceneobjects.PolygonExtension.getInstance(),
-                ui.sceneobjects.ArcadeImageExtension.getInstance()
+                ui.sceneobjects.ArcadeImageExtension.getInstance(),
+                ui.sceneobjects.ArcadeSpriteExtension.getInstance()
             );
 
             // scene plain object extensions

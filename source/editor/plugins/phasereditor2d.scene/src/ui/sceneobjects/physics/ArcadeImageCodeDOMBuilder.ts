@@ -2,10 +2,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class ArcadeImageCodeDOMBuilder extends BaseImageCodeDOMBuilder {
+    export class ArcadeObjectCodeDOMBuilder extends BaseImageCodeDOMBuilder {
 
-        constructor() {
-            super("image", "physics.add");
+        constructor(arcadeObjectType: "image"|"sprite") {
+            super(arcadeObjectType, "physics.add");
         }
 
         buildPrefabExtraTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs): void {
@@ -22,12 +22,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getFactoryMethodName(obj: ArcadeImage): string {
 
+            const defaultFactory = super.getFactoryMethodName(obj);
+
             if (ArcadeComponent.bodyType.getValue(obj) === Phaser.Physics.Arcade.DYNAMIC_BODY) {
 
-                return "image";
+                return defaultFactory;
             }
 
-            return "staticImage";
+            if (defaultFactory === "image") {
+
+                return "staticImage";
+            }
+
+            return "staticSprite";
         }
     }
 }
