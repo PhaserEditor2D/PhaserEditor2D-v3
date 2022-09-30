@@ -6,6 +6,7 @@
 * Fixes Users Components files serialization. The `app` field is `Phaser Editor 2D - User Components Editor`, and the `contentType` field is `phasereditor2d.core.scene.UserComponents`.
 * Removes Monaco-based editors.
 * Uses colors for XY labels in the Inspector view.
+* Adds support for Arcade physics. The Arcade Image & Sprite. And the body tools.
 
 ## v3.34.0 - Aug 12, 2022
 
