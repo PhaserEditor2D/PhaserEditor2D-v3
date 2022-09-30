@@ -23,8 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (GameObjectEditorSupport.hasObjectComponent(obj, ArcadeComponent)) {
 
-                    if (ArcadeComponent.isCircleBody(obj as ArcadeObject)
-                        || ArcadeComponent.center.getValue(obj)) {
+                    if (ArcadeComponent.isCircleBody(obj as ArcadeObject)) {
 
                         return false;
                     }

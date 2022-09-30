@@ -8,11 +8,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super({
                 id: ArcadeBodyTool.ID,
-                command: editor.commands.CMD_EDIT_ARCADE_BODY
+                command: editor.commands.CMD_EDIT_ARCADE_BODY,
             },
+                ArcadeComponent.offset.x,
+                ArcadeComponent.offset.y,
+                ArcadeComponent.radius,
                 ArcadeComponent.size.x,
-                ArcadeComponent.size.y,
-                ArcadeComponent.radius);
+                ArcadeComponent.size.y);
 
             this.addItems(
                 new ArcadeBodySizeToolItem(1, 0.5),
@@ -26,13 +28,55 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
-        onActivated(args: editor.tools.ISceneToolContextArgs) {
+        protected getProperties(obj?: any): IProperty<any>[] {
+
+            if (GameObjectEditorSupport.hasObjectComponent(obj, ArcadeComponent)) {
+
+                const props = this.getSizeOrRadiusProperties(obj);
+
+                props.push(
+                    ArcadeComponent.offset.x,
+                    ArcadeComponent.offset.y
+                );
+
+                return props;
+            }
+        }
+
+        protected getSizeOrRadiusProperties(obj?: any): IProperty<any>[] {
+
+            if (ArcadeComponent.isCircleBody(obj)) {
+
+                return [
+                    ArcadeComponent.radius
+                ];
+            }
+
+            return [
+                ArcadeComponent.size.x,
+                ArcadeComponent.size.y
+            ];
+        }
+
+        async onActivated(args: editor.tools.ISceneToolContextArgs) {
 
             super.onActivated(args);
 
             const sections = [ArcadeGeometrySection.ID];
 
-            this.confirmUnlockProperty(args, this.getProperties(), "size", ...sections);
+            const props: Set<IProperty<ArcadeObject>> = new Set();
+
+            for (const obj of args.objects) {
+
+                for (const prop of this.getSizeOrRadiusProperties(obj)) {
+
+                    props.add(prop);
+                }
+            }
+
+            await this.confirmUnlockProperty(args, [ArcadeComponent.offset.x, ArcadeComponent.offset.y], "body.offset", ...sections);
+
+            await this.confirmUnlockProperty(args, [...props], "body size", ...sections);
         }
 
         render(args: editor.tools.ISceneToolRenderArgs): void {
@@ -50,8 +94,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const ctx = args.canvasContext;
 
             ctx.save();
-
-            const body = obj.body;
 
             if (ArcadeComponent.isCircleBody(obj)) {
 

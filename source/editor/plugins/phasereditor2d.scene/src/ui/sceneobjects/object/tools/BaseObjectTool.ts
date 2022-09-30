@@ -60,9 +60,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        confirmUnlockProperty(args: editor.tools.ISceneToolContextArgs, props: Array<IProperty<any>>, propLabel: string, ...sectionId: string[]) {
+        async confirmUnlockProperty(args: editor.tools.ISceneToolContextArgs, props: Array<IProperty<any>>, propLabel: string, ...sectionId: string[]) {
 
-            args.editor.confirmUnlockProperty(props, propLabel, ...sectionId);
+            await args.editor.confirmUnlockProperty(props, propLabel, ...sectionId);
         }
     }
 }
