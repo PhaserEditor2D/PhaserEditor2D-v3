@@ -36,10 +36,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs)
             : core.code.MethodCallCodeDOM[] {
 
-
             const obj = args.obj as Collider;
 
-            const call = new core.code.MethodCallCodeDOM("collider", `${args.gameObjectFactoryExpr}.physics.add`);
+            const methodName = obj.onlyOverlap? "overlap" : "collider";
+
+            const call = new core.code.MethodCallCodeDOM(methodName, `${args.gameObjectFactoryExpr}.physics.add`);
 
             call.arg(obj.object1 || "undefined");
             call.arg(obj.object2 || "undefined");
