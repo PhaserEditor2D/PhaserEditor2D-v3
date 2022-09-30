@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs)
-            : core.code.MethodCallCodeDOM[] {
+            : IBuildPlainObjectFactoryCodeDOMResult {
 
             const obj = args.obj as Collider;
 
@@ -44,8 +44,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.arg(obj.object1 || "undefined");
             call.arg(obj.object2 || "undefined");
+            call.arg(obj.collideCallback || "undefined");
+            call.arg(obj.processCallback || "undefined");
+            call.arg(obj.callbackContext || "undefined");
 
-            return [call];
+            return {
+                lazyStatements: [call],
+                objectFactoryMethodCall: call
+            };
         }
 
         createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject[] {

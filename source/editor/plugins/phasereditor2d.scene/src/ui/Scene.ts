@@ -434,14 +434,42 @@ namespace phasereditor2d.scene.ui {
 
         getByEditorId(id: string) {
 
-            let obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
-
-            if (!obj) {
-                
-                console.error(`Object with id=${id} not found.`);
-            }
+            const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
 
             return obj;
+        }
+
+        findByEditorLabel(label: string) {
+
+            const found = { obj: undefined };
+
+            this.visitAll(obj => {
+
+                const support = sceneobjects.EditorSupport.getEditorSupport(obj);
+
+                if (support) {
+
+                    if (support.getLabel() === label) {
+
+                        found.obj = obj;
+                    }
+                }
+            });
+
+            if (found.obj) {
+
+                return found.obj;
+            }
+
+            for (const objList of this.getObjectLists().getLists()) {
+
+                if (objList.getLabel() === label) {
+
+                    return objList;
+                }
+            }
+
+            return undefined;
         }
 
         debugFindDuplicatedEditorId(list?: sceneobjects.ISceneGameObject[], set?: Set<any>) {

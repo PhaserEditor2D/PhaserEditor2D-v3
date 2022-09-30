@@ -20,6 +20,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         gameObjectFactoryExpr: string;
     }
 
+    export interface IBuildPlainObjectFactoryCodeDOMResult {
+        firstStatements?: code.CodeDOM[];
+        lazyStatements?: code.CodeDOM[];
+        objectFactoryMethodCall: code.MethodCallCodeDOM;
+    }
+
     export abstract class ScenePlainObjectExtension extends SceneObjectExtension {
 
         static POINT_ID = "phasereditor2d.scene.ui.sceneobjects.ScenePlainObjectExtension";
@@ -61,6 +67,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args This method args.
          */
-        abstract buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM[];
+        abstract buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs): IBuildPlainObjectFactoryCodeDOMResult;
     }
 }

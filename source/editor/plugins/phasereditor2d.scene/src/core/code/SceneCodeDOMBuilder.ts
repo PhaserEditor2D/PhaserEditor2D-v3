@@ -374,7 +374,7 @@ namespace phasereditor2d.scene.core.code {
                 });
             }
 
-            this.addCreateAllPlainObjectCode(ctrDecl);
+            this.addCreateAllPlainObjectCode(ctrDecl.getBody(), lazyStatements);
 
             this.addCreateListsCode(body);
 
@@ -442,10 +442,9 @@ namespace phasereditor2d.scene.core.code {
             }
 
             const body = createMethodDecl.getBody();
-
-            this.addCreateAllPlainObjectCode(createMethodDecl);
-
             const lazyStatements: CodeDOM[] = [];
+
+            this.addCreateAllPlainObjectCode(body, lazyStatements);
 
             for (const obj of this._scene.getDisplayListChildren()) {
 
@@ -474,16 +473,57 @@ namespace phasereditor2d.scene.core.code {
             return createMethodDecl;
         }
 
-        private addCreateAllPlainObjectCode(createMethodDecl: MethodDeclCodeDOM) {
-
-            const body = createMethodDecl.getBody();
+        private addCreateAllPlainObjectCode(firstStatements: CodeDOM[], lazyStatements: CodeDOM[]) {
 
             for (const obj of this._scene.getPlainObjects()) {
 
-                body.push(new RawCodeDOM(""));
-                body.push(new RawCodeDOM("// " + obj.getEditorSupport().getLabel()));
+                this.addCreatePlainObjectCode(obj, firstStatements, lazyStatements);
+            }
+        }
 
-                this.addCreatePlainObjectCode(obj, createMethodDecl);
+        private addCreatePlainObjectCode(
+            obj: ui.sceneobjects.IScenePlainObject, firstStatements: CodeDOM[], lazyStatements: CodeDOM[]) {
+
+            const objSupport = obj.getEditorSupport();
+
+            const varname = formatToValidVarName(objSupport.getLabel());
+
+            const result = objSupport.getExtension().buildCreateObjectWithFactoryCodeDOM({
+                gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene" : "this",
+                obj: obj,
+                varname
+            });
+
+            const comments = [
+                new RawCodeDOM(""),
+                new RawCodeDOM("// " + obj.getEditorSupport().getLabel())
+            ];
+
+            if (result.firstStatements) {
+
+                firstStatements.push(...comments);
+                firstStatements.push(...result.firstStatements);
+            }
+
+            if (result.lazyStatements) {
+
+                lazyStatements.push(...comments);
+                lazyStatements.push(...result.lazyStatements);
+            }
+
+            const methodCall = result.objectFactoryMethodCall;
+            
+            methodCall.setDeclareReturnToVar(true);
+
+            if (!objSupport.isMethodScope()) {
+
+                result.objectFactoryMethodCall.setDeclareReturnToVar(true);
+                result.objectFactoryMethodCall.setDeclareReturnToField(true);
+            }
+
+            if (result.objectFactoryMethodCall.isDeclareReturnToVar()) {
+
+                result.objectFactoryMethodCall.setReturnToVar(varname);
             }
         }
 
@@ -601,37 +641,6 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
-        private addCreatePlainObjectCode(
-            obj: ui.sceneobjects.IScenePlainObject, createMethodDecl: MethodDeclCodeDOM) {
-
-            const objSupport = obj.getEditorSupport();
-
-            const varname = formatToValidVarName(objSupport.getLabel());
-
-            const createObjectMethodCalls = objSupport.getExtension().buildCreateObjectWithFactoryCodeDOM({
-                gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene" : "this",
-                obj: obj,
-                varname
-            })
-
-            createMethodDecl.getBody().push(...createObjectMethodCalls);
-
-            const mainCreateMethodCall = createObjectMethodCalls[0];
-
-            mainCreateMethodCall.setDeclareReturnToVar(true);
-
-            if (!objSupport.isMethodScope()) {
-
-                mainCreateMethodCall.setDeclareReturnToVar(true);
-                mainCreateMethodCall.setDeclareReturnToField(true);
-            }
-
-            if (mainCreateMethodCall.isDeclareReturnToVar()) {
-
-                mainCreateMethodCall.setReturnToVar(varname);
-            }
-        }
-
         private addCreateObjectCodeOfNestedPrefab(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
 
             const varname = this.getPrefabInstanceVarName(obj);
@@ -700,8 +709,8 @@ namespace phasereditor2d.scene.core.code {
                 const factoryVarname = builder.getChainToFactory();
 
                 createObjectMethodCall = builder.buildCreateObjectWithFactoryCodeDOM({
-                    gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? 
-                    `scene.${factoryVarname}` : `this.${factoryVarname}`,
+                    gameObjectFactoryExpr: this._scene.isPrefabSceneType() ?
+                        `scene.${factoryVarname}` : `this.${factoryVarname}`,
                     obj: obj
                 });
             }

@@ -1,9 +1,9 @@
-/// <reference path="../../editor/properties/PlainObjectSection.ts" />
+/// <reference path="../object/properties/PlainObjectSection.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class ColliderSection extends editor.properties.PlainObjectSection<Collider> {
+    export class ColliderSection extends PlainObjectSection<Collider> {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.ColliderSection";
 
@@ -14,11 +14,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElement(parent, 2);
+            const comp = this.createDefaultGridElement(parent);
 
-            this.createPropertyString(comp, ColliderComponent.object1);
+            this.createPropertyBoolean(comp, ColliderComponent.onlyOverlap);
 
-            this.createPropertyString(comp, ColliderComponent.object2);
+            this.createPropertyObjectVar(comp, ColliderComponent.object1);
+
+            this.createPropertyObjectVar(comp, ColliderComponent.object2);
+
+            this.createPropertyString(comp, ColliderComponent.collideCallback);
+
+            this.createPropertyString(comp, ColliderComponent.processCallback);
+
+            this.createPropertyString(comp, ColliderComponent.callbackContext);
+
         }
 
         canEdit(obj: any, n: number): boolean {

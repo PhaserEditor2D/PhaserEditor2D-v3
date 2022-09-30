@@ -105,7 +105,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
     }
 
-    class ObjectVarContentProvider extends editor.outline.SceneEditorOutlineContentProvider {
+    export class ObjectVarContentProvider extends editor.outline.SceneEditorOutlineContentProvider {
 
         getRoots(input: any): any[] {
 

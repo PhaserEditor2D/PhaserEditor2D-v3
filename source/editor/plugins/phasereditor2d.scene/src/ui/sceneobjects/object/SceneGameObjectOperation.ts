@@ -50,7 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (let i = 0; i < this._objIdList.length; i++) {
 
                 const id = this._objIdList[i];
-                const obj = scene.getByEditorId(id) || scene.getPlainObjectById(id);
+                const obj = scene.getPlainObjectById(id) || scene.getByEditorId(id);
                 const value = values[i];
 
                 if (obj) {
