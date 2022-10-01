@@ -47,10 +47,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_CANVAS = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToCanvas";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToWebGL";
     export const CMD_PASTE_IN_PLACE = "phasereditor2d.scene.ui.editor.commands.PasteInPlace";
+    export const CMD_ARCADE_CENTER_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeCenterBody";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
-        if (colibri.Platform.getWorkbench().getActiveDialog()) {
+        if (args.activeDialog) {
 
             return false;
         }
@@ -126,6 +127,56 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerTextureCommands(manager);
 
             this.registerSnappingCommands(manager);
+
+            this.registerArcadeCommands(manager);
+        }
+
+        private static registerArcadeCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_ARCADE_CENTER_BODY,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Center Arcade Body",
+                    tooltip: "Center the Arcade body of the selected objects.",
+                },
+                handler: {
+                    testFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        if (isSceneScope(args)) {
+
+                            for (const obj of editor.getSelectedGameObjects()) {
+
+                                const objES = obj.getEditorSupport();
+
+                                if (!objES.hasComponent(ui.sceneobjects.ArcadeComponent)) {
+
+                                    return false;
+                                }
+
+                                if (!objES.isUnlockedProperty(ui.sceneobjects.ArcadeComponent.offset.x)
+                                    || !objES.isUnlockedProperty(ui.sceneobjects.ArcadeComponent.offset.y)) {
+
+                                    return false;
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+                    },
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        editor.getUndoManager().add(new ui.sceneobjects.ArcadeCenterBodyOperation(
+                            editor, editor.getSelectedGameObjects()));
+                    },
+                }
+            });
         }
 
         static registerAddObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -590,7 +641,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     shift: true,
                     key: "KeyV"
                 }
-            })
+            });
 
             // cut
 

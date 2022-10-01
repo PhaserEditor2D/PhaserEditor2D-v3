@@ -10,6 +10,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, ArcadeGeometrySection.ID, "Arcade Body Geometry");
         }
 
+        getSectionHelpPath() {
+
+            return "scene-editor/arcade-geometry-properties.html";
+        }
+
+        createMenu(menu: controls.Menu): void {
+            
+            this.createToolMenuItem(menu, ArcadeBodyTool.ID);
+
+            menu.addSeparator();
+            
+            menu.addCommand(ui.editor.commands.CMD_ARCADE_CENTER_BODY);
+
+            menu.addSeparator();
+
+            super.createMenu(menu);
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesBoolXY(parent);

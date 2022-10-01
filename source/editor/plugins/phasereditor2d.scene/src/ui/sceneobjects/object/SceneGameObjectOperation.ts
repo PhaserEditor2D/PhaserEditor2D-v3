@@ -4,11 +4,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _objIdList: string[];
         private _value: any;
-        private _values1: any[];
-        private _values2: any[];
+        private _afterValues: any[];
+        private _beforeValues: any[];
         private _objects: any[];
 
-        constructor(editor: editor.SceneEditor, objects: T[], value: any) {
+        constructor(editor: editor.SceneEditor, objects: T[], value?: any) {
             super(editor);
 
             this._objects = objects;
@@ -19,28 +19,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract setValue(obj: T, value: any): void;
 
+        protected transformValue(obj: T): any {
+
+            return this._value;
+        }
+
         async execute() {
 
             this._objIdList = this._objects.map(obj => obj.getEditorSupport().getId());
 
-            this._values1 = this._objects.map(_ => this._value);
-
-            this._values2 = this._objects.map(obj => this.getValue(obj));
+            this._beforeValues = this._objects.map(obj => this.getValue(obj));
+            
+            this._afterValues = this._objects.map(obj => this.transformValue(obj));
 
             // don't keep the objects reference, we have the ids.
             this._objects = null;
 
-            this.update(this._values1);
+            this.update(this._afterValues);
         }
 
         undo(): void {
 
-            this.update(this._values2);
+            this.update(this._beforeValues);
         }
 
         redo(): void {
 
-            this.update(this._values1);
+            this.update(this._afterValues);
         }
 
         private update(values: any[]) {
