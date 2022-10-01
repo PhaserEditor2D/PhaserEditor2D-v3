@@ -1,0 +1,373 @@
+namespace phasereditor2d.scene.ui.sceneobjects {
+
+    import controls = colibri.ui.controls;
+
+    /**
+     * A base for objects added to the scene.
+     * It doesn't need to be a game object (like an Image), it could be a plain object.
+     * You can take a look to the `SceneGameObjectSection` and the `PlainObjectSection`.
+     */
+    export abstract class SceneObjectSection<T extends ISceneObject> extends editor.properties.BaseSceneSection<T> {
+
+        createEnumField<TValue>(
+            parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked = true, filter?: (v: TValue) => boolean) {
+
+            const getItems = () => property.values
+                .filter(v => !filter || filter(v))
+                .map(value => {
+                    return {
+                        name: property.getValueLabel(value),
+                        value
+                    };
+                });
+
+            const btn = this.createMenuButton(parent, "", getItems, value => {
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                btn.disabled = checkUnlocked && !this.isUnlocked(property);
+
+                btn.textContent = this.flatValues_StringJoinDifferent(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValueLabel(property.getValue(obj)))
+                );
+            });
+
+            return btn;
+        }
+
+        // tslint:disable-next-line:ban-types
+        createFloatField(parent: HTMLElement, property: IProperty<T>) {
+
+            const text = this.createText(parent, false);
+
+            text.addEventListener("change", e => {
+
+                const textValue = text.value;
+
+                let value: number;
+
+                if (textValue.trim() === "") {
+
+                    value = property.defValue;
+
+                } else {
+
+                    value = this.parseNumberExpression(text);
+                }
+
+                if (isNaN(value)) {
+
+                    this.updateWithSelection();
+
+                } else {
+
+                    this.getEditor().getUndoManager().add(
+                        new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                }
+            });
+
+            this.addUpdater(() => {
+
+                text.disabled = !this.isUnlocked(property);
+
+                text.value = this.flatValues_Number(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValue(obj))
+                );
+            });
+
+            return text;
+        }
+
+        createStringField(
+            parent: HTMLElement, property: IProperty<T>,
+            checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
+
+            const text = multiLine ? this.createTextArea(parent, false) : this.createText(parent, false);
+
+            text.addEventListener("change", e => {
+
+                const value = text.value;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                text.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                if (readOnlyOnMultiple) {
+
+                    text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                }
+
+                text.value = this.flatValues_StringOneOrNothing(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValue(obj))
+                );
+            });
+
+            return text;
+        }
+
+        createStringDialogField(
+            parent: HTMLElement, property: IProperty<T>,
+            checkUnlock = true, readOnlyOnMultiple = false) {
+
+            const { text, btn } = this.createTextDialog(parent, property.label, false);
+
+            text.addEventListener("change", e => {
+
+                const value = text.value;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                text.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                if (readOnlyOnMultiple) {
+
+                    text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                }
+
+                text.value = this.flatValues_StringOneOrNothing(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValue(obj))
+                );
+
+                btn.disabled = text.readOnly;
+            });
+
+            return text;
+        }
+
+        createColorField(
+            parent: HTMLElement, property: IProperty<T>, allowAlpha = true,
+            checkUnlock = true, readOnlyOnMultiple = false) {
+
+            const colorElement = this.createColor(parent, false, allowAlpha);
+            const text = colorElement.text;
+            const btn = colorElement.btn;
+
+            text.addEventListener("change", e => {
+
+                const value = text.value;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                text.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                if (readOnlyOnMultiple) {
+
+                    text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                }
+
+                btn.disabled = text.readOnly;
+
+                text.value = this.flatValues_StringOneOrNothing(
+
+                    this.getSelection()
+
+                        .map(obj => property.getValue(obj))
+                );
+
+                btn.style.background = text.value.endsWith("selected)") ? "transparent" : text.value;
+            });
+
+            return colorElement;
+        }
+
+        createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {
+
+            const labelElement = this.createLabel(parent, property.label, PhaserHelp(property.tooltip));
+
+            const checkElement = this.createCheckbox(parent, labelElement);
+
+            checkElement.addEventListener("change", e => {
+
+                const value = checkElement.checked;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                checkElement.disabled = checkUnlock && !this.isUnlocked(property);
+
+                const list = this.getSelection()
+
+                    .map(obj => property.getValue(obj) as boolean)
+
+                    .filter(b => !b);
+
+                checkElement.checked = list.length === 0;
+            });
+
+            return {
+                labelElement,
+                checkElement
+            };
+        }
+
+        createObjectVarField(
+            parent: HTMLElement, property: IProperty<T>,
+            checkUnlock = true, readOnlyOnMultiple = false) {
+
+            const fieldElement = document.createElement("div");
+            fieldElement.classList.add("formGrid");
+            fieldElement.style.gridTemplateColumns = "1fr auto";
+
+            parent.appendChild(fieldElement);
+
+            const text = this.createText(fieldElement, false);
+
+            const getValue = () => this.flatValues_StringOneOrNothing(
+
+                this.getSelection()
+
+                    .map(obj => property.getValue(obj))
+            );
+
+            text.addEventListener("change", e => {
+
+                const value = text.value;
+
+                this.getEditor().getUndoManager().add(
+                    new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+            });
+
+            this.addUpdater(() => {
+
+                text.readOnly = checkUnlock && !this.isUnlocked(property);
+
+                if (readOnlyOnMultiple) {
+
+                    text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
+                }
+
+                text.value = getValue();
+            });
+
+            const btn = this.createButtonDialog({
+                getValue: () => getValue(),
+                createDialogViewer: async (revealValue) => {
+
+                    const sceneEditor = this.getEditor();
+
+                    const viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.editor.ObjectVarExpressionType.Dialog");
+                    viewer.setCellRendererProvider(new editor.outline.SceneEditorOutlineRendererProvider());
+                    viewer.setLabelProvider(new editor.outline.SceneEditorOutlineLabelProvider());
+                    viewer.setStyledLabelProvider(new editor.outline.SceneEditorOutlineStyledLabelProvider());
+                    viewer.setContentProvider(new ObjectVarContentProvider(sceneEditor));
+
+                    const scene = sceneEditor.getScene();
+
+                    const input = [
+                        ...scene.getDisplayListChildren(),
+                        ...scene.getObjectLists().getLists()
+                    ];
+
+                    viewer.setInput(input);
+
+                    const found = scene.findByEditorLabel(revealValue);
+
+                    if (found) {
+
+                        viewer.setSelection([found]);
+                        viewer.reveal(found);
+                    }
+
+                    return viewer;
+                },
+                dialogElementToString: (viewer, value) => {
+
+                    const support = EditorSupport.getEditorSupport(value);
+
+                    if (support) {
+
+                        return support.getLabel();
+                    }
+
+                    return viewer.getLabelProvider().getLabel(value);
+                },
+                dialogTittle: "Select Object",
+                onValueSelected: (value: string) => {
+
+                    text.value = value;
+
+                    this.getEditor().getUndoManager().add(
+                        new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                },
+                updateIconCallback: (iconControl, value) => {
+
+                    const scene = this.getEditor().getScene();
+
+                    const found = scene.findByEditorLabel(value);
+
+                    if (found) {
+
+                        const renderer = new editor.outline.SceneEditorOutlineRendererProvider()
+                            .getCellRenderer(found);
+
+                        const icon = new controls.viewers.ImageFromCellRenderer(found, renderer, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE)
+
+                        iconControl.setIcon(icon);
+
+                    } else {
+
+                        iconControl.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+                    }
+                },
+            });
+
+            fieldElement.appendChild(btn);
+
+            return {
+                textElement: text,
+                btnElement: btn
+            };
+        }
+
+        isUnlocked(...properties: Array<IProperty<T>>) {
+
+            for (const obj of this.getSelection()) {
+
+                for (const property of properties) {
+
+                    const objES = obj.getEditorSupport();
+
+                    const locked = !objES.isUnlockedProperty(property);
+
+                    if (locked) {
+
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+}

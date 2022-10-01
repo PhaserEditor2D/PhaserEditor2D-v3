@@ -2,7 +2,7 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export interface ITransformLikeObject extends ISceneGameObjectLike {
+    export interface ITransformLikeObject extends ISceneGameObject {
 
         x: number;
         y: number;

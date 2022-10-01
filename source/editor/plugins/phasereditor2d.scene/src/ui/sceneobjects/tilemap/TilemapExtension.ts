@@ -26,9 +26,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM[] {
+        buildCreateObjectWithFactoryCodeDOM(args: IBuildPlainObjectFactoryCodeDOMArgs):
+            IBuildPlainObjectFactoryCodeDOMResult {
 
-            const result: code.MethodCallCodeDOM[] = [];
+            const statements: code.MethodCallCodeDOM[] = [];
 
             const tilemap = args.obj as Tilemap;
 
@@ -36,7 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             addTilemapDom.argLiteral(tilemap.getTilemapAssetKey());
 
-            result.push(addTilemapDom);
+            statements.push(addTilemapDom);
 
             for (const tileset of tilemap.tilesets) {
 
@@ -48,10 +49,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     addTilesetImageDom.argLiteral(tileset.image.key);
                 }
 
-                result.push(addTilesetImageDom);
+                statements.push(addTilesetImageDom);
             }
 
-            return result;
+            return {
+                firstStatements: statements,
+                objectFactoryMethodCall: addTilemapDom
+            };
         }
 
         async getAssetsFromObjectData(args: IGetAssetsFromPlainObjectArgs): Promise<any[]> {

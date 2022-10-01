@@ -18,41 +18,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createPropertyXYRow(comp, ArcadeComponent.offset);
 
-            this.createSeparatorForXYGrid(comp, "Circle");
+            this.createSeparatorForXYGrid(comp, "Circular");
 
             {
-                const row = this.createPropertyFloatRow(comp, ArcadeComponent.radius, false);
-                row.style.gridColumn = "span 4";
-                this.addUpdater(() => {
-
-                    const isCircle = this.flatValues_BooleanAnd(
-                        this.getSelection().map(obj => ArcadeComponent.isCircleBody(obj)));
-
-                    row.disabled = row.disabled || !isCircle;
-                });
+                const input = this.createPropertyFloatRow(comp, ArcadeComponent.radius);
+                input.style.gridColumn = "span 4";
+                this.addCheckGeometryUpdater(true, [input]);
             }
 
-            this.createSeparatorForXYGrid(comp, "Rectangle");
+            this.createSeparatorForXYGrid(comp, "Rectangular");
 
-            {
-                const centerElement = this.createPropertyBoolean(comp, ArcadeComponent.center);
-                centerElement.checkElement.style.gridColumn = "span 4";
-
-                const elements = this.createPropertyXYRow(comp, ArcadeComponent.size, false);
-
-                elements.push(centerElement.checkElement);
-
-                this.addUpdater(() => {
-
-                    const isCircle = this.flatValues_BooleanAnd(
-                        this.getSelection().map(obj => ArcadeComponent.isCircleBody(obj)));
-
-                    for (const elem of elements) {
-
-                        elem.disabled = elem.disabled || isCircle;
-                    }
-                });
+            { 
+                const elements = this.createPropertyXYRow(comp, ArcadeComponent.size);
+                this.addCheckGeometryUpdater(false, elements);
             }
+        }
+
+        private addCheckGeometryUpdater(expectingCircle: boolean, elements: HTMLInputElement[]) {
+
+            this.addUpdater(() => {
+
+                const isCircle = this.flatValues_BooleanAnd(
+                    this.getSelection().map(obj => ArcadeComponent.isCircleBody(obj)));
+
+                for (const elem of elements) {
+
+                    elem.disabled = elem.disabled || isCircle !== expectingCircle;
+                }
+            });
         }
 
         canEdit(obj: any, n: number): boolean {

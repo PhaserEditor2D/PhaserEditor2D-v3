@@ -67,9 +67,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const width = obj.frame ? obj.frame.realWidth : obj.width;
             const height = obj.frame ? obj.frame.realHeight : obj.height;
 
-            const center = ArcadeComponent.center.getValue(obj);
-
-            obj.setBodySize(width, height, center);
+            obj.setBodySize(width, height, false);
         }
     }
 
@@ -104,7 +102,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return {
             name: "bodyGeometry",
             label: "Geometry",
-            tooltip: "Select the body geometry. It may change the offset, size, or radius properties.",
+            tooltip: "Select the body's shape.",
             values: [GEOM_CIRCLE, GEOM_RECT],
             getValue: obj => (obj.body["__isCircle"] ? GEOM_CIRCLE : GEOM_RECT),
             setValue: (obj, value) => {
@@ -112,7 +110,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.body["__isCircle"] = value === GEOM_CIRCLE;
                 updateBodyGeom(obj);
             },
-            getValueLabel: value => (value === GEOM_CIRCLE ? "CIRCLE" : "RECTANGLE"),
+            getValueLabel: value => (value === GEOM_CIRCLE ? "CIRCULAR" : "RECTANGULAR"),
             defValue: GEOM_RECT
         };
     }
@@ -128,15 +126,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const body = obj.body;
 
-                const center = ArcadeComponent.center.getValue(obj);
-
                 if (axis === "width") {
 
-                    obj.body.setSize(value, body.height, center);
+                    obj.body.setSize(value, body.height, false);
 
                 } else {
 
-                    obj.body.setSize(body.width, value, center);
+                    obj.body.setSize(body.width, value, false);
                 }
             },
             defValue: 0
@@ -180,7 +176,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static geometry = geometryProperty();
         static radius = SimpleBodyProperty("radius", 64, "Radius", "__radius");
         static offset = SimpleBodyVectorProperty("offset", "Offset", 0);
-        static center = SimpleBodyProperty("center", true, "Center", "__center", "Automatically center the body when resize it.\nAvailable only for the RECTANGLE geometry.");
         static size: IPropertyXY = {
             label: "Size",
             tooltip: "Size",
@@ -235,7 +230,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.mass,
                 ArcadeComponent.geometry,
                 ArcadeComponent.radius,
-                ArcadeComponent.center,
                 ArcadeComponent.size.x,
                 ArcadeComponent.size.y,
                 ArcadeComponent.offset.x,
@@ -250,6 +244,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // float properties
 
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args,
+
+                ArcadeComponent.offset.x,
+                ArcadeComponent.offset.y,
 
                 ArcadeComponent.velocity.x,
                 ArcadeComponent.velocity.y,
@@ -302,71 +299,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // geometry
 
             const obj = this.getObject();
-            const objES = obj.getEditorSupport();
 
-            // the geometry fields cannot be changed on a prefab instance
+            if (ArcadeComponent.isCircleBody(obj)) {
 
-            if (!objES.isPrefabInstance()) {
+                this.buildSetObjectPropertyCodeDOM([ArcadeComponent.radius], (args2) => {
 
-                const body = obj.body;
-
-                let offsetWasModified = false;
-
-                // shape
-
-                if (ArcadeComponent.isCircleBody(obj)) {
-
-                    const dom = new code.MethodCallCodeDOM("setCircle", args.objectVarName);
-
-                    dom.argFloat(ArcadeComponent.radius.getValue(obj));
-
+                    const dom = new code.MethodCallCodeDOM("body.setCircle", args.objectVarName);
+    
+                    const r = ArcadeComponent.radius.getValue(obj);
+    
+                    dom.arg(r);
+    
                     args.statements.push(dom);
+                });
 
-                    offsetWasModified = true;
+            } else {
 
-                } else {
+                this.buildSetObjectPropertyCodeDOM([ArcadeComponent.size.x], (args2) => {
 
-                    let defWidth = 0;
-                    let defHeight = 0;
-
-                    if (obj.frame) {
-
-                        defWidth = obj.frame.realWidth;
-                        defHeight = obj.frame.realHeight;
-                    }
-
-                    if (body.width !== defWidth || body.height !== defHeight) {
-
-                        const dom = new code.MethodCallCodeDOM("setBodySize", args.objectVarName);
-
-                        const center = ArcadeComponent.center.getValue(obj);
-
-                        dom.argFloat(body.width);
-                        dom.argFloat(body.height);
-                        dom.argBool(center);
-
-                        args.statements.push(dom);
-
-                        offsetWasModified = true;
-                    }
-                }
-
-                // offset
-
-                const { x, y } = body.offset;
-
-                if (offsetWasModified || x !== 0 || y !== 0) {
-
-                    const dom = new code.MethodCallCodeDOM("setOffset", args.objectVarName);
-
-                    dom.argFloat(x);
-                    dom.argFloat(y);
-
+                    const dom = new code.MethodCallCodeDOM("body.setSize", args.objectVarName);
+    
+                    const x = ArcadeComponent.size.x.getValue(obj)
+                    const y = ArcadeComponent.size.y.getValue(obj);
+    
+                    dom.arg(x);
+                    dom.arg(y);
+                    dom.argBool(false);
+    
                     args.statements.push(dom);
-                }
+                });
             }
         }
-
 
         private buildPrefabEnableBodyCodeDOM(args: ISetObjectPropertiesCodeDOMArgs) {
 

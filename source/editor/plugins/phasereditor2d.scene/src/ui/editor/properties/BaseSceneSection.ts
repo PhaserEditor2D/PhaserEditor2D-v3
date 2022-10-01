@@ -49,5 +49,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             return this.getEditor().getUndoManager();
         }
+
     }
 }

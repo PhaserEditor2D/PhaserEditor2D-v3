@@ -81,6 +81,64 @@ namespace colibri.ui.controls.properties {
             return text;
         }
 
+        createButtonDialog(args: {
+            getValue: () => any,
+            onValueSelected: (value: string) => void,
+            updateIconCallback?: (iconControl: IconControl, value: any) => void,
+            createDialogViewer: (revealValue: string) => Promise<controls.viewers.TreeViewer>,
+            dialogElementToString: (viewer: colibri.ui.controls.viewers.TreeViewer, value: any) => string,
+            dialogTittle: string
+        }) {
+
+            const iconControl = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+
+            const btn = document.createElement("button");
+            btn.appendChild(iconControl.getCanvas());
+
+            btn.addEventListener("click", async (e) => {
+
+                const value = args.getValue();
+
+                const viewer = await args.createDialogViewer(value);
+
+                const dlg = new controls.dialogs.ViewerDialog(viewer, true);
+
+                dlg.setSize(undefined, window.innerHeight * 2 / 3);
+
+                dlg.create();
+
+                dlg.setTitle(args.dialogTittle);
+
+                dlg.enableButtonOnlyWhenOneElementIsSelected(
+                    dlg.addOpenButton("Select", sel => {
+                        
+                        const obj = sel[0];
+                        
+                        const value = args.dialogElementToString(viewer, obj);
+
+                        args.onValueSelected(value);
+
+                        if (args.updateIconCallback) {
+
+                            args.updateIconCallback(iconControl, value);
+                        }
+                    }));
+
+                dlg.addCancelButton();
+
+                controls.viewers.GridTreeViewerRenderer.expandSections(viewer);
+            });
+
+            if (args.updateIconCallback) {
+
+                const value = args.getValue();
+
+                args.updateIconCallback(iconControl, value);
+            }
+
+            return btn;
+        }
+
         createTextDialog(parent: HTMLElement, dialogTitle: string, readOnly = false) {
 
             const text = this.createTextArea(parent, false);
@@ -243,7 +301,7 @@ namespace colibri.ui.controls.properties {
 
             return text;
         }
-        
+
         private static NEXT_ID = 0;
 
         createCheckbox(parent: HTMLElement, label?: HTMLLabelElement) {

@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export abstract class SceneGameObjectOperation<T extends ISceneGameObjectLike> extends editor.undo.SceneEditorOperation {
+    export abstract class SceneGameObjectOperation<T extends ISceneObject> extends editor.undo.SceneEditorOperation {
 
         private _objIdList: string[];
         private _value: any;
@@ -45,13 +45,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private update(values: any[]) {
 
+            const scene = this._editor.getScene();
+
             for (let i = 0; i < this._objIdList.length; i++) {
 
                 const id = this._objIdList[i];
-                const obj = this._editor.getScene().getByEditorId(id);
+                const obj = scene.getPlainObjectById(id) || scene.getByEditorId(id);
                 const value = values[i];
 
                 if (obj) {
+                    
                     this.setValue(obj, value);
                 }
             }

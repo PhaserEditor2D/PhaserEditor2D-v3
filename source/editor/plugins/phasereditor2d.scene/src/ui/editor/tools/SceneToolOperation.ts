@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             for (const obj of this._objects) {
 
-                const sprite = obj as sceneobjects.ISceneGameObjectLike;
+                const sprite = obj as sceneobjects.ISceneGameObject;
 
                 const value0 = this.getInitialValue(sprite);
                 const value1 = this.getFinalValue(sprite);
@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
             for (const obj of this._objects) {
 
-                const sprite = obj as sceneobjects.ISceneGameObjectLike;
+                const sprite = obj as sceneobjects.ISceneGameObject;
 
                 const id = sprite.getEditorSupport().getId();
 

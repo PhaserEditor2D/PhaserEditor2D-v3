@@ -125,5 +125,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return prop.defValue;
         }
+
+        isUnlockedProperty(prop: IProperty<T>) {
+
+            return true;
+        }
     }
 }
