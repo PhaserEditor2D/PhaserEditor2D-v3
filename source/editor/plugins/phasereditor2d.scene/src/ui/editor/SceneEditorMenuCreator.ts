@@ -33,6 +33,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createTextureMenu());
 
+            menu.addMenu(this.createArcadePhysicsMenu());
+
             menu.addMenu(this.createParentMenu());
 
             menu.addMenu(this.createDepthMenu());
@@ -48,6 +50,20 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createSceneMenu());
 
             menu.addMenu(this.createCompilerMenu());
+        }
+
+        createArcadePhysicsMenu(): controls.Menu {
+           
+            const menu = new controls.Menu("Arcade Physics");
+
+            menu.addCommand(editor.commands.CMD_ARCADE_CENTER_BODY, {
+                text: "Center Body"
+            });
+            menu.addCommand(editor.commands.CMD_ARCADE_RESIZE_TO_OBJECT_BODY, {
+                text: "Resize Body To Object Size"
+            });
+
+            return menu;
         }
 
         private createAddObjectMenu() {
