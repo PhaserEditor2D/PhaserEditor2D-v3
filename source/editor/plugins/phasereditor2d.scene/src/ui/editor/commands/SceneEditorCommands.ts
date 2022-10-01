@@ -48,6 +48,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToWebGL";
     export const CMD_PASTE_IN_PLACE = "phasereditor2d.scene.ui.editor.commands.PasteInPlace";
     export const CMD_ARCADE_CENTER_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeCenterBody";
+    export const CMD_ARCADE_RESIZE_TO_OBJECT_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeResizeBodyToObject";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -133,6 +134,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
         private static registerArcadeCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
+            // center body
+
             manager.add({
                 command: {
                     id: CMD_ARCADE_CENTER_BODY,
@@ -173,6 +176,69 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const editor = args.activeEditor as ui.editor.SceneEditor;
 
                         editor.getUndoManager().add(new ui.sceneobjects.ArcadeCenterBodyOperation(
+                            editor, editor.getSelectedGameObjects()));
+                    },
+                }
+            });
+
+            // resize body
+
+            manager.add({
+                command: {
+                    id: CMD_ARCADE_RESIZE_TO_OBJECT_BODY,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Resize Arcade Body To Object Size",
+                    tooltip: "Resize & center the Arcade body to fill the whole object's size.",
+                },
+                handler: {
+                    testFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        if (isSceneScope(args)) {
+
+                            for (const obj of editor.getSelectedGameObjects()) {
+
+                                const objES = obj.getEditorSupport();
+
+                                if (!objES.hasComponent(ui.sceneobjects.ArcadeComponent)) {
+
+                                    return false;
+                                }
+
+                                if (!objES.isUnlockedProperty(ui.sceneobjects.ArcadeComponent.offset.x)
+                                    || !objES.isUnlockedProperty(ui.sceneobjects.ArcadeComponent.offset.x)) {
+
+                                    return false;
+                                }
+
+                                if (ui.sceneobjects.ArcadeComponent.isCircleBody(obj as any)) {
+
+                                    if (!objES.isUnlockedProperty(ui.sceneobjects.ArcadeComponent.radius)) {
+
+                                        return false;
+                                    }
+
+                                } else {
+
+                                    if (!objES.isUnlockedProperty(ui.sceneobjects.ArcadeComponent.size.x)
+                                        || !objES.isUnlockedProperty(ui.sceneobjects.ArcadeComponent.size.y)) {
+
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+                    },
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        editor.getUndoManager().add(new ui.sceneobjects.ArcadeResizeBodyToObjectOperation(
                             editor, editor.getSelectedGameObjects()));
                     },
                 }

@@ -20,8 +20,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createToolMenuItem(menu, ArcadeBodyTool.ID);
 
             menu.addSeparator();
-            
+
             menu.addCommand(ui.editor.commands.CMD_ARCADE_CENTER_BODY);
+            menu.addCommand(ui.editor.commands.CMD_ARCADE_RESIZE_TO_OBJECT_BODY);
 
             menu.addSeparator();
 
