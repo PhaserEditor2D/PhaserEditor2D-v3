@@ -41,6 +41,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 return props;
             }
+
+            return [];
         }
 
         protected getSizeOrRadiusProperties(obj?: any): IProperty<any>[] {
