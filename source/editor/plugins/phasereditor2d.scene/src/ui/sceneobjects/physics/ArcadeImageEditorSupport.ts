@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(ArcadeImageExtension.getInstance(), obj, scene, true);
 
             this.addComponent(
-                new ArcadeComponent(obj),
+                new ArcadeComponent(obj, true),
             );
         }
     }

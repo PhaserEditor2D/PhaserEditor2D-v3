@@ -851,7 +851,7 @@ namespace phasereditor2d.scene.core.code {
             const statements: CodeDOM[] = [];
             const lazyStatements: CodeDOM[] = [];
 
-            for (const comp of support.getComponents()) {
+            for (const comp of support.getActiveComponents()) {
 
                 comp.buildSetObjectPropertiesCodeDOM({
                     statements,

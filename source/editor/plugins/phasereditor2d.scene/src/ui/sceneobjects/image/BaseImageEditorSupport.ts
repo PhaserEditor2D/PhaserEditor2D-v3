@@ -16,7 +16,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new FlipComponent(obj as unknown as IFlipLikeObject),
                 new VisibleComponent(obj as unknown as IVisibleLikeObject),
                 new AlphaComponent(obj as unknown as IAlphaLikeObject),
-                new TintComponent(obj)
+                new TintComponent(obj),
+                new ArcadeComponent(obj, false)
             );
         }
 

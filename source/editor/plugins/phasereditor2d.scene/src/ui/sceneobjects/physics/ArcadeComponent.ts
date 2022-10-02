@@ -213,7 +213,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return (obj as any).body;
         }
 
-        constructor(obj: ISceneGameObject) {
+        constructor(obj: ISceneGameObject, active: boolean) {
             super(obj, [
                 ArcadeComponent.bodyType,
                 ArcadeComponent.enable,
@@ -254,7 +254,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.size.y,
                 ArcadeComponent.offset.x,
                 ArcadeComponent.offset.y
-            ]);
+            ], active);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {

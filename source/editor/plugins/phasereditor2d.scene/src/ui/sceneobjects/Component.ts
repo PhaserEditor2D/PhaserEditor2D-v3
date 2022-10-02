@@ -19,12 +19,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _obj: T;
         private _properties: Set<IProperty<any>>;
         private _active: boolean;
+        private _activeDefaultValue: boolean;
 
-        constructor(obj: T, properties: Array<IProperty<any>>, active = true) {
+        constructor(obj: T, properties: Array<IProperty<any>>, activeDefaultValue = true) {
 
             this._obj = obj;
             this._properties = new Set(properties);
-            this._active = true;
+            this._active = activeDefaultValue;
+            this._activeDefaultValue = activeDefaultValue;
         }
 
         isActive() {
@@ -201,11 +203,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
 
+        getComponentName() {
+
+            return this.constructor.name;
+        }
+
         writeJSON(ser: core.json.Serializer) {
 
-            for (const prop of this.getProperties()) {
+            ser.write(`${this.getComponentName()}.active`, this._active, this._activeDefaultValue);
 
-                this.writeProperty(ser, prop);
+            if (this._active) {
+
+                for (const prop of this.getProperties()) {
+
+                    this.writeProperty(ser, prop);
+                }
             }
         }
 
@@ -225,15 +237,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(ser: core.json.Serializer) {
 
-            for (const prop of this.getProperties()) {
+            this._active = ser.read(`${this.getComponentName()}.active`, this._activeDefaultValue);
 
-                if (prop.local) {
+            if (this._active) {
 
-                    this.readLocal(ser, prop);
+                for (const prop of this.getProperties()) {
 
-                } else {
+                    if (prop.local) {
 
-                    this.read(ser, prop);
+                        this.readLocal(ser, prop);
+
+                    } else {
+
+                        this.read(ser, prop);
+                    }
                 }
             }
         }
