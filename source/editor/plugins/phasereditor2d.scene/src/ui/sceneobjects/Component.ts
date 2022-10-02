@@ -34,9 +34,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._active;
         }
 
-        setActive() {
+        setActive(active: boolean) {
 
-            this._active = true;
+            this._active = active;
         }
 
         getExplicitTypesForMethodFactory(): string|undefined {

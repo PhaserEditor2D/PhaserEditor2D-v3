@@ -219,7 +219,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ArcadeComponent.getBody(obj).enable = false;
 
-            obj.getEditorSupport().activateComponent(ArcadeComponent);
+            obj.getEditorSupport().setComponentActive(ArcadeComponent, true);
+        }
+
+        static disableBody(obj: ISceneGameObject) {
+
+            const body = ArcadeComponent.getBody(obj);
+            
+            body.world.remove(body);
+
+            obj.getEditorSupport().setComponentActive(ArcadeComponent, false);
         }
 
         constructor(obj: ISceneGameObject, active: boolean) {

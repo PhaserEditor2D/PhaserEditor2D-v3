@@ -60,6 +60,12 @@ namespace phasereditor2d.scene.ui.editor {
                 text: "Add Body"
             });
 
+            menu.addCommand(editor.commands.CMD_ARCADE_DISABLE_BODY, {
+                text: "Remove Body"
+            });
+
+            menu.addSeparator();
+
             menu.addCommand(editor.commands.CMD_ARCADE_CENTER_BODY, {
                 text: "Center Body"
             });

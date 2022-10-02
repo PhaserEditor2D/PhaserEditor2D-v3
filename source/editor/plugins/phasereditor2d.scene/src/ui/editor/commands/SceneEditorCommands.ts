@@ -48,6 +48,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToWebGL";
     export const CMD_PASTE_IN_PLACE = "phasereditor2d.scene.ui.editor.commands.PasteInPlace";
     export const CMD_ARCADE_ENABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeEnableBody";
+    export const CMD_ARCADE_DISABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeDisableBody";
     export const CMD_ARCADE_CENTER_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeCenterBody";
     export const CMD_ARCADE_RESIZE_TO_OBJECT_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeResizeBodyToObject";
 
@@ -142,7 +143,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     id: CMD_ARCADE_ENABLE_BODY,
                     category: CAT_SCENE_EDITOR,
                     name: "Add Arcade Physics Body",
-                    tooltip: "Adds an Arcade physics body to the selected objects.",
+                    tooltip: "Add an Arcade physics body to the selected objects.",
                 },
                 handler: {
                     testFunc: args => {
@@ -170,15 +171,51 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const editor = args.activeEditor as ui.editor.SceneEditor;
 
-                        // editor.getUndoManager().add(new ui.sceneobjects.ArcadeCenterBodyOperation(
-                        //     editor, editor.getSelectedGameObjects()));
+                        editor.getUndoManager().add(
+                            new ui.sceneobjects.EnableArcadeBodyOperation(editor, true));
+                    },
+                }
+            });
 
-                        for(const obj of editor.getSelectedGameObjects()) {
+            // disable body
 
-                            ui.sceneobjects.ArcadeComponent.enableBody(obj);
+            manager.add({
+                command: {
+                    id: CMD_ARCADE_DISABLE_BODY,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Remove Arcade Physics Body",
+                    tooltip: "Remove the Arcade physics body from the selected objects.",
+                },
+                handler: {
+                    testFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        if (isSceneScope(args)) {
+
+                            for (const obj of editor.getSelectedGameObjects()) {
+
+                                const objES = obj.getEditorSupport();
+
+                                if (!objES.hasComponent(ui.sceneobjects.ArcadeComponent)
+                                    || obj instanceof ui.sceneobjects.ArcadeImage
+                                    || obj instanceof ui.sceneobjects.ArcadeSprite) {
+
+                                    return false;
+                                }
+                            }
+
+                            return true;
                         }
 
-                        editor.setSelection(editor.getSelection());
+                        return false;
+                    },
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        editor.getUndoManager().add(
+                            new ui.sceneobjects.EnableArcadeBodyOperation(editor, false));
                     },
                 }
             });

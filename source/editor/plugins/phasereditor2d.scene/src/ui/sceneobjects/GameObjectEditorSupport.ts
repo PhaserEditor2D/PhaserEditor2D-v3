@@ -353,11 +353,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return { width: obj.width, height: obj.height };
         }
 
-        activateComponent(ctr: Function) {
+        setComponentActive(ctr: Function, active: boolean) {
 
             const comp = this._componentMap.get(ctr);
 
-            comp.setActive();
+            comp.setActive(active);
         }
 
         // tslint:disable-next-line:ban-types
