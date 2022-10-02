@@ -33,6 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new OriginComponent(obj),
                 new VisibleComponent(obj),
                 new AlphaSingleComponent(obj),
+                new ArcadeComponent(obj, false),
                 new ShapeComponent(obj)
             );
         }

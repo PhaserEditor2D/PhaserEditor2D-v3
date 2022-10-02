@@ -6,10 +6,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: Container, scene: Scene) {
             super(ContainerExtension.getInstance(), obj, scene);
 
-            this.addComponent(new TransformComponent(obj));
-            this.addComponent(new VisibleComponent(obj));
-            this.addComponent(new AlphaSingleComponent(obj));
-            this.addComponent(new ChildrenComponent(obj));
+            this.addComponent(
+                new TransformComponent(obj),
+                new VisibleComponent(obj),
+                new AlphaSingleComponent(obj),
+                new ChildrenComponent(obj),
+                new ArcadeComponent(obj, false));
         }
 
         computeSize(): { width: any; height: any; } {
