@@ -18,11 +18,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _obj: T;
         private _properties: Set<IProperty<any>>;
+        private _active: boolean;
 
-        constructor(obj: T, properties: Array<IProperty<any>>) {
+        constructor(obj: T, properties: Array<IProperty<any>>, active = true) {
 
             this._obj = obj;
             this._properties = new Set(properties);
+            this._active = true;
+        }
+
+        isActive() {
+
+            return this._active;
         }
 
         getProperties() {

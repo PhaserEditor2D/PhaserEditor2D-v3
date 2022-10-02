@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ArcadeImageEditorSupport extends BaseImageEditorSupport<ArcadeObject> {
+    export class ArcadeImageEditorSupport extends BaseImageEditorSupport<ISceneGameObject> {
 
         constructor(obj: ArcadeImage, scene: Scene) {
             super(ArcadeImageExtension.getInstance(), obj, scene, true);

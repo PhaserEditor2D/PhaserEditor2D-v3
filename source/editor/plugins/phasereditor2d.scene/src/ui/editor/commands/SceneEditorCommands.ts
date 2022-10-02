@@ -140,8 +140,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_ARCADE_CENTER_BODY,
                     category: CAT_SCENE_EDITOR,
-                    name: "Center Arcade Body",
-                    tooltip: "Center the Arcade body of the selected objects.",
+                    name: "Center Arcade Physics Body",
+                    tooltip: "Center the Arcade Physics Body of the selected objects.",
                 },
                 handler: {
                     testFunc: args => {
@@ -187,8 +187,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_ARCADE_RESIZE_TO_OBJECT_BODY,
                     category: CAT_SCENE_EDITOR,
-                    name: "Resize Arcade Body To Object Size",
-                    tooltip: "Resize & center the Arcade body to fill the whole object's size.",
+                    name: "Resize Arcade Physics Body To Object Size",
+                    tooltip: "Resize & center the Arcade Physics Body to fill the whole object's size.",
                 },
                 handler: {
                     testFunc: args => {
@@ -1537,7 +1537,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_EDIT_ARCADE_BODY,
-                    name: "Arcade Body Tool",
+                    name: "Arcade Physics Body Tool",
                     tooltip: "Edit body of selected objects.",
                     category: CAT_SCENE_EDITOR
                 },

@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ArcadeResizeBodyToObjectOperation extends SceneGameObjectOperation<ISceneGameObject> {
 
-        transformValue(obj: ArcadeObject): any {
+        transformValue(obj: Sprite): any {
 
             let offsetX: number;
             let offsetY: number;
@@ -29,21 +29,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return { offsetX, offsetY, width, height, radius, isCircle };
         }
 
-        getValue(obj: ArcadeObject) {
+        getValue(obj: ISceneGameObject) {
+
+            const body = ArcadeComponent.getBody(obj);
 
             return {
-                offsetX: obj.body.offset.x,
-                offsetY: obj.body.offset.y,
-                width: obj.body.width,
-                height: obj.body.height,
+                offsetX: body.offset.x,
+                offsetY: body.offset.y,
+                width: body.width,
+                height: body.height,
                 radius: ArcadeComponent.radius.getValue(obj),
                 isCircle: ArcadeComponent.isCircleBody(obj)
             };
         }
 
-        setValue(obj: ArcadeObject, value: any): void {
+        setValue(obj: ISceneGameObject, value: any): void {
 
-            obj.body.setOffset(value.offsetX, value.offsetY);
+            const body = ArcadeComponent.getBody(obj);
+
+            body.setOffset(value.offsetX, value.offsetY);
 
             if (value.isCircle) {
 

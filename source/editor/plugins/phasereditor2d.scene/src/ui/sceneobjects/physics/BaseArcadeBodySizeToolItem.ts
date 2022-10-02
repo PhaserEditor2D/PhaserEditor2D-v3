@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
-        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: ArcadeObject, fx: number, fy: number, removeRotation = false) {
+        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number, removeRotation = false) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
 
@@ -35,8 +35,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
 
-            const x = sprite.body.offset.x - displayOriginX + fx * width;
-            const y = sprite.body.offset.y - displayOriginY + fy * height;
+            const body = ArcadeComponent.getBody(sprite);
+            const x = body.offset.x - displayOriginX + fx * width;
+            const y = body.offset.y - displayOriginY + fy * height;
 
             const tx = sprite.getWorldTransformMatrix();
 

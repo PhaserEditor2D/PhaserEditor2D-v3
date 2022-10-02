@@ -9,20 +9,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(toolArgs);
         }
 
-        getInitialValue(obj: ArcadeObject): number {
+        getInitialValue(obj: ISceneGameObject): number {
 
             return this.getInitialRadius(obj);
         }
     
-        getFinalValue(obj: ArcadeObject): number {
+        getFinalValue(obj: ISceneGameObject): number {
 
             return ArcadeComponent.radius.getValue(obj);
         }
 
-        setValue(obj: ArcadeObject, value: number) {
+        setValue(obj: ISceneGameObject, value: number) {
 
             ArcadeComponent.radius.setValue(obj, value);
-            obj.body.setCircle(value);
+            ArcadeComponent.getBody(obj).setCircle(value);
         }
     }
 }

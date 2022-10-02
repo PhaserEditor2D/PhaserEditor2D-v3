@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const sections = [ArcadeGeometrySection.ID];
 
-            const props: Set<IProperty<ArcadeObject>> = new Set();
+            const props: Set<IProperty<ISceneGameObject>> = new Set();
 
             for (const obj of args.objects) {
 
@@ -85,13 +85,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                this.renderObj(args, obj as ArcadeObject);
+                this.renderObj(args, obj as Sprite);
             }
 
             super.render(args);
         }
 
-        private renderObj(args: editor.tools.ISceneToolRenderArgs, obj: ArcadeObject) {
+        private renderObj(args: editor.tools.ISceneToolRenderArgs, obj: Sprite) {
 
             const ctx = args.canvasContext;
 
@@ -109,9 +109,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.restore();
         }
 
-        private renderRect(obj: ArcadeObject, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
+        private renderRect(obj: Sprite, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
 
-            const body = obj.body;
+            const body = ArcadeComponent.getBody(obj);
 
             const p = new Phaser.Math.Vector2();
 
@@ -145,9 +145,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.strokeRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
         }
 
-        private renderCircle(obj: ArcadeObject, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
+        private renderCircle(obj: Sprite, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
 
-            const body = obj.body;
+            const body = ArcadeComponent.getBody(obj);
 
             const p = new Phaser.Math.Vector2();
 

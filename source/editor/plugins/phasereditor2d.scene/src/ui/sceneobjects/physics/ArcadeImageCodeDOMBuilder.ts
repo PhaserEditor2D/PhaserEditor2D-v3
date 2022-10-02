@@ -2,10 +2,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class ArcadeObjectCodeDOMBuilder extends BaseImageCodeDOMBuilder {
+    export class ISceneGameObjectCodeDOMBuilder extends BaseImageCodeDOMBuilder {
 
-        constructor(arcadeObjectType: "image"|"sprite") {
-            super(arcadeObjectType, "physics.add");
+        constructor(ISceneGameObjectType: "image"|"sprite") {
+            super(ISceneGameObjectType, "physics.add");
         }
 
         buildPrefabExtraTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs): void {
