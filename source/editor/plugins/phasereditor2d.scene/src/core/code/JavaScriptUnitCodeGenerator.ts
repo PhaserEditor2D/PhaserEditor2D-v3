@@ -13,6 +13,11 @@ namespace phasereditor2d.scene.core.code {
             this._generateImports = true;
         }
 
+        isTypeScript() {
+
+            return false;
+        }
+
         getUnit() {
 
             return this._unit;
@@ -362,6 +367,11 @@ namespace phasereditor2d.scene.core.code {
 
                 if (call.isDeclareReturnToVar()) {
 
+                    if (!this.isTypeScript() && call.getExplicitType()) {
+
+                        this.line(`/** @type {${call.getExplicitType()}} */`);
+                    }
+
                     this.append("const ");
                 }
 
@@ -392,7 +402,17 @@ namespace phasereditor2d.scene.core.code {
 
             this.join(args);
 
-            this.line(");");
+            if (this.isTypeScript()
+                && call.getExplicitType()
+                && call.isDeclareReturnToVar()
+                && call.getReturnToVar()) {
+
+                this.line(`) as ${call.getExplicitType()};`);
+
+            } else {
+
+                this.line(");");
+            }
         }
 
         private generateRawCode(raw: RawCodeDOM) {

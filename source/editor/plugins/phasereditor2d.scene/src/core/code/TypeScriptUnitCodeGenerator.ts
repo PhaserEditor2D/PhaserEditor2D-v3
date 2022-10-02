@@ -6,6 +6,11 @@ namespace phasereditor2d.scene.core.code {
             super(unit);
         }
 
+        isTypeScript(): boolean {
+            
+            return true;
+        }
+
         protected generateExtraUnitCode(): void {
             
             for(const codeDom of this.getUnit().getTypeScriptExtraDefs()) {

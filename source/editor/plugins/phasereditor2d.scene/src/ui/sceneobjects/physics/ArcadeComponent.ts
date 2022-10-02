@@ -213,6 +213,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return (obj as any).body;
         }
 
+        static enableBody(obj: ISceneGameObject) {
+
+            obj.scene.physics.add.existing(obj);
+
+            ArcadeComponent.getBody(obj).enable = false;
+
+            obj.getEditorSupport().activateComponent(ArcadeComponent);
+        }
+
         constructor(obj: ISceneGameObject, active: boolean) {
             super(obj, [
                 ArcadeComponent.bodyType,
@@ -257,9 +266,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ], active);
         }
 
+        readJSON(ser: core.json.Serializer): void {
+
+            const active = ser.read(`${this.getComponentName()}.active`, false);
+
+            if (active) {
+
+                ArcadeComponent.enableBody(this.getObject());
+            }
+
+            super.readJSON(ser);
+        }
+
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
-            this.buildPrefabEnableBodyCodeDOM(args);
+            this.buildEnableBodyCodeDOM(args);
 
             // float properties
 
@@ -303,6 +324,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.maxAngular
             );
 
+
             // boolean properties
 
             this.buildSetObjectPropertyCodeDOM_BooleanProperty(args,
@@ -319,10 +341,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // geometry
 
             const obj = this.getObject();
+            const objES = this.getEditorSupport();
 
             if (ArcadeComponent.isCircleBody(obj)) {
 
+                let generateSetCircle = { value: false };
+
                 this.buildSetObjectPropertyCodeDOM([ArcadeComponent.radius], (args2) => {
+
+                    generateSetCircle.value = true;
+                });
+
+                if (!generateSetCircle.value && !objES.isPrefabInstance()) {
+
+                    // we should force the setCircle() call.
+                    generateSetCircle.value = true;
+                }
+
+                if (generateSetCircle.value) {
 
                     const dom = new code.MethodCallCodeDOM("body.setCircle", args.objectVarName);
 
@@ -331,7 +367,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     dom.arg(r);
 
                     args.statements.push(dom);
-                });
+                }
 
             } else {
 
@@ -351,26 +387,66 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        private buildPrefabEnableBodyCodeDOM(args: ISetObjectPropertiesCodeDOMArgs) {
+        getExplicitTypesForMethodFactory() {
 
-            const objES = this.getEditorSupport();
+            const obj = this.getObject();
+            const objES = obj.getEditorSupport();
 
-            if (!objES.isScenePrefabObject()) {
+            if (obj instanceof ArcadeImage || obj instanceof ArcadeSprite) {
 
-                return;
+            } else {
+
+                if (objES.isUnlockedProperty(ArcadeComponent.bodyType)) {
+
+                    const baseType = objES.getExtension().getPhaserTypeName();
+
+                    const bodyType = ArcadeComponent.isStaticBody(obj) ? "StaticBody" : "Body";
+
+                    return `${baseType} & { body: Phaser.Physics.Arcade.${bodyType} }`;
+                }
             }
 
-            if (objES.isUnlockedProperty(ArcadeComponent.bodyType)) {
+            return undefined;
+        }
 
-                const body = args.statements;
+        private buildEnableBodyCodeDOM(args: ISetObjectPropertiesCodeDOMArgs) {
 
-                const stmt = new code.MethodCallCodeDOM("existing", "scene.physics.add");
+            const obj = this.getObject();
+            const objES = obj.getEditorSupport();
 
-                stmt.arg("this");
+            if (obj instanceof ArcadeImage || obj instanceof ArcadeSprite) {
 
-                stmt.argBool(ArcadeComponent.isStaticBody(this.getObject()));
+                if (objES.isScenePrefabObject()) {
 
-                body.push(stmt);
+                    if (objES.isUnlockedProperty(ArcadeComponent.bodyType)) {
+
+                        const body = args.statements;
+
+                        const stmt = new code.MethodCallCodeDOM("existing", "scene.physics.add");
+
+                        stmt.arg("this");
+
+                        stmt.argBool(ArcadeComponent.isStaticBody(this.getObject()));
+
+                        body.push(stmt);
+                    }
+                }
+
+            } else {
+
+                if (objES.isUnlockedProperty(ArcadeComponent.bodyType)) {
+
+                    const body = args.statements;
+
+                    const ctx = objES.getScene().isPrefabSceneType() ? "scene" : "this";
+                    const stmt = new code.MethodCallCodeDOM("existing", `${ctx}.physics.add`);
+
+                    stmt.arg(args.objectVarName);
+
+                    stmt.argBool(ArcadeComponent.isStaticBody(this.getObject()));
+
+                    body.push(stmt);
+                }
             }
         }
     }

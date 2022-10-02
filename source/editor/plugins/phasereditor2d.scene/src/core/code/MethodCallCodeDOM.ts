@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.core.code {
         private _declareReturnToVar: boolean;
         private _declareReturnToField: boolean;
         private _isConstructor: boolean;
+        private _explicitType: string;
 
         constructor(methodName: string, contextExpr = "") {
             super();
@@ -42,15 +43,28 @@ namespace phasereditor2d.scene.core.code {
         }
 
         isDeclareReturnToVar() {
+
             return this._declareReturnToVar;
         }
 
         setDeclareReturnToField(declareReturnToField: boolean) {
+
             this._declareReturnToField = declareReturnToField;
         }
 
         isDeclareReturnToField() {
+
             return this._declareReturnToField;
+        }
+
+        setExplicitType(explicitType: string) {
+
+            this._explicitType = explicitType;
+        }
+
+        getExplicitType() {
+
+            return this._explicitType;
         }
 
         arg(expr: string) {

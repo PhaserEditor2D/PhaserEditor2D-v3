@@ -34,6 +34,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._active;
         }
 
+        setActive() {
+
+            this._active = true;
+        }
+
+        getExplicitTypesForMethodFactory(): string|undefined {
+
+            return undefined;
+        }
+
         getProperties() {
 
             return this._properties;
@@ -165,7 +175,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             codeDomBuilder({ prop, fieldCodeName, value });
                         }
                     }
-
                 }
 
                 if (local) {
