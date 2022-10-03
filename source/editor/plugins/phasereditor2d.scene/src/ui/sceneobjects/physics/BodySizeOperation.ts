@@ -9,12 +9,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(toolArgs);
         }
 
-        getInitialValue(obj: ArcadeObject): { x: number; y: number; } {
+        getInitialValue(obj: ISceneGameObject): { x: number; y: number; } {
 
             return this.getInitialSize(obj);
         }
     
-        getFinalValue(obj: ArcadeObject): { x: number; y: number; } {
+        getFinalValue(obj: ISceneGameObject): { x: number; y: number; } {
 
             return {
                 x: ArcadeComponent.size.x.getValue(obj),
@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             };
         }
 
-        setValue(obj: ArcadeObject, value: { x: number; y: number; }) {
+        setValue(obj: ISceneGameObject, value: { x: number; y: number; }) {
 
             ArcadeComponent.size.x.setValue(obj, value.x);
             ArcadeComponent.size.y.setValue(obj, value.y);

@@ -18,9 +18,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        getCodeDOMBuilder(): ArcadeObjectCodeDOMBuilder {
+        getCodeDOMBuilder(): ISceneGameObjectCodeDOMBuilder {
 
-            return new ArcadeObjectCodeDOMBuilder("sprite");
+            return new ISceneGameObjectCodeDOMBuilder("sprite");
         }
 
         protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {

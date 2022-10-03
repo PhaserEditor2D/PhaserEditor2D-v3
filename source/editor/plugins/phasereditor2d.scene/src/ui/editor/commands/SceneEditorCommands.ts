@@ -47,6 +47,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_CANVAS = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToCanvas";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToWebGL";
     export const CMD_PASTE_IN_PLACE = "phasereditor2d.scene.ui.editor.commands.PasteInPlace";
+    export const CMD_ARCADE_ENABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeEnableBody";
+    export const CMD_ARCADE_DISABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeDisableBody";
     export const CMD_ARCADE_CENTER_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeCenterBody";
     export const CMD_ARCADE_RESIZE_TO_OBJECT_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeResizeBodyToObject";
 
@@ -134,14 +136,98 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
         private static registerArcadeCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
+            // enable body
+
+            manager.add({
+                command: {
+                    id: CMD_ARCADE_ENABLE_BODY,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Add Arcade Physics Body",
+                    tooltip: "Add an Arcade physics body to the selected objects.",
+                },
+                handler: {
+                    testFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        if (isSceneScope(args)) {
+
+                            for (const obj of editor.getSelectedGameObjects()) {
+
+                                const objES = obj.getEditorSupport();
+
+                                if (objES.hasComponent(ui.sceneobjects.ArcadeComponent)) {
+
+                                    return false;
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+                    },
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        editor.getUndoManager().add(
+                            new ui.sceneobjects.EnableArcadeBodyOperation(editor, true));
+                    },
+                }
+            });
+
+            // disable body
+
+            manager.add({
+                command: {
+                    id: CMD_ARCADE_DISABLE_BODY,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Remove Arcade Physics Body",
+                    tooltip: "Remove the Arcade physics body from the selected objects.",
+                },
+                handler: {
+                    testFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        if (isSceneScope(args)) {
+
+                            for (const obj of editor.getSelectedGameObjects()) {
+
+                                const objES = obj.getEditorSupport();
+
+                                if (!objES.hasComponent(ui.sceneobjects.ArcadeComponent)
+                                    || obj instanceof ui.sceneobjects.ArcadeImage
+                                    || obj instanceof ui.sceneobjects.ArcadeSprite) {
+
+                                    return false;
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+                    },
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as ui.editor.SceneEditor;
+
+                        editor.getUndoManager().add(
+                            new ui.sceneobjects.EnableArcadeBodyOperation(editor, false));
+                    },
+                }
+            });
+
             // center body
 
             manager.add({
                 command: {
                     id: CMD_ARCADE_CENTER_BODY,
                     category: CAT_SCENE_EDITOR,
-                    name: "Center Arcade Body",
-                    tooltip: "Center the Arcade body of the selected objects.",
+                    name: "Center Arcade Physics Body",
+                    tooltip: "Center the Arcade Physics Body of the selected objects.",
                 },
                 handler: {
                     testFunc: args => {
@@ -187,8 +273,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_ARCADE_RESIZE_TO_OBJECT_BODY,
                     category: CAT_SCENE_EDITOR,
-                    name: "Resize Arcade Body To Object Size",
-                    tooltip: "Resize & center the Arcade body to fill the whole object's size.",
+                    name: "Resize Arcade Physics Body To Object Size",
+                    tooltip: "Resize & center the Arcade Physics Body to fill the whole object's size.",
                 },
                 handler: {
                     testFunc: args => {
@@ -1537,7 +1623,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_EDIT_ARCADE_BODY,
-                    name: "Arcade Body Tool",
+                    name: "Arcade Physics Body Tool",
                     tooltip: "Edit body of selected objects.",
                     category: CAT_SCENE_EDITOR
                 },

@@ -2,37 +2,52 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ArcadeCenterBodyOperation extends SceneGameObjectOperation<ISceneGameObject> {
 
-        transformValue(obj: ArcadeObject): any {
+        transformValue(obj: ISceneGameObject): any {
 
-            const body = obj.body;
+            const objES = obj.getEditorSupport();
+
+            const body = ArcadeComponent.getBody(obj);
 
             let x: number;
             let y: number;
+
+            const { width, height } = objES.computeSize();
 
             if (ArcadeComponent.isCircleBody(obj)) {
 
                 const r = ArcadeComponent.radius.getValue(obj);
 
-                x = obj.width / 2 - r;
-                y = obj.height / 2 - r;
+                x = width / 2 - r;
+                y = height / 2 - r;
 
             } else {
 
-                x = (obj.width - body.width) / 2;
-                y = (obj.height - body.height) / 2;
+                x = (width - body.width) / 2;
+                y = (height - body.height) / 2;
+            }
+
+            if (obj instanceof Container) {
+
+                const origin = objES.computeDisplayOrigin();
+                x -= origin.displayOriginX;
+                y -= origin.displayOriginY;
             }
 
             return { x, y };
         }
 
-        getValue(obj: ArcadeObject) {
+        getValue(obj: ISceneGameObject) {
 
-            return { ...obj.body.offset };
+            const body = ArcadeComponent.getBody(obj);
+
+            return { ...body.offset };
         }
 
-        setValue(obj: ArcadeObject, value: any): void {
+        setValue(obj: ISceneGameObject, value: any): void {
 
-            obj.body.setOffset(value.x, value.y);
+            const body = ArcadeComponent.getBody(obj);
+
+            body.setOffset(value.x, value.y);
         }
     }
 }

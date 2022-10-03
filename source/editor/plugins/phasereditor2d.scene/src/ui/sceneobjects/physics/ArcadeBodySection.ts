@@ -2,10 +2,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class ArcadeBodySection extends SceneGameObjectSection<ArcadeObject> {
+    export class ArcadeBodySection extends SceneGameObjectSection<ISceneGameObject> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.ArcadeSection", "Arcade Body");
+            super(page, "phasereditor2d.scene.ui.sceneobjects.ArcadeSection", "Arcade Physics Body");
         }
 
         createForm(parent: HTMLDivElement) {

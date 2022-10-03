@@ -2,12 +2,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class ArcadeGeometrySection extends SceneGameObjectSection<ArcadeObject> {
+    export class ArcadeGeometrySection extends SceneGameObjectSection<ISceneGameObject> {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.ArcadeGeometrySection";
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, ArcadeGeometrySection.ID, "Arcade Body Geometry");
+            super(page, ArcadeGeometrySection.ID, "Arcade Physics Body Geometry");
         }
 
         getSectionHelpPath() {

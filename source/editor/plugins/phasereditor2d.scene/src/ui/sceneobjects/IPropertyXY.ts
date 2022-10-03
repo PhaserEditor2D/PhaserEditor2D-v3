@@ -4,6 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         label: string;
         tooltip?: string;
+        setterName?:string;
         x: IProperty<any>;
         y: IProperty<any>;
     }

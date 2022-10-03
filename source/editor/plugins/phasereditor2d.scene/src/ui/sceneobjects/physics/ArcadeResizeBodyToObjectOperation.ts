@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ArcadeResizeBodyToObjectOperation extends SceneGameObjectOperation<ISceneGameObject> {
 
-        transformValue(obj: ArcadeObject): any {
+        transformValue(obj: Sprite): any {
 
             let offsetX: number;
             let offsetY: number;
@@ -12,38 +12,53 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const isCircle = ArcadeComponent.isCircleBody(obj);
 
+            const objES = obj.getEditorSupport();
+
+            const objSize = objES.computeSize();
+
             if (isCircle) {
 
-                radius = obj.width / 2;
-                offsetX = obj.width / 2 - radius;
-                offsetY = obj.height / 2 - radius;
+                radius = objSize.width / 2;
+                offsetX = objSize.width / 2 - radius;
+                offsetY = objSize.height / 2 - radius;
 
             } else {
 
                 offsetX = 0;
                 offsetY = 0;
-                width = obj.width;
-                height = obj.height;
+                width = objSize.width;
+                height = objSize.height;
+            }
+
+            if (obj instanceof Container) {
+
+                const origin = objES.computeDisplayOrigin();
+                offsetX -= origin.displayOriginX;
+                offsetY -= origin.displayOriginY;
             }
 
             return { offsetX, offsetY, width, height, radius, isCircle };
         }
 
-        getValue(obj: ArcadeObject) {
+        getValue(obj: ISceneGameObject) {
+
+            const body = ArcadeComponent.getBody(obj);
 
             return {
-                offsetX: obj.body.offset.x,
-                offsetY: obj.body.offset.y,
-                width: obj.body.width,
-                height: obj.body.height,
+                offsetX: body.offset.x,
+                offsetY: body.offset.y,
+                width: body.width,
+                height: body.height,
                 radius: ArcadeComponent.radius.getValue(obj),
                 isCircle: ArcadeComponent.isCircleBody(obj)
             };
         }
 
-        setValue(obj: ArcadeObject, value: any): void {
+        setValue(obj: ISceneGameObject, value: any): void {
 
-            obj.body.setOffset(value.offsetX, value.offsetY);
+            const body = ArcadeComponent.getBody(obj);
+
+            body.setOffset(value.offsetX, value.offsetY);
 
             if (value.isCircle) {
 

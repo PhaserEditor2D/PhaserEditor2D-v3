@@ -13,6 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new AlphaComponent(obj),
                 new TintComponent(obj),
                 new TextContentComponent(obj),
+                new ArcadeComponent(obj, false),
                 new BitmapTextComponent(obj)
             );
         }

@@ -45,7 +45,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEdit(obj: any, n: number): boolean {
-            return GameObjectEditorSupport.getObjectComponent(obj, TransformComponent) !== null && n > 0;
+
+            return GameObjectEditorSupport.hasObjectComponent(obj, TransformComponent) && n > 0;
         }
 
         canEditNumber(n: number): boolean {

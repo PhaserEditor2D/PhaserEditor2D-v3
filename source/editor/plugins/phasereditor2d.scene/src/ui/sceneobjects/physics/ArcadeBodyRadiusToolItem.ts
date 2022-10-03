@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of objects) {
 
-                if (!ArcadeComponent.isCircleBody(obj as ArcadeObject)) {
+                if (!ArcadeComponent.isCircleBody(obj as ISceneGameObject)) {
 
                     return false;
                 }

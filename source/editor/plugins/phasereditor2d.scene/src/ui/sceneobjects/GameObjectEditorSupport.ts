@@ -160,7 +160,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const comp of this._componentMap.values()) {
 
-                if (comp.getProperties().has(property)) {
+                if (comp.isActive() && comp.getProperties().has(property)) {
 
                     return true;
                 }
@@ -267,7 +267,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             GameObjectEditorSupport.buildPrefabDependencyHash(args.builder, this._prefabId);
 
-            for (const comp of this.getComponents()) {
+            for (const comp of this.getActiveComponents()) {
 
                 comp.buildDependenciesHash(args);
             }
@@ -353,21 +353,47 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return { width: obj.width, height: obj.height };
         }
 
+        setComponentActive(ctr: Function, active: boolean) {
+
+            const comp = this._componentMap.get(ctr);
+
+            comp.setActive(active);
+        }
+
         // tslint:disable-next-line:ban-types
         getComponent(ctr: Function): Component<any> {
 
-            return this._componentMap.get(ctr);
+            const comp = this._componentMap.get(ctr);
+
+            if (comp && comp.isActive()) {
+
+                return comp;
+            }
+
+            return undefined;
         }
 
         // tslint:disable-next-line:ban-types
         hasComponent(ctr: Function) {
 
-            return this._componentMap.has(ctr);
+            const comp = this._componentMap.get(ctr);
+
+            if (comp) {
+
+                return comp.isActive();
+            }
+
+            return false;
         }
 
         getComponents() {
 
             return this._componentMap.values();
+        }
+
+        getActiveComponents() {
+
+            return [...this._componentMap.values()].filter(comp => comp.isActive());
         }
 
         // tslint:disable-next-line:ban-types

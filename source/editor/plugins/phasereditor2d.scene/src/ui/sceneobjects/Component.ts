@@ -18,11 +18,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _obj: T;
         private _properties: Set<IProperty<any>>;
+        private _active: boolean;
+        private _activeDefaultValue: boolean;
 
-        constructor(obj: T, properties: Array<IProperty<any>>) {
+        constructor(obj: T, properties: Array<IProperty<any>>, activeDefaultValue = true) {
 
             this._obj = obj;
             this._properties = new Set(properties);
+            this._active = activeDefaultValue;
+            this._activeDefaultValue = activeDefaultValue;
+        }
+
+        isActive() {
+
+            return this._active;
+        }
+
+        setActive(active: boolean) {
+
+            this._active = active;
+        }
+
+        getExplicitTypesForMethodFactory(): string | undefined {
+
+            return undefined;
         }
 
         getProperties() {
@@ -156,7 +175,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             codeDomBuilder({ prop, fieldCodeName, value });
                         }
                     }
-
                 }
 
                 if (local) {
@@ -169,6 +187,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
                 }
             }
+        }
+
+        buildSetObjectPropertyXYCodeDOM(
+            propXY: IPropertyXY,
+            codeDomBuilder: (builderArgs: { propXY: IPropertyXY, x: any, y: any }) => void) {
+
+            const obj = this.getObject();
+
+            const x = propXY.x.getValue(obj);
+            const y = propXY.y.getValue(obj);
+
+            let gen = false;
+
+            if (this.getEditorSupport().isPrefabInstance()) {
+
+                gen = this.getEditorSupport().isUnlockedPropertyXY(propXY);
+
+            } else {
+
+                const defaultX = this.getPropertyDefaultValue(propXY.x);
+                const defaultY = this.getPropertyDefaultValue(propXY.y);
+
+                gen = x !== defaultX || y !== defaultY;
+            }
+
+            if (gen) {
+
+                codeDomBuilder({ propXY, x, y });
+            }
+        }
+
+        buildSetObjectPropertyXYCodeDOM_FloatXY(args: ISetObjectPropertiesCodeDOMArgs,
+            propXY: IPropertyXY) {
+
+            this.buildSetObjectPropertyXYCodeDOM(propXY, args2 => {
+
+                const dom = new code.MethodCallCodeDOM(propXY.setterName, args.objectVarName);
+
+                dom.argFloat(args2.x);
+                dom.argFloat(args2.y);
+
+                args.statements.push(dom);
+            });
         }
 
         buildSetObjectPropertyCodeDOM_FloatProperty(
@@ -194,11 +255,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void;
 
+        getComponentName() {
+
+            return this.constructor.name;
+        }
+
         writeJSON(ser: core.json.Serializer) {
 
-            for (const prop of this.getProperties()) {
+            ser.write(`${this.getComponentName()}.active`, this._active, this._activeDefaultValue);
 
-                this.writeProperty(ser, prop);
+            if (this._active) {
+
+                for (const prop of this.getProperties()) {
+
+                    this.writeProperty(ser, prop);
+                }
             }
         }
 
@@ -218,15 +289,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(ser: core.json.Serializer) {
 
-            for (const prop of this.getProperties()) {
+            this._active = ser.read(`${this.getComponentName()}.active`, this._activeDefaultValue);
 
-                if (prop.local) {
+            if (this._active) {
 
-                    this.readLocal(ser, prop);
+                for (const prop of this.getProperties()) {
 
-                } else {
+                    if (prop.local) {
 
-                    this.read(ser, prop);
+                        this.readLocal(ser, prop);
+
+                    } else {
+
+                        this.read(ser, prop);
+                    }
                 }
             }
         }

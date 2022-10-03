@@ -512,7 +512,7 @@ namespace phasereditor2d.scene.core.code {
             }
 
             const methodCall = result.objectFactoryMethodCall;
-            
+
             methodCall.setDeclareReturnToVar(true);
 
             if (!objSupport.isMethodScope()) {
@@ -666,22 +666,22 @@ namespace phasereditor2d.scene.core.code {
 
         private addCreateObjectCode(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
 
-            const objSupport = obj.getEditorSupport();
+            const objES = obj.getEditorSupport();
 
             let createObjectMethodCall: MethodCallCodeDOM;
 
-            if (objSupport.isPrefabInstance()) {
+            if (objES.isPrefabInstance()) {
 
-                const clsName = objSupport.getPrefabName();
+                const clsName = objES.getPrefabName();
 
-                const type = objSupport.getObjectType();
+                const type = objES.getObjectType();
 
                 const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
                 createObjectMethodCall = new code.MethodCallCodeDOM(clsName);
                 createObjectMethodCall.setConstructor(true);
 
-                const prefabSerializer = objSupport.getPrefabSerializer();
+                const prefabSerializer = objES.getPrefabSerializer();
 
                 if (prefabSerializer) {
 
@@ -694,17 +694,17 @@ namespace phasereditor2d.scene.core.code {
                         prefabSerializer
                     });
 
-                    const filePath = code.getImportPath(this._sceneFile, objSupport.getPrefabFile());
+                    const filePath = code.getImportPath(this._sceneFile, objES.getPrefabFile());
                     this._unit.addImport(clsName, filePath);
 
                 } else {
 
-                    throw new Error(`Cannot find prefab with id ${objSupport.getPrefabId()}.`);
+                    throw new Error(`Cannot find prefab with id ${objES.getPrefabId()}.`);
                 }
 
             } else {
 
-                const builder = objSupport.getExtension().getCodeDOMBuilder();
+                const builder = objES.getExtension().getCodeDOMBuilder();
 
                 const factoryVarname = builder.getChainToFactory();
 
@@ -713,15 +713,25 @@ namespace phasereditor2d.scene.core.code {
                         `scene.${factoryVarname}` : `this.${factoryVarname}`,
                     obj: obj
                 });
+
+                const forcingType = objES.getActiveComponents()
+
+                    .map(comp => comp.getExplicitTypesForMethodFactory())
+
+                    .filter(type => type !== undefined)
+
+                    .join(" & ");
+
+                createObjectMethodCall.setExplicitType(forcingType);
             }
 
-            const varname = formatToValidVarName(objSupport.getLabel());
+            const varname = formatToValidVarName(objES.getLabel());
 
             const objParent = ui.sceneobjects.getObjectParent(obj);
 
             createMethodDecl.getBody().push(createObjectMethodCall);
 
-            if (objSupport.isPrefabInstance()) {
+            if (objES.isPrefabInstance()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
 
@@ -777,7 +787,7 @@ namespace phasereditor2d.scene.core.code {
             }
 
             {
-                const lists = objSupport.getScene().getObjectLists().getListsByObjectId(objSupport.getId());
+                const lists = objES.getScene().getObjectLists().getListsByObjectId(objES.getId());
 
                 if (lists.length > 0) {
 
@@ -785,7 +795,7 @@ namespace phasereditor2d.scene.core.code {
                 }
             }
 
-            if (!objSupport.isMethodScope()) {
+            if (!objES.isMethodScope()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
                 createObjectMethodCall.setDeclareReturnToField(true);
@@ -851,7 +861,7 @@ namespace phasereditor2d.scene.core.code {
             const statements: CodeDOM[] = [];
             const lazyStatements: CodeDOM[] = [];
 
-            for (const comp of support.getComponents()) {
+            for (const comp of support.getActiveComponents()) {
 
                 comp.buildSetObjectPropertiesCodeDOM({
                     statements,
