@@ -117,6 +117,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const origin = obj.getEditorSupport().computeDisplayOrigin();
 
+            if (obj instanceof Container) {
+
+                origin.displayOriginX = 0;
+                origin.displayOriginY = 0;
+            }
+
             let x1 = body.offset.x - origin.displayOriginX;
             let y1 = body.offset.y - origin.displayOriginY;
             let x2 = x1 + body.width;
@@ -152,6 +158,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const p = new Phaser.Math.Vector2();
 
             const origin = obj.getEditorSupport().computeDisplayOrigin();
+
+            if (obj instanceof Container) {
+
+                origin.displayOriginX = 0;
+                origin.displayOriginY = 0;
+            }
 
             const bodyRadius = ArcadeComponent.radius.getValue(obj);
             let x1 = body.offset.x - origin.displayOriginX;

@@ -46,7 +46,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 height = size.height;
             }
 
-            const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+            let { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+
+            if (sprite instanceof Container) {
+                
+                displayOriginX = 0;
+                displayOriginY = 0;
+            }
 
             const body = ArcadeComponent.getBody(sprite);
 

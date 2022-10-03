@@ -33,7 +33,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { width, height } = this.computeSize(sprite);
 
-            const { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+            let { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+
+            if (sprite instanceof Container) {
+
+                displayOriginX = 0;
+                displayOriginY = 0;
+            }
 
             const body = ArcadeComponent.getBody(sprite);
             const x = body.offset.x - displayOriginX + fx * width;
