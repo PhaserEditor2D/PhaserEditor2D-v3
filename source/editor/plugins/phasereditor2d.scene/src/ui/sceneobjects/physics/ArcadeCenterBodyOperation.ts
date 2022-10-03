@@ -4,12 +4,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         transformValue(obj: ISceneGameObject): any {
 
+            const objES = obj.getEditorSupport();
+
             const body = ArcadeComponent.getBody(obj);
 
             let x: number;
             let y: number;
 
-            const { width, height } = obj.getEditorSupport().computeSize();
+            const { width, height } = objES.computeSize();
 
             if (ArcadeComponent.isCircleBody(obj)) {
 
@@ -22,6 +24,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 x = (width - body.width) / 2;
                 y = (height - body.height) / 2;
+            }
+
+            if (obj instanceof Container) {
+
+                const origin = objES.computeDisplayOrigin();
+                x -= origin.displayOriginX;
+                y -= origin.displayOriginY;
             }
 
             return { x, y };

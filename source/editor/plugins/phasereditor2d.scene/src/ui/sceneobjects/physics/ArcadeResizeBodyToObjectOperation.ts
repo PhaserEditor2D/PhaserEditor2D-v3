@@ -12,18 +12,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const isCircle = ArcadeComponent.isCircleBody(obj);
 
+            const objES = obj.getEditorSupport();
+
+            const objSize = objES.computeSize();
+
             if (isCircle) {
 
-                radius = obj.width / 2;
-                offsetX = obj.width / 2 - radius;
-                offsetY = obj.height / 2 - radius;
+                radius = objSize.width / 2;
+                offsetX = objSize.width / 2 - radius;
+                offsetY = objSize.height / 2 - radius;
 
             } else {
 
                 offsetX = 0;
                 offsetY = 0;
-                width = obj.width;
-                height = obj.height;
+                width = objSize.width;
+                height = objSize.height;
+            }
+
+            if (obj instanceof Container) {
+
+                const origin = objES.computeDisplayOrigin();
+                offsetX -= origin.displayOriginX;
+                offsetY -= origin.displayOriginY;
             }
 
             return { offsetX, offsetY, width, height, radius, isCircle };
