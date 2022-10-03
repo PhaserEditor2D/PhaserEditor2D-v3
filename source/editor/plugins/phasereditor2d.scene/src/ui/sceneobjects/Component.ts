@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._active = active;
         }
 
-        getExplicitTypesForMethodFactory(): string|undefined {
+        getExplicitTypesForMethodFactory(): string | undefined {
 
             return undefined;
         }
@@ -187,6 +187,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
                 }
             }
+        }
+
+        buildSetObjectPropertyXYCodeDOM(
+            propXY: IPropertyXY,
+            codeDomBuilder: (builderArgs: { propXY: IPropertyXY, x: any, y: any }) => void) {
+
+            const obj = this.getObject();
+
+            const x = propXY.x.getValue(obj);
+            const y = propXY.y.getValue(obj);
+
+            let gen = false;
+
+            if (this.getEditorSupport().isPrefabInstance()) {
+
+                gen = this.getEditorSupport().isUnlockedPropertyXY(propXY);
+
+            } else {
+
+                const defaultX = this.getPropertyDefaultValue(propXY.x);
+                const defaultY = this.getPropertyDefaultValue(propXY.y);
+
+                gen = x !== defaultX || y !== defaultY;
+            }
+
+            if (gen) {
+
+                codeDomBuilder({ propXY, x, y });
+            }
+        }
+
+        buildSetObjectPropertyXYCodeDOM_FloatXY(args: ISetObjectPropertiesCodeDOMArgs,
+            propXY: IPropertyXY) {
+
+            this.buildSetObjectPropertyXYCodeDOM(propXY, args2 => {
+
+                const dom = new code.MethodCallCodeDOM(propXY.setterName, args.objectVarName);
+
+                dom.argFloat(args2.x);
+                dom.argFloat(args2.y);
+
+                args.statements.push(dom);
+            });
         }
 
         buildSetObjectPropertyCodeDOM_FloatProperty(

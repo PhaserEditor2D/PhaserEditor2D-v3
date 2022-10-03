@@ -33,6 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static origin: IPropertyXY = {
             label: "Origin",
+            setterName: "setOrigin",
             tooltip: "phaser:Phaser.GameObjects.Components.Origin.setOrigin",
             x: OriginComponent.originX,
             y: OriginComponent.originY
@@ -49,36 +50,38 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
 
-            let add = false;
+            this.buildSetObjectPropertyXYCodeDOM_FloatXY(args, OriginComponent.origin);
 
-            if (this.getEditorSupport().isPrefabInstance()) {
+            // let add = false;
 
-                if (this.getEditorSupport().isUnlockedPropertyXY(OriginComponent.origin)) {
+            // if (this.getEditorSupport().isPrefabInstance()) {
 
-                    add = true;
-                }
+            //     if (this.getEditorSupport().isUnlockedPropertyXY(OriginComponent.origin)) {
 
-            } else {
+            //         add = true;
+            //     }
 
-                const defaultOriginX = this.getPropertyDefaultValue(OriginComponent.originX);
-                const defaultOriginY = this.getPropertyDefaultValue(OriginComponent.originY);
+            // } else {
 
-                if (defaultOriginX !== obj.originX || defaultOriginY !== obj.originY) {
+            //     const defaultOriginX = this.getPropertyDefaultValue(OriginComponent.originX);
+            //     const defaultOriginY = this.getPropertyDefaultValue(OriginComponent.originY);
 
-                    add = true;
-                }
-            }
+            //     if (defaultOriginX !== obj.originX || defaultOriginY !== obj.originY) {
+
+            //         add = true;
+            //     }
+            // }
 
 
-            if (add) {
+            // if (add) {
 
-                const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
+            //     const dom = new code.MethodCallCodeDOM("setOrigin", args.objectVarName);
 
-                dom.argFloat(obj.originX);
-                dom.argFloat(obj.originY);
+            //     dom.argFloat(obj.originX);
+            //     dom.argFloat(obj.originY);
 
-                args.statements.push(dom);
-            }
+            //     args.statements.push(dom);
+            // }
         }
     }
 }

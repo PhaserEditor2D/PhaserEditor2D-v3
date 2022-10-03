@@ -39,10 +39,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
     }
 
-    function SimpleBodyVectorProperty(vectorName: string, label: string, defValueX: number, defValueY?: number): IPropertyXY {
+    function SimpleBodyVectorProperty(vectorName: string, label: string, defValueX: number, defValueY?: number, setterName?: string): IPropertyXY {
 
         return {
             label,
+            setterName: setterName ? `body.${setterName}` : undefined,
             tooltip: "phaser:Phaser.Physics.Arcade.Body." + vectorName,
             x: simpleBodyVectorProperty(vectorName, "x", defValueX),
             y: simpleBodyVectorProperty(vectorName, "y", defValueY ?? defValueX)
@@ -190,7 +191,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static mass = SimpleBodyProperty("mass", 1, "Mass");
         static geometry = geometryProperty();
         static radius = SimpleBodyProperty("radius", 64, "Radius", "__radius");
-        static offset = SimpleBodyVectorProperty("offset", "Offset", 0);
+        static offset = SimpleBodyVectorProperty("offset", "Offset", 0, 0, "setOffset");
         static size: IPropertyXY = {
             label: "Size",
             tooltip: "Size",
@@ -295,9 +296,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args,
 
-                ArcadeComponent.offset.x,
-                ArcadeComponent.offset.y,
-
                 ArcadeComponent.velocity.x,
                 ArcadeComponent.velocity.y,
 
@@ -351,6 +349,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
             const objES = this.getEditorSupport();
+
+            this.buildSetObjectPropertyXYCodeDOM_FloatXY(args, ArcadeComponent.offset);
 
             if (ArcadeComponent.isCircleBody(obj)) {
 
