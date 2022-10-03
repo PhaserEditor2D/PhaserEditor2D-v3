@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.ShapeSection", "Shape", false, false);
         }
 
+        protected getSectionHelpPath() {
+            
+            return "scene-editor/shape-object.html";
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent);
