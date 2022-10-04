@@ -253,9 +253,11 @@ namespace phasereditor2d.scene.core.code {
 
                     const varName = code.formatToValidVarName(objES.getLabel());
 
+                    const explicitType = this.getExplicitType(obj);
+
                     const type = objES.isPrefabInstance()
                         ? objES.getPrefabName()
-                        : objES.getPhaserType();
+                        : (explicitType ?? objES.getPhaserType());
 
                     const isPublic = objES.isPublic();
 
@@ -714,13 +716,7 @@ namespace phasereditor2d.scene.core.code {
                     obj: obj
                 });
 
-                const forcingType = objES.getActiveComponents()
-
-                    .map(comp => comp.getExplicitTypesForMethodFactory())
-
-                    .filter(type => type !== undefined)
-
-                    .join(" & ");
+                const forcingType = this.getExplicitType(obj);
 
                 createObjectMethodCall.setExplicitType(forcingType);
             }
@@ -805,6 +801,19 @@ namespace phasereditor2d.scene.core.code {
 
                 createObjectMethodCall.setReturnToVar(varname);
             }
+        }
+        
+        getExplicitType(obj: ISceneGameObject) {
+            
+            const objES = obj.getEditorSupport();
+
+            return objES.getActiveComponents()
+
+            .map(comp => comp.getExplicitTypesForMethodFactory())
+
+            .filter(type => type !== undefined)
+
+            .join(" & ");
         }
 
         private getPrefabInstanceVarName(obj: ISceneGameObject) {
