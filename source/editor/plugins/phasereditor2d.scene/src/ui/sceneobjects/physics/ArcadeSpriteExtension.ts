@@ -27,5 +27,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return new ArcadeSprite(scene, x, y, key || null, frame);
         }
+
+        collectExtraDataForCreateDefaultObject(editor: editor.SceneEditor): Promise<ICreateExtraDataResult> {
+            
+            return this.collectTextureDataCreateDefaultObject(editor);
+        }
     }
 }

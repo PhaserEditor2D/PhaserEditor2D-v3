@@ -11,10 +11,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private constructor() {
             super({
-                    typeName: "ArcadeImage",
-                    phaserTypeName: "Phaser.Physics.Arcade.Image",
-                    category: SCENE_OBJECT_ARCADE_CATEGORY,
-                    icon: ScenePlugin.getInstance().getIconDescriptor(ICON_IMAGE_TYPE)
+                typeName: "ArcadeImage",
+                phaserTypeName: "Phaser.Physics.Arcade.Image",
+                category: SCENE_OBJECT_ARCADE_CATEGORY,
+                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_IMAGE_TYPE)
             });
         }
 
@@ -26,6 +26,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
 
             return new ArcadeImage(scene, x, y, key || null, frame);
+        }
+
+        collectExtraDataForCreateDefaultObject(editor: editor.SceneEditor): Promise<ICreateExtraDataResult> {
+            
+            return this.collectTextureDataCreateDefaultObject(editor);
         }
     }
 }

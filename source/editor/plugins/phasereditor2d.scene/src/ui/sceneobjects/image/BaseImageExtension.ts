@@ -32,21 +32,39 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createDefaultSceneObject(args: ICreateDefaultArgs) {
 
-            return [this.createImageObject(args.scene, args.x, args.y)];
+            let key: string;
+            let frame: string | number;
+
+            if (args.extraData) {
+
+                const result = this.getKeyFrameFromAsset(args.extraData);
+                key = result.key;
+                frame = result.frame;
+            }
+
+            const obj = this.createImageObject(args.scene, args.x, args.y, key, frame);
+
+            if (key) {
+
+                const textureComponent = (obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent);
+                textureComponent.setTextureKeys({ key, frame });
+            }
+
+            return [obj];
         }
 
-        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject {
+        private getKeyFrameFromAsset(data: any) {
 
             let key: string;
             let frame: string | number;
             let baseLabel: string;
 
-            if (args.asset instanceof pack.core.AssetPackImageFrame) {
+            if (data instanceof pack.core.AssetPackImageFrame) {
 
-                const packItem = args.asset.getPackItem();
+                const packItem = data.getPackItem();
 
                 key = packItem.getKey();
-                frame = args.asset.getName();
+                frame = data.getName();
                 baseLabel = frame.toString();
 
                 if (packItem instanceof pack.core.SpritesheetAssetPackItem) {
@@ -54,12 +72,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     baseLabel = key + frame.toString();
                 }
 
-            } else if (args.asset instanceof pack.core.ImageAssetPackItem) {
+            } else if (data instanceof pack.core.ImageAssetPackItem) {
 
-                key = args.asset.getKey();
+                key = data.getKey();
                 frame = undefined;
                 baseLabel = key;
             }
+
+            return { key, frame, baseLabel };
+        }
+
+        createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject {
+
+            const { key, frame, baseLabel } = this.getKeyFrameFromAsset(args.asset);
 
             const sprite = this.createImageObject(args.scene, args.x, args.y, key, frame);
 
@@ -91,6 +116,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             sprite.getEditorSupport().readJSON(args.data);
 
             return sprite;
+        }
+
+        async collectTextureDataCreateDefaultObject(editor: editor.SceneEditor) {
+
+            const selected = await TextureSelectionDialog.selectOneTexture(editor, [], "No Texture");
+
+            const ext = ScenePlugin.getInstance().getLoaderUpdaterForAsset(selected);
+
+            if (ext) {
+
+                await ext.updateLoader(editor.getScene(), selected);
+            }
+
+            return {
+                data: selected
+            };
         }
 
         protected abstract newObject(

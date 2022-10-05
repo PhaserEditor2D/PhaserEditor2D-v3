@@ -1,7 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
-    import io = colibri.core.io;
 
     const grouping = pack.ui.viewers.AssetPackGrouping;
 
@@ -13,8 +12,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     ];
 
     export class TextureSelectionDialog extends controls.dialogs.ViewerDialog {
+        
+        private _cancelButton: HTMLButtonElement;
 
-        static async createDialog(
+        static createDialog(
             editor: editor.SceneEditor, selected: pack.core.AssetPackImageFrame[],
             callback: (selection: pack.core.AssetPackImageFrame[]) => void
         ) {
@@ -29,6 +30,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return dlg;
         }
 
+        static async selectOneTexture(editor: editor.SceneEditor, selected?: pack.core.AssetPackImageFrame[], cancelButtonLabel?: string) {
+
+            return new Promise((resolver, reject) => {
+
+                const dlg = this.createDialog(editor, selected?? [], (selection) => {
+
+                    resolver(selection[0]);
+                });
+                
+                dlg.eventDialogClose.addListener(() => {
+                    
+                    resolver(undefined);
+                });
+
+                if (cancelButtonLabel) {
+
+                    dlg.getCancelButton().innerHTML = cancelButtonLabel;
+                }
+            });
+        }
+
         private _callback: (selection: pack.core.AssetPackImageFrame[]) => void;
         private _editor: editor.SceneEditor;
 
@@ -41,7 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editor = editor;
             this._callback = callback;
 
-            this.setSize(900, 500, true);
+            this.setSize(window.innerWidth / 2, window.innerHeight * 0.7, true);
         }
 
         create() {
@@ -87,9 +109,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             viewer.eventOpenItem.addListener(() => btn.click());
 
-            this.addButton("Cancel", () => this.close());
+            this._cancelButton = this.addCancelButton();
 
             this.updateFromGroupingType();
+        }
+
+        getCancelButton() {
+
+            return this._cancelButton;
         }
 
         private updateFromGroupingType() {
