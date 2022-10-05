@@ -160,6 +160,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                                     return false;
                                 }
+
+                                if (objES.isPrefabInstance()) {
+
+                                    return false;
+                                }
                             }
 
                             return true;
