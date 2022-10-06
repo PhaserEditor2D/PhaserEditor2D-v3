@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.35.0-beta.0 - Oct 6, 2022
 
 * Allows append objects to a prefab instance.
 * Fixes Users Components files serialization. The `app` field is `Phaser Editor 2D - User Components Editor`, and the `contentType` field is `phasereditor2d.core.scene.UserComponents`.
