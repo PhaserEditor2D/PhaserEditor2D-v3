@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.ArcadeCollideSection", "Arcade Physics Body Collision");
         }
 
+        protected getSectionHelpPath() {
+        
+            return "scene-editor/arcade-physics-properties.html#arcade-physics-body-collision-section";
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesBoolXY(parent);

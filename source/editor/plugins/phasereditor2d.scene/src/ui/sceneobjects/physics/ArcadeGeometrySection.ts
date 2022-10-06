@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getSectionHelpPath() {
 
-            return "scene-editor/arcade-geometry-properties.html";
+            return "scene-editor/arcade-physics-properties.html#arcade-physics-body-geometry-section";
         }
 
         createMenu(menu: controls.Menu): void {

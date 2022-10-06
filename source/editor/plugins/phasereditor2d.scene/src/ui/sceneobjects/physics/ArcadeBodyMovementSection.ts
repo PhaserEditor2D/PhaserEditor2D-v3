@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.ArcadeBodyMovementSection", "Arcade Physics Body Movement");
         }
 
+        protected getSectionHelpPath() {
+            
+            return "scene-editor/arcade-physics-properties.html#arcade-physics-body-movement-section";
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesBoolXY(parent);
