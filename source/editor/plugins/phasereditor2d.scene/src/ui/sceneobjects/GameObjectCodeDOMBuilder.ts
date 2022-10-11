@@ -30,16 +30,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         /**
-         * Build extra typescript definitions at the top of the file.
-         * 
-         * @param args This method args.
-         */
-        buildPrefabExtraTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs) {
-            
-            // nothing
-        }
-
-        /**
          * Build a method call CodeDOM to create the scene object of this extension,
          * using the factories provided by Phaser.
          *

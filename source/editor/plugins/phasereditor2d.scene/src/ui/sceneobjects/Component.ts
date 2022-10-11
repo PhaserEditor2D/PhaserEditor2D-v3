@@ -14,8 +14,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         sceneFile: io.FilePath
     }
 
-    export abstract class Component<T extends ISceneGameObject> implements core.json.ISerializable {
+    export interface IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs {
+        unit: code.UnitCodeDOM;
+        clsName: string;
+        prefabObj: ISceneGameObject
+    }
 
+    export abstract class Component<T extends ISceneGameObject> implements core.json.ISerializable {
+        
+        
         private _obj: T;
         private _properties: Set<IProperty<any>>;
         private _active: boolean;
@@ -248,8 +255,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        async buildDependenciesHash(args: IBuildDependencyHashArgs) {
+         /**
+         * Build extra typescript definitions at the top of the file.
+         * 
+         * @param args This method args.
+         */
+        buildPrefabExtraTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs) {
+            // nothing by default
+        }
 
+        async buildDependenciesHash(args: IBuildDependencyHashArgs) {
             // nothing by default
         }
 
