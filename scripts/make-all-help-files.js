@@ -246,6 +246,12 @@ utils.makeHelpFile([
     "Phaser.Physics.Arcade.Body.overlapX",
     "Phaser.Physics.Arcade.Body.overlapY",
     "Phaser.Physics.Arcade.Body.overlapR",
+    "Phaser.Physics.Arcade.Collider(overlapOnly)",
+    "Phaser.Physics.Arcade.Collider(object1)",
+    "Phaser.Physics.Arcade.Collider(object2)",
+    "Phaser.Physics.Arcade.Collider(collideCallback)",
+    "Phaser.Physics.Arcade.Collider(processCallback)",
+    "Phaser.Physics.Arcade.Collider(callbackContext)",
 
     
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");

@@ -145,5 +145,11 @@
   "Phaser.Physics.Arcade.Body.friction": "If this Body is `immovable` and in motion, `friction` is the proportion of this Body's motion received by the riding Body on each axis, relative to 1.\rThe horizontal component (x) is applied only when two colliding Bodies are separated vertically.\rThe vertical component (y) is applied only when two colliding Bodies are separated horizontally.\rThe default value (1, 0) moves the riding Body horizontally in equal proportion to this Body and vertically not at all.",
   "Phaser.Physics.Arcade.Body.overlapX": "The amount of horizontal overlap (before separation), if this Body is colliding with another.",
   "Phaser.Physics.Arcade.Body.overlapY": "The amount of vertical overlap (before separation), if this Body is colliding with another.",
-  "Phaser.Physics.Arcade.Body.overlapR": "The amount of overlap (before separation), if this Body is circular and colliding with another circular body."
+  "Phaser.Physics.Arcade.Body.overlapR": "The amount of overlap (before separation), if this Body is circular and colliding with another circular body.",
+  "Phaser.Physics.Arcade.Collider(overlapOnly)": "Whether to check for collisions or overlap.",
+  "Phaser.Physics.Arcade.Collider(object1)": "The first object to check for collision.",
+  "Phaser.Physics.Arcade.Collider(object2)": "The second object to check for collision.",
+  "Phaser.Physics.Arcade.Collider(collideCallback)": "The callback to invoke when the two objects collide.",
+  "Phaser.Physics.Arcade.Collider(processCallback)": "The callback to invoke when the two objects collide. Must return a boolean.",
+  "Phaser.Physics.Arcade.Collider(callbackContext)": "The scope in which to call the callbacks."
 }

@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createDefaultGridElement(parent);
 
-            this.createPropertyBoolean(comp, ColliderComponent.onlyOverlap);
+            this.createPropertyBoolean(comp, ColliderComponent.overlapOnly);
 
             this.createPropertyObjectVar(comp, ColliderComponent.object1);
 
