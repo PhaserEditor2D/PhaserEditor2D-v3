@@ -255,9 +255,13 @@ namespace phasereditor2d.scene.core.code {
 
                     const explicitType = this.getExplicitType(obj);
 
+                    console.log("explicitType '" + explicitType + "'");
+
                     const type = objES.isPrefabInstance()
                         ? objES.getPrefabName()
-                        : (explicitType ?? objES.getPhaserType());
+                        : (explicitType ? explicitType : objES.getPhaserType());
+
+                    console.log(type);
 
                     const isPublic = objES.isPublic();
 
