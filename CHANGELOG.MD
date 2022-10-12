@@ -8,6 +8,7 @@
 * Uses colors for XY labels in the Inspector view.
 * Adds support for Arcade physics. The Arcade Image & Sprite. And the body tools.
 * Adds APPLE_M1_README.txt file to All-in-One/macOS-arm dist.
+* Fixes bug with Replace Type command: wrong unlocking position properties.
 
 ## v3.34.0 - Aug 12, 2022
 
