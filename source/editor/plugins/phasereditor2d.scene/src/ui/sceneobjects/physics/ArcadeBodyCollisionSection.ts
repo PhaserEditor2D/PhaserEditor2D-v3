@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected getSectionHelpPath() {
-        
+
             return "scene-editor/arcade-physics-properties.html#arcade-physics-body-collision-section";
         }
 
@@ -32,6 +32,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createPropertyXYRow(comp, ArcadeComponent.overlap);
 
             this.createPropertyFloatRow(comp, ArcadeComponent.overlapR).style.gridColumn = "span 4";
+
+            for (const collisionProp of [
+                ArcadeComponent.collideWorldBounds,
+                ArcadeComponent.checkCollisionNone,
+                ArcadeComponent.checkCollisionUp,
+                ArcadeComponent.checkCollisionDown,
+                ArcadeComponent.checkCollisionLeft,
+                ArcadeComponent.checkCollisionRight,
+            ]) {
+
+                this.createPropertyBoolean(comp, collisionProp).checkElement.style.gridColumn = "span 4";
+            }
         }
 
         canEdit(obj: any, n: number): boolean {

@@ -26,6 +26,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
     }
 
+    function CheckCollisionProperty(
+        name: string, defValue: any): IProperty<any> {
+
+        return {
+            name,
+            codeName: `body.checkCollision.${name}`,
+            defValue,
+            label: `Check Collision ${name.substring(0, 1).toUpperCase()}${name.substring(1)}`,
+            tooltip: `phaser:Phaser.Physics.Arcade.Body.checkCollision`,
+            getValue: obj => obj.body.checkCollision[name] ?? defValue,
+            setValue: (obj, value) => {
+
+                obj.body.checkCollision[name] = value;
+            }
+        };
+    }
+
     function simpleBodyVectorProperty(vectorName: string, axis: "x" | "y", defValue: number): IProperty<ISceneGameObject> {
 
         return {
@@ -174,6 +191,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static drag = SimpleBodyVectorProperty("drag", "Drag", 0);
         static bounce = SimpleBodyVectorProperty("bounce", "Bounce", 0);
         static collideWorldBounds = SimpleBodyProperty("collideWorldBounds", false, "Collide World Bounds");
+        static checkCollisionNone = CheckCollisionProperty("none", false);
+        static checkCollisionUp = CheckCollisionProperty("up", true);
+        static checkCollisionDown = CheckCollisionProperty("down", true);
+        static checkCollisionLeft = CheckCollisionProperty("left", true);
+        static checkCollisionRight = CheckCollisionProperty("right", true);
         static allowRotation = SimpleBodyProperty("allowRotation", true, "Allow Rotation");
         static angularVelocity = SimpleBodyProperty("angularVelocity", 0, "Angular Velocity");
         static angularAcceleration = SimpleBodyProperty("angularAcceleration", 0, "Angular Acceleration");
@@ -254,6 +276,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.bounce.x,
                 ArcadeComponent.bounce.y,
                 ArcadeComponent.collideWorldBounds,
+                ArcadeComponent.checkCollisionNone,
+                ArcadeComponent.checkCollisionUp,
+                ArcadeComponent.checkCollisionDown,
+                ArcadeComponent.checkCollisionLeft,
+                ArcadeComponent.checkCollisionRight,
                 ArcadeComponent.overlap.x,
                 ArcadeComponent.overlap.y,
                 ArcadeComponent.overlapR,
@@ -358,6 +385,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.allowDrag,
                 ArcadeComponent.allowRotation,
                 ArcadeComponent.collideWorldBounds,
+                ArcadeComponent.checkCollisionNone,
+                ArcadeComponent.checkCollisionUp,
+                ArcadeComponent.checkCollisionDown,
+                ArcadeComponent.checkCollisionLeft,
+                ArcadeComponent.checkCollisionRight,
                 ArcadeComponent.pushable,
                 ArcadeComponent.immovable);
 
