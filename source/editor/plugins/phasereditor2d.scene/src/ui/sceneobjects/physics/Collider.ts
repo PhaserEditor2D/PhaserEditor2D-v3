@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         public object1 = "";
         public object2 = "";
-        public onlyOverlap = false;
+        public overlapOnly = false;
         public collideCallback = "";
         public processCallback = "";
         public callbackContext = ""

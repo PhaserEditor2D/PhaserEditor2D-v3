@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = args.obj as Collider;
 
-            const methodName = obj.onlyOverlap? "overlap" : "collider";
+            const methodName = obj.overlapOnly? "overlap" : "collider";
 
             const call = new core.code.MethodCallCodeDOM(methodName, `${args.gameObjectFactoryExpr}.physics.add`);
 
@@ -57,11 +57,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createDefaultSceneObject(args: ICreateDefaultArgs): ISceneObject[] {
 
             return [new Collider(args.scene)];
-        }
-
-        isAvailableAsPrefabElement(): boolean {
-            
-            return false;
         }
     }
 }
