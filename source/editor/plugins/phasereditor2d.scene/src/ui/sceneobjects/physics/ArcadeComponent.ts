@@ -319,6 +319,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          
             const obj = args.prefabObj;
 
+            if (obj.getEditorSupport().isPrefabInstance()) {
+
+                // hey, this is a variant prefab!
+                // the body was set in the root prefab
+
+                return;
+            }
+
             const isStatic = ArcadeComponent.isStaticBody(obj as any);
             const type = isStatic? "Phaser.Physics.Arcade.StaticBody" : "Phaser.Physics.Arcade.Body";
 
