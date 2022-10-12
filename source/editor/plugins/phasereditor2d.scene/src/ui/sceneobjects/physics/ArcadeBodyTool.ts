@@ -64,13 +64,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.onActivated(args);
 
+            for(const obj of args.objects) {
+
+                if (!obj.getEditorSupport().hasComponent(ArcadeComponent)) {
+
+                    return;
+                }
+            }
+
             const sections = [ArcadeGeometrySection.ID];
 
             const props: Set<IProperty<ISceneGameObject>> = new Set();
 
             for (const obj of args.objects) {
 
-                for (const prop of this.getSizeOrRadiusProperties(obj)) {
+                const objProps = this.getProperties(obj);
+                
+                for(const prop of objProps) {
 
                     props.add(prop);
                 }

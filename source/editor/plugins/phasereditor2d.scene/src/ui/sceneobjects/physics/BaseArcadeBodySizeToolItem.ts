@@ -160,13 +160,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 let originX = 0;
                 let originY = 0;
 
-                // if (ArcadeComponent.center.getValue(obj)) {
-
-                //     const origin = sprite.getEditorSupport().computeOrigin();
-                //     originX = origin.originX;
-                //     originY = origin.originY;
-                // }
-
                 const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
                 const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
 

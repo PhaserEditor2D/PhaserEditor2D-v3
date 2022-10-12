@@ -26,15 +26,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 for (const prop of props) {
 
                     if (!support.hasProperty(prop)) {
+
                         return false;
                     }
 
                     if (!support.isUnlockedProperty(prop)) {
+
                         return false;
                     }
                 }
 
-                return true;
+                return props.length > 0;
             }
 
             return false;

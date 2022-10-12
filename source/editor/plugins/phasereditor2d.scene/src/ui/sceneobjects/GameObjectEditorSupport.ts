@@ -158,9 +158,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         hasProperty(property: IProperty<any>) {
 
-            for (const comp of this._componentMap.values()) {
+            for (const comp of this.getActiveComponents()) {
 
-                if (comp.isActive() && comp.getProperties().has(property)) {
+                if (comp.getProperties().has(property)) {
 
                     return true;
                 }
