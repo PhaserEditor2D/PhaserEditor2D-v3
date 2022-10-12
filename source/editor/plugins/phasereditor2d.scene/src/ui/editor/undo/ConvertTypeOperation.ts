@@ -6,12 +6,6 @@ namespace phasereditor2d.scene.ui.editor.undo {
     import json = core.json;
     import ISceneObject = sceneobjects.ISceneGameObject;
 
-    interface IObjectConversionData {
-        parentId: string;
-        objData: json.IObjectData;
-        targetType: sceneobjects.SceneGameObjectExtension | io.FilePath;
-    }
-
     declare type ITargetType = sceneobjects.SceneGameObjectExtension | io.FilePath;
 
     export class ConvertTypeOperation extends undo.ObjectSnapshotOperation {
@@ -82,7 +76,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 const type = ser.getType();
                 const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
 
-                if (obj.getEditorSupport().isUnlockedProperty(sceneobjects.TransformComponent.x)) {
+                if (obj.getEditorSupport().isUnlockedPropertyXY(sceneobjects.TransformComponent.position)) {
 
                     ser.setUnlocked(sceneobjects.TransformComponent.x.name, true);
                     ser.setUnlocked(sceneobjects.TransformComponent.y.name, true);

@@ -228,6 +228,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        setUnlockedPropertyXY(property: IPropertyXY, unlock: boolean) {
+
+            this.setUnlockedProperty(property.x, unlock);
+            this.setUnlockedProperty(property.y, unlock);
+        }
+
         _clearUnlockProperties() {
 
             this._unlockedProperties.clear();

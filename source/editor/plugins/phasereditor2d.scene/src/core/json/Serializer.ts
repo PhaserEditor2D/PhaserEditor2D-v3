@@ -133,7 +133,9 @@ namespace phasereditor2d.scene.core.json {
 
             if (this.isPrefabInstance()) {
 
-                const set = new Set(...(this._data.unlock ? this._data.unlock : []));
+                const dataUnlock = this._data.unlock ?? [];
+
+                const set = new Set(dataUnlock);
 
                 if (unlocked) {
 
