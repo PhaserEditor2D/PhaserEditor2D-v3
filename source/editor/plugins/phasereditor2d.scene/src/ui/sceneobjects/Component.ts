@@ -260,7 +260,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * 
          * @param args This method args.
          */
-        buildPrefabExtraTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs) {
+        buildPrefabTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs) {
             // nothing by default
         }
 

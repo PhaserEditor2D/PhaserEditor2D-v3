@@ -69,7 +69,11 @@ namespace phasereditor2d.scene.core.code {
 
         protected generateUnitElement(elem: CodeDOM) {
 
-            if (elem instanceof ClassDeclCodeDOM) {
+            if (elem instanceof InterfaceDeclCodeDOM) {
+
+                this.generateInterface(elem);
+
+            } else if (elem instanceof ClassDeclCodeDOM) {
 
                 this.generateClass(elem as ClassDeclCodeDOM);
 
@@ -88,9 +92,12 @@ namespace phasereditor2d.scene.core.code {
                 this.line();
             }
         }
+        
+        protected generateInterface(interfaceDecl: InterfaceDeclCodeDOM) {
+            // nothing, it is for the TypeScript generator
+        }
 
         protected generateExtraUnitCode() {
-
             // nothing, used by the TypeScript generator
         }
 

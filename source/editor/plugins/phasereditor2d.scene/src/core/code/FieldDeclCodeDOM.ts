@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.core.code {
         private _publicScope: boolean;
         private _initialValueExpr: string;
         private _allowUndefined: boolean;
+        private _interfaceMember: boolean;
 
         constructor(name: string, type: string, publicScope: boolean = false) {
             super(name);
@@ -14,6 +15,17 @@ namespace phasereditor2d.scene.core.code {
             this._publicScope = publicScope;
             this._initialValueExpr = null;
             this._allowUndefined = false;
+            this._interfaceMember = false;
+        }
+
+        isInterfaceMember() {
+
+            return this._interfaceMember;
+        }
+
+        setInterfaceMember(interfaceMember: boolean) {
+            
+            this._interfaceMember = interfaceMember;
         }
 
         isAllowUndefined() {

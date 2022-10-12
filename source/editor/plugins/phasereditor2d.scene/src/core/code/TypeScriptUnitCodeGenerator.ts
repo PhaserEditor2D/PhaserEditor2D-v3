@@ -7,16 +7,42 @@ namespace phasereditor2d.scene.core.code {
         }
 
         isTypeScript(): boolean {
-            
+
             return true;
         }
 
         protected generateExtraUnitCode(): void {
-            
-            for(const codeDom of this.getUnit().getTypeScriptExtraDefs()) {
+
+            for (const codeDom of this.getUnit().getTypeScriptInterfaces()) {
 
                 this.generateUnitElement(codeDom);
             }
+        }
+
+        protected generateInterface(ifaceDecl: InterfaceDeclCodeDOM): void {
+
+            if (ifaceDecl.isExportInterface()) {
+
+                this.append("export default ");
+            }
+
+            this.append("interface " + ifaceDecl.getName());
+
+            this.openIndent(" {");
+
+            this.line();
+
+            const body = CodeDOM.removeBlankLines(ifaceDecl.getBody());
+
+
+            for (const fieldDecl of body) {
+
+                this.generateFieldDecl(fieldDecl);
+            }
+
+            this.closeIndent("}");
+
+            this.line();
         }
 
         generateMethodReturnTypeJSDoc(methodDecl: MethodDeclCodeDOM) {
@@ -25,8 +51,17 @@ namespace phasereditor2d.scene.core.code {
 
         protected generateFieldDecl(fieldDecl: FieldDeclCodeDOM) {
 
-            const mod = fieldDecl.isPublic() ? "public" : "private";
+            let mod: string;
+            
+            if (fieldDecl.isInterfaceMember()) {
 
+                mod = "";
+
+            } else {
+
+                mod = fieldDecl.isPublic() ? "public" : "private";
+            }
+            
             if (fieldDecl.isInitialized()) {
 
                 this.line(`${mod} ${fieldDecl.getName()}: ${fieldDecl.getType()} = ${fieldDecl.getInitialValueExpr()};`);

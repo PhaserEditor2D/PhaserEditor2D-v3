@@ -331,7 +331,7 @@ namespace phasereditor2d.scene.core.code {
             
             const objBuilder = ext.getCodeDOMBuilder();
 
-            this.buildPrefabExtraTypeScriptDefinitionsCodeDOM(prefabObj, objBuilder);
+            this.buildPrefabTypeScriptDefinitionsCodeDOM(prefabObj, objBuilder);
 
             ctrDecl.arg("scene", "Phaser.Scene");
 
@@ -402,15 +402,22 @@ namespace phasereditor2d.scene.core.code {
             return ctrDecl;
         }
         
-        private buildPrefabExtraTypeScriptDefinitionsCodeDOM(prefabObj: ISceneGameObject, objBuilder: ui.sceneobjects.GameObjectCodeDOMBuilder) {
+        private buildPrefabTypeScriptDefinitionsCodeDOM(prefabObj: ISceneGameObject, objBuilder: ui.sceneobjects.GameObjectCodeDOMBuilder) {
             
             for(const comp of prefabObj.getEditorSupport().getActiveComponents()) {
 
-                comp.buildPrefabExtraTypeScriptDefinitionsCodeDOM({
+                comp.buildPrefabTypeScriptDefinitionsCodeDOM({
                     unit: this._unit,
                     prefabObj,
                     clsName: this.getClassName()
                 });
+            }
+
+            const settings = this._scene.getSettings();
+
+            for(const iface of this._unit.getTypeScriptInterfaces()) {
+
+                iface.setExportInterface(settings.exportClass);
             }
         }
 

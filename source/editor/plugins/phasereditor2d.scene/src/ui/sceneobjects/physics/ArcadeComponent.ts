@@ -288,16 +288,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.readJSON(ser);
         }
 
-        buildPrefabExtraTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs): void {
+        buildPrefabTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs): void {
          
             const obj = args.prefabObj;
 
             const isStatic = ArcadeComponent.isStaticBody(obj as any);
-            const type = isStatic? "StaticBody" : "Body";
+            const type = isStatic? "Phaser.Physics.Arcade.StaticBody" : "Phaser.Physics.Arcade.Body";
 
-            const src = `export default interface ${args.clsName} { body: Phaser.Physics.Arcade.${type} }`;
+            const fieldDecl = new code.FieldDeclCodeDOM("body", type);
+            fieldDecl.setInterfaceMember(true);
 
-            args.unit.getTypeScriptExtraDefs().push(new code.RawCodeDOM(src));
+            const interDecl = new code.InterfaceDeclCodeDOM(args.clsName);
+            interDecl.getBody().push(fieldDecl);
+
+            args.unit.getTypeScriptInterfaces().push(interDecl);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
