@@ -530,19 +530,19 @@ namespace phasereditor2d.scene.core.code {
                 lazyStatements.push(...result.lazyStatements);
             }
 
-            const methodCall = result.objectFactoryMethodCall;
+            const objectFactoryMethodCall = result.objectFactoryMethodCall;
 
-            methodCall.setDeclareReturnToVar(true);
+            // methodCall.setDeclareReturnToVar(true);
 
             if (!objSupport.isMethodScope()) {
 
-                result.objectFactoryMethodCall.setDeclareReturnToVar(true);
-                result.objectFactoryMethodCall.setDeclareReturnToField(true);
+                objectFactoryMethodCall.setDeclareReturnToVar(true);
+                objectFactoryMethodCall.setDeclareReturnToField(true);
             }
 
-            if (result.objectFactoryMethodCall.isDeclareReturnToVar()) {
+            if (objectFactoryMethodCall.isDeclareReturnToVar()) {
 
-                result.objectFactoryMethodCall.setReturnToVar(varname);
+                objectFactoryMethodCall.setReturnToVar(varname);
             }
         }
 

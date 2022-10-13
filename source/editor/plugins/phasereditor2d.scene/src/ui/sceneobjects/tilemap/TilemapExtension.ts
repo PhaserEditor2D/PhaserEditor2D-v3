@@ -44,6 +44,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const addTilesetImageDom = new code.MethodCallCodeDOM("addTilesetImage", args.varname);
                 addTilesetImageDom.argLiteral(tileset.name);
 
+                addTilemapDom.setDeclareReturnToVar(true);
+
                 if (tileset.image) {
 
                     addTilesetImageDom.argLiteral(tileset.image.key);

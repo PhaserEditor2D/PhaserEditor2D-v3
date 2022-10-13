@@ -41,12 +41,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const methodName = obj.overlapOnly? "overlap" : "collider";
 
             const call = new core.code.MethodCallCodeDOM(methodName, `${args.gameObjectFactoryExpr}.physics.add`);
-
+            
             call.arg(obj.object1 || "undefined");
             call.arg(obj.object2 || "undefined");
             call.arg(obj.collideCallback || "undefined");
             call.arg(obj.processCallback || "undefined");
             call.arg(obj.callbackContext || "undefined");
+
+            call.setDeclareReturnToVar(false);
 
             return {
                 lazyStatements: [call],
