@@ -1,5 +1,15 @@
 namespace colibri.ui.controls.properties {
 
+    export interface ICreateButtonDialogArgs {
+
+        getValue: () => any,
+        onValueSelected: (value: string) => void,
+        updateIconCallback?: (iconControl: IconControl, value: any) => Promise<void>,
+        createDialogViewer: (revealValue: string) => Promise<controls.viewers.TreeViewer>,
+        dialogElementToString: (viewer: colibri.ui.controls.viewers.TreeViewer, value: any) => string,
+        dialogTittle: string
+    }
+
     export class FormBuilder {
 
         createSeparator(parent: HTMLElement, text: string) {
@@ -81,21 +91,14 @@ namespace colibri.ui.controls.properties {
             return text;
         }
 
-        createButtonDialog(args: {
-            getValue: () => any,
-            onValueSelected: (value: string) => void,
-            updateIconCallback?: (iconControl: IconControl, value: any) => void,
-            createDialogViewer: (revealValue: string) => Promise<controls.viewers.TreeViewer>,
-            dialogElementToString: (viewer: colibri.ui.controls.viewers.TreeViewer, value: any) => string,
-            dialogTittle: string
-        }) {
+        createButtonDialog(args: ICreateButtonDialogArgs) {
 
             const iconControl = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
-            const btn = document.createElement("button");
-            btn.appendChild(iconControl.getCanvas());
+            const buttonElement = document.createElement("button");
+            buttonElement.appendChild(iconControl.getCanvas());
 
-            btn.addEventListener("click", async (e) => {
+            buttonElement.addEventListener("click", async (e) => {
 
                 const value = args.getValue();
 
@@ -111,9 +114,9 @@ namespace colibri.ui.controls.properties {
 
                 dlg.enableButtonOnlyWhenOneElementIsSelected(
                     dlg.addOpenButton("Select", sel => {
-                        
+
                         const obj = sel[0];
-                        
+
                         const value = args.dialogElementToString(viewer, obj);
 
                         args.onValueSelected(value);
@@ -129,14 +132,19 @@ namespace colibri.ui.controls.properties {
                 controls.viewers.GridTreeViewerRenderer.expandSections(viewer);
             });
 
-            if (args.updateIconCallback) {
+            const updateDialogButtonIcon = () => {
 
-                const value = args.getValue();
+                if (args.updateIconCallback) {
 
-                args.updateIconCallback(iconControl, value);
-            }
+                    const value = args.getValue();
 
-            return btn;
+                    args.updateIconCallback(iconControl, value);
+                }
+            };
+
+            updateDialogButtonIcon();
+
+            return { buttonElement, updateDialogButtonIcon };
         }
 
         createTextDialog(parent: HTMLElement, dialogTitle: string, readOnly = false) {

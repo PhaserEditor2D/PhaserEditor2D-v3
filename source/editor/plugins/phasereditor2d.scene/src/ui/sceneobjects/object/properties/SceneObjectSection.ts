@@ -270,7 +270,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 text.value = getValue();
             });
 
-            const btn = this.createButtonDialog({
+            const dlgArgs: controls.properties.ICreateButtonDialogArgs = {
                 getValue: () => getValue(),
                 createDialogViewer: async (revealValue) => {
 
@@ -320,7 +320,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     this.getEditor().getUndoManager().add(
                         new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
                 },
-                updateIconCallback: (iconControl, value) => {
+                updateIconCallback: async (iconControl, value) => {
 
                     const scene = this.getEditor().getScene();
 
@@ -333,6 +333,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const icon = new controls.viewers.ImageFromCellRenderer(found, renderer, controls.RENDER_ICON_SIZE, controls.RENDER_ICON_SIZE)
 
+                        await icon.preload();
+
                         iconControl.setIcon(icon);
 
                     } else {
@@ -340,13 +342,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         iconControl.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
                     }
                 },
-            });
+            };
 
-            fieldElement.appendChild(btn);
+            const result = this.createButtonDialog(dlgArgs);
+
+            fieldElement.appendChild(result.buttonElement);
+
+            this.addUpdater(() => {
+
+                console.log("update button man!");
+
+                result.updateDialogButtonIcon();
+            });
 
             return {
                 textElement: text,
-                btnElement: btn
+                btnElement: result.buttonElement
             };
         }
 
