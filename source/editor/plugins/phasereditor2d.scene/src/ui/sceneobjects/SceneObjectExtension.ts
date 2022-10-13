@@ -55,7 +55,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * Collect the data used to create a new, empty object. For example, a BitmapText requires
          * a BitmapFont key to be created, so this method opens a dialog to select the font.
          */
-        async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor): Promise<ICreateExtraDataResult> {
+        async collectExtraDataForCreateDefaultObject(editor: ui.editor.SceneEditor, inReplaceTypeContext = false): Promise<ICreateExtraDataResult> {
 
             return {};
         }
