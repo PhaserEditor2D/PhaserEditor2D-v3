@@ -215,6 +215,7 @@ utils.makeHelpFile([
 
     "Phaser.GameObjects.Layer",
 
+    "Phaser.Physics.Arcade.Collider",
     "Phaser.Physics.Arcade.Image",
     "Phaser.Physics.Arcade.Sprite",
     "Phaser.Physics.Arcade.Body",
