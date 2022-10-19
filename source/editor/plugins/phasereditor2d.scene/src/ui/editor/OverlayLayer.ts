@@ -60,22 +60,39 @@ namespace phasereditor2d.scene.ui.editor {
 
             const ctx = this.getContext();
 
-            ctx.save();
-
             const camera = this._editor.getScene().getCamera();
 
-            for (const obj of this._editor.getSelection()) {
+            const selection = this._editor.getSelection();
 
-                if (sceneobjects.isGameObject(obj)) {
+            const gameObjectsSet = new Set(selection.filter(obj => sceneobjects.isGameObject(obj)));
 
-                    const sprite = obj as sceneobjects.ISceneGameObject;
+            for (const obj of selection) {
+
+                ctx.save();
+
+                const isGameObject = sceneobjects.isGameObject(obj);
+                const isUserCompNode = obj instanceof sceneobjects.UserComponentNode
+                    && !gameObjectsSet.has(obj.getObject());
+
+                if (isGameObject || isUserCompNode) {
+
+                    let sprite: sceneobjects.ISceneGameObject;
+
+                    if (isUserCompNode) {
+
+                        sprite = obj.getObject();
+
+                    } else {
+
+                        sprite = obj as sceneobjects.ISceneGameObject;
+                    }
 
                     const points = sprite.getEditorSupport().getScreenBounds(camera);
 
                     if (points.length === 4) {
 
                         ctx.strokeStyle = "black";
-                        ctx.lineWidth = 4;
+                        ctx.lineWidth = isUserCompNode ? 1 : 4;
 
                         ctx.beginPath();
                         ctx.moveTo(points[0].x, points[0].y);
@@ -88,7 +105,15 @@ namespace phasereditor2d.scene.ui.editor {
                         ctx.strokeStyle = "#00ff00";
                         // ctx.strokeStyle = controls.Controls.getTheme().viewerSelectionBackground;
 
-                        ctx.lineWidth = 2;
+                        if (isUserCompNode) {
+
+                            ctx.lineWidth = 1;
+                            ctx.setLineDash([1, 2]);
+
+                        } else {
+
+                            ctx.lineWidth = 2;
+                        }
 
                         ctx.beginPath();
                         ctx.moveTo(points[0].x, points[0].y);
@@ -99,9 +124,9 @@ namespace phasereditor2d.scene.ui.editor {
                         ctx.stroke();
                     }
                 }
-            }
 
-            ctx.restore();
+                ctx.restore();
+            }
         }
 
         private renderGrid() {
