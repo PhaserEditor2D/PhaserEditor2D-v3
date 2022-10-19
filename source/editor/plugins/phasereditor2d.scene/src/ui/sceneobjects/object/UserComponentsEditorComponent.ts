@@ -2,6 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
     import io = colibri.core.io;
+    import UserComponent = editor.usercomponent.UserComponent;
 
     export interface IUserComponentAndPrefab {
         prefabFile: io.FilePath;
@@ -140,7 +141,59 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return `${compName}.${propName}`;
         }
 
-        getUserComponents() {
+        private _userCompMap: Map<string, UserComponentNode> = new Map();
+
+        getUserComponentNodes() {
+
+            const obj = this.getObject();
+
+            const result: UserComponentNode[] = [];
+
+            // build local components
+
+            const localComponents = this.getLocalUserComponents();
+
+            for(const findCompResult of localComponents) {
+
+                const node = this.getUserComponentNodeFor(obj, findCompResult.component);
+
+                result.push(node);
+            }
+
+            // build prefab components
+
+            const compAndPrefabList = this.getPrefabUserComponents();
+
+            for(const compAndPrefab of compAndPrefabList) {
+
+                for(const comp of compAndPrefab.components) {
+
+                    const node = this.getUserComponentNodeFor(obj, comp, compAndPrefab.prefabFile);
+
+                    result.push(node);
+                }
+            }
+
+            return result;
+        }
+        
+        private getUserComponentNodeFor(obj: ISceneGameObject, userComponent: UserComponent, prefabFile?: io.FilePath) {
+        
+            const key = UserComponentNode.computeKey(obj, userComponent, prefabFile);
+
+            if (this._userCompMap.has(key)) {
+
+                return this._userCompMap.get(key);
+            }
+        
+            const node = new UserComponentNode(obj, userComponent, prefabFile);
+
+            this._userCompMap.set(key, node);
+
+            return node;
+        }
+
+        getLocalUserComponents(): core.json.IFindComponentResult[] {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
@@ -151,7 +204,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .filter(c => c !== undefined);
         }
 
-        getPrefabUserComponents() {
+        getPrefabUserComponents(): IUserComponentAndPrefab[] {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 

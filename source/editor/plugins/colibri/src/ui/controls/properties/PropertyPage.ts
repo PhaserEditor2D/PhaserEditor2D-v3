@@ -273,6 +273,11 @@ namespace colibri.ui.controls.properties {
                             break;
                         }
                     }
+
+                    if (show && !section.canEditAll(selection)) {
+
+                        show = false;
+                    }
                 }
 
                 show = show && sectionIdSet.has(section.getId());

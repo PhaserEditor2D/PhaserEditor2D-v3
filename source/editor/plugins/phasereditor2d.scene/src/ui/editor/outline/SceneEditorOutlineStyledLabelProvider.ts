@@ -36,6 +36,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (obj instanceof sceneobjects.ObjectList) {
 
                 return obj.getLabel();
+
+            } else if (obj instanceof sceneobjects.UserComponentNode) {
+
+                return obj.getUserComponent().getName();
             }
 
             const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();
@@ -58,6 +62,18 @@ namespace phasereditor2d.scene.ui.editor.outline {
             const baseLabel = this.getLabel(obj);
 
             let hintText = "";
+
+            if (obj instanceof sceneobjects.UserComponentNode) {
+
+                if (obj.isPrefabDefined()) {
+
+                    hintText += ` (comp @ ${obj.getPrefabFile().getNameWithoutExtension()})`;
+
+                } else {
+
+                    hintText += " (comp)";
+                }
+            }
 
             if (sceneobjects.GameObjectEditorSupport.hasObjectComponent(obj, sceneobjects.VisibleComponent)) {
 

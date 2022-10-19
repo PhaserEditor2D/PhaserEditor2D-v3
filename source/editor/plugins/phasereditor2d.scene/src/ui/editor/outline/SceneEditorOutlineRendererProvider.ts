@@ -21,6 +21,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (element instanceof sceneobjects.ObjectList) {
 
                 return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
+
+            } else if (element instanceof sceneobjects.UserComponentNode) {
+
+                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT));
             }
 
             const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();

@@ -38,31 +38,46 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
         getChildren(parent: sceneobjects.ISceneGameObject): any[] {
 
-            if (parent instanceof Phaser.GameObjects.DisplayList) {
+            if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(parent)) {
 
-                const list = [...parent.getChildren()];
+                let list = [];
 
-                list.reverse();
+                if (parent instanceof sceneobjects.Container || parent instanceof sceneobjects.Layer) {
+
+                    const parentES = parent.getEditorSupport();
+
+                    if (!parentES.isShowChildrenInOutline()) {
+
+                        list = [];
+
+                    } else if (parentES.isPrefabInstance()) {
+
+                        const prefabChildren = parentES.getMutableNestedPrefabChildren();
+
+                        const appendedChildren = parentES.getAppendedChildren();
+
+                        list = [...prefabChildren, ...appendedChildren];
+
+                    } else {
+
+                        list = [...parent.getChildren()];
+
+                        list.reverse();
+                    }
+                }
+
+                // prepend the user components
+
+                const parentES = sceneobjects.GameObjectEditorSupport.getEditorSupport(parent);
+
+                const nodes = parentES.getUserComponentsComponent().getUserComponentNodes();
+
+                list = [...nodes, ...list];
 
                 return list;
+            }
 
-            } else if (parent instanceof sceneobjects.Container || parent instanceof sceneobjects.Layer) {
-
-                const editorSupport = parent.getEditorSupport();
-
-                if (!editorSupport.isShowChildrenInOutline()) {
-
-                    return [];
-                }
-
-                if (editorSupport.isPrefabInstance()) {
-
-                    const prefabChildren = editorSupport.getMutableNestedPrefabChildren();
-
-                    const appendedChildren = editorSupport.getAppendedChildren();
-
-                    return [...prefabChildren, ...appendedChildren];
-                }
+            if (parent instanceof Phaser.GameObjects.DisplayList) {
 
                 const list = [...parent.getChildren()];
 
