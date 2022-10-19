@@ -120,7 +120,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
                 }
 
-                const btn = this.createButton(this._propArea, "Select Parents", () => {
+                const btn = this.createButton(this._propArea, "Select Parent Game Object", () => {
 
                     this.getEditor().setSelection(this.getSelection().map(node => node.getObject()));
                 });
@@ -247,21 +247,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     });
                 }
 
-                menu.addAction({
-                    text: "Delete",
-                    callback: () => {
+                const allLocalNodes = nodes.filter(n => n.isPrefabDefined()).length === 0;
 
-                        section.runOperation(() => {
+                if (allLocalNodes) {
 
-                            for (const node of nodes) {
+                    menu.addAction({
+                        text: "Delete",
+                        callback: () => {
 
-                                node.getUserComponentsComponent().removeUserComponent(compName);
-                            }
-                        });
+                            section.runOperation(() => {
 
-                        section.updateWithSelection();
-                    }
-                });
+                                for (const node of nodes) {
+
+                                    node.getUserComponentsComponent().removeUserComponent(compName);
+                                }
+                            });
+
+                            section.updateWithSelection();
+                        }
+                    });
+                }
             }
         }
 

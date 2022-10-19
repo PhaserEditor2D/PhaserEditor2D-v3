@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             let selection = this.getSelection()
                 .flatMap(obj => obj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes());
 
-            let nodes = [];
+            let nodes: UserComponentNode[] = [];
 
             for (const node of selection) {
 
@@ -137,13 +137,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         this.getEditor().setSelection(nodes);
                     });
 
-                    const samePrefabNodes = this.getSelection()
-                        .flatMap(obj => obj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes())
-                        .filter(node => node.isPrefabDefined() && compName === node.getUserComponent().getName());
+                    // get all nodes (from the selected objects)
+                    // with the same user component of this current node
+                    const sameNodes = this.getSelection()
+                        .flatMap(obj => obj.getEditorSupport()
+                            .getUserComponentsComponent().getUserComponentNodes())
+                        .filter(n => n.getUserComponent().getName() === compName);
+
+                    const samePrefabNodes = sameNodes.filter(n => n.isPrefabDefined());
 
                     ObjectSingleUserComponentSection.buildPrefabLinks(samePrefabNodes, headerDiv);
 
-                    this.createComponentMenuIcon(headerDiv, commonNodes);
+
+                    this.createComponentMenuIcon(headerDiv, sameNodes);
                 }
 
                 // Add Components button
