@@ -27,6 +27,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._prefabFile = prefabFile;
         }
 
+        getId() {
+
+            return `${this._obj.getEditorSupport().getId()}#${this._userComponent.getName()}`;
+        }
+
         getObject() {
 
             return this._obj;

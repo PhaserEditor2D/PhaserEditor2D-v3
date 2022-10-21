@@ -255,6 +255,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         text: "Delete",
                         callback: () => {
 
+                            const editor = section.getEditor();
+
+                            const selIds = editor.getSelectionManager().getSelectionIds();
+
                             section.runOperation(() => {
 
                                 for (const node of nodes) {
@@ -263,7 +267,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 }
                             });
 
-                            section.updateWithSelection();
+                            editor.getSelectionManager().setSelectionByIds(selIds);
                         }
                     });
                 }
