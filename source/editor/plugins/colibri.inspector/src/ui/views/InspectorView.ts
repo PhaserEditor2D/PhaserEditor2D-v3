@@ -6,7 +6,7 @@ namespace colibri.inspector.ui.views {
 
     export class InspectorView extends ide.ViewPart {
 
-        static VIEW_ID = "colibri.inspector.ui.views.InspectorView";
+        static VIEW_ID = "InspectorView";
 
         private _propertyPage: controls.properties.PropertyPage;
         private _currentPart: ide.Part;
