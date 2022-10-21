@@ -16,12 +16,22 @@
 }
 
 #InspectorView .PrefabLink {
-    margin-bottom: 5px;
-    margin-top: 5px;
-    padding: 5px;
-    background: rgba(0, 0, 0, 0.1);
     width: 100%;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    padding: 3px;
     border-radius: 3px;
+}
+
+#InspectorView .PrefabLink {
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+#InspectorView .PrefabLink:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 #InspectorView .PrefabLink:nth-child(1) {

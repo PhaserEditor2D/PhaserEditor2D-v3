@@ -70,7 +70,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const headerDiv = document.createElement("div");
                 headerDiv.classList.add("PrefabLink");
-                headerDiv.style.width = "100%";
 
                 this._propArea.appendChild(headerDiv);
 
