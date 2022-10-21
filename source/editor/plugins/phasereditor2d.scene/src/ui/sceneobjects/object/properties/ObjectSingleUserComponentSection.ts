@@ -150,6 +150,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 for (let i = 0; i < nodesInPrefabsLen; i++) {
 
+                    const node = nodesInPrefabs[i];
+
                     const prefabFile = nodesInPrefabs[i].getPrefabFile();
                     const prefabBtn = document.createElement("a");
                     headerDiv.appendChild(prefabBtn);
@@ -157,7 +159,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     prefabBtn.innerHTML = prefabFile.getNameWithoutExtension();
                     prefabBtn.addEventListener("click", e => {
 
-                        colibri.Platform.getWorkbench().openEditor(prefabFile);
+                        const prefabEditor = colibri.Platform.getWorkbench().openEditor(prefabFile);
+
+                        if (prefabEditor && prefabEditor instanceof ui.editor.SceneEditor) {
+                            
+                            setTimeout(() => {
+
+                                const prefabObj = prefabEditor.getScene().getPrefabObject();
+                                const prefabNode = prefabObj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes().find(n => n.getUserComponent().getName() === node.getUserComponent().getName());
+                                prefabEditor.setSelection([prefabNode]);
+                                
+                            }, 100);
+                        }
                     });
 
                     if (i < nodesInPrefabsLen - 1) {

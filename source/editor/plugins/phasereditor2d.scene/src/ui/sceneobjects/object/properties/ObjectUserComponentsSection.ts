@@ -109,8 +109,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const editorCompList = this.getSelection()
                     .map(obj => GameObjectEditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent);
 
-                // const commonLocalComponents = this.getCommonComponents(c => c.getLocalUserComponents().map(info => info.component.getName()));
-
                 const commonNodes = this.getCommonComponentNodes();
 
                 for (const node of commonNodes) {
