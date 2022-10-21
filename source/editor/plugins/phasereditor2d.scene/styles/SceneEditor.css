@@ -16,26 +16,24 @@
 }
 
 #InspectorView .PrefabLink {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 3px;
     width: 100%;
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
     padding: 3px;
     border-radius: 3px;
 }
 
-#InspectorView .PrefabLink {
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
+#InspectorView label {
+    min-width: unset;
+}
+
+#InspectorView .PrefabLink .IconButton {
+    margin-left: auto;
 }
 
 #InspectorView .PrefabLink:hover {
     background: rgba(255, 255, 255, 0.05);
-}
-
-#InspectorView .PrefabLink:nth-child(1) {
-    margin-top: 0px;
 }
 
 .lightBlue #InspectorView .PrefabLink {

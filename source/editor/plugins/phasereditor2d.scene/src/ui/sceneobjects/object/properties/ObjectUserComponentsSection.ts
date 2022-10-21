@@ -120,6 +120,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this._propArea.appendChild(headerDiv);
 
+                    ObjectSingleUserComponentSection.createComponentIcon(this, headerDiv);
+
                     const compBtn = document.createElement("a");
                     headerDiv.appendChild(compBtn);
                     compBtn.href = "#";

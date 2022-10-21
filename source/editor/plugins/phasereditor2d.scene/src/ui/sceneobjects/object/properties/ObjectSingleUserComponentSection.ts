@@ -75,6 +75,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 // open component editor link
 
+                ObjectSingleUserComponentSection.createComponentIcon(this, headerDiv);
+
                 const compBtn = document.createElement("a");
                 headerDiv.appendChild(compBtn);
                 compBtn.href = "#";
@@ -127,6 +129,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 btn.style.justifySelf = "self-center";
                 btn.style.marginTop = "10px";
             });
+        }
+
+        static createComponentIcon(section: colibri.ui.controls.properties.FormBuilder, headerDiv: HTMLDivElement) {
+
+            section.createIcon(headerDiv, ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT));
         }
 
         static buildPrefabLinks(nodes: UserComponentNode[], headerDiv: HTMLDivElement) {
