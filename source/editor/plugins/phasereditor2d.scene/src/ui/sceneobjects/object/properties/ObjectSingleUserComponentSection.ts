@@ -162,14 +162,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         const prefabEditor = colibri.Platform.getWorkbench().openEditor(prefabFile);
 
                         if (prefabEditor && prefabEditor instanceof ui.editor.SceneEditor) {
-                            
+
                             setTimeout(() => {
 
-                                const prefabObj = prefabEditor.getScene().getPrefabObject();
-                                const prefabNode = prefabObj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes().find(n => n.getUserComponent().getName() === node.getUserComponent().getName());
-                                prefabEditor.setSelection([prefabNode]);
-                                
-                            }, 100);
+                                const obj = node.getObject();
+                                const objES = obj.getEditorSupport();
+
+                                let selObj: ISceneGameObject;
+
+                                if (objES.isNestedPrefabInstance()) {
+
+                                    selObj = prefabEditor.getScene().getByEditorId(objES.getPrefabId());
+
+                                } else {
+
+                                    selObj = prefabEditor.getScene().getPrefabObject();
+                                }
+
+                                if (selObj) {
+
+                                    const selNode = selObj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes().find(n => n.getUserComponent().getName() === node.getUserComponent().getName());
+
+                                    if (selNode) {
+
+                                        prefabEditor.setSelection([selNode]);
+                                    }
+                                }
+
+                            }, 10);
                         }
                     });
 
