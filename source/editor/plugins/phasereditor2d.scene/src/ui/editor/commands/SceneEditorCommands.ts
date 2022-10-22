@@ -1155,11 +1155,17 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 handler: {
 
-                    testFunc: args => isSceneScope(args) && (args.activeEditor as SceneEditor)
+                    testFunc: args => {
 
-                        .getSelection()
+                        const sel = args.activeEditor.getSelection();
 
-                        .length > 0,
+                        return isSceneScope(args)
+                            && (sel.filter(obj =>
+                                obj instanceof sceneobjects.Container
+                                || obj instanceof sceneobjects.Layer))
+
+                                .length === sel.length;
+                    },
 
                     executeFunc: args => {
 
@@ -1323,7 +1329,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const prefabsLen = selection.filter(
                             obj => sceneobjects.isGameObject(obj)
                                 && (obj as sceneobjects.ISceneGameObject)
-                                .getEditorSupport().isPrefabInstance()).length;
+                                    .getEditorSupport().isPrefabInstance()).length;
 
                         return selection.length === prefabsLen;
                     },
