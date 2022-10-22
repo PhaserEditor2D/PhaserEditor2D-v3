@@ -969,6 +969,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             const editor = args.activeEditor as editor.SceneEditor;
 
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
+
                             for (const obj of editor.getSelectedGameObjects()) {
 
                                 const editorSupport = obj.getEditorSupport();
@@ -1011,6 +1016,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         if (isSceneScope(args)) {
 
                             const editor = args.activeEditor as editor.SceneEditor;
+
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
