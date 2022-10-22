@@ -32,6 +32,14 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             scene.removePlainObjects(editor.getSelectedPlainObjects());
 
+            const nodes = editor.getSelectedUserComponentNodes();
+
+            for (const node of nodes) {
+
+                node.getUserComponentsComponent()
+                    .removeUserComponent(node.getUserComponent().getName());
+            }
+
             editor.setSelection([]);
         }
     }
