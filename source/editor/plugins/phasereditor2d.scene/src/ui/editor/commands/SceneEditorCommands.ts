@@ -160,6 +160,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         if (isSceneScope(args)) {
 
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
+
                             for (const obj of editor.getSelectedGameObjects()) {
 
                                 const objES = obj.getEditorSupport();
@@ -206,6 +211,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         if (isSceneScope(args)) {
 
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
+
                             for (const obj of editor.getSelectedGameObjects()) {
 
                                 const objES = obj.getEditorSupport();
@@ -248,6 +258,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const editor = args.activeEditor as ui.editor.SceneEditor;
 
                         if (isSceneScope(args)) {
+
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
@@ -295,6 +310,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const editor = args.activeEditor as ui.editor.SceneEditor;
 
                         if (isSceneScope(args)) {
+
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
