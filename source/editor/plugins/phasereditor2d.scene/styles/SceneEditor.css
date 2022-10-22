@@ -28,6 +28,10 @@
     min-width: unset;
 }
 
+.dark #InspectorView .PrefabLink .PrefabName {
+    color: cyan;
+}
+
 #InspectorView .PrefabLink .IconButton {
     margin-left: auto;
 }

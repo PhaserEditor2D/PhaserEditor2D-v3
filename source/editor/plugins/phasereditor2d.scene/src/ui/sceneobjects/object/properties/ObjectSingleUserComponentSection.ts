@@ -83,13 +83,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 compBtn.innerHTML = compName;
                 compBtn.addEventListener("click", e => {
 
-                    const info = finder.getUserComponentByName(compName);
-
-                    const editor = colibri.Platform.getWorkbench().openEditor(info.file) as editor.usercomponent.UserComponentsEditor;
-
-                    editor.revealComponent(compName);
-
-                    colibri.Platform.getWorkbench().openEditor(compInfo.file);
+                    ObjectSingleUserComponentSection.openComponentEditor(node);
                 });
 
                 // open prefab file link
@@ -131,9 +125,71 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        private static openComponentEditor(node: UserComponentNode) {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const compName = node.getUserComponent().getName();
+
+            const info = finder.getUserComponentByName(compName);
+
+            const editor = colibri.Platform.getWorkbench().openEditor(info.file) as editor.usercomponent.UserComponentsEditor;
+
+            editor.revealComponent(compName);
+        }
+
         static createComponentIcon(section: colibri.ui.controls.properties.FormBuilder, headerDiv: HTMLDivElement) {
 
             section.createIcon(headerDiv, ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT));
+        }
+
+        static selectAllComponentNodesFor(editor: ui.editor.SceneEditor, node: UserComponentNode) {
+
+            const compName = node.getUserComponent().getName();
+
+            const nodes = editor.getSelectedGameObjects()
+                .flatMap(obj => obj.getEditorSupport()
+                    .getUserComponentsComponent().getUserComponentNodes())
+                .filter(node => node.getUserComponent().getName() === compName);
+
+            editor.setSelection(nodes);
+        }
+
+        private static openPrefabLinkInSceneEditor(node: UserComponentNode) {
+
+            const prefabFile = node.getPrefabFile();
+            const prefabEditor = colibri.Platform.getWorkbench().openEditor(prefabFile);
+
+            if (prefabEditor && prefabEditor instanceof ui.editor.SceneEditor) {
+
+                setTimeout(() => {
+
+                    const obj = node.getObject();
+                    const objES = obj.getEditorSupport();
+
+                    let selObj: ISceneGameObject;
+
+                    if (objES.isNestedPrefabInstance()) {
+
+                        selObj = prefabEditor.getScene().getByEditorId(objES.getPrefabId());
+
+                    } else {
+
+                        selObj = prefabEditor.getScene().getPrefabObject();
+                    }
+
+                    if (selObj) {
+
+                        const selNode = selObj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes().find(n => n.getUserComponent().getName() === node.getUserComponent().getName());
+
+                        if (selNode) {
+
+                            prefabEditor.setSelection([selNode]);
+                        }
+                    }
+
+                }, 10);
+            }
         }
 
         static buildPrefabLinks(nodes: UserComponentNode[], headerDiv: HTMLDivElement) {
@@ -166,38 +222,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     prefabBtn.innerHTML = prefabFile.getNameWithoutExtension();
                     prefabBtn.addEventListener("click", e => {
 
-                        const prefabEditor = colibri.Platform.getWorkbench().openEditor(prefabFile);
-
-                        if (prefabEditor && prefabEditor instanceof ui.editor.SceneEditor) {
-
-                            setTimeout(() => {
-
-                                const obj = node.getObject();
-                                const objES = obj.getEditorSupport();
-
-                                let selObj: ISceneGameObject;
-
-                                if (objES.isNestedPrefabInstance()) {
-
-                                    selObj = prefabEditor.getScene().getByEditorId(objES.getPrefabId());
-
-                                } else {
-
-                                    selObj = prefabEditor.getScene().getPrefabObject();
-                                }
-
-                                if (selObj) {
-
-                                    const selNode = selObj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes().find(n => n.getUserComponent().getName() === node.getUserComponent().getName());
-
-                                    if (selNode) {
-
-                                        prefabEditor.setSelection([selNode]);
-                                    }
-                                }
-
-                            }, 10);
-                        }
+                        this.openPrefabLinkInSceneEditor(node);
                     });
 
                     if (i < nodesInPrefabsLen - 1) {
@@ -228,7 +253,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const compName = comp.getName();
 
             menu.addAction({
-                text: `Select All With ${compName}`,
+                text: `Select Objects With ${compName}`,
                 callback: () => {
 
                     const sel = [];
@@ -251,9 +276,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             });
 
-            if (!node.isPrefabDefined()) {
+            menu.addAction({
+                text: "Open Definition Of " + node.getUserComponent().getName(),
+                callback: () => this.openComponentEditor(node)
+            });
 
-                menu.addSeparator();
+            if (node.isPrefabDefined()) {
+
+                menu.addAction({
+                    text: `Reveal In ${node.getPrefabFile().getNameWithoutExtension()} File`,
+                    callback: () => this.openPrefabLinkInSceneEditor(node)
+                });
+            }
+
+            if (section instanceof ObjectUserComponentsSection) {
+
+                menu.addAction({
+                    text: "Edit Values",
+                    callback: () => {
+
+                        ObjectSingleUserComponentSection.selectAllComponentNodesFor(section.getEditor(), node);
+                    }
+                });
+            }
+
+            if (!node.isPrefabDefined()) {
 
                 if (nodes.length === 1) {
 

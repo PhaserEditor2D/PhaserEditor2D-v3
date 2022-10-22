@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Shows User Components as children nodes of the objects in the Outline view.
+
 ## v3.35.0 - Oct 14, 2022
 
 * Allows append objects to a prefab instance.

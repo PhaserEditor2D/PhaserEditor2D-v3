@@ -128,12 +128,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     compBtn.innerHTML = compName;
                     compBtn.addEventListener("click", e => {
 
-                        const nodes = this.getSelection()
-                            .flatMap(obj => obj.getEditorSupport()
-                                .getUserComponentsComponent().getUserComponentNodes())
-                            .filter(node => node.getUserComponent().getName() === compName);
-
-                        this.getEditor().setSelection(nodes);
+                        ObjectSingleUserComponentSection.selectAllComponentNodesFor(this.getEditor(), node);
                     });
 
                     // get all nodes (from the selected objects)
