@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page,
-                "phasereditor2d.scene.ui.sceneobjects.ObjectSingleUserComponentSection", "User Component", false, true);
+                "phasereditor2d.scene.ui.sceneobjects.ObjectSingleUserComponentSection", "User Component", false, false);
         }
 
         getSectionHelpPath() {
