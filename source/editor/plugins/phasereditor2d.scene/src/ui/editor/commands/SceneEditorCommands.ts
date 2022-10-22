@@ -76,7 +76,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             .length === 0;
     }
 
-    
+
     function noUserComponentsNodeInPrefabSelected(args: colibri.ui.ide.commands.HandlerArgs) {
 
         return args.activeEditor.getSelection()
@@ -1288,19 +1288,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             return false;
                         }
 
-                        const editor = args.activeEditor as SceneEditor;
+                        const selection = args.activeEditor.getSelection();
 
-                        const sel = editor.getSelectedGameObjects();
+                        const prefabsLen = selection.filter(
+                            obj => sceneobjects.isGameObject(obj)
+                                && (obj as sceneobjects.ISceneGameObject)
+                                .getEditorSupport().isPrefabInstance()).length;
 
-                        for (const obj of sel) {
-
-                            if (!obj.getEditorSupport().isPrefabInstance()) {
-
-                                return false;
-                            }
-                        }
-
-                        return true;
+                        return selection.length === prefabsLen;
                     },
                     executeFunc: args => {
 
