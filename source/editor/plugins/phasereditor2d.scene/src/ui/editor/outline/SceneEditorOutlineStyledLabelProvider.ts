@@ -67,7 +67,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 if (obj.isPrefabDefined()) {
 
-                    hintText += ` (comp @ ${obj.getPrefabFile().getNameWithoutExtension()})`;
+                    hintText += ` (comp ← ${obj.getPrefabFile().getNameWithoutExtension()})`;
 
                 } else {
 

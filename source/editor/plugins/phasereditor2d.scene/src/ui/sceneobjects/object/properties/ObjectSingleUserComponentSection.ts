@@ -1,7 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
-    import UserComponent = editor.usercomponent.UserComponent;
 
     class GameObjectSectionWrapper extends SceneGameObjectSection<ISceneGameObject> {
 
@@ -200,8 +199,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (atLeastOneDefinedInAPrefab) {
 
-                const elem = document.createElement("label");
-                elem.innerHTML = " @ ";
+                const elem = document.createElement("span");
+                elem.innerHTML = " ← ";
                 headerDiv.appendChild(elem);
 
                 if (nodesInPrefabsLen > 1) {
