@@ -79,7 +79,7 @@ namespace colibri.ui.ide {
             return this._projectPreferences;
         }
 
-        showNotification(text: string) {
+        showNotification(text: string, clickCallback?: () => void) {
 
             const element = document.createElement("div");
             element.classList.add("Notification");
@@ -91,13 +91,20 @@ namespace colibri.ui.ide {
 
             element.addEventListener("click", () => element.remove());
 
+            const duration = 4000;
+
             setTimeout(() => {
 
                 element.classList.add("FadeOutEffect");
 
-                setTimeout(() => element.remove(), 4000);
+                setTimeout(() => element.remove(), duration);
 
-            }, 4000);
+            }, duration);
+
+            if (clickCallback) {
+
+                element.addEventListener("click", clickCallback);
+            }
         }
 
         async launch() {
