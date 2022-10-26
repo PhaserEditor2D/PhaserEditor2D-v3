@@ -70,7 +70,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 const parentES = sceneobjects.GameObjectEditorSupport.getEditorSupport(parent);
 
-                const nodes = parentES.getUserComponentsComponent().getUserComponentNodes();
+                const nodes = parentES
+                    .getUserComponentsComponent()
+                    .getUserComponentNodes()
+                    .filter(n => n.isPublished());
 
                 list = [...nodes, ...list];
 

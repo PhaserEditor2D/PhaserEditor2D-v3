@@ -3,6 +3,7 @@
 ## dev
 
 * Shows User Components as children nodes of the objects in the Outline view.
+* A new Export parameter in the user components of prefab objects.
 
 ## v3.35.0 - Oct 14, 2022
 

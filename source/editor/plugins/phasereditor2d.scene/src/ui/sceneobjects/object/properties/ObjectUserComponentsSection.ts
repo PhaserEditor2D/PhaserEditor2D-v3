@@ -27,7 +27,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const node of selection) {
 
-                const name = node.getUserComponent().getName();
+                if (!node.isPublished()) {
+
+                    continue;
+                }
+
+                const name = node.getComponentName();
 
                 if (nameCountMap.has(name)) {
 
@@ -44,7 +49,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const total = this.getSelection().length;
 
             nodes = nodes
-                .filter(node => nameCountMap.get(node.getUserComponent().getName()) === total);
+                .filter(node => nameCountMap.get(node.getComponentName()) === total);
 
             nodes.sort((a, b) => {
 
@@ -55,39 +60,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
 
             return nodes;
-        }
-
-        private getCommonComponents(getComponents: (c: UserComponentsEditorComponent) => string[]) {
-
-            const nameCountMap = new Map<string, number>();
-
-            for (const obj of this.getSelection()) {
-
-                const editorComp = GameObjectEditorSupport.getObjectComponent(obj, UserComponentsEditorComponent) as UserComponentsEditorComponent;
-
-                const result = getComponents(editorComp);
-
-                for (const name of result) {
-
-                    if (nameCountMap.has(name)) {
-
-                        const count = nameCountMap.get(name);
-                        nameCountMap.set(name, count + 1);
-
-                    } else {
-
-                        nameCountMap.set(name, 1);
-                    }
-                }
-            }
-
-            const total = this.getSelection().length;
-
-            const names = [...nameCountMap.keys()];
-
-            return names
-
-                .filter(name => nameCountMap.get(name) === total);
         }
 
         createForm(parent: HTMLDivElement) {
@@ -113,7 +85,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 for (const node of commonNodes) {
 
-                    const compName = node.getUserComponent().getName();
+                    const compName = node.getComponentName();
 
                     const headerDiv = document.createElement("div");
                     headerDiv.classList.add("PrefabLink");
@@ -136,7 +108,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const sameNodes = this.getSelection()
                         .flatMap(obj => obj.getEditorSupport()
                             .getUserComponentsComponent().getUserComponentNodes())
-                        .filter(n => n.getUserComponent().getName() === compName);
+                        .filter(n => n.getComponentName() === compName);
 
                     const samePrefabNodes = sameNodes.filter(n => n.isPrefabDefined());
 
@@ -253,7 +225,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 btn.style.marginTop = "10px";
             });
         }
-
+        
         private createComponentMenuIcon(
             headerDiv: HTMLElement, nodes: UserComponentNode[]) {
 

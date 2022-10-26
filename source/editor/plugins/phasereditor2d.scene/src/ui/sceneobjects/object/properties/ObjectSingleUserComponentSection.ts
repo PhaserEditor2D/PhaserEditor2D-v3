@@ -1,15 +1,12 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
+    import io = colibri.core.io;
 
-    class GameObjectSectionWrapper extends SceneGameObjectSection<ISceneGameObject> {
+    class GameObjectSectionAdapter extends SceneGameObjectSection<ISceneGameObject> {
 
-        private _nodes: UserComponentNode[];
-
-        constructor(page: controls.properties.PropertyPage, nodes: UserComponentNode[]) {
+        constructor(page: controls.properties.PropertyPage) {
             super(page, "id", "title");
-
-            this._nodes = nodes;
         }
 
         createForm(parent: HTMLDivElement) {
@@ -28,7 +25,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getSelection(): ISceneGameObject[] {
 
-            return this._nodes.map(node => node.getObject());
+            const page = this.getPage();
+
+            const sel = page.getSelection();
+
+            return sel.map((n: UserComponentNode) => n.getObject());
         }
     }
 
@@ -47,13 +48,54 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createForm(parent: HTMLDivElement) {
 
-            const comp = this.createGridElement(parent);
-            comp.style.gridTemplateColumns = "1fr";
+            const sectionAdapter = new GameObjectSectionAdapter(this.getPage());
 
-            this._propArea = this.createGridElement(comp);
+            {
+                const commonPropsComp = this.createGridElement(parent, 2);
+
+                {
+                    // name property
+
+                    this.createLabel(commonPropsComp, "Component");
+
+                    const text = this.createText(commonPropsComp, true);
+
+                    this.addUpdater(() => {
+
+                        text.value = this.buildComponentName();
+                    });
+                }
+
+                {
+                    // export property
+
+                    const result = sectionAdapter.createBooleanField(commonPropsComp, this.getExportProperty(), false);
+
+                    this.addUpdater(() => {
+
+                        const values = this.getSelection().map(n => {
+
+                            if (n.getObject().getEditorSupport().isScenePrefabObject()) {
+
+                                if (n.getUserComponentsComponent().hasLocalUserComponent(n.getComponentName())) {
+
+                                    return true;
+                                }
+                            }
+
+                            return false;
+                        });
+
+                        const visible = this.flatValues_BooleanAnd(values);
+
+                        result.labelElement.style.display = visible ? "" : "none";
+                        result.checkElement.style.display = visible ? "" : "none";
+                    });
+                }
+            }
+
+            this._propArea = this.createGridElement(parent);
             this._propArea.style.gridTemplateColumns = "1fr";
-
-            comp.appendChild(this._propArea);
 
             this.addUpdater(() => {
 
@@ -64,30 +106,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const nodes = this.getSelection();
                 const node = nodes[0];
 
-                const compName = node.getUserComponent().getName();
+                const compName = node.getComponentName();
                 const compInfo = finder.getUserComponentByName(compName);
-
-                const headerDiv = document.createElement("div");
-                headerDiv.classList.add("PrefabLink");
-
-                this._propArea.appendChild(headerDiv);
-
-                // open component editor link
-
-                ObjectSingleUserComponentSection.createComponentIcon(this, headerDiv);
-
-                const compBtn = document.createElement("a");
-                headerDiv.appendChild(compBtn);
-                compBtn.href = "#";
-                compBtn.innerHTML = compName;
-                compBtn.addEventListener("click", e => {
-
-                    ObjectSingleUserComponentSection.openComponentEditor(node);
-                });
-
-                // open prefab file link
-
-                const { atLeastOneDefinedInAPrefab } = ObjectSingleUserComponentSection.buildPrefabLinks(nodes, headerDiv);
 
                 // properties
 
@@ -98,18 +118,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const compPropArea = this.createGridElement(this._propArea);
                         compPropArea.style.gridTemplateColumns = "auto auto 1fr";
-                        compPropArea.style.width = "100%";
 
-                        const objSectionWrapper = new GameObjectSectionWrapper(this.getPage(), this.getSelection());
-
-                        this.addUpdater(() => {
-
-                            objSectionWrapper.updateWithSelection();
-                        });
+                        const atLeastOneDefinedInAPrefab = nodes
+                            .filter(n => n.isPrefabDefined())
+                            .length > 0;
 
                         for (const prop of props) {
 
-                            prop.getType().createInspectorPropertyEditor(objSectionWrapper, compPropArea, prop, atLeastOneDefinedInAPrefab);
+                            prop.getType().createInspectorPropertyEditor(sectionAdapter, compPropArea, prop, atLeastOneDefinedInAPrefab);
                         }
                     }
                 }
@@ -122,13 +138,47 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 btn.style.justifySelf = "self-center";
                 btn.style.marginTop = "10px";
             });
+
+            // it is important to update the adapter at the end,
+            // because it should update the adapter selection after the dynamic prop elements
+            // are created
+
+            this.addUpdater(() => {
+
+                sectionAdapter.updateWithSelection();
+            });
+        }
+
+        private getExportProperty(): IProperty<ISceneGameObject> {
+
+            return {
+                name: "isExported",
+                label: "Export",
+                getValue: obj => {
+
+                    const compName = this.getSelectionFirstElement().getComponentName();
+
+                    const value = obj.getEditorSupport()
+                        .getUserComponentsComponent().isExportComponent(compName);
+
+                    return value;
+                },
+                setValue: (obj: ISceneGameObject, value: boolean) => {
+
+                    const compName = this.getSelectionFirstElement().getComponentName();
+
+                    obj.getEditorSupport()
+                        .getUserComponentsComponent().setExportComponent(compName, value);
+                },
+                defValue: true,
+            };
         }
 
         private static openComponentEditor(node: UserComponentNode) {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            const compName = node.getUserComponent().getName();
+            const compName = node.getComponentName();
 
             const info = finder.getUserComponentByName(compName);
 
@@ -144,12 +194,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static selectAllComponentNodesFor(editor: ui.editor.SceneEditor, node: UserComponentNode) {
 
-            const compName = node.getUserComponent().getName();
+            const compName = node.getComponentName();
 
             const nodes = editor.getSelectedGameObjects()
                 .flatMap(obj => obj.getEditorSupport()
                     .getUserComponentsComponent().getUserComponentNodes())
-                .filter(node => node.getUserComponent().getName() === compName);
+                .filter(node => node.getComponentName() === compName);
 
             editor.setSelection(nodes);
         }
@@ -179,7 +229,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (selObj) {
 
-                        const selNode = selObj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes().find(n => n.getUserComponent().getName() === node.getUserComponent().getName());
+                        const selNode = selObj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes().find(n => n.getComponentName() === node.getComponentName());
 
                         if (selNode) {
 
@@ -189,6 +239,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 }, 10);
             }
+        }
+
+        private buildComponentName() {
+
+            const nodes = this.getSelection();
+
+            let name = this.getSelectionFirstElement().getComponentName();
+
+            const prefabNodes = [...new Set(
+                nodes
+                    .filter(n => n.isPrefabDefined())
+                    .map(node => node.getPrefabFile().getNameWithoutExtension()))
+            ];
+
+            const prefabNames = prefabNodes.join(", ");
+
+            if (prefabNodes.length === 1) {
+
+                name += " ← " + prefabNames;
+
+            } else if (prefabNodes.length > 1) {
+
+                name += ` ← (${prefabNames})`;
+            }
+
+            return name;
         }
 
         static buildPrefabLinks(nodes: UserComponentNode[], headerDiv: HTMLDivElement) {
@@ -247,8 +323,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             menu: controls.Menu,
             section: ObjectSingleUserComponentSection | ObjectUserComponentsSection) {
 
-            const node = nodes[0];
-            const comp = node.getUserComponent();
+            const firstNode = nodes[0];
+            const comp = firstNode.getUserComponent();
             const compName = comp.getName();
 
             menu.addAction({
@@ -276,16 +352,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
 
             menu.addAction({
-                text: "Open Definition Of " + node.getUserComponent().getName(),
-                callback: () => this.openComponentEditor(node)
+                text: "Open Definition Of " + firstNode.getComponentName(),
+                callback: () => this.openComponentEditor(firstNode)
             });
 
-            if (node.isPrefabDefined()) {
+            // the Reveal In Prefab File options
+            {
+                const fileNodeMap = new Map<io.FilePath, UserComponentNode>();
 
-                menu.addAction({
-                    text: `Reveal In ${node.getPrefabFile().getNameWithoutExtension()} File`,
-                    callback: () => this.openPrefabLinkInSceneEditor(node)
-                });
+                for (const node of nodes) {
+
+                    if (node.isPrefabDefined()) {
+
+                        fileNodeMap.set(node.getPrefabFile(), node);
+                    }
+                }
+
+                for (const prefabFile of fileNodeMap.keys()) {
+
+                    const node = fileNodeMap.get(prefabFile);
+
+                    menu.addAction({
+                        text: `Reveal In ${prefabFile.getNameWithoutExtension()} File`,
+                        callback: () => this.openPrefabLinkInSceneEditor(node)
+                    });
+                }
             }
 
             if (section instanceof ObjectUserComponentsSection) {
@@ -294,16 +385,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     text: "Edit Values",
                     callback: () => {
 
-                        ObjectSingleUserComponentSection.selectAllComponentNodesFor(section.getEditor(), node);
+                        ObjectSingleUserComponentSection.selectAllComponentNodesFor(section.getEditor(), firstNode);
                     }
                 });
             }
 
-            if (!node.isPrefabDefined()) {
+            if (!firstNode.isPrefabDefined()) {
 
                 if (nodes.length === 1) {
 
-                    const editorComp = node.getUserComponentsComponent();
+                    const editorComp = firstNode.getUserComponentsComponent();
 
                     menu.addAction({
                         text: "Move Up",

@@ -37,9 +37,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._obj;
         }
 
+        isPublished() {
+
+            return this.getUserComponentsComponent().isComponentPublished(this.getComponentName());
+        }
+
         getUserComponent() {
 
             return this._userComponent;
+        }
+
+        getComponentName() {
+
+            return this._userComponent.getName();
         }
 
         getUserComponentsComponent() {
