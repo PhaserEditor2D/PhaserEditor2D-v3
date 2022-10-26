@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Fixes background for the "New update available" notification. If you click the notification panel, it opens the `https://phasereditor2d.com/downloads` page.
+
 ## v3.35.0 - Oct 14, 2022
 
 * Allows append objects to a prefab instance.
