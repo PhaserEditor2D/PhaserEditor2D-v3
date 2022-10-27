@@ -2,6 +2,7 @@
 
 ## dev
 
+* Bug fix: doesn't keep user comonents in object when convert it to prefab.
 * Fixes background for the "New update available" notification. If you click the notification panel, it opens the `https://phasereditor2d.com/downloads` page.
 * Shows User Components as children nodes of the objects in the Outline view.
 * A new Export parameter in the user components of prefab objects.
