@@ -1409,7 +1409,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                     editor, newFile));
 
                             editor.refreshBlocks();
-
                         });
 
                         const dlg = ext.createDialog({
