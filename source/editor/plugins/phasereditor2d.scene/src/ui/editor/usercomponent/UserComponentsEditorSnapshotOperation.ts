@@ -1,7 +1,7 @@
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     interface ISnapshotData {
-        selection: string[],
+        selection: ISelectionItemID[],
         model: IUserComponentsModelData
     }
 
@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         static takeSnapshot(editor: UserComponentsEditor): ISnapshotData {
 
             return {
-                selection: editor.getSelectedComponents().map((userComp: UserComponent) => userComp.getName()),
+                selection: editor.getSelectionDataFromObjects(editor.getSelection()),
                 model: editor.getModel().toJSON()
             };
         }
@@ -31,14 +31,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             this._editor.getModel().readJSON(data.model);
 
-            const sel = data.selection
-                .map(name => this._editor.getModel().getComponents().find(userComp => userComp.getName() === name))
-                .filter(userComp => userComp !== undefined);
+            const sel = this._editor.getSelectionFromData(data.selection);
 
             const viewer = this._editor.getViewer();
-
-            viewer.setInput(this._editor.getModel().getComponents());
-
             viewer.setSelection(sel);
             viewer.reveal(...sel);
 

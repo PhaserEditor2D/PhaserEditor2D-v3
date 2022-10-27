@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class UserProperties {
+       
 
         private _properties: UserProperty[];
         private _componentPropertyBuilder: TComponentPropertyBuilder;
@@ -13,6 +14,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getProperties() {
 
             return this._properties;
+        }
+
+        deleteProperty(propName: string) {
+            
+            const prop = this._properties.find(p => p.getName() === propName);
+
+            const i = this._properties.indexOf(prop);
+
+            this._properties.splice(i, 1);
         }
 
         add(prop: UserProperty) {
@@ -34,7 +44,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            const prop = new UserProperty(this._componentPropertyBuilder, {
+            const prop = new UserProperty(this, this._componentPropertyBuilder, {
                 defValue: propType.getDefaultValue(),
                 label: "Property " + i,
                 name: "property" + i,
@@ -52,7 +62,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const propData of data) {
 
-                const prop = new UserProperty(this._componentPropertyBuilder);
+                const prop = new UserProperty(this, this._componentPropertyBuilder);
 
                 prop.readJSON(propData);
 

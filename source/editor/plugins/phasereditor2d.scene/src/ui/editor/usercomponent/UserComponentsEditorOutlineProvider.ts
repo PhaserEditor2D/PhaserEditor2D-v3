@@ -34,15 +34,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         getContentProvider(): colibri.ui.controls.viewers.ITreeContentProvider {
 
-            // // tslint:disable-next-line:new-parens
-            // return new class extends controls.viewers.ArrayTreeContentProvider {
-
-            //     getRoots(input: UserComponentsModel) {
-
-            //         return input.getComponents();
-            //     }
-            // };
-
             return new OutlineContentProvider(this._editor);
         }
 
