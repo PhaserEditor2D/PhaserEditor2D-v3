@@ -28,20 +28,8 @@
     min-width: unset;
 }
 
-.dark #InspectorView .PrefabLink .PrefabName {
-    color: cyan;
-}
-
 #InspectorView .PrefabLink .IconButton {
     margin-left: auto;
-}
-
-#InspectorView .PrefabLink:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.lightBlue #InspectorView .PrefabLink {
-    background: #b2c3dd66;
 }
 
 /* light */
