@@ -2,6 +2,7 @@
 
 ## dev
 
+* Shows prefab properties as independent elements in the Outline view.
 * User Components Editor: shows & edits properties as independent entities.
 * Bug fix: doesn't keep user comonents in object when convert it to prefab.
 * Fixes background for the "New update available" notification. If you click the notification panel, it opens the `https://phasereditor2d.com/downloads` page.
