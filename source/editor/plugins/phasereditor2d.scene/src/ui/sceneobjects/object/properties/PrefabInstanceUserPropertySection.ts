@@ -60,21 +60,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const headerDiv = this.createPrefabLink(prefabFile);
 
-                    // const headerDiv = document.createElement("div");
-                    // headerDiv.classList.add("PrefabLink");
-                    // headerDiv.style.gridColumn = "1 / span 3";
-                    // headerDiv.style.width = "100%";
-                    // this._propArea.appendChild(headerDiv);
-
-                    // const prefabBtn = document.createElement("a");
-                    // prefabBtn.href = "#";
-                    // prefabBtn.innerHTML = prefabName;
-                    // headerDiv.appendChild(prefabBtn);
-
-                    // const openFileCallback = () => colibri.Platform.getWorkbench().openEditor(propsByPrefab.prefabFile);
-
-                    // prefabBtn.addEventListener("click", openFileCallback);
-
                     this.createMenuIcon(headerDiv, () => {
 
                         const menu = new controls.Menu();
@@ -130,7 +115,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const headerDiv = document.createElement("div");
             headerDiv.classList.add("PrefabLink");
             headerDiv.style.gridColumn = "1 / span 3";
-            headerDiv.style.width = "100%";
             this._propArea.appendChild(headerDiv);
 
             const prefabBtn = document.createElement("a");

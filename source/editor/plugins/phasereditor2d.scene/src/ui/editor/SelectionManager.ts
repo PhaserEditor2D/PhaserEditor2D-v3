@@ -13,17 +13,30 @@ namespace phasereditor2d.scene.ui.editor {
 
         getSelectionIds() {
 
-            const list = [];
+            const list: string[] = [];
 
-            list.push(...this._editor.getSelectedGameObjects()
+            const selection = this._editor.getSelection();
+            const selectedObjects = this._editor.getSelectedGameObjects();
+            const selectedPlainObjects = this._editor.getSelectedPlainObjects();
+
+            list.push(...selectedObjects
                 .map(obj => obj.getEditorSupport().getId()));
 
-            list.push(...this._editor.getSelectedPlainObjects()
+            list.push(...selectedPlainObjects
                 .map(obj => obj.getEditorSupport().getId()))
 
-            list.push(...this._editor.getSelection()
+            list.push(...selection
                 .filter(obj => obj instanceof sceneobjects.ObjectList)
                 .map(obj => (obj as sceneobjects.ObjectList).getId()));
+
+            list.push(...selection
+                .filter(i => i instanceof sceneobjects.UserComponentNode)
+                .map((i: sceneobjects.UserComponentNode) => i.getId()));
+
+            
+            list.push(...selection
+                .filter(obj => obj instanceof sceneobjects.UserProperty)
+                .map((p: sceneobjects.UserProperty) => `prefabProperty#${p.getName()}`))
 
             return list;
         }
@@ -32,8 +45,18 @@ namespace phasereditor2d.scene.ui.editor {
 
             const scene = this._editor.getScene();
 
-            const map: Map<string, any> = new Map(
-                scene.buildObjectIdMap());
+            const objMap = scene.buildObjectIdMap();
+            const userCompMap = scene.buildUserComponentIdMap();
+
+            const map: Map<string, any> = new Map([...objMap, ...userCompMap] as Array<any>);
+
+            for (const [k, v] of objMap) {
+                map.set(k, v);
+            }
+
+            for (const [k, v] of objMap) {
+                map.set(k, v);
+            }
 
             for (const obj of scene.getPlainObjects()) {
 
@@ -43,6 +66,11 @@ namespace phasereditor2d.scene.ui.editor {
             for (const list of this._editor.getScene().getObjectLists().getLists()) {
 
                 map.set(list.getId(), list);
+            }
+
+            for(const prop of scene.getPrefabUserProperties().getProperties()) {
+
+                map.set(`prefabProperty#${prop.getName()}`, prop);
             }
 
             const sel = selectionIds
@@ -80,7 +108,8 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor.setSelection(this._editor.getSelection()
                 .map(obj => {
 
-                    const objMap = this._editor.getScene().buildObjectIdMap();
+                    const scene = this._editor.getScene();
+                    const objMap = scene.buildObjectIdMap();
 
                     if (sceneobjects.isGameObject(obj)) {
 
@@ -89,13 +118,19 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (sceneobjects.ScenePlainObjectEditorSupport.hasEditorSupport(obj)) {
 
-                        return this._editor.getScene().getPlainObjectById(
+                        return scene.getPlainObjectById(
                             (obj as sceneobjects.IScenePlainObject).getEditorSupport().getId());
                     }
 
                     if (obj instanceof sceneobjects.ObjectList) {
 
-                        return this._editor.getScene().getObjectLists().getListById(obj.getId());
+                        return scene.getObjectLists().getListById(obj.getId());
+                    }
+
+                    if (obj instanceof sceneobjects.UserProperty) {
+
+                        return scene.getPrefabUserProperties().getProperties()
+                            .find(p => p.getName() === obj.getName());
                     }
 
                     return undefined;

@@ -17,6 +17,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
         }
 
         getSectionProviders() {
+            
             return this._sectionProviders;
         }
     }

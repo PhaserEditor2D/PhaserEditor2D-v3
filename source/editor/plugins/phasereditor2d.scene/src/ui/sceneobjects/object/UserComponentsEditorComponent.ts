@@ -2,6 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
     import io = colibri.core.io;
+    import UserComponent = editor.usercomponent.UserComponent;
 
     export interface IUserComponentAndPrefab {
         prefabFile: io.FilePath;
@@ -24,7 +25,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ser.getData()["components"] = [...this._compNames];
 
+            for (const compName of this._compNames) {
+
+                const key = this.getPropertyKey(compName, "export");
+
+                const exported = this.isExportComponent(compName);
+
+                colibri.core.json.write(ser.getData(), key, exported, true);
+            }
+
             super.writeJSON(ser);
+        }
+
+        readJSON(ser: core.json.Serializer) {
+
+            this._compNames = ser.getData()["components"] || [];
+
+            for (const compName of this._compNames) {
+
+                const key = this.getPropertyKey(compName, "export");
+
+                const exported = colibri.core.json.read(ser.getData(), key, true);
+
+                this.setExportComponent(compName, exported);
+            }
+
+            super.readJSON(ser);
         }
 
         writeProperty(ser: core.json.Serializer, prop: IProperty<any>) {
@@ -44,11 +70,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.writeProperty(ser, prop);
         }
 
-        readJSON(ser: core.json.Serializer) {
+        setExportComponent(compName: string, isExport: boolean) {
 
-            this._compNames = ser.getData()["components"] || [];
+            this._propData[this.getPropertyKey(compName, "export")] = isExport;
+        }
 
-            super.readJSON(ser);
+        isExportComponent(compName: string) {
+
+            const val = this._propData[this.getPropertyKey(compName, "export")] ?? true;
+
+            return val;
+        }
+
+        isComponentPublished(compName: string) {
+
+            const objES = this.getEditorSupport();
+
+            if (objES.isPrefabInstance()) {
+
+                return this.isComponentAvailabeInPrefab(compName, objES.getPrefabId());
+            }
+
+            return this.hasLocalUserComponent(compName);
+        }
+        
+        private isComponentAvailabeInPrefab(compName: string, prefabId: string) {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const data = finder.getPrefabData(prefabId);
+
+            const key = this.getPropertyKey(compName, "export");
+
+            if (key in data) {
+
+                return data[key];
+            }
+
+            if (data.prefabId) {
+
+                return this.isComponentAvailabeInPrefab(compName, data.prefabId);
+            }
+
+            return true;
         }
 
         setPropertyValue(compName: string, prop: UserProperty, value: any) {
@@ -106,6 +170,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     delete this._propData[this.getPropertyKey(compName, prop.getName())];
                 }
+
+                delete this._propData[this.getPropertyKey(compName, "export")];
             }
         }
 
@@ -140,7 +206,59 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return `${compName}.${propName}`;
         }
 
-        getUserComponents() {
+        private _userCompMap: Map<string, UserComponentNode> = new Map();
+
+        getUserComponentNodes() {
+
+            const obj = this.getObject();
+
+            const result: UserComponentNode[] = [];
+
+            // build local components
+
+            const localComponents = this.getLocalUserComponents();
+
+            for (const findCompResult of localComponents) {
+
+                const node = this.getUserComponentNodeFor(obj, findCompResult.component);
+
+                result.push(node);
+            }
+
+            // build prefab components
+
+            const compAndPrefabList = this.getPrefabUserComponents();
+
+            for (const compAndPrefab of compAndPrefabList) {
+
+                for (const comp of compAndPrefab.components) {
+
+                    const node = this.getUserComponentNodeFor(obj, comp, compAndPrefab.prefabFile);
+
+                    result.push(node);
+                }
+            }
+
+            return result;
+        }
+
+        private getUserComponentNodeFor(obj: ISceneGameObject, userComponent: UserComponent, prefabFile?: io.FilePath) {
+
+            const key = UserComponentNode.computeKey(obj, userComponent, prefabFile);
+
+            if (this._userCompMap.has(key)) {
+
+                return this._userCompMap.get(key);
+            }
+
+            const node = new UserComponentNode(obj, userComponent, prefabFile);
+
+            this._userCompMap.set(key, node);
+
+            return node;
+        }
+
+        getLocalUserComponents(): core.json.IFindComponentResult[] {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
@@ -151,7 +269,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .filter(c => c !== undefined);
         }
 
-        getPrefabUserComponents() {
+        getPrefabUserComponents(): IUserComponentAndPrefab[] {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 

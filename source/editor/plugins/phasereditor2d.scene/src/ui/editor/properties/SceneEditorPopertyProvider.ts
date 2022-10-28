@@ -35,9 +35,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
             for (const ext of exts) {
 
                 for (const provider of ext.getSectionProviders()) {
+
                     sections.push(provider(page));
                 }
             }
+
+            sections.push(new ui.editor.properties.PrefabPropertySection(page));
         }
     }
 }

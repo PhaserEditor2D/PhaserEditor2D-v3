@@ -77,12 +77,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 text.disabled = !this.isUnlocked(property);
 
-                text.value = this.flatValues_Number(
+                const values = this.getSelection()
 
-                    this.getSelection()
+                    .map(obj => property.getValue(obj));
 
-                        .map(obj => property.getValue(obj))
-                );
+                text.value = this.flatValues_Number(values);
             });
 
             return text;

@@ -2,6 +2,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     import controls = colibri.ui.controls;
 
+    export declare type TUserPropertiesAction = (props?: sceneobjects.UserProperties) => void
+
     export abstract class UserPropertiesSection extends controls.properties.PropertySection<any> {
 
         private _propArea: HTMLDivElement;
@@ -10,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         protected abstract getUserProperties(): sceneobjects.UserProperties;
 
-        protected abstract runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean);
+        protected abstract runOperation(action: TUserPropertiesAction, updateSelection?: boolean);
 
         hasMenu() {
 

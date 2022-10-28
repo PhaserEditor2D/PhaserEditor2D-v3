@@ -39,6 +39,33 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 "Name of the type of the Game Object that this component can be added on.", () => this.createGameObjectTypeOptions());
 
             this.stringProp(comp, "BaseClass", "Super Class", "Name of the super class of the component. It is optional.", () => this.createSuperClassOptions());
+
+
+            const op = (
+                action: editor.properties.TUserPropertiesAction) => {
+
+                const props = this.getSelectionFirstElement().getUserProperties();
+
+                this.getEditor().runOperation(() => action(props));
+            };
+
+            const selector = (obj: any) => {
+
+                const editor = this.getEditor();
+
+                const data = editor.getSelectionDataFromObjects([obj]);
+                const sel = editor.getSelectionFromData(data);
+
+                editor.getViewer().revealAndSelect(...sel);
+                editor.refreshViewers();
+            };
+
+            const { buttonElement } = editor.properties.SingleUserPropertySection
+                .createAddComponentButton(comp, this, op, selector);
+
+            buttonElement.style.marginTop = "10px";
+            buttonElement.style.width = "100%";
+            buttonElement.style.gridColumn = "1 / span 3";
         }
 
         private createSuperClassOptions(): string[] {

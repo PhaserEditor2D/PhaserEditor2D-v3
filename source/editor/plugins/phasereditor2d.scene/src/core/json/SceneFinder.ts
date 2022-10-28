@@ -28,7 +28,6 @@ namespace phasereditor2d.scene.core.json {
         }
     }
 
-
     export interface IUserComponentsModelInfo {
         file: io.FilePath;
         model: usercomponent.UserComponentsModel;

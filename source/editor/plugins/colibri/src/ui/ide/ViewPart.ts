@@ -7,5 +7,4 @@ namespace colibri.ui.ide {
             this.addClass("View");
         }
     }
-
 }

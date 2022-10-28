@@ -412,6 +412,21 @@ namespace phasereditor2d.scene.ui {
             return map;
         }
 
+        buildUserComponentIdMap() {
+
+            const map = new Map<string, sceneobjects.UserComponentNode>();
+
+            this.visitAll(obj => {
+
+                for(const node of obj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes()) {
+
+                    map.set(node.getId(), node);
+                }
+            });
+
+            return map;
+        }
+
         snapPoint(x: number, y: number): { x: number, y: number } {
 
             if (this._settings.snapEnabled) {

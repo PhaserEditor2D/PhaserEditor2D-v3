@@ -29,6 +29,11 @@ namespace colibri.ui.controls.properties {
 
         abstract canEdit(obj: any, n: number): boolean;
 
+        canEditAll(selection: any[]) {
+
+            return true;
+        }
+
         private localStorageKey(prop: string) {
 
             return "PropertySection[" + this._id + "]." + prop;
@@ -187,7 +192,7 @@ namespace colibri.ui.controls.properties {
             }
 
             if (simpleProps) {
-                
+
                 div.classList.add("formSimpleProps");
             }
 
@@ -196,6 +201,6 @@ namespace colibri.ui.controls.properties {
             return div;
         }
 
-        
+
     }
 }

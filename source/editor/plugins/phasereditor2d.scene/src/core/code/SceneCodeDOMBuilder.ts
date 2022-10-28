@@ -259,8 +259,6 @@ namespace phasereditor2d.scene.core.code {
                         ? objES.getPrefabName()
                         : (explicitType ? explicitType : objES.getPhaserType());
 
-                    console.log(type);
-
                     const isPublic = objES.isPublic();
 
                     const field = new FieldDeclCodeDOM(varName, type, isPublic);
