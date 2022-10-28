@@ -33,10 +33,20 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             roots.push(...ScenePlugin.getInstance().getPlainObjectCategories());
 
+            if (scene.isPrefabSceneType()) {
+
+                roots.push(scene.getPrefabUserProperties());
+            }
+
             return roots;
         }
 
         getChildren(parent: sceneobjects.ISceneGameObject): any[] {
+
+            if (parent instanceof sceneobjects.PrefabUserProperties) {
+
+                return parent.getProperties();
+            }
 
             if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(parent)) {
 

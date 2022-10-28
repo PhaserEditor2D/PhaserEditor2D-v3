@@ -14,7 +14,8 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             } else if (element instanceof Phaser.GameObjects.DisplayList
                 || element instanceof sceneobjects.ObjectLists
-                || typeof element === "string") {
+                || typeof element === "string"
+                || element instanceof sceneobjects.PrefabUserProperties) {
 
                 return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
@@ -25,6 +26,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (element instanceof sceneobjects.UserComponentNode) {
 
                 return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT));
+
+            } else if (element instanceof sceneobjects.UserProperty) {
+
+                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_PROPERTY));
             }
 
             const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();

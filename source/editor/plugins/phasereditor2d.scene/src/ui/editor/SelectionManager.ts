@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         getSelectionIds() {
 
-            const list = [];
+            const list: string[] = [];
 
             const selection = this._editor.getSelection();
             const selectedObjects = this._editor.getSelectedGameObjects();
@@ -45,11 +45,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             const map: Map<string, any> = new Map([...objMap, ...userCompMap] as Array<any>);
 
-            for(const [k, v] of objMap) {
+            for (const [k, v] of objMap) {
                 map.set(k, v);
             }
 
-            for(const [k, v] of objMap) {
+            for (const [k, v] of objMap) {
                 map.set(k, v);
             }
 
@@ -98,7 +98,8 @@ namespace phasereditor2d.scene.ui.editor {
             this._editor.setSelection(this._editor.getSelection()
                 .map(obj => {
 
-                    const objMap = this._editor.getScene().buildObjectIdMap();
+                    const scene = this._editor.getScene();
+                    const objMap = scene.buildObjectIdMap();
 
                     if (sceneobjects.isGameObject(obj)) {
 
@@ -107,13 +108,19 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (sceneobjects.ScenePlainObjectEditorSupport.hasEditorSupport(obj)) {
 
-                        return this._editor.getScene().getPlainObjectById(
+                        return scene.getPlainObjectById(
                             (obj as sceneobjects.IScenePlainObject).getEditorSupport().getId());
                     }
 
                     if (obj instanceof sceneobjects.ObjectList) {
 
-                        return this._editor.getScene().getObjectLists().getListById(obj.getId());
+                        return scene.getObjectLists().getListById(obj.getId());
+                    }
+
+                    if (obj instanceof sceneobjects.UserProperty) {
+
+                        return scene.getPrefabUserProperties().getProperties()
+                            .find(p => p.getName() === obj.getName());
                     }
 
                     return undefined;

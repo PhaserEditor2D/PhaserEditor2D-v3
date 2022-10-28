@@ -24,16 +24,26 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         private load(data: any) {
 
-            this.getEditor().getScene().getPrefabUserProperties().readJSON(data);
-            this.getEditor().setDirty(true);
-            this.getEditor().dispatchSelectionChanged();
+            const editor = this.getEditor();
+            
+            editor.getScene().getPrefabUserProperties().readJSON(data);
+
+            editor.setDirty(true);
+
+            editor.getSelectionManager().refreshSelection();
+
+            editor.refreshOutline();
+
+            editor.dispatchSelectionChanged();
         }
 
         undo(): void {
+
             this.load(this._before);
         }
 
         redo(): void {
+            
             this.load(this._after);
         }
     }

@@ -40,6 +40,14 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (obj instanceof sceneobjects.UserComponentNode) {
 
                 return obj.getComponentName();
+
+            } else if (obj instanceof sceneobjects.PrefabUserProperties) {
+
+                return "Prefab Properties";
+
+            } else if (obj instanceof sceneobjects.UserProperty) {
+
+                return obj.getLabel();
             }
 
             const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();

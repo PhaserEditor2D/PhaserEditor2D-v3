@@ -4,47 +4,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     export class PrefabPropertiesSection extends SceneSection {
 
-        private _sectionHelper: UserPropertiesSection;
-
         constructor(page: controls.properties.PropertyPage) {
             super(
                 page, "phasereditor2d.scene.ui.editor.properties.PrefabPropertiesSection",
                 "Prefab Properties", false, true);
-
-            const self = this;
-
-            class SectionHelper extends UserPropertiesSection {
-
-                protected getSectionHelpPath(): string {
-
-                    return self.getSectionHelpPath();
-                }
-
-                protected getUserProperties(): sceneobjects.UserProperties {
-
-                    return self.getEditor().getScene().getPrefabUserProperties();
-                }
-
-                protected runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
-
-                    self.runOperation(action, updateSelection);
-                }
-
-                getSelection() {
-
-                    return self.getSelection();
-                }
-
-                canEdit(obj: any, n: number): boolean {
-                    throw new Error("Method not implemented.");
-                }
-
-                canEditNumber(n: number): boolean {
-                    throw new Error("Method not implemented.");
-                }
-            }
-
-            this._sectionHelper = new SectionHelper(page, "", "");
         }
 
         getSectionHelpPath() {
@@ -53,41 +16,29 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         createForm(parent: HTMLDivElement) {
 
-            this._sectionHelper.createForm(parent);
+            const comp = this.createGridElement(parent, 1);
 
-            this.addUpdater(() => {
+            const selector = (obj: sceneobjects.UserProperty) => {
 
-                if (this.getEditor().getScene()) {
+                this.getEditor().setSelection([obj]);
+            };
 
-                    this._sectionHelper.updateWithSelection();
-                }
-            });
+            SingleUserPropertySection.createAddComponentButton(comp, this, action => this.runOperation(action), selector);
         }
 
         runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection = true) {
 
-            const theEditor = this.getEditor();
-
-            const before = editor.properties.ChangePrefabPropertiesOperation.snapshot(theEditor);
-
-            action(this.getScene().getPrefabUserProperties());
-
-            const after = editor.properties.ChangePrefabPropertiesOperation.snapshot(this.getEditor());
-
-            this.getEditor().getUndoManager()
-                .add(new ChangePrefabPropertiesOperation(this.getEditor(), before, after));
-
-            theEditor.setDirty(true);
-
-            if (updateSelection) {
-
-                this.updateWithSelection();
-            }
+            PrefabPropertySection.runPropertiesOperation(this.getEditor(), action, updateSelection);
         }
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof Scene && obj.isPrefabSceneType();
+            return obj instanceof Scene && obj.isPrefabSceneType() || obj instanceof sceneobjects.PrefabUserProperties;
+        }
+
+        canEditNumber(n: number): boolean {
+
+            return n === 1;
         }
     }
 }
