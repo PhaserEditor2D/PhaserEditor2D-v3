@@ -2,6 +2,7 @@
 
 ## dev
 
+* Removes extra collideWorldBounds parameter in Inspector section.
 * Shows prefab properties as independent elements in the Outline view.
 * User Components Editor: shows & edits properties as independent entities.
 * Bug fix: doesn't keep user comonents in object when convert it to prefab.
