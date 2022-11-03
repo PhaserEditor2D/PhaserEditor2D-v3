@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.35.1 - Nov 3, 2022
 
 * Removes extra collideWorldBounds parameter in Inspector section.
 * Shows prefab properties as independent elements in the Outline view.
