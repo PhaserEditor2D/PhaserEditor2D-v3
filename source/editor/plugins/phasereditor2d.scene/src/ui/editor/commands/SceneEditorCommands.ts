@@ -76,6 +76,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
             .length === 0;
     }
 
+
+    function noUserComponentsNodeInPrefabSelected(args: colibri.ui.ide.commands.HandlerArgs) {
+
+        return args.activeEditor.getSelection()
+            .filter(obj => obj instanceof sceneobjects.UserComponentNode && obj.isPrefabDefined())
+            .length === 0;
+    }
+
     function isOnlyContainerSelected(args: colibri.ui.ide.commands.HandlerArgs) {
 
         return isSceneScope(args) && editorHasSelection(args)
@@ -152,6 +160,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         if (isSceneScope(args)) {
 
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
+
                             for (const obj of editor.getSelectedGameObjects()) {
 
                                 const objES = obj.getEditorSupport();
@@ -198,6 +211,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         if (isSceneScope(args)) {
 
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
+
                             for (const obj of editor.getSelectedGameObjects()) {
 
                                 const objES = obj.getEditorSupport();
@@ -240,6 +258,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const editor = args.activeEditor as ui.editor.SceneEditor;
 
                         if (isSceneScope(args)) {
+
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
@@ -287,6 +310,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const editor = args.activeEditor as ui.editor.SceneEditor;
 
                         if (isSceneScope(args)) {
+
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
@@ -814,7 +842,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_DELETE,
 
-                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0 && noNestedPrefabSelected(args),
+                args => isSceneScope(args) && args.activeEditor.getSelection().length > 0 && noNestedPrefabSelected(args) && noUserComponentsNodeInPrefabSelected(args),
 
                 args => args.activeEditor.getUndoManager()
                     .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
@@ -941,6 +969,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             const editor = args.activeEditor as editor.SceneEditor;
 
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
+
                             for (const obj of editor.getSelectedGameObjects()) {
 
                                 const editorSupport = obj.getEditorSupport();
@@ -983,6 +1016,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         if (isSceneScope(args)) {
 
                             const editor = args.activeEditor as editor.SceneEditor;
+
+                            if (editor.getSelectedGameObjects().length !== editor.getSelection().length) {
+
+                                return false;
+                            }
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
@@ -1117,11 +1155,17 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 handler: {
 
-                    testFunc: args => isSceneScope(args) && (args.activeEditor as SceneEditor)
+                    testFunc: args => {
 
-                        .getSelection()
+                        const sel = args.activeEditor.getSelection();
 
-                        .length > 0,
+                        return isSceneScope(args)
+                            && (sel.filter(obj =>
+                                obj instanceof sceneobjects.Container
+                                || obj instanceof sceneobjects.Layer))
+
+                                .length === sel.length;
+                    },
 
                     executeFunc: args => {
 
@@ -1280,19 +1324,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             return false;
                         }
 
-                        const editor = args.activeEditor as SceneEditor;
+                        const selection = args.activeEditor.getSelection();
 
-                        const sel = editor.getSelectedGameObjects();
+                        const prefabsLen = selection.filter(
+                            obj => sceneobjects.isGameObject(obj)
+                                && (obj as sceneobjects.ISceneGameObject)
+                                    .getEditorSupport().isPrefabInstance()).length;
 
-                        for (const obj of sel) {
-
-                            if (!obj.getEditorSupport().isPrefabInstance()) {
-
-                                return false;
-                            }
-                        }
-
-                        return true;
+                        return selection.length === prefabsLen;
                     },
                     executeFunc: args => {
 
@@ -1370,7 +1409,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                     editor, newFile));
 
                             editor.refreshBlocks();
-
                         });
 
                         const dlg = ext.createDialog({

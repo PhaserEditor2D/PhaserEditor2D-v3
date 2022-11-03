@@ -29,7 +29,7 @@
     }
 
     label {
-        min-width: 0px;
+        /* min-width: 0px; */
     }
 
     * {
@@ -445,6 +445,7 @@
         right: 30px;
         padding: 20px;
         border-radius: 3px;
+        background: inherit;
     }
 
     .Dialog,

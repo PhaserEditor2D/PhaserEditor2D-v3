@@ -9,6 +9,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export const CMD_OPEN_COMPONENT_OUTPUT_FILE = "phasereditor2d.scene.ui.editor.usercomponent.OpenComponentOutputFile";
     export const CAT_USER_COMPONENTS_EDITOR = "phasereditor2d.scene.ui.editor.usercomponent.UserComponentsCategory";
 
+    export declare type ISelectionItemID = { component: string, property?: string };
+
     export class UserComponentsEditor extends colibri.ui.ide.ViewerFileEditor {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
@@ -193,6 +195,47 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._model = new UserComponentsModel();
             this._outlineProvider = new UserComponentsEditorOutlineProvider(this);
             this._propertyProvider = new UserComponentsEditorPropertySectionProvider(this);
+        }
+
+        getSelectionDataFromObjects(selection: any[]): ISelectionItemID[] {
+
+            const result = selection.map(obj => {
+
+                if (obj instanceof UserComponent) {
+
+                    return { component: obj.getName() }
+                }
+
+                if (obj instanceof sceneobjects.UserProperty) {
+
+                    const comp = (obj.getAllProperties() as UserComponentProperties).getUserComponent();
+
+                    return {
+                        component: comp.getName(),
+                        property: obj.getName()
+                    };
+                }
+            });
+
+            return result;
+        }
+
+        getSelectionFromData(selectionData: ISelectionItemID[]) {
+
+            const selection = selectionData.map(item => {
+
+                const comp = this._model.getComponents().find(comp => comp.getName() === item.component);
+
+                if (comp && item.property) {
+
+                    return comp.getUserProperties().getProperties().find(prop => prop.getName() === item.property);
+                }
+
+                return comp;
+
+            }).filter(obj => obj !== undefined);
+
+            return selection;
         }
 
         getSelectedComponents(): UserComponent[] {
@@ -385,7 +428,6 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             if (this.getViewer()) {
 
-                this.getViewer().setInput(this._model.getComponents());
                 this.refreshViewers();
             }
         }
@@ -400,31 +442,34 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const before = UserComponentsEditorSnapshotOperation.takeSnapshot(this);
 
-            const deleteSet = new Set();
+            const deleteComponentsSet = new Set();
 
             for (const obj of this.getViewer().getSelection()) {
 
                 if (obj instanceof UserComponent) {
 
-                    deleteSet.add(obj);
+                    deleteComponentsSet.add(obj);
 
-                } else {
+                } else if (obj instanceof sceneobjects.UserProperty) {
+
+                    obj.getAllProperties().deleteProperty(obj.getName());
+
+                } else if (typeof obj === "string") {
 
                     for (const obj2 of this._model.getComponents()) {
 
                         if (obj2.getGameObjectType() === obj) {
 
-                            deleteSet.add(obj2);
+                            deleteComponentsSet.add(obj2);
                         }
                     }
                 }
             }
 
             this._model.setComponents(
-                this._model.getComponents().filter(comp => !deleteSet.has(comp))
+                this._model.getComponents().filter(comp => !deleteComponentsSet.has(comp))
             );
 
-            this.getViewer().setInput(this._model.getComponents());
             this.getViewer().setSelection([]);
             this.setDirty(true);
 
@@ -464,10 +509,18 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             viewer.setLabelProvider(new UserComponentSignatureLabelProvider());
             viewer.setStyledLabelProvider(new UserComponentSignatureStyledLabelProvider());
-            viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+            viewer.setContentProvider(new UserComponentEditorContentProvider());
             viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
                 // tslint:disable-next-line:new-parens
-                obj => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT))
+                obj => {
+
+                    if (obj instanceof UserComponent) {
+
+                        return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT))
+                    }
+
+                    return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_PROPERTY));
+                }
             ));
             // tslint:disable-next-line:new-parens
             viewer.setTreeRenderer(new class extends controls.viewers.TreeViewerRenderer {
@@ -482,7 +535,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                     args.canvasContext.font = controls.getCanvasFontHeight() + "px Monospace";
                 }
             });
-            viewer.setInput([]);
+            viewer.setInput(this._model);
 
             viewer.eventSelectionChanged.addListener(() => {
 
@@ -552,16 +605,20 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         getLabel(obj: any): string {
 
-            const comp = obj as UserComponent;
+            if (obj instanceof UserComponent) {
 
-            const body = comp.getUserProperties().getProperties()
-                .map(p => p.getName() + ": " +
-                    (p.getType() instanceof ui.sceneobjects.ExpressionPropertyType ?
-                        (p.getType() as ui.sceneobjects.ExpressionPropertyType).getExpressionType()
-                        : p.getType().getName()))
-                .join(", ")
+                return `class ${obj.getName()} (gameObject: ${obj.getGameObjectType()})`;
+            }
 
-            return `class ${comp.getName()} (gameObject: ${comp.getGameObjectType()}) { ${body} }`;
+            if (obj instanceof sceneobjects.UserProperty) {
+
+                return "property " + obj.getLabel() + ": " +
+                    (obj.getType() instanceof ui.sceneobjects.ExpressionPropertyType ?
+                        (obj.getType() as ui.sceneobjects.ExpressionPropertyType).getExpressionType()
+                        : obj.getType().getName());
+            }
+
+            return "";
         }
     }
 
@@ -586,60 +643,48 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const colors = dark ? colorMap.dark : colorMap.light;
 
-            const comp = obj as UserComponent;
+            if (obj instanceof UserComponent) {
 
-            const result = [{
-                text: "class ",
-                color: colors.keyword
-            }, {
-                text: comp.getName(),
-                color: colors.typeName,
-            }, {
-                text: " (gameObject: ",
-                color: colors.default
-            }, {
-                text: comp.getGameObjectType(),
-                color: colors.typeName
-            }, {
-                text: ") { ",
-                color: colors.default
-            }];
+                return [{
+                    text: "class ",
+                    color: colors.keyword
+                }, {
+                    text: obj.getName(),
+                    color: colors.typeName,
+                }, {
+                    text: " (gameObject: ",
+                    color: colors.default
+                }, {
+                    text: obj.getGameObjectType(),
+                    color: colors.typeName
+                },
+                {
+                    text: ")",
+                    color: colors.default
+                }]
+            }
 
-            const props = comp.getUserProperties().getProperties();
+            if (obj instanceof sceneobjects.UserProperty) {
 
-            for (let i = 0; i < props.length; i++) {
+                const typeName = obj.getType() instanceof ui.sceneobjects.ExpressionPropertyType ?
 
-                const prop = props[i];
+                    (obj.getType() as ui.sceneobjects.ExpressionPropertyType).getExpressionType()
 
-                const typeName = prop.getType() instanceof ui.sceneobjects.ExpressionPropertyType ?
+                    : obj.getType().getName();
 
-                    (prop.getType() as ui.sceneobjects.ExpressionPropertyType).getExpressionType()
-
-                    : prop.getType().getName();
-
-                if (i > 0) {
-
-                    result.push({
-                        text: ", ",
-                        color: colors.default
-                    })
-                }
-
-                result.push({
-                    text: prop.getName() + ": ",
+                return [{
+                    text: "property ",
+                    color: colors.keyword
+                }, {
+                    text: obj.getLabel() + ": ",
                     color: colors.default
                 }, {
                     text: typeName,
                     color: colors.typeName
-                });
+                }];
             }
 
-            result.push({
-                text: " }",
-                color: colors.default
-            });
-
-            return result;
+            return [];
         }
     }
 }

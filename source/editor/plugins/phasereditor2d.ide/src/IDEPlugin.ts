@@ -129,13 +129,26 @@ namespace phasereditor2d.ide {
             return this._externalEditorName;
         }
 
+        openBrowser(url: string) {
+
+            colibri.Platform.onElectron(electron => {
+
+                colibri.core.io.apiRequest("OpenBrowser", { url });
+
+            }, () => {
+
+                controls.Controls.openUrlInNewPage(url);
+            });
+        }
+
         async requestUpdateAvailable() {
 
             if (this.isDesktopMode()) {
 
                 if (await this.isNewUpdateAvailable()) {
 
-                    colibri.Platform.getWorkbench().showNotification("A new version is available!");
+                    colibri.Platform.getWorkbench().showNotification("A new version is available!",
+                        () => this.openBrowser("https://phasereditor2d.com/downloads"));
                 }
             }
         }
@@ -248,7 +261,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.36.0-alpha.1";
+    export const VER = "3.35.1";
 
     async function main() {
 

@@ -1,15 +1,14 @@
 /// <reference path="../properties/UserPropertiesSection.ts" />
+/// <reference path="../properties/SingleUserPropertySection.ts" />
 
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     import controls = colibri.ui.controls;
 
-    export class UserComponentPropertiesSection extends editor.properties.UserPropertiesSection {
-
+    export class UserComponentPropertySection extends editor.properties.SingleUserPropertySection<sceneobjects.UserProperty> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.editor.usercomponent.UserComponentPropertiesSection", "Component Properties", false, false);
-
+            super(page, "phasereditor2d.scene.ui.editor.usercomponent.UserComponentPropertySection", "User Property", false, false);
         }
 
         protected getSectionHelpPath(): string {
@@ -17,16 +16,26 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return "scene-editor/user-components-editor-edit-component.html";
         }
 
-        protected getUserProperties(): sceneobjects.UserProperties {
-
-            return (this.getSelectionFirstElement() as UserComponent).getUserProperties();
-        }
-
         getEditor() {
 
             return colibri.Platform.getWorkbench()
                 .getActiveWindow().getEditorArea()
                 .getSelectedEditor() as UserComponentsEditor;
+        }
+
+        protected getUserProperties(): sceneobjects.UserProperties {
+
+            return this.getSelectionFirstElement().getAllProperties();
+        }
+
+        protected getProperty(): sceneobjects.UserProperty {
+
+            return this.getSelectionFirstElement();
+        }
+
+        protected componentTitleUpdated(): void {
+
+            this.getEditor().refreshViewers();
         }
 
         runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
@@ -41,7 +50,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof UserComponent;
+            return obj instanceof sceneobjects.UserProperty;
         }
 
         canEditNumber(n: number): boolean {

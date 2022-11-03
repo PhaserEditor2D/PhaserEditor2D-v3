@@ -16,20 +16,20 @@
 }
 
 #InspectorView .PrefabLink {
-    margin-bottom: 5px;
-    margin-top: 5px;
-    padding: 5px;
-    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 3px;
     width: 100%;
+    padding: 3px;
     border-radius: 3px;
 }
 
-#InspectorView .PrefabLink:nth-child(1) {
-    margin-top: 0px;
+#InspectorView label {
+    min-width: unset;
 }
 
-.lightBlue #InspectorView .PrefabLink {
-    background: #b2c3dd66;
+#InspectorView .PrefabLink .IconButton {
+    margin-left: auto;
 }
 
 /* light */

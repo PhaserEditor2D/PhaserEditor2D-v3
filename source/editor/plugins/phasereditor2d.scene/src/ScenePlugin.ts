@@ -14,6 +14,7 @@ namespace phasereditor2d.scene {
     export const ICON_UNLOCKED = "unlocked";
     export const ICON_LIST = "list";
     export const ICON_USER_COMPONENT = "user-component";
+    export const ICON_USER_PROPERTY = "dot";
     export const ICON_IMAGE_TYPE = "image-type";
     export const ICON_SPRITE_TYPE = "sprite-type";
     export const ICON_TILESPRITE_TYPE = "tilesprite";
@@ -165,6 +166,7 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 ide.IconLoaderExtension.withPluginFiles(this, [
                     ICON_USER_COMPONENT,
+                    ICON_USER_PROPERTY,
                     ICON_SELECT_REGION,
                     ICON_TRANSLATE,
                     ICON_SCALE,
@@ -309,7 +311,8 @@ namespace phasereditor2d.scene {
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.GameObjectVariableSection(page),
                 page => new ui.sceneobjects.PrefabInstanceSection(page),
-                page => new ui.sceneobjects.UserComponentInstancePropertySection(page),
+                page => new ui.sceneobjects.ObjectUserComponentsSection(page),
+                page => new ui.sceneobjects.ObjectSingleUserComponentSection(page),
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ParentSection(page),

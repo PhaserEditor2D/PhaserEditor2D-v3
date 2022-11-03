@@ -21,8 +21,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createPropertyBoolean(comp, ArcadeComponent.immovable).checkElement.style.gridColumn = "span 4";
 
-            this.createPropertyBoolean(comp, ArcadeComponent.collideWorldBounds).checkElement.style.gridColumn = "span 4";
-
             this.createPropertyFloatRow(comp, ArcadeComponent.mass).style.gridColumn = "span 4";
 
             this.createPropertyXYRow(comp, ArcadeComponent.bounce);

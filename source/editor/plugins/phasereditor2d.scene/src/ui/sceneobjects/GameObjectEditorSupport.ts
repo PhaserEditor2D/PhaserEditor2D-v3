@@ -206,7 +206,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const userComp = property.getUserComponent();
 
-            const editorUserComp = this.getComponent(UserComponentsEditorComponent) as UserComponentsEditorComponent;
+            const editorUserComp = this.getUserComponentsComponent();
 
             if (editorUserComp.hasLocalUserComponent(userComp.getName())) {
 
@@ -400,6 +400,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getActiveComponents() {
 
             return [...this._componentMap.values()].filter(comp => comp.isActive());
+        }
+
+        getUserComponentsComponent() {
+
+            return this.getComponent(UserComponentsEditorComponent) as UserComponentsEditorComponent;
         }
 
         // tslint:disable-next-line:ban-types
