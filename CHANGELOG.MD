@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Refactored migration process. Fixes running migrations when creating the scene thumbnails.
+
 ## v3.35.1 - Nov 3, 2022
 
 * Removes extra collideWorldBounds parameter in Inspector section.
