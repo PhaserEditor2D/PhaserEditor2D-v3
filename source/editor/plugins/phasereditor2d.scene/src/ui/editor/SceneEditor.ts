@@ -521,7 +521,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const data = JSON.parse(content) as core.json.ISceneData;
 
-                await ScenePlugin.getInstance().runSceneDataMigrations(data);
+                ScenePlugin.getInstance().runSceneDataMigrations(data);
 
                 if (SceneMaker.isValidSceneDataFormat(data)) {
 

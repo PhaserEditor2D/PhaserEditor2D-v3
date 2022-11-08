@@ -8,6 +8,6 @@ namespace phasereditor2d.scene.ui {
             super(SceneDataMigrationExtension.POINT_ID, priority);
         }
 
-        abstract migrate(data: core.json.ISceneData): Promise<void>;
+        abstract migrate(data: core.json.ISceneData): void;
     }
 }

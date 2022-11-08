@@ -280,6 +280,8 @@ namespace phasereditor2d.scene.ui {
 
                 const data: core.json.ISceneData = JSON.parse(content);
 
+                ScenePlugin.getInstance().runSceneDataMigrations(data);
+
                 // const width = data.settings.borderWidth || 800;
                 // const height = data.settings.borderHeight || 600;
 

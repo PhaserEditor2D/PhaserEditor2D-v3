@@ -3,17 +3,19 @@ namespace phasereditor2d.scene.core.migrations {
 
     export class OriginMigration_v2_to_v3 extends ui.SceneDataMigrationExtension {
 
-        async migrate(data: json.ISceneData): Promise<void> {
+        migrate(data: json.ISceneData) {
 
             const version = data.meta.version ?? 1;
 
             if (version < 3) {
 
-                await this.migrateList(data.displayList);
+                console.log("Migrating: unlock position by default");
+                
+                this.migrateList(data.displayList);
             }
         }
 
-        private async migrateList(list: json.IObjectData[]) {
+        private migrateList(list: json.IObjectData[]) {
 
             for (const obj of list) {
 
@@ -33,12 +35,12 @@ namespace phasereditor2d.scene.core.migrations {
 
                 if (obj.list) {
 
-                    await this.migrateList(obj.list);
+                    this.migrateList(obj.list);
                 }
 
                 if (obj.nestedPrefabs) {
 
-                    await this.migrateList(obj.nestedPrefabs);
+                    this.migrateList(obj.nestedPrefabs);
                 }
             }
         }
