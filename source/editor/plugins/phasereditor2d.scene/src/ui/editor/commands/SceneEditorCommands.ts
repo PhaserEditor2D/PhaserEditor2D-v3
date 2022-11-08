@@ -1157,14 +1157,17 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                     testFunc: args => {
 
+                        if (!isSceneScope(args)) {
+
+                            return false;
+                        }
+
                         const sel = args.activeEditor.getSelection();
 
-                        return isSceneScope(args)
-                            && (sel.filter(obj =>
-                                obj instanceof sceneobjects.Container
-                                || obj instanceof sceneobjects.Layer))
-
-                                .length === sel.length;
+                        return (sel.filter(obj =>
+                            obj instanceof sceneobjects.Container
+                            || obj instanceof sceneobjects.Layer))
+                            .length === sel.length;
                     },
 
                     executeFunc: args => {
@@ -1846,6 +1849,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         testFunc: args => {
 
                             if (!isSceneScope(args)) {
+                                
                                 return false;
                             }
 
