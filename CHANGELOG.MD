@@ -3,6 +3,7 @@
 ## dev
 
 * Refactored migration process. Fixes running migrations when creating the scene thumbnails.
+* Fixes bug when opening the Command Paletter and no editor is open.
 
 ## v3.35.1 - Nov 3, 2022
 
