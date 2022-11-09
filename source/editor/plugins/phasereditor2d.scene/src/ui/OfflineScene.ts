@@ -46,6 +46,8 @@ namespace phasereditor2d.scene.ui {
 
         async create() {
 
+            ScenePlugin.getInstance().runSceneDataMigrations(this._data);
+
             this.registerDestroyListener("OfflineScene");
 
             const maker = this.getMaker();
