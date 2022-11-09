@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.35.2 - Nov 9, 2022
 
 * Refactored migration process. Fixes running migrations when creating the scene thumbnails.
 * Adds migration for `Text.align` property.
