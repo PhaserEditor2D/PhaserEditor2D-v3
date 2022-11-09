@@ -116,6 +116,7 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(new core.migrations.OriginMigration_v2_to_v3());
             reg.addExtension(new core.migrations.UnlockPositionMigration_v1_to_v2());
+            reg.addExtension(new core.migrations.TextAlignMigration());
 
             // preload docs
 
