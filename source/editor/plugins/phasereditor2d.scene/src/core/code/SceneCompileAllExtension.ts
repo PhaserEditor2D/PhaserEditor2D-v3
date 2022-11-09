@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.core.code {
 
+    import io = colibri.core.io;
+
     export class SceneCompileAllExtension extends phasereditor2d.ide.core.CompileProjectExtension {
 
         private getFiles() {
@@ -14,25 +16,31 @@ namespace phasereditor2d.scene.core.code {
             return this.getFiles().length;
         }
 
+
+        static async compileSceneFile(file: io.FilePath) {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const data = finder.getSceneData(file);
+
+            const scene = await ui.OfflineScene.createScene(data);
+
+            const compiler = new core.code.SceneCompiler(scene, file);
+
+            await compiler.compile();
+
+            scene.destroyGame();
+        }
+
         async preload(monitor: colibri.ui.controls.IProgressMonitor) {
 
             const files = this.getFiles();
-
-            const finder = ScenePlugin.getInstance().getSceneFinder();
 
             monitor.addTotal(files.length);
 
             for (const file of files) {
 
-                const data = finder.getSceneData(file);
-
-                const scene = await ui.OfflineScene.createScene(data);
-
-                const compiler = new core.code.SceneCompiler(scene, file);
-
-                await compiler.compile();
-
-                scene.destroyGame();
+                await SceneCompileAllExtension.compileSceneFile(file);
 
                 monitor.step();
             }

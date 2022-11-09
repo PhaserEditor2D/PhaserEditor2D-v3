@@ -1,3 +1,4 @@
+
 namespace phasereditor2d.scene.ui.editor.commands {
 
     import controls = colibri.ui.controls;
@@ -42,6 +43,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_FIX_SCENE_FILES_ID = "phasereditor2d.scene.ui.editor.commands.FixSceneFilesID";
     export const CMD_DUPLICATE_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.DuplicateSceneFile";
     export const CMD_CLEAR_SCENE_THUMBNAIL_CACHE = "phasereditor2d.scene.ui.editor.commands.ClearSceneThumbnailCache";
+    export const CMD_MIGRATE_AND_BUILD_ALL_SCENE_FILES = "phasereditor2d.scene.ui.editor.commands.MigrateAndBuildAllSceneFiles";
     export const CMD_OPEN_SCENE_FILE = "phasereditor2d.scene.ui.editor.commands.OpenSceneFile";
     export const CMD_DISABLE_AWAKE_EVENT_PREFABS = "phasereditor2d.scene.ui.editor.commands.DisableAwakeEventPrefabs";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_CANVAS = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToCanvas";
@@ -500,6 +502,67 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 }
             });
+
+            // migrate scene files
+
+            manager.add({
+                command: {
+                    id: CMD_MIGRATE_AND_BUILD_ALL_SCENE_FILES,
+                    name: "Migrate All Scene Files",
+                    tooltip: "Run the migration process in all scene files and compile the project.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    executeFunc: async args => {
+
+                        const dlg = new controls.dialogs.ProgressDialog();
+
+                        dlg.create();
+                        dlg.setTitle("Migrating & Compiling Scene Files");
+
+                        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                        const files = finder.getSceneFiles();
+
+                        const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
+
+                        monitor.addTotal(files.length);
+
+                        for (const file of files) {
+
+                            try {
+
+                                const finder = ScenePlugin.getInstance().getSceneFinder();
+
+                                const data1 = finder.getSceneData(file);
+
+                                const scene = await ui.OfflineScene.createScene(data1);
+
+                                // compile code
+
+                                const compiler = new core.code.SceneCompiler(scene, file);
+                                await compiler.compile();
+
+                                // write scene data
+                                const writer = new core.json.SceneWriter(scene);
+
+                                const data2 = writer.toJSON();
+
+                                const content = JSON.stringify(data2, null, 4);
+
+                                await colibri.ui.ide.FileUtils.setFileString_async(file, content);
+
+                            } catch (e) {
+
+                                alert((e as Error).message);
+                            }
+                            monitor.step();
+                        }
+
+                        dlg.close();
+                    }
+                }
+            })
 
             // clear scene thumbnail database
 
@@ -1849,7 +1912,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         testFunc: args => {
 
                             if (!isSceneScope(args)) {
-                                
+
                                 return false;
                             }
 
