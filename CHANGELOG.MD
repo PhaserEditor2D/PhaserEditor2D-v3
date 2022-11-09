@@ -3,6 +3,7 @@
 ## dev
 
 * Refactored migration process. Fixes running migrations when creating the scene thumbnails.
+* Adds migration for `Text.align` property.
 * Fixes bug when opening the Command Paletter and no editor is open.
 * Adds a **Migrate & Compile All Scenes** command.
 
