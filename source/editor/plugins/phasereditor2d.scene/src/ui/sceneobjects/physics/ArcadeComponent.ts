@@ -238,9 +238,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static enableBody(obj: ISceneGameObject) {
 
-            obj.scene.physics.add.existing(obj);
+            const sprite = obj as Image;
 
-            ArcadeComponent.getBody(obj).enable = false;
+            // I have to scale to 1 and later restore the original scale
+            // see issue https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/250
+            const {scaleX, scaleY} = sprite;
+
+            sprite.setScale(1, 1);
+
+            sprite.scene.physics.add.existing(sprite);
+
+            sprite.setScale(scaleX, scaleY);
+
+            const body = ArcadeComponent.getBody(obj);
+            body.enable = false;
 
             obj.getEditorSupport().setComponentActive(ArcadeComponent, true);
         }

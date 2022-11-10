@@ -305,10 +305,10 @@ namespace phasereditor2d.scene.ui {
 
             this._editorScene.setVersion(version);
 
-            if (version === 1) {
-                // old version, perform unlock x & y migration
-                new json.Version1ToVersion2Migration().migrate(sceneData);
-            }
+            // if (version === 1) {
+            //     // old version, perform unlock x & y migration
+            //     new json.Version1ToVersion2Migration().migrate(sceneData);
+            // }
 
             if (sceneData.settings) {
 

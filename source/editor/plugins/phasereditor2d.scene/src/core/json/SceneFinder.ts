@@ -24,7 +24,8 @@ namespace phasereditor2d.scene.core.json {
         async preload(monitor: controls.IProgressMonitor) {
 
             await this._finder.preload(monitor);
-            await this._finder.runMigrations();
+            
+            this._finder.runMigrations();
         }
     }
 
@@ -134,11 +135,11 @@ namespace phasereditor2d.scene.core.json {
             monitor.step();
         }
 
-        async runMigrations() {
+        runMigrations() {
 
             for (const data of this._sceneFilename_Data_Map.values()) {
 
-                await ScenePlugin.getInstance().runSceneDataMigrations(data);
+                ScenePlugin.getInstance().runSceneDataMigrations(data);
             }
         }
 
@@ -169,7 +170,7 @@ namespace phasereditor2d.scene.core.json {
                     compFiles.push(file);
 
                 } catch (e) {
-                    
+
                     console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
                 }
 

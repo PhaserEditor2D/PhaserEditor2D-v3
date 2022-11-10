@@ -1,5 +1,13 @@
 # Change Log
 
+## v3.35.2 - Nov 10, 2022
+
+* Refactored migration process. Fixes running migrations when creating the scene thumbnails.
+* Adds migration for `Text.align` property.
+* Fixes bug when opening the Command Palette and no editor is open.
+* Adds a **Migrate & Compile All Scenes** command.
+* [#250](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/250): Fixes adding a physics body to a scaled object.
+
 ## v3.35.1 - Nov 3, 2022
 
 * Removes extra collideWorldBounds parameter in Inspector section.

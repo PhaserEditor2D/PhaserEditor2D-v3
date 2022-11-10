@@ -53,7 +53,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_SHAPE_CATEGORY = "Shape";
     export const SCENE_OBJECT_TILEMAP_CATEGORY = "Tile Map";
     export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
-    
+
     export const SCENE_OBJECT_CATEGORIES = [
         SCENE_OBJECT_IMAGE_CATEGORY,
         SCENE_OBJECT_GROUPING_CATEGORY,
@@ -115,6 +115,8 @@ namespace phasereditor2d.scene {
             // migrations
 
             reg.addExtension(new core.migrations.OriginMigration_v2_to_v3());
+            reg.addExtension(new core.migrations.UnlockPositionMigration_v1_to_v2());
+            reg.addExtension(new core.migrations.TextAlignMigration());
 
             // preload docs
 
@@ -578,7 +580,7 @@ namespace phasereditor2d.scene {
             dlg.close();
         }
 
-        async runSceneDataMigrations(sceneData: core.json.ISceneData) {
+        runSceneDataMigrations(sceneData: core.json.ISceneData) {
 
             const migrations = colibri.Platform.getExtensionRegistry()
                 .getExtensions<ui.SceneDataMigrationExtension>(ui.SceneDataMigrationExtension.POINT_ID);
@@ -587,7 +589,7 @@ namespace phasereditor2d.scene {
 
                 try {
 
-                    await migration.migrate(sceneData);
+                    migration.migrate(sceneData);
 
                 } catch (e) {
 
