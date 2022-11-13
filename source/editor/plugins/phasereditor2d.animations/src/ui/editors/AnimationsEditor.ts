@@ -81,9 +81,24 @@ namespace phasereditor2d.animations.ui.editors {
 
             const content = JSON.stringify(animsData, null, 4);
 
-            await FileUtils.setFileString_async(this.getInput(), content);
+            const animsFile = this.getInput();
+
+            await FileUtils.setFileString_async(animsFile, content);
 
             this.setDirty(false);
+
+            const tsFileName = animsFile.getName() + ".d.ts";
+
+            let tsFile = animsFile.getSibling(tsFileName);
+
+            if (!tsFile) {
+
+                tsFile = await colibri.ui.ide.FileUtils.createFile_async(animsFile.getParent(), tsFileName, "");
+            }
+
+            const generator = new AnimationsTypeScriptCompiler(animsData);
+            
+            await generator.compileFile(animsFile, tsFile);
         }
 
         openAddFramesDialog(cmd: "prepend" | "append"): void {

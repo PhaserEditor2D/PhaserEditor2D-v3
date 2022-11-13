@@ -1,4 +1,4 @@
-namespace phasereditor2d.scene.core.code {
+namespace phasereditor2d.ide.core.code {
 
     export abstract class BaseCodeGenerator {
 
