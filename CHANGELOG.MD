@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Animations Editor: allows creating an animation with a single frame.
+
 ## v3.35.2 - Nov 10, 2022
 
 * Refactored migration process. Fixes running migrations when creating the scene thumbnails.
