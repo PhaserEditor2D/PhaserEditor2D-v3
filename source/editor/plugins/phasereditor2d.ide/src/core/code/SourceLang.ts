@@ -1,4 +1,4 @@
-namespace phasereditor2d.scene.core.json {
+namespace phasereditor2d.ide.core.code {
 
     export enum SourceLang {
 

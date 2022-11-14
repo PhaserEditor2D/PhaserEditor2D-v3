@@ -31,10 +31,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 const btn = this.createMenuButton(comp, "", () => [{
                     name: "JavaScript",
-                    value: core.json.SourceLang.JAVA_SCRIPT
+                    value: ide.core.code.SourceLang.JAVA_SCRIPT
                 }, {
                     name: "TypeScript",
-                    value: core.json.SourceLang.TYPE_SCRIPT
+                    value: ide.core.code.SourceLang.TYPE_SCRIPT
                 }], value => {
 
                     this.getEditor().runOperation(model => {
@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     const lang = this.getSelectionFirstElement().getOutputLang();
 
-                    btn.textContent = lang === core.json.SourceLang.JAVA_SCRIPT ?
+                    btn.textContent = lang === ide.core.code.SourceLang.JAVA_SCRIPT ?
                         "JavaScript" : "TypeScript";
                 });
             }

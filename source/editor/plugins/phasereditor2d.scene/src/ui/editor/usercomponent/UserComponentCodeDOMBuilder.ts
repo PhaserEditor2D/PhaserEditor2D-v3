@@ -199,7 +199,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         private isTypeScriptOutput() {
 
-            return this._model.outputLang === core.json.SourceLang.TYPE_SCRIPT;
+            return this._model.outputLang === ide.core.code.SourceLang.TYPE_SCRIPT;
         }
 
         private buildAccessorMethods(clsDom: code.ClassDeclCodeDOM) {

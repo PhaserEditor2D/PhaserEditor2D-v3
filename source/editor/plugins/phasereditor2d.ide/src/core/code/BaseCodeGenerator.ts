@@ -11,6 +11,11 @@ namespace phasereditor2d.ide.core.code {
             this._indent = 0;
         }
 
+        formatVariableName(name: string) {
+
+            return formatToValidVarName(name);
+        }
+
         getOffset() {
             return this._text.length;
         }

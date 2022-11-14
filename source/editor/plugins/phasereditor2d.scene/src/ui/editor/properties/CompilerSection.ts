@@ -51,11 +51,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 comp, () => [
                     {
                         name: "JavaScript",
-                        value: core.json.SourceLang.JAVA_SCRIPT,
+                        value: ide.core.code.SourceLang.JAVA_SCRIPT,
                     },
                     {
                         name: "TypeScript",
-                        value: core.json.SourceLang.TYPE_SCRIPT
+                        value: ide.core.code.SourceLang.TYPE_SCRIPT
                     }],
                 "compilerOutputLanguage", "Output Language",
                 "The scene compiler output language.");

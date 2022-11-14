@@ -20,6 +20,7 @@ namespace phasereditor2d.animations.ui.editors {
         private _selectedAnimations: Phaser.Animations.Animation[];
         private _currentDependenciesHash: string;
         private _menuCreator: AnimationsEditorMenuCreator;
+        private _model: AnimationsModel;
 
         static getFactory() {
 
@@ -38,67 +39,64 @@ namespace phasereditor2d.animations.ui.editors {
             this._propertiesProvider = new properties.AnimationsEditorPropertyProvider();
 
             this._selectedAnimations = [];
+
+            this._model = new AnimationsModel();
+        }
+
+        getModel() {
+
+            return this._model;
         }
 
         protected async doSave() {
 
             const animsData = this._scene.anims.toJSON();
 
-            for (const a of animsData.anims) {
-
-                if (a.delay === 0) delete a.delay;
-
-                if (a.repeat === 0) delete a.repeat;
-
-                if (a.repeatDelay === 0) delete a.repeatDelay;
-
-                if (!a.yoyo) delete a.yoyo;
-
-                if (!a.showOnStart) delete a.showOnStart;
-
-                if (!a.hideOnComplete) delete a.hideOnComplete;
-
-                if (!a.skipMissedFrames) delete a.skipMissedFrames;
-
-                delete a.duration;
-
-                for (const frame of a.frames) {
-
-                    try {
-                        const item = this.getScene().getMaker().getPackFinder().findAssetPackItem(frame.key);
-
-                        if (item instanceof pack.core.ImageAssetPackItem) {
-
-                            delete frame.frame;
-                        }
-                    } catch (e) {
-                        // nothing
-                    }
-                }
-            }
-
-            animsData["meta"] = AnimationsPlugin.getInstance().createAnimationsMetaData();
-
-            const content = JSON.stringify(animsData, null, 4);
+            this._model.setJSONAnimations(animsData);
 
             const animsFile = this.getInput();
 
-            await FileUtils.setFileString_async(animsFile, content);
+            await this._model.writeFile(animsFile, this.getScene().getMaker().getPackFinder());
 
             this.setDirty(false);
 
-            const tsFileName = animsFile.getName() + ".d.ts";
+            await this.compile();
+        }
 
-            let tsFile = animsFile.getSibling(tsFileName);
+        async compile() {
 
-            if (!tsFile) {
+            if (!this._model.generateCode) {
 
-                tsFile = await colibri.ui.ide.FileUtils.createFile_async(animsFile.getParent(), tsFileName, "");
+                return;
             }
 
-            const generator = new AnimationsTypeScriptCompiler(animsData);
-            
-            await generator.compileFile(animsFile, tsFile);
+            const animsFile = this.getInput();
+
+            const fileExt = this._model.sourceLang === ide.core.code.SourceLang.JAVA_SCRIPT ? "js" : "ts";
+
+            const tsFileName = `${animsFile.getNameWithoutExtension()}.${fileExt}`;
+
+            const outputFolderName = this._model.outputFolder || animsFile.getParent().getFullName();
+
+            const outputFolder = colibri.ui.ide.FileUtils.getFileFromPath(outputFolderName);
+
+            if (outputFolder) {
+
+                let tsFile = outputFolder.getFile(tsFileName);
+
+                if (!tsFile) {
+
+                    tsFile = await colibri.ui.ide.FileUtils.createFile_async(outputFolder, tsFileName, "");
+                }
+
+                const generator = new AnimationsCompiler(this._model);
+
+                await generator.compileFile(animsFile, tsFile);
+
+            } else {
+
+                alert("Animations compiler: invalid output folder.");
+            }
         }
 
         openAddFramesDialog(cmd: "prepend" | "append"): void {
@@ -180,6 +178,13 @@ namespace phasereditor2d.animations.ui.editors {
         selectAll() {
 
             this.setSelection(this.getAnimations());
+        }
+
+        deselectAll() {
+
+            this.setSelection([this._model]);
+
+            this.refreshOutline();
         }
 
         deleteSelected() {
@@ -510,11 +515,10 @@ namespace phasereditor2d.animations.ui.editors {
 
                 const file = this.getInput();
 
-                await FileUtils.preloadFileString(file);
+                this._model = new AnimationsModel();
+                await this._model.readFile(file);
 
-                const content = FileUtils.getFileString(file);
-
-                const data = JSON.parse(content);
+                const data = this._model.getModelData();
 
                 this._overlayLayer.setLoading(true);
                 this._overlayLayer.render();
@@ -626,6 +630,11 @@ namespace phasereditor2d.animations.ui.editors {
                 this.updateIfDependenciesChanged();
 
                 this.refreshBlocks();
+
+                if (this.getSelection() && this.getSelection().length === 0) {
+
+                    this.setSelection([this._model]);
+                }
             }
         }
 
@@ -694,6 +703,14 @@ namespace phasereditor2d.animations.ui.editors {
             const after = AnimationsEditorSnapshotOperation.takeSnapshot(this);
 
             this.getUndoManager().add(new AnimationsEditorSnapshotOperation(this, before, after, useAnimationIndexAsKey));
+        }
+
+        runSettingsOperation(op: () => void) {
+
+            // TODO: implements the undo operation
+            op();
+
+            this.setDirty(true);
         }
 
         private computeSelectedAnimations() {
@@ -777,6 +794,8 @@ namespace phasereditor2d.animations.ui.editors {
         }
 
         reset(animsData: Phaser.Types.Animations.JSONAnimations, useAnimationIndexAsKey: boolean) {
+
+            this._model.setJSONAnimations(animsData);
 
             let selectedIndexes: number[];
             let selectedKeys: string[];

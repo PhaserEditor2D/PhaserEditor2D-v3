@@ -16,6 +16,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
             sections.push(
                 new AnimationSection(page),
+                new AnimationCompilerSection(page),
                 new AnimationPreviewFrameSection(page),
                 new ManyAnimationFramesPreviewSection(page)
             );
@@ -35,7 +36,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
                     || activePart instanceof colibri.inspector.ui.views.InspectorView
                     || activePart instanceof phasereditor2d.outline.ui.views.OutlineView) {
 
-                    return editor.getAnimations();
+                    return [editor.getModel()];
                 }
             }
 

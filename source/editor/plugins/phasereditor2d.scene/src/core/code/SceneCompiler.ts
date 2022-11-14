@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.core.code {
 
             const settings = this._scene.getSettings();
 
-            const compileToJS = settings.compilerOutputLanguage === json.SourceLang.JAVA_SCRIPT;
+            const compileToJS = settings.compilerOutputLanguage === phasereditor2d.ide.core.code.SourceLang.JAVA_SCRIPT;
 
             const fileExt = compileToJS ? "js" : "ts";
             const fileName = this._sceneFile.getNameWithoutExtension() + "." + fileExt;
@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.core.code {
                 return;
             }
 
-            const compileToJS = settings.compilerOutputLanguage === json.SourceLang.JAVA_SCRIPT;
+            const compileToJS = settings.compilerOutputLanguage === phasereditor2d.ide.core.code.SourceLang.JAVA_SCRIPT;
 
             const builder = new core.code.SceneCodeDOMBuilder(this._scene, this._sceneFile);
 
