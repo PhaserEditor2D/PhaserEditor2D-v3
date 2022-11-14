@@ -4,6 +4,7 @@
 
 * Animations Editor: allows creating an animation with a single frame.
 * Animations Editor: allows compiling the animation keys as JavaScript/TypeScript constants.
+* Scene Editor: adds Keyboard.Key object support.
 
 ## v3.35.2 - Nov 10, 2022
 
