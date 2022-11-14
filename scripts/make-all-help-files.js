@@ -254,6 +254,8 @@ utils.makeHelpFile([
     "Phaser.Physics.Arcade.Collider(processCallback)",
     "Phaser.Physics.Arcade.Collider(callbackContext)",
 
+    "Phaser.Input.Keyboard.Key"
+
     
 ], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
 
