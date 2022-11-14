@@ -29,6 +29,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const dlg = new controls.dialogs.ViewerDialog(viewer, false);
                 
                 dlg.create();
+
+                dlg.setTitle("Select The KeyCode");
                 
                 dlg.addOpenButton("Select", (sel) => {
 
