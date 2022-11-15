@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 
                 dlg.create();
 
-                dlg.setTitle("Select The KeyCode");
+                dlg.setTitle("Select Key Code");
                 
                 dlg.addOpenButton("Select", (sel) => {
 
