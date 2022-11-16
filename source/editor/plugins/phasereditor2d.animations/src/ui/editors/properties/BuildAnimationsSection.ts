@@ -35,9 +35,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
                 const builder = new AnimationsBuilder(this.getEditor(), this.getSelection());
 
-                const allClusters = builder.buildClusters();
-
-                const clusters = allClusters.filter(c => c.elements.length > 1);
+                const clusters = builder.buildClusters();
 
                 const len = clusters.length;
 
@@ -48,15 +46,6 @@ namespace phasereditor2d.animations.ui.editors.properties {
                     html += clusters.map(c => `<b>${c.prefix}</b> <small>(${c.elements.length} frames)</small>`).join("<br>")
                     html += "<br><br>";
                 }
-
-                const skipped = allClusters.length - len;
-
-                if (skipped > 0) {
-
-                    html += `<small>Skipping ${skipped} animations with a single frame.</small>`;
-                    html += "<br><br>";
-                }
-
 
                 clustersElement.innerHTML = html;
 

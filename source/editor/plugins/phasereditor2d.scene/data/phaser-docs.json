@@ -152,5 +152,6 @@
   "Phaser.Physics.Arcade.Collider(object2)": "The second object to check for collision.",
   "Phaser.Physics.Arcade.Collider(collideCallback)": "The callback to invoke when the two objects collide.",
   "Phaser.Physics.Arcade.Collider(processCallback)": "The callback to invoke when the two objects collide. Must return a boolean.",
-  "Phaser.Physics.Arcade.Collider(callbackContext)": "The scope in which to call the callbacks."
+  "Phaser.Physics.Arcade.Collider(callbackContext)": "The scope in which to call the callbacks.",
+  "Phaser.Input.Keyboard.Key": "A generic Key object which can be passed to the Process functions (and so on)\rkeycode must be an integer"
 }

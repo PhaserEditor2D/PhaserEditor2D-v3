@@ -382,7 +382,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const component = this.getSelectedComponents()[0];
 
-            const fileName = component.getName() + "." + (this._model.getOutputLang() === core.json.SourceLang.JAVA_SCRIPT ? "js" : "ts");
+            const fileName = component.getName() + "." + (this._model.getOutputLang() === ide.core.code.SourceLang.JAVA_SCRIPT ? "js" : "ts");
 
             const file = this.getInput().getSibling(fileName);
 

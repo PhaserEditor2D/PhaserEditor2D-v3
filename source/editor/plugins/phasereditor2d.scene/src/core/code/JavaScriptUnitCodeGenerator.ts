@@ -1,5 +1,7 @@
 namespace phasereditor2d.scene.core.code {
 
+    import BaseCodeGenerator = ide.core.code.BaseCodeGenerator;
+
     export class JavaScriptUnitCodeGenerator extends BaseCodeGenerator {
 
         private _unit: UnitCodeDOM;

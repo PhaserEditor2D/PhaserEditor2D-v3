@@ -12,7 +12,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super({
                 category: SCENE_OBJECT_ARCADE_CATEGORY,
-                // TODO: collider icon
                 icon: ScenePlugin.getInstance().getIconDescriptor(ICON_ARCADE_COLLIDER),
                 phaserTypeName: "Phaser.Physics.Arcade.Collider",
                 typeName: "Collider"

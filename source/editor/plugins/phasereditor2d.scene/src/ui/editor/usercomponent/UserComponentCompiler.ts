@@ -56,7 +56,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         isJavaScriptOutput() {
 
-            return this._model.getOutputLang() === core.json.SourceLang.JAVA_SCRIPT;
+            return this._model.getOutputLang() === ide.core.code.SourceLang.JAVA_SCRIPT;
         }
 
         getOutputFile(userCompName: string) {

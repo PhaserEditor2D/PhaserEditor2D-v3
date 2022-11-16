@@ -46,6 +46,7 @@ namespace phasereditor2d.scene {
     export const ICON_ORIGIN_BOTTOM_CENTER = "origin-bottomcenter";
     export const ICON_ORIGIN_BOTTOM_RIGHT = "origin-bottomright";
     export const ICON_ARCADE_COLLIDER = "collider";
+    export const ICON_KEYBOARD_KEY = "keyboard-key";
 
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
@@ -53,6 +54,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_SHAPE_CATEGORY = "Shape";
     export const SCENE_OBJECT_TILEMAP_CATEGORY = "Tile Map";
     export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
+    export const SCENE_OBJECT_INPUT_CATEGORY = "Input";
 
     export const SCENE_OBJECT_CATEGORIES = [
         SCENE_OBJECT_IMAGE_CATEGORY,
@@ -60,7 +62,8 @@ namespace phasereditor2d.scene {
         SCENE_OBJECT_TEXT_CATEGORY,
         SCENE_OBJECT_ARCADE_CATEGORY,
         SCENE_OBJECT_SHAPE_CATEGORY,
-        SCENE_OBJECT_TILEMAP_CATEGORY
+        SCENE_OBJECT_TILEMAP_CATEGORY,
+        SCENE_OBJECT_INPUT_CATEGORY
     ];
 
     export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
@@ -207,7 +210,8 @@ namespace phasereditor2d.scene {
                     ICON_ORIGIN_BOTTOM_LEFT,
                     ICON_ORIGIN_BOTTOM_CENTER,
                     ICON_ORIGIN_BOTTOM_RIGHT,
-                    ICON_ARCADE_COLLIDER
+                    ICON_ARCADE_COLLIDER,
+                    ICON_KEYBOARD_KEY
                 ])
             );
 
@@ -295,7 +299,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.PolygonExtension.getInstance(),
                 ui.sceneobjects.ArcadeImageExtension.getInstance(),
                 ui.sceneobjects.ArcadeSpriteExtension.getInstance(),
-                ui.sceneobjects.ColliderExtension.getInstance()
+                ui.sceneobjects.ColliderExtension.getInstance(),
+                ui.sceneobjects.KeyboardKeyExtension.getInstance()
             );
 
             // scene plain object extensions
@@ -346,7 +351,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.EllipseSection(page),
                 page => new ui.sceneobjects.TriangleSection(page),
                 page => new ui.sceneobjects.PolygonSection(page),
-                page => new ui.sceneobjects.ColliderSection(page)
+                page => new ui.sceneobjects.ColliderSection(page),
+                page => new ui.sceneobjects.KeyboardKeySection(page)
             ));
 
             // scene tools

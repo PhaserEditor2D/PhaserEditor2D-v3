@@ -34,7 +34,7 @@ namespace phasereditor2d.animations.ui.editors {
 
             nameMaker.update(editor.getAnimations());
 
-            const clusters = this.buildClusters().filter(c => c.elements.length > 1);
+            const clusters = this.buildClusters();
 
             const animsArray: any[] = clusters.map(c => {
 

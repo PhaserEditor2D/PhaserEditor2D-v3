@@ -44,7 +44,7 @@ namespace phasereditor2d.animations.ui.editors {
             return hash;
         }
 
-        async updateSceneLoader(data: Phaser.Types.Animations.JSONAnimations, monitor?: colibri.ui.controls.IProgressMonitor) {
+        async updateSceneLoader(data: IAnimationsData, monitor?: colibri.ui.controls.IProgressMonitor) {
 
             const scene = this.getScene();
 

@@ -125,7 +125,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             const lang = this._scene.getSettings().compilerOutputLanguage;
 
-            const ext = lang === json.SourceLang.JAVA_SCRIPT ? ".js" : ".ts";
+            const ext = lang === phasereditor2d.ide.core.code.SourceLang.JAVA_SCRIPT ? ".js" : ".ts";
 
             const file = this.getInput().getSibling(this.getInput().getNameWithoutExtension() + ext);
 

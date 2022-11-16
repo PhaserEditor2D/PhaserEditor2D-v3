@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
     export interface IUserComponentsModelData {
         components: any[],
-        outputLang?: core.json.SourceLang,
+        outputLang?: ide.core.code.SourceLang,
         exportClass?: boolean,
         autoImport?: boolean,
         insertSpaces?: boolean,
@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
     export class UserComponentsModel {
 
         private _components: UserComponent[];
-        public outputLang: core.json.SourceLang;
+        public outputLang: ide.core.code.SourceLang;
         public javaScriptInitFieldsInConstructor: boolean;
         public insertSpaces: boolean;
         public tabSize: number;
@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         constructor() {
 
             this._components = [];
-            this.outputLang = core.json.SourceLang.JAVA_SCRIPT;
+            this.outputLang = ide.core.code.SourceLang.JAVA_SCRIPT;
             this.javaScriptInitFieldsInConstructor = false;
             this.insertSpaces = false;
             this.tabSize = 4;
@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                 }
             };
 
-            write(data, "outputLang", this.outputLang, core.json.SourceLang.JAVA_SCRIPT);
+            write(data, "outputLang", this.outputLang, ide.core.code.SourceLang.JAVA_SCRIPT);
             write(data, "javaScriptInitFieldsInConstructor", this.javaScriptInitFieldsInConstructor, false);
             write(data, "insertSpaces", this.insertSpaces, false);
             write(data, "tabSize", this.tabSize, 4);
@@ -61,7 +61,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         readJSON(data: IUserComponentsModelData) {
 
-            this.outputLang = read(data, "outputLang", core.json.SourceLang.JAVA_SCRIPT);
+            this.outputLang = read(data, "outputLang", ide.core.code.SourceLang.JAVA_SCRIPT);
             this.javaScriptInitFieldsInConstructor = read(data, "javaScriptInitFieldsInConstructor", false);
             this.insertSpaces = read(data, "insertSpaces", false);
             this.tabSize = read(data, "tabSize", 4);
@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return this.outputLang;
         }
 
-        setOutputLang(outputLang: core.json.SourceLang) {
+        setOutputLang(outputLang: ide.core.code.SourceLang) {
 
             this.outputLang = outputLang;
         }

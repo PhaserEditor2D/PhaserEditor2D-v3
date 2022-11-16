@@ -13,10 +13,11 @@ namespace phasereditor2d.animations.ui.dialogs {
 
         getCreateFileContentFunc(): (args: files.ui.dialogs.ICreateFileContentArgs) => string {
 
-            return _ => JSON.stringify({
-                anims: [],
-                meta: AnimationsPlugin.getInstance().createAnimationsMetaData()
-            }, null, 4);
+            const model = new editors.AnimationsModel();
+            
+            const animsData = model.toJSON(undefined);
+
+            return _ => JSON.stringify(animsData, null, 4);
         }
     }
 }

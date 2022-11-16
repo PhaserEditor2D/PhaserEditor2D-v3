@@ -1,5 +1,11 @@
 # Change Log
 
+## v3.36.0 - Nov 15, 2022
+
+* Animations Editor: allows creating an animation with a single frame.
+* Animations Editor: allows compiling the animation keys as JavaScript/TypeScript constants.
+* Scene Editor: adds Keyboard.Key object support.
+
 ## v3.35.2 - Nov 10, 2022
 
 * Refactored migration process. Fixes running migrations when creating the scene thumbnails.

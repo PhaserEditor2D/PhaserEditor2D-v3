@@ -70,7 +70,9 @@ namespace phasereditor2d.animations {
 
             manager.addHandlerHelper(colibri.ui.ide.actions.CMD_ESCAPE,
                 args => args.activePart instanceof ui.editors.AnimationsEditor,
-                args => args.activeEditor.setSelection([]));
+                args => {
+                    (args.activeEditor as ui.editors.AnimationsEditor).deselectAll();
+                });
 
             // delete
 
@@ -141,14 +143,6 @@ namespace phasereditor2d.animations {
                     executeFunc: args => (args.activeEditor as ui.editors.AnimationsEditor).openAddFramesDialog("append")
                 }
             });
-        }
-
-        createAnimationsMetaData() {
-
-            return {
-                "app": "Phaser Editor 2D v3",
-                "contentType": pack.core.contentTypes.CONTENT_TYPE_ANIMATIONS
-            }
         }
     }
 

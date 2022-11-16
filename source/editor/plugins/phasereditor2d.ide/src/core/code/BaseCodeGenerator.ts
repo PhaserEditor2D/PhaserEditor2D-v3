@@ -1,4 +1,4 @@
-namespace phasereditor2d.scene.core.code {
+namespace phasereditor2d.ide.core.code {
 
     export abstract class BaseCodeGenerator {
 
@@ -9,6 +9,11 @@ namespace phasereditor2d.scene.core.code {
         constructor() {
             this._text = "";
             this._indent = 0;
+        }
+
+        formatVariableName(name: string) {
+
+            return formatToValidVarName(name);
         }
 
         getOffset() {

@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.core.json {
             public exportClass = false,
             public autoImport = false,
             public generateAwakeHandler = false,
-            public compilerOutputLanguage = SourceLang.JAVA_SCRIPT,
+            public compilerOutputLanguage = ide.core.code.SourceLang.JAVA_SCRIPT,
             public scopeBlocksToFolder: boolean = false,
             public borderX = 0,
             public borderY = 0,
@@ -52,7 +52,7 @@ namespace phasereditor2d.scene.core.json {
             write(data, "preloadPackFiles", this.preloadPackFiles, []);
             write(data, "createMethodName", this.createMethodName, "create");
             write(data, "sceneKey", this.sceneKey, "");
-            write(data, "compilerOutputLanguage", this.compilerOutputLanguage, SourceLang.JAVA_SCRIPT);
+            write(data, "compilerOutputLanguage", this.compilerOutputLanguage, ide.core.code.SourceLang.JAVA_SCRIPT);
             write(data, "scopeBlocksToFolder", this.scopeBlocksToFolder, false);
             write(data, "borderX", this.borderX, 0);
             write(data, "borderY", this.borderY, 0);
@@ -80,7 +80,7 @@ namespace phasereditor2d.scene.core.json {
             this.preloadPackFiles = read(data, "preloadPackFiles", []);
             this.createMethodName = read(data, "createMethodName", "create");
             this.sceneKey = read(data, "sceneKey", "");
-            this.compilerOutputLanguage = read(data, "compilerOutputLanguage", SourceLang.JAVA_SCRIPT);
+            this.compilerOutputLanguage = read(data, "compilerOutputLanguage", ide.core.code.SourceLang.JAVA_SCRIPT);
             this.scopeBlocksToFolder = read(data, "scopeBlocksToFolder", false);
             this.borderX = read(data, "borderX", 0);
             this.borderY = read(data, "borderY", 0);
