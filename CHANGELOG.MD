@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.36.0 - Nov 15, 2022
 
 * Animations Editor: allows creating an animation with a single frame.
 * Animations Editor: allows compiling the animation keys as JavaScript/TypeScript constants.
