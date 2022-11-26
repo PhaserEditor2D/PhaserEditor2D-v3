@@ -4,6 +4,8 @@
 
 namespace colibri {
 
+    export let CAPABILITY_FILE_STORAGE = true;
+
     export const ICON_FILE = "file";
     export const ICON_FOLDER = "folder";
     export const ICON_PLUS = "plus";

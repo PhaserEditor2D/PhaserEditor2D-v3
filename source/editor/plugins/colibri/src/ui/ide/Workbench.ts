@@ -56,9 +56,12 @@ namespace colibri.ui.ide {
 
             this._fileImageSizeCache = new ImageSizeFileCache();
 
-            this._fileStorage = new core.io.FileStorage_HTTPServer();
+            if (CAPABILITY_FILE_STORAGE) {
 
-            this._fileStringCache = new core.io.FileStringCache(this._fileStorage);
+                this._fileStorage = new core.io.FileStorage_HTTPServer();
+
+                this._fileStringCache = new core.io.FileStringCache(this._fileStorage);
+            }
 
             this._globalPreferences = new core.preferences.Preferences("__global__");
 
@@ -197,7 +200,7 @@ namespace colibri.ui.ide {
 
             await this._fileStorage.openProject();
 
-            const projectName =this._fileStorage.getRoot().getName();
+            const projectName = this._fileStorage.getRoot().getName();
 
             console.log(`Workbench: project ${projectName} loaded.`);
 

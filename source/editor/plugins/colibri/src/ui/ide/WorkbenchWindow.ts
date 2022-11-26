@@ -194,10 +194,13 @@ namespace colibri.ui.ide {
 
             Platform.getWorkbench().eventThemeChanged.addListener(() => this.layout());
 
-            FileUtils.getFileStorage().addChangeListener(e => {
+            if (colibri.CAPABILITY_FILE_STORAGE) {
 
-                this.onStorageChanged(e);
-            });
+                FileUtils.getFileStorage().addChangeListener(e => {
+
+                    this.onStorageChanged(e);
+                });
+            }
 
             this._toolbar = new MainToolbar();
             this._clientArea = new controls.Control("div", "WindowClientArea");
