@@ -57,14 +57,21 @@ namespace colibri {
             return image;
         }
 
-        getResourceURL(pathInPlugin: string) {
+        getResourceURL(pathInPlugin: string, version?: string) {
 
-            return `app/plugins/${this.getId()}/${pathInPlugin}?v=${Date.now()}`;
+            if (version === undefined) {
+
+                version = Date.now().toString();
+            }
+
+            return `app/plugins/${this.getId()}/${pathInPlugin}?v=${version}`;
         }
 
-        async getJSON(pathInPlugin: string) {
+        async getJSON(pathInPlugin: string, version?: string) {
 
-            const result = await fetch(this.getResourceURL(pathInPlugin));
+            const url = this.getResourceURL(pathInPlugin, version);
+
+            const result = await fetch(url);
 
             const data = await result.json();
 
