@@ -1,5 +1,9 @@
 # Change Log
 
+## v3.36.1 - Dec 12, 2022
+
+* Get latest changes from Core.
+
 ## v3.36.0 - Nov 15, 2022
 
 * Animations Editor: allows creating an animation with a single frame.
