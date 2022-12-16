@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Fixes labels of the Size section in the Inspector view.
+
 ## v3.36.2 - Dec 14, 2022
 
 * Get latest update from Core: 

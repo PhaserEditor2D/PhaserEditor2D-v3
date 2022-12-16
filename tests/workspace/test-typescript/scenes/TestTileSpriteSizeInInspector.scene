@@ -1,0 +1,43 @@
+{
+    "id": "22f975d4-0322-485d-915b-0548ee638fea",
+    "sceneType": "SCENE",
+    "settings": {
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "TestTileSpriteSizeInInspector",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "TileSprite",
+            "id": "103bcf21-ad8c-4b01-a348-754cb35b17df",
+            "label": "dino",
+            "components": [],
+            "texture": {
+                "key": "dino"
+            },
+            "x": 418,
+            "y": 329,
+            "width": 756,
+            "height": 565
+        },
+        {
+            "type": "Rectangle",
+            "id": "ca3762b4-26b3-4016-9437-57f38d7d56cf",
+            "label": "rectangle_1",
+            "components": [],
+            "x": 89,
+            "y": 84,
+            "isFilled": true,
+            "width": 128,
+            "height": 128
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 3
+    }
+}
