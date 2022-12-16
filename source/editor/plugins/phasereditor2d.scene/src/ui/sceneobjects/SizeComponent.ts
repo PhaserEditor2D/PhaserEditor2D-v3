@@ -14,6 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static width: IProperty<ISizeLikeObject> = {
             name: "width",
             defValue: 0,
+            label: "W",
             tooltip: "The object's width.",
             local: false,
             getValue: obj => obj.width,
@@ -26,6 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static height: IProperty<ISizeLikeObject> = {
             name: "height",
+            label: "H",
             defValue: 0,
             tooltip: "The object's height.",
             local: false,
