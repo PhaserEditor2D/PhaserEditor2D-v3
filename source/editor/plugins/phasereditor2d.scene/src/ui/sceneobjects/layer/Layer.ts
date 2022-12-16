@@ -16,6 +16,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._editorSupport;
         }
 
+        setData(key: string | any, data?: any): this {
+
+            return super.setData(key, data);
+        }
+
+        incData(key: string | any, data?: any): this {
+
+            return super.incData(key, data);
+        }
+
+        toggleData(key: string | any): this {
+
+            return super.toggleData(key);
+        }
+
         getChildren(): ISceneGameObject[] {
 
             return super.getChildren() as any;
