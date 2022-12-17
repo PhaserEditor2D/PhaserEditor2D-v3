@@ -334,7 +334,7 @@ namespace phasereditor2d.scene.ui.editor {
                 },
                 // resolution: window.devicePixelRatio,
                 render: {
-                    pixelArt: true,
+                    pixelArt: ScenePlugin.DEFAULT_EDITOR_PIXEL_ART,
                     transparent: true
                 },
                 audio: {

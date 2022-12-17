@@ -48,6 +48,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_DISABLE_AWAKE_EVENT_PREFABS = "phasereditor2d.scene.ui.editor.commands.DisableAwakeEventPrefabs";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_CANVAS = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToCanvas";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToWebGL";
+    export const CMD_ENABLE_PIXEL_ART_RENDERING = "phasereditor2d.scene.ui.editor.commands.EnablePixelArtRendering";
+    export const CMD_DISABLE_PIXEL_ART_RENDERING = "phasereditor2d.scene.ui.editor.commands.DisablePixelArtRendering";
     export const CMD_PASTE_IN_PLACE = "phasereditor2d.scene.ui.editor.commands.PasteInPlace";
     export const CMD_ARCADE_ENABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeEnableBody";
     export const CMD_ARCADE_DISABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeDisableBody";
@@ -421,6 +423,40 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     executeFunc: args => {
 
                         ScenePlugin.getInstance().setDefaultRenderType("webgl");
+                    }
+                }
+            });
+
+            // enable pixel art rendering
+
+            manager.add({
+                command: {
+                    id: CMD_ENABLE_PIXEL_ART_RENDERING,
+                    name: "Enable Pixel Art Rendering",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Enable pixel-art rendering in the scenes"
+                },
+                handler: {
+                    testFunc: phasereditor2d.ide.ui.actions.isNotWelcomeWindowScope,
+                    executeFunc: args => {
+
+                        ScenePlugin.getInstance().setDefaultRenderPixelArt(true);
+                    }
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_DISABLE_PIXEL_ART_RENDERING,
+                    name: "Disable Pixel Art Rendering",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Disable pixel-art rendering in the scenes"
+                },
+                handler: {
+                    testFunc: phasereditor2d.ide.ui.actions.isNotWelcomeWindowScope,
+                    executeFunc: args => {
+
+                        ScenePlugin.getInstance().setDefaultRenderPixelArt(false);
                     }
                 }
             });
