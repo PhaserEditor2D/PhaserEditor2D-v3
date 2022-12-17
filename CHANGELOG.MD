@@ -3,6 +3,7 @@
 ## dev
 
 * Fixes labels of the Size section in the Inspector view.
+* Improves folder icons.
 
 ## v3.36.2 - Dec 14, 2022
 
