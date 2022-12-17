@@ -4,6 +4,7 @@
 
 * Fixes labels of the Size section in the Inspector view.
 * Improves folder icons.
+* Adds command for enable/disable pixel art rendering mode.
 
 ## v3.36.2 - Dec 14, 2022
 

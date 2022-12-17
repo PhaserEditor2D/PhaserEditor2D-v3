@@ -319,7 +319,7 @@ namespace phasereditor2d.scene.ui {
                         mode: Phaser.Scale.NONE
                     },
                     render: {
-                        pixelArt: true,
+                        pixelArt: ScenePlugin.DEFAULT_PIXEL_ART,
                         transparent: true
                     },
                     audio: {

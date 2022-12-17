@@ -76,6 +76,10 @@ namespace phasereditor2d.scene {
 
         static DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
 
+        static DEFAULT_PIXEL_ART = true;
+
+        static DEFAULT_EDITOR_PIXEL_ART = true;
+
         private _sceneFinder: core.json.SceneFinder;
 
         private _docs: phasereditor2d.ide.core.PhaserDocs;
@@ -97,6 +101,12 @@ namespace phasereditor2d.scene {
             console.log("ScenePlugin: default render type: " + (type === "canvas" ? "Phaser.CANVAS" : "Phaser.WEBGL"));
 
             this.setDefaultRenderType(type as any);
+
+            const pixelArt = window.localStorage.getItem("phasereditor2d.scene.PIXEL_ART") !== "0";
+
+            this.setDefaultRenderPixelArt(pixelArt);
+
+            console.log("ScenePlugin: default pixelArt: " + pixelArt);
         }
 
         setDefaultRenderType(type?: "canvas" | "webgl") {
@@ -105,6 +115,14 @@ namespace phasereditor2d.scene {
 
             ScenePlugin.DEFAULT_CANVAS_CONTEXT = type === "canvas" ? Phaser.CANVAS : Phaser.WEBGL;
             ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT = ScenePlugin.DEFAULT_CANVAS_CONTEXT;
+        }
+
+        setDefaultRenderPixelArt(pixelArt: boolean) {
+
+            window.localStorage.setItem("phasereditor2d.scene.PIXEL_ART", pixelArt ? "1" : "0");
+
+            ScenePlugin.DEFAULT_PIXEL_ART = pixelArt;
+            ScenePlugin.DEFAULT_EDITOR_PIXEL_ART = pixelArt;
         }
 
         getPhaserDocs() {
