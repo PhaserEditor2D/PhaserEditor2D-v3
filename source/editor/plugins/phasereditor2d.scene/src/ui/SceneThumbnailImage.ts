@@ -194,7 +194,7 @@ namespace phasereditor2d.scene.ui {
         }
     }
 
-    export class SceneThumbnail implements controls.IImage {
+    export class SceneThumbnailImage implements controls.IImage {
 
         private _file: io.FilePath;
         private _image: controls.ImageWrapper;
@@ -290,16 +290,16 @@ namespace phasereditor2d.scene.ui {
 
                 let canvas: HTMLCanvasElement;
 
-                if (SceneThumbnail._canvas) {
+                if (SceneThumbnailImage._canvas) {
 
-                    canvas = SceneThumbnail._canvas;
+                    canvas = SceneThumbnailImage._canvas;
 
                 } else {
 
                     canvas = document.createElement("canvas");
                     canvas.style.width = (canvas.width = width) + "px";
                     canvas.style.height = (canvas.height = height) + "px";
-                    SceneThumbnail._canvas = canvas;
+                    SceneThumbnailImage._canvas = canvas;
 
                     const parent = document.createElement("div");
                     parent.style.position = "fixed";

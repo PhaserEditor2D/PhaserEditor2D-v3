@@ -70,7 +70,7 @@ namespace phasereditor2d.scene.ui {
                     }
                 }
 
-                const image = new SceneThumbnail(file);
+                const image = new SceneThumbnailImage(file);
 
                 await image.preload();
 
