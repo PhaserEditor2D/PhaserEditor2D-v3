@@ -2,7 +2,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class BaseImageEditorSupport<T extends ISceneGameObject> extends GameObjectEditorSupport<T> {
 
-        constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene, includeTextureComponent = true) {
+        constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene,
+            includeTextureComponent = true, includeAlphaComponent = true, includeFlipComponent = true, includeTint = true) {
+                
             super(extension, obj, scene);
 
             if (includeTextureComponent) {
@@ -10,13 +12,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.addComponent(new TextureComponent(obj as unknown as ITextureLikeObject));
             }
 
+            if (includeAlphaComponent) {
+
+                this.addComponent(new AlphaComponent(obj as unknown as IAlphaLikeObject));
+            }
+
+            if (includeFlipComponent) {
+
+                this.addComponent(new FlipComponent(obj as unknown as IFlipLikeObject));
+            }
+
+            if (includeTint) {
+
+                this.addComponent(new TintComponent(obj));
+            }
+
             this.addComponent(
                 new TransformComponent(obj as unknown as ITransformLikeObject),
                 new OriginComponent(obj as unknown as IOriginLikeObject),
-                new FlipComponent(obj as unknown as IFlipLikeObject),
                 new VisibleComponent(obj as unknown as IVisibleLikeObject),
-                new AlphaComponent(obj as unknown as IAlphaLikeObject),
-                new TintComponent(obj),
                 new ArcadeComponent(obj, false)
             );
         }

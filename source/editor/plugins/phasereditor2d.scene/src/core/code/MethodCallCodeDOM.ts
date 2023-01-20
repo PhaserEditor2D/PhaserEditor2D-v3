@@ -72,6 +72,11 @@ namespace phasereditor2d.scene.core.code {
             this._args.push(expr);
         }
 
+        argUndefined() {
+
+            this.arg("undefined");
+        }
+
         argStringOrFloat(expr: string | number) {
 
             switch (typeof expr) {
@@ -96,6 +101,10 @@ namespace phasereditor2d.scene.core.code {
 
                 case "number":
                     this.argInt(expr);
+                    break;
+
+                case "undefined":
+                    this.arg("undefined");
                     break;
             }
         }

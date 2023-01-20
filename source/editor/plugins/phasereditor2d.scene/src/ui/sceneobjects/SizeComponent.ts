@@ -9,6 +9,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class SizeComponent extends Component<ISizeLikeObject> {
 
+        static FLAG_DISABLE_GENERATE_UPDATE_DISPALY_ORIGIN = "updateDispyOrigin";
+
         // static width = SimpleProperty("width", 0, "Width", "The object's width.", false, updateDisplayOrigin);
         // static height = SimpleProperty("height", 0, "Height", "The object's height.", false, updateDisplayOrigin);
         static width: IProperty<ISizeLikeObject> = {
@@ -52,18 +54,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             const obj = this.getObject();
-            const support = obj.getEditorSupport();
+            const objES = obj.getEditorSupport();
             const prop = SizeComponent.size;
 
-            if (support.isNestedPrefabInstance()
-                && support.isUnlockedPropertyXY(prop)) {
+            if (objES.isNestedPrefabInstance()
+                && objES.isUnlockedPropertyXY(prop)) {
 
                 const dom = new core.code.MethodCallCodeDOM("setSize", args.objectVarName);
                 dom.argFloat(prop.x.getValue(obj));
                 dom.argFloat(prop.y.getValue(obj));
                 args.statements.push(dom);
-                args.statements.push(
-                    new core.code.MethodCallCodeDOM("updateDisplayOrigin", args.objectVarName));
+
+                if (objES.getSizeComponentGeneratesUpdateDisplayOrigin()) {
+
+                    args.statements.push(
+                        new core.code.MethodCallCodeDOM("updateDisplayOrigin", args.objectVarName));
+                }
             }
         }
     }

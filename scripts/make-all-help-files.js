@@ -120,6 +120,11 @@ utils.makeHelpFile([
     "Phaser.GameObjects.TileSprite.tileScaleY",
     "Phaser.GameObjects.TileSprite.setTileScale",
 
+    "Phaser.GameObjects.NineSlice.leftWidth",
+    "Phaser.GameObjects.NineSlice.rightWidth",
+    "Phaser.GameObjects.NineSlice.topHeight",
+    "Phaser.GameObjects.NineSlice.bottomHeight",
+
     "Phaser.GameObjects.GameObject.parentContainer",
 
     "Phaser.GameObjects.Text",

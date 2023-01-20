@@ -642,6 +642,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return SizeSection.SECTION_ID;
         }
 
+        getSizeComponentGeneratesUpdateDisplayOrigin() {
+
+            return true;
+        }
+
+        updateAfterSetTexture() {
+            // nothing by default
+        }
+
         isDescendentOf(parent: Container | Layer) {
 
             const set = new Set(this.getAllParents());

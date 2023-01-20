@@ -159,6 +159,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             properties: Array<IProperty<T>>,
             codeDomBuilder: (builderArgs: { prop: IProperty<T>, fieldCodeName: string, value: any }) => void) {
 
+                const objES = this.getEditorSupport();
+
             for (const prop of properties) {
 
                 const fieldCodeName = prop.codeName ?? prop.name;
@@ -166,18 +168,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 let local = true;
 
-                if (this.getEditorSupport().isPrefabInstance()) {
+                if (objES.isPrefabInstance()) {
 
                     local = false;
 
                     if (prop instanceof UserComponentPropertyWrapper) {
 
-                        local = this.getEditorSupport().isLocalUserProperty(prop);
+                        local = objES.isLocalUserProperty(prop);
                     }
 
                     if (!local) {
 
-                        if (this.getEditorSupport().isUnlockedProperty(prop)) {
+                        if (objES.isUnlockedProperty(prop)) {
 
                             codeDomBuilder({ prop, fieldCodeName, value });
                         }
