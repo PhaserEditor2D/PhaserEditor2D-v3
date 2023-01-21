@@ -31,6 +31,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static leftWidth = sliceProperty("leftWidth", 10, "L");
         static rightWidth = sliceProperty("rightWidth", 10, "R");
+        static sliceProperties = [
+            ThreeSliceComponent.leftWidth,
+            ThreeSliceComponent.rightWidth
+        ];
 
         static horizontalWidth: IPropertyXY = {
             label: "Slice Width",
@@ -39,10 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         constructor(obj: ThreeSlice) {
-            super(obj, [
-                ThreeSliceComponent.leftWidth,
-                ThreeSliceComponent.rightWidth
-            ]);
+            super(obj, ThreeSliceComponent.sliceProperties);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
@@ -51,20 +52,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (objES.isNestedPrefabInstance()) {
 
-                const len = args.statements.length;
+                let onlySizeChanged = true;
 
-                for (const prop of [
-                    ThreeSliceComponent.leftWidth,
-                    ThreeSliceComponent.rightWidth]) {
+                for (const prop of ThreeSliceComponent.sliceProperties) {
 
-                    this.buildSetObjectPropertyCodeDOM_FloatProperty(args, prop);
+                    if (objES.isUnlockedProperty(prop)) {
+
+                        onlySizeChanged = false;
+                    }
                 }
 
-                if (args.statements.length > len) {
-                    // when one of the above properties is changed,
-                    // it requires to call the updateVertices() method.
-                    const dom = new core.code.MethodCallCodeDOM("updateVertices", args.objectVarName);
-                    args.statements.push(dom);
+                if (onlySizeChanged) {
+
+                    const sizeComponent = objES.getComponent(SizeComponent) as SizeComponent;
+
+                    sizeComponent.buildSetObjectPropertiesCodeDOM(args, false);
+
+                } else {
+
+                    this.buildSetObjectPropertiesWithMethodCodeDOM_FloatProperty(
+                        args,
+                        "setSlices",
+                        SizeComponent.width,
+                        SizeComponent.height,
+                        ...ThreeSliceComponent.sliceProperties);
                 }
             }
         }

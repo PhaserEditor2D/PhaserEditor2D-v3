@@ -14,6 +14,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.getObject().setInteractive(interactive_getAlpha_RenderTexture);
         }
 
+        isCustom_SizeComponent_buildSetObjectPropertiesCodeDOM(): boolean {
+            
+            return true;
+        }
+
         getSizeComponentGeneratesUpdateDisplayOrigin(): boolean {
             
             return false;
