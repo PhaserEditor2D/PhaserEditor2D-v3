@@ -21,8 +21,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     }
 
     export abstract class Component<T extends ISceneGameObject> implements core.json.ISerializable {
-        
-        
+
+
         private _obj: T;
         private _properties: Set<IProperty<any>>;
         private _active: boolean;
@@ -157,16 +157,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertyCodeDOM(
             properties: Array<IProperty<T>>,
-            codeDomBuilder: (builderArgs: { prop: IProperty<T>, fieldCodeName: string, value: any }) => void) {
+            codeDomBuilder: (builderArgs: { prop: IProperty<T>, fieldCodeName: string, value: any }) => void,
+            onPropertyIgnored?: (builderArgs: { prop: IProperty<T>, fieldCodeName: string, value: any }) => void) {
 
-                const objES = this.getEditorSupport();
+            const objES = this.getEditorSupport();
 
             for (const prop of properties) {
 
                 const fieldCodeName = prop.codeName ?? prop.name;
                 const value = prop.getValue(this.getObject());
+                const builderArgs = { prop, fieldCodeName, value };
 
                 let local = true;
+                let skip = true;
 
                 if (objES.isPrefabInstance()) {
 
@@ -181,7 +184,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         if (objES.isUnlockedProperty(prop)) {
 
-                            codeDomBuilder({ prop, fieldCodeName, value });
+                            skip = false;
+                            codeDomBuilder(builderArgs);
                         }
                     }
                 }
@@ -192,8 +196,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (value !== defValue) {
 
-                        codeDomBuilder({ prop, fieldCodeName, value });
+                        skip = false;
+                        codeDomBuilder(builderArgs);
                     }
+                }
+
+                if (skip && onPropertyIgnored) {
+
+                    onPropertyIgnored(builderArgs);
                 }
             }
         }
@@ -257,11 +267,45 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-         /**
-         * Build extra typescript definitions at the top of the file.
-         * 
-         * @param args This method args.
-         */
+        buildSetObjectPropertiesWithMethodCodeDOM_FloatProperty(
+            args: ISetObjectPropertiesCodeDOMArgs,
+            methodName: string,
+            ...properties: Array<IProperty<T>>) {
+
+            const values: string[] = [];
+            const generateCode = { yes: false };
+
+            this.buildSetObjectPropertyCodeDOM(properties, args2 => {
+
+                const codeValue = args2.prop.valueToCodeConverter ? args2.prop.valueToCodeConverter(args2.value) : args2.value;
+
+                values.push(codeValue);
+
+                generateCode.yes = true;
+
+            }, args2 => {
+
+                values.push(`${args.objectVarName}.${args2.fieldCodeName}`);
+            });
+
+            if (generateCode.yes) {
+
+                const dom = new code.MethodCallCodeDOM(methodName, args.objectVarName);
+
+                for (const value of values) {
+
+                    dom.arg(value);
+                }
+
+                args.statements.push(dom);
+            }
+        }
+
+        /**
+        * Build extra typescript definitions at the top of the file.
+        * 
+        * @param args This method args.
+        */
         buildPrefabTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs) {
             // nothing by default
         }

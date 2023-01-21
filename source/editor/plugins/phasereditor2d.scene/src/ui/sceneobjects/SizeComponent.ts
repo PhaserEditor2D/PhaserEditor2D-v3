@@ -51,10 +51,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(obj, [SizeComponent.width, SizeComponent.height]);
         }
 
-        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
+        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs, checkCustom = true): void {
 
             const obj = this.getObject();
             const objES = obj.getEditorSupport();
+
+            if (checkCustom && objES.isCustom_SizeComponent_buildSetObjectPropertiesCodeDOM()) {
+
+                return;
+            }
+
             const prop = SizeComponent.size;
 
             if (objES.isNestedPrefabInstance()

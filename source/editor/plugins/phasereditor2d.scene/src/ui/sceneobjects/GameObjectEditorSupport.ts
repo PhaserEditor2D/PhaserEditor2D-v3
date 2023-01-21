@@ -520,7 +520,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * 
          * @returns If it is.
          */
-         isRootPrefabDefined() {
+        isRootPrefabDefined() {
 
             return this.isPrefabInstance() && !this.isNestedPrefabDefined();
         }
@@ -627,6 +627,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return list;
         }
 
+        /**
+        * If this object type has a custom method for setting the size of the object.
+        * 
+        * @returns Generate a custom code for setting the size properties.
+        */
+        isCustom_SizeComponent_buildSetObjectPropertiesCodeDOM() {
+
+            return false;
+        }
+
+        /**
+         * Get the size properties for this object type. By default it uses the properties from the SizeComponent.
+         * 
+         * @returns The size properties.
+         */
         getSizeProperties() {
 
             if (this.hasComponent(SizeComponent)) {
@@ -637,17 +652,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return [];
         }
 
+        /**
+         * The section ID for the size properties of this object type. By default it retures the SizeSection ID.
+         * 
+         * @returns The size section id.
+         */
         getSizeSectionId() {
 
             return SizeSection.SECTION_ID;
         }
 
+        /**
+         * If this object type requires to update the display origin after changing the size.
+         * 
+         * @returns Generate updateDisplayOrigin()?
+         */
         getSizeComponentGeneratesUpdateDisplayOrigin() {
 
             return true;
         }
 
-        updateAfterSetTexture() {
+        /**
+         * This callback method is executed when the texture of this object is changed by TextureComponent.
+         */
+        onUpdateAfterSetTexture() {
             // nothing by default
         }
 

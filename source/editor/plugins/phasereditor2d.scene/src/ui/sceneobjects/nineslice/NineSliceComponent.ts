@@ -53,13 +53,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             y: NineSliceComponent.bottomHeight,
         }
 
+        static sliceProperties = [
+            NineSliceComponent.leftWidth,
+            NineSliceComponent.rightWidth,
+            NineSliceComponent.topHeight,
+            NineSliceComponent.bottomHeight
+        ];
+
         constructor(obj: NineSlice) {
-            super(obj, [
-                NineSliceComponent.leftWidth,
-                NineSliceComponent.rightWidth,
-                NineSliceComponent.topHeight,
-                NineSliceComponent.bottomHeight
-            ]);
+            super(obj,
+                NineSliceComponent.sliceProperties);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
@@ -68,22 +71,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (objES.isNestedPrefabInstance()) {
 
-                const len = args.statements.length;
+                let onlySizeChanged = true;
 
-                for (const prop of [
-                    NineSliceComponent.leftWidth,
-                    NineSliceComponent.rightWidth,
-                    NineSliceComponent.topHeight,
-                    NineSliceComponent.bottomHeight]) {
+                for (const prop of NineSliceComponent.sliceProperties) {
 
-                    this.buildSetObjectPropertyCodeDOM_FloatProperty(args, prop);
+                    if (objES.isUnlockedProperty(prop)) {
+
+                        onlySizeChanged = false;
+                    }
                 }
 
-                if (args.statements.length > len) {
-                    // when one of the above properties is changed,
-                    // it requires to call the updateVertices() method.
-                    const dom = new core.code.MethodCallCodeDOM("updateVertices", args.objectVarName);
-                    args.statements.push(dom);
+                if (onlySizeChanged) {
+
+                    const sizeComponent = objES.getComponent(SizeComponent) as SizeComponent;
+
+                    sizeComponent.buildSetObjectPropertiesCodeDOM(args, false);
+
+                } else {
+
+                    this.buildSetObjectPropertiesWithMethodCodeDOM_FloatProperty(
+                        args,
+                        "setSlices",
+                        SizeComponent.width,
+                        SizeComponent.height,
+                        ...NineSliceComponent.sliceProperties);
                 }
             }
         }

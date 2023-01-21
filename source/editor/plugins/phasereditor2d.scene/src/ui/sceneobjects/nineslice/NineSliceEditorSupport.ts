@@ -19,7 +19,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        updateAfterSetTexture(): void {
+        isCustom_SizeComponent_buildSetObjectPropertiesCodeDOM(): boolean {
+            
+            return true;
+        }
+
+        onUpdateAfterSetTexture(): void {
             
             const obj = this.getObject();
             obj.updateVertices();

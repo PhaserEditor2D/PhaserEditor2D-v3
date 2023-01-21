@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return false;
         }
 
-        updateAfterSetTexture(): void {
+        onUpdateAfterSetTexture(): void {
             
             const obj = this.getObject();
             obj.updateVertices();
