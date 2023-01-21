@@ -5,8 +5,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: NineSlice, scene: Scene) {
             super(NineSliceExtension.getInstance(), obj, scene, true, false, false, false);
 
-            this.addComponent(new SizeComponent(obj));
-            this.addComponent(new NineSliceComponent(obj));
+            this.addComponent(
+                new TintSingleComponent(obj),
+                new SizeComponent(obj),
+                new NineSliceComponent(obj));
         }
 
         setInteractive() {
@@ -15,17 +17,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getSizeComponentGeneratesUpdateDisplayOrigin(): boolean {
-            
+
             return false;
         }
 
         isCustom_SizeComponent_buildSetObjectPropertiesCodeDOM(): boolean {
-            
+
             return true;
         }
 
         onUpdateAfterSetTexture(): void {
-            
+
             const obj = this.getObject();
             obj.updateVertices();
             (obj as any).updateUVs();

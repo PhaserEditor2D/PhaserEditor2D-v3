@@ -5,8 +5,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: ThreeSlice, scene: Scene) {
             super(ThreeSliceExtension.getInstance(), obj, scene, true, false, false, false);
 
-            this.addComponent(new SizeComponent(obj));
-            this.addComponent(new ThreeSliceComponent(obj));
+            this.addComponent(
+                new TintSingleComponent(obj),
+                new SizeComponent(obj),
+                new ThreeSliceComponent(obj));
         }
 
         setInteractive() {

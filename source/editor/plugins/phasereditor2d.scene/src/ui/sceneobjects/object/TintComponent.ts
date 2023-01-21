@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    function colorStringToColorNumberConverter(value: string) {
+    export function colorStringToColorNumberConverter(value: string) {
 
         if (typeof (value) === "string" && value.trim() === "") {
 
