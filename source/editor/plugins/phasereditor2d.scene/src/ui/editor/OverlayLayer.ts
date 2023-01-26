@@ -29,12 +29,19 @@ namespace phasereditor2d.scene.ui.editor {
             const tool = manager.getActiveTool();
 
             if (!tool) {
+
+                return;
+            }
+
+            if (!tool.isValidForAll(this._editor.getSelectedGameObjects())) {
+
                 return;
             }
 
             const renderSel = this._editor.getSelection().filter(obj => tool.canRender(obj));
 
             if (renderSel.length === 0 && tool.isObjectTool()) {
+
                 return;
             }
 

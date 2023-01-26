@@ -61,9 +61,15 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (tool.isObjectTool()) {
 
+                    if (!tool.isValidForAll(args.objects)) {
+
+                        return;
+                    }
+
                     for (const obj of args.objects) {
 
                         if (!tool.canEdit(obj)) {
+
                             return;
                         }
                     }

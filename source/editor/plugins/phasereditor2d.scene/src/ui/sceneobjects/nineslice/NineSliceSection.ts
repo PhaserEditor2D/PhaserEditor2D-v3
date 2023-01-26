@@ -16,6 +16,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createPropertyXYRow(comp, NineSliceComponent.horizontalWidth);
             this.createPropertyXYRow(comp, NineSliceComponent.verticalWidth);
+
+            const btn = this.createButton(comp, "Edit Slices", () => {
+
+                this.getEditor().getToolsManager().activateTool(SliceTool.ID);
+            });
+
+            btn.style.gridColumn = "1 / span 6";
+        }
+
+        createMenu(menu: controls.Menu): void {
+
+            super.createMenu(menu);
+
+            menu.addCommand(ui.editor.commands.CMD_EDIT_SLICE_SCENE_OBJECT);
         }
 
         canEdit(obj: any, n: number): boolean {

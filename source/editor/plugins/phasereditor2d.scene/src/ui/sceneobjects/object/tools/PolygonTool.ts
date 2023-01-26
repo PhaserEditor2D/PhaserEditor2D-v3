@@ -39,6 +39,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 "points", PolygonSection.SECTION_ID);
         }
 
+        isValidForAll(objects: ISceneGameObject[]): boolean {
+            
+            return objects.length === 1;
+        }
+
         canRender(obj: unknown): boolean {
 
             return obj instanceof Polygon;

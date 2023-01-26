@@ -22,6 +22,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_EDIT_POLYGON_OBJECT = "phasereditor2d.scene.ui.editor.commands.EditPolygonObject";
     export const CMD_RESIZE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeSceneObject";
+    export const CMD_EDIT_SLICE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.EditSliceSceneObject";
     export const CMD_EDIT_ARCADE_BODY = "phasereditor2d.scene.ui.editor.commands.EditArcadeBody";
     export const CMD_SELECT_REGION = "phasereditor2d.scene.ui.editor.commands.SelectRegion";
     export const CMD_PAN_SCENE = "phasereditor2d.scene.ui.editor.commands.PanScene";
@@ -1779,6 +1780,20 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "KeyB"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_EDIT_SLICE_SCENE_OBJECT,
+                    name: "Slice Tool",
+                    tooltip: "Edit selected slice objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.SliceTool.ID)
                 }
             });
         }
