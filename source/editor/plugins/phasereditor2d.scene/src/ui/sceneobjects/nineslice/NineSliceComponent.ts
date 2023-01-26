@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             name,
             defValue,
             label,
-            tooltip: "TODO",
+            tooltip: `phaser:Phaser.GameObjects.NineSlice.${name}`,
             local: false,
             getValue: obj => obj[name],
             setValue: (obj: NineSlice, value) => {
