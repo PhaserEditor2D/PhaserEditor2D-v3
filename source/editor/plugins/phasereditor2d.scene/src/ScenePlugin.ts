@@ -47,6 +47,8 @@ namespace phasereditor2d.scene {
     export const ICON_ORIGIN_BOTTOM_RIGHT = "origin-bottomright";
     export const ICON_ARCADE_COLLIDER = "collider";
     export const ICON_KEYBOARD_KEY = "keyboard-key";
+    export const ICON_9_SLICE = "9slice";
+    export const ICON_3_SLICE = "3slice";
 
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
@@ -229,7 +231,9 @@ namespace phasereditor2d.scene {
                     ICON_ORIGIN_BOTTOM_CENTER,
                     ICON_ORIGIN_BOTTOM_RIGHT,
                     ICON_ARCADE_COLLIDER,
-                    ICON_KEYBOARD_KEY
+                    ICON_KEYBOARD_KEY,
+                    ICON_9_SLICE,
+                    ICON_3_SLICE
                 ])
             );
 
