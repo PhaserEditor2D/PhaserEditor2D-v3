@@ -220,6 +220,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return;
             }
 
+            const mirror = args.event.shiftKey;
+
             const camera = args.camera;
 
             for (const obj of args.objects) {
@@ -239,27 +241,60 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const comp = obj instanceof NineSlice ? NineSliceComponent : ThreeSliceComponent;
 
+                let value: number;
+
                 switch (this._slice) {
 
                     case "leftWidth":
 
-                        comp.leftWidth.setValue(obj, initLeftWidth + dx);
+                        value = initLeftWidth + dx;
+
+                        comp.leftWidth.setValue(obj, value);
+
+                        if (mirror) {
+
+                            comp.rightWidth.setValue(obj, value);
+                        }
+
                         break;
 
                     case "rightWidth":
 
-                        comp.rightWidth.setValue(obj, initRightWidth - dx);
+                        value = initRightWidth - dx;
+
+                        comp.rightWidth.setValue(obj, value);
+
+                        if (mirror) {
+
+                            comp.leftWidth.setValue(obj, value);
+                        }
+
                         break;
 
                     case "topHeight":
 
-                        NineSliceComponent.topHeight.setValue(obj, initTopHeight + dy);
-                        console.log("topHeight", (obj as any).topHeight);
+                        value = initTopHeight + dy;
+
+                        NineSliceComponent.topHeight.setValue(obj, value);
+
+                        if (mirror) {
+
+                            NineSliceComponent.bottomHeight.setValue(obj, value);
+                        }
+
                         break;
 
                     case "bottomHeight":
 
-                        NineSliceComponent.bottomHeight.setValue(obj, initBottomHeight - dy);
+                        value = initBottomHeight - dy;
+
+                        NineSliceComponent.bottomHeight.setValue(obj, value);
+
+                        if (mirror) {
+
+                            NineSliceComponent.topHeight.setValue(obj, value);
+                        }
+
                         break;
                 }
             }
@@ -297,8 +332,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const data = obj.getData("SliceTool");
 
-            return { 
-                leftWidth: data.initLeftWidth, 
+            return {
+                leftWidth: data.initLeftWidth,
                 rightWidth: data.initRightWidth,
                 topHeight: data.initTopHeight,
                 bottomHeight: data.initBottomHeight
