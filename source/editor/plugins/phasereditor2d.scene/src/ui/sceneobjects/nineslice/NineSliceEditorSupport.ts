@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(NineSliceExtension.getInstance(), obj, scene, true, false, false, false);
 
             this.addComponent(
+                new AlphaSingleComponent(obj),
                 new TintSingleComponent(obj),
                 new SizeComponent(obj),
                 new NineSliceComponent(obj));
