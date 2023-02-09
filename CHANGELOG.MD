@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.60.0-beta.1 - development
 
 * Fixes labels of the Size section in the Inspector view.
 * Improves folder icons.
