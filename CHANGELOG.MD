@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.60.0-beta.1 - development
+## v3.60.0-beta.1 - Feb 10, 2023
 
 * Fixes labels of the Size section in the Inspector view.
 * Improves folder icons.
