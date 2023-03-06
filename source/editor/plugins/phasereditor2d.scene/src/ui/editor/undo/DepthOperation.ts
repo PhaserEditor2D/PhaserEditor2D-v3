@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             for (const obj of sel) {
 
-                const parent = sceneobjects.getObjectParentOrDisplayList(obj);
+                const parent = obj.getEditorSupport().getObjectParentOrDisplayList();
 
                 const index = parent.getIndex(obj);
 
@@ -58,8 +58,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             sel.sort((a, b) => {
 
-                const aParent = sceneobjects.getObjectParentOrDisplayList(a);
-                const bParent = sceneobjects.getObjectParentOrDisplayList(a);
+                const aParent = a.getEditorSupport().getObjectParentOrDisplayList();
+                const bParent = b.getEditorSupport().getObjectParentOrDisplayList();
 
                 const aa = aParent.getIndex(a);
                 const bb = bParent.getIndex(b);
@@ -80,7 +80,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     for (const obj of sel) {
 
-                        sceneobjects.getObjectParentOrDisplayList(obj).bringToTop(obj);
+                        obj.getEditorSupport().getObjectParentOrDisplayList().bringToTop(obj);
                     }
 
                     break;
@@ -91,7 +91,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                         const obj = sel[sel.length - i - 1];
 
-                        const parent = sceneobjects.getObjectParentOrDisplayList(obj);
+                        const parent = obj.getEditorSupport().getObjectParentOrDisplayList();
 
                         let bottomIndex = 0;
 
@@ -125,7 +125,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                         const obj = sel[sel.length - i - 1];
 
-                        sceneobjects.getObjectParentOrDisplayList(obj).moveUp(obj);
+                        obj.getEditorSupport().getObjectParentOrDisplayList().moveUp(obj);
                     }
 
                     break;
@@ -134,7 +134,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     for (const obj of sel) {
 
-                        sceneobjects.getObjectParentOrDisplayList(obj).moveDown(obj);
+                        obj.getEditorSupport().getObjectParentOrDisplayList().moveDown(obj);
                     }
 
                     break;

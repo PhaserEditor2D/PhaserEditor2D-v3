@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const targetParentSupport = targetParent.getEditorSupport();
 
-            const objParent = getObjectParent(obj);
+            const objParent = obj.getEditorSupport().getObjectParent();
 
             if (objParent === targetParent) {
 
@@ -85,7 +85,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const hasPosition = obj.getEditorSupport().isUnlockedProperty(TransformComponent.x);
 
-                const currentParent = getObjectParent(obj);
+                const currentParent = obj.getEditorSupport().getObjectParent();
 
                 const objSupport = obj.getEditorSupport();
 

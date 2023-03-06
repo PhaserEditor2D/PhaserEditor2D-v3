@@ -65,9 +65,11 @@ namespace phasereditor2d.scene.ui {
 
                 map.set(obj, index);
 
-                if (!(obj as sceneobjects.ISceneGameObject).getEditorSupport().isPrefabInstance()) {
+                const objES = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 
-                    const children = sceneobjects.GameObjectEditorSupport.getObjectChildren(obj as any);
+                if (!objES.isPrefabInstance()) {
+
+                    const children = objES.getChildren();
 
                     index = this.buildSortingMap(map, children, index);
                 }
@@ -178,17 +180,17 @@ namespace phasereditor2d.scene.ui {
 
         isNonTopPrefabObject(obj: any) {
 
-            const support = sceneobjects.GameObjectEditorSupport.getEditorSupport(obj);
+            const objES = sceneobjects.GameObjectEditorSupport.getEditorSupport(obj);
 
-            if (support) {
+            if (objES) {
 
-                const scene = support.getScene();
+                const scene = objES.getScene();
 
                 if (scene.isPrefabSceneType()) {
 
                     if (scene.getPrefabObject() !== obj) {
 
-                        const parent = sceneobjects.getObjectParent(obj);
+                        const parent = objES.getObjectParent();
 
                         if (parent) {
 

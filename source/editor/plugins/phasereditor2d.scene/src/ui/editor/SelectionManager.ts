@@ -176,7 +176,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private parentsAllowPickingChildren(obj: sceneobjects.ISceneGameObject) {
 
-            const parent = sceneobjects.getObjectParent(obj);
+            const parent = obj.getEditorSupport().getObjectParent();
 
             if (parent) {
 
@@ -200,7 +200,7 @@ namespace phasereditor2d.scene.ui.editor {
                     }
                 }
 
-                const parent = sceneobjects.getObjectParent(obj);
+                const parent = obj.getEditorSupport().getObjectParent();
 
                 return this.findPickableObject(parent);
             }
@@ -227,7 +227,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (selected) {
 
-                    const objParent = sceneobjects.getObjectParent(selected);
+                    const objParent = selected.getEditorSupport().getObjectParent();
 
                     if (objParent) {
 

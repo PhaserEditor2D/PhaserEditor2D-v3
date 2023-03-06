@@ -2,48 +2,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
 
-    export function isNestedPrefabInstance(obj: any) {
-
-        const support = GameObjectEditorSupport.getEditorSupport(obj);
-
-        if (support) {
-
-            return support.isNestedPrefabInstance();
-        }
-
-        return false;
-    }
-
-    export function isGameObject(obj: any) {
-
-        return GameObjectEditorSupport.hasEditorSupport(obj);
-    }
-
-    export function isGameObjectParent(obj: any) {
-
-        return obj instanceof Container || obj instanceof Layer;
-    }
-
-    export function getObjectChildren(obj: ISceneGameObject) {
-
-        if (obj instanceof Layer || obj instanceof Container) {
-
-            return obj.getChildren();
-        }
-
-        return [];
-    }
-
-    export function getObjectParent(obj: ISceneGameObject) {
-
-        return GameObjectEditorSupport.getObjectParent(obj);
-    }
-
-    export function getObjectParentOrDisplayList(obj: ISceneGameObject) {
-
-        return getObjectParent(obj) || obj.getEditorSupport().getScene().sys.displayList;
-    }
-
     export abstract class GameObjectEditorSupport<T extends ISceneGameObject> extends EditorSupport<T> {
 
         private _extension: SceneGameObjectExtension;
@@ -76,12 +34,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             scene.sys.displayList.add(obj as Phaser.GameObjects.GameObject);
         }
 
-        static isParentObject(obj: ISceneGameObject) {
+        getObjectChildren() {
 
-            return obj instanceof Layer || obj instanceof Container;
+            const obj = this.getObject();
+
+            if (obj instanceof Layer || obj instanceof Container) {
+
+                return obj.getChildren();
+            }
+
+            return [];
         }
 
-        static getObjectParent(obj: ISceneGameObject): Container | Layer {
+        getObjectParentOrDisplayList() {
+
+            return this.getObjectParent() || this.getScene().sys.displayList;
+        }
+
+        getObjectParent(): Container | Layer | undefined {
+
+            const obj = this.getObject();
 
             if (obj.parentContainer) {
 
@@ -93,10 +65,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return obj.displayList;
             }
 
-            return null;
+            return undefined;
         }
 
-        static getObjectChildren(obj: ISceneGameObject): ISceneGameObject[] {
+        getChildren() {
+
+            const obj = this.getObject();
 
             if (obj instanceof Container
                 || obj instanceof Layer
@@ -106,11 +80,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return [];
-        }
-
-        getChildren() {
-
-            return GameObjectEditorSupport.getObjectChildren(this.getObject());
         }
 
         abstract setInteractive(): void;
@@ -483,7 +452,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getParentId(): string {
 
-            const parent = GameObjectEditorSupport.getObjectParent(this.getObject());
+            const parent = this.getObjectParent();
 
             if (parent) {
 
@@ -504,8 +473,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this.isNestedPrefabInstance()) {
 
-                const parentSupport = (getObjectParent(this.getObject()) as ISceneGameObject)
-                    .getEditorSupport();
+                const parentSupport = this.getObjectParent().getEditorSupport();
 
                 return parentSupport.isMutableNestedPrefabInstance()
                     || parentSupport.isPrefabInstanceRoot();
@@ -557,7 +525,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this.isPrefabInstance() && !this.isNestedPrefabInstance()) {
 
-                const parent = getObjectParent(this.getObject());
+                const parent = this.getObjectParent();
 
                 if (!parent || !parent.getEditorSupport().isPrefabInstance()) {
 
@@ -585,7 +553,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isPrefeabInstanceAppendedChild() {
 
-            const parent = GameObjectEditorSupport.getObjectParent(this.getObject());
+            const parent = this.getObjectParent();
 
             if (parent && parent.getEditorSupport().isPrefabInstance()) {
 
@@ -688,7 +656,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private getAllParents2(obj: ISceneGameObject, list: Array<Container | Layer>) {
 
-            const objParent = GameObjectEditorSupport.getObjectParent(obj);
+            const objParent = obj.getEditorSupport().getObjectParent();
 
             if (objParent) {
 
@@ -709,7 +677,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this.isPrefabInstance()) {
 
-                const children = sceneobjects.getObjectChildren(this.getObject());
+                const children = this.getObjectChildren();
 
                 return children
                     .filter(obj => obj.getEditorSupport().isMutableNestedPrefabInstance());

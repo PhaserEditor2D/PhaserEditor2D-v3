@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private findParentLayer(obj: ISceneGameObject) {
 
-            const parent = getObjectParent(obj);
+            const parent = obj.getEditorSupport().getObjectParent();
 
             if (parent) {
 
@@ -72,7 +72,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
-                const objParent = getObjectParentOrDisplayList(obj);
+                const objParent = obj.getEditorSupport().getObjectParentOrDisplayList();
 
                 objParent.remove(sprite);
 

@@ -738,7 +738,7 @@ namespace phasereditor2d.scene.core.code {
 
             const varname = formatToValidVarName(objES.getLabel());
 
-            const objParent = ui.sceneobjects.getObjectParent(obj);
+            const objParent = objES.getObjectParent();
 
             createMethodDecl.getBody().push(createObjectMethodCall);
 
@@ -856,7 +856,7 @@ namespace phasereditor2d.scene.core.code {
 
         private findPrefabInstanceThatIsDefinedAsRootPrefab(obj: ui.sceneobjects.ISceneGameObject): ui.sceneobjects.ISceneGameObject {
 
-            const parent = ui.sceneobjects.getObjectParent(obj);
+            const parent = obj.getEditorSupport().getObjectParent();
 
             if (parent.getEditorSupport().isRootPrefabDefined()) {
 

@@ -1220,7 +1220,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         .getSelectedGameObjects()
 
-                        .map(obj => sceneobjects.getObjectParent(obj))
+                        .map(obj => obj.getEditorSupport().getObjectParent())
 
                         .filter(parent => parent !== undefined && parent !== null)
 
@@ -1232,7 +1232,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const sel = editor.getSelectedGameObjects()
 
-                            .map(obj => sceneobjects.getObjectParent(obj))
+                            .map(obj => obj.getEditorSupport().getObjectParent())
 
                             .filter(parent => parent !== undefined && parent !== null);
 
@@ -1276,7 +1276,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const sel = editor.getSelection()
 
-                            .flatMap(obj => sceneobjects.GameObjectEditorSupport.getObjectChildren(obj))
+                            .filter(obj => sceneobjects.isGameObject(obj))
+
+                            .flatMap((obj:sceneobjects.ISceneGameObject) => obj.getEditorSupport().getChildren())
 
                             .filter(obj => {
 

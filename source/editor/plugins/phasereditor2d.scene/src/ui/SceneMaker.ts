@@ -19,8 +19,8 @@ namespace phasereditor2d.scene.ui {
 
         private findDropTargetParent(obj: sceneobjects.ISceneGameObject) {
 
-            const parent = sceneobjects.getObjectParent(obj);
-
+            const parent = obj.getEditorSupport().getObjectParent();
+            
             if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
                 const objES = obj.getEditorSupport();

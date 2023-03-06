@@ -50,7 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const parents = sel
 
-                    .map(obj => sceneobjects.getObjectParent(obj))
+                    .map(obj => obj.getEditorSupport().getObjectParent())
 
                     .filter(cont => cont);
 
