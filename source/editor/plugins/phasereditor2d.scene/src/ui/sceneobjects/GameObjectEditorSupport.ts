@@ -34,6 +34,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             scene.addGameObject(obj);
         }
 
+        static isDisplayObjectType(type: string) {
+
+            return type !== ScriptNodeExtension.getInstance().getTypeName();
+        }
+
         isDisplayObject() {
 
             return true;

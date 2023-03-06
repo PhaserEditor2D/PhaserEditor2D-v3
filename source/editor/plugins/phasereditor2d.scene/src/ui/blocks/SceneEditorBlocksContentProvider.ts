@@ -54,7 +54,10 @@ namespace phasereditor2d.scene.ui.blocks {
 
                     if (groupingType === grouping.GROUP_ASSETS_BY_LOCATION) {
 
-                        return colibri.ui.ide.FileUtils.distinct(this.getSceneFiles("prefabs").map(f => f.getParent()));
+                        const files = colibri.ui.ide.FileUtils.distinct(
+                            this.getSceneFiles("prefabs").map(f => f.getParent()));
+
+                        return files;
                     }
 
                     return viewers.PhaserTypeSymbol.getSymbols();
