@@ -57,6 +57,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_TILEMAP_CATEGORY = "Tile Map";
     export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
     export const SCENE_OBJECT_INPUT_CATEGORY = "Input";
+    export const SCENE_OBJECT_SCRIPT_CATEGORY = "Script";
 
     export const SCENE_OBJECT_CATEGORIES = [
         SCENE_OBJECT_IMAGE_CATEGORY,
@@ -65,7 +66,8 @@ namespace phasereditor2d.scene {
         SCENE_OBJECT_ARCADE_CATEGORY,
         SCENE_OBJECT_SHAPE_CATEGORY,
         SCENE_OBJECT_TILEMAP_CATEGORY,
-        SCENE_OBJECT_INPUT_CATEGORY
+        SCENE_OBJECT_INPUT_CATEGORY,
+        SCENE_OBJECT_SCRIPT_CATEGORY
     ];
 
     export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
@@ -324,7 +326,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ArcadeImageExtension.getInstance(),
                 ui.sceneobjects.ArcadeSpriteExtension.getInstance(),
                 ui.sceneobjects.ColliderExtension.getInstance(),
-                ui.sceneobjects.KeyboardKeyExtension.getInstance()
+                ui.sceneobjects.KeyboardKeyExtension.getInstance(),
+                ui.sceneobjects.ScriptNodeExtension.getInstance()
             );
 
             // scene plain object extensions

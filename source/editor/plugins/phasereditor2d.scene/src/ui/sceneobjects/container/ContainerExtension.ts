@@ -78,7 +78,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             container.getEditorSupport().setScene(scene);
 
-            scene.sys.displayList.add(container);
+            scene.addGameObject(container);
 
             return container;
         }

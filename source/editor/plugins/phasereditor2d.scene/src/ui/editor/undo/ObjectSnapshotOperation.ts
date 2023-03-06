@@ -94,7 +94,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     if (newObj) {
 
-                        scene.sys.displayList.remove(newObj);
+                        scene.removeGameObject(newObj);
 
                         if (objSnapshot.parentId) {
 

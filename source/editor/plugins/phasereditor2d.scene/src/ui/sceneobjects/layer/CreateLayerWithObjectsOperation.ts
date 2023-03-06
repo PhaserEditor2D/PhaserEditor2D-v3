@@ -59,24 +59,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (newParent) {
 
-                this.getScene().sys.displayList.remove(layer);
+                this.getScene().removeGameObject(layer);
 
-                newParent.add(layer);
+                newParent.getEditorSupport().addObjectChild(layer);
             }
 
             for (const obj of list) {
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+                const sprite = obj as unknown as Sprite;
 
                 const worldPoint = new Phaser.Math.Vector2(0, 0);
 
                 sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
-                const objParent = obj.getEditorSupport().getObjectParentOrDisplayList();
+                const objParent = obj.getEditorSupport().getObjectParent();
 
-                objParent.remove(sprite);
+                if (objParent) {
 
-                layer.add(sprite);
+                    objParent.getEditorSupport().removeObjectChild(sprite);
+
+                } else {
+
+                    this.getScene().removeGameObject(sprite);
+                }
+
+                layer.getEditorSupport().addObjectChild(sprite);
 
                 sprite.x = worldPoint.x;
                 sprite.y = worldPoint.y;

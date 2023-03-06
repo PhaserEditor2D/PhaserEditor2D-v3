@@ -73,8 +73,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const map = scene.buildObjectIdMap();
 
-            const displayList = scene.sys.displayList;
-
             const objects = this.getEditor().getSelectedGameObjects();
 
             scene.sortObjectsByIndex(objects);
@@ -103,11 +101,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (currentParent) {
 
-                    currentParent.remove(obj);
+                    currentParent.getEditorSupport().removeObjectChild(obj);
 
                 } else {
 
-                    displayList.remove(obj);
+                    scene.removeGameObject(obj);
                 }
 
                 if (this._parentId) {
@@ -131,7 +129,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         sprite.y = p.y;
                     }
 
-                    newParent.add(sprite);
+                    newParent.getEditorSupport().addObjectChild(sprite);
 
                 } else {
 
@@ -141,7 +139,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         sprite.y = worldPoint.y;
                     }
 
-                    displayList.add(sprite, true);
+                    scene.addGameObject(sprite, true);
                 }
             }
         }

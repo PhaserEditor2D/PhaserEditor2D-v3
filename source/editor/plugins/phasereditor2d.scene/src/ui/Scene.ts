@@ -69,7 +69,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (!objES.isPrefabInstance()) {
 
-                    const children = objES.getChildren();
+                    const children = objES.getObjectChildren();
 
                     index = this.buildSortingMap(map, children, index);
                 }
@@ -110,6 +110,26 @@ namespace phasereditor2d.scene.ui {
 
                 obj.getEditorSupport().destroy();
             }
+        }
+
+        getGameObjectIndex(obj: sceneobjects.ISceneGameObject) {
+
+            return this.children.getIndex(obj);
+        }
+
+        removeGameObject(obj: sceneobjects.ISceneGameObject) {
+
+            this.children.remove(obj);
+        }
+
+        addGameObject(obj: sceneobjects.ISceneGameObject, skipCallback = false) {
+
+            this.children.add(obj, skipCallback);
+        }
+
+        addGameObjectAt(obj: sceneobjects.ISceneGameObject, index: number, skipCallback = false) {
+
+            this.children.addAt(obj, index, skipCallback);
         }
 
         addPlainObject(obj: sceneobjects.IScenePlainObject) {

@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui {
         private findDropTargetParent(obj: sceneobjects.ISceneGameObject) {
 
             const parent = obj.getEditorSupport().getObjectParent();
-            
+
             if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
                 const objES = obj.getEditorSupport();
@@ -87,23 +87,30 @@ namespace phasereditor2d.scene.ui {
                         continue;
                     }
 
-                    const sprite = obj as sceneobjects.Sprite;
-                    const p = new Phaser.Math.Vector2();
-                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                    if (obj.getEditorSupport().isDisplayObject()) {
 
-                    this._editorScene.sys.displayList.remove(sprite);
-                    container.add(sprite);
+                        const sprite = obj as sceneobjects.Sprite;
+                        const p = new Phaser.Math.Vector2();
+                        sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
 
-                    container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
-                    sprite.x = p.x;
-                    sprite.y = p.y;
+                        this._editorScene.removeGameObject(sprite);
+                        container.getEditorSupport().addObjectChild(sprite);
+
+                        container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+                        sprite.x = p.x;
+                        sprite.y = p.y;
+
+                    } else {
+
+                        container.getEditorSupport().addObjectChild(obj);
+                    }
                 }
 
             } else if (layer) {
 
                 for (const obj of sprites) {
 
-                    layer.add(obj);
+                    layer.getEditorSupport().addObjectChild(obj);
                 }
 
             } else {
@@ -147,8 +154,8 @@ namespace phasereditor2d.scene.ui {
 
                         parent.getEditorSupport().setLabel(scene.makeNewName("container"));
 
-                        scene.sys.displayList.remove(prefabObj);
-                        parent.add(prefabObj);
+                        scene.removeGameObject(prefabObj);
+                        parent.getEditorSupport().addObjectChild(prefabObj);
                     }
 
                     if (parent) {
@@ -164,9 +171,11 @@ namespace phasereditor2d.scene.ui {
                                 }
                             }
 
-                            scene.sys.displayList.remove(sprite);
+                            scene.removeGameObject(sprite);
 
-                            parent.add(sprite);
+                            const parentES: sceneobjects.GameObjectEditorSupport<any> = parent.getEditorSupport();
+
+                            parentES.addObjectChild(sprite);
                         }
 
                         if (parent !== prefabObj && parent instanceof sceneobjects.Container) {

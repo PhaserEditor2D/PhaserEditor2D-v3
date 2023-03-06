@@ -78,6 +78,7 @@ namespace phasereditor2d.scene.ui.editor {
                 ctx.save();
 
                 const isGameObject = sceneobjects.isGameObject(obj);
+
                 const isUserCompNode = obj instanceof sceneobjects.UserComponentNode
                     && !gameObjectsSet.has(obj.getObject());
 
@@ -94,7 +95,14 @@ namespace phasereditor2d.scene.ui.editor {
                         sprite = obj as sceneobjects.ISceneGameObject;
                     }
 
-                    const points = sprite.getEditorSupport().getScreenBounds(camera);
+                    const spriteES = sprite.getEditorSupport();
+
+                    if (!spriteES.isDisplayObject()) {
+
+                        continue;
+                    }
+
+                    const points = spriteES.getScreenBounds(camera);
 
                     if (points.length === 4) {
 

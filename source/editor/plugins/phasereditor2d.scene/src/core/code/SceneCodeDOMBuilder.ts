@@ -290,7 +290,7 @@ namespace phasereditor2d.scene.core.code {
 
                     if (objES.isPrefeabInstanceAppendedChild()) {
 
-                        children = objES.getChildren();
+                        children = objES.getObjectChildren();
 
                     } else if (objES.isMutableNestedPrefabInstance()) {
 
@@ -303,7 +303,7 @@ namespace phasereditor2d.scene.core.code {
 
                 } else {
 
-                    children = objES.getChildren();
+                    children = objES.getObjectChildren();
                 }
             }
 
@@ -746,7 +746,7 @@ namespace phasereditor2d.scene.core.code {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
 
-                if (!objParent) {
+                if (!objParent && objES.isDisplayObject()) {
 
                     const addToScene = new MethodCallCodeDOM("existing", "this.add");
                     addToScene.arg(varname);

@@ -225,7 +225,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const maker = containerSupport.getScene().getMaker();
 
-            container.removeAll(true);
+            container.getEditorSupport().removeAllObjectChildren();
 
             let i = 0;
 
@@ -253,7 +253,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (sprite) {
 
-                    container.add(sprite);
+                    container.getEditorSupport().addObjectChild(sprite);
 
                     // if it is not an appended child
                     if (i < prefabChildren.length) {

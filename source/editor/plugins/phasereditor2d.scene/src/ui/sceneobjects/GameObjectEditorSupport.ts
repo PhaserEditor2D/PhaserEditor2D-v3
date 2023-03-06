@@ -31,7 +31,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.setInteractive();
 
-            scene.sys.displayList.add(obj as Phaser.GameObjects.GameObject);
+            scene.addGameObject(obj);
+        }
+
+        isDisplayObject() {
+
+            return true;
+        }
+
+        addObjectChild(child: ISceneGameObject) {
+
+            const obj = this.getObject();
+
+            if (obj instanceof Layer || obj instanceof Container) {
+
+                return obj.add(child);
+            }
+        }
+
+        removeObjectChild(child: ISceneGameObject) {
+
+            const obj = this.getObject();
+
+            if (obj instanceof Layer || obj instanceof Container) {
+
+                return obj.remove(child);
+            }
+        }
+
+        removeAllObjectChildren() {
+
+            const obj = this.getObject();
+
+            if (obj instanceof Layer || obj instanceof Container) {
+
+                return obj.removeAll(true);
+            }
         }
 
         getObjectChildren() {
@@ -48,7 +83,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getObjectParentOrDisplayList() {
 
-            return this.getObjectParent() || this.getScene().sys.displayList;
+            return this.getObjectParent() || this.getScene().children;
         }
 
         getObjectParent(): Container | Layer | undefined {
@@ -66,20 +101,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return undefined;
-        }
-
-        getChildren() {
-
-            const obj = this.getObject();
-
-            if (obj instanceof Container
-                || obj instanceof Layer
-                || obj instanceof Phaser.GameObjects.DisplayList) {
-
-                return obj.list as ISceneGameObject[];
-            }
-
-            return [];
         }
 
         abstract setInteractive(): void;

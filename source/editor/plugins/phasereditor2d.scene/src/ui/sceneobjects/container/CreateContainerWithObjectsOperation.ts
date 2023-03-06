@@ -42,14 +42,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (newParent) {
 
-                this.getScene().sys.displayList.remove(container);
+                this.getScene().removeGameObject(container);
 
-                newParent.add(container);
+                newParent.getEditorSupport().addObjectChild(container);
             }
 
             for (const obj of list) {
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+                const sprite = obj as unknown as Sprite;
 
                 const worldPoint = new Phaser.Math.Vector2(0, 0);
 
@@ -59,10 +59,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (objParent) {
 
-                    objParent.remove(sprite);
+                    objParent.getEditorSupport().removeObjectChild(sprite);
                 }
 
-                container.add(sprite);
+                container.getEditorSupport().addObjectChild(sprite);
 
                 const localPoint = new Phaser.Math.Vector2(0, 0);
 

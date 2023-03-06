@@ -19,19 +19,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static breakParent(scene: Scene, selectedObjects: ISceneGameObject[]) {
 
-            const displayList = scene.sys.displayList;
-
             const sel = [];
 
             for (const obj of selectedObjects) {
 
                 const parent = obj as sceneobjects.Container | sceneobjects.Layer;
 
-                const children = [...parent.getChildren()];
+                const children = [...parent.getEditorSupport().getObjectChildren()];
 
                 for (const child of children) {
 
-                    const sprite = child as unknown as Phaser.GameObjects.Sprite;
+                    const sprite = child as unknown as Image;
 
                     const p = new Phaser.Math.Vector2(0, 0);
 
@@ -39,9 +37,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     sel.push(sprite);
 
-                    parent.remove(sprite);
+                    parent.getEditorSupport().removeObjectChild(sprite);
 
-                    displayList.remove(sprite);
+                    scene.removeGameObject(sprite);
 
                     sprite.displayList = null;
 
@@ -49,19 +47,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         parent.parentContainer.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
 
-                        parent.parentContainer.add(sprite);
+                        (parent.parentContainer as Container).getEditorSupport().addObjectChild(sprite);
 
                     } else {
 
                         if (parent.displayList instanceof Layer) {
 
-                            parent.displayList.add(sprite);
+                            parent.displayList.getEditorSupport().addObjectChild(sprite);
 
                         } else {
 
-                            const i = displayList.getIndex(parent);
+                            const i = scene.getGameObjectIndex(parent);
 
-                            displayList.addAt(sprite, i, true);
+                            scene.addGameObjectAt(sprite, i, true);
                         }
                     }
 

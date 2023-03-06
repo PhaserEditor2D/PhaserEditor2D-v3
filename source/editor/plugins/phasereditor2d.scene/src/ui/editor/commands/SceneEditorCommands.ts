@@ -1278,7 +1278,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             .filter(obj => sceneobjects.isGameObject(obj))
 
-                            .flatMap((obj:sceneobjects.ISceneGameObject) => obj.getEditorSupport().getChildren())
+                            .flatMap((obj:sceneobjects.ISceneGameObject) => obj.getEditorSupport().getObjectChildren())
 
                             .filter(obj => {
 

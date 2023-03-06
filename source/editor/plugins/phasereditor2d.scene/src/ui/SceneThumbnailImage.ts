@@ -156,6 +156,11 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
+        getDisplayListChildren(): sceneobjects.ISceneGameObject[] {
+            
+            return super.getDisplayListChildren().filter(obj => obj.getEditorSupport().isDisplayObject());
+        }
+
         private computeSceneBounds() {
 
             const children = this.getDisplayListChildren();
@@ -172,7 +177,7 @@ namespace phasereditor2d.scene.ui {
             let maxX = Number.MIN_SAFE_INTEGER;
             let maxY = Number.MIN_SAFE_INTEGER;
 
-            for (const obj of this.getDisplayListChildren()) {
+            for (const obj of children) {
 
                 const points = obj.getEditorSupport().getScreenBounds(camera);
 
