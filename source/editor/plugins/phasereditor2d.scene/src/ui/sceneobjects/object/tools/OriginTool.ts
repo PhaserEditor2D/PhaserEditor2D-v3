@@ -41,9 +41,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (obj instanceof Container) {
 
-                if (obj.getEditorSupport().isPrefabInstance()) {
+                const objES = obj.getEditorSupport();
 
-                    for (const test of [obj, ...obj.getChildren()]) {
+                if (objES.isPrefabInstance()) {
+
+                    for (const test of [obj, ...objES.getObjectChildren()]) {
 
                         if (!test.getEditorSupport().isUnlockedPropertyXY(TransformComponent.position)) {
 

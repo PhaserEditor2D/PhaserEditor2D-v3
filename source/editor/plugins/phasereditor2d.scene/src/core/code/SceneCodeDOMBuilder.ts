@@ -906,10 +906,11 @@ namespace phasereditor2d.scene.core.code {
             lazyStatements: CodeDOM[]
         }) {
 
+            const objES = args.obj.getEditorSupport();
             const body = args.createMethodDecl.getBody();
-            const parentIsPrefab = args.obj.getEditorSupport().isPrefabInstance();
+            const parentIsPrefab = objES.isPrefabInstance();
 
-            for (const child of args.obj.getChildren()) {
+            for (const child of objES.getObjectChildren()) {
 
                 const childES = child.getEditorSupport();
 

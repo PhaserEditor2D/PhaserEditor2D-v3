@@ -70,7 +70,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                     } else {
 
-                        list = [...parent.getChildren()];
+                        list = [...parent.getEditorSupport().getObjectChildren()];
 
                         list.reverse();
                     }

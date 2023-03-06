@@ -289,7 +289,7 @@ namespace phasereditor2d.scene.ui {
 
                     if (obj.visible && obj.alpha > 0) {
 
-                        this.getInputSortedObjects2(result, obj.getChildren());
+                        this.getInputSortedObjects2(result, obj.getEditorSupport().getObjectChildren());
                     }
 
                 } else {
@@ -314,7 +314,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    this.visit(visitor, obj.getChildren());
+                    this.visit(visitor, obj.getEditorSupport().getObjectChildren());
                 }
             }
         }
@@ -335,7 +335,7 @@ namespace phasereditor2d.scene.ui {
 
                     if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                        this.visitAskChildren(visitor, obj.getChildren());
+                        this.visitAskChildren(visitor, obj.getEditorSupport().getObjectChildren());
                     }
                 }
             }
@@ -413,7 +413,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    i += this.buildObjectSortingMap2(map, obj.getChildren());
+                    i += this.buildObjectSortingMap2(map, obj.getEditorSupport().getObjectChildren());
                 }
 
                 i++;
@@ -545,7 +545,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    const result = this.findByEditorId(obj.getChildren(), id);
+                    const result = this.findByEditorId(obj.getEditorSupport().getObjectChildren(), id);
 
                     if (result) {
                         return result;

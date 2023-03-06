@@ -17,9 +17,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getScreenBounds(camera: Phaser.Cameras.Scene2D.Camera) {
 
-            const layer = this.getObject();
+            const children = this.getObjectChildren();
 
-            if (layer.list.length === 0) {
+            if (children.length === 0) {
+
                 return [];
             }
 
@@ -28,7 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const points: Phaser.Math.Vector2[] = [];
 
-            for (const obj of layer.getChildren()) {
+            for (const obj of children) {
 
                 const bounds = obj.getEditorSupport().getScreenBounds(camera);
 

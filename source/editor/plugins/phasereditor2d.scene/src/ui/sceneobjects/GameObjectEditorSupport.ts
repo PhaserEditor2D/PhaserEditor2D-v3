@@ -69,13 +69,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        getObjectChildren() {
+        getObjectChildren(): ISceneGameObject[] {
 
             const obj = this.getObject();
 
-            if (obj instanceof Layer || obj instanceof Container) {
+            if (obj instanceof Layer) {
 
-                return obj.getChildren();
+                return obj.getChildren() as T[];
+            }
+
+            if (obj instanceof Container) {
+
+                return obj.list as ISceneGameObject[];
             }
 
             return [];
@@ -578,11 +583,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (parent && parent.getEditorSupport().isPrefabInstance()) {
 
-                const parentSupport = (parent.getEditorSupport() as ParentGameObjectEditorSupport<any>);
+                const parentES = (parent.getEditorSupport() as ParentGameObjectEditorSupport<any>);
 
-                const countPrefabChildren = parentSupport.getCountPrefabChildren();
+                const countPrefabChildren = parentES.getCountPrefabChildren();
 
-                const index = parent.getChildren().indexOf(this.getObject());
+                const index = parentES.getObjectChildren().indexOf(this.getObject());
 
                 return index >= countPrefabChildren;
             }

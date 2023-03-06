@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getAppendedChildren() {
 
-            const children = this.getObject().getChildren();
+            const children = this.getObjectChildren();
 
             const appended = children.slice(this._countPrefabChildren);
 
@@ -61,7 +61,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         destroy() {
 
-            for (const obj of this.getObject().getChildren()) {
+            for (const obj of this.getObjectChildren()) {
 
                 obj.getEditorSupport().destroy();
             }
@@ -109,13 +109,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            const support = container.getEditorSupport();
+            const containerES = container.getEditorSupport();
 
-            if (support.isPrefabInstance()) {
+            if (containerES.isPrefabInstance()) {
 
                 // write nested prefabs
 
-                containerData.nestedPrefabs = container.getChildren()
+                containerData.nestedPrefabs = containerES.getObjectChildren()
 
                     .filter(obj => obj.getEditorSupport().isMutableNestedPrefabInstance())
 
@@ -138,7 +138,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 // write appended objects
 
-                containerData.list = support.getAppendedChildren().map(obj => {
+                containerData.list = containerES.getAppendedChildren().map(obj => {
 
                     const objData = {} as json.IObjectData;
 
@@ -149,7 +149,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             } else {
 
-                containerData.list = container.getChildren().map(obj => {
+                containerData.list = containerES.getObjectChildren().map(obj => {
 
                     const objData = {} as json.IObjectData;
 
@@ -414,7 +414,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (!this.isPrefabInstance()) {
 
-                for (const obj of this.getObject().getChildren()) {
+                for (const obj of this.getObjectChildren()) {
 
                     obj.getEditorSupport().buildDependencyHash(args);
                 }
