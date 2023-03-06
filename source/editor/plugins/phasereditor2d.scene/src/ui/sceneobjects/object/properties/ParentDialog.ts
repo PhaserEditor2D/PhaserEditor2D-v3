@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         create() {
 
             const viewer = this.getViewer();
-            viewer.setLabelProvider(new editor.outline.SceneEditorOutlineLabelProvider());
+            viewer.setLabelProvider(new LabelProvider());
             viewer.setCellRendererProvider(new editor.outline.SceneEditorOutlineRendererProvider());
             viewer.setContentProvider(new ParentContentProvider(this._editor));
 
@@ -60,6 +60,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }));
 
             this.addCancelButton();
+        }
+    }
+
+    class LabelProvider extends editor.outline.SceneEditorOutlineLabelProvider {
+
+        getLabel(obj: any): string {
+            
+            if (obj instanceof Phaser.GameObjects.DisplayList) {
+
+                return "Scene";
+            }
+
+            return super.getLabel(obj);
         }
     }
 

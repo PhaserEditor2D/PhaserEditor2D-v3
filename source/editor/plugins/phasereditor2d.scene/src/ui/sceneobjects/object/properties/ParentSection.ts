@@ -64,7 +64,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 } else if (parents.length === 0) {
 
-                    str = "Display List";
+                    str = "Scene";
 
                 } else {
 
