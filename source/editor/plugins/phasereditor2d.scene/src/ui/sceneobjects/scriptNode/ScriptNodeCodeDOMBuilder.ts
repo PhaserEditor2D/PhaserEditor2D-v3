@@ -5,12 +5,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class ScriptNodeCodeDOMBuilder extends GameObjectCodeDOMBuilder {
 
         constructor() {
-            super("script");
+            super("ScriptNode");
         }
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
-            
-            const call = new code.MethodCallCodeDOM("script", args.gameObjectFactoryExpr);
+
+            const call = new code.MethodCallCodeDOM("ScriptNode");
+
+            call.setConstructor(true);
+
+            call.arg(args.parentVarName || args.sceneExpr)
 
             return call;
         }
@@ -19,22 +23,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const call = args.methodCallDOM;
 
-            call.arg(args.sceneExpr);
-
-            if (args.parentVarName) {
-
-                call.arg(args.parentVarName);
-            }
+            call.arg(args.parentVarName || args.sceneExpr);
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
 
-            args.ctrDeclCodeDOM.arg("parent", "ScriptNode | Phaser.GameObjects.GameObject", true);
+            const decl = args.ctrDeclCodeDOM;
+
+            // remove the scene arg
+            decl.getArgs().pop();
+
+            decl.arg("parent", "ScriptNode | Phaser.GameObjects.GameObject | Phaser.Scene", true);
         }
 
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
 
-            args.superMethodCallCodeDOM.arg("parent");
+            const call = args.superMethodCallCodeDOM;
+
+            // remove the scene arg
+            call.getArgs().pop();
+
+            call.arg("parent");
         }
     }
 }

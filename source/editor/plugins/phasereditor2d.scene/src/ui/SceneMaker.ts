@@ -213,16 +213,6 @@ namespace phasereditor2d.scene.ui {
 
                 const objData = sceneData.displayList[sceneData.displayList.length - 1];
 
-                // Exclude the ScriptNode prefabs from the blocks
-
-                if (sceneData.sceneType === core.json.SceneType.PREFAB) {
-
-                    if (!sceneobjects.GameObjectEditorSupport.isDisplayObjectType(objData.type)) {
-
-                        return false;
-                    }
-                }
-
                 if (objData.prefabId) {
 
                     const prefabFile = sceneFinder.getPrefabFile(objData.prefabId);

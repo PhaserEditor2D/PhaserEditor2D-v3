@@ -35,6 +35,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         obj: ISceneGameObject;
         gameObjectFactoryExpr: string;
+        sceneExpr: string;
+        parentVarName: string;
     }
 
     export interface IBuildPrefabConstructorCodeDOMArgs {

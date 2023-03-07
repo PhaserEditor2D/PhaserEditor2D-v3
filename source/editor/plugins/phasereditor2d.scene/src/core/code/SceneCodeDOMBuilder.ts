@@ -326,7 +326,7 @@ namespace phasereditor2d.scene.core.code {
             const type = prefabObj.getEditorSupport().getObjectType();
 
             const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
-            
+
             const objBuilder = ext.getCodeDOMBuilder();
 
             this.buildPrefabTypeScriptDefinitionsCodeDOM(prefabObj, objBuilder);
@@ -399,10 +399,10 @@ namespace phasereditor2d.scene.core.code {
 
             return ctrDecl;
         }
-        
+
         private buildPrefabTypeScriptDefinitionsCodeDOM(prefabObj: ISceneGameObject, objBuilder: ui.sceneobjects.GameObjectCodeDOMBuilder) {
-            
-            for(const comp of prefabObj.getEditorSupport().getActiveComponents()) {
+
+            for (const comp of prefabObj.getEditorSupport().getActiveComponents()) {
 
                 comp.buildPrefabTypeScriptDefinitionsCodeDOM({
                     unit: this._unit,
@@ -413,7 +413,7 @@ namespace phasereditor2d.scene.core.code {
 
             const settings = this._scene.getSettings();
 
-            for(const iface of this._unit.getTypeScriptInterfaces()) {
+            for (const iface of this._unit.getTypeScriptInterfaces()) {
 
                 iface.setExportInterface(settings.exportClass);
             }
@@ -736,13 +736,29 @@ namespace phasereditor2d.scene.core.code {
 
                 const builder = objES.getExtension().getCodeDOMBuilder();
 
-                const factoryVarname = builder.getChainToFactory();
-
+                const factoryVarName = builder.getChainToFactory();
+                const sceneVarName = this._scene.isPrefabSceneType() ? `scene` : `this`;
                 createObjectMethodCall = builder.buildCreateObjectWithFactoryCodeDOM({
-                    gameObjectFactoryExpr: this._scene.isPrefabSceneType() ?
-                        `scene.${factoryVarname}` : `this.${factoryVarname}`,
+                    gameObjectFactoryExpr: `${sceneVarName}.${factoryVarName}`,
+                    sceneExpr: sceneVarName,
+                    parentVarName, 
                     obj: obj
                 });
+
+                // for example, in case it is adding a ScriptNode to a scene
+                if (createObjectMethodCall.isConstructor()) {
+
+                    const clsName = createObjectMethodCall.getMethodName();
+
+                    const clsFile = this._fileNameMap.get(clsName);
+
+                    if (clsFile) {
+
+                        const filePath = code.getImportPath(this._sceneFile, clsFile);
+
+                        this._unit.addImport(clsName, filePath);
+                    }
+                }
 
                 const forcingType = this.getExplicitType(obj);
 
@@ -823,18 +839,18 @@ namespace phasereditor2d.scene.core.code {
                 createObjectMethodCall.setReturnToVar(varname);
             }
         }
-        
+
         getExplicitType(obj: ISceneGameObject) {
-            
+
             const objES = obj.getEditorSupport();
 
             return objES.getActiveComponents()
 
-            .map(comp => comp.getExplicitTypesForMethodFactory())
+                .map(comp => comp.getExplicitTypesForMethodFactory())
 
-            .filter(type => type !== undefined)
+                .filter(type => type !== undefined)
 
-            .join(" & ");
+                .join(" & ");
         }
 
         private getPrefabInstanceVarName(obj: ISceneGameObject) {
