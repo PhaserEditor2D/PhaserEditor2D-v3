@@ -687,6 +687,18 @@ namespace phasereditor2d.scene.core.code {
 
             let createObjectMethodCall: MethodCallCodeDOM;
 
+            const objParent = objES.getObjectParent();
+            let parentVarName: string;
+
+            if (objParent) {
+
+                const parentIsPrefabObject = this._scene.isPrefabSceneType()
+                    && objParent === this._scene.getPrefabObject();
+
+                parentVarName = parentIsPrefabObject ? "this"
+                    : this.getPrefabInstanceVarName(objParent);
+            }
+
             if (objES.isPrefabInstance()) {
 
                 const clsName = objES.getPrefabName();
@@ -708,6 +720,7 @@ namespace phasereditor2d.scene.core.code {
                         obj,
                         methodCallDOM: createObjectMethodCall,
                         sceneExpr: this._isPrefabScene ? "scene" : "this",
+                        parentVarName,
                         prefabSerializer
                     });
 
@@ -738,15 +751,14 @@ namespace phasereditor2d.scene.core.code {
 
             const varname = formatToValidVarName(objES.getLabel());
 
-            const objParent = objES.getObjectParent();
-
             createMethodDecl.getBody().push(createObjectMethodCall);
 
-            if (objES.isPrefabInstance()) {
+            // script nodes are not added to the scene this way
+            if (objES.isPrefabInstance() && objES.isDisplayObject()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
 
-                if (!objParent && objES.isDisplayObject()) {
+                if (!objParent) {
 
                     const addToScene = new MethodCallCodeDOM("existing", "this.add");
                     addToScene.arg(varname);
@@ -759,7 +771,6 @@ namespace phasereditor2d.scene.core.code {
                 varname
             });
 
-
             if (result.statements.length + result.lazyStatements.length > 0) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
@@ -769,17 +780,12 @@ namespace phasereditor2d.scene.core.code {
 
             createMethodDecl.getBody().push(...result.statements);
 
-            if (objParent) {
+            // the script nodes are not added to the parent this way
+            if (objParent && objES.isDisplayObject()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
 
-                const parentIsPrefabObject = this._scene.isPrefabSceneType()
-                    && objParent === this._scene.getPrefabObject();
-
-                const parentVarname = parentIsPrefabObject ? "this"
-                    : this.getPrefabInstanceVarName(objParent);
-
-                const addToParentCall = new MethodCallCodeDOM("add", parentVarname);
+                const addToParentCall = new MethodCallCodeDOM("add", parentVarName);
 
                 addToParentCall.arg(varname);
 

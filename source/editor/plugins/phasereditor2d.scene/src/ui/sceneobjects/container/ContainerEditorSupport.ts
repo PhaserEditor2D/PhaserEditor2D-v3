@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.getObject();
 
-            const children = this.getObjectChildren();
+            const children = this.getDisplayObjectChildren();
 
             if (children.length === 0) {
 

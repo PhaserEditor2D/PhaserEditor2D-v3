@@ -20,6 +20,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const call = args.methodCallDOM;
 
             call.arg(args.sceneExpr);
+
+            if (args.parentVarName) {
+
+                call.arg(args.parentVarName);
+            }
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {

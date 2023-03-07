@@ -1,5 +1,10 @@
 # Change Log
 
+## v360.0-dev
+
+* Removes Parent section.
+* Supports the new ScriptNode object.
+
 ## v3.60.0-beta.1 - Feb 10, 2023
 
 * Fixes labels of the Size section in the Inspector view.

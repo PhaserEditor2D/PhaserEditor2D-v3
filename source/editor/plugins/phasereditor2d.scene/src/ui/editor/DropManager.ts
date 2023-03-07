@@ -222,21 +222,20 @@ namespace phasereditor2d.scene.ui.editor {
 
             for (const sceneObject of [...newSprites, ...newPlainObjects]) {
 
-                const support = sceneObject.getEditorSupport();
+                const sceneObjectES = sceneObject.getEditorSupport();
 
-                let label = support.getLabel();
+                let label = sceneObjectES.getLabel();
 
-                if (support instanceof sceneobjects.GameObjectEditorSupport) {
+                if (sceneObjectES instanceof sceneobjects.GameObjectEditorSupport) {
 
-                    label = support.isPrefabInstance() ? support.getPrefabName() : support.getLabel();
-
+                    label = sceneObjectES.isPrefabInstance() ? sceneObjectES.getPrefabName() : sceneObjectES.getLabel();
                 }
 
                 label = core.code.formatToValidVarName(label);
 
                 label = nameMaker.makeName(label);
 
-                support.setLabel(label);
+                sceneObjectES.setLabel(label);
             }
 
             scene.getMaker().afterDropObjects(prefabObj, newSprites);

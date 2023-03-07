@@ -13,7 +13,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const comp = this.createGridElement(parent, 1);
 
             this.createButton(comp, "Add Script", () => {
+                
+                const dlg = new AddScriptDialog(this.getEditor());
 
+                dlg.create();
             });
         }
 

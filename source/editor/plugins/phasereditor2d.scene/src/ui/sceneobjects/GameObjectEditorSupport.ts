@@ -74,6 +74,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        getDisplayObjectChildren() {
+
+            return this.getObjectChildren()
+                .filter(obj => obj.getEditorSupport().isDisplayObject());
+        }
+
         getObjectChildren(): ISceneGameObject[] {
 
             const obj = this.getObject();

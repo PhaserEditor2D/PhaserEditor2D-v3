@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
         private _offsetY: number;
         private _data: any[];
 
-        constructor(editor: SceneEditor, data: any[], offsetX: number, offsetY: number) {
+        constructor(editor: SceneEditor, data: any[], offsetX = 0, offsetY = 0) {
             super(editor);
 
             this._offsetX = offsetX;

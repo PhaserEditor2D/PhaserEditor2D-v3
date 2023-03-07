@@ -41,6 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         obj: ISceneGameObject;
         sceneExpr: string;
+        parentVarName?: string;
         methodCallDOM: code.MethodCallCodeDOM;
         prefabSerializer: json.Serializer;
     }

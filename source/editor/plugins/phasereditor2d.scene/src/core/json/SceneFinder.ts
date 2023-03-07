@@ -367,6 +367,26 @@ namespace phasereditor2d.scene.core.json {
             return this._prefabFiles;
         }
 
+        getScriptPrefabFiles() {
+
+            return this._prefabFiles.filter(file => {
+
+                const prefabId = this.getPrefabId(file);
+
+                if (prefabId) {
+
+                    const data = this.getPrefabData(prefabId);
+
+                    if (data.type === ui.sceneobjects.ScriptNodeExtension.getInstance().getTypeName()) {
+
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        }
+
         getOriginalPrefabId(prefabId: string): string | undefined {
 
             const objData = this.getPrefabData(prefabId);

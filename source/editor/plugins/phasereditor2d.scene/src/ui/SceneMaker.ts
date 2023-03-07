@@ -2,7 +2,6 @@
 namespace phasereditor2d.scene.ui {
 
     import controls = colibri.ui.controls;
-    import ide = colibri.ui.ide;
     import io = colibri.core.io;
     import json = core.json;
     import FileUtils = colibri.ui.ide.FileUtils;
@@ -49,12 +48,14 @@ namespace phasereditor2d.scene.ui {
             return undefined;
         }
 
-        afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
+        afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, dropObjects: sceneobjects.ISceneGameObject[]) {
 
             let container: sceneobjects.Container;
             let layer: sceneobjects.Layer;
 
-            for (const sprite of this._editorScene.getEditor().getSelectedGameObjects()) {
+            const selection = this._editorScene.getEditor().getSelectedGameObjects();
+
+            for (const sprite of selection) {
 
                 let sprite2 = sprite;
 
@@ -80,16 +81,16 @@ namespace phasereditor2d.scene.ui {
 
             if (container) {
 
-                for (const obj of sprites) {
+                for (const dropObj of dropObjects) {
 
-                    if (obj instanceof sceneobjects.Layer) {
+                    if (dropObj instanceof sceneobjects.Layer) {
 
                         continue;
                     }
 
-                    if (obj.getEditorSupport().isDisplayObject()) {
+                    if (dropObj.getEditorSupport().isDisplayObject()) {
 
-                        const sprite = obj as sceneobjects.Sprite;
+                        const sprite = dropObj as sceneobjects.Sprite;
                         const p = new Phaser.Math.Vector2();
                         sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
 
@@ -102,20 +103,20 @@ namespace phasereditor2d.scene.ui {
 
                     } else {
 
-                        container.getEditorSupport().addObjectChild(obj);
+                        container.getEditorSupport().addObjectChild(dropObj);
                     }
                 }
 
             } else if (layer) {
 
-                for (const obj of sprites) {
+                for (const obj of dropObjects) {
 
                     layer.getEditorSupport().addObjectChild(obj);
                 }
 
             } else {
 
-                this.afterDropObjectsInPrefabScene(prefabObj, sprites);
+                this.afterDropObjectsInPrefabScene(prefabObj, dropObjects);
             }
         }
 
