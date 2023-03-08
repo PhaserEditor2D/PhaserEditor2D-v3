@@ -1,11 +1,7 @@
-/// <reference path="../../ui/sceneobjects/container/Container.ts"/>
-/// <reference path="../../ui/sceneobjects/layer/Layer.ts"/>
 namespace phasereditor2d.scene.core.code {
 
     import io = colibri.core.io;
     import ISceneGameObject = ui.sceneobjects.ISceneGameObject;
-    import Container = ui.sceneobjects.Container;
-    import Layer = ui.sceneobjects.Layer;
 
     export class SceneCodeDOMBuilder {
 
@@ -282,29 +278,26 @@ namespace phasereditor2d.scene.core.code {
 
             let children: ISceneGameObject[];
 
-            if (obj instanceof Container || obj instanceof Layer) {
+            const objES = obj.getEditorSupport();
 
-                const objES = obj.getEditorSupport();
+            if (objES.isPrefabInstance()) {
 
-                if (objES.isPrefabInstance()) {
+                if (objES.isPrefeabInstanceAppendedChild()) {
 
-                    if (objES.isPrefeabInstanceAppendedChild()) {
+                    children = objES.getObjectChildren();
 
-                        children = objES.getObjectChildren();
+                } else if (objES.isMutableNestedPrefabInstance()) {
 
-                    } else if (objES.isMutableNestedPrefabInstance()) {
-
-                        children = objES.getMutableNestedPrefabChildren();
-
-                    } else {
-
-                        children = obj.getEditorSupport().getAppendedChildren();
-                    }
+                    children = objES.getMutableNestedPrefabChildren();
 
                 } else {
 
-                    children = objES.getObjectChildren();
+                    children = obj.getEditorSupport().getAppendedChildren();
                 }
+
+            } else {
+
+                children = objES.getObjectChildren();
             }
 
             return children;
@@ -363,14 +356,11 @@ namespace phasereditor2d.scene.core.code {
 
             body.push(...result.statements);
 
-            if (prefabObj instanceof Container || prefabObj instanceof Layer) {
-
-                this.addChildrenObjects({
-                    createMethodDecl: ctrDecl,
-                    obj: prefabObj,
-                    lazyStatements
-                });
-            }
+            this.addChildrenObjects({
+                createMethodDecl: ctrDecl,
+                obj: prefabObj,
+                lazyStatements
+            });
 
             this.addCreateAllPlainObjectCode(ctrDecl.getBody(), lazyStatements);
 
@@ -671,14 +661,11 @@ namespace phasereditor2d.scene.core.code {
 
             createMethodDecl.getBody().push(...result.statements);
 
-            if (obj instanceof Container || obj instanceof Layer) {
-
-                this.addChildrenObjects({
-                    createMethodDecl,
-                    obj,
-                    lazyStatements
-                });
-            }
+            this.addChildrenObjects({
+                createMethodDecl,
+                obj,
+                lazyStatements
+            });
         }
 
         private addCreateObjectCode(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
@@ -741,7 +728,7 @@ namespace phasereditor2d.scene.core.code {
                 createObjectMethodCall = builder.buildCreateObjectWithFactoryCodeDOM({
                     gameObjectFactoryExpr: `${sceneVarName}.${factoryVarName}`,
                     sceneExpr: sceneVarName,
-                    parentVarName, 
+                    parentVarName,
                     obj: obj
                 });
 
@@ -808,9 +795,23 @@ namespace phasereditor2d.scene.core.code {
                 createMethodDecl.getBody().push(addToParentCall);
             }
 
-            if (obj instanceof Container || obj instanceof Layer) {
+            // generate children
+            {
+                let declareVar: boolean;
 
-                createObjectMethodCall.setDeclareReturnToVar(true);
+                if (objES.isPrefabInstance()) {
+
+                    declareVar = objES.getAppendedChildren().length > 0;
+
+                } else {
+
+                    declareVar = objES.getObjectChildren().length > 0;
+                }
+
+                if (declareVar) {
+                
+                    createObjectMethodCall.setDeclareReturnToVar(true);
+                }
 
                 this.addChildrenObjects({
                     createMethodDecl,
@@ -818,6 +819,8 @@ namespace phasereditor2d.scene.core.code {
                     lazyStatements
                 });
             }
+
+            // generate lists
 
             {
                 const lists = objES.getScene().getObjectLists().getListsByObjectId(objES.getId());
@@ -827,6 +830,8 @@ namespace phasereditor2d.scene.core.code {
                     createObjectMethodCall.setDeclareReturnToVar(true);
                 }
             }
+
+            // set var flags
 
             if (!objES.isMethodScope()) {
 
@@ -923,7 +928,7 @@ namespace phasereditor2d.scene.core.code {
         }
 
         private addChildrenObjects(args: {
-            obj: Container | Layer,
+            obj: ISceneGameObject,
             createMethodDecl: MethodDeclCodeDOM,
             lazyStatements: CodeDOM[]
         }) {
