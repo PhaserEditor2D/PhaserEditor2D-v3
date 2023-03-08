@@ -152,16 +152,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._objectChildren;
         }
 
-        getObjectParentOrDisplayList() {
+        getObjectSiblings() {
 
             const parent = this.getObjectParent();
 
-            if (parent instanceof Layer || parent instanceof Container) {
+            if (parent) {
 
-                return parent;
+                return parent.getEditorSupport().getObjectChildren();
             }
 
-            return this.getScene().children;
+            return this.getScene().getDisplayListChildren();
         }
 
         getObjectParent(): ISceneGameObject | undefined {
