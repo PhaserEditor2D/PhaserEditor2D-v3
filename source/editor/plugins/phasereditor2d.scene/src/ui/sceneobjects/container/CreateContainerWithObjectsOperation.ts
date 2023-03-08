@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const objParent = obj.getEditorSupport().getObjectParent();
 
-                if (objParent) {
+                if (objParent && (objParent instanceof Layer || objParent instanceof Container)) {
 
                     if (newParent) {
 

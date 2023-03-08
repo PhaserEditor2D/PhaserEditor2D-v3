@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 if (parent instanceof Phaser.GameObjects.GameObject) {
 
-                    const parentES: sceneobjects.ParentGameObjectEditorSupport<any>
+                    const parentES: sceneobjects.DisplayParentGameObjectEditorSupport<any>
                         = (parent as sceneobjects.ISceneGameObject).getEditorSupport() as any;
 
                     bottomIndex = parentES.getCountPrefabChildren();

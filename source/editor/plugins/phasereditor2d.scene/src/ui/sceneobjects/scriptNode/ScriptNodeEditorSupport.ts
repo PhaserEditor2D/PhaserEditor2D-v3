@@ -21,5 +21,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_BUILD));
         }
+
+        getObjectParent(): ISceneGameObject {
+            
+            const parent = this.getObject().getParent();
+
+            if (isGameObject(parent)) {
+
+                return parent as ISceneGameObject;
+            }
+
+            return undefined;
+        }
     }
 }

@@ -120,6 +120,11 @@ namespace phasereditor2d.scene.ui {
         removeGameObject(obj: sceneobjects.ISceneGameObject) {
 
             this.children.remove(obj);
+
+            if (obj instanceof sceneobjects.ScriptNode) {
+
+                obj.setParent(undefined);
+            }
         }
 
         addGameObject(obj: sceneobjects.ISceneGameObject, skipCallback = false) {
@@ -312,10 +317,7 @@ namespace phasereditor2d.scene.ui {
 
                 visitor(obj);
 
-                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
-
-                    this.visit(visitor, obj.getEditorSupport().getObjectChildren());
-                }
+                this.visit(visitor, obj.getEditorSupport().getObjectChildren());
             }
         }
 
@@ -333,10 +335,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (visitChildren) {
 
-                    if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
-
-                        this.visitAskChildren(visitor, obj.getEditorSupport().getObjectChildren());
-                    }
+                    this.visitAskChildren(visitor, obj.getEditorSupport().getObjectChildren());
                 }
             }
         }
@@ -440,7 +439,7 @@ namespace phasereditor2d.scene.ui {
 
             this.visitAll(obj => {
 
-                for(const node of obj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes()) {
+                for (const node of obj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes()) {
 
                     map.set(node.getId(), node);
                 }
@@ -540,16 +539,14 @@ namespace phasereditor2d.scene.ui {
             for (const obj of list) {
 
                 if (obj.getEditorSupport().getId() === id) {
+
                     return obj;
                 }
 
-                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
+                const result = this.findByEditorId(obj.getEditorSupport().getObjectChildren(), id);
 
-                    const result = this.findByEditorId(obj.getEditorSupport().getObjectChildren(), id);
-
-                    if (result) {
-                        return result;
-                    }
+                if (result) {
+                    return result;
                 }
             }
 

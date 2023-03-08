@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             } else if (obj instanceof Phaser.GameObjects.DisplayList) {
 
-                return "Display List";
+                return "Scene";
 
             } else if (obj instanceof sceneobjects.ObjectLists) {
 

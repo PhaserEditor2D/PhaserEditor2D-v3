@@ -1,7 +1,7 @@
-/// <reference path="../ParentGameObjectEditorSupport.ts"/>
+/// <reference path="../DisplayParentGameObjectEditorSupport.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ContainerEditorSupport extends ParentGameObjectEditorSupport<Container> {
+    export class ContainerEditorSupport extends DisplayParentGameObjectEditorSupport<Container> {
 
         constructor(obj: Container, scene: Scene) {
             super(ContainerExtension.getInstance(), obj, scene);

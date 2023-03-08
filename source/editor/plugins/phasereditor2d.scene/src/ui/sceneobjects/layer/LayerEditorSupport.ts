@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     import controls = colibri.ui.controls;
     import json = phasereditor2d.scene.core.json;
 
-    export class LayerEditorSupport extends ParentGameObjectEditorSupport<Layer> {
+    export class LayerEditorSupport extends DisplayParentGameObjectEditorSupport<Layer> {
 
         constructor(obj: Layer, scene: Scene) {
             super(LayerExtension.getInstance(), obj, scene);
