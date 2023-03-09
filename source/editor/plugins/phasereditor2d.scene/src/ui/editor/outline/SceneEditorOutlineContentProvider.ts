@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
     export class SceneEditorOutlineContentProvider implements controls.viewers.ITreeContentProvider {
 
-        private _editor: SceneEditor;
+        protected _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
 

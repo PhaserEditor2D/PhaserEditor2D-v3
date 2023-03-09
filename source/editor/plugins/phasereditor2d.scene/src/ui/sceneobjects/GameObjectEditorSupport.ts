@@ -97,11 +97,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this._objectChildren.splice(i, 1);
                 }
+            }
 
-                if (child instanceof ScriptNode) {
+            if (child instanceof ScriptNode) {
 
-                    child.setParent(undefined);
-                }
+                child.setParent(undefined);
             }
         }
 
@@ -718,7 +718,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getAllParents() {
 
-            const list: Array<Container | Layer> = [];
+            const list: Array<ISceneGameObject> = [];
 
             this.getAllParents2(this.getObject(), list);
 
@@ -784,11 +784,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return set.has(parent);
         }
 
-        private getAllParents2(obj: ISceneGameObject, list: Array<Container | Layer>) {
+        private getAllParents2(obj: ISceneGameObject, list: Array<ISceneGameObject>) {
 
             const objParent = obj.getEditorSupport().getObjectParent();
 
-            if (objParent && (objParent instanceof Layer || objParent instanceof Container)) {
+            if (objParent) {
 
                 list.push(objParent);
 
