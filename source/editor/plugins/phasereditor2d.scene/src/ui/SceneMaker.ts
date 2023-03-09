@@ -262,7 +262,7 @@ namespace phasereditor2d.scene.ui {
 
             const builder = new phasereditor2d.ide.core.MultiHashBuilder();
 
-            for (const obj of this._editorScene.getDisplayListChildren()) {
+            for (const obj of this._editorScene.getGameObjects()) {
 
                 await obj.getEditorSupport().buildDependencyHash({ builder });
             }

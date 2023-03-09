@@ -132,7 +132,7 @@ namespace phasereditor2d.scene.core.code {
 
                 const fields: MemberDeclCodeDOM[] = [];
 
-                this.buildObjectClassFields(fields, this._scene.getDisplayListChildren());
+                this.buildObjectClassFields(fields, this._scene.getGameObjects());
                 this.buildPlainObjectsClassFields(fields);
                 this.buildListClassFields(fields);
 
@@ -453,7 +453,7 @@ namespace phasereditor2d.scene.core.code {
 
             this.addCreateAllPlainObjectCode(body, lazyStatements);
 
-            for (const obj of this._scene.getDisplayListChildren()) {
+            for (const obj of this._scene.getGameObjects()) {
 
                 if (obj.getEditorSupport().isMutableNestedPrefabInstance()) {
 
@@ -609,7 +609,7 @@ namespace phasereditor2d.scene.core.code {
 
             const prefabObj = this._scene.isPrefabSceneType() ? this._scene.getPrefabObject() : null;
 
-            this.addFieldInitCode_GameObjects(fields, prefabObj, this._scene.getDisplayListChildren());
+            this.addFieldInitCode_GameObjects(fields, prefabObj, this._scene.getGameObjects());
 
             for (const obj of this._scene.getPlainObjects()) {
 

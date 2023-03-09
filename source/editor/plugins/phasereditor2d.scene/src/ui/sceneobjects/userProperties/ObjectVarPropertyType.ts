@@ -67,7 +67,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer): void {
 
-            viewer.setInput(this.getEditor().getScene().getDisplayListChildren());
+            viewer.setInput(this.getEditor().getScene().getGameObjects());
         }
 
         protected async updateIcon(iconControl: controls.IconControl, value: string): Promise<void> {

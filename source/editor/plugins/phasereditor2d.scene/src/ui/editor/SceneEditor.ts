@@ -730,7 +730,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private async refreshSceneWithData(sceneData: json.ISceneData) {
 
-            for (const obj of this._scene.getDisplayListChildren()) {
+            for (const obj of this._scene.getGameObjects()) {
 
                 obj.getEditorSupport().destroy();
             }

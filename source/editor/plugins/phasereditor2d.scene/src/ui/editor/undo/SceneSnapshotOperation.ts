@@ -51,7 +51,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             return {
 
-                displayList: scene.getDisplayListChildren().map(obj => {
+                displayList: scene.getGameObjects().map(obj => {
 
                     const data = {} as any;
 

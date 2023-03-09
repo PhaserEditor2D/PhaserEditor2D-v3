@@ -66,7 +66,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                     const appendedChildren = parentES.getAppendedChildren();
 
-                    list = [...prefabChildren, ...appendedChildren];
+                    list = [...prefabChildren.reverse(), ...appendedChildren.reverse()];
 
                 } else {
 

@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui {
 
             maker.createScene(this._data);
 
-            const children = this.getDisplayListChildren();
+            const children = this.getGameObjects();
 
             let singleObject: sceneobjects.ISceneGameObject;
 
@@ -156,14 +156,14 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        getDisplayListChildren(): sceneobjects.ISceneGameObject[] {
+        getGameObjects(): sceneobjects.ISceneGameObject[] {
             
-            return super.getDisplayListChildren().filter(obj => obj.getEditorSupport().isDisplayObject());
+            return super.getGameObjects().filter(obj => obj.getEditorSupport().isDisplayObject());
         }
 
         private computeSceneBounds() {
 
-            const children = this.getDisplayListChildren();
+            const children = this.getGameObjects();
 
             if (children.length === 0) {
 

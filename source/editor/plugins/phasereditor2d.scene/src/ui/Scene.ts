@@ -46,7 +46,7 @@ namespace phasereditor2d.scene.ui {
 
             const map: Map<any, number> = new Map();
 
-            this.buildSortingMap(map, this.getDisplayListChildren(), 0);
+            this.buildSortingMap(map, this.getGameObjects(), 0);
 
             objects.sort((a, b) => {
 
@@ -185,7 +185,7 @@ namespace phasereditor2d.scene.ui {
             this.input["_pendingInsertion"].length = 0;
             this.input["_pendingRemoval"].length = 0;
 
-            for (const obj of this.getDisplayListChildren()) {
+            for (const obj of this.getGameObjects()) {
 
                 obj.getEditorSupport().destroy();
             }
@@ -195,7 +195,7 @@ namespace phasereditor2d.scene.ui {
 
             if (this.sys.displayList) {
 
-                const list = this.getDisplayListChildren();
+                const list = this.getGameObjects();
 
                 return list[list.length - 1];
             }
@@ -275,14 +275,14 @@ namespace phasereditor2d.scene.ui {
             return super.getMaker() as SceneMaker;
         }
 
-        getDisplayListChildren(): sceneobjects.ISceneGameObject[] {
+        getGameObjects(): sceneobjects.ISceneGameObject[] {
 
             return this.sys.displayList.getChildren() as any;
         }
 
         getInputSortedObjects(): Phaser.GameObjects.GameObject[] {
 
-            return this.getInputSortedObjects2([], this.getDisplayListChildren());
+            return this.getInputSortedObjects2([], this.getGameObjects());
         }
 
         private getInputSortedObjects2(
@@ -308,7 +308,7 @@ namespace phasereditor2d.scene.ui {
 
         visitAll(visitor: (obj: sceneobjects.ISceneGameObject) => void) {
 
-            this.visit(visitor, this.getDisplayListChildren());
+            this.visit(visitor, this.getGameObjects());
         }
 
         visit(visitor: (obj: sceneobjects.ISceneGameObject) => void, children: sceneobjects.ISceneGameObject[]) {
@@ -323,7 +323,7 @@ namespace phasereditor2d.scene.ui {
 
         visitAllAskChildren(visitor: (obj: sceneobjects.ISceneGameObject) => boolean) {
 
-            this.visitAskChildren(visitor, this.getDisplayListChildren());
+            this.visitAskChildren(visitor, this.getGameObjects());
         }
 
         visitAskChildren(
@@ -384,7 +384,7 @@ namespace phasereditor2d.scene.ui {
 
             const map = new Map<sceneobjects.ISceneGameObject, number>();
 
-            this.buildObjectSortingMap2(map, this.getDisplayListChildren());
+            this.buildObjectSortingMap2(map, this.getGameObjects());
 
             return map;
         }
@@ -470,7 +470,7 @@ namespace phasereditor2d.scene.ui {
 
         getByEditorId(id: string) {
 
-            const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
+            const obj = Scene.findByEditorId(this.getGameObjects(), id);
 
             return obj;
         }
@@ -512,7 +512,7 @@ namespace phasereditor2d.scene.ui {
 
             set = set ?? new Set();
 
-            for (const obj of (list ?? this.getDisplayListChildren())) {
+            for (const obj of (list ?? this.getGameObjects())) {
 
                 const id = obj.getEditorSupport().getId();
 

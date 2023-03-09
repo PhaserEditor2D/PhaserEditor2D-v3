@@ -141,7 +141,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         selectAll() {
 
-            const sel = this._editor.getScene().getDisplayListChildren();
+            const sel = this._editor.getScene().getGameObjects();
             this._editor.setSelection(sel);
             this._editor.repaint();
         }

@@ -125,6 +125,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .filter(obj => obj.getEditorSupport().isDisplayObject());
         }
 
+        getObjectScriptNodes() {
+
+            return this.getObjectChildren().filter(o => o instanceof ScriptNode);
+        }
+
         getEditableObjectChildren() {
 
             if (this.isPrefabInstance()) {
@@ -161,7 +166,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return parent.getEditorSupport().getObjectChildren();
             }
 
-            return this.getScene().getDisplayListChildren();
+            return this.getScene().getGameObjects();
         }
 
         getObjectParent(): ISceneGameObject | undefined {

@@ -284,7 +284,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const scene = sceneEditor.getScene();
 
                     const input = [
-                        ...scene.getDisplayListChildren(),
+                        ...scene.getGameObjects(),
                         ...scene.getObjectLists().getLists()
                     ];
 
