@@ -8,8 +8,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private static createViewer() {
 
             const viewer = new controls.viewers.TreeViewer("AddScriptsDialog");
-            viewer.setLabelProvider(new controls.viewers.LabelProvider((file: colibri.core.io.FilePath) => {
-                return file.getNameWithoutExtension();
+            viewer.setLabelProvider(new controls.viewers.LabelProvider((obj: colibri.core.io.FilePath | ScriptNodeExtension) => {
+
+                if (obj instanceof ScriptNodeExtension) {
+
+                    return obj.getTypeName();
+                }
+
+                return obj.getNameWithoutExtension();
+            }));
+            viewer.setStyledLabelProvider(new (class s {
+                getStyledTexts(obj: any, dark: boolean) {
+
+                    let text: string;
+                    let color: string;
+
+                    if (obj instanceof ScriptNodeExtension) {
+
+                        text = obj.getTypeName();
+                        color = controls.Controls.getTheme().viewerForeground;
+
+                    } else {
+
+                        text = obj.getNameWithoutExtension();
+                        color = ScenePlugin.getInstance().getPrefabColor();
+                    }
+
+                    return [{ text, color }];
+                }
             }));
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
             viewer.setCellRendererProvider(
@@ -19,7 +45,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            const input = finder.getScriptPrefabFiles();
+            const input = [ScriptNodeExtension.getInstance(), ...finder.getScriptPrefabFiles()];
 
             viewer.setInput(input);
 
@@ -50,7 +76,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addCancelButton();
         }
 
-        addScript(script: io.FilePath) {
+        addScript(script: any) {
 
             this._editor.getUndoManager().add(
                 new ui.editor.undo.CreateObjectWithAssetOperation(this._editor, [script], 0, 0));

@@ -67,9 +67,6 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             const theme = controls.Controls.getTheme();
 
-            const nestedPrefabColor = "olive";
-            const prefabColor = theme.dark ? "lightGreen" : "darkGreen";
-
             let color = theme.viewerForeground;
 
             const baseLabel = this.getLabel(obj);
@@ -84,11 +81,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                     if (obj.getObject().getEditorSupport().isMutableNestedPrefabInstance()) {
 
-                        color = nestedPrefabColor;
+                        color = ScenePlugin.getInstance().getNestedPrefabColor();
 
                     } else {
 
-                        color = prefabColor;
+                        color = ScenePlugin.getInstance().getPrefabColor();
                     }
 
                 } else {
@@ -115,13 +112,13 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                     hintText += "- nested prefab";
 
-                    color = nestedPrefabColor;
+                    color = ScenePlugin.getInstance().getNestedPrefabColor();
 
                 } else if (support.isPrefabInstance()) {
 
                     hintText += "- prefab"
 
-                    color = prefabColor;
+                    color = ScenePlugin.getInstance().getPrefabColor();
                 }
             }
 

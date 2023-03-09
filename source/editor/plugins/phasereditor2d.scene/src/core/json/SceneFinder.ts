@@ -448,6 +448,13 @@ namespace phasereditor2d.scene.core.json {
             return result;
         }
 
+        isPrefabFile(file: io.FilePath) {
+
+            const data = this.getSceneData(file);
+
+            return data && data.sceneType === SceneType.PREFAB;
+        }
+
         getSceneData(file: io.FilePath) {
 
             return this._sceneFilename_Data_Map.get(file.getFullName());
