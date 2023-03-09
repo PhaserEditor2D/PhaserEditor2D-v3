@@ -2,11 +2,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class ScriptNodeDialog extends controls.dialogs.ViewerDialog {
+    export class BrowseScriptsDialog extends controls.dialogs.ViewerDialog {
 
         private static createViewer(editor: ui.editor.SceneEditor) {
 
-            const viewer = new controls.viewers.TreeViewer("ScriptBodeDialog");
+            const viewer = new controls.viewers.TreeViewer("BrowseScriptsDialog");
 
             viewer.setLabelProvider(new ui.editor.outline.SceneEditorOutlineLabelProvider());
             viewer.setStyledLabelProvider(new ui.editor.outline.SceneEditorOutlineStyledLabelProvider());
@@ -21,14 +21,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _editor: ui.editor.SceneEditor;
 
         constructor(editor: ui.editor.SceneEditor) {
-            super(ScriptNodeDialog.createViewer(editor), true);
+            super(BrowseScriptsDialog.createViewer(editor), true);
 
             this._editor = editor;
         }
 
-        create(hideParentDialog?: boolean): void {
+        create(): void {
 
             super.create();
+
+            this.setTitle("Browse Scripts");
 
             this.addOpenButton("Select", sel => {
 
@@ -43,7 +45,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getRoots(input: any): any[] {
 
-            return this._editor.getSelectedGameObjects();
+            const sel = this._editor.getSelectedGameObjects();
+
+            if (sel.length === 0) {
+
+                return this._editor.getScene().getGameObjects();
+            }
+
+            return sel;
         }
 
         getChildren(parent: any): any[] {
@@ -57,7 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 if (obj instanceof ScriptNode) {
 
                     result.push(obj);
-                    
+
                 } else if (isGameObject(obj)) {
 
                     if (this.hasUserComponentOrScriptNode(obj)) {
@@ -80,7 +89,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const children = super.getChildren(obj);
 
-                for(const child of children) {
+                for (const child of children) {
 
                     if (isGameObject(child)) {
 

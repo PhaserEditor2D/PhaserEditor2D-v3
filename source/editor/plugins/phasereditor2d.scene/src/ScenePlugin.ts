@@ -347,7 +347,6 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.PrefabInstanceSection(page),
                 page => new ui.sceneobjects.ObjectUserComponentsSection(page),
                 page => new ui.sceneobjects.ObjectSingleUserComponentSection(page),
-                page => new ui.sceneobjects.ScriptsSection(page),
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ChildrenSection(page),

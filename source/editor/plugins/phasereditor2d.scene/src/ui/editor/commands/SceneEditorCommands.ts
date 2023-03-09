@@ -157,29 +157,20 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_OPEN_SCRIPT_DIALOG,
                     category: CAT_SCENE_EDITOR,
-                    name: "Select Scripts",
-                    tooltip: "Opens the Select Script Dialog",
+                    name: "Browse Scripts",
+                    tooltip: "Opens the Browse Scripts dialog",
                 },
                 handler: {
-                    testFunc: args => {
-
-                        const editor = args.activeEditor as ui.editor.SceneEditor;
-
-                        if (isSceneScope(args)) {
-
-                            return editor.getSelectedGameObjects().length > 0;
-                        }
-
-                        return false;
-                    },
+                    testFunc: isSceneScope,
                     executeFunc: args => {
 
-                        const dlg = new sceneobjects.ScriptNodeDialog(args.activeEditor as SceneEditor);
+                        const dlg = new sceneobjects.BrowseScriptsDialog(args.activeEditor as SceneEditor);
                         dlg.create();
                     }
                 },
                 keys: {
                     key: "KeyU",
+                    shift: true
                 }
             });
 
@@ -210,7 +201,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "KeyU",
-                    shift: true
                 }
             });
         }
