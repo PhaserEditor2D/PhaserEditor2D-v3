@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui {
 
             const objES = obj.getEditorSupport();
 
-            if (objES.isPrefabInstanceElement() || objES.isPrefabInstance()) {
+            if (objES.isPrefabInstanceElement()) {
 
                 if (!objES.isMutableNestedPrefabInstance()) {
 
@@ -82,8 +82,6 @@ namespace phasereditor2d.scene.ui {
             for (const sprite of selection) {
 
                 const dropTarget = areDropingScriptNodes ? this.findDropScriptTargetParent(sprite) : this.findDropTargetParent(sprite);
-
-                console.log("dropTarget", dropTarget);
 
                 if (dropTarget) {
 
