@@ -159,14 +159,16 @@ namespace phasereditor2d.scene.ui {
                 return;
             }
 
-            let parent: sceneobjects.Container | sceneobjects.Layer;
+            let parent: sceneobjects.Container | sceneobjects.Layer | sceneobjects.ScriptNode;
 
             if (scene.isPrefabSceneType()) {
 
                 if (sprites.length > 0) {
 
                     if (!prefabObj.getEditorSupport().isPrefabInstance()
-                        && (prefabObj instanceof sceneobjects.Container || prefabObj instanceof sceneobjects.Layer)) {
+                        && (prefabObj instanceof sceneobjects.Container 
+                            || prefabObj instanceof sceneobjects.Layer 
+                            || prefabObj instanceof sceneobjects.ScriptNode)) {
 
                         parent = prefabObj;
 
