@@ -191,6 +191,21 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
+        isScriptNodePrefabScene() {
+
+            if (this.isPrefabSceneType()) {
+
+                const obj = this.getPrefabObject();
+
+                if (obj) {
+
+                    return obj instanceof sceneobjects.ScriptNode;
+                }
+            }
+
+            return false;
+        }
+
         getPrefabObject(): sceneobjects.ISceneGameObject {
 
             if (this.sys.displayList) {

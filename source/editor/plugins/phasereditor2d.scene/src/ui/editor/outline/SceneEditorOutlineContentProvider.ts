@@ -29,9 +29,18 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 roots.push(displayList);
             }
 
-            roots.push(scene.getObjectLists());
+            if (scene.getObjectLists().getLists().length > 0) {
 
-            roots.push(...ScenePlugin.getInstance().getPlainObjectCategories());
+                roots.push(scene.getObjectLists());
+            }
+
+            if (!scene.isScriptNodePrefabScene()) {
+
+                roots.push(...ScenePlugin.getInstance().getPlainObjectCategories().filter(cat => {
+
+                    return this.getChildren(cat).length > 0;
+                }));
+            }
 
             if (scene.isPrefabSceneType()) {
 
