@@ -45,16 +45,17 @@ namespace phasereditor2d.scene.ui.blocks {
 
             if (this._editor.getScene().isScriptNodePrefabScene()) {
 
+                const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
+
                 return [
                     sceneobjects.ScriptNodeExtension.getInstance(),
-                    ...ScenePlugin.getInstance().getSceneFinder().getScriptPrefabFiles()
+                    ...this.getSceneFiles("prefabs")
+                        .filter(f => sceneFinder.isScriptPrefabFile(f))
                 ];
             }
 
             const groupingType = grouping.getGroupingPreference();
             const section = this._blocksProvider.getSelectedTabSection();
-
-            const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
 
             switch (section) {
 

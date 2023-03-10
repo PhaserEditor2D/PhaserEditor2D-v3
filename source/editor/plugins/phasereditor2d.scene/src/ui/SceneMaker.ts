@@ -18,22 +18,24 @@ namespace phasereditor2d.scene.ui {
 
         private findDropScriptTargetParent(obj: sceneobjects.ISceneGameObject) {
 
-            const parent = obj.getEditorSupport().getObjectParent();
+            // if (obj instanceof sceneobjects.ScriptNode) {
 
-            const objES = obj.getEditorSupport();
+            //     return obj;
+            // }
 
-            if (objES.isPrefabInstanceElement()) {
+            // const parent = obj.getEditorSupport().getObjectParent();
 
-                if (!objES.isMutableNestedPrefabInstance()) {
+            // const objES = obj.getEditorSupport();
 
-                    if (parent) {
+            // if (objES.isPrefabInstanceElement() && !objES.isMutableNestedPrefabInstance()) {
 
-                        return this.findDropTargetParent(parent);
-                    }
+            //     if (parent) {
 
-                    return undefined;
-                }
-            }
+            //         return this.findDropTargetParent(parent);
+            //     }
+
+            //     return undefined;
+            // }
 
             return obj;
         }
@@ -88,7 +90,7 @@ namespace phasereditor2d.scene.ui {
                     if (areDropingScriptNodes) {
 
                         dropInObj = dropTarget;
-                        
+
                     } else if (dropTarget instanceof sceneobjects.Container) {
 
                         dropInContainer = dropTarget;
@@ -165,9 +167,11 @@ namespace phasereditor2d.scene.ui {
 
                 if (sprites.length > 0) {
 
-                    if (!prefabObj.getEditorSupport().isPrefabInstance()
-                        && (prefabObj instanceof sceneobjects.Container 
-                            || prefabObj instanceof sceneobjects.Layer 
+                    const prefabObjES = prefabObj.getEditorSupport();
+
+                    if ((!prefabObjES.isPrefabInstance() || prefabObjES.isAllowAppendChildren())
+                        && (prefabObj instanceof sceneobjects.Container
+                            || prefabObj instanceof sceneobjects.Layer
                             || prefabObj instanceof sceneobjects.ScriptNode)) {
 
                         parent = prefabObj;
