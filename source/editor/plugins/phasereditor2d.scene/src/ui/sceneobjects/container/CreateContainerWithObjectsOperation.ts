@@ -6,8 +6,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async performModification() {
 
+            const scene = this.getScene();
+
             const [container] = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
-                scene: this.getScene(),
+                scene,
                 x: 0,
                 y: 0
             });
@@ -16,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const list = [...this._editor.getSelectedGameObjects()];
 
-            this._editor.getScene().sortObjectsByRenderingOrder(list);
+            scene.sortObjectsByRenderingOrder(list);
 
             let newParent: Container | Layer;
 
@@ -42,9 +44,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (newParent) {
 
-                this.getScene().removeGameObject(container);
+                scene.removeGameObject(container);
 
-                newParent.getEditorSupport().addObjectChild(container);
+                const newParentES = newParent.getEditorSupport();
+
+                newParentES.addObjectChild(container);
+                newParentES.sortObjectChildren();
+
+            } else {
+
+                scene.sortGameObjects();
             }
 
             for (const obj of list) {

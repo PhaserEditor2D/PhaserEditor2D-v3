@@ -8,6 +8,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(ScriptNodeExtension.getInstance(), obj, scene);
         }
 
+        destroy(): boolean | void {
+            
+            this.getObject().removeFromParent();
+
+            super.destroy();
+        }
+
         isDisplayObject(): boolean {
 
             return false;

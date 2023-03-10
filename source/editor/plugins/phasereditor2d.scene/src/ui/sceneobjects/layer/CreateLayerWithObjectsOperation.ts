@@ -23,17 +23,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async performModification() {
 
+            const scene = this.getScene();
+
             const [layer] = sceneobjects.LayerExtension.getInstance().createDefaultSceneObject({
                 scene: this.getScene(),
                 x: 0,
                 y: 0
             }) as sceneobjects.Layer[];
 
-            layer.getEditorSupport().setLabel(this.getScene().makeNewName("layer"));
+            layer.getEditorSupport().setLabel(scene.makeNewName("layer"));
 
             const list = [...this._editor.getSelectedGameObjects()];
 
-            this._editor.getScene().sortObjectsByRenderingOrder(list);
+            scene.sortObjectsByRenderingOrder(list);
 
             let newParent: Layer;
 
@@ -59,9 +61,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (newParent) {
 
-                this.getScene().removeGameObject(layer);
+                scene.removeGameObject(layer);
 
-                newParent.getEditorSupport().addObjectChild(layer);
+                const newParentES = newParent.getEditorSupport();
+
+                newParentES.addObjectChild(layer);
+                newParentES.sortObjectChildren();
+
+            } else {
+
+                scene.sortGameObjects();
             }
 
             for (const obj of list) {
@@ -80,7 +89,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 } else {
 
-                    this.getScene().removeGameObject(sprite);
+                    scene.removeGameObject(sprite);
                 }
 
                 layer.getEditorSupport().addObjectChild(sprite);

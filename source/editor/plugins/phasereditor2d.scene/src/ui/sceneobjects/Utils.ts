@@ -25,19 +25,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
     }
 
-    export function sortObjectsAlgorithm(objects: ISceneGameObject[], start: number) {
+    export function sortObjectsAlgorithm(children: ISceneGameObject[], countPrefabChildren: number) {
 
-        for (let i = start; i < objects.length - 1; i++) {
+        const start = countPrefabChildren;
+        const len = children.length;
 
-            for (let j = i + 1; j < objects.length; j++) {
+        for (let i = start; i < len - 1 ; i++) {
 
-                const a = objects[i];
-                const b = objects[j];
+            for (let j = i + 1; j < len; j++) {
+
+                const a = children[i];
+                const b = children[j];
 
                 if (gameObjectSortingWeight(b) < gameObjectSortingWeight(a)) {
 
-                    objects[i] = b;
-                    objects[j] = a;
+                    children[i] = b;
+                    children[j] = a;
                 }
             }
         }

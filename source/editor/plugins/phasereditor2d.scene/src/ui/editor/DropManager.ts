@@ -73,8 +73,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             const exts = ScenePlugin.getInstance().getGameObjectExtensions();
 
-            const parentsForSorting: Set<Scene|sceneobjects.ISceneGameObject> = new Set();
-
             const nameMaker = new ide.utils.NameMaker(obj => {
 
                 if (obj instanceof sceneobjects.ObjectList) {

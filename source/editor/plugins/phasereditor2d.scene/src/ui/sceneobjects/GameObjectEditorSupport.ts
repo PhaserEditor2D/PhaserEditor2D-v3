@@ -173,9 +173,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const children = this.getObjectChildren();
 
-            const start = this._countPrefabChildren;
-
-            sortObjectsAlgorithm(children, start);
+            sortObjectsAlgorithm(children, this._countPrefabChildren);
         }
 
         getObjectParent(): ISceneGameObject | undefined {
