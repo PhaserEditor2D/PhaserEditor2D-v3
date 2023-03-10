@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         static allow(editor: SceneEditor, move: DepthMove) {
 
-            const sel = this.sortedSelection(editor);
+            let sel = this.sortedSelection(editor);
 
             for (const obj of sel) {
 
@@ -148,6 +148,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     break;
             }
+
+            sceneobjects.sortGameObjects(sel);
 
             this.getEditor().repaint();
         }

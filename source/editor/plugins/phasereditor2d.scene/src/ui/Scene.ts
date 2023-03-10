@@ -275,6 +275,11 @@ namespace phasereditor2d.scene.ui {
             return super.getMaker() as SceneMaker;
         }
 
+        sortGameObjects() {
+
+            sceneobjects.sortObjectsAlgorithm(this.getGameObjects(), 0);
+        }
+
         getGameObjects(): sceneobjects.ISceneGameObject[] {
 
             return this.sys.displayList.getChildren() as any;
