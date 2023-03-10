@@ -16,11 +16,13 @@ namespace phasereditor2d.scene.ui.blocks {
 
     const grouping = pack.ui.viewers.AssetPackGrouping;
 
+    const SCRIPTS_CATEGORY = "Scripts";
+
     export class SceneEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
 
         private _getPacks: () => pack.core.AssetPack[];
         private _blocksProvider: SceneEditorBlocksProvider;
-        private _editor: editor.SceneEditor;
+        protected _editor: editor.SceneEditor;
 
         constructor(editor: editor.SceneEditor, getPacks: () => pack.core.AssetPack[]) {
             super();
@@ -41,8 +43,18 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getRoots(input: any) {
 
+            if (this._editor.getScene().isScriptNodePrefabScene()) {
+
+                return [
+                    sceneobjects.ScriptNodeExtension.getInstance(),
+                    ...ScenePlugin.getInstance().getSceneFinder().getScriptPrefabFiles()
+                ];
+            }
+
             const groupingType = grouping.getGroupingPreference();
             const section = this._blocksProvider.getSelectedTabSection();
+
+            const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
 
             switch (section) {
 

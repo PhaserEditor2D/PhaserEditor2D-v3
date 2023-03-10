@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.core.json {
         async preload(monitor: controls.IProgressMonitor) {
 
             await this._finder.preload(monitor);
-            
+
             this._finder.runMigrations();
         }
     }
@@ -369,22 +369,27 @@ namespace phasereditor2d.scene.core.json {
 
         getScriptPrefabFiles() {
 
-            return this._prefabFiles.filter(file => {
+            return this._prefabFiles.filter(file => this.isScriptPrefabFile(file));
+        }
 
-                const prefabId = this.getPrefabId(file);
+        isScriptPrefabFile(file: io.FilePath) {
 
-                if (prefabId) {
+            let prefabId = this.getPrefabId(file);
 
-                    const data = this.getPrefabData(prefabId);
+            if (prefabId) {
 
-                    if (data.type === ui.sceneobjects.ScriptNodeExtension.getInstance().getTypeName()) {
+                prefabId = this.getOriginalPrefabId(prefabId);
 
-                        return true;
-                    }
+                const data = this.getPrefabData(prefabId);
+
+                if (data && data.type === ui.sceneobjects.ScriptNodeExtension
+                    .getInstance().getTypeName()) {
+
+                    return true;
                 }
+            }
 
-                return false;
-            });
+            return false;
         }
 
         getOriginalPrefabId(prefabId: string): string | undefined {
