@@ -82,7 +82,11 @@ namespace phasereditor2d.scene.ui.editor {
                 const isUserCompNode = obj instanceof sceneobjects.UserComponentNode
                     && !gameObjectsSet.has(obj.getObject());
 
-                if (isGameObject || isUserCompNode) {
+                const isScriptNode = obj instanceof sceneobjects.ScriptNode && !gameObjectsSet.has(obj.getParentDisplayObject());
+
+                const isNonDisplayObject = isUserCompNode || isScriptNode;
+
+                if (isGameObject || isNonDisplayObject) {
 
                     let sprite: sceneobjects.ISceneGameObject;
 
@@ -90,24 +94,28 @@ namespace phasereditor2d.scene.ui.editor {
 
                         sprite = obj.getObject();
 
+                    } else if (isScriptNode) {
+
+                        sprite = obj.getParentDisplayObject();
+
                     } else {
 
                         sprite = obj as sceneobjects.ISceneGameObject;
                     }
 
-                    const spriteES = sprite.getEditorSupport();
-
-                    if (!spriteES.isDisplayObject()) {
+                    if (!sprite) {
 
                         continue;
                     }
+
+                    const spriteES = sprite.getEditorSupport();
 
                     const points = spriteES.getScreenBounds(camera);
 
                     if (points.length === 4) {
 
                         ctx.strokeStyle = "black";
-                        ctx.lineWidth = isUserCompNode ? 1 : 4;
+                        ctx.lineWidth = isNonDisplayObject ? 1 : 4;
 
                         ctx.beginPath();
                         ctx.moveTo(points[0].x, points[0].y);
@@ -120,7 +128,7 @@ namespace phasereditor2d.scene.ui.editor {
                         ctx.strokeStyle = "#00ff00";
                         // ctx.strokeStyle = controls.Controls.getTheme().viewerSelectionBackground;
 
-                        if (isUserCompNode) {
+                        if (isNonDisplayObject) {
 
                             ctx.lineWidth = 1;
                             ctx.setLineDash([1, 2]);

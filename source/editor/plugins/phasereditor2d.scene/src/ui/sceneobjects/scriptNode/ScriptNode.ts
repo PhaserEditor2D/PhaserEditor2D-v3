@@ -13,6 +13,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._parent = scene.children;
         }
 
+        getParentDisplayObject() {
+
+            if (this._parent) {
+
+                if (this._parent instanceof ScriptNode) {
+
+                    return this._parent.getParentDisplayObject();
+
+                } else if (isGameObject(this._parent)) {
+
+                    return this._parent;
+                }
+            }
+
+            return undefined;
+        }
+
         willRender(camera: Phaser.Cameras.Scene2D.Camera): boolean {
 
             return false;
