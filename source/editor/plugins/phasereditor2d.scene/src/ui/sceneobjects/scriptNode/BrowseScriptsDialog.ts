@@ -47,12 +47,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const sel = this._editor.getSelectedGameObjects();
 
+            let result: ISceneGameObject[];
+
             if (sel.length === 0) {
 
-                return this._editor.getScene().getGameObjects();
+                result = [...this._editor.getScene().getGameObjects()].reverse();
+
+            } else {
+
+                sel.sort(sceneobjects.gameObjectSortingWeight);
+
+                result = sel;
             }
 
-            return sel;
+            result = result.filter(obj => {
+
+                return obj instanceof ScriptNode || this.hasUserComponentOrScriptNode(obj);
+            });
+
+            return result;
         }
 
         getChildren(parent: any): any[] {

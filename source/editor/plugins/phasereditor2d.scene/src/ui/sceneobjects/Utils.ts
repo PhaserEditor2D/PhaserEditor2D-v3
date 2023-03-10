@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const a = objects[i];
                 const b = objects[j];
 
-                if (weight(b) < weight(a)) {
+                if (gameObjectSortingWeight(b) < gameObjectSortingWeight(a)) {
 
                     objects[i] = b;
                     objects[j] = a;
@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
     }
 
-    function weight(obj: ISceneGameObject) {
+    export function gameObjectSortingWeight(obj: ISceneGameObject) {
 
         if (obj instanceof ScriptNode) {
 
