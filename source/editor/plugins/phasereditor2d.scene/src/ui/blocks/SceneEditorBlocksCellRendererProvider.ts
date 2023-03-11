@@ -19,6 +19,12 @@ namespace phasereditor2d.scene.ui.blocks {
 
             if (element instanceof colibri.core.io.FilePath && ScenePlugin.getInstance().isSceneContentType(element)) {
 
+                if (ScenePlugin.getInstance().getSceneFinder().isScriptPrefabFile(element)) {
+
+                    return new colibri.ui.controls.viewers.IconGridCellRenderer(
+                        ScenePlugin.getInstance().getIcon(ICON_BUILD));
+                }
+
                 return new viewers.SceneFileCellRenderer();
 
             } else if (element instanceof sceneobjects.SceneObjectExtension) {

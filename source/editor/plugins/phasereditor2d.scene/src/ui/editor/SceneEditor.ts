@@ -382,6 +382,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             if (file) {
 
+                if (ScenePlugin.getInstance().getSceneFinder().isScriptPrefabFile(file)) {
+                
+                    return ScenePlugin.getInstance().getIcon(ICON_BUILD);
+                }
+
                 const img = SceneThumbnailCache.getInstance().getContent(file);
 
                 if (img) {
