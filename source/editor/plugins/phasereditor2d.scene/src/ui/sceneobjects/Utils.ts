@@ -72,4 +72,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         return GameObjectEditorSupport.hasEditorSupport(obj);
     }
+
+    export function isDisplayObject(obj: any) {
+
+        return isGameObject(obj) && !(obj instanceof ScriptNode));
+    }
 }

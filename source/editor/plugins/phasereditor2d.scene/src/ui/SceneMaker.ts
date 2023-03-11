@@ -42,6 +42,8 @@ namespace phasereditor2d.scene.ui {
 
         private findDropTargetParent(obj: sceneobjects.ISceneGameObject) {
 
+            console.log("here");
+
             const parent = obj.getEditorSupport().getObjectParent();
 
             if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
@@ -161,6 +163,9 @@ namespace phasereditor2d.scene.ui {
                 return;
             }
 
+            const dropOnlyScripts = sprites
+                .filter(obj => obj instanceof sceneobjects.ScriptNode).length === sprites.length;
+
             let parent: sceneobjects.Container | sceneobjects.Layer | sceneobjects.ScriptNode;
 
             if (scene.isPrefabSceneType()) {
@@ -172,7 +177,7 @@ namespace phasereditor2d.scene.ui {
                     if ((!prefabObjES.isPrefabInstance() || prefabObjES.isAllowAppendChildren())
                         && (prefabObj instanceof sceneobjects.Container
                             || prefabObj instanceof sceneobjects.Layer
-                            || prefabObj instanceof sceneobjects.ScriptNode)) {
+                            || (dropOnlyScripts && prefabObj instanceof sceneobjects.ScriptNode))) {
 
                         parent = prefabObj;
 
