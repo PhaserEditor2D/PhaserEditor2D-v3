@@ -232,6 +232,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                                 const objES = obj.getEditorSupport();
 
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
+
                                 if (objES.hasComponent(ui.sceneobjects.ArcadeComponent)) {
 
                                     return false;
@@ -1134,9 +1139,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
-                                const editorSupport = obj.getEditorSupport();
+                                const objES = obj.getEditorSupport();
 
-                                if (editorSupport.isNestedPrefabInstance()) {
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
+
+                                if (objES.isNestedPrefabInstance()) {
 
                                     return false;
                                 }
