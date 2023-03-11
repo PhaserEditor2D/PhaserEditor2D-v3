@@ -1192,7 +1192,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
-                                if (obj.getEditorSupport().isNestedPrefabInstance()) {
+                                const objES = obj.getEditorSupport();
+
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
+
+                                if (objES.isNestedPrefabInstance()) {
 
                                     return false;
                                 }
