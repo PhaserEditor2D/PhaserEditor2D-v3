@@ -156,14 +156,9 @@ namespace phasereditor2d.scene.ui {
             }
         }
 
-        getGameObjects(): sceneobjects.ISceneGameObject[] {
-            
-            return super.getGameObjects().filter(obj => obj.getEditorSupport().isDisplayObject());
-        }
-
         private computeSceneBounds() {
 
-            const children = this.getGameObjects();
+            const children = this.getGameObjects().filter(obj => obj.getEditorSupport().isDisplayObject());
 
             if (children.length === 0) {
 
