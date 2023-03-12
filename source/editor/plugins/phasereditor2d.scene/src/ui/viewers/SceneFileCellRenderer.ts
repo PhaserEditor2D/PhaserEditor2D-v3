@@ -7,9 +7,20 @@ namespace phasereditor2d.scene.ui.viewers {
 
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
             const file = args.obj as core.io.FilePath;
 
-            const image = SceneThumbnailCache.getInstance().getContent(file);
+            let image: controls.IImage;
+
+            if (finder.isScriptPrefabFile(file)) {
+
+                image = ScenePlugin.getInstance().getIcon(ICON_BUILD);
+
+            } else {
+
+                image = SceneThumbnailCache.getInstance().getContent(file);
+            }
 
             if (image) {
 

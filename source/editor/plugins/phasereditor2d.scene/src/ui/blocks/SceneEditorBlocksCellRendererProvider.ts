@@ -38,6 +38,10 @@ namespace phasereditor2d.scene.ui.blocks {
             } else if (typeof (element) === "string" && BLOCKS_SECTIONS.indexOf(element) >= 0) {
 
                 return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+
+            } else if (element instanceof viewers.PhaserTypeSymbol) {
+
+                return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
             }
 
             return super.getCellRenderer(element);
