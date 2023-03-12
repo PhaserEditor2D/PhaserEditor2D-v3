@@ -28,14 +28,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
 
+            const types = ScriptNodeEditorSupport.DEFAULT_PARENT_VARIABLE_TYPES;
+            args.importTypes = types;
+
             const decl = args.ctrDeclCodeDOM;
 
             // remove the scene arg
             decl.getArgs().pop();
 
-            const obj = args.prefabObj as ScriptNode;
-
-            decl.arg("parent", ScriptNodeEditorSupport.DEFAULT_PARENT_VARIABLE_TYPE);
+            decl.arg("parent", types.join(" | "));
         }
 
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {

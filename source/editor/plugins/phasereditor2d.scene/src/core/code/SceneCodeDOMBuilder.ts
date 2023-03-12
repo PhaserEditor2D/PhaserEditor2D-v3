@@ -173,6 +173,30 @@ namespace phasereditor2d.scene.core.code {
             return unit;
         }
 
+        private addImportForType(type: string) {
+
+            if (!this._scene.getSettings().autoImport) {
+
+                return;
+            }
+
+            if (type) {
+
+                if (type.startsWith("Phaser.")) {
+
+                    this._unit.addImport("Phaser", "phaser");
+
+                } else if (this._fileNameMap.has(type)) {
+
+                    const importFile = this._fileNameMap.get(type);
+
+                    const importPath = code.getImportPath(this._sceneFile, importFile);
+
+                    this._unit.addImport(type, importPath);
+                }
+            }
+        }
+
         private getClassName() {
 
             return this._sceneFile.getNameWithoutExtension();
@@ -326,10 +350,18 @@ namespace phasereditor2d.scene.core.code {
 
             ctrDecl.arg("scene", "Phaser.Scene");
 
-            objBuilder.buildPrefabConstructorDeclarationCodeDOM({
+            const args: ui.sceneobjects.IBuildPrefabConstructorDeclarationCodeDOM = {
                 ctrDeclCodeDOM: ctrDecl,
-                prefabObj
-            });
+                prefabObj,
+                importTypes: []
+            };
+
+            objBuilder.buildPrefabConstructorDeclarationCodeDOM(args);
+
+            for (const type of args.importTypes) {
+
+                this.addImportForType(type);
+            }
 
             {
                 const superCall = new MethodCallCodeDOM("super");
@@ -338,7 +370,7 @@ namespace phasereditor2d.scene.core.code {
 
                 objBuilder.buildPrefabConstructorDeclarationSupperCallCodeDOM({
                     superMethodCallCodeDOM: superCall,
-                    prefabObj: prefabObj
+                    prefabObj: prefabObj,
                 });
 
                 body.push(superCall);
@@ -809,7 +841,7 @@ namespace phasereditor2d.scene.core.code {
                 }
 
                 if (declareVar) {
-                
+
                     createObjectMethodCall.setDeclareReturnToVar(true);
                 }
 
