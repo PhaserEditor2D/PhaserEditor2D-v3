@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ScriptNode extends Phaser.GameObjects.GameObject implements ISceneGameObject {
 
-        private _editorSupport: GameObjectEditorSupport<ScriptNode>;
+        private _editorSupport: ScriptNodeEditorSupport;
         private _parent: ISceneGameObject | Phaser.GameObjects.DisplayList;
 
         constructor(scene: Scene) {

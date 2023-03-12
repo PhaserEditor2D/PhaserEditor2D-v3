@@ -33,7 +33,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // remove the scene arg
             decl.getArgs().pop();
 
-            decl.arg("parent", "ScriptNode | Phaser.GameObjects.GameObject | Phaser.Scene");
+            const obj = args.prefabObj as ScriptNode;
+
+            decl.arg("parent", ScriptNodeEditorSupport.DEFAULT_PARENT_VARIABLE_TYPE);
         }
 
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {

@@ -4,6 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ScriptNodeEditorSupport extends GameObjectEditorSupport<ScriptNode> {
 
+        static DEFAULT_PARENT_VARIABLE_TYPE = "ScriptNode | Phaser.GameObjects.GameObject | Phaser.Scene";
+
         constructor(scene: Scene, obj: ScriptNode) {
             super(ScriptNodeExtension.getInstance(), obj, scene);
         }

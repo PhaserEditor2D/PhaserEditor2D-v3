@@ -48,38 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createBooleanField(comp, VariableComponent.useGameObjectName, false);
             }
 
-            {
-                // Type
-
-                this.createLabel(comp, "Type", "The type of the object.");
-
-                const btn = this.createButton(comp, "", e => {
-
-                    const dlg = new editor.ConvertTypeDialog(this.getEditor());
-
-                    dlg.create();
-                });
-
-                this.addUpdater(() => {
-
-                    btn.textContent = this.flatValues_StringJoinDifferent(
-
-                        this.getSelection().map(obj => {
-
-                            const support = obj.getEditorSupport();
-
-                            let typename = support.getObjectType();
-
-                            if (support.isPrefabInstance()) {
-
-                                typename = `prefab ${support.getPrefabName()} (${typename})`;
-                            }
-
-                            return typename;
-                        })
-                    );
-                });
-            }
+            GameObjectVariableSection.createTypeEditor(this, comp);
 
             {
                 // Scope
@@ -95,6 +64,38 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     return scope !== ObjectScope.NESTED_PREFAB;
                 });
             }
+        }
+
+        static createTypeEditor(section: SceneGameObjectSection<ISceneGameObject>, parentElement: HTMLElement) {
+
+            section.createLabel(parentElement, "Type", "The type of the object.");
+
+            const btn = section.createButton(parentElement, "", e => {
+
+                const dlg = new editor.ConvertTypeDialog(section.getEditor());
+
+                dlg.create();
+            });
+
+            section.addUpdater(() => {
+
+                btn.textContent = section.flatValues_StringJoinDifferent(
+
+                    section.getSelection().map(obj => {
+
+                        const support = obj.getEditorSupport();
+
+                        let typename = support.getObjectType();
+
+                        if (support.isPrefabInstance()) {
+
+                            typename = `prefab ${support.getPrefabName()} (${typename})`;
+                        }
+
+                        return typename;
+                    })
+                );
+            });
         }
 
         canEdit(obj: any, n: number): boolean {

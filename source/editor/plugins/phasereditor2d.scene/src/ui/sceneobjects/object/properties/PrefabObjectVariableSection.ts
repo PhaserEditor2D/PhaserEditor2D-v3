@@ -19,38 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 2);
 
-            {
-                // Type
-
-                this.createLabel(comp, "Type", "The type of the object.");
-
-                const btn = this.createButton(comp, "", e => {
-
-                    const dlg = new editor.ConvertTypeDialog(this.getEditor());
-
-                    dlg.create();
-                });
-
-                this.addUpdater(() => {
-
-                    btn.textContent = this.flatValues_StringJoinDifferent(
-
-                        this.getSelection().map(obj => {
-
-                            const support = obj.getEditorSupport();
-
-                            let typename = support.getObjectType();
-
-                            if (support.isPrefabInstance()) {
-
-                                typename = `prefab ${support.getPrefabName()} (${typename})`;
-                            }
-
-                            return typename;
-                        })
-                    );
-                });
-            }
+            GameObjectVariableSection.createTypeEditor(this, comp);
         }
 
         canEdit(obj: any, n: number): boolean {
