@@ -41,12 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const obj = this.getSelectionFirstElement() as ISceneGameObject;
 
-                if (obj.getEditorSupport().isNestedPrefabInstance()) {
-
-                    const file = obj.getEditorSupport().getPrefabFile();
-
-                    this.createPrefabLink(file, `Root Prefab: ${file.getNameWithoutExtension()}`);
-                }
+                // properties of non-nested prefabs
 
                 const userPropsComponent = GameObjectEditorSupport
                     .getObjectComponent(obj, PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
@@ -106,6 +101,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         prop.getType().createInspectorPropertyEditor(this, this._propArea, prop, true);
                     }
+                }
+
+                // link to nested prefab
+
+                const objES = obj.getEditorSupport();
+
+                if (objES.isNestedPrefabInstance()) {
+
+                    const file = objES.getPrefabFile();
+
+                    this.createPrefabLink(file, `${file.getNameWithoutExtension()} (nested in)`);
                 }
             });
         }
