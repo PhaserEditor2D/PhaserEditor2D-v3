@@ -68,7 +68,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static createTypeEditor(section: SceneGameObjectSection<ISceneGameObject>, parentElement: HTMLElement) {
 
-            section.createLabel(parentElement, "Type", "The type of the object.");
+            const label = section.createLabel(parentElement, "Type", "The type of the object.");
 
             const btn = section.createButton(parentElement, "", e => {
 
@@ -79,23 +79,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             section.addUpdater(() => {
 
+                const finder = ScenePlugin.getInstance().getSceneFinder();
+
                 btn.textContent = section.flatValues_StringJoinDifferent(
 
                     section.getSelection().map(obj => {
 
-                        const support = obj.getEditorSupport();
+                        const objES = obj.getEditorSupport();
 
-                        let typename = support.getObjectType();
+                        let typename = objES.getObjectType();
 
-                        if (support.isPrefabInstance()) {
+                        if (objES.isPrefabInstance()) {
 
-                            typename = `prefab ${support.getPrefabName()} (${typename})`;
+                            typename = `prefab ${objES.getDisplayPrefabName()} (${typename})`;
                         }
 
                         return typename;
                     })
                 );
             });
+
+            return { label, btn };
         }
 
         canEdit(obj: any, n: number): boolean {

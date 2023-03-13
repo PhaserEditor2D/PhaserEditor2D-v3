@@ -906,6 +906,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return name1;
         }
 
+        getNextNonNestedPrefabFile() {
+
+            if (!this.isPrefabInstance()) {
+
+                return undefined;
+            }
+
+            if (this.isNestedPrefabDefined()) {
+
+                return undefined;
+            }
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            if (this.isNestedPrefabInstance()) {
+
+                const nextPrefabId = finder.getFirstNonNestedPrefabId(this._prefabId);
+
+                return finder.getPrefabFile(nextPrefabId);
+            }
+
+            return this.getPrefabFile();
+        }
+
         getPrefabFile() {
 
             if (this._prefabId) {
@@ -918,27 +942,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return null;
-        }
-
-        getPrefabOrNestedPrefabFile() {
-
-            const finder = ScenePlugin.getInstance().getSceneFinder();
-
-            if (this.isNestedPrefabInstance()) {
-
-                const originalId = finder.getOriginalPrefabId(this._prefabId);
-
-                if (finder.isNestedPrefab(originalId)) {
-
-                    return null;
-
-                } else {
-
-                    return finder.getPrefabFile(originalId);
-                }
-            }
-
-            return this.getPrefabFile();
         }
 
         getPrefabData() {

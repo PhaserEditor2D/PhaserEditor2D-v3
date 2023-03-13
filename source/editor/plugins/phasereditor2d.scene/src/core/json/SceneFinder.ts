@@ -392,6 +392,23 @@ namespace phasereditor2d.scene.core.json {
             return false;
         }
 
+        getFirstNonNestedPrefabId(prefabId: string): string | undefined {
+
+            if (this.isNestedPrefab(prefabId)) {
+
+                const data = this.getPrefabData(prefabId);
+
+                if (data.prefabId) {
+
+                    return this.getFirstNonNestedPrefabId(data.prefabId);
+                }
+
+                return undefined;
+            }
+
+            return prefabId;
+        }
+
         getOriginalPrefabId(prefabId: string): string | undefined {
 
             const objData = this.getPrefabData(prefabId);
