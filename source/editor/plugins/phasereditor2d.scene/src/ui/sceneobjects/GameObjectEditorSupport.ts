@@ -641,7 +641,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * 
          * @returns Is it defined as nested prefab?
          */
-        private isNestedPrefabDefined() {
+        public isNestedPrefabDefined() {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
@@ -869,6 +869,41 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return null;
+        }
+
+        /**
+         * Get the display name of the prefab. The display name of a prefab is a composition of the prefab's name and the nested prefab's name.
+         * If this is a nested prefab, then it may be instance of another prefab file, so it returns two prefab names.
+         */
+        getDisplayPrefabName() {
+
+            if (!this.isPrefabInstance()) {
+
+                return undefined;
+            }
+
+            if (this.isNestedPrefabDefined()) {
+
+                return this.getPrefabName();
+            }
+
+            const name1 = this.getPrefabName();
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const data = finder.getPrefabData(this.getPrefabId());
+
+            if (data && data.prefabId) {
+
+                const file2 = finder.getPrefabFile(data.prefabId);
+
+                if (file2) {
+
+                    return `${name1}#${file2.getNameWithoutExtension()}`
+                }
+            }
+
+            return name1;
         }
 
         getPrefabFile() {
