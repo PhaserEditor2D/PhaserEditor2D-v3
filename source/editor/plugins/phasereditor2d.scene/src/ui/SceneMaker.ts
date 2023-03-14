@@ -42,8 +42,6 @@ namespace phasereditor2d.scene.ui {
 
         private findDropTargetParent(obj: sceneobjects.ISceneGameObject) {
 
-            console.log("here");
-
             const parent = obj.getEditorSupport().getObjectParent();
 
             if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
@@ -52,7 +50,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (objES.isPrefabInstanceElement() || objES.isPrefabInstance()) {
 
-                    if (!objES.isAllowAppendChildren() || !objES.isMutableNestedPrefabInstance()) {
+                    if (!objES.isAllowAppendChildren() || objES.isPrefabInstanceElement() && !objES.isMutableNestedPrefabInstance()) {
 
                         if (parent) {
 
