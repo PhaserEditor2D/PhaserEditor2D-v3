@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const sceneCtx = obj.getEditorSupport().getScene().isPrefabSceneType() ? "this.scene" : "this";
 
-            const call = new core.code.MethodCallCodeDOM("addKey", `${sceneCtx}.input.keyboard`);
+            const call = new core.code.MethodCallCodeDOM("addKey", `${sceneCtx}.input.keyboard!`);
             call.arg(`Phaser.Input.Keyboard.KeyCodes.${obj.keyCode}`);
 
             return {
