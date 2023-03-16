@@ -10,6 +10,7 @@ namespace phasereditor2d.scene.core.code {
         private _sceneFile: io.FilePath;
         private _unit: UnitCodeDOM;
         private _fileNameMap: Map<string, io.FilePath>;
+        private _nestedPrefabsRequireDeclareVar: Set<string>;
 
         constructor(scene: ui.Scene, file: io.FilePath) {
 
@@ -17,6 +18,7 @@ namespace phasereditor2d.scene.core.code {
             this._sceneFile = file;
             this._isPrefabScene = this._scene.isPrefabSceneType();
             this._fileNameMap = new Map();
+            this._nestedPrefabsRequireDeclareVar = new Set();
         }
 
         async build(): Promise<UnitCodeDOM> {
@@ -691,6 +693,16 @@ namespace phasereditor2d.scene.core.code {
 
             lazyStatements.push(...result.lazyStatements);
 
+            if (result.statements.length + result.lazyStatements.length > 0) {
+
+                const split = varname.split(".");
+
+                if (split.length > 1) {
+
+                    this._nestedPrefabsRequireDeclareVar.add(split[0]);
+                }
+            }
+
             createMethodDecl.getBody().push(...result.statements);
 
             this.addChildrenObjects({
@@ -840,16 +852,21 @@ namespace phasereditor2d.scene.core.code {
                     declareVar = objES.getObjectChildren().length > 0;
                 }
 
-                if (declareVar) {
-
-                    createObjectMethodCall.setDeclareReturnToVar(true);
-                }
-
                 this.addChildrenObjects({
                     createMethodDecl,
                     obj,
                     lazyStatements
                 });
+
+                if (this._nestedPrefabsRequireDeclareVar.has(varname)) {
+
+                    declareVar = true;
+                }
+
+                if (declareVar) {
+
+                    createObjectMethodCall.setDeclareReturnToVar(true);
+                }
             }
 
             // generate lists
@@ -890,7 +907,7 @@ namespace phasereditor2d.scene.core.code {
                 .join(" & ");
         }
 
-        private getPrefabInstanceVarName(obj: ISceneGameObject) {
+        private getPrefabInstanceVarName(obj: ISceneGameObject): string {
 
             const objSupport = obj.getEditorSupport();
 
