@@ -909,18 +909,18 @@ namespace phasereditor2d.scene.core.code {
 
         private getPrefabInstanceVarName(obj: ISceneGameObject): string {
 
-            const objSupport = obj.getEditorSupport();
+            const objES = obj.getEditorSupport();
 
-            if (objSupport.isScenePrefabObject()) {
+            if (objES.isScenePrefabObject()) {
 
                 return "this";
             }
 
-            const varName = formatToValidVarName(objSupport.getLabel());
+            const varName = formatToValidVarName(objES.getLabel());
 
-            if (objSupport.isNestedPrefabInstance()) {
+            if (objES.isNestedPrefabInstance()) {
 
-                const parent = this.findPrefabInstanceThatIsDefinedAsRootPrefab(obj);
+                const parent = this.findPrefabInstanceWhereTheGivenObjectIsDefined(obj);
 
                 const parentVarName = this.getPrefabInstanceVarName(parent);
 
@@ -930,16 +930,44 @@ namespace phasereditor2d.scene.core.code {
             return varName;
         }
 
-        private findPrefabInstanceThatIsDefinedAsRootPrefab(obj: ui.sceneobjects.ISceneGameObject): ui.sceneobjects.ISceneGameObject {
+        private findPrefabInstanceWhereTheGivenObjectIsDefined(obj: ui.sceneobjects.ISceneGameObject): ui.sceneobjects.ISceneGameObject {
 
-            const parent = obj.getEditorSupport().getObjectParent();
+            const objES = obj.getEditorSupport();
 
-            if (parent.getEditorSupport().isRootPrefabDefined()) {
+            // get the prefab file of the object...
 
-                return parent;
+            const objPrefabFile = objES.getPrefabFile();
+
+            // ...so find the parent that is an instance of this file
+
+            const parent = objES.getObjectParent();
+
+            return this.findPrefabInstanceOfFile(parent, objPrefabFile);
+        }
+
+        private findPrefabInstanceOfFile(obj: ISceneGameObject, targetPrefaFile: io.FilePath): ISceneGameObject {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const objES = obj.getEditorSupport();
+
+            // it is posible the object is a nested prefab,
+            // but what we need is the original prefab file or a variant of it.
+            const prefabId = finder.getFirstNonNestedPrefabId(objES.getPrefabId());
+
+            // the original prefab file (or a variant of it)
+            // this could be 'undefined' if the obj is a nested prefab
+            // of a primitive type.
+            const prefabFile = finder.getPrefabFile(prefabId);
+
+            // ok, if both file are the same, I found it!
+            if (prefabFile === targetPrefaFile) {
+
+                return obj;
             }
 
-            return this.findPrefabInstanceThatIsDefinedAsRootPrefab(parent);
+            // not found? keep searching...
+            return this.findPrefabInstanceOfFile(objES.getObjectParent(), targetPrefaFile);
         }
 
         private buildSetObjectProperties(args: {

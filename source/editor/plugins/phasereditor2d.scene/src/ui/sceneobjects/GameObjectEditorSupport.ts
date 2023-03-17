@@ -625,17 +625,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         /**
-         * If it is a prefab instance that was first defined as root prefab.
-         * It maybe pointing to a nested prefab, but it then will point to a root prefab.
-         * 
-         * @returns If it is.
-         */
-        isRootPrefabDefined() {
-
-            return this.isPrefabInstance() && !this.isNestedPrefabDefined();
-        }
-
-        /**
          * If it's first definition as prefab is a nested prefab.
          * It means, in any case, it isn't an instance of a root prefab.
          * 
