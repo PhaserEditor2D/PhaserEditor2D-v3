@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.core.code {
         private _sceneFile: io.FilePath;
         private _unit: UnitCodeDOM;
         private _fileNameMap: Map<string, io.FilePath>;
-        private _nestedPrefabsRequireDeclareVar: Set<string>;
+        private _requireDeclareVarSet: Set<string>;
 
         constructor(scene: ui.Scene, file: io.FilePath) {
 
@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.core.code {
             this._sceneFile = file;
             this._isPrefabScene = this._scene.isPrefabSceneType();
             this._fileNameMap = new Map();
-            this._nestedPrefabsRequireDeclareVar = new Set();
+            this._requireDeclareVarSet = new Set();
         }
 
         async build(): Promise<UnitCodeDOM> {
@@ -695,7 +695,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (result.statements.length + result.lazyStatements.length > 0) {
 
-                this.addVarNameToPrefabsRequiredDeclareVar(varname);
+                this.addVarNameToRequiredDeclareVarSet(varname);
             }
 
             createMethodDecl.getBody().push(...result.statements);
@@ -707,13 +707,13 @@ namespace phasereditor2d.scene.core.code {
             });
         }
 
-        private addVarNameToPrefabsRequiredDeclareVar(varName: string) {
+        private addVarNameToRequiredDeclareVarSet(varName: string) {
 
             const split = varName.split(".");
 
             if (split.length > 1) {
 
-                this._nestedPrefabsRequireDeclareVar.add(split[0]);
+                this._requireDeclareVarSet.add(split[0]);
             }
         }
 
@@ -740,7 +740,7 @@ namespace phasereditor2d.scene.core.code {
             // nested prefabs which are parents of new nodes
             if (obj instanceof ui.sceneobjects.ScriptNode && parentVarName) {
 
-                this.addVarNameToPrefabsRequiredDeclareVar(parentVarName);
+                this.addVarNameToRequiredDeclareVarSet(parentVarName);
             }
 
             if (objES.isPrefabInstance()) {
@@ -871,7 +871,7 @@ namespace phasereditor2d.scene.core.code {
                     lazyStatements
                 });
 
-                if (this._nestedPrefabsRequireDeclareVar.has(varname)) {
+                if (this._requireDeclareVarSet.has(varname)) {
 
                     declareVar = true;
                 }
