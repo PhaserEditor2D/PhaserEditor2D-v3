@@ -695,12 +695,7 @@ namespace phasereditor2d.scene.core.code {
 
             if (result.statements.length + result.lazyStatements.length > 0) {
 
-                const split = varname.split(".");
-
-                if (split.length > 1) {
-
-                    this._nestedPrefabsRequireDeclareVar.add(split[0]);
-                }
+                this.addVarNameToPrefabsRequiredDeclareVar(varname);
             }
 
             createMethodDecl.getBody().push(...result.statements);
@@ -710,6 +705,16 @@ namespace phasereditor2d.scene.core.code {
                 obj,
                 lazyStatements
             });
+        }
+
+        private addVarNameToPrefabsRequiredDeclareVar(varName: string) {
+
+            const split = varName.split(".");
+
+            if (split.length > 1) {
+
+                this._nestedPrefabsRequireDeclareVar.add(split[0]);
+            }
         }
 
         private addCreateObjectCode(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
@@ -728,6 +733,14 @@ namespace phasereditor2d.scene.core.code {
 
                 parentVarName = parentIsPrefabObject ? "this"
                     : this.getPrefabInstanceVarName(objParent);
+            }
+
+            // the script nodes require using the varname of the parents
+            // so we need to generate a var for it. This covers the cases of
+            // nested prefabs which are parents of new nodes
+            if (obj instanceof ui.sceneobjects.ScriptNode && parentVarName) {
+
+                this.addVarNameToPrefabsRequiredDeclareVar(parentVarName);
             }
 
             if (objES.isPrefabInstance()) {
