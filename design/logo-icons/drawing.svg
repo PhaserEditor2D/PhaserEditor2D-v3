@@ -329,7 +329,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.19377678"
      inkscape:cx="250.28799"
-     inkscape:cy="1821.6837"
+     inkscape:cy="2946.6895"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1778,7 +1778,8 @@
        id="g4953"
        inkscape:export-filename="./256.png"
        inkscape:export-xdpi="23.999992"
-       inkscape:export-ydpi="23.999992">
+       inkscape:export-ydpi="23.999992"
+       transform="translate(-31.551145,283.98999)">
       <g
          id="g4358">
         <path
@@ -1803,7 +1804,7 @@
            ry="52.916668" />
         <path
            id="rect1423-9-1-5-8-3-3"
-           style="opacity:0.09579439;fill:#ffffff;fill-opacity:1;stroke-width:12.3696;stroke-opacity:0.560784"
+           style="opacity:0.0957944;fill:#ffffff;fill-opacity:1;stroke-width:12.3696;stroke-opacity:0.560784"
            d="m -214.18272,454.31593 c -29.31582,0 -52.91666,23.60083 -52.91666,52.91667 v 163.20552 a 183.77279,181.20854 0 0 0 21.7842,1.40095 183.77279,181.20854 0 0 0 183.77275,-181.20857 183.77279,181.20854 0 0 0 -3.730519,-36.31457 z" />
         <path
            id="rect10389-6-1-5-9"
@@ -1942,7 +1943,7 @@
        inkscape:export-filename="./512.png"
        inkscape:export-xdpi="23.999992"
        inkscape:export-ydpi="23.999992"
-       transform="matrix(0.49999999,0,0,0.49999999,-109.00668,646.61465)">
+       transform="matrix(0.49999999,0,0,0.49999999,119.06219,646.61465)">
       <g
          id="g4358-7">
         <path
@@ -2106,7 +2107,7 @@
        inkscape:export-filename="./256.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       transform="matrix(0.25,0,0,0.25,128.84721,652.68929)">
+       transform="matrix(0.25,0,0,0.25,200.98371,827.92697)">
       <g
          id="g4358-7-0">
         <path
@@ -2270,7 +2271,7 @@
        inkscape:export-filename="./128.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       transform="matrix(0.125,0,0,0.125,281.84815,473.99863)">
+       transform="matrix(0.125,0,0,0.125,270.25568,918.58313)">
       <g
          id="g4358-7-0-6">
         <path
@@ -2434,7 +2435,7 @@
        inkscape:export-filename="./48.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       transform="matrix(0.046875,0,0,0.046875,264.93377,701.66309)">
+       transform="matrix(0.046875,0,0,0.046875,296.48491,975.24324)">
       <g
          id="g4358-7-0-6-3">
         <path
@@ -2598,7 +2599,7 @@
        inkscape:export-filename="./32.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       transform="matrix(0.03125,0,0,0.03125,145.36414,619.82649)">
+       transform="matrix(0.03125,0,0,0.03125,223.51875,986.57526)">
       <g
          id="g4358-7-0-6-3-7">
         <path
