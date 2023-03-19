@@ -4,6 +4,7 @@
 
 * Removes Parent section.
 * Supports the new ScriptNode object.
+* Updates the app icon.
 
 ## v3.60.0-beta.1 - Feb 10, 2023
 
