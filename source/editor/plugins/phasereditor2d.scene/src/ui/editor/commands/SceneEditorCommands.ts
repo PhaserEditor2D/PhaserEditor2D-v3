@@ -182,17 +182,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Opens the Add Script Dialog",
                 },
                 handler: {
-                    testFunc: args => {
-
-                        const editor = args.activeEditor as ui.editor.SceneEditor;
-
-                        if (isSceneScope(args)) {
-
-                            return editor.getSelectedGameObjects().length > 0;
-                        }
-
-                        return false;
-                    },
+                    testFunc: isSceneScope,
                     executeFunc: args => {
 
                         const dlg = new sceneobjects.AddScriptDialog(args.activeEditor as SceneEditor);
