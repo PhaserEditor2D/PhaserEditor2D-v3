@@ -165,7 +165,7 @@ namespace phasereditor2d.scene {
             }));
 
             ui.sceneobjects.ScriptNodeCodeResources.getInstance().registerCommands(
-                "phasereditor.scene.ScriptNodeCategory", "Script Node", reg);
+                "phasereditor.scene.ScriptNodeCategory", "ScriptNode", reg);
 
             // preload project
 
