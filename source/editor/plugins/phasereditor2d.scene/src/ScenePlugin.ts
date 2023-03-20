@@ -157,6 +157,16 @@ namespace phasereditor2d.scene {
                 await ui.editor.usercomponent.UserComponentCodeResources.getInstance().preload();
             }));
 
+            // preload ScriptNode files
+
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
+
+                await ui.sceneobjects.ScriptNodeCodeResources.getInstance().preload();
+            }));
+
+            ui.sceneobjects.ScriptNodeCodeResources.getInstance().registerCommands(
+                "phasereditor.scene.ScriptNodeCategory", "Script Node", reg);
+
             // preload project
 
             reg.addExtension(this._sceneFinder.getProjectPreloader());
