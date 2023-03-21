@@ -6,7 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private findParentLayer(obj: ISceneGameObject) {
 
-            const parent = getObjectParent(obj);
+            const parent = obj.getEditorSupport().getObjectParent();
 
             if (parent) {
 
@@ -23,17 +23,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async performModification() {
 
+            const scene = this.getScene();
+
             const [layer] = sceneobjects.LayerExtension.getInstance().createDefaultSceneObject({
                 scene: this.getScene(),
                 x: 0,
                 y: 0
             }) as sceneobjects.Layer[];
 
-            layer.getEditorSupport().setLabel(this.getScene().makeNewName("layer"));
+            layer.getEditorSupport().setLabel(scene.makeNewName("layer"));
 
             const list = [...this._editor.getSelectedGameObjects()];
 
-            this._editor.getScene().sortObjectsByRenderingOrder(list);
+            scene.sortObjectsByRenderingOrder(list);
 
             let newParent: Layer;
 
@@ -59,24 +61,38 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (newParent) {
 
-                this.getScene().sys.displayList.remove(layer);
+                scene.removeGameObject(layer);
 
-                newParent.add(layer);
+                const newParentES = newParent.getEditorSupport();
+
+                newParentES.addObjectChild(layer);
+                newParentES.sortObjectChildren();
+
+            } else {
+
+                scene.sortGameObjects();
             }
 
             for (const obj of list) {
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+                const sprite = obj as unknown as Sprite;
 
                 const worldPoint = new Phaser.Math.Vector2(0, 0);
 
                 sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
-                const objParent = getObjectParentOrDisplayList(obj);
+                const objParent = obj.getEditorSupport().getObjectParent();
 
-                objParent.remove(sprite);
+                if (objParent) {
 
-                layer.add(sprite);
+                    objParent.getEditorSupport().removeObjectChild(sprite);
+
+                } else {
+
+                    scene.removeGameObject(sprite);
+                }
+
+                layer.getEditorSupport().addObjectChild(sprite);
 
                 sprite.x = worldPoint.x;
                 sprite.y = worldPoint.y;

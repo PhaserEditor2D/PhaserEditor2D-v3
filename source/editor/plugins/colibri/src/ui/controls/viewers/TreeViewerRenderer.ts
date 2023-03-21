@@ -288,7 +288,7 @@ namespace colibri.ui.controls.viewers {
             args.canvasContext.fillText(label, x, y);
         }
 
-        protected renderStyledLabel(args: RenderCellArgs, x: number, y: number, styledProvider: IStyledLabelProvider) {
+        protected renderStyledLabel(args: RenderCellArgs, x: number, y: number, styledProvider: IStyledLabelProvider, maxLength = -1) {
 
             const dark = controls.Controls.getTheme().dark;
 
@@ -300,15 +300,31 @@ namespace colibri.ui.controls.viewers {
 
             ctx.save();
 
+            let len = 0;
+
             for (const part of parts) {
 
                 ctx.fillStyle = part.color;
 
-                ctx.fillText(part.text, cursor, y);
+                let text = part.text;
 
-                const width = this.measureText(args, part.text);
+                if (maxLength > 0 && len + part.text.length > maxLength) {
+
+                    text = text.substring(0, maxLength - len - 2) + "..";
+                }
+
+                ctx.fillText(text, cursor, y);
+
+                const width = this.measureText(args, text);
 
                 cursor += width;
+
+                len += text.length;
+
+                if (maxLength > 0 && len >= maxLength) {
+
+                    break;
+                }
             }
 
             ctx.restore();

@@ -173,7 +173,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const text = this.createStringField(parent, prop);
 
-            return text;
+            return { label, text };
         }
 
         createPropertyStringDialogRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {

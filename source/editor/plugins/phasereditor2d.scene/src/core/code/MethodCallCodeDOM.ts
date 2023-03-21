@@ -10,6 +10,7 @@ namespace phasereditor2d.scene.core.code {
         private _declareReturnToField: boolean;
         private _isConstructor: boolean;
         private _explicitType: string;
+        private _optionalContext: boolean;
 
         constructor(methodName: string, contextExpr = "") {
             super();
@@ -20,6 +21,16 @@ namespace phasereditor2d.scene.core.code {
             this._declareReturnToVar = false;
             this._isConstructor = false;
             this._declareReturnToField = false;
+        }
+
+        setOptionalContext(optionalContext: boolean) {
+
+            this._optionalContext = optionalContext;
+        }
+
+        isOptionalContext() {
+
+            return this._optionalContext;
         }
 
         isConstructor() {

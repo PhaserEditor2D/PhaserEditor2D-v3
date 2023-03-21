@@ -16,6 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const viewer = this.getViewer();
             viewer.setLabelProvider(new editor.outline.SceneEditorOutlineLabelProvider());
+            viewer.setStyledLabelProvider(new editor.outline.SceneEditorOutlineStyledLabelProvider());
             viewer.setCellRendererProvider(new editor.outline.SceneEditorOutlineRendererProvider());
             viewer.setContentProvider(new ParentContentProvider(this._editor));
 
@@ -43,7 +44,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.setTitle("Parent");
 
-            this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Move", sel => {
+            const btn = this.addOpenButton("Move", sel => {
 
                 const parent = sel[0] as (Container | Layer);
 
@@ -57,55 +58,114 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         new MoveToParentOperation(this._editor,
                             parent.getEditorSupport().getId()));
                 }
-            }));
+            });
+
+            this.enableButtonOnlyWhenOneElementIsSelected(btn, dstObj => {
+
+                const editorSelection = this._editor.getSelectedGameObjects();
+
+                for(const selObj of editorSelection) {
+
+                    // cannot move a root obj to the display list
+                    if (dstObj instanceof Phaser.GameObjects.DisplayList) {
+
+                        if (dstObj.exists(selObj)) {
+
+                            return false;
+                        }
+
+                        return true;
+                    }
+
+                    const selObjParent = selObj.getEditorSupport().getObjectParent();
+
+                    if (dstObj === selObjParent) {
+                        // cannot move the obj to its own parent
+                        return false;
+                    }
+
+                    if (selObj instanceof ScriptNode) {
+                        // you can move a script node to any object in the dialog
+                        return true;
+                    }
+
+                    if (isGameObject(dstObj)) {
+
+                        const dstObjES = (dstObj as ISceneGameObject).getEditorSupport();
+
+                        if (dstObjES.isPrefabInstance() && !dstObjES.isAllowAppendChildren()) {
+                            // you cannot move an object to a parent
+                            // who is not allowing adding more children
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            });
 
             this.addCancelButton();
         }
     }
 
-    class ParentContentProvider implements controls.viewers.ITreeContentProvider {
+    class ParentContentProvider extends ui.editor.outline.SceneEditorOutlineContentProvider {
 
-        private _editor: ui.editor.SceneEditor;
+        private _selection: ISceneGameObject[];
 
         constructor(editor: ui.editor.SceneEditor) {
+            super(editor);
 
-            this._editor = editor;
+            this._selection = editor.getSelectedGameObjects();
         }
 
-        getRoots(input: Phaser.GameObjects.DisplayList): any[] {
+        getRoots(input: any): any[] {
 
-            return [input];
+            return [this._editor.getScene().children];
         }
 
         getChildren(parent: any): any[] {
 
-            if (parent instanceof Phaser.Structs.List) {
+            let children = super.getChildren(parent);
 
-                return this.filterList(parent.list);
-            }
+            children = children.filter(dstObj => {
 
-            if (parent instanceof Phaser.GameObjects.DisplayList) {
+                // cannot add anything different to an scene or a game object
+                if (!isGameObject(dstObj) && !(dstObj instanceof Phaser.GameObjects.DisplayList)) {
 
-                return this.filterList(parent.list);
-            }
+                    return false;
+                }
 
-            if (parent instanceof Container) {
+                for (const selObj of this._selection) {
 
-                return this.filterList(parent.list);
-            }
+                    // cannot move a layer to a container
+                    if (selObj instanceof Layer && dstObj instanceof Container) {
 
-            return [];
-        }
+                        return false;
+                    }
 
-        private filterList(list: any[]) {
+                    // cannot add to itself or any's childlren
+                    if (selObj === dstObj) {
 
-            const sel = this._editor.getSelectedGameObjects();
+                        return false;
+                    }
 
-            return list.filter(obj => {
+                    // cannot add a non-script-node to a script node
+                    if (dstObj instanceof ScriptNode && !(selObj instanceof ScriptNode)) {
 
-                return MoveToParentOperation.canMoveAllTo(sel, obj);
+                        return false;
+                    }
 
-            }).reverse();
+                    // cannot add a non-script-node to a non-layer-or-container
+                    if (!(dstObj instanceof Layer || dstObj instanceof Container) && !(selObj instanceof ScriptNode)) {
+
+                        return false;
+                    }
+
+                    return true;
+                }
+            });
+
+            return children;
         }
     }
 }

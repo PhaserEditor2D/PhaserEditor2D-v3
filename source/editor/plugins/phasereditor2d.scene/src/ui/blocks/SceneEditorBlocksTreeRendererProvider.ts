@@ -16,7 +16,6 @@ namespace phasereditor2d.scene.ui.blocks {
     ]
 
     export const BLOCKS_SECTIONS = [
-
         BUILTIN_SECTION,
         PREFAB_SECTION,
         ...BLOCKS_ASSET_SECTIONS

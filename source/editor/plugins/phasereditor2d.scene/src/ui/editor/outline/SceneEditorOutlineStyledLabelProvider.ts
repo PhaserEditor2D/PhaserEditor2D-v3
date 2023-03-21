@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             } else if (obj instanceof Phaser.GameObjects.DisplayList) {
 
-                return "Display List";
+                return "Scene";
 
             } else if (obj instanceof sceneobjects.ObjectLists) {
 
@@ -67,6 +67,8 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             const theme = controls.Controls.getTheme();
 
+            let color = theme.viewerForeground;
+
             const baseLabel = this.getLabel(obj);
 
             let hintText = "";
@@ -76,6 +78,15 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 if (obj.isPrefabDefined()) {
 
                     hintText += ` (comp ← ${obj.getPrefabFile().getNameWithoutExtension()})`;
+
+                    if (obj.getObject().getEditorSupport().isMutableNestedPrefabInstance()) {
+
+                        color = ScenePlugin.getInstance().getNestedPrefabColor();
+
+                    } else {
+
+                        color = ScenePlugin.getInstance().getPrefabColor();
+                    }
 
                 } else {
 
@@ -99,11 +110,15 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 if (support.isMutableNestedPrefabInstance()) {
 
-                    hintText += "(nested)";
+                    hintText += "- nested prefab";
+
+                    color = ScenePlugin.getInstance().getNestedPrefabColor();
 
                 } else if (support.isPrefabInstance()) {
 
-                    hintText += "(prefab)"
+                    hintText += "- prefab"
+
+                    color = ScenePlugin.getInstance().getPrefabColor();
                 }
             }
 
@@ -119,7 +134,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
             return [
                 {
                     text: baseLabel,
-                    color: theme.viewerForeground
+                    color
                 },
                 {
                     text: " " + hintText,

@@ -458,15 +458,25 @@ namespace colibri.ui.controls.viewers {
 
                 this.prepareContextForText(args);
 
-                const label = args.viewer.getLabelProvider().getLabel(args.obj);
+                const labelProvider = args.viewer.getLabelProvider();
+                const styledLabelProvider = args.viewer.getStyledLabelProvider();
 
-                const trim = this.trimLabel(ctx, label, args.w - 10);
+                const label = labelProvider.getLabel(args.obj);
 
-                const x2 = Math.max(x, x + args.w / 2 - trim.textWidth / 2);
+                const trimLabel = this.trimLabel(ctx, label, args.w - 10);
+
+                const x2 = Math.max(x, x + args.w / 2 - trimLabel.textWidth / 2);
 
                 const y2 = args.y + args.h - 5;
 
-                ctx.fillText(trim.text, x2, y2);
+                if (styledLabelProvider && !selected) {
+
+                    this.renderStyledLabel(args, x2, y2, styledLabelProvider, trimLabel.text.length);
+                    
+                } else {
+
+                    ctx.fillText(trimLabel.text, x2, y2);
+                }
 
                 ctx.restore();
 

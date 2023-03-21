@@ -52,8 +52,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 let parentId: string;
 
-                const parent = sceneobjects.getObjectParent(obj);
-
+                const parent = obj.getEditorSupport().getObjectParent();
+                
                 if (parent) {
 
                     parentId = parent.getEditorSupport().getId();
@@ -94,7 +94,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     if (newObj) {
 
-                        scene.sys.displayList.remove(newObj);
+                        scene.removeGameObject(newObj);
 
                         if (objSnapshot.parentId) {
 

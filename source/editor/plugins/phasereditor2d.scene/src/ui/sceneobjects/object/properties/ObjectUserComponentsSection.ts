@@ -225,7 +225,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 btn.style.marginTop = "10px";
             });
         }
-        
+
         private createComponentMenuIcon(
             headerDiv: HTMLElement, nodes: UserComponentNode[]) {
 
@@ -248,7 +248,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: any, n: number): boolean {
 
-            return GameObjectEditorSupport.hasEditorSupport(obj);
+            return GameObjectEditorSupport.hasEditorSupport(obj)
+                && (obj as ISceneGameObject).getEditorSupport().isDisplayObject();
         }
 
         canEditNumber(n: number): boolean {

@@ -56,6 +56,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_ARCADE_DISABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeDisableBody";
     export const CMD_ARCADE_CENTER_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeCenterBody";
     export const CMD_ARCADE_RESIZE_TO_OBJECT_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeResizeBodyToObject";
+    export const CMD_OPEN_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenScriptDialog";
+    export const CMD_OPEN_ADD_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenAddScriptDialog";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -145,6 +147,52 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerSnappingCommands(manager);
 
             this.registerArcadeCommands(manager);
+
+            this.registerScriptNodeCommands(manager);
+        }
+
+        private static registerScriptNodeCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_OPEN_SCRIPT_DIALOG,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Browse Scripts",
+                    tooltip: "Opens the Browse Scripts dialog",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const dlg = new sceneobjects.BrowseScriptsDialog(args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    key: "KeyU",
+                    shift: true
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_OPEN_ADD_SCRIPT_DIALOG,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Add Script",
+                    tooltip: "Opens the Add Script Dialog",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const dlg = new sceneobjects.AddScriptDialog(args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    key: "KeyU",
+                }
+            });
         }
 
         private static registerArcadeCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -173,6 +221,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             for (const obj of editor.getSelectedGameObjects()) {
 
                                 const objES = obj.getEditorSupport();
+
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
 
                                 if (objES.hasComponent(ui.sceneobjects.ArcadeComponent)) {
 
@@ -1076,9 +1129,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
-                                const editorSupport = obj.getEditorSupport();
+                                const objES = obj.getEditorSupport();
 
-                                if (editorSupport.isNestedPrefabInstance()) {
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
+
+                                if (objES.isNestedPrefabInstance()) {
 
                                     return false;
                                 }
@@ -1124,7 +1182,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
-                                if (obj.getEditorSupport().isNestedPrefabInstance()) {
+                                const objES = obj.getEditorSupport();
+
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
+
+                                if (objES.isNestedPrefabInstance()) {
 
                                     return false;
                                 }
@@ -1220,7 +1285,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         .getSelectedGameObjects()
 
-                        .map(obj => sceneobjects.getObjectParent(obj))
+                        .map(obj => obj.getEditorSupport().getObjectParent())
 
                         .filter(parent => parent !== undefined && parent !== null)
 
@@ -1232,7 +1297,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const sel = editor.getSelectedGameObjects()
 
-                            .map(obj => sceneobjects.getObjectParent(obj))
+                            .map(obj => obj.getEditorSupport().getObjectParent())
 
                             .filter(parent => parent !== undefined && parent !== null);
 
@@ -1276,7 +1341,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const sel = editor.getSelection()
 
-                            .flatMap(obj => sceneobjects.GameObjectEditorSupport.getObjectChildren(obj))
+                            .filter(obj => sceneobjects.isGameObject(obj))
+
+                            .flatMap((obj: sceneobjects.ISceneGameObject) => obj.getEditorSupport().getObjectChildren())
 
                             .filter(obj => {
 

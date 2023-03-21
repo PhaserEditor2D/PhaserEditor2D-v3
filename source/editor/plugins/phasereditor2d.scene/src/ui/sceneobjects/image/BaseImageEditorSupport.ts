@@ -4,35 +4,45 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(extension: SceneGameObjectExtension, obj: T, scene: Scene,
             includeTextureComponent = true, includeAlphaComponent = true, includeFlipComponent = true, includeTint = true) {
-                
+
             super(extension, obj, scene);
 
+            // texture
             if (includeTextureComponent) {
 
                 this.addComponent(new TextureComponent(obj as unknown as ITextureLikeObject));
             }
 
-            if (includeAlphaComponent) {
+            // transform
+            // origin
+            this.addComponent(
+                new TransformComponent(obj as unknown as ITransformLikeObject),
+                new OriginComponent(obj as unknown as IOriginLikeObject));
 
-                this.addComponent(new AlphaComponent(obj as unknown as IAlphaLikeObject));
-            }
-
+            // flip
             if (includeFlipComponent) {
 
                 this.addComponent(new FlipComponent(obj as unknown as IFlipLikeObject));
             }
 
+            // visible
+            this.addComponent(
+                new VisibleComponent(obj as unknown as IVisibleLikeObject));
+
+            // alpha
+            if (includeAlphaComponent) {
+
+                this.addComponent(new AlphaComponent(obj as unknown as IAlphaLikeObject));
+            }
+
+            // tint
             if (includeTint) {
 
                 this.addComponent(new TintComponent(obj));
             }
 
-            this.addComponent(
-                new TransformComponent(obj as unknown as ITransformLikeObject),
-                new OriginComponent(obj as unknown as IOriginLikeObject),
-                new VisibleComponent(obj as unknown as IVisibleLikeObject),
-                new ArcadeComponent(obj, false)
-            );
+            // arcade
+            this.addComponent(new ArcadeComponent(obj, false));
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {

@@ -382,6 +382,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             if (file) {
 
+                if (ScenePlugin.getInstance().getSceneFinder().isScriptPrefabFile(file)) {
+                
+                    return ScenePlugin.getInstance().getIcon(ICON_BUILD);
+                }
+
                 const img = SceneThumbnailCache.getInstance().getContent(file);
 
                 if (img) {
@@ -730,7 +735,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private async refreshSceneWithData(sceneData: json.ISceneData) {
 
-            for (const obj of this._scene.getDisplayListChildren()) {
+            for (const obj of this._scene.getGameObjects()) {
 
                 obj.getEditorSupport().destroy();
             }

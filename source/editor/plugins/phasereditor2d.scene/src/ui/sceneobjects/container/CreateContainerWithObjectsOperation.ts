@@ -6,8 +6,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async performModification() {
 
+            const scene = this.getScene();
+
             const [container] = sceneobjects.ContainerExtension.getInstance().createDefaultSceneObject({
-                scene: this.getScene(),
+                scene,
                 x: 0,
                 y: 0
             });
@@ -16,15 +18,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const list = [...this._editor.getSelectedGameObjects()];
 
-            this._editor.getScene().sortObjectsByRenderingOrder(list);
+            scene.sortObjectsByRenderingOrder(list);
 
             let newParent: Container | Layer;
 
             for (const obj of list) {
 
-                const objParent = getObjectParent(obj);
+                const objParent = obj.getEditorSupport().getObjectParent();
 
-                if (objParent) {
+                if (objParent && (objParent instanceof Layer || objParent instanceof Container)) {
 
                     if (newParent) {
 
@@ -42,27 +44,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (newParent) {
 
-                this.getScene().sys.displayList.remove(container);
+                scene.removeGameObject(container);
 
-                newParent.add(container);
+                const newParentES = newParent.getEditorSupport();
+
+                newParentES.addObjectChild(container);
+                newParentES.sortObjectChildren();
+
+            } else {
+
+                scene.sortGameObjects();
             }
 
             for (const obj of list) {
 
-                const sprite = obj as unknown as Phaser.GameObjects.Sprite;
+                const sprite = obj as unknown as Sprite;
 
                 const worldPoint = new Phaser.Math.Vector2(0, 0);
 
                 sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
 
-                const objParent = getObjectParent(obj);
+                const objParent = obj.getEditorSupport().getObjectParent();
 
                 if (objParent) {
 
-                    objParent.remove(sprite);
+                    objParent.getEditorSupport().removeObjectChild(sprite);
                 }
 
-                container.add(sprite);
+                container.getEditorSupport().addObjectChild(sprite);
 
                 const localPoint = new Phaser.Math.Vector2(0, 0);
 

@@ -1,7 +1,7 @@
 /// <reference path="./Component.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ChildrenComponent extends Component<Container | Layer> {
+    export class ChildrenComponent extends Component<Container | Layer | ScriptNode> {
 
         static allowPickChildren: IProperty<Container> = {
             name: "allowPickChildren",
@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setValue: (obj, value) => obj.getEditorSupport().setAllowAppendChildren(value)
         };
 
-        constructor(obj: Container | Layer) {
+        constructor(obj: Container | Layer | ScriptNode) {
             super(obj, [
                 ChildrenComponent.allowPickChildren,
                 ChildrenComponent.showChildrenInOutline,

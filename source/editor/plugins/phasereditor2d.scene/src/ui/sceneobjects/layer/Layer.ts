@@ -31,11 +31,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return super.toggleData(key);
         }
 
-        getChildren(): ISceneGameObject[] {
-
-            return super.getChildren() as any;
-        }
-
         replace(oldChild: Phaser.GameObjects.GameObject, newChild: Phaser.GameObjects.GameObject) {
 
             newChild.displayList = this;

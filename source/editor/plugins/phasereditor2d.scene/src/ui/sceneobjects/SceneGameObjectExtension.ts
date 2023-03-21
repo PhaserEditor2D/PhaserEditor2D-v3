@@ -35,12 +35,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         obj: ISceneGameObject;
         gameObjectFactoryExpr: string;
+        sceneExpr: string;
+        parentVarName: string;
     }
 
     export interface IBuildPrefabConstructorCodeDOMArgs {
 
         obj: ISceneGameObject;
         sceneExpr: string;
+        parentVarName?: string;
         methodCallDOM: code.MethodCallCodeDOM;
         prefabSerializer: json.Serializer;
     }
@@ -49,6 +52,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         ctrDeclCodeDOM: code.MethodDeclCodeDOM;
         prefabObj: ISceneGameObject;
+        importTypes: string[];
     }
 
     export interface IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {

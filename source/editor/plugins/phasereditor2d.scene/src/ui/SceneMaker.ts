@@ -2,7 +2,6 @@
 namespace phasereditor2d.scene.ui {
 
     import controls = colibri.ui.controls;
-    import ide = colibri.ui.ide;
     import io = colibri.core.io;
     import json = core.json;
     import FileUtils = colibri.ui.ide.FileUtils;
@@ -17,9 +16,33 @@ namespace phasereditor2d.scene.ui {
             this._editorScene = scene;
         }
 
+        private findDropScriptTargetParent(obj: sceneobjects.ISceneGameObject) {
+
+            // if (obj instanceof sceneobjects.ScriptNode) {
+
+            //     return obj;
+            // }
+
+            // const parent = obj.getEditorSupport().getObjectParent();
+
+            // const objES = obj.getEditorSupport();
+
+            // if (objES.isPrefabInstanceElement() && !objES.isMutableNestedPrefabInstance()) {
+
+            //     if (parent) {
+
+            //         return this.findDropTargetParent(parent);
+            //     }
+
+            //     return undefined;
+            // }
+
+            return obj;
+        }
+
         private findDropTargetParent(obj: sceneobjects.ISceneGameObject) {
 
-            const parent = sceneobjects.getObjectParent(obj);
+            const parent = obj.getEditorSupport().getObjectParent();
 
             if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
@@ -27,7 +50,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (objES.isPrefabInstanceElement() || objES.isPrefabInstance()) {
 
-                    if (!objES.isAllowAppendChildren() || !objES.isMutableNestedPrefabInstance()) {
+                    if (!objES.isAllowAppendChildren() || objES.isPrefabInstanceElement() && !objES.isMutableNestedPrefabInstance()) {
 
                         if (parent) {
 
@@ -49,66 +72,78 @@ namespace phasereditor2d.scene.ui {
             return undefined;
         }
 
-        afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, sprites: sceneobjects.ISceneGameObject[]) {
+        afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, dropObjects: sceneobjects.ISceneGameObject[]) {
 
-            let container: sceneobjects.Container;
-            let layer: sceneobjects.Layer;
+            let dropInContainer: sceneobjects.Container;
+            let dropInObj: sceneobjects.ISceneGameObject;
 
-            for (const sprite of this._editorScene.getEditor().getSelectedGameObjects()) {
+            const selection = this._editorScene.getEditor().getSelectedGameObjects();
 
-                let sprite2 = sprite;
+            const areDropingScriptNodes = dropObjects.filter(obj => obj instanceof sceneobjects.ScriptNode).length === dropObjects.length;
 
-                const dropTarget = this.findDropTargetParent(sprite2);
+            for (const sprite of selection) {
+
+                const dropTarget = areDropingScriptNodes ? this.findDropScriptTargetParent(sprite) : this.findDropTargetParent(sprite);
 
                 if (dropTarget) {
 
-                    if (dropTarget instanceof sceneobjects.Container) {
+                    if (areDropingScriptNodes) {
 
-                        container = dropTarget;
+                        dropInObj = dropTarget;
+
+                    } else if (dropTarget instanceof sceneobjects.Container) {
+
+                        dropInContainer = dropTarget;
 
                     } else if (dropTarget instanceof sceneobjects.Layer) {
 
-                        layer = dropTarget;
+                        dropInObj = dropTarget;
 
                     } else if (dropTarget.displayList instanceof sceneobjects.Layer) {
 
-                        layer = dropTarget.displayList;
+                        dropInObj = dropTarget.displayList;
                     }
-
                 }
             }
 
-            if (container) {
+            if (dropInContainer) {
 
-                for (const obj of sprites) {
+                for (const dropObj of dropObjects) {
 
-                    if (obj instanceof sceneobjects.Layer) {
+                    if (dropObj instanceof sceneobjects.Layer) {
 
                         continue;
                     }
 
-                    const sprite = obj as sceneobjects.Sprite;
-                    const p = new Phaser.Math.Vector2();
-                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                    if (dropObj.getEditorSupport().isDisplayObject()) {
 
-                    this._editorScene.sys.displayList.remove(sprite);
-                    container.add(sprite);
+                        const sprite = dropObj as sceneobjects.Sprite;
+                        const p = new Phaser.Math.Vector2();
+                        sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
 
-                    container.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
-                    sprite.x = p.x;
-                    sprite.y = p.y;
+                        this._editorScene.removeGameObject(sprite);
+                        dropInContainer.getEditorSupport().addObjectChild(sprite);
+
+                        dropInContainer.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+                        sprite.x = p.x;
+                        sprite.y = p.y;
+
+                    } else {
+
+                        dropInContainer.getEditorSupport().addObjectChild(dropObj);
+                    }
                 }
 
-            } else if (layer) {
+            } else if (dropInObj) {
 
-                for (const obj of sprites) {
+                for (const obj of dropObjects) {
 
-                    layer.add(obj);
+                    dropInObj.getEditorSupport().addObjectChild(obj);
                 }
 
             } else {
 
-                this.afterDropObjectsInPrefabScene(prefabObj, sprites);
+                this.afterDropObjectsInPrefabScene(prefabObj, dropObjects);
             }
         }
 
@@ -126,14 +161,21 @@ namespace phasereditor2d.scene.ui {
                 return;
             }
 
-            let parent: sceneobjects.Container | sceneobjects.Layer;
+            const dropOnlyScripts = sprites
+                .filter(obj => obj instanceof sceneobjects.ScriptNode).length === sprites.length;
+
+            let parent: sceneobjects.Container | sceneobjects.Layer | sceneobjects.ScriptNode;
 
             if (scene.isPrefabSceneType()) {
 
                 if (sprites.length > 0) {
 
-                    if (!prefabObj.getEditorSupport().isPrefabInstance()
-                        && (prefabObj instanceof sceneobjects.Container || prefabObj instanceof sceneobjects.Layer)) {
+                    const prefabObjES = prefabObj.getEditorSupport();
+
+                    if ((!prefabObjES.isPrefabInstance() || prefabObjES.isAllowAppendChildren())
+                        && (prefabObj instanceof sceneobjects.Container
+                            || prefabObj instanceof sceneobjects.Layer
+                            || (dropOnlyScripts && prefabObj instanceof sceneobjects.ScriptNode))) {
 
                         parent = prefabObj;
 
@@ -147,8 +189,8 @@ namespace phasereditor2d.scene.ui {
 
                         parent.getEditorSupport().setLabel(scene.makeNewName("container"));
 
-                        scene.sys.displayList.remove(prefabObj);
-                        parent.add(prefabObj);
+                        scene.removeGameObject(prefabObj);
+                        parent.getEditorSupport().addObjectChild(prefabObj);
                     }
 
                     if (parent) {
@@ -164,9 +206,11 @@ namespace phasereditor2d.scene.ui {
                                 }
                             }
 
-                            scene.sys.displayList.remove(sprite);
+                            scene.removeGameObject(sprite);
 
-                            parent.add(sprite);
+                            const parentES: sceneobjects.GameObjectEditorSupport<any> = parent.getEditorSupport();
+
+                            parentES.addObjectChild(sprite);
                         }
 
                         if (parent !== prefabObj && parent instanceof sceneobjects.Container) {
@@ -227,7 +271,7 @@ namespace phasereditor2d.scene.ui {
 
             const builder = new phasereditor2d.ide.core.MultiHashBuilder();
 
-            for (const obj of this._editorScene.getDisplayListChildren()) {
+            for (const obj of this._editorScene.getGameObjects()) {
 
                 await obj.getEditorSupport().buildDependencyHash({ builder });
             }

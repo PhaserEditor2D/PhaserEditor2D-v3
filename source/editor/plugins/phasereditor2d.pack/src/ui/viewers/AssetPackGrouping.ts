@@ -25,7 +25,7 @@ namespace phasereditor2d.pack.ui.viewers {
             window.localStorage["phasereditor2d.scene.ui.blocks.SceneEditorBlocksProvider.assetGrouping"] = groupType;
         }
 
-        static getGroupingPreference() {
+        static getGroupingPreference(): string {
 
             return window.localStorage["phasereditor2d.scene.ui.blocks.SceneEditorBlocksProvider.assetGrouping"]
                 || AssetPackGrouping.GROUP_ASSETS_BY_TYPE;

@@ -19,6 +19,12 @@ namespace phasereditor2d.scene.ui.blocks {
 
             if (element instanceof colibri.core.io.FilePath && ScenePlugin.getInstance().isSceneContentType(element)) {
 
+                if (ScenePlugin.getInstance().getSceneFinder().isScriptPrefabFile(element)) {
+
+                    return new colibri.ui.controls.viewers.IconGridCellRenderer(
+                        ScenePlugin.getInstance().getIcon(ICON_BUILD));
+                }
+
                 return new viewers.SceneFileCellRenderer();
 
             } else if (element instanceof sceneobjects.SceneObjectExtension) {
@@ -30,6 +36,10 @@ namespace phasereditor2d.scene.ui.blocks {
                 return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
 
             } else if (typeof (element) === "string" && BLOCKS_SECTIONS.indexOf(element) >= 0) {
+
+                return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+
+            } else if (element instanceof viewers.PhaserTypeSymbol) {
 
                 return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
             }
