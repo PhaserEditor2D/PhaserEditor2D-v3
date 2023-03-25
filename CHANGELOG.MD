@@ -1,6 +1,6 @@
 # Change Log
 
-## v360.0-dev
+## v360.0-beta.2 - Mar 25, 2023
 
 * Removes Parent section.
 * Supports the new ScriptNode object.
