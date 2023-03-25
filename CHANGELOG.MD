@@ -5,6 +5,7 @@
 * Removes Parent section.
 * Supports the new ScriptNode object.
 * Updates the app icon.
+* Updates to Phaser 3.60-beta.20.
 
 ## v3.60.0-beta.1 - Feb 10, 2023
 
