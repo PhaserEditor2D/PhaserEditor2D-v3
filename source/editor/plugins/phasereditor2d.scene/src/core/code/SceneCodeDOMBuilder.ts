@@ -973,8 +973,14 @@ namespace phasereditor2d.scene.core.code {
             // of a primitive type.
             const prefabFile = finder.getPrefabFile(prefabId);
 
-            // ok, if both file are the same, I found it!
+            // ok, if both file are the same, or are a variant, I found it!
+
             if (prefabFile === targetPrefaFile) {
+
+                return obj;
+            }
+            
+            if (finder.isPrefabVariant(prefabFile, targetPrefaFile)) {
 
                 return obj;
             }

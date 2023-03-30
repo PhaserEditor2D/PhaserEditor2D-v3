@@ -451,6 +451,20 @@ namespace phasereditor2d.scene.core.json {
             return this.getPrefabHierarchy2(prefabId, []);
         }
 
+        isPrefabVariant(basePrefabFile: io.FilePath, superPrefanFile: io.FilePath) {
+
+            const basePrefabId = this.getPrefabId(basePrefabFile);
+
+            const result = this.getPrefabHierarchy(basePrefabId);
+
+            if (result.indexOf(superPrefanFile) >= 0) {
+
+                return true;
+            }
+
+            return false;
+        }
+
         private getPrefabHierarchy2(prefabId: string, result: io.FilePath[]) {
 
             const file = this.getPrefabFile(prefabId);
