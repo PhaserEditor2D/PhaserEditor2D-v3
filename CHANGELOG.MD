@@ -1,5 +1,7 @@
 # Change Log
 
+* Scene compiler: fixes nested prefab varname resolution. 
+
 ## v360.0-beta.2 - Mar 25, 2023
 
 * Removes Parent section.
