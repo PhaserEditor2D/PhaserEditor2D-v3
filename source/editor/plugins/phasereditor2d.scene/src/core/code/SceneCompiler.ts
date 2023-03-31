@@ -30,6 +30,8 @@ namespace phasereditor2d.scene.core.code {
 
         async compile() {
 
+            console.log(`Compiling ${this._sceneFile.getName()}`);
+
             const settings = this._scene.getSettings();
 
             if (!settings.compilerEnabled) {

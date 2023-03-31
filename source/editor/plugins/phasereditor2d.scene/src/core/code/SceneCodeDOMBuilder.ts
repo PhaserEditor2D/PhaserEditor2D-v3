@@ -966,26 +966,32 @@ namespace phasereditor2d.scene.core.code {
 
             // it is posible the object is a nested prefab,
             // but what we need is the original prefab file or a variant of it.
-            const prefabId = finder.getFirstNonNestedPrefabId(objES.getPrefabId());
+            const firstNonNestedPrefabId = finder.getFirstNonNestedPrefabId(objES.getPrefabId());
 
-            // the original prefab file (or a variant of it)
-            // this could be 'undefined' if the obj is a nested prefab
-            // of a primitive type.
-            const prefabFile = finder.getPrefabFile(prefabId);
+            // maybe it is a nested prefab of a built-in type,
+            // in that case, the prefabId is undefined, and it should
+            // keep searching in the parent
+            if (firstNonNestedPrefabId) {
 
-            // ok, if both file are the same, or are a variant, I found it!
+                // the original prefab file (or a variant of it)
+                // this could be 'undefined' if the obj is a nested prefab
+                // of a primitive type.
+                const prefabFile = finder.getPrefabFile(firstNonNestedPrefabId);
 
-            if (prefabFile === targetPrefaFile) {
+                // ok, if both file are the same, I found it!
+                if (prefabFile === targetPrefaFile) {
 
-                return obj;
+                    return obj;
+                }
+
+                // no, wait, it is a variant! That's ok too.
+                if (finder.isPrefabVariant(prefabFile, targetPrefaFile)) {
+
+                    return obj;
+                }
             }
-            
-            if (finder.isPrefabVariant(prefabFile, targetPrefaFile)) {
 
-                return obj;
-            }
-
-            // not found? keep searching...
+            // not found? keep searching with the parent...
             return this.findPrefabInstanceOfFile(objES.getObjectParent(), targetPrefaFile);
         }
 

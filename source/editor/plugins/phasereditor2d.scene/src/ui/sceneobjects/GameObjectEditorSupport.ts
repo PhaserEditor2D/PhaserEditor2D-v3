@@ -615,10 +615,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this.isNestedPrefabInstance()) {
 
-                const parentSupport = this.getObjectParent().getEditorSupport();
+                const parent = this.getObjectParent();
+                const parentES = parent.getEditorSupport();
 
-                return parentSupport.isMutableNestedPrefabInstance()
-                    || parentSupport.isPrefabInstanceRoot();
+                return parentES.isMutableNestedPrefabInstance()
+                    || parentES.isPrefabInstanceRoot();
             }
 
             return false;
@@ -657,8 +658,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (this.isPrefabInstance() && !this.isNestedPrefabInstance()) {
 
                 const parent = this.getObjectParent();
+                const parentES = parent?.getEditorSupport();
 
-                if (!parent || !parent.getEditorSupport().isPrefabInstance()) {
+                if (!parent 
+                    || !parentES.isPrefabInstance()
+                    || this.isPrefeabInstanceAppendedChild()) {
 
                     return true;
                 }
@@ -810,8 +814,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const children = this.getObjectChildren();
 
-                return children
-                    .filter(obj => obj.getEditorSupport().isMutableNestedPrefabInstance());
+                const result = [];
+
+                for(const obj of children) {
+
+                    const objES = obj.getEditorSupport();
+
+                    if (objES.isMutableNestedPrefabInstance()) {
+
+                        result.push(obj);
+                    }
+                }
+
+                return result;
             }
 
             return [];

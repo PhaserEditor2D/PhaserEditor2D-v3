@@ -12,8 +12,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async performModification() {
 
-            console.log("here");
-
             const scene = this.getScene();
 
             const map = scene.buildObjectIdMap();
