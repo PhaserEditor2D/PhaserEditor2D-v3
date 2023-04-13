@@ -15,7 +15,7 @@ namespace phasereditor2d.ide.core.code  {
             return "./" + importFile.getNameWithoutExtension();
         }
 
-        if (importFilePath.startsWith(parentPath)) {
+        if (importFilePath.startsWith(parentPath + "/")) {
 
             return "./" + importFileElements.slice(parentElements.length).join("/");
         }
