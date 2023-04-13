@@ -18,6 +18,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+        getHelp(): string {
+            
+            return "A custom Phaser Editor 2D object for implementing game logic and object behaviors.";
+        }
+
         acceptsDropData(data: any): boolean {
             
             return false;
