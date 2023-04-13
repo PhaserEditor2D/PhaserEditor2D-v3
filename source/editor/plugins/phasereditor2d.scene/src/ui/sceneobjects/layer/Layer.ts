@@ -16,6 +16,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._editorSupport;
         }
 
+        // polyfill GameObject methods
+
         setData(key: string | any, data?: any): this {
 
             return super.setData(key, data);
@@ -37,13 +39,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return super.replace(oldChild, newChild);
         }
-
-        // polyfill GameObject methods
-
-        parentContainer: Phaser.GameObjects.Container;
-        tabIndex: number;
-        input: Phaser.Types.Input.InteractiveObject;
-        body: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody | MatterJS.BodyType;
 
         setInteractive(hitArea?: any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): this {
 
