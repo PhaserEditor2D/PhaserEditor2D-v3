@@ -34,38 +34,33 @@ namespace phasereditor2d.scene.core.code {
         }
 
         isConstructor() {
+
             return this._isConstructor;
         }
 
         setConstructor(isConstructor: boolean) {
+
             this._isConstructor = isConstructor;
         }
 
         getReturnToVar() {
+
             return this._returnToVar;
         }
 
         setReturnToVar(returnToVar: string) {
+
             this._returnToVar = returnToVar;
         }
 
         setDeclareReturnToVar(declareReturnToVar: boolean) {
+
             this._declareReturnToVar = declareReturnToVar;
         }
 
         isDeclareReturnToVar() {
 
             return this._declareReturnToVar;
-        }
-
-        setDeclareReturnToField(declareReturnToField: boolean) {
-
-            this._declareReturnToField = declareReturnToField;
-        }
-
-        isDeclareReturnToField() {
-
-            return this._declareReturnToField;
         }
 
         setExplicitType(explicitType: string) {
@@ -141,18 +136,22 @@ namespace phasereditor2d.scene.core.code {
         }
 
         getMethodName() {
+            
             return this._methodName;
         }
 
         setMethodName(methodName: string) {
+
             this._methodName = methodName;
         }
 
         getContextExpr() {
+
             return this._contextExpr;
         }
 
         getArgs() {
+
             return this._args;
         }
     }

@@ -11,6 +11,7 @@ namespace phasereditor2d.scene.core.code {
         private _unit: UnitCodeDOM;
         private _fileNameMap: Map<string, io.FilePath>;
         private _requireDeclareVarSet: Set<string>;
+        private _objectsToFieldList: ISceneGameObject[];
 
         constructor(scene: ui.Scene, file: io.FilePath) {
 
@@ -19,6 +20,7 @@ namespace phasereditor2d.scene.core.code {
             this._isPrefabScene = this._scene.isPrefabSceneType();
             this._fileNameMap = new Map();
             this._requireDeclareVarSet = new Set();
+            this._objectsToFieldList = [];
         }
 
         async build(): Promise<UnitCodeDOM> {
@@ -264,14 +266,13 @@ namespace phasereditor2d.scene.core.code {
 
         private buildObjectClassFields(fields: MemberDeclCodeDOM[], children: ISceneGameObject[]) {
 
-            for (const obj of children) {
+            for (const obj of this._objectsToFieldList) {
 
                 const objES = obj.getEditorSupport();
-                const isMethodScope = objES.getScope() === ui.sceneobjects.ObjectScope.METHOD;
                 const isPrefabObj = this._scene.isPrefabSceneType() && this._scene.getPrefabObject() === obj;
                 const isPrefabScene = this._scene.isPrefabSceneType();
 
-                if (!isMethodScope && !isPrefabObj) {
+                if (!isPrefabObj) {
 
                     const varName = code.formatToValidVarName(objES.getLabel());
 
@@ -290,43 +291,7 @@ namespace phasereditor2d.scene.core.code {
 
                     fields.push(field);
                 }
-
-                const children = this.getWalkingChildren(obj);
-
-                if (children) {
-
-                    this.buildObjectClassFields(fields, children);
-                }
             }
-        }
-
-        private getWalkingChildren(obj: ISceneGameObject) {
-
-            let children: ISceneGameObject[];
-
-            const objES = obj.getEditorSupport();
-
-            if (objES.isPrefabInstance()) {
-
-                if (objES.isPrefeabInstanceAppendedChild()) {
-
-                    children = objES.getObjectChildren();
-
-                } else if (objES.isMutableNestedPrefabInstance()) {
-
-                    children = objES.getMutableNestedPrefabChildren();
-
-                } else {
-
-                    children = obj.getEditorSupport().getAppendedChildren();
-                }
-
-            } else {
-
-                children = objES.getObjectChildren();
-            }
-
-            return children;
         }
 
         private buildPrefabConstructorMethod() {
@@ -554,12 +519,9 @@ namespace phasereditor2d.scene.core.code {
 
             const objectFactoryMethodCall = result.objectFactoryMethodCall;
 
-            // methodCall.setDeclareReturnToVar(true);
-
             if (!objSupport.isMethodScope()) {
 
                 objectFactoryMethodCall.setDeclareReturnToVar(true);
-                objectFactoryMethodCall.setDeclareReturnToField(true);
             }
 
             if (objectFactoryMethodCall.isDeclareReturnToVar()) {
@@ -614,11 +576,11 @@ namespace phasereditor2d.scene.core.code {
 
         private addFieldInitCode_GameObjects(fields: CodeDOM[], prefabObj: ISceneGameObject, children: ISceneGameObject[]) {
 
-            for (const obj of children) {
+            for (const obj of this._objectsToFieldList) {
 
                 const objES = obj.getEditorSupport();
 
-                if (!objES.isMethodScope() && prefabObj !== obj) {
+                if (prefabObj !== obj) {
 
                     const varname = formatToValidVarName(objES.getLabel());
 
@@ -627,14 +589,29 @@ namespace phasereditor2d.scene.core.code {
 
                     fields.push(dom);
                 }
-
-                const walkingChildren = this.getWalkingChildren(obj);
-
-                if (walkingChildren) {
-
-                    this.addFieldInitCode_GameObjects(fields, prefabObj, walkingChildren);
-                }
             }
+
+            // for (const obj of children) {
+
+            //     const objES = obj.getEditorSupport();
+
+            //     if (!objES.isMethodScope() && prefabObj !== obj) {
+
+            //         const varname = formatToValidVarName(objES.getLabel());
+
+            //         const dom = new AssignPropertyCodeDOM(varname, "this");
+            //         dom.value(varname);
+
+            //         fields.push(dom);
+            //     }
+
+            //     const walkingChildren = this.getWalkingChildren(obj);
+
+            //     if (walkingChildren) {
+
+            //         this.addFieldInitCode_GameObjects(fields, prefabObj, walkingChildren);
+            //     }
+            // }
         }
 
         private addFieldInitCode(body: CodeDOM[]) {
@@ -898,7 +875,7 @@ namespace phasereditor2d.scene.core.code {
             if (!objES.isMethodScope()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
-                createObjectMethodCall.setDeclareReturnToField(true);
+                this._objectsToFieldList.push(obj);
             }
 
             if (createObjectMethodCall.isDeclareReturnToVar()) {
