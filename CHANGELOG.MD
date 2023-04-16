@@ -1,20 +1,16 @@
 # Change Log
 
-* Scene compiler: fixes nested prefab varname resolution. 
-
-## v360.0-beta.2 - Mar 25, 2023
-
-* Removes Parent section.
-* Supports the new ScriptNode object.
-* Updates the app icon.
-* Updates to Phaser 3.60-beta.20.
-
-## v3.60.0-beta.1 - Feb 10, 2023
+## v3.60.0
 
 * Fixes labels of the Size section in the Inspector view.
+* Scene compiler: fixes nested prefab varname resolution.
 * Improves folder icons.
 * Adds command for enable/disable pixel art rendering mode.
 * New game objects support: NineSlice and ThreeSlice.
+* Removes Parent section.
+* Supports the new ScriptNode object.
+* Updates the app icon.
+* Updates to Phaser 3.60. 
 
 ## v3.36.2 - Dec 14, 2022
 
