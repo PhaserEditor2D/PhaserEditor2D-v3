@@ -7,7 +7,6 @@ namespace phasereditor2d.scene.core.code {
         private _args: string[];
         private _returnToVar: string;
         private _declareReturnToVar: boolean;
-        private _declareReturnToField: boolean;
         private _isConstructor: boolean;
         private _explicitType: string;
         private _optionalContext: boolean;
@@ -20,7 +19,6 @@ namespace phasereditor2d.scene.core.code {
             this._args = [];
             this._declareReturnToVar = false;
             this._isConstructor = false;
-            this._declareReturnToField = false;
         }
 
         setOptionalContext(optionalContext: boolean) {
@@ -136,7 +134,7 @@ namespace phasereditor2d.scene.core.code {
         }
 
         getMethodName() {
-            
+
             return this._methodName;
         }
 
