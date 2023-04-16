@@ -3,6 +3,7 @@
 ## v3.60.0
 
 * Fixes labels of the Size section in the Inspector view.
+* Scene compiler: fixes class-field declaration.
 * Scene compiler: fixes nested prefab varname resolution.
 * Improves folder icons.
 * Adds command for enable/disable pixel art rendering mode.
@@ -10,7 +11,8 @@
 * Removes Parent section.
 * Supports the new ScriptNode object.
 * Updates the app icon.
-* Updates to Phaser 3.60. 
+* Updates to Phaser 3.60.
+* Updates allInOne built-in templates to support Phaser 3.60 and script nodes.
 
 ## v3.36.2 - Dec 14, 2022
 
