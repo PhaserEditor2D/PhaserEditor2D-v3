@@ -37,15 +37,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const propertiesInObject: IUserPropertiesInObject[] = [];
 
-            const editorSupport = this.getObject().getEditorSupport();
+            const objES = this.getObject().getEditorSupport();
 
-            if (editorSupport.isPrefabInstance()) {
+            const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                const prefabFile = this.getObject().getEditorSupport().getPrefabOrNestedPrefabFile();
+            if (objES.isPrefabInstance()) {
 
-                if (prefabFile) {
+                const nextPrefabId = finder.getFirstNonNestedPrefabId(objES.getPrefabId());
 
-                    this.getPrefabProperties(propertiesInObject, prefabFile);
+                if (nextPrefabId) {
+
+                    const prefabFile = finder.getPrefabFile(nextPrefabId);
+
+                    if (prefabFile) {
+
+                        this.getPrefabProperties(propertiesInObject, prefabFile);
+                    }
                 }
             }
 

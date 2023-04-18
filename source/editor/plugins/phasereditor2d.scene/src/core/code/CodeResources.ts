@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.core.code {
 
         addResource(id: string, path: string) {
 
-            this._resources.push({ id, path })
+            this._resources.push({ id, path });
         }
 
         addCodeResource(fileName: string) {
@@ -105,12 +105,20 @@ namespace phasereditor2d.scene.core.code {
 
                 const newFiles = [];
                 const resources = this._resources.filter(r => r.id.startsWith(`${spec}/`));
-                resources.push(this._resources.find(r => r.id.startsWith("defs")));
+                
+                const defsRes = this._resources.find(r => r.id.startsWith("defs"));
+
+                if (defsRes) {
+
+                    resources.push(defsRes);
+                }
 
                 monitor.addTotal(resources.length + 1);
 
                 await this.preload();
                 monitor.step();
+
+                console.log(resources);
 
                 for (const resource of resources) {
 
@@ -132,6 +140,8 @@ namespace phasereditor2d.scene.core.code {
                 viewer.setSelection(newFiles);
 
             } catch (e) {
+
+                console.log(e);
 
                 alert("Error: " + e.message);
             }

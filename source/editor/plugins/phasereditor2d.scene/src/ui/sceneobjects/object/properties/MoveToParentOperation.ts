@@ -10,70 +10,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._parentId = parentId;
         }
 
-        static canMoveAllTo(objList: ISceneGameObject[], parent: Container | Layer) {
-
-            for (const obj of objList) {
-
-                if (!this.canMoveTo(obj, parent)) {
-
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private static canMoveTo(obj: ISceneGameObject, targetParent: Container | Layer) {
-
-            if (!(targetParent instanceof Container || targetParent instanceof Layer)) {
-
-                return false;
-            }
-
-            const targetParentSupport = targetParent.getEditorSupport();
-
-            const objParent = getObjectParent(obj);
-
-            if (objParent === targetParent) {
-
-                return false;
-            }
-
-            if (obj instanceof Container || obj instanceof Layer) {
-
-                if (obj === targetParent) {
-
-                    return false;
-                }
-
-                const parents = new Set(targetParentSupport.getAllParents());
-
-                if (parents.has(obj)) {
-
-                    return false;
-                }
-
-                if (obj instanceof Layer && targetParent instanceof Container) {
-
-                    return false;
-                }
-            }
-
-            if (targetParentSupport.isPrefabInstance() && !targetParentSupport.isAllowAppendChildren()) {
-
-                return false;
-            }
-
-            return true;
-        }
-
         protected async performModification() {
 
             const scene = this.getScene();
 
             const map = scene.buildObjectIdMap();
-
-            const displayList = scene.sys.displayList;
 
             const objects = this.getEditor().getSelectedGameObjects();
 
@@ -83,65 +24,66 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const sprite = obj as unknown as Sprite;
 
-                const hasPosition = obj.getEditorSupport().isUnlockedProperty(TransformComponent.x);
+                const objES = obj.getEditorSupport();
 
-                const currentParent = getObjectParent(obj);
+                const canTranslate = objES.hasComponent(TransformComponent)
+                    && objES.isUnlockedProperty(TransformComponent.x);
 
-                const objSupport = obj.getEditorSupport();
+                const currentParent = objES.getObjectParent();
 
-                if (objSupport.getParentId() === this._parentId) {
+                if (objES.getParentId() === this._parentId) {
 
                     continue;
                 }
 
                 const worldPoint = new Phaser.Math.Vector2(0, 0);
 
-                if (hasPosition) {
+                if (canTranslate) {
 
                     sprite.getWorldTransformMatrix().transformPoint(0, 0, worldPoint);
                 }
 
                 if (currentParent) {
 
-                    currentParent.remove(obj);
+                    currentParent.getEditorSupport().removeObjectChild(obj);
 
                 } else {
 
-                    displayList.remove(obj);
+                    scene.removeGameObject(obj);
                 }
 
                 if (this._parentId) {
 
-                    const newParent = map.get(this._parentId) as (Container | Layer);
+                    const newParent = map.get(this._parentId);
 
-                    const p = new Phaser.Math.Vector2(0, 0);
+                    if (canTranslate) {
 
-                    if (newParent instanceof Container) {
+                        const p = new Phaser.Math.Vector2(0, 0);
 
-                        newParent.getWorldTransformMatrix().applyInverse(worldPoint.x, worldPoint.y, p);
+                        if (newParent instanceof Container) {
 
-                    } else {
+                            newParent.getWorldTransformMatrix().applyInverse(worldPoint.x, worldPoint.y, p);
 
-                        p.set(worldPoint.x, worldPoint.y);
-                    }
+                        } else {
 
-                    if (hasPosition) {
+                            p.set(worldPoint.x, worldPoint.y);
+                        }
 
                         sprite.x = p.x;
                         sprite.y = p.y;
                     }
 
-                    newParent.add(sprite);
+                    newParent.getEditorSupport().addObjectChild(sprite);
 
                 } else {
 
-                    if (hasPosition) {
+                    if (canTranslate) {
 
                         sprite.x = worldPoint.x;
                         sprite.y = worldPoint.y;
                     }
 
-                    displayList.add(sprite, true);
+                    scene.addGameObject(sprite, true);
                 }
             }
         }

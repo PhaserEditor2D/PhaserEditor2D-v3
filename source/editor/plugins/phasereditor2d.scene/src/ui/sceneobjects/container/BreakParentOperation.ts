@@ -19,54 +19,60 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static breakParent(scene: Scene, selectedObjects: ISceneGameObject[]) {
 
-            const displayList = scene.sys.displayList;
-
             const sel = [];
 
             for (const obj of selectedObjects) {
 
                 const parent = obj as sceneobjects.Container | sceneobjects.Layer;
 
-                const children = [...parent.getChildren()];
+                const children = [...parent.getEditorSupport().getObjectChildren()];
 
-                for (const child of children) {
+                for (const childObj of children) {
 
-                    const sprite = child as unknown as Phaser.GameObjects.Sprite;
+                    const pos = new Phaser.Math.Vector2(0, 0);
 
-                    const p = new Phaser.Math.Vector2(0, 0);
+                    let childAsSprite: Image;
 
-                    sprite.getWorldTransformMatrix().transformPoint(0, 0, p);
+                    if (childObj.getEditorSupport().hasComponent(TransformComponent)) {
 
-                    sel.push(sprite);
+                        childAsSprite = childObj as Image;
 
-                    parent.remove(sprite);
+                        childAsSprite.getWorldTransformMatrix().transformPoint(0, 0, pos);
+                    }
 
-                    displayList.remove(sprite);
+                    sel.push(childObj);
 
-                    sprite.displayList = null;
+                    parent.getEditorSupport().removeObjectChild(childObj);
+
+                    scene.removeGameObject(childObj);
+
+                    childObj.displayList = null;
 
                     if (parent.parentContainer) {
 
-                        parent.parentContainer.getWorldTransformMatrix().applyInverse(p.x, p.y, p);
+                        parent.parentContainer.getWorldTransformMatrix().applyInverse(pos.x, pos.y, pos);
 
-                        parent.parentContainer.add(sprite);
+                        (parent.parentContainer as Container).getEditorSupport().addObjectChild(childObj);
 
                     } else {
 
                         if (parent.displayList instanceof Layer) {
 
-                            parent.displayList.add(sprite);
+                            parent.displayList.getEditorSupport().addObjectChild(childObj);
 
                         } else {
 
-                            const i = displayList.getIndex(parent);
+                            const i = scene.getGameObjectIndex(parent);
 
-                            displayList.addAt(sprite, i, true);
+                            scene.addGameObjectAt(childObj, i, true);
                         }
                     }
 
-                    sprite.x = p.x;
-                    sprite.y = p.y;
+                    if (childAsSprite) {
+
+                        childAsSprite.x = pos.x;
+                        childAsSprite.y = pos.y;
+                    }
                 }
 
                 parent.getEditorSupport().destroy();

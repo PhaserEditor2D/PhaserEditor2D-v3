@@ -16,9 +16,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._editorSupport;
         }
 
-        getChildren(): ISceneGameObject[] {
+        // polyfill GameObject methods
 
-            return super.getChildren() as any;
+        setData(key: string | any, data?: any): this {
+
+            return super.setData(key, data);
+        }
+
+        incData(key: string | any, data?: any): this {
+
+            return super.incData(key, data);
+        }
+
+        toggleData(key: string | any): this {
+
+            return super.toggleData(key);
         }
 
         replace(oldChild: Phaser.GameObjects.GameObject, newChild: Phaser.GameObjects.GameObject) {
@@ -27,13 +39,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return super.replace(oldChild, newChild);
         }
-
-        // polyfill GameObject methods
-
-        parentContainer: Phaser.GameObjects.Container;
-        tabIndex: number;
-        input: Phaser.Types.Input.InteractiveObject;
-        body: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody | MatterJS.BodyType;
 
         setInteractive(hitArea?: any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): this {
 

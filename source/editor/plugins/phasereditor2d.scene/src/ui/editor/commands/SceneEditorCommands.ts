@@ -22,6 +22,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SCALE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ScaleSceneObject";
     export const CMD_EDIT_POLYGON_OBJECT = "phasereditor2d.scene.ui.editor.commands.EditPolygonObject";
     export const CMD_RESIZE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.ResizeSceneObject";
+    export const CMD_EDIT_SLICE_SCENE_OBJECT = "phasereditor2d.scene.ui.editor.commands.EditSliceSceneObject";
     export const CMD_EDIT_ARCADE_BODY = "phasereditor2d.scene.ui.editor.commands.EditArcadeBody";
     export const CMD_SELECT_REGION = "phasereditor2d.scene.ui.editor.commands.SelectRegion";
     export const CMD_PAN_SCENE = "phasereditor2d.scene.ui.editor.commands.PanScene";
@@ -48,11 +49,15 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_DISABLE_AWAKE_EVENT_PREFABS = "phasereditor2d.scene.ui.editor.commands.DisableAwakeEventPrefabs";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_CANVAS = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToCanvas";
     export const CMD_SET_DEFAULT_RENDER_TYPE_TO_WEBGL = "phasereditor2d.scene.ui.editor.commands.SetDefaultRenderTypeToWebGL";
+    export const CMD_ENABLE_PIXEL_ART_RENDERING = "phasereditor2d.scene.ui.editor.commands.EnablePixelArtRendering";
+    export const CMD_DISABLE_PIXEL_ART_RENDERING = "phasereditor2d.scene.ui.editor.commands.DisablePixelArtRendering";
     export const CMD_PASTE_IN_PLACE = "phasereditor2d.scene.ui.editor.commands.PasteInPlace";
     export const CMD_ARCADE_ENABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeEnableBody";
     export const CMD_ARCADE_DISABLE_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeDisableBody";
     export const CMD_ARCADE_CENTER_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeCenterBody";
     export const CMD_ARCADE_RESIZE_TO_OBJECT_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeResizeBodyToObject";
+    export const CMD_OPEN_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenScriptDialog";
+    export const CMD_OPEN_ADD_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenAddScriptDialog";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -142,6 +147,52 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerSnappingCommands(manager);
 
             this.registerArcadeCommands(manager);
+
+            this.registerScriptNodeCommands(manager);
+        }
+
+        private static registerScriptNodeCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_OPEN_SCRIPT_DIALOG,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Browse Scripts",
+                    tooltip: "Opens the Browse Scripts dialog",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const dlg = new sceneobjects.BrowseScriptsDialog(args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    key: "KeyU",
+                    shift: true
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_OPEN_ADD_SCRIPT_DIALOG,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Add Script",
+                    tooltip: "Opens the Add Script Dialog",
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const dlg = new sceneobjects.AddScriptDialog(args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
+                },
+                keys: {
+                    key: "KeyU",
+                }
+            });
         }
 
         private static registerArcadeCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -170,6 +221,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             for (const obj of editor.getSelectedGameObjects()) {
 
                                 const objES = obj.getEditorSupport();
+
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
 
                                 if (objES.hasComponent(ui.sceneobjects.ArcadeComponent)) {
 
@@ -421,6 +477,40 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     executeFunc: args => {
 
                         ScenePlugin.getInstance().setDefaultRenderType("webgl");
+                    }
+                }
+            });
+
+            // enable pixel art rendering
+
+            manager.add({
+                command: {
+                    id: CMD_ENABLE_PIXEL_ART_RENDERING,
+                    name: "Enable Pixel Art Rendering",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Enable pixel-art rendering in the scenes"
+                },
+                handler: {
+                    testFunc: phasereditor2d.ide.ui.actions.isNotWelcomeWindowScope,
+                    executeFunc: args => {
+
+                        ScenePlugin.getInstance().setDefaultRenderPixelArt(true);
+                    }
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_DISABLE_PIXEL_ART_RENDERING,
+                    name: "Disable Pixel Art Rendering",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Disable pixel-art rendering in the scenes"
+                },
+                handler: {
+                    testFunc: phasereditor2d.ide.ui.actions.isNotWelcomeWindowScope,
+                    executeFunc: args => {
+
+                        ScenePlugin.getInstance().setDefaultRenderPixelArt(false);
                     }
                 }
             });
@@ -1039,9 +1129,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
-                                const editorSupport = obj.getEditorSupport();
+                                const objES = obj.getEditorSupport();
 
-                                if (editorSupport.isNestedPrefabInstance()) {
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
+
+                                if (objES.isNestedPrefabInstance()) {
 
                                     return false;
                                 }
@@ -1087,7 +1182,14 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             for (const obj of editor.getSelectedGameObjects()) {
 
-                                if (obj.getEditorSupport().isNestedPrefabInstance()) {
+                                const objES = obj.getEditorSupport();
+
+                                if (!objES.isDisplayObject()) {
+
+                                    return false;
+                                }
+
+                                if (objES.isNestedPrefabInstance()) {
 
                                     return false;
                                 }
@@ -1183,7 +1285,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         .getSelectedGameObjects()
 
-                        .map(obj => sceneobjects.getObjectParent(obj))
+                        .map(obj => obj.getEditorSupport().getObjectParent())
 
                         .filter(parent => parent !== undefined && parent !== null)
 
@@ -1195,7 +1297,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const sel = editor.getSelectedGameObjects()
 
-                            .map(obj => sceneobjects.getObjectParent(obj))
+                            .map(obj => obj.getEditorSupport().getObjectParent())
 
                             .filter(parent => parent !== undefined && parent !== null);
 
@@ -1239,7 +1341,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const sel = editor.getSelection()
 
-                            .flatMap(obj => sceneobjects.GameObjectEditorSupport.getObjectChildren(obj))
+                            .filter(obj => sceneobjects.isGameObject(obj))
+
+                            .flatMap((obj: sceneobjects.ISceneGameObject) => obj.getEditorSupport().getObjectChildren())
 
                             .filter(obj => {
 
@@ -1743,6 +1847,20 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "KeyB"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_EDIT_SLICE_SCENE_OBJECT,
+                    name: "Slice Tool",
+                    tooltip: "Edit selected slice objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.SliceTool.ID)
                 }
             });
         }

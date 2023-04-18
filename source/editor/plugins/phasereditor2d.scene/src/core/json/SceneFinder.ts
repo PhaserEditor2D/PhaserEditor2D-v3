@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.core.json {
         async preload(monitor: controls.IProgressMonitor) {
 
             await this._finder.preload(monitor);
-            
+
             this._finder.runMigrations();
         }
     }
@@ -367,6 +367,48 @@ namespace phasereditor2d.scene.core.json {
             return this._prefabFiles;
         }
 
+        getScriptPrefabFiles() {
+
+            return this._prefabFiles.filter(file => this.isScriptPrefabFile(file));
+        }
+
+        isScriptPrefabFile(file: io.FilePath) {
+
+            let prefabId = this.getPrefabId(file);
+
+            if (prefabId) {
+
+                prefabId = this.getOriginalPrefabId(prefabId);
+
+                const data = this.getPrefabData(prefabId);
+
+                if (data && data.type === ui.sceneobjects.ScriptNodeExtension
+                    .getInstance().getTypeName()) {
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        getFirstNonNestedPrefabId(prefabId: string): string | undefined {
+
+            if (this.isNestedPrefab(prefabId)) {
+
+                const data = this.getPrefabData(prefabId);
+
+                if (data.prefabId) {
+
+                    return this.getFirstNonNestedPrefabId(data.prefabId);
+                }
+
+                return undefined;
+            }
+
+            return prefabId;
+        }
+
         getOriginalPrefabId(prefabId: string): string | undefined {
 
             const objData = this.getPrefabData(prefabId);
@@ -409,6 +451,20 @@ namespace phasereditor2d.scene.core.json {
             return this.getPrefabHierarchy2(prefabId, []);
         }
 
+        isPrefabVariant(basePrefabFile: io.FilePath, superPrefanFile: io.FilePath) {
+
+            const basePrefabId = this.getPrefabId(basePrefabFile);
+
+            const result = this.getPrefabHierarchy(basePrefabId);
+
+            if (result.indexOf(superPrefanFile) >= 0) {
+
+                return true;
+            }
+
+            return false;
+        }
+
         private getPrefabHierarchy2(prefabId: string, result: io.FilePath[]) {
 
             const file = this.getPrefabFile(prefabId);
@@ -426,6 +482,13 @@ namespace phasereditor2d.scene.core.json {
             }
 
             return result;
+        }
+
+        isPrefabFile(file: io.FilePath) {
+
+            const data = this.getSceneData(file);
+
+            return data && data.sceneType === SceneType.PREFAB;
         }
 
         getSceneData(file: io.FilePath) {

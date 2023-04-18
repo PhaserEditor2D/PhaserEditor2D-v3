@@ -18,10 +18,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const comp = this.createGridElementWithPropertiesXY(parent);
 
             // fontFamily
-            this.createPropertyStringRow(comp, TextComponent.fontFamily).style.gridColumn = "3 / span 4";
+            this.createPropertyStringRow(comp, TextComponent.fontFamily).text.style.gridColumn = "3 / span 4";
 
             // fontSize
-            this.createPropertyStringRow(comp, TextComponent.fontSize).style.gridColumn = "3 / span 4";
+            this.createPropertyStringRow(comp, TextComponent.fontSize).text.style.gridColumn = "3 / span 4";
 
             // fontStyle
             this.createPropertyEnumRow(comp, TextComponent.fontStyle).style.gridColumn = "3 / span 4";

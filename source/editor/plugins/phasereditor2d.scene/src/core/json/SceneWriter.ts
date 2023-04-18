@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.core.json {
 
             // display list
 
-            for (const obj of this._scene.getDisplayListChildren()) {
+            for (const obj of this._scene.getGameObjects()) {
 
                 const objData = {} as IObjectData;
                 obj.getEditorSupport().writeJSON(objData);

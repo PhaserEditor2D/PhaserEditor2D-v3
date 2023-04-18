@@ -334,7 +334,7 @@ namespace phasereditor2d.scene.ui.editor {
                 },
                 // resolution: window.devicePixelRatio,
                 render: {
-                    pixelArt: true,
+                    pixelArt: ScenePlugin.DEFAULT_EDITOR_PIXEL_ART,
                     transparent: true
                 },
                 audio: {
@@ -381,6 +381,11 @@ namespace phasereditor2d.scene.ui.editor {
             const file = this.getInput();
 
             if (file) {
+
+                if (ScenePlugin.getInstance().getSceneFinder().isScriptPrefabFile(file)) {
+                
+                    return ScenePlugin.getInstance().getIcon(ICON_BUILD);
+                }
 
                 const img = SceneThumbnailCache.getInstance().getContent(file);
 
@@ -730,7 +735,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private async refreshSceneWithData(sceneData: json.ISceneData) {
 
-            for (const obj of this._scene.getDisplayListChildren()) {
+            for (const obj of this._scene.getGameObjects()) {
 
                 obj.getEditorSupport().destroy();
             }

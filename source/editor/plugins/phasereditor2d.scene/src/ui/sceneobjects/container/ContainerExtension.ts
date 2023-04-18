@@ -28,7 +28,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const list = [];
 
-            const { children } = ParentGameObjectEditorSupport.buildRawChildrenData(args.serializer.getData());
+            const { children } = GameObjectEditorSupport.buildRawChildrenData(args.serializer.getData());
 
             for (const objData of children) {
 
@@ -78,7 +78,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             container.getEditorSupport().setScene(scene);
 
-            scene.sys.displayList.add(container);
+            scene.addGameObject(container);
 
             return container;
         }

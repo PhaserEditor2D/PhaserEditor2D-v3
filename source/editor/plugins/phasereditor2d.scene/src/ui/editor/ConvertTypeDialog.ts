@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.editor {
 
         private static getObjectsToMorph(editor: SceneEditor) {
 
-            return editor.getSelection().filter(obj => sceneobjects.isGameObject(obj));
+            return editor.getSelectedGameObjects().filter(obj => sceneobjects.isGameObject(obj));
         }
 
         create() {

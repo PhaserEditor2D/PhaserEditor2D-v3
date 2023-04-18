@@ -39,7 +39,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): code.MethodCallCodeDOM {
 
-            const obj = args.obj as TileSprite;
+            const obj = args.obj as Rectangle;
+            
             const call = new code.MethodCallCodeDOM("rectangle", args.gameObjectFactoryExpr);
 
             call.argFloat(obj.x);

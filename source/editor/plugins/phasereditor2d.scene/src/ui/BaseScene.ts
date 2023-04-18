@@ -35,8 +35,11 @@ namespace phasereditor2d.scene.ui {
 
             if (this.game) {
 
-                this.game.destroy(true);
-                this.game.loop.tick();
+                // we need to start the loop so the game could be destroyed
+                // for checking if the game is destroyed, you can listen to Phaser.Core.Events.DESTROY.
+                this.game.loop.start(this.game.loop.callback);
+
+                this.game.destroy(true, false);
             }
         }
     }

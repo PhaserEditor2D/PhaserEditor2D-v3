@@ -78,6 +78,11 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         abstract canRender(obj: unknown): boolean;
 
+        isValidForAll(objects: ISceneObject[]) {
+
+            return true;
+        }
+
         requiresRepaintOnMouseMove() {
 
             return false;

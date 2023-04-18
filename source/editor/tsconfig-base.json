@@ -4,7 +4,7 @@
             "esnext",
             "dom"
         ],
-        "target": "ES2020",
+        "target": "ESNext",
         "composite": true,
         "declaration": true,
         "declarationMap": true,

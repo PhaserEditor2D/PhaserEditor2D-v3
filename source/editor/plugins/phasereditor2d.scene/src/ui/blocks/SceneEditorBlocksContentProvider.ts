@@ -16,11 +16,13 @@ namespace phasereditor2d.scene.ui.blocks {
 
     const grouping = pack.ui.viewers.AssetPackGrouping;
 
+    const SCRIPTS_CATEGORY = "Scripts";
+
     export class SceneEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
 
         private _getPacks: () => pack.core.AssetPack[];
         private _blocksProvider: SceneEditorBlocksProvider;
-        private _editor: editor.SceneEditor;
+        protected _editor: editor.SceneEditor;
 
         constructor(editor: editor.SceneEditor, getPacks: () => pack.core.AssetPack[]) {
             super();
@@ -41,6 +43,17 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getRoots(input: any) {
 
+            if (this._editor.getScene().isScriptNodePrefabScene()) {
+
+                const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
+
+                return [
+                    sceneobjects.ScriptNodeExtension.getInstance(),
+                    ...this.getSceneFiles("prefabs")
+                        .filter(f => sceneFinder.isScriptPrefabFile(f))
+                ];
+            }
+
             const groupingType = grouping.getGroupingPreference();
             const section = this._blocksProvider.getSelectedTabSection();
 
@@ -54,7 +67,10 @@ namespace phasereditor2d.scene.ui.blocks {
 
                     if (groupingType === grouping.GROUP_ASSETS_BY_LOCATION) {
 
-                        return colibri.ui.ide.FileUtils.distinct(this.getSceneFiles("prefabs").map(f => f.getParent()));
+                        const files = colibri.ui.ide.FileUtils.distinct(
+                            this.getSceneFiles("prefabs").map(f => f.getParent()));
+
+                        return files;
                     }
 
                     return viewers.PhaserTypeSymbol.getSymbols();

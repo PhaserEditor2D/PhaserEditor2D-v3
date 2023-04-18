@@ -10,6 +10,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             viewer.setContentProvider(new AddObjectContentProvider(editor));
             viewer.setLabelProvider(new blocks.SceneEditorBlocksLabelProvider());
+            viewer.setStyledLabelProvider(new blocks.SceneEditorBlocksStyledLabelProvider());
             viewer.setCellRendererProvider(new blocks.SceneEditorBlocksCellRendererProvider());
             viewer.setInput([]);
 
@@ -67,6 +68,11 @@ namespace phasereditor2d.scene.ui.dialogs {
         }
 
         getRoots(input: any) {
+
+            if (this._editor.getScene().isScriptNodePrefabScene()) {
+
+                return [sceneobjects.ScriptNodeExtension.getInstance()];
+            }
 
             return SCENE_OBJECT_CATEGORIES;
         }

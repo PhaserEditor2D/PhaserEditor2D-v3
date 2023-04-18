@@ -47,6 +47,8 @@ namespace phasereditor2d.scene {
     export const ICON_ORIGIN_BOTTOM_RIGHT = "origin-bottomright";
     export const ICON_ARCADE_COLLIDER = "collider";
     export const ICON_KEYBOARD_KEY = "keyboard-key";
+    export const ICON_9_SLICE = "9slice";
+    export const ICON_3_SLICE = "3slice";
 
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
@@ -55,6 +57,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_TILEMAP_CATEGORY = "Tile Map";
     export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
     export const SCENE_OBJECT_INPUT_CATEGORY = "Input";
+    export const SCENE_OBJECT_SCRIPT_CATEGORY = "Script";
 
     export const SCENE_OBJECT_CATEGORIES = [
         SCENE_OBJECT_IMAGE_CATEGORY,
@@ -63,7 +66,8 @@ namespace phasereditor2d.scene {
         SCENE_OBJECT_ARCADE_CATEGORY,
         SCENE_OBJECT_SHAPE_CATEGORY,
         SCENE_OBJECT_TILEMAP_CATEGORY,
-        SCENE_OBJECT_INPUT_CATEGORY
+        SCENE_OBJECT_INPUT_CATEGORY,
+        SCENE_OBJECT_SCRIPT_CATEGORY
     ];
 
     export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
@@ -75,6 +79,10 @@ namespace phasereditor2d.scene {
         static DEFAULT_CANVAS_CONTEXT = Phaser.WEBGL;
 
         static DEFAULT_EDITOR_CANVAS_CONTEXT = Phaser.WEBGL;
+
+        static DEFAULT_PIXEL_ART = true;
+
+        static DEFAULT_EDITOR_PIXEL_ART = true;
 
         private _sceneFinder: core.json.SceneFinder;
 
@@ -97,6 +105,12 @@ namespace phasereditor2d.scene {
             console.log("ScenePlugin: default render type: " + (type === "canvas" ? "Phaser.CANVAS" : "Phaser.WEBGL"));
 
             this.setDefaultRenderType(type as any);
+
+            const pixelArt = window.localStorage.getItem("phasereditor2d.scene.PIXEL_ART") !== "0";
+
+            this.setDefaultRenderPixelArt(pixelArt);
+
+            console.log("ScenePlugin: default pixelArt: " + pixelArt);
         }
 
         setDefaultRenderType(type?: "canvas" | "webgl") {
@@ -105,6 +119,14 @@ namespace phasereditor2d.scene {
 
             ScenePlugin.DEFAULT_CANVAS_CONTEXT = type === "canvas" ? Phaser.CANVAS : Phaser.WEBGL;
             ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT = ScenePlugin.DEFAULT_CANVAS_CONTEXT;
+        }
+
+        setDefaultRenderPixelArt(pixelArt: boolean) {
+
+            window.localStorage.setItem("phasereditor2d.scene.PIXEL_ART", pixelArt ? "1" : "0");
+
+            ScenePlugin.DEFAULT_PIXEL_ART = pixelArt;
+            ScenePlugin.DEFAULT_EDITOR_PIXEL_ART = pixelArt;
         }
 
         getPhaserDocs() {
@@ -134,6 +156,16 @@ namespace phasereditor2d.scene {
 
                 await ui.editor.usercomponent.UserComponentCodeResources.getInstance().preload();
             }));
+
+            // preload ScriptNode files
+
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
+
+                await ui.sceneobjects.ScriptNodeCodeResources.getInstance().preload();
+            }));
+
+            ui.sceneobjects.ScriptNodeCodeResources.getInstance().registerCommands(
+                "phasereditor.scene.ScriptNodeCategory", "ScriptNode", reg);
 
             // preload project
 
@@ -211,7 +243,9 @@ namespace phasereditor2d.scene {
                     ICON_ORIGIN_BOTTOM_CENTER,
                     ICON_ORIGIN_BOTTOM_RIGHT,
                     ICON_ARCADE_COLLIDER,
-                    ICON_KEYBOARD_KEY
+                    ICON_KEYBOARD_KEY,
+                    ICON_9_SLICE,
+                    ICON_3_SLICE
                 ])
             );
 
@@ -288,6 +322,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ImageExtension.getInstance(),
                 ui.sceneobjects.SpriteExtension.getInstance(),
                 ui.sceneobjects.TileSpriteExtension.getInstance(),
+                ui.sceneobjects.NineSliceExtension.getInstance(),
+                ui.sceneobjects.ThreeSliceExtension.getInstance(),
                 ui.sceneobjects.TextExtension.getInstance(),
                 ui.sceneobjects.BitmapTextExtension.getInstance(),
                 ui.sceneobjects.ContainerExtension.getInstance(),
@@ -300,7 +336,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ArcadeImageExtension.getInstance(),
                 ui.sceneobjects.ArcadeSpriteExtension.getInstance(),
                 ui.sceneobjects.ColliderExtension.getInstance(),
-                ui.sceneobjects.KeyboardKeyExtension.getInstance()
+                ui.sceneobjects.KeyboardKeyExtension.getInstance(),
+                ui.sceneobjects.ScriptNodeExtension.getInstance()
             );
 
             // scene plain object extensions
@@ -317,12 +354,13 @@ namespace phasereditor2d.scene {
 
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.GameObjectVariableSection(page),
+                page => new ui.sceneobjects.PrefabObjectVariableSection(page),
+                page => new ui.sceneobjects.NestedPrefabObjectVariableSection(page),
                 page => new ui.sceneobjects.PrefabInstanceSection(page),
                 page => new ui.sceneobjects.ObjectUserComponentsSection(page),
                 page => new ui.sceneobjects.ObjectSingleUserComponentSection(page),
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
-                page => new ui.sceneobjects.ParentSection(page),
                 page => new ui.sceneobjects.ChildrenSection(page),
                 page => new ui.sceneobjects.TransformSection(page),
                 page => new ui.sceneobjects.OriginSection(page),
@@ -331,8 +369,11 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.AlphaSection(page),
                 page => new ui.sceneobjects.AlphaSingleSection(page),
                 page => new ui.sceneobjects.TintSection(page),
+                page => new ui.sceneobjects.TintSingleSection(page),
                 page => new ui.sceneobjects.SizeSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),
+                page => new ui.sceneobjects.NineSliceSection(page),
+                page => new ui.sceneobjects.ThreeSliceSection(page),
                 page => new ui.sceneobjects.ArcadeBodySection(page),
                 page => new ui.sceneobjects.ArcadeGeometrySection(page),
                 page => new ui.sceneobjects.ArcadeBodyMovementSection(page),
@@ -364,6 +405,7 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.OriginTool(),
                 new ui.sceneobjects.SizeTool(),
                 new ui.sceneobjects.ArcadeBodyTool(),
+                new ui.sceneobjects.SliceTool(),
                 new ui.sceneobjects.PolygonTool(),
                 new ui.sceneobjects.SelectionRegionTool(),
                 new ui.sceneobjects.PanTool(),
@@ -443,6 +485,16 @@ namespace phasereditor2d.scene {
         createUserPropertyType(typeId: string) {
 
             return this.createUserPropertyTypes().find(t => t.getId() === typeId);
+        }
+
+        getPrefabColor() {
+
+            return colibri.ui.controls.Controls.getTheme().dark? "lightGreen" : "darkGreen";
+        }
+
+        getNestedPrefabColor() {
+
+            return "olive";
         }
 
         getSceneFinder() {

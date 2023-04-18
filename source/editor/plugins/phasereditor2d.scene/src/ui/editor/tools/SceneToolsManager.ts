@@ -51,7 +51,22 @@ namespace phasereditor2d.scene.ui.editor.tools {
         }
 
         getActiveTool() {
+
             return this._activeTool;
+        }
+
+        activateTool(toolId: string) {
+
+            const tool = this.findTool(toolId);
+
+            if (tool) {
+
+                this.setActiveTool(tool);
+
+            } else {
+
+                console.error(`Tool not found ${toolId}`);
+            }
         }
 
         setActiveTool(tool: SceneTool) {

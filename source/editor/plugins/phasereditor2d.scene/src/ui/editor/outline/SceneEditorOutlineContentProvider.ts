@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
     export class SceneEditorOutlineContentProvider implements controls.viewers.ITreeContentProvider {
 
-        private _editor: SceneEditor;
+        protected _editor: SceneEditor;
 
         constructor(editor: SceneEditor) {
 
@@ -29,9 +29,18 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 roots.push(displayList);
             }
 
-            roots.push(scene.getObjectLists());
+            if (scene.getObjectLists().getLists().length > 0) {
 
-            roots.push(...ScenePlugin.getInstance().getPlainObjectCategories());
+                roots.push(scene.getObjectLists());
+            }
+
+            if (!scene.isScriptNodePrefabScene()) {
+
+                roots.push(...ScenePlugin.getInstance().getPlainObjectCategories().filter(cat => {
+
+                    return this.getChildren(cat).length > 0;
+                }));
+            }
 
             if (scene.isPrefabSceneType()) {
 
@@ -41,7 +50,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
             return roots;
         }
 
-        getChildren(parent: sceneobjects.ISceneGameObject): any[] {
+        getChildren(parent: any): any[] {
 
             if (parent instanceof sceneobjects.PrefabUserProperties) {
 
@@ -50,42 +59,39 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             if (sceneobjects.GameObjectEditorSupport.hasEditorSupport(parent)) {
 
+                const parentObj = parent as sceneobjects.ISceneGameObject;
+
                 let list = [];
 
-                if (parent instanceof sceneobjects.Container || parent instanceof sceneobjects.Layer) {
+                const parentES = parentObj.getEditorSupport();
 
-                    const parentES = parent.getEditorSupport();
+                if (!parentES.isShowChildrenInOutline()) {
 
-                    if (!parentES.isShowChildrenInOutline()) {
+                    list = [];
 
-                        list = [];
+                } else if (parentES.isPrefabInstance()) {
 
-                    } else if (parentES.isPrefabInstance()) {
+                    const prefabChildren = parentES.getMutableNestedPrefabChildren();
 
-                        const prefabChildren = parentES.getMutableNestedPrefabChildren();
+                    const appendedChildren = parentES.getAppendedChildren();
 
-                        const appendedChildren = parentES.getAppendedChildren();
+                    list = [...prefabChildren.reverse(), ...appendedChildren.reverse()];
 
-                        list = [...prefabChildren, ...appendedChildren];
+                } else {
 
-                    } else {
+                    list = [...parentES.getObjectChildren()];
 
-                        list = [...parent.getChildren()];
-
-                        list.reverse();
-                    }
+                    list.reverse();
                 }
 
                 // prepend the user components
 
-                const parentES = sceneobjects.GameObjectEditorSupport.getEditorSupport(parent);
-
-                const nodes = parentES
+                const compNodes = parentES
                     .getUserComponentsComponent()
                     .getUserComponentNodes()
                     .filter(n => n.isPublished());
 
-                list = [...nodes, ...list];
+                list = [...compNodes, ...list];
 
                 return list;
             }

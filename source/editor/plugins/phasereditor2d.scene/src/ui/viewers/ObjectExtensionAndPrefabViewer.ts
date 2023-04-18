@@ -17,14 +17,26 @@ namespace phasereditor2d.scene.ui.viewers {
             const treeRenderer = new controls.viewers.GridTreeViewerRenderer(this);
             treeRenderer.setPaintItemShadow(true);
             treeRenderer.setSectionCriteria(obj => ObjectExtensionAndPrefabViewer.SECTIONS.indexOf(obj) >= 0);
-
             this.setLabelProvider(new ui.blocks.SceneEditorBlocksLabelProvider());
-            this.setCellRendererProvider(new ui.blocks.SceneEditorBlocksCellRendererProvider());
+            this.setCellRendererProvider(new CellRendererProvider());
             this.setContentProvider(new ObjectExtensionAndPrefabContentProvider());
             this.setTreeRenderer(treeRenderer);
             this.setInput(ObjectExtensionAndPrefabViewer.SECTIONS);
 
             this.setCellSize(78, true);
+        }
+    }
+
+    class CellRendererProvider extends ui.blocks.SceneEditorBlocksCellRendererProvider {
+
+        getCellRenderer(element: any) {
+            
+            if (element === ObjectExtensionAndPrefabViewer.PREFAB_SECTION) {
+
+                return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+            }
+
+            return super.getCellRenderer(element);
         }
     }
 

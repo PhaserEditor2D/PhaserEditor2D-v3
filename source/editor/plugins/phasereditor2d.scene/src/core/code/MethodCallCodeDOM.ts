@@ -7,9 +7,9 @@ namespace phasereditor2d.scene.core.code {
         private _args: string[];
         private _returnToVar: string;
         private _declareReturnToVar: boolean;
-        private _declareReturnToField: boolean;
         private _isConstructor: boolean;
         private _explicitType: string;
+        private _optionalContext: boolean;
 
         constructor(methodName: string, contextExpr = "") {
             super();
@@ -19,42 +19,46 @@ namespace phasereditor2d.scene.core.code {
             this._args = [];
             this._declareReturnToVar = false;
             this._isConstructor = false;
-            this._declareReturnToField = false;
+        }
+
+        setOptionalContext(optionalContext: boolean) {
+
+            this._optionalContext = optionalContext;
+        }
+
+        isOptionalContext() {
+
+            return this._optionalContext;
         }
 
         isConstructor() {
+
             return this._isConstructor;
         }
 
         setConstructor(isConstructor: boolean) {
+
             this._isConstructor = isConstructor;
         }
 
         getReturnToVar() {
+
             return this._returnToVar;
         }
 
         setReturnToVar(returnToVar: string) {
+
             this._returnToVar = returnToVar;
         }
 
         setDeclareReturnToVar(declareReturnToVar: boolean) {
+
             this._declareReturnToVar = declareReturnToVar;
         }
 
         isDeclareReturnToVar() {
 
             return this._declareReturnToVar;
-        }
-
-        setDeclareReturnToField(declareReturnToField: boolean) {
-
-            this._declareReturnToField = declareReturnToField;
-        }
-
-        isDeclareReturnToField() {
-
-            return this._declareReturnToField;
         }
 
         setExplicitType(explicitType: string) {
@@ -70,6 +74,11 @@ namespace phasereditor2d.scene.core.code {
         arg(expr: string) {
 
             this._args.push(expr);
+        }
+
+        argUndefined() {
+
+            this.arg("undefined");
         }
 
         argStringOrFloat(expr: string | number) {
@@ -97,6 +106,10 @@ namespace phasereditor2d.scene.core.code {
                 case "number":
                     this.argInt(expr);
                     break;
+
+                case "undefined":
+                    this.arg("undefined");
+                    break;
             }
         }
 
@@ -121,18 +134,22 @@ namespace phasereditor2d.scene.core.code {
         }
 
         getMethodName() {
+
             return this._methodName;
         }
 
         setMethodName(methodName: string) {
+
             this._methodName = methodName;
         }
 
         getContextExpr() {
+
             return this._contextExpr;
         }
 
         getArgs() {
+
             return this._args;
         }
     }

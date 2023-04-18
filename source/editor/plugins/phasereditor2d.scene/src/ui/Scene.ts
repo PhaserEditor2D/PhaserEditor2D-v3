@@ -46,7 +46,7 @@ namespace phasereditor2d.scene.ui {
 
             const map: Map<any, number> = new Map();
 
-            this.buildSortingMap(map, this.getDisplayListChildren(), 0);
+            this.buildSortingMap(map, this.getGameObjects(), 0);
 
             objects.sort((a, b) => {
 
@@ -65,9 +65,11 @@ namespace phasereditor2d.scene.ui {
 
                 map.set(obj, index);
 
-                if (!(obj as sceneobjects.ISceneGameObject).getEditorSupport().isPrefabInstance()) {
+                const objES = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 
-                    const children = sceneobjects.GameObjectEditorSupport.getObjectChildren(obj as any);
+                if (!objES.isPrefabInstance()) {
+
+                    const children = objES.getObjectChildren();
 
                     index = this.buildSortingMap(map, children, index);
                 }
@@ -108,6 +110,31 @@ namespace phasereditor2d.scene.ui {
 
                 obj.getEditorSupport().destroy();
             }
+        }
+
+        getGameObjectIndex(obj: sceneobjects.ISceneGameObject) {
+
+            return this.children.getIndex(obj);
+        }
+
+        removeGameObject(obj: sceneobjects.ISceneGameObject) {
+
+            this.children.remove(obj);
+
+            if (obj instanceof sceneobjects.ScriptNode) {
+
+                obj.setParent(undefined);
+            }
+        }
+
+        addGameObject(obj: sceneobjects.ISceneGameObject, skipCallback = false) {
+
+            this.children.add(obj, skipCallback);
+        }
+
+        addGameObjectAt(obj: sceneobjects.ISceneGameObject, index: number, skipCallback = false) {
+
+            this.children.addAt(obj, index, skipCallback);
         }
 
         addPlainObject(obj: sceneobjects.IScenePlainObject) {
@@ -158,17 +185,32 @@ namespace phasereditor2d.scene.ui {
             this.input["_pendingInsertion"].length = 0;
             this.input["_pendingRemoval"].length = 0;
 
-            for (const obj of this.getDisplayListChildren()) {
+            for (const obj of this.getGameObjects()) {
 
                 obj.getEditorSupport().destroy();
             }
+        }
+
+        isScriptNodePrefabScene() {
+
+            if (this.isPrefabSceneType()) {
+
+                const obj = this.getPrefabObject();
+
+                if (obj) {
+
+                    return obj instanceof sceneobjects.ScriptNode;
+                }
+            }
+
+            return false;
         }
 
         getPrefabObject(): sceneobjects.ISceneGameObject {
 
             if (this.sys.displayList) {
 
-                const list = this.getDisplayListChildren();
+                const list = this.getGameObjects();
 
                 return list[list.length - 1];
             }
@@ -178,17 +220,17 @@ namespace phasereditor2d.scene.ui {
 
         isNonTopPrefabObject(obj: any) {
 
-            const support = sceneobjects.GameObjectEditorSupport.getEditorSupport(obj);
+            const objES = sceneobjects.GameObjectEditorSupport.getEditorSupport(obj);
 
-            if (support) {
+            if (objES) {
 
-                const scene = support.getScene();
+                const scene = objES.getScene();
 
                 if (scene.isPrefabSceneType()) {
 
                     if (scene.getPrefabObject() !== obj) {
 
-                        const parent = sceneobjects.getObjectParent(obj);
+                        const parent = objES.getObjectParent();
 
                         if (parent) {
 
@@ -248,14 +290,19 @@ namespace phasereditor2d.scene.ui {
             return super.getMaker() as SceneMaker;
         }
 
-        getDisplayListChildren(): sceneobjects.ISceneGameObject[] {
+        sortGameObjects() {
+
+            sceneobjects.sortObjectsAlgorithm(this.getGameObjects(), 0);
+        }
+
+        getGameObjects(): sceneobjects.ISceneGameObject[] {
 
             return this.sys.displayList.getChildren() as any;
         }
 
         getInputSortedObjects(): Phaser.GameObjects.GameObject[] {
 
-            return this.getInputSortedObjects2([], this.getDisplayListChildren());
+            return this.getInputSortedObjects2([], this.getGameObjects());
         }
 
         private getInputSortedObjects2(
@@ -267,7 +314,7 @@ namespace phasereditor2d.scene.ui {
 
                     if (obj.visible && obj.alpha > 0) {
 
-                        this.getInputSortedObjects2(result, obj.getChildren());
+                        this.getInputSortedObjects2(result, obj.getEditorSupport().getObjectChildren());
                     }
 
                 } else {
@@ -281,7 +328,7 @@ namespace phasereditor2d.scene.ui {
 
         visitAll(visitor: (obj: sceneobjects.ISceneGameObject) => void) {
 
-            this.visit(visitor, this.getDisplayListChildren());
+            this.visit(visitor, this.getGameObjects());
         }
 
         visit(visitor: (obj: sceneobjects.ISceneGameObject) => void, children: sceneobjects.ISceneGameObject[]) {
@@ -290,16 +337,13 @@ namespace phasereditor2d.scene.ui {
 
                 visitor(obj);
 
-                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
-
-                    this.visit(visitor, obj.getChildren());
-                }
+                this.visit(visitor, obj.getEditorSupport().getObjectChildren());
             }
         }
 
         visitAllAskChildren(visitor: (obj: sceneobjects.ISceneGameObject) => boolean) {
 
-            this.visitAskChildren(visitor, this.getDisplayListChildren());
+            this.visitAskChildren(visitor, this.getGameObjects());
         }
 
         visitAskChildren(
@@ -311,10 +355,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (visitChildren) {
 
-                    if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
-
-                        this.visitAskChildren(visitor, obj.getChildren());
-                    }
+                    this.visitAskChildren(visitor, obj.getEditorSupport().getObjectChildren());
                 }
             }
         }
@@ -363,7 +404,7 @@ namespace phasereditor2d.scene.ui {
 
             const map = new Map<sceneobjects.ISceneGameObject, number>();
 
-            this.buildObjectSortingMap2(map, this.getDisplayListChildren());
+            this.buildObjectSortingMap2(map, this.getGameObjects());
 
             return map;
         }
@@ -391,7 +432,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
 
-                    i += this.buildObjectSortingMap2(map, obj.getChildren());
+                    i += this.buildObjectSortingMap2(map, obj.getEditorSupport().getObjectChildren());
                 }
 
                 i++;
@@ -418,7 +459,7 @@ namespace phasereditor2d.scene.ui {
 
             this.visitAll(obj => {
 
-                for(const node of obj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes()) {
+                for (const node of obj.getEditorSupport().getUserComponentsComponent().getUserComponentNodes()) {
 
                     map.set(node.getId(), node);
                 }
@@ -449,7 +490,7 @@ namespace phasereditor2d.scene.ui {
 
         getByEditorId(id: string) {
 
-            const obj = Scene.findByEditorId(this.getDisplayListChildren(), id);
+            const obj = Scene.findByEditorId(this.getGameObjects(), id);
 
             return obj;
         }
@@ -491,7 +532,7 @@ namespace phasereditor2d.scene.ui {
 
             set = set ?? new Set();
 
-            for (const obj of (list ?? this.getDisplayListChildren())) {
+            for (const obj of (list ?? this.getGameObjects())) {
 
                 const id = obj.getEditorSupport().getId();
 
@@ -518,16 +559,14 @@ namespace phasereditor2d.scene.ui {
             for (const obj of list) {
 
                 if (obj.getEditorSupport().getId() === id) {
+
                     return obj;
                 }
 
-                if (obj instanceof sceneobjects.Container || obj instanceof sceneobjects.Layer) {
+                const result = this.findByEditorId(obj.getEditorSupport().getObjectChildren(), id);
 
-                    const result = this.findByEditorId(obj.getChildren(), id);
-
-                    if (result) {
-                        return result;
-                    }
+                if (result) {
+                    return result;
                 }
             }
 

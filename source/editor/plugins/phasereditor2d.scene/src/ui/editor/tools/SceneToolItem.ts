@@ -198,6 +198,39 @@ namespace phasereditor2d.scene.ui.editor.tools {
             return a;
         }
 
+        protected drawLinePath(ctx: CanvasRenderingContext2D, color: string, x1: number, y1: number, x2: number, y2: number, dashed = false) {
+
+            ctx.save();
+
+            if (dashed) {
+
+                ctx.setLineDash([5, 10]);
+                ctx.lineCap = "square";
+            }
+
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 1.5;
+            
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
         protected drawArrowPath(ctx: CanvasRenderingContext2D, color: string) {
 
             ctx.save();
@@ -262,8 +295,8 @@ namespace phasereditor2d.scene.ui.editor.tools {
 
         protected getAvgScreenPointOfObjects(
             args: ISceneToolContextArgs,
-            fx: (ob: sceneobjects.Image) => number = obj => 0,
-            fy: (ob: sceneobjects.Image) => number = obj => 0,
+            fx: (ob: sceneobjects.Image | any) => number = obj => 0,
+            fy: (ob: sceneobjects.Image | any) => number = obj => 0,
             removeRotation = false) {
 
             let avgY = 0;

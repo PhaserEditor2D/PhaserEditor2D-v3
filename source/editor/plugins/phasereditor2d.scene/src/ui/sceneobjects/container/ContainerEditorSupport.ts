@@ -1,7 +1,7 @@
-/// <reference path="../ParentGameObjectEditorSupport.ts"/>
+/// <reference path="../DisplayParentGameObjectEditorSupport.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ContainerEditorSupport extends ParentGameObjectEditorSupport<Container> {
+    export class ContainerEditorSupport extends DisplayParentGameObjectEditorSupport<Container> {
 
         constructor(obj: Container, scene: Scene) {
             super(ContainerExtension.getInstance(), obj, scene);
@@ -42,7 +42,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const container = this.getObject();
 
-            if (container.list.length === 0) {
+            const children = this.getDisplayObjectChildren();
+
+            if (children.length === 0) {
+
                 return [];
             }
 
@@ -51,7 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const points: Phaser.Math.Vector2[] = [];
 
-            for (const obj of container.getChildren()) {
+            for (const obj of children) {
 
                 const bounds = obj.getEditorSupport().getScreenBounds(camera);
 
