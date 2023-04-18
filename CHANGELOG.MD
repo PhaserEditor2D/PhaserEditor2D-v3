@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.60.0
+## v3.60.0 - Apr 16, 2023
 
 * Fixes labels of the Size section in the Inspector view.
 * Scene compiler: fixes class-field declaration.
