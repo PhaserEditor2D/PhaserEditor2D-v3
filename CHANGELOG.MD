@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Fixes keyboard key objects serialization.
+
 ## v3.60.0 - Apr 16, 2023
 
 * Fixes labels of the Size section in the Inspector view.
