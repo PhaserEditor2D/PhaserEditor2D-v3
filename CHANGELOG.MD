@@ -1,8 +1,8 @@
 # Change Log
 
-## dev
+## v3.60.1 - Apr 21, 2023
 
-* Fixes keyboard key objects serialization.
+* Fixes plain object serialization (keyboard keys, colliders,...).
 
 ## v3.60.0 - Apr 16, 2023
 
