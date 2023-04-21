@@ -35,9 +35,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 dlg.addOpenButton("Select", (sel) => {
 
                     const value = sel[0];
+                    const keys = this.getSelection();
+
+                    console.log("set", value, "to", keys[0].getEditorSupport().getId());
 
                     this.getEditor().getUndoManager().add(
-                        new SimpleOperation(this.getEditor(), this.getSelection(), KeyboardKeyComponent.keyCode, value));
+                        new SimpleOperation(this.getEditor(), keys, KeyboardKeyComponent.keyCode, value));
 
                 }, false);
 

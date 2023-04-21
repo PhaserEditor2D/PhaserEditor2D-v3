@@ -1,5 +1,9 @@
 # Change Log
 
+## v3.60.1 - Apr 21, 2023
+
+* Fixes plain object serialization (keyboard keys, colliders,...).
+
 ## v3.60.0 - Apr 16, 2023
 
 * Fixes labels of the Size section in the Inspector view.

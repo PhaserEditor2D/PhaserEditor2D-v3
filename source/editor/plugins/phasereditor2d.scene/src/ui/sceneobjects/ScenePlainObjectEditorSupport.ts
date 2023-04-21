@@ -18,6 +18,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._components = components;
 
             this.setScope(ObjectScope.CLASS);
+
+            this._id = Phaser.Utils.String.UUID();
         }
 
         writeJSON(objData: core.json.IScenePlainObjectData) {
@@ -40,7 +42,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(objData: core.json.IScenePlainObjectData) {
 
-            this._id = objData.id;
+            this._id = objData.id || Phaser.Utils.String.UUID();
             this.setScope(colibri.core.json.read(objData, "scope", ObjectScope.CLASS));
             this.setLabel(objData.label);
 
