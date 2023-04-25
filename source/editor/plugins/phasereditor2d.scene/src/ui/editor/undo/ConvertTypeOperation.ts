@@ -67,6 +67,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                     objData.prefabId = finder.getPrefabId(this._targetType);
                     objData.components = [];
+                    objData.list = [];
 
                 } else {
 
