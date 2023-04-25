@@ -3,6 +3,7 @@
 ## v3.60.2
 
 * Fixes creating a prefab layer with a selected container or layer.
+* Updates the ScriptNode resources with the bug fixes.
 * [#129](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/129) Adds Preview Scene command (Ctrl+0). It runs the game in the browser and passes the `start=<scene-name>` parameter.
 
 ## v3.60.1 - Apr 21, 2023
