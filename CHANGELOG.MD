@@ -1,5 +1,9 @@
 # Change Log
 
+## v3.60.2
+
+* Fixes creating a prefab layer with a selected container or layer.
+
 ## v3.60.1 - Apr 21, 2023
 
 * Fixes plain object serialization (keyboard keys, colliders,...).
