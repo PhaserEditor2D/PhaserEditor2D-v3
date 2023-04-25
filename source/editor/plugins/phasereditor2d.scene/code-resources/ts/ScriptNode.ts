@@ -46,10 +46,11 @@ class ScriptNode {
             this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
         }
 
-        if (listenStart || listenUpdate || listenDestroy) {
+        if (listenAwake || listenStart || listenUpdate || listenDestroy) {
 
             const destroyCallback = () => {
 
+                this.scene.events.off("scene-awake", this.awake, this);
                 this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.start, this);
                 this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
 
@@ -65,7 +66,7 @@ class ScriptNode {
 
             } else {
 
-                this.scene.events.on(Phaser.Scenes.Events.DESTROY, destroyCallback);
+                this.scene.events.on(Phaser.Scenes.Events.SHUTDOWN, destroyCallback);
             }
         }
     }
@@ -100,18 +101,18 @@ class ScriptNode {
         this.children.push(child);
     }
 
-    executeChildren(args?: any) {
+    executeChildren(...args: any[]) {
 
         if (this._children) {
 
             for(const child of this._children) {
 
-                child.execute(args);
+                child.execute(...args);
             }
         }
     }
 
-    execute(args?: any): void {
+    execute(...args: any[]): void {
         // override this on executable nodes
     }
 

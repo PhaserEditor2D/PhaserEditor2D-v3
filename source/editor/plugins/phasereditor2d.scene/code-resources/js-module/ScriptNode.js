@@ -1,17 +1,16 @@
 import Phaser from "phaser";
 
-
 export default class ScriptNode {
 
-    /**
+    /** 
      * @private
-     * @type {Phaser.Scene}
-     */
+     * @type {Phaser.Scene} 
+     **/
     _scene;
 
     /**
-     * @private
-     * @type {Phaser.GameObjects.GameObject}
+     * @private 
+     * @type {Phaser.GameObjects.GameObject | undefined}
      */
     _gameObject;
 
@@ -23,12 +22,11 @@ export default class ScriptNode {
 
     /**
      * @private
-     * @type {ScriptNode[]}
+     * @type {ScriptNode[] | undefined}
      */
     _children;
 
     /**
-     * 
      * @param {ScriptNode | Phaser.GameObjects.GameObject | Phaser.Scene} parent 
      */
     constructor(parent) {
@@ -72,10 +70,11 @@ export default class ScriptNode {
             this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
         }
 
-        if (listenStart || listenUpdate || listenDestroy) {
+        if (listenAwake || listenStart || listenUpdate || listenDestroy) {
 
             const destroyCallback = () => {
 
+                this.scene.events.off("scene-awake", this.awake, this);
                 this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.start, this);
                 this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
 
@@ -91,7 +90,7 @@ export default class ScriptNode {
 
             } else {
 
-                this.scene.events.on(Phaser.Scenes.Events.DESTROY, destroyCallback);
+                this.scene.events.on(Phaser.Scenes.Events.SHUTDOWN, destroyCallback);
             }
         }
     }
@@ -111,9 +110,6 @@ export default class ScriptNode {
         return this._parent;
     }
 
-    /**
-     * @type {ScriptNode[]}
-     */
     get children() {
 
         if (!this._children) {
@@ -125,7 +121,6 @@ export default class ScriptNode {
     }
 
     /**
-     * 
      * @param {ScriptNode} child 
      */
     add(child) {
@@ -134,25 +129,23 @@ export default class ScriptNode {
     }
 
     /**
-     * 
-     * @param {any | undefined} args 
+     * @param  {...any} args 
      */
-    executeChildren(args) {
+    executeChildren(...args) {
 
         if (this._children) {
 
-            for(const child of this._children) {
+            for (const child of this._children) {
 
-                child.execute(args);
+                child.execute(...args);
             }
         }
     }
 
     /**
-     * 
-     * @param {any | undefined} args 
+     * @param  {...any} args 
      */
-    execute(args) {
+    execute(...args) {
         // override this on executable nodes
     }
 
