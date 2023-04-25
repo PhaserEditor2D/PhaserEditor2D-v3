@@ -141,6 +141,27 @@ namespace phasereditor2d.ide {
             });
         }
 
+        async playProject(startScene?: string) {
+
+            const config = await IDEPlugin.getInstance().requestProjectConfig();
+
+            const search = startScene ? `?start=${startScene}` : "";
+
+            colibri.Platform.onElectron(electron => {
+
+                const url = config.playUrl + search;
+
+                colibri.core.io.apiRequest("OpenBrowser", { url });
+
+            }, () => {
+
+                const url = (config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl())
+                    + search;
+
+                controls.Controls.openUrlInNewPage(url);
+            });
+        }
+
         async requestUpdateAvailable() {
 
             if (this.isDesktopMode()) {

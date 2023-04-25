@@ -45,18 +45,7 @@ namespace phasereditor2d.ide.ui.actions {
 
                     executeFunc: async (args) => {
 
-                        const config = await IDEPlugin.getInstance().requestProjectConfig();
-
-                        const url = config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
-
-                        colibri.Platform.onElectron(electron => {
-
-                            colibri.core.io.apiRequest("OpenBrowser", { url: config.playUrl });
-
-                        }, () => {
-
-                            controls.Controls.openUrlInNewPage(url);
-                        });
+                        IDEPlugin.getInstance().playProject();
                     }
                 },
                 keys: {
