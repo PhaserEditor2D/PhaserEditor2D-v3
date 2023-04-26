@@ -161,6 +161,7 @@ namespace phasereditor2d.files.ui.views {
         }
 
         getPropertyProvider() {
+
             return this._propertyProvider;
         }
 
@@ -181,7 +182,7 @@ namespace phasereditor2d.files.ui.views {
 
             viewer.repaint();
 
-            viewer.eventOpenItem.addListener((file: io.FilePath) => {
+            viewer.eventOpenItem.addListener(async (file: io.FilePath) => {
 
                 if (file.isFolder()) {
 
@@ -192,7 +193,7 @@ namespace phasereditor2d.files.ui.views {
                     return;
                 }
 
-                wb.openEditor(file);
+                FilesPlugin.getInstance().getOpenFileAction()(file);
             });
 
             wb.getFileStorage().addChangeListener(change => this.onFileStorageChange(change));

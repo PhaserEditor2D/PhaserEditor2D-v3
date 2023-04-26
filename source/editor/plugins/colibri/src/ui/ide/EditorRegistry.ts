@@ -25,6 +25,7 @@ namespace colibri.ui.ide {
             for (const factory of this._factories) {
 
                 if (factory.acceptInput(input)) {
+                    
                     return factory;
                 }
             }

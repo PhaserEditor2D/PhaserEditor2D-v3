@@ -6,7 +6,7 @@ namespace phasereditor2d.ide {
     export const ICON_PLAY = "play";
 
     export class IDEPlugin extends colibri.Plugin {
-
+        
         public eventActivationChanged = new controls.ListenerList<boolean>();
 
         private static _instance = new IDEPlugin();
@@ -82,6 +82,8 @@ namespace phasereditor2d.ide {
                     command: ui.actions.CMD_LOCATE_FILE
                 }));
             }
+
+            phasereditor2d.files.FilesPlugin.getInstance().setOpenFileAction(file => this.openFileFromFilesView(file));
         }
 
         async compileProject() {
@@ -187,6 +189,7 @@ namespace phasereditor2d.ide {
         }
 
         isDesktopMode() {
+
             return this._desktopMode;
         }
 
@@ -265,6 +268,40 @@ namespace phasereditor2d.ide {
         openProjectInVSCode() {
 
             this.openFileExternalEditor(colibri.ui.ide.FileUtils.getRoot());
+        }
+
+        setEnableOpenCodeFileInExternalEditor(enabled: boolean) {
+            
+            window.localStorage.setItem("phasereditor2d.ide.enableOpenCodeFileInExternalEditor", enabled? "1" : "0");
+        }
+
+        isEnableOpenCodeFileInExternalEditor() {
+
+            return window.localStorage.getItem("phasereditor2d.ide.enableOpenCodeFileInExternalEditor") === "1";
+        }
+
+        private openFileFromFilesView(file: io.FilePath) {
+
+            // a hack, detect if content type is JS, TS, or plain text, so it opens the external editor
+            if (this.isEnableOpenCodeFileInExternalEditor()) {
+
+                const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
+
+                switch (ct) {
+                    case "typescript":
+                    case "javascript":
+                    case "html":
+                    case "css":
+
+                        console.log(`Openin ${file.getFullName()} with external editor`);
+
+                        this.openFileExternalEditor(file);
+
+                        return;
+                }
+            }
+
+            colibri.Platform.getWorkbench().openEditor(file);
         }
 
         async openFileExternalEditor(file: io.FilePath) {
