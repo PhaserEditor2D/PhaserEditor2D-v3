@@ -149,16 +149,14 @@ namespace phasereditor2d.ide {
 
             const search = startScene ? `?start=${startScene}` : "";
 
-            colibri.Platform.onElectron(electron => {
+            const url = (config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl())
+                    + search;
 
-                const url = config.playUrl + search;
+            colibri.Platform.onElectron(electron => {
 
                 colibri.core.io.apiRequest("OpenBrowser", { url });
 
             }, () => {
-
-                const url = (config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl())
-                    + search;
 
                 controls.Controls.openUrlInNewPage(url);
             });
@@ -319,7 +317,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.60.2";
+    export const VER = "3.60.3";
 
     async function main() {
 
