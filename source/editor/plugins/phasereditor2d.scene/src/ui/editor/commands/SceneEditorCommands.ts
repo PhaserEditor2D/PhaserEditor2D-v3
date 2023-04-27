@@ -461,11 +461,18 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     testFunc: isSceneScope,
                     executeFunc: args => {
 
+                        let name = localStorage.getItem("phasereditor2d.lastPreviewScene");
+
                         const file = (args.activeEditor as SceneEditor).getInput();
 
-                        const sceneName = file.getNameWithoutExtension();
+                        const isPrefab = ScenePlugin.getInstance().getSceneFinder().isPrefabFile(file);
 
-                        ide.IDEPlugin.getInstance().playProject(sceneName);
+                        if (!isPrefab) {
+
+                            name = file.getNameWithoutExtension()
+                        }
+
+                        ide.IDEPlugin.getInstance().playProject(name);
                     }
                 },
                 keys: {
