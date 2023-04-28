@@ -875,6 +875,7 @@ namespace phasereditor2d.scene.core.code {
             if (!objES.isMethodScope()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
+
                 this._objectsToFieldList.push(obj);
             }
 

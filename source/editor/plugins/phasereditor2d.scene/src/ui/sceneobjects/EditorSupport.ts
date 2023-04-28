@@ -63,7 +63,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isMethodScope() {
 
-            return this._scope === ObjectScope.METHOD;
+            return this._scope === ObjectScope.METHOD
+                || this._scope === ObjectScope.LOCAL_NESTED_PREFAB;
         }
 
         getObject() {
