@@ -283,7 +283,8 @@ namespace phasereditor2d.scene.core.json {
 
                 for (const c of objData.list) {
 
-                    if (c.scope === ui.sceneobjects.ObjectScope.NESTED_PREFAB) {
+                    if (c.scope === ui.sceneobjects.ObjectScope.NESTED_PREFAB
+                        || c.scope === ui.sceneobjects.ObjectScope.LOCAL_NESTED_PREFAB) {
 
                         prefabObjectId_ObjectData_Map.set(c.id, c);
                         prefabId_File_Map.set(c.id, file);

@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         CLASS = "CLASS",
         PUBLIC = "PUBLIC",
         LOCAL_NESTED_PREFAB = "LOCAL_NESTED_PREFAB",
-        NESTED_PREFAB = "NESTED_PREFAB"
+        NESTED_PREFAB = "NESTED_PREFAB",
     }
 
     export abstract class EditorSupport<T> {
