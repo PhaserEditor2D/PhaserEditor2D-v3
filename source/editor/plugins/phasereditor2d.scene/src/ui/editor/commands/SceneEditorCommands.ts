@@ -58,6 +58,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_ARCADE_RESIZE_TO_OBJECT_BODY = "phasereditor2d.scene.ui.editor.commands.ArcadeResizeBodyToObject";
     export const CMD_OPEN_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenScriptDialog";
     export const CMD_OPEN_ADD_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenAddScriptDialog";
+    export const CMD_PREVIEW_SCENE = "phasereditor2d.scene.ui.editor.commands.PreviewScene";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -446,6 +447,40 @@ namespace phasereditor2d.scene.ui.editor.commands {
         }
 
         static registerGlobalCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // preview scene
+
+            manager.add({
+                command: {
+                    id: CMD_PREVIEW_SCENE,
+                    name: "Preview Scene",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Run the game and jump to the scene of the active scene editor"
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        let name = localStorage.getItem("phasereditor2d.lastPreviewScene");
+
+                        const file = (args.activeEditor as SceneEditor).getInput();
+
+                        const isPrefab = ScenePlugin.getInstance().getSceneFinder().isPrefabFile(file);
+
+                        if (!isPrefab) {
+
+                            name = file.getNameWithoutExtension()
+                        }
+
+                        ide.IDEPlugin.getInstance().playProject(name);
+                    }
+                },
+                keys: {
+                    control: true,
+                    key: "Digit0",
+                    keyLabel: "0"
+                }
+            });
 
             // set default renderer type
 

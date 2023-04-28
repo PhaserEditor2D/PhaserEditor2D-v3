@@ -143,6 +143,10 @@ namespace phasereditor2d.scene.ui.editor {
                 callback: () => this._editor.setSelection([])
             });
 
+            menu.addCommand(commands.CMD_PREVIEW_SCENE, {
+                text: "Preview"
+            });
+
             return menu;
         }
 

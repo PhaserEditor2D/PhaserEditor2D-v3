@@ -7,8 +7,9 @@ namespace phasereditor2d.ide.ui.actions {
     export const CMD_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.PlayProject";
     export const CMD_QUICK_PLAY_PROJECT = "phasereditor2d.ide.ui.actions.QuickPlayProject";
     export const CMD_OPEN_VSCODE = "phasereditor2d.ide.ui.actions.OpenVSCode";
+    export const CMD_ENABLE_OPEN_SOURCE_FILE_IN_EXTERNAL_EDITOR = "phasereditor2d.ide.ui.actions.EnableOpenCodeFileInExternalEditor";
+    export const CMD_DISABLE_OPEN_SOURCE_FILE_IN_EXTERNAL_EDITOR = "phasereditor2d.ide.ui.actions.EnableOpenCodeFileInExternalEditor";
 
-    import controls = colibri.ui.controls;
     import commands = colibri.ui.ide.commands;
     import io = colibri.core.io;
 
@@ -25,6 +26,38 @@ namespace phasereditor2d.ide.ui.actions {
             manager.addCategory({
                 id: CAT_PROJECT,
                 name: "Project"
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_ENABLE_OPEN_SOURCE_FILE_IN_EXTERNAL_EDITOR,
+                    category: CAT_PROJECT,
+                    name: "Enable Open Code File In External Editor",
+                    tooltip: "If enable, clicking on a coding file in the Files view opens the external editor"
+                },
+                handler: {
+                    testFunc: isNotWelcomeWindowScope,
+                    executeFunc: () => {
+
+                        IDEPlugin.getInstance().setEnableOpenCodeFileInExternalEditor(true);
+                    }
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_DISABLE_OPEN_SOURCE_FILE_IN_EXTERNAL_EDITOR,
+                    category: CAT_PROJECT,
+                    name: "Disable Open Code File In External Editor",
+                    tooltip: "If disabled, clicking on a coding file open the built-in editor."
+                },
+                handler: {
+                    testFunc: isNotWelcomeWindowScope,
+                    executeFunc: () => {
+
+                        IDEPlugin.getInstance().setEnableOpenCodeFileInExternalEditor(false);
+                    }
+                }
             });
 
             // play game
@@ -45,18 +78,7 @@ namespace phasereditor2d.ide.ui.actions {
 
                     executeFunc: async (args) => {
 
-                        const config = await IDEPlugin.getInstance().requestProjectConfig();
-
-                        const url = config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
-
-                        colibri.Platform.onElectron(electron => {
-
-                            colibri.core.io.apiRequest("OpenBrowser", { url: config.playUrl });
-
-                        }, () => {
-
-                            controls.Controls.openUrlInNewPage(url);
-                        });
+                        IDEPlugin.getInstance().playProject();
                     }
                 },
                 keys: {

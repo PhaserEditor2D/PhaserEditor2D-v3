@@ -6,7 +6,7 @@ namespace phasereditor2d.ide {
     export const ICON_PLAY = "play";
 
     export class IDEPlugin extends colibri.Plugin {
-
+        
         public eventActivationChanged = new controls.ListenerList<boolean>();
 
         private static _instance = new IDEPlugin();
@@ -82,6 +82,8 @@ namespace phasereditor2d.ide {
                     command: ui.actions.CMD_LOCATE_FILE
                 }));
             }
+
+            phasereditor2d.files.FilesPlugin.getInstance().setOpenFileAction(file => this.openFileFromFilesView(file));
         }
 
         async compileProject() {
@@ -141,6 +143,25 @@ namespace phasereditor2d.ide {
             });
         }
 
+        async playProject(startScene?: string) {
+
+            const config = await IDEPlugin.getInstance().requestProjectConfig();
+
+            const search = startScene ? `?start=${startScene}` : "";
+
+            const url = (config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl())
+                    + search;
+
+            colibri.Platform.onElectron(electron => {
+
+                colibri.core.io.apiRequest("OpenBrowser", { url: config.playUrl });
+
+            }, () => {
+
+                controls.Controls.openUrlInNewPage(url);
+            });
+        }
+
         async requestUpdateAvailable() {
 
             if (this.isDesktopMode()) {
@@ -166,6 +187,7 @@ namespace phasereditor2d.ide {
         }
 
         isDesktopMode() {
+
             return this._desktopMode;
         }
 
@@ -246,6 +268,40 @@ namespace phasereditor2d.ide {
             this.openFileExternalEditor(colibri.ui.ide.FileUtils.getRoot());
         }
 
+        setEnableOpenCodeFileInExternalEditor(enabled: boolean) {
+            
+            window.localStorage.setItem("phasereditor2d.ide.enableOpenCodeFileInExternalEditor", enabled? "1" : "0");
+        }
+
+        isEnableOpenCodeFileInExternalEditor() {
+
+            return window.localStorage.getItem("phasereditor2d.ide.enableOpenCodeFileInExternalEditor") === "1";
+        }
+
+        private openFileFromFilesView(file: io.FilePath) {
+
+            // a hack, detect if content type is JS, TS, or plain text, so it opens the external editor
+            if (this.isEnableOpenCodeFileInExternalEditor()) {
+
+                const ct = colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file);
+
+                switch (ct) {
+                    case "typescript":
+                    case "javascript":
+                    case "html":
+                    case "css":
+
+                        console.log(`Openin ${file.getFullName()} with external editor`);
+
+                        this.openFileExternalEditor(file);
+
+                        return;
+                }
+            }
+
+            colibri.Platform.getWorkbench().openEditor(file);
+        }
+
         async openFileExternalEditor(file: io.FilePath) {
 
             const resp = await colibri.core.io.apiRequest("OpenVSCode", { location: file.getFullName() });
@@ -261,7 +317,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.60.1";
+    export const VER = "3.60.3";
 
     async function main() {
 

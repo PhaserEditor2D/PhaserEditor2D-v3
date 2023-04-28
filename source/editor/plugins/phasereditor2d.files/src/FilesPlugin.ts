@@ -8,13 +8,25 @@ namespace phasereditor2d.files {
     export class FilesPlugin extends colibri.Plugin {
 
         private static _instance = new FilesPlugin();
+        private _openFileAction: (file: colibri.core.io.FilePath) => void;
 
         static getInstance() {
+
             return this._instance;
         }
 
         private constructor() {
             super("phasereditor2d.files");
+        }
+
+        setOpenFileAction(action: (file: colibri.core.io.FilePath) => void) {
+
+            this._openFileAction = action;
+        }
+
+        getOpenFileAction() {
+
+            return this._openFileAction;
         }
 
         public registerExtensions(reg: colibri.ExtensionRegistry) {
