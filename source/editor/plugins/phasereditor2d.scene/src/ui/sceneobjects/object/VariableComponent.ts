@@ -30,7 +30,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             local: true,
             getValue: obj => obj.getEditorSupport().getScope(),
             setValue: (obj, value) => obj.getEditorSupport().setScope(value),
-            values: [ObjectScope.METHOD, ObjectScope.CLASS, ObjectScope.PUBLIC, ObjectScope.NESTED_PREFAB],
+            values: [
+                ObjectScope.METHOD,
+                ObjectScope.CLASS,
+                ObjectScope.PUBLIC,
+                ObjectScope.LOCAL_NESTED_PREFAB,
+                ObjectScope.NESTED_PREFAB
+            ],
             getValueLabel: value => value.split("_").map(v => v[0] + v.substring(1).toLowerCase()).join(" ")
         };
 
@@ -47,7 +53,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (this.getEditorSupport().isUseGameObjectName()) {
 
                 const dom = new code.AssignPropertyCodeDOM("name", args.objectVarName);
- 
+
                 dom.valueLiteral(this.getEditorSupport().getLabel());
 
                 args.statements.push(dom);

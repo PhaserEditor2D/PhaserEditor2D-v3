@@ -12,6 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
         private _isNestedPrefabInstance: boolean;
+        private _isNestedPrefanInstanceBranch: boolean; 
 
         // parent
         private _allowPickChildren: boolean;
@@ -29,6 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._serializables = [];
             this._componentMap = new Map();
             this._isNestedPrefabInstance = false;
+            this._isNestedPrefanInstanceBranch = false;
 
             this._allowPickChildren = true;
             this._showChildrenInOutline = true;
@@ -663,6 +665,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 if (!parent 
                     || !parentES.isPrefabInstance()
                     || this.isPrefeabInstanceAppendedChild()) {
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        isNestedPrefabInstanceParent() {
+
+            for(const obj of this.getObjectChildren()) {
+
+                const objES = obj.getEditorSupport();
+
+                if (objES.isNestedPrefabInstance() || objES.isNestedPrefabInstanceParent()) {
 
                     return true;
                 }

@@ -7,6 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         METHOD = "METHOD",
         CLASS = "CLASS",
         PUBLIC = "PUBLIC",
+        LOCAL_NESTED_PREFAB = "LOCAL_NESTED_PREFAB",
         NESTED_PREFAB = "NESTED_PREFAB"
     }
 
@@ -97,7 +98,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isNestedPrefabScope() {
 
-            return this._scope === ObjectScope.NESTED_PREFAB;
+            return this._scope === ObjectScope.NESTED_PREFAB
+                || this._scope === ObjectScope.LOCAL_NESTED_PREFAB;
         }
 
         isPublic() {
