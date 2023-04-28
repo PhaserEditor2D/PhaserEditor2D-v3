@@ -1,6 +1,10 @@
 # Change Log
 
-## v3.60.2
+## v3.60.3 - Apr 27, 2023
+
+* Fixes regression bug with the Play command.
+
+## v3.60.2 - Apr 27, 2023
 
 * Fixes creating a prefab layer with a selected container or layer.
 * Updates the ScriptNode resources with the bug fixes.
