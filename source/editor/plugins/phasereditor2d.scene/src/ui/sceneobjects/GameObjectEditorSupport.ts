@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
         private _isNestedPrefabInstance: boolean;
-        private _isNestedPrefanInstanceBranch: boolean; 
+        private _isLocalNestedPrefabInstance: boolean;
 
         // parent
         private _allowPickChildren: boolean;
@@ -30,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._serializables = [];
             this._componentMap = new Map();
             this._isNestedPrefabInstance = false;
-            this._isNestedPrefanInstanceBranch = false;
+            this._isLocalNestedPrefabInstance = false;
 
             this._allowPickChildren = true;
             this._showChildrenInOutline = true;
@@ -662,7 +662,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const parent = this.getObjectParent();
                 const parentES = parent?.getEditorSupport();
 
-                if (!parent 
+                if (!parent
                     || !parentES.isPrefabInstance()
                     || this.isPrefeabInstanceAppendedChild()) {
 
@@ -675,7 +675,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         isNestedPrefabInstanceParent() {
 
-            for(const obj of this.getObjectChildren()) {
+            for (const obj of this.getObjectChildren()) {
 
                 const objES = obj.getEditorSupport();
 
@@ -693,9 +693,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._isNestedPrefabInstance;
         }
 
-        _setNestedPrefabInstance(isNestedPrefabInstace: boolean) {
+        private _setNestedPrefabInstance(isNestedPrefabInstace: boolean) {
 
             this._isNestedPrefabInstance = isNestedPrefabInstace;
+        }
+
+        isLocalNestedPrefabInstance() {
+
+            return this._isLocalNestedPrefabInstance;
+        }
+
+        private _setLocalNestedPrefabInstance(isLocalNestedPrefabInstance: boolean) {
+
+            this._isLocalNestedPrefabInstance = isLocalNestedPrefabInstance;
         }
 
         isPrefabInstance() {
@@ -833,7 +843,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const result = [];
 
-                for(const obj of children) {
+                for (const obj of children) {
 
                     const objES = obj.getEditorSupport();
 
@@ -1252,17 +1262,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (sprite) {
 
-                    parent.getEditorSupport().addObjectChild(sprite);
+                    parentES.addObjectChild(sprite);
+
+                    const spriteES = sprite.getEditorSupport();
 
                     // if it is not an appended child
                     if (i < prefabChildren.length) {
 
                         const prefabData = prefabChildren[i];
+                        const { scope } = prefabData;
 
-                        if (prefabData.scope === sceneobjects.ObjectScope.NESTED_PREFAB
-                            || prefabData.scope === sceneobjects.ObjectScope.LOCAL_NESTED_PREFAB) {
+                        if (scope === sceneobjects.ObjectScope.NESTED_PREFAB
+                            || scope === sceneobjects.ObjectScope.LOCAL_NESTED_PREFAB) {
 
-                            sprite.getEditorSupport()._setNestedPrefabInstance(true);
+                            spriteES._setNestedPrefabInstance(true);
+                            spriteES._setLocalNestedPrefabInstance(
+                                scope === sceneobjects.ObjectScope.LOCAL_NESTED_PREFAB);
                         }
                     }
 
