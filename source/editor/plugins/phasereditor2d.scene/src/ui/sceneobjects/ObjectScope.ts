@@ -32,4 +32,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         return false;
     }
+
+    export function isPublicScope(scope: ObjectScope) {
+
+        switch (scope) {
+
+            case ObjectScope.PUBLIC:
+            case ObjectScope.PUBLIC_NESTED_PREFAB:
+                
+                return true;
+        }
+
+        return false;
+    }
 }

@@ -282,7 +282,7 @@ namespace phasereditor2d.scene.core.code {
                         ? objES.getPrefabName()
                         : (explicitType ? explicitType : objES.getPhaserType());
 
-                    const isPublic = objES.isPublic();
+                    const isPublic = objES.isPublicScope();
 
                     const field = new FieldDeclCodeDOM(varName, type, isPublic);
                     // Allow undefined if the object is part of a scene.
@@ -490,11 +490,11 @@ namespace phasereditor2d.scene.core.code {
         private addCreatePlainObjectCode(
             obj: ui.sceneobjects.IScenePlainObject, firstStatements: CodeDOM[], lazyStatements: CodeDOM[]) {
 
-            const objSupport = obj.getEditorSupport();
+            const objES = obj.getEditorSupport();
 
-            const varname = formatToValidVarName(objSupport.getLabel());
+            const varname = formatToValidVarName(objES.getLabel());
 
-            const result = objSupport.getExtension().buildCreateObjectWithFactoryCodeDOM({
+            const result = objES.getExtension().buildCreateObjectWithFactoryCodeDOM({
                 gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene" : "this",
                 obj: obj,
                 varname
@@ -519,7 +519,7 @@ namespace phasereditor2d.scene.core.code {
 
             const objectFactoryMethodCall = result.objectFactoryMethodCall;
 
-            if (!objSupport.isMethodScope()) {
+            if (!objES.isMethodScope()) {
 
                 objectFactoryMethodCall.setDeclareReturnToVar(true);
             }
