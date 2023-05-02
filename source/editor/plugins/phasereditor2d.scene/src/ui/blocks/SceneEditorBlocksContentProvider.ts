@@ -16,8 +16,6 @@ namespace phasereditor2d.scene.ui.blocks {
 
     const grouping = pack.ui.viewers.AssetPackGrouping;
 
-    const SCRIPTS_CATEGORY = "Scripts";
-
     export class SceneEditorBlocksContentProvider extends pack.ui.viewers.AssetPackContentProvider {
 
         private _getPacks: () => pack.core.AssetPack[];
@@ -43,9 +41,9 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getRoots(input: any) {
 
-            if (this._editor.getScene().isScriptNodePrefabScene()) {
+            const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
 
-                const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
+            if (this._editor.getScene().isScriptNodePrefabScene()) {
 
                 return [
                     sceneobjects.ScriptNodeExtension.getInstance(),
@@ -125,9 +123,19 @@ namespace phasereditor2d.scene.ui.blocks {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            const files = (sceneType === "prefabs" ? finder.getPrefabFiles() : finder.getSceneFiles());
+            let files = (sceneType === "prefabs" ? finder.getPrefabFiles() : finder.getSceneFiles());
 
-            return files.filter(file => SceneMaker.acceptDropFile(file, this._editor.getInput()));
+            files = files.filter(file => SceneMaker.acceptDropFile(file, this._editor.getInput()));
+
+            files.sort((a, b) => {
+
+                const aa = finder.isScriptPrefabFile(a)? 1 : 0;
+                const bb = finder.isScriptPrefabFile(b)? 1 : 0;
+
+                return aa - bb;
+            });
+
+            return files;
         }
 
         getChildren(parent: any): any[] {
