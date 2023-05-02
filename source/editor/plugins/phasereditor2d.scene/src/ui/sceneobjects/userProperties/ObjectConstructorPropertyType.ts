@@ -50,8 +50,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                await finder.preload(controls.EMPTY_PROGRESS_MONITOR);
-
                 const file = finder.getSceneFiles()
                     .find(f => this.valueToString(null, f) === value);
 

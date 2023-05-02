@@ -643,7 +643,6 @@ namespace phasereditor2d.scene {
 
         runSceneDataMigrations(sceneData: core.json.ISceneData) {
 
-
             // check scene data min supported version
 
             if (this._showIncompatibilityMessage) {

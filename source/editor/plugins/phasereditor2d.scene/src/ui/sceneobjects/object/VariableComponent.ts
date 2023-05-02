@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             getValue: obj => obj.getEditorSupport().getScope(),
             setValue: (obj, value) => obj.getEditorSupport().setScope(value),
             values: OBJECT_SCOPES,
-            getValueLabel: value => value.split("_").map(v => v[0] + v.substring(1).toLowerCase()).join(" ")
+            getValueLabel: value => value.replaceAll("_", " ") // value.split("_").map(v => v[0] + v.substring(1).toLowerCase()).join(" ")
         };
 
         constructor(obj: ISceneGameObject) {
