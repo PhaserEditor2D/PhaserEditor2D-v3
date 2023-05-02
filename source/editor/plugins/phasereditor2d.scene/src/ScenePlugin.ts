@@ -490,7 +490,7 @@ namespace phasereditor2d.scene {
 
         getPrefabColor() {
 
-            return colibri.ui.controls.Controls.getTheme().dark? "lightGreen" : "darkGreen";
+            return colibri.ui.controls.Controls.getTheme().dark ? "lightGreen" : "darkGreen";
         }
 
         getNestedPrefabColor() {
@@ -639,7 +639,32 @@ namespace phasereditor2d.scene {
             dlg.close();
         }
 
+        private _showIncompatibilityMessage = true;
+
         runSceneDataMigrations(sceneData: core.json.ISceneData) {
+
+
+            // check scene data min supported version
+
+            if (this._showIncompatibilityMessage) {
+
+                const version = sceneData.meta.version;
+
+                if (version) {
+
+                    if (version > ui.Scene.CURRENT_VERSION) {
+
+                        alert(`
+                        The project contains scene files created by newer versions of the editor.
+                        You should update the editor.
+                        `);
+                    }
+                }
+
+                this._showIncompatibilityMessage = false;
+            }
+
+            // check migrations
 
             const migrations = colibri.Platform.getExtensionRegistry()
                 .getExtensions<ui.SceneDataMigrationExtension>(ui.SceneDataMigrationExtension.POINT_ID);
