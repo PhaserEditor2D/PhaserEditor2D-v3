@@ -345,7 +345,7 @@ namespace colibri.ui.controls {
 
                 if (menuRect.width > window.innerWidth - x || openLeft) {
 
-                    this._element.style.left = targetRect.right - menuRect.width + "px";
+                    this._element.style.left = Math.max(0, targetRect.right - menuRect.width) + "px";
                 }
 
                 if (menuRect.height > window.innerHeight - y) {
