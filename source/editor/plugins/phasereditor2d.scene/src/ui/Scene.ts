@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui {
 
     export class Scene extends BaseScene {
 
-        static CURRENT_VERSION = 3;
+        static CURRENT_VERSION = 4;
 
         private _id: string;
         private _sceneType: core.json.SceneType;

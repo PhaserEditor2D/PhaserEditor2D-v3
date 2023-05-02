@@ -2,15 +2,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export enum ObjectScope {
-
-        METHOD = "METHOD",
-        CLASS = "CLASS",
-        PUBLIC = "PUBLIC",
-        LOCAL_NESTED_PREFAB = "LOCAL_NESTED_PREFAB",
-        NESTED_PREFAB = "NESTED_PREFAB",
-    }
-
     export abstract class EditorSupport<T> {
 
         private _object: T;
@@ -64,7 +55,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         isMethodScope() {
 
             return this._scope === ObjectScope.METHOD
-                || this._scope === ObjectScope.LOCAL_NESTED_PREFAB;
+                || this._scope === ObjectScope.METHOD_NESTED_PREFAB;
         }
 
         getObject() {
@@ -97,16 +88,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._scope;
         }
 
-        isNestedPrefabScope() {
-
-            return this._scope === ObjectScope.NESTED_PREFAB
-                || this._scope === ObjectScope.LOCAL_NESTED_PREFAB;
-        }
-
         isPublic() {
 
             return this._scope === ObjectScope.PUBLIC
-                || this._scope === ObjectScope.NESTED_PREFAB;
+                || this._scope === ObjectScope.PUBLIC_NESTED_PREFAB;
         }
 
         setScope(scope: ObjectScope) {

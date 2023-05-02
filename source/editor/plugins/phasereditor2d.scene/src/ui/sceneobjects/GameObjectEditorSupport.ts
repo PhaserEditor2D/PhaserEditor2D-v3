@@ -1272,12 +1272,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         const prefabData = prefabChildren[i];
                         const { scope } = prefabData;
 
-                        if (scope === sceneobjects.ObjectScope.NESTED_PREFAB
-                            || scope === sceneobjects.ObjectScope.LOCAL_NESTED_PREFAB) {
+                        if (ui.sceneobjects.isNestedPrefabScope(scope)) {
 
                             spriteES._setNestedPrefabInstance(true);
                             spriteES._setLocalNestedPrefabInstance(
-                                scope === sceneobjects.ObjectScope.LOCAL_NESTED_PREFAB);
+                                scope !== sceneobjects.ObjectScope.PUBLIC_NESTED_PREFAB);
                         }
                     }
 
@@ -1304,8 +1303,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const originalChild of originalPrefabChildren) {
 
-                if (originalChild.scope !== sceneobjects.ObjectScope.NESTED_PREFAB
-                    && originalChild.scope !== sceneobjects.ObjectScope.LOCAL_NESTED_PREFAB) {
+                if (!sceneobjects.isNestedPrefabScope(originalChild.scope)) {
 
                     result.push(originalChild);
 

@@ -5,8 +5,6 @@ namespace phasereditor2d.scene.core.migrations {
 
         migrate(data: json.ISceneData) {
 
-            console.log("Migrating: Text align");
-
             this.migrateList(data.displayList);
         }
 
@@ -23,6 +21,8 @@ namespace phasereditor2d.scene.core.migrations {
                         const alignProp = ui.sceneobjects.TextComponent.align;
 
                         objData.align = alignProp.values[objData.align] ?? alignProp.defValue;
+
+                        console.log(`Migrate Text align to ${objData.align} [${objData.id}]`);
                     }
                 }
 
