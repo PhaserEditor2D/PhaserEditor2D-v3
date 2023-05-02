@@ -8,6 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _label: string;
         private _scope: ObjectScope;
         private _objectIds: string[];
+        private _items: ObjectListItem[];
 
         constructor() {
 
@@ -15,37 +16,72 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._label = "list";
             this._scope = ObjectScope.CLASS;
             this._objectIds = [];
+            this._items = [];
+        }
+
+        getItemsWithObjects(scene: Scene) {
+
+            const map = scene.buildObjectIdMap();
+
+            for(const item of this._items) {
+
+                item.setObject(map.get(item.getObjectId()));
+            }
+
+            return this._items.filter(item => Boolean(item.getObject()));
+        }
+
+        removeItem(id: string) {
+
+            this._items = this._items.filter(i => i.getId() !== id);
+            
+            this._objectIds = this._items.map(i => i.getObjectId());
+        }
+
+        getItems() {
+
+            return this._items;
         }
 
         getObjectIds() {
+
             return this._objectIds;
         }
 
         setObjectsIds(ids: string[]) {
+
             this._objectIds = ids;
+
+            this._items = this._objectIds.map(id => new ObjectListItem(id));
         }
 
         getId() {
+
             return this._id;
         }
 
         setId(id: string) {
+
             this._id = id;
         }
 
         getLabel() {
+
             return this._label;
         }
 
         setLabel(label: string) {
+
             this._label = label;
         }
 
         getScope() {
+
             return this._scope;
         }
 
         setScope(scope: ObjectScope) {
+
             this._scope = scope;
         }
 
@@ -91,8 +127,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._id = data.id;
             this._label = data.label;
-            this._objectIds = data.objectIds || [];
             this._scope = data.scope || sceneobjects.ObjectScope.CLASS;
+            this.setObjectsIds(data.objectIds || []);
         }
 
         writeJSON(data: json.IObjectListData) {

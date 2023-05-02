@@ -30,10 +30,13 @@ namespace phasereditor2d.scene.ui.editor {
                 .map(obj => (obj as sceneobjects.ObjectList).getId()));
 
             list.push(...selection
+                .filter(obj => obj instanceof sceneobjects.ObjectListItem)
+                .map(obj => (obj as sceneobjects.ObjectListItem).getId()))
+
+            list.push(...selection
                 .filter(i => i instanceof sceneobjects.UserComponentNode)
                 .map((i: sceneobjects.UserComponentNode) => i.getId()));
 
-            
             list.push(...selection
                 .filter(obj => obj instanceof sceneobjects.UserProperty)
                 .map((p: sceneobjects.UserProperty) => `prefabProperty#${p.getName()}`))
@@ -66,6 +69,11 @@ namespace phasereditor2d.scene.ui.editor {
             for (const list of this._editor.getScene().getObjectLists().getLists()) {
 
                 map.set(list.getId(), list);
+
+                for(const item of list.getItems()) {
+
+                    map.set(item.getId(), item);
+                }
             }
 
             for(const prop of scene.getPrefabUserProperties().getProperties()) {

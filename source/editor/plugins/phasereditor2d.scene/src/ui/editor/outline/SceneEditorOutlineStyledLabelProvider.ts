@@ -37,6 +37,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return obj.getLabel();
 
+            } else if (obj instanceof sceneobjects.ObjectListItem) {
+
+                return this.getLabel(obj.getObject());
+
             } else if (obj instanceof sceneobjects.UserComponentNode) {
 
                 return obj.getComponentName();
