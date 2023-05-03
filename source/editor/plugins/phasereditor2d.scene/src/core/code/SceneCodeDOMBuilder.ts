@@ -456,7 +456,8 @@ namespace phasereditor2d.scene.core.code {
 
                 if (obj.getEditorSupport().isMutableNestedPrefabInstance()) {
 
-                    this.addCreateObjectCodeOfNestedPrefab(obj, createMethodDecl, lazyStatements);
+                    // this.addCreateObjectCodeOfNestedPrefab(obj, createMethodDecl, lazyStatements);
+                    throw new Error("Assert: this code should not be reached.");
 
                 } else {
 
