@@ -1163,6 +1163,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 delete containerData.list;
             }
+
+            // if the container has an empty nestedPrefabs array, remove it from the file
+            if (containerData.nestedPrefabs && containerData.nestedPrefabs.length === 0) {
+
+                delete containerData.nestedPrefabs;
+            }
         }
 
         private static readPrefabChildren(serializer: core.json.Serializer, list: json.IObjectData[]) {
