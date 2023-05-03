@@ -31,6 +31,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._items.filter(item => Boolean(item.getObject()));
         }
 
+        updateOrderIdsFromItems() {
+
+            this._objectIds = this._items.map(i => i.getObjectId());
+        }
+
         removeItem(id: string) {
 
             this._items = this._items.filter(i => i.getId() !== id);
@@ -52,7 +57,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._objectIds = ids;
 
-            this._items = this._objectIds.map(id => new ObjectListItem(id));
+            this._items = this._objectIds.map(id => new ObjectListItem(this, id));
         }
 
         getId() {

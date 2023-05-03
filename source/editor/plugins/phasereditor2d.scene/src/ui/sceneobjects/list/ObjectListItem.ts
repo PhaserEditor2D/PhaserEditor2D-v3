@@ -2,12 +2,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ObjectListItem {
 
+        private _parent: ObjectList;
         private _objectId: string;
         private _obj: ISceneGameObject;
 
-        constructor(objectId: string) {
+        constructor(parent: ObjectList, objectId: string) {
 
+            this._parent = parent;
             this._objectId = objectId;
+        }
+
+        getParent() {
+
+            return this._parent;
         }
 
         getId() {

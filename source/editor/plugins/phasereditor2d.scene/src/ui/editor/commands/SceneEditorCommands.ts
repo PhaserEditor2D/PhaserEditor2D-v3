@@ -139,6 +139,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             this.registerDepthCommands(manager);
 
+            this.registerListCommands(manager);
+
             this.registerTypeCommands(manager);
 
             this.registerMoveObjectCommands(manager);
@@ -1989,6 +1991,41 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         executeFunc: args => args.activeEditor.getUndoManager().add(
                             new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move))
+                    },
+
+                    keys: {
+                        key
+                    }
+                });
+            }
+        }
+
+        private static registerListCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // order commands
+
+            const moves: [undo.DepthMove, string][] = [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]];
+
+            for (const tuple of moves) {
+
+                const move = tuple[0];
+                const key = tuple[1];
+
+                manager.add({
+
+                    command: {
+                        id: "phasereditor2d.scene.ui.editor.commands.ListOrder" + move,
+                        name: "Move " + move,
+                        category: CAT_SCENE_EDITOR,
+                        tooltip: "Move the object in its list to " + move + "."
+                    },
+
+                    handler: {
+                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                            && sceneobjects.ListOrderOperation.allow(args.activeEditor as any, move),
+
+                        executeFunc: args => args.activeEditor.getUndoManager().add(
+                            new sceneobjects.ListOrderOperation(args.activeEditor as editor.SceneEditor, move))
                     },
 
                     keys: {
