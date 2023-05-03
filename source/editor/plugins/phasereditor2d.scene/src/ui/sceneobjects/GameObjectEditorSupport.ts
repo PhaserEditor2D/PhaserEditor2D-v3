@@ -1157,6 +1157,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     return objData as json.IObjectData;
                 });
             }
+
+            // if the container has an empty list, remove it from the file
+            if (containerData.list && containerData.list.length === 0) {
+
+                delete containerData.list;
+            }
         }
 
         private static readPrefabChildren(serializer: core.json.Serializer, list: json.IObjectData[]) {
