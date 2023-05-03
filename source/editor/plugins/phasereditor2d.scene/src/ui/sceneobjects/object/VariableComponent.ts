@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static scope: IEnumProperty<ISceneGameObject, ObjectScope> = {
             name: "scope",
             tooltip: "The variable lexical scope.",
-            defValue: ObjectScope.METHOD,
+            defValue: ObjectScope.LOCAL,
             local: true,
             getValue: obj => obj.getEditorSupport().getScope(),
             setValue: (obj, value) => obj.getEditorSupport().setScope(value),

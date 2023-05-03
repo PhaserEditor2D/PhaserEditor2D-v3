@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._scene = scene;
             this._label = label;
             this._useGameObjectName = false;
-            this._scope = ObjectScope.METHOD;
+            this._scope = ObjectScope.LOCAL;
 
             this.setId(Phaser.Utils.String.UUID());
         }
@@ -52,16 +52,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "";
         }
 
+        isLocalScope() {
+
+            return isLocalScope(this._scope);
+        }
+
         isMethodScope() {
 
-            return this._scope === ObjectScope.METHOD
-                || this._scope === ObjectScope.METHOD_NESTED_PREFAB;
+            return isMethodScope(this._scope);
+        }
+
+        isClassScope() {
+
+            return isClassScope(this._scope);
         }
 
         isPublicScope() {
 
-            return this._scope === ObjectScope.PUBLIC
-                || this._scope === ObjectScope.PUBLIC_NESTED_PREFAB;
+            return isPublicScope(this._scope);
+        }
+
+        isClassOrPublicScope() {
+
+            return isClassOrPublicScope(this._scope);
         }
 
         getObject() {

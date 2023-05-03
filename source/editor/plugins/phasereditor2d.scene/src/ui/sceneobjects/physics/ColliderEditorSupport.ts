@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new ColliderComponent(obj)
             );
 
-            this.setScope(ObjectScope.METHOD);
+            this.setScope(ObjectScope.LOCAL);
         }
 
         destroy() {

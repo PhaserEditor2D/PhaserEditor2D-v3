@@ -225,7 +225,7 @@ namespace phasereditor2d.scene.core.code {
 
                 const objES = obj.getEditorSupport();
 
-                if (!objES.isMethodScope()) {
+                if (objES.isClassOrPublicScope()) {
 
                     const objType = objES.getPhaserType();
 
@@ -247,7 +247,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const list of this._scene.getObjectLists().getLists()) {
 
-                if (!ui.sceneobjects.isMethodScope(list.getScope())) {
+                if (ui.sceneobjects.isClassOrPublicScope(list.getScope())) {
 
                     const listType = list.inferType(objMap);
 
@@ -519,7 +519,7 @@ namespace phasereditor2d.scene.core.code {
 
             const objectFactoryMethodCall = result.objectFactoryMethodCall;
 
-            if (!objES.isMethodScope()) {
+            if (objES.isClassOrPublicScope() || objES.isMethodScope()) {
 
                 objectFactoryMethodCall.setDeclareReturnToVar(true);
             }
@@ -590,28 +590,6 @@ namespace phasereditor2d.scene.core.code {
                     fields.push(dom);
                 }
             }
-
-            // for (const obj of children) {
-
-            //     const objES = obj.getEditorSupport();
-
-            //     if (!objES.isMethodScope() && prefabObj !== obj) {
-
-            //         const varname = formatToValidVarName(objES.getLabel());
-
-            //         const dom = new AssignPropertyCodeDOM(varname, "this");
-            //         dom.value(varname);
-
-            //         fields.push(dom);
-            //     }
-
-            //     const walkingChildren = this.getWalkingChildren(obj);
-
-            //     if (walkingChildren) {
-
-            //         this.addFieldInitCode_GameObjects(fields, prefabObj, walkingChildren);
-            //     }
-            // }
         }
 
         private addFieldInitCode(body: CodeDOM[]) {
@@ -626,7 +604,7 @@ namespace phasereditor2d.scene.core.code {
 
                 const objES = obj.getEditorSupport();
 
-                if (!objES.isMethodScope()) {
+                if (objES.isClassOrPublicScope()) {
 
                     const varname = formatToValidVarName(objES.getLabel());
 
@@ -640,7 +618,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const list of this._scene.getObjectLists().getLists()) {
 
-                if (!ui.sceneobjects.isMethodScope(list.getScope())) {
+                if (ui.sceneobjects.isClassOrPublicScope(list.getScope())) {
 
                     const varname = formatToValidVarName(list.getLabel());
 
@@ -813,6 +791,11 @@ namespace phasereditor2d.scene.core.code {
                 createObjectMethodCall.setDeclareReturnToVar(true);
             }
 
+            if (objES.isMethodScope()) {
+                // it is method scope... the user wants a variable!
+                createObjectMethodCall.setDeclareReturnToVar(true);
+            }
+
             lazyStatements.push(...result.lazyStatements);
 
             createMethodDecl.getBody().push(...result.statements);
@@ -872,7 +855,7 @@ namespace phasereditor2d.scene.core.code {
 
             // set var flags
 
-            if (!objES.isMethodScope()) {
+            if (objES.isClassOrPublicScope()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
 
