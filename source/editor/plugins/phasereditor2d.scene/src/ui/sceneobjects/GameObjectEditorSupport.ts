@@ -693,19 +693,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._isNestedPrefabInstance;
         }
 
-        private _setNestedPrefabInstance(isNestedPrefabInstace: boolean) {
-
-            this._isNestedPrefabInstance = isNestedPrefabInstace;
-        }
-
         isLocalNestedPrefabInstance() {
 
             return this._isLocalNestedPrefabInstance;
-        }
-
-        private _setLocalNestedPrefabInstance(isLocalNestedPrefabInstance: boolean) {
-
-            this._isLocalNestedPrefabInstance = isLocalNestedPrefabInstance;
         }
 
         isPrefabInstance() {
@@ -1274,14 +1264,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         if (ui.sceneobjects.isNestedPrefabScope(scope)) {
 
-                            spriteES._setNestedPrefabInstance(true);
-                            spriteES._setLocalNestedPrefabInstance(
-                                scope !== sceneobjects.ObjectScope.PUBLIC_NESTED_PREFAB);
+                            spriteES._isNestedPrefabInstance = true;
+                            spriteES._isLocalNestedPrefabInstance =
+                                scope !== sceneobjects.ObjectScope.PUBLIC_NESTED_PREFAB;
                         }
+
+                    } else {
+                        // TODO: we can flag it as a regular object, that is not part of a prefab instance
+                        // or it is appended to a prefab instance.
                     }
 
                     // updates the object with the final data
-                    sprite.getEditorSupport().readJSON(childData);
+                    spriteES.readJSON(childData);
                 }
 
                 i++;
