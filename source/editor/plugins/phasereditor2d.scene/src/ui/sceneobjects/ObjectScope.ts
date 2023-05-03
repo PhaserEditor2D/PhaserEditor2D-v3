@@ -45,4 +45,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         return false;
     }
+
+    export function isMethodScope(scope: ObjectScope) {
+
+        switch (scope) {
+
+            case ObjectScope.METHOD:
+            case ObjectScope.METHOD_NESTED_PREFAB:
+                
+                return true;
+        }
+
+        return false;
+    }
+
+    export function isClassScope(scope: ObjectScope) {
+
+        switch (scope) {
+
+            case ObjectScope.CLASS:
+            case ObjectScope.CLASS_NESTED_PREFAB:
+                
+                return true;
+        }
+
+        return false;
+    }
 }

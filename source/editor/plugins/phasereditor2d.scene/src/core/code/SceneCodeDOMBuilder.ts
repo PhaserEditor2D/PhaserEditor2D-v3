@@ -223,17 +223,16 @@ namespace phasereditor2d.scene.core.code {
 
             for (const obj of this._scene.getPlainObjects()) {
 
-                const editorSupport = obj.getEditorSupport();
-                const scope = editorSupport.getScope();
+                const objES = obj.getEditorSupport();
 
-                if (scope !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (!objES.isMethodScope()) {
 
-                    const objType = editorSupport.getPhaserType();
+                    const objType = objES.getPhaserType();
 
                     const dom = new FieldDeclCodeDOM(
-                        formatToValidVarName(editorSupport.getLabel()),
+                        formatToValidVarName(objES.getLabel()),
                         objType,
-                        scope === ui.sceneobjects.ObjectScope.PUBLIC);
+                        objES.isPublicScope());
 
                     dom.setAllowUndefined(!this._scene.isPrefabSceneType());
 
@@ -248,14 +247,14 @@ namespace phasereditor2d.scene.core.code {
 
             for (const list of this._scene.getObjectLists().getLists()) {
 
-                if (list.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (!ui.sceneobjects.isMethodScope(list.getScope())) {
 
                     const listType = list.inferType(objMap);
 
                     const dom = new FieldDeclCodeDOM(
                         formatToValidVarName(list.getLabel()),
                         listType,
-                        list.getScope() === ui.sceneobjects.ObjectScope.PUBLIC);
+                        ui.sceneobjects.isPublicScope(list.getScope()));
 
                     dom.setAllowUndefined(!this._scene.isPrefabSceneType());
 
@@ -625,11 +624,11 @@ namespace phasereditor2d.scene.core.code {
 
             for (const obj of this._scene.getPlainObjects()) {
 
-                const editorSupport = obj.getEditorSupport();
+                const objES = obj.getEditorSupport();
 
-                if (editorSupport.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (!objES.isMethodScope()) {
 
-                    const varname = formatToValidVarName(editorSupport.getLabel());
+                    const varname = formatToValidVarName(objES.getLabel());
 
                     const dom = new AssignPropertyCodeDOM(varname, "this");
 
@@ -641,7 +640,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const list of this._scene.getObjectLists().getLists()) {
 
-                if (list.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (!ui.sceneobjects.isMethodScope(list.getScope())) {
 
                     const varname = formatToValidVarName(list.getLabel());
 
