@@ -12,7 +12,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
         private _isNestedPrefabInstance: boolean;
-        private _isLocalNestedPrefabInstance: boolean;
+        private _isPrivateNestedPrefabInstance: boolean;
+        private _isPrefabInstancePart: boolean;
+        // a temporal variable used for serialization
+        public _private_np: boolean;
 
         // parent
         private _allowPickChildren: boolean;
@@ -30,7 +33,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._serializables = [];
             this._componentMap = new Map();
             this._isNestedPrefabInstance = false;
-            this._isLocalNestedPrefabInstance = false;
+            this._isPrivateNestedPrefabInstance = false;
+            this._isPrefabInstancePart = false;
+            this._private_np = false;
 
             this._allowPickChildren = true;
             this._showChildrenInOutline = true;
@@ -615,6 +620,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          */
         isMutableNestedPrefabInstance() {
 
+            // TODO: the next line is a better implementation we should test:
+            // return this.isNestedPrefabInstance() && !this.isPrivateNestedPrefabInstance();
+
             if (this.isNestedPrefabInstance()) {
 
                 const parent = this.getObjectParent();
@@ -693,9 +701,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._isNestedPrefabInstance;
         }
 
-        isLocalNestedPrefabInstance() {
+        isPrivateNestedPrefabInstance() {
 
-            return this._isLocalNestedPrefabInstance;
+            return this._isPrivateNestedPrefabInstance;
+        }
+
+        isPrefabInstancePart() {
+
+            return this._isPrefabInstancePart;
         }
 
         isPrefabInstance() {
@@ -1025,6 +1038,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             data.id = this.getId();
+            data.private_np = this._private_np ? true : undefined;
 
             if (this._prefabId && this._unlockedProperties.size > 0) {
 
@@ -1272,18 +1286,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     if (i < prefabChildren.length) {
 
                         const prefabData = prefabChildren[i];
-                        const { scope } = prefabData;
+                        const { private_np, scope } = prefabData;
 
-                        if (ui.sceneobjects.isNestedPrefabScope(scope)) {
+                        if (private_np || ui.sceneobjects.isNestedPrefabScope(scope)) {
 
                             spriteES._isNestedPrefabInstance = true;
-                            spriteES._isLocalNestedPrefabInstance =
-                                scope !== sceneobjects.ObjectScope.PUBLIC_NESTED_PREFAB;
+                            spriteES._isPrivateNestedPrefabInstance = private_np;
                         }
 
-                    } else {
-                        // TODO: we can flag it as a regular object, that is not part of a prefab instance
-                        // or it is appended to a prefab instance.
+                        this._isPrefabInstancePart = true;
                     }
 
                     // updates the object with the final data
@@ -1309,11 +1320,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const originalChild of originalPrefabChildren) {
 
-                if (!sceneobjects.isNestedPrefabScope(originalChild.scope)) {
+                const isNestedPrefab = originalChild.private_np
+                    || sceneobjects.isNestedPrefabScope(originalChild.scope);
 
-                    result.push(originalChild);
-
-                } else {
+                if (isNestedPrefab) {
 
                     // find a local nested prefab
 
@@ -1341,13 +1351,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         }
                     }
 
+                    let createFreshObject = true;
+                    let newNestedPrefabs: json.IObjectData[];
+
                     if (localNestedPrefab) {
 
-                        result.push(localNestedPrefab);
+                        if (isPublicScope(originalChild.scope)) {
+                            // it is ok, the original child is public
+                            // add the local nested prefab as final version of the object
+                            result.push(localNestedPrefab);
 
-                    } else {
+                            createFreshObject = false;
 
-                        // we don't have a local prefab, find one remote and create a pointer to it
+                        } else {
+
+                            // the original object is not public any more,
+                            // we will create a link-object, but keeping the same nested prefabs
+                            newNestedPrefabs = localNestedPrefab.nestedPrefabs;
+                        }
+                    } 
+                    
+                    if (createFreshObject) {
+
+                        // we don't have a local nested prefab,
+                        // or the original nested prefab is not public any more
+                        // so find one remote and create a pointer to it
 
                         const remoteNestedPrefab = this.findRemoteNestedPrefab(objData.prefabId, originalChild.id);
 
@@ -1359,6 +1387,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 id: Phaser.Utils.String.UUID(),
                                 prefabId: remoteNestedPrefab.id,
                                 label: remoteNestedPrefab.label,
+                                nestedPrefabs: newNestedPrefabs
                             };
 
                             result.push(nestedPrefab);
@@ -1371,11 +1400,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 id: Phaser.Utils.String.UUID(),
                                 prefabId: originalChild.id,
                                 label: originalChild.label,
+                                nestedPrefabs: newNestedPrefabs
                             };
 
                             result.push(nestedPrefab);
                         }
                     }
+                    
+                } else {
+
+                    result.push(originalChild);
                 }
             }
 
