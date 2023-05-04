@@ -5,10 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         METHOD = "METHOD",
         CLASS = "CLASS",
         PUBLIC = "PUBLIC",
-        LOCAL_NESTED_PREFAB = "NESTED_PREFAB_LOCAL",
-        METHOD_NESTED_PREFAB = "NESTED_PREFAB_METHOD",
-        CLASS_NESTED_PREFAB = "NESTED_PREFAB_CLASS",
-        PUBLIC_NESTED_PREFAB = "NESTED_PREFAB_PUBLIC",
+        NESTED_PREFAB = "NESTED_PREFAB",
     }
 
     export const OBJECT_SCOPES = [
@@ -16,25 +13,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         ObjectScope.METHOD,
         ObjectScope.CLASS,
         ObjectScope.PUBLIC,
-        ObjectScope.LOCAL_NESTED_PREFAB,
-        ObjectScope.METHOD_NESTED_PREFAB,
-        ObjectScope.CLASS_NESTED_PREFAB,
-        ObjectScope.PUBLIC_NESTED_PREFAB
+        ObjectScope.NESTED_PREFAB
     ];
 
     export function isNestedPrefabScope(scope: ObjectScope) {
 
-        switch (scope) {
-
-            case ObjectScope.LOCAL_NESTED_PREFAB:
-            case ObjectScope.METHOD_NESTED_PREFAB:
-            case ObjectScope.CLASS_NESTED_PREFAB:
-            case ObjectScope.PUBLIC_NESTED_PREFAB:
-
-                return true;
-        }
-
-        return false;
+        return scope === ObjectScope.NESTED_PREFAB;
     }
 
     export function isClassOrPublicScope(scope: ObjectScope) {
@@ -47,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         switch (scope) {
 
             case ObjectScope.PUBLIC:
-            case ObjectScope.PUBLIC_NESTED_PREFAB:
+            case ObjectScope.NESTED_PREFAB:
                 
                 return true;
         }
@@ -57,40 +41,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export function isLocalScope(scope: ObjectScope) {
 
-        switch (scope) {
-
-            case ObjectScope.LOCAL:
-            case ObjectScope.LOCAL_NESTED_PREFAB:
-                
-                return true;
-        }
-
-        return false;
+        return scope === ObjectScope.LOCAL;
     }
 
     export function isMethodScope(scope: ObjectScope) {
 
-        switch (scope) {
-
-            case ObjectScope.METHOD:
-            case ObjectScope.METHOD_NESTED_PREFAB:
-                
-                return true;
-        }
-
-        return false;
+        return scope === ObjectScope.METHOD;
     }
 
     export function isClassScope(scope: ObjectScope) {
 
-        switch (scope) {
-
-            case ObjectScope.CLASS:
-            case ObjectScope.CLASS_NESTED_PREFAB:
-                
-                return true;
-        }
-
-        return false;
+        return scope === ObjectScope.CLASS;
     }
 }

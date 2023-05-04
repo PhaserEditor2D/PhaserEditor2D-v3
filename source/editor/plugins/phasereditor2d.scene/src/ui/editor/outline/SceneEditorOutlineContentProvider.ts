@@ -144,7 +144,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 if (childES.isMutableNestedPrefabInstance()) {
 
-                    if (childES.isLocalNestedPrefabInstance()) {
+                    if (childES.isPrivateNestedPrefabInstance()) {
 
                         this.getPublicMutableNestedPrefabChildren(child, list);
 
