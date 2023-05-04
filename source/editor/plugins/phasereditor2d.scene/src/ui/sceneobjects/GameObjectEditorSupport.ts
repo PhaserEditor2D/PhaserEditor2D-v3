@@ -1351,13 +1351,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         }
                     }
 
+                    let createFreshObject = true;
+                    let newNestedPrefabs: json.IObjectData[];
+
                     if (localNestedPrefab) {
 
-                        result.push(localNestedPrefab);
+                        if (isPublicScope(originalChild.scope)) {
+                            // it is ok, the original child is public
+                            // add the local nested prefab as final version of the object
+                            result.push(localNestedPrefab);
 
-                    } else {
+                            createFreshObject = false;
 
-                        // we don't have a local prefab, find one remote and create a pointer to it
+                        } else {
+
+                            // the original object is not public any more,
+                            // we will create a link-object, but keeping the same nested prefabs
+                            newNestedPrefabs = localNestedPrefab.nestedPrefabs;
+                        }
+                    } 
+                    
+                    if (createFreshObject) {
+
+                        // we don't have a local nested prefab,
+                        // or the original nested prefab is not public any more
+                        // so find one remote and create a pointer to it
 
                         const remoteNestedPrefab = this.findRemoteNestedPrefab(objData.prefabId, originalChild.id);
 
@@ -1369,6 +1387,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 id: Phaser.Utils.String.UUID(),
                                 prefabId: remoteNestedPrefab.id,
                                 label: remoteNestedPrefab.label,
+                                nestedPrefabs: newNestedPrefabs
                             };
 
                             result.push(nestedPrefab);
@@ -1381,6 +1400,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 id: Phaser.Utils.String.UUID(),
                                 prefabId: originalChild.id,
                                 label: originalChild.label,
+                                nestedPrefabs: newNestedPrefabs
                             };
 
                             result.push(nestedPrefab);
