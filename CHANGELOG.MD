@@ -7,6 +7,7 @@
 * Shows Object List items in the Outline view. Allows ordering the items with the Up, Down, Top, Down, commands.
 * A new game object scope: LOCAL. The LOCAL scope is now the default scope for objects and has the same meaning of METHOD scope before. Now the METHOD scope forces the creation of a variable for the object.
 * Auto computes the middle-private nested prefabs. It doesn't require to declare a parent of a nested prefab as nested prefab. 
+* Improves Outline elements tagging. It uses tahs like `#prefab_inst` `#nested_prefab_inst` `#scope_local` `#scope_nested_prefab`... So you can search for it in the Outline filter box.
 
 ## v3.60.3 - Apr 27, 2023
 
