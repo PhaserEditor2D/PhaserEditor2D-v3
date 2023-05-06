@@ -179,7 +179,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                             const objES = sceneobjects.GameObjectEditorSupport.getEditorSupport(obj);
 
-                            if (objES && objES.isDisplayObject()) {
+                            if (objES && objES.isDisplayObject() && !objES.isPrefabInstance()) {
 
                                 if (objES.hasComponent(sceneobjects.HitAreaComponent)) {
 

@@ -13,6 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class HitAreaComponent extends Component<ISceneGameObject> {
 
         static hitAreaShape: IEnumProperty<ISceneGameObject, HitAreaShape> = {
+            local: true,
             name: "hitArea.shape",
             label: "Shape",
             defValue: HitAreaShape.RECTANGLE,

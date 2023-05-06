@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     ): IProperty<ISceneGameObject> {
 
         return {
+            local: true,
             name: `hitArea.${name}`,
             label,
             tooltip,
