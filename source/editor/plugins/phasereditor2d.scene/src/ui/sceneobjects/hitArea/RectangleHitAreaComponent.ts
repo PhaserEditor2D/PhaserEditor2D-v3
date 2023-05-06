@@ -31,6 +31,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ]);
         }
 
+        static getRectangleComponent(obj: ISceneGameObject) {
+
+            const objES = obj.getEditorSupport();
+
+            const comp = objES.getComponent(RectangleHitAreaComponent) as RectangleHitAreaComponent;
+            
+            return comp;
+        }
+
         private initUnlockListener() {
 
             const objES = this.getEditorSupport();

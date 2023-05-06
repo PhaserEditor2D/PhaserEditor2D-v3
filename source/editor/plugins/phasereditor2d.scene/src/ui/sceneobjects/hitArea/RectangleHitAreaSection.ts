@@ -4,8 +4,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class RectangleHitAreaSection extends SceneGameObjectSection<ISceneGameObject> {
 
+        static ID = "phasereditor2d.scene.ui.sceneobjects.RectangleHitAreaSection";
+
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.RectangleHitAreaSection", "Hit Area (Rectangle)");
+            super(page, RectangleHitAreaSection.ID, "Hit Area (Rectangle)");
         }
 
         createForm(parent: HTMLDivElement) {
