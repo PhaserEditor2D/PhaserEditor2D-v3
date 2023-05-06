@@ -21,9 +21,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new ResizeHitAreaToolItem(1, 0.5),
                 new ResizeHitAreaToolItem(1, 1),
                 new ResizeHitAreaToolItem(0.5, 1),
-                // new ArcadeBodyOffsetToolItem(0, 0),
-                // new ArcadeBodyOffsetToolItem(0.5, 0),
-                // new ArcadeBodyOffsetToolItem(0, 0.5),
+                new RectangleHitAreaOffsetToolItem(0, 0),
+                new RectangleHitAreaOffsetToolItem(0.5, 0),
+                new RectangleHitAreaOffsetToolItem(0, 0.5),
                 // new ArcadeBodyCircleOffsetToolItem(),
                 // new ArcadeBodyRadiusToolItem()
             );

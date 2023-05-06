@@ -36,6 +36,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._hitAreaShape = HitAreaShape.RECTANGLE;
         }
 
+        static getShape(obj: ISceneGameObject): HitAreaShape {
+
+            return this.hitAreaShape.getValue(obj)
+        }
+
         static enableHitArea(obj: ISceneGameObject, enable: boolean) {
 
             const objES = obj.getEditorSupport();
