@@ -35,6 +35,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createTextureMenu());
 
+            menu.addMenu(this.createHitAreaMenu());
+
             menu.addMenu(this.createArcadePhysicsMenu());
 
             menu.addMenu(this.createParentMenu());
@@ -54,6 +56,15 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createSceneMenu());
 
             menu.addMenu(this.createCompilerMenu());
+        }
+
+        createHitAreaMenu(): controls.Menu {
+
+            const menu = new controls.Menu("Hit Area");
+
+            menu.addCommand(ui.editor.commands.CMD_HIT_AREA_ENABLE);
+
+            return menu;
         }
 
         createScriptsMenu(): controls.Menu {

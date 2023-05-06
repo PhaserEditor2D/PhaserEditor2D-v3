@@ -219,6 +219,11 @@ utils.makeHelpFile([
 
     "Phaser.GameObjects.Polygon",
 
+    "Phaser.Geom.Rectangle.x",
+    "Phaser.Geom.Rectangle.y",
+    "Phaser.Geom.Rectangle.width",
+    "Phaser.Geom.Rectangle.height",
+
     "Phaser.GameObjects.Layer",
 
     "Phaser.Physics.Arcade.Collider",
