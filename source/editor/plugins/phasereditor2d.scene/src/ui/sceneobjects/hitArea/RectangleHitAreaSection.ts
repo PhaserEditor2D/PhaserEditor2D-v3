@@ -23,12 +23,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createPropertyXYRow(comp, RectangleHitAreaComponent.position, false);
             this.createPropertyXYRow(comp, RectangleHitAreaComponent.size, false);
-
-            this.createButton(comp, "Resize Tool", () => {
-
-                this.getEditor().getToolsManager().activateTool(ResizeHitAreaTool.ID);
-
-            }).style.gridColumn = " span 6";
         }
 
         canEdit(obj: any, n: number): boolean {
