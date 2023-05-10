@@ -36,7 +36,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const objES = obj.getEditorSupport();
 
             const comp = objES.getComponent(RectangleHitAreaComponent) as RectangleHitAreaComponent;
-            
+
             return comp;
         }
 
@@ -49,7 +49,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             unlockEvent.addListener(args => {
 
                 if (args.property === HitAreaComponent.hitAreaShape) {
-                    
+
                     objES.setUnlockedProperty(RectangleHitAreaComponent.x, args.unlock);
                     objES.setUnlockedProperty(RectangleHitAreaComponent.y, args.unlock);
                     objES.setUnlockedProperty(RectangleHitAreaComponent.width, args.unlock);
@@ -67,8 +67,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setDefaultValues() {
 
-            console.log("here");
-
             const obj = this.getObject() as Image;
             const objES = this.getEditorSupport();
 
@@ -83,6 +81,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 width = widthProp.getValue(obj);
                 height = heightProp.getValue(obj);
+
+            } else if (obj instanceof Container) {
+
+                const c = obj as Container;
+                
+                const b = c.getBounds();
+
+                width = b.width;
+                height = b.height;
 
             } else if (obj.width && obj.height) {
 
