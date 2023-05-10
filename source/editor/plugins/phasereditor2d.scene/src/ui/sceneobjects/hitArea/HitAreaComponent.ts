@@ -1,6 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export enum HitAreaShape {
+        NONE = "NONE",
         CIRCLE = "CIRCLE",
         RECTANGLE = "RECTANGLE"
     }
@@ -13,14 +14,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class HitAreaComponent extends Component<ISceneGameObject> {
 
         static hitAreaShape: IEnumProperty<ISceneGameObject, HitAreaShape> = {
-            local: true,
             name: "hitArea.shape",
             label: "Shape",
-            defValue: HitAreaShape.RECTANGLE,
+            defValue: HitAreaShape.NONE,
             getValue: obj => getComp(obj).getHitAreaShape(),
             setValue: (obj, value) => getComp(obj).setHitAreaShape(value),
             getValueLabel: value => value.toString(),
             values: [
+                HitAreaShape.NONE,
                 HitAreaShape.RECTANGLE,
                 HitAreaShape.CIRCLE
             ]
@@ -31,9 +32,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: ISceneGameObject) {
             super(obj, [
                 HitAreaComponent.hitAreaShape
-            ], false);
+            ]);
 
-            this._hitAreaShape = HitAreaShape.RECTANGLE;
+            this._hitAreaShape = HitAreaShape.NONE;
+        }
+
+        static hasHitAreaShape(obj: ISceneGameObject, shape: HitAreaShape) {
+
+            if (this.hasHitArea(obj)) {
+
+                return this.getShape(obj) === shape;
+            }
+
+            return false;
+        }
+
+        static hasHitArea(obj: ISceneGameObject) {
+
+            return GameObjectEditorSupport.hasObjectComponent(obj, HitAreaComponent);
         }
 
         static getShape(obj: ISceneGameObject): HitAreaShape {
@@ -41,23 +57,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.hitAreaShape.getValue(obj)
         }
 
-        static enableHitArea(obj: ISceneGameObject, enable: boolean) {
-
-            const objES = obj.getEditorSupport();
-            
-            objES.setComponentActive(HitAreaComponent, enable);
-
-            if (enable) {
-
-                const comp = objES.getComponent(HitAreaComponent) as HitAreaComponent;
-                comp.setHitAreaShape(HitAreaShape.RECTANGLE);
-                const rectComp = objES.getComponent(RectangleHitAreaComponent) as RectangleHitAreaComponent;
-                rectComp.setDefaultValues();
-            }
-        }
-
         getHitAreaShape() {
-            
+
             return this._hitAreaShape;
         }
 
@@ -67,6 +68,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
+
+            const objES = this.getEditorSupport();
+
+            if (objES.isPrefabInstance()) {
+
+                if (objES.isUnlockedProperty(HitAreaComponent.hitAreaShape)) {
+
+                    const code = new core.code.MethodCallCodeDOM("removeInteractive", args.objectVarName);
+                    args.statements.push(code);
+                }
+            }
         }
     }
 }

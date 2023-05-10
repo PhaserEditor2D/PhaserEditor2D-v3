@@ -8,18 +8,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.HitAreaSection", "Hit Area");
         }
 
-        createMenu(menu: controls.Menu): void {
-            
-            menu.addCommand(ui.editor.commands.CMD_HIT_AREA_DISABLE);
-        }
-
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);
 
             const { hitAreaShape } = HitAreaComponent;
 
-            this.createPropertyEnumRow(comp, hitAreaShape);
+            const prop = {...hitAreaShape};
+
+            prop.setValue = (obj, value) => {
+
+                hitAreaShape.setValue(obj, value);
+
+                if (value === HitAreaShape.RECTANGLE) {
+
+                    const comp = RectangleHitAreaComponent.getRectangleComponent(obj);
+
+                    comp.setDefaultValues();
+                }
+            }
+
+            this.createPropertyEnumRow(comp, prop);
         }
 
         canEdit(obj: any, n: number): boolean {

@@ -10,18 +10,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, RectangleHitAreaSection.ID, "Hit Area (Rectangle)");
         }
 
+        createMenu(menu: controls.Menu) {
+
+            this.createToolMenuItem(menu, ResizeHitAreaTool.ID);
+
+            super.createMenu(menu);
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
 
             this.createPropertyXYRow(comp, RectangleHitAreaComponent.position, false);
             this.createPropertyXYRow(comp, RectangleHitAreaComponent.size, false);
+
+            this.createButton(comp, "Resize Tool", () => {
+
+                this.getEditor().getToolsManager().activateTool(ResizeHitAreaTool.ID);
+
+            }).style.gridColumn = " span 6";
         }
 
         canEdit(obj: any, n: number): boolean {
 
-            return GameObjectEditorSupport.hasObjectComponent(obj, HitAreaComponent)
-                && GameObjectEditorSupport.hasObjectComponent(obj, RectangleHitAreaComponent);
+            return HitAreaComponent.hasHitAreaShape(obj, HitAreaShape.RECTANGLE);
         }
 
         canEditNumber(n: number): boolean {

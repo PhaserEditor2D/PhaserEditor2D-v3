@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             unlockEvent.addListener(args => {
 
-                if (args.property === HitAreaComponent.hitAreaShape) {
+                if (args.property.name === HitAreaComponent.hitAreaShape.name) {
 
                     objES.setUnlockedProperty(RectangleHitAreaComponent.x, args.unlock);
                     objES.setUnlockedProperty(RectangleHitAreaComponent.y, args.unlock);
@@ -105,20 +105,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
             const objES = obj.getEditorSupport();
-            const hitAreaComp = objES.getComponent(HitAreaComponent);
 
-            if (hitAreaComp) {
+            if (objES.getComponent(HitAreaComponent)) {
 
                 if (objES.isUnlockedProperty(HitAreaComponent.hitAreaShape)) {
 
                     if (HitAreaComponent.hitAreaShape.getValue(obj) === HitAreaShape.RECTANGLE) {
-
-                        if (objES.isPrefabInstance()) {
-
-                            // we should disable the input, then enable it again with a new shape
-                            const code = new core.code.MethodCallCodeDOM("removeInteractive", args.objectVarName);
-                            args.statements.push(code);
-                        }
 
                         const code = new core.code.MethodCallCodeDOM("setInteractive", args.objectVarName);
 

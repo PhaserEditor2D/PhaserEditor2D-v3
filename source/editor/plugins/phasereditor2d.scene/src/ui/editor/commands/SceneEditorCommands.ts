@@ -59,8 +59,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenScriptDialog";
     export const CMD_OPEN_ADD_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenAddScriptDialog";
     export const CMD_PREVIEW_SCENE = "phasereditor2d.scene.ui.editor.commands.PreviewScene";
-    export const CMD_HIT_AREA_ENABLE = "phasereditor2d.scene.ui.editor.commands.EnableHitArea";
-    export const CMD_HIT_AREA_DISABLE = "phasereditor2d.scene.ui.editor.commands.DisableHitArea";
     export const CMD_RESIZE_HIT_AREA = "phasereditor2d.scene.ui.editor.commands.ResizeHitArea";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
@@ -155,99 +153,6 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerArcadeCommands(manager);
 
             this.registerScriptNodeCommands(manager);
-
-            this.registerHitAreaCommands(manager);
-        }
-
-        private static registerHitAreaCommands(manager: colibri.ui.ide.commands.CommandManager) {
-
-            manager.add({
-                command: {
-                    id: CMD_HIT_AREA_ENABLE,
-                    name: "Enable Hit Area",
-                    category: CAT_SCENE_EDITOR,
-                    tooltip: "Enable the input system of the selected objects",
-                },
-                handler: {
-                    testFunc: args => {
-
-                        if (!isSceneScope(args)) {
-
-                            return false;
-                        }
-
-                        for (const obj of args.activeEditor.getSelection()) {
-
-                            const objES = sceneobjects.GameObjectEditorSupport.getEditorSupport(obj);
-
-                            if (objES && objES.isDisplayObject() && !objES.isPrefabInstance()) {
-
-                                if (objES.hasComponent(sceneobjects.HitAreaComponent)) {
-
-                                    return false;
-                                }
-
-                            } else {
-
-                                return false;
-                            }
-                        }
-
-                        return true;
-                    },
-                    executeFunc: args => {
-
-                        const editor = args.activeEditor as SceneEditor;
-
-                        editor.getUndoManager().add(
-                            new ui.sceneobjects.EnableHitAreaOperation(editor, true));
-                    }
-                }
-            });
-
-            manager.add({
-                command: {
-                    id: CMD_HIT_AREA_DISABLE,
-                    name: "Disable Hit Area",
-                    category: CAT_SCENE_EDITOR,
-                    tooltip: "Enable the input system of the selected objects",
-                },
-                handler: {
-                    testFunc: args => {
-
-                        if (!isSceneScope(args)) {
-
-                            return false;
-                        }
-
-                        for (const obj of args.activeEditor.getSelection()) {
-
-                            const objES = sceneobjects.GameObjectEditorSupport.getEditorSupport(obj);
-
-                            if (objES && objES.isDisplayObject()) {
-
-                                if (!objES.hasComponent(sceneobjects.HitAreaComponent)) {
-
-                                    return false;
-                                }
-
-                            } else {
-
-                                return false;
-                            }
-                        }
-
-                        return true;
-                    },
-                    executeFunc: args => {
-
-                        const editor = args.activeEditor as SceneEditor;
-
-                        editor.getUndoManager().add(
-                            new ui.sceneobjects.EnableHitAreaOperation(editor, false));
-                    }
-                }
-            });
         }
 
         private static registerScriptNodeCommands(manager: colibri.ui.ide.commands.CommandManager) {

@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected getProperties(obj?: any): IProperty<any>[] {
 
-            if (GameObjectEditorSupport.hasObjectComponent(obj, RectangleHitAreaComponent)) {
+            if (HitAreaComponent.hasHitArea(obj)) {
 
                 return [
                     RectangleHitAreaComponent.x,
@@ -50,9 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                const objES = obj.getEditorSupport();
-
-                if (!objES.hasComponent(HitAreaComponent)) {
+                if (!HitAreaComponent.hasHitArea(obj)) {
 
                     return;
                 }
@@ -92,9 +90,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of objects) {
 
-                const objES = obj.getEditorSupport();
-
-                if (!objES.hasComponent(HitAreaComponent)) {
+                if (!HitAreaComponent.hasHitArea(obj)
+                    || HitAreaComponent.getShape(obj) === HitAreaShape.NONE) {
 
                     return false
                 }
