@@ -26,6 +26,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected abstract createStopDragOperation(args: editor.tools.ISceneToolDragEventArgs): colibri.ui.ide.undo.Operation;
 
+        isValidFor(objects: ISceneGameObject[]): boolean {
+         
+            return ResizeHitAreaTool.isValidFor(...objects);
+        }
+        
         getPoint(args: editor.tools.ISceneToolContextArgs): { x: number; y: number; } {
 
             return this.getAvgScreenPointOfObjects(args,

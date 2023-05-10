@@ -14,6 +14,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._y = y;
         }
 
+        isValidFor(objects: ISceneGameObject[]): boolean {
+         
+            return ResizeHitAreaTool.isValidFor(...objects);
+        }
+
         getPoint(args: editor.tools.ISceneToolContextArgs): { x: number; y: number; } {
 
             return this.getAvgScreenPointOfObjects(args,

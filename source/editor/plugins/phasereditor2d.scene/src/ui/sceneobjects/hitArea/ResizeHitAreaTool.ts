@@ -79,10 +79,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                this.renderObj(args, obj as Sprite);
+                if (ResizeHitAreaTool.isValidFor(obj)) {
+
+                    this.renderObj(args, obj as Sprite);
+                }
             }
 
             super.render(args);
+        }
+
+        static isValidFor(...objects: ISceneGameObject[]): boolean {
+
+            for (const obj of objects) {
+
+                const objES = obj.getEditorSupport();
+
+                if (!objES.hasComponent(HitAreaComponent)) {
+
+                    return false
+                }
+            }
+
+            return true;
         }
 
         private renderObj(args: editor.tools.ISceneToolRenderArgs, obj: Sprite) {
@@ -129,7 +147,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             let y2 = y1 + height;
 
             const tx = obj.getWorldTransformMatrix();
-            
+
             const points = [
                 [x1, y1],
                 [x2, y1],
@@ -145,7 +163,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
 
             ctx.save();
-            
+
             ctx.strokeStyle = "black";
             ctx.lineWidth = 3;
             this.drawPath(ctx, points);
