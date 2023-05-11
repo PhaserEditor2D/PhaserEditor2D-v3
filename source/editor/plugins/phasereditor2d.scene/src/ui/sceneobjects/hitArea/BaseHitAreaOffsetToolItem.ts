@@ -15,13 +15,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._y = y;
         }
 
+        protected abstract getToolOrigin(obj: ISceneGameObject): { originX: number, originY: number };
+
         getPoint(args: editor.tools.ISceneToolContextArgs): { x: number; y: number; } {
 
             return this.getAvgScreenPointOfObjects(args,
 
-                (sprite: sceneobjects.Image) => this._x,
+                (sprite: sceneobjects.Image) => this._x - this.getToolOrigin(sprite).originX,
 
-                (sprite: sceneobjects.Image) => this._y,
+                (sprite: sceneobjects.Image) => this._y - this.getToolOrigin(sprite).originY,
             );
         }
 

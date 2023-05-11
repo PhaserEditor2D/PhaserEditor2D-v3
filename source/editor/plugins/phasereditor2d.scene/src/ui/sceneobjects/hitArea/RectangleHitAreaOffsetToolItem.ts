@@ -6,6 +6,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(HitAreaShape.RECTANGLE, x, y);
         }
 
+        protected getToolOrigin(obj: ISceneGameObject): { originX: number; originY: number; } {
+
+            return { originX: 0, originY: 0 };
+        }
+
         protected getOffsetProperties(obj: ISceneGameObject): { x: IProperty<ISceneGameObject>; y: IProperty<ISceneGameObject>; } {
 
             const { x, y } = RectangleHitAreaComponent;
