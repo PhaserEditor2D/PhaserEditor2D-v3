@@ -209,6 +209,8 @@ utils.makeHelpFile([
     "Phaser.GameObjects.Ellipse",
     "Phaser.GameObjects.Ellipse.smoothness",
 
+    "Phaser.GameObjects.Polygon",
+
     "Phaser.GameObjects.Triangle",
     "Phaser.Geom.Triangle.x1",
     "Phaser.Geom.Triangle.y1",
@@ -217,12 +219,15 @@ utils.makeHelpFile([
     "Phaser.Geom.Triangle.x3",
     "Phaser.Geom.Triangle.y3",
 
-    "Phaser.GameObjects.Polygon",
-
     "Phaser.Geom.Rectangle.x",
     "Phaser.Geom.Rectangle.y",
     "Phaser.Geom.Rectangle.width",
     "Phaser.Geom.Rectangle.height",
+    
+    "Phaser.Geom.Ellipse.x",
+    "Phaser.Geom.Ellipse.y",
+    "Phaser.Geom.Ellipse.width",
+    "Phaser.Geom.Ellipse.height",
 
     "Phaser.GameObjects.Layer",
 

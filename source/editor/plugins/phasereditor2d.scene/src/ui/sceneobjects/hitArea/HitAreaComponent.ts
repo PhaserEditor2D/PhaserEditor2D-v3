@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export enum HitAreaShape {
         NONE = "NONE",
-        CIRCLE = "CIRCLE",
+        ELLIPSE = "ELLIPSE",
         RECTANGLE = "RECTANGLE"
     }
 
@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             values: [
                 HitAreaShape.NONE,
                 HitAreaShape.RECTANGLE,
-                HitAreaShape.CIRCLE
+                HitAreaShape.ELLIPSE
             ]
         };
 

@@ -112,9 +112,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const shape = comp.getHitAreaShape();
 
-            if (shape === HitAreaShape.CIRCLE) {
+            if (shape === HitAreaShape.ELLIPSE) {
 
-                this.renderCircle(obj, args, ctx);
+                this.renderEllipse(obj, args, ctx);
 
             } else {
 
@@ -187,7 +187,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.closePath();
         }
 
-        private renderCircle(obj: Sprite, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
+        private renderEllipse(obj: Sprite, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
 
             // const body = ArcadeComponent.getBody(obj);
 

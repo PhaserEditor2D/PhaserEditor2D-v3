@@ -1,6 +1,7 @@
+/// <reference path="./BaseHitAreaComponent.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class RectangleHitAreaComponent extends Component<ISceneGameObject> {
+    export class RectangleHitAreaComponent extends BaseHitAreaComponent {
 
         static x = HitAreaProperty(RectangleHitAreaComponent, "x", "X", "phaser:Phaser.Geom.Rectangle.x", 0);
         static y = HitAreaProperty(RectangleHitAreaComponent, "y", "Y", "phaser:Phaser.Geom.Rectangle.y", 0);
@@ -23,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         public height = 0;
 
         constructor(obj: ISceneGameObject) {
-            super(obj, [
+            super(obj, HitAreaShape.RECTANGLE, [
                 RectangleHitAreaComponent.x,
                 RectangleHitAreaComponent.y,
                 RectangleHitAreaComponent.width,
@@ -40,97 +41,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-        private initUnlockListener() {
-
-            const objES = this.getEditorSupport();
-
-            const unlockEvent = objES.unlockEvent;
-
-            unlockEvent.addListener(args => {
-
-                if (args.property.name === HitAreaComponent.hitAreaShape.name) {
-
-                    objES.setUnlockedProperty(RectangleHitAreaComponent.x, args.unlock);
-                    objES.setUnlockedProperty(RectangleHitAreaComponent.y, args.unlock);
-                    objES.setUnlockedProperty(RectangleHitAreaComponent.width, args.unlock);
-                    objES.setUnlockedProperty(RectangleHitAreaComponent.height, args.unlock);
-                }
-            });
-        }
-
-        readJSON(ser: core.json.Serializer): void {
-
-            this.initUnlockListener();
-
-            super.readJSON(ser);
-        }
-
-        setDefaultValues() {
-
-            const obj = this.getObject() as Image;
-            const objES = this.getEditorSupport();
+        protected _setDefaultValues(width: number, height: number): void {
 
             this.x = 0;
             this.y = 0;
-
-            let width = 0, height = 0;
-
-            let [widthProp, heightProp] = objES.getSizeProperties();
-
-            if (widthProp && heightProp) {
-
-                width = widthProp.getValue(obj);
-                height = heightProp.getValue(obj);
-
-            } else if (obj instanceof Container) {
-
-                const c = obj as Container;
-                
-                const b = c.getBounds();
-
-                width = b.width;
-                height = b.height;
-
-            } else if (obj.width && obj.height) {
-
-                width = obj.width;
-                height = obj.height;
-            }
-
             this.width = width;
             this.height = height;
         }
 
-        buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
+        protected override buildSetInteractiveCodeCOM(obj: ISceneGameObject, code: core.code.MethodCallCodeDOM): void {
 
-            const obj = this.getObject();
-            const objES = obj.getEditorSupport();
+            const { x, y, width, height } = this;
 
-            if (objES.getComponent(HitAreaComponent)) {
+            code.arg(`new Phaser.Geom.Rectangle(${x}, ${y}, ${width}, ${height})`);
 
-                if (objES.isUnlockedProperty(HitAreaComponent.hitAreaShape)) {
-
-                    if (HitAreaComponent.hitAreaShape.getValue(obj) === HitAreaShape.RECTANGLE) {
-
-                        const code = new core.code.MethodCallCodeDOM("setInteractive", args.objectVarName);
-
-                        const { x, y, width, height } = RectangleHitAreaComponent;
-
-                        const geomArgs = [
-                            x.getValue(obj) ?? x.defValue,
-                            y.getValue(obj) ?? y.defValue,
-                            width.getValue(obj) ?? width.defValue,
-                            height.getValue(obj) ?? height.defValue
-                        ];
-
-                        code.arg(`new Phaser.Geom.Rectangle(${geomArgs.join(", ")})`);
-
-                        code.arg("Phaser.Geom.Rectangle.Contains");
-
-                        args.statements.push(code);
-                    }
-                }
-            }
+            code.arg("Phaser.Geom.Rectangle.Contains");
         }
     }
 }
