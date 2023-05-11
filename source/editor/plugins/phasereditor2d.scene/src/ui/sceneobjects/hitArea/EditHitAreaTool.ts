@@ -24,6 +24,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new RectangleHitAreaOffsetToolItem(0, 0),
                 new RectangleHitAreaOffsetToolItem(0.5, 0),
                 new RectangleHitAreaOffsetToolItem(0, 0.5),
+                
+                new EllipseHitAreaSizeToolItem(1, 0.5),
+                new EllipseHitAreaSizeToolItem(1, 1),
+                new EllipseHitAreaSizeToolItem(0.5, 1),
+                new EllipseHitAreaOffsetToolItem(0, 0),
+                new EllipseHitAreaOffsetToolItem(0.5, 0),
+                new EllipseHitAreaOffsetToolItem(0, 0.5),
             );
         }
 

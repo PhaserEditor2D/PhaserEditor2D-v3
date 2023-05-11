@@ -4,8 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export abstract class BaseHitAreaOffsetToolItem
         extends BaseHitAreaToolItem implements editor.tools.ISceneToolItemXY {
 
-        private _x: IAxisFactor;
-        private _y: IAxisFactor;
+        protected _x: IAxisFactor;
+        protected _y: IAxisFactor;
         private _dragging: boolean;
 
         constructor(shape: HitAreaShape, x: IAxisFactor, y: IAxisFactor) {
@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
-        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number, removeRotation = false) {
+        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
 
@@ -49,11 +49,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             y = y - displayOriginY + fy * height;
 
             const tx = sprite.getWorldTransformMatrix();
-
-            if (removeRotation) {
-
-                tx.rotate(-tx.rotation);
-            }
 
             tx.transformPoint(x, y, worldPoint);
 

@@ -2,22 +2,22 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class RectangleHitAreaSizeToolItem extends BaseHitAreaSizeToolItem {
+    export class EllipseHitAreaSizeToolItem extends BaseHitAreaSizeToolItem {
 
         constructor(x: IAxisFactor, y: IAxisFactor) {
-            super(HitAreaShape.RECTANGLE, x, y);
+            super(HitAreaShape.ELLIPSE, x, y);
         }
 
-        protected getToolOrigin(): { originX: number; originY: number; } {
-
-            return { originX: 0, originY: 0 };
+        protected getToolOrigin(obj: ISceneGameObject): { originX: number; originY: number; } {
+            
+            return obj.getEditorSupport().computeOrigin();
         }
 
         private getHitAreaComp(obj: ISceneGameObject) {
 
             const objEs = obj.getEditorSupport();
 
-            const comp = objEs.getComponent(RectangleHitAreaComponent) as RectangleHitAreaComponent;
+            const comp = objEs.getComponent(EllipseHitAreaComponent) as EllipseHitAreaComponent;
 
             return comp;
         }
@@ -38,12 +38,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected getDataKey(): string {
 
-            return "RectangleHitAreaSizeToolItem";
+            return "EllipseHitAreaSizeToolItem";
         }
 
         protected getHitAreaSectionId(): string {
 
-            return RectangleHitAreaSection.ID;
+            return EllipseHitAreaSection.ID;
         }
 
         protected onDragValues(obj: ISceneGameObject, changeX: boolean, changeY: boolean, width: number, height: number) {
@@ -63,7 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected createStopDragOperation(args: editor.tools.ISceneToolDragEventArgs): colibri.ui.ide.undo.Operation {
 
-            return new RectangleHitAreaSizeOperation(args, obj => this.getInitialSize(obj));
+            return new EllipseHitAreaSizeOperation(args, obj => this.getInitialSize(obj));
         }
     }
 }

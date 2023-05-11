@@ -4,8 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export abstract class BaseHitAreaSizeToolItem
         extends BaseHitAreaToolItem implements editor.tools.ISceneToolItemXY {
 
-        private _x: IAxisFactor;
-        private _y: IAxisFactor;
+        protected _x: IAxisFactor;
+        protected _y: IAxisFactor;
         private _dragging: boolean;
 
         constructor(shape: HitAreaShape, x: IAxisFactor, y: IAxisFactor) {
@@ -31,13 +31,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return this.getAvgScreenPointOfObjects(args,
 
-                (sprite: sceneobjects.Image) => this._x,
+                (sprite: sceneobjects.Image) => this._x - this.getToolOrigin(sprite).originX,
 
-                (sprite: sceneobjects.Image) => this._y,
+                (sprite: sceneobjects.Image) => this._y - this.getToolOrigin(sprite).originY,
             );
         }
 
-        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number, removeRotation = false) {
+        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
 
@@ -56,11 +56,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const y = offset.y - displayOriginY + fy * height;
 
             const tx = sprite.getWorldTransformMatrix();
-
-            if (removeRotation) {
-
-                tx.rotate(-tx.rotation);
-            }
 
             tx.transformPoint(x, y, worldPoint);
 
@@ -133,6 +128,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return { x: data.initWidth, y: data.initHeight };
         }
 
+        protected abstract getToolOrigin(obj: ISceneGameObject): { originX: number, originY: number };
+
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
             if (!this._dragging) {
@@ -156,8 +153,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const flipX = sprite.flipX ? -1 : 1;
                 const flipY = sprite.flipY ? -1 : 1;
 
-                let originX = 0;
-                let originY = 0;
+                const { originX, originY } = this.getToolOrigin(obj);
 
                 const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
                 const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
