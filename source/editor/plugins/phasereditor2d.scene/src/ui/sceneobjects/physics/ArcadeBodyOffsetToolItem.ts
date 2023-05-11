@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         extends BaseArcadeBodyOffsetToolItem implements editor.tools.ISceneToolItemXY {
 
 
-        constructor(x: IScaleAxis, y: IScaleAxis) {
+        constructor(x: IAxisFactor, y: IAxisFactor) {
             super(x, y);
         }
 

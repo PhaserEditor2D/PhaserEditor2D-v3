@@ -20,12 +20,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 hitAreaShape.setValue(obj, value);
 
-                if (value === HitAreaShape.RECTANGLE) {
+                const comp = HitAreaComponent.getShapeComponent(obj)
 
-                    const comp = RectangleHitAreaComponent.getRectangleComponent(obj);
-
-                    comp.setDefaultValues();
-                }
+                comp.setDefaultValues();
             }
 
             this.createPropertyEnumRow(comp, prop);

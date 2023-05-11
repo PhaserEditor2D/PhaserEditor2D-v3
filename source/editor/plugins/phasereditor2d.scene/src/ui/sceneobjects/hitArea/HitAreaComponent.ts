@@ -37,6 +37,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._hitAreaShape = HitAreaShape.NONE;
         }
 
+        static getShapeComponent(obj: ISceneGameObject) {
+
+            const shape = this.getShape(obj);
+
+            switch(shape) {
+
+                case HitAreaShape.RECTANGLE:
+
+                    return RectangleHitAreaComponent.getRectangleComponent(obj);
+
+                case HitAreaShape.ELLIPSE: 
+
+                return EllipseHitAreaComponent.getEllipseComponent(obj);
+            }
+
+            return undefined;
+        }
+
         static hasHitAreaShape(obj: ISceneGameObject, shape: HitAreaShape) {
 
             if (this.hasHitArea(obj)) {

@@ -2,6 +2,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class RectangleHitAreaOffsetToolItem extends BaseHitAreaOffsetToolItem {
 
+        constructor(x: IAxisFactor, y: IAxisFactor) {
+            super(HitAreaShape.RECTANGLE, x, y);
+        }
+
         protected getOffsetProperties(obj: ISceneGameObject): { x: IProperty<ISceneGameObject>; y: IProperty<ISceneGameObject>; } {
 
             const { x, y } = RectangleHitAreaComponent;
@@ -27,7 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected createStopDragOperation(args: editor.tools.ISceneToolDragEventArgs): colibri.ui.ide.undo.Operation {
-            
+
             return new RectangleOffsetOperation(args, obj => this.getInitialValue(obj))
         }
     }

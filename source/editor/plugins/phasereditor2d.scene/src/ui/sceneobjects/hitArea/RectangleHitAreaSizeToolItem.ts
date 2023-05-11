@@ -2,7 +2,11 @@
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ResizeHitAreaToolItem extends BaseHitAreaSizeToolItem {
+    export class RectangleHitAreaSizeToolItem extends BaseHitAreaSizeToolItem {
+
+        constructor(x: IAxisFactor, y: IAxisFactor) {
+            super(HitAreaShape.RECTANGLE, x, y);
+        }
 
         private getHitAreaComp(obj: ISceneGameObject) {
 
@@ -29,7 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected getDataKey(): string {
 
-            return "ResizeHitAreaToolItem";
+            return "RectangleHitAreaSizeToolItem";
         }
 
         protected getHitAreaSectionId(): string {
@@ -54,7 +58,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected createStopDragOperation(args: editor.tools.ISceneToolDragEventArgs): colibri.ui.ide.undo.Operation {
 
-            return new ResizeHitAreaOperation(args, obj => this.getInitialSize(obj));
+            return new RectangleHitAreaSizeOperation(args, obj => this.getInitialSize(obj));
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ResizeHitAreaOperation extends editor.tools.SceneToolOperation<{ x: number, y: number }> {
+    export class RectangleHitAreaSizeOperation extends editor.tools.SceneToolOperation<{ x: number, y: number }> {
 
         constructor(
             toolArgs: editor.tools.ISceneToolContextArgs,

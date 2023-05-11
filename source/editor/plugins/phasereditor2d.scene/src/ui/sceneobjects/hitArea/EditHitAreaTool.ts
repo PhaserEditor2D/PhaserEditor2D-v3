@@ -1,15 +1,15 @@
 /// <reference path="../object/tools/BaseObjectTool.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ResizeHitAreaTool extends BaseObjectTool {
+    export class EditHitAreaTool extends BaseObjectTool {
 
-        static ID = "phasereditor2d.scene.ui.sceneobjects.ResizeHitAreaTool";
+        static ID = "phasereditor2d.scene.ui.sceneobjects.EditHitAreaTool";
         static TOOL_COLOR = "orange";
 
         constructor() {
             super({
-                id: ResizeHitAreaTool.ID,
-                command: editor.commands.CMD_RESIZE_HIT_AREA,
+                id: EditHitAreaTool.ID,
+                command: editor.commands.CMD_EDIT_HIT_AREA,
             },
                 RectangleHitAreaComponent.x,
                 RectangleHitAreaComponent.y,
@@ -18,14 +18,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
 
             this.addItems(
-                new ResizeHitAreaToolItem(1, 0.5),
-                new ResizeHitAreaToolItem(1, 1),
-                new ResizeHitAreaToolItem(0.5, 1),
+                new RectangleHitAreaSizeToolItem(1, 0.5),
+                new RectangleHitAreaSizeToolItem(1, 1),
+                new RectangleHitAreaSizeToolItem(0.5, 1),
                 new RectangleHitAreaOffsetToolItem(0, 0),
                 new RectangleHitAreaOffsetToolItem(0.5, 0),
                 new RectangleHitAreaOffsetToolItem(0, 0.5),
-                // new ArcadeBodyCircleOffsetToolItem(),
-                // new ArcadeBodyRadiusToolItem()
             );
         }
 
@@ -77,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                if (ResizeHitAreaTool.isValidFor(obj)) {
+                if (EditHitAreaTool.isValidFor(obj)) {
 
                     this.renderObj(args, obj as Sprite);
                 }
@@ -165,7 +163,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.lineWidth = 3;
             this.drawPath(ctx, points);
 
-            ctx.strokeStyle = ResizeHitAreaTool.TOOL_COLOR;
+            ctx.strokeStyle = EditHitAreaTool.TOOL_COLOR;
             ctx.lineWidth = 1;
             this.drawPath(ctx, points);
 
@@ -189,53 +187,67 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private renderEllipse(obj: Sprite, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
 
-            // const body = ArcadeComponent.getBody(obj);
+            const origin = obj.getEditorSupport().computeDisplayOrigin();
 
-            // const p = new Phaser.Math.Vector2();
+            if (obj instanceof Container) {
 
-            // const origin = obj.getEditorSupport().computeDisplayOrigin();
+                origin.displayOriginX = 0;
+                origin.displayOriginY = 0;
+            }
 
-            // if (obj instanceof Container) {
+            const comp = EllipseHitAreaComponent.getEllipseComponent(obj);
 
-            //     origin.displayOriginX = 0;
-            //     origin.displayOriginY = 0;
-            // }
+            const { x, y, width, height } = comp;
 
-            // const bodyRadius = ArcadeComponent.radius.getValue(obj);
-            // let x1 = body.offset.x - origin.displayOriginX;
-            // let y1 = body.offset.y - origin.displayOriginY;
-            // let x2 = x1 + bodyRadius * 2;
-            // let y2 = y1 + bodyRadius * 2;
+            let x1 = x - origin.displayOriginX;
+            let y1 = y - origin.displayOriginY;
+            let x2 = x1 + width;
+            let y2 = y1 + height;
+            const tx = obj.getWorldTransformMatrix();
 
-            // const tx = obj.getWorldTransformMatrix();
-            // // removes rotation
-            // tx.rotate(-tx.rotation);
-            // tx.transformPoint(x1, y1, p);
-            // x1 = p.x;
-            // y1 = p.y;
+            const points = [
+                [x1, y1],
+                [x2, y1],
+                [x2, y2],
+            ].map(([x, y]) => {
 
-            // tx.transformPoint(x2, y2, p);
-            // x2 = p.x;
-            // y2 = p.y;
+                return tx.transformPoint(x, y);
+            }).map(p => {
 
-            // const p1 = args.camera.getScreenPoint(x1, y1);
-            // const p2 = args.camera.getScreenPoint(x2, y2);
+                return args.camera.getScreenPoint(p.x, p.y);
+            });
 
-            // const r = (p2.x - p1.x) / 2;
-            // const x = p1.x + r;
-            // const y = p1.y + r;
+            const [p1, p2, p3] = points;
 
-            // ctx.strokeStyle = "black";
-            // ctx.lineWidth = 3;
-            // ctx.beginPath();
-            // ctx.ellipse(x, y, r, r, 0, 0, 360);
-            // ctx.stroke();
+            const screenWidth = Phaser.Math.Distance.BetweenPoints(p1, p2);
+            const screenHeight = Phaser.Math.Distance.BetweenPoints(p2, p3);
+            const angle = ui.editor.tools.SceneToolItem.getGlobalAngle(obj);
 
-            // ctx.strokeStyle = ArcadeBodyTool.BODY_TOOL_COLOR;
-            // ctx.lineWidth = 1;
-            // ctx.beginPath();
-            // ctx.ellipse(x, y, r, r, 0, 0, 360);
-            // ctx.stroke();
+            ctx.save();
+
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 3;
+            this.drawEllipse(ctx, p1.x, p1.y, screenWidth, screenHeight, angle);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.strokeStyle = EditHitAreaTool.TOOL_COLOR;
+            ctx.lineWidth = 1;
+            this.drawEllipse(ctx, p1.x, p1.y, screenWidth, screenHeight, angle);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.restore();
+        }
+
+        private drawEllipse(ctx: CanvasRenderingContext2D, x:number, y:number, w: number, h: number, angle: number) {
+
+            const rx = w / 2;
+            const ry = h / 2;
+
+            ctx.ellipse(x, y, rx, ry, Phaser.Math.DegToRad(angle), 0, Math.PI * 2);
         }
     }
 }

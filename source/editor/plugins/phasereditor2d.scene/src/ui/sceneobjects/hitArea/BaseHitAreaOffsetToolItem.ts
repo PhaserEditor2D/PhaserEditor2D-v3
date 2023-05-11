@@ -1,22 +1,18 @@
+/// <reference path="./BaseHitAreaToolItem.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class BaseHitAreaOffsetToolItem
-        extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+        extends BaseHitAreaToolItem implements editor.tools.ISceneToolItemXY {
 
-        private _x: IScaleAxis;
-        private _y: IScaleAxis;
+        private _x: IAxisFactor;
+        private _y: IAxisFactor;
         private _dragging: boolean;
 
-        constructor(x: IScaleAxis, y: IScaleAxis) {
-            super();
+        constructor(shape: HitAreaShape, x: IAxisFactor, y: IAxisFactor) {
+            super(shape);
 
             this._x = x;
             this._y = y;
-        }
-
-        isValidFor(objects: ISceneGameObject[]): boolean {
-         
-            return ResizeHitAreaTool.isValidFor(...objects);
         }
 
         getPoint(args: editor.tools.ISceneToolContextArgs): { x: number; y: number; } {
@@ -108,7 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.rotate(Phaser.Math.DegToRad(angle));
 
             this.drawRect(ctx, args.canEdit ?
-                ResizeHitAreaTool.TOOL_COLOR : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                EditHitAreaTool.TOOL_COLOR : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
             ctx.restore();
         }

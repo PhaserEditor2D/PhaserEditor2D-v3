@@ -1,15 +1,13 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export declare type IScaleAxis = 0 | 0.5 | 1;
-
     export class ScaleToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
-        private _x: IScaleAxis;
-        private _y: IScaleAxis;
+        private _x: IAxisFactor;
+        private _y: IAxisFactor;
         private _dragging: boolean;
 
-        constructor(x: IScaleAxis, y: IScaleAxis) {
+        constructor(x: IAxisFactor, y: IAxisFactor) {
             super();
 
             this._x = x;

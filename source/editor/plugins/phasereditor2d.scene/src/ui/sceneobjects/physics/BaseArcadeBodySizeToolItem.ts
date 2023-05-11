@@ -3,11 +3,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export abstract class BaseArcadeBodySizeToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
-        private _x: IScaleAxis;
-        private _y: IScaleAxis;
+        private _x: IAxisFactor;
+        private _y: IAxisFactor;
         private _dragging: boolean;
 
-        constructor(x: IScaleAxis, y: IScaleAxis) {
+        constructor(x: IAxisFactor, y: IAxisFactor) {
             super();
 
             this._x = x;
