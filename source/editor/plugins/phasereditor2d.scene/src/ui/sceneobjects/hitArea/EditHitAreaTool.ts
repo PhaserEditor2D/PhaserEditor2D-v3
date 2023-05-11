@@ -14,7 +14,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 RectangleHitAreaComponent.x,
                 RectangleHitAreaComponent.y,
                 RectangleHitAreaComponent.width,
-                RectangleHitAreaComponent.height
+                RectangleHitAreaComponent.height,
+                EllipseHitAreaComponent.x,
+                EllipseHitAreaComponent.y,
+                EllipseHitAreaComponent.width,
+                EllipseHitAreaComponent.height,
+                CircleHitAreaComponent.x,
+                CircleHitAreaComponent.y,
+                CircleHitAreaComponent.radius
             );
 
             this.addItems(
@@ -31,6 +38,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new EllipseHitAreaOffsetToolItem(0, 0),
                 new EllipseHitAreaOffsetToolItem(0.5, 0),
                 new EllipseHitAreaOffsetToolItem(0, 0.5),
+
+                new CircleHitAreaSizeToolItem(),
+                new CircleHitAreaOffsetToolItem()
             );
         }
 
@@ -121,6 +131,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.renderEllipse(obj, args, ctx);
 
+            } else if (shape === HitAreaShape.CIRCLE) {
+
+                this.renderCircle(obj, args, ctx);
+
             } else {
 
                 this.renderRect(obj, args, ctx);
@@ -194,6 +208,35 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private renderEllipse(obj: Sprite, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
 
+            const comp = EllipseHitAreaComponent.getEllipseComponent(obj);
+
+            const { x, y, width, height } = comp;
+
+            this.renderEllipseHelper(args, ctx, obj, x, y, width, height, true);
+        }
+
+        private drawEllipse(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, angle: number) {
+
+            const rx = w / 2;
+            const ry = h / 2;
+
+            ctx.ellipse(x, y, rx, ry, Phaser.Math.DegToRad(angle), 0, Math.PI * 2);
+        }
+
+        private renderCircle(obj: Sprite, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
+
+            const comp = CircleHitAreaComponent.getCircleComponent(obj);
+
+            const { x, y, radius } = comp;
+
+            const width = radius * 2;
+            const height = width;
+
+            this.renderEllipseHelper(args, ctx, obj, x, y, width, height, false);
+        }
+
+        private renderEllipseHelper(args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D, obj: Sprite, x: number, y: number, width: number, height: number, dashedRect: boolean) {
+
             const origin = obj.getEditorSupport().computeDisplayOrigin();
 
             if (obj instanceof Container) {
@@ -201,10 +244,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 origin.displayOriginX = 0;
                 origin.displayOriginY = 0;
             }
-
-            const comp = EllipseHitAreaComponent.getEllipseComponent(obj);
-
-            const { x, y, width, height } = comp;
 
             let x1 = x - origin.displayOriginX;
             let y1 = y - origin.displayOriginY;
@@ -243,36 +282,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.stroke();
             ctx.closePath();
 
-            // dashed rect
+            if (dashedRect) {
 
-            x1 = x - origin.displayOriginX - width / 2;
-            y1 = y - origin.displayOriginY - height / 2;
-            x2 = x1 + width;
-            y2 = y1 + height;
+                // dashed rect
 
-            points = [
-                [x1, y1],
-                [x2, y1],
-                [x2, y2],
-                [x1, y2],
-                [x1, y1]
-            ]
-                .map(([x, y]) => tx.transformPoint(x, y))
+                x1 = x - origin.displayOriginX - width / 2;
+                y1 = y - origin.displayOriginY - height / 2;
+                x2 = x1 + width;
+                y2 = y1 + height;
 
-                .map(p => args.camera.getScreenPoint(p.x, p.y));
+                points = [
+                    [x1, y1],
+                    [x2, y1],
+                    [x2, y2],
+                    [x1, y2],
+                    [x1, y1]
+                ]
+                    .map(([x, y]) => tx.transformPoint(x, y))
 
-            ctx.setLineDash([1, 1]);
-            this.drawPath(ctx, points);
+                    .map(p => args.camera.getScreenPoint(p.x, p.y));
 
-            ctx.restore();
-        }
+                ctx.setLineDash([1, 1]);
+                this.drawPath(ctx, points);
 
-        private drawEllipse(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, angle: number) {
-
-            const rx = w / 2;
-            const ry = h / 2;
-
-            ctx.ellipse(x, y, rx, ry, Phaser.Math.DegToRad(angle), 0, Math.PI * 2);
+                ctx.restore();
+            }
         }
     }
 }

@@ -2,12 +2,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class EllipseHitAreaSection extends SceneGameObjectSection<ISceneGameObject> {
+    export class CircleHitAreaSection extends SceneGameObjectSection<ISceneGameObject> {
 
-        static ID = "phasereditor2d.scene.ui.sceneobjects.EllipseHitAreaSection";
+        static ID = "phasereditor2d.scene.ui.sceneobjects.CircleHitAreaSection";
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, EllipseHitAreaSection.ID, "Hit Area (Ellipse)");
+            super(page, CircleHitAreaSection.ID, "Hit Area (Circle)");
         }
 
         createMenu(menu: controls.Menu) {
@@ -21,13 +21,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
 
-            this.createPropertyXYRow(comp, EllipseHitAreaComponent.position, false);
-            this.createPropertyXYRow(comp, EllipseHitAreaComponent.size, false);
+            this.createPropertyXYRow(comp, CircleHitAreaComponent.position, false);
+
+            this.createPropertyFloatRow(comp, CircleHitAreaComponent.radius, false)
+                .style.gridColumn = "span 4";
         }
 
         canEdit(obj: any, n: number): boolean {
 
-            return HitAreaComponent.hasHitAreaShape(obj, HitAreaShape.ELLIPSE);
+            return HitAreaComponent.hasHitAreaShape(obj, HitAreaShape.CIRCLE);
         }
 
         canEditNumber(n: number): boolean {

@@ -24,6 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             values: [
                 HitAreaShape.NONE,
                 HitAreaShape.RECTANGLE,
+                HitAreaShape.CIRCLE,
                 HitAreaShape.ELLIPSE
             ]
         };

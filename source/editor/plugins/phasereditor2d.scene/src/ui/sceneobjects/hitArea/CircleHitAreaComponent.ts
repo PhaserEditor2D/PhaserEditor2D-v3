@@ -46,7 +46,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { x, y, radius } = this;
 
-            code.arg(`new Phaser.Geom.Circle(${x}, ${y}, ${radius}`);
+            code.arg(`new Phaser.Geom.Circle(${x}, ${y}, ${radius})`);
 
             code.arg("Phaser.Geom.Circle.Contains");
         }
