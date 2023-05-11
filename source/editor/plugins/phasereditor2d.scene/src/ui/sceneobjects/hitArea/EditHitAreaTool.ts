@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new RectangleHitAreaOffsetToolItem(0, 0),
                 new RectangleHitAreaOffsetToolItem(0.5, 0),
                 new RectangleHitAreaOffsetToolItem(0, 0.5),
-                
+
                 new EllipseHitAreaSizeToolItem(1, 0.5),
                 new EllipseHitAreaSizeToolItem(1, 1),
                 new EllipseHitAreaSizeToolItem(0.5, 1),
@@ -212,17 +212,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             let y2 = y1 + height;
             const tx = obj.getWorldTransformMatrix();
 
-            const points = [
+            let points = [
                 [x1, y1],
                 [x2, y1],
                 [x2, y2],
-            ].map(([x, y]) => {
+            ]
+                .map(([x, y]) => tx.transformPoint(x, y))
 
-                return tx.transformPoint(x, y);
-            }).map(p => {
-
-                return args.camera.getScreenPoint(p.x, p.y);
-            });
+                .map(p => args.camera.getScreenPoint(p.x, p.y));
 
             const [p1, p2, p3] = points;
 
@@ -246,10 +243,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.stroke();
             ctx.closePath();
 
+            // dashed rect
+
+            x1 = x - origin.displayOriginX - width / 2;
+            y1 = y - origin.displayOriginY - height / 2;
+            x2 = x1 + width;
+            y2 = y1 + height;
+
+            points = [
+                [x1, y1],
+                [x2, y1],
+                [x2, y2],
+                [x1, y2],
+                [x1, y1]
+            ]
+                .map(([x, y]) => tx.transformPoint(x, y))
+
+                .map(p => args.camera.getScreenPoint(p.x, p.y));
+
+            ctx.setLineDash([1, 1]);
+            this.drawPath(ctx, points);
+
             ctx.restore();
         }
 
-        private drawEllipse(ctx: CanvasRenderingContext2D, x:number, y:number, w: number, h: number, angle: number) {
+        private drawEllipse(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, angle: number) {
 
             const rx = w / 2;
             const ry = h / 2;

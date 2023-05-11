@@ -1,15 +1,15 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class EllipseHitAreaOffsetToolItem extends BaseHitAreaOffsetToolItem {
-        
+
         constructor(x: IAxisFactor, y: IAxisFactor) {
             super(HitAreaShape.ELLIPSE, x, y);
         }
 
         protected getToolOrigin(obj: ISceneGameObject): { originX: number; originY: number; } {
-            
-            return obj.getEditorSupport().computeOrigin();
-        }        
+
+            return { originX: 0.5, originY: 0.5 };
+        }
 
         protected getOffsetProperties(obj: ISceneGameObject): { x: IProperty<ISceneGameObject>; y: IProperty<ISceneGameObject>; } {
 

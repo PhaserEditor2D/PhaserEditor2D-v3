@@ -9,8 +9,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected getToolOrigin(obj: ISceneGameObject): { originX: number; originY: number; } {
-            
-            return obj.getEditorSupport().computeOrigin();
+
+            return { originX: 0.5, originY: 0.5 };
         }
 
         private getHitAreaComp(obj: ISceneGameObject) {

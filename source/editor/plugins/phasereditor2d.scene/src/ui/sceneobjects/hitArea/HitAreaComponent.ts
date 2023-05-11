@@ -2,8 +2,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export enum HitAreaShape {
         NONE = "NONE",
-        ELLIPSE = "ELLIPSE",
-        RECTANGLE = "RECTANGLE"
+        RECTANGLE = "RECTANGLE",
+        CIRCLE = "CIRCLE",
+        ELLIPSE = "ELLIPSE"
     }
 
     function getComp(obj: ISceneGameObject) {
@@ -46,6 +47,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 case HitAreaShape.RECTANGLE:
 
                     return RectangleHitAreaComponent.getRectangleComponent(obj);
+                    
+                case HitAreaShape.CIRCLE:
+
+                return CircleHitAreaComponent.getCircleComponent(obj);
 
                 case HitAreaShape.ELLIPSE: 
 

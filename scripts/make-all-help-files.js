@@ -229,6 +229,10 @@ utils.makeHelpFile([
     "Phaser.Geom.Ellipse.width",
     "Phaser.Geom.Ellipse.height",
 
+    "Phaser.Geom.Circle.x",
+    "Phaser.Geom.Circle.y",
+    "Phaser.Geom.Circle.radius",
+
     "Phaser.GameObjects.Layer",
 
     "Phaser.Physics.Arcade.Collider",

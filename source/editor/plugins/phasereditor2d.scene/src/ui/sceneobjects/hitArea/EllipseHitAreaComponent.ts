@@ -8,11 +8,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static y = HitAreaProperty(EllipseHitAreaComponent, "y", "Y", "phaser:Phaser.Geom.Ellipse.y", 0);
         static width = HitAreaProperty(EllipseHitAreaComponent, "width", "W", "phaser:Phaser.Geom.Ellipse.width", 0);
         static height = HitAreaProperty(EllipseHitAreaComponent, "height", "H", "phaser:Phaser.Geom.Ellipse.height", 0);
+        
         static position: IPropertyXY = {
             label: "Offset",
             x: this.x,
             y: this.y
         };
+        
         static size: IPropertyXY = {
             label: "Size",
             x: this.width,
