@@ -40,7 +40,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new EllipseHitAreaOffsetToolItem(0, 0.5),
 
                 new CircleHitAreaSizeToolItem(),
-                new CircleHitAreaOffsetToolItem()
+                new CircleHitAreaOffsetToolItem(),
+
+                new PolygonHitAreaToolItem()
             );
         }
 
@@ -135,10 +137,53 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.renderCircle(obj, args, ctx);
 
+            } else if (shape === HitAreaShape.POLYGON) {
+
+                this.renderPolygon(obj, args, ctx);
+
             } else {
 
                 this.renderRect(obj, args, ctx);
             }
+
+            ctx.restore();
+        }
+
+        private renderPolygon(obj: Sprite, args: editor.tools.ISceneToolRenderArgs, ctx: CanvasRenderingContext2D) {
+
+            const origin = obj.getEditorSupport().computeDisplayOrigin();
+
+            if (obj instanceof Container) {
+
+                origin.displayOriginX = 0;
+                origin.displayOriginY = 0;
+            }
+
+            const comp = PolygonHitAreaComponent.getPolygonComponent(obj);
+
+            const tx = obj.getWorldTransformMatrix();
+
+            const points: Array<Phaser.Math.Vector2> = comp.vectors
+                .map(p => new Phaser.Math.Vector2(
+                        p.x - origin.displayOriginX,
+                        p.y - origin.displayOriginY))
+
+                .map(p => tx.transformPoint(p.x, p.y))
+
+                .map(p => args.camera.getScreenPoint(p.x, p.y));
+
+            // close the path
+            points.push(points[0]);
+
+            ctx.save();
+
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 3;
+            this.drawPath(ctx, points);
+
+            ctx.strokeStyle = EditHitAreaTool.TOOL_COLOR;
+            ctx.lineWidth = 1;
+            this.drawPath(ctx, points);
 
             ctx.restore();
         }

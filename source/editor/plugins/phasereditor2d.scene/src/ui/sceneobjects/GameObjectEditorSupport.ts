@@ -66,7 +66,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     new HitAreaComponent(obj),
                     new RectangleHitAreaComponent(obj),
                     new CircleHitAreaComponent(obj),
-                    new EllipseHitAreaComponent(obj)
+                    new EllipseHitAreaComponent(obj),
+                    new PolygonHitAreaComponent(obj)
                 );
             }
 

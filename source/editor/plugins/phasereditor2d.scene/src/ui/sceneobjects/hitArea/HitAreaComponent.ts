@@ -4,7 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         NONE = "NONE",
         RECTANGLE = "RECTANGLE",
         CIRCLE = "CIRCLE",
-        ELLIPSE = "ELLIPSE"
+        ELLIPSE = "ELLIPSE",
+        POLYGON = "POLYGON"
     }
 
     function getComp(obj: ISceneGameObject) {
@@ -25,7 +26,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 HitAreaShape.NONE,
                 HitAreaShape.RECTANGLE,
                 HitAreaShape.CIRCLE,
-                HitAreaShape.ELLIPSE
+                HitAreaShape.ELLIPSE,
+                HitAreaShape.POLYGON
             ]
         };
 
@@ -43,19 +45,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const shape = this.getShape(obj);
 
-            switch(shape) {
+            switch (shape) {
 
                 case HitAreaShape.RECTANGLE:
 
                     return RectangleHitAreaComponent.getRectangleComponent(obj);
-                    
+
                 case HitAreaShape.CIRCLE:
 
-                return CircleHitAreaComponent.getCircleComponent(obj);
+                    return CircleHitAreaComponent.getCircleComponent(obj);
 
-                case HitAreaShape.ELLIPSE: 
+                case HitAreaShape.ELLIPSE:
 
-                return EllipseHitAreaComponent.getEllipseComponent(obj);
+                    return EllipseHitAreaComponent.getEllipseComponent(obj);
+
+                case HitAreaShape.POLYGON:
+
+                    return PolygonHitAreaComponent.getPolygonComponent(obj);
             }
 
             return undefined;
