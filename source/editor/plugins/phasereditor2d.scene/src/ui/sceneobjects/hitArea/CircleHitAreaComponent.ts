@@ -37,9 +37,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected _setDefaultValues(width: number, height: number): void {
 
-            this.x = 0;
-            this.y = 0;
-            this.radius = Math.min(width, height);
+            this.x = width / 2;
+            this.y = height / 2;
+            this.radius = Math.min(width, height) / 2;
         }
 
         protected override buildSetInteractiveCodeCOM(obj: ISceneGameObject, code: core.code.MethodCallCodeDOM): void {

@@ -14,15 +14,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { hitAreaShape } = HitAreaComponent;
 
-            const prop = {...hitAreaShape};
+            const prop = { ...hitAreaShape };
 
             prop.setValue = (obj, value) => {
 
                 hitAreaShape.setValue(obj, value);
 
-                const comp = HitAreaComponent.getShapeComponent(obj)
+                if (value !== HitAreaShape.NONE) {
 
-                comp.setDefaultValues();
+                    const comp = HitAreaComponent.getShapeComponent(obj);
+
+                    comp.setDefaultValues();
+                }
             }
 
             this.createPropertyEnumRow(comp, prop);

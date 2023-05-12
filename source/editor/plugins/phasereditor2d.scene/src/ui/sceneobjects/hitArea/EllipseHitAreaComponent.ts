@@ -46,8 +46,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected _setDefaultValues(width: number, height: number): void {
 
-            this.x = 0;
-            this.y = 0;
+            this.x = width / 2;
+            this.y = height / 2;
             this.width = width;
             this.height = height;
         }
