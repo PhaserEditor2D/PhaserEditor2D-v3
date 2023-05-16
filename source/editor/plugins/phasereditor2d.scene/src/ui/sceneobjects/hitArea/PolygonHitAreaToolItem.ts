@@ -384,7 +384,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (Date.now() - this._startDragTime > 300) {
 
-                    args.editor.getUndoManager().add(new PolygonOperation(args));
+                    args.editor.getUndoManager().add(new PolygonHitAreaOperation(args));
 
                 }
 
