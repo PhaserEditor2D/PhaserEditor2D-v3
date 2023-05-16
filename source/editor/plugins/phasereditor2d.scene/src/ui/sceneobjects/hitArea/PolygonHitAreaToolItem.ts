@@ -219,10 +219,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = comp.getObject() as Sprite;
 
-            let { displayOriginX, displayOriginY } = obj.getEditorSupport().computeDisplayOrigin();
-
-            displayOriginX = obj.displayWidth * 0.5;
-            displayOriginY = obj.displayHeight * 0.5;
+            const { displayOriginX, displayOriginY } = obj.getEditorSupport().computeDisplayOrigin();
 
             const tx = obj.getWorldTransformMatrix();
 
@@ -376,7 +373,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             comp.points = points.map(p => `${p.x} ${p.y}`).join(" ");
 
-            args.editor.updateInspectorViewSection(PolygonSection.SECTION_ID);
+            args.editor.updateInspectorViewSection(PolygonHitAreaSection.ID);
         }
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {

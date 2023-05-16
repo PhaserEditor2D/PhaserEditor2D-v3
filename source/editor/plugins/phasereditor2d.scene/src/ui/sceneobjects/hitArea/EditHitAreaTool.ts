@@ -5,6 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.EditHitAreaTool";
         static TOOL_COLOR = "orange";
+        private _polygonToolItem: PolygonHitAreaToolItem;
 
         constructor() {
             super({
@@ -42,8 +43,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 new CircleHitAreaSizeToolItem(),
                 new CircleHitAreaOffsetToolItem(),
 
-                new PolygonHitAreaToolItem()
+                this._polygonToolItem = new PolygonHitAreaToolItem()
             );
+        }
+
+        handleDoubleClick(args: editor.tools.ISceneToolContextArgs): boolean {
+
+            if (this._polygonToolItem.isValidFor(args.objects)) {
+
+                return this._polygonToolItem.handleDoubleClick(args);
+            }
+
+            return super.handleDoubleClick(args);
+        }
+
+        handleDeleteCommand(args: editor.tools.ISceneToolContextArgs): boolean {
+
+            if (this._polygonToolItem.isValidFor(args.objects)) {
+                
+                return this._polygonToolItem.handleDeleteCommand(args);
+            }
+
+            return super.handleDeleteCommand(args);
+        }
+
+        requiresRepaintOnMouseMove() {
+
+            return true;
         }
 
         protected getProperties(obj?: any): IProperty<any>[] {
@@ -165,8 +191,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const points: Array<Phaser.Math.Vector2> = comp.vectors
                 .map(p => new Phaser.Math.Vector2(
-                        p.x - origin.displayOriginX,
-                        p.y - origin.displayOriginY))
+                    p.x - origin.displayOriginX,
+                    p.y - origin.displayOriginY))
 
                 .map(p => tx.transformPoint(p.x, p.y))
 
