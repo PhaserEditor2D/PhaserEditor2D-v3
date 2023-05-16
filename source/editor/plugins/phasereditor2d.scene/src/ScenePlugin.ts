@@ -374,6 +374,11 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.NineSliceSection(page),
                 page => new ui.sceneobjects.ThreeSliceSection(page),
+                page => new ui.sceneobjects.HitAreaSection(page),
+                page => new ui.sceneobjects.RectangleHitAreaSection(page),
+                page => new ui.sceneobjects.CircleHitAreaSection(page),
+                page => new ui.sceneobjects.EllipseHitAreaSection(page),
+                page => new ui.sceneobjects.PolygonHitAreaSection(page),
                 page => new ui.sceneobjects.ArcadeBodySection(page),
                 page => new ui.sceneobjects.ArcadeGeometrySection(page),
                 page => new ui.sceneobjects.ArcadeBodyMovementSection(page),
@@ -404,11 +409,12 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.ScaleTool(),
                 new ui.sceneobjects.OriginTool(),
                 new ui.sceneobjects.SizeTool(),
+                new ui.sceneobjects.EditHitAreaTool(),
                 new ui.sceneobjects.ArcadeBodyTool(),
                 new ui.sceneobjects.SliceTool(),
                 new ui.sceneobjects.PolygonTool(),
                 new ui.sceneobjects.SelectionRegionTool(),
-                new ui.sceneobjects.PanTool(),
+                new ui.sceneobjects.PanTool()
             ));
 
             // files view sections

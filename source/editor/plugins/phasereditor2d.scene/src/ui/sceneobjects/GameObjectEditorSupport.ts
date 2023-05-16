@@ -2,6 +2,12 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
+    import controls = colibri.ui.controls;
+
+    interface IUnlockListenerArg<T> {
+        property: IProperty<T>,
+        unlock: boolean;
+    }
 
     export abstract class GameObjectEditorSupport<T extends ISceneGameObject> extends EditorSupport<T> {
 
@@ -16,6 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _isPrefabInstancePart: boolean;
         // a temporal variable used for serialization
         public _private_np: boolean;
+        public unlockEvent: controls.ListenerList<IUnlockListenerArg<T>>;
 
         // parent
         private _allowPickChildren: boolean;
@@ -29,6 +36,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(obj, extension.getTypeName().toLowerCase(), scene);
 
             this._extension = extension;
+            this.unlockEvent = new controls.ListenerList();
             this._unlockedProperties = new Set();
             this._serializables = [];
             this._componentMap = new Map();
@@ -51,6 +59,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new VariableComponent(obj));
             this.addComponent(new PrefabUserPropertyComponent(obj));
             this.addComponent(new UserComponentsEditorComponent(obj));
+
+            if (this.isDisplayObject()) {
+
+                this.addComponent(
+                    new HitAreaComponent(obj),
+                    new RectangleHitAreaComponent(obj),
+                    new CircleHitAreaComponent(obj),
+                    new EllipseHitAreaComponent(obj),
+                    new PolygonHitAreaComponent(obj)
+                );
+            }
 
             this.setInteractive();
 
@@ -336,6 +355,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._unlockedProperties.delete(property.name);
             }
+
+            this.unlockEvent.fire({ property, unlock });
         }
 
         setUnlockedPropertyXY(property: IPropertyXY, unlock: boolean) {
@@ -1369,8 +1390,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             // we will create a link-object, but keeping the same nested prefabs
                             newNestedPrefabs = localNestedPrefab.nestedPrefabs;
                         }
-                    } 
-                    
+                    }
+
                     if (createFreshObject) {
 
                         // we don't have a local nested prefab,
@@ -1406,7 +1427,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             result.push(nestedPrefab);
                         }
                     }
-                    
+
                 } else {
 
                     result.push(originalChild);

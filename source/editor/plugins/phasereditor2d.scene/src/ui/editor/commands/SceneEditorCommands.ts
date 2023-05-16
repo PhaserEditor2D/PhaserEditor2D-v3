@@ -59,6 +59,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenScriptDialog";
     export const CMD_OPEN_ADD_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenAddScriptDialog";
     export const CMD_PREVIEW_SCENE = "phasereditor2d.scene.ui.editor.commands.PreviewScene";
+    export const CMD_EDIT_HIT_AREA = "phasereditor2d.scene.ui.editor.commands.ResizeHitArea";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -1898,6 +1899,23 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     testFunc: isSceneScope,
                     executeFunc: args => (args.activeEditor as SceneEditor)
                         .getToolsManager().swapTool(ui.sceneobjects.SliceTool.ID)
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_EDIT_HIT_AREA,
+                    name: "Hit Area Tool",
+                    tooltip: "Resize the hit area of the selected objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.EditHitAreaTool.ID)
+                },
+                keys: {
+                    key: "KeyI"
                 }
             });
         }

@@ -1,37 +1,35 @@
+/// <reference path="./BaseHitAreaToolItem.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export abstract class BaseArcadeBodySizeToolItem
-        extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+    export abstract class BaseHitAreaOffsetToolItem
+        extends BaseHitAreaToolItem implements editor.tools.ISceneToolItemXY {
 
-        private _x: IAxisFactor;
-        private _y: IAxisFactor;
+        protected _x: IAxisFactor;
+        protected _y: IAxisFactor;
         private _dragging: boolean;
 
-        constructor(x: IAxisFactor, y: IAxisFactor) {
-            super();
+        constructor(shape: HitAreaShape, x: IAxisFactor, y: IAxisFactor) {
+            super(shape);
 
             this._x = x;
             this._y = y;
         }
 
+        protected abstract getToolOrigin(obj: ISceneGameObject): { originX: number, originY: number };
+
         getPoint(args: editor.tools.ISceneToolContextArgs): { x: number; y: number; } {
 
             return this.getAvgScreenPointOfObjects(args,
 
-                (sprite: sceneobjects.Image) => this._x,
+                (sprite: sceneobjects.Image) => this._x - this.getToolOrigin(sprite).originX,
 
-                (sprite: sceneobjects.Image) => this._y,
-
-                // remove rotation, not supported by the arcade body
-                true
+                (sprite: sceneobjects.Image) => this._y - this.getToolOrigin(sprite).originY,
             );
         }
 
         protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
-
-            const { width, height } = this.computeSize(sprite);
 
             let { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
 
@@ -41,9 +39,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 displayOriginY = 0;
             }
 
-            const body = ArcadeComponent.getBody(sprite);
-            const x = body.offset.x - displayOriginX + fx * width;
-            const y = body.offset.y - displayOriginY + fy * height;
+            const offset = this.getOffsetProperties(sprite);
+            const size = this.getSizeProperties(sprite);
+
+            let x = offset.x.getValue(sprite) as number;
+            let y = offset.y.getValue(sprite) as number;
+            let width = size.width.getValue(sprite) as number;
+            let height = size.height.getValue(sprite) as number;
+
+            x = x - displayOriginX + fx * width;
+            y = y - displayOriginY + fy * height;
 
             const tx = sprite.getWorldTransformMatrix();
 
@@ -54,11 +59,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected computeSize(obj: ISceneGameObject) {
 
+            const size = this.getSizeProperties(obj);
+
             return {
-                width: ArcadeComponent.size.x.getValue(obj),
-                height: ArcadeComponent.size.y.getValue(obj)
-            };
+                width: size.width.getValue(obj) as number,
+                height: size.height.getValue(obj) as number
+            }
         }
+
+        private computeOffset(obj: ISceneGameObject) {
+
+            const offset = this.getOffsetProperties(obj);
+
+            return {
+                x: offset.x.getValue(obj),
+                y: offset.y.getValue(obj)
+            }
+        };
+
+        protected abstract getOffsetProperties(obj: ISceneGameObject): {
+            x: IProperty<ISceneGameObject>,
+            y: IProperty<ISceneGameObject>
+        };
+
+        protected abstract getSizeProperties(obj: ISceneGameObject): {
+            width: IProperty<ISceneGameObject>,
+            height: IProperty<ISceneGameObject>
+        };
 
         render(args: editor.tools.ISceneToolRenderArgs) {
 
@@ -70,12 +97,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             ctx.translate(point.x, point.y);
 
-            // remove totation, not supported by the Arcade body
-            // const angle = this.globalAngle(args.objects[0] as any);
-            // ctx.rotate(Phaser.Math.DegToRad(angle));
+            const angle = this.globalAngle(args.objects[0] as any);
+            ctx.rotate(Phaser.Math.DegToRad(angle));
 
             this.drawRect(ctx, args.canEdit ?
-                ArcadeBodyTool.BODY_TOOL_COLOR : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+                EditHitAreaTool.TOOL_COLOR : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
             ctx.restore();
         }
@@ -90,6 +116,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         onStartDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
             if (!this.containsPoint(args)) {
+
                 return;
             }
 
@@ -99,7 +126,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                const sprite = obj as unknown as ArcadeImage;
+                const sprite = obj as unknown as Image;
 
                 const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
 
@@ -109,30 +136,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 worldTx.applyInverse(point.x, point.y, initLocalPos);
 
-                const { width, height } = this.computeSize(sprite);
+                const offset = this.computeOffset(sprite);
 
-                sprite.setData(this.getDataKey(), {
-                    initWidth: width,
-                    initHeight: height,
+                sprite.setData(this.getKeyData(), {
                     initLocalPos: initLocalPos,
+                    initLocalOffset: offset,
                     initWorldTx: worldTx
                 });
             }
         }
 
-        protected abstract getDataKey(): string;
+        protected getInitialValue(obj: ISceneGameObject) {
 
-        protected getInitialSize(obj: any): { x: number, y: number } {
+            const { initLocalOffset } = obj.getData(this.getKeyData());
 
-            const data = obj.getData(this.getDataKey());
-
-            return { x: data.initWidth, y: data.initHeight };
+            return initLocalOffset;
         }
+
+        protected abstract getKeyData(): string;
 
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
             if (!this._dragging) {
-
                 return;
             }
 
@@ -141,7 +166,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const obj of args.objects) {
 
                 const sprite = obj as Sprite;
-                const data = sprite.data.get(this.getDataKey());
+                const data = sprite.data.get(this.getKeyData());
                 const initLocalPos: Phaser.Math.Vector2 = data.initLocalPos;
                 const worldTx: Phaser.GameObjects.Components.TransformMatrix = data.initWorldTx;
 
@@ -152,31 +177,33 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const flipX = sprite.flipX ? -1 : 1;
                 const flipY = sprite.flipY ? -1 : 1;
 
-                let originX = 0;
-                let originY = 0;
-
                 const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
                 const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
 
-                const dw = dx / (1 - (originX === 1 ? 0 : originX));
-                const dh = dy / (1 - (originY === 1 ? 0 : originY));
+                const x = data.initLocalOffset.x + dx;
+                const y = data.initLocalOffset.y + dy;
 
-                const { x: width, y: height } = args.editor.getScene().snapPoint(
-                    data.initWidth + dw,
-                    data.initHeight + dh
-                );
+                const changeAll = this._x === 0 && this._y === 0 || this._x === 0.5 && this._y === 0.5;
+                const changeX = this._x === 0 && this._y === 0.5 || changeAll;
+                const changeY = this._x === 0.5 && this._y === 0 || changeAll;
 
-                const changeAll = this._x === 1 && this._y === 1;
-                const changeX = this._x === 1 && this._y === 0.5 || changeAll;
-                const changeY = this._x === 0.5 && this._y === 1 || changeAll;
+                const offset = this.getOffsetProperties(obj);
 
-                this.onDragValues(sprite, changeX, changeY, width, height);
+                if (changeX) {
 
-                args.editor.updateInspectorViewSection(ArcadeGeometrySection.ID);
+                    offset.x.setValue(sprite, Math.floor(x));
+                }
+
+                if (changeY) {
+
+                    offset.y.setValue(sprite, Math.floor(y));
+                }
+
+                args.editor.updateInspectorViewSection(this.getOffsetSectionId());
             }
         }
 
-        protected abstract onDragValues(sprite: Sprite, changeX: boolean, changeY: boolean, width: number, height: number);
+        protected abstract getOffsetSectionId(): string;
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 

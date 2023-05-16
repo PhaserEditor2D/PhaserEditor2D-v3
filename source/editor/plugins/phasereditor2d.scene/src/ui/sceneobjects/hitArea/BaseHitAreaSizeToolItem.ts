@@ -1,27 +1,65 @@
+/// <reference path="./BaseHitAreaToolItem.ts"/>
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class SizeToolItem
-        extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
+    export abstract class BaseHitAreaSizeToolItem
+        extends BaseHitAreaToolItem implements editor.tools.ISceneToolItemXY {
 
-        private _x: IAxisFactor;
-        private _y: IAxisFactor;
+        protected _x: IAxisFactor;
+        protected _y: IAxisFactor;
         private _dragging: boolean;
 
-        constructor(x: IAxisFactor, y: IAxisFactor) {
-            super();
+        constructor(shape: HitAreaShape, x: IAxisFactor, y: IAxisFactor) {
+            super(shape);
 
             this._x = x;
             this._y = y;
         }
 
+        protected abstract computeSize(obj: ISceneGameObject): { width: number, height: number };
+
+        protected abstract getHitAreaOffset(obj: ISceneGameObject): { x: number, y: number };
+
+        protected abstract getDataKey(): string;
+
+        protected abstract getHitAreaSectionId(): string;
+
+        protected abstract onDragValues(obj: ISceneGameObject, changeX: boolean, changeY: boolean, width: number, height: number): void;
+
+        protected abstract createStopDragOperation(args: editor.tools.ISceneToolDragEventArgs): colibri.ui.ide.undo.Operation;
+
         getPoint(args: editor.tools.ISceneToolContextArgs): { x: number; y: number; } {
 
             return this.getAvgScreenPointOfObjects(args,
 
-                (sprite: sceneobjects.Image) => this._x - sprite.getEditorSupport().computeOrigin().originX,
+                (sprite: sceneobjects.Image) => this._x - this.getToolOrigin(sprite).originX,
 
-                (sprite: sceneobjects.Image) => this._y - sprite.getEditorSupport().computeOrigin().originY
+                (sprite: sceneobjects.Image) => this._y - this.getToolOrigin(sprite).originY,
             );
+        }
+
+        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number) {
+
+            const worldPoint = new Phaser.Geom.Point(0, 0);
+
+            const { width, height } = this.computeSize(sprite);
+
+            let { displayOriginX, displayOriginY } = sprite.getEditorSupport().computeDisplayOrigin();
+
+            if (sprite instanceof Container) {
+
+                displayOriginX = 0;
+                displayOriginY = 0;
+            }
+
+            const offset = this.getHitAreaOffset(sprite);
+            const x = offset.x - displayOriginX + fx * width;
+            const y = offset.y - displayOriginY + fy * height;
+
+            const tx = sprite.getWorldTransformMatrix();
+
+            tx.transformPoint(x, y, worldPoint);
+
+            return args.camera.getScreenPoint(worldPoint.x, worldPoint.y);
         }
 
         render(args: editor.tools.ISceneToolRenderArgs) {
@@ -35,10 +73,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctx.translate(point.x, point.y);
 
             const angle = this.globalAngle(args.objects[0] as any);
-
             ctx.rotate(Phaser.Math.DegToRad(angle));
 
-            this.drawRect(ctx, args.canEdit ? "#00f" : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
+            this.drawRect(ctx, args.canEdit ?
+                EditHitAreaTool.TOOL_COLOR : editor.tools.SceneTool.COLOR_CANNOT_EDIT);
 
             ctx.restore();
         }
@@ -62,7 +100,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const obj of args.objects) {
 
-                const sprite = obj as unknown as TileSprite;
+                const sprite = obj as unknown as Image;
 
                 const worldTx = new Phaser.GameObjects.Components.TransformMatrix();
 
@@ -72,25 +110,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 worldTx.applyInverse(point.x, point.y, initLocalPos);
 
-                sprite.setData("SizeTool", {
-                    initWidth: sprite.width,
-                    initHeight: sprite.height,
+                const { width, height } = this.computeSize(sprite);
+
+                sprite.setData(this.getDataKey(), {
+                    initWidth: width,
+                    initHeight: height,
                     initLocalPos: initLocalPos,
                     initWorldTx: worldTx
                 });
             }
         }
 
-        static getInitialSize(obj: any): { x: number, y: number } {
+        protected getInitialSize(obj: any): { x: number, y: number } {
 
-            const data = obj.getData("SizeTool");
+            const data = obj.getData(this.getDataKey());
 
             return { x: data.initWidth, y: data.initHeight };
         }
 
+        protected abstract getToolOrigin(obj: ISceneGameObject): { originX: number, originY: number };
+
         onDrag(args: editor.tools.ISceneToolDragEventArgs): void {
 
             if (!this._dragging) {
+
                 return;
             }
 
@@ -99,7 +142,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             for (const obj of args.objects) {
 
                 const sprite = obj as Sprite;
-                const data = sprite.data.get("SizeTool");
+                const data = sprite.data.get(this.getDataKey());
                 const initLocalPos: Phaser.Math.Vector2 = data.initLocalPos;
                 const worldTx: Phaser.GameObjects.Components.TransformMatrix = data.initWorldTx;
 
@@ -110,8 +153,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const flipX = sprite.flipX ? -1 : 1;
                 const flipY = sprite.flipY ? -1 : 1;
 
-                const { originX, originY } = sprite.getEditorSupport()
-                    .computeOrigin();
+                const { originX, originY } = this.getToolOrigin(obj);
 
                 const dx = (localPos.x - initLocalPos.x) * flipX / camera.zoom;
                 const dy = (localPos.y - initLocalPos.y) * flipY / camera.zoom;
@@ -128,19 +170,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const changeX = this._x === 1 && this._y === 0.5 || changeAll;
                 const changeY = this._x === 0.5 && this._y === 1 || changeAll;
 
-                const [widthProp, heightProp] = sprite.getEditorSupport().getSizeProperties();
+                this.onDragValues(sprite, changeX, changeY, width, height);
 
-                if (changeX) {
-
-                    widthProp.setValue(sprite, Math.floor(width));
-                }
-
-                if (changeY) {
-
-                    heightProp.setValue(sprite, Math.floor(height));
-                }
-
-                args.editor.updateInspectorViewSection(obj.getEditorSupport().getSizeSectionId());
+                args.editor.updateInspectorViewSection(this.getHitAreaSectionId());
             }
         }
 
@@ -148,7 +180,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._dragging) {
 
-                args.editor.getUndoManager().add(new SizeOperation(args));
+                args.editor.getUndoManager().add(this.createStopDragOperation(args));
 
                 this._dragging = false;
             }
