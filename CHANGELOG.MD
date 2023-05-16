@@ -9,6 +9,7 @@
 * Auto computes the middle-private nested prefabs. It doesn't require to declare a parent of a nested prefab as nested prefab. 
 * Improves Outline elements tagging. It uses tahs like `#prefab_inst` `#nested_prefab_inst` `#scope_local` `#scope_nested_prefab`... So you can search for it in the Outline filter box.
 * Allows enabling input in objects.
+* Adds the Name parameter to the Variable section of a nested prefab instance.
 
 ## v3.60.3 - Apr 27, 2023
 

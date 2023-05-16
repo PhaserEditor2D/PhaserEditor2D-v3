@@ -639,7 +639,7 @@ namespace phasereditor2d.scene.core.code {
 
         private addCreateObjectCodeOfNestedPrefab(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
 
-            const varname = this.getPrefabInstanceVarName(obj);
+            const varname = SceneCodeDOMBuilder.getPrefabInstanceVarName(obj);
 
             const result = this.buildSetObjectProperties({
                 obj,
@@ -687,7 +687,7 @@ namespace phasereditor2d.scene.core.code {
                     && objParent === this._scene.getPrefabObject();
 
                 parentVarName = parentIsPrefabObject ? "this"
-                    : this.getPrefabInstanceVarName(objParent);
+                    : SceneCodeDOMBuilder.getPrefabInstanceVarName(objParent);
             }
 
             // the script nodes require using the varname of the parents
@@ -881,7 +881,7 @@ namespace phasereditor2d.scene.core.code {
                 .join(" & ");
         }
 
-        private getPrefabInstanceVarName(obj: ISceneGameObject): string {
+        static getPrefabInstanceVarName(obj: ISceneGameObject): string {
 
             const objES = obj.getEditorSupport();
 
@@ -904,7 +904,7 @@ namespace phasereditor2d.scene.core.code {
             return varName;
         }
 
-        private findPrefabInstanceWhereTheGivenObjectIsDefined(obj: ui.sceneobjects.ISceneGameObject): ui.sceneobjects.ISceneGameObject {
+        private static findPrefabInstanceWhereTheGivenObjectIsDefined(obj: ui.sceneobjects.ISceneGameObject): ui.sceneobjects.ISceneGameObject {
 
             const objES = obj.getEditorSupport();
 
@@ -919,7 +919,7 @@ namespace phasereditor2d.scene.core.code {
             return this.findPrefabInstanceOfFile(parent, objPrefabFile);
         }
 
-        private findPrefabInstanceOfFile(obj: ISceneGameObject, targetPrefaFile: io.FilePath): ISceneGameObject {
+        private static findPrefabInstanceOfFile(obj: ISceneGameObject, targetPrefaFile: io.FilePath): ISceneGameObject {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 

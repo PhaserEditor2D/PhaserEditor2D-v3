@@ -19,8 +19,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 2);
 
-            const { btn } = GameObjectVariableSection.createTypeEditor(this, comp);
-            btn.disabled = true;
+            {
+                // Name
+
+                this.createLabel(comp, "Name", "The name of the variable associated to this object. This name is used by the compiler.");
+
+                const text = this.createText(comp, true);
+
+                this.addUpdater(() => {
+
+                    text.value = this.flatValues_StringOneOrNothing(
+                        this.getSelection()
+                            .map(obj => this.getVarName(obj)));
+                })
+            }
+
+            {
+                // Type
+
+                const { btn } = GameObjectVariableSection.createTypeEditor(this, comp);
+                btn.disabled = true;
+            }
+        }
+
+        private getVarName(obj: ISceneGameObject) {
+
+            const varName = core.code.SceneCodeDOMBuilder.getPrefabInstanceVarName(obj);
+
+            return varName;
         }
 
         canEdit(obj: any, n: number): boolean {
