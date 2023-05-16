@@ -11,6 +11,7 @@
 * Allows enabling input in objects.
 * Adds the Name parameter to the Variable section of a nested prefab instance.
 * [#282](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/282) Use full nested prefab path in user object variable properties.
+* Excludes script node prefabs from the Blocks view when editing a non-script node scene.
 
 ## v3.60.3 - Apr 27, 2023
 
