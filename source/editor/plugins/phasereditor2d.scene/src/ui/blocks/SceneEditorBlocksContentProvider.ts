@@ -41,14 +41,11 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getRoots(input: any) {
 
-            const sceneFinder = ScenePlugin.getInstance().getSceneFinder();
-
             if (this._editor.getScene().isScriptNodePrefabScene()) {
 
                 return [
                     sceneobjects.ScriptNodeExtension.getInstance(),
-                    ...this.getSceneFiles("prefabs")
-                        .filter(f => sceneFinder.isScriptPrefabFile(f))
+                    ...this.getPrefabFiles("scripts")
                 ];
             }
 
@@ -66,7 +63,7 @@ namespace phasereditor2d.scene.ui.blocks {
                     if (groupingType === grouping.GROUP_ASSETS_BY_LOCATION) {
 
                         const files = colibri.ui.ide.FileUtils.distinct(
-                            this.getSceneFiles("prefabs").map(f => f.getParent()));
+                            this.getPrefabFiles("prefabs").map(f => f.getParent()));
 
                         return files;
                     }
@@ -111,7 +108,7 @@ namespace phasereditor2d.scene.ui.blocks {
                     return [
                         BUILTIN_SECTION,
                         ...colibri.ui.ide.FileUtils.distinct([
-                            ...this.getSceneFiles().map(f => f.getParent()),
+                            ...this.getPrefabFiles().map(f => f.getParent()),
                             ...packFolders])
                     ]
             }
@@ -119,21 +116,26 @@ namespace phasereditor2d.scene.ui.blocks {
             return [];
         }
 
-        private getSceneFiles(sceneType: "prefabs" | "all" = "all") {
+        private getPrefabFiles(sceneType: "prefabs" | "scripts" = "prefabs") {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            let files = (sceneType === "prefabs" ? finder.getPrefabFiles() : finder.getSceneFiles());
+            let files: io.FilePath[] = [];
+
+            switch (sceneType) {
+
+                case "prefabs":
+
+                    files = finder.getPrefabFiles().filter(f => !finder.isScriptPrefabFile(f));
+                    break;
+
+                case "scripts":
+
+                    files = finder.getPrefabFiles().filter(f => finder.isScriptPrefabFile(f));
+                    break;
+            }
 
             files = files.filter(file => SceneMaker.acceptDropFile(file, this._editor.getInput()));
-
-            files.sort((a, b) => {
-
-                const aa = finder.isScriptPrefabFile(a)? 1 : 0;
-                const bb = finder.isScriptPrefabFile(b)? 1 : 0;
-
-                return aa - bb;
-            });
 
             return files;
         }
@@ -144,7 +146,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
                 const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                return this.getSceneFiles().filter(file => finder.getScenePhaserType(file) === parent.getPhaserType());
+                return this.getPrefabFiles().filter(file => finder.getScenePhaserType(file) === parent.getPhaserType());
             }
 
             if (parent instanceof pack.core.AssetPack) {
@@ -190,7 +192,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
                     case PREFAB_SECTION:
 
-                        const files = this.getSceneFiles();
+                        const files = this.getPrefabFiles();
 
                         return files;
                 }
@@ -205,10 +207,10 @@ namespace phasereditor2d.scene.ui.blocks {
 
                 if (tabSection === TAB_SECTION_PREFABS) {
 
-                    return this.getSceneFiles("prefabs").filter(f => f.getParent() === parent);
+                    return this.getPrefabFiles("prefabs").filter(f => f.getParent() === parent);
                 }
 
-                const scenes = this.getSceneFiles().filter(f => f.getParent() === parent);
+                const scenes = this.getPrefabFiles().filter(f => f.getParent() === parent);
                 const items = this.getPackItems().filter(item => grouping.getItemFolder(item) === parent);
 
                 return [...scenes, ...items];
