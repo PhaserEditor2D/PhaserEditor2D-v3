@@ -82,7 +82,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const code = new core.code.MethodCallCodeDOM("setInteractive", args.objectVarName);
 
-                        this.buildSetInteractiveCodeCOM(obj, code);
+                        this.buildSetInteractiveCodeCOM(args, obj, code);
 
                         args.statements.push(code);
                     }
@@ -90,6 +90,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        protected abstract buildSetInteractiveCodeCOM(obj: ISceneGameObject, code: core.code.MethodCallCodeDOM): void;
+        protected abstract buildSetInteractiveCodeCOM(args: ISetObjectPropertiesCodeDOMArgs, obj: ISceneGameObject, code: core.code.MethodCallCodeDOM): void;
     }
 }

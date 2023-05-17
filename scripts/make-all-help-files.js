@@ -233,6 +233,8 @@ utils.makeHelpFile([
     "Phaser.Geom.Circle.y",
     "Phaser.Geom.Circle.radius",
 
+    "Phaser.Input.InputPlugin.makePixelPerfect(alphaTolerance)",
+
     "Phaser.GameObjects.Layer",
 
     "Phaser.Physics.Arcade.Collider",

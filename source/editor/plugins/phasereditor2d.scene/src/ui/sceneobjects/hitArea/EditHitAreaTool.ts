@@ -145,15 +145,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private renderObj(args: editor.tools.ISceneToolRenderArgs, obj: Sprite) {
 
-            const ctx = args.canvasContext;
-
-            ctx.save();
-
             const objES = obj.getEditorSupport();
 
             const comp = objES.getComponent(HitAreaComponent) as HitAreaComponent;
 
             const shape = comp.getHitAreaShape();
+
+            if (shape === HitAreaShape.PIXEL_PERFECT) {
+
+                // pixel perfect doesn't have any tool item
+
+                return;
+            }
+
+            const ctx = args.canvasContext;
+
+            ctx.save();
 
             if (shape === HitAreaShape.ELLIPSE) {
 

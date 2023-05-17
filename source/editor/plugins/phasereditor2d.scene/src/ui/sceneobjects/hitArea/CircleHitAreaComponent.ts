@@ -42,7 +42,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.radius = Math.min(width, height) / 2;
         }
 
-        protected override buildSetInteractiveCodeCOM(obj: ISceneGameObject, code: core.code.MethodCallCodeDOM): void {
+        protected override buildSetInteractiveCodeCOM(
+            args: ISetObjectPropertiesCodeDOMArgs,
+            obj: ISceneGameObject,
+            code: core.code.MethodCallCodeDOM): void {
 
             const { x, y, radius } = this;
 

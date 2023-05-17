@@ -5,7 +5,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         RECTANGLE = "RECTANGLE",
         CIRCLE = "CIRCLE",
         ELLIPSE = "ELLIPSE",
-        POLYGON = "POLYGON"
+        POLYGON = "POLYGON",
+        PIXEL_PERFECT = "PIXEL_PERFECT"
     }
 
     function getComp(obj: ISceneGameObject) {
@@ -27,7 +28,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 HitAreaShape.RECTANGLE,
                 HitAreaShape.CIRCLE,
                 HitAreaShape.ELLIPSE,
-                HitAreaShape.POLYGON
+                HitAreaShape.POLYGON,
+                HitAreaShape.PIXEL_PERFECT
             ]
         };
 
@@ -62,6 +64,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 case HitAreaShape.POLYGON:
 
                     return PolygonHitAreaComponent.getPolygonComponent(obj);
+
+                case HitAreaShape.PIXEL_PERFECT:
+
+                    return PixelPerfectHitAreaComponent.getPixelPerfectComponent(obj)
             }
 
             return undefined;

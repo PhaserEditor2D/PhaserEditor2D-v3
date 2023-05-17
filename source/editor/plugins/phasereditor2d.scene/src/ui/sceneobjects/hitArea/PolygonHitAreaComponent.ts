@@ -47,7 +47,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.points = `0 ${h * 0.25} ${w/2} 0 ${w} ${h * 0.25} ${w} ${h} 0 ${h}`;
         }
 
-        protected override buildSetInteractiveCodeCOM(obj: ISceneGameObject, code: core.code.MethodCallCodeDOM): void {
+        protected override buildSetInteractiveCodeCOM(
+            args: ISetObjectPropertiesCodeDOMArgs,
+            obj: ISceneGameObject,
+            code: core.code.MethodCallCodeDOM): void {
 
             code.arg(`new Phaser.Geom.Polygon("${this.points}")`);
 

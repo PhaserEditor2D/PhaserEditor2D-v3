@@ -28,7 +28,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            this.createPropertyEnumRow(comp, prop);
+            this.createPropertyEnumRow(comp, prop, undefined, value => {
+
+                if (value === HitAreaShape.PIXEL_PERFECT) {
+
+                    for(const obj of this.getSelection()) {
+
+                        if (!(obj instanceof Sprite) && !(obj instanceof Image)) {
+
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            });
         }
 
         canEdit(obj: any, n: number): boolean {
