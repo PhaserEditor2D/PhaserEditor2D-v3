@@ -2,6 +2,12 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import json = core.json;
+    import controls = colibri.ui.controls;
+
+    interface IUnlockListenerArg<T> {
+        property: IProperty<T>,
+        unlock: boolean;
+    }
 
     export abstract class GameObjectEditorSupport<T extends ISceneGameObject> extends EditorSupport<T> {
 
@@ -12,6 +18,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _componentMap: Map<Function, Component<any>>;
         private _unlockedProperties: Set<string>;
         private _isNestedPrefabInstance: boolean;
+        private _isPrivateNestedPrefabInstance: boolean;
+        private _isPrefabInstancePart: boolean;
+        // a temporal variable used for serialization
+        public _private_np: boolean;
+        public unlockEvent: controls.ListenerList<IUnlockListenerArg<T>>;
 
         // parent
         private _allowPickChildren: boolean;
@@ -25,10 +36,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(obj, extension.getTypeName().toLowerCase(), scene);
 
             this._extension = extension;
+            this.unlockEvent = new controls.ListenerList();
             this._unlockedProperties = new Set();
             this._serializables = [];
             this._componentMap = new Map();
             this._isNestedPrefabInstance = false;
+            this._isPrivateNestedPrefabInstance = false;
+            this._isPrefabInstancePart = false;
+            this._private_np = false;
 
             this._allowPickChildren = true;
             this._showChildrenInOutline = true;
@@ -44,6 +59,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new VariableComponent(obj));
             this.addComponent(new PrefabUserPropertyComponent(obj));
             this.addComponent(new UserComponentsEditorComponent(obj));
+
+            if (this.isDisplayObject()) {
+
+                this.addComponent(
+                    new HitAreaComponent(obj),
+                    new RectangleHitAreaComponent(obj),
+                    new CircleHitAreaComponent(obj),
+                    new EllipseHitAreaComponent(obj),
+                    new PolygonHitAreaComponent(obj),
+                    new PixelPerfectHitAreaComponent(obj)
+                );
+            }
 
             this.setInteractive();
 
@@ -329,6 +356,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._unlockedProperties.delete(property.name);
             }
+
+            this.unlockEvent.fire({ property, unlock });
         }
 
         setUnlockedPropertyXY(property: IPropertyXY, unlock: boolean) {
@@ -613,6 +642,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          */
         isMutableNestedPrefabInstance() {
 
+            // TODO: the next line is a better implementation we should test:
+            // return this.isNestedPrefabInstance() && !this.isPrivateNestedPrefabInstance();
+
             if (this.isNestedPrefabInstance()) {
 
                 const parent = this.getObjectParent();
@@ -660,9 +692,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const parent = this.getObjectParent();
                 const parentES = parent?.getEditorSupport();
 
-                if (!parent 
+                if (!parent
                     || !parentES.isPrefabInstance()
                     || this.isPrefeabInstanceAppendedChild()) {
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        isNestedPrefabInstanceParent() {
+
+            for (const obj of this.getObjectChildren()) {
+
+                const objES = obj.getEditorSupport();
+
+                if (objES.isNestedPrefabInstance() || objES.isNestedPrefabInstanceParent()) {
 
                     return true;
                 }
@@ -676,9 +723,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._isNestedPrefabInstance;
         }
 
-        _setNestedPrefabInstance(isNestedPrefabInstace: boolean) {
+        isPrivateNestedPrefabInstance() {
 
-            this._isNestedPrefabInstance = isNestedPrefabInstace;
+            return this._isPrivateNestedPrefabInstance;
+        }
+
+        isPrefabInstancePart() {
+
+            return this._isPrefabInstancePart;
         }
 
         isPrefabInstance() {
@@ -816,7 +868,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const result = [];
 
-                for(const obj of children) {
+                for (const obj of children) {
 
                     const objES = obj.getEditorSupport();
 
@@ -1008,6 +1060,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             data.id = this.getId();
+            data.private_np = this._private_np ? true : undefined;
 
             if (this._prefabId && this._unlockedProperties.size > 0) {
 
@@ -1140,6 +1193,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     return objData as json.IObjectData;
                 });
             }
+
+            // if the container has an empty list, remove it from the file
+            if (containerData.list && containerData.list.length === 0) {
+
+                delete containerData.list;
+            }
+
+            // if the container has an empty nestedPrefabs array, remove it from the file
+            if (containerData.nestedPrefabs && containerData.nestedPrefabs.length === 0) {
+
+                delete containerData.nestedPrefabs;
+            }
         }
 
         private static readPrefabChildren(serializer: core.json.Serializer, list: json.IObjectData[]) {
@@ -1235,21 +1300,27 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (sprite) {
 
-                    parent.getEditorSupport().addObjectChild(sprite);
+                    parentES.addObjectChild(sprite);
+
+                    const spriteES = sprite.getEditorSupport();
 
                     // if it is not an appended child
                     if (i < prefabChildren.length) {
 
                         const prefabData = prefabChildren[i];
+                        const { private_np, scope } = prefabData;
 
-                        if (prefabData.scope === sceneobjects.ObjectScope.NESTED_PREFAB) {
+                        if (private_np || ui.sceneobjects.isNestedPrefabScope(scope)) {
 
-                            sprite.getEditorSupport()._setNestedPrefabInstance(true);
+                            spriteES._isNestedPrefabInstance = true;
+                            spriteES._isPrivateNestedPrefabInstance = private_np;
                         }
+
+                        this._isPrefabInstancePart = true;
                     }
 
                     // updates the object with the final data
-                    sprite.getEditorSupport().readJSON(childData);
+                    spriteES.readJSON(childData);
                 }
 
                 i++;
@@ -1271,11 +1342,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const originalChild of originalPrefabChildren) {
 
-                if (originalChild.scope !== sceneobjects.ObjectScope.NESTED_PREFAB) {
+                const isNestedPrefab = originalChild.private_np
+                    || sceneobjects.isNestedPrefabScope(originalChild.scope);
 
-                    result.push(originalChild);
-
-                } else {
+                if (isNestedPrefab) {
 
                     // find a local nested prefab
 
@@ -1303,13 +1373,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         }
                     }
 
+                    let createFreshObject = true;
+                    let newNestedPrefabs: json.IObjectData[];
+
                     if (localNestedPrefab) {
 
-                        result.push(localNestedPrefab);
+                        if (isPublicScope(originalChild.scope)) {
+                            // it is ok, the original child is public
+                            // add the local nested prefab as final version of the object
+                            result.push(localNestedPrefab);
 
-                    } else {
+                            createFreshObject = false;
 
-                        // we don't have a local prefab, find one remote and create a pointer to it
+                        } else {
+
+                            // the original object is not public any more,
+                            // we will create a link-object, but keeping the same nested prefabs
+                            newNestedPrefabs = localNestedPrefab.nestedPrefabs;
+                        }
+                    }
+
+                    if (createFreshObject) {
+
+                        // we don't have a local nested prefab,
+                        // or the original nested prefab is not public any more
+                        // so find one remote and create a pointer to it
 
                         const remoteNestedPrefab = this.findRemoteNestedPrefab(objData.prefabId, originalChild.id);
 
@@ -1321,6 +1409,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 id: Phaser.Utils.String.UUID(),
                                 prefabId: remoteNestedPrefab.id,
                                 label: remoteNestedPrefab.label,
+                                nestedPrefabs: newNestedPrefabs
                             };
 
                             result.push(nestedPrefab);
@@ -1333,11 +1422,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 id: Phaser.Utils.String.UUID(),
                                 prefabId: originalChild.id,
                                 label: originalChild.label,
+                                nestedPrefabs: newNestedPrefabs
                             };
 
                             result.push(nestedPrefab);
                         }
                     }
+
+                } else {
+
+                    result.push(originalChild);
                 }
             }
 

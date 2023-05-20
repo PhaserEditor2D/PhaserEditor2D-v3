@@ -1,3 +1,4 @@
+/// <reference path="../../sceneobjects/ObjectScope.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = scene.core.code;
@@ -26,12 +27,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static scope: IEnumProperty<ISceneGameObject, ObjectScope> = {
             name: "scope",
             tooltip: "The variable lexical scope.",
-            defValue: ObjectScope.METHOD,
+            defValue: ObjectScope.LOCAL,
             local: true,
             getValue: obj => obj.getEditorSupport().getScope(),
             setValue: (obj, value) => obj.getEditorSupport().setScope(value),
-            values: [ObjectScope.METHOD, ObjectScope.CLASS, ObjectScope.PUBLIC, ObjectScope.NESTED_PREFAB],
-            getValueLabel: value => value.split("_").map(v => v[0] + v.substring(1).toLowerCase()).join(" ")
+            values: OBJECT_SCOPES,
+            getValueLabel: value => value.replaceAll("_", " ") // value.split("_").map(v => v[0] + v.substring(1).toLowerCase()).join(" ")
         };
 
         constructor(obj: ISceneGameObject) {
@@ -47,7 +48,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (this.getEditorSupport().isUseGameObjectName()) {
 
                 const dom = new code.AssignPropertyCodeDOM("name", args.objectVarName);
- 
+
                 dom.valueLiteral(this.getEditorSupport().getLabel());
 
                 args.statements.push(dom);

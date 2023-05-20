@@ -30,6 +30,14 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 lists.removeListById(obj.getId());
             }
 
+            for(const obj of editor.getSelectedListItems()) {
+
+                for(const list of lists.getLists()) {
+
+                    list.removeItem(obj.getId());
+                }
+            }
+
             for(const obj of editor.getSelectedPrefabProperties()) {
 
                 obj.getAllProperties().deleteProperty(obj.getName());

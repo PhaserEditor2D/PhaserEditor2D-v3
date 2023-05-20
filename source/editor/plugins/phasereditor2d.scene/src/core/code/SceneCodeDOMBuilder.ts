@@ -223,17 +223,16 @@ namespace phasereditor2d.scene.core.code {
 
             for (const obj of this._scene.getPlainObjects()) {
 
-                const editorSupport = obj.getEditorSupport();
-                const scope = editorSupport.getScope();
+                const objES = obj.getEditorSupport();
 
-                if (scope !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (objES.isClassOrPublicScope()) {
 
-                    const objType = editorSupport.getPhaserType();
+                    const objType = objES.getPhaserType();
 
                     const dom = new FieldDeclCodeDOM(
-                        formatToValidVarName(editorSupport.getLabel()),
+                        formatToValidVarName(objES.getLabel()),
                         objType,
-                        scope === ui.sceneobjects.ObjectScope.PUBLIC);
+                        objES.isPublicScope());
 
                     dom.setAllowUndefined(!this._scene.isPrefabSceneType());
 
@@ -248,14 +247,14 @@ namespace phasereditor2d.scene.core.code {
 
             for (const list of this._scene.getObjectLists().getLists()) {
 
-                if (list.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (ui.sceneobjects.isClassOrPublicScope(list.getScope())) {
 
                     const listType = list.inferType(objMap);
 
                     const dom = new FieldDeclCodeDOM(
                         formatToValidVarName(list.getLabel()),
                         listType,
-                        list.getScope() === ui.sceneobjects.ObjectScope.PUBLIC);
+                        ui.sceneobjects.isPublicScope(list.getScope()));
 
                     dom.setAllowUndefined(!this._scene.isPrefabSceneType());
 
@@ -282,7 +281,7 @@ namespace phasereditor2d.scene.core.code {
                         ? objES.getPrefabName()
                         : (explicitType ? explicitType : objES.getPhaserType());
 
-                    const isPublic = objES.isPublic();
+                    const isPublic = objES.isPublicScope();
 
                     const field = new FieldDeclCodeDOM(varName, type, isPublic);
                     // Allow undefined if the object is part of a scene.
@@ -456,7 +455,8 @@ namespace phasereditor2d.scene.core.code {
 
                 if (obj.getEditorSupport().isMutableNestedPrefabInstance()) {
 
-                    this.addCreateObjectCodeOfNestedPrefab(obj, createMethodDecl, lazyStatements);
+                    // this.addCreateObjectCodeOfNestedPrefab(obj, createMethodDecl, lazyStatements);
+                    throw new Error("Assert: this code should not be reached.");
 
                 } else {
 
@@ -490,11 +490,11 @@ namespace phasereditor2d.scene.core.code {
         private addCreatePlainObjectCode(
             obj: ui.sceneobjects.IScenePlainObject, firstStatements: CodeDOM[], lazyStatements: CodeDOM[]) {
 
-            const objSupport = obj.getEditorSupport();
+            const objES = obj.getEditorSupport();
 
-            const varname = formatToValidVarName(objSupport.getLabel());
+            const varname = formatToValidVarName(objES.getLabel());
 
-            const result = objSupport.getExtension().buildCreateObjectWithFactoryCodeDOM({
+            const result = objES.getExtension().buildCreateObjectWithFactoryCodeDOM({
                 gameObjectFactoryExpr: this._scene.isPrefabSceneType() ? "scene" : "this",
                 obj: obj,
                 varname
@@ -519,7 +519,7 @@ namespace phasereditor2d.scene.core.code {
 
             const objectFactoryMethodCall = result.objectFactoryMethodCall;
 
-            if (!objSupport.isMethodScope()) {
+            if (objES.isClassOrPublicScope() || objES.isMethodScope()) {
 
                 objectFactoryMethodCall.setDeclareReturnToVar(true);
             }
@@ -590,28 +590,6 @@ namespace phasereditor2d.scene.core.code {
                     fields.push(dom);
                 }
             }
-
-            // for (const obj of children) {
-
-            //     const objES = obj.getEditorSupport();
-
-            //     if (!objES.isMethodScope() && prefabObj !== obj) {
-
-            //         const varname = formatToValidVarName(objES.getLabel());
-
-            //         const dom = new AssignPropertyCodeDOM(varname, "this");
-            //         dom.value(varname);
-
-            //         fields.push(dom);
-            //     }
-
-            //     const walkingChildren = this.getWalkingChildren(obj);
-
-            //     if (walkingChildren) {
-
-            //         this.addFieldInitCode_GameObjects(fields, prefabObj, walkingChildren);
-            //     }
-            // }
         }
 
         private addFieldInitCode(body: CodeDOM[]) {
@@ -624,11 +602,11 @@ namespace phasereditor2d.scene.core.code {
 
             for (const obj of this._scene.getPlainObjects()) {
 
-                const editorSupport = obj.getEditorSupport();
+                const objES = obj.getEditorSupport();
 
-                if (editorSupport.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (objES.isClassOrPublicScope()) {
 
-                    const varname = formatToValidVarName(editorSupport.getLabel());
+                    const varname = formatToValidVarName(objES.getLabel());
 
                     const dom = new AssignPropertyCodeDOM(varname, "this");
 
@@ -640,7 +618,7 @@ namespace phasereditor2d.scene.core.code {
 
             for (const list of this._scene.getObjectLists().getLists()) {
 
-                if (list.getScope() !== ui.sceneobjects.ObjectScope.METHOD) {
+                if (ui.sceneobjects.isClassOrPublicScope(list.getScope())) {
 
                     const varname = formatToValidVarName(list.getLabel());
 
@@ -661,7 +639,7 @@ namespace phasereditor2d.scene.core.code {
 
         private addCreateObjectCodeOfNestedPrefab(obj: ISceneGameObject, createMethodDecl: MethodDeclCodeDOM, lazyStatements: CodeDOM[]) {
 
-            const varname = this.getPrefabInstanceVarName(obj);
+            const varname = SceneCodeDOMBuilder.getPrefabInstanceVarName(obj);
 
             const result = this.buildSetObjectProperties({
                 obj,
@@ -709,7 +687,7 @@ namespace phasereditor2d.scene.core.code {
                     && objParent === this._scene.getPrefabObject();
 
                 parentVarName = parentIsPrefabObject ? "this"
-                    : this.getPrefabInstanceVarName(objParent);
+                    : SceneCodeDOMBuilder.getPrefabInstanceVarName(objParent);
             }
 
             // the script nodes require using the varname of the parents
@@ -813,6 +791,11 @@ namespace phasereditor2d.scene.core.code {
                 createObjectMethodCall.setDeclareReturnToVar(true);
             }
 
+            if (objES.isMethodScope()) {
+                // it is method scope... the user wants a variable!
+                createObjectMethodCall.setDeclareReturnToVar(true);
+            }
+
             lazyStatements.push(...result.lazyStatements);
 
             createMethodDecl.getBody().push(...result.statements);
@@ -872,9 +855,10 @@ namespace phasereditor2d.scene.core.code {
 
             // set var flags
 
-            if (!objES.isMethodScope()) {
+            if (objES.isClassOrPublicScope()) {
 
                 createObjectMethodCall.setDeclareReturnToVar(true);
+
                 this._objectsToFieldList.push(obj);
             }
 
@@ -897,7 +881,7 @@ namespace phasereditor2d.scene.core.code {
                 .join(" & ");
         }
 
-        private getPrefabInstanceVarName(obj: ISceneGameObject): string {
+        static getPrefabInstanceVarName(obj: ISceneGameObject): string {
 
             const objES = obj.getEditorSupport();
 
@@ -920,7 +904,7 @@ namespace phasereditor2d.scene.core.code {
             return varName;
         }
 
-        private findPrefabInstanceWhereTheGivenObjectIsDefined(obj: ui.sceneobjects.ISceneGameObject): ui.sceneobjects.ISceneGameObject {
+        private static findPrefabInstanceWhereTheGivenObjectIsDefined(obj: ui.sceneobjects.ISceneGameObject): ui.sceneobjects.ISceneGameObject {
 
             const objES = obj.getEditorSupport();
 
@@ -935,7 +919,7 @@ namespace phasereditor2d.scene.core.code {
             return this.findPrefabInstanceOfFile(parent, objPrefabFile);
         }
 
-        private findPrefabInstanceOfFile(obj: ISceneGameObject, targetPrefaFile: io.FilePath): ISceneGameObject {
+        private static findPrefabInstanceOfFile(obj: ISceneGameObject, targetPrefaFile: io.FilePath): ISceneGameObject {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 

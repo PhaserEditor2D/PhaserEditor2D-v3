@@ -23,6 +23,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
 
+            } else if (element instanceof sceneobjects.ObjectListItem) {
+
+                return new sceneobjects.ObjectListItemCellRenderer(
+                    this.getCellRenderer(element.getObject()));
+
             } else if (element instanceof sceneobjects.UserComponentNode) {
 
                 return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT));

@@ -133,6 +133,8 @@ namespace phasereditor2d.ide {
 
         openBrowser(url: string) {
 
+            console.log("Opening browser for: " + url);
+
             colibri.Platform.onElectron(electron => {
 
                 colibri.core.io.apiRequest("OpenBrowser", { url });
@@ -149,17 +151,20 @@ namespace phasereditor2d.ide {
 
             const search = startScene ? `?start=${startScene}` : "";
 
-            const url = (config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl())
-                    + search;
+            let url: string;
 
-            colibri.Platform.onElectron(electron => {
+            if (config.playUrl) {
 
-                colibri.core.io.apiRequest("OpenBrowser", { url: config.playUrl });
+                url = config.playUrl + search;
 
-            }, () => {
+            } else {
 
-                controls.Controls.openUrlInNewPage(url);
-            });
+                const {protocol, host} = window.location;
+
+                url = `${protocol}//${host}/editor/external/${search}`;
+            }
+
+            this.openBrowser(url);
         }
 
         async requestUpdateAvailable() {
@@ -317,7 +322,7 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.60.3";
+    export const VER = "3.61.0";
 
     async function main() {
 

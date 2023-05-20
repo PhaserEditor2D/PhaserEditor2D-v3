@@ -55,11 +55,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected valueToString(viewer: colibri.ui.controls.viewers.TreeViewer, value: any): string {
 
-            const support = EditorSupport.getEditorSupport(value);
+            const objES = EditorSupport.getEditorSupport(value);
 
-            if (support) {
+            if (objES) {
 
-                return support.getLabel();
+                if (objES instanceof GameObjectEditorSupport && objES.isNestedPrefabInstance()) {
+
+                    return core.code.SceneCodeDOMBuilder.getPrefabInstanceVarName(value);
+                }
+
+                return objES.getLabel();
             }
 
             return viewer.getLabelProvider().getLabel(value);
@@ -76,14 +81,31 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const foundElement = [undefined];
 
-            scene.visitAll(obj => {
+            scene.visitAllAskChildren(obj => {
 
                 if (!foundElement[0]) {
 
-                    if (obj.getEditorSupport().getLabel() === value) {
+                    const objES = obj.getEditorSupport();
+
+                    if (objES.isNestedPrefabInstance()) {
+
+                        const objVarName = core.code.SceneCodeDOMBuilder.getPrefabInstanceVarName(obj);
+
+                        if (objVarName === value) {
+
+                            foundElement[0] = obj;
+
+                            return false;
+                        }
+
+                    } else if (core.code.formatToValidVarName(objES.getLabel()) === value) {
 
                         foundElement[0] = obj;
+
+                        return false;
                     }
+
+                    return true;
                 }
             });
 

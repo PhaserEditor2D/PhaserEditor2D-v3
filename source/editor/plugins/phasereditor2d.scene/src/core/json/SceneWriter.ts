@@ -43,8 +43,30 @@ namespace phasereditor2d.scene.core.json {
 
             for (const obj of this._scene.getGameObjects()) {
 
+                this.computeDataField_private_np(obj);
+            }
+
+            for (const obj of this._scene.getGameObjects()) {
+
                 const objData = {} as IObjectData;
-                obj.getEditorSupport().writeJSON(objData);
+
+                const objES = obj.getEditorSupport();
+
+                // write the `private_np` field
+
+                const private_np = objES._private_np;
+
+                if (private_np) {
+
+                    objData.private_np = true;
+                }
+
+                // serialize all the other obj data
+
+                objES.writeJSON(objData);
+
+                // add the data to the list
+
                 sceneData.displayList.push(objData);
             }
 
@@ -60,6 +82,42 @@ namespace phasereditor2d.scene.core.json {
             }
 
             return sceneData;
+        }
+
+        private computeDataField_private_np(obj: ui.sceneobjects.ISceneGameObject) {
+
+            const objES = obj.getEditorSupport();
+
+            for (const child of objES.getObjectChildren()) {
+
+                this.computeDataField_private_np(child);
+            }
+
+            if (!objES.isPrefabInstancePart()
+                && !objES.isNestedPrefabScope()
+                && !objES.isScenePrefabObject()) {
+
+                // ok, it is an object in the scene which
+                // I don't know if it is a private nested prefab (`private_np`)
+                // let's investigate with the kids
+
+                for (const child of objES.getObjectChildren()) {
+
+                    const childES = child.getEditorSupport();
+
+                    if (
+                        // the child is flagged as private_np
+                        childES._private_np 
+                        // or the child is is a common object with a NESTED_PREFAB scope
+                        || (childES.isNestedPrefabScope() && !childES.isPrefabInstancePart())) {
+                        
+                        // flag the object and stop the search
+                        objES._private_np = true;
+
+                        break;
+                    }
+                }
+            }
         }
 
         toString(): string {

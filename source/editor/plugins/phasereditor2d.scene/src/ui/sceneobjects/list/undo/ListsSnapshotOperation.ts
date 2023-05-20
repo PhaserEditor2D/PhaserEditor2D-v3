@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _before: json.IObjectListData[];
         private _after: json.IObjectListData[];
+        private _selection: string[];
 
         constructor(editor: editor.SceneEditor) {
             super(editor);
@@ -15,9 +16,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async execute() {
 
-            const lists = this._editor.getScene().getObjectLists();
+            const scene = this._editor.getScene();
+
+            const lists = scene.getObjectLists();
 
             this._before = lists.toJSON_lists();
+            this._selection = this._editor.getSelectionManager().getSelectionIds();
 
             this.performChange(lists);
 
@@ -36,7 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._editor.refreshOutline();
 
-            this._editor.getSelectionManager().refreshSelection();
+            this._editor.getSelectionManager().setSelectionByIds(this._selection);
         }
 
         undo(): void {

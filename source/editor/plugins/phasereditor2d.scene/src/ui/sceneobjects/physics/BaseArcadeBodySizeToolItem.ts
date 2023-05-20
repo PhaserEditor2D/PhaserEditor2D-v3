@@ -3,11 +3,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export abstract class BaseArcadeBodySizeToolItem
         extends editor.tools.SceneToolItem implements editor.tools.ISceneToolItemXY {
 
-        private _x: IScaleAxis;
-        private _y: IScaleAxis;
+        private _x: IAxisFactor;
+        private _y: IAxisFactor;
         private _dragging: boolean;
 
-        constructor(x: IScaleAxis, y: IScaleAxis) {
+        constructor(x: IAxisFactor, y: IAxisFactor) {
             super();
 
             this._x = x;
@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             );
         }
 
-        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number, removeRotation = false) {
+        protected getScreenPointOfObject(args: ui.editor.tools.ISceneToolContextArgs, sprite: Sprite, fx: number, fy: number) {
 
             const worldPoint = new Phaser.Geom.Point(0, 0);
 
@@ -46,11 +46,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const y = body.offset.y - displayOriginY + fy * height;
 
             const tx = sprite.getWorldTransformMatrix();
-
-            if (removeRotation) {
-
-                tx.rotate(-tx.rotation);
-            }
 
             tx.transformPoint(x, y, worldPoint);
 

@@ -374,6 +374,12 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.NineSliceSection(page),
                 page => new ui.sceneobjects.ThreeSliceSection(page),
+                page => new ui.sceneobjects.HitAreaSection(page),
+                page => new ui.sceneobjects.RectangleHitAreaSection(page),
+                page => new ui.sceneobjects.CircleHitAreaSection(page),
+                page => new ui.sceneobjects.EllipseHitAreaSection(page),
+                page => new ui.sceneobjects.PolygonHitAreaSection(page),
+                page => new ui.sceneobjects.PixelPerfectHitAreaSection(page),
                 page => new ui.sceneobjects.ArcadeBodySection(page),
                 page => new ui.sceneobjects.ArcadeGeometrySection(page),
                 page => new ui.sceneobjects.ArcadeBodyMovementSection(page),
@@ -382,7 +388,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TextContentSection(page),
                 page => new ui.sceneobjects.TextSection(page),
                 page => new ui.sceneobjects.BitmapTextSection(page),
-                page => new ui.sceneobjects.ListSection(page),
+                page => new ui.sceneobjects.ObjectListItemSection(page),
                 page => new ui.sceneobjects.ScenePlainObjectVariableSection(page),
                 page => new ui.sceneobjects.TilemapSection(page),
                 page => new ui.sceneobjects.TilesetSection(page),
@@ -404,11 +410,12 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.ScaleTool(),
                 new ui.sceneobjects.OriginTool(),
                 new ui.sceneobjects.SizeTool(),
+                new ui.sceneobjects.EditHitAreaTool(),
                 new ui.sceneobjects.ArcadeBodyTool(),
                 new ui.sceneobjects.SliceTool(),
                 new ui.sceneobjects.PolygonTool(),
                 new ui.sceneobjects.SelectionRegionTool(),
-                new ui.sceneobjects.PanTool(),
+                new ui.sceneobjects.PanTool()
             ));
 
             // files view sections
@@ -489,7 +496,7 @@ namespace phasereditor2d.scene {
 
         getPrefabColor() {
 
-            return colibri.ui.controls.Controls.getTheme().dark? "lightGreen" : "darkGreen";
+            return colibri.ui.controls.Controls.getTheme().dark ? "lightGreen" : "darkGreen";
         }
 
         getNestedPrefabColor() {
@@ -638,7 +645,31 @@ namespace phasereditor2d.scene {
             dlg.close();
         }
 
+        private _showIncompatibilityMessage = true;
+
         runSceneDataMigrations(sceneData: core.json.ISceneData) {
+
+            // check scene data min supported version
+
+            if (this._showIncompatibilityMessage) {
+
+                const version = sceneData.meta.version;
+
+                if (version) {
+
+                    if (version > ui.Scene.CURRENT_VERSION) {
+
+                        alert(`
+                        The project contains scene files created by newer versions of the editor.
+                        You should update the editor.
+                        `);
+                    }
+                }
+
+                this._showIncompatibilityMessage = false;
+            }
+
+            // check migrations
 
             const migrations = colibri.Platform.getExtensionRegistry()
                 .getExtensions<ui.SceneDataMigrationExtension>(ui.SceneDataMigrationExtension.POINT_ID);

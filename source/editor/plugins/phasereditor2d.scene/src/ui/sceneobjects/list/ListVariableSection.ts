@@ -52,14 +52,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.createLabel(comp, "Scope", "The lexical scope of the object.");
 
+                // I skip the LOCAL scope here because a List without a variable
+                // has no sense
                 const items = [{
-                    name: "Method",
+                    name: "METHOD",
                     value: ObjectScope.METHOD
                 }, {
-                    name: "Class",
+                    name: "CLASS",
                     value: ObjectScope.CLASS
                 }, {
-                    name: "Public",
+                    name: "PUBLIC",
                     value: ObjectScope.PUBLIC
                 }];
 

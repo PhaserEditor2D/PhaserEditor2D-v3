@@ -24,8 +24,6 @@ namespace phasereditor2d.scene.core.json {
         async preload(monitor: controls.IProgressMonitor) {
 
             await this._finder.preload(monitor);
-
-            this._finder.runMigrations();
         }
     }
 
@@ -73,7 +71,6 @@ namespace phasereditor2d.scene.core.json {
             colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(async (e) => {
 
                 await this.handleStorageChange(e);
-
             });
         }
 
@@ -133,14 +130,6 @@ namespace phasereditor2d.scene.core.json {
             await this.preloadComponentsFiles(monitor);
 
             monitor.step();
-        }
-
-        runMigrations() {
-
-            for (const data of this._sceneFilename_Data_Map.values()) {
-
-                ScenePlugin.getInstance().runSceneDataMigrations(data);
-            }
         }
 
         private async preloadComponentsFiles(monitor: controls.IProgressMonitor): Promise<void> {
@@ -214,7 +203,7 @@ namespace phasereditor2d.scene.core.json {
 
                     const data = JSON.parse(content) as ISceneData;
 
-                    // await ScenePlugin.getInstance().runSceneDataMigrations(data);
+                    ScenePlugin.getInstance().runSceneDataMigrations(data);
 
                     sceneFilename_Data_Map.set(file.getFullName(), data);
                     {
@@ -224,7 +213,6 @@ namespace phasereditor2d.scene.core.json {
                     }
 
                     if (data.id) {
-
 
                         if (sceneIdSet.has(data.id)) {
 
@@ -257,6 +245,7 @@ namespace phasereditor2d.scene.core.json {
                     sceneFiles.push(file);
 
                 } catch (e) {
+                    
                     console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
                 }
 
@@ -283,7 +272,7 @@ namespace phasereditor2d.scene.core.json {
 
                 for (const c of objData.list) {
 
-                    if (c.scope === ui.sceneobjects.ObjectScope.NESTED_PREFAB) {
+                    if (c.private_np || ui.sceneobjects.isNestedPrefabScope(c.scope)) {
 
                         prefabObjectId_ObjectData_Map.set(c.id, c);
                         prefabId_File_Map.set(c.id, file);

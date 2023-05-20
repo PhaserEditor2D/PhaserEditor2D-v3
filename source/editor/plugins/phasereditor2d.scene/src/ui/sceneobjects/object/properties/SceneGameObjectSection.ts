@@ -204,7 +204,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon: boolean = true) {
+        createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon: boolean = true, filter?: (v: any) => boolean) {
 
             if (lockIcon) {
 
@@ -214,7 +214,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
-            const btn = this.createEnumField(parent, prop);
+            const btn = this.createEnumField(parent, prop, undefined, filter);
 
             return btn;
         }

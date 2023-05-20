@@ -56,16 +56,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.createLabel(comp, "Scope", "The lexical scope of the object.");
 
-                const items = [{
-                    name: "Method",
-                    value: ObjectScope.METHOD
-                }, {
-                    name: "Class",
-                    value: ObjectScope.CLASS
-                }, {
-                    name: "Public",
-                    value: ObjectScope.PUBLIC
-                }];
+                const items = [
+                    {
+                        name: "LOCAL",
+                        value: ObjectScope.LOCAL
+                    },
+                    {
+                        name: "METHOD",
+                        value: ObjectScope.METHOD
+                    }, {
+                        name: "CLASS",
+                        value: ObjectScope.CLASS
+                    }, {
+                        name: "PUBLIC",
+                        value: ObjectScope.PUBLIC
+                    }];
 
                 const btn = this.createMenuButton(comp, "", () => items, scope => {
 
@@ -73,7 +78,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         for (const obj of objects) {
 
-                            obj.getEditorSupport().setScope(scope);
+                            const objES = obj.getEditorSupport();
+
+                            objES.setScope(scope);
                         }
                     });
                 });

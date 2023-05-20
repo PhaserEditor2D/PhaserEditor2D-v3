@@ -14,7 +14,14 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         static allow(editor: SceneEditor, move: DepthMove) {
 
+            // sort the selection and filter off non-game-objects
             let sel = this.sortedSelection(editor);
+
+            // if the sorted selection contains all the selected objects
+            if (sel.length !== editor.getSelection().length) {
+
+                return false;
+            }
 
             for (const obj of sel) {
 

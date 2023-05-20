@@ -59,6 +59,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenScriptDialog";
     export const CMD_OPEN_ADD_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenAddScriptDialog";
     export const CMD_PREVIEW_SCENE = "phasereditor2d.scene.ui.editor.commands.PreviewScene";
+    export const CMD_EDIT_HIT_AREA = "phasereditor2d.scene.ui.editor.commands.ResizeHitArea";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -138,6 +139,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerOriginCommands(manager);
 
             this.registerDepthCommands(manager);
+
+            this.registerListCommands(manager);
 
             this.registerTypeCommands(manager);
 
@@ -1898,6 +1901,23 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         .getToolsManager().swapTool(ui.sceneobjects.SliceTool.ID)
                 }
             });
+
+            manager.add({
+                command: {
+                    id: CMD_EDIT_HIT_AREA,
+                    name: "Hit Area Tool",
+                    tooltip: "Resize the hit area of the selected objects.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => (args.activeEditor as SceneEditor)
+                        .getToolsManager().swapTool(ui.sceneobjects.EditHitAreaTool.ID)
+                },
+                keys: {
+                    key: "KeyI"
+                }
+            });
         }
 
         private static registerVisibilityCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -1989,6 +2009,41 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         executeFunc: args => args.activeEditor.getUndoManager().add(
                             new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move))
+                    },
+
+                    keys: {
+                        key
+                    }
+                });
+            }
+        }
+
+        private static registerListCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // order commands
+
+            const moves: [undo.DepthMove, string][] = [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]];
+
+            for (const tuple of moves) {
+
+                const move = tuple[0];
+                const key = tuple[1];
+
+                manager.add({
+
+                    command: {
+                        id: "phasereditor2d.scene.ui.editor.commands.ListOrder" + move,
+                        name: "Move " + move,
+                        category: CAT_SCENE_EDITOR,
+                        tooltip: "Move the object in its list to " + move + "."
+                    },
+
+                    handler: {
+                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                            && sceneobjects.ListOrderOperation.allow(args.activeEditor as any, move),
+
+                        executeFunc: args => args.activeEditor.getUndoManager().add(
+                            new sceneobjects.ListOrderOperation(args.activeEditor as editor.SceneEditor, move))
                     },
 
                     keys: {

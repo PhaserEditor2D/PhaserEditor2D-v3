@@ -383,7 +383,7 @@ namespace phasereditor2d.scene.ui.editor {
             if (file) {
 
                 if (ScenePlugin.getInstance().getSceneFinder().isScriptPrefabFile(file)) {
-                
+
                     return ScenePlugin.getInstance().getIcon(ICON_BUILD);
                 }
 
@@ -568,14 +568,21 @@ namespace phasereditor2d.scene.ui.editor {
 
             return this.getSelection()
 
-                .filter(obj => sceneobjects.isGameObject(obj)) as any;
+                .filter(obj => sceneobjects.isGameObject(obj));
         }
 
         getSelectedLists(): sceneobjects.ObjectList[] {
 
             return this.getSelection()
 
-                .filter(obj => obj instanceof sceneobjects.ObjectList) as any;
+                .filter(obj => obj instanceof sceneobjects.ObjectList);
+        }
+
+        getSelectedListItems(): sceneobjects.ObjectListItem[] {
+
+            return this.getSelection()
+
+                .filter(obj => obj instanceof sceneobjects.ObjectListItem);
         }
 
         getSelectedPlainObjects(): sceneobjects.IScenePlainObject[] {
@@ -901,7 +908,7 @@ namespace phasereditor2d.scene.ui.editor {
             } catch (e) {
 
                 console.log(e);
-                
+
                 alert(e.message);
             }
         }

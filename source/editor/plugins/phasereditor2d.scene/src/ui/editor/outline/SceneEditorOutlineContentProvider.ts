@@ -71,7 +71,9 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 } else if (parentES.isPrefabInstance()) {
 
-                    const prefabChildren = parentES.getMutableNestedPrefabChildren();
+                    const prefabChildren: sceneobjects.ISceneGameObject[] = [];
+
+                    this.getPublicMutableNestedPrefabChildren(parent, prefabChildren);
 
                     const appendedChildren = parentES.getAppendedChildren();
 
@@ -108,6 +110,12 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return parent.getLists();
 
+            } else if (parent instanceof sceneobjects.ObjectList) {
+
+                const scene = this._editor.getScene();
+                
+                return parent.getItemsWithObjects(scene);
+
             } else if (typeof parent === "string") {
 
                 return this._editor.getScene().getPlainObjectsByCategory(parent);
@@ -124,6 +132,28 @@ namespace phasereditor2d.scene.ui.editor.outline {
             }
 
             return [];
+        }
+
+        private getPublicMutableNestedPrefabChildren(parent: sceneobjects.ISceneGameObject, list: sceneobjects.ISceneGameObject[]) {
+
+            const parentES = parent.getEditorSupport();
+
+            for (const child of parentES.getMutableNestedPrefabChildren()) {
+
+                const childES = child.getEditorSupport();
+
+                if (childES.isMutableNestedPrefabInstance()) {
+
+                    if (childES.isPrivateNestedPrefabInstance()) {
+
+                        this.getPublicMutableNestedPrefabChildren(child, list);
+
+                    } else {
+
+                        list.push(child);
+                    }
+                }
+            }
         }
     }
 }

@@ -23,7 +23,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         writeJSON(ser: core.json.Serializer) {
 
-            ser.getData()["components"] = [...this._compNames];
+            const data = ser.getData() as core.json.IObjectData;
+
+            data.components = [...this._compNames];
+
+            // we don't want to serialize an empty components array,
+            // if it is the case, we exclude it from the file
+            if (data.components.length === 0) {
+
+                delete data.components;
+            }
 
             for (const compName of this._compNames) {
 
@@ -39,7 +48,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         readJSON(ser: core.json.Serializer) {
 
-            this._compNames = ser.getData()["components"] || [];
+            const data = ser.getData() as core.json.IObjectData;
+
+            this._compNames = data.components || [];
 
             for (const compName of this._compNames) {
 

@@ -37,6 +37,10 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return obj.getLabel();
 
+            } else if (obj instanceof sceneobjects.ObjectListItem) {
+
+                return this.getLabel(obj.getObject());
+
             } else if (obj instanceof sceneobjects.UserComponentNode) {
 
                 return obj.getComponentName();
@@ -106,19 +110,29 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             if (sceneobjects.isGameObject(obj)) {
 
-                const support = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
+                const objES = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 
-                if (support.isMutableNestedPrefabInstance()) {
+                if (obj instanceof sceneobjects.ScriptNode) {
 
-                    hintText += "- nested prefab";
+                    hintText += " #script";
+                }
+
+                if (objES.isMutableNestedPrefabInstance()) {
+
+                    hintText += " #nested_prefab_inst";
 
                     color = ScenePlugin.getInstance().getNestedPrefabColor();
 
-                } else if (support.isPrefabInstance()) {
+                } else if (objES.isPrefabInstance()) {
 
-                    hintText += "- prefab"
+                    hintText += " #prefab_inst"
 
                     color = ScenePlugin.getInstance().getPrefabColor();
+                }
+
+                if (!objES.isNestedPrefabInstance()) {
+
+                    hintText += ` #scope_${objES.getScope().toLocaleLowerCase()}`;
                 }
             }
 
@@ -138,7 +152,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 },
                 {
                     text: " " + hintText,
-                    color: theme.viewerForeground + "90"
+                    color: theme.viewerForeground + "45"
                 }
             ];
         }
