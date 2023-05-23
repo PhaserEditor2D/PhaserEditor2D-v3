@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.readJSON(ser);
         }
 
-        protected abstract _setDefaultValues(width: number, height: number): void;
+        protected abstract _setDefaultValues(x: number, y: number, width: number, height: number): void;
 
         setDefaultValues() {
 
@@ -43,6 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const objES = this.getEditorSupport();
 
             let width = 0, height = 0;
+            let x = 0, y = 0;
 
             let [widthProp, heightProp] = objES.getSizeProperties();
 
@@ -60,13 +61,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 width = b.width;
                 height = b.height;
 
+                const origin = c.getEditorSupport().computeDisplayOrigin();
+
+                x = -origin.displayOriginX;
+                y = -origin.displayOriginY;
+
             } else if (obj.width && obj.height) {
 
                 width = obj.width;
                 height = obj.height;
             }
 
-            this._setDefaultValues(width, height);
+            this._setDefaultValues(x, y, width, height);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
