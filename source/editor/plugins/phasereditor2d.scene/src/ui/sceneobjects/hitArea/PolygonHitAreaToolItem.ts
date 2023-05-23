@@ -219,7 +219,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = comp.getObject() as Sprite;
 
-            const { displayOriginX, displayOriginY } = obj.getEditorSupport().computeDisplayOrigin();
+            const { displayOriginX, displayOriginY } = this.getDisplayOrigin(obj);
 
             const tx = obj.getWorldTransformMatrix();
 
@@ -366,7 +366,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             sprite.getWorldTransformMatrix().applyInverse(newPoint.x, newPoint.y, newPoint);
 
-            const {displayOriginX, displayOriginY} = sprite.getEditorSupport().computeDisplayOrigin();
+            let { displayOriginX, displayOriginY } = this.getDisplayOrigin(sprite);
 
             point.x = newPoint.x + displayOriginX;
             point.y = newPoint.y + displayOriginY;
@@ -374,6 +374,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp.points = points.map(p => `${p.x} ${p.y}`).join(" ");
 
             args.editor.updateInspectorViewSection(PolygonHitAreaSection.ID);
+        }
+
+        private getDisplayOrigin(sprite: ISceneGameObject) {
+
+            if (sprite instanceof Container) {
+
+                return { displayOriginX: 0, displayOriginY: 0 };
+            }
+
+            return sprite.getEditorSupport().computeDisplayOrigin();
         }
 
         onStopDrag(args: editor.tools.ISceneToolDragEventArgs): void {
