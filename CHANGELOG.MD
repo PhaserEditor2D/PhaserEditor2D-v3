@@ -3,6 +3,7 @@
 ## v3.61.1-dev
 
 * [#284](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/284) Fixes hit area rendering for containers.
+* A new Add Prefab Property command that shows a dialog.
 
 ## v3.61.0 - May 18, 2023
 
