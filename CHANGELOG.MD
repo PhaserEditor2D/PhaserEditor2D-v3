@@ -4,6 +4,7 @@
 
 * [#284](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/284) Fixes hit area rendering for containers.
 * A new Add Prefab Property command that shows a dialog.
+* Replaces the Object Depth commands for the Edit move commands.
 
 ## v3.61.0 - May 18, 2023
 
