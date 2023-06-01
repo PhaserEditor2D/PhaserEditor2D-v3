@@ -39,8 +39,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createParentMenu());
 
-            menu.addMenu(this.createListMenu());
-
             menu.addSeparator();
 
             menu.addMenu(this.createSnappingMenu());
@@ -164,20 +162,6 @@ namespace phasereditor2d.scene.ui.editor {
             }
 
             menu.addCommand(commands.CMD_QUICK_EDIT_OUTPUT_FILE);
-
-            return menu;
-        }
-
-        private createListMenu(): controls.Menu {
-
-            const menu = new controls.Menu("Object List");
-
-            for (const move of ["Up", "Down", "Top", "Bottom"]) {
-
-                const id = "phasereditor2d.scene.ui.editor.commands.ListOrder" + move;
-
-                menu.addCommand(id);
-            }
 
             return menu;
         }

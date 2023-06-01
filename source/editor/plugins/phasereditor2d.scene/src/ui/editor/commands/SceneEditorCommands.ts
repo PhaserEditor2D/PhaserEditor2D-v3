@@ -2109,34 +2109,26 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             // order commands
 
-            const moves: [undo.DepthMove, string][] = [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]];
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
 
             for (const tuple of moves) {
 
                 const move = tuple[0];
-                const key = tuple[1];
+                const cmd = tuple[1];
 
-                manager.add({
-
-                    command: {
-                        id: "phasereditor2d.scene.ui.editor.commands.ListOrder" + move,
-                        name: "Move " + move,
-                        category: CAT_SCENE_EDITOR,
-                        tooltip: "Move the object in its list to " + move + "."
-                    },
-
-                    handler: {
-                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
-                            && sceneobjects.ListOrderOperation.allow(args.activeEditor as any, move),
-
-                        executeFunc: args => args.activeEditor.getUndoManager().add(
-                            new sceneobjects.ListOrderOperation(args.activeEditor as editor.SceneEditor, move))
-                    },
-
-                    keys: {
-                        key
-                    }
-                });
+                manager.addHandlerHelper(cmd,
+                    // testFunc
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && sceneobjects.ListOrderOperation.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => args.activeEditor.getUndoManager().add(
+                        new sceneobjects.ListOrderOperation(args.activeEditor as editor.SceneEditor, move))
+                );
             }
         }
 
