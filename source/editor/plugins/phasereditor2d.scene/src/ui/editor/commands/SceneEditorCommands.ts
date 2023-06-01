@@ -61,6 +61,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_PREVIEW_SCENE = "phasereditor2d.scene.ui.editor.commands.PreviewScene";
     export const CMD_EDIT_HIT_AREA = "phasereditor2d.scene.ui.editor.commands.ResizeHitArea";
     export const CMD_ADD_PREFAB_PROPERTY = "phasereditor2d.scene.ui.editor.commands.AddPrefabProperty";
+    export const CMD_SORT_OBJ_UP = "phasereditor2d.scene.ui.editor.commands.SortObjectUp";
+    export const CMD_SORT_OBJ_DOWN = "phasereditor2d.scene.ui.editor.commands.SortObjectDown";
+    export const CMD_SORT_OBJ_TOP = "phasereditor2d.scene.ui.editor.commands.SortObjectTop";
+    export const CMD_SORT_OBJ_BOTTOM = "phasereditor2d.scene.ui.editor.commands.SortObjectBottom";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -186,11 +190,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         const dialog = new ui.dialogs.AddPrefabPropertyDialog();
                         dialog.create();
 
-                    //    ui.editor.properties.PrefabPropertySection.runPropertiesOperation(editor, () => {
+                        //    ui.editor.properties.PrefabPropertySection.runPropertiesOperation(editor, () => {
 
-                    //         // TODO: show the Add Property dialog
+                        //         // TODO: show the Add Property dialog
 
-                    //    }, true);
+                        //    }, true);
                     }
                 }
             })
@@ -1079,6 +1083,56 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 args => args.activeEditor.getUndoManager()
                     .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
             );
+
+            // sort
+
+            manager.add({
+                command: {
+                    id: CMD_SORT_OBJ_UP,
+                    name: "Move Up",
+                    tooltip: "Move up object in the list.",
+                    category: CAT_SCENE_EDITOR
+                },
+                keys: {
+                    key: "PageUp"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SORT_OBJ_DOWN,
+                    name: "Move Down",
+                    tooltip: "Move down object in the list.",
+                    category: CAT_SCENE_EDITOR
+                },
+                keys: {
+                    key: "PageDown"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SORT_OBJ_TOP,
+                    name: "Move Top",
+                    tooltip: "Move top object in the list.",
+                    category: CAT_SCENE_EDITOR
+                },
+                keys: {
+                    key: "Home"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SORT_OBJ_BOTTOM,
+                    name: "Move Bottom",
+                    tooltip: "Move bottom object in the list.",
+                    category: CAT_SCENE_EDITOR
+                },
+                keys: {
+                    key: "End"
+                }
+            });
         }
 
         private static registerMoveObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -2028,34 +2082,26 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
         private static registerDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
-            const moves: [undo.DepthMove, string][] = [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]];
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
 
             for (const tuple of moves) {
 
                 const move = tuple[0];
-                const key = tuple[1];
+                const cmd = tuple[1];
 
-                manager.add({
-
-                    command: {
-                        id: "phasereditor2d.scene.ui.editor.commands.Depth" + move,
-                        name: "Move Object Depth " + move,
-                        category: CAT_SCENE_EDITOR,
-                        tooltip: "Move the object in its container to " + move + "."
-                    },
-
-                    handler: {
-                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
-                            && undo.DepthOperation.allow(args.activeEditor as any, move),
-
-                        executeFunc: args => args.activeEditor.getUndoManager().add(
-                            new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move))
-                    },
-
-                    keys: {
-                        key
-                    }
-                });
+                manager.addHandlerHelper(cmd,
+                    // testFunc 
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && undo.DepthOperation.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => args.activeEditor.getUndoManager().add(
+                        new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move)
+                    ));
             }
         }
 

@@ -39,8 +39,6 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createParentMenu());
 
-            menu.addMenu(this.createDepthMenu());
-
             menu.addMenu(this.createListMenu());
 
             menu.addSeparator();
@@ -170,20 +168,6 @@ namespace phasereditor2d.scene.ui.editor {
             return menu;
         }
 
-        private createDepthMenu(): controls.Menu {
-
-            const menu = new controls.Menu("Depth");
-
-            for (const move of ["Up", "Down", "Top", "Bottom"]) {
-
-                const id = "phasereditor2d.scene.ui.editor.commands.Depth" + move;
-
-                menu.addCommand(id);
-            }
-
-            return menu;
-        }
-
         private createListMenu(): controls.Menu {
 
             const menu = new controls.Menu("Object List");
@@ -212,6 +196,13 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addCommand(colibri.ui.ide.actions.CMD_PASTE);
             menu.addCommand(commands.CMD_PASTE_IN_PLACE);
             menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
+
+            menu.addSeparator();
+
+            menu.addCommand(commands.CMD_SORT_OBJ_UP);
+            menu.addCommand(commands.CMD_SORT_OBJ_DOWN);
+            menu.addCommand(commands.CMD_SORT_OBJ_TOP);
+            menu.addCommand(commands.CMD_SORT_OBJ_BOTTOM);
 
             return menu;
         }
