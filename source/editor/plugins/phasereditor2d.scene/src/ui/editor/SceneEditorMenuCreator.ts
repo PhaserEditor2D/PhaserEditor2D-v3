@@ -317,6 +317,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_OPEN_PREFAB);
             menu.addCommand(commands.CMD_CREATE_PREFAB_WITH_OBJECT);
+            menu.addSeparator();
+            menu.addCommand(commands.CMD_ADD_PREFAB_PROPERTY);
 
             return menu;
         }

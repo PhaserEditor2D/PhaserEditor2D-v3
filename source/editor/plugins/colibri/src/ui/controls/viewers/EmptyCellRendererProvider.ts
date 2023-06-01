@@ -18,6 +18,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         preload(obj: any): Promise<PreloadResult> {
+            
             return Controls.resolveNothingLoaded();
         }
     }

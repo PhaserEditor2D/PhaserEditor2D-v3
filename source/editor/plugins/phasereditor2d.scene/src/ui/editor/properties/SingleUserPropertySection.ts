@@ -15,21 +15,21 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         protected abstract runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean);
 
-        static createAddComponentButton(
+        static createAddProprtyButton(
             comp: HTMLDivElement,
             formBuilder: colibri.ui.controls.properties.FormBuilder,
             runOperation: (
                 action: TUserPropertiesAction) => void,
             selector: (obj:any) => void) {
 
-            const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
+            const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
 
             const buttonElement = formBuilder.createMenuButton(comp, "Add Property", () => propTypes.map(t => ({
                 name: t.getName() + " Property",
                 value: t.getId()
             })), (typeId: string) => {
 
-                const newType = ScenePlugin.getInstance().createUserPropertyType(typeId);
+                const newType = ScenePlugin.getInstance().getUserPropertyType(typeId);
 
                 runOperation(userProps => {
 
@@ -267,7 +267,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const menu = new controls.Menu("Change Type");
 
-            const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
+            const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
 
             for (const propType of propTypes) {
 

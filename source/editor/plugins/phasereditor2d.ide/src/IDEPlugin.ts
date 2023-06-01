@@ -265,6 +265,7 @@ namespace phasereditor2d.ide {
         }
 
         isOpeningProject() {
+            
             return this._openingProject;
         }
 

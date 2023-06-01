@@ -60,6 +60,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_ADD_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenAddScriptDialog";
     export const CMD_PREVIEW_SCENE = "phasereditor2d.scene.ui.editor.commands.PreviewScene";
     export const CMD_EDIT_HIT_AREA = "phasereditor2d.scene.ui.editor.commands.ResizeHitArea";
+    export const CMD_ADD_PREFAB_PROPERTY = "phasereditor2d.scene.ui.editor.commands.AddPrefabProperty";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -153,6 +154,46 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerArcadeCommands(manager);
 
             this.registerScriptNodeCommands(manager);
+
+            this.registerPrefabCommands(manager);
+        }
+
+        private static registerPrefabCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_ADD_PREFAB_PROPERTY,
+                    name: "Add Prefab Property",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Add a new property to the current prefab"
+                },
+                handler: {
+                    testFunc: args => {
+
+                        if (isSceneScope(args)) {
+
+                            const editor = args.activeEditor as SceneEditor;
+
+                            return editor.getScene().isPrefabSceneType();
+                        }
+
+                        return false;
+                    },
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const dialog = new ui.dialogs.AddPrefabPropertyDialog();
+                        dialog.create();
+
+                    //    ui.editor.properties.PrefabPropertySection.runPropertiesOperation(editor, () => {
+
+                    //         // TODO: show the Add Property dialog
+
+                    //    }, true);
+                    }
+                }
+            })
         }
 
         private static registerScriptNodeCommands(manager: colibri.ui.ide.commands.CommandManager) {

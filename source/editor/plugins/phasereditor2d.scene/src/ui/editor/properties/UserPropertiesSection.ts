@@ -32,14 +32,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this._propArea = this.createGridElement(comp, 2);
             comp.appendChild(this._propArea);
 
-            const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
+            const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
 
             const btn = this.createMenuButton(comp, "Add Property", () => propTypes.map(t => ({
                 name: t.getName() + " Property",
                 value: t.getId()
             })), (typeId: string) => {
 
-                const newType = ScenePlugin.getInstance().createUserPropertyType(typeId);
+                const newType = ScenePlugin.getInstance().getUserPropertyType(typeId);
 
                 this.runOperation(userProps => {
 
@@ -259,7 +259,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const menu = new controls.Menu("Change Type");
 
-            const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
+            const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
 
             for (const propType of propTypes) {
 

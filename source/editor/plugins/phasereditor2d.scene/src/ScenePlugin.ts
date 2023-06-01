@@ -469,10 +469,17 @@ namespace phasereditor2d.scene {
             return settings;
         }
 
-        createUserPropertyTypes() {
+        private _userPropertyTypes: ui.sceneobjects.UserPropertyType<any>[];
+
+        getUserPropertyTypes() {
+
+            if (this._userPropertyTypes) {
+
+                return this._userPropertyTypes;
+            }
 
             // TODO: we should do this via extension
-            return [
+            return this._userPropertyTypes = [
                 new ui.sceneobjects.NumberPropertyType(),
                 new ui.sceneobjects.StringPropertyType(),
                 new ui.sceneobjects.BooleanPropertyType(),
@@ -489,9 +496,9 @@ namespace phasereditor2d.scene {
             ];
         }
 
-        createUserPropertyType(typeId: string) {
+        getUserPropertyType(typeId: string) {
 
-            return this.createUserPropertyTypes().find(t => t.getId() === typeId);
+            return this.getUserPropertyTypes().find(t => t.getId() === typeId);
         }
 
         getPrefabColor() {
