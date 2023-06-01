@@ -20,24 +20,28 @@ namespace phasereditor2d.scene.ui.editor.properties {
             formBuilder: colibri.ui.controls.properties.FormBuilder,
             runOperation: (
                 action: TUserPropertiesAction) => void,
-            selector: (obj:any) => void) {
+            selector: (obj: any) => void) {
 
             const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
 
-            const buttonElement = formBuilder.createMenuButton(comp, "Add Property", () => propTypes.map(t => ({
-                name: t.getName() + " Property",
-                value: t.getId()
-            })), (typeId: string) => {
+            const buttonElement = formBuilder.createButton(comp, "Add Property", () => {
 
-                const newType = ScenePlugin.getInstance().getUserPropertyType(typeId);
+                class Dlg extends ui.dialogs.AbstractAddPrefabPropertyDialog {
 
-                runOperation(userProps => {
+                    protected addProperty(propType: sceneobjects.UserPropertyType<any>): void {
 
-                    const prop = userProps.createProperty(newType);
-                    userProps.add(prop);
+                        runOperation(userProps => {
 
-                    selector(prop);
-                });
+                            const prop = userProps.createProperty(propType);
+                            userProps.add(prop);
+
+                            selector(prop);
+                        });
+                    }
+                }
+
+                const dlg = new Dlg();
+                dlg.create();
             });
 
             return { buttonElement };
@@ -102,7 +106,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     this.runOperation(userProps => {
 
                         userProps.deleteProperty(prop.getName());
-                       
+
                     }, true);
                 }
             });
