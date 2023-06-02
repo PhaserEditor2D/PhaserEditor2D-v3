@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         static allow(editor: SceneEditor, move: ui.editor.undo.DepthMove) {
 
-            const sel: ui.sceneobjects.UserProperty[] = editor.getSelection();
+            const sel = this.sortedSelection(editor);
 
             if (sel.length === 0) {
 
@@ -48,7 +48,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         static execute(editor: SceneEditor, depthMove: undo.DepthMove): void {
 
-            const sel = editor.getSelection() as any as sceneobjects.UserProperty[];
+            const sel = this.sortedSelection(editor);
 
             switch (depthMove) {
 
@@ -100,6 +100,22 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     break;
             }
+        }
+
+        private static sortedSelection(editor: SceneEditor) {
+
+            const sel = editor.getSelection() as any as sceneobjects.UserProperty[];
+            const props = editor.getScene().getPrefabUserProperties().getProperties();
+
+            sel.sort((a, b) => {
+
+                const aa = props.indexOf(a);
+                const bb = props.indexOf(b);
+
+                return aa - bb;
+            });
+
+            return sel;
         }
     }
 }
