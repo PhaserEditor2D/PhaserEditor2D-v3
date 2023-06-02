@@ -143,13 +143,15 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             this.registerOriginCommands(manager);
 
-            this.registerDepthCommands(manager);
+            this.registerGameObjectDepthCommands(manager);
+
+            this.registerPlainObjectOrderCommands(manager);
 
             this.registerListCommands(manager);
 
             this.registerTypeCommands(manager);
 
-            this.registerMoveObjectCommands(manager);
+            this.registerTranslateObjectCommands(manager);
 
             this.registerTextureCommands(manager);
 
@@ -162,6 +164,31 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerPrefabCommands(manager);
 
             this.registerPropertiesCommands(manager);
+        }
+
+        static registerPlainObjectOrderCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
+
+            for (const tuple of moves) {
+
+                const move = tuple[0];
+                const cmd = tuple[1];
+
+                manager.addHandlerHelper(cmd,
+                    // testFunc 
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && undo.PlainObjectOrderOperation.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => args.activeEditor.getUndoManager().add(
+                        new undo.PlainObjectOrderOperation(args.activeEditor as editor.SceneEditor, move)
+                    ));
+            }
         }
 
         private static registerPrefabCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -1137,7 +1164,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             });
         }
 
-        private static registerMoveObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
+        private static registerTranslateObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
             class Operation extends undo.SceneSnapshotOperation {
 
@@ -2082,7 +2109,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             });
         }
 
-        private static registerDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {
+        private static registerGameObjectDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
             const moves: [undo.DepthMove, string][] = [
                 ["Up", CMD_SORT_OBJ_UP],
@@ -2099,10 +2126,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 manager.addHandlerHelper(cmd,
                     // testFunc 
                     args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
-                        && undo.DepthOperation.allow(args.activeEditor as any, move),
+                        && undo.GameObjectDepthOperation.allow(args.activeEditor as any, move),
                     // execFunc
                     args => args.activeEditor.getUndoManager().add(
-                        new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move)
+                        new undo.GameObjectDepthOperation(args.activeEditor as editor.SceneEditor, move)
                     ));
             }
         }
