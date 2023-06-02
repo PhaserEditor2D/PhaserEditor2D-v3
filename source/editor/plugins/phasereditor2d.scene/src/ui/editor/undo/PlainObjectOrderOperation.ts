@@ -24,7 +24,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
         static allow(editor: SceneEditor, move: DepthMove) {
 
             // sort the selection and filter off non-game-objects
-            let sel = editor.getSelectedPlainObjects();
+            let sel = this.sortedSelection(editor);
 
             // if the sorted selection contains all the selected objects
             if (sel.length !== editor.getSelection().length) {
@@ -64,7 +64,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const editor = this.getEditor();
 
-            const sel = editor.getSelectedPlainObjects();
+            const sel = PlainObjectOrderOperation.sortedSelection(editor);
 
             const plainObjects = editor.getScene().getPlainObjects();
 
@@ -86,8 +86,6 @@ namespace phasereditor2d.scene.ui.editor.undo {
                     break;
 
                 case "Top":
-
-                    console.log("here");
 
                     for (let i = 0; i < sel.length; i++) {
 
@@ -126,6 +124,23 @@ namespace phasereditor2d.scene.ui.editor.undo {
             }
 
             this.getEditor().repaint();
+        }
+
+        private static sortedSelection(editor: SceneEditor) {
+
+            const sel = editor.getSelectedPlainObjects();
+
+            const plainObjects = editor.getScene().getPlainObjects();
+
+            sel.sort((a, b) => {
+
+                const aa = plainObjects.indexOf(a);
+                const bb = plainObjects.indexOf(b);
+
+                return aa - bb;
+            });
+
+            return sel;
         }
     }
 }
