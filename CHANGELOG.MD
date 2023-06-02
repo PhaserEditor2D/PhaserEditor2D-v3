@@ -6,8 +6,8 @@
 * A new Add Prefab Property command that shows a dialog.
 * Replaces the Object Depth commands for the Edit move commands.
 * Replaces the Object List sort commands by the Editor move commands.
-* Allows change prefab properties with the Edit move commands.
-* Removes the Move menu items from the Prefab Properties section.
+* Allows change prefab properties with the Edit move commands. Remove the Move options from the Prefab Properties section's menu.
+* Allows copy/paste of prefab properties.
 
 ## v3.61.0 - May 18, 2023
 
