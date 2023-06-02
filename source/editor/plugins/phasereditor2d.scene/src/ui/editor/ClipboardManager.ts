@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor {
 
     export interface IClipboardItem {
 
-        type: string;
+        type: "ISceneObject" | "ObjectList" | "PrefabProperty";
         data: object;
     }
 
@@ -31,12 +31,52 @@ namespace phasereditor2d.scene.ui.editor {
 
             ClipboardManager._clipboard = [];
 
+            this.copyGameObjects();
+
+            this.copyObjectLists();
+
+            this.copyPrefabProperties();
+        }
+
+        private copyPrefabProperties() {
+
+            for (const prop of this._editor.getSelectedPrefabProperties()) {
+
+                const data = {};
+
+                prop.writeJSON(data);
+
+                ClipboardManager._clipboard.push({
+                    data,
+                    type: "PrefabProperty"
+                });
+            }
+        }
+
+        private copyObjectLists() {
+
+            for (const list of this._editor.getSelectedLists()) {
+
+                const listData = {} as any;
+                list.writeJSON(listData);
+
+                ClipboardManager._clipboard.push({
+                    type: "ObjectList",
+                    data: listData
+                });
+            }
+        }
+
+        private copyGameObjects() {
+
             let minX = Number.MAX_SAFE_INTEGER;
             let minY = Number.MAX_SAFE_INTEGER;
 
             const p = new Phaser.Math.Vector2();
 
-            for (const obj of this._editor.getSelectedGameObjects()) {
+            const gameObjects = this._editor.getSelectedGameObjects();
+
+            for (const obj of gameObjects) {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
@@ -54,7 +94,7 @@ namespace phasereditor2d.scene.ui.editor {
                 minY = Math.min(minY, p.y);
             }
 
-            for (const obj of this._editor.getSelectedGameObjects()) {
+            for (const obj of gameObjects) {
 
                 const objData = {} as any;
 
@@ -81,17 +121,6 @@ namespace phasereditor2d.scene.ui.editor {
                 ClipboardManager._clipboard.push({
                     type: "ISceneObject",
                     data: objData
-                });
-            }
-
-            for (const list of this._editor.getSelectedLists()) {
-
-                const listData = {} as any;
-                list.writeJSON(listData);
-
-                ClipboardManager._clipboard.push({
-                    type: "ObjectList",
-                    data: listData
                 });
             }
         }

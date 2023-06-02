@@ -29,11 +29,61 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const items = ClipboardManager.getClipboardCopy();
 
-            const maker = this._editor.getSceneMaker();
-
             const sel = [];
 
+            this.pasteGameObjects(items, sel);
+
+            this.pastePrefaProperties(items, sel);
+
+            this._editor.setSelection(sel);
+        }
+
+        private pastePrefaProperties(clipboardItems: IClipboardItem[], sel: any[]) {
+
             const scene = this._editor.getScene();
+
+            if (!scene.isPrefabSceneType()) {
+
+                return;
+            }
+
+            for (const item of clipboardItems) {
+
+                if (item.type === "PrefabProperty") {
+
+                    const data = item.data as any;
+
+                    const id = data.type.id;
+
+                    const propType = ScenePlugin.getInstance().getUserPropertyType(id);
+
+                    if (propType) {
+
+                        const userProps = scene.getPrefabUserProperties();
+
+                        const dataName = colibri.ui.ide.utils.NameMaker.trimNumbering(data.name);
+                        const dataLabel = colibri.ui.ide.utils.NameMaker.trimNumbering(data.label);
+
+                        const { name, label } = userProps.createNewPropertyNameInfo(dataName, dataLabel);
+
+                        data.name = name;
+                        data.label = label;
+
+                        const prop = userProps.createPropertyFromData(data);
+
+                        userProps.add(prop);
+
+                        sel.push(prop);
+                    }
+                }
+            }
+        }
+
+        private async pasteGameObjects(clipboardItems: IClipboardItem[], sel: any[]) {
+
+            const scene = this._editor.getScene();
+
+            const maker = this._editor.getSceneMaker();
 
             const nameMaker = scene.createNameMaker();
 
@@ -41,11 +91,11 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const sprites: sceneobjects.ISceneGameObject[] = [];
 
-            const displayList = items.filter(i => i.type === "ISceneObject").map(i => i.data as json.IObjectData);
+            const displayList = clipboardItems.filter(i => i.type === "ISceneObject").map(i => i.data as json.IObjectData);
 
             await scene.getMaker().updateLoaderWithData([], displayList);
 
-            for (const item of items) {
+            for (const item of clipboardItems) {
 
                 if (item.type === "ISceneObject") {
 
@@ -89,8 +139,6 @@ namespace phasereditor2d.scene.ui.editor.undo {
             }
 
             maker.afterDropObjects(prefabObj, sprites);
-
-            this._editor.setSelection(sel);
         }
 
         private setNewObjectId(data: json.IObjectData) {
