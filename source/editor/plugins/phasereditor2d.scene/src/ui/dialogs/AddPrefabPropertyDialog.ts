@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             const editor = colibri.Platform.getWorkbench().getActiveEditor() as ui.editor.SceneEditor;
 
-            ui.editor.properties.PrefabPropertySection.runPropertiesOperation(editor, (props) => {
+            ui.editor.properties.ChangePrefabPropertiesOperation.runPropertiesOperation(editor, (props) => {
 
                 const prop = props.createProperty(propType);
 

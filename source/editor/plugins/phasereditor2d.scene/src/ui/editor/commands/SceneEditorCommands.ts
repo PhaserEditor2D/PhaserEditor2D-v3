@@ -160,6 +160,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerScriptNodeCommands(manager);
 
             this.registerPrefabCommands(manager);
+
+            this.registerPropertiesCommands(manager);
         }
 
         private static registerPrefabCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -2102,6 +2104,35 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     args => args.activeEditor.getUndoManager().add(
                         new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move)
                     ));
+            }
+        }
+
+        private static registerPropertiesCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // order commands
+
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
+
+            for (const tuple of moves) {
+
+                const move = tuple[0];
+                const cmd = tuple[1];
+
+                manager.addHandlerHelper(cmd,
+                    // testFunc
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && properties.PrefabPropertyOrderAction.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => properties.ChangePrefabPropertiesOperation.runPropertiesOperation(args.activeEditor as SceneEditor, props => {
+
+                        properties.PrefabPropertyOrderAction.execute(args.activeEditor as SceneEditor, move);
+                    })
+                );
             }
         }
 

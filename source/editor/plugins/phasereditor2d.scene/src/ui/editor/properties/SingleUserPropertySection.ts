@@ -56,49 +56,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const prop = this.getProperty();
 
-            menu.addAction({
-                text: "Move Up",
-                callback: () => {
-                    this.runOperation(userProps => {
-
-                        const list = userProps.getProperties();
-
-                        const i = list.indexOf(prop);
-
-                        if (i > 0) {
-
-                            const temp = list[i - 1];
-                            list[i - 1] = prop;
-                            list[i] = temp;
-                        }
-                    }, true);
-                }
-            });
-
-            menu.addAction({
-                text: "Move Down",
-                callback: () => {
-                    this.runOperation(userProps => {
-
-                        const list = userProps.getProperties();
-
-                        const i = list.indexOf(prop);
-
-                        if (i < list.length - 1) {
-
-                            const temp = list[i + 1];
-                            list[i + 1] = prop;
-                            list[i] = temp;
-                        }
-                    }, true);
-                }
-            });
-
-            menu.addSeparator();
-
             menu.addMenu(this.createMorphMenu(prop));
-
-            menu.addSeparator();
 
             menu.addAction({
                 text: "Delete",

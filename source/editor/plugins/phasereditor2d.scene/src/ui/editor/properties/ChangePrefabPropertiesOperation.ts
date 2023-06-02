@@ -22,6 +22,29 @@ namespace phasereditor2d.scene.ui.editor.properties {
             return data;
         }
 
+        static runPropertiesOperation(editor: SceneEditor, action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
+
+            const scene = editor.getScene();
+
+            const before = this.snapshot(editor);
+
+            action(scene.getPrefabUserProperties());
+
+            const after = this.snapshot(editor);
+
+            editor.getUndoManager()
+                .add(new ChangePrefabPropertiesOperation(editor, before, after));
+
+            editor.setDirty(true);
+
+            editor.refreshOutline();
+
+            if (updateSelection) {
+
+                editor.getSelectionManager().refreshSelection();
+            }
+        }
+
         private load(data: any) {
 
             const editor = this.getEditor();
