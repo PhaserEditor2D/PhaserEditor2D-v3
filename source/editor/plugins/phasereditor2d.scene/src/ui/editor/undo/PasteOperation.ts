@@ -31,7 +31,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             const sel = [];
 
-            this.pasteGameObjects(items, sel);
+            await this.pasteGameObjects(items, sel);
 
             this.pastePrefaProperties(items, sel);
 
