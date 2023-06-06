@@ -204,6 +204,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
+        createKeyCodeRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
+
+            if (lockIcon) {
+
+                this.createLock(parent, prop);
+            }
+
+            const labelElement = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
+            labelElement.style.gridColumn = "2";
+
+            const buttonElement = this.createKeyCodeField(parent, prop);
+
+            return { labelElement, buttonElement };
+        }
+
         createPropertyEnumRow(parent: HTMLElement, prop: IEnumProperty<any, any>, lockIcon: boolean = true, filter?: (v: any) => boolean) {
 
             if (lockIcon) {

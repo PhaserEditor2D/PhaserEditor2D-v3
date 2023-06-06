@@ -17,40 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLabel(comp, "Key Code", "The keycode of this key");
 
-            const btn = this.createButton(comp, "KeyCode", e => {
-                
-                const viewer = new controls.viewers.TreeViewer(KeyboardKeySection.ID + ".keyCodes");
-                viewer.setLabelProvider(new controls.viewers.LabelProvider(obj => obj));
-                viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider());
-                viewer.setInput(KeyboardKeyExtension.getInstance().getKeyCodes());
-                viewer.revealAndSelect(this.getSelectionFirstElement().keyCode);
-
-                const dlg = new controls.dialogs.ViewerDialog(viewer, false);
-                
-                dlg.create();
-
-                dlg.setTitle("Select Key Code");
-                
-                dlg.addOpenButton("Select", (sel) => {
-
-                    const value = sel[0];
-                    const keys = this.getSelection();
-
-                    console.log("set", value, "to", keys[0].getEditorSupport().getId());
-
-                    this.getEditor().getUndoManager().add(
-                        new SimpleOperation(this.getEditor(), keys, KeyboardKeyComponent.keyCode, value));
-
-                }, false);
-
-                dlg.addCancelButton();
-            });
-
-            this.addUpdater(() => {
-
-                btn.textContent = this.flatValues_StringOneOrNothing(this.getSelection().map(k => k.keyCode));
-            });
+            this.createKeyCodeField(comp, KeyboardKeyComponent.keyCode);
         }
 
         canEdit(obj: any, n: number): boolean {
