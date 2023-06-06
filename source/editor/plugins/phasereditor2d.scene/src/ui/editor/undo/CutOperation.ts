@@ -12,30 +12,21 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             this._editor.getClipboardManager().copy();
 
-            const scene  = this.getScene();
+            const scene = this.getScene();
 
             const lists = this._editor.getScene().getObjectLists();
 
-            for (const obj of this._editor.getSelection()) {
+            // delete game objects
 
-                if (sceneobjects.isGameObject(obj)) {
+            for (const obj of this._editor.getSelectedGameObjects()) {
 
-                    const sprite = obj as sceneobjects.ISceneGameObject;
+                const objES = obj.getEditorSupport();
 
-                    sprite.getEditorSupport().destroy();
-                    lists
-                        .removeObjectById(sprite.getEditorSupport().getId());
-
-                }
+                objES.destroy();
+                lists.removeObjectById(objES.getId());
             }
 
-            for (const obj of this._editor.getSelection()) {
-
-                if (obj instanceof sceneobjects.ObjectList) {
-
-                    lists.removeListById(obj.getId());
-                }
-            }
+            // delete plain objects
 
             const plainObjects = this._editor.getSelectedPlainObjects();
 
@@ -43,6 +34,22 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 scene.removePlainObjects(plainObjects);
             }
+
+            // delete ObjectLists
+
+            for (const objectList of this._editor.getSelectedLists()) {
+
+                lists.removeListById(objectList.getId());
+            }
+
+            // delete prefab properties
+
+            for (const prop of this._editor.getSelectedPrefabProperties()) {
+
+                prop.getAllProperties().deleteProperty(prop.getName());
+            }
+
+            // clear selection
 
             this._editor.setSelection([]);
         }

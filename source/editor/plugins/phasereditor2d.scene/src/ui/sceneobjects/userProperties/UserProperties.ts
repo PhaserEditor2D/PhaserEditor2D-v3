@@ -48,6 +48,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createNewPropertyNameInfo(baseName: string, baseLabel: string) {
 
+            const p = this._properties.find(p2 => p2.getInfo().name === baseName);
+
+            if (!p) {
+
+                return { name: baseName, label: baseLabel };
+            }
+
             let i = 0;
 
             while (true) {
