@@ -8,6 +8,7 @@
 * Replaces the Object List sort commands by the Editor move commands.
 * Allows change prefab properties with the Edit move commands. Remove the Move options from the Prefab Properties section's menu.
 * Allows copy/paste of prefab properties.
+* Allows cut/copy/paste keyboard keys.
 
 ## v3.61.0 - May 18, 2023
 
