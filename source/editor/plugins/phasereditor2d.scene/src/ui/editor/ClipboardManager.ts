@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor {
 
     export interface IClipboardItem {
 
-        type: "ISceneObject" | "ObjectList" | "PrefabProperty";
+        type: "ISceneObject" | "IScenePlainObject" | "ObjectList" | "PrefabProperty";
         data: object;
     }
 
@@ -33,9 +33,26 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.copyGameObjects();
 
+            this.copyPlainObjects();
+
             this.copyObjectLists();
 
             this.copyPrefabProperties();
+        }
+
+        private copyPlainObjects() {
+
+            for(const obj of this._editor.getSelectedPlainObjects()) {
+
+                const data: any = {};
+
+                obj.getEditorSupport().writeJSON(data);
+
+                ClipboardManager._clipboard.push({
+                    data,
+                    type: "IScenePlainObject"
+                });
+            }
         }
 
         private copyPrefabProperties() {

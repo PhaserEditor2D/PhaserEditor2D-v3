@@ -33,9 +33,47 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             await this.pasteGameObjects(items, sel);
 
+            await this.pastePlainObjects(items, sel);
+
             this.pastePrefaProperties(items, sel);
 
             this._editor.setSelection(sel);
+        }
+
+        private async pastePlainObjects(clipboardItems: IClipboardItem[], sel: any[]) {
+
+            const scene = this._editor.getScene();
+
+            const nameMaker = scene.createNameMaker();
+
+            const plainObjects: sceneobjects.IScenePlainObject[] = [];
+
+            const dataList = clipboardItems.filter(i => i.type === "IScenePlainObject").map(i => i.data as json.IScenePlainObjectData);
+
+            await scene.getMaker().updateLoaderWithData([], dataList);
+
+            for (const data of dataList) {
+
+                this.setNewObjectId(data);
+
+                const obj =scene.readPlainObject(data);
+
+                if (obj) {
+
+                    plainObjects.push(obj);
+
+                    sel.push(obj);
+                }
+            }
+
+            for (const newObj of plainObjects) {
+
+                const oldLabel = newObj.getEditorSupport().getLabel();
+
+                const newLabel = nameMaker.makeName(oldLabel);
+
+                newObj.getEditorSupport().setLabel(newLabel);
+            }
         }
 
         private pastePrefaProperties(clipboardItems: IClipboardItem[], sel: any[]) {
