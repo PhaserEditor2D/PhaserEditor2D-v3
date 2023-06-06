@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 }
             }
 
-            const siblings = sel[0].getAllProperties().getProperties();
+            const siblings = sel[0].getManager().getProperties();
 
             for (const prop of sel) {
 
@@ -56,7 +56,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     for (const prop of sel) {
 
-                        const siblings = prop.getAllProperties().getProperties();
+                        const siblings = prop.getManager().getProperties();
 
                         Phaser.Utils.Array.BringToTop(siblings, prop);
                     }
@@ -69,7 +69,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                         const prop = sel[sel.length - i - 1];
 
-                        const siblings = prop.getAllProperties().getProperties();
+                        const siblings = prop.getManager().getProperties();
 
                         Phaser.Utils.Array.SendToBack(siblings, prop)
                     }
@@ -82,7 +82,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                         const prop = sel[sel.length - i - 1];
 
-                        const siblings = prop.getAllProperties().getProperties();
+                        const siblings = prop.getManager().getProperties();
 
                         Phaser.Utils.Array.MoveUp(siblings, prop);
                     }
@@ -93,7 +93,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     for (const prop of sel) {
 
-                        const siblings = prop.getAllProperties().getProperties();
+                        const siblings = prop.getManager().getProperties();
 
                         Phaser.Utils.Array.MoveDown(siblings, prop);
                     }

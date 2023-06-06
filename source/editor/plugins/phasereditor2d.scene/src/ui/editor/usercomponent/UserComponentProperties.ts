@@ -1,9 +1,9 @@
-/// <reference path="../../sceneobjects/userProperties/UserProperties.ts" />
+/// <reference path="../../sceneobjects/userProperties/UserPropertiesManager.ts" />
 /// <reference path="../../sceneobjects/userProperties/UserComponentPropertyWrapper.ts" />
 /// <reference path="../../sceneobjects/userProperties/UserComponentOptionPropertyWrapper.ts" />
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
-    export class UserComponentProperties extends sceneobjects.UserProperties {
+    export class UserComponentProperties extends sceneobjects.UserPropertiesManager {
 
         private _userComponent: UserComponent;
 

@@ -7,13 +7,13 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         protected abstract getSectionHelpPath(): string;
 
-        protected abstract getUserProperties(): sceneobjects.UserProperties;
+        protected abstract getUserProperties(): sceneobjects.UserPropertiesManager;
 
         protected abstract getProperty(): sceneobjects.UserProperty;
 
         protected abstract componentTitleUpdated(): void;
 
-        protected abstract runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean);
+        protected abstract runOperation(action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection?: boolean);
 
         static createAddProprtyButton(
             comp: HTMLDivElement,

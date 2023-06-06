@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     import controls = colibri.ui.controls;
 
-    export declare type TUserPropertiesAction = (props?: sceneobjects.UserProperties) => void
+    export declare type TUserPropertiesAction = (props?: sceneobjects.UserPropertiesManager) => void
 
     export abstract class UserPropertiesSection extends controls.properties.PropertySection<any> {
 
@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         protected abstract getSectionHelpPath(): string;
 
-        protected abstract getUserProperties(): sceneobjects.UserProperties;
+        protected abstract getUserProperties(): sceneobjects.UserPropertiesManager;
 
         protected abstract runOperation(action: TUserPropertiesAction, updateSelection?: boolean);
 

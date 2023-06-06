@@ -26,7 +26,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             SingleUserPropertySection.createAddProprtyButton(comp, this, action => this.runOperation(action), selector);
         }
 
-        runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection = true) {
+        runOperation(action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection = true) {
 
             ui.editor.properties.ChangePrefabPropertiesOperation.runPropertiesOperation(this.getEditor(), action, updateSelection);
         }

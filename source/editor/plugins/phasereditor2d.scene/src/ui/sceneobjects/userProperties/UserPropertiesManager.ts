@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export abstract class UserProperties {
+    export abstract class UserPropertiesManager {
 
         private _properties: UserProperty[];
         private _componentPropertyBuilder: TComponentPropertyBuilder;

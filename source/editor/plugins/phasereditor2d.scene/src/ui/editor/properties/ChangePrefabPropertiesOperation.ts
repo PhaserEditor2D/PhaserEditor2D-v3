@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             return data;
         }
 
-        static runPropertiesOperation(editor: SceneEditor, action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
+        static runPropertiesOperation(editor: SceneEditor, action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection?: boolean) {
 
             const scene = editor.getScene();
 

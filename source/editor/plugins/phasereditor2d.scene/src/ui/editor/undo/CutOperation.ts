@@ -46,7 +46,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             for (const prop of this._editor.getSelectedPrefabProperties()) {
 
-                prop.getAllProperties().deleteProperty(prop.getName());
+                prop.getManager().deleteProperty(prop.getName());
             }
 
             // clear selection

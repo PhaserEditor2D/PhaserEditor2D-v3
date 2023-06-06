@@ -208,7 +208,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 if (obj instanceof sceneobjects.UserProperty) {
 
-                    const comp = (obj.getAllProperties() as UserComponentProperties).getUserComponent();
+                    const comp = (obj.getManager() as UserComponentProperties).getUserComponent();
 
                     return {
                         component: comp.getName(),
@@ -452,7 +452,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 } else if (obj instanceof sceneobjects.UserProperty) {
 
-                    obj.getAllProperties().deleteProperty(obj.getName());
+                    obj.getManager().deleteProperty(obj.getName());
 
                 } else if (typeof obj === "string") {
 

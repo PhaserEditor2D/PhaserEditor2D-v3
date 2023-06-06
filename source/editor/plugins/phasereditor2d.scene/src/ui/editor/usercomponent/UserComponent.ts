@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         private _name: string;
         private _baseClass: string;
         private _gameObjectType: string;
-        private _properties: sceneobjects.UserProperties;
+        private _properties: sceneobjects.UserPropertiesManager;
 
         constructor(name: string) {
 

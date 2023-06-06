@@ -16,18 +16,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _info: IUserPropertyInfo;
         private _componentProperty: IProperty<any>;
         private _componentPropertyBuilder: TComponentPropertyBuilder;
-        private _allProperties: UserProperties;
+        private _manager: UserPropertiesManager;
 
-        constructor(allProperties: UserProperties, componentPropertyBuilder: TComponentPropertyBuilder, info?: IUserPropertyInfo) {
+        constructor(allProperties: UserPropertiesManager, componentPropertyBuilder: TComponentPropertyBuilder, info?: IUserPropertyInfo) {
 
-            this._allProperties = allProperties;
+            this._manager = allProperties;
             this._componentPropertyBuilder = componentPropertyBuilder;
             this._info = info;
         }
 
-        getAllProperties() {
+        getManager() {
 
-            return this._allProperties;
+            return this._manager;
         }
 
         getComponentProperty(): IProperty<any> {

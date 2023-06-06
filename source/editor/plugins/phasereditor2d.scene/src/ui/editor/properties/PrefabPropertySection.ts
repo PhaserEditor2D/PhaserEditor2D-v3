@@ -14,9 +14,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
             return "scene-editor/prefab-user-properties.html";
         }
 
-        protected getUserProperties(): sceneobjects.UserProperties {
+        protected getUserProperties(): sceneobjects.UserPropertiesManager {
 
-            return this.getProperty().getAllProperties();
+            return this.getProperty().getManager();
         }
 
         protected getProperty(): sceneobjects.UserProperty {
@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             return colibri.ui.ide.Workbench.getWorkbench().getActiveEditor() as SceneEditor;
         }
 
-        protected runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean) {
+        protected runOperation(action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection?: boolean) {
 
             ui.editor.properties.ChangePrefabPropertiesOperation.runPropertiesOperation(this.getEditor(), action, updateSelection);
         }
