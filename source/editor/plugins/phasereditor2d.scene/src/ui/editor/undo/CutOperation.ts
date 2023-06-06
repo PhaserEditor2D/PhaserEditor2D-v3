@@ -12,6 +12,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             this._editor.getClipboardManager().copy();
 
+            const scene  = this.getScene();
+
             const lists = this._editor.getScene().getObjectLists();
 
             for (const obj of this._editor.getSelection()) {
@@ -24,10 +26,22 @@ namespace phasereditor2d.scene.ui.editor.undo {
                     lists
                         .removeObjectById(sprite.getEditorSupport().getId());
 
-                } else if (obj instanceof sceneobjects.ObjectList) {
+                }
+            }
+
+            for (const obj of this._editor.getSelection()) {
+
+                if (obj instanceof sceneobjects.ObjectList) {
 
                     lists.removeListById(obj.getId());
                 }
+            }
+
+            const plainObjects = this._editor.getSelectedPlainObjects();
+
+            if (plainObjects.length > 0) {
+
+                scene.removePlainObjects(plainObjects);
             }
 
             this._editor.setSelection([]);
