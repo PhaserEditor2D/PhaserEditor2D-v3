@@ -11,6 +11,7 @@
 * Allows copy/cut/paste keyboard keys.
 * Shows Keyboard.Key and Object List objects in the Object Variable user property's dialog..
 * Adds the new KeyCode User Property.
+* Fixes hit area serialization.
 
 ## v3.61.0 - May 18, 2023
 
