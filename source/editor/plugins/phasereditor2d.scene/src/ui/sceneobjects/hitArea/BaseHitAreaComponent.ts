@@ -35,6 +35,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.readJSON(ser);
         }
 
+        writeJSON(ser: core.json.Serializer): void {
+
+            // only writes this component data if its shape is selected
+            const shape = HitAreaComponent.hitAreaShape.getValue(this.getObject());
+
+            if (shape === this._shape) {
+
+                super.writeJSON(ser);
+            }            
+        }
+
         protected abstract _setDefaultValues(x: number, y: number, width: number, height: number): void;
 
         setDefaultValues() {

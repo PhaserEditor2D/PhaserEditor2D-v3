@@ -74,7 +74,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of properties) {
 
-                ser.write(prop.name, prop.getValue(this._obj), this.getPropertyDefaultValue(prop));
+                const value = prop.getValue(this._obj);
+
+                const defValue = this.getPropertyDefaultValue(prop);
+                
+                ser.write(prop.name, value, defValue);
             }
         }
 
