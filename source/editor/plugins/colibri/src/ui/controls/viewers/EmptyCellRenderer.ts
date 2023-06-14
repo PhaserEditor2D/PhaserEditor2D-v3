@@ -6,6 +6,7 @@ namespace colibri.ui.controls.viewers {
         private _variableSize: boolean;
 
         constructor(variableSize: boolean = true) {
+            
             this._variableSize = variableSize;
         }
 

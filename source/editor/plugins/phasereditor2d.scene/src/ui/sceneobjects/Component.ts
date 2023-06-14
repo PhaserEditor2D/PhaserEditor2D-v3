@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         objectVarName: string;
         prefabSerializer: core.json.Serializer;
         unit: core.code.UnitCodeDOM;
-        sceneFile: io.FilePath
+        sceneFile: io.FilePath,
+        obj: ISceneGameObject
     }
 
     export interface IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs {

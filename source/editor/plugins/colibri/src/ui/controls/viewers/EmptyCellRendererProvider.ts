@@ -10,6 +10,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         constructor(getRenderer?: (element: any) => ICellRenderer) {
+            
             this._getRenderer = getRenderer ?? ((e) => new EmptyCellRenderer());
         }
 

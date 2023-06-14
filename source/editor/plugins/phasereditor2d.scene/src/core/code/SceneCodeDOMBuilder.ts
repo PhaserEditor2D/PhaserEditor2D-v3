@@ -983,7 +983,8 @@ namespace phasereditor2d.scene.core.code {
                     objectVarName: varname,
                     prefabSerializer: prefabSerializer,
                     unit: this._unit,
-                    sceneFile: this._sceneFile
+                    sceneFile: this._sceneFile,
+                    obj
                 });
             }
 

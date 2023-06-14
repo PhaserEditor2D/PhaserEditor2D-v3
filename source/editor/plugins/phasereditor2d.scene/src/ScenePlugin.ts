@@ -87,6 +87,7 @@ namespace phasereditor2d.scene {
         private _sceneFinder: core.json.SceneFinder;
 
         private _docs: phasereditor2d.ide.core.PhaserDocs;
+        private _eventsDocs: phasereditor2d.ide.core.PhaserDocs;
 
         static getInstance() {
             return this._instance;
@@ -95,7 +96,12 @@ namespace phasereditor2d.scene {
         private constructor() {
             super("phasereditor2d.scene");
 
-            this._docs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json");
+            this._docs = new phasereditor2d.ide.core.PhaserDocs(
+                this,
+                "data/phaser-docs.json",
+                "data/events-docs.json");
+
+            this._eventsDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/events-docs.json");
         }
 
         async starting() {
@@ -130,7 +136,13 @@ namespace phasereditor2d.scene {
         }
 
         getPhaserDocs() {
+
             return this._docs;
+        }
+
+        getPhaserEventsDocs() {
+
+            return this._eventsDocs;
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -148,6 +160,11 @@ namespace phasereditor2d.scene {
             reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
 
                 await ScenePlugin.getInstance().getPhaserDocs().preload();
+            }));
+
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
+
+                await ScenePlugin.getInstance().getPhaserEventsDocs().preload();
             }));
 
             // preload UserComponent files
@@ -482,6 +499,7 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.OptionPropertyType(),
                 new ui.sceneobjects.ObjectVarPropertyType(),
                 new ui.sceneobjects.ObjectConstructorPropertyType(),
+                new ui.sceneobjects.EventPropertyType(),
                 new ui.sceneobjects.TextureConfigPropertyType(),
                 new ui.sceneobjects.AnimationKeyPropertyType(),
                 new ui.sceneobjects.AudioKeyPropertyType(),

@@ -136,7 +136,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             viewer.setInput([]);
 
-            const dlg = new controls.dialogs.ViewerDialog(viewer, true);
+            const dlg = this.createDialogInstance(viewer, true);
 
             const size = this.getDialogSize();
 
@@ -161,6 +161,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.revealValue(viewer, revealValue);
 
             controls.viewers.GridTreeViewerRenderer.expandSections(viewer);
+        }
+
+        protected createDialogInstance(viewer: controls.viewers.TreeViewer, showZoomControls: boolean)
+            : controls.dialogs.AbstractViewerDialog {
+
+            return new controls.dialogs.ViewerDialog(viewer, showZoomControls)
         }
 
         protected abstract valueToString(viewer: controls.viewers.TreeViewer, value: any): string;
