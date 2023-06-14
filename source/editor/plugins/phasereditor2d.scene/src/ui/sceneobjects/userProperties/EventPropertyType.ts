@@ -86,6 +86,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer) {
 
+            // Phaser events
             const docs = ScenePlugin.getInstance().getPhaserEventsDocs();
 
             const phaserNames = docs.getKeys();
@@ -94,9 +95,39 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const events = await finder.findUserEvents();
 
+            // user events
+
             const userNames = events.map(e => e.name);
 
-            viewer.setInput([...userNames, ...phaserNames]);
+            // Phaser animation dynamic events
+
+            const packFinder = new pack.core.PackFinder();
+
+            await packFinder.preload();
+
+            const animEvents = packFinder
+                .getAssets(i => i instanceof pack.core.AnimationsAssetPackItem)
+                .map(i => i as pack.core.AnimationsAssetPackItem)
+                .flatMap(i => i.getAnimations())
+                .map(anim => anim.getKey())
+                .map(k => `animationcomplete-${k}`);
+
+            // Phaser keyboard dynamic events
+
+            const keyboardEvents = [];
+
+            for(const k of Object.keys(Phaser.Input.Keyboard.KeyCodes)) {
+
+                keyboardEvents.push(`keydown-${k}`, `keyup-${k}`);
+            }
+
+            console.log(keyboardEvents);
+            
+            viewer.setInput([
+                ...userNames,
+                ...phaserNames,
+                ...keyboardEvents,
+                ...animEvents]);
         }
     }
 
@@ -129,13 +160,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const [eventName] = sel as string[];
 
+                const phaserDocs = ScenePlugin.getInstance().getPhaserDocs();
+                const eventsDocs = ScenePlugin.getInstance().getPhaserEventsDocs();
+
                 if (eventName) {
 
                     let help = "";
 
                     if (eventName.startsWith("Phaser.")) {
 
-                        help = ScenePlugin.getInstance().getPhaserEventsDocs().getDoc(eventName, false) || "";
+                        help = eventsDocs.getDoc(eventName, false) || "";
+
+                    } else if (eventName.startsWith("animationcomplete-")) {
+
+                        help = eventsDocs.getDoc("Phaser.Animations.Events.ANIMATION_COMPLETE_KEY", false);
+
+                    } else if (eventName.startsWith("keydown-")) {
+
+                        help = eventsDocs.getDoc("Phaser.Input.Keyboard.Events.KEY_DOWN", false);
+
+                    } if (eventName.startsWith("keyup-")) {
+
+                        help = eventsDocs.getDoc("Phaser.Input.Keyboard.Events.KEY_UP", false);
 
                     } else {
 
