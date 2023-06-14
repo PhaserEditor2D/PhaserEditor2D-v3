@@ -84,12 +84,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return value;
         }
 
-        protected loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer): void {
+        protected async loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer) {
 
             const docs = ScenePlugin.getInstance().getPhaserEventsDocs();
-            const keys = docs.getKeys();
 
-            viewer.setInput(keys);
+            const phaserNames = docs.getKeys();
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const events = await finder.findUserEvents();
+
+            const userNames = events.map(e => e.name);
+
+            viewer.setInput([...userNames, ...phaserNames]);
         }
     }
 
@@ -111,15 +118,36 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const viewer = this.getViewer();
 
+            const userEvents: core.json.IUserEvent[] = [];
+
+            ScenePlugin.getInstance().getSceneFinder().findUserEvents().then(events => {
+
+                userEvents.push(...events);
+            })
+
             viewer.eventSelectionChanged.addListener(sel => {
 
-                const [event] = sel as string[];
+                const [eventName] = sel as string[];
 
-                if (event) {
+                if (eventName) {
 
-                    const doc = ScenePlugin.getInstance().getPhaserEventsDocs().getDoc(event, false) || "";
+                    let help = "";
 
-                    docsArea.innerHTML = doc;
+                    if (eventName.startsWith("Phaser.")) {
+
+                        help = ScenePlugin.getInstance().getPhaserEventsDocs().getDoc(eventName, false) || "";
+
+                    } else {
+
+                        const event = userEvents.find(e => e.name === eventName);
+
+                        if (event) {
+
+                            help = phasereditor2d.ide.core.PhaserDocs.markdownToHtml(event.help)
+                        }
+                    }
+
+                    docsArea.innerHTML = help;
                 }
             });
         }

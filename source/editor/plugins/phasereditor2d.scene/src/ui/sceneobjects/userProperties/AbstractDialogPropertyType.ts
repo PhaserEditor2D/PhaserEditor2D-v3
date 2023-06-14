@@ -156,7 +156,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             dlg.addCancelButton();
 
-            this.loadViewerInput(viewer);
+            await this.loadViewerInput(viewer);
 
             this.revealValue(viewer, revealValue);
 
@@ -171,7 +171,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected abstract valueToString(viewer: controls.viewers.TreeViewer, value: any): string;
 
-        protected abstract loadViewerInput(viewer: controls.viewers.TreeViewer): void;
+        protected abstract loadViewerInput(viewer: controls.viewers.TreeViewer): Promise<void>;
 
         protected revealValue(viewer: controls.viewers.TreeViewer, value: string) {
 

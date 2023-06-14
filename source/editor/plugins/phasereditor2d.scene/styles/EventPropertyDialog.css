@@ -1,6 +1,7 @@
 .EventPropertyDialogHelpPane {
     height: 10rem;
     overflow-y: scroll;
+    align-items: start !important;
 }
 
 .dark .EventPropertyDialogHelpPane {

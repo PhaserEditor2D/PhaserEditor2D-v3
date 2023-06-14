@@ -12,6 +12,13 @@ namespace phasereditor2d.ide.core {
             this._files = files;
         }
 
+        static markdownToHtml(txt: string) {
+
+            const converter = new showdown.Converter();
+
+            return converter.makeHtml(txt);
+        }
+
         async preload() {
 
             if (!this._data) {

@@ -38,6 +38,12 @@ namespace phasereditor2d.scene.core.json {
         component: usercomponent.UserComponent
     }
 
+    export interface IUserEvent {
+        name: string;
+        help: string;
+        file: io.FilePath;
+    }
+
     export class SceneFinder {
 
         private _prefabObjectId_ObjectData_Map: Map<string, IObjectData>;
@@ -245,7 +251,7 @@ namespace phasereditor2d.scene.core.json {
                     sceneFiles.push(file);
 
                 } catch (e) {
-                    
+
                     console.error(`SceneDataTable: parsing file ${file.getFullName()}. Error: ${(e as Error).message}`);
                 }
 
@@ -537,6 +543,45 @@ namespace phasereditor2d.scene.core.json {
                 console.log("Prefab data " + id + ":");
                 console.log(this._prefabObjectId_ObjectData_Map.get(id));
             }
+        }
+
+        async findUserEvents(): Promise<IUserEvent[]> {
+
+            const result: IUserEvent[] = [];
+
+            for (const file of colibri.ui.ide.FileUtils.getAllFiles()) {
+
+                if (file.getName() === "events.txt") {
+
+                    const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
+                    const lines = content.split("\n");
+
+                    for (let line of lines) {
+
+                        line = line.trim();
+
+                        if (line.length === 0) {
+
+                            continue;
+                        }
+
+                        let name = line;
+                        let help = "";
+
+                        const i = line.indexOf(" ");
+
+                        if (i > 0) {
+
+                            name = line.substring(0, i);
+                            help = line.substring(i + 1);
+                        }
+
+                        result.push({ name, help, file });
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

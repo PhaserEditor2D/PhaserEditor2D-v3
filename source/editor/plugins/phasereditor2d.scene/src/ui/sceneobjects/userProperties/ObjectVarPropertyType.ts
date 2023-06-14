@@ -70,7 +70,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return core.code.formatToValidVarName(viewer.getLabelProvider().getLabel(value));
         }
 
-        protected loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer): void {
+        protected async loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer): Promise<void> {
 
             const scene = this.getEditor().getScene();
 
