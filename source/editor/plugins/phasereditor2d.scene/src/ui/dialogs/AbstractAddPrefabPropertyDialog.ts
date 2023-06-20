@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             super.create(hideParentDialog);
 
-            this.setTitle("Add Prefab Property");
+            this.setTitle("Add Property");
 
             this.enableButtonOnlyWhenOneElementIsSelected(this.addOpenButton("Add Property", sel => {
 
