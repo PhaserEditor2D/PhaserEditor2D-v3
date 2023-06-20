@@ -375,7 +375,15 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.NestedPrefabObjectVariableSection(page),
                 page => new ui.sceneobjects.PrefabInstanceSection(page),
                 page => new ui.sceneobjects.ObjectUserComponentsSection(page),
-                page => new ui.sceneobjects.ObjectSingleUserComponentSection(page),
+                page => new ui.sceneobjects.ObjectSingleUserComponentSection(page)));
+
+            // dynamic component sections
+
+            reg.addExtension(new ui.editor.properties.DynamicUserComponentSectionExtension());
+
+            // more property sections
+            
+            reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ChildrenSection(page),
@@ -401,7 +409,6 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ArcadeGeometrySection(page),
                 page => new ui.sceneobjects.ArcadeBodyMovementSection(page),
                 page => new ui.sceneobjects.ArcadeBodyCollisionSection(page),
-                page => new ui.sceneobjects.TextureSection(page),
                 page => new ui.sceneobjects.TextContentSection(page),
                 page => new ui.sceneobjects.TextSection(page),
                 page => new ui.sceneobjects.BitmapTextSection(page),
@@ -416,7 +423,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TriangleSection(page),
                 page => new ui.sceneobjects.PolygonSection(page),
                 page => new ui.sceneobjects.ColliderSection(page),
-                page => new ui.sceneobjects.KeyboardKeySection(page)
+                page => new ui.sceneobjects.KeyboardKeySection(page),
+                page => new ui.sceneobjects.TextureSection(page),
             ));
 
             // scene tools

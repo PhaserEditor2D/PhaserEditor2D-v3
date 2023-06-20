@@ -211,6 +211,7 @@ namespace colibri.ui.controls.properties {
         }
 
         getSectionProvider() {
+            
             return this._sectionProvider;
         }
     }
