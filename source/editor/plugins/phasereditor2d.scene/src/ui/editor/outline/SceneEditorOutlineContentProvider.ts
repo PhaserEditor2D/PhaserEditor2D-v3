@@ -86,14 +86,14 @@ namespace phasereditor2d.scene.ui.editor.outline {
                     list.reverse();
                 }
 
-                // prepend the user components
+                // // prepend the user components
 
-                const compNodes = parentES
-                    .getUserComponentsComponent()
-                    .getUserComponentNodes()
-                    .filter(n => n.isPublished());
+                // const compNodes = parentES
+                //     .getUserComponentsComponent()
+                //     .getUserComponentNodes()
+                //     .filter(n => n.isPublished());
 
-                list = [...compNodes, ...list];
+                // list = [...compNodes, ...list];
 
                 return list;
             }
