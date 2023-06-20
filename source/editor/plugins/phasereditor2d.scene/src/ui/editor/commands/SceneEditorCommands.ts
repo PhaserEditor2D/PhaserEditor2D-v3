@@ -65,6 +65,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SORT_OBJ_DOWN = "phasereditor2d.scene.ui.editor.commands.SortObjectDown";
     export const CMD_SORT_OBJ_TOP = "phasereditor2d.scene.ui.editor.commands.SortObjectTop";
     export const CMD_SORT_OBJ_BOTTOM = "phasereditor2d.scene.ui.editor.commands.SortObjectBottom";
+    export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.commands.AddUserComponent";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -114,6 +115,24 @@ namespace phasereditor2d.scene.ui.editor.commands {
         return args.activeEditor && args.activeEditor.getSelection().length > 0;
     }
 
+    function onlyGameObjectsSelected(args: colibri.ui.ide.commands.HandlerArgs) {
+
+        if (args.activeEditor instanceof SceneEditor) {
+
+            for (const obj of args.activeEditor.getSelection()) {
+
+                if (!sceneobjects.isGameObject(obj)) {
+
+                    return false;
+                }
+            }
+
+            return args.activeEditor.getSelection().length > 0;
+        }
+
+        return false;
+    }
+
     export class SceneEditorCommands {
 
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -160,6 +179,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerArcadeCommands(manager);
 
             this.registerScriptNodeCommands(manager);
+
+            this.registerUserComponentCommands(manager);
 
             this.registerPrefabCommands(manager);
 
@@ -227,6 +248,129 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 }
             })
+        }
+
+        private static registerUserComponentCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+
+                command: {
+                    id: CMD_ADD_USER_COMPONENT,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Add User Component",
+                    tooltip: "Pick a User Component and add it to the selected objects"
+                },
+                handler: {
+                    testFunc: onlyGameObjectsSelected,
+                    executeFunc: args => {
+
+                        const finder = ScenePlugin.getInstance().getSceneFinder();
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const editorCompList = args.activeEditor.getSelection()
+                            .map(obj => sceneobjects.GameObjectEditorSupport.getObjectComponent(obj, sceneobjects.UserComponentsEditorComponent) as sceneobjects.UserComponentsEditorComponent);
+
+                        const used = new Set(
+                            [...editorCompList
+                                .flatMap(editorComp => editorComp.getLocalUserComponents())
+                                .map(info => info.component.getName()),
+
+                            ...editorCompList.flatMap(editorComp => editorComp.getPrefabUserComponents())
+                                .flatMap(info => info.components)
+                                .map(c => c.getName())
+                            ]
+                        );
+
+                        class ContentProvider implements controls.viewers.ITreeContentProvider {
+
+                            getRoots(input: any): any[] {
+
+                                return finder.getUserComponentsModels()
+                                    .filter(info => info.model.getComponents().filter(c => !used.has(c.getName())).length > 0);
+                            }
+
+                            getChildren(parentObj: core.json.IUserComponentsModelInfo | usercomponent.UserComponent): any[] {
+
+                                if (parentObj instanceof usercomponent.UserComponent) {
+
+                                    return [];
+                                }
+
+                                return parentObj.model.getComponents().filter(c => !used.has(c.getName()));
+                            }
+                        }
+
+                        const viewer = new controls.viewers.TreeViewer("UserComponentInstancePropertySection.addComponentDialogViewer");
+
+                        viewer.setStyledLabelProvider({
+                            getStyledTexts: (obj: usercomponent.UserComponent | core.json.IUserComponentsModelInfo, dark) => {
+
+                                const theme = controls.Controls.getTheme();
+
+                                if (obj instanceof usercomponent.UserComponent) {
+
+                                    return [{
+                                        text: obj.getName(),
+                                        color: theme.viewerForeground
+                                    }];
+                                }
+
+                                return [{
+                                    text: obj.file.getNameWithoutExtension(),
+                                    color: theme.viewerForeground
+                                }, {
+                                    text: " - " + obj.file.getParent().getProjectRelativeName()
+                                        .split("/").filter(s => s !== "").reverse().join("/"),
+                                    color: theme.viewerForeground + "90"
+                                }];
+                            }
+                        });
+
+                        viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
+                            (obj: core.json.IUserComponentsModelInfo | usercomponent.UserComponent) =>
+                                new controls.viewers.IconImageCellRenderer(
+                                    obj instanceof usercomponent.UserComponent ?
+                                        ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT)
+                                        : colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER))));
+
+                        viewer.setContentProvider(new ContentProvider());
+
+                        viewer.setInput([]);
+
+                        viewer.expandRoots(false);
+
+                        const dlg = new controls.dialogs.ViewerDialog(viewer, false);
+
+                        dlg.setSize(undefined, 400, true);
+
+                        dlg.create();
+
+                        dlg.setTitle("User Component");
+
+                        dlg.enableButtonOnlyWhenOneElementIsSelected(dlg.addOpenButton("Add Component", () => {
+
+                            const selComp = viewer.getSelectionFirstElement() as usercomponent.UserComponent;
+
+                            if (selComp) {
+
+
+                                editor.getUndoManager().add(new ui.editor.undo.SimpleSceneSnapshotOperation(editor, () => {
+
+                                    for (const editorComp of editorCompList) {
+
+                                        editorComp.addUserComponent(selComp.getName());
+                                    }
+                                }));
+
+                                // section.updateWithSelection();
+                                editor.dispatchSelectionChanged();
+                            }
+                        }), obj => obj instanceof usercomponent.UserComponent);
+
+                        dlg.addCancelButton();
+                    }
+                }
+            });
         }
 
         private static registerScriptNodeCommands(manager: colibri.ui.ide.commands.CommandManager) {

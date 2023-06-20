@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createPrefabMenu());
 
-            menu.addMenu(this.createScriptsMenu());
+            menu.addMenu(this.createScriptingMenu());
 
             menu.addMenu(this.createTypeMenu());
 
@@ -52,12 +52,16 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createCompilerMenu());
         }
 
-        createScriptsMenu(): controls.Menu {
+        createScriptingMenu(): controls.Menu {
 
-            const menu = new controls.Menu("Scripts");
+            const menu = new controls.Menu("Scripting");
 
             menu.addCommand(commands.CMD_OPEN_ADD_SCRIPT_DIALOG);
             menu.addCommand(commands.CMD_OPEN_SCRIPT_DIALOG);
+
+            menu.addSeparator();
+
+            menu.addCommand(commands.CMD_ADD_USER_COMPONENT);
 
             return menu;
         }
