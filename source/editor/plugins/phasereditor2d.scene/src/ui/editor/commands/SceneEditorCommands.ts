@@ -260,6 +260,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     name: "Add User Component",
                     tooltip: "Pick a User Component and add it to the selected objects"
                 },
+                keys: {
+                    key: "KeyC",
+                    keyLabel: "C"
+                },
                 handler: {
                     testFunc: onlyGameObjectsSelected,
                     executeFunc: args => {
@@ -345,7 +349,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         dlg.create();
 
-                        dlg.setTitle("User Component");
+                        dlg.setTitle("Add User Component");
 
                         dlg.enableButtonOnlyWhenOneElementIsSelected(dlg.addOpenButton("Add Component", () => {
 
