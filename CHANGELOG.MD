@@ -13,6 +13,9 @@
 * Shows Keyboard.Key and Object List objects in the Object Variable user property's dialog..
 * Adds the new KeyCode User Property.
 * Fixes hit area serialization.
+* Removes the User Components section and show user components properties as individual sections:
+    * Renames the Scripts context menu to Scripting and include:
+        - Add User Component
 
 ## v3.61.0 - May 18, 2023
 
