@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
         constructor(page: controls.properties.PropertyPage, componentName: string, hash: string) {
             super(page,
                 DynamicPropertySection.computeId(componentName, hash),
-                `${componentName} (component)`);
+                `${componentName} (user component)`);
 
             this._componentName = componentName;
         }
