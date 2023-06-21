@@ -4,13 +4,13 @@ namespace phasereditor2d.scene.ui.editor.properties {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export class DynamicPropertySection extends sceneobjects.SceneGameObjectSection<sceneobjects.ISceneGameObject> {
+    export class DynamicUserComponentPropertySection extends sceneobjects.SceneGameObjectSection<sceneobjects.ISceneGameObject> {
 
         private _componentName: string;
 
         constructor(page: controls.properties.PropertyPage, componentName: string, hash: string) {
             super(page,
-                DynamicPropertySection.computeId(componentName, hash),
+                DynamicUserComponentPropertySection.computeId(componentName, hash),
                 `${componentName} (user component)`);
 
             this._componentName = componentName;

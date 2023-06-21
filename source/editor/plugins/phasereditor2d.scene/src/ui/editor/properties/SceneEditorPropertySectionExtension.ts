@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             this._sectionProviders = sectionProviders;
         }
 
-        getSectionProviders() {
+        getSectionProviders(editor?: SceneEditor) {
             
             return this._sectionProviders;
         }

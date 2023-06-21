@@ -3,20 +3,42 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     export class DynamicUserComponentSectionExtension extends SceneEditorPropertySectionExtension {
 
-        getSectionProviders(): GetPropertySection[] {
+        getSectionProviders(editor: SceneEditor): GetPropertySection[] {
+
+            const compNames = editor.getSelectedGameObjects()
+                .flatMap(obj => obj.getEditorSupport()
+                    .getUserComponentsComponent()
+                    .getUserComponentNodes())
+                .map(compNode => compNode.getComponentName())
+
+            const used = new Set();
 
             const result: GetPropertySection[] = [];
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            for (const model of finder.getUserComponentsModels()) {
+            for(const compName of compNames) {
 
-                for (const comp of model.model.getComponents()) {
+                if (!used.has(compName)) {
 
-                    result.push(page => new DynamicPropertySection(
-                        page, comp.getName(), `${model.file.getModTime()}`));
+                    const findResult = finder.getUserComponentByName(compName);
+
+                    if (findResult) {
+
+                        result.push(page => new DynamicUserComponentPropertySection(
+                            page, compName, `${findResult.file.getModTime()}`));
+                    }
                 }
             }
+
+            // for (const model of finder.getUserComponentsModels()) {
+
+            //     for (const comp of model.model.getComponents()) {
+
+            //         result.push(page => new DynamicUserComponentPropertySection(
+            //             page, comp.getName(), `${model.file.getModTime()}`));
+            //     }
+            // }
 
             return result;
         }

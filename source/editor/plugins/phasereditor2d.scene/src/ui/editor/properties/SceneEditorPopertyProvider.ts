@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             for (const ext of exts) {
 
-                const providers = ext.getSectionProviders();
+                const providers = ext.getSectionProviders(this._editor);
 
                 for (const provider of providers) {
 
