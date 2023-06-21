@@ -62,6 +62,7 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addSeparator();
 
             menu.addCommand(commands.CMD_ADD_USER_COMPONENT);
+            menu.addCommand(commands.CMD_BROWSE_USER_COMPONENTS);
 
             return menu;
         }

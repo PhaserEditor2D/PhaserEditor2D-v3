@@ -66,6 +66,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SORT_OBJ_TOP = "phasereditor2d.scene.ui.editor.commands.SortObjectTop";
     export const CMD_SORT_OBJ_BOTTOM = "phasereditor2d.scene.ui.editor.commands.SortObjectBottom";
     export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.commands.AddUserComponent";
+    export const CMD_BROWSE_USER_COMPONENTS = "phasereditor2d.scene.ui.editor.commands.BrowseUserComponents";
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -252,6 +253,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
         private static registerUserComponentCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
+            // add user component
+
             manager.add({
 
                 command: {
@@ -375,6 +378,25 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 }
             });
+
+            // browse user component
+            manager.add({
+                command: {
+                    id: CMD_BROWSE_USER_COMPONENTS,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Browse User Components",
+                    tooltip: "Browse all user components in the scene's objects."
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const dlg = new sceneobjects.BrowseUserComponentsDialog(
+                            args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
+                }
+            })
         }
 
         private static registerScriptNodeCommands(manager: colibri.ui.ide.commands.CommandManager) {
