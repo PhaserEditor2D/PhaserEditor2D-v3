@@ -68,6 +68,12 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.commands.AddUserComponent";
     export const CMD_BROWSE_USER_COMPONENTS = "phasereditor2d.scene.ui.editor.commands.BrowseUserComponents";
 
+    function isCommandDialogActive() {
+
+        return colibri.Platform.getWorkbench()
+            .getActiveDialog() instanceof controls.dialogs.CommandDialog
+    }
+
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
         if (args.activeDialog) {
@@ -1396,6 +1402,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             testFunc: args => {
 
                                 if (!isSceneScope(args)) {
+
+                                    return false;
+                                }
+
+                                if (isCommandDialogActive()) {
 
                                     return false;
                                 }
