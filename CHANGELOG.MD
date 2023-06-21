@@ -16,6 +16,7 @@
 * Removes the User Components section and show user components properties as individual sections:
     * Renames the Scripts context menu to Scripting and include:
         - Add User Component
+        - Browse User Components
 * Removes user component nodes from the Outline view.
 
 ## v3.61.0 - May 18, 2023
