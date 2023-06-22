@@ -13,12 +13,12 @@
 * Shows Keyboard.Key and Object List objects in the Object Variable user property's dialog..
 * Adds the new KeyCode User Property.
 * Fixes hit area serialization.
-* Removes the User Components section and show user components properties as individual sections:
+* Removes the User Components section and shows user components properties as individual sections:
     * Renames the Scripts context menu to Scripting and include:
         - Add User Component
         - Browse User Components
 * Removes user component nodes from the Outline view.
-* Removes the Prefab Instance section, now it shows the prefab instance user properties as common sections.
+* Removes the Prefab Instance section, shows the prefab instance user properties as individual sections.
 
 ## v3.61.0 - May 18, 2023
 
