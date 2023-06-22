@@ -29,7 +29,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     visitedComps.add(compName);
 
-                    result.push(page => new DynamicUserComponentPropertySection(
+                    result.push(page => new DynamicUserComponentSection(
                         page, compName, `${compInfo.file.getModTime()}`));
                 }
             }
@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                         if (findResult) {
 
-                            result.push(page => new DynamicUserComponentPropertySection(
+                            result.push(page => new DynamicUserComponentSection(
                                 page, compName, `${findResult.file.getModTime()}`));
                         }
                     }
