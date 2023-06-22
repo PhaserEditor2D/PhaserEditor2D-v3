@@ -4,13 +4,13 @@ namespace phasereditor2d.scene.ui.editor.properties {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export class DynamicUserComponentPropertySection extends sceneobjects.SceneGameObjectSection<sceneobjects.ISceneGameObject> {
+    export class DynamicUserComponentSection extends sceneobjects.SceneGameObjectSection<sceneobjects.ISceneGameObject> {
 
         private _componentName: string;
 
         constructor(page: controls.properties.PropertyPage, componentName: string, hash: string) {
             super(page,
-                DynamicUserComponentPropertySection.computeId(componentName, hash),
+                DynamicUserComponentSection.computeId(componentName, hash),
                 componentName);
 
             this._componentName = componentName;
@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 const used = new Set();
 
-                for(const prefabName of prefabNames) {
+                for (const prefabName of prefabNames) {
 
                     if (used.has(prefabName)) {
 
@@ -283,7 +283,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 if (props.length > 0) {
 
                     const atLeastOnePrefab = this.getSelection()
-                        .filter(obj => obj.getEditorSupport().isPrefabInstance())
+                        .map(obj => obj.getEditorSupport())
+                        .filter(objES => objES.isPrefabInstance()
+                            && !objES.getUserComponentsComponent()
+                                .hasLocalUserComponent(this._componentName))
                         .length > 0;
 
                     for (const prop of props) {
