@@ -15,10 +15,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page,
                 DynamicPrefabInstanceSection.computeId(prefabFile),
                 prefabFile.getNameWithoutExtension(),
-                false, true, ScenePlugin.getInstance().getIcon(ICON_GROUP));
+                false, true, ScenePlugin.getInstance().getIcon(ICON_GROUP),
+                DynamicPrefabInstanceSection.computeTypeHash(prefabFile));
 
             this._prefabFile = prefabFile;
             this._properties = properties;
+        }
+
+        private static computeTypeHash(prefabFile: io.FilePath): string {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+            
+            const prefabId = finder.getPrefabId(prefabFile);
+
+            return `DynamicPrefabInstanceSection_${prefabFile.getNameWithoutExtension()}_${prefabId}`
         }
 
         private static computeId(prefabFile: io.FilePath) {

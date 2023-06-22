@@ -12,6 +12,7 @@ namespace colibri.ui.controls.properties {
         private _fillSpace: boolean;
         private _collapsedByDefault: boolean;
         private _icon: controls.IImage;
+        private _typeHash: string;
 
         constructor(
             page: PropertyPage,
@@ -19,7 +20,8 @@ namespace colibri.ui.controls.properties {
             title: string,
             fillSpace = false,
             collapsedByDefault = false,
-            icon?: controls.IImage) {
+            icon?: controls.IImage,
+            typeHash?: string) {
 
             super();
 
@@ -29,6 +31,8 @@ namespace colibri.ui.controls.properties {
             this._fillSpace = fillSpace;
             this._collapsedByDefault = collapsedByDefault;
             this._icon = icon;
+            this._typeHash = typeHash;
+
             this._updaters = [];
 
             const localTabSection = localStorage.getItem(this.localStorageKey("tabSection"));
@@ -68,6 +72,7 @@ namespace colibri.ui.controls.properties {
         }
 
         addUpdater(updater: Updater) {
+
             this._updaters.push(updater);
         }
 
@@ -81,6 +86,7 @@ namespace colibri.ui.controls.properties {
         }
 
         getPage() {
+
             return this._page;
         }
 
@@ -112,6 +118,11 @@ namespace colibri.ui.controls.properties {
         getIcon() {
 
             return this._icon;
+        }
+
+        getTypeHash() {
+
+            return this._typeHash;
         }
 
         create(parent: HTMLDivElement): void {

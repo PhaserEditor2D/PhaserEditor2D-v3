@@ -18,6 +18,13 @@ namespace colibri.ui.controls.properties {
             this._section = section;
 
             this.addClass("PropertySectionPane");
+
+            const hashType = section.getTypeHash();
+
+            if (hashType) {
+
+                this.getElement().setAttribute("type-hash", section.getTypeHash());
+            }
         }
 
         createSection() {

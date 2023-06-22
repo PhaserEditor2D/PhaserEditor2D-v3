@@ -212,13 +212,30 @@ namespace colibri.ui.controls {
         }
 
         add(control: Control): void {
+
             control._container = this;
+
             this._children.push(control);
+
             this._element.appendChild(control.getElement());
+            
             control.onControlAdded();
         }
 
+        remove(control: Control) {
+
+            control.getElement().remove();
+
+            this._children = this._children.filter(c => c !== control);
+
+            control.onControlRemoved();
+        }
+
         protected onControlAdded() {
+            // nothing
+        }
+
+        protected onControlRemoved() {
             // nothing
         }
 

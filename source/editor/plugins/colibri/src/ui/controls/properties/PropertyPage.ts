@@ -28,8 +28,6 @@ namespace colibri.ui.controls.properties {
 
         private build() {
 
-            console.log("build()", Date.now());
-
             if (this._sectionProvider) {
 
                 const list: Array<PropertySection<any>> = [];
@@ -42,6 +40,12 @@ namespace colibri.ui.controls.properties {
 
                         const pane = new PropertySectionPane(this, section);
 
+                        if (section.getTypeHash()) {
+
+                            this.removePanesWithSameTypeHash(section.getTypeHash());
+                        }
+                        
+                        console.log("PropertyPage: create pane for", section.getTitle(), section.getId());
                         this.add(pane);
 
                         this._sectionPaneMap.set(section.getId(), pane);
@@ -64,10 +68,27 @@ namespace colibri.ui.controls.properties {
             } else {
 
                 for (const pane of this._sectionPanes) {
-                    
+
                     pane.getElement().style.display = "none";
                 }
             }
+        }
+
+        private removePanesWithSameTypeHash(typeHash: string) {
+
+            for (const pane of this._sectionPanes) {
+
+                const section = pane.getSection();
+
+                if (section.getTypeHash() === typeHash) {
+
+                    console.log("PropertyPage: remove dynamic pane", section.getTitle(), section.getId());
+                    this.remove(pane);
+                }
+            }
+
+            this._sectionPanes = this._sectionPanes
+                .filter(pane => pane.getSection().getTypeHash() !== typeHash);
         }
 
         public updateWithSelection(): void {
@@ -220,7 +241,7 @@ namespace colibri.ui.controls.properties {
         }
 
         getSectionProvider() {
-            
+
             return this._sectionProvider;
         }
     }
