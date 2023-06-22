@@ -372,8 +372,7 @@ namespace phasereditor2d.scene {
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.GameObjectVariableSection(page),
                 page => new ui.sceneobjects.PrefabObjectVariableSection(page),
-                page => new ui.sceneobjects.NestedPrefabObjectVariableSection(page),
-                page => new ui.sceneobjects.PrefabInstanceSection(page)
+                page => new ui.sceneobjects.NestedPrefabObjectVariableSection(page)
             ));
 
             // dynamic component sections
