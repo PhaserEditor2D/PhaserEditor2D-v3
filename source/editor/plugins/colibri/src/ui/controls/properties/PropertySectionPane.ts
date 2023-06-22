@@ -59,7 +59,8 @@ namespace colibri.ui.controls.properties {
                 }
 
                 this._titleLabel = document.createElement("label");
-                this.updateTitle()
+                this._titleLabel.classList.add("TitleLabel");
+                this.updateTitle();
                 this._titleArea.appendChild(this._titleLabel);
 
                 this._menuIcon = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_SMALL_MENU));
@@ -151,7 +152,7 @@ namespace colibri.ui.controls.properties {
 
             if (this._titleLabel) {
 
-                this._titleLabel.innerText = this._section.getTitle();
+                this._titleLabel.innerHTML = this._section.getTitle();
             }
         }
 

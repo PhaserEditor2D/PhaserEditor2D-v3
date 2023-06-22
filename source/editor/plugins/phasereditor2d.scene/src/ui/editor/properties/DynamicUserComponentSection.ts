@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     distinctPrefabNames.push(prefabName);
                 }
 
-                return `${this._componentName} ← ${distinctPrefabNames.join(" | ")}`;
+                return `${this._componentName} <span class="UserComponentTitle_PrefabsPart">← ${distinctPrefabNames.join(" &amp; ")}</span>`;
             }
 
             return this._componentName;
