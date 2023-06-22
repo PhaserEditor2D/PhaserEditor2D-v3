@@ -86,11 +86,18 @@ namespace colibri.ui.controls.properties {
         }
 
         getId() {
+
             return this._id;
         }
 
         getTitle() {
+
             return this._title;
+        }
+
+        isDynamicTitle() {
+
+            return false;
         }
 
         create(parent: HTMLDivElement): void {

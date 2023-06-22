@@ -51,7 +51,9 @@ namespace colibri.ui.controls.properties {
                 const sectionIdList = list.map(section => section.getId());
 
                 for (const pane of this._sectionPanes) {
+
                     const index = sectionIdList.indexOf(pane.getSection().getId());
+
                     pane.getElement().style.order = index.toString();
                 }
 
@@ -141,6 +143,11 @@ namespace colibri.ui.controls.properties {
                     pane.getElement().style.display = "grid";
                     pane.createSection();
                     section.updateWithSelection();
+
+                    if (section.isDynamicTitle()) {
+
+                        pane.updateTitle();
+                    }
 
                 } else {
 

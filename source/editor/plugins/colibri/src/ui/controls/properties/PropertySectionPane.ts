@@ -8,6 +8,7 @@ namespace colibri.ui.controls.properties {
         private _page: PropertyPage;
         private _menuIcon: IconControl;
         private _expandIconControl: IconControl;
+        private _titleLabel: HTMLLabelElement;
 
         constructor(page: PropertyPage, section: PropertySection<any>) {
             super();
@@ -40,9 +41,9 @@ namespace colibri.ui.controls.properties {
 
                 this._titleArea.appendChild(this._expandIconControl.getCanvas());
 
-                const label = document.createElement("label");
-                label.innerText = this._section.getTitle();
-                this._titleArea.appendChild(label);
+                this._titleLabel = document.createElement("label");
+                this.updateTitle()
+                this._titleArea.appendChild(this._titleLabel);
 
                 this._menuIcon = new IconControl(ColibriPlugin.getInstance().getIcon(ICON_SMALL_MENU));
                 this._menuIcon.getCanvas().classList.add("IconButton");
@@ -103,6 +104,7 @@ namespace colibri.ui.controls.properties {
 
 
         isExpanded() {
+
             return this._expandIconControl.getCanvas().classList.contains("expanded");
         }
 
@@ -128,6 +130,14 @@ namespace colibri.ui.controls.properties {
             this.setCollapsedStateInStorage(!this.isExpanded());
         }
 
+        updateTitle() {
+
+            if (this._titleLabel) {
+
+                this._titleLabel.innerText = this._section.getTitle();
+            }
+        }
+
         private updateExpandIcon() {
 
             const icon = this.isExpanded() ? colibri.ICON_CONTROL_SECTION_COLLAPSE : colibri.ICON_CONTROL_SECTION_EXPAND;
@@ -138,11 +148,8 @@ namespace colibri.ui.controls.properties {
         }
 
         getSection() {
-            return this._section;
-        }
 
-        getFormArea() {
-            return this._formArea;
+            return this._section;
         }
     }
 }

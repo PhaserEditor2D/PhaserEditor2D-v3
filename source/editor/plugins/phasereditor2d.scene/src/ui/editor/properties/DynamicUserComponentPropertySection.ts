@@ -8,27 +8,54 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         private _componentName: string;
 
-        constructor(page: controls.properties.PropertyPage, componentName: string, hash: string, prefabName = "") {
+        constructor(page: controls.properties.PropertyPage, componentName: string, hash: string) {
             super(page,
                 DynamicUserComponentPropertySection.computeId(componentName, hash),
-                DynamicUserComponentPropertySection.computeName(componentName, prefabName));
+                componentName);
 
             this._componentName = componentName;
-        }
-        
-        private static computeName(componentName: string, prefabName: string): string {
-
-            if (prefabName) {
-
-                return `${componentName} ← ${prefabName}`;
-            }
-
-            return componentName;
         }
 
         private static computeId(compName: string, hash: string) {
 
             return `phasereditor2d.scene.ui.editor.properties.DynamicPropertySection_${compName}_${hash}`;
+        }
+
+        isDynamicTitle(): boolean {
+
+            return true;
+        }
+
+        getTitle(): string {
+
+            const prefabNames = this.getSelection()
+                .flatMap((obj: sceneobjects.ISceneGameObject) => obj.getEditorSupport()
+                    .getUserComponentsComponent()
+                    .getPrefabUserComponents())
+                .filter(i => i.components.find(c => c.getName() === this._componentName))
+                .map(i => i.prefabFile.getNameWithoutExtension());
+
+            const distinctPrefabNames: string[] = [];
+
+            if (prefabNames.length > 0) {
+
+                const used = new Set();
+
+                for(const prefabName of prefabNames) {
+
+                    if (used.has(prefabName)) {
+
+                        continue;
+                    }
+
+                    used.add(prefabName);
+                    distinctPrefabNames.push(prefabName);
+                }
+
+                return `${this._componentName} ← ${distinctPrefabNames.join(" | ")}`;
+            }
+
+            return this._componentName;
         }
 
         createMenu(menu: controls.Menu): void {

@@ -84,64 +84,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                         if (findResult) {
 
-                            const prefabName = prefabInfo.prefabFile.getNameWithoutExtension();
-
                             result.push(page => new DynamicUserComponentPropertySection(
-                                page, compName, `${findResult.file.getModTime()}`, prefabName));
+                                page, compName, `${findResult.file.getModTime()}`));
                         }
                     }
                 }
             }
 
-
-            // this.addUserComponentSections(editor, result);
-
-            // this.addPrefabSections(editor, result);
-
             return result;
-        }
-
-        private addPrefabSections(editor: SceneEditor, result: GetPropertySection[]) {
-
-            for (const obj of editor.getSelectedGameObjects()) {
-
-                const objES = obj.getEditorSupport();
-                const prefabUserProps = objES.getComponent(sceneobjects.PrefabUserPropertyComponent) as sceneobjects.PrefabUserPropertyComponent;
-                const infoList = prefabUserProps.getPropertiesByPrefab();
-
-                for (const info of infoList) {
-
-                    result.push(page => new sceneobjects.DynamicPrefabInstanceSection(
-                        page, info.prefabFile, info.properties));
-                }
-            }
-        }
-
-        private addUserComponentSections(editor: SceneEditor, result: GetPropertySection[]) {
-
-            const compNames = editor.getSelectedGameObjects()
-                .flatMap(obj => obj.getEditorSupport()
-                    .getUserComponentsComponent()
-                    .getUserComponentNodes())
-                .map(compNode => compNode.getComponentName());
-
-            const used = new Set();
-
-            const finder = ScenePlugin.getInstance().getSceneFinder();
-
-            for (const compName of compNames) {
-
-                if (!used.has(compName)) {
-
-                    const findResult = finder.getUserComponentByName(compName);
-
-                    if (findResult) {
-
-                        result.push(page => new DynamicUserComponentPropertySection(
-                            page, compName, `${findResult.file.getModTime()}`));
-                    }
-                }
-            }
         }
     }
 }
