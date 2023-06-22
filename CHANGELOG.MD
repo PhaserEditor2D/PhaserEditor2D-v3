@@ -18,6 +18,7 @@
         - Add User Component
         - Browse User Components
 * Removes user component nodes from the Outline view.
+* Removes the Prefab Instance section, now it shows the prefab instance user properties as common sections.
 
 ## v3.61.0 - May 18, 2023
 
