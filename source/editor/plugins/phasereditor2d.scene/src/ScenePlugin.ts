@@ -378,7 +378,7 @@ namespace phasereditor2d.scene {
 
             // dynamic component sections
 
-            reg.addExtension(new ui.editor.properties.DynamicUserComponentSectionExtension());
+            reg.addExtension(new ui.editor.properties.DynamicUserSectionExtension());
 
             // more property sections
 

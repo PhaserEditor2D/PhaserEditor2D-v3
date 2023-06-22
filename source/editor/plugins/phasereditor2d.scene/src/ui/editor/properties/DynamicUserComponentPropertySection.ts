@@ -8,12 +8,22 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         private _componentName: string;
 
-        constructor(page: controls.properties.PropertyPage, componentName: string, hash: string) {
+        constructor(page: controls.properties.PropertyPage, componentName: string, hash: string, prefabName = "") {
             super(page,
                 DynamicUserComponentPropertySection.computeId(componentName, hash),
-                `${componentName} (user component)`);
+                DynamicUserComponentPropertySection.computeName(componentName, prefabName));
 
             this._componentName = componentName;
+        }
+        
+        private static computeName(componentName: string, prefabName: string): string {
+
+            if (prefabName) {
+
+                return `${componentName} ← ${prefabName}`;
+            }
+
+            return componentName;
         }
 
         private static computeId(compName: string, hash: string) {
