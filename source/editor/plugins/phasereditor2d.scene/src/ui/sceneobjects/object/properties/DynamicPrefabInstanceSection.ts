@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page,
                 DynamicPrefabInstanceSection.computeId(prefabFile),
                 prefabFile.getNameWithoutExtension(),
-                false, true);
+                false, true, ScenePlugin.getInstance().getIcon(ICON_GROUP));
 
             this._prefabFile = prefabFile;
             this._properties = properties;

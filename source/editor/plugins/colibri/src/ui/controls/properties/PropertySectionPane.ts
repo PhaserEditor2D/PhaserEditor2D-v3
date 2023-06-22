@@ -41,6 +41,16 @@ namespace colibri.ui.controls.properties {
 
                 this._titleArea.appendChild(this._expandIconControl.getCanvas());
 
+                const icon = this._section.getIcon();
+
+                if (icon) {
+
+                    const iconControl = new IconControl(icon);
+                    iconControl.getCanvas().classList.add("PropertySectionIcon");
+                    this._titleArea.appendChild(iconControl.getCanvas());
+                    this._titleArea.classList.add("PropertyTitleAreaWithIcon");
+                }
+
                 this._titleLabel = document.createElement("label");
                 this.updateTitle()
                 this._titleArea.appendChild(this._titleLabel);

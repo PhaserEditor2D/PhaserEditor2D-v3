@@ -11,8 +11,16 @@ namespace colibri.ui.controls.properties {
         private _updaters: Updater[];
         private _fillSpace: boolean;
         private _collapsedByDefault: boolean;
+        private _icon: controls.IImage;
 
-        constructor(page: PropertyPage, id: string, title: string, fillSpace = false, collapsedByDefault = false, tabSectionByDefault?: string) {
+        constructor(
+            page: PropertyPage,
+            id: string,
+            title: string,
+            fillSpace = false,
+            collapsedByDefault = false,
+            icon?: controls.IImage) {
+
             super();
 
             this._page = page;
@@ -20,12 +28,13 @@ namespace colibri.ui.controls.properties {
             this._title = title;
             this._fillSpace = fillSpace;
             this._collapsedByDefault = collapsedByDefault;
+            this._icon = icon;
             this._updaters = [];
 
             const localTabSection = localStorage.getItem(this.localStorageKey("tabSection"));
         }
 
-        abstract createForm(parent: HTMLDivElement);
+        abstract createForm(parent: HTMLDivElement): void;
 
         abstract canEdit(obj: any, n: number): boolean;
 
@@ -98,6 +107,11 @@ namespace colibri.ui.controls.properties {
         isDynamicTitle() {
 
             return false;
+        }
+
+        getIcon() {
+
+            return this._icon;
         }
 
         create(parent: HTMLDivElement): void {

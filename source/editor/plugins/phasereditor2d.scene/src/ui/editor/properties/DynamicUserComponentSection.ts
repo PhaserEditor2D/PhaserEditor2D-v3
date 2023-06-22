@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
         constructor(page: controls.properties.PropertyPage, componentName: string, hash: string) {
             super(page,
                 DynamicUserComponentSection.computeId(componentName, hash),
-                componentName);
+                componentName, false, true, ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT));
 
             this._componentName = componentName;
         }
