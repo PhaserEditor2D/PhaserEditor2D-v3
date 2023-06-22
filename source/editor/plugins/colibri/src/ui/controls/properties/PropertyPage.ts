@@ -28,6 +28,8 @@ namespace colibri.ui.controls.properties {
 
         private build() {
 
+            console.log("build()", Date.now());
+
             if (this._sectionProvider) {
 
                 const list: Array<PropertySection<any>> = [];

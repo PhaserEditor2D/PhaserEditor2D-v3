@@ -116,13 +116,13 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     menu.addAction({
                         text: `Reveal In ${prefabFile.getNameWithoutExtension()} File`,
-                        callback: () => this.openPrefabLinkInSceneEditor(prefabFile)
+                        callback: () => this.openPrefabDefInSceneEditor(prefabFile)
                     });
                 }
             }
 
             const allLocalNodes = this.getSelection()
-                .map(obj => obj.getEditorSupport()
+                .filter(obj => obj.getEditorSupport()
                     .getUserComponentsComponent()
                     .hasLocalUserComponent(this._componentName))
                 .length === this.getSelection().length;
@@ -192,7 +192,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             editor.getUndoManager().add(new ui.editor.undo.SimpleSceneSnapshotOperation(editor, action));
         }
 
-        private openPrefabLinkInSceneEditor(prefabFile: io.FilePath) {
+        private openPrefabDefInSceneEditor(prefabFile: io.FilePath) {
 
             const prefabEditor = colibri.Platform.getWorkbench().openEditor(prefabFile);
 
