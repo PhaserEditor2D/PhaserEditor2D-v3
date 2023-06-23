@@ -225,7 +225,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
             }
         }
 
-
         private openComponentEditor() {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
@@ -250,11 +249,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 this.addUpdater(() => {
 
+                    const scene = this.getEditor().getScene();
+
                     const values = this.getSelection().map(obj => {
 
                         const objES = obj.getEditorSupport();
 
-                        if (objES.isScenePrefabObject()) {
+                        if (scene.isPrefabSceneType()
+                            && (objES.isScenePrefabObject() || objES.isNestedPrefabScope())) {
 
                             if (objES.getUserComponentsComponent()
                                 .hasLocalUserComponent(this._componentName)) {
