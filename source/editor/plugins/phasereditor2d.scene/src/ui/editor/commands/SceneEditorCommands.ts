@@ -270,8 +270,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Pick a User Component and add it to the selected objects"
                 },
                 keys: {
-                    key: "KeyC",
-                    keyLabel: "C"
+                    key: "KeyM",
+                    keyLabel: "M"
                 },
                 handler: {
                     testFunc: onlyGameObjectsSelected,
@@ -392,6 +392,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     category: CAT_SCENE_EDITOR,
                     name: "Browse User Components",
                     tooltip: "Browse all user components in the scene's objects."
+                },
+                keys: {
+                    key: "KeyM",
+                    shift: true,
+                    keyLabel: "M"
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -1147,7 +1152,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "KeyM"
+                    key: "KeyF"
                 }
             });
         }

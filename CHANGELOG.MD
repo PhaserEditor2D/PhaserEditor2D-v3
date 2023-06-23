@@ -19,6 +19,7 @@
         - Browse User Components
 * Removes user component nodes from the Outline view.
 * Removes the Prefab Instance section, shows the prefab instance user properties as individual sections.
+* The Replace Texture Frame command responds to the `F` key.
 
 ## v3.61.0 - May 18, 2023
 
