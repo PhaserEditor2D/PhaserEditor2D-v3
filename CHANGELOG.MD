@@ -15,11 +15,12 @@
 * Fixes hit area serialization.
 * Removes the User Components section and shows user components properties as individual sections:
     * Renames the Scripts context menu to Scripting and include:
-        - Add User Component
-        - Browse User Components
+        - Add User Component (`M` key)
+        - Browse User Components (`Shift+M` key)
 * Removes user component nodes from the Outline view.
 * Removes the Prefab Instance section, shows the prefab instance user properties as individual sections.
 * The Replace Texture Frame command responds to the `F` key.
+* Fixes adding a script node to all selected game objects.
 
 ## v3.61.0 - May 18, 2023
 
