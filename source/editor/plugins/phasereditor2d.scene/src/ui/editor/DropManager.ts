@@ -65,7 +65,9 @@ namespace phasereditor2d.scene.ui.editor {
             ide.Workbench.getWorkbench().setActivePart(this._editor);
         }
 
-        async createWithDropEvent(dropAssetArray: any[], offsetX: number, offsetY: number) {
+        async createWithDropEvent(
+            dropAssetArray: any[], offsetX: number, offsetY: number,
+            alternativeSelection?: sceneobjects.ISceneGameObject[]) {
 
             const scene = this._editor.getScene();
 
@@ -134,11 +136,12 @@ namespace phasereditor2d.scene.ui.editor {
                     if (sceneMaker.isPrefabFile(data)) {
 
                         const sprite = await sceneMaker.createPrefabInstanceWithFile(data);
+                        const spriteES = sprite.getEditorSupport();
 
-                        if (sprite.getEditorSupport().hasComponent(sceneobjects.TransformComponent)) {
+                        if (spriteES.hasComponent(sceneobjects.TransformComponent)) {
 
-                            sprite.getEditorSupport().setUnlockedProperty(sceneobjects.TransformComponent.x, true);
-                            sprite.getEditorSupport().setUnlockedProperty(sceneobjects.TransformComponent.y, true);
+                            spriteES.setUnlockedProperty(sceneobjects.TransformComponent.x, true);
+                            spriteES.setUnlockedProperty(sceneobjects.TransformComponent.y, true);
                             (sprite as any as Phaser.GameObjects.Image).setPosition(x, y);
                         }
 
@@ -238,7 +241,7 @@ namespace phasereditor2d.scene.ui.editor {
                 sceneObjectES.setLabel(label);
             }
 
-            scene.getMaker().afterDropObjects(prefabObj, newSprites);
+            scene.getMaker().afterDropObjects(prefabObj, newSprites, alternativeSelection);
 
             sceneobjects.sortGameObjects(newSprites);
 
