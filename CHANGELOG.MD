@@ -21,6 +21,7 @@
 * Removes the Prefab Instance section, shows the prefab instance user properties as individual sections.
 * The Replace Texture Frame command responds to the `F` key.
 * Fixes adding a script node to all selected game objects.
+[#223](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/222) Fixed tab-focus on the DOM elements of the user properties.
 
 ## v3.61.0 - May 18, 2023
 
