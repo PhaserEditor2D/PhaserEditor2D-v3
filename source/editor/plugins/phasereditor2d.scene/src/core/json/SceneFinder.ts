@@ -560,7 +560,7 @@ namespace phasereditor2d.scene.core.json {
 
                         line = line.trim();
 
-                        if (line.length === 0) {
+                        if (line.length === 0 || line.startsWith("#")) {
 
                             continue;
                         }
