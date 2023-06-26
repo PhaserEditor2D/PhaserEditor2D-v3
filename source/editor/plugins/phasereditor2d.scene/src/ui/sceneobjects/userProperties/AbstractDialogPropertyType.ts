@@ -52,7 +52,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const text = section.createStringField(comp, prop);
 
-            const btn = this.createSearchButton(() => prop.getValue(section.getSelectionFirstElement()), value => {
+            const { buttonElement, iconControl } = this.createSearchButton(() => prop.getValue(section.getSelectionFirstElement()), value => {
 
                 text.value = value;
 
@@ -64,10 +64,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             section.addUpdater(() => {
 
-                btn.disabled = !section.isUnlocked(prop);
+                buttonElement.disabled = !section.isUnlocked(prop);
+
+                const value = prop.getValue(section.getSelectionFirstElement());
+
+                this.updateIcon(iconControl, value);
             });
 
-            comp.appendChild(btn);
+            comp.appendChild(buttonElement);
         }
 
         private createEditorComp() {
@@ -82,6 +86,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private createSearchButton(getValue: () => any, callback: (value: string) => void) {
+
+            console.log("createSearchButton")
 
             const iconControl = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
@@ -102,7 +108,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
 
-            return btn;
+            return { buttonElement: btn, iconControl };
         }
 
         protected async updateIcon(iconControl: controls.IconControl, value: any) {
@@ -198,14 +204,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 setValue(inputElement.value);
             });
 
+            const { buttonElement, iconControl } = this.createSearchButton(getValue, setValue);
+
+            comp.appendChild(buttonElement);
+
             const update = () => {
 
-                inputElement.value = getValue();
+                const value = getValue();
+
+                inputElement.value = value;
+
+                this.updateIcon(iconControl, value);
             };
-
-            const btn = this.createSearchButton(getValue, setValue);
-
-            comp.appendChild(btn);
 
             return {
                 element: comp,
