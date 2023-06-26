@@ -34,15 +34,15 @@ namespace phasereditor2d.scene.ui.editor.undo {
                     || asset instanceof sceneobjects.ScriptNodeExtension;
             }
 
-            if (isScriptNode) {
+            const sel = editor.getSelectedGameObjects();
 
-                // We are droping a script node,
+            if (isScriptNode && sel.length > 0) {
+
+                // We are dropping a script node,
                 // so we should go for every object selected in the scene
                 // and add the script.
                 // It is different from adding a regular game object,
                 // where only one instance is created
-
-                const sel = editor.getSelectedGameObjects();
 
                 const newSprites = [];
 
