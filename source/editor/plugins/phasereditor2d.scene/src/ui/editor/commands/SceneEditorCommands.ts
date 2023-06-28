@@ -1152,6 +1152,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
+                    shift: true,
                     key: "KeyF"
                 }
             });
