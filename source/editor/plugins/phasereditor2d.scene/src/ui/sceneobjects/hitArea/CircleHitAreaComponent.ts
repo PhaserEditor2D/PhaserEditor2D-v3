@@ -35,10 +35,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-        protected _setDefaultValues(width: number, height: number): void {
+        protected _setDefaultValues(x:number, y: number, width: number, height: number): void {
 
-            this.x = width / 2;
-            this.y = height / 2;
+            this.x = x + width / 2;
+            this.y = y + height / 2;
             this.radius = Math.min(width, height) / 2;
         }
 

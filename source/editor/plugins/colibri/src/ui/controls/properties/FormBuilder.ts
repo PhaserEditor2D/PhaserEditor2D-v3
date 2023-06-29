@@ -47,7 +47,10 @@ namespace colibri.ui.controls.properties {
 
             btn.addEventListener("click", e => callback(e));
 
-            parent.appendChild(btn);
+            if (parent) {
+
+                parent.appendChild(btn);
+            }
 
             return btn;
         }

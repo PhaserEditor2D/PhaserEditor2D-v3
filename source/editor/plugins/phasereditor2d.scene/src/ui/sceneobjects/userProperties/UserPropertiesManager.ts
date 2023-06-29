@@ -1,12 +1,12 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export abstract class UserProperties {
-       
+    export abstract class UserPropertiesManager {
+
         private _properties: UserProperty[];
         private _componentPropertyBuilder: TComponentPropertyBuilder;
 
         constructor(componentPropertyBuilder: TComponentPropertyBuilder) {
-            
+
             this._componentPropertyBuilder = componentPropertyBuilder;
             this._properties = [];
         }
@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         deleteProperty(propName: string) {
-            
+
             const prop = this._properties.find(p => p.getName() === propName);
 
             const i = this._properties.indexOf(prop);
@@ -32,26 +32,54 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createProperty(propType: UserPropertyType<any>) {
 
+            const { name, label } = this.createNewPropertyNameInfo("property", "Property");
+
+            const prop = new UserProperty(this, this._componentPropertyBuilder, {
+                defValue: propType.getDefaultValue(),
+                name,
+                label,
+                tooltip: "",
+                customDefinition: false,
+                type: propType
+            });
+
+            return prop;
+        }
+
+        createNewPropertyNameInfo(baseName: string, baseLabel: string) {
+
+            const p = this._properties.find(p2 => p2.getInfo().name === baseName);
+
+            if (!p) {
+
+                return { name: baseName, label: baseLabel };
+            }
+
             let i = 0;
 
             while (true) {
+
                 i++;
 
-                const p = this._properties.find(p2 => p2.getInfo().name === "property" + i)
+                const p = this._properties.find(p2 => p2.getInfo().name === `${baseName}_${i}`);
 
                 if (!p) {
+
                     break;
                 }
             }
 
-            const prop = new UserProperty(this, this._componentPropertyBuilder, {
-                defValue: propType.getDefaultValue(),
-                label: "Property " + i,
-                name: "property" + i,
-                tooltip: "Property " + i,
-                customDefinition: false,
-                type: propType
-            });
+            return {
+                name: `${baseName}_${i}`,
+                label: `${baseLabel} ${i}`
+            }
+        }
+
+        createPropertyFromData(data: any) {
+
+            const prop = new UserProperty(this, this._componentPropertyBuilder);
+
+            prop.readJSON(data);
 
             return prop;
         }
@@ -62,9 +90,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const propData of data) {
 
-                const prop = new UserProperty(this, this._componentPropertyBuilder);
-
-                prop.readJSON(propData);
+                const prop = this.createPropertyFromData(propData);
 
                 this._properties.push(prop);
             }

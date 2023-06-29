@@ -27,9 +27,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const support = obj["getEditorSupport"]();
 
-                if (support instanceof EditorSupport)
+                if (support instanceof EditorSupport) {
 
                     return support;
+                }
             }
 
             return null;

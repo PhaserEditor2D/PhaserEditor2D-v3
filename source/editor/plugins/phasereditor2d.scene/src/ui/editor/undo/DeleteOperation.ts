@@ -40,7 +40,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             for(const obj of editor.getSelectedPrefabProperties()) {
 
-                obj.getAllProperties().deleteProperty(obj.getName());
+                obj.getManager().deleteProperty(obj.getName());
             }
 
             scene.removePlainObjects(editor.getSelectedPlainObjects());

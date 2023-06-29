@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         objectVarName: string;
         prefabSerializer: core.json.Serializer;
         unit: core.code.UnitCodeDOM;
-        sceneFile: io.FilePath
+        sceneFile: io.FilePath,
+        obj: ISceneGameObject
     }
 
     export interface IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs {
@@ -74,7 +75,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prop of properties) {
 
-                ser.write(prop.name, prop.getValue(this._obj), this.getPropertyDefaultValue(prop));
+                const value = prop.getValue(this._obj);
+
+                const defValue = this.getPropertyDefaultValue(prop);
+                
+                ser.write(prop.name, value, defValue);
             }
         }
 

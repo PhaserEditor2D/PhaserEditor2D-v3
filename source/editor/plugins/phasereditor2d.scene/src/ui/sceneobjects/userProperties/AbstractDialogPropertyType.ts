@@ -52,7 +52,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const text = section.createStringField(comp, prop);
 
-            const btn = this.createSearchButton(() => prop.getValue(section.getSelectionFirstElement()), value => {
+            const { buttonElement, iconControl } = this.createSearchButton(() => prop.getValue(section.getSelectionFirstElement()), value => {
 
                 text.value = value;
 
@@ -64,10 +64,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             section.addUpdater(() => {
 
-                btn.disabled = !section.isUnlocked(prop);
+                buttonElement.disabled = !section.isUnlocked(prop);
+
+                const value = prop.getValue(section.getSelectionFirstElement());
+
+                this.updateIcon(iconControl, value);
             });
 
-            comp.appendChild(btn);
+            comp.appendChild(buttonElement);
         }
 
         private createEditorComp() {
@@ -82,6 +86,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private createSearchButton(getValue: () => any, callback: (value: string) => void) {
+
+            console.log("createSearchButton")
 
             const iconControl = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
@@ -102,7 +108,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
 
-            return btn;
+            return { buttonElement: btn, iconControl };
         }
 
         protected async updateIcon(iconControl: controls.IconControl, value: any) {
@@ -136,7 +142,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             viewer.setInput([]);
 
-            const dlg = new controls.dialogs.ViewerDialog(viewer, true);
+            const dlg = this.createDialogInstance(viewer, true);
 
             const size = this.getDialogSize();
 
@@ -156,16 +162,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             dlg.addCancelButton();
 
-            this.loadViewerInput(viewer);
+            await this.loadViewerInput(viewer);
 
             this.revealValue(viewer, revealValue);
 
             controls.viewers.GridTreeViewerRenderer.expandSections(viewer);
         }
 
+        protected createDialogInstance(viewer: controls.viewers.TreeViewer, showZoomControls: boolean)
+            : controls.dialogs.AbstractViewerDialog {
+
+            return new controls.dialogs.ViewerDialog(viewer, showZoomControls)
+        }
+
         protected abstract valueToString(viewer: controls.viewers.TreeViewer, value: any): string;
 
-        protected abstract loadViewerInput(viewer: controls.viewers.TreeViewer): void;
+        protected abstract loadViewerInput(viewer: controls.viewers.TreeViewer): Promise<void>;
 
         protected revealValue(viewer: controls.viewers.TreeViewer, value: string) {
 
@@ -192,14 +204,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 setValue(inputElement.value);
             });
 
+            const { buttonElement, iconControl } = this.createSearchButton(getValue, setValue);
+
+            comp.appendChild(buttonElement);
+
             const update = () => {
 
-                inputElement.value = getValue();
+                const value = getValue();
+
+                inputElement.value = value;
+
+                this.updateIcon(iconControl, value);
             };
-
-            const btn = this.createSearchButton(getValue, setValue);
-
-            comp.appendChild(btn);
 
             return {
                 element: comp,

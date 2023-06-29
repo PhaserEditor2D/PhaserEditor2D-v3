@@ -16,6 +16,7 @@ namespace colibri.ui.controls.viewers {
             }
 
             if (typeof (obj) === "string") {
+                
                 return obj;
             }
 

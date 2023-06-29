@@ -27,7 +27,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createPrefabMenu());
 
-            menu.addMenu(this.createScriptsMenu());
+            menu.addMenu(this.createScriptingMenu());
 
             menu.addMenu(this.createTypeMenu());
 
@@ -38,10 +38,6 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createArcadePhysicsMenu());
 
             menu.addMenu(this.createParentMenu());
-
-            menu.addMenu(this.createDepthMenu());
-
-            menu.addMenu(this.createListMenu());
 
             menu.addSeparator();
 
@@ -56,12 +52,17 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createCompilerMenu());
         }
 
-        createScriptsMenu(): controls.Menu {
+        createScriptingMenu(): controls.Menu {
 
-            const menu = new controls.Menu("Scripts");
+            const menu = new controls.Menu("Scripting");
 
             menu.addCommand(commands.CMD_OPEN_ADD_SCRIPT_DIALOG);
             menu.addCommand(commands.CMD_OPEN_SCRIPT_DIALOG);
+
+            menu.addSeparator();
+
+            menu.addCommand(commands.CMD_ADD_USER_COMPONENT);
+            menu.addCommand(commands.CMD_BROWSE_USER_COMPONENTS);
 
             return menu;
         }
@@ -170,34 +171,6 @@ namespace phasereditor2d.scene.ui.editor {
             return menu;
         }
 
-        private createDepthMenu(): controls.Menu {
-
-            const menu = new controls.Menu("Depth");
-
-            for (const move of ["Up", "Down", "Top", "Bottom"]) {
-
-                const id = "phasereditor2d.scene.ui.editor.commands.Depth" + move;
-
-                menu.addCommand(id);
-            }
-
-            return menu;
-        }
-
-        private createListMenu(): controls.Menu {
-
-            const menu = new controls.Menu("Object List");
-
-            for (const move of ["Up", "Down", "Top", "Bottom"]) {
-
-                const id = "phasereditor2d.scene.ui.editor.commands.ListOrder" + move;
-
-                menu.addCommand(id);
-            }
-
-            return menu;
-        }
-
         private createEditMenu() {
 
             const menu = new controls.Menu("Edit");
@@ -212,6 +185,13 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addCommand(colibri.ui.ide.actions.CMD_PASTE);
             menu.addCommand(commands.CMD_PASTE_IN_PLACE);
             menu.addCommand(colibri.ui.ide.actions.CMD_DELETE);
+
+            menu.addSeparator();
+
+            menu.addCommand(commands.CMD_SORT_OBJ_UP);
+            menu.addCommand(commands.CMD_SORT_OBJ_DOWN);
+            menu.addCommand(commands.CMD_SORT_OBJ_TOP);
+            menu.addCommand(commands.CMD_SORT_OBJ_BOTTOM);
 
             return menu;
         }
@@ -317,6 +297,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addCommand(commands.CMD_OPEN_PREFAB);
             menu.addCommand(commands.CMD_CREATE_PREFAB_WITH_OBJECT);
+            menu.addSeparator();
+            menu.addCommand(commands.CMD_ADD_PREFAB_PROPERTY);
 
             return menu;
         }

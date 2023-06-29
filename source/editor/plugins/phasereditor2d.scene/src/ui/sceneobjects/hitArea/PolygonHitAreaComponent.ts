@@ -5,7 +5,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class PolygonHitAreaComponent extends BaseHitAreaComponent {
 
         static points = HitAreaProperty(PolygonHitAreaComponent, "points", "Points", "The polygon's points, in a string format `X1 Y1 Y2 X2...`", "");
-        
+
         public points: string;
 
         constructor(obj: ISceneGameObject) {
@@ -42,9 +42,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-        protected _setDefaultValues(w: number, h: number): void {
+        protected _setDefaultValues(x: number, y: number, w: number, h: number): void {
 
-            this.points = `0 ${h * 0.25} ${w/2} 0 ${w} ${h * 0.25} ${w} ${h} 0 ${h}`;
+            this.points = `${x} ${y + h * 0.25} ${x + w / 2} ${y} ${x + w} ${y + h * 0.25} ${x + w} ${y + h} ${x} ${y + h}`;
         }
 
         protected override buildSetInteractiveCodeCOM(

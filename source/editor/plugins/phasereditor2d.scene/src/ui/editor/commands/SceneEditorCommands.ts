@@ -60,6 +60,19 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_OPEN_ADD_SCRIPT_DIALOG = "phasereditor2d.scene.ui.editor.commands.OpenAddScriptDialog";
     export const CMD_PREVIEW_SCENE = "phasereditor2d.scene.ui.editor.commands.PreviewScene";
     export const CMD_EDIT_HIT_AREA = "phasereditor2d.scene.ui.editor.commands.ResizeHitArea";
+    export const CMD_ADD_PREFAB_PROPERTY = "phasereditor2d.scene.ui.editor.commands.AddPrefabProperty";
+    export const CMD_SORT_OBJ_UP = "phasereditor2d.scene.ui.editor.commands.SortObjectUp";
+    export const CMD_SORT_OBJ_DOWN = "phasereditor2d.scene.ui.editor.commands.SortObjectDown";
+    export const CMD_SORT_OBJ_TOP = "phasereditor2d.scene.ui.editor.commands.SortObjectTop";
+    export const CMD_SORT_OBJ_BOTTOM = "phasereditor2d.scene.ui.editor.commands.SortObjectBottom";
+    export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.commands.AddUserComponent";
+    export const CMD_BROWSE_USER_COMPONENTS = "phasereditor2d.scene.ui.editor.commands.BrowseUserComponents";
+
+    function isCommandDialogActive() {
+
+        return colibri.Platform.getWorkbench()
+            .getActiveDialog() instanceof controls.dialogs.CommandDialog
+    }
 
     function isSceneScope(args: colibri.ui.ide.commands.HandlerArgs) {
 
@@ -109,6 +122,24 @@ namespace phasereditor2d.scene.ui.editor.commands {
         return args.activeEditor && args.activeEditor.getSelection().length > 0;
     }
 
+    function onlyGameObjectsSelected(args: colibri.ui.ide.commands.HandlerArgs) {
+
+        if (args.activeEditor instanceof SceneEditor) {
+
+            for (const obj of args.activeEditor.getSelection()) {
+
+                if (!sceneobjects.isGameObject(obj)) {
+
+                    return false;
+                }
+            }
+
+            return args.activeEditor.getSelection().length > 0;
+        }
+
+        return false;
+    }
+
     export class SceneEditorCommands {
 
         static registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -138,13 +169,15 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             this.registerOriginCommands(manager);
 
-            this.registerDepthCommands(manager);
+            this.registerGameObjectDepthCommands(manager);
+
+            this.registerPlainObjectOrderCommands(manager);
 
             this.registerListCommands(manager);
 
             this.registerTypeCommands(manager);
 
-            this.registerMoveObjectCommands(manager);
+            this.registerTranslateObjectCommands(manager);
 
             this.registerTextureCommands(manager);
 
@@ -153,6 +186,228 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerArcadeCommands(manager);
 
             this.registerScriptNodeCommands(manager);
+
+            this.registerUserComponentCommands(manager);
+
+            this.registerPrefabCommands(manager);
+
+            this.registerPropertiesCommands(manager);
+        }
+
+        static registerPlainObjectOrderCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
+
+            for (const tuple of moves) {
+
+                const move = tuple[0];
+                const cmd = tuple[1];
+
+                manager.addHandlerHelper(cmd,
+                    // testFunc 
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && undo.PlainObjectOrderOperation.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => args.activeEditor.getUndoManager().add(
+                        new undo.PlainObjectOrderOperation(args.activeEditor as editor.SceneEditor, move)
+                    ));
+            }
+        }
+
+        private static registerPrefabCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            manager.add({
+                command: {
+                    id: CMD_ADD_PREFAB_PROPERTY,
+                    name: "Add Prefab Property",
+                    category: CAT_SCENE_EDITOR,
+                    tooltip: "Add a new property to the current prefab"
+                },
+                handler: {
+                    testFunc: args => {
+
+                        if (isSceneScope(args)) {
+
+                            const editor = args.activeEditor as SceneEditor;
+
+                            return editor.getScene().isPrefabSceneType();
+                        }
+
+                        return false;
+                    },
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const dialog = new ui.dialogs.AddPrefabPropertyDialog();
+                        dialog.create();
+
+                        //    ui.editor.properties.PrefabPropertySection.runPropertiesOperation(editor, () => {
+
+                        //         // TODO: show the Add Property dialog
+
+                        //    }, true);
+                    }
+                }
+            })
+        }
+
+        private static registerUserComponentCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // add user component
+
+            manager.add({
+
+                command: {
+                    id: CMD_ADD_USER_COMPONENT,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Add User Component",
+                    tooltip: "Pick a User Component and add it to the selected objects"
+                },
+                keys: {
+                    key: "KeyM",
+                    keyLabel: "M"
+                },
+                handler: {
+                    testFunc: onlyGameObjectsSelected,
+                    executeFunc: args => {
+
+                        const finder = ScenePlugin.getInstance().getSceneFinder();
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const editorCompList = args.activeEditor.getSelection()
+                            .map(obj => sceneobjects.GameObjectEditorSupport.getObjectComponent(obj, sceneobjects.UserComponentsEditorComponent) as sceneobjects.UserComponentsEditorComponent);
+
+                        const used = new Set(
+                            [...editorCompList
+                                .flatMap(editorComp => editorComp.getLocalUserComponents())
+                                .map(info => info.component.getName()),
+
+                            ...editorCompList.flatMap(editorComp => editorComp.getPrefabUserComponents())
+                                .flatMap(info => info.components)
+                                .map(c => c.getName())
+                            ]
+                        );
+
+                        class ContentProvider implements controls.viewers.ITreeContentProvider {
+
+                            getRoots(input: any): any[] {
+
+                                return finder.getUserComponentsModels()
+                                    .filter(info => info.model.getComponents().filter(c => !used.has(c.getName())).length > 0);
+                            }
+
+                            getChildren(parentObj: core.json.IUserComponentsModelInfo | usercomponent.UserComponent): any[] {
+
+                                if (parentObj instanceof usercomponent.UserComponent) {
+
+                                    return [];
+                                }
+
+                                return parentObj.model.getComponents().filter(c => !used.has(c.getName()));
+                            }
+                        }
+
+                        const viewer = new controls.viewers.TreeViewer("UserComponentInstancePropertySection.addComponentDialogViewer");
+
+                        viewer.setStyledLabelProvider({
+                            getStyledTexts: (obj: usercomponent.UserComponent | core.json.IUserComponentsModelInfo, dark) => {
+
+                                const theme = controls.Controls.getTheme();
+
+                                if (obj instanceof usercomponent.UserComponent) {
+
+                                    return [{
+                                        text: obj.getName(),
+                                        color: theme.viewerForeground
+                                    }];
+                                }
+
+                                return [{
+                                    text: obj.file.getNameWithoutExtension(),
+                                    color: theme.viewerForeground
+                                }, {
+                                    text: " - " + obj.file.getParent().getProjectRelativeName()
+                                        .split("/").filter(s => s !== "").reverse().join("/"),
+                                    color: theme.viewerForeground + "90"
+                                }];
+                            }
+                        });
+
+                        viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
+                            (obj: core.json.IUserComponentsModelInfo | usercomponent.UserComponent) =>
+                                new controls.viewers.IconImageCellRenderer(
+                                    obj instanceof usercomponent.UserComponent ?
+                                        ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT)
+                                        : colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER))));
+
+                        viewer.setContentProvider(new ContentProvider());
+
+                        viewer.setInput([]);
+
+                        viewer.expandRoots(false);
+
+                        const dlg = new controls.dialogs.ViewerDialog(viewer, false);
+
+                        dlg.setSize(undefined, 400, true);
+
+                        dlg.create();
+
+                        dlg.setTitle("Add User Component");
+
+                        dlg.enableButtonOnlyWhenOneElementIsSelected(dlg.addOpenButton("Add Component", () => {
+
+                            const selComp = viewer.getSelectionFirstElement() as usercomponent.UserComponent;
+
+                            if (selComp) {
+
+
+                                editor.getUndoManager().add(new ui.editor.undo.SimpleSceneSnapshotOperation(editor, () => {
+
+                                    for (const editorComp of editorCompList) {
+
+                                        editorComp.addUserComponent(selComp.getName());
+                                    }
+                                }));
+
+                                // section.updateWithSelection();
+                                editor.dispatchSelectionChanged();
+                            }
+                        }), obj => obj instanceof usercomponent.UserComponent);
+
+                        dlg.addCancelButton();
+                    }
+                }
+            });
+
+            // browse user component
+            manager.add({
+                command: {
+                    id: CMD_BROWSE_USER_COMPONENTS,
+                    category: CAT_SCENE_EDITOR,
+                    name: "Browse User Components",
+                    tooltip: "Browse all user components in the scene's objects."
+                },
+                keys: {
+                    key: "KeyM",
+                    shift: true,
+                    keyLabel: "M"
+                },
+                handler: {
+                    testFunc: isSceneScope,
+                    executeFunc: args => {
+
+                        const dlg = new sceneobjects.BrowseUserComponentsDialog(
+                            args.activeEditor as SceneEditor);
+                        dlg.create();
+                    }
+                }
+            })
         }
 
         private static registerScriptNodeCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -897,7 +1152,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     }
                 },
                 keys: {
-                    key: "KeyM"
+                    shift: true,
+                    key: "KeyF"
                 }
             });
         }
@@ -1038,9 +1294,59 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 args => args.activeEditor.getUndoManager()
                     .add(new undo.DeleteOperation(args.activeEditor as SceneEditor))
             );
+
+            // sort
+
+            manager.add({
+                command: {
+                    id: CMD_SORT_OBJ_UP,
+                    name: "Move Up",
+                    tooltip: "Move up object in the list.",
+                    category: CAT_SCENE_EDITOR
+                },
+                keys: {
+                    key: "PageUp"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SORT_OBJ_DOWN,
+                    name: "Move Down",
+                    tooltip: "Move down object in the list.",
+                    category: CAT_SCENE_EDITOR
+                },
+                keys: {
+                    key: "PageDown"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SORT_OBJ_TOP,
+                    name: "Move Top",
+                    tooltip: "Move top object in the list.",
+                    category: CAT_SCENE_EDITOR
+                },
+                keys: {
+                    key: "Home"
+                }
+            });
+
+            manager.add({
+                command: {
+                    id: CMD_SORT_OBJ_BOTTOM,
+                    name: "Move Bottom",
+                    tooltip: "Move bottom object in the list.",
+                    category: CAT_SCENE_EDITOR
+                },
+                keys: {
+                    key: "End"
+                }
+            });
         }
 
-        private static registerMoveObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
+        private static registerTranslateObjectCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
             class Operation extends undo.SceneSnapshotOperation {
 
@@ -1102,6 +1408,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             testFunc: args => {
 
                                 if (!isSceneScope(args)) {
+
+                                    return false;
+                                }
+
+                                if (isCommandDialogActive()) {
 
                                     return false;
                                 }
@@ -1985,36 +2296,57 @@ namespace phasereditor2d.scene.ui.editor.commands {
             });
         }
 
-        private static registerDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {
+        private static registerGameObjectDepthCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
-            const moves: [undo.DepthMove, string][] = [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]];
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
 
             for (const tuple of moves) {
 
                 const move = tuple[0];
-                const key = tuple[1];
+                const cmd = tuple[1];
 
-                manager.add({
+                manager.addHandlerHelper(cmd,
+                    // testFunc 
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && undo.GameObjectDepthOperation.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => args.activeEditor.getUndoManager().add(
+                        new undo.GameObjectDepthOperation(args.activeEditor as editor.SceneEditor, move)
+                    ));
+            }
+        }
 
-                    command: {
-                        id: "phasereditor2d.scene.ui.editor.commands.Depth" + move,
-                        name: "Move Object Depth " + move,
-                        category: CAT_SCENE_EDITOR,
-                        tooltip: "Move the object in its container to " + move + "."
-                    },
+        private static registerPropertiesCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
-                    handler: {
-                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
-                            && undo.DepthOperation.allow(args.activeEditor as any, move),
+            // order commands
 
-                        executeFunc: args => args.activeEditor.getUndoManager().add(
-                            new undo.DepthOperation(args.activeEditor as editor.SceneEditor, move))
-                    },
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
 
-                    keys: {
-                        key
-                    }
-                });
+            for (const tuple of moves) {
+
+                const move = tuple[0];
+                const cmd = tuple[1];
+
+                manager.addHandlerHelper(cmd,
+                    // testFunc
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && properties.PrefabPropertyOrderAction.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => properties.ChangePrefabPropertiesOperation.runPropertiesOperation(args.activeEditor as SceneEditor, props => {
+
+                        properties.PrefabPropertyOrderAction.execute(args.activeEditor as SceneEditor, move);
+                    })
+                );
             }
         }
 
@@ -2022,34 +2354,26 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
             // order commands
 
-            const moves: [undo.DepthMove, string][] = [["Up", "PageUp"], ["Down", "PageDown"], ["Top", "Home"], ["Bottom", "End"]];
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
 
             for (const tuple of moves) {
 
                 const move = tuple[0];
-                const key = tuple[1];
+                const cmd = tuple[1];
 
-                manager.add({
-
-                    command: {
-                        id: "phasereditor2d.scene.ui.editor.commands.ListOrder" + move,
-                        name: "Move " + move,
-                        category: CAT_SCENE_EDITOR,
-                        tooltip: "Move the object in its list to " + move + "."
-                    },
-
-                    handler: {
-                        testFunc: args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
-                            && sceneobjects.ListOrderOperation.allow(args.activeEditor as any, move),
-
-                        executeFunc: args => args.activeEditor.getUndoManager().add(
-                            new sceneobjects.ListOrderOperation(args.activeEditor as editor.SceneEditor, move))
-                    },
-
-                    keys: {
-                        key
-                    }
-                });
+                manager.addHandlerHelper(cmd,
+                    // testFunc
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && sceneobjects.ListOrderOperation.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => args.activeEditor.getUndoManager().add(
+                        new sceneobjects.ListOrderOperation(args.activeEditor as editor.SceneEditor, move))
+                );
             }
         }
 

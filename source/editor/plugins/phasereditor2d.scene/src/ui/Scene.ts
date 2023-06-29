@@ -84,20 +84,29 @@ namespace phasereditor2d.scene.ui {
 
             for (const objData of list) {
 
-                const ext = ScenePlugin.getInstance().getPlainObjectExtensionByObjectType(objData.type);
-
-                if (ext) {
-
-                    const plainObject = ext.createPlainObjectWithData({
-                        scene: this,
-                        data: objData
-                    });
-
-                    plainObject.getEditorSupport().readJSON(objData);
-
-                    this.addPlainObject(plainObject);
-                }
+                this.readPlainObject(objData);
             }
+        }
+
+        readPlainObject(objData: core.json.IScenePlainObjectData) {
+
+            const ext = ScenePlugin.getInstance().getPlainObjectExtensionByObjectType(objData.type);
+
+            if (ext) {
+
+                const plainObject = ext.createPlainObjectWithData({
+                    scene: this,
+                    data: objData
+                });
+
+                plainObject.getEditorSupport().readJSON(objData);
+
+                this.addPlainObject(plainObject);
+
+                return plainObject;
+            }
+
+            return undefined;
         }
 
         removePlainObjects(objects: sceneobjects.IScenePlainObject[]) {
@@ -371,9 +380,11 @@ namespace phasereditor2d.scene.ui {
 
             const nameMaker = new colibri.ui.ide.utils.NameMaker((obj: any) => {
 
-                if (sceneobjects.isGameObject(obj)) {
+                const objES = sceneobjects.EditorSupport.getEditorSupport(obj);
 
-                    return (obj as sceneobjects.ISceneGameObject).getEditorSupport().getLabel();
+                if (objES) {
+
+                    return objES.getLabel();
                 }
 
                 return (obj as sceneobjects.ObjectList).getLabel();
@@ -388,6 +399,8 @@ namespace phasereditor2d.scene.ui {
                 return !objES.isPrefabInstance() || objES.isMutableNestedPrefabInstance()
                     || objES.isPrefeabInstanceAppendedChild;;
             });
+
+            nameMaker.update(this._plainObjects);
 
             for (const list of this._objectLists.getLists()) {
 

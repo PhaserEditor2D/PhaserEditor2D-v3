@@ -7,7 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static SECTION_ID = "phasereditor2d.scene.ui.sceneobjects.TextureSection";
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, TextureSection.SECTION_ID, "Texture", false, true);
+            super(page, TextureSection.SECTION_ID, "Texture", false, false);
         }
 
         getSectionHelpPath() {

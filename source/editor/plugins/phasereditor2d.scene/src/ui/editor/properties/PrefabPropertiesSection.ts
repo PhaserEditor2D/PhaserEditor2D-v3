@@ -23,12 +23,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 this.getEditor().setSelection([obj]);
             };
 
-            SingleUserPropertySection.createAddComponentButton(comp, this, action => this.runOperation(action), selector);
+            SingleUserPropertySection.createAddProprtyButton(comp, this, action => this.runOperation(action), selector);
         }
 
-        runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection = true) {
+        runOperation(action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection = true) {
 
-            PrefabPropertySection.runPropertiesOperation(this.getEditor(), action, updateSelection);
+            ui.editor.properties.ChangePrefabPropertiesOperation.runPropertiesOperation(this.getEditor(), action, updateSelection);
         }
 
         canEdit(obj: any, n: number): boolean {

@@ -4,43 +4,64 @@ namespace phasereditor2d.ide.core {
 
         private _data: any = null;
         private _plugin: colibri.Plugin;
-        private _filePath: string;
+        private _files: string[];
 
-        constructor(plugin: colibri.Plugin, filePath: string) {
+        constructor(plugin: colibri.Plugin, ...files: string[]) {
 
             this._plugin = plugin;
-            this._filePath = filePath;
+            this._files = files;
+        }
+
+        static markdownToHtml(txt: string) {
+
+            const converter = new showdown.Converter();
+
+            return converter.makeHtml(txt);
         }
 
         async preload() {
 
             if (!this._data) {
 
-                console.log("Loading jsdoc " + this._plugin.getId() + ": " + this._filePath);
+                this._data = {};
 
-                this._data = await this._plugin.getJSON(this._filePath);
+                for (const file of this._files) {
 
-                const converter = new showdown.Converter();
+                    console.log("Loading jsdoc " + this._plugin.getId() + ": " + file);
 
-                // tslint:disable-next-line:forin
-                for (const k in this._data) {
+                    const fileData = await this._plugin.getJSON(file);
 
-                    const help = this._data[k];
+                    const converter = new showdown.Converter();
 
-                    this._data[k] = converter.makeHtml(help);
+                    // tslint:disable-next-line:forin
+                    for (const k in fileData) {
+
+                        const help = fileData[k];
+
+                        this._data[k] = converter.makeHtml(help);
+                    }
                 }
             }
         }
 
-        getDoc(helpKey: string): string {
+        getDoc(helpKey: string, wrap = true): string {
 
             if (helpKey in this._data) {
 
-                return `<small>${helpKey}</small> <br><br> <div style="max-width:60em">${this._data[helpKey]}</div>`;
+                if (wrap) {
+
+                    return `<small>${helpKey}</small> <br><br> <div style="max-width:60em">${this._data[helpKey]}</div>`;
+                }
+
+                return this._data[helpKey];
             }
 
             return "Help not found for: " + helpKey;
         }
 
+        getKeys() {
+
+            return Object.keys(this._data);
+        }
     }
 }

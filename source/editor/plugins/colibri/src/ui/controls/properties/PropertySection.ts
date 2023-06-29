@@ -11,8 +11,18 @@ namespace colibri.ui.controls.properties {
         private _updaters: Updater[];
         private _fillSpace: boolean;
         private _collapsedByDefault: boolean;
+        private _icon: controls.IImage;
+        private _typeHash: string;
 
-        constructor(page: PropertyPage, id: string, title: string, fillSpace = false, collapsedByDefault = false, tabSectionByDefault?: string) {
+        constructor(
+            page: PropertyPage,
+            id: string,
+            title: string,
+            fillSpace = false,
+            collapsedByDefault = false,
+            icon?: controls.IImage,
+            typeHash?: string) {
+
             super();
 
             this._page = page;
@@ -20,12 +30,15 @@ namespace colibri.ui.controls.properties {
             this._title = title;
             this._fillSpace = fillSpace;
             this._collapsedByDefault = collapsedByDefault;
+            this._icon = icon;
+            this._typeHash = typeHash;
+
             this._updaters = [];
 
             const localTabSection = localStorage.getItem(this.localStorageKey("tabSection"));
         }
 
-        abstract createForm(parent: HTMLDivElement);
+        abstract createForm(parent: HTMLDivElement): void;
 
         abstract canEdit(obj: any, n: number): boolean;
 
@@ -59,6 +72,7 @@ namespace colibri.ui.controls.properties {
         }
 
         addUpdater(updater: Updater) {
+
             this._updaters.push(updater);
         }
 
@@ -72,6 +86,7 @@ namespace colibri.ui.controls.properties {
         }
 
         getPage() {
+
             return this._page;
         }
 
@@ -86,11 +101,28 @@ namespace colibri.ui.controls.properties {
         }
 
         getId() {
+
             return this._id;
         }
 
         getTitle() {
+
             return this._title;
+        }
+
+        isDynamicTitle() {
+
+            return false;
+        }
+
+        getIcon() {
+
+            return this._icon;
+        }
+
+        getTypeHash() {
+
+            return this._typeHash;
         }
 
         create(parent: HTMLDivElement): void {

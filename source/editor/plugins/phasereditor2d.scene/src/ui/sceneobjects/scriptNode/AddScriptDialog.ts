@@ -70,7 +70,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.addOpenButton("Add Script", sel => {
 
                     this.addScript(sel[0]);
-
                 }));
 
             this.addCancelButton();

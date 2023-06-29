@@ -87,6 +87,7 @@ namespace phasereditor2d.scene {
         private _sceneFinder: core.json.SceneFinder;
 
         private _docs: phasereditor2d.ide.core.PhaserDocs;
+        private _eventsDocs: phasereditor2d.ide.core.PhaserDocs;
 
         static getInstance() {
             return this._instance;
@@ -95,7 +96,12 @@ namespace phasereditor2d.scene {
         private constructor() {
             super("phasereditor2d.scene");
 
-            this._docs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json");
+            this._docs = new phasereditor2d.ide.core.PhaserDocs(
+                this,
+                "data/phaser-docs.json",
+                "data/events-docs.json");
+
+            this._eventsDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/events-docs.json");
         }
 
         async starting() {
@@ -130,7 +136,13 @@ namespace phasereditor2d.scene {
         }
 
         getPhaserDocs() {
+
             return this._docs;
+        }
+
+        getPhaserEventsDocs() {
+
+            return this._eventsDocs;
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -148,6 +160,11 @@ namespace phasereditor2d.scene {
             reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
 
                 await ScenePlugin.getInstance().getPhaserDocs().preload();
+            }));
+
+            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
+
+                await ScenePlugin.getInstance().getPhaserEventsDocs().preload();
             }));
 
             // preload UserComponent files
@@ -355,10 +372,16 @@ namespace phasereditor2d.scene {
             reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.GameObjectVariableSection(page),
                 page => new ui.sceneobjects.PrefabObjectVariableSection(page),
-                page => new ui.sceneobjects.NestedPrefabObjectVariableSection(page),
-                page => new ui.sceneobjects.PrefabInstanceSection(page),
-                page => new ui.sceneobjects.ObjectUserComponentsSection(page),
-                page => new ui.sceneobjects.ObjectSingleUserComponentSection(page),
+                page => new ui.sceneobjects.NestedPrefabObjectVariableSection(page)
+            ));
+
+            // dynamic component sections
+
+            reg.addExtension(new ui.editor.properties.DynamicUserSectionExtension());
+
+            // more property sections
+
+            reg.addExtension(new ui.editor.properties.SceneEditorPropertySectionExtension(
                 page => new ui.sceneobjects.ListVariableSection(page),
                 page => new ui.sceneobjects.GameObjectListSection(page),
                 page => new ui.sceneobjects.ChildrenSection(page),
@@ -384,7 +407,6 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ArcadeGeometrySection(page),
                 page => new ui.sceneobjects.ArcadeBodyMovementSection(page),
                 page => new ui.sceneobjects.ArcadeBodyCollisionSection(page),
-                page => new ui.sceneobjects.TextureSection(page),
                 page => new ui.sceneobjects.TextContentSection(page),
                 page => new ui.sceneobjects.TextSection(page),
                 page => new ui.sceneobjects.BitmapTextSection(page),
@@ -399,7 +421,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TriangleSection(page),
                 page => new ui.sceneobjects.PolygonSection(page),
                 page => new ui.sceneobjects.ColliderSection(page),
-                page => new ui.sceneobjects.KeyboardKeySection(page)
+                page => new ui.sceneobjects.KeyboardKeySection(page),
+                page => new ui.sceneobjects.TextureSection(page),
             ));
 
             // scene tools
@@ -469,7 +492,7 @@ namespace phasereditor2d.scene {
             return settings;
         }
 
-        createUserPropertyTypes() {
+        getUserPropertyTypes() {
 
             // TODO: we should do this via extension
             return [
@@ -477,10 +500,12 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.StringPropertyType(),
                 new ui.sceneobjects.BooleanPropertyType(),
                 new ui.sceneobjects.ColorPropertyType(),
+                new ui.sceneobjects.KeyCodePropertyType(),
                 new ui.sceneobjects.ExpressionPropertyType(),
                 new ui.sceneobjects.OptionPropertyType(),
                 new ui.sceneobjects.ObjectVarPropertyType(),
                 new ui.sceneobjects.ObjectConstructorPropertyType(),
+                new ui.sceneobjects.EventPropertyType(),
                 new ui.sceneobjects.TextureConfigPropertyType(),
                 new ui.sceneobjects.AnimationKeyPropertyType(),
                 new ui.sceneobjects.AudioKeyPropertyType(),
@@ -489,9 +514,9 @@ namespace phasereditor2d.scene {
             ];
         }
 
-        createUserPropertyType(typeId: string) {
+        getUserPropertyType(typeId: string) {
 
-            return this.createUserPropertyTypes().find(t => t.getId() === typeId);
+            return this.getUserPropertyTypes().find(t => t.getId() === typeId);
         }
 
         getPrefabColor() {

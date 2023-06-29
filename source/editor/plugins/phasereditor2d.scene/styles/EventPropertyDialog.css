@@ -1,0 +1,11 @@
+.EventPropertyDialogHelpPane {
+    height: 10rem;
+    overflow-y: scroll;
+    align-items: start !important;
+}
+
+.dark .EventPropertyDialogHelpPane {
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-radius: 0px;
+}

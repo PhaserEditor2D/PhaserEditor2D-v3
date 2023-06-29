@@ -90,6 +90,7 @@ namespace colibri.ui.ide {
         }
 
         getSelection() {
+            
             return this._selection;
         }
 

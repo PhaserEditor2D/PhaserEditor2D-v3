@@ -22,16 +22,16 @@ namespace colibri.ui.ide.utils {
             }
         }
 
-        trimNumbering(name: string) {
+        static trimNumbering(name: string) {
 
-            return name.replace(/[0-9 _-]+$/, "")
+            return name.replace(/[0-9 _-]+$/, "");
         }
 
         makeName(baseName: string) {
 
             if (this._nameSet.has(baseName)) {
 
-                baseName = this.trimNumbering(baseName);
+                baseName = NameMaker.trimNumbering(baseName);
 
                 let name: string;
 

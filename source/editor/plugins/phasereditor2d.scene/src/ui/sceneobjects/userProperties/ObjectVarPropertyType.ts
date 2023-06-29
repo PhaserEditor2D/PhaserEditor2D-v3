@@ -64,15 +64,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     return core.code.SceneCodeDOMBuilder.getPrefabInstanceVarName(value);
                 }
 
-                return objES.getLabel();
+                return core.code.formatToValidVarName(objES.getLabel());
             }
 
-            return viewer.getLabelProvider().getLabel(value);
+            return core.code.formatToValidVarName(viewer.getLabelProvider().getLabel(value));
         }
 
-        protected loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer): void {
+        protected async loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer): Promise<void> {
 
-            viewer.setInput(this.getEditor().getScene().getGameObjects());
+            const scene = this.getEditor().getScene();
+
+            const input = [
+                ...scene.getGameObjects(),
+                ...scene.getPlainObjects(),
+                ...scene.getObjectLists().getLists()
+            ];
+
+            viewer.setInput(input);
         }
 
         protected async updateIcon(iconControl: controls.IconControl, value: string): Promise<void> {
@@ -109,7 +117,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             });
 
-            const found = foundElement[0];
+            let found = foundElement[0];
+
+            if (!found) {
+
+                found = scene.getPlainObjects().find(
+                    obj => core.code.formatToValidVarName(obj.getEditorSupport().getLabel()) === value);
+            }
+
+            if (!found) {
+
+                found = scene.getObjectLists().getLists()
+                    .find(l => core.code.formatToValidVarName(l.getLabel()) === value);
+            }
 
             if (found) {
 

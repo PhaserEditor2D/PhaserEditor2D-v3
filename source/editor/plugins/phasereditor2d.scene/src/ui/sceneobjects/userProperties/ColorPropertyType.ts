@@ -37,17 +37,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             };
         }
 
-        private createEditorComp() {
-
-            const comp = document.createElement("div");
-            comp.style.display = "grid";
-            comp.style.gridTemplateColumns = "1fr auto";
-            comp.style.gap = "5px";
-            comp.style.alignItems = "center";
-
-            return comp;
-        }
-
         createInspectorPropertyEditor(section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
 
             section.createPropertyColorRow(parent, userProp.getComponentProperty(), true, lockIcon);

@@ -1,7 +1,8 @@
 {
     "id": "phasereditor2d.scene",
     "styles": [
-        "styles/SceneEditor.css"
+        "styles/SceneEditor.css",
+        "styles/EventPropertyDialog.css"
     ],
     "scripts": [
         "libs/localforage.js",

@@ -72,4 +72,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         return GameObjectEditorSupport.hasEditorSupport(obj);
     }
+
+    export function isPlainObject(obj: any) {
+
+        return ScenePlainObjectEditorSupport.hasEditorSupport(obj);
+    }
 }

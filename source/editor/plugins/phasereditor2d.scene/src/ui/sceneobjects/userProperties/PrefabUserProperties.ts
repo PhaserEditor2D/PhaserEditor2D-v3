@@ -1,4 +1,4 @@
-/// <reference path="UserProperties.ts" />
+/// <reference path="UserPropertiesManager.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export function PrefabUserPropertyBuilder(prop: UserProperty) {
@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return new PrefabUserPropertyWrapper(prop);
     }
 
-    export class PrefabUserProperties extends UserProperties {
+    export class PrefabUserProperties extends UserPropertiesManager {
 
         constructor() {
             super(PrefabUserPropertyBuilder);

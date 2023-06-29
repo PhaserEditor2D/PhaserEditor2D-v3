@@ -197,6 +197,43 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return colorElement;
         }
 
+        createKeyCodeField(parent: HTMLElement, property: IProperty<T>) {
+
+            const btn = this.createButton(parent, "KeyCode", e => {
+                
+                const viewer = new KeyboardKeysViewer();
+
+                const selObj = this.getSelectionFirstElement();
+                const keyCode = property.getValue(selObj);
+
+                viewer.revealAndSelect(keyCode);
+
+                const dlg = new controls.dialogs.ViewerDialog(viewer, false);
+                
+                dlg.create();
+
+                dlg.setTitle("Select Key Code");
+                
+                dlg.addOpenButton("Select", (sel) => {
+
+                    const value = sel[0];
+                    const keys = this.getSelection();
+
+                    this.getEditor().getUndoManager().add(
+                        new SimpleOperation(this.getEditor(), keys, KeyboardKeyComponent.keyCode, value));
+
+                }, false);
+
+                dlg.addCancelButton();
+            });
+
+            this.addUpdater(() => {
+
+                btn.textContent = this.flatValues_StringOneOrNothing(
+                    this.getSelection().map(obj => property.getValue(obj)));
+            });
+        }
+
         createBooleanField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {
 
             const labelElement = this.createLabel(parent, property.label, PhaserHelp(property.tooltip));

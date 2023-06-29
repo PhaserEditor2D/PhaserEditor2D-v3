@@ -7,37 +7,41 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         protected abstract getSectionHelpPath(): string;
 
-        protected abstract getUserProperties(): sceneobjects.UserProperties;
+        protected abstract getUserProperties(): sceneobjects.UserPropertiesManager;
 
         protected abstract getProperty(): sceneobjects.UserProperty;
 
         protected abstract componentTitleUpdated(): void;
 
-        protected abstract runOperation(action: (props?: sceneobjects.UserProperties) => void, updateSelection?: boolean);
+        protected abstract runOperation(action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection?: boolean);
 
-        static createAddComponentButton(
+        static createAddProprtyButton(
             comp: HTMLDivElement,
             formBuilder: colibri.ui.controls.properties.FormBuilder,
             runOperation: (
                 action: TUserPropertiesAction) => void,
-            selector: (obj:any) => void) {
+            selector: (obj: any) => void) {
 
-            const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
+            const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
 
-            const buttonElement = formBuilder.createMenuButton(comp, "Add Property", () => propTypes.map(t => ({
-                name: t.getName() + " Property",
-                value: t.getId()
-            })), (typeId: string) => {
+            const buttonElement = formBuilder.createButton(comp, "Add Property", () => {
 
-                const newType = ScenePlugin.getInstance().createUserPropertyType(typeId);
+                class Dlg extends ui.dialogs.AbstractAddPrefabPropertyDialog {
 
-                runOperation(userProps => {
+                    protected addProperty(propType: sceneobjects.UserPropertyType<any>): void {
 
-                    const prop = userProps.createProperty(newType);
-                    userProps.add(prop);
+                        runOperation(userProps => {
 
-                    selector(prop);
-                });
+                            const prop = userProps.createProperty(propType);
+                            userProps.add(prop);
+
+                            selector(prop);
+                        });
+                    }
+                }
+
+                const dlg = new Dlg();
+                dlg.create();
             });
 
             return { buttonElement };
@@ -52,49 +56,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const prop = this.getProperty();
 
-            menu.addAction({
-                text: "Move Up",
-                callback: () => {
-                    this.runOperation(userProps => {
-
-                        const list = userProps.getProperties();
-
-                        const i = list.indexOf(prop);
-
-                        if (i > 0) {
-
-                            const temp = list[i - 1];
-                            list[i - 1] = prop;
-                            list[i] = temp;
-                        }
-                    }, true);
-                }
-            });
-
-            menu.addAction({
-                text: "Move Down",
-                callback: () => {
-                    this.runOperation(userProps => {
-
-                        const list = userProps.getProperties();
-
-                        const i = list.indexOf(prop);
-
-                        if (i < list.length - 1) {
-
-                            const temp = list[i + 1];
-                            list[i + 1] = prop;
-                            list[i] = temp;
-                        }
-                    }, true);
-                }
-            });
-
-            menu.addSeparator();
-
             menu.addMenu(this.createMorphMenu(prop));
-
-            menu.addSeparator();
 
             menu.addAction({
                 text: "Delete",
@@ -102,7 +64,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     this.runOperation(userProps => {
 
                         userProps.deleteProperty(prop.getName());
-                       
+
                     }, true);
                 }
             });
@@ -267,7 +229,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const menu = new controls.Menu("Change Type");
 
-            const propTypes = ScenePlugin.getInstance().createUserPropertyTypes();
+            const propTypes = ScenePlugin.getInstance().getUserPropertyTypes();
 
             for (const propType of propTypes) {
 

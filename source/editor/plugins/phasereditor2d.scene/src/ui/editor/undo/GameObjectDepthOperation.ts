@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
     export declare type DepthMove = "Up" | "Down" | "Top" | "Bottom";
 
-    export class DepthOperation extends SceneSnapshotOperation {
+    export class GameObjectDepthOperation extends SceneSnapshotOperation {
 
         private _depthMove: DepthMove;
 
@@ -80,7 +80,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         protected async performModification() {
 
-            const sel = DepthOperation.sortedSelection(this.getEditor());
+            const sel = GameObjectDepthOperation.sortedSelection(this.getEditor());
 
             switch (this._depthMove) {
 

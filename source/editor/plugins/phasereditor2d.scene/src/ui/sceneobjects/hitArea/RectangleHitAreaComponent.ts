@@ -41,10 +41,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return comp;
         }
 
-        protected _setDefaultValues(width: number, height: number): void {
+        protected _setDefaultValues(x:number, y: number, width: number, height: number): void {
 
-            this.x = 0;
-            this.y = 0;
+            this.x = x;
+            this.y = y;
             this.width = width;
             this.height = height;
         }

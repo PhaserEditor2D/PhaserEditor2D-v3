@@ -72,12 +72,13 @@ namespace phasereditor2d.scene.ui {
             return undefined;
         }
 
-        afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, dropObjects: sceneobjects.ISceneGameObject[]) {
+        afterDropObjects(prefabObj: sceneobjects.ISceneGameObject, dropObjects: sceneobjects.ISceneGameObject[], alternativeSelection?: sceneobjects.ISceneGameObject[]) {
 
             let dropInContainer: sceneobjects.Container;
             let dropInObj: sceneobjects.ISceneGameObject;
 
-            const selection = this._editorScene.getEditor().getSelectedGameObjects();
+            const selection = alternativeSelection
+                || this._editorScene.getEditor().getSelectedGameObjects();
 
             const areDropingScriptNodes = dropObjects.filter(obj => obj instanceof sceneobjects.ScriptNode).length === dropObjects.length;
 
@@ -318,7 +319,9 @@ namespace phasereditor2d.scene.ui {
                     label: "temporal"
                 });
 
-                if (obj.getEditorSupport().isUnlockedProperty(sceneobjects.TransformComponent.x)) {
+                const objES = obj.getEditorSupport();
+
+                if (objES.isUnlockedProperty(sceneobjects.TransformComponent.x)) {
 
                     const { x, y } = this.getCanvasCenterPoint();
 
