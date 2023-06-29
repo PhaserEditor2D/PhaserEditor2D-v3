@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.62.0-dev
+## v3.62.0, Jun 29, 2023
 
 * New Event user property.
 * [#284](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/284) Fixes hit area rendering for containers.
