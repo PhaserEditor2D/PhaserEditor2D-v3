@@ -197,7 +197,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return colorElement;
         }
 
-        createKeyCodeField(parent: HTMLElement, property: IProperty<T>) {
+        createKeyCodeField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {
 
             const btn = this.createButton(parent, "KeyCode", e => {
                 
@@ -220,7 +220,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const keys = this.getSelection();
 
                     this.getEditor().getUndoManager().add(
-                        new SimpleOperation(this.getEditor(), keys, KeyboardKeyComponent.keyCode, value));
+                        new SimpleOperation(this.getEditor(), keys, property, value));
 
                 }, false);
 
@@ -231,6 +231,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 btn.textContent = this.flatValues_StringOneOrNothing(
                     this.getSelection().map(obj => property.getValue(obj)));
+
+                btn.disabled = checkUnlock && !this.isUnlocked(property);
             });
         }
 
