@@ -1,5 +1,9 @@
 # Change Log
 
+## v3.62.2, Jul 2, 2023
+
+* Fixes exporting user components in prefabs.
+
 ## v3.62.1, Jun 30, 2023
 
 * Fixes KeyCode user property editor.
