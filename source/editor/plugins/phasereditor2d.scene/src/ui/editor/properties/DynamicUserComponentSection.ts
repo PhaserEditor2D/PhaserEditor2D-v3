@@ -335,7 +335,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 if (userComp.hasUserComponent(this._componentName)) {
 
-                    return true;
+                    if (userComp.hasLocalUserComponent(this._componentName)) {
+
+                        return true;
+                    }
+
+                    const exported = userComp.isComponentPublished(this._componentName);
+
+                    return exported;
                 }
             }
 
