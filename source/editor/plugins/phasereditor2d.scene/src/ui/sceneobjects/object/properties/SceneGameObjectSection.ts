@@ -214,7 +214,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const labelElement = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             labelElement.style.gridColumn = "2";
 
-            const buttonElement = this.createKeyCodeField(parent, prop);
+            const buttonElement = this.createKeyCodeField(parent, prop, lockIcon);
 
             return { labelElement, buttonElement };
         }

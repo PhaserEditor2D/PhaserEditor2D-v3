@@ -1,5 +1,9 @@
 # Change Log
 
+## v3.62.1, Jun 30, 2023
+
+* Fixes KeyCode user property editor.
+
 ## v3.62.0, Jun 29, 2023
 
 * New Event user property.
