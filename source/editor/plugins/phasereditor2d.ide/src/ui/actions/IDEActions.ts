@@ -103,10 +103,19 @@ namespace phasereditor2d.ide.ui.actions {
                     executeFunc: async (args) => {
 
                         const config = await IDEPlugin.getInstance().requestProjectConfig();
+                        let url: string;
 
-                        const url = config.playUrl || "./external/";
+                        if (colibri.Platform.isOnElectron()) {
+
+                            url = config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
+
+                        } else {
+
+                            url = config.playUrl || "./external/";
+                        }
 
                         const dlg = new dialogs.PlayDialog(url);
+                        
                         dlg.create();
                     }
                 },

@@ -6,7 +6,7 @@ namespace phasereditor2d.ide {
     export const ICON_PLAY = "play";
 
     export class IDEPlugin extends colibri.Plugin {
-        
+
         public eventActivationChanged = new controls.ListenerList<boolean>();
 
         private static _instance = new IDEPlugin();
@@ -159,11 +159,16 @@ namespace phasereditor2d.ide {
 
             } else {
 
-                // const {protocol, host} = window.location;
+                if (colibri.Platform.isOnElectron()) {
 
-                // url = `${protocol}//${host}/editor/external/${search}`;
+                    const { protocol, host } = window.location;
 
-                url = `./external/${search}`;
+                    url = `${protocol}//${host}/editor/external/${search}`;
+
+                } else {
+
+                    url = `./external/${search}`;
+                }
             }
 
             this.openBrowser(url);
@@ -267,7 +272,7 @@ namespace phasereditor2d.ide {
         }
 
         isOpeningProject() {
-            
+
             return this._openingProject;
         }
 
@@ -277,8 +282,8 @@ namespace phasereditor2d.ide {
         }
 
         setEnableOpenCodeFileInExternalEditor(enabled: boolean) {
-            
-            window.localStorage.setItem("phasereditor2d.ide.enableOpenCodeFileInExternalEditor", enabled? "1" : "0");
+
+            window.localStorage.setItem("phasereditor2d.ide.enableOpenCodeFileInExternalEditor", enabled ? "1" : "0");
         }
 
         isEnableOpenCodeFileInExternalEditor() {

@@ -56,5 +56,10 @@ namespace colibri {
                 elseCallback();
             }
         }
+
+        static isOnElectron() {
+
+            return Boolean(this.getElectron());
+        }
     }
 }
