@@ -104,7 +104,7 @@ namespace phasereditor2d.ide.ui.actions {
 
                         const config = await IDEPlugin.getInstance().requestProjectConfig();
 
-                        const url = config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
+                        const url = config.playUrl || "./external/";
 
                         const dlg = new dialogs.PlayDialog(url);
                         dlg.create();

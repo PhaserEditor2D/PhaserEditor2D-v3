@@ -10,7 +10,6 @@ namespace phasereditor2d.ide.ui.dialogs {
             super("PlayDialog");
 
             this._url = url;
-
         }
 
         protected resize() {

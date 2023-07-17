@@ -159,9 +159,11 @@ namespace phasereditor2d.ide {
 
             } else {
 
-                const {protocol, host} = window.location;
+                // const {protocol, host} = window.location;
 
-                url = `${protocol}//${host}/editor/external/${search}`;
+                // url = `${protocol}//${host}/editor/external/${search}`;
+
+                url = `./external/${search}`;
             }
 
             this.openBrowser(url);
