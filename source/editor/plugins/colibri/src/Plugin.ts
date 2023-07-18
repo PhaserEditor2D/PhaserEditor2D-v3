@@ -35,7 +35,7 @@ namespace colibri {
             const x2 = ui.controls.ICON_SIZE === 32;
 
             return ui.controls.Controls
-                .getImage(`app/plugins/${this.getId()}/icons/${theme}/${name}${x2 ? "@2x" : ""}.png`, theme + "." + name);
+                .getImage(`/editor/app/plugins/${this.getId()}/icons/${theme}/${name}${x2 ? "@2x" : ""}.png`, theme + "." + name);
         }
 
         getIconDescriptor(name: string) {
@@ -64,7 +64,7 @@ namespace colibri {
                 version = Date.now().toString();
             }
 
-            return `app/plugins/${this.getId()}/${pathInPlugin}?v=${version}`;
+            return `/editor/app/plugins/${this.getId()}/${pathInPlugin}?v=${version}`;
         }
 
         async getJSON(pathInPlugin: string, version?: string) {
