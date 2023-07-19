@@ -34,43 +34,15 @@ namespace colibri {
         private static _instance;
 
         static getInstance(): ColibriPlugin {
+
             return this._instance ?? (this._instance = new ColibriPlugin());
         }
 
         private constructor() {
-            super("colibri");
+            super("colibri", true);
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
-
-            // theme icons
-
-            reg.addExtension(
-                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_KEYMAP,
-                    ICON_CONTROL_DIRTY,
-                    ICON_PLUS,
-                    ICON_MINUS,
-                    ICON_DELETE,
-                    ICON_COLOR,
-                    ICON_FILE,
-                    ICON_FOLDER,
-                    ICON_ZOOM_RESET,
-                    ICON_ZOOM_IN,
-                    ICON_ZOOM_OUT,
-                    ICON_MENU,
-                    ICON_SMALL_MENU,
-                    ICON_CHECKED,
-                    ICON_CONTROL_CLOSE,
-                    ICON_CONTROL_TREE_COLLAPSE,
-                    ICON_CONTROL_TREE_EXPAND,
-                    ICON_CONTROL_TREE_EXPAND_LEFT,
-                    ICON_CONTROL_TREE_COLLAPSE_LEFT,
-                    ICON_CONTROL_SECTION_COLLAPSE,
-                    ICON_CONTROL_SECTION_COLLAPSE_LEFT,
-                    ICON_CONTROL_SECTION_EXPAND,
-                ])
-            );
 
             // themes
 

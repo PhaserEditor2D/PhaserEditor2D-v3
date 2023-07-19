@@ -2,36 +2,13 @@ namespace colibri.ui.controls {
 
     export class IconImage implements IImage {
 
-        private _plugin: colibri.Plugin;
-        private _name: string;
         private _darkImage: IImage;
         private _lightImage: IImage;
 
-        constructor(plugin: colibri.Plugin, name: string, common: boolean) {
+        constructor(lightImage: IImage, darkImage: IImage) {
 
-            this._plugin = plugin;
-            this._name = name;
-
-            if (common) {
-
-                this._darkImage = plugin.getThemeIcon(name, "common");
-                this._lightImage = this._darkImage;
-
-            } else {
-
-                this._darkImage = plugin.getThemeIcon(name, "dark");
-                this._lightImage = plugin.getThemeIcon(name, "light");
-            }
-        }
-
-        getPlugin() {
-
-            return this._plugin;
-        }
-
-        getName() {
-
-            return this._name;
+            this._lightImage = lightImage;
+            this._darkImage = darkImage;
         }
 
         getNegativeThemeImage() {
