@@ -72,18 +72,18 @@ namespace colibri {
 
                 if (common) {
 
-                    darkImage = new ui.controls.AtlasImage(this._atlasImage,
-                        this.getFrameDataFromIconsAtlas(this.getIconPath(name, "common")));
+                    darkImage = new ui.controls.AtlasImage(this,
+                        this.getIconsAtlasFrameName(name, "common"));
 
                     lightImage = darkImage;
 
                 } else {
 
-                    darkImage = new ui.controls.AtlasImage(this._atlasImage,
-                        this.getFrameDataFromIconsAtlas(this.getIconPath(name, "dark")));
+                    darkImage = new ui.controls.AtlasImage(this,
+                        this.getIconsAtlasFrameName(name, "dark"));
 
-                    lightImage = new ui.controls.AtlasImage(this._atlasImage,
-                        this.getFrameDataFromIconsAtlas(this.getIconPath(name, "light")));
+                    lightImage = new ui.controls.AtlasImage(this,
+                        this.getIconsAtlasFrameName(name, "light"));
                 }
 
             } else {
@@ -107,7 +107,12 @@ namespace colibri {
             return image;
         }
 
-        private getFrameDataFromIconsAtlas(frame: string) {
+        getIconsAtlasImage() {
+
+            return this._atlasImage;
+        }
+
+        getFrameDataFromIconsAtlas(frame: string) {
 
             const frameData = this._atlasData.frames[frame];
 
@@ -121,7 +126,7 @@ namespace colibri {
 
         private getThemeIcon(name: string, theme: "dark" | "light" | "common") {
 
-            const iconPath = this.getIconPath(name, theme);
+            const iconPath = this.getIconsAtlasFrameName(name, theme);
 
             const url = this.getResourceURL(`icons/${iconPath}`);
 
@@ -130,7 +135,7 @@ namespace colibri {
             return ui.controls.Controls.getImage(url, id);
         }
 
-        private getIconPath(name: string, theme: "dark" | "light" | "common") {
+        private getIconsAtlasFrameName(name: string, theme: "dark" | "light" | "common") {
 
             const x2 = ui.controls.ICON_SIZE === 32;
 

@@ -26,19 +26,22 @@ namespace colibri.ui.controls {
      */
     export class AtlasImage implements IImage {
 
-        private _atlasImage: IImage;
-        private _frameData: IAtlasFrameData;
+        private _plugin: Plugin;
+        private _frame: string;
 
-        constructor(atlasImage: IImage, frameData: IAtlasFrameData) {
+        constructor(plugin: Plugin, frame: string) {
 
-            this._atlasImage = atlasImage;
-            this._frameData = frameData;
+            this._plugin = plugin;
+            this._frame = frame;
         }
 
         paint(context: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, center: boolean): void {
 
-            const frame = this._frameData.frame;
-            const sprite = this._frameData.spriteSourceSize;
+            const frameData = this.getFrameData();
+            const atlasImage = this._plugin.getIconsAtlasImage();
+
+            const frame = frameData.frame;
+            const sprite = frameData.spriteSourceSize;
 
             const factor = controls.ICON_SIZE === 32 ? 0.5 : 1;
 
@@ -47,9 +50,14 @@ namespace colibri.ui.controls {
             const ow = sprite.w * factor;
             const oh = sprite.h * factor;
 
-            this._atlasImage.paintFrame(context,
+            atlasImage.paintFrame(context,
                 frame.x, frame.y, frame.w, frame.h,
                 x + ox, y + oy, ow, oh);
+        }
+
+        private getFrameData() {
+
+            return this._plugin.getFrameDataFromIconsAtlas(this._frame);
         }
 
         paintFrame(context: CanvasRenderingContext2D, srcX: number, srcY: number, scrW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void {
@@ -67,12 +75,12 @@ namespace colibri.ui.controls {
 
         getWidth(): number {
 
-            return this._frameData.sourceSize.w;
+            return this.getFrameData().sourceSize.w;
         }
 
         getHeight(): number {
 
-            return this._frameData.sourceSize.h;
+            return this.getFrameData().sourceSize.h;
         }
 
         preloadSize(): Promise<PreloadResult> {

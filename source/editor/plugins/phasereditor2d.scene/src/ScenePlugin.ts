@@ -94,7 +94,7 @@ namespace phasereditor2d.scene {
         }
 
         private constructor() {
-            super("phasereditor2d.scene");
+            super("phasereditor2d.scene", true);
 
             this._docs = new phasereditor2d.ide.core.PhaserDocs(
                 this,
@@ -213,57 +213,6 @@ namespace phasereditor2d.scene {
                     core.CONTENT_TYPE_SCENE,
                     new ui.viewers.SceneFileCellRenderer()
                 )
-            );
-
-            // icons loader
-
-            reg.addExtension(
-                ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_USER_COMPONENT,
-                    ICON_USER_PROPERTY,
-                    ICON_SELECT_REGION,
-                    ICON_TRANSLATE,
-                    ICON_SCALE,
-                    ICON_ANGLE,
-                    ICON_ORIGIN,
-                    ICON_TEXT_TYPE,
-                    ICON_BITMAP_FONT_TYPE,
-                    ICON_SPRITE_TYPE,
-                    ICON_TILESPRITE_TYPE,
-                    ICON_LIST,
-                    ICON_IMAGE_TYPE,
-                    ICON_GROUP,
-                    ICON_BUILD,
-                    ICON_LAYER,
-                    ICON_ALIGN_LEFT,
-                    ICON_ALIGN_CENTER,
-                    ICON_ALIGN_RIGHT,
-                    ICON_ALIGN_TOP,
-                    ICON_ALIGN_MIDDLE,
-                    ICON_ALIGN_BOTTOM,
-                    ICON_BORDER_LEFT,
-                    ICON_BORDER_CENTER,
-                    ICON_BORDER_RIGHT,
-                    ICON_BORDER_TOP,
-                    ICON_BORDER_MIDDLE,
-                    ICON_BORDER_BOTTOM,
-                    ICON_GRID,
-                    ICON_COLUMN,
-                    ICON_ROW,
-                    ICON_ORIGIN_TOP_LEFT,
-                    ICON_ORIGIN_TOP_CENTER,
-                    ICON_ORIGIN_TOP_RIGHT,
-                    ICON_ORIGIN_MIDDLE_LEFT,
-                    ICON_ORIGIN_MIDDLE_CENTER,
-                    ICON_ORIGIN_MIDDLE_RIGHT,
-                    ICON_ORIGIN_BOTTOM_LEFT,
-                    ICON_ORIGIN_BOTTOM_CENTER,
-                    ICON_ORIGIN_BOTTOM_RIGHT,
-                    ICON_ARCADE_COLLIDER,
-                    ICON_KEYBOARD_KEY,
-                    ICON_9_SLICE,
-                    ICON_3_SLICE
-                ])
             );
 
             reg.addExtension(
