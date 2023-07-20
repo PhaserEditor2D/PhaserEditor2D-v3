@@ -14,8 +14,9 @@ namespace phasereditor2d.ide.ui.dialogs {
 
         protected resize() {
 
-            const width = Math.floor(window.innerWidth * 0.6);
-            const height = Math.floor(window.innerHeight * 0.75);
+            const height = Math.floor(window.innerHeight * 0.95);
+            let width = Math.floor(
+                Math.min(height * 1920 / 1080, window.innerWidth * 0.95));
 
             this.setBounds({
                 x: window.innerWidth / 2 - width / 2,
@@ -52,6 +53,13 @@ namespace phasereditor2d.ide.ui.dialogs {
             this.setTitle("Play");
 
             this.addCancelButton();
+
+            this.addButton("Open In New Tab", () => {
+
+                colibri.Platform.getWorkbench()
+                    .getCommandManager()
+                    .executeCommand(ui.actions.CMD_PLAY_PROJECT);
+            });
         }
     }
 }
