@@ -16,7 +16,7 @@ namespace phasereditor2d.ide.ui.dialogs {
             element.classList.add("DialogClientArea", "DialogSection");
 
             const html = `
-            <p class="Title"><b>Phaser Editor 2D ${activated? "Premium" : "Free"}</b><br><small>v${ide.VER}</small></p>
+            <p class="Title"><b>Phaser Editor 2D ${activated? "Premium" : "Free"}</b><br><small>v${colibri.PRODUCT_VERSION}</small></p>
             <p><i>A friendly IDE for HTML5 game development</i></p>
 
             <p>

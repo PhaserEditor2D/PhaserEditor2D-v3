@@ -148,7 +148,7 @@ namespace colibri {
 
         getResourceURL(pathInPlugin: string) {
 
-            return `${this.getPluginURL(pathInPlugin)}?v=${colibri.CACHE_VERSION}`;
+            return `${this.getPluginURL(pathInPlugin)}?v=${colibri.PRODUCT_VERSION}`;
         }
 
         // getResourceURL(pathInPlugin: string, version?: string) {

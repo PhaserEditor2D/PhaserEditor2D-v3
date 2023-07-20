@@ -203,7 +203,7 @@ namespace colibri.ui.controls {
 
             if (appendVersion) {
 
-                url += "?v=" + CACHE_VERSION;
+                url += "?v=" + PRODUCT_VERSION;
             }
 
             const img = new DefaultImage(new Image(), url);

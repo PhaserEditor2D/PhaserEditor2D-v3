@@ -1,6 +1,6 @@
 namespace colibri {
 
-    export let CACHE_VERSION = "1";
+    export let PRODUCT_VERSION = "1";
 
     export class Platform {
 
@@ -42,7 +42,7 @@ namespace colibri {
             return ui.ide.Workbench.getWorkbench();
         }
 
-        static async start() {
+        static async loadProduct() {
 
             try {
 
@@ -50,7 +50,7 @@ namespace colibri {
 
                 this._product = await resp.json();
 
-                CACHE_VERSION = this._product.version;
+                PRODUCT_VERSION = this._product.version;
 
             } catch (e) {
 
@@ -58,6 +58,9 @@ namespace colibri {
 
                 throw new Error("Cannot fetch product configuration.");
             }
+        }
+
+        static async start() {
 
             await this.getWorkbench().launch();
         }

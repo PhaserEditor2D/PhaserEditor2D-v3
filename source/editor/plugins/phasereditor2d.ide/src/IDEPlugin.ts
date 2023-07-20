@@ -233,7 +233,7 @@ namespace phasereditor2d.ide {
 
                 console.log(`IDEPlugin: opening project`);
 
-                document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"}`;
+                document.title = `Phaser Editor 2D v${colibri.PRODUCT_VERSION} ${this.isLicenseActivated() ? "Premium" : "Free"}`;
 
                 const designWindow = wb.activateWindow(ui.DesignWindow.ID) as ui.DesignWindow;
 
@@ -252,7 +252,7 @@ namespace phasereditor2d.ide {
 
                 const projectName = wb.getFileStorage().getRoot().getName();
 
-                document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"} ${projectName}`;
+                document.title = `Phaser Editor 2D v${colibri.PRODUCT_VERSION} ${this.isLicenseActivated() ? "Premium" : "Free"} ${projectName}`;
 
             } finally {
 
@@ -321,23 +321,23 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = colibri.CACHE_VERSION;
-
     async function main() {
 
-        colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
+        await colibri.Platform.loadProduct();
 
-        await IDEPlugin.getInstance().requestServerMode();
-
-        await colibri.Platform.start();
-
-        console.log(`%c %c Phaser Editor 2D %c v${VER} %c %c https://phasereditor2d.com `,
+        console.log(`%c %c Phaser Editor 2D %c v${colibri.PRODUCT_VERSION} %c %c https://phasereditor2d.com `,
             "background-color:red",
             "background-color:#3f3f3f;color:whitesmoke",
             "background-color:orange;color:black",
             "background-color:red",
             "background-color:silver",
         );
+
+        colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
+
+        await IDEPlugin.getInstance().requestServerMode();
+
+        await colibri.Platform.start();
 
         await IDEPlugin.getInstance().ideOpenProject();
 
