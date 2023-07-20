@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 category: SCENE_OBJECT_INPUT_CATEGORY,
                 phaserTypeName: "Phaser.Input.Keyboard.Key",
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_KEYBOARD_KEY),
+                icon: icons.getIconDescriptor(icons.ICON_KEYBOARD_KEY),
                 typeName: "Keyboard.Key",
             });
         }

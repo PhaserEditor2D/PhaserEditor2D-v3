@@ -111,6 +111,7 @@ namespace phasereditor2d.ide.ui {
         }
 
         getEditorArea() {
+
             return this._editorArea;
         }
 

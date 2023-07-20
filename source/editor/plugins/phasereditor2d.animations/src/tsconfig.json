@@ -11,6 +11,9 @@
             "path": "../../phasereditor2d.blocks/src"
         },
         {
+            "path": "../../phasereditor2d.icons/src"
+        },
+        {
             "path": "../../phasereditor2d.outline/src"
         },
         {

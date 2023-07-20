@@ -121,9 +121,14 @@ namespace colibri.ui.ide {
             {
                 const plugins = Platform.getPlugins();
 
+                const registry = Platform.getExtensionRegistry();
+
                 for (const plugin of plugins) {
 
-                    plugin.registerExtensions(Platform.getExtensionRegistry());
+                    // register default extensions
+                    registry.addExtension(new IconAtlasLoaderExtension(plugin));
+
+                    plugin.registerExtensions(registry);
                 }
 
                 for (const plugin of plugins) {
@@ -311,9 +316,12 @@ namespace colibri.ui.ide {
             dlg.setCloseWithEscapeKey(false);
             dlg.setProgress(0);
 
-            let resCount = 0;
-
             // count icon extensions
+
+            const iconAtlasExtensions: IconAtlasLoaderExtension[] = Platform
+                .getExtensionRegistry()
+                .getExtensions(IconAtlasLoaderExtension.POINT_ID);
+
 
             const icons: controls.IconImage[] = [];
             {
@@ -324,38 +332,31 @@ namespace colibri.ui.ide {
 
                     icons.push(...extension.getIcons());
                 }
-
-                resCount = icons.length;
             }
 
             // count resource extensions
+
             const resExtensions = Platform
                 .getExtensions<PluginResourceLoaderExtension>(PluginResourceLoaderExtension.POINT_ID);
 
-            resCount += resExtensions.length;
+            // start preload
 
+            const preloads = [
+                ...iconAtlasExtensions,
+                ...icons,
+                ...resExtensions
+            ];
 
             let i = 0;
 
-            for (const icon of icons) {
+            for (const preloader of preloads) {
 
-                await icon.preload();
-
-                i++;
-
-                dlg.setProgress(i / resCount);
-            }
-
-            for (const resExt of resExtensions) {
-
-                await resExt.preload();
+                await preloader.preload();
 
                 i++;
 
-                dlg.setProgress(i / resCount);
+                dlg.setProgress(i / preloads.length);
             }
-
-            // resources
 
             dlg.close();
         }
@@ -376,11 +377,13 @@ namespace colibri.ui.ide {
         }
 
         private initCommands() {
+
             this._commandManager = new commands.CommandManager();
 
             const extensions = Platform.getExtensions<commands.CommandExtension>(commands.CommandExtension.POINT_ID);
 
             for (const extension of extensions) {
+                
                 extension.getConfigurer()(this._commandManager);
             }
         }

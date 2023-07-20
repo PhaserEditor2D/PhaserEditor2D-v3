@@ -11,7 +11,7 @@ namespace phasereditor2d.files.ui.actions {
             super({
                 commandId: CMD_NEW_FILE,
                 showText: false,
-                icon: FilesPlugin.getInstance().getIcon(ICON_NEW_FILE)
+                icon: icons.getIcon(icons.ICON_NEW_FILE)
             });
         }
 

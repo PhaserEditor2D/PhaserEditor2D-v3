@@ -48,9 +48,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         getCellRendererProvider(): colibri.ui.controls.viewers.ICellRendererProvider {
 
             return new controls.viewers.EmptyCellRendererProvider(
-                obj => new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(
+                obj => new controls.viewers.IconImageCellRenderer(icons.getIcon(
                     obj instanceof UserComponent ?
-                        ICON_USER_COMPONENT : ICON_GROUP
+                        icons.ICON_USER_COMPONENT : icons.ICON_GROUP
                 ))
             );
         }

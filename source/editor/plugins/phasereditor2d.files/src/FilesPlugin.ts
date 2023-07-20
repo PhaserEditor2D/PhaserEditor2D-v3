@@ -2,9 +2,6 @@ namespace phasereditor2d.files {
 
     import ide = colibri.ui.ide;
 
-    export const ICON_NEW_FILE = "file-new";
-    export const ICON_PROJECT = "project";
-
     export class FilesPlugin extends colibri.Plugin {
 
         private static _instance = new FilesPlugin();
@@ -30,15 +27,6 @@ namespace phasereditor2d.files {
         }
 
         public registerExtensions(reg: colibri.ExtensionRegistry) {
-
-            // icons loader
-
-            reg.addExtension(
-                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_NEW_FILE,
-                    ICON_PROJECT
-                ])
-            );
 
             // new files
 

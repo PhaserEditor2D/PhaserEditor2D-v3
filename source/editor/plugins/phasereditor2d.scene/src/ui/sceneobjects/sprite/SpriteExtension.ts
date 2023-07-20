@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 phaserTypeName: "Phaser.GameObjects.Sprite",
                 typeName: "Sprite",
                 category: SCENE_OBJECT_IMAGE_CATEGORY,
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_SPRITE_TYPE)
+                icon: icons.getIconDescriptor(icons.ICON_SPRITE_TYPE)
             });
         }
 

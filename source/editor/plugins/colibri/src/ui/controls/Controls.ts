@@ -185,10 +185,12 @@ namespace colibri.ui.controls {
         }
 
         static resolveResourceLoaded() {
+
             return Promise.resolve(PreloadResult.RESOURCES_LOADED);
         }
 
         static resolveNothingLoaded() {
+            
             return Promise.resolve(PreloadResult.NOTHING_LOADED);
         }
 

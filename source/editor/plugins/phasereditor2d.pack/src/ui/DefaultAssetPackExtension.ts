@@ -311,8 +311,6 @@ namespace phasereditor2d.pack.ui {
 
                 const type = element.getType();
 
-                const webPlugin = webContentTypes.WebContentTypesPlugin.getInstance();
-
                 switch (type) {
 
                     case core.IMAGE_TYPE:
@@ -334,7 +332,7 @@ namespace phasereditor2d.pack.ui {
 
                     case core.AUDIO_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SOUND), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(icons.getIcon(icons.ICON_FILE_SOUND), layout);
 
                     case core.SCRIPT_TYPE:
                     case core.SCENE_FILE_TYPE:
@@ -353,15 +351,15 @@ namespace phasereditor2d.pack.ui {
                     case core.HTML_TYPE:
                     case core.JSON_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(icons.getIcon(icons.ICON_FILE_SCRIPT), layout);
 
                     case core.TEXT_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_TEXT), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(icons.getIcon(icons.ICON_FILE_TEXT), layout);
 
                     case core.HTML_TEXTURE_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_IMAGE), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(icons.getIcon(icons.ICON_FILE_IMAGE), layout);
 
                     case core.BITMAP_FONT_TYPE:
 
@@ -369,17 +367,17 @@ namespace phasereditor2d.pack.ui {
 
                     case core.VIDEO_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_VIDEO), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(icons.getIcon(icons.ICON_FILE_VIDEO), layout);
 
                     case core.ANIMATION_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ANIMATIONS), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(icons.getIcon(icons.ICON_ANIMATIONS), layout);
 
                     case core.TILEMAP_CSV_TYPE:
                     case core.TILEMAP_IMPACT_TYPE:
                     case core.TILEMAP_TILED_JSON_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_TILEMAP), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(icons.getIcon(icons.ICON_TILEMAP), layout);
 
                     default:
                         break;
@@ -391,7 +389,7 @@ namespace phasereditor2d.pack.ui {
 
             } else if (element instanceof core.AnimationConfigInPackItem) {
 
-                return DefaultAssetPackExtension.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ANIMATIONS), layout);
+                return DefaultAssetPackExtension.getIconRenderer(icons.getIcon(icons.ICON_ANIMATIONS), layout);
             }
 
             return undefined;
@@ -411,8 +409,7 @@ namespace phasereditor2d.pack.ui {
                 }
             }
 
-            return this.getIconRenderer(webContentTypes.WebContentTypesPlugin
-                .getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT), layout);
+            return this.getIconRenderer(icons.getIcon(icons.ICON_FILE_SCRIPT), layout);
         }
 
         static getIconRenderer(icon: controls.IImage, layout: "grid" | "tree") {

@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.blocks {
                 if (ScenePlugin.getInstance().getSceneFinder().isScriptPrefabFile(element)) {
 
                     return new colibri.ui.controls.viewers.IconGridCellRenderer(
-                        ScenePlugin.getInstance().getIcon(ICON_BUILD));
+                        icons.getIcon(icons.ICON_BUILD));
                 }
 
                 return new viewers.SceneFileCellRenderer();
@@ -33,7 +33,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
             } else if (element === sceneobjects.ObjectList) {
 
-                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
+                return new controls.viewers.IconImageCellRenderer(icons.getIcon(icons.ICON_LIST));
 
             } else if (typeof (element) === "string" && BLOCKS_SECTIONS.indexOf(element) >= 0) {
 

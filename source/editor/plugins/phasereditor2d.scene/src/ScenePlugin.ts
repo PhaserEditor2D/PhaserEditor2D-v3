@@ -3,53 +3,6 @@ namespace phasereditor2d.scene {
     import ide = colibri.ui.ide;
     import controls = colibri.ui.controls;
 
-    export const ICON_GROUP = "group";
-    export const ICON_TRANSLATE = "translate";
-    export const ICON_ANGLE = "angle";
-    export const ICON_SCALE = "scale";
-    export const ICON_ORIGIN = "origin";
-    export const ICON_SELECT_REGION = "select-region";
-    export const ICON_BUILD = "build";
-    export const ICON_LOCKED = "locked";
-    export const ICON_UNLOCKED = "unlocked";
-    export const ICON_LIST = "list";
-    export const ICON_USER_COMPONENT = "user-component";
-    export const ICON_USER_PROPERTY = "dot";
-    export const ICON_IMAGE_TYPE = "image-type";
-    export const ICON_SPRITE_TYPE = "sprite-type";
-    export const ICON_TILESPRITE_TYPE = "tilesprite";
-    export const ICON_TEXT_TYPE = "text-type";
-    export const ICON_BITMAP_FONT_TYPE = "bitmapfont-type";
-    export const ICON_LAYER = "layer";
-    export const ICON_ALIGN_LEFT = "align-left";
-    export const ICON_ALIGN_CENTER = "align-center";
-    export const ICON_ALIGN_RIGHT = "align-right";
-    export const ICON_ALIGN_TOP = "align-top";
-    export const ICON_ALIGN_MIDDLE = "align-middle";
-    export const ICON_ALIGN_BOTTOM = "align-bottom";
-    export const ICON_BORDER_LEFT = "border-left";
-    export const ICON_BORDER_CENTER = "border-center";
-    export const ICON_BORDER_RIGHT = "border-right";
-    export const ICON_BORDER_TOP = "border-top";
-    export const ICON_BORDER_MIDDLE = "border-middle";
-    export const ICON_BORDER_BOTTOM = "border-bottom";
-    export const ICON_GRID = "grid";
-    export const ICON_COLUMN = "column";
-    export const ICON_ROW = "row";
-    export const ICON_ORIGIN_TOP_LEFT = "origin-topleft";
-    export const ICON_ORIGIN_TOP_CENTER = "origin-topcenter";
-    export const ICON_ORIGIN_TOP_RIGHT = "origin-topright";
-    export const ICON_ORIGIN_MIDDLE_LEFT = "origin-middleleft";
-    export const ICON_ORIGIN_MIDDLE_CENTER = "origin-middlecenter";
-    export const ICON_ORIGIN_MIDDLE_RIGHT = "origin-middleright";
-    export const ICON_ORIGIN_BOTTOM_LEFT = "origin-bottomleft";
-    export const ICON_ORIGIN_BOTTOM_CENTER = "origin-bottomcenter";
-    export const ICON_ORIGIN_BOTTOM_RIGHT = "origin-bottomright";
-    export const ICON_ARCADE_COLLIDER = "collider";
-    export const ICON_KEYBOARD_KEY = "keyboard-key";
-    export const ICON_9_SLICE = "9slice";
-    export const ICON_3_SLICE = "3slice";
-
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
     export const SCENE_OBJECT_GROUPING_CATEGORY = "Grouping";
@@ -215,68 +168,10 @@ namespace phasereditor2d.scene {
                 )
             );
 
-            // icons loader
-
             reg.addExtension(
-                ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_USER_COMPONENT,
-                    ICON_USER_PROPERTY,
-                    ICON_SELECT_REGION,
-                    ICON_TRANSLATE,
-                    ICON_SCALE,
-                    ICON_ANGLE,
-                    ICON_ORIGIN,
-                    ICON_TEXT_TYPE,
-                    ICON_BITMAP_FONT_TYPE,
-                    ICON_SPRITE_TYPE,
-                    ICON_TILESPRITE_TYPE,
-                    ICON_LIST,
-                    ICON_IMAGE_TYPE,
-                    ICON_GROUP,
-                    ICON_BUILD,
-                    ICON_LAYER,
-                    ICON_ALIGN_LEFT,
-                    ICON_ALIGN_CENTER,
-                    ICON_ALIGN_RIGHT,
-                    ICON_ALIGN_TOP,
-                    ICON_ALIGN_MIDDLE,
-                    ICON_ALIGN_BOTTOM,
-                    ICON_BORDER_LEFT,
-                    ICON_BORDER_CENTER,
-                    ICON_BORDER_RIGHT,
-                    ICON_BORDER_TOP,
-                    ICON_BORDER_MIDDLE,
-                    ICON_BORDER_BOTTOM,
-                    ICON_GRID,
-                    ICON_COLUMN,
-                    ICON_ROW,
-                    ICON_ORIGIN_TOP_LEFT,
-                    ICON_ORIGIN_TOP_CENTER,
-                    ICON_ORIGIN_TOP_RIGHT,
-                    ICON_ORIGIN_MIDDLE_LEFT,
-                    ICON_ORIGIN_MIDDLE_CENTER,
-                    ICON_ORIGIN_MIDDLE_RIGHT,
-                    ICON_ORIGIN_BOTTOM_LEFT,
-                    ICON_ORIGIN_BOTTOM_CENTER,
-                    ICON_ORIGIN_BOTTOM_RIGHT,
-                    ICON_ARCADE_COLLIDER,
-                    ICON_KEYBOARD_KEY,
-                    ICON_9_SLICE,
-                    ICON_3_SLICE
-                ])
-            );
-
-            reg.addExtension(
-                ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_LOCKED,
-                    ICON_UNLOCKED
-                ])
-            );
-
-            reg.addExtension(
-                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(this, [
+                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(icons.IconsPlugin.getInstance(), [
                     {
-                        iconName: ICON_USER_COMPONENT,
+                        iconName: icons.ICON_USER_COMPONENT,
                         contentType: core.CONTENT_TYPE_USER_COMPONENTS
                     }
                 ]));

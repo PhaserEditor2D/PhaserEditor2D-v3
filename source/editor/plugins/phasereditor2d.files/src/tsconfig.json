@@ -8,6 +8,9 @@
             "path": "../../colibri/src"
         },
         {
+            "path": "../../phasereditor2d.icons/src"
+        },
+        {
             "path": "../../phasereditor2d.blocks/src"
         },
         {

@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 typeName: "ArcadeImage",
                 phaserTypeName: "Phaser.Physics.Arcade.Image",
                 category: SCENE_OBJECT_ARCADE_CATEGORY,
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_IMAGE_TYPE)
+                icon: icons.getIconDescriptor(icons.ICON_IMAGE_TYPE)
             });
         }
 

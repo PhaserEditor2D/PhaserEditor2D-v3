@@ -20,6 +20,7 @@ namespace colibri.ui.ide {
         }
 
         getIcons() {
+            
             return this._icons;
         }
 

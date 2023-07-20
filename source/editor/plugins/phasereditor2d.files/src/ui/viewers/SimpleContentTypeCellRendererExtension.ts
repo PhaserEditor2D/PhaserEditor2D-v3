@@ -8,10 +8,12 @@ namespace phasereditor2d.files.ui.viewers {
         }
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
+
             return this._renderer;
         }
 
         preload(element: any): Promise<controls.PreloadResult> {
+            
             return controls.Controls.resolveNothingLoaded();
         }
     }
@@ -31,6 +33,7 @@ namespace phasereditor2d.files.ui.viewers {
         getRendererProvider(contentType: string): controls.viewers.ICellRendererProvider {
 
             if (contentType === this._contentType) {
+
                 return new Provider(this._cellRenderer);
             }
 

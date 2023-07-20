@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 typeName: "ScriptNode",
                 phaserTypeName: "ScriptNode",
                 category: SCENE_OBJECT_SCRIPT_CATEGORY,
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_BUILD)
+                icon: icons.getIconDescriptor(icons.ICON_BUILD)
             });
         }
 

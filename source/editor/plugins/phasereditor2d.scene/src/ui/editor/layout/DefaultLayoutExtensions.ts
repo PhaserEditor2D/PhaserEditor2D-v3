@@ -90,42 +90,42 @@ namespace phasereditor2d.scene.ui.editor.layout {
         static ALIGN_LEFT = new TransformLayoutExtension({
             name: "Left",
             group: "Align",
-            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_LEFT),
+            icon: icons.getIcon(icons.ICON_ALIGN_LEFT),
             action: makeAlignAction("x", minValue, 0)
         });
 
         static ALIGN_CENTER = new TransformLayoutExtension({
             name: "Center",
             group: "Align",
-            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_CENTER),
+            icon: icons.getIcon(icons.ICON_ALIGN_CENTER),
             action: makeAlignAction("x", avgValue, 0.5)
         });
 
         static ALIGN_RIGHT = new TransformLayoutExtension({
             name: "Right",
             group: "Align",
-            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_RIGHT),
+            icon: icons.getIcon(icons.ICON_ALIGN_RIGHT),
             action: makeAlignAction("x", maxValue, 1)
         });
 
         static ALIGN_TOP = new TransformLayoutExtension({
             name: "Top",
             group: "Align",
-            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_TOP),
+            icon: icons.getIcon(icons.ICON_ALIGN_TOP),
             action: makeAlignAction("y", minValue, 0)
         });
 
         static ALIGN_MIDDLE = new TransformLayoutExtension({
             name: "Middle",
             group: "Align",
-            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_MIDDLE),
+            icon: icons.getIcon(icons.ICON_ALIGN_MIDDLE),
             action: makeAlignAction("y", avgValue, 0.5)
         });
 
         static ALIGN_BOTTOM = new TransformLayoutExtension({
             name: "Bottom",
             group: "Align",
-            icon: ScenePlugin.getInstance().getIcon(ICON_ALIGN_BOTTOM),
+            icon: icons.getIcon(icons.ICON_ALIGN_BOTTOM),
             action: makeAlignAction("y", maxValue, 1)
         });
 
@@ -134,42 +134,42 @@ namespace phasereditor2d.scene.ui.editor.layout {
         static ALIGN_BORDER_LEFT = new TransformLayoutExtension({
             name: "Border Left",
             group: "Align To Border",
-            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_LEFT),
+            icon: icons.getIcon(icons.ICON_BORDER_LEFT),
             action: makeShiftAction("x", 0)
         });
 
         static ALIGN_BORDER_CENTER = new TransformLayoutExtension({
             name: "Border Center",
             group: "Align To Border",
-            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_CENTER),
+            icon: icons.getIcon(icons.ICON_BORDER_CENTER),
             action: makeShiftAction("x", 0.5)
         });
 
         static ALIGN_BORDER_RIGHT = new TransformLayoutExtension({
             name: "Border Right",
             group: "Align To Border",
-            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_RIGHT),
+            icon: icons.getIcon(icons.ICON_BORDER_RIGHT),
             action: makeShiftAction("x", 1)
         });
 
         static ALIGN_BORDER_TOP = new TransformLayoutExtension({
             name: "Border Top",
             group: "Align To Border",
-            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_TOP),
+            icon: icons.getIcon(icons.ICON_BORDER_TOP),
             action: makeShiftAction("y", 0)
         });
 
         static ALIGN_BORDER_MIDDLE = new TransformLayoutExtension({
             name: "Border Middle",
             group: "Align To Border",
-            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_MIDDLE),
+            icon: icons.getIcon(icons.ICON_BORDER_MIDDLE),
             action: makeShiftAction("y", 0.5)
         });
 
         static ALIGN_BORDER_BOTTOM = new TransformLayoutExtension({
             name: "Border Bottom",
             group: "Align To Border",
-            icon: ScenePlugin.getInstance().getIcon(ICON_BORDER_BOTTOM),
+            icon: icons.getIcon(icons.ICON_BORDER_BOTTOM),
             action: makeShiftAction("y", 1)
         });
 
@@ -183,7 +183,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 label: "Padding",
                 defaultValue: 0
             }],
-            icon: ScenePlugin.getInstance().getIcon(ICON_ROW),
+            icon: icons.getIcon(icons.ICON_ROW),
             action: args => {
 
                 args.positions.sort((a, b) => a.x - b.x);
@@ -212,7 +212,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 label: "Padding",
                 defaultValue: 0
             }],
-            icon: ScenePlugin.getInstance().getIcon(ICON_COLUMN),
+            icon: icons.getIcon(icons.ICON_COLUMN),
             action: args => {
 
                 args.positions.sort((a, b) => a.y - b.y);
@@ -253,7 +253,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
                 label: "Cell Height",
                 defaultValue: 0
             }],
-            icon: ScenePlugin.getInstance().getIcon(ICON_GRID),
+            icon: icons.getIcon(icons.ICON_GRID),
             action: args => {
 
                 const minX = minValue(args.positions.map(p => p.x));
