@@ -321,11 +321,15 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.62.3-alpha.1";
+    export const VER = colibri.CACHE_VERSION;
 
     async function main() {
 
-        colibri.CACHE_VERSION = VER;
+        colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
+
+        await IDEPlugin.getInstance().requestServerMode();
+
+        await colibri.Platform.start();
 
         console.log(`%c %c Phaser Editor 2D %c v${VER} %c %c https://phasereditor2d.com `,
             "background-color:red",
@@ -334,12 +338,6 @@ namespace phasereditor2d.ide {
             "background-color:red",
             "background-color:silver",
         );
-
-        colibri.ui.controls.dialogs.AlertDialog.replaceConsoleAlert();
-
-        await IDEPlugin.getInstance().requestServerMode();
-
-        await colibri.Platform.start();
 
         await IDEPlugin.getInstance().ideOpenProject();
 
