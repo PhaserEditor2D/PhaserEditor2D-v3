@@ -44,8 +44,7 @@ namespace colibri {
 
             await this._atlasImage.preload();
 
-            this._atlasData = await this.getJSON(
-                "icons/atlas.json", CACHE_VERSION);
+            this._atlasData = await this.getJSON("icons/atlas.json");
         }
 
         registerExtensions(registry: ExtensionRegistry): void {
@@ -147,21 +146,29 @@ namespace colibri {
             return `/editor/app/plugins/${this.getId()}/${pathInPlugin}`;
         }
 
-        getResourceURL(pathInPlugin: string, version?: string) {
+        getResourceURL(pathInPlugin: string) {
 
-            if (version === undefined) {
-
-                version = Date.now().toString();
-            }
-
-            return `${this.getPluginURL(pathInPlugin)}?v=${version}`;
+            return `${this.getPluginURL(pathInPlugin)}?v=${colibri.CACHE_VERSION}`;
         }
 
-        async getJSON(pathInPlugin: string, version?: string) {
+        // getResourceURL(pathInPlugin: string, version?: string) {
 
-            const url = this.getResourceURL(pathInPlugin, version);
+        //     if (version === undefined) {
 
-            const result = await fetch(url);
+        //         version = Date.now().toString();
+        //     }
+
+        //     return `${this.getPluginURL(pathInPlugin)}?v=${version}`;
+        // }
+
+        async getJSON(pathInPlugin: string) {
+
+            const url = this.getResourceURL(pathInPlugin);
+
+            const result = await fetch(url, {
+                method: "GET",
+                cache: "force-cache"
+            });
 
             const data = await result.json();
 
@@ -170,7 +177,10 @@ namespace colibri {
 
         async getString(pathInPlugin: string) {
 
-            const result = await fetch(this.getResourceURL(pathInPlugin));
+            const result = await fetch(this.getResourceURL(pathInPlugin), {
+                method: "GET",
+                cache: "force-cache"
+            });
 
             const data = await result.text();
 

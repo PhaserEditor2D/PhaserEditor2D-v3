@@ -451,7 +451,8 @@ namespace colibri.core.io {
             // return content;
 
             const resp = await fetch(file.getUrl(), {
-                method: "GET"
+                method: "GET",
+                cache: "force-cache"
             });
 
             const content = await resp.text();
